@@ -59,7 +59,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     private func convert(emojiCategories: [EmojiCategory]) -> [EmojiPickerEmojiCategoryViewData] {
         emojiCategories.compactMap { emojiCategory in
             let emojisViewData: [EmojiPickerEmojiViewData] = emojiCategory.emojis.compactMap { emojiItem in
-                EmojiPickerEmojiViewData(id: emojiItem.id, value: emojiItem.unicode)
+                EmojiPickerEmojiViewData(id: "\(emojiCategory.id)-\(emojiItem.id)", value: emojiItem.unicode)
             }
             
             return EmojiPickerEmojiCategoryViewData(id: emojiCategory.id, emojis: emojisViewData)
