@@ -621,11 +621,15 @@
 "screen_room_pinned_banner_loading_description" = "Laster inn melding...";
 "screen_room_pinned_banner_view_all_button_title" = "Vis alle";
 "screen_room_single_knock_request_title" = "%1$@ ønsker å bli med i dette rommet";
+"screen_room_change_permissions_change_settings" = "Change settings";
+"screen_room_change_permissions_manage_space" = "Manage space";
+"screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Rediger administratorer eller eiere";
 "screen_room_details_pinned_events_row_title" = "Festede meldinger";
 "screen_room_details_requests_to_join_title" = "Forespørsler om å bli med";
 "screen_room_grouped_state_events_expand" = "Utvid";
 "screen_room_grouped_state_events_reduce" = "Reduser";
+"screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Gå til nytt rom";
 "screen_room_timeline_tombstoned_room_message" = "Dette rommet har blitt erstattet og er ikke lenger aktivt";
 "screen_room_timeline_upgraded_room_action" = "Se gamle meldinger";
@@ -669,7 +673,6 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ område";
 "screen_space_list_title" = "Områder";
-"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Bli med i rommet med adresse";
 "screen_start_chat_join_room_by_address_invalid_address" = "Ikke en gyldig adresse";
 "screen_start_chat_join_room_by_address_placeholder" = "Gå inn...";
@@ -679,7 +682,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Meldingen ble ikke sendt fordi %1$@s verifiserte identitet er tilbakestilt.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meldingen ble ikke sendt fordi %1$@ ikke har verifisert alle enheter.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine.";
-"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Hjemmeserveradresse";
 "screen_account_provider_form_notice" = "Skriv inn et søkeord eller en domeneadresse.";
 "screen_account_provider_form_subtitle" = "Søk etter et selskap, fellesskap eller privat server.";
@@ -1002,10 +1004,13 @@
 "screen_room_change_permissions_administrators" = "Kun for administratorer";
 "screen_room_change_permissions_ban_people" = "Forby folk";
 "screen_room_change_permissions_delete_messages" = "Fjern meldinger";
+"screen_room_change_permissions_everyone" = "Member";
 "screen_room_change_permissions_invite_people" = "Inviter folk og godta forespørsler om å bli med";
+"screen_room_change_permissions_member_moderation" = "Manage members";
 "screen_room_change_permissions_moderators" = "Administratorer og moderatorer";
 "screen_room_change_permissions_remove_people" = "Fjern folk og avslå forespørsler om å bli med";
 "screen_room_change_permissions_room_avatar" = "Endre romavatar";
+"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "Endre romnavn";
 "screen_room_change_permissions_room_topic" = "Endre temaet til rommet";
 "screen_room_change_permissions_send_messages" = "Send meldinger";
@@ -1093,7 +1098,6 @@
 "screen_room_roles_and_permissions_messages_and_content" = "Meldinger og innhold";
 "screen_room_roles_and_permissions_moderators" = "Moderatorer";
 "screen_room_roles_and_permissions_owners" = "Eiere";
-"screen_room_roles_and_permissions_permissions_header" = "Tillatelser";
 "screen_room_roles_and_permissions_reset" = "Tilbakestill tillatelser";
 "screen_room_roles_and_permissions_reset_confirm_description" = "Når du har tilbakestilt tillatelsene, mister du gjeldende innstillinger.";
 "screen_room_roles_and_permissions_reset_confirm_title" = "Vil du tilbakestille tillatelsene?";
@@ -1364,6 +1368,7 @@
 "screen_security_and_privacy_room_history_anyone_option_title" = "Alle";
 "screen_security_and_privacy_room_visibility_section_header" = "Romsynlighet";
 "screen_space_settings_leave_space" = "Forlat område";
+"screen_space_settings_roles_and_permissions" = "Roller og tillatelser";
 "screen_space_settings_security_and_privacy" = "Sikkerhet og personvern";
 "screen_account_provider_change" = "Bytt kontotilbyder";
 "screen_account_provider_signin_subtitle" = "Det er her samtalene dine vil ligge - akkurat som du ville brukt en e-postleverandør til å oppbevare e-postene dine.";
@@ -1404,10 +1409,7 @@
 "screen_report_content_block_user" = "Blokker bruker";
 "screen_reset_encryption_password_placeholder" = "Angi...";
 "screen_room_attachment_source_camera_photo" = "Ta bilde";
-"screen_room_change_permissions_everyone" = "Alle";
-"screen_room_change_permissions_member_moderation" = "Moderering av medlemmer";
 "screen_room_change_permissions_messages_and_content" = "Meldinger og innhold";
-"screen_room_change_permissions_room_details" = "Romdetaljer";
 "screen_room_change_role_section_administrators" = "Administratorer";
 "screen_room_change_role_section_moderators" = "Moderatorer";
 "screen_room_change_role_section_users" = "Medlemmer";
@@ -1426,6 +1428,7 @@
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Fjern og utesteng medlem";
 "screen_room_notification_settings_mode_all_messages" = "Alle meldinger";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Bare omtaler og nøkkelord";
+"screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_timeline_reactions_show_less" = "Vis mindre";
 "screen_roomlist_filter_invites" = "Invitasjoner";
 "screen_roomlist_filter_people" = "Personer";

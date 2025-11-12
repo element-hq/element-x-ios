@@ -621,11 +621,15 @@
 "screen_room_pinned_banner_loading_description" = "Φόρτωση μηνύματος...";
 "screen_room_pinned_banner_view_all_button_title" = "Προβολή Όλων";
 "screen_room_single_knock_request_title" = "%1$@ θέλει να συμμετάσχει σε αυτή την αίθουσα";
+"screen_room_change_permissions_change_settings" = "Change settings";
+"screen_room_change_permissions_manage_space" = "Manage space";
+"screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Edit Admins or Owners";
 "screen_room_details_pinned_events_row_title" = "Καρφιτσωμένα μηνύματα";
 "screen_room_details_requests_to_join_title" = "Αιτήματα συμμετοχής";
 "screen_room_grouped_state_events_expand" = "Επέκταση";
 "screen_room_grouped_state_events_reduce" = "Μείωση";
+"screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Μετάβαση σε νέα αίθουσα";
 "screen_room_timeline_tombstoned_room_message" = "Αυτή η αίθουσα έχει αντικατασταθεί και δεν είναι πλέον ενεργή";
 "screen_room_timeline_upgraded_room_action" = "Δες παλιά μηνύματα";
@@ -669,7 +673,6 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
-"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Συμμετοχή σε αίθουσα μέσω διεύθυνσης";
 "screen_start_chat_join_room_by_address_invalid_address" = "Μη έγκυρη διεύθυνση";
 "screen_start_chat_join_room_by_address_placeholder" = "Εισάγετε...";
@@ -679,7 +682,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Το μήνυμα δεν στάλθηκε γιατί έγινε επαναφορά της επαληθευμένης ταυτότητας του χρήστη %1$@.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Το μήνυμα δεν στάλθηκε επειδή ο χρήστης %1$@ δεν έχει επαληθεύσει όλες τις συσκευές.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Το μήνυμα δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου.";
-"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Διεύθυνση οικιακού διακομιστή";
 "screen_account_provider_form_notice" = "Εισήγαγε έναν όρο αναζήτησης ή μια διεύθυνση τομέα.";
 "screen_account_provider_form_subtitle" = "Αναζήτησε μια εταιρεία, κοινότητα ή ιδιωτικό διακομιστή.";
@@ -1002,10 +1004,13 @@
 "screen_room_change_permissions_administrators" = "Μόνο διαχειριστές";
 "screen_room_change_permissions_ban_people" = "Αποκλεισμός ατόμων";
 "screen_room_change_permissions_delete_messages" = "Αφαίρεση μηνυμάτων";
+"screen_room_change_permissions_everyone" = "Member";
 "screen_room_change_permissions_invite_people" = "Προσκάλεσε άτομα και αποδέξου αιτήματα συμμετοχής";
+"screen_room_change_permissions_member_moderation" = "Manage members";
 "screen_room_change_permissions_moderators" = "Διαχειριστές και συντονιστές";
 "screen_room_change_permissions_remove_people" = "Αφαίρεση ατόμων και απόρριψη αιτημάτων συμμετοχής";
 "screen_room_change_permissions_room_avatar" = "Αλλαγή εικόνας προφίλ αίθουσας";
+"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "Αλλαγή ονόματος αίθουσας";
 "screen_room_change_permissions_room_topic" = "Αλλαγή θέματος αίθουσας";
 "screen_room_change_permissions_send_messages" = "Αποστολή μηνυμάτων";
@@ -1093,7 +1098,6 @@
 "screen_room_roles_and_permissions_messages_and_content" = "Μηνύματα και περιεχόμενο";
 "screen_room_roles_and_permissions_moderators" = "Συντονιστές";
 "screen_room_roles_and_permissions_owners" = "Owners";
-"screen_room_roles_and_permissions_permissions_header" = "Άδειες";
 "screen_room_roles_and_permissions_reset" = "Επαναφορά δικαιωμάτων";
 "screen_room_roles_and_permissions_reset_confirm_description" = "Μόλις επαναφέρεις τα δικαιώματα, θα χάσεις τις τρέχουσες ρυθμίσεις.";
 "screen_room_roles_and_permissions_reset_confirm_title" = "Επαναφορά δικαιωμάτων;";
@@ -1364,6 +1368,7 @@
 "screen_security_and_privacy_room_history_anyone_option_title" = "Οποιοσδήποτε";
 "screen_security_and_privacy_room_visibility_section_header" = "Ορατότητα αίθουσας";
 "screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_roles_and_permissions" = "Ρόλοι και δικαιώματα";
 "screen_space_settings_security_and_privacy" = "Ασφάλεια & απόρρητο";
 "screen_account_provider_change" = "Αλλαγή παρόχου λογαριασμού";
 "screen_account_provider_signin_subtitle" = "Εδώ θα ζουν οι συνομιλίες σου - όπως θα χρησιμοποιούσες έναν πάροχο email για να διατηρήσεις τα email σου.";
@@ -1404,10 +1409,7 @@
 "screen_report_content_block_user" = "Αποκλεισμός χρήστη";
 "screen_reset_encryption_password_placeholder" = "Εισαγωγή...";
 "screen_room_attachment_source_camera_photo" = "Τράβηξε φωτογραφία";
-"screen_room_change_permissions_everyone" = "Όλοι";
-"screen_room_change_permissions_member_moderation" = "Συντονισμός μελών";
 "screen_room_change_permissions_messages_and_content" = "Μηνύματα και περιεχόμενο";
-"screen_room_change_permissions_room_details" = "Λεπτομέρειες αίθουσας";
 "screen_room_change_role_section_administrators" = "Διαχειριστές";
 "screen_room_change_role_section_moderators" = "Συντονιστές";
 "screen_room_change_role_section_users" = "Μέλη";
@@ -1426,6 +1428,7 @@
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Αφαίρεση και αποκλεισμός μέλους";
 "screen_room_notification_settings_mode_all_messages" = "Όλα τα μηνύματα";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Μόνο αναφορές και λέξεις-κλειδιά";
+"screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_timeline_reactions_show_less" = "Εμφάνιση λιγότερων";
 "screen_roomlist_filter_invites" = "Προσκλήσεις";
 "screen_roomlist_filter_people" = "Άτομα";

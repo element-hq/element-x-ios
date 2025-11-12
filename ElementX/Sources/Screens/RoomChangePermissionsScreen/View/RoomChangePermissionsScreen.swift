@@ -14,22 +14,31 @@ struct RoomChangePermissionsScreen: View {
     
     var body: some View {
         Form {
-            ForEach($context.settings) { $setting in
-                Section {
-                    ListRow(label: .plain(title: setting.title),
-                            kind: .inlinePicker(selection: $setting.value, items: setting.allValues))
-                } header: {
-                    Text(setting.title)
-                        .compoundListSectionHeader()
-                }
+            ForEach(RoomChangePermissionsScreenGroup.allCases, id: \.self) { group in
+                section(for: group)
             }
         }
         .compoundList()
-        .navigationTitle(context.viewState.title)
+        .navigationTitle(L10n.screenRoomChangePermissionsTitle)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(context.viewState.hasChanges)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
+    }
+    
+    @ViewBuilder
+    private func section(for group: RoomChangePermissionsScreenGroup) -> some View {
+        if let settings = Binding($context.settings[group]) {
+            Section {
+                ForEach(settings) { $setting in
+                    ListRow(label: .plain(title: setting.title),
+                            kind: .picker(selection: $setting.value, items: setting.allValues))
+                }
+            } header: {
+                Text(group.name)
+                    .compoundListSectionHeader()
+            }
+        }
     }
     
     @ToolbarContentBuilder
@@ -54,31 +63,24 @@ struct RoomChangePermissionsScreen: View {
 // MARK: - Previews
 
 struct RoomChangePermissionsScreen_Previews: PreviewProvider, TestablePreview {
-    static let detailsViewModel = makeViewModel(group: .roomDetails)
-    static let messagesViewModel = makeViewModel(group: .messagesAndContent)
-    static let membersViewModel = makeViewModel(group: .memberModeration)
+    static let roomViewModel = makeViewModel(isSpace: false)
+    static let spaceViewModel = makeViewModel(isSpace: true)
     
     static var previews: some View {
         NavigationStack {
-            RoomChangePermissionsScreen(context: detailsViewModel.context)
+            RoomChangePermissionsScreen(context: roomViewModel.context)
         }
-        .previewDisplayName("Room details")
+        .previewDisplayName("Room")
         
         NavigationStack {
-            RoomChangePermissionsScreen(context: messagesViewModel.context)
+            RoomChangePermissionsScreen(context: spaceViewModel.context)
         }
-        .previewDisplayName("Messages and Content")
-        
-        NavigationStack {
-            RoomChangePermissionsScreen(context: membersViewModel.context)
-        }
-        .previewDisplayName("Member moderation")
+        .previewDisplayName("Space")
     }
     
-    static func makeViewModel(group: RoomRolesAndPermissionsScreenPermissionsGroup) -> RoomChangePermissionsScreenViewModel {
+    static func makeViewModel(isSpace: Bool) -> RoomChangePermissionsScreenViewModel {
         RoomChangePermissionsScreenViewModel(currentPermissions: .init(powerLevels: .mock),
-                                             group: group,
-                                             roomProxy: JoinedRoomProxyMock(.init()),
+                                             roomProxy: JoinedRoomProxyMock(.init(isSpace: isSpace)),
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              analytics: ServiceLocator.shared.analytics)
     }

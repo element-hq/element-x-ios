@@ -119,10 +119,10 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .finishedChangingRoles, transitions: [.changingRoles => .rolesAndPermissionsScreen])
         
         stateMachine.addRoutes(event: .changePermissions, transitions: [.rolesAndPermissionsScreen => .changingPermissions]) { [weak self] context in
-            guard let (permissions, group) = context.userInfo as? (RoomPermissions, RoomRolesAndPermissionsScreenPermissionsGroup) else {
+            guard let permissions = context.userInfo as? RoomPermissions else {
                 fatalError("Expected a group and the current permissions")
             }
-            self?.presentChangePermissionsScreen(permissions: permissions, group: group)
+            self?.presentChangePermissionsScreen(permissions: permissions)
         }
         stateMachine.addRoutes(event: .finishedChangingPermissions, transitions: [.changingPermissions => .rolesAndPermissionsScreen])
         
@@ -144,8 +144,8 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .editRoles(let role):
                 stateMachine.tryEvent(.changeRoles, userInfo: role)
-            case .editPermissions(let permissions, let group):
-                stateMachine.tryEvent(.changePermissions, userInfo: (permissions, group))
+            case .editPermissions(let permissions):
+                stateMachine.tryEvent(.changePermissions, userInfo: permissions)
             case .demotedOwnUser:
                 stateMachine.tryEvent(.demotedOwnUser)
             }
@@ -179,9 +179,8 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentChangePermissionsScreen(permissions: RoomPermissions, group: RoomRolesAndPermissionsScreenPermissionsGroup) {
+    private func presentChangePermissionsScreen(permissions: RoomPermissions) {
         let parameters = RoomChangePermissionsScreenCoordinatorParameters(permissions: permissions,
-                                                                          permissionsGroup: group,
                                                                           roomProxy: roomProxy,
                                                                           userIndicatorController: userIndicatorController,
                                                                           analytics: analytics)

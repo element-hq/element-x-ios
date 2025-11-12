@@ -621,11 +621,15 @@
 "screen_room_pinned_banner_loading_description" = "Завантаження повідомлення…";
 "screen_room_pinned_banner_view_all_button_title" = "Переглянути всі";
 "screen_room_single_knock_request_title" = "%1$@ хоче приєднатися до цієї кімнати";
+"screen_room_change_permissions_change_settings" = "Change settings";
+"screen_room_change_permissions_manage_space" = "Manage space";
+"screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Змінити адміністраторів або власників";
 "screen_room_details_pinned_events_row_title" = "Закріплені повідомлення";
 "screen_room_details_requests_to_join_title" = "Запити на приєднання";
 "screen_room_grouped_state_events_expand" = "Розгорнути";
 "screen_room_grouped_state_events_reduce" = "Згорнути";
+"screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Перейти до нової кімнати";
 "screen_room_timeline_tombstoned_room_message" = "Цю кімнату замінили, і вона більше не активна.";
 "screen_room_timeline_upgraded_room_action" = "Перегляд давніших повідомлень";
@@ -669,7 +673,6 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Простори";
-"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Приєднатися до кімнати за адресою";
 "screen_start_chat_join_room_by_address_invalid_address" = "Недійсна адреса";
 "screen_start_chat_join_room_by_address_placeholder" = "Введіть...";
@@ -679,7 +682,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Повідомлення не надіслано, оскільки підтверджену особистість %1$@ скинуто.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Повідомлення не надіслано, оскільки %1$@ перевірив не всі пристрої.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Повідомлення не надіслано, оскільки ви не підтвердили один або кілька своїх пристроїв.";
-"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Адреса домашнього сервера";
 "screen_account_provider_form_notice" = "Уведіть пошуковий термін або адресу домену.";
 "screen_account_provider_form_subtitle" = "Пошук компанії, спільноти або приватного сервера.";
@@ -1002,10 +1004,13 @@
 "screen_room_change_permissions_administrators" = "Тільки для адміністраторів";
 "screen_room_change_permissions_ban_people" = "Заблоковувати людей";
 "screen_room_change_permissions_delete_messages" = "Вилучати повідомлення";
+"screen_room_change_permissions_everyone" = "Member";
 "screen_room_change_permissions_invite_people" = "Запрошувати людей і приймати запити на приєднання";
+"screen_room_change_permissions_member_moderation" = "Manage members";
 "screen_room_change_permissions_moderators" = "Адміністратори та модератори";
 "screen_room_change_permissions_remove_people" = "Вилучати людей і відхиляти запити на приєднання";
 "screen_room_change_permissions_room_avatar" = "Змінювати аватар кімнати";
+"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "Змінювати назву кімнати";
 "screen_room_change_permissions_room_topic" = "Змінювати тему кімнати";
 "screen_room_change_permissions_send_messages" = "Надсилати повідомлення";
@@ -1093,7 +1098,6 @@
 "screen_room_roles_and_permissions_messages_and_content" = "Повідомлення та зміст";
 "screen_room_roles_and_permissions_moderators" = "Модератори";
 "screen_room_roles_and_permissions_owners" = "Власники";
-"screen_room_roles_and_permissions_permissions_header" = "Дозволи";
 "screen_room_roles_and_permissions_reset" = "Скинути дозволи";
 "screen_room_roles_and_permissions_reset_confirm_description" = "Після скидання дозволів ви втратите поточні налаштування.";
 "screen_room_roles_and_permissions_reset_confirm_title" = "Скинути дозволи?";
@@ -1364,6 +1368,7 @@
 "screen_security_and_privacy_room_history_anyone_option_title" = "Кожний";
 "screen_security_and_privacy_room_visibility_section_header" = "Видимість кімнати";
 "screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_roles_and_permissions" = "Ролі та дозволи";
 "screen_space_settings_security_and_privacy" = "Безпека й приватність";
 "screen_account_provider_change" = "Змінити провайдера облікового запису";
 "screen_account_provider_signin_subtitle" = "Тут розміщуватимуться ваші розмови — так само як у поштовій скриньці для зберігання своїх електронних листів.";
@@ -1404,10 +1409,7 @@
 "screen_report_content_block_user" = "Заблокувати користувача";
 "screen_reset_encryption_password_placeholder" = "Входимо...";
 "screen_room_attachment_source_camera_photo" = "Зробити фото";
-"screen_room_change_permissions_everyone" = "Усі";
-"screen_room_change_permissions_member_moderation" = "Модерація учасників";
 "screen_room_change_permissions_messages_and_content" = "Повідомлення та зміст";
-"screen_room_change_permissions_room_details" = "Деталі кімнати";
 "screen_room_change_role_section_administrators" = "Адміністратори";
 "screen_room_change_role_section_moderators" = "Модератори";
 "screen_room_change_role_section_users" = "Учасники";
@@ -1426,6 +1428,7 @@
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Вилучити й заблокувати учасника";
 "screen_room_notification_settings_mode_all_messages" = "Всі повідомлення";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Тільки згадки та ключові слова";
+"screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_timeline_reactions_show_less" = "Показувати менше";
 "screen_roomlist_filter_invites" = "Запрошення";
 "screen_roomlist_filter_people" = "Люди";

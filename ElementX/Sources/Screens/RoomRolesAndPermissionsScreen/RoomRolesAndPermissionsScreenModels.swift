@@ -12,7 +12,7 @@ enum RoomRolesAndPermissionsScreenViewModelAction {
     /// The user would like to edit member roles.
     case editRoles(RoomRolesAndPermissionsScreenRole)
     /// The user would like to edit room permissions.
-    case editPermissions(permissions: RoomPermissions, group: RoomRolesAndPermissionsScreenPermissionsGroup)
+    case editPermissions(permissions: RoomPermissions)
     /// The user has demoted themself.
     case demotedOwnUser
 }
@@ -47,17 +47,11 @@ enum RoomRolesAndPermissionsScreenAlertType {
 enum RoomRolesAndPermissionsScreenViewAction {
     case editRoles(RoomRolesAndPermissionsScreenRole)
     case editOwnUserRole
-    case editPermissions(RoomRolesAndPermissionsScreenPermissionsGroup)
+    case editPermissions
     case reset
 }
 
 enum RoomRolesAndPermissionsScreenRole: Hashable {
     case administrators
     case moderators
-}
-
-enum RoomRolesAndPermissionsScreenPermissionsGroup {
-    case roomDetails
-    case messagesAndContent
-    case memberModeration
 }

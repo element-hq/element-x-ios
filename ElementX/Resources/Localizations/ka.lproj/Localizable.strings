@@ -621,11 +621,15 @@
 "screen_room_pinned_banner_loading_description" = "Loading message…";
 "screen_room_pinned_banner_view_all_button_title" = "View All";
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
+"screen_room_change_permissions_change_settings" = "Change settings";
+"screen_room_change_permissions_manage_space" = "Manage space";
+"screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Edit Admins or Owners";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_grouped_state_events_expand" = "Expand";
 "screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Jump to new room";
 "screen_room_timeline_tombstoned_room_message" = "This room has been replaced and is no longer active";
 "screen_room_timeline_upgraded_room_action" = "See old messages";
@@ -669,7 +673,6 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
-"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
 "screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
 "screen_start_chat_join_room_by_address_placeholder" = "Enter...";
@@ -679,7 +682,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
-"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "სახლის სერვერის მისამართი";
 "screen_account_provider_form_notice" = "შეიყვანეთ საძიებო სიტყვა ან დომენის მისამართი.";
 "screen_account_provider_form_subtitle" = "მოძებნეთ კომპანია, საზოგადოება ან კერძო სერვერი.";
@@ -1002,10 +1004,13 @@
 "screen_room_change_permissions_administrators" = "მხოლოდ ადმინისტრატორები";
 "screen_room_change_permissions_ban_people" = "მომხმარებლების დაბლოკვა";
 "screen_room_change_permissions_delete_messages" = "შეტყობინებების წაშლა";
+"screen_room_change_permissions_everyone" = "Member";
 "screen_room_change_permissions_invite_people" = "მომხმარებლების მოწვევა და გაწევრიანების მოთხოვნების დადასტურება";
+"screen_room_change_permissions_member_moderation" = "Manage members";
 "screen_room_change_permissions_moderators" = "ადმინისტრატორები და მოდერატორები";
 "screen_room_change_permissions_remove_people" = "მომხმარებლების გაგდება და გაწევრიანების მოთხოვნების უარყოფა";
 "screen_room_change_permissions_room_avatar" = "ოთახის სურათის შეცვლა";
+"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "ოთახის სახელის შეცვლა";
 "screen_room_change_permissions_room_topic" = "ოთახის თემის შეცვლა";
 "screen_room_change_permissions_send_messages" = "შეტყობინებების გაგზავნა";
@@ -1093,7 +1098,6 @@
 "screen_room_roles_and_permissions_messages_and_content" = "შეტყობინებები და შინაარსი";
 "screen_room_roles_and_permissions_moderators" = "მოდერატორები";
 "screen_room_roles_and_permissions_owners" = "Owners";
-"screen_room_roles_and_permissions_permissions_header" = "ნებართვები";
 "screen_room_roles_and_permissions_reset" = "ნებართვების გადაყენება";
 "screen_room_roles_and_permissions_reset_confirm_description" = "ნებართვების გადაყენების შემთხვევაში მიმდინარე პარამეტრებს დაკარგავთ.";
 "screen_room_roles_and_permissions_reset_confirm_title" = "გადავაყენოთ ცვლილებები?";
@@ -1364,6 +1368,7 @@
 "screen_security_and_privacy_room_history_anyone_option_title" = "Anyone";
 "screen_security_and_privacy_room_visibility_section_header" = "Room visibility";
 "screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_roles_and_permissions" = "როლები და ნებართვები";
 "screen_space_settings_security_and_privacy" = "Security & privacy";
 "screen_account_provider_change" = "შეცვალეთ ანგარიშის მომწოდებელი";
 "screen_account_provider_signin_subtitle" = "აქ იქნება თქვენი საუბრები - ისევე, როგორც თქვენ ელ. ფოსტაში ინახება თქვენი ელ.წერილები.";
@@ -1404,10 +1409,7 @@
 "screen_report_content_block_user" = "მომხმარებლის დაბლოკვა";
 "screen_reset_encryption_password_placeholder" = "შეყვანა";
 "screen_room_attachment_source_camera_photo" = "ფოტოს გადაღება";
-"screen_room_change_permissions_everyone" = "ყველა";
-"screen_room_change_permissions_member_moderation" = "წევრების მოდერირება";
 "screen_room_change_permissions_messages_and_content" = "შეტყობინებები და შინაარსი";
-"screen_room_change_permissions_room_details" = "ოთახის დეტალები";
 "screen_room_change_role_section_administrators" = "ადმინისტრატორები";
 "screen_room_change_role_section_moderators" = "მოდერატორები";
 "screen_room_change_role_section_users" = "წევრები";
@@ -1426,6 +1428,7 @@
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "წევრის წაშლა და დაბლოკვა";
 "screen_room_notification_settings_mode_all_messages" = "ყველა შეტყობინება";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "მხოლოდ ხსენებები და საკვანძო სიტყვები";
+"screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_timeline_reactions_show_less" = "ნაკლების ჩვენება";
 "screen_roomlist_filter_invites" = "მოწვევები";
 "screen_roomlist_filter_people" = "ხალხი";
