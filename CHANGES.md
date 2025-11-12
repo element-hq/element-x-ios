@@ -1,3 +1,41 @@
+## Changes in 25.11.1 (2025-11-12)
+
+### What's Changed
+
+✨ Features
+* Make the room "Security & privacy" screen available by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4725
+
+🙌 Improvements
+* Pop to coordinator by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4703
+* Only offer to verify if a cross-signed device is available and improve the UX whilst waiting. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4710
+
+🐛 Bugfixes
+* Fix: update members on power level changes in members list by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4707
+* Correctly handle span tags and data attributes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4714
+* Fix another bug where the app could crash on launch if the access token had expired. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4733
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4721
+
+🧱 Build
+* Move danger/swift to an ubuntu runner and use the available action by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4715
+* Make sure the integration tests stop when running out of WAS retries 🙈 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4730
+
+🚧 In development 🚧
+* Space Settings - Navigations by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4691
+* Space Settings: Leave Room by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4700
+* Handle threaded pinned events by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4704
+
+Others
+* Update the enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4712
+* Update actions/checkout action to v5 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4716
+* Fix the integration tests. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4723
+* Clarify how the different mapLibre URLs are used by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4724
+* Update UI test snapshots. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4722
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.11.0...release/25.11.1
+
 ## Changes in 25.11.0 (2025-11-05)
 
 ### What's Changed
