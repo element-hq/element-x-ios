@@ -621,11 +621,15 @@
 "screen_room_pinned_banner_loading_description" = "بار کردن پیام‌ها…";
 "screen_room_pinned_banner_view_all_button_title" = "نمایش همه";
 "screen_room_single_knock_request_title" = "%1$@ می‌خواهد به این اتاق بپیوندد";
+"screen_room_change_permissions_change_settings" = "Change settings";
+"screen_room_change_permissions_manage_space" = "Manage space";
+"screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "ویرایش مدیران یا مالکان";
 "screen_room_details_pinned_events_row_title" = "پیام‌های سنجاق شده";
 "screen_room_details_requests_to_join_title" = "درخواست‌های پیوستن";
 "screen_room_grouped_state_events_expand" = "گسترش";
 "screen_room_grouped_state_events_reduce" = "کاهش";
+"screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "پرش به اتاق جدید";
 "screen_room_timeline_tombstoned_room_message" = "این اتاق جایگزین شده و دیگر فعّال نیست";
 "screen_room_timeline_upgraded_room_action" = "دیدن پیام‌های قدیمی";
@@ -669,7 +673,6 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "‏%1$@ فضا";
 "screen_space_list_title" = "فضاها";
-"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "پیوستن به اتاق با نشانی";
 "screen_start_chat_join_room_by_address_invalid_address" = "نشانی معتبری نیست";
 "screen_start_chat_join_room_by_address_placeholder" = "ورود…";
@@ -679,7 +682,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
-"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "نشانی کارساز خانگی";
 "screen_account_provider_form_notice" = "ورود عبارت جست‌وجو یا نشانی دامنه.";
 "screen_account_provider_form_subtitle" = "جست‌وجو برای شرکت، اجتماع یا کارسازی خصوصی.";
@@ -1002,10 +1004,13 @@
 "screen_room_change_permissions_administrators" = "فقط مدیران";
 "screen_room_change_permissions_ban_people" = "تحریم افراد";
 "screen_room_change_permissions_delete_messages" = "برداشتن پیام‌ها";
+"screen_room_change_permissions_everyone" = "هرکسی";
 "screen_room_change_permissions_invite_people" = "دعوت افراد و پذیرش درخواست‌های پیوستن";
+"screen_room_change_permissions_member_moderation" = "نظارت اعضا";
 "screen_room_change_permissions_moderators" = "مدیرن و ناظران";
 "screen_room_change_permissions_remove_people" = "برداشتن افراد و رد درخواست‌های پیوستن";
 "screen_room_change_permissions_room_avatar" = "تغییر چهرک اتاق";
+"screen_room_change_permissions_room_details" = "جزییات اتاق";
 "screen_room_change_permissions_room_name" = "تغییر نام اتاق";
 "screen_room_change_permissions_room_topic" = "دگرگونی موضوع اتاق";
 "screen_room_change_permissions_send_messages" = "فرستادن پیام‌ها";
@@ -1093,7 +1098,6 @@
 "screen_room_roles_and_permissions_messages_and_content" = "پیام‌ها و محتوا";
 "screen_room_roles_and_permissions_moderators" = "ناظم‌ها";
 "screen_room_roles_and_permissions_owners" = "مالکان";
-"screen_room_roles_and_permissions_permissions_header" = "اجازه‌ها";
 "screen_room_roles_and_permissions_reset" = "بازنشانی اجازه‌ها";
 "screen_room_roles_and_permissions_reset_confirm_description" = "Once you reset permissions, you will lose the current settings.";
 "screen_room_roles_and_permissions_reset_confirm_title" = "بازنشانی اجازه‌ها؟";
@@ -1364,6 +1368,7 @@
 "screen_security_and_privacy_room_history_anyone_option_title" = "هرکسی";
 "screen_security_and_privacy_room_visibility_section_header" = "نمایانی اتاق";
 "screen_space_settings_leave_space" = "ترک فضا";
+"screen_space_settings_roles_and_permissions" = "نقش‌ها و اجازه‌ها";
 "screen_space_settings_security_and_privacy" = "امنیت و محرمانگی";
 "screen_account_provider_change" = "تغییر فراهم کنندهٔ حساب";
 "screen_account_provider_signin_subtitle" = "جایی که گفت‌وگوهایتان خواهند زیست — درست مثل استفاده‌تان از فراهم کنندهٔ رایانامه‌ای برای نگه داشتن رایانامه‌هایتان.";
@@ -1404,10 +1409,7 @@
 "screen_report_content_block_user" = "انسداد کاربر";
 "screen_reset_encryption_password_placeholder" = "ورود…";
 "screen_room_attachment_source_camera_photo" = "عکس گرفتن";
-"screen_room_change_permissions_everyone" = "هرکسی";
-"screen_room_change_permissions_member_moderation" = "نظارت اعضا";
 "screen_room_change_permissions_messages_and_content" = "پیام‌ها و محتوا";
-"screen_room_change_permissions_room_details" = "جزییات اتاق";
 "screen_room_change_role_section_administrators" = "مدیران";
 "screen_room_change_role_section_moderators" = "ناظم‌ها";
 "screen_room_change_role_section_users" = "اعضا";
@@ -1426,6 +1428,7 @@
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "برداشت و تحریم عضو";
 "screen_room_notification_settings_mode_all_messages" = "همهٔ پیام‌ها";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "فقط اشاره‌ها و کلیدواژگان";
+"screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_timeline_reactions_show_less" = "نمایش کم‌تر";
 "screen_roomlist_filter_invites" = "دعوت‌ها";
 "screen_roomlist_filter_people" = "افراد";

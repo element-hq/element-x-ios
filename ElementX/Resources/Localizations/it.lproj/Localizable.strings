@@ -621,11 +621,15 @@
 "screen_room_pinned_banner_loading_description" = "Caricamento messaggio…";
 "screen_room_pinned_banner_view_all_button_title" = "Mostra tutti";
 "screen_room_single_knock_request_title" = "%1$@ vuole entrare in questa stanza";
+"screen_room_change_permissions_change_settings" = "Change settings";
+"screen_room_change_permissions_manage_space" = "Manage space";
+"screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Modifica amministratori o proprietari";
 "screen_room_details_pinned_events_row_title" = "Messaggi fissati";
 "screen_room_details_requests_to_join_title" = "Richieste di accesso";
 "screen_room_grouped_state_events_expand" = "Espandi";
 "screen_room_grouped_state_events_reduce" = "Riduci";
+"screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Vai alla nuova stanza";
 "screen_room_timeline_tombstoned_room_message" = "Questa stanza è stata sostituita e non è più attiva";
 "screen_room_timeline_upgraded_room_action" = "Visualizza i vecchi messaggi";
@@ -669,7 +673,6 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spazi";
-"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Accedi alla stanza tramite indirizzo";
 "screen_start_chat_join_room_by_address_invalid_address" = "Indirizzo non valido";
 "screen_start_chat_join_room_by_address_placeholder" = "Inserisci...";
@@ -679,7 +682,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Messaggio non inviato perché l'identità verificata di %1$@ è stata reimpostata.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Messaggio non inviato perché %1$@ non ha verificato tutti i dispositivi.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Messaggio non inviato perché non hai verificato uno o più dispositivi.";
-"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Indirizzo dell'homeserver";
 "screen_account_provider_form_notice" = "Inserisci un termine di ricerca o un indirizzo di dominio.";
 "screen_account_provider_form_subtitle" = "Cerca un'azienda, una comunità o un server privato.";
@@ -1002,10 +1004,13 @@
 "screen_room_change_permissions_administrators" = "Solo amministratori";
 "screen_room_change_permissions_ban_people" = "Escludi membri";
 "screen_room_change_permissions_delete_messages" = "Rimuovi messaggi";
+"screen_room_change_permissions_everyone" = "Member";
 "screen_room_change_permissions_invite_people" = "Invita persone e accetta richieste di partecipazione";
+"screen_room_change_permissions_member_moderation" = "Manage members";
 "screen_room_change_permissions_moderators" = "Amministratori e moderatori";
 "screen_room_change_permissions_remove_people" = "Rimuovi le persone e rifiuta le richieste di partecipazione";
 "screen_room_change_permissions_room_avatar" = "Cambia avatar della stanza";
+"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "Cambia il nome della stanza";
 "screen_room_change_permissions_room_topic" = "Cambiare l'argomento della stanza";
 "screen_room_change_permissions_send_messages" = "Inviare messaggi";
@@ -1093,7 +1098,6 @@
 "screen_room_roles_and_permissions_messages_and_content" = "Messaggi e contenuti";
 "screen_room_roles_and_permissions_moderators" = "Moderatori";
 "screen_room_roles_and_permissions_owners" = "Proprietari";
-"screen_room_roles_and_permissions_permissions_header" = "Autorizzazioni";
 "screen_room_roles_and_permissions_reset" = "Reimpostare le autorizzazioni";
 "screen_room_roles_and_permissions_reset_confirm_description" = "Una volta reimpostate le autorizzazioni, perderai le impostazioni correnti.";
 "screen_room_roles_and_permissions_reset_confirm_title" = "Reimpostare autorizzazioni?";
@@ -1364,6 +1368,7 @@
 "screen_security_and_privacy_room_history_anyone_option_title" = "Chiunque";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilità della stanza";
 "screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_roles_and_permissions" = "Ruoli e autorizzazioni";
 "screen_space_settings_security_and_privacy" = "Sicurezza e privacy";
 "screen_account_provider_change" = "Cambia fornitore dell'account";
 "screen_account_provider_signin_subtitle" = "Qui è dove vivranno le tue conversazioni — proprio come useresti un fornitore di posta elettronica per conservare le tue email.";
@@ -1404,10 +1409,7 @@
 "screen_report_content_block_user" = "Blocca utente";
 "screen_reset_encryption_password_placeholder" = "Inserisci...";
 "screen_room_attachment_source_camera_photo" = "Scatta foto";
-"screen_room_change_permissions_everyone" = "Tutti";
-"screen_room_change_permissions_member_moderation" = "Moderazione dei membri";
 "screen_room_change_permissions_messages_and_content" = "Messaggi e contenuti";
-"screen_room_change_permissions_room_details" = "Dettagli della stanza";
 "screen_room_change_role_section_administrators" = "Amministratori";
 "screen_room_change_role_section_moderators" = "Moderatori";
 "screen_room_change_role_section_users" = "Membri";
@@ -1426,6 +1428,7 @@
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Rimuovi ed escludi";
 "screen_room_notification_settings_mode_all_messages" = "Tutti i messaggi";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Solo menzioni e parole chiave";
+"screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_timeline_reactions_show_less" = "Mostra meno";
 "screen_roomlist_filter_invites" = "Inviti";
 "screen_roomlist_filter_people" = "Persone";

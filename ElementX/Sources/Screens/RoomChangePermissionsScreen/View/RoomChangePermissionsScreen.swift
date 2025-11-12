@@ -14,7 +14,7 @@ struct RoomChangePermissionsScreen: View {
     
     var body: some View {
         Form {
-            ForEach(RoomChangePermissionsGroup.allCases, id: \.self) { group in
+            ForEach(RoomChangePermissionsScreenGroup.allCases, id: \.self) { group in
                 section(for: group)
             }
         }
@@ -27,8 +27,8 @@ struct RoomChangePermissionsScreen: View {
     }
     
     @ViewBuilder
-    private func section(for group: RoomChangePermissionsGroup) -> some View {
-        if let settings = $context.settings[group].unwrap() {
+    private func section(for group: RoomChangePermissionsScreenGroup) -> some View {
+        if let settings = Binding($context.settings[group]) {
             Section {
                 ForEach(settings) { $setting in
                     ListRow(label: .plain(title: setting.title),

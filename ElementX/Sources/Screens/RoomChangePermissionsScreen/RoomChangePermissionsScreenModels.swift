@@ -29,7 +29,7 @@ struct RoomChangePermissionsScreenViewState: BindableState {
 
 struct RoomChangePermissionsScreenViewStateBindings: BindableState {
     /// All of the settings shown for this screen.
-    var settings: [RoomChangePermissionsGroup: [RoomPermissionsSetting]]
+    var settings: [RoomChangePermissionsScreenGroup: [RoomPermissionsSetting]]
     /// Information about the currently displayed alert.
     var alertInfo: AlertInfo<RoomChangePermissionsScreenAlertType>?
 }
@@ -48,7 +48,7 @@ enum RoomChangePermissionsScreenViewAction {
     case cancel
 }
 
-enum RoomChangePermissionsGroup: CaseIterable {
+enum RoomChangePermissionsScreenGroup: CaseIterable {
     case memberModeration
     case roomDetails
     case messagesAndContent
@@ -70,8 +70,8 @@ extension RoomChangePermissionsScreenViewState {
     ///   - currentPermissions: The current permissions for the room.
     ///   - isSpace: if the room is a space or a normal room.
     init(currentPermissions: RoomPermissions, isSpace: Bool) {
-        var settings = [RoomChangePermissionsGroup: [RoomPermissionsSetting]]()
-        for group in RoomChangePermissionsGroup.allCases {
+        var settings = [RoomChangePermissionsScreenGroup: [RoomPermissionsSetting]]()
+        for group in RoomChangePermissionsScreenGroup.allCases {
             switch group {
             case .roomDetails:
                 settings[group] = [

@@ -621,11 +621,15 @@
 "screen_room_pinned_banner_loading_description" = "Загрузка сообщения...";
 "screen_room_pinned_banner_view_all_button_title" = "Посмотреть все";
 "screen_room_single_knock_request_title" = "%1$@ хочет присоединиться к этой комнате";
+"screen_room_change_permissions_change_settings" = "Change settings";
+"screen_room_change_permissions_manage_space" = "Manage space";
+"screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Редактировать роль владельца и администратора";
 "screen_room_details_pinned_events_row_title" = "Закрепленные сообщения";
 "screen_room_details_requests_to_join_title" = "Запросы на вступление";
 "screen_room_grouped_state_events_expand" = "Развернуть";
 "screen_room_grouped_state_events_reduce" = "Уменьшить";
+"screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Перейти в новую комнату";
 "screen_room_timeline_tombstoned_room_message" = "Эта комната была заменена и больше не активна";
 "screen_room_timeline_upgraded_room_action" = "Посмотреть старые сообщения";
@@ -669,7 +673,6 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ пространство";
 "screen_space_list_title" = "Пространства";
-"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Присоединиться к комнате по адресу";
 "screen_start_chat_join_room_by_address_invalid_address" = "Недействительный адрес";
 "screen_start_chat_join_room_by_address_placeholder" = "Ввести...";
@@ -679,7 +682,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Сообщение не отправлено, потому что подтвержденная личность %1$@ была сброшена.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Сообщение не отправлено, потому что %1$@ не проверил одно или несколько устройств.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Сообщение не отправлено, поскольку вы не подтвердили одно или несколько своих устройств.";
-"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Адрес домашнего сервера";
 "screen_account_provider_form_notice" = "Введите поисковый запрос или адрес домена.";
 "screen_account_provider_form_subtitle" = "Поиск компании, сообщества или частного сервера.";
@@ -1002,10 +1004,13 @@
 "screen_room_change_permissions_administrators" = "Только администраторы";
 "screen_room_change_permissions_ban_people" = "Блокировать людей могут";
 "screen_room_change_permissions_delete_messages" = "Удалить сообщения";
+"screen_room_change_permissions_everyone" = "Member";
 "screen_room_change_permissions_invite_people" = "Приглашать людей и принимать запросы на присоединение могут";
+"screen_room_change_permissions_member_moderation" = "Manage members";
 "screen_room_change_permissions_moderators" = "Администраторы и модераторы";
 "screen_room_change_permissions_remove_people" = "Удалять людей и отклонять запросы на присоединение могут";
 "screen_room_change_permissions_room_avatar" = "Менять изображение комнаты могут";
+"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "Менять название комнаты могут";
 "screen_room_change_permissions_room_topic" = "Менять тему комнаты могут";
 "screen_room_change_permissions_send_messages" = "Отправлять сообщения могут";
@@ -1093,7 +1098,6 @@
 "screen_room_roles_and_permissions_messages_and_content" = "Сообщения и содержание";
 "screen_room_roles_and_permissions_moderators" = "Модераторы";
 "screen_room_roles_and_permissions_owners" = "Владельцы";
-"screen_room_roles_and_permissions_permissions_header" = "Разрешения";
 "screen_room_roles_and_permissions_reset" = "Сбросить разрешения";
 "screen_room_roles_and_permissions_reset_confirm_description" = "Как только вы сбросите разрешения, все текущие настройки будут утеряны.";
 "screen_room_roles_and_permissions_reset_confirm_title" = "Сбросить разрешения?";
@@ -1364,6 +1368,7 @@
 "screen_security_and_privacy_room_history_anyone_option_title" = "Любой";
 "screen_security_and_privacy_room_visibility_section_header" = "Видимость комнаты";
 "screen_space_settings_leave_space" = "Покинуть пространство";
+"screen_space_settings_roles_and_permissions" = "Роли и разрешения";
 "screen_space_settings_security_and_privacy" = "Безопасность и конфиденциальность";
 "screen_account_provider_change" = "Сменить поставщика учетной записи";
 "screen_account_provider_signin_subtitle" = "Здесь будут храниться ваши разговоры — точно так же, как если бы вы использовали почтового провайдера для хранения своих писем.";
@@ -1404,10 +1409,7 @@
 "screen_report_content_block_user" = "Заблокировать пользователя";
 "screen_reset_encryption_password_placeholder" = "Вход…";
 "screen_room_attachment_source_camera_photo" = "Сделать фото";
-"screen_room_change_permissions_everyone" = "Все";
-"screen_room_change_permissions_member_moderation" = "Модерация участников";
 "screen_room_change_permissions_messages_and_content" = "Сообщения и содержание";
-"screen_room_change_permissions_room_details" = "Информация о комнате";
 "screen_room_change_role_section_administrators" = "Администраторы";
 "screen_room_change_role_section_moderators" = "Модераторы";
 "screen_room_change_role_section_users" = "Участники";
@@ -1426,6 +1428,7 @@
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Удалить и заблокировать участника";
 "screen_room_notification_settings_mode_all_messages" = "О всех сообщениях";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Только упоминания и ключевые слова";
+"screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_timeline_reactions_show_less" = "Показать меньше";
 "screen_roomlist_filter_invites" = "Приглашения";
 "screen_roomlist_filter_people" = "Пользователи";

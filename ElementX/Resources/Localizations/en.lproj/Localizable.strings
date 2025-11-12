@@ -1098,7 +1098,6 @@
 "screen_room_roles_and_permissions_messages_and_content" = "Messages and content";
 "screen_room_roles_and_permissions_moderators" = "Moderators";
 "screen_room_roles_and_permissions_owners" = "Owners";
-"screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_roles_and_permissions_reset" = "Reset permissions";
 "screen_room_roles_and_permissions_reset_confirm_description" = "Once you reset permissions, you will lose the current settings.";
 "screen_room_roles_and_permissions_reset_confirm_title" = "Reset permissions?";
@@ -1429,6 +1428,7 @@
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Ban user";
 "screen_room_notification_settings_mode_all_messages" = "All messages";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_timeline_reactions_show_less" = "Show less";
 "screen_roomlist_filter_invites" = "Invites";
 "screen_roomlist_filter_people" = "People";
