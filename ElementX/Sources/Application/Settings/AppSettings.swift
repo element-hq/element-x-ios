@@ -54,6 +54,8 @@ final class AppSettings {
         
         case elementCallBaseURLOverride
         
+        case acknowledgedHistoryVisibleRooms
+        
         // Feature flags
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
@@ -169,6 +171,10 @@ final class AppSettings {
     /// Defaults to `true` for new users, and we use a migration to set it to `false` for existing users.
     @UserPreference(key: UserDefaultsKeys.hasSeenNewSoundBanner, defaultValue: true, storageType: .userDefaults(store))
     var hasSeenNewSoundBanner
+    
+    /// The Set of room identifiers that the user has acknowledged have visible history.
+    @UserPreference(key: UserDefaultsKeys.acknowledgedHistoryVisibleRooms, defaultValue: [], storageType: .userDefaults(store))
+    var acknowledgedHistoryVisibleRooms: Set<String>
     
     /// The initial set of account providers shown to the user in the authentication flow.
     ///

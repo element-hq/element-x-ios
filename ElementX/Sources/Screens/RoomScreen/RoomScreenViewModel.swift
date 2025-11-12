@@ -101,6 +101,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 Task { await resolveIdentityPinningViolation(userID) }
             case .resolveVerificationViolation(let userID):
                 Task { await resolveIdentityVerificationViolation(userID) }
+            case .dismissHistoryVisibleAlert:
+                appSettings.acknowledgedHistoryVisibleRooms.insert(roomProxy.id)
+                state.footerDetails = nil
             }
         case .acceptKnock(let eventID):
             Task { await acceptKnock(eventID: eventID) }
@@ -341,6 +344,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canAcceptKnocks = powerLevels.canOwnUserInvite()
             state.canDeclineKnocks = powerLevels.canOwnUserKick()
             state.canBan = powerLevels.canOwnUserBan()
+        }
+        
+        if roomInfo.historyVisibility == RoomHistoryVisibility.joined {
+            appSettings.acknowledgedHistoryVisibleRooms.remove(roomInfo.id)
+            state.footerDetails = nil
+        } else if roomInfo.isEncrypted, !appSettings.acknowledgedHistoryVisibleRooms.contains(roomInfo.id) {
+            state.footerDetails = .historyVisible(learnMoreURL: "https://element.io")
         }
     }
     
