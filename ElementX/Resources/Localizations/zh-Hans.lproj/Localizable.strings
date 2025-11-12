@@ -523,6 +523,7 @@
 "screen_create_room_room_access_section_knocking_option_description" = "任何人都可以请求加入房间，但必须由管理员或审核人接受";
 "screen_create_room_room_access_section_knocking_option_title" = "请求加入";
 "screen_create_room_room_address_section_footer" = "要使该房间在公开房间目录中可见，您需要一个房间地址。";
+"screen_create_room_room_address_section_title" = "房间地址";
 "screen_create_room_room_visibility_section_title" = "房间可见性";
 "screen_decline_and_block_block_user_option_description" = "您不会看到来自该用户的任何信息或房间邀请";
 "screen_decline_and_block_report_user_option_description" = "向您的帐户提供商举报此房间。";
@@ -623,6 +624,7 @@
 "screen_room_single_knock_request_title" = "%1$@想加入这个房间";
 "screen_room_change_permissions_change_settings" = "Change settings";
 "screen_room_change_permissions_manage_space" = "Manage space";
+"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "编辑管理员或所有者";
 "screen_room_details_pinned_events_row_title" = "置顶消息";
@@ -645,13 +647,17 @@
 "screen_security_and_privacy_encryption_section_footer" = "加密一旦启用，就无法禁用。";
 "screen_security_and_privacy_encryption_toggle_title" = "启用端到端加密";
 "screen_security_and_privacy_room_access_anyone_option_description" = "任何人都可以找到并加入";
+"screen_security_and_privacy_room_access_anyone_option_title" = "任何人";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "只有受邀者才能加入";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "仅限邀请";
 "screen_security_and_privacy_room_access_section_header" = "房间访问权限";
 "screen_security_and_privacy_room_access_space_members_option_description" = "目前不支持空间";
 "screen_security_and_privacy_room_access_space_members_option_title" = "空间成员";
+"screen_security_and_privacy_room_address_description" = "You’ll need an address in order to make it visible in the public directory.";
 "screen_security_and_privacy_room_address_section_footer" = "你需要有房间地址才能使其在房间目录中可见。";
+"screen_security_and_privacy_room_address_section_header" = "房间地址";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "允许通过搜索 %1$@ 的公共房间目录来发现此房间";
+"screen_security_and_privacy_room_directory_visibility_toggle_description" = "Allow to be found by searching the public directory.";
 "screen_security_and_privacy_room_directory_visibility_toggle_title" = "在公共房间目录中可见";
 "screen_security_and_privacy_room_history_section_header" = "谁可以读取历史记录";
 "screen_security_and_privacy_room_history_since_invite_option_title" = "仅限被邀请的成员";
@@ -1347,7 +1353,6 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "如果受到邀请，他们可以重新加入聊天室。";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "取消封禁";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "解除封禁 %1$@";
-"screen_create_room_room_address_section_title" = "房间地址";
 "screen_decline_and_block_block_user_option_title" = "封禁用户";
 "screen_decline_and_block_report_user_reason_placeholder" = "描述举报的原因...";
 "screen_home_tab_chats" = "全部聊天";
@@ -1363,8 +1368,6 @@
 "screen_roomlist_knock_event_sent_description" = "加入请求已发送";
 "screen_security_and_privacy_ask_to_join_option_title" = "请求加入";
 "screen_security_and_privacy_encryption_section_header" = "加密";
-"screen_security_and_privacy_room_access_anyone_option_title" = "任何人";
-"screen_security_and_privacy_room_address_section_header" = "房间地址";
 "screen_security_and_privacy_room_history_anyone_option_title" = "任何人";
 "screen_security_and_privacy_room_visibility_section_header" = "房间可见性";
 "screen_space_settings_leave_space" = "离开空间";

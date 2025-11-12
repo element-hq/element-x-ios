@@ -20,9 +20,7 @@ struct SecurityAndPrivacyScreen: View {
             
             if context.desiredSettings.accessType != .inviteOnly, context.viewState.canEditAddress {
                 if let canonicalAlias = context.viewState.canonicalAlias {
-                    visibilitySection
                     addressSection(canonicalAlias: canonicalAlias)
-                    roomDirectoryVisibilitySection
                 } else {
                     publishingSection
                     addAddressSection
@@ -47,26 +45,31 @@ struct SecurityAndPrivacyScreen: View {
     
     private var roomAccessSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle,
-                                  description: L10n.screenSecurityAndPrivacyRoomAccessInviteOnlyOptionDescription),
-                    kind: .selection(isSelected: context.desiredSettings.accessType == .inviteOnly) { context.desiredSettings.accessType = .inviteOnly })
+            ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionTitle,
+                                    description: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionDescription,
+                                    icon: \.public),
+                    kind: .selection(isSelected: context.desiredSettings.accessType == .anyone) { context.desiredSettings.accessType = .anyone })
             if context.viewState.isKnockingEnabled || context.viewState.currentSettings.accessType == .askToJoin {
-                ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyAskToJoinOptionTitle,
-                                      description: L10n.screenSecurityAndPrivacyAskToJoinOptionDescription),
+                ListRow(label: .default(title: L10n.screenSecurityAndPrivacyAskToJoinOptionTitle,
+                                        description: L10n.screenSecurityAndPrivacyAskToJoinOptionDescription,
+                                        icon: \.userAdd),
                         kind: .selection(isSelected: context.desiredSettings.accessType == .askToJoin) { context.desiredSettings.accessType = .askToJoin })
                     .disabled(!context.viewState.isKnockingEnabled)
             }
-            ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionTitle,
-                                  description: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionDescription),
-                    kind: .selection(isSelected: context.desiredSettings.accessType == .anyone) { context.desiredSettings.accessType = .anyone })
             
             if context.viewState.currentSettings.accessType == .spaceUsers {
-                ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionTitle,
-                                      description: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionDescription),
+                ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionTitle,
+                                        description: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionDescription,
+                                        icon: \.space),
                         kind: .selection(isSelected: context.desiredSettings.accessType == .spaceUsers) { })
                     // This is not supported so it will always be disabled and has no handler
                     .disabled(true)
             }
+            
+            ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle,
+                                    description: L10n.screenSecurityAndPrivacyRoomAccessInviteOnlyOptionDescription,
+                                    icon: \.lock),
+                    kind: .selection(isSelected: context.desiredSettings.accessType == .inviteOnly) { context.desiredSettings.accessType = .inviteOnly })
         } header: {
             Text(L10n.screenSecurityAndPrivacyRoomAccessSectionHeader)
                 .compoundListSectionHeader()
@@ -116,27 +119,15 @@ struct SecurityAndPrivacyScreen: View {
         }
     }
     
-    private var visibilitySection: some View {
-        Section {
-            EmptyView()
-        } header: {
-            Text(L10n.screenSecurityAndPrivacyRoomVisibilitySectionHeader)
-                .compoundListSectionHeader()
-        } footer: {
-            Text(L10n.screenSecurityAndPrivacyRoomVisibilitySectionFooter(context.viewState.serverName))
-                .compoundListSectionFooter()
-        }
-    }
-    
     private func addressSection(canonicalAlias: String) -> some View {
         Section {
-            ListRow(label: .plain(title: canonicalAlias), kind: .navigationLink { context.send(viewAction: .editAddress) })
+            ListRow(label: .plain(title: canonicalAlias,
+                                  description: L10n.screenSecurityAndPrivacyRoomAddressDescription),
+                    kind: .navigationLink { context.send(viewAction: .editAddress) })
+            roomDirectoryVisibilityRow
         } header: {
             Text(L10n.screenSecurityAndPrivacyRoomAddressSectionHeader)
                 .compoundListSectionHeader()
-        } footer: {
-            Text(L10n.screenSecurityAndPrivacyRoomAddressSectionFooter)
-                .compoundListSectionFooter()
         }
     }
     
@@ -168,22 +159,16 @@ struct SecurityAndPrivacyScreen: View {
     }
     
     @ViewBuilder
-    private var roomDirectoryVisibilitySection: some View {
+    private var roomDirectoryVisibilityRow: some View {
         let binding = Binding<Bool>(get: {
             context.desiredSettings.isVisibileInRoomDirectory ?? false
         }, set: { newValue in
             context.desiredSettings.isVisibileInRoomDirectory = newValue
         })
-        
-        Section {
-            ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomDirectoryVisibilityToggleTitle),
-                    details:
-                    context.desiredSettings.isVisibileInRoomDirectory == nil ? .isWaiting(true) : nil,
-                    kind: context.desiredSettings.isVisibileInRoomDirectory == nil ? .label : .toggle(binding))
-        } footer: {
-            Text(L10n.screenSecurityAndPrivacyRoomDirectoryVisibilitySectionFooter(context.viewState.serverName))
-                .compoundListSectionFooter()
-        }
+        ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomDirectoryVisibilityToggleTitle,
+                              description: L10n.screenSecurityAndPrivacyRoomDirectoryVisibilityToggleDescription),
+                details: context.desiredSettings.isVisibileInRoomDirectory == nil ? .isWaiting(true) : nil,
+                kind: context.desiredSettings.isVisibileInRoomDirectory == nil ? .label : .toggle(binding))
     }
     
     @ToolbarContentBuilder
