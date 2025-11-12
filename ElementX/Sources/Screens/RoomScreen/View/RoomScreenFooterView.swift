@@ -20,6 +20,8 @@ struct RoomScreenFooterView: View {
             .compound.borderInfoSubtle
         case .verificationViolation:
             .compound.borderCriticalSubtle
+        case .historyVisible:
+            .compound.borderInfoSubtle
         case .none:
             Color.compound.bgCanvasDefault
         }
@@ -31,6 +33,8 @@ struct RoomScreenFooterView: View {
             .compound.info
         case .verificationViolation:
             Gradient(colors: [.compound.bgCriticalSubtle, .clear])
+        case .historyVisible:
+            Gradient(colors: [.compound.bgInfoSubtle, .clear])
         case .none:
             Gradient(colors: [.clear])
         }
@@ -54,6 +58,8 @@ struct RoomScreenFooterView: View {
             pinViolation(member: member, learnMoreURL: learnMoreURL)
         case .verificationViolation(member: let member, learnMoreURL: let learnMoreURL):
             verificationViolation(member: member, learnMoreURL: learnMoreURL)
+        case .historyVisible(learnMoreURL: let learnMoreURL):
+            historyVisibleAlert(learnMoreUrl: learnMoreURL)
         }
     }
     
@@ -155,6 +161,34 @@ struct RoomScreenFooterView: View {
         guard let localpart = userID.components(separatedBy: ":").first else { return userID }
         return String(localpart.trimmingPrefix("@"))
     }
+    
+    private func historyVisibleAlert(learnMoreUrl: URL) -> some View {
+        let linkPlaceholder = "{link}"
+        var description = AttributedString(UntranslatedL10n.cryptoHistoryVisible(linkPlaceholder))
+        var linkString = AttributedString(L10n.actionLearnMore)
+        linkString.link = learnMoreUrl
+        linkString.bold()
+        description.replace(linkPlaceholder, with: linkString)
+        
+        return VStack(spacing: 16) {
+            HStack(spacing: 16) {
+                CompoundIcon(\.info).foregroundColor(.compound.iconInfoPrimary)
+                Text(description)
+                    .font(.compound.bodyMD)
+                    .foregroundColor(.compound.textInfoPrimary)
+            }
+            Button {
+                callback(.dismissHistoryVisibleAlert)
+            } label: {
+                Text(L10n.actionDismiss)
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.compound(.primary, size: .medium))
+        }
+        .padding(.top, 16)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 8)
+    }
 }
 
 struct RoomScreenFooterView_Previews: PreviewProvider, TestablePreview {
@@ -166,6 +200,8 @@ struct RoomScreenFooterView_Previews: PreviewProvider, TestablePreview {
     static let verificationViolationDetails: RoomScreenFooterViewDetails = .verificationViolation(member: RoomMemberProxyMock.mockBob,
                                                                                                   learnMoreURL: "https://element.io/")
     
+    static let historyVisibleDetails: RoomScreenFooterViewDetails = .historyVisible(learnMoreURL: "https://element.io")
+    
     static var previews: some View {
         RoomScreenFooterView(details: bobDetails, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
             .previewDisplayName("With displayname")
@@ -173,5 +209,7 @@ struct RoomScreenFooterView_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("Without displayname")
         RoomScreenFooterView(details: verificationViolationDetails, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
             .previewDisplayName("Verification Violation")
+        RoomScreenFooterView(details: historyVisibleDetails, mediaProvider: MediaProviderMock(configuration: .init()))
+            { _ in }.previewDisplayName("History Visible")
     }
 }
