@@ -189,7 +189,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
-        let ringDurationMillis = min(expirationDate.timeIntervalSince1970 - nowDate.timeIntervalSince1970, 90) * 1000
+        let ringDuration: Duration = .seconds(min(expirationDate.timeIntervalSince1970 - nowDate.timeIntervalSince1970, 90))
         
         let roomDisplayName = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
         
@@ -210,7 +210,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         
         endUnansweredCallTask = Task { [weak self] in
-            try? await self?.timeProvider.clock.sleep(for: .milliseconds(ringDurationMillis))
+            try? await self?.timeProvider.clock.sleep(for: ringDuration)
             
             guard let self, !Task.isCancelled else {
                 return
