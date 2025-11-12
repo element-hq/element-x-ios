@@ -686,7 +686,51 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(String(attributedString.characters), "like\n\n • this\ntest")
+        XCTAssertEqual(String(attributedString.characters), "like\n\n   • this\ntest")
+    }
+    
+    func testUnorderedList() {
+        let htmlString = "<ul><li>1</li><li>2</li><li>3</li></ul>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "  • 1\n  • 2\n  • 3")
+    }
+    
+    func testNestedUnorderedList() {
+        let htmlString = "<ul><li>A<ul><li>A1</li><li>A2</li><li>A3</li></ul></li><li>B</li><li>C</li></ul>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "  • A\n      • A1\n      • A2\n      • A3\n  • B\n  • C")
+    }
+    
+    func testOrderedList() {
+        let htmlString = "<ol><li>1</li><li>2</li><li>3</li></ol>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "  1. 1\n  2. 2\n  3. 3")
+    }
+    
+    func testNestedOrderedList() {
+        let htmlString = "<ol><li>A<ol><li>A1</li><li>A2</li><li>A3</li></ol></li><li>B</li><li>C</li></ol>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "  1. A\n      1. A1\n      2. A2\n      3. A3\n  2. B\n  3. C")
     }
     
     func testOutOfOrderListNubmering() {
@@ -697,7 +741,18 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(String(attributedString.characters), " 2. this is a two")
+        XCTAssertEqual(String(attributedString.characters), "   2. this is a two")
+    }
+    
+    func testNestedHeterogeneousLists() {
+        let htmlString = "<ol><li>A<ul><li>A1</li><li>A2</li><li>A3</li></ul></li><li>B</li><li>C</li></ol>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "  1. A\n      • A1\n      • A2\n      • A3\n  2. B\n  3. C")
     }
     
     // MARK: - Phishing prevention
