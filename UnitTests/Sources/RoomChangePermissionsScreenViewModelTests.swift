@@ -18,16 +18,9 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
     var context: RoomChangePermissionsScreenViewModelType.Context {
         viewModel.context
     }
-    
-    override func setUp() {
-        roomProxy = JoinedRoomProxyMock(.init())
-        viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: .init(powerLevels: .mock),
-                                                         roomProxy: roomProxy,
-                                                         userIndicatorController: UserIndicatorControllerMock(),
-                                                         analytics: ServiceLocator.shared.analytics)
-    }
 
     func testChangeSetting() {
+        setUp(isSpace: false)
         // Given a screen with no changes.
         guard let index = context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
             XCTFail("There should be a setting for the room avatar.")
@@ -46,6 +39,7 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
     }
     
     func testSave() async throws {
+        setUp(isSpace: false)
         // Given a screen with changes.
         guard let index = context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
             XCTFail("There should be a setting for the room avatar.")
@@ -68,6 +62,7 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
     }
     
     func testSaveNoChanges() async throws {
+        setUp(isSpace: false)
         // Given a screen with no changes.
         XCTAssertFalse(context.viewState.hasChanges)
         
@@ -76,5 +71,29 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
         
         // Then nothing should happen.
         XCTAssertFalse(roomProxy.applyPowerLevelChangesCalled)
+    }
+    
+    func testDefaultStateRoom() async throws {
+        setUp(isSpace: false)
+        XCTAssertNotNil(context.settings[.roomDetails])
+        XCTAssertNotNil(context.settings[.memberModeration])
+        XCTAssertNotNil(context.settings[.messagesAndContent])
+        XCTAssertNil(context.settings[.manageSpace])
+    }
+    
+    func testDefaultStateSpace() async throws {
+        setUp(isSpace: true)
+        XCTAssertNotNil(context.settings[.roomDetails])
+        XCTAssertNotNil(context.settings[.memberModeration])
+        XCTAssertNil(context.settings[.messagesAndContent])
+        XCTAssertNotNil(context.settings[.manageSpace])
+    }
+    
+    private func setUp(isSpace: Bool) {
+        roomProxy = JoinedRoomProxyMock(.init(isSpace: isSpace))
+        viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: .init(powerLevels: .mock),
+                                                         roomProxy: roomProxy,
+                                                         userIndicatorController: UserIndicatorControllerMock(),
+                                                         analytics: ServiceLocator.shared.analytics)
     }
 }
