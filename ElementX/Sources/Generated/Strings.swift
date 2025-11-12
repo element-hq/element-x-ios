@@ -2306,6 +2306,8 @@ internal enum L10n {
   internal static var screenRoomChangePermissionsInvitePeople: String { return L10n.tr("Localizable", "screen_room_change_permissions_invite_people") }
   /// Manage space
   internal static var screenRoomChangePermissionsManageSpace: String { return L10n.tr("Localizable", "screen_room_change_permissions_manage_space") }
+  /// Manage rooms
+  internal static var screenRoomChangePermissionsManageSpaceRooms: String { return L10n.tr("Localizable", "screen_room_change_permissions_manage_space_rooms") }
   /// Manage members
   internal static var screenRoomChangePermissionsMemberModeration: String { return L10n.tr("Localizable", "screen_room_change_permissions_member_moderation") }
   /// Messages and content
