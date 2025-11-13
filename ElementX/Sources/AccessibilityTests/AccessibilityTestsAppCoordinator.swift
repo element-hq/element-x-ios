@@ -108,6 +108,7 @@ struct PreviewsWrapperView: View {
             EmptyView()
         } else {
             wrapper.currentPreview.content
+                // This ID raises UIKit assertions on iOS 26 but is needed otherwise toolbars go missing and some timeline items won't resize.
                 .id("\(wrapper.previewName)-\(dynamicTypeSize)")
         }
     }
