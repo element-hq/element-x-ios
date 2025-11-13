@@ -65,6 +65,6 @@ extension RoomPowerLevelsValues {
                               roomName: 50,
                               roomAvatar: 50,
                               roomTopic: 50,
-                              manageRoomsInSpace: 50)
+                              spaceChild: 50)
     }
 }

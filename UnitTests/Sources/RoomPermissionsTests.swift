@@ -24,7 +24,7 @@ class RoomPermissionsTests: XCTestCase {
                                                 roomName: 0,
                                                 roomAvatar: 0,
                                                 roomTopic: 0,
-                                                manageRoomsInSpace: 100)
+                                                spaceChild: 100)
         
         // When creating room permissions from them.
         let permissions = RoomPermissions(powerLevels: powerLevels)
@@ -40,6 +40,6 @@ class RoomPermissionsTests: XCTestCase {
         XCTAssertEqual(permissions.roomName, .user)
         XCTAssertEqual(permissions.roomAvatar, .user)
         XCTAssertEqual(permissions.roomTopic, .user)
-        XCTAssertEqual(permissions.manageRoomsInSpace, .administrator)
+        XCTAssertEqual(permissions.spaceChild, .administrator)
     }
 }
