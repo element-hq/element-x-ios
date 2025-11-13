@@ -400,7 +400,7 @@ private struct NavigationSplitCoordinatorView: View {
                 .id(module.id)
         }
         .animation(.elementDefault, value: navigationSplitCoordinator.sidebarModule)
-        .animation(.elementDefault, value: navigationSplitCoordinator.detailModule)
+        .animation(.noAnimation, value: navigationSplitCoordinator.detailModule) // Don't crossfade the detail transition on iPad.
     }
 }
 
