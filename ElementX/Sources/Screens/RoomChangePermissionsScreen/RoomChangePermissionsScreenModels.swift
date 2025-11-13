@@ -113,8 +113,8 @@ extension RoomChangePermissionsScreenViewState {
                 if isSpace {
                     settings[group] = [
                         RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsManageSpaceRooms,
-                                               value: currentPermissions.manageRoomsInSpace,
-                                               keyPath: \.manageRoomsInSpace),
+                                               value: currentPermissions.spaceChild,
+                                               keyPath: \.spaceChild),
                         RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsChangeSettings,
                                                value: currentPermissions.stateDefault,
                                                keyPath: \.stateDefault)
