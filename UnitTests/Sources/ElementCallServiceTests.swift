@@ -78,7 +78,7 @@ class ElementCallServiceTests: XCTestCase {
         XCTAssertTrue(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
     }
     
-    func testLifetimeIsCapped() async {
+    func testLifetimeIsCapped() async throws {
         setupService()
    
         XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
@@ -89,8 +89,9 @@ class ElementCallServiceTests: XCTestCase {
                              didReceiveIncomingPushWith: pushPayload,
                              for: .voIP) { }
         
-        // advance pass the max timeout but below the 300
+        // Advance past the max timeout but below the 300
         await testClock.advance(by: .seconds(100))
+        try await Task.sleep(for: .milliseconds(100)) // Make sure there's time for the unanswered call to be reported.
         
         // Call should have ended with unanswered
         XCTAssertTrue(callProvider.reportCallWithEndedAtReasonCalled)
