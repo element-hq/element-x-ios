@@ -11,6 +11,7 @@ import Foundation
 @testable import Compound
 import XCTest
 
+@MainActor
 class OverrideColorTests: XCTestCase {
     func testSwiftUI() {
         let colors = CompoundColors()

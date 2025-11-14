@@ -62,8 +62,11 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         super.init()
     }
     
-    override func didReceive(_ request: UNNotificationRequest,
-                             withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        Task { await handle(request, withContentHandler: contentHandler) }
+    }
+    
+    private func handle(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) async {
         guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
               let roomID = request.content.roomID,
               let eventID = request.content.eventID,
@@ -78,7 +81,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
-        appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: settings)
+        await appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: settings)
         
         guard let mutableContent = request.content.mutableCopy() as? UNMutableNotificationContent else {
             return contentHandler(request.content)
@@ -90,27 +93,25 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         
         MXLog.info("\(tag) Received payload: \(request.content.userInfo)")
         
-        Task {
-            do {
-                let userSession = try await NSEUserSession(credentials: credentials,
-                                                           roomID: roomID,
-                                                           clientSessionDelegate: keychainController,
-                                                           appHooks: appHooks,
-                                                           appSettings: settings)
-                
-                notificationHandler = NotificationHandler(userSession: userSession,
-                                                          settings: settings,
-                                                          contentHandler: contentHandler,
-                                                          notificationContent: mutableContent,
-                                                          tag: tag)
-                
-                ExtensionLogger.logMemory(with: tag)
-                MXLog.info("\(tag) Configured user session")
-                
-                await notificationHandler?.processEvent(eventID, roomID: roomID)
-            } catch {
-                MXLog.error("Failed creating user session with error: \(error)")
-            }
+        do {
+            let userSession = try await NSEUserSession(credentials: credentials,
+                                                       roomID: roomID,
+                                                       clientSessionDelegate: keychainController,
+                                                       appHooks: appHooks,
+                                                       appSettings: settings)
+            
+            notificationHandler = NotificationHandler(userSession: userSession,
+                                                      settings: settings,
+                                                      contentHandler: contentHandler,
+                                                      notificationContent: mutableContent,
+                                                      tag: tag)
+            
+            ExtensionLogger.logMemory(with: tag)
+            MXLog.info("\(tag) Configured user session")
+            
+            await notificationHandler?.processEvent(eventID, roomID: roomID)
+        } catch {
+            MXLog.error("Failed creating user session with error: \(error)")
         }
     }
     
