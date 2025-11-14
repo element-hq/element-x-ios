@@ -16,9 +16,16 @@ class ElementCallServiceTests: XCTestCase {
     var callProvider: CXProviderMock!
     var currentDate: Date!
     var testClock: TestClock<Duration>!
-    let pushRegistry = PKPushRegistry(queue: nil)
+    var pushRegistry: PKPushRegistry!
     
     var service: ElementCallService!
+    
+    override func tearDown() {
+        callProvider = nil
+        currentDate = nil
+        testClock = nil
+        pushRegistry = nil
+    }
     
     func testIncomingCall() async {
         setupService()
@@ -106,12 +113,13 @@ class ElementCallServiceTests: XCTestCase {
         
         // Advance past the max timeout but below the 300
         await testClock.advance(by: .seconds(100))
-        await fulfillment(of: [expectation])
+        await fulfillment(of: [expectation], timeout: 1)
     }
     
     // MARK: - Helpers
     
     private func setupService() {
+        pushRegistry = PKPushRegistry(queue: nil)
         callProvider = CXProviderMock(.init())
         currentDate = Date()
         testClock = TestClock()
