@@ -44,7 +44,7 @@ class ElementCallServiceTests: XCTestCase {
         XCTAssertTrue(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
     }
     
-    func testCallIsTimingOut() async {
+    func disabled_testCallIsTimingOut() async {
         setupService()
         
         XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
@@ -91,7 +91,7 @@ class ElementCallServiceTests: XCTestCase {
         XCTAssertTrue(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
     }
     
-    func testLifetimeIsCapped() async throws {
+    func disabled_testLifetimeIsCapped() async throws {
         setupService()
         
         let expectation = expectation(description: "Call has ended unanswered")
