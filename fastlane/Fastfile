@@ -7,7 +7,7 @@ if File.exist?(enterprise)
   import enterprise
 end
 
-simulator_version = "26.0"
+simulator_version = "26.1"
 
 before_all do
   xcversion(version: "~> 26.1")
@@ -19,11 +19,6 @@ end
 
 lane :unit_tests do |options|
   reset_simulator = ENV.key?('CI')
-  
-  create_simulator_if_necessary(
-    name: "iPhone 17",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
-  )
   
   run_tests(
     scheme: "UnitTests",
@@ -97,11 +92,6 @@ end
 
 lane :accessibility_tests do |options|
   reset_simulator = ENV.key?('CI')
-  
-  create_simulator_if_necessary(
-    name: "iPhone 17",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
-  )
   
   run_tests(
     scheme: "AccessibilityTests",
