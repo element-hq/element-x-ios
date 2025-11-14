@@ -117,7 +117,7 @@ final class NSEUserSession {
     }
 }
 
-private class ClientDelegateWrapper: ClientDelegate {
+private final class ClientDelegateWrapper: ClientDelegate {
     // MARK: - ClientDelegate
 
     func didReceiveAuthError(isSoftLogout: Bool) {

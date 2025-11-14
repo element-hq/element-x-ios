@@ -111,7 +111,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
     // MARK: - Private
     
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     func attributedString(element: Element,
                           documentBody: Element,
                           preserveFormatting: Bool,
