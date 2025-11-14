@@ -35,7 +35,7 @@ public class CompoundUIColors {
     
     /// Customise the colour at the specified key path with the supplied colour.
     /// Supplying `nil` as the colour will remove any existing customisation.
-    public func override(_ keyPath: KeyPath<CompoundUIColorTokens, UIColor>, with color: UIColor?) {
+    @MainActor public func override(_ keyPath: KeyPath<CompoundUIColorTokens, UIColor>, with color: UIColor?) {
         overrides[keyPath] = color
     }
     
