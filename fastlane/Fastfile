@@ -1,5 +1,4 @@
 require 'yaml'
-require 'timeout'
 
 skip_docs
 
