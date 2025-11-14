@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import KeychainAccess
+@preconcurrency import KeychainAccess
 import MatrixRustSDK
 
 enum KeychainControllerService: String {
@@ -23,7 +23,7 @@ enum KeychainControllerService: String {
     }
 }
 
-class KeychainController: KeychainControllerProtocol {
+final class KeychainController: KeychainControllerProtocol {
     /// The keychain responsible for storing account restoration tokens (keyed by userID).
     private let restorationTokenKeychain: Keychain
     /// The keychain responsible for storing all other secrets in the app (keyed by `Key`s).

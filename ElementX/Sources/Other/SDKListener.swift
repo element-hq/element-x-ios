@@ -51,6 +51,14 @@ extension SDKListener: VerificationStateListener where T == VerificationState {
     func onUpdate(status: VerificationState) { onUpdateClosure(status) }
 }
 
+extension SDKListener: IgnoredUsersListener where T == [String] {
+    func call(ignoredUserIds: [String]) { onUpdateClosure(ignoredUserIds) }
+}
+
+extension SDKListener: SendQueueRoomErrorListener where T == (String, ClientError) {
+    func onError(roomId: String, error: ClientError) { onUpdateClosure((roomId, error)) }
+}
+
 // MARK: SecureBackupController
 
 extension SDKListener: BackupStateListener where T == BackupState {
@@ -105,6 +113,18 @@ extension SDKListener: RoomInfoListener where T == RoomInfo {
 
 extension SDKListener: CallDeclineListener where T == String {
     func call(declinerUserId: String) { onUpdateClosure(declinerUserId) }
+}
+
+extension SDKListener: TypingNotificationsListener where T == [String] {
+    func call(typingUserIds: [String]) { onUpdateClosure(typingUserIds) }
+}
+
+extension SDKListener: IdentityStatusChangeListener where T == [IdentityStatusChange] {
+    func call(identityStatusChange: [IdentityStatusChange]) { onUpdateClosure(identityStatusChange) }
+}
+
+extension SDKListener: KnockRequestsListener where T == [KnockRequest] {
+    func call(joinRequests: [KnockRequest]) { onUpdateClosure(joinRequests) }
 }
 
 // MARK: TimelineProxy

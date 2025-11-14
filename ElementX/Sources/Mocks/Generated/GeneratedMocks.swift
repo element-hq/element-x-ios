@@ -2141,9 +2141,9 @@ class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
     }
     var reportNewIncomingCallWithUpdateCompletionReceivedArguments: (uuid: UUID, update: CXCallUpdate, completion: (Error?) -> Void)?
     var reportNewIncomingCallWithUpdateCompletionReceivedInvocations: [(uuid: UUID, update: CXCallUpdate, completion: (Error?) -> Void)] = []
-    var reportNewIncomingCallWithUpdateCompletionClosure: ((UUID, CXCallUpdate, @escaping (Error?) -> Void) -> Void)?
+    var reportNewIncomingCallWithUpdateCompletionClosure: ((UUID, CXCallUpdate, @Sendable @escaping (Error?) -> Void) -> Void)?
 
-    func reportNewIncomingCall(with uuid: UUID, update: CXCallUpdate, completion: @escaping (Error?) -> Void) {
+    func reportNewIncomingCall(with uuid: UUID, update: CXCallUpdate, completion: @Sendable @escaping (Error?) -> Void) {
         reportNewIncomingCallWithUpdateCompletionCallsCount += 1
         reportNewIncomingCallWithUpdateCompletionReceivedArguments = (uuid: uuid, update: update, completion: completion)
         DispatchQueue.main.async {
