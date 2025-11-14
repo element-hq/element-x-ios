@@ -7,10 +7,10 @@ if File.exist?(enterprise)
   import enterprise
 end
 
-simulator_version = "26.0"
+simulator_version = "26.1"
 
 before_all do
-  xcversion(version: "~> 26.0.0")
+  xcversion(version: "~> 26.1")
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
@@ -334,3 +334,5 @@ private_lane :create_simulator_if_necessary do |options|
   
   # device_id is unused right now but is useful to check e.g. the boot status of a simulator.
 end
+
+default_platform(:ios)
