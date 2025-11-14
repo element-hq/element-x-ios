@@ -11,7 +11,7 @@ end
 simulator_version = "26.0"
 
 before_all do
-  xcversion(version: "~> 26.1.0")
+  xcversion(version: "~> 26.1")
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
@@ -21,7 +21,7 @@ end
 lane :unit_tests do |options|
   reset_simulator = ENV.key?('CI')
   
-  preboot_simulator(
+  create_simulator_if_necessary(
     name: "iPhone 17",
     type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
   )
@@ -61,14 +61,14 @@ lane :ui_tests do |options|
   if options[:device] == "iPhone"
     device = "iPhone-26.0"
     
-    preboot_simulator(
+    create_simulator_if_necessary(
       name: "iPhone-26.0",
       type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
     )
   elsif options[:device] == "iPad"
     device = "iPad-26.0"
     
-    preboot_simulator(
+    create_simulator_if_necessary(
       name: "iPad-26.0",
       type: "com.apple.CoreSimulator.SimDeviceType.iPad-A16"
     )
@@ -99,7 +99,7 @@ end
 lane :accessibility_tests do |options|
   reset_simulator = ENV.key?('CI')
   
-  preboot_simulator(
+  create_simulator_if_necessary(
     name: "iPhone 17",
     type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
   )
@@ -319,7 +319,7 @@ private_lane :bump_build_number do
   increment_build_number(build_number: build_number)
 end
 
-lane :preboot_simulator do |options|
+private_lane :create_simulator_if_necessary do |options|
   simulator_name = options[:name]
   UI.user_error!("Invalid simulator name") unless !simulator_name.to_s.empty?
 
