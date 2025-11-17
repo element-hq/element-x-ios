@@ -11,7 +11,7 @@ on:
 jobs:
   tests:
     name: Tests (Enterprise)
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 45
     
     # Skip in forks
