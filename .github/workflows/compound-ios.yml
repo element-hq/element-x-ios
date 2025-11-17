@@ -41,7 +41,7 @@ jobs:
 
     - name: Run tests
       working-directory: compound-ios
-      run: set -o pipefail && xcodebuild test -scheme 'Compound' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=Snapshots,OS=26.0.1' -skipPackagePluginValidation -resultBundlePath Logs/CompoundTests.xcresult | xcbeautify --renderer github-actions
+      run: set -o pipefail && xcodebuild test -scheme 'Compound' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=Snapshots,OS=26.1' -skipPackagePluginValidation -resultBundlePath Logs/CompoundTests.xcresult | xcbeautify --renderer github-actions
 
     - name: Zip artifacts
       if: failure() # We only care about artefacts if the tests fail
