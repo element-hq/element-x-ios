@@ -14,7 +14,7 @@ on:
 jobs:
   tests:
 
-    runs-on: macos-16
+    runs-on: macos-26
     timeout-minutes: 15
 
     concurrency:
