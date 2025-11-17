@@ -4,12 +4,17 @@
 name: Compound
 
 on:
+  workflow_dispatch:
+
   push:
     branches: [ develop ]
-    paths: [ 'compound-ios/**' ]
+    paths:
+      - 'compound-ios/**'
   
   pull_request:
-    paths: [ 'compound-ios/**' ]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'compound-ios/**'
 
 jobs:
   tests:
