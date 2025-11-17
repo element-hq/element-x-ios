@@ -53,17 +53,17 @@ lane :ui_tests do |options|
   # Presumably because launching 2 simulators uses more memory than the runner has available.
   
   if options[:device] == "iPhone"
-    device = "iPhone-26.0"
+    device = "iPhone-#{simulator_version}"
     
     create_simulator_if_necessary(
-      name: "iPhone-26.0",
+      name: "iPhone-#{simulator_version}",
       type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
     )
   elsif options[:device] == "iPad"
-    device = "iPad-26.0"
+    device = "iPad-#{simulator_version}"
     
     create_simulator_if_necessary(
-      name: "iPad-26.0",
+      name: "iPad-#{simulator_version}",
       type: "com.apple.CoreSimulator.SimDeviceType.iPad-A16"
     )
   else

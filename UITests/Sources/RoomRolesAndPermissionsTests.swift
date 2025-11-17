@@ -16,9 +16,7 @@ class RoomRolesAndPermissionsUITests: XCTestCase {
         static let rolesAndPermissions = 0
         static let administratorsRole = 1
         static let moderatorsRole = 2
-        static let roomDetailsPermissions = 3
-        static let messagesAndContentPermissions = 4
-        static let memberModerationPermissions = 5
+        static let permissions = 3
     }
     
     func testFlow() async throws {
@@ -34,15 +32,8 @@ class RoomRolesAndPermissionsUITests: XCTestCase {
         try await app.assertScreenshot(step: Step.moderatorsRole)
         app.navigationBars.buttons.element(boundBy: 0).tap()
         
-        app.buttons[A11yIdentifiers.roomRolesAndPermissionsScreen.roomDetails].tap()
-        try await app.assertScreenshot(step: Step.roomDetailsPermissions)
+        app.buttons[A11yIdentifiers.roomRolesAndPermissionsScreen.permissions].tap()
+        try await app.assertScreenshot(step: Step.permissions)
         app.navigationBars.buttons.element(boundBy: 0).tap()
-        
-        app.buttons[A11yIdentifiers.roomRolesAndPermissionsScreen.messagesAndContent].tap()
-        try await app.assertScreenshot(step: Step.messagesAndContentPermissions)
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-        
-        app.buttons[A11yIdentifiers.roomRolesAndPermissionsScreen.memberModeration].tap()
-        try await app.assertScreenshot(step: Step.memberModerationPermissions)
     }
 }
