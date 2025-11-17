@@ -362,7 +362,46 @@ class TimelineController: TimelineControllerProtocol {
                                               audioInfo: audioInfo,
                                               waveform: waveform, requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
     }
-    
+
+    func sendSticker(_ sticker: Sticker,
+                     requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        // Download the sticker from MXC URL to a temporary file
+        guard let stickerURL = URL(string: sticker.url) else {
+            MXLog.error("Invalid sticker URL: \(sticker.url)")
+            return .failure(.generic)
+        }
+
+        do {
+            // Download the sticker to a temporary file
+            let (tempFileURL, _) = try await URLSession.shared.download(from: stickerURL)
+
+            // Create ImageInfo from sticker info
+            let imageInfo = ImageInfo(
+                height: UInt(sticker.info.h),
+                width: UInt(sticker.info.w),
+                mimetype: sticker.info.mimetype,
+                size: UInt(sticker.info.size),
+                blurhash: nil
+            )
+
+            // Send the sticker using the timeline proxy
+            let result = await activeTimeline.sendSticker(
+                url: tempFileURL,
+                imageInfo: imageInfo,
+                body: sticker.body,
+                requestHandle: requestHandle
+            ).mapError(TimelineControllerError.timelineProxyError)
+
+            // Clean up the temporary file
+            try? FileManager.default.removeItem(at: tempFileURL)
+
+            return result
+        } catch {
+            MXLog.error("Failed to download sticker: \(error)")
+            return .failure(.generic)
+        }
+    }
+
     // MARK: - Polls
     
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {

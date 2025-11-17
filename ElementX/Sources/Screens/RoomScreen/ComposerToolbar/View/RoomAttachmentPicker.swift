@@ -40,7 +40,14 @@ struct RoomAttachmentPicker: View {
                 Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
-            
+
+            Button {
+                context.send(viewAction: .attach(.sticker))
+            } label: {
+                Label(L10n.commonStickers, systemImage: "face.smiling")
+            }
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerSticker)
+
             Button {
                 context.send(viewAction: .attach(.poll))
             } label: {

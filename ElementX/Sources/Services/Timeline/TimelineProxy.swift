@@ -362,7 +362,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                           waveform: [Float],
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending voice message")
-        
+
         do {
             let handle = try timeline.sendVoiceMessage(params: .init(source: .file(filename: url.path(percentEncoded: false)),
                                                                      caption: nil,
@@ -371,19 +371,49 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                                      inReplyTo: nil),
                                                        audioInfo: audioInfo,
                                                        waveform: waveform)
-            
+
             await requestHandle(handle)
-            
+
             try await handle.join()
             MXLog.info("Finished sending voice message")
         } catch {
             MXLog.error("Failed sending vocie message with error: \(error)")
             return .failure(.sdkError(error))
         }
-        
+
         return .success(())
     }
-    
+
+    func sendSticker(url: URL,
+                     imageInfo: ImageInfo,
+                     body: String,
+                     requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Sending sticker")
+
+        do {
+            // Use sendImage but send as sticker by using the sendMessageEventContent with custom content
+            // Since the Rust SDK might not have a dedicated sendSticker method yet,
+            // we'll use sendImage which is very similar to stickers
+            let handle = try timeline.sendImage(params: .init(source: .file(filename: url.path(percentEncoded: false)),
+                                                              caption: body,
+                                                              formattedCaption: nil,
+                                                              mentions: nil,
+                                                              inReplyTo: nil),
+                                                thumbnailSource: nil,
+                                                imageInfo: imageInfo)
+
+            await requestHandle(handle)
+
+            try await handle.join()
+            MXLog.info("Finished sending sticker")
+        } catch {
+            MXLog.error("Failed sending sticker with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+
+        return .success(())
+    }
+
     /// Send a message within a room. If `inReplyToEventID` is specified then it will be sent as a reply
     /// to that particular message. This works for both normal and threaded timelines with the relation and
     /// fallback logic being handled SDK side based on the timeline instance focus mode.

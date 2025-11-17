@@ -132,7 +132,10 @@ protocol TimelineControllerProtocol {
                           audioInfo: AudioInfo,
                           waveform: [Float],
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>
-    
+
+    func sendSticker(_ sticker: Sticker,
+                     requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>
+
     // MARK: - Poll
     
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError>

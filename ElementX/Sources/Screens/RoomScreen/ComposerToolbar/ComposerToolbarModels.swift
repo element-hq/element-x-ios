@@ -65,6 +65,7 @@ enum ComposerAttachmentType {
     case file
     case location
     case poll
+    case sticker
 }
 
 struct ComposerToolbarViewState: BindableState {
