@@ -15,10 +15,18 @@ import XCTest
 
 @MainActor
 class PreviewTests: XCTestCase {
+    private struct SnapshotDevice {
+        let name: String
+        let device: String
+    }
+    
     private let deviceConfig: ViewImageConfig = .iPhoneX
     private let simulatorDevice: String? = "iPhone14,6" // iPhone SE 3rd Generation
-    private let requiredOSVersion = (major: 26, minor: 0)
-    private let snapshotDevices = ["iPhone 16", "iPad"]
+    private let requiredOSVersion = (major: 26, minor: 1)
+    // The key is the name we will give to the snapshot
+    // The value is the actual device that will be used to render the preview
+    private let snapshotDevices: [SnapshotDevice] = [.init(name: "iPhone", device: "iPhone 17"),
+                                                     .init(name: "iPad", device: "iPad")]
     private var recordMode: SnapshotTestingConfiguration.Record = .missing
 
     override func setUp() {
@@ -66,9 +74,9 @@ class PreviewTests: XCTestCase {
         var sanitizedSuiteName = String(testName.suffix(testName.count - "test".count).dropLast(2))
         sanitizedSuiteName = sanitizedSuiteName.prefix(1).lowercased() + sanitizedSuiteName.dropFirst()
         
-        for deviceName in snapshotDevices {
-            guard var device = PreviewDevice(rawValue: deviceName).snapshotDevice() else {
-                fatalError("Unknown device name: \(deviceName)")
+        for snapshotDevice in snapshotDevices {
+            guard var device = PreviewDevice(rawValue: snapshotDevice.device).snapshotDevice() else {
+                fatalError("Unknown device name: \(snapshotDevice.device)")
             }
             // Ignore specific device safe area (using the workaround value to fix rendering issues).
             device.safeArea = .one
@@ -77,9 +85,9 @@ class PreviewTests: XCTestCase {
             
             var testName = ""
             if let displayName = preview.displayName {
-                testName = "\(displayName)-\(deviceName)-\(localeCode)"
+                testName = "\(displayName)-\(snapshotDevice.name)-\(localeCode)"
             } else {
-                testName = "\(deviceName)-\(localeCode)-\(step)"
+                testName = "\(snapshotDevice.name)-\(localeCode)-\(step)"
             }
             
             let isScreen = switch preview.layout {
@@ -155,7 +163,7 @@ private class SnapshotPreferences: @unchecked Sendable {
 private extension PreviewDevice {
     func snapshotDevice() -> ViewImageConfig? {
         switch rawValue {
-        case "iPhone 16", "iPhone 15", "iPhone 14", "iPhone 13", "iPhone 12", "iPhone 11", "iPhone 10":
+        case "iPhone 17", "iPhone 16", "iPhone 15", "iPhone 14", "iPhone 13", "iPhone 12", "iPhone 11", "iPhone 10":
             return .iPhoneX
         case "iPhone 6", "iPhone 6s", "iPhone 7", "iPhone 8":
             return .iPhone8
