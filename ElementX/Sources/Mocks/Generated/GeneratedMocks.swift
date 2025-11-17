@@ -16383,6 +16383,11 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
     }
 }
 class StaticRoomSummaryProviderMock: StaticRoomSummaryProviderProtocol, @unchecked Sendable {
+    var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {
+        get { return underlyingStatePublisher }
+        set(value) { underlyingStatePublisher = value }
+    }
+    var underlyingStatePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never>!
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
         get { return underlyingRoomListPublisher }
         set(value) { underlyingRoomListPublisher = value }

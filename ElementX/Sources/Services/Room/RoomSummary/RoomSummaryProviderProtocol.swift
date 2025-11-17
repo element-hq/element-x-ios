@@ -44,6 +44,9 @@ enum RoomSummaryProviderFilter: Equatable {
 
 // sourcery: AutoMockable
 protocol StaticRoomSummaryProviderProtocol {
+    /// Publishes the current state the summary provider is finding itself in
+    var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> { get }
+    
     /// Publishes the currently available room summaries
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> { get }
     
@@ -52,9 +55,6 @@ protocol StaticRoomSummaryProviderProtocol {
 
 // sourcery: AutoMockable
 protocol RoomSummaryProviderProtocol: StaticRoomSummaryProviderProtocol {
-    /// Publishes the current state the summary provider is finding itself in
-    var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> { get }
-        
     func updateVisibleRange(_ range: Range<Int>)
     
     func setFilter(_ filter: RoomSummaryProviderFilter)
