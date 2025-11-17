@@ -591,8 +591,8 @@ class ClientProxy: ClientProxyProtocol {
             return room
         }
         
-        if !roomSummaryProvider.statePublisher.value.isLoaded {
-            _ = await roomSummaryProvider.statePublisher.values.first { $0.isLoaded }
+        if !staticRoomSummaryProvider.statePublisher.value.isLoaded {
+            _ = await staticRoomSummaryProvider.statePublisher.values.first { $0.isLoaded }
         }
         
         if shouldAwait {
