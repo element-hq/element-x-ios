@@ -5337,7 +5337,6 @@
 			children = (
 				BDDD421CD80AD0BCBA035076 /* Common */,
 				EEFCB022372FE5F306ED9199 /* LeaveSpace */,
-				ADA672F2647D05F087305B21 /* LeaveSpaceSheet */,
 				FCF165F4DDB83F3DECFEB57A /* SpaceListScreen */,
 				C360FCF7418FE3593D5A0CBF /* SpaceScreen */,
 				55312ACF4155CC5B2054AD75 /* SpaceSettingsScreen */,
@@ -5633,13 +5632,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		ADA672F2647D05F087305B21 /* LeaveSpaceSheet */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = LeaveSpaceSheet;
-			sourceTree = "<group>";
-		};
 		B04B538A859CD012755DC19C /* NSE */ = {
 			isa = PBXGroup;
 			children = (
@@ -5867,13 +5859,6 @@
 				DB08D1F7C27A8C24EF81073C /* MapURLs.swift */,
 			);
 			path = MapLibre;
-			sourceTree = "<group>";
-		};
-		C18958141C8ED6D778F779A4 /* CreateRoom */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CreateRoom;
 			sourceTree = "<group>";
 		};
 		C1CD278862878F9545608040 /* SessionVerificationScreen */ = {
@@ -6258,7 +6243,6 @@
 				53FB148CD26AFB6A5B9E20B3 /* BugReportScreen */,
 				1185EECDD07495D65AC84AFC /* CallScreen */,
 				90DC2E28718955ED87AD1456 /* CreatePollScreen */,
-				C18958141C8ED6D778F779A4 /* CreateRoom */,
 				821EB0D1C0019E3C7BBAEDBB /* CreateRoomScreen */,
 				3E1CCC4B607946CE90B4A827 /* DeclineAndBlockScreen */,
 				45F2BCFD6E9A6F040CC20582 /* EditRoomAddressScreen */,
