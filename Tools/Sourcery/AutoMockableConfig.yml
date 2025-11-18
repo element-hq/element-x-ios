@@ -1,6 +1,7 @@
 sources:
   include:
     - ../../ElementX
+    - ../../NSE
   exclude:
     - ../../ElementX/Sources/Mocks/SDK
 templates:

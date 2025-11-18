@@ -16,7 +16,7 @@ import Version
 
 struct NotificationContentBuilder {
     let messageEventStringBuilder: RoomMessageEventStringBuilder
-    let userSession: NSEUserSession
+    let userSession: NSEUserSessionProtocol
     
     /// Process the given notification item proxy
     /// - Parameters:
@@ -38,7 +38,7 @@ struct NotificationContentBuilder {
         }
         
         // So that the UI groups notification that are received for the same room/thread but also for the same user
-        let threadIdentifier = if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+        let threadIdentifier = if userSession.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
             // If a threaded message we group notifications also by thread root id
             "\(notificationItem.receiverID)\(notificationItem.roomID)\(threadRootEventID)"
         } else {
@@ -146,7 +146,7 @@ struct NotificationContentBuilder {
     
     private func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
         if notificationItem.isDM {
-            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+            if userSession.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
                 .init(mediaSource: notificationItem.senderAvatarMediaSource,
                       groupInfo: .init(avatarDisplayName: notificationItem.senderDisplayName ?? notificationItem.senderID,
                                        displayName: L10n.commonThread,
@@ -155,7 +155,7 @@ struct NotificationContentBuilder {
                 .init(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
             }
         } else {
-            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+            if userSession.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
                 .init(mediaSource: notificationItem.roomAvatarMediaSource,
                       groupInfo: .init(avatarDisplayName: notificationItem.roomDisplayName,
                                        displayName: L10n.notificationThreadInRoom(notificationItem.roomDisplayName),

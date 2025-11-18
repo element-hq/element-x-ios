@@ -10,6 +10,7 @@ import Foundation
 import MatrixRustSDK
 import UserNotifications
 
+// sourcery: AutoMockable
 protocol NotificationItemProxyProtocol {
     var event: NotificationEvent? { get }
     
