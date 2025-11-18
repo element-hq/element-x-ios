@@ -32,7 +32,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         
         rootCoordinator = NavigationRootCoordinator()
         
-        let clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+        let clientProxy = ClientProxyMock(.init(userID: "hi@bob", staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         clientProxy.homeserverReachabilityPublisher = homeserverReachabilitySubject.asCurrentValuePublisher()
         
         let networkMonitor = NetworkMonitorMock.default

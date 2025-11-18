@@ -2386,6 +2386,77 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - groupedRoomListService
+
+    var groupedRoomListServiceSyncServiceSpaceServiceSpaceIdUnderlyingCallsCount = 0
+    open var groupedRoomListServiceSyncServiceSpaceServiceSpaceIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return groupedRoomListServiceSyncServiceSpaceServiceSpaceIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = groupedRoomListServiceSyncServiceSpaceServiceSpaceIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                groupedRoomListServiceSyncServiceSpaceServiceSpaceIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    groupedRoomListServiceSyncServiceSpaceServiceSpaceIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var groupedRoomListServiceSyncServiceSpaceServiceSpaceIdCalled: Bool {
+        return groupedRoomListServiceSyncServiceSpaceServiceSpaceIdCallsCount > 0
+    }
+    open var groupedRoomListServiceSyncServiceSpaceServiceSpaceIdReceivedArguments: (syncService: SyncService, spaceService: SpaceService, spaceId: String?)?
+    open var groupedRoomListServiceSyncServiceSpaceServiceSpaceIdReceivedInvocations: [(syncService: SyncService, spaceService: SpaceService, spaceId: String?)] = []
+
+    var groupedRoomListServiceSyncServiceSpaceServiceSpaceIdUnderlyingReturnValue: GroupedRoomListService!
+    open var groupedRoomListServiceSyncServiceSpaceServiceSpaceIdReturnValue: GroupedRoomListService! {
+        get {
+            if Thread.isMainThread {
+                return groupedRoomListServiceSyncServiceSpaceServiceSpaceIdUnderlyingReturnValue
+            } else {
+                var returnValue: GroupedRoomListService? = nil
+                DispatchQueue.main.sync {
+                    returnValue = groupedRoomListServiceSyncServiceSpaceServiceSpaceIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                groupedRoomListServiceSyncServiceSpaceServiceSpaceIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    groupedRoomListServiceSyncServiceSpaceServiceSpaceIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var groupedRoomListServiceSyncServiceSpaceServiceSpaceIdClosure: ((SyncService, SpaceService, String?) -> GroupedRoomListService)?
+
+    open override func groupedRoomListService(syncService: SyncService, spaceService: SpaceService, spaceId: String?) -> GroupedRoomListService {
+        groupedRoomListServiceSyncServiceSpaceServiceSpaceIdCallsCount += 1
+        groupedRoomListServiceSyncServiceSpaceServiceSpaceIdReceivedArguments = (syncService: syncService, spaceService: spaceService, spaceId: spaceId)
+        DispatchQueue.main.async {
+            self.groupedRoomListServiceSyncServiceSpaceServiceSpaceIdReceivedInvocations.append((syncService: syncService, spaceService: spaceService, spaceId: spaceId))
+        }
+        if let groupedRoomListServiceSyncServiceSpaceServiceSpaceIdClosure = groupedRoomListServiceSyncServiceSpaceServiceSpaceIdClosure {
+            return groupedRoomListServiceSyncServiceSpaceServiceSpaceIdClosure(syncService, spaceService, spaceId)
+        } else {
+            return groupedRoomListServiceSyncServiceSpaceServiceSpaceIdReturnValue
+        }
+    }
+
     //MARK: - homeserver
 
     var homeserverUnderlyingCallsCount = 0
@@ -9430,6 +9501,199 @@ open class GrantLoginWithQrCodeHandlerSDKMock: MatrixRustSDK.GrantLoginWithQrCod
             self.scanQrCodeDataProgressListenerReceivedInvocations.append((qrCodeData: qrCodeData, progressListener: progressListener))
         }
         try await scanQrCodeDataProgressListenerClosure?(qrCodeData, progressListener)
+    }
+}
+open class GroupedRoomListServiceSDKMock: MatrixRustSDK.GroupedRoomListService, @unchecked Sendable {
+    init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+
+    //MARK: - setFilter
+
+    var setFilterKindUnderlyingCallsCount = 0
+    open var setFilterKindCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setFilterKindUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setFilterKindUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setFilterKindUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setFilterKindUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var setFilterKindCalled: Bool {
+        return setFilterKindCallsCount > 0
+    }
+    open var setFilterKindReceivedKind: RoomListEntriesDynamicFilterKind?
+    open var setFilterKindReceivedInvocations: [RoomListEntriesDynamicFilterKind?] = []
+
+    var setFilterKindUnderlyingReturnValue: Bool!
+    open var setFilterKindReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return setFilterKindUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setFilterKindUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setFilterKindUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setFilterKindUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var setFilterKindClosure: ((RoomListEntriesDynamicFilterKind?) async -> Bool)?
+
+    open override func setFilter(kind: RoomListEntriesDynamicFilterKind?) async -> Bool {
+        setFilterKindCallsCount += 1
+        setFilterKindReceivedKind = kind
+        DispatchQueue.main.async {
+            self.setFilterKindReceivedInvocations.append(kind)
+        }
+        if let setFilterKindClosure = setFilterKindClosure {
+            return await setFilterKindClosure(kind)
+        } else {
+            return setFilterKindReturnValue
+        }
+    }
+
+    //MARK: - setup
+
+    var setupUnderlyingCallsCount = 0
+    open var setupCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setupUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setupUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setupUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setupUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var setupCalled: Bool {
+        return setupCallsCount > 0
+    }
+    open var setupClosure: (() async -> Void)?
+
+    open override func setup() async {
+        setupCallsCount += 1
+        await setupClosure?()
+    }
+
+    //MARK: - subscribeToEntries
+
+    var subscribeToEntriesListenerUnderlyingCallsCount = 0
+    open var subscribeToEntriesListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToEntriesListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToEntriesListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToEntriesListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToEntriesListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToEntriesListenerCalled: Bool {
+        return subscribeToEntriesListenerCallsCount > 0
+    }
+    open var subscribeToEntriesListenerReceivedListener: GroupedRoomListEntriesListener?
+    open var subscribeToEntriesListenerReceivedInvocations: [GroupedRoomListEntriesListener] = []
+
+    var subscribeToEntriesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToEntriesListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToEntriesListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToEntriesListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToEntriesListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToEntriesListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToEntriesListenerClosure: ((GroupedRoomListEntriesListener) async -> TaskHandle)?
+
+    open override func subscribeToEntries(listener: GroupedRoomListEntriesListener) async -> TaskHandle {
+        subscribeToEntriesListenerCallsCount += 1
+        subscribeToEntriesListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToEntriesListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToEntriesListenerClosure = subscribeToEntriesListenerClosure {
+            return await subscribeToEntriesListenerClosure(listener)
+        } else {
+            return subscribeToEntriesListenerReturnValue
+        }
     }
 }
 open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, @unchecked Sendable {

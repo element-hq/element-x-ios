@@ -16,7 +16,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
     private let chatType: NotificationSettingsChatType
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let userSession: UserSessionProtocol
-    private let roomSummaryProvider: RoomSummaryProviderProtocol?
+    private let roomSummaryProvider: StaticRoomSummaryProviderProtocol?
     
     // periphery:ignore - cancellable tasks get cancelled when reassigned
     @CancellableTask private var fetchDefaultRoomNotificationModesTask: Task<Void, Error>?
@@ -32,7 +32,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         self.chatType = chatType
         self.userSession = userSession
         notificationSettingsProxy = userSession.clientProxy.notificationSettings
-        roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
+        roomSummaryProvider = userSession.clientProxy.staticRoomSummaryProvider
         
         super.init(initialViewState: NotificationSettingsEditScreenViewState(bindings: bindings,
                                                                              strings: NotificationSettingsEditScreenStrings(chatType: chatType)),

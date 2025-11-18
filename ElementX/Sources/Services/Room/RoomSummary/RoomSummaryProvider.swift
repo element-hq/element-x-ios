@@ -400,14 +400,3 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
     }
 }
-
-extension RoomSummaryProviderState {
-    init(roomListState: RoomListLoadingState) {
-        switch roomListState {
-        case .notLoaded:
-            self = .notLoaded
-        case .loaded(let maximumNumberOfRooms):
-            self = .loaded(totalNumberOfRooms: UInt(maximumNumberOfRooms ?? 0))
-        }
-    }
-}

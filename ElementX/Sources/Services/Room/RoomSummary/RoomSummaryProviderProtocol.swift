@@ -14,6 +14,15 @@ enum RoomSummaryProviderState {
     case notLoaded
     case loaded(totalNumberOfRooms: UInt)
     
+    init(roomListState: RoomListLoadingState) {
+        switch roomListState {
+        case .notLoaded:
+            self = .notLoaded
+        case .loaded(let maximumNumberOfRooms):
+            self = .loaded(totalNumberOfRooms: UInt(maximumNumberOfRooms ?? 0))
+        }
+    }
+    
     var isLoaded: Bool {
         switch self {
         case .loaded:

@@ -251,7 +251,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .bugReport:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             let userSession = UserSessionMock(.init(clientProxy: clientProxy))
             let coordinator = BugReportScreenCoordinator(parameters: .init(bugReportService: BugReportServiceMock(.init()),
                                                                            userSession: userSession,
@@ -594,7 +594,7 @@ class MockScreen: Identifiable {
             }
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com",
                                                     deviceID: "MOCKCLIENT",
-                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
+                                                    staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
                                                     spaceServiceConfiguration: .init(joinedSpaces: .mockSingleRoom),
                                                     roomPreviews: [SpaceRoomProxyProtocol].mockSpaceList.map(RoomPreviewProxyMock.init)))
             
@@ -742,7 +742,7 @@ class MockScreen: Identifiable {
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: false))
             navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
             
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             
             let roomProxy = JoinedRoomProxyMock(.init(id: "whatever", name: "okay", shouldUseAutoUpdatingTimeline: true))
             

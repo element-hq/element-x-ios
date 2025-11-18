@@ -58,7 +58,7 @@ struct HomeScreenRoomCell: View {
                 .accessibilityHidden(true)
         }
     }
-    
+        
     private var content: some View {
         VStack(alignment: .leading, spacing: 2) {
             header
@@ -156,8 +156,18 @@ struct HomeScreenRoomCell: View {
     @ViewBuilder
     private var lastMessage: some View {
         if let displayedLastMessage = room.displayedLastMessage {
-            Text(displayedLastMessage)
-                .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
+            HStack(alignment: .top, spacing: 4.0) {
+                if let previewAvatar = room.previewAvatar, dynamicTypeSize < .accessibility3 {
+                    RoomAvatarImage(avatar: previewAvatar,
+                                    avatarSize: .room(on: .chatsRoomPreview),
+                                    mediaProvider: mediaProvider)
+                        .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
+                        .accessibilityHidden(true)
+                }
+                
+                Text(displayedLastMessage)
+                    .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
+            }
         }
     }
 }
@@ -224,9 +234,11 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(roomSummaryProvider: RoomSummaryProviderProtocol) -> HomeScreenViewModel {
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe", roomSummaryProvider: roomSummaryProvider))))
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe", staticRoomSummaryProvider: roomSummaryProvider))))
 
-        return HomeScreenViewModel(userSession: userSession,
+        return HomeScreenViewModel(spaceID: nil,
+                                   spaceName: nil,
+                                   userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
                                    analyticsService: ServiceLocator.shared.analytics,

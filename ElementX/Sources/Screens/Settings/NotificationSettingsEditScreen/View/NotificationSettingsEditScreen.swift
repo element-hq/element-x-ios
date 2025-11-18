@@ -66,7 +66,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummary].mockRooms.map(\.id)
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com",
-                                                                                   roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                                                   staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                                                    notificationSettings: notificationSettingsProxy))))
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                                 userSession: userSession)
@@ -79,7 +79,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com",
-                                                                                   roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                                                   staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                                                    notificationSettings: notificationSettingsProxy))))
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                                 userSession: userSession)
@@ -107,7 +107,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummary].mockRooms.map(\.id)
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com",
-                                                                                   roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                                                   staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                                                    notificationSettings: notificationSettingsProxy))))
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                                 userSession: userSession)
