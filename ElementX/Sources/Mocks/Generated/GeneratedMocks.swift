@@ -11556,12 +11556,247 @@ class MediaProviderMock: MediaProviderProtocol, @unchecked Sendable {
         }
     }
 }
+class NSEUserSessionMock: NSEUserSessionProtocol, @unchecked Sendable {
+    var inviteAvatarsVisibilityCallsCount = 0
+    var inviteAvatarsVisibilityCalled: Bool {
+        return inviteAvatarsVisibilityCallsCount > 0
+    }
+
+    var inviteAvatarsVisibility: InviteAvatars {
+        get async {
+            inviteAvatarsVisibilityCallsCount += 1
+            if let inviteAvatarsVisibilityClosure = inviteAvatarsVisibilityClosure {
+                return await inviteAvatarsVisibilityClosure()
+            } else {
+                return underlyingInviteAvatarsVisibility
+            }
+        }
+    }
+    var underlyingInviteAvatarsVisibility: InviteAvatars!
+    var inviteAvatarsVisibilityClosure: (() async -> InviteAvatars)?
+    var mediaPreviewVisibilityCallsCount = 0
+    var mediaPreviewVisibilityCalled: Bool {
+        return mediaPreviewVisibilityCallsCount > 0
+    }
+
+    var mediaPreviewVisibility: MediaPreviews {
+        get async {
+            mediaPreviewVisibilityCallsCount += 1
+            if let mediaPreviewVisibilityClosure = mediaPreviewVisibilityClosure {
+                return await mediaPreviewVisibilityClosure()
+            } else {
+                return underlyingMediaPreviewVisibility
+            }
+        }
+    }
+    var underlyingMediaPreviewVisibility: MediaPreviews!
+    var mediaPreviewVisibilityClosure: (() async -> MediaPreviews)?
+    var threadsEnabled: Bool {
+        get { return underlyingThreadsEnabled }
+        set(value) { underlyingThreadsEnabled = value }
+    }
+    var underlyingThreadsEnabled: Bool!
+
+    //MARK: - notificationItemProxy
+
+    var notificationItemProxyRoomIDEventIDUnderlyingCallsCount = 0
+    var notificationItemProxyRoomIDEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return notificationItemProxyRoomIDEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = notificationItemProxyRoomIDEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                notificationItemProxyRoomIDEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    notificationItemProxyRoomIDEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var notificationItemProxyRoomIDEventIDCalled: Bool {
+        return notificationItemProxyRoomIDEventIDCallsCount > 0
+    }
+    var notificationItemProxyRoomIDEventIDReceivedArguments: (roomID: String, eventID: String)?
+    var notificationItemProxyRoomIDEventIDReceivedInvocations: [(roomID: String, eventID: String)] = []
+
+    var notificationItemProxyRoomIDEventIDUnderlyingReturnValue: NotificationItemProxyProtocol?
+    var notificationItemProxyRoomIDEventIDReturnValue: NotificationItemProxyProtocol? {
+        get {
+            if Thread.isMainThread {
+                return notificationItemProxyRoomIDEventIDUnderlyingReturnValue
+            } else {
+                var returnValue: NotificationItemProxyProtocol?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = notificationItemProxyRoomIDEventIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                notificationItemProxyRoomIDEventIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    notificationItemProxyRoomIDEventIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var notificationItemProxyRoomIDEventIDClosure: ((String, String) async -> NotificationItemProxyProtocol?)?
+
+    func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
+        notificationItemProxyRoomIDEventIDCallsCount += 1
+        notificationItemProxyRoomIDEventIDReceivedArguments = (roomID: roomID, eventID: eventID)
+        DispatchQueue.main.async {
+            self.notificationItemProxyRoomIDEventIDReceivedInvocations.append((roomID: roomID, eventID: eventID))
+        }
+        if let notificationItemProxyRoomIDEventIDClosure = notificationItemProxyRoomIDEventIDClosure {
+            return await notificationItemProxyRoomIDEventIDClosure(roomID, eventID)
+        } else {
+            return notificationItemProxyRoomIDEventIDReturnValue
+        }
+    }
+    //MARK: - roomForIdentifier
+
+    var roomForIdentifierUnderlyingCallsCount = 0
+    var roomForIdentifierCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomForIdentifierUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomForIdentifierUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomForIdentifierUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomForIdentifierUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var roomForIdentifierCalled: Bool {
+        return roomForIdentifierCallsCount > 0
+    }
+    var roomForIdentifierReceivedRoomID: String?
+    var roomForIdentifierReceivedInvocations: [String] = []
+
+    var roomForIdentifierUnderlyingReturnValue: Room?
+    var roomForIdentifierReturnValue: Room? {
+        get {
+            if Thread.isMainThread {
+                return roomForIdentifierUnderlyingReturnValue
+            } else {
+                var returnValue: Room?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomForIdentifierUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomForIdentifierUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomForIdentifierUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var roomForIdentifierClosure: ((String) -> Room?)?
+
+    func roomForIdentifier(_ roomID: String) -> Room? {
+        roomForIdentifierCallsCount += 1
+        roomForIdentifierReceivedRoomID = roomID
+        DispatchQueue.main.async {
+            self.roomForIdentifierReceivedInvocations.append(roomID)
+        }
+        if let roomForIdentifierClosure = roomForIdentifierClosure {
+            return roomForIdentifierClosure(roomID)
+        } else {
+            return roomForIdentifierReturnValue
+        }
+    }
+}
 class NetworkMonitorMock: NetworkMonitorProtocol, @unchecked Sendable {
     var reachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
         get { return underlyingReachabilityPublisher }
         set(value) { underlyingReachabilityPublisher = value }
     }
     var underlyingReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
+
+}
+class NotificationItemProxyMock: NotificationItemProxyProtocol, @unchecked Sendable {
+    var event: NotificationEvent?
+    var senderID: String {
+        get { return underlyingSenderID }
+        set(value) { underlyingSenderID = value }
+    }
+    var underlyingSenderID: String!
+    var roomID: String {
+        get { return underlyingRoomID }
+        set(value) { underlyingRoomID = value }
+    }
+    var underlyingRoomID: String!
+    var receiverID: String {
+        get { return underlyingReceiverID }
+        set(value) { underlyingReceiverID = value }
+    }
+    var underlyingReceiverID: String!
+    var senderDisplayName: String?
+    var senderAvatarMediaSource: MediaSourceProxy?
+    var roomDisplayName: String {
+        get { return underlyingRoomDisplayName }
+        set(value) { underlyingRoomDisplayName = value }
+    }
+    var underlyingRoomDisplayName: String!
+    var roomAvatarMediaSource: MediaSourceProxy?
+    var roomJoinedMembers: Int {
+        get { return underlyingRoomJoinedMembers }
+        set(value) { underlyingRoomJoinedMembers = value }
+    }
+    var underlyingRoomJoinedMembers: Int!
+    var isRoomDirect: Bool {
+        get { return underlyingIsRoomDirect }
+        set(value) { underlyingIsRoomDirect = value }
+    }
+    var underlyingIsRoomDirect: Bool!
+    var isRoomPrivate: Bool {
+        get { return underlyingIsRoomPrivate }
+        set(value) { underlyingIsRoomPrivate = value }
+    }
+    var underlyingIsRoomPrivate: Bool!
+    var isNoisy: Bool {
+        get { return underlyingIsNoisy }
+        set(value) { underlyingIsNoisy = value }
+    }
+    var underlyingIsNoisy: Bool!
+    var hasMention: Bool {
+        get { return underlyingHasMention }
+        set(value) { underlyingHasMention = value }
+    }
+    var underlyingHasMention: Bool!
+    var threadRootEventID: String?
 
 }
 class NotificationManagerMock: NotificationManagerProtocol, @unchecked Sendable {
