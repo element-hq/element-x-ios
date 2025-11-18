@@ -27,7 +27,7 @@ class ChatsFlowCoordinatorTests: XCTestCase {
     
     override func setUp() async throws {
         cancellables.removeAll()
-        clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+        clientProxy = ClientProxyMock(.init(userID: "hi@bob", staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())
         
         splitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: false))

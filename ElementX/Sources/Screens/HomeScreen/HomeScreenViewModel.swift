@@ -27,7 +27,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol,
+    init(spaceID: String?,
+         spaceName: String?,
+         userSession: UserSessionProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
@@ -39,9 +41,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
         
-        roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
+        roomSummaryProvider = userSession.clientProxy.roomSummaryProvider(spaceID: spaceID)
         
         super.init(initialViewState: .init(userID: userSession.clientProxy.userID,
+                                           isSpace: spaceID != nil,
+                                           spaceName: spaceName,
                                            bindings: .init(filtersState: .init(appSettings: appSettings))),
                    mediaProvider: userSession.mediaProvider)
         

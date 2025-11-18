@@ -47,6 +47,10 @@ extension SDKListener: RoomListServiceSyncIndicatorListener where T == RoomListS
     func onUpdate(syncIndicator: RoomListServiceSyncIndicator) { onUpdateClosure(syncIndicator) }
 }
 
+extension SDKListener: GroupedRoomListEntriesListener where T == [GroupedRoomListUpdate] {
+    func onUpdate(roomUpdates: [GroupedRoomListUpdate]) { onUpdateClosure(roomUpdates) }
+}
+
 extension SDKListener: VerificationStateListener where T == VerificationState {
     func onUpdate(status: VerificationState) { onUpdateClosure(status) }
 }

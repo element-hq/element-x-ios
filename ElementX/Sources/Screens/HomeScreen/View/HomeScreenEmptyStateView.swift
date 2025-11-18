@@ -142,9 +142,11 @@ struct HomeScreenEmptyStateView_Previews: PreviewProvider, TestablePreview {
     
     static let viewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@user:example.com",
-                                                                                   roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([])))))))
+                                                                                   staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([])))))))
         
-        return HomeScreenViewModel(userSession: userSession,
+        return HomeScreenViewModel(spaceID: nil,
+                                   spaceName: nil,
+                                   userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
                                    analyticsService: ServiceLocator.shared.analytics,

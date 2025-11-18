@@ -22,7 +22,7 @@ struct HomeScreen: View {
             .alert(item: $context.leaveRoomAlertItem,
                    actions: leaveRoomAlertActions,
                    message: leaveRoomAlertMessage)
-            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
+            .navigationTitle(context.viewState.isSpace ? (context.viewState.spaceName ?? L10n.commonSpace) : L10n.screenRoomlistMainSpaceTitle)
             .toolbar { toolbar }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .track(screen: .Home)
@@ -35,12 +35,16 @@ struct HomeScreen: View {
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
-            settingsButton
+            if !context.viewState.isSpace {
+                settingsButton
+            }
         }
         .backportSharedBackgroundVisibility(.hidden)
         
         ToolbarItem(placement: .primaryAction) {
-            newRoomButton
+            if !context.viewState.isSpace {
+                newRoomButton
+            }
         }
         .backportSharedBackgroundVisibility(.hidden)
     }
@@ -138,11 +142,13 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         }
         
         let clientProxy = ClientProxyMock(.init(userID: userID,
-                                                roomSummaryProvider: RoomSummaryProviderMock(.init(state: roomSummaryProviderState))))
+                                                staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: roomSummaryProviderState))))
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
-        return HomeScreenViewModel(userSession: userSession,
+        return HomeScreenViewModel(spaceID: nil,
+                                   spaceName: nil,
+                                   userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
                                    analyticsService: ServiceLocator.shared.analytics,
