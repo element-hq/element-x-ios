@@ -435,7 +435,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     private func setupRoomFlowCoordinator(asChildFlow: Bool = false, roomType: RoomType? = nil) {
         cancellables.removeAll()
         clientProxy = ClientProxyMock(.init(userID: "hi@bob",
-                                            roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                            staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                             spaceServiceConfiguration: .populated))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())
         

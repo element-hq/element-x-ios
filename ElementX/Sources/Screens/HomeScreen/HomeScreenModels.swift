@@ -97,6 +97,9 @@ struct HomeScreenViewState: BindableState {
     var shouldShowNewSoundBanner = false
     
     var requiresExtraAccountSetup = false
+    
+    var isSpace = false
+    var spaceName: String?
         
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
@@ -198,6 +201,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     let lastMessage: AttributedString?
     
     let avatar: RoomAvatar
+    let previewAvatar: RoomAvatar?
         
     let canonicalAlias: String?
     
@@ -223,6 +227,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
                        avatar: .room(id: "", name: "", avatarURL: nil),
+                       previewAvatar: nil,
                        canonicalAlias: nil,
                        isTombstoned: false)
     }
@@ -248,7 +253,7 @@ extension HomeScreenRoom {
         }
         
         self.init(id: roomID,
-                  roomID: summary.id,
+                  roomID: roomID,
                   type: type,
                   badges: .init(isDotShown: isDotShown,
                                 isMentionShown: isMentionShown,
@@ -261,6 +266,7 @@ extension HomeScreenRoom {
                   timestamp: summary.lastMessageDate?.formattedMinimal(),
                   lastMessage: summary.lastMessage,
                   avatar: summary.avatar,
+                  previewAvatar: summary.previewAvatar,
                   canonicalAlias: summary.canonicalAlias,
                   isTombstoned: summary.isTombstoned)
     }

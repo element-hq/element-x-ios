@@ -108,8 +108,6 @@ protocol ClientProxyProtocol: AnyObject {
     
     var mediaLoader: MediaLoaderProtocol { get }
     
-    var roomSummaryProvider: RoomSummaryProviderProtocol { get }
-    
     /// Used for listing rooms that shouldn't be affected by the main `roomSummaryProvider` filtering
     /// But can still be filtered by queries, since this may be shared across multiple views, remember to reset
     /// The filtering state when you are done with it
@@ -175,6 +173,8 @@ protocol ClientProxyProtocol: AnyObject {
     func roomForIdentifier(_ identifier: String) async -> RoomProxyType?
     
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError>
+    
+    func roomSummaryProvider(spaceID: String?) -> RoomSummaryProviderProtocol
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary?
     

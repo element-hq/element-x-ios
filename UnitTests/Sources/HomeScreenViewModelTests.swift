@@ -422,7 +422,8 @@ class HomeScreenViewModelTests: XCTestCase {
         
         notificationManager = NotificationManagerMock()
         
-        viewModel = HomeScreenViewModel(userSession: userSession,
+        viewModel = HomeScreenViewModel(spaceID: nil,
+                                        userSession: userSession,
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         appSettings: appSettings,
                                         analyticsService: ServiceLocator.shared.analytics,

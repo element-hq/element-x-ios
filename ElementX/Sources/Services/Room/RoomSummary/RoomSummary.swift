@@ -38,14 +38,21 @@ struct RoomSummary {
     
     let name: String
     let isDirect: Bool
+    
     let isSpace: Bool
+    
     let avatarURL: URL?
     
     let heroes: [UserProfileProxy]
     let activeMembersCount: UInt
     
+    // FIXME: This is bonkers
+    var lastMessageRoomId: String?
     let lastMessage: AttributedString?
     let lastMessageDate: Date?
+    var lastMessageRoomName: String?
+    var lastMessageRoomAvatarURL: URL?
+    
     let unreadMessagesCount: UInt
     let unreadMentionsCount: UInt
     let unreadNotificationsCount: UInt
@@ -144,5 +151,13 @@ extension RoomSummary {
         } else {
             return .room(id: id, name: name, avatarURL: avatarURL)
         }
+    }
+    
+    var previewAvatar: RoomAvatar? {
+        guard let lastMessageRoomId else {
+            return nil
+        }
+        
+        return .room(id: lastMessageRoomId, name: lastMessageRoomName, avatarURL: lastMessageRoomAvatarURL)
     }
 }

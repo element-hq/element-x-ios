@@ -55,7 +55,7 @@ struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, Testabl
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
         
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe",
-                                                                                   roomSummaryProvider: summaryProvider,
+                                                                                   staticRoomSummaryProvider: summaryProvider,
                                                                                    notificationSettings: notificationSettingsProxy))))
         let viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                                 userSession: userSession)

@@ -44,7 +44,7 @@ import SwiftUI
                 .hidden
             } else if let barVisibilityOverride {
                 barVisibilityOverride
-            } else if horizontalSizeClass == .compact, navigationSplitCoordinator?.detailCoordinator != nil {
+            } else if horizontalSizeClass == .compact, (navigationSplitCoordinator?.detailCoordinator as? NavigationStackCoordinator)?.rootCoordinator != nil {
                 // Whilst we support pushing screens on the stack in the sidebarCoordinator, in practice
                 // we never do that, so simply checking that the detailCoordinator exists is enough.
                 .hidden

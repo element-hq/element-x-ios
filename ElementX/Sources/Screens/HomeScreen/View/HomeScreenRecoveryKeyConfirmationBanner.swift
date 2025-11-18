@@ -117,11 +117,13 @@ struct HomeScreenRecoveryKeyConfirmationBanner_Previews: PreviewProvider, Testab
     
     static func makeViewModel() -> HomeScreenViewModel {
         let clientProxy = ClientProxyMock(.init(userID: "@alice:example.com",
-                                                roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loading))))
+                                                staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loading))))
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
-        return HomeScreenViewModel(userSession: userSession,
+        return HomeScreenViewModel(spaceID: nil,
+                                   spaceName: nil,
+                                   userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
                                    analyticsService: ServiceLocator.shared.analytics,

@@ -28,7 +28,7 @@ class MessageForwardingScreenViewModelTests: XCTestCase {
         
         viewModel = MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
                                                      userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                     staticRoomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                      userIndicatorController: UserIndicatorControllerMock())
         context = viewModel.context
     }

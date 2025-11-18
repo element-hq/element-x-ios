@@ -196,7 +196,9 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
-        return HomeScreenViewModel(userSession: userSession,
+        return HomeScreenViewModel(spaceID: nil,
+                                   spaceName: nil,
+                                   userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
                                    analyticsService: ServiceLocator.shared.analytics,

@@ -2262,11 +2262,6 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingMediaLoader = value }
     }
     var underlyingMediaLoader: MediaLoaderProtocol!
-    var roomSummaryProvider: RoomSummaryProviderProtocol {
-        get { return underlyingRoomSummaryProvider }
-        set(value) { underlyingRoomSummaryProvider = value }
-    }
-    var underlyingRoomSummaryProvider: RoomSummaryProviderProtocol!
     var alternateRoomSummaryProvider: RoomSummaryProviderProtocol {
         get { return underlyingAlternateRoomSummaryProvider }
         set(value) { underlyingAlternateRoomSummaryProvider = value }
@@ -3456,6 +3451,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return await roomPreviewForIdentifierViaClosure(identifier, via)
         } else {
             return roomPreviewForIdentifierViaReturnValue
+        }
+    }
+    //MARK: - roomSummaryProvider
+
+    var roomSummaryProviderSpaceIDUnderlyingCallsCount = 0
+    var roomSummaryProviderSpaceIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomSummaryProviderSpaceIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomSummaryProviderSpaceIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomSummaryProviderSpaceIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomSummaryProviderSpaceIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var roomSummaryProviderSpaceIDCalled: Bool {
+        return roomSummaryProviderSpaceIDCallsCount > 0
+    }
+    var roomSummaryProviderSpaceIDReceivedSpaceID: String?
+    var roomSummaryProviderSpaceIDReceivedInvocations: [String?] = []
+
+    var roomSummaryProviderSpaceIDUnderlyingReturnValue: RoomSummaryProviderProtocol!
+    var roomSummaryProviderSpaceIDReturnValue: RoomSummaryProviderProtocol! {
+        get {
+            if Thread.isMainThread {
+                return roomSummaryProviderSpaceIDUnderlyingReturnValue
+            } else {
+                var returnValue: RoomSummaryProviderProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomSummaryProviderSpaceIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomSummaryProviderSpaceIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomSummaryProviderSpaceIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var roomSummaryProviderSpaceIDClosure: ((String?) -> RoomSummaryProviderProtocol)?
+
+    func roomSummaryProvider(spaceID: String?) -> RoomSummaryProviderProtocol {
+        roomSummaryProviderSpaceIDCallsCount += 1
+        roomSummaryProviderSpaceIDReceivedSpaceID = spaceID
+        DispatchQueue.main.async {
+            self.roomSummaryProviderSpaceIDReceivedInvocations.append(spaceID)
+        }
+        if let roomSummaryProviderSpaceIDClosure = roomSummaryProviderSpaceIDClosure {
+            return roomSummaryProviderSpaceIDClosure(spaceID)
+        } else {
+            return roomSummaryProviderSpaceIDReturnValue
         }
     }
     //MARK: - roomSummaryForIdentifier

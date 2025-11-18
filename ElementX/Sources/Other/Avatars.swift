@@ -133,6 +133,7 @@ enum UserAvatarSizeOnScreen {
 
 enum RoomAvatarSizeOnScreen {
     case chats
+    case chatsRoomPreview
     case spaces
     case spaceSettings
     case timeline
@@ -171,6 +172,8 @@ enum RoomAvatarSizeOnScreen {
             return 64
         case .spaceHeader:
             return 64
+        case .chatsRoomPreview:
+            return 20
         }
     }
 }

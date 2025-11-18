@@ -193,7 +193,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .roomList):
-                presentHomeScreen()
+                presentHomeScreen(spaceID: nil, spaceName: nil)
             case(.roomList(let detailState), .selectRoom(let roomID, let via, let entryPoint), .roomList):
                 handleSelectRoomTransition(roomID: roomID, via: via, entryPoint: entryPoint, detailState: detailState, animated: animated)
             case(.roomList, .deselectRoom, .roomList):
@@ -201,7 +201,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             
             case(.roomList, .startSpaceFlow, .roomList):
                 guard let spaceRoomListProxy = userInfo?.spaceRoomListProxy else { fatalError("A space room list proxy is required.") }
-                startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy, animated: animated)
+//                startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy, animated: animated)
+                presentHomeScreen(spaceID: spaceRoomListProxy.id, spaceName: spaceRoomListProxy.spaceRoomProxyPublisher.value.name)
             case (.roomList, .finishedSpaceFlow, .roomList):
                 dismissSpaceFlow(animated: animated)
                 
@@ -361,8 +362,10 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                             wasVisibleToUser: nil)
     }
     
-    private func presentHomeScreen() {
-        let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
+    private func presentHomeScreen(spaceID: String?, spaceName: String?) {
+        let parameters = HomeScreenCoordinatorParameters(spaceID: spaceID,
+                                                         spaceName: spaceName,
+                                                         userSession: userSession,
                                                          bugReportService: flowParameters.bugReportService,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
                                                          appSettings: flowParameters.appSettings,
@@ -413,7 +416,11 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
+        if spaceID != nil {
+            sidebarNavigationStackCoordinator.push(coordinator)
+        } else {
+            sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
+        }
     }
     
     private func presentReportRoom(for roomID: String) async {

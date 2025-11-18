@@ -14,7 +14,7 @@ struct ClientProxyMockConfiguration {
     var userIDServerName: String?
     var userID: String = RoomMemberProxyMock.mockMe.userID
     var deviceID: String?
-    var roomSummaryProvider: RoomSummaryProviderProtocol = RoomSummaryProviderMock(.init())
+    var staticRoomSummaryProvider: RoomSummaryProviderProtocol = RoomSummaryProviderMock(.init())
     var spaceServiceConfiguration: SpaceServiceProxyMock.Configuration = .init()
     var roomPreviews: [RoomPreviewProxyProtocol]?
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
@@ -48,9 +48,8 @@ extension ClientProxyMock {
         homeserver = configuration.homeserver
         userIDServerName = configuration.userIDServerName
         
-        roomSummaryProvider = configuration.roomSummaryProvider
+        staticRoomSummaryProvider = configuration.staticRoomSummaryProvider
         alternateRoomSummaryProvider = RoomSummaryProviderMock(.init())
-        staticRoomSummaryProvider = RoomSummaryProviderMock(.init())
         
         roomDirectorySearchProxyReturnValue = configuration.roomDirectorySearchProxy
         
@@ -107,7 +106,7 @@ extension ClientProxyMock {
         spaceService = SpaceServiceProxyMock(configuration.spaceServiceConfiguration)
         
         roomForIdentifierClosure = { [weak self] identifier in
-            if let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) {
+            if let room = self?.staticRoomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) {
                 let joinedRoomIDs = configuration.overrides.joinedRoomIDs
                 switch room.joinRequestType {
                 case .invite where !joinedRoomIDs.contains(room.id):
