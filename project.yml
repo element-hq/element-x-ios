@@ -114,6 +114,9 @@ packages:
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.1.1
+  Dynamic:
+    url: https://github.com/mhdhejazi/Dynamic
+    exactVersion: 1.2
   GZIP:
     url: https://github.com/nicklockwood/GZIP
     minorVersion: 1.3.2
