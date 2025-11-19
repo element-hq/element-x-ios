@@ -118,6 +118,13 @@ struct NotificationSettingsScreen: View {
                     .disabled(context.viewState.settings == nil)
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
+            // Sound
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsSound),
+                    details: .title(context.viewState.soundName),
+                    kind: .navigationLink {
+                        context.send(viewAction: .soundTapped)
+                    })
+            
         } header: {
             Text(L10n.screenNotificationSettingsNotificationSectionTitle)
                 .compoundListSectionHeader()

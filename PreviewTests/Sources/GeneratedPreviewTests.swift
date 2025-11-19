@@ -539,6 +539,12 @@ extension PreviewTests {
         }
     }
 
+    func testNotificationSoundSelectionScreen() async throws {
+        for (index, preview) in NotificationSoundSelectionScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testPINTextField() async throws {
         for (index, preview) in PINTextField_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

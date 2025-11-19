@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "اشاره‌ها";
 "screen_notification_settings_notification_section_title" = "آگاه کردنم برای";
 "screen_notification_settings_room_mention_label" = "آگاه کردنم برای ‪@room";
+"screen_notification_settings_sound" = "صدا";
+"screen_notification_settings_sound_alert_tones" = "آهنگ‌های هشدار";
+"screen_notification_settings_sound_classic" = "کلاسیک";
+"screen_notification_settings_sound_default" = "پیش‌فرض";
+"screen_notification_settings_sound_title" = "صدای آگاهی";
 "screen_notification_settings_system_notifications_action_required" = "برای گرفتن آگاهی‌ها لطفاً%1$@تان را تغییر دهید.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "تنظیمات سامانه";
 "screen_notification_settings_system_notifications_turned_off" = "آگاهی‌های سامانه‌ای خاموش شدند";

@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "تذکرے";
 "screen_notification_settings_notification_section_title" = "مجھے مطلع کریں برائے";
 "screen_notification_settings_room_mention_label" = "مجھے @کمرہ پر مطلع کریں";
+"screen_notification_settings_sound" = "آواز";
+"screen_notification_settings_sound_alert_tones" = "الرٹ ٹونز";
+"screen_notification_settings_sound_classic" = "کلاسک";
+"screen_notification_settings_sound_default" = "ڈیفالٹ";
+"screen_notification_settings_sound_title" = "اطلاع کی آواز";
 "screen_notification_settings_system_notifications_action_required" = "اطلاعات موصول کرنے کے لئے، براہ کرم اپنا %1$@ تبدیل کریں۔";
 "screen_notification_settings_system_notifications_action_required_content_link" = "نظام کی ترتیبات";
 "screen_notification_settings_system_notifications_turned_off" = "نظام کی اطلاعات بند کر دی گئیں";

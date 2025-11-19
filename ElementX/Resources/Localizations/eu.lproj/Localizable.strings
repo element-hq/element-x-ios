@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Aipamenak";
 "screen_notification_settings_notification_section_title" = "Jakinarazi";
 "screen_notification_settings_room_mention_label" = "Jakinarazi @gelan";
+"screen_notification_settings_sound" = "Soinua";
+"screen_notification_settings_sound_alert_tones" = "Alerta-tonuak";
+"screen_notification_settings_sound_classic" = "Klasikoa";
+"screen_notification_settings_sound_default" = "Lehenetsia";
+"screen_notification_settings_sound_title" = "Jakinarazpen soinua";
 "screen_notification_settings_system_notifications_action_required" = "Jakinarazpenak jasotzeko, aldatu %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "sistemaren ezarpenak";
 "screen_notification_settings_system_notifications_turned_off" = "Sistemaren jakinarazpenak desaktibatuta daude";

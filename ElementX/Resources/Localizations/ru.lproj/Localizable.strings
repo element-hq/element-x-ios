@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Упоминания";
 "screen_notification_settings_notification_section_title" = "Уведомлять меня";
 "screen_notification_settings_room_mention_label" = "Уведомлять меня при упоминании @room";
+"screen_notification_settings_sound" = "Звук";
+"screen_notification_settings_sound_alert_tones" = "Звуки оповещений";
+"screen_notification_settings_sound_classic" = "Классический";
+"screen_notification_settings_sound_default" = "По умолчанию";
+"screen_notification_settings_sound_title" = "Звук уведомления";
 "screen_notification_settings_system_notifications_action_required" = "Чтобы получать уведомления, измените свой %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "настройки системы";
 "screen_notification_settings_system_notifications_turned_off" = "Системные уведомления выключены";

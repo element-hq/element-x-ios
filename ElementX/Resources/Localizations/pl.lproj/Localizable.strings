@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Wzmianki";
 "screen_notification_settings_notification_section_title" = "Powiadamiaj mnie przez";
 "screen_notification_settings_room_mention_label" = "Powiadom mnie na @pokój";
+"screen_notification_settings_sound" = "Dźwięk";
+"screen_notification_settings_sound_alert_tones" = "Dźwięki alertów";
+"screen_notification_settings_sound_classic" = "Klasyczny";
+"screen_notification_settings_sound_default" = "Domyślny";
+"screen_notification_settings_sound_title" = "Dźwięk powiadomienia";
 "screen_notification_settings_system_notifications_action_required" = "Aby otrzymywać powiadomienia, zmień swoje%1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "ustawienia systemowe";
 "screen_notification_settings_system_notifications_turned_off" = "Powiadomienia systemowe wyłączone";

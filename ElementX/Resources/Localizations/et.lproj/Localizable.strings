@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Mainimiste alusel";
 "screen_notification_settings_notification_section_title" = "Teavita mind";
 "screen_notification_settings_room_mention_label" = "Teavita mind @jututoa puhul";
+"screen_notification_settings_sound" = "Heli";
+"screen_notification_settings_sound_alert_tones" = "Häirehelid";
+"screen_notification_settings_sound_classic" = "Klassikaline";
+"screen_notification_settings_sound_default" = "Vaikimisi";
+"screen_notification_settings_sound_title" = "Teavituse heli";
 "screen_notification_settings_system_notifications_action_required" = "Teavituste saamiseks palun muuda oma %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "süsteemi seadistusi";
 "screen_notification_settings_system_notifications_turned_off" = "Süsteemi teavitused on välja lülitatud";

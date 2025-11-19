@@ -54,6 +54,8 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
                 self.actionsSubject.send(.close)
             case .editDefaultMode(let chatType):
                 self.presentEditScreen(chatType: chatType)
+            case .selectSound:
+                self.presentSoundSelectionScreen()
             }
         }
         .store(in: &cancellables)
@@ -71,5 +73,11 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
                                                                                          userSession: parameters.userSession)
         let editSettingsCoordinator = NotificationSettingsEditScreenCoordinator(parameters: editSettingsParameters)
         navigationStackCoordinator?.push(editSettingsCoordinator)
+    }
+    
+    private func presentSoundSelectionScreen() {
+        let soundSelectionParameters = NotificationSoundSelectionScreenCoordinatorParameters(appSettings: parameters.appSettings)
+        let soundSelectionCoordinator = NotificationSoundSelectionScreenCoordinator(parameters: soundSelectionParameters)
+        navigationStackCoordinator?.push(soundSelectionCoordinator)
     }
 }

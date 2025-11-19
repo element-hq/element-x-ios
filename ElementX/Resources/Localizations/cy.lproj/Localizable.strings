@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Crybwyll";
 "screen_notification_settings_notification_section_title" = "Rhoi gwybod i mi am";
 "screen_notification_settings_room_mention_label" = "Rhoi gwybod i mi ar @ystafell";
+"screen_notification_settings_sound" = "Sain";
+"screen_notification_settings_sound_alert_tones" = "Tonau rhybudd";
+"screen_notification_settings_sound_classic" = "Clasurol";
+"screen_notification_settings_sound_default" = "Rhagosodedig";
+"screen_notification_settings_sound_title" = "Sain hysbysiad";
 "screen_notification_settings_system_notifications_action_required" = "I dderbyn hysbysiadau, newidiwch eich %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "gosodiadau system";
 "screen_notification_settings_system_notifications_turned_off" = "Hysbysiadau system wedi'u diffodd";

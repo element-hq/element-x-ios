@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Vermeldingen";
 "screen_notification_settings_notification_section_title" = "Stuur me een melding voor";
 "screen_notification_settings_room_mention_label" = "Stuur me een melding bij @kamer";
+"screen_notification_settings_sound" = "Geluid";
+"screen_notification_settings_sound_alert_tones" = "Waarschuwingstonen";
+"screen_notification_settings_sound_classic" = "Klassiek";
+"screen_notification_settings_sound_default" = "Standaard";
+"screen_notification_settings_sound_title" = "Meldingsgeluid";
 "screen_notification_settings_system_notifications_action_required" = "Wijzig je %1$@ om meldingen te ontvangen.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "systeeminstellingen";
 "screen_notification_settings_system_notifications_turned_off" = "Systeemmeldingen uitgeschakeld";

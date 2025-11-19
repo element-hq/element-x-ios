@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "ხსენებები";
 "screen_notification_settings_notification_section_title" = "ჩემი შეტყობინება შემდეგისთვის:";
 "screen_notification_settings_room_mention_label" = "ჩემი შეტყობინება @room-ზე";
+"screen_notification_settings_sound" = "ხმა";
+"screen_notification_settings_sound_alert_tones" = "გაფრთხილების ტონები";
+"screen_notification_settings_sound_classic" = "კლასიკური";
+"screen_notification_settings_sound_default" = "ნაგულისხმევი";
+"screen_notification_settings_sound_title" = "შეტყობინების ხმა";
 "screen_notification_settings_system_notifications_action_required" = "შეტყობინებების მისაღებად გთხოვთ შეცვალოთ %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "სისტემის პარამეტრები";
 "screen_notification_settings_system_notifications_turned_off" = "სისტემის შეტყობინებები გამორთულია";

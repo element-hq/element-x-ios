@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Sebutan";
 "screen_notification_settings_notification_section_title" = "Beri tahu saya tentang";
 "screen_notification_settings_room_mention_label" = "Beri tahu saya pada @room";
+"screen_notification_settings_sound" = "Suara";
+"screen_notification_settings_sound_alert_tones" = "Nada peringatan";
+"screen_notification_settings_sound_classic" = "Klasik";
+"screen_notification_settings_sound_default" = "Bawaan";
+"screen_notification_settings_sound_title" = "Suara pemberitahuan";
 "screen_notification_settings_system_notifications_action_required" = "Untuk menerima pemberitahuan, silakan ubah %1$@ Anda.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "pengaturan sistem";
 "screen_notification_settings_system_notifications_turned_off" = "Pemberitahuan sistem dimatikan";

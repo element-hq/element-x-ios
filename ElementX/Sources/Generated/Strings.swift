@@ -2002,6 +2002,16 @@ internal enum L10n {
   internal static var screenNotificationSettingsNotificationSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_notification_section_title") }
   /// Notify me on @room
   internal static var screenNotificationSettingsRoomMentionLabel: String { return L10n.tr("Localizable", "screen_notification_settings_room_mention_label") }
+  /// Sound
+  internal static var screenNotificationSettingsSound: String { return L10n.tr("Localizable", "screen_notification_settings_sound") }
+  /// Alert tones
+  internal static var screenNotificationSettingsSoundAlertTones: String { return L10n.tr("Localizable", "screen_notification_settings_sound_alert_tones") }
+  /// Classic
+  internal static var screenNotificationSettingsSoundClassic: String { return L10n.tr("Localizable", "screen_notification_settings_sound_classic") }
+  /// Default
+  internal static var screenNotificationSettingsSoundDefault: String { return L10n.tr("Localizable", "screen_notification_settings_sound_default") }
+  /// Notification Sound
+  internal static var screenNotificationSettingsSoundTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_title") }
   /// To receive notifications, please change your %1$@.
   internal static func screenNotificationSettingsSystemNotificationsActionRequired(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_notification_settings_system_notifications_action_required", String(describing: p1))

@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Omtaler";
 "screen_notification_settings_notification_section_title" = "Varsle meg om";
 "screen_notification_settings_room_mention_label" = "Gi meg varsel på @room";
+"screen_notification_settings_sound" = "Lyd";
+"screen_notification_settings_sound_alert_tones" = "Varselslyder";
+"screen_notification_settings_sound_classic" = "Klassisk";
+"screen_notification_settings_sound_default" = "Standard";
+"screen_notification_settings_sound_title" = "Varsellyd";
 "screen_notification_settings_system_notifications_action_required" = "For å motta varsler, vennligst endre %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "systeminnstillinger";
 "screen_notification_settings_system_notifications_turned_off" = "Systemvarsler er slått av";

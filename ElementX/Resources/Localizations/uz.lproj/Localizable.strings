@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Eslatmalar";
 "screen_notification_settings_notification_section_title" = "Menga xabar bering";
 "screen_notification_settings_room_mention_label" = "Menga @room orqali xabar bering";
+"screen_notification_settings_sound" = "Ovoz";
+"screen_notification_settings_sound_alert_tones" = "Ogohlantirish ohanglari";
+"screen_notification_settings_sound_classic" = "Klassik";
+"screen_notification_settings_sound_default" = "Standart";
+"screen_notification_settings_sound_title" = "Bildirishnoma ovozi";
 "screen_notification_settings_system_notifications_action_required" = "Bildirishnomalarni olish uchun, iltimos, o'zingizni %1$@ingizni o'zgartiring.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "tizim sozlamalari";
 "screen_notification_settings_system_notifications_turned_off" = "Tizim bildirishnomalari o'chirilgan";

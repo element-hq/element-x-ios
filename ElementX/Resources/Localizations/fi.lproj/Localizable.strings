@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Maininnat";
 "screen_notification_settings_notification_section_title" = "Ilmoita minulle";
 "screen_notification_settings_room_mention_label" = "Ilmoita minulle @room-maininnoista";
+"screen_notification_settings_sound" = "Ääni";
+"screen_notification_settings_sound_alert_tones" = "Hälytysäänet";
+"screen_notification_settings_sound_classic" = "Klassinen";
+"screen_notification_settings_sound_default" = "Oletus";
+"screen_notification_settings_sound_title" = "Ilmoitusääni";
 "screen_notification_settings_system_notifications_action_required" = "Jos haluat saada ilmoituksia, vaihda %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "järjestelmäsi asetuksia";
 "screen_notification_settings_system_notifications_turned_off" = "Järjestelmän ilmoitukset on poissa päältä";

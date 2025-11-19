@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Згадки";
 "screen_notification_settings_notification_section_title" = "Сповіщати мене про";
 "screen_notification_settings_room_mention_label" = "Сповіщати про @room";
+"screen_notification_settings_sound" = "Звук";
+"screen_notification_settings_sound_alert_tones" = "Звуки сповіщень";
+"screen_notification_settings_sound_classic" = "Класичний";
+"screen_notification_settings_sound_default" = "За замовчуванням";
+"screen_notification_settings_sound_title" = "Звук сповіщення";
 "screen_notification_settings_system_notifications_action_required" = "Щоб отримувати сповіщення змініть свої %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "системні налаштування";
 "screen_notification_settings_system_notifications_turned_off" = "Системні сповіщення вимкнені";

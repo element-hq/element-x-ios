@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "提及";
 "screen_notification_settings_notification_section_title" = "请通知我：";
 "screen_notification_settings_room_mention_label" = "@room 时通知我";
+"screen_notification_settings_sound" = "声音";
+"screen_notification_settings_sound_alert_tones" = "提示音";
+"screen_notification_settings_sound_classic" = "经典";
+"screen_notification_settings_sound_default" = "默认";
+"screen_notification_settings_sound_title" = "通知声音";
 "screen_notification_settings_system_notifications_action_required" = "要接收通知，请更改您的 %1$@。";
 "screen_notification_settings_system_notifications_action_required_content_link" = "系统设置";
 "screen_notification_settings_system_notifications_turned_off" = "系统通知已关闭";

@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Említések";
 "screen_notification_settings_notification_section_title" = "Értesítés ezekről:";
 "screen_notification_settings_room_mention_label" = "Értesítés a @room említésekor";
+"screen_notification_settings_sound" = "Hang";
+"screen_notification_settings_sound_alert_tones" = "Riasztási hangok";
+"screen_notification_settings_sound_classic" = "Klasszikus";
+"screen_notification_settings_sound_default" = "Alapértelmezett";
+"screen_notification_settings_sound_title" = "Értesítési hang";
 "screen_notification_settings_system_notifications_action_required" = "Az értesítések fogadásához kérjük, módosítsa a %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "rendszerbeállításokat";
 "screen_notification_settings_system_notifications_turned_off" = "A rendszerértesítések ki vannak kapcsolva";

@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Zmínky";
 "screen_notification_settings_notification_section_title" = "Upozornit mě na";
 "screen_notification_settings_room_mention_label" = "Upozornit mě na @room";
+"screen_notification_settings_sound" = "Zvuk";
+"screen_notification_settings_sound_alert_tones" = "Upozornění";
+"screen_notification_settings_sound_classic" = "Klasické";
+"screen_notification_settings_sound_default" = "Výchozí";
+"screen_notification_settings_sound_title" = "Zvuk oznámení";
 "screen_notification_settings_system_notifications_action_required" = "Chcete-li dostávat oznámení, změňte prosím svůj %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "systémová nastavení";
 "screen_notification_settings_system_notifications_turned_off" = "Systémová oznámení byla vypnuta";

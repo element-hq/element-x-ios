@@ -893,6 +893,11 @@
 "screen_notification_settings_mode_mentions" = "Mentions";
 "screen_notification_settings_notification_section_title" = "Notify me for";
 "screen_notification_settings_room_mention_label" = "Notify me on @room";
+"screen_notification_settings_sound" = "Sono";
+"screen_notification_settings_sound_alert_tones" = "Alarmoj";
+"screen_notification_settings_sound_classic" = "Klasika";
+"screen_notification_settings_sound_default" = "Defaŭlta";
+"screen_notification_settings_sound_title" = "Sciiga sono";
 "screen_notification_settings_system_notifications_action_required" = "To receive notifications, please change your %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "system settings";
 "screen_notification_settings_system_notifications_turned_off" = "System notifications turned off";

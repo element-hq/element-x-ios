@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Згадванні";
 "screen_notification_settings_notification_section_title" = "Апавясціць мяне";
 "screen_notification_settings_room_mention_label" = "Апавясціць пра @room";
+"screen_notification_settings_sound" = "Гук";
+"screen_notification_settings_sound_alert_tones" = "Гукі апавяшчэнняў";
+"screen_notification_settings_sound_classic" = "Класічны";
+"screen_notification_settings_sound_default" = "Па змаўчанні";
+"screen_notification_settings_sound_title" = "Гук апавяшчэння";
 "screen_notification_settings_system_notifications_action_required" = "Каб атрымліваць апавяшчэнні, змяніце свой %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "налады сістэмы";
 "screen_notification_settings_system_notifications_turned_off" = "Сістэмныя апавяшчэнні выключаны";

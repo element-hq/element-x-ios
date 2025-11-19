@@ -23,6 +23,7 @@ protocol CommonSettingsProtocol {
     var enableKeyShareOnInvite: Bool { get }
     var threadsEnabled: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
+    var notificationSoundName: String? { get }
 }
 
 /// Store Element specific app settings.
@@ -44,6 +45,7 @@ final class AppSettings {
         
         case enableNotifications
         case enableInAppNotifications
+        case notificationSoundName
         case pusherProfileTag
         case logLevel
         case traceLogPacks
@@ -266,6 +268,10 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
     var hideQuietNotificationAlerts
+    
+    /// The name of the notification sound file to use. When nil, uses the system default.
+    @UserPreference(key: UserDefaultsKeys.notificationSoundName, storageType: .userDefaults(store))
+    var notificationSoundName: String?
 
     /// Tag describing which set of device specific rules a pusher executes.
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))

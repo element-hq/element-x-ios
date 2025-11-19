@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "언급";
 "screen_notification_settings_notification_section_title" = "나에게 알려주세요";
 "screen_notification_settings_room_mention_label" = "@room 에서 알림 받기";
+"screen_notification_settings_sound" = "소리";
+"screen_notification_settings_sound_alert_tones" = "알림 소리";
+"screen_notification_settings_sound_classic" = "클래식";
+"screen_notification_settings_sound_default" = "기본값";
+"screen_notification_settings_sound_title" = "알림 소리";
 "screen_notification_settings_system_notifications_action_required" = "알림을 받으려면 %1$@ 을 변경해 주세요.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "시스템 설정";
 "screen_notification_settings_system_notifications_turned_off" = "시스템 알림이 꺼져 있습니다.";

@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Αναφορές";
 "screen_notification_settings_notification_section_title" = "Ειδοποίησέ με για";
 "screen_notification_settings_room_mention_label" = "Ειδοποίηση για @room";
+"screen_notification_settings_sound" = "Ήχος";
+"screen_notification_settings_sound_alert_tones" = "Ήχοι ειδοποίησης";
+"screen_notification_settings_sound_classic" = "Κλασικός";
+"screen_notification_settings_sound_default" = "Προεπιλογή";
+"screen_notification_settings_sound_title" = "Ήχος ειδοποίησης";
 "screen_notification_settings_system_notifications_action_required" = "Για να λαμβάνεις ειδοποιήσεις, άλλαξε το %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "ρυθμίσεις συστήματος";
 "screen_notification_settings_system_notifications_turned_off" = "Ειδοποιήσεις συστήματος ανενεργές";

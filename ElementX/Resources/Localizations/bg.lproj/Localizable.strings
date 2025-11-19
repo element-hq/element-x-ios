@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Споменавания";
 "screen_notification_settings_notification_section_title" = "Да бъда известяван за";
 "screen_notification_settings_room_mention_label" = "Известяване за @room";
+"screen_notification_settings_sound" = "Звук";
+"screen_notification_settings_sound_alert_tones" = "Звуци за известия";
+"screen_notification_settings_sound_classic" = "Класически";
+"screen_notification_settings_sound_default" = "По подразбиране";
+"screen_notification_settings_sound_title" = "Звук за известие";
 "screen_notification_settings_system_notifications_action_required" = "За да получавате известия, моля, променете своя %1$@";
 "screen_notification_settings_system_notifications_action_required_content_link" = "системни настройки";
 "screen_notification_settings_system_notifications_turned_off" = "Системните известия са изключени";

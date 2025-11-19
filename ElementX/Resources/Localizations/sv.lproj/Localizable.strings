@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Omnämnanden";
 "screen_notification_settings_notification_section_title" = "Meddela mig för";
 "screen_notification_settings_room_mention_label" = "Meddela mig på @room";
+"screen_notification_settings_sound" = "Ljud";
+"screen_notification_settings_sound_alert_tones" = "Varningssignaler";
+"screen_notification_settings_sound_classic" = "Klassisk";
+"screen_notification_settings_sound_default" = "Standard";
+"screen_notification_settings_sound_title" = "Aviseringsljud";
 "screen_notification_settings_system_notifications_action_required" = "För att få aviseringar, vänligen ändra dina %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "systeminställningar";
 "screen_notification_settings_system_notifications_turned_off" = "Systemaviseringar avstängda";

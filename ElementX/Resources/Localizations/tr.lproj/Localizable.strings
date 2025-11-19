@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Bahsetmeler";
 "screen_notification_settings_notification_section_title" = "Bana bildir";
 "screen_notification_settings_room_mention_label" = "Bana @room'da bildir";
+"screen_notification_settings_sound" = "Ses";
+"screen_notification_settings_sound_alert_tones" = "Uyarı sesleri";
+"screen_notification_settings_sound_classic" = "Klasik";
+"screen_notification_settings_sound_default" = "Varsayılan";
+"screen_notification_settings_sound_title" = "Bildirim sesi";
 "screen_notification_settings_system_notifications_action_required" = "Bildirimleri almak için lütfen %1$@ değiştirin.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "si̇stem ayarları";
 "screen_notification_settings_system_notifications_turned_off" = "Sistem bildirimleri kapalı";

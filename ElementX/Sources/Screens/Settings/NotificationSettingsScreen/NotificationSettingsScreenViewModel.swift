@@ -29,15 +29,31 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         self.notificationSettingsProxy = notificationSettingsProxy
         
         let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
-        super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings, isModallyPresented: isModallyPresented))
+        var initialState = NotificationSettingsScreenViewState(bindings: bindings, isModallyPresented: isModallyPresented)
+        initialState.soundName = Self.displayName(for: appSettings.notificationSoundName)
+        super.init(initialViewState: initialState)
                 
         // Listen for changes to AppSettings.
         appSettings.$enableNotifications
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
             .store(in: &cancellables)
         
+        appSettings.$notificationSoundName
+            .map { Self.displayName(for: $0) }
+            .weakAssign(to: \.state.soundName, on: self)
+            .store(in: &cancellables)
+        
         setupDidBecomeActiveSubscription()
         setupNotificationSettingsSubscription()
+    }
+    
+    private static func displayName(for soundFileName: String?) -> String {
+        guard let soundFileName else {
+            return L10n.screenNotificationSettingsSoundDefault
+        }
+        // Remove file extension and capitalize
+        let nameWithoutExtension = (soundFileName as NSString).deletingPathExtension
+        return nameWithoutExtension.capitalized
     }
     
     func fetchInitialContent() {
@@ -54,6 +70,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             actionsSubject.send(.editDefaultMode(chatType: .groupChat))
         case .directChatsTapped:
             actionsSubject.send(.editDefaultMode(chatType: .oneToOneChat))
+        case .soundTapped:
+            actionsSubject.send(.selectSound)
         case .roomMentionChanged:
             guard let settings = state.settings, settings.roomMentionsEnabled != state.bindings.roomMentionsEnabled else {
                 return

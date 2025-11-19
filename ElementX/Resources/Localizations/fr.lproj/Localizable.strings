@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Mentions";
 "screen_notification_settings_notification_section_title" = "Prévenez-moi pour";
 "screen_notification_settings_room_mention_label" = "Prévenez-moi si un message contient \"@room\"";
+"screen_notification_settings_sound" = "Son";
+"screen_notification_settings_sound_alert_tones" = "Sonneries d'alerte";
+"screen_notification_settings_sound_classic" = "Classique";
+"screen_notification_settings_sound_default" = "Par défaut";
+"screen_notification_settings_sound_title" = "Son de notification";
 "screen_notification_settings_system_notifications_action_required" = "Pour recevoir des notifications, veuillez modifier votre %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "paramètres du système";
 "screen_notification_settings_system_notifications_turned_off" = "Les notifications du système sont désactivées";

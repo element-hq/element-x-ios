@@ -359,6 +359,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "NotificationSettingsScreen_Previews")
     }
 
+    func testNotificationSoundSelectionScreen() async throws {
+        try await performAccessibilityAudit(named: "NotificationSoundSelectionScreen_Previews")
+    }
+
     func testPINTextField() async throws {
         try await performAccessibilityAudit(named: "PINTextField_Previews")
     }

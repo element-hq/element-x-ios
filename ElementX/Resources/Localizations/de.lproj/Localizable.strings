@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Erwähnungen";
 "screen_notification_settings_notification_section_title" = "Benachrichtige mich bei";
 "screen_notification_settings_room_mention_label" = "Benachrichtige mich bei @room";
+"screen_notification_settings_sound" = "Ton";
+"screen_notification_settings_sound_alert_tones" = "Hinweistöne";
+"screen_notification_settings_sound_classic" = "Klassisch";
+"screen_notification_settings_sound_default" = "Standard";
+"screen_notification_settings_sound_title" = "Benachrichtigungston";
 "screen_notification_settings_system_notifications_action_required" = "Um Benachrichtigungen zu erhalten, ändere bitte deine %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "Systemeinstellungen";
 "screen_notification_settings_system_notifications_turned_off" = "Systembenachrichtigungen deaktiviert";

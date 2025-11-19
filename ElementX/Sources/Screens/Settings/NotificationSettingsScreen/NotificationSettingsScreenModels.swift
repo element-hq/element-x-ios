@@ -12,6 +12,7 @@ import UIKit
 enum NotificationSettingsScreenViewModelAction {
     case close
     case editDefaultMode(chatType: NotificationSettingsChatType)
+    case selectSound
 }
 
 struct NotificationSettingsScreenViewState: BindableState {
@@ -22,6 +23,7 @@ struct NotificationSettingsScreenViewState: BindableState {
     var fixingConfigurationMismatch = false
     // Hide calls settings until calls are available in El-X
     let showCallsSettings = false
+    var soundName: String = L10n.screenNotificationSettingsSoundDefault
     
     var showSystemNotificationsAlert: Bool {
         bindings.enableNotifications && isUserPermissionGranted == false
@@ -84,6 +86,7 @@ enum NotificationSettingsScreenViewAction {
     case changedEnableNotifications
     case groupChatsTapped
     case directChatsTapped
+    case soundTapped
     case roomMentionChanged
     case callsChanged
     case invitationsChanged

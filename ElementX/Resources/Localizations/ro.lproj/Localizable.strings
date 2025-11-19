@@ -908,6 +908,11 @@
 "screen_notification_settings_mode_mentions" = "Mențiuni";
 "screen_notification_settings_notification_section_title" = "Anunță-mă pentru";
 "screen_notification_settings_room_mention_label" = "Anunțați-mă pentru @room";
+"screen_notification_settings_sound" = "Sunet";
+"screen_notification_settings_sound_alert_tones" = "Tonuri de alertă";
+"screen_notification_settings_sound_classic" = "Clasic";
+"screen_notification_settings_sound_default" = "Implicit";
+"screen_notification_settings_sound_title" = "Sunet de notificare";
 "screen_notification_settings_system_notifications_action_required" = "Pentru a primi notificări, vă rugăm să vă schimbați %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "Setări de sistem";
 "screen_notification_settings_system_notifications_turned_off" = "Notificările de sistem sunt dezactivate";
