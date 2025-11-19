@@ -19,10 +19,10 @@ struct SecurityAndPrivacyScreen: View {
             }
             
             if context.desiredSettings.accessType != .inviteOnly, context.viewState.canEditAddress {
+                visibilitySection
                 if let canonicalAlias = context.viewState.canonicalAlias {
                     addressSection(canonicalAlias: canonicalAlias)
                 } else {
-                    publishingSection
                     addAddressSection
                 }
             }
@@ -119,26 +119,28 @@ struct SecurityAndPrivacyScreen: View {
         }
     }
     
+    private var visibilitySection: some View {
+        Section {
+            EmptyView()
+        } header: {
+            Text(L10n.screenSecurityAndPrivacyRoomVisibilitySectionHeader)
+                .compoundListSectionHeader()
+        } footer: {
+            Text(L10n.screenSecurityAndPrivacyRoomVisibilitySectionFooter)
+                .compoundListSectionFooter()
+        }
+    }
+    
     private func addressSection(canonicalAlias: String) -> some View {
         Section {
-            ListRow(label: .plain(title: canonicalAlias,
-                                  description: L10n.screenSecurityAndPrivacyRoomAddressDescription),
+            ListRow(label: .plain(title: canonicalAlias),
                     kind: .navigationLink { context.send(viewAction: .editAddress) })
             roomDirectoryVisibilityRow
         } header: {
             Text(L10n.screenSecurityAndPrivacyRoomAddressSectionHeader)
                 .compoundListSectionHeader()
-        }
-    }
-    
-    private var publishingSection: some View {
-        Section {
-            EmptyView()
-        } header: {
-            Text(L10n.screenSecurityAndPrivacyRoomPublishingSectionHeader)
-                .compoundListSectionHeader()
         } footer: {
-            Text(L10n.screenSecurityAndPrivacyRoomPublishingSectionFooter)
+            Text(L10n.screenSecurityAndPrivacyRoomAddressSectionFooter)
                 .compoundListSectionFooter()
         }
     }
