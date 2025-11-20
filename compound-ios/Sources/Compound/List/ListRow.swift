@@ -8,6 +8,16 @@
 
 import SwiftUI
 
+public enum ListRowColor {
+    public static var separatorTint: Color {
+        if #available(iOS 26, *) {
+            .compound.bgSubtleSecondary
+        } else {
+            .compound._borderInteractiveSecondaryAlpha
+        }
+    }
+}
+
 public enum ListRowPadding {
     public static let horizontal: CGFloat = 16
     public static let vertical: CGFloat = 13
@@ -49,20 +59,12 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
     
     let kind: Kind<CustomContent, SelectionValue>
     
-    private var separatorTint: Color {
-        if #available(iOS 26, *) {
-            .compound.bgSubtleSecondary
-        } else {
-            .compound._borderInteractiveSecondaryAlpha
-        }
-    }
-    
     public var body: some View {
         rowContent
             .buttonStyle(ListRowButtonStyle())
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.compound.bgCanvasDefaultLevel1)
-            .listRowSeparatorTint(separatorTint)
+            .listRowSeparatorTint(ListRowColor.separatorTint)
     }
     
     @ViewBuilder

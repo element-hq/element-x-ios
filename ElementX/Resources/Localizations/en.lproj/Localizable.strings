@@ -629,6 +629,8 @@
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_grouped_state_events_expand" = "Expand";
 "screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_member_list_banned_header_title" = "%1$d Banned";
+"screen_room_member_list_pending_status" = "Pending";
 "screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Jump to new room";
 "screen_room_timeline_tombstoned_room_message" = "This room has been replaced and is no longer active";
@@ -1069,7 +1071,7 @@
 "screen_room_member_list_manage_member_unban_message" = "They will be able to join this room again if invited.";
 "screen_room_member_list_mode_banned" = "Banned";
 "screen_room_member_list_mode_members" = "Members";
-"screen_room_member_list_pending_header_title" = "Pending";
+"screen_room_member_list_pending_header_title" = "%1$d Invited";
 "screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "Room members";
 "screen_room_member_list_unbanning_user" = "Unbanning %1$@";
