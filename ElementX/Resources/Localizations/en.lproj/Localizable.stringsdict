@@ -317,9 +317,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>%1$d Person</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d People</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>

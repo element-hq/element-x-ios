@@ -2478,6 +2478,10 @@ internal enum L10n {
   }
   /// There are no banned users.
   internal static var screenRoomMemberListBannedEmpty: String { return L10n.tr("Localizable", "screen_room_member_list_banned_empty") }
+  /// %1$d Banned
+  internal static func screenRoomMemberListBannedHeaderTitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_member_list_banned_header_title", p1)
+  }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomMemberListHeaderTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_header_title", p1)
@@ -2496,8 +2500,12 @@ internal enum L10n {
   internal static var screenRoomMemberListModeBanned: String { return L10n.tr("Localizable", "screen_room_member_list_mode_banned") }
   /// Members
   internal static var screenRoomMemberListModeMembers: String { return L10n.tr("Localizable", "screen_room_member_list_mode_members") }
+  /// %1$d Invited
+  internal static func screenRoomMemberListPendingHeaderTitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_member_list_pending_header_title", p1)
+  }
   /// Pending
-  internal static var screenRoomMemberListPendingHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_pending_header_title") }
+  internal static var screenRoomMemberListPendingStatus: String { return L10n.tr("Localizable", "screen_room_member_list_pending_status") }
   /// Admin
   internal static var screenRoomMemberListRoleAdministrator: String { return L10n.tr("Localizable", "screen_room_member_list_role_administrator") }
   /// Moderator

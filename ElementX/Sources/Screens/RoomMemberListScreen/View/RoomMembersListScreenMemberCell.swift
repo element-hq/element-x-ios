@@ -6,28 +6,30 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct RoomMembersListScreenMemberCell: View {
     let listEntry: RoomMemberListScreenEntry
+    let isLast: Bool
     let context: RoomMembersListScreenViewModel.Context
 
     var body: some View {
         Button {
             context.send(viewAction: .selectMember(listEntry.member))
         } label: {
-            HStack(spacing: 8) {
+            HStack(spacing: 16) {
                 LoadableAvatarImage(url: avatarURL,
                                     name: avatarName,
                                     contentID: listEntry.member.id,
-                                    avatarSize: .user(on: .roomDetails),
+                                    avatarSize: .user(on: .roomMembersList),
                                     mediaProvider: context.mediaProvider)
                     .accessibilityHidden(true)
                 
                 HStack(alignment: .center, spacing: 4) {
-                    VStack(alignment: .leading, spacing: 0) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text(title)
-                            .font(.compound.bodyMDSemibold)
+                            .font(.compound.bodyLG)
                             .foregroundColor(.compound.textPrimary)
                             .lineLimit(1)
                         
@@ -44,11 +46,19 @@ struct RoomMembersListScreenMemberCell: View {
                     
                     if let role {
                         Text(role)
-                            .font(.compound.bodyXS)
+                            .font(.compound.bodyLG)
                             .foregroundStyle(.compound.textSecondary)
                     }
                 }
+                .overlay(alignment: .bottom) {
+                    if !isLast {
+                        ListRowColor.separatorTint
+                            .frame(height: 1)
+                            .offset(x: 0, y: ListRowPadding.vertical)
+                    }
+                }
             }
+            .padding(ListRowPadding.insets)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
         }
@@ -124,17 +134,17 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                           analytics: ServiceLocator.shared.analytics)
     static var previews: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 0) {
             Section("Invited/Joined") {
                 ForEach(members, id: \.member.id) { entry in
-                    RoomMembersListScreenMemberCell(listEntry: entry, context: viewModel.context)
+                    RoomMembersListScreenMemberCell(listEntry: entry, isLast: members.last == entry, context: viewModel.context)
                 }
             }
             
             // Banned members should have their profiles hidden and the avatar should use the first letter from their user ID.
             Section("Banned") {
                 ForEach(bannedMembers, id: \.member.id) { entry in
-                    RoomMembersListScreenMemberCell(listEntry: entry, context: viewModel.context)
+                    RoomMembersListScreenMemberCell(listEntry: entry, isLast: bannedMembers.last == entry, context: viewModel.context)
                 }
             }
         }
