@@ -2482,6 +2482,12 @@ internal enum L10n {
   internal static func screenRoomMemberListBannedHeaderTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_banned_header_title", p1)
   }
+  /// Check the spelling or try a new search
+  internal static var screenRoomMemberListEmptySearchSubtitle: String { return L10n.tr("Localizable", "screen_room_member_list_empty_search_subtitle") }
+  /// No results for “%1$@”
+  internal static func screenRoomMemberListEmptySearchTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_member_list_empty_search_title", String(describing: p1))
+  }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomMemberListHeaderTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_header_title", p1)
