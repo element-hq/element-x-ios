@@ -630,6 +630,8 @@
 "screen_room_grouped_state_events_expand" = "Expand";
 "screen_room_grouped_state_events_reduce" = "Reduce";
 "screen_room_member_list_banned_header_title" = "%1$d Banned";
+"screen_room_member_list_empty_search_subtitle" = "Check the spelling or try a new search";
+"screen_room_member_list_empty_search_title" = "No results for “%1$@”";
 "screen_room_member_list_pending_status" = "Pending";
 "screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Jump to new room";
