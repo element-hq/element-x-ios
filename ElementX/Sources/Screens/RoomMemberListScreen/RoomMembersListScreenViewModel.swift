@@ -104,11 +104,15 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             self.members = members
             self.currentUserProxy = members.first { $0.userID == roomProxy.ownUserID }
             
+            var newBindings = state.bindings
+            if state.bindings.mode == .banned, roomMembersDetails.bannedMembers.count == 0 {
+                newBindings.mode = .members
+            }
             self.state = .init(joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
                                joinedMembers: roomMembersDetails.joinedMembers,
                                invitedMembers: roomMembersDetails.invitedMembers,
                                bannedMembers: roomMembersDetails.bannedMembers,
-                               bindings: state.bindings)
+                               bindings: newBindings)
             
             if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
                 self.state.canInviteUsers = powerLevels.canOwnUserInvite()
