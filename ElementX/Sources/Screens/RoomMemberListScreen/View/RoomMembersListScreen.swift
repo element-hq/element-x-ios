@@ -77,7 +77,7 @@ struct RoomMembersListScreen: View {
                         })
                     }
                 }
-                .background(.compound.bgCanvasDefault)
+                .background(.compound.bgCanvasDefaultLevel1)
                 .clipShape(sectionShape)
                 .padding(.bottom, 32)
             } header: {
