@@ -75,6 +75,15 @@ struct RoomMembersListScreenViewState: BindableState {
         bannedMembers
             .filter { $0.member.matches(searchQuery: bindings.searchQuery) }
     }
+    
+    var shouldShowEmptyState: Bool {
+        switch bindings.mode {
+        case .banned:
+            visibleBannedMembers.count == 0
+        case .members:
+            visibleInvitedMembers.count + visibleJoinedMembers.count == 0
+        }
+    }
 }
 
 struct RoomMembersListScreenViewStateBindings {

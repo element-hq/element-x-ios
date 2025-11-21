@@ -14,7 +14,7 @@ struct RoomMembersListScreen: View {
     
     var body: some View {
         ScrollView {
-            if context.viewState.canBanUsers {
+            if context.viewState.canBanUsers, context.viewState.bannedMembersCount > 0 {
                 Picker("", selection: $context.mode) {
                     Text(L10n.screenRoomMemberListModeMembers)
                         .tag(RoomMembersListScreenMode.members)
@@ -25,19 +25,17 @@ struct RoomMembersListScreen: View {
                 .padding(ListRowPadding.insets)
             }
             
-            if context.mode == .members {
-                roomMembers
+            if context.viewState.shouldShowEmptyState {
+                emptySearchView
             } else {
-                bannedUsers
-            }
-        }
-        .overlay {
-            if context.mode == .banned, context.viewState.bannedMembersCount == 0 {
-                Text(L10n.screenRoomMemberListBannedEmpty)
-                    .font(.compound.bodyMD)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
+                Spacer()
+                    .frame(height: 18)
+                switch context.mode {
+                case .members:
+                    roomMembers
+                case .banned:
+                    bannedUsers
+                }
             }
         }
         .compoundList()
@@ -81,6 +79,7 @@ struct RoomMembersListScreen: View {
                 }
                 .background(.compound.bgCanvasDefault)
                 .clipShape(sectionShape)
+                .padding(.bottom, 32)
             } header: {
                 section.header(count: entries.count)
             }
@@ -106,6 +105,26 @@ struct RoomMembersListScreen: View {
             }
         }
     }
+    
+    private var emptySearchView: some View {
+        VStack(spacing: 16) {
+            BigIcon(icon: \.search, style: .default)
+                .accessibilityHidden(true)
+            VStack(spacing: 8) {
+                Text(L10n.screenRoomMemberListEmptySearchTitle(context.searchQuery))
+                    .font(.compound.headingMDBold)
+                    .foregroundStyle(.compound.textPrimary)
+                    .frame(maxWidth: .infinity)
+                Text(L10n.screenRoomMemberListEmptySearchSubtitle)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textSecondary)
+                    .frame(maxWidth: .infinity)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .padding(.horizontal, 24)
+        .padding(.top, 40)
+    }
 }
 
 private enum MembersSection {
@@ -118,9 +137,9 @@ private enum MembersSection {
         case .banned:
             L10n.screenRoomMemberListBannedHeaderTitle(count)
         case .invited:
-            L10n.screenRoomMemberListHeaderTitle(count)
-        case .joined:
             L10n.screenRoomMemberListPendingHeaderTitle(count)
+        case .joined:
+            L10n.screenRoomMemberListHeaderTitle(count)
         }
     }
     
@@ -139,6 +158,7 @@ private enum MembersSection {
         text(count: count)
             .compoundListSectionHeader()
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 16)
     }
 }
 
@@ -149,7 +169,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
     static let invitesViewModel = makeViewModel(withInvites: true)
     static let adminViewModel = makeViewModel(isAdmin: true, initialMode: .members)
     static let bannedViewModel = makeViewModel(isAdmin: true, initialMode: .banned)
-    static let emptyBannedViewModel = makeViewModel(withBanned: false, isAdmin: true, initialMode: .banned)
+    static let emptyBannedViewModel = makeViewModel(withBanned: false, isAdmin: false, initialMode: .members)
     
     static var previews: some View {
         NavigationStack {
@@ -186,17 +206,17 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         
         NavigationStack {
             RoomMembersListScreen(context: emptyBannedViewModel.context)
+                .onAppear { emptyBannedViewModel.context.searchQuery = "Dan" }
         }
-        .snapshotPreferences(expect: emptyBannedViewModel.context.$viewState.map { state in
-            state.canBanUsers == true
-        })
-        .previewDisplayName("Admin: Empty Banned")
+        .snapshotPreferences(expect: emptyBannedViewModel.context.$viewState.map(\.shouldShowEmptyState))
+        .previewDisplayName("Empty Search")
     }
     
     static func makeViewModel(withInvites: Bool = false,
                               withBanned: Bool = true,
                               isAdmin: Bool = false,
-                              initialMode: RoomMembersListScreenMode = .members) -> RoomMembersListScreenViewModel {
+                              initialMode: RoomMembersListScreenMode = .members,
+                              searchQuery: String = "") -> RoomMembersListScreenViewModel {
         let mockAdmin = RoomMemberProxyMock.mockAdmin
         
         let ownUserID = isAdmin ? mockAdmin.userID : RoomMemberProxyMock.mockMe.userID
