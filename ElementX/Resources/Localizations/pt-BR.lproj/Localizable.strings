@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Adicionar emoji";
 "screen_room_timeline_beginning_of_room" = "Este é o início de %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Este é o início desta conversa.";
-"screen_room_timeline_legacy_call" = "Chamada não suportada. Pergunte se o remetente pode usar o novo aplicativo Element X.";
+"screen_room_timeline_legacy_call" = "Chamada não suportada. Pergunte se o remetente pode usar o novo aplicativo TULPAR.";
 "screen_room_timeline_less_reactions" = "Mostrar menos";
 "screen_room_timeline_message_copied" = "Mensagem copiada";
 "screen_room_timeline_no_permission_to_post" = "Você não tem permissão para postar nesta sala";

@@ -1,6 +1,6 @@
 settings:
-  APP_GROUP_IDENTIFIER: group.io.element.nightly
-  BASE_BUNDLE_IDENTIFIER: io.element.elementx.nightly
+  APP_GROUP_IDENTIFIER: group.kz.tulpar.chat.nightly
+  BASE_BUNDLE_IDENTIFIER: kz.tulpar.chat.nightly
 
 targets:
   ElementX:

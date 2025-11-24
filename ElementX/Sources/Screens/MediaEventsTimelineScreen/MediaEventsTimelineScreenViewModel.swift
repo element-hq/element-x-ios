@@ -150,7 +150,6 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         let sheetModel = TimelineMediaPreviewViewModel(initialItem: item,
                                                        timelineViewModel: activeTimelineViewModel,
                                                        mediaProvider: mediaProvider,
-                                                       photoLibraryManager: PhotoLibraryManager(),
                                                        userIndicatorController: userIndicatorController,
                                                        appMediator: appMediator)
         sheetModel.actions.sink { [weak self] action in

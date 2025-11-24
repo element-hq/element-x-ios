@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "Argazkiak edo bideoak egiteko eta mezu gisa bidaltzeko Element X-k kamerarako sarbidea behar du.";
+"NSCameraUsageDescription" = "Argazkiak edo bideoak egiteko eta mezu gisa bidaltzeko TULPAR-k kamerarako sarbidea behar du.";
 "NSFaceIDUsageDescription" = "Aplikaziora sartzeko Face ID erabiltzen da.";
-"NSLocationWhenInUseUsageDescription" = "Grant location access so that Element X can share your location.";
-"NSMicrophoneUsageDescription" = "To record and send messages with audio, Element X needs to access the microphone.";
+"NSLocationWhenInUseUsageDescription" = "Grant location access so that TULPAR can share your location.";
+"NSMicrophoneUsageDescription" = "To record and send messages with audio, TULPAR needs to access the microphone.";
 "NSPhotoLibraryUsageDescription" = "This lets you save images and videos to your photo library.";

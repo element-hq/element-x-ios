@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Додати смайлики";
 "screen_room_timeline_beginning_of_room" = "Це початок %1$@";
 "screen_room_timeline_beginning_of_room_no_name" = "Це початок цієї розмови.";
-"screen_room_timeline_legacy_call" = "Непідтримуваний виклик. Запитайте, чи може абонент використовувати новий застосунок Element X.";
+"screen_room_timeline_legacy_call" = "Непідтримуваний виклик. Запитайте, чи може абонент використовувати новий застосунок TULPAR.";
 "screen_room_timeline_less_reactions" = "Показувати менше";
 "screen_room_timeline_message_copied" = "Повідомлення скопійовано";
 "screen_room_timeline_no_permission_to_post" = "У вас немає дозволу на публікацію в цій кімнаті";

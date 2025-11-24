@@ -44,7 +44,7 @@ class AudioRecorder: AudioRecorderProtocol {
         audioEngine?.isRunning ?? false
     }
     
-    private let dispatchQueue = DispatchQueue(label: "io.element.elementx.audio_recorder", qos: .userInitiated)
+    private let dispatchQueue = DispatchQueue(label: "kz.tulpar.chat.audio_recorder", qos: .userInitiated)
     private var stopped = false
     
     init(audioSession: AudioSessionProtocol = AVAudioSession.sharedInstance()) {

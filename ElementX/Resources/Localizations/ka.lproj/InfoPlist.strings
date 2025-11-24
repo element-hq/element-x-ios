@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "სურათის ან ვიდეოს გადასაღებად და შემდგომ გასაგზავნად Element X კამერასთან წვდომა სჭირდება.";
+"NSCameraUsageDescription" = "სურათის ან ვიდეოს გადასაღებად და შემდგომ გასაგზავნად TULPAR კამერასთან წვდომა სჭირდება.";
 "NSFaceIDUsageDescription" = "Face ID გამოიყენება თქვენს აპლიკაციასთან წვდომისათვის.";
-"NSLocationWhenInUseUsageDescription" = "მიანიჭეთ Element X-ს წვდომა ადგილმდებარეობასთან მისი გასაზიარებლად";
-"NSMicrophoneUsageDescription" = "ხმოვანი შეტყობინების გასაგზავნად Element X-ს თქვენს მიკროფონთან წვდომა სჭირდება.";
+"NSLocationWhenInUseUsageDescription" = "მიანიჭეთ TULPAR-ს წვდომა ადგილმდებარეობასთან მისი გასაზიარებლად";
+"NSMicrophoneUsageDescription" = "ხმოვანი შეტყობინების გასაგზავნად TULPAR-ს თქვენს მიკროფონთან წვდომა სჭირდება.";
 "NSPhotoLibraryUsageDescription" = "ეს გაძლევთ საშუალებას, შეინახოთ სურათები და ვიდეოები თქვენს ფოტო ბიბლიოთეკაში.";

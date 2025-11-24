@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Tilføj emoji";
 "screen_room_timeline_beginning_of_room" = "Dette er begyndelsen på %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Dette er begyndelsen på denne samtale.";
-"screen_room_timeline_legacy_call" = "Ikke-understøttet opkald. Spørg, om den, der ringer op, kan bruge den nye Element X-app.";
+"screen_room_timeline_legacy_call" = "Ikke-understøttet opkald. Spørg, om den, der ringer op, kan bruge den nye TULPAR-app.";
 "screen_room_timeline_less_reactions" = "Vis mindre";
 "screen_room_timeline_message_copied" = "Beskeden er kopieret";
 "screen_room_timeline_no_permission_to_post" = "Du har ikke tilladelse til at slå noget op i dette rum";

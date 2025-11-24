@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Přidat emoji";
 "screen_room_timeline_beginning_of_room" = "Toto je začátek %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Toto je začátek této konverzace.";
-"screen_room_timeline_legacy_call" = "Nepodporované volání. Zeptejte se, zda volající může používat novou aplikaci Element X.";
+"screen_room_timeline_legacy_call" = "Nepodporované volání. Zeptejte se, zda volající může používat novou aplikaci TULPAR.";
 "screen_room_timeline_less_reactions" = "Zobrazit méně";
 "screen_room_timeline_message_copied" = "Zpráva zkopírována";
 "screen_room_timeline_no_permission_to_post" = "Nemáte oprávnění zveřejňovat příspěvky v této místnosti";

@@ -231,7 +231,6 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
                                                       timelineViewModel: TimelineViewModel.mock(timelineKind: timelineKind,
                                                                                                 timelineController: timelineController),
                                                       mediaProvider: MediaProviderMock(configuration: .init()),
-                                                      photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),
                                                       appMediator: AppMediatorMock())
         

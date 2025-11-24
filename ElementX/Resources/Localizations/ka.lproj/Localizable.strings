@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "ემოჯის დამატება";
 "screen_room_timeline_beginning_of_room" = "ეს არის %1$@-ს დასაწყისი.";
 "screen_room_timeline_beginning_of_room_no_name" = "ეს არის ამ საუბრის დასაწყისი.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new TULPAR app.";
 "screen_room_timeline_less_reactions" = "ნაკლების ჩვენება";
 "screen_room_timeline_message_copied" = "შეტყობინება დაკოპირდა";
 "screen_room_timeline_no_permission_to_post" = "თქვენ არ გაქვთ ამ ოთახში გამოქვეყნების ნებართვა";

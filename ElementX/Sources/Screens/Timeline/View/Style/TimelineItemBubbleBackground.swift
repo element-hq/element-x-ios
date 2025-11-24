@@ -8,6 +8,7 @@
 
 import Compound
 import SwiftUI
+import UIKit
 
 extension View {
     /// - Parameters:
@@ -16,7 +17,10 @@ extension View {
     ///   - color: self explanatory, defaults to subtle secondary
     func bubbleBackground(isOutgoing: Bool = true,
                           insets: EdgeInsets = .init(top: 8, leading: 12, bottom: 8, trailing: 12),
-                          color: Color? = .compound.bgSubtleSecondary) -> some View {
+                          color: Color? = Color(uiColor: UIColor { traitCollection in
+                              traitCollection.userInterfaceStyle == .dark ? UIColor(red: 0.20, green: 0.22, blue: 0.25, alpha: 1)
+                                                                           : UIColor(red: 0.93, green: 0.94, blue: 0.96, alpha: 1)
+                          })) -> some View {
         modifier(TimelineItemBubbleBackgroundModifier(isOutgoing: isOutgoing,
                                                       insets: insets,
                                                       color: color))
@@ -29,12 +33,12 @@ private struct TimelineItemBubbleBackgroundModifier: ViewModifier {
     let isOutgoing: Bool
     let insets: EdgeInsets
     var color: Color?
-    
+
     func body(content: Content) -> some View {
         content
             .padding(insets)
             .background(color)
-            .cornerRadius(12, corners: roundedCorners)
+            .cornerRadius(18, corners: roundedCorners)
     }
     
     private var roundedCorners: UIRectCorner {

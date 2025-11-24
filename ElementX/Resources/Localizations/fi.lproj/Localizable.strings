@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Lisää reaktio";
 "screen_room_timeline_beginning_of_room" = "Tämä on huoneen %1$@ alku.";
 "screen_room_timeline_beginning_of_room_no_name" = "Tämä on tämän keskustelun alku.";
-"screen_room_timeline_legacy_call" = "Puhelu, jota ei tueta. Kysy, voiko soittaja käyttää uutta Element X -sovellusta.";
+"screen_room_timeline_legacy_call" = "Puhelu, jota ei tueta. Kysy, voiko soittaja käyttää uutta TULPAR -sovellusta.";
 "screen_room_timeline_less_reactions" = "Näytä vähemmän";
 "screen_room_timeline_message_copied" = "Viesti kopioitu";
 "screen_room_timeline_no_permission_to_post" = "Sinulla ei ole oikeutta kirjoittaa tässä huoneessa";

@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Emoji hinzufügen";
 "screen_room_timeline_beginning_of_room" = "Dies ist der Anfang von %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Dies ist der Anfang dieses Gesprächs.";
-"screen_room_timeline_legacy_call" = "Nicht unterstützter Anruf. Frag den Anrufer, ob er die neue Element X-App nutzen kann.";
+"screen_room_timeline_legacy_call" = "Nicht unterstützter Anruf. Frag den Anrufer, ob er die neue TULPAR-App nutzen kann.";
 "screen_room_timeline_less_reactions" = "Weniger anzeigen";
 "screen_room_timeline_message_copied" = "Nachricht wurde kopiert";
 "screen_room_timeline_no_permission_to_post" = "Du bist nicht berechtigt, in diesem Chat zu schreiben";

@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "新增表情符號";
 "screen_room_timeline_beginning_of_room" = "這是 %1$@ 的開頭。";
 "screen_room_timeline_beginning_of_room_no_name" = "這是此對話的開頭。";
-"screen_room_timeline_legacy_call" = "不支援的通話。詢問通話者是否可以使用新的 Element X 應用程式。";
+"screen_room_timeline_legacy_call" = "不支援的通話。詢問通話者是否可以使用新的 TULPAR 應用程式。";
 "screen_room_timeline_less_reactions" = "較少";
 "screen_room_timeline_message_copied" = "訊息已複製";
 "screen_room_timeline_no_permission_to_post" = "您沒有權限在此聊天室傳送訊息";

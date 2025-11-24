@@ -7,7 +7,7 @@ To create a fork, the first step is to update some of the project's configuratio
 ```
 APP_DISPLAY_NAME: Element X
 APP_GROUP_IDENTIFIER: group.io.element
-BASE_BUNDLE_IDENTIFIER: io.element.elementx
+BASE_BUNDLE_IDENTIFIER: kz.tulpar.chat
 DEVELOPMENT_TEAM: 7J4U792NQT
 ```
 

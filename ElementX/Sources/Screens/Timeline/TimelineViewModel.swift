@@ -760,7 +760,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         return TimelineMediaPreviewViewModel(initialItem: item,
                                              timelineViewModel: timelineViewModel,
                                              mediaProvider: userSession.mediaProvider,
-                                             photoLibraryManager: PhotoLibraryManager(),
                                              userIndicatorController: userIndicatorController,
                                              appMediator: appMediator)
     }

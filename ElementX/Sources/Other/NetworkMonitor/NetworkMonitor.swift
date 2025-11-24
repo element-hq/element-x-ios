@@ -20,7 +20,7 @@ class NetworkMonitor: NetworkMonitorProtocol {
     }
     
     init() {
-        queue = DispatchQueue(label: "io.element.elementx.network_monitor", qos: .background)
+        queue = DispatchQueue(label: "kz.tulpar.chat.network_monitor", qos: .background)
         pathMonitor = NWPathMonitor()
         reachabilitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
         
