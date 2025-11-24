@@ -119,7 +119,7 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(userID: String) -> UserProfileScreenViewModel {
         let clientProxyMock = ClientProxyMock(.init())
         
-        clientProxyMock.userIdentityForClosure = { userID in
+        clientProxyMock.userIdentityForFallBackToServerClosure = { userID, _ in
             let identity = switch userID {
             case RoomMemberProxyMock.mockDan.userID:
                 UserIdentityProxyMock(configuration: .init(verificationState: .verified))

@@ -140,7 +140,7 @@ extension ClientProxyMock {
             }
         }
         
-        userIdentityForReturnValue = .success(UserIdentityProxyMock(configuration: .init()))
+        userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init()))
         
         underlyingIsReportRoomSupported = true
         underlyingIsLiveKitRTCSupported = true

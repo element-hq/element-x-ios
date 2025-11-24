@@ -8816,16 +8816,16 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - userIdentity
 
-    open var userIdentityUserIdThrowableError: Error?
-    var userIdentityUserIdUnderlyingCallsCount = 0
-    open var userIdentityUserIdCallsCount: Int {
+    open var userIdentityUserIdFallbackToServerThrowableError: Error?
+    var userIdentityUserIdFallbackToServerUnderlyingCallsCount = 0
+    open var userIdentityUserIdFallbackToServerCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return userIdentityUserIdUnderlyingCallsCount
+                return userIdentityUserIdFallbackToServerUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = userIdentityUserIdUnderlyingCallsCount
+                    returnValue = userIdentityUserIdFallbackToServerUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -8833,29 +8833,29 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                userIdentityUserIdUnderlyingCallsCount = newValue
+                userIdentityUserIdFallbackToServerUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    userIdentityUserIdUnderlyingCallsCount = newValue
+                    userIdentityUserIdFallbackToServerUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var userIdentityUserIdCalled: Bool {
-        return userIdentityUserIdCallsCount > 0
+    open var userIdentityUserIdFallbackToServerCalled: Bool {
+        return userIdentityUserIdFallbackToServerCallsCount > 0
     }
-    open var userIdentityUserIdReceivedUserId: String?
-    open var userIdentityUserIdReceivedInvocations: [String] = []
+    open var userIdentityUserIdFallbackToServerReceivedArguments: (userId: String, fallbackToServer: Bool)?
+    open var userIdentityUserIdFallbackToServerReceivedInvocations: [(userId: String, fallbackToServer: Bool)] = []
 
-    var userIdentityUserIdUnderlyingReturnValue: UserIdentity?
-    open var userIdentityUserIdReturnValue: UserIdentity? {
+    var userIdentityUserIdFallbackToServerUnderlyingReturnValue: UserIdentity?
+    open var userIdentityUserIdFallbackToServerReturnValue: UserIdentity? {
         get {
             if Thread.isMainThread {
-                return userIdentityUserIdUnderlyingReturnValue
+                return userIdentityUserIdFallbackToServerUnderlyingReturnValue
             } else {
                 var returnValue: UserIdentity?? = nil
                 DispatchQueue.main.sync {
-                    returnValue = userIdentityUserIdUnderlyingReturnValue
+                    returnValue = userIdentityUserIdFallbackToServerUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -8863,29 +8863,29 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                userIdentityUserIdUnderlyingReturnValue = newValue
+                userIdentityUserIdFallbackToServerUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    userIdentityUserIdUnderlyingReturnValue = newValue
+                    userIdentityUserIdFallbackToServerUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var userIdentityUserIdClosure: ((String) async throws -> UserIdentity?)?
+    open var userIdentityUserIdFallbackToServerClosure: ((String, Bool) async throws -> UserIdentity?)?
 
-    open override func userIdentity(userId: String) async throws -> UserIdentity? {
-        if let error = userIdentityUserIdThrowableError {
+    open override func userIdentity(userId: String, fallbackToServer: Bool) async throws -> UserIdentity? {
+        if let error = userIdentityUserIdFallbackToServerThrowableError {
             throw error
         }
-        userIdentityUserIdCallsCount += 1
-        userIdentityUserIdReceivedUserId = userId
+        userIdentityUserIdFallbackToServerCallsCount += 1
+        userIdentityUserIdFallbackToServerReceivedArguments = (userId: userId, fallbackToServer: fallbackToServer)
         DispatchQueue.main.async {
-            self.userIdentityUserIdReceivedInvocations.append(userId)
+            self.userIdentityUserIdFallbackToServerReceivedInvocations.append((userId: userId, fallbackToServer: fallbackToServer))
         }
-        if let userIdentityUserIdClosure = userIdentityUserIdClosure {
-            return try await userIdentityUserIdClosure(userId)
+        if let userIdentityUserIdFallbackToServerClosure = userIdentityUserIdFallbackToServerClosure {
+            return try await userIdentityUserIdFallbackToServerClosure(userId, fallbackToServer)
         } else {
-            return userIdentityUserIdReturnValue
+            return userIdentityUserIdFallbackToServerReturnValue
         }
     }
 
@@ -22936,6 +22936,127 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
     }
     fileprivate var underlyingHandle: UInt64!
 
+    //MARK: - addChildToSpace
+
+    open var addChildToSpaceChildIdSpaceIdThrowableError: Error?
+    var addChildToSpaceChildIdSpaceIdUnderlyingCallsCount = 0
+    open var addChildToSpaceChildIdSpaceIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addChildToSpaceChildIdSpaceIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addChildToSpaceChildIdSpaceIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addChildToSpaceChildIdSpaceIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addChildToSpaceChildIdSpaceIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var addChildToSpaceChildIdSpaceIdCalled: Bool {
+        return addChildToSpaceChildIdSpaceIdCallsCount > 0
+    }
+    open var addChildToSpaceChildIdSpaceIdReceivedArguments: (childId: String, spaceId: String)?
+    open var addChildToSpaceChildIdSpaceIdReceivedInvocations: [(childId: String, spaceId: String)] = []
+    open var addChildToSpaceChildIdSpaceIdClosure: ((String, String) async throws -> Void)?
+
+    open override func addChildToSpace(childId: String, spaceId: String) async throws {
+        if let error = addChildToSpaceChildIdSpaceIdThrowableError {
+            throw error
+        }
+        addChildToSpaceChildIdSpaceIdCallsCount += 1
+        addChildToSpaceChildIdSpaceIdReceivedArguments = (childId: childId, spaceId: spaceId)
+        DispatchQueue.main.async {
+            self.addChildToSpaceChildIdSpaceIdReceivedInvocations.append((childId: childId, spaceId: spaceId))
+        }
+        try await addChildToSpaceChildIdSpaceIdClosure?(childId, spaceId)
+    }
+
+    //MARK: - joinedParentsOfChild
+
+    open var joinedParentsOfChildChildIdThrowableError: Error?
+    var joinedParentsOfChildChildIdUnderlyingCallsCount = 0
+    open var joinedParentsOfChildChildIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return joinedParentsOfChildChildIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinedParentsOfChildChildIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinedParentsOfChildChildIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinedParentsOfChildChildIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var joinedParentsOfChildChildIdCalled: Bool {
+        return joinedParentsOfChildChildIdCallsCount > 0
+    }
+    open var joinedParentsOfChildChildIdReceivedChildId: String?
+    open var joinedParentsOfChildChildIdReceivedInvocations: [String] = []
+
+    var joinedParentsOfChildChildIdUnderlyingReturnValue: [SpaceRoom]!
+    open var joinedParentsOfChildChildIdReturnValue: [SpaceRoom]! {
+        get {
+            if Thread.isMainThread {
+                return joinedParentsOfChildChildIdUnderlyingReturnValue
+            } else {
+                var returnValue: [SpaceRoom]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinedParentsOfChildChildIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinedParentsOfChildChildIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinedParentsOfChildChildIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var joinedParentsOfChildChildIdClosure: ((String) async throws -> [SpaceRoom])?
+
+    open override func joinedParentsOfChild(childId: String) async throws -> [SpaceRoom] {
+        if let error = joinedParentsOfChildChildIdThrowableError {
+            throw error
+        }
+        joinedParentsOfChildChildIdCallsCount += 1
+        joinedParentsOfChildChildIdReceivedChildId = childId
+        DispatchQueue.main.async {
+            self.joinedParentsOfChildChildIdReceivedInvocations.append(childId)
+        }
+        if let joinedParentsOfChildChildIdClosure = joinedParentsOfChildChildIdClosure {
+            return try await joinedParentsOfChildChildIdClosure(childId)
+        } else {
+            return joinedParentsOfChildChildIdReturnValue
+        }
+    }
+
     //MARK: - joinedSpaces
 
     var joinedSpacesUnderlyingCallsCount = 0
@@ -23074,6 +23195,52 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
         } else {
             return leaveSpaceSpaceIdReturnValue
         }
+    }
+
+    //MARK: - removeChildFromSpace
+
+    open var removeChildFromSpaceChildIdSpaceIdThrowableError: Error?
+    var removeChildFromSpaceChildIdSpaceIdUnderlyingCallsCount = 0
+    open var removeChildFromSpaceChildIdSpaceIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeChildFromSpaceChildIdSpaceIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeChildFromSpaceChildIdSpaceIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeChildFromSpaceChildIdSpaceIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeChildFromSpaceChildIdSpaceIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var removeChildFromSpaceChildIdSpaceIdCalled: Bool {
+        return removeChildFromSpaceChildIdSpaceIdCallsCount > 0
+    }
+    open var removeChildFromSpaceChildIdSpaceIdReceivedArguments: (childId: String, spaceId: String)?
+    open var removeChildFromSpaceChildIdSpaceIdReceivedInvocations: [(childId: String, spaceId: String)] = []
+    open var removeChildFromSpaceChildIdSpaceIdClosure: ((String, String) async throws -> Void)?
+
+    open override func removeChildFromSpace(childId: String, spaceId: String) async throws {
+        if let error = removeChildFromSpaceChildIdSpaceIdThrowableError {
+            throw error
+        }
+        removeChildFromSpaceChildIdSpaceIdCallsCount += 1
+        removeChildFromSpaceChildIdSpaceIdReceivedArguments = (childId: childId, spaceId: spaceId)
+        DispatchQueue.main.async {
+            self.removeChildFromSpaceChildIdSpaceIdReceivedInvocations.append((childId: childId, spaceId: spaceId))
+        }
+        try await removeChildFromSpaceChildIdSpaceIdClosure?(childId, spaceId)
     }
 
     //MARK: - spaceRoomList
