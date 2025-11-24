@@ -337,7 +337,7 @@
 "common_voice_message" = "Sprachnachricht";
 "common_waiting" = "Warten…";
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
-"common_you" = "Sie";
+"common_you" = "Du";
 "common.add_account" = "Konto hinzufügen";
 "common.add_another_account" = "Weiteres Konto hinzufügen";
 "common.no_space_name" = "Kein Space Name";
@@ -527,7 +527,6 @@
 "screen_create_room_room_visibility_section_title" = " Sichtbarkeit des Chats";
 "screen_decline_and_block_block_user_option_description" = "Du wirst keine Nachrichten oder Chat-Einladungen von diesem Nutzer sehen.";
 "screen_decline_and_block_report_user_option_description" = "Melde diesen Chat deinem Konto-Anbieter.";
-"screen_decline_and_block_title" = "Ablehnen und blockieren";
 "screen_edit_room_address_room_address_section_footer" = "Du benötigst eine Chat-Adresse, um den Chat im Verzeichnis sichtbar zu machen.";
 "screen_edit_room_address_title" = "Chat-Adresse";
 "screen_invite_users_already_a_member" = "Bereits Mitglied";
@@ -604,7 +603,6 @@
 "screen_report_room_leave_failed_alert_title" = "Der Chat kann nicht verlassen werden";
 "screen_report_room_reason_footer" = "Melde diesen Chat deinem Administrator. Wenn die Nachrichten verschlüsselt sind, kann dein Administrator sie nicht lesen.";
 "screen_report_room_reason_placeholder" = "Beschreibe den Grund für die Meldung…";
-"screen_report_room_title" = "Chat melden";
 "screen_reset_encryption_password_error" = "Es ist ein unbekannter Fehler aufgetreten. Bitte überprüfe das Passwort deines Kontos und versuche es erneut.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Verifizierung zurückziehen und senden";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Du kannst deine Verifizierung zurückziehen und diese Nachricht trotzdem senden, oder du kannst vorerst abbrechen und es später noch einmal versuchen, nachdem du %1$@ erneut verifiziert hast.";
@@ -631,6 +629,9 @@
 "screen_room_details_requests_to_join_title" = "Beitrittsanfragen";
 "screen_room_grouped_state_events_expand" = "Erweitern";
 "screen_room_grouped_state_events_reduce" = "Verkleinern";
+"screen_room_member_list_empty_search_subtitle" = "Check the spelling or try a new search";
+"screen_room_member_list_empty_search_title" = "No results for “%1$@”";
+"screen_room_member_list_pending_status" = "Pending";
 "screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Zum Nachfolge-Chat springen";
 "screen_room_timeline_tombstoned_room_message" = "Dieser Chat wurde stillgelegt und ist nicht mehr aktiv";
@@ -647,14 +648,11 @@
 "screen_security_and_privacy_encryption_section_footer" = "Einmal angeschaltet kann die Verschlüsselung nicht mehr deaktiviert werden.";
 "screen_security_and_privacy_encryption_toggle_title" = "Ende-zu-Ende-Verschlüsselung aktivieren";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Jeder kann diesen Chat finden und ihm beitreten";
-"screen_security_and_privacy_room_access_anyone_option_title" = "Alle";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Personen können nur beitreten, wenn sie eingeladen werden.";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Nur auf Einladung";
 "screen_security_and_privacy_room_access_section_header" = "Chat Zugang";
 "screen_security_and_privacy_room_access_space_members_option_description" = "Spaces werden zur Zeit nicht unterstützt.";
 "screen_security_and_privacy_room_access_space_members_option_title" = "Spacemitglieder";
-"screen_security_and_privacy_room_address_description" = "You’ll need an address in order to make it visible in the public directory.";
-"screen_security_and_privacy_room_address_section_footer" = "Du benötigst eine Chat-Adresse, um den Chat im Verzeichnis sichtbar zu machen.";
 "screen_security_and_privacy_room_address_section_header" = "Chatroomadresse";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Erlaube das Auffinden dieses Chats durch Suche im öffentlichen Verzeichnis von %1$@";
 "screen_security_and_privacy_room_directory_visibility_toggle_description" = "Allow to be found by searching the public directory.";
@@ -664,7 +662,8 @@
 "screen_security_and_privacy_room_history_since_selecting_option_title" = "Nur Mitglieder seit Auswahl dieser Option";
 "screen_security_and_privacy_room_publishing_section_footer" = "Chat-Adressen machen es möglich, Chats zu finden und ihnen beizutreten. Dies erleichtert es, Chats mit anderen zu teilen.\nAuf Wunsch kannst du deinen Chat im öffentlichen Verzeichnis deines Homeservers veröffentlichen.";
 "screen_security_and_privacy_room_publishing_section_header" = "Veröffentlichung von Chats";
-"screen_security_and_privacy_room_visibility_section_footer" = "Chat-Adressen machen es möglich, Chats zu finden und ihnen beizutreten. Dies erleichtert es, Chats mit anderen zu teilen.\nDie Adresse ist auch erforderlich, um den Chat im öffentlichen Verzeichnis von %1$@ zu veröffentlichen.";
+"screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
+"screen_security_and_privacy_room_visibility_section_header" = "Chatroomsichtbarkeit.";
 "screen_security_and_privacy_title" = "Sicherheit & Datenschutz";
 "screen_space_menu_action_members" = "Mitglieder anzeigen";
 "screen_space_announcement_item1" = "Von dir erstellte oder beigetretene Spaces anzeigen";
@@ -1016,7 +1015,6 @@
 "screen_room_change_permissions_moderators" = "Admins und Moderatoren";
 "screen_room_change_permissions_remove_people" = "Personen entfernen und Beitrittsanfragen ablehnen";
 "screen_room_change_permissions_room_avatar" = "Avatar ändern";
-"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "Chat-Namen ändern";
 "screen_room_change_permissions_room_topic" = "Chat Thema ändern";
 "screen_room_change_permissions_send_messages" = "Nachrichten senden";
@@ -1072,12 +1070,8 @@
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Mitglied nur entfernen";
 "screen_room_member_list_manage_member_unban_action" = "Sperre aufheben";
 "screen_room_member_list_manage_member_unban_message" = "Die Nutzer können dem Chat wieder beitreten, wenn sie eingeladen werden.";
-"screen_room_member_list_manage_member_unban_title" = "Nutzer entsperren";
 "screen_room_member_list_mode_banned" = "Gesperrt";
 "screen_room_member_list_mode_members" = "Mitglieder";
-"screen_room_member_list_pending_header_title" = "Ausstehend";
-"screen_room_member_list_role_administrator" = "Admin";
-"screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_role_owner" = "Eigentümer";
 "screen_room_member_list_room_members_header_title" = "Mitglieder";
 "screen_room_member_list_unbanning_user" = "%1$@ wird entsperrt.";
@@ -1355,11 +1349,13 @@
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "%1$@ wird entsperrt.";
 "screen_decline_and_block_block_user_option_title" = "Nutzer blockieren";
 "screen_decline_and_block_report_user_reason_placeholder" = "Beschreibe den Grund für die Meldung…";
+"screen_decline_and_block_title" = "Ablehnen und blockieren";
 "screen_home_tab_chats" = "Chats";
 "screen_home_tab_spaces" = "Spaces";
 "screen_join_room_decline_and_block_button_title" = "Ablehnen und blockieren";
 "screen_knock_requests_list_title" = "Beitrittsanfragen";
 "screen_pinned_timeline_screen_title_empty" = "Fixierte Nachrichten";
+"screen_report_room_title" = "Chat melden";
 "screen_room_mentions_at_room_title" = "Alle";
 "screen_room_single_knock_request_accept_button_title" = "Akzeptieren";
 "screen_room_single_knock_request_view_button_title" = "Ansicht";
@@ -1368,8 +1364,9 @@
 "screen_roomlist_knock_event_sent_description" = "Beitrittsanfrage geschickt";
 "screen_security_and_privacy_ask_to_join_option_title" = "Beitritt beantragen";
 "screen_security_and_privacy_encryption_section_header" = "Verschlüsselung";
+"screen_security_and_privacy_room_access_anyone_option_title" = "Jeder";
+"screen_security_and_privacy_room_address_section_footer" = "Du benötigst eine Chat-Adresse, um den Chat im Verzeichnis sichtbar zu machen.";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Jeder";
-"screen_security_and_privacy_room_visibility_section_header" = " Sichtbarkeit des Chats";
 "screen_space_settings_leave_space" = "Space verlassen";
 "screen_space_settings_roles_and_permissions" = "Rollen und Berechtigungen";
 "screen_space_settings_security_and_privacy" = "Sicherheit & Datenschutz";
@@ -1413,6 +1410,7 @@
 "screen_reset_encryption_password_placeholder" = "Eingeben...";
 "screen_room_attachment_source_camera_photo" = "Foto aufnehmen";
 "screen_room_change_permissions_messages_and_content" = "Nachrichten senden & löschen";
+"screen_room_change_permissions_room_details" = "Chat bearbeiten";
 "screen_room_change_role_section_administrators" = "Admins";
 "screen_room_change_role_section_moderators" = "Moderatoren";
 "screen_room_change_role_section_users" = "Mitglieder";
@@ -1429,6 +1427,9 @@
 "screen_room_details_topic_title" = "Thema";
 "screen_room_error_failed_processing_media" = "Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut.";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Mitglied entfernen und sperren";
+"screen_room_member_list_manage_member_unban_title" = "Sperre für diesen Chat aufheben";
+"screen_room_member_list_role_administrator" = "Nur Admins";
+"screen_room_member_list_role_moderator" = "Admins und Moderatoren";
 "screen_room_notification_settings_mode_all_messages" = "Alle Nachrichten";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Nur Erwähnungen und Schlüsselwörter";
 "screen_room_roles_and_permissions_permissions_header" = "Permissions";

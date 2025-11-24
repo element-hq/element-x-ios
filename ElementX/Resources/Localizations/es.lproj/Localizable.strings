@@ -527,7 +527,6 @@
 "screen_create_room_room_visibility_section_title" = "Visibilidad de la sala";
 "screen_decline_and_block_block_user_option_description" = "No verás ningún mensaje ni invitación a sala que provenga de este usuario";
 "screen_decline_and_block_report_user_option_description" = "Denunciar esta sala a tu proveedor de cuentas.";
-"screen_decline_and_block_title" = "Rechazar y bloquear";
 "screen_edit_room_address_room_address_section_footer" = "Necesitarás una dirección de sala para que sea visible en el directorio.";
 "screen_edit_room_address_title" = "Dirección de la sala";
 "screen_invite_users_already_a_member" = "Ya eres miembro";
@@ -604,7 +603,6 @@
 "screen_report_room_leave_failed_alert_title" = "No se pudo salir de la sala";
 "screen_report_room_reason_footer" = "Denuncia esta sala a tu administrador. Si los mensajes están cifrados, tu administrador no podrá leerlos.";
 "screen_report_room_reason_placeholder" = "Describe el motivo de la denuncia…";
-"screen_report_room_title" = "Denunciar sala";
 "screen_reset_encryption_password_error" = "Se ha producido un error desconocido. Comprueba que la contraseña de tu cuenta sea correcta y vuelve a intentarlo.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Retirar la verificación y enviar";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Puedes retirar tu verificación y enviar este mensaje de todos modos, o puedes cancelarlo por ahora e intentarlo de nuevo más tarde después de volver a verificar a %1$@.";
@@ -631,6 +629,9 @@
 "screen_room_details_requests_to_join_title" = "Solicitudes de unión";
 "screen_room_grouped_state_events_expand" = "Expand";
 "screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_member_list_empty_search_subtitle" = "Check the spelling or try a new search";
+"screen_room_member_list_empty_search_title" = "No results for “%1$@”";
+"screen_room_member_list_pending_status" = "Pending";
 "screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Jump to new room";
 "screen_room_timeline_tombstoned_room_message" = "This room has been replaced and is no longer active";
@@ -647,15 +648,12 @@
 "screen_security_and_privacy_encryption_section_footer" = "Una vez activado, el cifrado no se puede desactivar.";
 "screen_security_and_privacy_encryption_toggle_title" = "Activar el cifrado de extremo a extremo";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Cualquiera puede encontrarla y unirse";
-"screen_security_and_privacy_room_access_anyone_option_title" = "Public";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Las personas solo pueden unirse si están invitadas";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Solo por invitación";
 "screen_security_and_privacy_room_access_section_header" = "Acceso a la sala";
 "screen_security_and_privacy_room_access_space_members_option_description" = "No se admiten los espacios por el momento.";
 "screen_security_and_privacy_room_access_space_members_option_title" = "Miembros del espacio";
-"screen_security_and_privacy_room_address_description" = "You’ll need an address in order to make it visible in the public directory.";
-"screen_security_and_privacy_room_address_section_footer" = "Necesitarás una dirección de sala para que esta sea visible en el directorio de salas.";
-"screen_security_and_privacy_room_address_section_header" = "Published address";
+"screen_security_and_privacy_room_address_section_header" = "Address";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Permite encontrar esta sala buscando en el directorio de salas públicas de %1$@";
 "screen_security_and_privacy_room_directory_visibility_toggle_description" = "Allow to be found by searching the public directory.";
 "screen_security_and_privacy_room_directory_visibility_toggle_title" = "Visible en el directorio de salas públicas";
@@ -664,7 +662,8 @@
 "screen_security_and_privacy_room_history_since_selecting_option_title" = "Solo participantes desde que se selecciona esta opción";
 "screen_security_and_privacy_room_publishing_section_footer" = "Las direcciones de sala son formas de buscar salas y acceder a ellas. Esto también garantiza que puedas compartir fácilmente tu sala con otras personas.\nPuedes optar por publicar tu sala en el directorio de salas públicas de tu servidor base.";
 "screen_security_and_privacy_room_publishing_section_header" = "Publicación de la sala";
-"screen_security_and_privacy_room_visibility_section_footer" = "Las direcciones de sala son un medio para buscar y acceder a salas. También te permiten compartir fácilmente tu sala con otras personas.\nLa dirección también es necesaria para hacer visible la sala en el directorio de salas públicas de %1$@.";
+"screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
+"screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Seguridad y privacidad";
 "screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
@@ -1016,7 +1015,6 @@
 "screen_room_change_permissions_moderators" = "Administradores y moderadores";
 "screen_room_change_permissions_remove_people" = "Eliminar personas y rechazar solicitudes de unión";
 "screen_room_change_permissions_room_avatar" = "Cambiar el avatar de la sala";
-"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "Cambiar el nombre de la sala";
 "screen_room_change_permissions_room_topic" = "Cambiar el tema de la sala";
 "screen_room_change_permissions_send_messages" = "Enviar mensajes";
@@ -1072,12 +1070,8 @@
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Solo eliminar miembro";
 "screen_room_member_list_manage_member_unban_action" = "Quitar veto";
 "screen_room_member_list_manage_member_unban_message" = "Podrá volver a unirse a esta sala si se le invita.";
-"screen_room_member_list_manage_member_unban_title" = "Quitar veto al usuario";
 "screen_room_member_list_mode_banned" = "Vetados";
 "screen_room_member_list_mode_members" = "Miembros";
-"screen_room_member_list_pending_header_title" = "Pendiente";
-"screen_room_member_list_role_administrator" = "Admin";
-"screen_room_member_list_role_moderator" = "Moderador";
 "screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "Miembros de la sala";
 "screen_room_member_list_unbanning_user" = "Levantando veto a %1$@";
@@ -1355,11 +1349,13 @@
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Levantando veto a %1$@";
 "screen_decline_and_block_block_user_option_title" = "Bloquear usuario";
 "screen_decline_and_block_report_user_reason_placeholder" = "Describe el motivo de la denuncia…";
+"screen_decline_and_block_title" = "Rechazar y bloquear";
 "screen_home_tab_chats" = "Chats";
 "screen_home_tab_spaces" = "Spaces";
 "screen_join_room_decline_and_block_button_title" = "Rechazar y bloquear";
 "screen_knock_requests_list_title" = "Solicitudes de unión";
 "screen_pinned_timeline_screen_title_empty" = "Mensajes fijados";
+"screen_report_room_title" = "Denunciar sala";
 "screen_room_mentions_at_room_title" = "Todos";
 "screen_room_single_knock_request_accept_button_title" = "Aceptar";
 "screen_room_single_knock_request_view_button_title" = "View";
@@ -1368,8 +1364,9 @@
 "screen_roomlist_knock_event_sent_description" = "Solicitud de unión enviada";
 "screen_security_and_privacy_ask_to_join_option_title" = "Solicitud para unirse";
 "screen_security_and_privacy_encryption_section_header" = "Cifrado";
+"screen_security_and_privacy_room_access_anyone_option_title" = "Cualquiera";
+"screen_security_and_privacy_room_address_section_footer" = "Necesitarás una dirección de sala para que sea visible en el directorio.";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Cualquiera";
-"screen_security_and_privacy_room_visibility_section_header" = "Visibilidad de la sala";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "Roles y permisos";
 "screen_space_settings_security_and_privacy" = "Seguridad y privacidad";
@@ -1413,6 +1410,7 @@
 "screen_reset_encryption_password_placeholder" = "Introducir…";
 "screen_room_attachment_source_camera_photo" = "Hacer foto";
 "screen_room_change_permissions_messages_and_content" = "Mensajes y contenido";
+"screen_room_change_permissions_room_details" = "Editar sala";
 "screen_room_change_role_section_administrators" = "Administradores";
 "screen_room_change_role_section_moderators" = "Moderadores";
 "screen_room_change_role_section_users" = "Miembros";
@@ -1429,6 +1427,9 @@
 "screen_room_details_topic_title" = "Tema";
 "screen_room_error_failed_processing_media" = "Error al procesar el contenido multimedia, por favor inténtalo de nuevo.";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Sacar y vetar a un miembro";
+"screen_room_member_list_manage_member_unban_title" = "Eliminar veto en la sala";
+"screen_room_member_list_role_administrator" = "Solo administradores";
+"screen_room_member_list_role_moderator" = "Administradores y moderadores";
 "screen_room_notification_settings_mode_all_messages" = "Todos los mensajes";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Únicamente Menciones y Palabras clave";
 "screen_room_roles_and_permissions_permissions_header" = "Permissions";
