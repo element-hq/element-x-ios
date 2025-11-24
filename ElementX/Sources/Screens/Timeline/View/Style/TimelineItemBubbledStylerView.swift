@@ -8,6 +8,7 @@
 
 import Compound
 import SwiftUI
+import UIKit
 
 struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: TimelineViewModel.Context
@@ -41,7 +42,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var body: some View {
         ZStack(alignment: .trailingFirstTextBaseline) {
             VStack(alignment: alignment, spacing: -12) {
-                if !timelineItem.isOutgoing, !isDirectOneToOneRoom {
+                if !timelineItem.isOutgoing {
                     header
                         .zIndex(1)
                 }
@@ -235,7 +236,15 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
 private extension EventBasedTimelineItemProtocol {
     var bubbleBackgroundColor: Color? {
-        let defaultColor: Color = isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
+        let outgoingColor = Color(uiColor: UIColor { trait in
+            trait.userInterfaceStyle == .dark ? UIColor(red: 0.17, green: 0.47, blue: 0.82, alpha: 1)
+                                               : UIColor(red: 0.24, green: 0.63, blue: 0.96, alpha: 1)
+        })
+        let incomingColor = Color(uiColor: UIColor { trait in
+            trait.userInterfaceStyle == .dark ? UIColor(red: 0.20, green: 0.22, blue: 0.25, alpha: 1)
+                                               : UIColor(red: 0.93, green: 0.94, blue: 0.96, alpha: 1)
+        })
+        let defaultColor: Color = isOutgoing ? outgoingColor : incomingColor
         
         switch self {
         case is ImageRoomTimelineItem, is VideoRoomTimelineItem:

@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Gehitu emojia";
 "screen_room_timeline_beginning_of_room" = "Hauxe da %1$@(r)en hasiera";
 "screen_room_timeline_beginning_of_room_no_name" = "Hau da elkarrizketaren hasiera.";
-"screen_room_timeline_legacy_call" = "Deia ez da bateragarria. Galdetu deika ari denari Element X aplikazio berria erabil dezakeen.";
+"screen_room_timeline_legacy_call" = "Deia ez da bateragarria. Galdetu deika ari denari TULPAR aplikazio berria erabil dezakeen.";
 "screen_room_timeline_less_reactions" = "Erakutsi gutxiago";
 "screen_room_timeline_message_copied" = "Mezua kopiatu da";
 "screen_room_timeline_no_permission_to_post" = "Ez duzu gela honetara mezuak bidaltzeko baimenik";

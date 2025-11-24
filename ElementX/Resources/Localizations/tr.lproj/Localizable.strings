@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Emoji ekle";
 "screen_room_timeline_beginning_of_room" = "Bu, %1$@ odasının başlangıcıdır.";
 "screen_room_timeline_beginning_of_room_no_name" = "Bu konuşmanın başlangıcıdır.";
-"screen_room_timeline_legacy_call" = "Desteklenmeyen çağrı. Arayanın yeni Element X uygulamasını kullanıp kullanamayacağını sorun.";
+"screen_room_timeline_legacy_call" = "Desteklenmeyen çağrı. Arayanın yeni TULPAR uygulamasını kullanıp kullanamayacağını sorun.";
 "screen_room_timeline_less_reactions" = "Daha az göster";
 "screen_room_timeline_message_copied" = "Mesaj kopyalandı";
 "screen_room_timeline_no_permission_to_post" = "Bu odada gönderi yapma izniniz yok";

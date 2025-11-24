@@ -15,10 +15,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     static let displayMessageForwardingDelay: TimeInterval = 1.0
     
     let instanceID = UUID()
-    
+
     private let timelineViewModel: TimelineViewModelProtocol
     private let mediaProvider: MediaProviderProtocol
-    private let photoLibraryManager: PhotoLibraryManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
     
@@ -30,12 +29,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     init(initialItem: EventBasedMessageTimelineItemProtocol,
          timelineViewModel: TimelineViewModelProtocol,
          mediaProvider: MediaProviderProtocol,
-         photoLibraryManager: PhotoLibraryManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol) {
         self.timelineViewModel = timelineViewModel
         self.mediaProvider = mediaProvider
-        self.photoLibraryManager = photoLibraryManager
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
         
@@ -85,8 +82,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             case .viewInRoomTimeline:
                 state.previewControllerDriver.send(.dismissDetailsSheet)
                 actionsSubject.send(.viewInRoomTimeline(item.timelineItem.id))
-            case .save:
-                Task { await saveCurrentItem() }
             case .redact:
                 state.bindings.redactConfirmationItem = item
             case .forward(let itemID):
@@ -167,38 +162,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    private func saveCurrentItem() async {
-        guard case let .media(mediaItem) = state.currentItem, let fileURL = mediaItem.fileHandle?.url else {
-            MXLog.error("Unable to save an item without a URL, the button shouldn't be visible.")
-            return
-        }
-        
-        // Dismiss the details sheet (nicer flow for images/video but _required_ in order to select a file directory).
-        state.previewControllerDriver.send(.dismissDetailsSheet)
-        
-        do {
-            switch mediaItem.timelineItem {
-            case is AudioRoomTimelineItem, is FileRoomTimelineItem:
-                state.previewControllerDriver.send(.exportFile(.init(url: fileURL)))
-                return // Don't show the indicator.
-            case is ImageRoomTimelineItem:
-                try await photoLibraryManager.addResource(.photo, at: fileURL).get()
-            case is VideoRoomTimelineItem:
-                try await photoLibraryManager.addResource(.video, at: fileURL).get()
-            default:
-                break
-            }
-            
-            showSavedIndicator()
-        } catch PhotoLibraryManagerError.notAuthorized {
-            MXLog.error("Not authorised to save item to photo library")
-            state.previewControllerDriver.send(.authorizationRequired(appMediator: appMediator))
-        } catch {
-            MXLog.error("Failed saving item: \(error)")
-            showErrorIndicator()
-        }
-    }
-    
     private func redactItem(_ item: TimelineMediaPreviewItem.Media) {
         timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.timelineItem.id, action: .redact))
         state.bindings.redactConfirmationItem = nil
@@ -215,14 +178,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                               title: L10n.commonFileDeleted,
                                                               iconName: "checkmark"))
     }
-    
-    private func showSavedIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
-                                                              type: .toast,
-                                                              title: L10n.commonFileSaved,
-                                                              iconName: "checkmark"))
-    }
-    
+
     private func showErrorIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
                                                               type: .toast,

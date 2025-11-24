@@ -4,7 +4,7 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>io.element.elementx.background.refresh</string>
+            <string>kz.tulpar.chat.background.refresh</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
@@ -73,8 +73,6 @@
 	<string>Grant location access so that $(APP_DISPLAY_NAME) can share your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To record and send messages with audio, $(APP_DISPLAY_NAME) needs to access the microphone.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This lets you save images and videos to your photo library.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>INSendMessageIntent</string>

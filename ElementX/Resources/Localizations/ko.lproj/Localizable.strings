@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "반응 추가";
 "screen_room_timeline_beginning_of_room" = "%1$@의 시작입니다.";
 "screen_room_timeline_beginning_of_room_no_name" = "대화의 시작입니다.";
-"screen_room_timeline_legacy_call" = "지원되지 않는 통화입니다. 발신자에게 새로운 Element X 앱을 사용할 수 있는지 문의하시기 바랍니다.";
+"screen_room_timeline_legacy_call" = "지원되지 않는 통화입니다. 발신자에게 새로운 TULPAR 앱을 사용할 수 있는지 문의하시기 바랍니다.";
 "screen_room_timeline_less_reactions" = "덜 보기";
 "screen_room_timeline_message_copied" = "메시지 복사됨";
 "screen_room_timeline_no_permission_to_post" = "이 방에 게시할 수 있는 권한이 없습니다.";

@@ -35,7 +35,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         
-        AppSettings.configureWithSuiteName("io.element.elementx.uitests")
+        AppSettings.configureWithSuiteName("kz.tulpar.chat.uitests")
         AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
         

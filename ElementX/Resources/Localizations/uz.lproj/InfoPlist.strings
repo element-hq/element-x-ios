@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "Rasmlar yoki videolar olish va ularni xabar Element X sifatida yuborish uchun kameraga ruxsat kerak boʻladi.";
+"NSCameraUsageDescription" = "Rasmlar yoki videolar olish va ularni xabar TULPAR sifatida yuborish uchun kameraga ruxsat kerak boʻladi.";
 "NSFaceIDUsageDescription" = "Face ID ilovangizdan foydalanish uchun ishlatiladi.";
-"NSLocationWhenInUseUsageDescription" = "Element X joylashuvingizni ulashishi uchun joylashuv axborotiga ruxsat bering.";
-"NSMicrophoneUsageDescription" = "Audio xabarlarni yozib olish va yuborish uchun Element X mikrofondan foydalanishga ruxsat olishi kerak.";
+"NSLocationWhenInUseUsageDescription" = "TULPAR joylashuvingizni ulashishi uchun joylashuv axborotiga ruxsat bering.";
+"NSMicrophoneUsageDescription" = "Audio xabarlarni yozib olish va yuborish uchun TULPAR mikrofondan foydalanishga ruxsat olishi kerak.";
 "NSPhotoLibraryUsageDescription" = "Bu sizga rasm va videolarni fotosuratlar kutubxonangizga saqlash imkonini beradi.";

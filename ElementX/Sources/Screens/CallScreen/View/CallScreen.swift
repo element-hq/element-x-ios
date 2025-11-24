@@ -348,7 +348,7 @@ struct CallScreen_Previews: PreviewProvider {
         return CallScreenViewModel(elementCallService: ElementCallServiceMock(.init()),
                                    configuration: .init(roomProxy: roomProxy,
                                                         clientProxy: clientProxy,
-                                                        clientID: "io.element.elementx",
+                                                        clientID: "kz.tulpar.chat",
                                                         elementCallBaseURL: "https://call.element.io",
                                                         elementCallBaseURLOverride: nil,
                                                         colorScheme: .light),

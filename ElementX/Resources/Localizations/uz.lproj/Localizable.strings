@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Emoji qo'shmoq";
 "screen_room_timeline_beginning_of_room" = "Bu %1$@ni boshlanishi";
 "screen_room_timeline_beginning_of_room_no_name" = "Bu suhbatning boshlanishi.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new TULPAR app.";
 "screen_room_timeline_less_reactions" = "Kamroq ko'rsatish";
 "screen_room_timeline_message_copied" = "Xabar nusxalandi";
 "screen_room_timeline_no_permission_to_post" = "Sizda bu xonaga post yozishga ruxsat yo‘q";

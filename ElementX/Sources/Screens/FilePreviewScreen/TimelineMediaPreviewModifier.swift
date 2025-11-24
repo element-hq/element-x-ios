@@ -181,7 +181,6 @@ struct TimelineMediaPreviewModifier_Previews: PreviewProvider {
                                              timelineViewModel: TimelineViewModel.mock(timelineKind: timelineController.timelineKind,
                                                                                        timelineController: timelineController),
                                              mediaProvider: mediaProvider,
-                                             photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              appMediator: AppMediatorMock())
     }

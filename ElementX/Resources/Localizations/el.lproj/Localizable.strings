@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Προσθήκη emoji";
 "screen_room_timeline_beginning_of_room" = "Αυτή είναι η αρχή του %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Αυτή είναι η αρχή τούτης της συνομιλίας.";
-"screen_room_timeline_legacy_call" = "Μη υποστηριζόμενη κλήση. Ρώτα εάν ο καλών μπορεί να χρησιμοποιήσει τη νέα εφαρμογή Element X.";
+"screen_room_timeline_legacy_call" = "Μη υποστηριζόμενη κλήση. Ρώτα εάν ο καλών μπορεί να χρησιμοποιήσει τη νέα εφαρμογή TULPAR.";
 "screen_room_timeline_less_reactions" = "Εμφάνιση λιγότερων";
 "screen_room_timeline_message_copied" = "Το μήνυμα αντιγράφηκε";
 "screen_room_timeline_no_permission_to_post" = "Δεν έχετε δικαιώματα για να δημοσιεύσετε σε αυτήν την αίθουσα";

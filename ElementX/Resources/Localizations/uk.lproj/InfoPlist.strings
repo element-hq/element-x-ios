@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "Щоб зробити фото або відео і відправити їх як повідомлення, Element X потрібен доступ до камери.";
+"NSCameraUsageDescription" = "Щоб зробити фото або відео і відправити їх як повідомлення, TULPAR потрібен доступ до камери.";
 "NSFaceIDUsageDescription" = "Face ID використовується для доступу до вашого застосунку.";
-"NSLocationWhenInUseUsageDescription" = "Надайте доступ до місцеперебування, щоб Element X міг поділитися ним.";
-"NSMicrophoneUsageDescription" = "Щоб записувати та надсилати повідомлення зі звуком, Element X потрібен доступ до мікрофона.";
+"NSLocationWhenInUseUsageDescription" = "Надайте доступ до місцеперебування, щоб TULPAR міг поділитися ним.";
+"NSMicrophoneUsageDescription" = "Щоб записувати та надсилати повідомлення зі звуком, TULPAR потрібен доступ до мікрофона.";
 "NSPhotoLibraryUsageDescription" = "Дає змогу зберігати світлини та відео у вашій бібліотеці.";

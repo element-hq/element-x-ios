@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Tambahkan emoji";
 "screen_room_timeline_beginning_of_room" = "Ini adalah awal dari %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Ini adalah awal dari percakapan ini.";
-"screen_room_timeline_legacy_call" = "Panggilan tidak didukung. Tanyakan apakah penelepon dapat menggunakan aplikasi Element X yang baru.";
+"screen_room_timeline_legacy_call" = "Panggilan tidak didukung. Tanyakan apakah penelepon dapat menggunakan aplikasi TULPAR yang baru.";
 "screen_room_timeline_less_reactions" = "Tampilkan lebih sedikit";
 "screen_room_timeline_message_copied" = "Pesan disalin";
 "screen_room_timeline_no_permission_to_post" = "Anda tidak memiliki izin untuk mengirim di ruangan ini";

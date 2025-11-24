@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "Um Bilder oder Videos aufzunehmen und als Nachricht zu versenden, benötigt Element X Zugriff auf die Kamera.";
+"NSCameraUsageDescription" = "Um Bilder oder Videos aufzunehmen und als Nachricht zu versenden, benötigt TULPAR Zugriff auf die Kamera.";
 "NSFaceIDUsageDescription" = "Face ID wird verwendet um die App zu entsperren.";
-"NSLocationWhenInUseUsageDescription" = "Erlaube Element X den Zugriff auf deinen Standort, um den Standort zu teilen.";
-"NSMicrophoneUsageDescription" = "Um Sprachnachrichten aufzunehmen und mit Element X zu versenden, wird der Zugriff auf das Mikrofon benötigt.";
+"NSLocationWhenInUseUsageDescription" = "Erlaube TULPAR den Zugriff auf deinen Standort, um den Standort zu teilen.";
+"NSMicrophoneUsageDescription" = "Um Sprachnachrichten aufzunehmen und mit TULPAR zu versenden, wird der Zugriff auf das Mikrofon benötigt.";
 "NSPhotoLibraryUsageDescription" = "Damit kannst du Bilder und Videos in deiner Foto Galerie speichern.";

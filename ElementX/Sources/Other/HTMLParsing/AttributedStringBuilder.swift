@@ -41,7 +41,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let mentionBuilder: MentionBuilderProtocol
     
     private static let attributeMSC4286 = "msc4286-external-payment-details"
-    private static let cacheDispatchQueue = DispatchQueue(label: "io.element.elementx.attributed_string_builder_v2_cache")
+    private static let cacheDispatchQueue = DispatchQueue(label: "kz.tulpar.chat.attributed_string_builder_v2_cache")
     private static var caches: [String: LRUCache<String, AttributedString>] = [:]
 
     static func invalidateCaches() {

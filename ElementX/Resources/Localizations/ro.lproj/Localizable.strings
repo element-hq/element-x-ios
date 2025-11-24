@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Adăugați emoji";
 "screen_room_timeline_beginning_of_room" = "Acesta este începutul conversației %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Acesta este începutul acestei conversații.";
-"screen_room_timeline_legacy_call" = "Apel neacceptat. Întrebați apelantul dacă poate utiliza noua aplicație Element X.";
+"screen_room_timeline_legacy_call" = "Apel neacceptat. Întrebați apelantul dacă poate utiliza noua aplicație TULPAR.";
 "screen_room_timeline_less_reactions" = "Afișați mai puțin";
 "screen_room_timeline_message_copied" = "Mesaj copiat";
 "screen_room_timeline_no_permission_to_post" = "Nu aveți permisiunea de a posta în această cameră";

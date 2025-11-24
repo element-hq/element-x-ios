@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "افزودن شکلک";
 "screen_room_timeline_beginning_of_room" = "آغاز %1$@ است.";
 "screen_room_timeline_beginning_of_room_no_name" = "این، آغاز گفت‌وگوست.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new TULPAR app.";
 "screen_room_timeline_less_reactions" = "نمایش کم‌تر";
 "screen_room_timeline_message_copied" = "پیام رونوشت شد";
 "screen_room_timeline_no_permission_to_post" = "اجازهٔ فرستادن به این اتاق را ندارید";

@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Emoji toevoegen";
 "screen_room_timeline_beginning_of_room" = "Dit is het begin van %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Dit is het begin van dit gesprek.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new TULPAR app.";
 "screen_room_timeline_less_reactions" = "Toon minder";
 "screen_room_timeline_message_copied" = "Bericht gekopieerd";
 "screen_room_timeline_no_permission_to_post" = "Je hebt geen toestemming om berichten in deze kamer te plaatsen";

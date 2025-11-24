@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Дадаць эмодзі";
 "screen_room_timeline_beginning_of_room" = "Гэта пачатак %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Гэта пачатак гэтай размовы.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new TULPAR app.";
 "screen_room_timeline_less_reactions" = "Паказаць менш";
 "screen_room_timeline_message_copied" = "Паведамленне скапіравана";
 "screen_room_timeline_no_permission_to_post" = "У Вас няма дазволу на публікацыю ў гэтым пакоі";

@@ -196,8 +196,6 @@ class TimelineInteractionHandler {
             actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
         case .share:
             break // Handled inline in the media preview screen with a ShareLink.
-        case .save:
-            break // Handled inline in the media preview screen.
         }
         
         if action.switchToDefaultComposer {

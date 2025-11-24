@@ -77,8 +77,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case unpin
     case viewInRoomTimeline
     case share
-    case save
-    
+
     var id: Self { self }
     
     /// Whether the item should cancel a reply/edit occurring in the composer.
@@ -132,7 +131,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     
     var canAppearInMediaDetails: Bool {
         switch self {
-        case .viewInRoomTimeline, .share, .save, .redact, .forward:
+        case .viewInRoomTimeline, .share, .redact, .forward:
             true
         default:
             false
@@ -186,8 +185,6 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionViewInTimeline, icon: \.visibilityOn)
         case .share:
             Label(L10n.actionShare, icon: \.shareIos)
-        case .save:
-            Label(L10n.actionSave, icon: \.downloadIos)
         }
     }
 }

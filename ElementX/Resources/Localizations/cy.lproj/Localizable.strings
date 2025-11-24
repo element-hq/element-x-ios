@@ -1113,7 +1113,7 @@
 "screen_room_timeline_add_reaction" = "Ychwanegu emoji";
 "screen_room_timeline_beginning_of_room" = "Dyma ddechrau %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Dyma ddechrau'r sgwrs hon.";
-"screen_room_timeline_legacy_call" = "Galwad heb ei chefnogi. Gofynnwch a all y galwr ddefnyddio'r ap Element X newydd.";
+"screen_room_timeline_legacy_call" = "Galwad heb ei chefnogi. Gofynnwch a all y galwr ddefnyddio'r ap TULPAR newydd.";
 "screen_room_timeline_less_reactions" = "Dangos llai";
 "screen_room_timeline_message_copied" = "Neges wedi'i chopïo";
 "screen_room_timeline_no_permission_to_post" = "Does gennych chi ddim caniatâd i bostio i'r ystafell hon";
