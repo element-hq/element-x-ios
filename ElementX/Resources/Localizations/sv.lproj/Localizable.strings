@@ -527,7 +527,6 @@
 "screen_create_room_room_visibility_section_title" = "Rumssynlighet";
 "screen_decline_and_block_block_user_option_description" = "Du kommer inte att se några meddelanden eller rumsinbjudningar från den här användaren";
 "screen_decline_and_block_report_user_option_description" = "Rapportera det här rummet till din kontoleverantör.";
-"screen_decline_and_block_title" = "Avvisa och blockera";
 "screen_edit_room_address_room_address_section_footer" = "Du behöver en rumsadress för att göra den synlig i katalogen.";
 "screen_edit_room_address_title" = "Rumsadress";
 "screen_invite_users_already_a_member" = "Redan medlem";
@@ -604,7 +603,6 @@
 "screen_report_room_leave_failed_alert_title" = "Kunde inte lämna rummet";
 "screen_report_room_reason_footer" = "Anmäl det här rummet till din administratör. Om meddelandena är krypterade kommer din administratör inte att kunna läsa dem.";
 "screen_report_room_reason_placeholder" = "Beskriv anledningen …";
-"screen_report_room_title" = "Rapportera rum";
 "screen_reset_encryption_password_error" = "Ett okänt fel inträffade. Kontrollera att ditt kontolösenord är korrekt och försök igen.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Dra tillbaka verifieringen och skicka";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Du kan dra tillbaka din verifiering och skicka det här meddelandet ändå, eller så kan du avbryta för tillfället och försöka igen senare efter att ha verifierat %1$@ igen.";
@@ -631,6 +629,9 @@
 "screen_room_details_requests_to_join_title" = "Begäran om att gå med";
 "screen_room_grouped_state_events_expand" = "Expandera";
 "screen_room_grouped_state_events_reduce" = "Reducera";
+"screen_room_member_list_empty_search_subtitle" = "Check the spelling or try a new search";
+"screen_room_member_list_empty_search_title" = "No results for “%1$@”";
+"screen_room_member_list_pending_status" = "Pending";
 "screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Hoppa till nytt rum";
 "screen_room_timeline_tombstoned_room_message" = "Det här rummet har ersatts och är inte längre aktivt";
@@ -647,15 +648,12 @@
 "screen_security_and_privacy_encryption_section_footer" = "Efter aktivering kan kryptering inte inaktiveras.";
 "screen_security_and_privacy_encryption_toggle_title" = "Aktivera totalsträckskryptering";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Vem som helst kan hitta och gå med";
-"screen_security_and_privacy_room_access_anyone_option_title" = "Vem som helst";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Användare kan bara gå med om de är inbjudna";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Endast inbjudan";
 "screen_security_and_privacy_room_access_section_header" = "Tillgång till rum";
 "screen_security_and_privacy_room_access_space_members_option_description" = "Utrymmen stöds för närvarande inte";
 "screen_security_and_privacy_room_access_space_members_option_title" = "Utrymmesmedlemmar";
-"screen_security_and_privacy_room_address_description" = "You’ll need an address in order to make it visible in the public directory.";
-"screen_security_and_privacy_room_address_section_footer" = "Du behöver en rumsadress för att göra den synlig i rumskatalogen.";
-"screen_security_and_privacy_room_address_section_header" = "Published address";
+"screen_security_and_privacy_room_address_section_header" = "Address";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Tillåt att detta rum hittas genom att söka i den offentliga rumskatalogen på %1$@";
 "screen_security_and_privacy_room_directory_visibility_toggle_description" = "Allow to be found by searching the public directory.";
 "screen_security_and_privacy_room_directory_visibility_toggle_title" = "Synlig i katalogen för offentliga rum";
@@ -664,7 +662,8 @@
 "screen_security_and_privacy_room_history_since_selecting_option_title" = "Endast medlemmar sedan det här alternativet har valts";
 "screen_security_and_privacy_room_publishing_section_footer" = "Rumsadresser är sätt att hitta och komma åt rum. Detta säkerställer också att du enkelt kan dela ditt rum med andra.\nDu kan välja att publicera ditt rum i din hemservers offentliga rumskatalog.";
 "screen_security_and_privacy_room_publishing_section_header" = "Rumspublicering";
-"screen_security_and_privacy_room_visibility_section_footer" = "Rumsadresser är sätt att hitta och komma åt rum. Detta säkerställer också att du enkelt kan dela ditt rum med andra. \nAdressen krävs också för att göra rummet synligt i%1$@ katalog för offentliga rum.";
+"screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
+"screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Säkerhet och sekretess";
 "screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
@@ -1016,7 +1015,6 @@
 "screen_room_change_permissions_moderators" = "Administratörer och moderatorer";
 "screen_room_change_permissions_remove_people" = "Ta bort personer och avslå förfrågningar om att gå med";
 "screen_room_change_permissions_room_avatar" = "Byt rumsavatar";
-"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "Byt rumsnamn";
 "screen_room_change_permissions_room_topic" = "Byt rumsämne";
 "screen_room_change_permissions_send_messages" = "Skicka meddelanden";
@@ -1072,12 +1070,8 @@
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Ta bara bort medlem";
 "screen_room_member_list_manage_member_unban_action" = "Avbanna";
 "screen_room_member_list_manage_member_unban_message" = "Denne kommer kunna gå med i rummet igen om denne bjuds in";
-"screen_room_member_list_manage_member_unban_title" = "Avbanna användare";
 "screen_room_member_list_mode_banned" = "Bannade";
 "screen_room_member_list_mode_members" = "Medlemmar";
-"screen_room_member_list_pending_header_title" = "Väntar";
-"screen_room_member_list_role_administrator" = "Admin";
-"screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_role_owner" = "Ägare";
 "screen_room_member_list_room_members_header_title" = "Rumsmedlemmar";
 "screen_room_member_list_unbanning_user" = "Avbannar %1$@";
@@ -1355,11 +1349,13 @@
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Avbannar %1$@";
 "screen_decline_and_block_block_user_option_title" = "Blockera användare";
 "screen_decline_and_block_report_user_reason_placeholder" = "Beskriv anledningen …";
+"screen_decline_and_block_title" = "Avvisa och blockera";
 "screen_home_tab_chats" = "Alla chattar";
 "screen_home_tab_spaces" = "Utrymmen";
 "screen_join_room_decline_and_block_button_title" = "Avvisa och blockera";
 "screen_knock_requests_list_title" = "Begäran om att gå med";
 "screen_pinned_timeline_screen_title_empty" = "Fästa meddelanden";
+"screen_report_room_title" = "Anmäl rum";
 "screen_room_mentions_at_room_title" = "Alla";
 "screen_room_single_knock_request_accept_button_title" = "Godkänn";
 "screen_room_single_knock_request_view_button_title" = "Visa";
@@ -1368,8 +1364,9 @@
 "screen_roomlist_knock_event_sent_description" = "Begäran om att gå med skickad";
 "screen_security_and_privacy_ask_to_join_option_title" = "Be om att gå med";
 "screen_security_and_privacy_encryption_section_header" = "Kryptering";
+"screen_security_and_privacy_room_access_anyone_option_title" = "Vem som helst";
+"screen_security_and_privacy_room_address_section_footer" = "Du behöver en rumsadress för att göra den synlig i katalogen.";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Vem som helst";
-"screen_security_and_privacy_room_visibility_section_header" = "Rumssynlighet";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "Roller och behörigheter";
 "screen_space_settings_security_and_privacy" = "Säkerhet och sekretess";
@@ -1413,6 +1410,7 @@
 "screen_reset_encryption_password_placeholder" = "Ange …";
 "screen_room_attachment_source_camera_photo" = "Ta ett foto";
 "screen_room_change_permissions_messages_and_content" = "Meddelanden och innehåll";
+"screen_room_change_permissions_room_details" = "Redigera rummet";
 "screen_room_change_role_section_administrators" = "Administratörer";
 "screen_room_change_role_section_moderators" = "Moderatorer";
 "screen_room_change_role_section_users" = "Medlemmar";
@@ -1429,6 +1427,9 @@
 "screen_room_details_topic_title" = "Ämne";
 "screen_room_error_failed_processing_media" = "Misslyckades att bearbeta media för uppladdning, vänligen pröva igen.";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Ta bort och banna medlem";
+"screen_room_member_list_manage_member_unban_title" = "Avbanna från rummet";
+"screen_room_member_list_role_administrator" = "Endast administratörer";
+"screen_room_member_list_role_moderator" = "Administratörer och moderatorer";
 "screen_room_notification_settings_mode_all_messages" = "Alla meddelanden";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Endast omnämnanden och nyckelord";
 "screen_room_roles_and_permissions_permissions_header" = "Permissions";

@@ -438,7 +438,7 @@
 "notification_room_invite_body" = "Ti ha invitato ad entrare nella stanza";
 "notification_room_invite_body_with_sender" = "%1$@ ti ha invitato a unirti alla stanza";
 "notification_sender_me" = "Io";
-"notification_sender_mention_reply" = "%1$@ è stato menzionato o risposto";
+"notification_sender_mention_reply" = "%1$@ ti ha menzionato o risposto";
 "notification_test_push_notification_content" = "Stai visualizzando la notifica! Cliccami!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -527,7 +527,6 @@
 "screen_create_room_room_visibility_section_title" = "Visibilità della stanza";
 "screen_decline_and_block_block_user_option_description" = "Non vedrai alcun messaggio o invito ad una stanza da parte di questo utente";
 "screen_decline_and_block_report_user_option_description" = "Segnala questa stanza al fornitore del tuo account.";
-"screen_decline_and_block_title" = "Rifiuta e blocca";
 "screen_edit_room_address_room_address_section_footer" = "Avrai bisogno di un indirizzo della stanza per renderla visibile nell'elenco.";
 "screen_edit_room_address_title" = "Indirizzo della stanza";
 "screen_invite_users_already_a_member" = "Già membro";
@@ -604,7 +603,6 @@
 "screen_report_room_leave_failed_alert_title" = "Impossibile lasciare la stanza";
 "screen_report_room_reason_footer" = "Segnala questa stanza al tuo amministratore. Se i messaggi sono cifrati, l'amministratore non sarà in grado di leggerli.";
 "screen_report_room_reason_placeholder" = "Descrivi il motivo della segnalazione...";
-"screen_report_room_title" = "Segnala stanza";
 "screen_reset_encryption_password_error" = "Si è verificato un errore sconosciuto. Controlla che la password del tuo account sia corretta e riprova.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Ritira la verifica e invia";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Puoi ritirare la tua verifica e inviare comunque questo messaggio, oppure annullarlo per ora e riprovare più tardi dopo aver riverificato %1$@.";
@@ -631,6 +629,9 @@
 "screen_room_details_requests_to_join_title" = "Richieste di accesso";
 "screen_room_grouped_state_events_expand" = "Espandi";
 "screen_room_grouped_state_events_reduce" = "Riduci";
+"screen_room_member_list_empty_search_subtitle" = "Check the spelling or try a new search";
+"screen_room_member_list_empty_search_title" = "No results for “%1$@”";
+"screen_room_member_list_pending_status" = "Pending";
 "screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Vai alla nuova stanza";
 "screen_room_timeline_tombstoned_room_message" = "Questa stanza è stata sostituita e non è più attiva";
@@ -647,14 +648,11 @@
 "screen_security_and_privacy_encryption_section_footer" = "Una volta attivata, la crittografia non può essere disattivata.";
 "screen_security_and_privacy_encryption_toggle_title" = "Attiva la crittografia end-to-end";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Chiunque può trovare ed entrare";
-"screen_security_and_privacy_room_access_anyone_option_title" = "Chiunque";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Le persone possono partecipare solo se invitate";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Solo su invito";
 "screen_security_and_privacy_room_access_section_header" = "Accesso alla stanza";
 "screen_security_and_privacy_room_access_space_members_option_description" = "Gli spazi non sono attualmente supportati";
 "screen_security_and_privacy_room_access_space_members_option_title" = "Membri dello spazio";
-"screen_security_and_privacy_room_address_description" = "You’ll need an address in order to make it visible in the public directory.";
-"screen_security_and_privacy_room_address_section_footer" = "Per rendere visibile la stanza nell'elenco delle stanze, è necessario l'indirizzo della stanza.";
 "screen_security_and_privacy_room_address_section_header" = "Indirizzo della stanza";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Consenti la ricerca di questa stanza effettuando una ricerca nell'elenco delle stanze pubbliche di %1$@";
 "screen_security_and_privacy_room_directory_visibility_toggle_description" = "Allow to be found by searching the public directory.";
@@ -664,7 +662,8 @@
 "screen_security_and_privacy_room_history_since_selecting_option_title" = "Solo membri da dopo aver selezionato questa opzione";
 "screen_security_and_privacy_room_publishing_section_footer" = "Gli indirizzi delle stanze sono modi per trovare e accedervi. In questo modo puoi anche condividere facilmente la tua stanze con altri.\nPuoi scegliere di pubblicare la tua stanza nell'elenco delle stanza pubbliche dell'homeserver.";
 "screen_security_and_privacy_room_publishing_section_header" = "Pubblicazione della stanza";
-"screen_security_and_privacy_room_visibility_section_footer" = "Gli indirizzi delle stanze sono modi per trovare e accedere a queste ultime. Questo assicura anche che tu possa condividere facilmente la tua stanza con altri. L'indirizzo è anche necessario per rendere la stanza visibile in %1$@ nell'elenco delle stanze pubbliche.";
+"screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
+"screen_security_and_privacy_room_visibility_section_header" = "Visibilità della stanza";
 "screen_security_and_privacy_title" = "Sicurezza e privacy";
 "screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
@@ -1016,7 +1015,6 @@
 "screen_room_change_permissions_moderators" = "Amministratori e moderatori";
 "screen_room_change_permissions_remove_people" = "Rimuovi le persone e rifiuta le richieste di partecipazione";
 "screen_room_change_permissions_room_avatar" = "Cambia avatar della stanza";
-"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "Cambia il nome della stanza";
 "screen_room_change_permissions_room_topic" = "Cambiare l'argomento della stanza";
 "screen_room_change_permissions_send_messages" = "Inviare messaggi";
@@ -1072,12 +1070,8 @@
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Rimuovi soltanto";
 "screen_room_member_list_manage_member_unban_action" = "Riammetti";
 "screen_room_member_list_manage_member_unban_message" = "Potrà entrare nuovamente in questa stanza se invitato.";
-"screen_room_member_list_manage_member_unban_title" = "Riammetti utente";
 "screen_room_member_list_mode_banned" = "Esclusi";
 "screen_room_member_list_mode_members" = "Membri";
-"screen_room_member_list_pending_header_title" = "In attesa";
-"screen_room_member_list_role_administrator" = "Amministratore";
-"screen_room_member_list_role_moderator" = "Moderatore";
 "screen_room_member_list_role_owner" = "Proprietario";
 "screen_room_member_list_room_members_header_title" = "Membri della stanza";
 "screen_room_member_list_unbanning_user" = "Riammissione di %1$@";
@@ -1152,12 +1146,12 @@
 "screen_server_confirmation_title_picker_mode" = "Scegli il fornitore dell'account";
 "screen_server_confirmation_title_register" = "Stai per creare un account su %1$@";
 "screen_session_verification_cancelled_subtitle" = "C'è qualcosa che non va. La richiesta è scaduta o è stata rifiutata.";
-"screen_session_verification_compare_emojis_subtitle" = "Verifica che gli emoji sottostanti corrispondano a quelli mostrati nell'altra sessione.";
+"screen_session_verification_compare_emojis_subtitle" = "Verifica che le emoji sottostanti corrispondano a quelle mostrate sull'altro dispositivo.";
 "screen_session_verification_compare_emojis_title" = "Confronta le emoji";
 "screen_session_verification_compare_emojis_user_subtitle" = "Conferma che le emoji qui sotto corrispondano a quelle visualizzate sul dispositivo dell'altro utente.";
 "screen_session_verification_compare_numbers_subtitle" = "Conferma che i numeri seguenti corrispondano a quelli mostrati nell'altra sessione.";
 "screen_session_verification_compare_numbers_title" = "Confronta i numeri";
-"screen_session_verification_complete_subtitle" = "La tua nuova sessione è ora verificata. Ha accesso ai tuoi messaggi crittografati e gli altri utenti la vedranno come attendibile.";
+"screen_session_verification_complete_subtitle" = "Ora puoi leggere o inviare messaggi in modo sicuro sul tuo altro dispositivo.";
 "screen_session_verification_complete_user_subtitle" = "Ora puoi fidarti dell'identità di questo utente quando invii o ricevi messaggi.";
 "screen_session_verification_enter_recovery_key" = "Inserisci la chiave di recupero";
 "screen_session_verification_failed_subtitle" = "La richiesta è scaduta, è stata rifiutata o c'è stata una mancata corrispondenza nella verifica.";
@@ -1355,11 +1349,13 @@
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Riammissione di %1$@";
 "screen_decline_and_block_block_user_option_title" = "Blocca utente";
 "screen_decline_and_block_report_user_reason_placeholder" = "Descrivi il motivo della segnalazione...";
+"screen_decline_and_block_title" = "Rifiuta e blocca";
 "screen_home_tab_chats" = "Tutte le conversazioni";
 "screen_home_tab_spaces" = "Spazi";
 "screen_join_room_decline_and_block_button_title" = "Rifiuta e blocca";
 "screen_knock_requests_list_title" = "Richieste di accesso";
 "screen_pinned_timeline_screen_title_empty" = "Messaggi fissati";
+"screen_report_room_title" = "Segnala stanza";
 "screen_room_mentions_at_room_title" = "Tutti";
 "screen_room_single_knock_request_accept_button_title" = "Accetta";
 "screen_room_single_knock_request_view_button_title" = "Visualizza";
@@ -1368,8 +1364,9 @@
 "screen_roomlist_knock_event_sent_description" = "Richiesta di accesso inviata";
 "screen_security_and_privacy_ask_to_join_option_title" = "Chiedi di entrare";
 "screen_security_and_privacy_encryption_section_header" = "Crittografia";
+"screen_security_and_privacy_room_access_anyone_option_title" = "Chiunque";
+"screen_security_and_privacy_room_address_section_footer" = "Avrai bisogno di un indirizzo della stanza per renderla visibile nell'elenco.";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Chiunque";
-"screen_security_and_privacy_room_visibility_section_header" = "Visibilità della stanza";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "Ruoli e autorizzazioni";
 "screen_space_settings_security_and_privacy" = "Sicurezza e privacy";
@@ -1413,6 +1410,7 @@
 "screen_reset_encryption_password_placeholder" = "Inserisci...";
 "screen_room_attachment_source_camera_photo" = "Scatta foto";
 "screen_room_change_permissions_messages_and_content" = "Messaggi e contenuti";
+"screen_room_change_permissions_room_details" = "Modifica stanza";
 "screen_room_change_role_section_administrators" = "Amministratori";
 "screen_room_change_role_section_moderators" = "Moderatori";
 "screen_room_change_role_section_users" = "Membri";
@@ -1429,6 +1427,9 @@
 "screen_room_details_topic_title" = "Argomento";
 "screen_room_error_failed_processing_media" = "Elaborazione del file multimediale da caricare fallita, riprova.";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Rimuovi ed escludi";
+"screen_room_member_list_manage_member_unban_title" = "Riammetti nella stanza";
+"screen_room_member_list_role_administrator" = "Solo amministratori";
+"screen_room_member_list_role_moderator" = "Amministratori e moderatori";
 "screen_room_notification_settings_mode_all_messages" = "Tutti i messaggi";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Solo menzioni e parole chiave";
 "screen_room_roles_and_permissions_permissions_header" = "Permissions";
@@ -1439,7 +1440,7 @@
 "screen_session_verification_device_verified" = "Dispositivo verificato";
 "screen_session_verification_request_failure_subtitle" = "La richiesta è scaduta, è stata rifiutata o c'è stata una mancata corrispondenza nella verifica.";
 "screen_session_verification_request_failure_title" = "Verifica fallita";
-"screen_session_verification_request_success_subtitle" = "La tua nuova sessione è ora verificata. Ha accesso ai tuoi messaggi crittografati e gli altri utenti la vedranno come attendibile.";
+"screen_session_verification_request_success_subtitle" = "Ora puoi leggere o inviare messaggi in modo sicuro sul tuo altro dispositivo.";
 "screen_session_verification_request_success_title" = "Dispositivo verificato";
 "screen_session_verification_waiting_other_device_title" = "Avvia la verifica sull'altro dispositivo";
 "screen_signout_confirmation_dialog_submit" = "Disconnetti";

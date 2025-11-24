@@ -527,7 +527,6 @@
 "screen_create_room_room_visibility_section_title" = "Huoneen näkyvyys";
 "screen_decline_and_block_block_user_option_description" = "Et tule näkemään viestejä tai kutsuja tältä käyttäjältä";
 "screen_decline_and_block_report_user_option_description" = "Ilmoita tästä huoneesta palveluntarjoajallesi.";
-"screen_decline_and_block_title" = "Hylkää ja estä";
 "screen_edit_room_address_room_address_section_footer" = "Tarvitset huoneen osoitteen, jotta se näkyy hakemistossa.";
 "screen_edit_room_address_title" = "Huoneen osoite";
 "screen_invite_users_already_a_member" = "On jo jäsen";
@@ -604,7 +603,6 @@
 "screen_report_room_leave_failed_alert_title" = "Huoneesta poistuminen epäonnistui";
 "screen_report_room_reason_footer" = "Ilmoita tästä huoneesta palvelimesi ylläpitäjälle. Jos viestit on salattu, ylläpitäjäsi ei voi lukea niitä.";
 "screen_report_room_reason_placeholder" = "Kuvaile syytä...";
-"screen_report_room_title" = "Ilmoita huoneesta";
 "screen_reset_encryption_password_error" = "Tapahtui tuntematon virhe. Tarkista, että tilisi salasana on oikein ja yritä uudelleen.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Peruuta vahvistus ja lähetä";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Voit peruuttaa vahvistuksen ja lähettää tämän viestin silti, tai voit peruuttaa viestin lähettämisen toistaiseksi ja yrittää uudelleen myöhemmin, kun olet vahvistanut käyttäjän %1$@ uudelleen.";
@@ -631,6 +629,9 @@
 "screen_room_details_requests_to_join_title" = "Liittymispyynnöt";
 "screen_room_grouped_state_events_expand" = "Laajenna";
 "screen_room_grouped_state_events_reduce" = "Pienennä";
+"screen_room_member_list_empty_search_subtitle" = "Check the spelling or try a new search";
+"screen_room_member_list_empty_search_title" = "No results for “%1$@”";
+"screen_room_member_list_pending_status" = "Pending";
 "screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_timeline_tombstoned_room_action" = "Siirry uuteen huoneeseen";
 "screen_room_timeline_tombstoned_room_message" = "Tämä huone on korvattu, eikä se ole enää aktiivinen";
@@ -647,14 +648,11 @@
 "screen_security_and_privacy_encryption_section_footer" = "Kun salaus on kerran otettu käyttöön, sitä ei voi poistaa käytöstä.";
 "screen_security_and_privacy_encryption_toggle_title" = "Ota päästä päähän -salaus käyttöön";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Kuka tahansa voi löytää ja liittyä.";
-"screen_security_and_privacy_room_access_anyone_option_title" = "Kuka tahansa";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Vain kutsutut henkilöt voivat liittyä";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Vain kutsutut";
 "screen_security_and_privacy_room_access_section_header" = "Huoneeseen pääsy";
 "screen_security_and_privacy_room_access_space_members_option_description" = "Tiloja ei tällä hetkellä tueta";
 "screen_security_and_privacy_room_access_space_members_option_title" = "Tilan jäsenet";
-"screen_security_and_privacy_room_address_description" = "You’ll need an address in order to make it visible in the public directory.";
-"screen_security_and_privacy_room_address_section_footer" = "Tarvitset huoneen osoitteen, jotta se näkyy huonehakemistossa.";
 "screen_security_and_privacy_room_address_section_header" = "Huoneen osoite";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Salli tämän huoneen löytäminen hakemalla %1$@ -palvelimen julkisesta huonehakemistosta.";
 "screen_security_and_privacy_room_directory_visibility_toggle_description" = "Allow to be found by searching the public directory.";
@@ -664,7 +662,8 @@
 "screen_security_and_privacy_room_history_since_selecting_option_title" = "Jäsenet tämän vaihtoehdon valinnan jälkeen";
 "screen_security_and_privacy_room_publishing_section_footer" = "Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa.\nVoit halutessasi julkaista huoneesi kotipalvelimesi julkisessa huonehakemistossa.";
 "screen_security_and_privacy_room_publishing_section_header" = "Huoneen julkaiseminen";
-"screen_security_and_privacy_room_visibility_section_footer" = "Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa.\nOsoitetta tarvitaan myös, jotta huone näkyy %1$@ -palvelimen julkisessa huonehakemistossa.";
+"screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
+"screen_security_and_privacy_room_visibility_section_header" = "Huoneen näkyvyys";
 "screen_security_and_privacy_title" = "Turvallisuus ja yksityisyys";
 "screen_space_menu_action_members" = "Näytä jäsenet";
 "screen_space_announcement_item1" = "Nähdä luomasi tai liittymäsi tilat";
@@ -1016,7 +1015,6 @@
 "screen_room_change_permissions_moderators" = "Ylläpitäjät ja valvojat";
 "screen_room_change_permissions_remove_people" = "Henkilöiden poistaminen ja liittymispyyntöjen hylkääminen";
 "screen_room_change_permissions_room_avatar" = "Huoneen avatarin vaihtaminen";
-"screen_room_change_permissions_room_details" = "Edit details";
 "screen_room_change_permissions_room_name" = "Huoneen nimen vaihtaminen";
 "screen_room_change_permissions_room_topic" = "Huoneen aiheen vaihtaminen";
 "screen_room_change_permissions_send_messages" = "Viestien lähettäminen";
@@ -1072,12 +1070,8 @@
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Poista vain jäsen huoneesta";
 "screen_room_member_list_manage_member_unban_action" = "Poista porttikielto";
 "screen_room_member_list_manage_member_unban_message" = "He voivat liittyä tähän huoneeseen uudelleen, jos heidät kutsutaan.";
-"screen_room_member_list_manage_member_unban_title" = "Poista käyttäjän porttikielto";
 "screen_room_member_list_mode_banned" = "Porttikiellot";
 "screen_room_member_list_mode_members" = "Jäsenet";
-"screen_room_member_list_pending_header_title" = "Kutsuttu";
-"screen_room_member_list_role_administrator" = "Ylläpitäjä";
-"screen_room_member_list_role_moderator" = "Valvoja";
 "screen_room_member_list_role_owner" = "Omistaja";
 "screen_room_member_list_room_members_header_title" = "Huoneen jäsenet";
 "screen_room_member_list_unbanning_user" = "Poistetaan käyttäjän %1$@ porttikieltoa";
@@ -1355,11 +1349,13 @@
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Poistetaan käyttäjän %1$@ porttikieltoa";
 "screen_decline_and_block_block_user_option_title" = "Estä käyttäjä";
 "screen_decline_and_block_report_user_reason_placeholder" = "Kuvaile syytä...";
+"screen_decline_and_block_title" = "Hylkää ja estä";
 "screen_home_tab_chats" = "Keskustelut";
 "screen_home_tab_spaces" = "Tilat";
 "screen_join_room_decline_and_block_button_title" = "Hylkää ja estä";
 "screen_knock_requests_list_title" = "Liittymispyynnöt";
 "screen_pinned_timeline_screen_title_empty" = "Kiinnitetyt viestit";
+"screen_report_room_title" = "Ilmoita huoneesta";
 "screen_room_mentions_at_room_title" = "Kaikki";
 "screen_room_single_knock_request_accept_button_title" = "Hyväksy";
 "screen_room_single_knock_request_view_button_title" = "Näytä";
@@ -1368,8 +1364,9 @@
 "screen_roomlist_knock_event_sent_description" = "Liittymispyyntö lähetetty";
 "screen_security_and_privacy_ask_to_join_option_title" = "Pyydä liittymistä";
 "screen_security_and_privacy_encryption_section_header" = "Salaus";
+"screen_security_and_privacy_room_access_anyone_option_title" = "Kuka tahansa";
+"screen_security_and_privacy_room_address_section_footer" = "Tarvitset huoneen osoitteen, jotta se näkyy hakemistossa.";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Kuka tahansa";
-"screen_security_and_privacy_room_visibility_section_header" = "Huoneen näkyvyys";
 "screen_space_settings_leave_space" = "Poistu tilasta";
 "screen_space_settings_roles_and_permissions" = "Roolit ja oikeudet";
 "screen_space_settings_security_and_privacy" = "Turvallisuus ja yksityisyys";
@@ -1413,6 +1410,7 @@
 "screen_reset_encryption_password_placeholder" = "Syötä...";
 "screen_room_attachment_source_camera_photo" = "Ota kuva";
 "screen_room_change_permissions_messages_and_content" = "Viestit ja sisältö";
+"screen_room_change_permissions_room_details" = "Muokkaa huonetta";
 "screen_room_change_role_section_administrators" = "Ylläpitäjät";
 "screen_room_change_role_section_moderators" = "Valvojat";
 "screen_room_change_role_section_users" = "Jäsenet";
@@ -1429,6 +1427,9 @@
 "screen_room_details_topic_title" = "Aihe";
 "screen_room_error_failed_processing_media" = "Median käsittely epäonnistui, yritä uudelleen.";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Poista jäsen huoneesta ja anna porttikielto";
+"screen_room_member_list_manage_member_unban_title" = "Poista porttikielto huoneesta";
+"screen_room_member_list_role_administrator" = "Vain ylläpitäjät";
+"screen_room_member_list_role_moderator" = "Ylläpitäjät ja valvojat";
 "screen_room_notification_settings_mode_all_messages" = "Kaikista viesteistä";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Vain maininnoista ja avainsanoista";
 "screen_room_roles_and_permissions_permissions_header" = "Permissions";
