@@ -108,22 +108,7 @@ class EventTimelineItemProxy {
 
     lazy var isEditable = item.isEditable
     
-    lazy var sender: TimelineItemSender = {
-        let profile = item.senderProfile
-        
-        switch profile {
-        case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
-            return .init(id: item.sender,
-                         displayName: displayName,
-                         isDisplayNameAmbiguous: isDisplayNameAmbiguous,
-                         avatarURL: avatarUrl.flatMap(URL.init(string:)))
-        default:
-            return .init(id: item.sender,
-                         displayName: nil,
-                         isDisplayNameAmbiguous: false,
-                         avatarURL: nil)
-        }
-    }()
+    lazy var sender = TimelineItemSender(senderID: item.sender, senderProfile: item.senderProfile)
     
     lazy var timestamp = Date(timeIntervalSince1970: TimeInterval(item.timestamp / 1000))
     
