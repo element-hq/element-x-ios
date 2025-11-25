@@ -1,0 +1,31 @@
+workflows:
+  tulpar-ios-debug:
+    name: TULPAR iOS Debug
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+
+    environment:
+      xcode: 16.4
+      vars:
+        XCODE_PROJECT: "ElementX.xcodeproj"
+        XCODE_SCHEME: "ElementX"
+
+    scripts:
+      - name: Show Xcode version
+        script: |
+          xcodebuild -version
+
+      - name: Build iOS app without code signing
+        script: |
+          set -e
+          xcodebuild \
+            -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
+            -configuration Release \
+            -sdk iphoneos \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+    artifacts:
+      - build/**/Build/Products/**/*.app
+      - ~/Library/Developer/Xcode/DerivedData/**/Build/Products/**/*.app
