@@ -140,7 +140,7 @@ struct TimelineMediaPreviewDetailsView: View {
         let item: TimelineMediaPreviewItem.Media
         let action: TimelineItemMenuAction
         let context: TimelineMediaPreviewViewModel.Context
-        
+
         var body: some View {
             if action == .share {
                 if let itemURL = item.fileHandle?.url {
@@ -148,10 +148,6 @@ struct TimelineMediaPreviewDetailsView: View {
                         action.label
                     }
                     .buttonStyle(.menuSheet)
-                }
-            } else if action == .save {
-                if item.fileHandle?.url != nil {
-                    button
                 }
             } else {
                 button
