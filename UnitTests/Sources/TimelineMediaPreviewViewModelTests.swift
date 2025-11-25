@@ -19,7 +19,6 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
     var viewModel: TimelineMediaPreviewViewModel!
     var context: TimelineMediaPreviewViewModel.Context { viewModel.context }
     var mediaProvider: MediaProviderMock!
-    var photoLibraryManager: PhotoLibraryManagerMock!
     var timelineController: MockTimelineController!
     
     func testLoadingItem() async throws {
@@ -180,89 +179,6 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         XCTAssertTrue(timelineController.redactCalled)
     }
     
-    func testSaveImage() async throws {
-        // Given a view model with a loaded image.
-        try await testLoadingItem()
-        guard case let .media(mediaItem) = context.viewState.currentItem else {
-            XCTFail("There should be a current item")
-            return
-        }
-        XCTAssertEqual(mediaItem.contentType, "JPEG image")
-        
-        // When choosing to save the image.
-        context.send(viewAction: .menuAction(.save, item: mediaItem))
-        try await Task.sleep(for: .seconds(0.5))
-        
-        // Then the image should be saved as a photo to the user's photo library.
-        XCTAssertTrue(photoLibraryManager.addResourceAtCalled)
-        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.type, .photo)
-        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.url, mediaItem.fileHandle?.url)
-    }
-    
-    func testSaveImageWithoutAuthorization() async throws {
-        // Given a view model with a loaded image where the user has denied access to the photo library.
-        setupViewModel(photoLibraryAuthorizationDenied: true)
-        try await loadInitialItem()
-        guard case let .media(mediaItem) = context.viewState.currentItem else {
-            XCTFail("There should be a current item")
-            return
-        }
-        XCTAssertEqual(mediaItem.contentType, "JPEG image")
-        
-        // When choosing to save the image.
-        let deferred = deferFulfillment(context.viewState.previewControllerDriver) { $0.isAuthorizationRequired }
-        context.send(viewAction: .menuAction(.save, item: mediaItem))
-        
-        // Then the user should be prompted to allow access.
-        try await deferred.fulfill()
-        XCTAssertTrue(photoLibraryManager.addResourceAtCalled)
-    }
-    
-    func testSaveVideo() async throws {
-        // Given a view model with a loaded video.
-        setupViewModel(initialItemIndex: 1)
-        try await loadInitialItem()
-        guard case let .media(mediaItem) = context.viewState.currentItem else {
-            XCTFail("There should be a current item")
-            return
-        }
-        XCTAssertEqual(mediaItem.contentType, "MPEG-4 movie")
-        
-        // When choosing to save the video.
-        context.send(viewAction: .menuAction(.save, item: mediaItem))
-        try await Task.sleep(for: .seconds(0.5))
-        
-        // Then the video should be saved as a video in the user's photo library.
-        XCTAssertTrue(photoLibraryManager.addResourceAtCalled)
-        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.type, .video)
-        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.url, mediaItem.fileHandle?.url)
-    }
-    
-    func testSaveFile() async throws {
-        // Given a view model with a loaded file.
-        setupViewModel(initialItemIndex: 2)
-        try await loadInitialItem()
-        guard case let .media(mediaItem) = context.viewState.currentItem else {
-            XCTFail("There should be a current item")
-            return
-        }
-        XCTAssertEqual(mediaItem.contentType, "PDF document")
-        
-        // When choosing to save the file.
-        let deferred = deferFulfillment(context.viewState.previewControllerDriver) { $0.isExportFile }
-        context.send(viewAction: .menuAction(.save, item: mediaItem))
-        let exportAction = try await deferred.fulfill()
-        
-        guard case let .exportFile(file) = exportAction else {
-            XCTFail("Unexpected action")
-            return
-        }
-        
-        // Then the binding should be set for the user to export the file to their specified location.
-        XCTAssertFalse(photoLibraryManager.addResourceAtCalled)
-        XCTAssertEqual(file.url, mediaItem.fileHandle?.url)
-    }
-    
     // MARK: - Helpers
     
     private func loadInitialItem() async throws {
@@ -277,19 +193,17 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    private func setupViewModel(initialItemIndex: Int = 0, photoLibraryAuthorizationDenied: Bool = false) {
+    private func setupViewModel(initialItemIndex: Int = 0) {
         let initialItems = makeItems()
         timelineController = MockTimelineController(timelineKind: .media(.mediaFilesScreen))
         timelineController.timelineItems = initialItems
-        
+
         mediaProvider = MediaProviderMock(configuration: .init())
-        photoLibraryManager = PhotoLibraryManagerMock(.init(authorizationDenied: photoLibraryAuthorizationDenied))
-        
+
         viewModel = TimelineMediaPreviewViewModel(initialItem: initialItems[initialItemIndex],
                                                   timelineViewModel: TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen),
                                                                                             timelineController: timelineController),
                                                   mediaProvider: mediaProvider,
-                                                  photoLibraryManager: photoLibraryManager,
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   appMediator: AppMediatorMock())
     }
