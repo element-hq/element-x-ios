@@ -648,11 +648,15 @@
 "screen_security_and_privacy_encryption_section_footer" = "Once enabled, encryption cannot be disabled.";
 "screen_security_and_privacy_encryption_toggle_title" = "Enable end-to-end encryption";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join.";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
+"screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Only invited people can join.";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Invite only";
 "screen_security_and_privacy_room_access_section_header" = "Access";
-"screen_security_and_privacy_room_access_space_members_option_description" = "Spaces are not currently supported";
+"screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorized spaces can join.";
+"screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
 "screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
+"screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Spaces are not currently supported";
 "screen_security_and_privacy_room_address_section_header" = "Address";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Allow for this room to be found by searching %1$@ public room directory";
 "screen_security_and_privacy_room_directory_visibility_toggle_description" = "Allow to be found by searching the public directory.";

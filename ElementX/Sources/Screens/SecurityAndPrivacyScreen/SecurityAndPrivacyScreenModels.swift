@@ -7,23 +7,45 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 enum SecurityAndPrivacyScreenViewModelAction {
     case displayEditAddressScreen
 }
 
 struct SecurityAndPrivacyScreenViewState: BindableState {
+    private static let accessSectionFooterAttributedString = {
+        let linkPlaceholder = "{link}"
+        var footer = AttributedString(L10n.screenSecurityAndPrivacyRoomAccessFooter(linkPlaceholder))
+        var linkString = AttributedString(L10n.screenSecurityAndPrivacyRoomAccessFooterManageSpacesAction)
+        // Doesn't really matter
+        linkString.link = .init(stringLiteral: "action://manageSpace")
+        linkString.bold()
+        footer.replace(linkPlaceholder, with: linkString)
+        return footer
+    }()
+    
     let serverName: String
     var currentSettings: SecurityAndPrivacySettings
     var bindings: SecurityAndPrivacyScreenViewStateBindings
     var canonicalAlias: String?
     var isKnockingEnabled: Bool
+    var isSpaceSettingsEnabled: Bool
     var isSpace: Bool
     
     var canEditAddress = false
     var canEditJoinRule = false
     var canEnableEncryption = false
     var canEditHistoryVisibility = false
+    var joinedParentSpaces: [SpaceRoomProxyProtocol] = []
+    
+    var selectableSpacesCount: Int {
+        Set(joinedParentSpaces.map(\.id) + currentSettings.accessType.spaceIDs).count
+    }
+    
+    private var desiredJoinedParentSpaces: [SpaceRoomProxyProtocol] {
+        joinedParentSpaces.filter { bindings.desiredSettings.accessType.spaceIDs.contains($0.id) }
+    }
     
     private var hasChanges: Bool {
         currentSettings != bindings.desiredSettings
@@ -45,16 +67,77 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
         }
         return options
     }
+    
+    var isSpaceMembersOptionAvailable: Bool {
+        currentSettings.accessType.isSpaceUsers || isSpaceMembersOptionSelectable
+    }
+    
+    var isSpaceMembersOptionSelectable: Bool {
+        isSpaceSettingsEnabled && selectableSpacesCount > 0
+    }
+    
+    var spaceMembersDescription: String {
+        if isSpaceMembersOptionSelectable {
+            switch spaceSelection {
+            case .singleJoined(let joinedParentSpace):
+                L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionSingleParentDescription(joinedParentSpace.name)
+            case .singleUnknown(let id):
+                L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionSingleParentDescription(id)
+            case .multiple:
+                L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionMultipleParentsDescription
+            }
+        } else {
+            L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionUnavailableDescription
+        }
+    }
+    
+    var accessSectionFooter: AttributedString? {
+        if bindings.desiredSettings.accessType.isSpaceUsers, isSpaceMembersOptionSelectable, selectableSpacesCount > 1 {
+            Self.accessSectionFooterAttributedString
+        } else {
+            nil
+        }
+    }
+    
+    enum SpaceSelection {
+        /// There is only one available parent space for selection and is joined by the user
+        case singleJoined(SpaceRoomProxyProtocol)
+        /// There is only one available space for selection and is unknown to the user
+        case singleUnknown(id: String)
+        /// Multiple spaces are available for selection
+        case multiple
+    }
+    
+    var spaceSelection: SpaceSelection {
+        if selectableSpacesCount > 1 {
+            .multiple
+        } else if let desiredJoinedParent = desiredJoinedParentSpaces.first {
+            // The parent space is joined by the user and is also currently selected
+            .singleJoined(desiredJoinedParent)
+        } else if let joinedParent = joinedParentSpaces.first {
+            // The parent space is joined by the user but is not currently selected
+            .singleJoined(joinedParent)
+        } else if let unknownSpaceID = bindings.desiredSettings.accessType.spaceIDs.first {
+            // The space is not joined by the user but is currently selected
+            .singleUnknown(id: unknownSpaceID)
+        } else {
+            // Not reachable because it would mean the selectable spaces are more than 1
+            // but are neither selected and/or joined parents.
+            fatalError("Not reachable")
+        }
+    }
         
     init(serverName: String,
          accessType: SecurityAndPrivacyRoomAccessType,
          isEncryptionEnabled: Bool,
          historyVisibility: SecurityAndPrivacyHistoryVisibility,
          isSpace: Bool,
-         isKnockingEnabled: Bool) {
+         isKnockingEnabled: Bool,
+         isSpaceSettingsEnabled: Bool) {
         self.serverName = serverName
         self.isKnockingEnabled = isKnockingEnabled
         self.isSpace = isSpace
+        self.isSpaceSettingsEnabled = isSpaceSettingsEnabled
         
         let settings = SecurityAndPrivacySettings(accessType: accessType,
                                                   isEncryptionEnabled: isEncryptionEnabled,
@@ -76,11 +159,39 @@ struct SecurityAndPrivacySettings: Equatable {
     var isVisibileInRoomDirectory: Bool?
 }
 
-enum SecurityAndPrivacyRoomAccessType {
+enum SecurityAndPrivacyRoomAccessType: Equatable {
     case inviteOnly
     case askToJoin
+    case askToJoinWithSpaceUsers(spaceIDs: [String])
     case anyone
-    case spaceUsers
+    case spaceUsers(spaceIDs: [String])
+    
+    var isSpaceUsers: Bool {
+        switch self {
+        case .spaceUsers:
+            true
+        default:
+            false
+        }
+    }
+    
+    var isAddressRequired: Bool {
+        switch self {
+        case .inviteOnly, .spaceUsers:
+            false
+        case .anyone, .askToJoin, .askToJoinWithSpaceUsers:
+            true
+        }
+    }
+    
+    var spaceIDs: [String] {
+        switch self {
+        case .spaceUsers(let spaceIDs), .askToJoinWithSpaceUsers(let spaceIDs):
+            return spaceIDs
+        case .inviteOnly, .askToJoin, .anyone:
+            return []
+        }
+    }
 }
 
 enum SecurityAndPrivacyAlertType {
@@ -91,6 +202,8 @@ enum SecurityAndPrivacyScreenViewAction {
     case save
     case tryUpdatingEncryption(Bool)
     case editAddress
+    case selectedSpaceMembersAccess
+    case manageSpaces
 }
 
 enum SecurityAndPrivacyHistoryVisibility {

@@ -19,4 +19,6 @@ protocol SpaceServiceProxyProtocol {
     
     func spaceRoomList(spaceID: String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>
     func leaveSpace(spaceID: String) async -> Result<LeaveSpaceHandleProxy, SpaceServiceProxyError>
+    /// Returns all the parent spaces of a room that user has joined.
+    func joinedParents(roomID: String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>
 }

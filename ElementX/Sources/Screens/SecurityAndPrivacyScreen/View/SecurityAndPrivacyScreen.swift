@@ -18,7 +18,7 @@ struct SecurityAndPrivacyScreen: View {
                 roomAccessSection
             }
             
-            if context.desiredSettings.accessType != .inviteOnly, context.viewState.canEditAddress {
+            if context.desiredSettings.accessType.isAddressRequired, context.viewState.canEditAddress {
                 visibilitySection
                 if let canonicalAlias = context.viewState.canonicalAlias {
                     addressSection(canonicalAlias: canonicalAlias)
@@ -57,13 +57,14 @@ struct SecurityAndPrivacyScreen: View {
                     .disabled(!context.viewState.isKnockingEnabled)
             }
             
-            if context.viewState.currentSettings.accessType == .spaceUsers {
+            if context.viewState.isSpaceMembersOptionAvailable {
                 ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionTitle,
-                                        description: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionDescription,
+                                        description: context.viewState.spaceMembersDescription,
                                         icon: \.space),
-                        kind: .selection(isSelected: context.desiredSettings.accessType == .spaceUsers) { })
-                    // This is not supported so it will always be disabled and has no handler
-                    .disabled(true)
+                        kind: .selection(isSelected: context.desiredSettings.accessType.isSpaceUsers) {
+                            context.send(viewAction: .selectedSpaceMembersAccess)
+                        })
+                        .disabled(!context.viewState.isSpaceMembersOptionSelectable)
             }
             
             ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle,
@@ -73,6 +74,15 @@ struct SecurityAndPrivacyScreen: View {
         } header: {
             Text(L10n.screenSecurityAndPrivacyRoomAccessSectionHeader)
                 .compoundListSectionHeader()
+        } footer: {
+            if let footer = context.viewState.accessSectionFooter {
+                Text(footer)
+                    .compoundListSectionFooter()
+                    .environment(\.openURL, OpenURLAction { _ in
+                        context.send(viewAction: .manageSpaces)
+                        return .handled
+                    })
+            }
         }
     }
     
@@ -218,14 +228,36 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
                                                  appSettings: AppSettings())
     }()
     
-    static let restrictedViewModel = {
+    static let singleSpaceMembersViewModel = {
         AppSettings.resetAllSettings()
+        let appSettings = AppSettings()
+        appSettings.spaceSettingsEnabled = true
+        let space = [SpaceRoomProxyProtocol].mockSingleRoom[0]
+        
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
                                                                                       canonicalAlias: "#room:matrix.org",
                                                                                       members: .allMembersAsCreator,
-                                                                                      joinRule: .restricted(rules: []),
+                                                                                      joinRule: .restricted(rules: [.roomMembership(roomId: space.id)]),
                                                                                       isVisibleInPublicDirectory: true)),
-                                                 clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                 clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",
+                                                                                    spaceServiceConfiguration: .init(joinedParentSpaces: [space]))),
+                                                 userIndicatorController: UserIndicatorControllerMock(),
+                                                 appSettings: AppSettings())
+    }()
+    
+    static let multipleSpacesMembersViewModel = {
+        AppSettings.resetAllSettings()
+        let appSettings = AppSettings()
+        appSettings.spaceSettingsEnabled = true
+        let spaces = [SpaceRoomProxyProtocol].mockJoinedSpaces
+        
+        return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
+                                                                                      canonicalAlias: "#room:matrix.org",
+                                                                                      members: .allMembersAsCreator,
+                                                                                      joinRule: .restricted(rules: spaces.map { .roomMembership(roomId: $0.id) }),
+                                                                                      isVisibleInPublicDirectory: true)),
+                                                 clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",
+                                                                                    spaceServiceConfiguration: .init(joinedParentSpaces: spaces))),
                                                  userIndicatorController: UserIndicatorControllerMock(),
                                                  appSettings: AppSettings())
     }()
@@ -278,17 +310,25 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Public room without address")
         
         NavigationStack {
-            SecurityAndPrivacyScreen(context: restrictedViewModel.context)
+            SecurityAndPrivacyScreen(context: singleSpaceMembersViewModel.context)
         }
-        .snapshotPreferences(expect: restrictedViewModel.context.$viewState.map { state in
+        .snapshotPreferences(expect: singleSpaceMembersViewModel.context.$viewState.map { state in
             state.currentSettings.isVisibileInRoomDirectory == true
         })
-        .previewDisplayName("Restricted room")
+        .previewDisplayName("Space members")
+        
+        NavigationStack {
+            SecurityAndPrivacyScreen(context: multipleSpacesMembersViewModel.context)
+        }
+        .snapshotPreferences(expect: multipleSpacesMembersViewModel.context.$viewState.map { state in
+            state.currentSettings.isVisibileInRoomDirectory == true
+        })
+        .previewDisplayName("Multiple Spaces members")
         
         NavigationStack {
             SecurityAndPrivacyScreen(context: askToJoinViewModel.context)
         }
-        .snapshotPreferences(expect: restrictedViewModel.context.$viewState.map { state in
+        .snapshotPreferences(expect: askToJoinViewModel.context.$viewState.map { state in
             state.currentSettings.isVisibileInRoomDirectory == true
         })
         .previewDisplayName("Ask to join room")
@@ -296,7 +336,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             SecurityAndPrivacyScreen(context: publicSpaceViewModel.context)
         }
-        .snapshotPreferences(expect: restrictedViewModel.context.$viewState.map { state in
+        .snapshotPreferences(expect: publicSpaceViewModel.context.$viewState.map { state in
             state.currentSettings.isVisibileInRoomDirectory == true
         })
         .previewDisplayName("Public space")

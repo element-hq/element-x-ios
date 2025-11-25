@@ -16616,6 +16616,76 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             return leaveSpaceSpaceIDReturnValue
         }
     }
+    //MARK: - joinedParents
+
+    var joinedParentsRoomIDUnderlyingCallsCount = 0
+    var joinedParentsRoomIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return joinedParentsRoomIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinedParentsRoomIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinedParentsRoomIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinedParentsRoomIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var joinedParentsRoomIDCalled: Bool {
+        return joinedParentsRoomIDCallsCount > 0
+    }
+    var joinedParentsRoomIDReceivedRoomID: String?
+    var joinedParentsRoomIDReceivedInvocations: [String] = []
+
+    var joinedParentsRoomIDUnderlyingReturnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>!
+    var joinedParentsRoomIDReturnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return joinedParentsRoomIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinedParentsRoomIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinedParentsRoomIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinedParentsRoomIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var joinedParentsRoomIDClosure: ((String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>)?
+
+    func joinedParents(roomID: String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError> {
+        joinedParentsRoomIDCallsCount += 1
+        joinedParentsRoomIDReceivedRoomID = roomID
+        DispatchQueue.main.async {
+            self.joinedParentsRoomIDReceivedInvocations.append(roomID)
+        }
+        if let joinedParentsRoomIDClosure = joinedParentsRoomIDClosure {
+            return await joinedParentsRoomIDClosure(roomID)
+        } else {
+            return joinedParentsRoomIDReturnValue
+        }
+    }
 }
 class StaticRoomSummaryProviderMock: StaticRoomSummaryProviderProtocol, @unchecked Sendable {
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {
