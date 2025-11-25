@@ -236,7 +236,7 @@ protocol ClientProxyProtocol: AnyObject {
     func withdrawUserIdentityVerification(_ userID: String) async -> Result<Void, ClientProxyError>
     func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError>
     
-    func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
+    func userIdentity(for userID: String, fallBackToServer: Bool) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
     
     // MARK: - Moderation & Safety
     

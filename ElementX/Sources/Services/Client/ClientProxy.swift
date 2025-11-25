@@ -1097,7 +1097,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Pinning current identity for user: \(userID)")
         
         do {
-            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID, fallbackToServer: true) else {
                 MXLog.error("Failed retrieving identity for user: \(userID)")
                 return .failure(.failedRetrievingUserIdentity)
             }
@@ -1113,7 +1113,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Withdrawing current identity verification for user: \(userID)")
         
         do {
-            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID, fallbackToServer: true) else {
                 MXLog.error("Failed retrieving identity for user: \(userID)")
                 return .failure(.failedRetrievingUserIdentity)
             }
@@ -1133,9 +1133,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
+    func userIdentity(for userID: String, fallBackToServer: Bool) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
         do {
-            return try await .success(client.encryption().userIdentity(userId: userID).map(UserIdentityProxy.init))
+            return try await .success(client.encryption().userIdentity(userId: userID, fallbackToServer: fallBackToServer).map(UserIdentityProxy.init))
         } catch {
             MXLog.error("Failed retrieving user identity: \(error)")
             return .failure(.sdkError(error))

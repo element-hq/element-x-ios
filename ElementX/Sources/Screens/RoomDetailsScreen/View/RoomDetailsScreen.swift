@@ -446,7 +446,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         let clientProxyMock = ClientProxyMock(.init())
         
-        clientProxyMock.userIdentityForClosure = { userID in
+        clientProxyMock.userIdentityForFallBackToServerClosure = { userID, _ in
             let identity = switch userID {
             case RoomMemberProxyMock.mockDan.userID:
                 UserIdentityProxyMock(configuration: .init(verificationState: verificationState))

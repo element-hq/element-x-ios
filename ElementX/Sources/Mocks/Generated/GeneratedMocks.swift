@@ -5297,15 +5297,15 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - userIdentity
 
-    var userIdentityForUnderlyingCallsCount = 0
-    var userIdentityForCallsCount: Int {
+    var userIdentityForFallBackToServerUnderlyingCallsCount = 0
+    var userIdentityForFallBackToServerCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return userIdentityForUnderlyingCallsCount
+                return userIdentityForFallBackToServerUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = userIdentityForUnderlyingCallsCount
+                    returnValue = userIdentityForFallBackToServerUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5313,29 +5313,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                userIdentityForUnderlyingCallsCount = newValue
+                userIdentityForFallBackToServerUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    userIdentityForUnderlyingCallsCount = newValue
+                    userIdentityForFallBackToServerUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var userIdentityForCalled: Bool {
-        return userIdentityForCallsCount > 0
+    var userIdentityForFallBackToServerCalled: Bool {
+        return userIdentityForFallBackToServerCallsCount > 0
     }
-    var userIdentityForReceivedUserID: String?
-    var userIdentityForReceivedInvocations: [String] = []
+    var userIdentityForFallBackToServerReceivedArguments: (userID: String, fallBackToServer: Bool)?
+    var userIdentityForFallBackToServerReceivedInvocations: [(userID: String, fallBackToServer: Bool)] = []
 
-    var userIdentityForUnderlyingReturnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>!
-    var userIdentityForReturnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>! {
+    var userIdentityForFallBackToServerUnderlyingReturnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>!
+    var userIdentityForFallBackToServerReturnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return userIdentityForUnderlyingReturnValue
+                return userIdentityForFallBackToServerUnderlyingReturnValue
             } else {
                 var returnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = userIdentityForUnderlyingReturnValue
+                    returnValue = userIdentityForFallBackToServerUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -5343,26 +5343,26 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                userIdentityForUnderlyingReturnValue = newValue
+                userIdentityForFallBackToServerUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    userIdentityForUnderlyingReturnValue = newValue
+                    userIdentityForFallBackToServerUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var userIdentityForClosure: ((String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>)?
+    var userIdentityForFallBackToServerClosure: ((String, Bool) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>)?
 
-    func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
-        userIdentityForCallsCount += 1
-        userIdentityForReceivedUserID = userID
+    func userIdentity(for userID: String, fallBackToServer: Bool) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
+        userIdentityForFallBackToServerCallsCount += 1
+        userIdentityForFallBackToServerReceivedArguments = (userID: userID, fallBackToServer: fallBackToServer)
         DispatchQueue.main.async {
-            self.userIdentityForReceivedInvocations.append(userID)
+            self.userIdentityForFallBackToServerReceivedInvocations.append((userID: userID, fallBackToServer: fallBackToServer))
         }
-        if let userIdentityForClosure = userIdentityForClosure {
-            return await userIdentityForClosure(userID)
+        if let userIdentityForFallBackToServerClosure = userIdentityForFallBackToServerClosure {
+            return await userIdentityForFallBackToServerClosure(userID, fallBackToServer)
         } else {
-            return userIdentityForReturnValue
+            return userIdentityForFallBackToServerReturnValue
         }
     }
     //MARK: - setTimelineMediaVisibility
