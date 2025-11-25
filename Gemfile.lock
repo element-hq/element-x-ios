@@ -236,13 +236,10 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  abbrev
   fastlane
   fastlane-plugin-sentry
   fastlane-plugin-xcconfig
   fastlane-plugin-xcodegen
-  mutex_m
-  ostruct
   semantic
   xcode-install
 
