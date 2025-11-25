@@ -13,6 +13,7 @@ import MatrixRustSDK
 extension SpaceServiceProxyMock {
     struct Configuration {
         var joinedSpaces: [SpaceRoomProxyProtocol] = []
+        var joinedParentSpaces: [SpaceRoomProxyProtocol] = []
         var spaceRoomLists: [String: SpaceRoomListProxyMock] = [:]
         var leaveSpaceRooms: [LeaveSpaceRoom] = []
     }
@@ -21,6 +22,7 @@ extension SpaceServiceProxyMock {
         self.init()
         
         joinedSpacesPublisher = .init(configuration.joinedSpaces)
+        joinedParentsRoomIDReturnValue = .success(configuration.joinedParentSpaces)
         spaceRoomListSpaceIDClosure = { spaceID in
             if let spaceRoomList = configuration.spaceRoomLists[spaceID] {
                 .success(spaceRoomList)
