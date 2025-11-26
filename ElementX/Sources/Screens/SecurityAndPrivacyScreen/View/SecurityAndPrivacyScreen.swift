@@ -242,7 +242,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
                                                  clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",
                                                                                     spaceServiceConfiguration: .init(joinedParentSpaces: [space]))),
                                                  userIndicatorController: UserIndicatorControllerMock(),
-                                                 appSettings: AppSettings())
+                                                 appSettings: appSettings)
     }()
     
     static let multipleSpacesMembersViewModel = {
@@ -259,7 +259,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
                                                  clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",
                                                                                     spaceServiceConfiguration: .init(joinedParentSpaces: spaces))),
                                                  userIndicatorController: UserIndicatorControllerMock(),
-                                                 appSettings: AppSettings())
+                                                 appSettings: appSettings)
     }()
     
     static let askToJoinViewModel = {

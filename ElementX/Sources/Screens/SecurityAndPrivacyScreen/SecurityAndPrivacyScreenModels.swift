@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MatrixRustSDK
 
 enum SecurityAndPrivacyScreenViewModelAction {
     case displayEditAddressScreen
@@ -39,12 +38,9 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     var canEditHistoryVisibility = false
     var joinedParentSpaces: [SpaceRoomProxyProtocol] = []
     
+    /// The count of the intersection between the set of joined parent spaces and the set of spaces in the current access type
     var selectableSpacesCount: Int {
         Set(joinedParentSpaces.map(\.id) + currentSettings.accessType.spaceIDs).count
-    }
-    
-    private var desiredJoinedParentSpaces: [SpaceRoomProxyProtocol] {
-        joinedParentSpaces.filter { bindings.desiredSettings.accessType.spaceIDs.contains($0.id) }
     }
     
     private var hasChanges: Bool {
@@ -111,13 +107,9 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     var spaceSelection: SpaceSelection {
         if selectableSpacesCount > 1 {
             .multiple
-        } else if let desiredJoinedParent = desiredJoinedParentSpaces.first {
-            // The parent space is joined by the user and is also currently selected
-            .singleJoined(desiredJoinedParent)
         } else if let joinedParent = joinedParentSpaces.first {
-            // The parent space is joined by the user but is not currently selected
             .singleJoined(joinedParent)
-        } else if let unknownSpaceID = bindings.desiredSettings.accessType.spaceIDs.first {
+        } else if let unknownSpaceID = currentSettings.accessType.spaceIDs.first {
             // The space is not joined by the user but is currently selected
             .singleUnknown(id: unknownSpaceID)
         } else {
