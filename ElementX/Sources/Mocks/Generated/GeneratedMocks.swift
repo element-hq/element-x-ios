@@ -16618,15 +16618,15 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
     }
     //MARK: - joinedParents
 
-    var joinedParentsRoomIDUnderlyingCallsCount = 0
-    var joinedParentsRoomIDCallsCount: Int {
+    var joinedParentsChildIDUnderlyingCallsCount = 0
+    var joinedParentsChildIDCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return joinedParentsRoomIDUnderlyingCallsCount
+                return joinedParentsChildIDUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = joinedParentsRoomIDUnderlyingCallsCount
+                    returnValue = joinedParentsChildIDUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -16634,29 +16634,29 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                joinedParentsRoomIDUnderlyingCallsCount = newValue
+                joinedParentsChildIDUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    joinedParentsRoomIDUnderlyingCallsCount = newValue
+                    joinedParentsChildIDUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var joinedParentsRoomIDCalled: Bool {
-        return joinedParentsRoomIDCallsCount > 0
+    var joinedParentsChildIDCalled: Bool {
+        return joinedParentsChildIDCallsCount > 0
     }
-    var joinedParentsRoomIDReceivedRoomID: String?
-    var joinedParentsRoomIDReceivedInvocations: [String] = []
+    var joinedParentsChildIDReceivedChildID: String?
+    var joinedParentsChildIDReceivedInvocations: [String] = []
 
-    var joinedParentsRoomIDUnderlyingReturnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>!
-    var joinedParentsRoomIDReturnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>! {
+    var joinedParentsChildIDUnderlyingReturnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>!
+    var joinedParentsChildIDReturnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>! {
         get {
             if Thread.isMainThread {
-                return joinedParentsRoomIDUnderlyingReturnValue
+                return joinedParentsChildIDUnderlyingReturnValue
             } else {
                 var returnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = joinedParentsRoomIDUnderlyingReturnValue
+                    returnValue = joinedParentsChildIDUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -16664,26 +16664,26 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                joinedParentsRoomIDUnderlyingReturnValue = newValue
+                joinedParentsChildIDUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    joinedParentsRoomIDUnderlyingReturnValue = newValue
+                    joinedParentsChildIDUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var joinedParentsRoomIDClosure: ((String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>)?
+    var joinedParentsChildIDClosure: ((String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>)?
 
-    func joinedParents(roomID: String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError> {
-        joinedParentsRoomIDCallsCount += 1
-        joinedParentsRoomIDReceivedRoomID = roomID
+    func joinedParents(childID: String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError> {
+        joinedParentsChildIDCallsCount += 1
+        joinedParentsChildIDReceivedChildID = childID
         DispatchQueue.main.async {
-            self.joinedParentsRoomIDReceivedInvocations.append(roomID)
+            self.joinedParentsChildIDReceivedInvocations.append(childID)
         }
-        if let joinedParentsRoomIDClosure = joinedParentsRoomIDClosure {
-            return await joinedParentsRoomIDClosure(roomID)
+        if let joinedParentsChildIDClosure = joinedParentsChildIDClosure {
+            return await joinedParentsChildIDClosure(childID)
         } else {
-            return joinedParentsRoomIDReturnValue
+            return joinedParentsChildIDReturnValue
         }
     }
 }

@@ -47,7 +47,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         setupRoomDirectoryVisibility()
         setupSubscriptions()
         Task {
-            switch await clientProxy.spaceService.joinedParents(roomID: roomProxy.id) {
+            switch await clientProxy.spaceService.joinedParents(childID: roomProxy.id) {
             case .success(let joinedParentSpaces):
                 state.joinedParentSpaces = joinedParentSpaces
             case .failure:
