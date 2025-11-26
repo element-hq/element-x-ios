@@ -36,6 +36,27 @@ class DateTests: XCTestCase {
         let theMillennium = calendar.date(from: DateComponents(year: 2000, month: 1, day: 1))!
         XCTAssertEqual(theMillennium.formattedMinimal(), theMillennium.formatted(.dateTime.year().day().month()))
     }
+    
+    func testDateSeparatorFormatting() {
+        let today = calendar.date(byAdding: DateComponents(hour: 9, minute: 30), to: startOfToday)!
+        XCTAssertEqual(today.formattedDateSeparator(), "Today")
+        
+        let yesterday = calendar.date(byAdding: .hour, value: 1, to: startOfYesterday)!
+        XCTAssertEqual(yesterday.formattedDateSeparator(), "Yesterday")
+        
+        let nearYesterday = calendar.date(byAdding: DateComponents(hour: -10), to: today)!
+        XCTAssertEqual(nearYesterday.formattedDateSeparator(), yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence)))
+        
+        let threeDaysAgo = calendar.date(byAdding: .day, value: -3, to: startOfToday)!
+        XCTAssertEqual(threeDaysAgo.formattedDateSeparator(), threeDaysAgo.formatted(.dateTime.weekday(.wide)))
+        
+        // This test will fail during the first 6 days of the year.
+        let sometimeThisYear = calendar.date(byAdding: .month, value: -10, to: startOfToday)!
+        XCTAssertEqual(sometimeThisYear.formattedDateSeparator(), sometimeThisYear.formatted(.dateTime.weekday(.wide).day().month(.wide)))
+        
+        let theMillennium = calendar.date(from: DateComponents(year: 2000, month: 1, day: 1))!
+        XCTAssertEqual(theMillennium.formattedDateSeparator(), theMillennium.formatted(.dateTime.weekday(.wide).day().month(.wide).year()))
+    }
 }
 
 // swiftlint:enable force_unwrapping
