@@ -19,6 +19,7 @@ struct SecurityAndPrivacyScreenCoordinatorParameters {
 enum SecurityAndPrivacyScreenCoordinatorAction {
     case displayEditAddressScreen
     case dismiss
+    case displayManageAuthorizedSpacesScreen(AuthorizedSpacesSelection)
 }
 
 final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
@@ -44,6 +45,8 @@ final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
+            case .displayManageAuthorizedSpacesScreen(let selection):
+                actionsSubject.send(.displayManageAuthorizedSpacesScreen(selection))
             case .displayEditAddressScreen:
                 actionsSubject.send(.displayEditAddressScreen)
             case .dismiss:

@@ -81,8 +81,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         case .selectedSpaceMembersAccess:
             handleSelectedSpaceMembersAccess()
         case .manageSpaces:
-            // TODO: Implement multiple space selection
-            break
+            displayManageAuthorizedSpacesScreen()
         }
     }
     
@@ -236,15 +235,29 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     }
     
     private func handleSelectedSpaceMembersAccess() {
-        switch context.viewState.spaceSelection {
-        case .singleJoined(let joinedParent):
-            context.desiredSettings.accessType = .spaceUsers(spaceIDs: [joinedParent.id])
-        case .singleUnknown(let id):
-            context.desiredSettings.accessType = .spaceUsers(spaceIDs: [id])
-        case .multiple:
-            // TODO: Implement multiple space selection
-            break
+        guard !state.bindings.desiredSettings.accessType.isSpaceUsers else {
+            return
         }
+        
+        switch state.spaceSelection {
+        case .singleJoined(let joinedParent):
+            state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: [joinedParent.id])
+        case .singleUnknown(let id):
+            state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: [id])
+        case .multiple:
+            displayManageAuthorizedSpacesScreen()
+        }
+    }
+    
+    private func displayManageAuthorizedSpacesScreen() {
+        let joinedParentSpaces = state.joinedParentSpaces
+        let unknownSpaceIDs = state.currentSettings.accessType.spaceIDs.filter { id in
+            !joinedParentSpaces.contains(where: { $0.id == id })
+        }
+        let selectedIDs = Set(state.bindings.desiredSettings.accessType.spaceIDs)
+        actionsSubject.send(.displayManageAuthorizedSpacesScreen(.init(joinedParentSpaces: joinedParentSpaces,
+                                                                       unknownSpacesIDs: unknownSpaceIDs,
+                                                                       selectedIDs: selectedIDs)))
     }
     
     private static let loadingIndicatorIdentifier = "\(EditRoomAddressScreenViewModel.self)-Loading"

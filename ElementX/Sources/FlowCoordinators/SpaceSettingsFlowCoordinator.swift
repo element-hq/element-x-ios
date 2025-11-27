@@ -1,4 +1,3 @@
-//
 // Copyright 2025 New Vector Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
@@ -33,6 +32,8 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case rolesAndPermissionsFlow
         /// The members flow screen
         case membersFlow
+        
+        case manageAuthorizedSpacesScreen
     }
     
     enum Event: EventType {
@@ -55,6 +56,9 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         
         case startRolesAndPermissionsFlow
         case stopRolesAndPermissionsFlow
+        
+        case presentManageAuthorizedSpacesScreen
+        case dismissedManageAuthorizedSpacesScreen
     }
     
     private let roomProxy: JoinedRoomProxyProtocol
@@ -126,6 +130,11 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             case (.editAddress, .dismissedEditAddress):
                 return .securityAndPrivacy
                 
+            case (.securityAndPrivacy, .presentManageAuthorizedSpacesScreen):
+                return .manageAuthorizedSpacesScreen
+            case (.manageAuthorizedSpacesScreen, .dismissedManageAuthorizedSpacesScreen):
+                return .securityAndPrivacy
+                
             case (.spaceSettings, .startMembersListFlow):
                 return .membersFlow
             case (.membersFlow, .stopMembersListFlow):
@@ -162,6 +171,14 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             case (.securityAndPrivacy, .presentEditAddress, .editAddress):
                 presentEditAddressScreen()
             case (.editAddress, .dismissedEditAddress, .securityAndPrivacy):
+                break
+                
+            case (.securityAndPrivacy, .presentManageAuthorizedSpacesScreen, .manageAuthorizedSpacesScreen):
+                guard let selection = context.userInfo as? AuthorizedSpacesSelection else {
+                    fatalError("AuthorizedSpacesSelection expected as userInfo")
+                }
+                presentManageAuthorizedSpacesScreen(selection: selection)
+            case (.manageAuthorizedSpacesScreen, .dismissedManageAuthorizedSpacesScreen, .securityAndPrivacy):
                 break
                 
             case (.spaceSettings, .startMembersListFlow, .membersFlow):
@@ -258,6 +275,8 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                 self.stateMachine.tryEvent(.presentEditAddress)
             case .dismiss:
                 navigationStackCoordinator.pop()
+            case .displayManageAuthorizedSpacesScreen(let selection):
+                self.stateMachine.tryEvent(.presentManageAuthorizedSpacesScreen, userInfo: selection)
             }
         }
         .store(in: &cancellables)
@@ -284,6 +303,25 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         stackCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissedEditAddress)
+        }
+    }
+    
+    private func presentManageAuthorizedSpacesScreen(selection: AuthorizedSpacesSelection) {
+        let navigationStack = NavigationStackCoordinator()
+        let coordinator = ManageAuthorizedSpacesScreenCoordinator(parameters: .init(authorizedSpacesSelection: selection,
+                                                                                    mediaProvider: flowParameters.userSession.mediaProvider))
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStack.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(navigationStack) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedManageAuthorizedSpacesScreen)
         }
     }
     

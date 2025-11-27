@@ -299,6 +299,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "LongPressWithFeedback_Previews")
     }
 
+    func testManageAuthorizedSpacesScreen() async throws {
+        try await performAccessibilityAudit(named: "ManageAuthorizedSpacesScreen_Previews")
+    }
+
     func testManageRoomMemberSheetView() async throws {
         try await performAccessibilityAudit(named: "ManageRoomMemberSheetView_Previews")
     }
