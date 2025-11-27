@@ -11,6 +11,7 @@ import Foundation
 enum SecurityAndPrivacyScreenViewModelAction {
     case displayEditAddressScreen
     case dismiss
+    case displayManageAuthorizedSpacesScreen(AuthorizedSpacesSelection)
 }
 
 struct SecurityAndPrivacyScreenViewState: BindableState {
