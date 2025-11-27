@@ -82,6 +82,7 @@ class LoggingTests: XCTestCase {
                                       activeMembersCount: 0,
                                       lastMessage: AttributedString(lastMessage),
                                       lastMessageDate: .mock,
+                                      lastMessageState: nil,
                                       unreadMessagesCount: 0,
                                       unreadMentionsCount: 0,
                                       unreadNotificationsCount: 0,

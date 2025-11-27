@@ -234,6 +234,7 @@
 "common_loading_more" = "Loading more…";
 "common_message" = "Message";
 "common_message_actions" = "Message actions";
+"common_message_failed_to_send" = "Message failed to send";
 "common_message_layout" = "Message layout";
 "common_message_removed" = "Message removed";
 "common_modern" = "Modern";

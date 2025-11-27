@@ -79,11 +79,24 @@ struct HomeScreenRoomCell: View {
     @ViewBuilder
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
-            Text(room.name)
-                .font(.compound.bodyLGSemibold)
-                .foregroundColor(.compound.textPrimary)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(spacing: 4) {
+                Text(room.name)
+                    .font(.compound.bodyLGSemibold)
+                    .foregroundColor(.compound.textPrimary)
+                    .lineLimit(1)
+                
+                switch room.lastMessageState {
+                case .sending:
+                    CompoundIcon(\.time, size: .xSmall, relativeTo: .compound.bodyLGSemibold)
+                        .foregroundStyle(.compound.iconTertiary)
+                case .failed:
+                    CompoundIcon(\.errorSolid, size: .xSmall, relativeTo: .compound.bodyLGSemibold)
+                        .foregroundStyle(.compound.iconCriticalPrimary)
+                case .none:
+                    EmptyView()
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
             
             if let timestamp = room.timestamp {
                 Text(timestamp)
@@ -99,7 +112,7 @@ struct HomeScreenRoomCell: View {
             ZStack(alignment: .topLeading) {
                 // Hidden text with 2 lines to maintain consistent height, scaling with dynamic text.
                 Text(" \n ")
-                    .lastMessageFormatting()
+                    .lastMessageFormatting(hasFailed: false)
                     .hidden()
                     .environment(\.redactionReasons, []) // Always maintain consistent height
                 
@@ -142,7 +155,7 @@ struct HomeScreenRoomCell: View {
     private var lastMessage: some View {
         if let displayedLastMessage = room.displayedLastMessage {
             Text(displayedLastMessage)
-                .lastMessageFormatting()
+                .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
         }
     }
 }
@@ -159,9 +172,9 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 }
 
 private extension View {
-    func lastMessageFormatting() -> some View {
+    func lastMessageFormatting(hasFailed: Bool) -> some View {
         font(.compound.bodyMD)
-            .foregroundColor(.compound.textSecondary)
+            .foregroundColor(hasFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
     }
@@ -173,6 +186,8 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     
     static let summaryProviderForNotificationsState = RoomSummaryProviderMock(.init(state: .loaded(.mockRoomsWithNotificationsState)))
     static let notificationsStateRooms = summaryProviderForNotificationsState.roomListPublisher.value.compactMap(mockRoom)
+    
+    static let lastMessageStateRooms = [makeRoom(lastMessageState: .sending), makeRoom(lastMessageState: .failed)]
     
     static var previews: some View {
         VStack(spacing: 0) {
@@ -192,6 +207,14 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
         }
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Notifications State")
+        
+        VStack(spacing: 0) {
+            ForEach(lastMessageStateRooms) { room in
+                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+            }
+        }
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Last Message State")
     }
     
     static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
@@ -207,5 +230,32 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                    analyticsService: ServiceLocator.shared.analytics,
                                    notificationManager: NotificationManagerMock(),
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
+    }
+    
+    static func makeRoom(lastMessageState: RoomSummary.LastMessageState) -> HomeScreenRoom {
+        let summary = RoomSummary(room: RoomSDKMock(),
+                                  id: UUID().uuidString,
+                                  joinRequestType: nil,
+                                  name: "Foundation and Empire",
+                                  isDirect: false,
+                                  isSpace: false,
+                                  avatarURL: .mockMXCAvatar,
+                                  heroes: [],
+                                  activeMembersCount: 0,
+                                  lastMessage: AttributedString("How do you see the Emperor then? You think he keeps office hours?"),
+                                  lastMessageDate: .mock,
+                                  lastMessageState: lastMessageState,
+                                  unreadMessagesCount: 2,
+                                  unreadMentionsCount: 0,
+                                  unreadNotificationsCount: 2,
+                                  notificationMode: .mute,
+                                  canonicalAlias: "#foundation-and-empire:matrix.org",
+                                  alternativeAliases: [],
+                                  hasOngoingCall: false,
+                                  isMarkedUnread: false,
+                                  isFavourite: false,
+                                  isTombstoned: false)
+        
+        return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
 }

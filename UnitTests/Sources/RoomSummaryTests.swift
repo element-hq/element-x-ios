@@ -101,6 +101,7 @@ class RoomSummaryTests: XCTestCase {
                     activeMembersCount: 0,
                     lastMessage: nil,
                     lastMessageDate: nil,
+                    lastMessageState: nil,
                     unreadMessagesCount: 0,
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 0,
