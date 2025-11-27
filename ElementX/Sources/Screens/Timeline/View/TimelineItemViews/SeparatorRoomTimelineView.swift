@@ -19,6 +19,7 @@ struct SeparatorRoomTimelineView: View {
             .multilineTextAlignment(.center)
             .padding(.horizontal, 36.0)
             .padding(.vertical, 8.0)
+        //  .background(Color.red)
     }
 }
 
