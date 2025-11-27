@@ -524,6 +524,8 @@ internal enum L10n {
   internal static var commonMessage: String { return L10n.tr("Localizable", "common_message") }
   /// Message actions
   internal static var commonMessageActions: String { return L10n.tr("Localizable", "common_message_actions") }
+  /// Message failed to send
+  internal static var commonMessageFailedToSend: String { return L10n.tr("Localizable", "common_message_failed_to_send") }
   /// Message layout
   internal static var commonMessageLayout: String { return L10n.tr("Localizable", "common_message_layout") }
   /// Message removed
