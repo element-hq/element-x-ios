@@ -449,6 +449,12 @@ extension PreviewTests {
         }
     }
 
+    func testManageAuthorizedSpacesScreen() async throws {
+        for (index, preview) in ManageAuthorizedSpacesScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testManageRoomMemberSheetView() async throws {
         for (index, preview) in ManageRoomMemberSheetView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
