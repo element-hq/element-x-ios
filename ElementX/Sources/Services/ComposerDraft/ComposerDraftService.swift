@@ -8,8 +8,6 @@
 
 import Foundation
 
-import MatrixRustSDK
-
 final class ComposerDraftService: ComposerDraftServiceProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private let threadRootEventID: String?

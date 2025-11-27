@@ -10,7 +10,7 @@ import Compound
 import MatrixRustSDK
 import SwiftUI
 
-/// Represents and issue with a timeline item's authenticity such as coming from an
+/// Represents an issue with a timeline item's authenticity such as coming from an
 /// unsigned session or being sent unencrypted in an encrypted room. See Rust's
 /// `ShieldStateCode` for more information about the meaning of the cases.
 enum EncryptionAuthenticity: Hashable {
