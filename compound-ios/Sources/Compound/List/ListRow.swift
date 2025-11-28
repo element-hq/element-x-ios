@@ -123,12 +123,12 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
             Button(action: action) {
                 RowContent(details: details, accessory: .selection(isSelected)) { label }
             }
-            .isToggle()
+            .accessibilityAddTraits(.isToggle)
         case .multiSelection(let isSelected, let action):
             Button(action: action) {
                 RowContent(details: details, accessory: .multiSelection(isSelected)) { label }
             }
-            .isToggle()
+            .accessibilityAddTraits(.isToggle)
         case .textField(let text, let axis):
             TextField(text: text, axis: axis) {
                 Text(label.title ?? "")
@@ -255,17 +255,6 @@ private extension TextField {
             self.init(text: text, axis: axis, label: label)
         } else {
             self.init(text: text, label: label)
-        }
-    }
-}
-
-private extension Button {
-    /// Adds the `isToggle` accessibility trait on iOS 17+
-    @ViewBuilder func isToggle() -> some View {
-        if #available(iOS 17.0, *) {
-            accessibilityAddTraits(.isToggle)
-        } else {
-            self
         }
     }
 }
