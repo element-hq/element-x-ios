@@ -18,10 +18,19 @@ struct UserDetailsEditScreenCoordinatorParameters {
     let appSettings: AppSettings
 }
 
+enum UserDetailsEditScreenCoordinatorAction {
+    case dismiss
+}
+
 final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
     private let parameters: UserDetailsEditScreenCoordinatorParameters
     private var viewModel: UserDetailsEditScreenViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
+    
+    private let actionsSubject: PassthroughSubject<RoomDetailsEditScreenCoordinatorAction, Never> = .init()
+    var actions: AnyPublisher<RoomDetailsEditScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: UserDetailsEditScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -34,13 +43,17 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.actions
             .sink { [weak self] action in
+                guard let self else { return }
+                
                 switch action {
+                case .dismiss:
+                    actionsSubject.send(.dismiss)
                 case .displayCameraPicker:
-                    self?.displayMediaPickerWithMode(.init(source: .camera, selectionType: .single))
+                    displayMediaPickerWithMode(.init(source: .camera, selectionType: .single))
                 case .displayMediaPicker:
-                    self?.displayMediaPickerWithMode(.init(source: .photoLibrary, selectionType: .single))
+                    displayMediaPickerWithMode(.init(source: .photoLibrary, selectionType: .single))
                 case .displayFilePicker:
-                    self?.displayMediaPickerWithMode(.init(source: .documents, selectionType: .single))
+                    displayMediaPickerWithMode(.init(source: .documents, selectionType: .single))
                 }
             }
             .store(in: &cancellables)
