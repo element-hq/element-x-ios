@@ -260,13 +260,9 @@ private extension TextField {
 }
 
 private extension Button {
-    /// Adds the `isToggle` accessibility trait on iOS 17+
-    @ViewBuilder func isToggle() -> some View {
-        if #available(iOS 17.0, *) {
-            accessibilityAddTraits(.isToggle)
-        } else {
-            self
-        }
+    /// Adds the `isToggle` accessibility trait
+    func isToggle() -> some View {
+        accessibilityAddTraits(.isToggle)
     }
 }
 
