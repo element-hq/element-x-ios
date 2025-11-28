@@ -39,10 +39,7 @@ import SwiftUI
         }
         
         func barVisibility(in horizontalSizeClass: UserInterfaceSizeClass?) -> Visibility {
-            if #unavailable(iOS 18.0) {
-                // There are glitches with the tab bar on iPadOS 17, so disable the tab bar until we have fixed it.
-                .hidden
-            } else if let barVisibilityOverride {
+            if let barVisibilityOverride {
                 barVisibilityOverride
             } else if horizontalSizeClass == .compact, navigationSplitCoordinator?.detailCoordinator != nil {
                 // Whilst we support pushing screens on the stack in the sidebarCoordinator, in practice

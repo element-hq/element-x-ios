@@ -16,26 +16,19 @@ struct LongPressWithFeedback: ViewModifier {
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
     func body(content: Content) -> some View {
-        if #available(iOS 18, *) {
-            mainContent(content: content)
-                .gesture(LongPressGestureRepresentable { gesture in
-                    switch gesture.state {
-                    case .began:
-                        handleLongPress(isPressing: true)
-                    case .ended, .cancelled, .failed:
-                        handleLongPress(isPressing: false)
-                    case .possible, .changed:
-                        break
-                    @unknown default:
-                        break
-                    }
-                })
-        } else {
-            mainContent(content: content)
-                .onLongPressGesture(minimumDuration: 0.25) { } onPressingChanged: { isPressing in
-                    handleLongPress(isPressing: isPressing)
+        mainContent(content: content)
+            .gesture(LongPressGestureRepresentable { gesture in
+                switch gesture.state {
+                case .began:
+                    handleLongPress(isPressing: true)
+                case .ended, .cancelled, .failed:
+                    handleLongPress(isPressing: false)
+                case .possible, .changed:
+                    break
+                @unknown default:
+                    break
                 }
-        }
+            })
     }
     
     // The gesture's minimum duration doesn't actually invoke the perform block when elapsed (thus

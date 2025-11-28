@@ -228,13 +228,9 @@ private struct FocusSearchIfHardwareKeyboardAvailableModifier: ViewModifier {
     @FocusState private var isFocused
     
     func body(content: Content) -> some View {
-        if #available(iOS 18.0, *) {
-            content
-                .searchFocused($isFocused)
-                .onAppear(perform: focusIfHardwareKeyboardAvailable)
-        } else {
-            content
-        }
+        content
+            .searchFocused($isFocused)
+            .onAppear(perform: focusIfHardwareKeyboardAvailable)
     }
     
     func focusIfHardwareKeyboardAvailable() {

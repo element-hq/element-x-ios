@@ -21,25 +21,19 @@ struct TimelineItemMacContextMenu: View {
             if let menuActions = actionProvider.makeActions() {
                 Section {
                     if !menuActions.reactions.isEmpty {
-                        if #available(iOS 17.0, *) {
-                            let reactions = (item as? EventBasedTimelineItemProtocol)?.properties.reactions ?? []
-                            ControlGroup {
-                                ForEach(menuActions.reactions, id: \.key) {
-                                    ReactionToggle(reaction: $0, reactions: reactions) {
-                                        send(.toggleReaction(key: $0))
-                                    }
-                                }
-                                
-                                Button { send(.react) } label: {
-                                    CompoundIcon(\.reactionAdd)
+                        let reactions = (item as? EventBasedTimelineItemProtocol)?.properties.reactions ?? []
+                        ControlGroup {
+                            ForEach(menuActions.reactions, id: \.key) {
+                                ReactionToggle(reaction: $0, reactions: reactions) {
+                                    send(.toggleReaction(key: $0))
                                 }
                             }
-                            .controlGroupStyle(.palette)
-                        } else {
+                            
                             Button { send(.react) } label: {
-                                TimelineItemMenuAction.react.label
+                                CompoundIcon(\.reactionAdd)
                             }
                         }
+                        .controlGroupStyle(.palette)
                     }
                     
                     ForEach(menuActions.actions) { action in

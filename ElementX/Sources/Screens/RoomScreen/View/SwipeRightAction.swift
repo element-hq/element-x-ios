@@ -51,59 +51,52 @@ struct SwipeRightAction<Label: View>: ViewModifier {
     
     @ViewBuilder
     private func mainContent(content: Content) -> some View {
-        if #available(iOS 18, *) {
-            content
-                .offset(x: xOffset, y: 0.0)
-                .animation(.interactiveSpring().speed(0.5), value: xOffset)
-                .gesture(PanGestureRepresentable { gesture in
-                    switch gesture.state {
-                    case .ended, .cancelled, .failed:
-                        if xOffset > actionThreshold {
-                            action()
-                        }
-                        
-                        xOffset = 0.0
-                    default:
-                        guard shouldStartAction() else {
-                            return
-                        }
-                        let translation = gesture.translation(in: nil)
-                        
-                        // Due to https://forums.developer.apple.com/forums/thread/760035 we had to make
-                        // the drag a simultaneous gesture otherwise it was impossible to scroll the timeline.
-                        // Therefore we need to prevent the animation to run if the user is to scrolling vertically.
-                        // It would be nice if we could somehow abort the gesture in this case.
-                        let width: CGFloat = if translation.x > abs(translation.y) {
-                            translation.x
-                        } else {
-                            0.0
-                        }
-                        
-                        // We want to add a spring like behaviour to the drag in which the view
-                        // moves slower the more it's dragged. We use a circular easing function
-                        // to generate those values up to the `swipeThreshold`
-                        // The final translation will be between 0 and `swipeThreshold` with the action being enabled from
-                        // `actionThreshold` onwards
-                        let screenWidthNormalisedTranslation = max(0.0, min(width, swipeThreshold)) / swipeThreshold
-                        let easedTranslation = circularEaseOut(screenWidthNormalisedTranslation)
-                        xOffset = easedTranslation * xOffsetThreshold
-                        
-                        if xOffset > actionThreshold {
-                            if !hasReachedActionThreshold {
-                                feedbackGenerator.impactOccurred()
-                                hasReachedActionThreshold = true
-                            }
-                        } else {
-                            hasReachedActionThreshold = false
-                        }
+        content
+            .offset(x: xOffset, y: 0.0)
+            .animation(.interactiveSpring().speed(0.5), value: xOffset)
+            .gesture(PanGestureRepresentable { gesture in
+                switch gesture.state {
+                case .ended, .cancelled, .failed:
+                    if xOffset > actionThreshold {
+                        action()
                     }
-                })
-        } else {
-            content
-                .offset(x: xOffset, y: 0.0)
-                .animation(.interactiveSpring().speed(0.5), value: xOffset)
-                .gesture(oldGesture)
-        }
+                    
+                    xOffset = 0.0
+                default:
+                    guard shouldStartAction() else {
+                        return
+                    }
+                    let translation = gesture.translation(in: nil)
+                    
+                    // Due to https://forums.developer.apple.com/forums/thread/760035 we had to make
+                    // the drag a simultaneous gesture otherwise it was impossible to scroll the timeline.
+                    // Therefore we need to prevent the animation to run if the user is to scrolling vertically.
+                    // It would be nice if we could somehow abort the gesture in this case.
+                    let width: CGFloat = if translation.x > abs(translation.y) {
+                        translation.x
+                    } else {
+                        0.0
+                    }
+                    
+                    // We want to add a spring like behaviour to the drag in which the view
+                    // moves slower the more it's dragged. We use a circular easing function
+                    // to generate those values up to the `swipeThreshold`
+                    // The final translation will be between 0 and `swipeThreshold` with the action being enabled from
+                    // `actionThreshold` onwards
+                    let screenWidthNormalisedTranslation = max(0.0, min(width, swipeThreshold)) / swipeThreshold
+                    let easedTranslation = circularEaseOut(screenWidthNormalisedTranslation)
+                    xOffset = easedTranslation * xOffsetThreshold
+                    
+                    if xOffset > actionThreshold {
+                        if !hasReachedActionThreshold {
+                            feedbackGenerator.impactOccurred()
+                            hasReachedActionThreshold = true
+                        }
+                    } else {
+                        hasReachedActionThreshold = false
+                    }
+                }
+            })
     }
     
     private var oldGesture: some Gesture {
