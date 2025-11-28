@@ -26,5 +26,18 @@ class ManageAuthorizedSpacesScreenViewModel: ManageAuthorizedSpacesScreenViewMod
     
     override func process(viewAction: ManageAuthorizedSpacesScreenViewAction) {
         MXLog.info("View model: received view action: \(viewAction)")
+        switch viewAction {
+        case .cancel:
+            actionsSubject.send(.dismiss)
+        case .done:
+            // TODO: Implement
+            break
+        case .toggle(let spaceID):
+            if state.desiredSelectedIDs.contains(spaceID) {
+                state.desiredSelectedIDs.remove(spaceID)
+            } else {
+                state.desiredSelectedIDs.insert(spaceID)
+            }
+        }
     }
 }
