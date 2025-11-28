@@ -218,12 +218,22 @@ private struct RowContent<Label: View, DetailsIcon: View>: View {
     let label: () -> Label
     
     var body: some View {
-        HStack(spacing: ListRowTrailingSectionSpacing.horizontal) {
-            label()
-                .frame(maxWidth: .infinity)
+        HStack(spacing: 0) {
+            // We should always have multi selection shown on the leading side
+            if let accessory, accessory.kind.isMultiSelection {
+                accessory
+                    .padding(.leading, ListRowPadding.horizontal)
+            }
             
-            if details != nil || accessory != nil {
-                ListRowTrailingSection(details, accessory: accessory)
+            HStack(spacing: ListRowTrailingSectionSpacing.horizontal) {
+                label()
+                    .frame(maxWidth: .infinity)
+                
+                if details != nil || accessory != nil {
+                    ListRowTrailingSection(details,
+                                           // Prevent multi selection to appear on the trailing side
+                                           accessory: accessory?.kind.isMultiSelection == true ? nil : accessory)
+                }
             }
         }
         .frame(maxHeight: .infinity)
