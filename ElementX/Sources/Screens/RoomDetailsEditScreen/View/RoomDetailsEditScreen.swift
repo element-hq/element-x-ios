@@ -30,6 +30,7 @@ struct RoomDetailsEditScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .track(screen: .RoomSettings)
+        .alert(item: $context.alertInfo)
     }
     
     // MARK: - Private
