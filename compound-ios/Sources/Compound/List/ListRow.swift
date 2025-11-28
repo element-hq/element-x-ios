@@ -218,6 +218,8 @@ private struct RowContent<Label: View, DetailsIcon: View>: View {
     let label: () -> Label
     
     var body: some View {
+        // If not custom, the label() content usually includes a leading `ListRowPadding.horizontal`
+        // that's why the external `HStack` has 0 spacing.
         HStack(spacing: 0) {
             // We should always have multi selection shown on the leading side
             if let accessory, accessory.kind.isMultiSelection {
