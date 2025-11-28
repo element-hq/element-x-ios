@@ -80,6 +80,7 @@ extension RoomFlowCoordinator {
         case knockRequestsList(previousState: State)
         case mediaEventsTimeline(previousState: State)
         case securityAndPrivacy(previousState: State)
+        case manageAuthorizedSpacesScreen(previousState: State)
         case reportRoom(previousState: State)
         case declineAndBlockScreen
         
@@ -98,6 +99,7 @@ extension RoomFlowCoordinator {
         let animated: Bool
         var timelineController: TimelineControllerProtocol?
         var spaceRoomListProxy: SpaceRoomListProxyProtocol?
+        var authorizedSpacesSelection: AuthorizedSpacesSelection?
     }
 
     enum Event: EventType {
@@ -173,6 +175,9 @@ extension RoomFlowCoordinator {
         
         case presentSecurityAndPrivacyScreen
         case dismissSecurityAndPrivacyScreen
+        
+        case presentManageAuthorizedSpacesScreen
+        case dismissedManageAuthorizedSpacesScreen
         
         case presentReportRoomScreen
         case dismissReportRoomScreen
@@ -319,6 +324,11 @@ extension RoomFlowCoordinator {
             case (.roomDetails, .presentSecurityAndPrivacyScreen):
                 return .securityAndPrivacy(previousState: fromState)
             case (.securityAndPrivacy(let previousState), .dismissSecurityAndPrivacyScreen):
+                return previousState
+                
+            case (.securityAndPrivacy, .presentManageAuthorizedSpacesScreen):
+                return .manageAuthorizedSpacesScreen(previousState: fromState)
+            case (.manageAuthorizedSpacesScreen(let previousState), .dismissedManageAuthorizedSpacesScreen):
                 return previousState
                 
             case (.roomDetails, .presentReportRoomScreen):
