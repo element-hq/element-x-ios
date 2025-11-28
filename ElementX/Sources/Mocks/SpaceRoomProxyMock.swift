@@ -100,6 +100,32 @@ extension [SpaceRoomProxyProtocol] {
         ]
     }
     
+    static var mockJoinedSpaces2: [SpaceRoomProxyMock] {
+        [
+            SpaceRoomProxyMock(.init(id: "space1",
+                                     name: "The Foundation",
+                                     avatarURL: .mockMXCAvatar,
+                                     isSpace: true,
+                                     childrenCount: 1,
+                                     joinedMembersCount: 500,
+                                     canonicalAlias: "#the-foundation:matrix.org",
+                                     state: .joined)),
+            SpaceRoomProxyMock(.init(id: "space2",
+                                     name: "The Second Foundation",
+                                     isSpace: true,
+                                     childrenCount: 1,
+                                     joinedMembersCount: 100,
+                                     state: .joined)),
+            SpaceRoomProxyMock(.init(id: "space3",
+                                     name: "The Galactic Empire",
+                                     isSpace: true,
+                                     childrenCount: 25000,
+                                     joinedMembersCount: 1_000_000_000,
+                                     canonicalAlias: "#the-galactic-empire:matrix.org",
+                                     state: .joined))
+        ]
+    }
+    
     static var mockSpaceList: [SpaceRoomProxyProtocol] {
         makeSpaceRooms(isSpace: true) + makeSpaceRooms(isSpace: false)
     }
