@@ -65,8 +65,10 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
     
     override func process(viewAction: UserDetailsEditScreenViewAction) {
         switch viewAction {
+        case .cancel:
+            showUnsavedChangesAlert() // The cancel button is only shown when there are unsaved changes.
         case .save:
-            saveUserDetails()
+            Task { await saveUserDetails() }
         case .presentMediaSource:
             state.bindings.showMediaSheet = true
         case .displayCameraPicker:
@@ -106,42 +108,52 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
     
     // MARK: - Private
     
-    private func saveUserDetails() {
-        Task {
-            let userIndicatorID = UUID().uuidString
-            defer {
-                userIndicatorController.retractIndicatorWithId(userIndicatorID)
-            }
-            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
-                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                                  title: L10n.screenEditProfileUpdatingDetails,
-                                                                  persistent: true))
-            
-            do {
-                try await withThrowingTaskGroup(of: Void.self) { group in
-                    if state.avatarDidChange {
-                        group.addTask {
-                            if let localMedia = await self.state.localMedia {
-                                try await self.clientProxy.setUserAvatar(media: localMedia).get()
-                            } else if await self.state.selectedAvatarURL == nil {
-                                try await self.clientProxy.removeUserAvatar().get()
-                            }
+    private func showUnsavedChangesAlert() {
+        state.bindings.alertInfo = .init(id: .unsavedChanges,
+                                         title: L10n.dialogUnsavedChangesTitle,
+                                         message: L10n.dialogUnsavedChangesDescriptionIos,
+                                         primaryButton: .init(title: L10n.actionSave) { Task { await self.saveUserDetails(shouldDismiss: true) } },
+                                         secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.dismiss) })
+    }
+    
+    private func saveUserDetails(shouldDismiss: Bool = false) async {
+        let userIndicatorID = UUID().uuidString
+        defer {
+            userIndicatorController.retractIndicatorWithId(userIndicatorID)
+        }
+        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.screenEditProfileUpdatingDetails,
+                                                              persistent: true))
+        
+        do {
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                if state.avatarDidChange {
+                    group.addTask {
+                        if let localMedia = await self.state.localMedia {
+                            try await self.clientProxy.setUserAvatar(media: localMedia).get()
+                        } else if await self.state.selectedAvatarURL == nil {
+                            try await self.clientProxy.removeUserAvatar().get()
                         }
                     }
-                    
-                    if state.nameDidChange {
-                        group.addTask {
-                            try await self.clientProxy.setUserDisplayName(self.state.bindings.name).get()
-                        }
-                    }
-                    
-                    try await group.waitForAll()
                 }
-            } catch {
-                userIndicatorController.alertInfo = .init(id: .init(),
-                                                          title: L10n.screenEditProfileErrorTitle,
-                                                          message: L10n.screenEditProfileError)
+                
+                if state.nameDidChange {
+                    group.addTask {
+                        try await self.clientProxy.setUserDisplayName(self.state.bindings.name).get()
+                    }
+                }
+                
+                try await group.waitForAll()
             }
+            
+            if shouldDismiss {
+                actionsSubject.send(.dismiss)
+            }
+        } catch {
+            userIndicatorController.alertInfo = .init(id: .init(),
+                                                      title: L10n.screenEditProfileErrorTitle,
+                                                      message: L10n.screenEditProfileError)
         }
     }
 }
