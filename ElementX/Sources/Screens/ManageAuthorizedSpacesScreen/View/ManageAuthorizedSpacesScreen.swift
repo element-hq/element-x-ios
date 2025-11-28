@@ -12,16 +12,95 @@ struct ManageAuthorizedSpacesScreen: View {
     @Bindable var context: ManageAuthorizedSpacesScreenViewModel.Context
     
     var body: some View {
-        Form { }
-            .compoundList()
-            .navigationTitle("Manage spaces")
+        Form {
+            header
+            if !context.viewState.authorizedSpacesSelection.joinedParentSpaces.isEmpty {
+                joinedParentsSection
+            }
+            if !context.viewState.authorizedSpacesSelection.unknownSpacesIDs.isEmpty {
+                unkwnownSpacesSection
+            }
+        }
+        .compoundList()
+        .navigationTitle(L10n.screenManageAuthorizedSpacesTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
+    }
+    
+    private var header: some View {
+        Section {
+            EmptyView()
+        } header: {
+            VStack(spacing: 16) {
+                BigIcon(icon: \.spaceSolid, style: .default)
+                    .accessibilityHidden(true)
+                Text(L10n.screenManageAuthorizedSpacesHeader)
+                    .multilineTextAlignment(.center)
+                    .font(.compound.headingMDBold)
+                    .foregroundStyle(.compound.textPrimary)
+                    .padding(.horizontal, 24)
+            }
+            .frame(maxWidth: .infinity)
+        }
+    }
+    
+    private var joinedParentsSection: some View {
+        Section {
+            ForEach(context.viewState.authorizedSpacesSelection.joinedParentSpaces, id: \.id) { space in
+                ListRow(label: .avatar(title: space.name,
+                                       description: space.canonicalAlias,
+                                       icon: avatar(space: space)),
+                        kind: .multiSelection(isSelected: context.viewState.desiredSelectedIDs.contains(space.id)) {
+                            context.send(viewAction: .toggle(spaceID: space.id))
+                        })
+            }
+        } header: {
+            Text(L10n.screenManageAuthorizedSpacesYourSpacesSectionTitle)
+                .compoundListSectionHeader()
+        }
+    }
+    
+    private var unkwnownSpacesSection: some View {
+        Section {
+            ForEach(context.viewState.authorizedSpacesSelection.unknownSpacesIDs, id: \.self) { id in
+                ListRow(label: .plain(title: L10n.screenManageAuthorizedSpacesUnknownSpace,
+                                      description: id),
+                        kind: .multiSelection(isSelected: context.viewState.desiredSelectedIDs.contains(id)) {
+                            context.send(viewAction: .toggle(spaceID: id))
+                        })
+            }
+        } header: {
+            Text(L10n.screenManageAuthorizedSpacesUnknownSpacesSectionTitle)
+                .compoundListSectionHeader()
+        }
+    }
+    
+    private func avatar(space: SpaceRoomProxyProtocol) -> some View {
+        RoomAvatarImage(avatar: space.avatar,
+                        avatarSize: .room(on: .authorizedSpaces),
+                        mediaProvider: context.mediaProvider)
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            ToolbarButton(role: .done) {
+                context.send(viewAction: .done)
+            }
+            .disabled(context.viewState.isDoneButtonDisabled)
+        }
+        ToolbarItem(placement: .cancellationAction) {
+            ToolbarButton(role: .cancel) {
+                context.send(viewAction: .cancel)
+            }
+        }
     }
 }
 
 // MARK: - Previews
 
 struct ManageAuthorizedSpacesScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = ManageAuthorizedSpacesScreenViewModel(authorizedSpacesSelection: .init(joinedParentSpaces: .mockJoinedSpaces,
+    static let viewModel = ManageAuthorizedSpacesScreenViewModel(authorizedSpacesSelection: .init(joinedParentSpaces: .mockJoinedSpaces2,
                                                                                                   unknownSpacesIDs: ["!unknown-space-id-1",
                                                                                                                      "!unknown-space-id-2",
                                                                                                                      "!unknown-space-id-3"],
@@ -31,6 +110,8 @@ struct ManageAuthorizedSpacesScreen_Previews: PreviewProvider, TestablePreview {
                                                                  mediaProvider: MediaProviderMock(configuration: .init()))
     
     static var previews: some View {
-        ManageAuthorizedSpacesScreen(context: viewModel.context)
+        NavigationStack {
+            ManageAuthorizedSpacesScreen(context: viewModel.context)
+        }
     }
 }

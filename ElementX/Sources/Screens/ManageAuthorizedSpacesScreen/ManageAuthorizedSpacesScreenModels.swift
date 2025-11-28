@@ -19,13 +19,21 @@ struct ManageAuthorizedSpacesScreenViewState: BindableState {
         authorizedSpacesSelection.selectedIDs != desiredSelectedIDs
     }
     
+    var isDoneButtonDisabled: Bool {
+        desiredSelectedIDs.isEmpty || !hasChanges
+    }
+    
     init(authorizedSpacesSelection: AuthorizedSpacesSelection) {
         self.authorizedSpacesSelection = authorizedSpacesSelection
         desiredSelectedIDs = authorizedSpacesSelection.selectedIDs
     }
 }
 
-enum ManageAuthorizedSpacesScreenViewAction { }
+enum ManageAuthorizedSpacesScreenViewAction {
+    case cancel
+    case done
+    case toggle(spaceID: String)
+}
 
 struct AuthorizedSpacesSelection {
     let joinedParentSpaces: [SpaceRoomProxyProtocol]
