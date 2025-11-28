@@ -6,8 +6,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import MatrixRustSDK
-
 enum TimelineItemThreadSummary: Hashable {
     case notLoaded
     case loading

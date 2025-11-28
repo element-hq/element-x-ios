@@ -9,7 +9,6 @@
 import Foundation
 
 import MatrixRustSDK
-import WysiwygComposer
 
 struct IntentionalMentions: Equatable {
     let userIDs: Set<String>

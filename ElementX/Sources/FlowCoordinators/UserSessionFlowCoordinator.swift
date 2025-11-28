@@ -9,7 +9,6 @@
 import AVKit
 import Combine
 import Compound
-import MatrixRustSDK
 import SwiftState
 import SwiftUI
 
