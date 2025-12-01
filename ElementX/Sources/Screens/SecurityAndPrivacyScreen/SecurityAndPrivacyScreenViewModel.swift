@@ -62,10 +62,10 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
+        case .cancel:
+            showUnsavedChangesAlert() // The cancel button is only shown when there are unsaved changes.
         case .save:
-            Task {
-                await saveDesiredSettings()
-            }
+            Task { await saveDesiredSettings() }
         case .tryUpdatingEncryption(let updatedValue):
             if updatedValue {
                 state.bindings.alertInfo = .init(id: .enableEncryption,
@@ -168,12 +168,19 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         }
     }
     
-    private func saveDesiredSettings() async {
+    private func showUnsavedChangesAlert() {
+        state.bindings.alertInfo = .init(id: .unsavedChanges,
+                                         title: L10n.dialogUnsavedChangesTitle,
+                                         message: L10n.dialogUnsavedChangesDescriptionIos,
+                                         primaryButton: .init(title: L10n.actionSave) { Task { await self.saveDesiredSettings(shouldDismiss: true) } },
+                                         secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.dismiss) })
+    }
+    
+    private func saveDesiredSettings(shouldDismiss: Bool = false) async {
         showLoadingIndicator()
+        defer { hideLoadingIndicator() }
         
-        defer {
-            hideLoadingIndicator()
-        }
+        var hasFailures = false
         
         if state.currentSettings.isEncryptionEnabled != state.bindings.desiredSettings.isEncryptionEnabled {
             switch await roomProxy.enableEncryption() {
@@ -181,6 +188,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.currentSettings.isEncryptionEnabled = state.bindings.desiredSettings.isEncryptionEnabled
             case .failure:
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                hasFailures = true
             }
         }
         
@@ -190,6 +198,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.currentSettings.historyVisibility = state.bindings.desiredSettings.historyVisibility
             case .failure:
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                hasFailures = true
             }
         }
         
@@ -205,6 +214,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.currentSettings.accessType = state.bindings.desiredSettings.accessType
             case .failure:
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                hasFailures = true
             }
         }
         
@@ -216,7 +226,12 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.currentSettings.isVisibileInRoomDirectory = state.bindings.desiredSettings.isVisibileInRoomDirectory
             case .failure:
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                hasFailures = true
             }
+        }
+        
+        if shouldDismiss, !hasFailures {
+            actionsSubject.send(.dismiss)
         }
     }
     
