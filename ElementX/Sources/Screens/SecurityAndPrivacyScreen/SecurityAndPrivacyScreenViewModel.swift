@@ -252,12 +252,19 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     private func displayManageAuthorizedSpacesScreen() {
         let joinedParentSpaces = state.joinedParentSpaces
         let unknownSpaceIDs = state.currentSettings.accessType.spaceIDs.filter { id in
-            !joinedParentSpaces.contains(where: { $0.id == id })
+            !joinedParentSpaces.contains { $0.id == id }
         }
         let selectedIDs = Set(state.bindings.desiredSettings.accessType.spaceIDs)
-        actionsSubject.send(.displayManageAuthorizedSpacesScreen(.init(joinedParentSpaces: joinedParentSpaces,
-                                                                       unknownSpacesIDs: unknownSpaceIDs,
-                                                                       selectedIDs: selectedIDs)))
+        let authorizedSpacesSelection = AuthorizedSpacesSelection(joinedParentSpaces: joinedParentSpaces,
+                                                                  unknownSpacesIDs: unknownSpaceIDs,
+                                                                  currentSelectedIDs: selectedIDs)
+        authorizedSpacesSelection.desiredSelectIDs
+            .sink { [weak self] desiredSelectedIDs in
+                self?.state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: desiredSelectedIDs.sorted())
+            }
+            .store(in: &cancellables)
+        
+        actionsSubject.send(.displayManageAuthorizedSpacesScreen(authorizedSpacesSelection))
     }
     
     private static let loadingIndicatorIdentifier = "\(EditRoomAddressScreenViewModel.self)-Loading"
