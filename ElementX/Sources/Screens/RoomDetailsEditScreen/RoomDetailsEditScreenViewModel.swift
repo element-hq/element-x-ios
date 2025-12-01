@@ -114,7 +114,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         if state.canSave {
             state.bindings.alertInfo = .init(id: .unsavedChanges,
                                              title: L10n.dialogUnsavedChangesTitle,
-                                             message: L10n.dialogUnsavedChangesDescriptionIos,
+                                             message: L10n.dialogUnsavedChangesDescription,
                                              primaryButton: .init(title: L10n.actionSave) { Task { await self.saveRoomDetails() } },
                                              secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.cancel) })
         } else {

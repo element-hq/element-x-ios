@@ -850,6 +850,8 @@ internal enum L10n {
   internal static var dialogTitleSuccess: String { return L10n.tr("Localizable", "dialog_title_success") }
   /// Warning
   internal static var dialogTitleWarning: String { return L10n.tr("Localizable", "dialog_title_warning") }
+  /// You have unsaved changes.
+  internal static var dialogUnsavedChangesDescription: String { return L10n.tr("Localizable", "dialog_unsaved_changes_description") }
   /// Your changes won’t be saved
   internal static var dialogUnsavedChangesDescriptionIos: String { return L10n.tr("Localizable", "dialog_unsaved_changes_description_ios") }
   /// Save changes?

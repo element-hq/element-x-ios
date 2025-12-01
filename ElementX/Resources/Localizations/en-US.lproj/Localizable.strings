@@ -373,6 +373,7 @@
 "dialog_default_video_quality_selector_subtitle" = "Select the default quality of videos you upload.";
 "dialog_title_confirmation" = "Confirmation";
 "dialog_title_warning" = "Warning";
+"dialog_unsaved_changes_description" = "You have unsaved changes.";
 "dialog_unsaved_changes_description_ios" = "Your changes won’t be saved";
 "dialog_unsaved_changes_title" = "Save changes?";
 "dialog_video_quality_selector_subtitle_file_size" = "The max file size allowed is: %1$@";
@@ -1036,7 +1037,6 @@
 "screen_room_change_role_moderators_owner_section_footer" = "Owners automatically have admin privileges.";
 "screen_room_change_role_moderators_title" = "Edit Moderators";
 "screen_room_change_role_owners_title" = "Choose Owners";
-"screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_details_add_topic_title" = "Add topic";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
@@ -1419,6 +1419,7 @@
 "screen_room_change_role_section_administrators" = "Admins";
 "screen_room_change_role_section_moderators" = "Moderators";
 "screen_room_change_role_section_users" = "Members";
+"screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_change_role_unsaved_changes_title" = "Save changes?";
 "screen_room_details_badge_public" = "Public room";
 "screen_room_details_invite_people_title" = "Invite people";
