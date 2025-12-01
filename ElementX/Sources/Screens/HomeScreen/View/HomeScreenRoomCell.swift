@@ -89,9 +89,11 @@ struct HomeScreenRoomCell: View {
                 case .sending:
                     CompoundIcon(\.time, size: .xSmall, relativeTo: .compound.bodyLGSemibold)
                         .foregroundStyle(.compound.iconTertiary)
+                        .accessibilityLabel(L10n.commonSending)
                 case .failed:
                     CompoundIcon(\.errorSolid, size: .xSmall, relativeTo: .compound.bodyLGSemibold)
                         .foregroundStyle(.compound.iconCriticalPrimary)
+                        .accessibilityHidden(true) // The last message contains the error.
                 case .none:
                     EmptyView()
                 }
