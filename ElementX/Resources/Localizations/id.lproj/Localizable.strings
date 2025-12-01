@@ -234,6 +234,7 @@
 "common_loading_more" = "Memuat lebih banyak...";
 "common_message" = "Pesan";
 "common_message_actions" = "Tindakan pesan";
+"common_message_failed_to_send" = "Message failed to send";
 "common_message_layout" = "Tata letak pesan";
 "common_message_removed" = "Pesan dihapus";
 "common_modern" = "Modern";
@@ -349,6 +350,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Lupa kunci pemulihan Anda?";
 "confirm_recovery_key_banner_title" = "Penyimpanan kunci Anda tidak sinkron";
 "crash_detection_dialog_content" = "%1$@ mengalami kemogokan saat terakhir kali digunakan. Apakah Anda ingin berbagi laporan kerusakan dengan kami?";
+"crypto_history_visible" = "Messages you send will be shared with new members invited to this room. %1$@";
 "crypto_identity_change_pin_violation" = "Identitas %1$@ telah diatur ulang. %2$@";
 "crypto_identity_change_pin_violation_new" = "Identitas %2$@ %1$@ telah diatur ulang. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
@@ -580,6 +582,11 @@
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
 "screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
+"screen_manage_authorized_spaces_header" = "Spaces where members can join the room without an invitation.";
+"screen_manage_authorized_spaces_title" = "Manage spaces";
+"screen_manage_authorized_spaces_unknown_space" = "(Unknown space)";
+"screen_manage_authorized_spaces_unknown_spaces_section_title" = "Other spaces you’re not a member of";
+"screen_manage_authorized_spaces_your_spaces_section_title" = "Your spaces";
 "screen_media_details_file_format" = "Format berkas";
 "screen_media_details_filename" = "Nama berkas";
 "screen_media_details_no_more_files_to_show" = "Tidak ada lagi berkas untuk ditampilkan";
@@ -648,11 +655,14 @@
 "screen_security_and_privacy_encryption_section_footer" = "Setelah diaktifkan, enkripsi tidak dapat dinonaktifkan.";
 "screen_security_and_privacy_encryption_toggle_title" = "Aktifkan enkripsi ujung ke ujung";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Siapa pun dapat menemukan dan bergabung";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Orang hanya dapat bergabung jika mereka diundang";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Hanya undangan";
 "screen_security_and_privacy_room_access_section_header" = "Akses ruangan";
-"screen_security_and_privacy_room_access_space_members_option_description" = "Space saat ini tidak didukung";
+"screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorized spaces can join.";
+"screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
 "screen_security_and_privacy_room_access_space_members_option_title" = "Anggota space";
+"screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Space saat ini tidak didukung";
 "screen_security_and_privacy_room_address_section_header" = "Address";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Izinkan ruangan ini ditemukan dengan mencari direktori ruangan %1$@ publik";
 "screen_security_and_privacy_room_directory_visibility_toggle_description" = "Allow to be found by searching the public directory.";
@@ -1365,6 +1375,7 @@
 "screen_security_and_privacy_ask_to_join_option_title" = "Minta untuk bergabung";
 "screen_security_and_privacy_encryption_section_header" = "Enkripsi";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Siapa pun";
+"screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
 "screen_security_and_privacy_room_address_section_footer" = "Anda akan memerlukan alamat ruangan untuk membuatnya terlihat dalam direktori.";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Siapa pun";
 "screen_space_settings_leave_space" = "Leave space";

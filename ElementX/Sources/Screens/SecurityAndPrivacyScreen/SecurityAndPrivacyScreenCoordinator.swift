@@ -18,6 +18,7 @@ struct SecurityAndPrivacyScreenCoordinatorParameters {
 
 enum SecurityAndPrivacyScreenCoordinatorAction {
     case displayEditAddressScreen
+    case dismiss
 }
 
 final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
@@ -45,6 +46,8 @@ final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .displayEditAddressScreen:
                 actionsSubject.send(.displayEditAddressScreen)
+            case .dismiss:
+                actionsSubject.send(.dismiss)
             }
         }
         .store(in: &cancellables)

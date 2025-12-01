@@ -234,6 +234,7 @@
 "common_loading_more" = "載入更多……";
 "common_message" = "訊息";
 "common_message_actions" = "訊息動作";
+"common_message_failed_to_send" = "Message failed to send";
 "common_message_layout" = "訊息佈局";
 "common_message_removed" = "訊息已移除";
 "common_modern" = "現代";
@@ -349,6 +350,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "忘記了您的復原金鑰？";
 "confirm_recovery_key_banner_title" = "您的金鑰儲存空間並未同步";
 "crash_detection_dialog_content" = "%1$@ 上次使用時當機了。您想要與我們分享當機報告嗎？";
+"crypto_history_visible" = "Messages you send will be shared with new members invited to this room. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@ 的身份似乎已重設。%2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@ 的 %2$@ 身份似乎已重設。%3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "（%1$@）";
@@ -580,6 +582,11 @@
 "screen_leave_space_subtitle_only_last_admin" = "您不會被從以下聊天室移除，因為您是唯一的管理員：";
 "screen_leave_space_title" = "離開 %1$@？";
 "screen_leave_space_title_last_admin" = "您是 %1$@ 唯一的管理員";
+"screen_manage_authorized_spaces_header" = "Spaces where members can join the room without an invitation.";
+"screen_manage_authorized_spaces_title" = "Manage spaces";
+"screen_manage_authorized_spaces_unknown_space" = "(Unknown space)";
+"screen_manage_authorized_spaces_unknown_spaces_section_title" = "Other spaces you’re not a member of";
+"screen_manage_authorized_spaces_your_spaces_section_title" = "Your spaces";
 "screen_media_details_file_format" = "檔案格式";
 "screen_media_details_filename" = "檔案名稱";
 "screen_media_details_no_more_files_to_show" = "無可顯示的檔案";
@@ -648,11 +655,14 @@
 "screen_security_and_privacy_encryption_section_footer" = "一旦啟用就無法停用加密。";
 "screen_security_and_privacy_encryption_toggle_title" = "啟用端到端加密";
 "screen_security_and_privacy_room_access_anyone_option_description" = "任何人都可以加入。";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "僅受邀者才能加入。";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "僅限邀請";
 "screen_security_and_privacy_room_access_section_header" = "存取權";
-"screen_security_and_privacy_room_access_space_members_option_description" = "目前不支援空間";
+"screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorized spaces can join.";
+"screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
 "screen_security_and_privacy_room_access_space_members_option_title" = "空間成員";
+"screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "目前不支援空間";
 "screen_security_and_privacy_room_address_section_header" = "地址";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "允許透過搜尋 %1$@ 公開聊天室目錄找到此聊天室";
 "screen_security_and_privacy_room_directory_visibility_toggle_description" = "允許其他人透過公開目錄找到。";
@@ -1365,6 +1375,7 @@
 "screen_security_and_privacy_ask_to_join_option_title" = "要求加入";
 "screen_security_and_privacy_encryption_section_header" = "加密";
 "screen_security_and_privacy_room_access_anyone_option_title" = "任何人";
+"screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
 "screen_security_and_privacy_room_address_section_footer" = "您需要地址才能在公開目錄中顯示。";
 "screen_security_and_privacy_room_history_anyone_option_title" = "任何人";
 "screen_space_settings_leave_space" = "離開空間";

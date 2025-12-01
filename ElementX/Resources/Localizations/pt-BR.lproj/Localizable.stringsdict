@@ -285,9 +285,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Leave %1$d room and space</string>
+			<string>Sair de %1$d sala e espaço</string>
 			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>Sair de %1$d salas e do espaço</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -317,9 +317,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Banned</string>
+			<string>%1$d banido</string>
 			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d banidos</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -349,9 +349,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Invited</string>
+			<string>%1$d convidado</string>
 			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d convidados</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -461,9 +461,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
+			<string>Você bloqueou %1$d usuário. Você não receberá notificações deste usuário.</string>
 			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>Você bloqueou %1$d usuários. Você não receberá notificações deles.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

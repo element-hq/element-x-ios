@@ -774,6 +774,10 @@ internal enum L10n {
   internal static func crashDetectionDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crash_detection_dialog_content", String(describing: p1))
   }
+  /// Messages you send will be shared with new members invited to this room. %1$@
+  internal static func cryptoHistoryVisible(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "crypto_history_visible", String(describing: p1))
+  }
   /// %1$@'s identity was reset. %2$@
   internal static func cryptoIdentityChangePinViolation(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation", String(describing: p1), String(describing: p2))
@@ -850,6 +854,8 @@ internal enum L10n {
   internal static var dialogTitleSuccess: String { return L10n.tr("Localizable", "dialog_title_success") }
   /// Warning
   internal static var dialogTitleWarning: String { return L10n.tr("Localizable", "dialog_title_warning") }
+  /// You have unsaved changes.
+  internal static var dialogUnsavedChangesDescription: String { return L10n.tr("Localizable", "dialog_unsaved_changes_description") }
   /// Your changes won’t be saved
   internal static var dialogUnsavedChangesDescriptionIos: String { return L10n.tr("Localizable", "dialog_unsaved_changes_description_ios") }
   /// Save changes?
@@ -1890,6 +1896,16 @@ internal enum L10n {
   internal static func screenLoginTitleWithHomeserver(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_login_title_with_homeserver", String(describing: p1))
   }
+  /// Spaces where members can join the room without an invitation.
+  internal static var screenManageAuthorizedSpacesHeader: String { return L10n.tr("Localizable", "screen_manage_authorized_spaces_header") }
+  /// Manage spaces
+  internal static var screenManageAuthorizedSpacesTitle: String { return L10n.tr("Localizable", "screen_manage_authorized_spaces_title") }
+  /// (Unknown space)
+  internal static var screenManageAuthorizedSpacesUnknownSpace: String { return L10n.tr("Localizable", "screen_manage_authorized_spaces_unknown_space") }
+  /// Other spaces you’re not a member of
+  internal static var screenManageAuthorizedSpacesUnknownSpacesSectionTitle: String { return L10n.tr("Localizable", "screen_manage_authorized_spaces_unknown_spaces_section_title") }
+  /// Your spaces
+  internal static var screenManageAuthorizedSpacesYourSpacesSectionTitle: String { return L10n.tr("Localizable", "screen_manage_authorized_spaces_your_spaces_section_title") }
   /// This file will be removed from the room and members won’t have access to it.
   internal static var screenMediaBrowserDeleteConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_delete_confirmation_subtitle") }
   /// Delete file?

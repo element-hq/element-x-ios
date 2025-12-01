@@ -234,6 +234,7 @@
 "common_loading_more" = "Daha fazla yükleniyor...";
 "common_message" = "Mesaj";
 "common_message_actions" = "Mesaj eylemleri";
+"common_message_failed_to_send" = "Message failed to send";
 "common_message_layout" = "Mesaj düzeni";
 "common_message_removed" = "Mesaj kaldırıldı";
 "common_modern" = "Modern";
@@ -349,6 +350,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Kurtarma anahtarınızı mı unuttunuz?";
 "confirm_recovery_key_banner_title" = "Anahtar depolama alanınız senkronize değil";
 "crash_detection_dialog_content" = "%1$@ son kullanıldığında çöktü. Bizimle bir çökme raporu paylaşmak ister misiniz?";
+"crypto_history_visible" = "Messages you send will be shared with new members invited to this room. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@ kişinin kimliği değişti. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@'ın %2$@ kimliği değişti. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
@@ -580,6 +582,11 @@
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
 "screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
+"screen_manage_authorized_spaces_header" = "Spaces where members can join the room without an invitation.";
+"screen_manage_authorized_spaces_title" = "Manage spaces";
+"screen_manage_authorized_spaces_unknown_space" = "(Unknown space)";
+"screen_manage_authorized_spaces_unknown_spaces_section_title" = "Other spaces you’re not a member of";
+"screen_manage_authorized_spaces_your_spaces_section_title" = "Your spaces";
 "screen_media_details_file_format" = "Dosya biçimi";
 "screen_media_details_filename" = "Dosya adı";
 "screen_media_details_no_more_files_to_show" = "Gösterilecek daha fazla dosya yok";
@@ -648,11 +655,14 @@
 "screen_security_and_privacy_encryption_section_footer" = "Açıldıktan donra şifreleme kapatılamaz.";
 "screen_security_and_privacy_encryption_toggle_title" = "Uçtan uca şifrelemeyi etkinleştir";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Herkes bulabilir ve katılabilir";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "İnsanlar yalnızca davet edildiklerinde katılabilirler";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Yalnızca davet";
 "screen_security_and_privacy_room_access_section_header" = "Oda Erişimi";
-"screen_security_and_privacy_room_access_space_members_option_description" = "Alanlar şu anda desteklenmiyor";
+"screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorized spaces can join.";
+"screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
 "screen_security_and_privacy_room_access_space_members_option_title" = "Alan üyeleri";
+"screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Alanlar şu anda desteklenmiyor";
 "screen_security_and_privacy_room_address_section_header" = "Oda adresi";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Bu odanın %1$@ genel oda dizininde arama yapılarak bulunmasına izin verin";
 "screen_security_and_privacy_room_directory_visibility_toggle_description" = "Allow to be found by searching the public directory.";
@@ -1365,6 +1375,7 @@
 "screen_security_and_privacy_ask_to_join_option_title" = "Katılmak için sor";
 "screen_security_and_privacy_encryption_section_header" = "Şifreleme";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Herkes";
+"screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
 "screen_security_and_privacy_room_address_section_footer" = "Dizinde görünür hale getirmek için bir oda adresine ihtiyacınız olacak.";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Herkes";
 "screen_space_settings_leave_space" = "Leave space";
