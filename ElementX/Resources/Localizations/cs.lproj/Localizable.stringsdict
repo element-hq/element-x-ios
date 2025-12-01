@@ -351,9 +351,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Banned</string>
+			<string>%1$d vykázán(a)</string>
+			<key>few</key>
+			<string>%1$d vykázáni</string>
 			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d vykázáných</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -385,9 +387,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Invited</string>
+			<string>%1$d pozván(a)</string>
+			<key>few</key>
+			<string>%1$d pozváni</string>
 			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d pozvaných</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
