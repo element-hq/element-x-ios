@@ -39,6 +39,7 @@ struct SecurityAndPrivacyScreen: View {
         .compoundList()
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(L10n.screenSecurityAndPrivacyTitle)
+        .navigationBarBackButtonHidden(!context.viewState.isSaveDisabled)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
     }
@@ -185,6 +186,14 @@ struct SecurityAndPrivacyScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            if !context.viewState.isSaveDisabled {
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
+            }
+        }
+        
         ToolbarItem(placement: .confirmationAction) {
             Button(L10n.actionSave) {
                 context.send(viewAction: .save)

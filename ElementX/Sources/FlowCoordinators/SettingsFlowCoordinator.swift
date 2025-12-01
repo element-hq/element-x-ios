@@ -155,6 +155,14 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              userIndicatorController: flowParameters.userIndicatorController,
                                                                              appSettings: flowParameters.appSettings))
+        coordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .dismiss:
+                    self?.navigationStackCoordinator.pop()
+                }
+            }
+            .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator)
     }

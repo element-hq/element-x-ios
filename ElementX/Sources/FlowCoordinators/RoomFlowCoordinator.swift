@@ -1355,6 +1355,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .displayEditAddressScreen:
                 presentEditAddressScreen()
+            case .dismiss:
+                navigationStackCoordinator.pop()
             }
         }
         .store(in: &cancellables)

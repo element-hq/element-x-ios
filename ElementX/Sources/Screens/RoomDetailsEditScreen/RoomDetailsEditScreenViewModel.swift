@@ -60,9 +60,9 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     override func process(viewAction: RoomDetailsEditScreenViewAction) {
         switch viewAction {
         case .cancel:
-            actionsSubject.send(.cancel)
+            cancel()
         case .save:
-            saveRoomDetails()
+            Task { await saveRoomDetails() }
         case .presentMediaSource:
             state.bindings.showMediaSheet = true
         case .displayCameraPicker:
@@ -110,50 +110,60 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         }
     }
     
-    private func saveRoomDetails() {
-        Task {
-            let userIndicatorID = UUID().uuidString
-            defer {
-                userIndicatorController.retractIndicatorWithId(userIndicatorID)
-            }
-            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
-                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                                  title: L10n.screenRoomDetailsUpdatingRoom,
-                                                                  persistent: true))
-            
-            do {
-                try await withThrowingTaskGroup(of: Void.self) { group in
-                    if state.avatarDidChange {
-                        group.addTask {
-                            if let localMedia = await self.state.localMedia {
-                                try await self.roomProxy.uploadAvatar(media: localMedia).get()
-                            } else if await self.state.avatarURL == nil {
-                                try await self.roomProxy.removeAvatar().get()
-                            }
+    private func cancel() {
+        if state.canSave {
+            state.bindings.alertInfo = .init(id: .unsavedChanges,
+                                             title: L10n.dialogUnsavedChangesTitle,
+                                             message: L10n.dialogUnsavedChangesDescription,
+                                             primaryButton: .init(title: L10n.actionSave) { Task { await self.saveRoomDetails() } },
+                                             secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.cancel) })
+        } else {
+            actionsSubject.send(.cancel)
+        }
+    }
+    
+    private func saveRoomDetails() async {
+        let userIndicatorID = UUID().uuidString
+        defer {
+            userIndicatorController.retractIndicatorWithId(userIndicatorID)
+        }
+        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.screenRoomDetailsUpdatingRoom,
+                                                              persistent: true))
+        
+        do {
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                if state.avatarDidChange {
+                    group.addTask {
+                        if let localMedia = await self.state.localMedia {
+                            try await self.roomProxy.uploadAvatar(media: localMedia).get()
+                        } else if await self.state.avatarURL == nil {
+                            try await self.roomProxy.removeAvatar().get()
                         }
                     }
-                    
-                    if state.nameDidChange {
-                        group.addTask {
-                            try await self.roomProxy.setName(self.state.bindings.name).get()
-                        }
-                    }
-                    
-                    if state.topicDidChange {
-                        group.addTask {
-                            try await self.roomProxy.setTopic(self.state.bindings.topic).get()
-                        }
-                    }
-                    
-                    try await group.waitForAll()
                 }
                 
-                actionsSubject.send(.saveFinished)
-            } catch {
-                userIndicatorController.alertInfo = .init(id: .init(),
-                                                          title: L10n.screenRoomDetailsEditionErrorTitle,
-                                                          message: L10n.screenRoomDetailsEditionError)
+                if state.nameDidChange {
+                    group.addTask {
+                        try await self.roomProxy.setName(self.state.bindings.name).get()
+                    }
+                }
+                
+                if state.topicDidChange {
+                    group.addTask {
+                        try await self.roomProxy.setTopic(self.state.bindings.topic).get()
+                    }
+                }
+                
+                try await group.waitForAll()
             }
+            
+            actionsSubject.send(.saveFinished)
+        } catch {
+            userIndicatorController.alertInfo = .init(id: .init(),
+                                                      title: L10n.screenRoomDetailsEditionErrorTitle,
+                                                      message: L10n.screenRoomDetailsEditionError)
         }
     }
 }

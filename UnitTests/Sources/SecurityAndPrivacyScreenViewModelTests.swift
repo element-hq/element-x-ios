@@ -88,6 +88,67 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         }
     }
     
+    func testSave() async throws {
+        setupViewModel(isSpaceSettingsEnabled: false, joinedParentSpaces: [], joinRule: .public)
+        
+        // Saving shouldn't dismiss this screen (or trigger any other action).
+        let deferred = deferFailure(viewModel.actionsPublisher, timeout: 1) { _ in true }
+        
+        context.desiredSettings.accessType = .inviteOnly
+        context.send(viewAction: .save)
+        
+        try await deferred.fulfill()
+    }
+    
+    func testCancelWithChangesAndDiscard() async throws {
+        setupViewModel(isSpaceSettingsEnabled: false, joinedParentSpaces: [], joinRule: .public)
+        context.desiredSettings.accessType = .inviteOnly
+        XCTAssertFalse(context.viewState.isSaveDisabled)
+        XCTAssertNil(context.alertInfo)
+        
+        context.send(viewAction: .cancel)
+        
+        XCTAssertNotNil(context.alertInfo)
+        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .dismiss }
+        context.alertInfo?.secondaryButton?.action?() // Discard
+        try await deferred.fulfill()
+    }
+    
+    func testCancelWithChangesAndSave() async throws {
+        setupViewModel(isSpaceSettingsEnabled: false, joinedParentSpaces: [], joinRule: .public)
+        context.desiredSettings.accessType = .inviteOnly
+        XCTAssertFalse(context.viewState.isSaveDisabled)
+        XCTAssertNil(context.alertInfo)
+        
+        context.send(viewAction: .cancel)
+        
+        XCTAssertNotNil(context.alertInfo)
+        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .dismiss }
+        context.alertInfo?.primaryButton.action?() // Save
+        try await deferred.fulfill()
+    }
+    
+    func testCancelWithChangesAndSaveWithFailure() async throws {
+        setupViewModel(isSpaceSettingsEnabled: false, joinedParentSpaces: [], joinRule: .public)
+        roomProxy.updateJoinRuleReturnValue = .failure(.sdkError(RoomProxyMockError.generic))
+        context.desiredSettings.accessType = .inviteOnly
+        XCTAssertFalse(context.viewState.isSaveDisabled)
+        XCTAssertNil(context.alertInfo)
+        
+        context.send(viewAction: .cancel)
+        
+        XCTAssertNotNil(context.alertInfo)
+        
+        // The screen should not be dismissed if a failure occurred.
+        let deferred = deferFailure(viewModel.actionsPublisher, timeout: 1) { _ in true }
+        context.alertInfo?.primaryButton.action?() // Save
+        try await deferred.fulfill()
+    }
+    
+    // MARK: - Helpers
+    
     private func setupViewModel(isSpaceSettingsEnabled: Bool,
                                 joinedParentSpaces: [SpaceRoomProxyProtocol],
                                 joinRule: JoinRule) {
@@ -98,6 +159,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
                                               members: .allMembersAsCreator,
                                               joinRule: joinRule,
                                               isVisibleInPublicDirectory: true))
+        roomProxy.updateJoinRuleReturnValue = .success(())
         
         viewModel = SecurityAndPrivacyScreenViewModel(roomProxy: roomProxy,
                                                       clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",

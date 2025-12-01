@@ -256,6 +256,8 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .displayEditAddressScreen:
                 self.stateMachine.tryEvent(.presentEditAddress)
+            case .dismiss:
+                navigationStackCoordinator.pop()
             }
         }
         .store(in: &cancellables)

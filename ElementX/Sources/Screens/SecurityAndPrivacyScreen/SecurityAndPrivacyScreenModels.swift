@@ -10,6 +10,7 @@ import Foundation
 
 enum SecurityAndPrivacyScreenViewModelAction {
     case displayEditAddressScreen
+    case dismiss
 }
 
 struct SecurityAndPrivacyScreenViewState: BindableState {
@@ -188,9 +189,11 @@ enum SecurityAndPrivacyRoomAccessType: Equatable {
 
 enum SecurityAndPrivacyAlertType {
     case enableEncryption
+    case unsavedChanges
 }
 
 enum SecurityAndPrivacyScreenViewAction {
+    case cancel
     case save
     case tryUpdatingEncryption(Bool)
     case editAddress
