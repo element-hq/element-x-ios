@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import MatrixRustSDK
 import XCTest
 
@@ -88,6 +89,96 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         }
     }
     
+    func testMultipleKnownSpacesMembersSelection() async throws {
+        let spaces = [SpaceRoomProxyProtocol].mockJoinedSpaces2
+        setupViewModel(isSpaceSettingsEnabled: true, joinedParentSpaces: spaces, joinRule: .public)
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.joinedParentSpaces.count == 3 }
+        try await deferred.fulfill()
+        
+        XCTAssertEqual(context.viewState.currentSettings.accessType, .anyone)
+        XCTAssertTrue(context.viewState.isSaveDisabled)
+        XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
+        guard case .multiple = context.viewState.spaceSelection else {
+            XCTFail("Expected spaceSelection to be .singleSpace")
+            return
+        }
+        
+        var desiredSpaceIDs: PassthroughSubject<Set<String>, Never>!
+        let deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
+            switch action {
+            case .displayManageAuthorizedSpacesScreen(let authorizedSpacesSelection):
+                defer { desiredSpaceIDs = authorizedSpacesSelection.desiredSelectIDs }
+                return authorizedSpacesSelection.joinedParentSpaces.map(\.id) == spaces.map(\.id) &&
+                    authorizedSpacesSelection.unknownSpacesIDs.isEmpty &&
+                    authorizedSpacesSelection.currentSelectedIDs.isEmpty
+            default:
+                return false
+            }
+        }
+        context.send(viewAction: .selectedSpaceMembersAccess)
+        try await deferredAction.fulfill()
+        desiredSpaceIDs.send([spaces[0].id])
+        XCTAssertEqual(context.desiredSettings.accessType, .spaceUsers(spaceIDs: [spaces[0].id]))
+        XCTAssertNotNil(context.viewState.accessSectionFooter)
+        XCTAssertFalse(context.viewState.isSaveDisabled)
+
+        let expectation = expectation(description: "Join rule has updated")
+        roomProxy.updateJoinRuleClosure = { value in
+            XCTAssertEqual(value, .restricted(rules: [.roomMembership(roomId: spaces[0].id)]))
+            expectation.fulfill()
+            return .success(())
+        }
+        context.send(viewAction: .save)
+        await fulfillment(of: [expectation])
+    }
+    
+    func testMultipleSpacesMembersSelection() async throws {
+        let spaces = [SpaceRoomProxyProtocol].mockJoinedSpaces2
+        setupViewModel(isSpaceSettingsEnabled: true,
+                       joinedParentSpaces: spaces,
+                       joinRule: .restricted(rules: [.roomMembership(roomId: "unknownSpaceID")]))
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 4 }
+        try await deferred.fulfill()
+        
+        XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceUsers)
+        XCTAssertTrue(context.viewState.isSaveDisabled)
+        XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
+        guard case .multiple = context.viewState.spaceSelection else {
+            XCTFail("Expected spaceSelection to be .singleSpace")
+            return
+        }
+        
+        var desiredSpaceIDs: PassthroughSubject<Set<String>, Never>!
+        let deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
+            switch action {
+            case .displayManageAuthorizedSpacesScreen(let authorizedSpacesSelection):
+                defer { desiredSpaceIDs = authorizedSpacesSelection.desiredSelectIDs }
+                return authorizedSpacesSelection.joinedParentSpaces.map(\.id) == spaces.map(\.id) &&
+                    authorizedSpacesSelection.unknownSpacesIDs == ["unknownSpaceID"] &&
+                    authorizedSpacesSelection.currentSelectedIDs == ["unknownSpaceID"]
+            default:
+                return false
+            }
+        }
+        context.send(viewAction: .manageSpaces)
+        try await deferredAction.fulfill()
+        desiredSpaceIDs.send([spaces[0].id, "unknownSpaceID"])
+        XCTAssertEqual(context.desiredSettings.accessType, .spaceUsers(spaceIDs: [spaces[0].id, "unknownSpaceID"]))
+        XCTAssertNotNil(context.viewState.accessSectionFooter)
+        XCTAssertFalse(context.viewState.isSaveDisabled)
+
+        let expectation = expectation(description: "Join rule has updated")
+        roomProxy.updateJoinRuleClosure = { value in
+            XCTAssertEqual(value, .restricted(rules: [.roomMembership(roomId: spaces[0].id), .roomMembership(roomId: "unknownSpaceID")]))
+            expectation.fulfill()
+            return .success(())
+        }
+        context.send(viewAction: .save)
+        await fulfillment(of: [expectation])
+    }
+    
     func testSave() async throws {
         setupViewModel(isSpaceSettingsEnabled: false, joinedParentSpaces: [], joinRule: .public)
         
@@ -110,7 +201,14 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         
         XCTAssertNotNil(context.alertInfo)
         
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .dismiss }
+        let deferred = deferFulfillment(viewModel.actionsPublisher) {
+            switch $0 {
+            case .dismiss:
+                true
+            default:
+                false
+            }
+        }
         context.alertInfo?.secondaryButton?.action?() // Discard
         try await deferred.fulfill()
     }
@@ -125,7 +223,14 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         
         XCTAssertNotNil(context.alertInfo)
         
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .dismiss }
+        let deferred = deferFulfillment(viewModel.actionsPublisher) {
+            switch $0 {
+            case .dismiss:
+                true
+            default:
+                false
+            }
+        }
         context.alertInfo?.primaryButton.action?() // Save
         try await deferred.fulfill()
     }
@@ -160,6 +265,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
                                               joinRule: joinRule,
                                               isVisibleInPublicDirectory: true))
         roomProxy.updateJoinRuleReturnValue = .success(())
+        roomProxy.updateRoomDirectoryVisibilityReturnValue = .success(())
         
         viewModel = SecurityAndPrivacyScreenViewModel(roomProxy: roomProxy,
                                                       clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",

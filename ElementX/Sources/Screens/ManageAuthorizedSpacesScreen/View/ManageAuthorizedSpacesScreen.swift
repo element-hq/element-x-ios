@@ -104,9 +104,9 @@ struct ManageAuthorizedSpacesScreen_Previews: PreviewProvider, TestablePreview {
                                                                                                   unknownSpacesIDs: ["!unknown-space-id-1",
                                                                                                                      "!unknown-space-id-2",
                                                                                                                      "!unknown-space-id-3"],
-                                                                                                  selectedIDs: ["space1",
-                                                                                                                "space3",
-                                                                                                                "!unknown-space-id-2"]),
+                                                                                                  currentSelectedIDs: ["space1",
+                                                                                                                       "space3",
+                                                                                                                       "!unknown-space-id-2"]),
                                                                  mediaProvider: MediaProviderMock(configuration: .init()))
     
     static var previews: some View {

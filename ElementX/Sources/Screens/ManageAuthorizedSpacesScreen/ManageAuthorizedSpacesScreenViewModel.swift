@@ -30,8 +30,8 @@ class ManageAuthorizedSpacesScreenViewModel: ManageAuthorizedSpacesScreenViewMod
         case .cancel:
             actionsSubject.send(.dismiss)
         case .done:
-            // TODO: Implement
-            break
+            state.authorizedSpacesSelection.desiredSelectIDs.send(state.desiredSelectedIDs)
+            actionsSubject.send(.dismiss)
         case .toggle(let spaceID):
             if state.desiredSelectedIDs.contains(spaceID) {
                 state.desiredSelectedIDs.remove(spaceID)

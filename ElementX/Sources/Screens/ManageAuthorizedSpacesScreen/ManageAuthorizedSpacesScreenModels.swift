@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Foundation
 
 enum ManageAuthorizedSpacesScreenViewModelAction {
@@ -16,7 +17,7 @@ struct ManageAuthorizedSpacesScreenViewState: BindableState {
     var desiredSelectedIDs: Set<String>
     
     var hasChanges: Bool {
-        authorizedSpacesSelection.selectedIDs != desiredSelectedIDs
+        authorizedSpacesSelection.currentSelectedIDs != desiredSelectedIDs
     }
     
     var isDoneButtonDisabled: Bool {
@@ -25,7 +26,7 @@ struct ManageAuthorizedSpacesScreenViewState: BindableState {
     
     init(authorizedSpacesSelection: AuthorizedSpacesSelection) {
         self.authorizedSpacesSelection = authorizedSpacesSelection
-        desiredSelectedIDs = authorizedSpacesSelection.selectedIDs
+        desiredSelectedIDs = authorizedSpacesSelection.currentSelectedIDs
     }
 }
 
@@ -38,5 +39,6 @@ enum ManageAuthorizedSpacesScreenViewAction {
 struct AuthorizedSpacesSelection {
     let joinedParentSpaces: [SpaceRoomProxyProtocol]
     let unknownSpacesIDs: [String]
-    let selectedIDs: Set<String>
+    let currentSelectedIDs: Set<String>
+    let desiredSelectIDs: PassthroughSubject<Set<String>, Never> = .init()
 }
