@@ -3732,18 +3732,18 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await removeAvatarClosure?()
     }
 
-    //MARK: - resetServerInfo
+    //MARK: - resetSupportedVersions
 
-    open var resetServerInfoThrowableError: Error?
-    var resetServerInfoUnderlyingCallsCount = 0
-    open var resetServerInfoCallsCount: Int {
+    open var resetSupportedVersionsThrowableError: Error?
+    var resetSupportedVersionsUnderlyingCallsCount = 0
+    open var resetSupportedVersionsCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return resetServerInfoUnderlyingCallsCount
+                return resetSupportedVersionsUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = resetServerInfoUnderlyingCallsCount
+                    returnValue = resetSupportedVersionsUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -3751,25 +3751,65 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                resetServerInfoUnderlyingCallsCount = newValue
+                resetSupportedVersionsUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    resetServerInfoUnderlyingCallsCount = newValue
+                    resetSupportedVersionsUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var resetServerInfoCalled: Bool {
-        return resetServerInfoCallsCount > 0
+    open var resetSupportedVersionsCalled: Bool {
+        return resetSupportedVersionsCallsCount > 0
     }
-    open var resetServerInfoClosure: (() async throws -> Void)?
+    open var resetSupportedVersionsClosure: (() async throws -> Void)?
 
-    open override func resetServerInfo() async throws {
-        if let error = resetServerInfoThrowableError {
+    open override func resetSupportedVersions() async throws {
+        if let error = resetSupportedVersionsThrowableError {
             throw error
         }
-        resetServerInfoCallsCount += 1
-        try await resetServerInfoClosure?()
+        resetSupportedVersionsCallsCount += 1
+        try await resetSupportedVersionsClosure?()
+    }
+
+    //MARK: - resetWellKnown
+
+    open var resetWellKnownThrowableError: Error?
+    var resetWellKnownUnderlyingCallsCount = 0
+    open var resetWellKnownCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetWellKnownUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetWellKnownUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetWellKnownUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetWellKnownUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var resetWellKnownCalled: Bool {
+        return resetWellKnownCallsCount > 0
+    }
+    open var resetWellKnownClosure: (() async throws -> Void)?
+
+    open override func resetWellKnown() async throws {
+        if let error = resetWellKnownThrowableError {
+            throw error
+        }
+        resetWellKnownCallsCount += 1
+        try await resetWellKnownClosure?()
     }
 
     //MARK: - resolveRoomAlias
@@ -22980,6 +23020,71 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
             self.addChildToSpaceChildIdSpaceIdReceivedInvocations.append((childId: childId, spaceId: spaceId))
         }
         try await addChildToSpaceChildIdSpaceIdClosure?(childId, spaceId)
+    }
+
+    //MARK: - editableSpaces
+
+    var editableSpacesUnderlyingCallsCount = 0
+    open var editableSpacesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return editableSpacesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editableSpacesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editableSpacesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editableSpacesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var editableSpacesCalled: Bool {
+        return editableSpacesCallsCount > 0
+    }
+
+    var editableSpacesUnderlyingReturnValue: [SpaceRoom]!
+    open var editableSpacesReturnValue: [SpaceRoom]! {
+        get {
+            if Thread.isMainThread {
+                return editableSpacesUnderlyingReturnValue
+            } else {
+                var returnValue: [SpaceRoom]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editableSpacesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editableSpacesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editableSpacesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var editableSpacesClosure: (() async -> [SpaceRoom])?
+
+    open override func editableSpaces() async -> [SpaceRoom] {
+        editableSpacesCallsCount += 1
+        if let editableSpacesClosure = editableSpacesClosure {
+            return await editableSpacesClosure()
+        } else {
+            return editableSpacesReturnValue
+        }
     }
 
     //MARK: - joinedParentsOfChild
