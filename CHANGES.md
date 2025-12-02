@@ -1,3 +1,51 @@
+## Changes in 25.12.0 (2025-12-02)
+
+### What's Changed
+
+🙌 Improvements
+* Room members list redesign by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4769
+* Redesigned empty state for room members list by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4771
+* Update the date separators to use "Today", "Yesterday" etc for messages in the past 7 days. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4785
+* Show the send state in the room list. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4791
+* Make multi selection accessory leading by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4795
+* Update Compound's List header style to match our iOS 26 components. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4797
+* Add the same unsaved changes alerts that Android has. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4803
+* Add a specific notification body for space invites. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4808
+
+🐛 Bugfixes
+* Favour network over homeserver reachability when computing the offline indicator. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4805
+* Fix missing read receipts in the timeline and edits in the room list. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4807
+
+⚠️ API Changes
+* Drop support for iOS 17 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4796
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4777
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4802
+
+🦻 Accessibility
+* Add accessibility hints for the send state in the room list. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4804
+
+🧱 Build
+* Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4782
+
+🚧 In development 🚧
+* Single space members access option by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4787
+* Manage multiple spaces members access by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4798
+
+Others
+* Update the enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4768
+* Update actions/checkout action to v6 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4767
+* Update peter-evans/create-pull-request action to v7.0.9 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4774
+* Esperanto deleted and regenerated some preview tests by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4776
+* Adopt the new latest event API. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4779
+* Update dependency element-hq/compound-design-tokens to v6.4.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4780
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4792
+* Update dependency element-hq/compound-design-tokens to v6.4.2 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4806
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.11.3...release/25.12.0
+
 ## Changes in 25.11.3 (2025-11-20)
 
 ### What's Changed
