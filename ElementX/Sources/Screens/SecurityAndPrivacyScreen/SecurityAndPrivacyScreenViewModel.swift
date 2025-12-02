@@ -245,6 +245,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: [joinedParent.id])
         case .singleUnknown(let id):
             state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: [id])
+        case .empty:
+            break // Very edge case. We do nothing in this case.
         case .multiple:
             displayManageAuthorizedSpacesScreen()
         }
