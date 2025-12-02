@@ -11776,6 +11776,11 @@ class NotificationItemProxyMock: NotificationItemProxyProtocol, @unchecked Senda
         set(value) { underlyingRoomJoinedMembers = value }
     }
     var underlyingRoomJoinedMembers: Int!
+    var isRoomSpace: Bool {
+        get { return underlyingIsRoomSpace }
+        set(value) { underlyingIsRoomSpace = value }
+    }
+    var underlyingIsRoomSpace: Bool!
     var isRoomDirect: Bool {
         get { return underlyingIsRoomDirect }
         set(value) { underlyingIsRoomDirect = value }

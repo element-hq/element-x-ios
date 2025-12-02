@@ -1034,6 +1034,8 @@ internal enum L10n {
   internal static func notificationSenderMentionReply(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_sender_mention_reply", String(describing: p1))
   }
+  /// Invited you to join the space
+  internal static var notificationSpaceInviteBody: String { return L10n.tr("Localizable", "notification_space_invite_body") }
   /// You are viewing the notification! Click me!
   internal static var notificationTestPushNotificationContent: String { return L10n.tr("Localizable", "notification_test_push_notification_content") }
   /// Thread in %1$@

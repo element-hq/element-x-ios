@@ -99,15 +99,14 @@ struct NotificationContentBuilder {
                                 notificationItem: NotificationItemProxyProtocol,
                                 mediaProvider: MediaProviderProtocol) async {
         notificationContent.categoryIdentifier = NotificationConstants.Category.invite
-
-        let body: String
-        if !notificationItem.isDM {
-            body = L10n.notificationRoomInviteBody
-        } else {
-            body = L10n.notificationInviteBody
-        }
         
-        notificationContent.body = body
+        notificationContent.body = if notificationItem.isDM {
+            L10n.notificationInviteBody
+        } else if notificationItem.isRoomSpace {
+            L10n.notificationSpaceInviteBody
+        } else {
+            L10n.notificationRoomInviteBody
+        }
         
         let name = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         await addCommunicationContext(notificationContent: &notificationContent,
