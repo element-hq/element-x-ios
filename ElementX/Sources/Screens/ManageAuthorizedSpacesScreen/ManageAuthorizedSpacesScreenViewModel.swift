@@ -30,13 +30,13 @@ class ManageAuthorizedSpacesScreenViewModel: ManageAuthorizedSpacesScreenViewMod
         case .cancel:
             actionsSubject.send(.dismiss)
         case .done:
-            state.authorizedSpacesSelection.desiredSelectIDs.send(state.desiredSelectedIDs)
+            state.authorizedSpacesSelection.selectedIDs.send(state.selectedIDs)
             actionsSubject.send(.dismiss)
         case .toggle(let spaceID):
-            if state.desiredSelectedIDs.contains(spaceID) {
-                state.desiredSelectedIDs.remove(spaceID)
+            if state.selectedIDs.contains(spaceID) {
+                state.selectedIDs.remove(spaceID)
             } else {
-                state.desiredSelectedIDs.insert(spaceID)
+                state.selectedIDs.insert(spaceID)
             }
         }
     }
