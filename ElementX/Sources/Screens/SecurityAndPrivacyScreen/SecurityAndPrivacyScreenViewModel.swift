@@ -236,6 +236,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     
     private func handleSelectedSpaceMembersAccess() {
         guard !state.bindings.desiredSettings.accessType.isSpaceUsers else {
+            // If the user is tapping the space members access again we do nothing
             return
         }
         
@@ -257,8 +258,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         let selectedIDs = Set(state.bindings.desiredSettings.accessType.spaceIDs)
         let authorizedSpacesSelection = AuthorizedSpacesSelection(joinedParentSpaces: joinedParentSpaces,
                                                                   unknownSpacesIDs: unknownSpaceIDs,
-                                                                  currentSelectedIDs: selectedIDs)
-        authorizedSpacesSelection.desiredSelectIDs
+                                                                  initialSelectedIDs: selectedIDs)
+        authorizedSpacesSelection.selectedIDs
             .sink { [weak self] desiredSelectedIDs in
                 self?.state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: desiredSelectedIDs.sorted())
             }

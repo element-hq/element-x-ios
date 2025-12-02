@@ -194,6 +194,7 @@ enum TestablePreviewsDictionary {
         "TimelineThreadSummaryView_Previews" : TimelineThreadSummaryView_Previews.self,
         "TimelineView_Previews" : TimelineView_Previews.self,
         "TombstonedAvatarImage_Previews" : TombstonedAvatarImage_Previews.self,
+        "ToolbarButton_Previews" : ToolbarButton_Previews.self,
         "TypingIndicatorView_Previews" : TypingIndicatorView_Previews.self,
         "UnsupportedRoomTimelineView_Previews" : UnsupportedRoomTimelineView_Previews.self,
         "UserDetailsEditScreen_Previews" : UserDetailsEditScreen_Previews.self,

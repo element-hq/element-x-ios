@@ -104,21 +104,21 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
             return
         }
         
-        var desiredSpaceIDs: PassthroughSubject<Set<String>, Never>!
+        var selectedIDs: PassthroughSubject<Set<String>, Never>!
         let deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
             switch action {
             case .displayManageAuthorizedSpacesScreen(let authorizedSpacesSelection):
-                defer { desiredSpaceIDs = authorizedSpacesSelection.desiredSelectIDs }
+                defer { selectedIDs = authorizedSpacesSelection.selectedIDs }
                 return authorizedSpacesSelection.joinedParentSpaces.map(\.id) == spaces.map(\.id) &&
                     authorizedSpacesSelection.unknownSpacesIDs.isEmpty &&
-                    authorizedSpacesSelection.currentSelectedIDs.isEmpty
+                    authorizedSpacesSelection.initialSelectedIDs.isEmpty
             default:
                 return false
             }
         }
         context.send(viewAction: .selectedSpaceMembersAccess)
         try await deferredAction.fulfill()
-        desiredSpaceIDs.send([spaces[0].id])
+        selectedIDs.send([spaces[0].id])
         XCTAssertEqual(context.desiredSettings.accessType, .spaceUsers(spaceIDs: [spaces[0].id]))
         XCTAssertNotNil(context.viewState.accessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
@@ -150,21 +150,22 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
             return
         }
         
-        var desiredSpaceIDs: PassthroughSubject<Set<String>, Never>!
+        var selectedIDs: PassthroughSubject<Set<String>, Never>!
         let deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
             switch action {
             case .displayManageAuthorizedSpacesScreen(let authorizedSpacesSelection):
-                defer { desiredSpaceIDs = authorizedSpacesSelection.desiredSelectIDs }
+                // We need the
+                defer { selectedIDs = authorizedSpacesSelection.selectedIDs }
                 return authorizedSpacesSelection.joinedParentSpaces.map(\.id) == spaces.map(\.id) &&
                     authorizedSpacesSelection.unknownSpacesIDs == ["unknownSpaceID"] &&
-                    authorizedSpacesSelection.currentSelectedIDs == ["unknownSpaceID"]
+                    authorizedSpacesSelection.initialSelectedIDs == ["unknownSpaceID"]
             default:
                 return false
             }
         }
         context.send(viewAction: .manageSpaces)
         try await deferredAction.fulfill()
-        desiredSpaceIDs.send([spaces[0].id, "unknownSpaceID"])
+        selectedIDs.send([spaces[0].id, "unknownSpaceID"])
         XCTAssertEqual(context.desiredSettings.accessType, .spaceUsers(spaceIDs: [spaces[0].id, "unknownSpaceID"]))
         XCTAssertNotNil(context.viewState.accessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)

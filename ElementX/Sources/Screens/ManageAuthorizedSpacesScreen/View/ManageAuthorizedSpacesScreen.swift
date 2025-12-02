@@ -14,11 +14,13 @@ struct ManageAuthorizedSpacesScreen: View {
     var body: some View {
         Form {
             header
+            
             if !context.viewState.authorizedSpacesSelection.joinedParentSpaces.isEmpty {
                 joinedParentsSection
             }
+            
             if !context.viewState.authorizedSpacesSelection.unknownSpacesIDs.isEmpty {
-                unkwnownSpacesSection
+                unknownSpacesSection
             }
         }
         .compoundList()
@@ -50,7 +52,7 @@ struct ManageAuthorizedSpacesScreen: View {
                 ListRow(label: .avatar(title: space.name,
                                        description: space.canonicalAlias,
                                        icon: avatar(space: space)),
-                        kind: .multiSelection(isSelected: context.viewState.desiredSelectedIDs.contains(space.id)) {
+                        kind: .multiSelection(isSelected: context.viewState.selectedIDs.contains(space.id)) {
                             context.send(viewAction: .toggle(spaceID: space.id))
                         })
             }
@@ -60,12 +62,12 @@ struct ManageAuthorizedSpacesScreen: View {
         }
     }
     
-    private var unkwnownSpacesSection: some View {
+    private var unknownSpacesSection: some View {
         Section {
             ForEach(context.viewState.authorizedSpacesSelection.unknownSpacesIDs, id: \.self) { id in
                 ListRow(label: .plain(title: L10n.screenManageAuthorizedSpacesUnknownSpace,
                                       description: id),
-                        kind: .multiSelection(isSelected: context.viewState.desiredSelectedIDs.contains(id)) {
+                        kind: .multiSelection(isSelected: context.viewState.selectedIDs.contains(id)) {
                             context.send(viewAction: .toggle(spaceID: id))
                         })
             }
@@ -104,7 +106,7 @@ struct ManageAuthorizedSpacesScreen_Previews: PreviewProvider, TestablePreview {
                                                                                                   unknownSpacesIDs: ["!unknown-space-id-1",
                                                                                                                      "!unknown-space-id-2",
                                                                                                                      "!unknown-space-id-3"],
-                                                                                                  currentSelectedIDs: ["space1",
+                                                                                                  initialSelectedIDs: ["space1",
                                                                                                                        "space3",
                                                                                                                        "!unknown-space-id-2"]),
                                                                  mediaProvider: MediaProviderMock(configuration: .init()))

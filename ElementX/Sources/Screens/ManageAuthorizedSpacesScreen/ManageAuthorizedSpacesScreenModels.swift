@@ -14,19 +14,19 @@ enum ManageAuthorizedSpacesScreenViewModelAction {
 
 struct ManageAuthorizedSpacesScreenViewState: BindableState {
     let authorizedSpacesSelection: AuthorizedSpacesSelection
-    var desiredSelectedIDs: Set<String>
+    var selectedIDs: Set<String>
     
     var hasChanges: Bool {
-        authorizedSpacesSelection.currentSelectedIDs != desiredSelectedIDs
+        authorizedSpacesSelection.initialSelectedIDs != selectedIDs
     }
     
     var isDoneButtonDisabled: Bool {
-        desiredSelectedIDs.isEmpty || !hasChanges
+        selectedIDs.isEmpty || !hasChanges
     }
     
     init(authorizedSpacesSelection: AuthorizedSpacesSelection) {
         self.authorizedSpacesSelection = authorizedSpacesSelection
-        desiredSelectedIDs = authorizedSpacesSelection.currentSelectedIDs
+        selectedIDs = authorizedSpacesSelection.initialSelectedIDs
     }
 }
 
@@ -39,6 +39,6 @@ enum ManageAuthorizedSpacesScreenViewAction {
 struct AuthorizedSpacesSelection {
     let joinedParentSpaces: [SpaceRoomProxyProtocol]
     let unknownSpacesIDs: [String]
-    let currentSelectedIDs: Set<String>
-    let desiredSelectIDs: PassthroughSubject<Set<String>, Never> = .init()
+    let initialSelectedIDs: Set<String>
+    let selectedIDs: PassthroughSubject<Set<String>, Never> = .init()
 }
