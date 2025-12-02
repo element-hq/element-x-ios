@@ -29,6 +29,8 @@ protocol NotificationItemProxyProtocol {
     var roomAvatarMediaSource: MediaSourceProxy? { get }
 
     var roomJoinedMembers: Int { get }
+    
+    var isRoomSpace: Bool { get }
 
     var isRoomDirect: Bool { get }
     

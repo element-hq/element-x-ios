@@ -36,6 +36,10 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     var roomDisplayName: String {
         notificationItem.roomInfo.displayName
     }
+    
+    var isRoomSpace: Bool {
+        notificationItem.roomInfo.isSpace
+    }
 
     var isRoomDirect: Bool {
         notificationItem.roomInfo.isDirect
@@ -102,6 +106,8 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
 
     var isNoisy: Bool { false }
 
+    var isRoomSpace: Bool { false }
+    
     var isRoomDirect: Bool { false }
     
     var isRoomPrivate: Bool { false }
