@@ -39,7 +39,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.isSaveDisabled)
         XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
         guard case .singleJoined = context.viewState.spaceSelection else {
-            XCTFail("Expected spaceSelection to be .singleSpace")
+            XCTFail("Expected spaceSelection to be .singleJoined")
             return
         }
         
@@ -72,7 +72,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         XCTAssertNil(context.viewState.accessSectionFooter)
         XCTAssertTrue(context.viewState.isSaveDisabled)
         guard case .singleUnknown = context.viewState.spaceSelection else {
-            XCTFail("Expected spaceSelection to be .singleSpace")
+            XCTFail("Expected spaceSelection to be .singleUnknown")
             return
         }
         
@@ -84,7 +84,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.isSaveDisabled)
         XCTAssertEqual(context.desiredSettings.accessType, .spaceUsers(spaceIDs: [space.id]))
         guard case .singleUnknown = context.viewState.spaceSelection else {
-            XCTFail("Expected spaceSelection to be .singleSpace")
+            XCTFail("Expected spaceSelection to be .singleUnknown")
             return
         }
     }
@@ -100,7 +100,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.isSaveDisabled)
         XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
         guard case .multiple = context.viewState.spaceSelection else {
-            XCTFail("Expected spaceSelection to be .singleSpace")
+            XCTFail("Expected spaceSelection to be .multiple")
             return
         }
         
@@ -146,7 +146,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.isSaveDisabled)
         XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
         guard case .multiple = context.viewState.spaceSelection else {
-            XCTFail("Expected spaceSelection to be .singleSpace")
+            XCTFail("Expected spaceSelection to be .multiple")
             return
         }
         
@@ -178,6 +178,60 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         }
         context.send(viewAction: .save)
         await fulfillment(of: [expectation])
+    }
+    
+    func testEmptySpaceMembersSelectionEdgeCase() async throws {
+        // Edge case where there is no available joined parents and the room has a restricted join rule.
+        // With no space ids in it
+        setupViewModel(isSpaceSettingsEnabled: true,
+                       joinedParentSpaces: [],
+                       joinRule: .restricted(rules: []))
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 0 }
+        try await deferred.fulfill()
+        
+        XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceUsers)
+        XCTAssertTrue(context.viewState.isSaveDisabled)
+        XCTAssertFalse(context.viewState.isSpaceMembersOptionSelectable)
+        XCTAssertNil(context.viewState.accessSectionFooter)
+        guard case .empty = context.viewState.spaceSelection else {
+            XCTFail("Expected spaceSelection to be .empty")
+            return
+        }
+    }
+    
+    func testEmptySpaceMembersSelectionWithJoinedParentEdgeCase() async throws {
+        // Edge case where there is one available joined parent but the room has a restricted join rule.
+        // With no space ids in it
+        let singleRoom = [SpaceRoomProxyProtocol].mockSingleRoom
+        setupViewModel(isSpaceSettingsEnabled: true,
+                       joinedParentSpaces: singleRoom,
+                       joinRule: .restricted(rules: []))
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 1 }
+        try await deferred.fulfill()
+        
+        XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceUsers)
+        XCTAssertTrue(context.viewState.isSaveDisabled)
+        XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
+        XCTAssertNotNil(context.viewState.accessSectionFooter)
+        guard case .multiple = context.viewState.spaceSelection else {
+            XCTFail("Expected spaceSelection to be .multiple")
+            return
+        }
+        
+        let deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
+            switch action {
+            case .displayManageAuthorizedSpacesScreen(let authorizedSpacesSelection):
+                return authorizedSpacesSelection.joinedParentSpaces.map(\.id) == singleRoom.map(\.id) &&
+                    authorizedSpacesSelection.unknownSpacesIDs.isEmpty &&
+                    authorizedSpacesSelection.initialSelectedIDs.isEmpty
+            default:
+                return false
+            }
+        }
+        context.send(viewAction: .manageSpaces)
+        try await deferredAction.fulfill()
     }
     
     func testSave() async throws {

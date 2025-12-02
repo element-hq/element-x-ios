@@ -81,7 +81,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
                 L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionSingleParentDescription(joinedParentSpace.name)
             case .singleUnknown(let id):
                 L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionSingleParentDescription(id)
-            case .multiple:
+            case .multiple, .empty:
                 L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionMultipleParentsDescription
             }
         } else {
@@ -90,7 +90,9 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     }
     
     var accessSectionFooter: AttributedString? {
-        if bindings.desiredSettings.accessType.isSpaceUsers, isSpaceMembersOptionSelectable, selectableSpacesCount > 1 {
+        if bindings.desiredSettings.accessType.isSpaceUsers,
+           isSpaceMembersOptionSelectable,
+           case .multiple = spaceSelection {
             Self.accessSectionFooterAttributedString
         } else {
             nil
@@ -104,13 +106,27 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
         case singleUnknown(id: String)
         /// Multiple spaces are available for selection
         case multiple
+        /// Edge case where the space members access type was found but it did not contain any space
+        case empty
     }
     
     var spaceSelection: SpaceSelection {
-        if selectableSpacesCount > 1 {
+        if selectableSpacesCount == 0 {
+            .empty
+        } else if selectableSpacesCount > 1 {
             .multiple
         } else if let joinedParent = joinedParentSpaces.first {
-            .singleJoined(joinedParent)
+            if case let .spaceUsers(ids) = currentSettings.accessType {
+                if ids.isEmpty {
+                    // Edge case where the access type is already space members, but it does not contain any id
+                    // So if the user wants to add their own parent they need to do it from the selection menu
+                    .multiple
+                } else {
+                    .singleJoined(joinedParent)
+                }
+            } else {
+                .singleJoined(joinedParent)
+            }
         } else if let unknownSpaceID = currentSettings.accessType.spaceIDs.first {
             // The space is not joined by the user but is currently selected
             .singleUnknown(id: unknownSpaceID)
