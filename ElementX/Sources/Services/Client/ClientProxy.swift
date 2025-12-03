@@ -715,13 +715,9 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
-    func logout() async {
-        do {
-            try await client.logout()
-        } catch {
-            MXLog.error("Failed logging out with error: \(error)")
-        }
+    
+    func linkNewDeviceService() -> LinkNewDeviceService {
+        LinkNewDeviceService(handler: client.newGrantLoginWithQrCodeHandler())
     }
     
     func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError> {
@@ -731,6 +727,14 @@ class ClientProxy: ClientProxyProtocol {
             return .success(())
         } catch {
             return .failure(.sdkError(error))
+        }
+    }
+    
+    func logout() async {
+        do {
+            try await client.logout()
+        } catch {
+            MXLog.error("Failed logging out with error: \(error)")
         }
     }
     
