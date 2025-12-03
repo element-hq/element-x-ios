@@ -34,6 +34,9 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("General") {
+                Toggle(isOn: $context.newQRCodeLoginFlowsEnabled) {
+                    Text("New QR code login flows")
+                }
                 Toggle(isOn: $context.spaceSettingsEnabled) {
                     Text("Space settings")
                 }

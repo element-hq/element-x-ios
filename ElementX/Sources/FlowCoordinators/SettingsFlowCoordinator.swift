@@ -83,6 +83,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     startEncryptionSettingsFlow(animated: true)
                 case .userDetails:
                     presentUserDetailsEditScreen()
+                case .linkNewDevice:
+                    break
                 case let .manageAccount(url):
                     presentAccountManagementURL(url)
                 case .analytics:

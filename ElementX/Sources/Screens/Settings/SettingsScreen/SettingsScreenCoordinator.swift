@@ -25,6 +25,7 @@ enum SettingsScreenCoordinatorAction {
     case bugReport
     case about
     case blockedUsers
+    case linkNewDevice
     case manageAccount(url: URL)
     case notifications
     case advancedSettings
@@ -59,6 +60,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.dismiss)
                 case .userDetails:
                     actionsSubject.send(.userDetails)
+                case .linkNewDevice:
+                    actionsSubject.send(.linkNewDevice)
                 case let .manageAccount(url):
                     actionsSubject.send(.manageAccount(url: url))
                 case .analytics:

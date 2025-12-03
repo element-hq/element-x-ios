@@ -66,6 +66,7 @@ final class AppSettings {
         case linkPreviewsEnabled
         case spaceSettingsEnabled
         case focusEventOnNotificationTap
+        case newQRCodeLoginFlowsEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -398,6 +399,9 @@ final class AppSettings {
         
     @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkPreviewsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.newQRCodeLoginFlowsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var newQRCodeLoginFlowsEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled

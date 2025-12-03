@@ -108,6 +108,14 @@ struct SettingsScreen: View {
     
     private var manageAccountSection: some View {
         Section {
+            if context.viewState.showLinkNewDeviceButton {
+                ListRow(label: .default(title: UntranslatedL10n.commonLinkNewDevice,
+                                        icon: \.devices),
+                        kind: .navigationLink {
+                            context.send(viewAction: .linkNewDevice)
+                        })
+            }
+            
             if let url = context.viewState.accountProfileURL {
                 ListRow(label: .default(title: L10n.actionManageAccount,
                                         icon: \.userProfile),
