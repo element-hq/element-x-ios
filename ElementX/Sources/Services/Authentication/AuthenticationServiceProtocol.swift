@@ -105,6 +105,7 @@ enum QRCodeLoginError: Error, Equatable {
     case expired
     case deviceNotSupported
     case deviceNotSignedIn
+    case deviceAlreadySignedIn
     case unknown
 }
 

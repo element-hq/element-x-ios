@@ -8,7 +8,7 @@
 import Foundation
 
 enum LinkNewDeviceScreenViewModelAction {
-    case linkMobileDevice
+    case linkMobileDevice(LinkNewDeviceService.GenerateProgressPublisher)
     case linkDesktopComputer
     case dismiss
 }

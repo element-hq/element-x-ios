@@ -6,6 +6,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias LinkNewDeviceScreenViewModelType = StateStoreViewModelV2<LinkNewDeviceScreenViewState, LinkNewDeviceScreenViewAction>
@@ -33,7 +34,7 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         
         switch viewAction {
         case .linkMobileDevice:
-            linkMobileDevice()
+            Task { await linkMobileDevice() }
         case .linkDesktopComputer:
             actionsSubject.send(.linkDesktopComputer)
         case .dismiss:
@@ -51,11 +52,28 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         }
     }
     
-    private func linkMobileDevice() {
+    private func linkMobileDevice() async {
         state.mode = .readyToLink(isGeneratingCode: true)
         
-        // TODO: Generate a QR code.
+        let linkNewDeviceService = clientProxy.linkNewDeviceService()
         
-        actionsSubject.send(.linkMobileDevice)
+        let progressPublisher = linkNewDeviceService.generateQRCode()
+        
+        do {
+            _ = try await linkNewDeviceService.generateQRCode()
+                .values
+                .first { progress in
+                    switch progress {
+                    case .qrReady: true
+                    default: false
+                    }
+                }
+            
+            actionsSubject.send(.linkMobileDevice(progressPublisher))
+            state.mode = .readyToLink(isGeneratingCode: false)
+        } catch {
+            #warning("Nope this is dumb…")
+            state.mode = .notSupported
+        }
     }
 }

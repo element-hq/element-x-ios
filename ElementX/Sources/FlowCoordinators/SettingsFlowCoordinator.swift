@@ -282,7 +282,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .linkMobileDevice:
+                case .linkMobileDevice(let progressPublisher):
                     break
                 case .linkDesktopComputer:
                     break

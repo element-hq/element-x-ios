@@ -4019,6 +4019,70 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return removeUserAvatarReturnValue
         }
     }
+    //MARK: - linkNewDeviceService
+
+    var linkNewDeviceServiceUnderlyingCallsCount = 0
+    var linkNewDeviceServiceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return linkNewDeviceServiceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = linkNewDeviceServiceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                linkNewDeviceServiceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    linkNewDeviceServiceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var linkNewDeviceServiceCalled: Bool {
+        return linkNewDeviceServiceCallsCount > 0
+    }
+
+    var linkNewDeviceServiceUnderlyingReturnValue: LinkNewDeviceService!
+    var linkNewDeviceServiceReturnValue: LinkNewDeviceService! {
+        get {
+            if Thread.isMainThread {
+                return linkNewDeviceServiceUnderlyingReturnValue
+            } else {
+                var returnValue: LinkNewDeviceService? = nil
+                DispatchQueue.main.sync {
+                    returnValue = linkNewDeviceServiceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                linkNewDeviceServiceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    linkNewDeviceServiceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var linkNewDeviceServiceClosure: (() -> LinkNewDeviceService)?
+
+    func linkNewDeviceService() -> LinkNewDeviceService {
+        linkNewDeviceServiceCallsCount += 1
+        if let linkNewDeviceServiceClosure = linkNewDeviceServiceClosure {
+            return linkNewDeviceServiceClosure()
+        } else {
+            return linkNewDeviceServiceReturnValue
+        }
+    }
     //MARK: - deactivateAccount
 
     var deactivateAccountPasswordEraseDataUnderlyingCallsCount = 0

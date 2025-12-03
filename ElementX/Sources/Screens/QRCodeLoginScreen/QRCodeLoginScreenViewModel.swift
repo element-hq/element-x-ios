@@ -140,7 +140,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             state.state = .error(.expired)
         case .deviceNotSupported:
             state.state = .error(.deviceNotSupported)
-        case .unknown:
+        case .deviceAlreadySignedIn, .unknown:
             state.state = .error(.unknown)
         }
     }
