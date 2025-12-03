@@ -239,6 +239,7 @@
 "common_message_removed" = "Message removed";
 "common_modern" = "Modern";
 "common_mute" = "Mute";
+"common_name" = "Name";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "No results";
 "common_no_room_name" = "No room name";
@@ -300,6 +301,7 @@
 "common_something_went_wrong" = "Something went wrong";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_space" = "Space";
+"common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "Starting chat…";
 "common_sticker" = "Sticker";
 "common_success" = "Success";

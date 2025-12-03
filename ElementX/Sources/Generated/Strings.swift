@@ -534,6 +534,8 @@ internal enum L10n {
   internal static var commonModern: String { return L10n.tr("Localizable", "common_modern") }
   /// Mute
   internal static var commonMute: String { return L10n.tr("Localizable", "common_mute") }
+  /// Name
+  internal static var commonName: String { return L10n.tr("Localizable", "common_name") }
   /// %1$@ (%2$@)
   internal static func commonNameAndId(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "common_name_and_id", String(describing: p1), String(describing: p2))
@@ -676,6 +678,8 @@ internal enum L10n {
   internal static var commonSomethingWentWrongMessage: String { return L10n.tr("Localizable", "common_something_went_wrong_message") }
   /// Space
   internal static var commonSpace: String { return L10n.tr("Localizable", "common_space") }
+  /// What is this space about?
+  internal static var commonSpaceTopicPlaceholder: String { return L10n.tr("Localizable", "common_space_topic_placeholder") }
   /// Plural format key: "%#@COUNT@"
   internal static func commonSpaces(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_spaces", p1)

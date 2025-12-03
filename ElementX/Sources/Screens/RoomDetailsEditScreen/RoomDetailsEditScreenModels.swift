@@ -35,7 +35,7 @@ struct RoomDetailsEditScreenViewState: BindableState {
     
     /// The string shown for the room's name when it can't be edited.
     var nameRowTitle: String {
-        bindings.name.isEmpty ? L10n.commonRoomName : bindings.name
+        bindings.name.isEmpty ? L10n.commonName : bindings.name
     }
     
     /// The string shown for the room's topic when it can't be edited.
