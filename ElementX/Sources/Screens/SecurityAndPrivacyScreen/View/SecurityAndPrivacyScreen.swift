@@ -50,13 +50,6 @@ struct SecurityAndPrivacyScreen: View {
                                     description: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionDescription,
                                     icon: \.public),
                     kind: .selection(isSelected: context.desiredSettings.accessType == .anyone) { context.desiredSettings.accessType = .anyone })
-            if context.viewState.isKnockingEnabled || context.viewState.currentSettings.accessType == .askToJoin {
-                ListRow(label: .default(title: L10n.screenSecurityAndPrivacyAskToJoinOptionTitle,
-                                        description: L10n.screenSecurityAndPrivacyAskToJoinOptionDescription,
-                                        icon: \.userAdd),
-                        kind: .selection(isSelected: context.desiredSettings.accessType == .askToJoin) { context.desiredSettings.accessType = .askToJoin })
-                    .disabled(!context.viewState.isKnockingEnabled)
-            }
             
             if context.viewState.isSpaceMembersOptionAvailable {
                 ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionTitle,
@@ -66,6 +59,17 @@ struct SecurityAndPrivacyScreen: View {
                             context.send(viewAction: .selectedSpaceMembersAccess)
                         })
                         .disabled(!context.viewState.isSpaceMembersOptionSelectable)
+            }
+            
+            if context.viewState.currentSettings.accessType == .askToJoin {
+                askToJoinOption
+            }
+            
+            // Ask to join and askToJoin with space members can coexist if the initial setting is ask to join but the space members option is available otherwise it's either one or the other.
+            if context.viewState.isAskToJoinWithSpaceMembersOptionAvailable {
+                askToJoinWithSpaceMembersOption
+            } else if context.viewState.isKnockingEnabled, context.viewState.currentSettings.accessType != .askToJoin {
+                askToJoinOption
             }
             
             ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle,
@@ -85,6 +89,22 @@ struct SecurityAndPrivacyScreen: View {
                     })
             }
         }
+    }
+    
+    private var askToJoinOption: some View {
+        ListRow(label: .default(title: L10n.screenSecurityAndPrivacyAskToJoinOptionTitle,
+                                description: L10n.screenSecurityAndPrivacyAskToJoinOptionDescription,
+                                icon: \.userAdd),
+                kind: .selection(isSelected: context.desiredSettings.accessType == .askToJoin) { context.desiredSettings.accessType = .askToJoin })
+            .disabled(!context.viewState.isKnockingEnabled)
+    }
+    
+    private var askToJoinWithSpaceMembersOption: some View {
+        ListRow(label: .default(title: L10n.screenSecurityAndPrivacyAskToJoinOptionTitle,
+                                description: context.viewState.askToJoinWithSpaceMembersDescription,
+                                icon: \.userAdd),
+                kind: .selection(isSelected: context.desiredSettings.accessType.isAskToJoinWithSpaceUsers) { context.send(viewAction: .selectedAskToJoinWithSpaceMembersAccess) })
+            .disabled(!context.viewState.isAskToJoinWithSpaceMembersOptionSelectable)
     }
     
     @ViewBuilder
@@ -286,6 +306,42 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
                                                  appSettings: appSettings)
     }()
     
+    static let singleAskToJoinSpaceMembersViewModel = {
+        AppSettings.resetAllSettings()
+        let appSettings = AppSettings()
+        appSettings.spaceSettingsEnabled = true
+        appSettings.knockingEnabled = true
+        let space = [SpaceRoomProxyProtocol].mockSingleRoom[0]
+        
+        return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
+                                                                                      canonicalAlias: "#room:matrix.org",
+                                                                                      members: .allMembersAsCreator,
+                                                                                      joinRule: .knockRestricted(rules: [.roomMembership(roomId: space.id)]),
+                                                                                      isVisibleInPublicDirectory: true)),
+                                                 clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",
+                                                                                    spaceServiceConfiguration: .init(joinedParentSpaces: [space]))),
+                                                 userIndicatorController: UserIndicatorControllerMock(),
+                                                 appSettings: appSettings)
+    }()
+    
+    static let multipleAskToJoinSpacesMembersViewModel = {
+        AppSettings.resetAllSettings()
+        let appSettings = AppSettings()
+        appSettings.spaceSettingsEnabled = true
+        appSettings.knockingEnabled = true
+        let spaces = [SpaceRoomProxyProtocol].mockJoinedSpaces
+        
+        return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
+                                                                                      canonicalAlias: "#room:matrix.org",
+                                                                                      members: .allMembersAsCreator,
+                                                                                      joinRule: .knockRestricted(rules: spaces.map { .roomMembership(roomId: $0.id) }),
+                                                                                      isVisibleInPublicDirectory: true)),
+                                                 clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",
+                                                                                    spaceServiceConfiguration: .init(joinedParentSpaces: spaces))),
+                                                 userIndicatorController: UserIndicatorControllerMock(),
+                                                 appSettings: appSettings)
+    }()
+    
     static let publicSpaceViewModel = {
         AppSettings.resetAllSettings()
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isSpace: true,
@@ -341,6 +397,22 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
             state.currentSettings.isVisibileInRoomDirectory == true
         })
         .previewDisplayName("Ask to join room")
+        
+        NavigationStack {
+            SecurityAndPrivacyScreen(context: singleAskToJoinSpaceMembersViewModel.context)
+        }
+        .snapshotPreferences(expect: singleAskToJoinSpaceMembersViewModel.context.$viewState.map { state in
+            state.currentSettings.isVisibileInRoomDirectory == true
+        })
+        .previewDisplayName("Ask to join with single space members room")
+        
+        NavigationStack {
+            SecurityAndPrivacyScreen(context: multipleAskToJoinSpacesMembersViewModel.context)
+        }
+        .snapshotPreferences(expect: multipleAskToJoinSpacesMembersViewModel.context.$viewState.map { state in
+            state.currentSettings.isVisibileInRoomDirectory == true
+        })
+        .previewDisplayName("Ask to join with multiple spaces members room")
         
         NavigationStack {
             SecurityAndPrivacyScreen(context: publicSpaceViewModel.context)

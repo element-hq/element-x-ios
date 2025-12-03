@@ -81,7 +81,9 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         case .selectedSpaceMembersAccess:
             handleSelectedSpaceMembersAccess()
         case .manageSpaces:
-            displayManageAuthorizedSpacesScreen()
+            displayManageAuthorizedSpacesScreen(isAskToJoin: state.bindings.desiredSettings.accessType.isAskToJoinWithSpaceUsers)
+        case .selectedAskToJoinWithSpaceMembersAccess:
+            handleSelectedAskToJoinWithSpaceMembersAccess()
         }
     }
     
@@ -248,11 +250,29 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         case .empty:
             break // Very edge case. We do nothing in this case.
         case .multiple:
-            displayManageAuthorizedSpacesScreen()
+            displayManageAuthorizedSpacesScreen(isAskToJoin: false)
         }
     }
     
-    private func displayManageAuthorizedSpacesScreen() {
+    private func handleSelectedAskToJoinWithSpaceMembersAccess() {
+        guard !state.bindings.desiredSettings.accessType.isAskToJoinWithSpaceUsers else {
+            // If the user is tapping the ask to join with space members access again we do nothing
+            return
+        }
+        
+        switch state.spaceSelection {
+        case .singleJoined(let joinedParent):
+            state.bindings.desiredSettings.accessType = .askToJoinWithSpaceUsers(spaceIDs: [joinedParent.id])
+        case .singleUnknown(let id):
+            state.bindings.desiredSettings.accessType = .askToJoinWithSpaceUsers(spaceIDs: [id])
+        case .empty:
+            break // Very edge case. We do nothing in this case.
+        case .multiple:
+            displayManageAuthorizedSpacesScreen(isAskToJoin: true)
+        }
+    }
+
+    private func displayManageAuthorizedSpacesScreen(isAskToJoin: Bool) {
         let joinedParentSpaces = state.joinedParentSpaces
         let unknownSpaceIDs = state.currentSettings.accessType.spaceIDs.filter { id in
             !joinedParentSpaces.contains { $0.id == id }
@@ -263,7 +283,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                                                                   initialSelectedIDs: selectedIDs)
         authorizedSpacesSelection.selectedIDs
             .sink { [weak self] desiredSelectedIDs in
-                self?.state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: desiredSelectedIDs.sorted())
+                let sortedIDs = desiredSelectedIDs.sorted()
+                self?.state.bindings.desiredSettings.accessType = isAskToJoin ? .askToJoinWithSpaceUsers(spaceIDs: sortedIDs) : .spaceUsers(spaceIDs: sortedIDs)
             }
             .store(in: &cancellables)
         
@@ -334,20 +355,24 @@ private extension Optional where Wrapped == JoinRule {
             return .anyone
         case .invite:
             return .inviteOnly
-        case .knock, .knockRestricted:
-            // TODO: Handle knock restricted with rules
+        case .knock:
             return .askToJoin
+        case .knockRestricted(let rules):
+            return .askToJoinWithSpaceUsers(spaceIDs: Self.spaceIDs(from: rules))
         case .restricted(let rules):
-            let spaceIDs = rules.compactMap { rule in
-                if case let .roomMembership(id) = rule {
-                    id
-                } else {
-                    nil
-                }
-            }
-            return .spaceUsers(spaceIDs: spaceIDs)
+            return .spaceUsers(spaceIDs: Self.spaceIDs(from: rules))
         default:
             return .inviteOnly
+        }
+    }
+    
+    private static func spaceIDs(from rules: [AllowRule]) -> [String] {
+        rules.compactMap { rule in
+            if case let .roomMembership(id) = rule {
+                id
+            } else {
+                nil
+            }
         }
     }
 }
