@@ -109,7 +109,7 @@ struct SettingsScreen: View {
     private var manageAccountSection: some View {
         Section {
             if context.viewState.showLinkNewDeviceButton {
-                ListRow(label: .default(title: UntranslatedL10n.commonLinkNewDevice,
+                ListRow(label: .default(title: L10n.commonLinkNewDevice,
                                         icon: \.devices),
                         kind: .navigationLink {
                             context.send(viewAction: .linkNewDevice)

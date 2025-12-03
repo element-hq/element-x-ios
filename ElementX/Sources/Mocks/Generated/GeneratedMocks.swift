@@ -2332,6 +2332,23 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingIsLiveKitRTCSupported: Bool!
     var isLiveKitRTCSupportedClosure: (() async -> Bool)?
+    var isLoginWithQRCodeSupportedCallsCount = 0
+    var isLoginWithQRCodeSupportedCalled: Bool {
+        return isLoginWithQRCodeSupportedCallsCount > 0
+    }
+
+    var isLoginWithQRCodeSupported: Bool {
+        get async {
+            isLoginWithQRCodeSupportedCallsCount += 1
+            if let isLoginWithQRCodeSupportedClosure = isLoginWithQRCodeSupportedClosure {
+                return await isLoginWithQRCodeSupportedClosure()
+            } else {
+                return underlyingIsLoginWithQRCodeSupported
+            }
+        }
+    }
+    var underlyingIsLoginWithQRCodeSupported: Bool!
+    var isLoginWithQRCodeSupportedClosure: (() async -> Bool)?
     var maxMediaUploadSizeCallsCount = 0
     var maxMediaUploadSizeCalled: Bool {
         return maxMediaUploadSizeCallsCount > 0

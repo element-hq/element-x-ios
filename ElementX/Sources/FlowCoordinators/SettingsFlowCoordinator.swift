@@ -84,7 +84,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .userDetails:
                     presentUserDetailsEditScreen()
                 case .linkNewDevice:
-                    break
+                    presentLinkNewDeviceScreen()
                 case let .manageAccount(url):
                     presentAccountManagementURL(url)
                 case .analytics:
@@ -270,5 +270,28 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                 presentationAnchor: flowParameters.windowManager.mainWindow,
                                                                 appSettings: flowParameters.appSettings)
         accountSettingsPresenter?.start()
+    }
+    
+    // MARK: - Link New Device
+
+    private func presentLinkNewDeviceScreen() {
+        let parameters = LinkNewDeviceScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy)
+        let coordinator = LinkNewDeviceScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .linkMobileDevice:
+                    break
+                case .linkDesktopComputer:
+                    break
+                case .dismiss:
+                    navigationStackCoordinator.pop()
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator)
     }
 }
