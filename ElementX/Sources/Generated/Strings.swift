@@ -2466,10 +2466,8 @@ internal enum L10n {
   internal static var screenRoomDetailsTitle: String { return L10n.tr("Localizable", "screen_room_details_title") }
   /// Topic
   internal static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
-  /// Updating room…
+  /// Updating details…
   internal static var screenRoomDetailsUpdatingRoom: String { return L10n.tr("Localizable", "screen_room_details_updating_room") }
-  /// Updating space…
-  internal static var screenRoomDetailsUpdatingSpace: String { return L10n.tr("Localizable", "screen_room_details_updating_space") }
   /// Failed loading
   internal static var screenRoomDirectorySearchLoadingError: String { return L10n.tr("Localizable", "screen_room_directory_search_loading_error") }
   /// Room directory

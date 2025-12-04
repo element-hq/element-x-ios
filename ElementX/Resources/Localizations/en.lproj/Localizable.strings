@@ -643,7 +643,6 @@
 "screen_room_change_role_administrators_or_owners_title" = "Edit Admins or Owners";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
 "screen_room_details_requests_to_join_title" = "Requests to join";
-"screen_room_details_updating_space" = "Updating space…";
 "screen_room_grouped_state_events_expand" = "Expand";
 "screen_room_grouped_state_events_reduce" = "Reduce";
 "screen_room_member_list_empty_search_subtitle" = "Check the spelling or try a new search";
@@ -1070,7 +1069,7 @@
 "screen_room_details_notification_mode_default" = "Default";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_title" = "Room info";
-"screen_room_details_updating_room" = "Updating room…";
+"screen_room_details_updating_room" = "Updating details…";
 "screen_room_directory_search_loading_error" = "Failed loading";
 "screen_room_directory_search_title" = "Room directory";
 "screen_room_encrypted_history_banner" = "Message history is currently unavailable.";
