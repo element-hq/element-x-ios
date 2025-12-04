@@ -446,6 +446,7 @@
 "notification_sender_me" = "Me";
 "notification_sender_mention_reply" = "%1$@ mentioned or replied";
 "notification_space_invite_body" = "Invited you to join the space";
+"notification_space_invite_body_with_sender" = "%1$@ invited you to join the space";
 "notification_test_push_notification_content" = "You are viewing the notification! Click me!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -1068,7 +1069,7 @@
 "screen_room_details_notification_mode_default" = "Default";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_title" = "Room info";
-"screen_room_details_updating_room" = "Updating room…";
+"screen_room_details_updating_room" = "Updating details…";
 "screen_room_directory_search_loading_error" = "Failed loading";
 "screen_room_directory_search_title" = "Room directory";
 "screen_room_encrypted_history_banner" = "Message history is currently unavailable.";

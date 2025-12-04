@@ -1042,6 +1042,10 @@ internal enum L10n {
   }
   /// Invited you to join the space
   internal static var notificationSpaceInviteBody: String { return L10n.tr("Localizable", "notification_space_invite_body") }
+  /// %1$@ invited you to join the space
+  internal static func notificationSpaceInviteBodyWithSender(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "notification_space_invite_body_with_sender", String(describing: p1))
+  }
   /// You are viewing the notification! Click me!
   internal static var notificationTestPushNotificationContent: String { return L10n.tr("Localizable", "notification_test_push_notification_content") }
   /// Thread in %1$@
@@ -2462,7 +2466,7 @@ internal enum L10n {
   internal static var screenRoomDetailsTitle: String { return L10n.tr("Localizable", "screen_room_details_title") }
   /// Topic
   internal static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
-  /// Updating room…
+  /// Updating details…
   internal static var screenRoomDetailsUpdatingRoom: String { return L10n.tr("Localizable", "screen_room_details_updating_room") }
   /// Failed loading
   internal static var screenRoomDirectorySearchLoadingError: String { return L10n.tr("Localizable", "screen_room_directory_search_loading_error") }
