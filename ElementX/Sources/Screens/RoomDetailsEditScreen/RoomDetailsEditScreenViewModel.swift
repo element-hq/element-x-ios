@@ -129,7 +129,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         }
         userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                              title: L10n.screenRoomDetailsUpdatingRoom,
+                                                              title: state.isSpace ? L10n.screenRoomDetailsUpdatingSpace : L10n.screenRoomDetailsUpdatingRoom,
                                                               persistent: true))
         
         do {
