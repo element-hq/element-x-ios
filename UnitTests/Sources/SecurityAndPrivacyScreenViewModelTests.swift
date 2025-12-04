@@ -44,7 +44,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         }
         
         context.send(viewAction: .selectedSpaceMembersAccess)
-        XCTAssertEqual(context.desiredSettings.accessType, .spaceUsers(spaceIDs: [space.id]))
+        XCTAssertEqual(context.desiredSettings.accessType, .spaceMembers(spaceIDs: [space.id]))
         XCTAssertNil(context.viewState.accessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
         
@@ -75,7 +75,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         }
         
         context.send(viewAction: .selectedAskToJoinWithSpaceMembersAccess)
-        XCTAssertEqual(context.desiredSettings.accessType, .askToJoinWithSpaceUsers(spaceIDs: [space.id]))
+        XCTAssertEqual(context.desiredSettings.accessType, .askToJoinWithSpaceMembers(spaceIDs: [space.id]))
         XCTAssertNil(context.viewState.accessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
         
@@ -97,7 +97,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let deferred = deferFulfillment(context.$viewState) { $0.joinedParentSpaces.count == 0 }
         try await deferred.fulfill()
         
-        XCTAssertEqual(context.viewState.currentSettings.accessType, .spaceUsers(spaceIDs: [space.id]))
+        XCTAssertEqual(context.viewState.currentSettings.accessType, .spaceMembers(spaceIDs: [space.id]))
         XCTAssertEqual(context.desiredSettings, context.viewState.currentSettings)
         XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
         XCTAssertNil(context.viewState.accessSectionFooter)
@@ -113,7 +113,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         
         context.send(viewAction: .selectedSpaceMembersAccess)
         XCTAssertTrue(context.viewState.isSaveDisabled)
-        XCTAssertEqual(context.desiredSettings.accessType, .spaceUsers(spaceIDs: [space.id]))
+        XCTAssertEqual(context.desiredSettings.accessType, .spaceMembers(spaceIDs: [space.id]))
         guard case .singleUnknown = context.viewState.spaceSelection else {
             XCTFail("Expected spaceSelection to be .singleUnknown")
             return
@@ -150,7 +150,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         context.send(viewAction: .selectedSpaceMembersAccess)
         try await deferredAction.fulfill()
         selectedIDs.send([spaces[0].id])
-        XCTAssertEqual(context.desiredSettings.accessType, .spaceUsers(spaceIDs: [spaces[0].id]))
+        XCTAssertEqual(context.desiredSettings.accessType, .spaceMembers(spaceIDs: [spaces[0].id]))
         XCTAssertNotNil(context.viewState.accessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
 
@@ -194,7 +194,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         context.send(viewAction: .selectedAskToJoinWithSpaceMembersAccess)
         try await deferredAction.fulfill()
         selectedIDs.send([spaces[0].id])
-        XCTAssertEqual(context.desiredSettings.accessType, .askToJoinWithSpaceUsers(spaceIDs: [spaces[0].id]))
+        XCTAssertEqual(context.desiredSettings.accessType, .askToJoinWithSpaceMembers(spaceIDs: [spaces[0].id]))
         XCTAssertNotNil(context.viewState.accessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
 
@@ -216,7 +216,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 4 }
         try await deferred.fulfill()
         
-        XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceUsers)
+        XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceMembers)
         XCTAssertTrue(context.viewState.isSaveDisabled)
         XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
         guard case .multiple = context.viewState.spaceSelection else {
@@ -240,7 +240,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         context.send(viewAction: .manageSpaces)
         try await deferredAction.fulfill()
         selectedIDs.send([spaces[0].id, "unknownSpaceID"])
-        XCTAssertEqual(context.desiredSettings.accessType, .spaceUsers(spaceIDs: [spaces[0].id, "unknownSpaceID"]))
+        XCTAssertEqual(context.desiredSettings.accessType, .spaceMembers(spaceIDs: [spaces[0].id, "unknownSpaceID"]))
         XCTAssertNotNil(context.viewState.accessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
 
@@ -263,7 +263,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 0 }
         try await deferred.fulfill()
         
-        XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceUsers)
+        XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceMembers)
         XCTAssertTrue(context.viewState.isSaveDisabled)
         XCTAssertFalse(context.viewState.isSpaceMembersOptionSelectable)
         XCTAssertNil(context.viewState.accessSectionFooter)
@@ -283,7 +283,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 1 }
         try await deferred.fulfill()
         
-        XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceUsers)
+        XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceMembers)
         XCTAssertTrue(context.viewState.isSaveDisabled)
         XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
         XCTAssertNotNil(context.viewState.accessSectionFooter)

@@ -55,7 +55,7 @@ struct SecurityAndPrivacyScreen: View {
                 ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionTitle,
                                         description: context.viewState.spaceMembersDescription,
                                         icon: \.space),
-                        kind: .selection(isSelected: context.desiredSettings.accessType.isSpaceUsers) {
+                        kind: .selection(isSelected: context.desiredSettings.accessType.isSpaceMembers) {
                             context.send(viewAction: .selectedSpaceMembersAccess)
                         })
                         .disabled(!context.viewState.isSpaceMembersOptionSelectable)
@@ -103,7 +103,7 @@ struct SecurityAndPrivacyScreen: View {
         ListRow(label: .default(title: L10n.screenSecurityAndPrivacyAskToJoinOptionTitle,
                                 description: context.viewState.askToJoinWithSpaceMembersDescription,
                                 icon: \.userAdd),
-                kind: .selection(isSelected: context.desiredSettings.accessType.isAskToJoinWithSpaceUsers) { context.send(viewAction: .selectedAskToJoinWithSpaceMembersAccess) })
+                kind: .selection(isSelected: context.desiredSettings.accessType.isAskToJoinWithSpaceMembers) { context.send(viewAction: .selectedAskToJoinWithSpaceMembersAccess) })
             .disabled(!context.viewState.isAskToJoinWithSpaceMembersOptionSelectable)
     }
     

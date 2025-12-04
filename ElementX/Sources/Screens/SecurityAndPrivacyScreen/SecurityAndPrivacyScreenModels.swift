@@ -67,7 +67,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     }
     
     var isSpaceMembersOptionAvailable: Bool {
-        currentSettings.accessType.isSpaceUsers || isSpaceMembersOptionSelectable
+        currentSettings.accessType.isSpaceMembers || isSpaceMembersOptionSelectable
     }
     
     var isSpaceMembersOptionSelectable: Bool {
@@ -75,7 +75,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     }
     
     var isAskToJoinWithSpaceMembersOptionAvailable: Bool {
-        currentSettings.accessType.isAskToJoinWithSpaceUsers || isAskToJoinWithSpaceMembersOptionSelectable
+        currentSettings.accessType.isAskToJoinWithSpaceMembers || isAskToJoinWithSpaceMembersOptionSelectable
     }
     
     var isAskToJoinWithSpaceMembersOptionSelectable: Bool {
@@ -113,9 +113,9 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     }
     
     var accessSectionFooter: AttributedString? {
-        if (bindings.desiredSettings.accessType.isSpaceUsers &&
+        if (bindings.desiredSettings.accessType.isSpaceMembers &&
             isSpaceMembersOptionSelectable) ||
-            (bindings.desiredSettings.accessType.isAskToJoinWithSpaceUsers &&
+            (bindings.desiredSettings.accessType.isAskToJoinWithSpaceMembers &&
                 isAskToJoinWithSpaceMembersOptionSelectable),
             case .multiple = spaceSelection {
             Self.accessSectionFooterAttributedString
@@ -141,7 +141,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
         } else if selectableSpacesCount > 1 {
             .multiple
         } else if let joinedParent = joinedParentSpaces.first {
-            if currentSettings.accessType.isSpaceUsers || currentSettings.accessType.isAskToJoinWithSpaceUsers {
+            if currentSettings.accessType.isSpaceMembers || currentSettings.accessType.isAskToJoinWithSpaceMembers {
                 if currentSettings.accessType.spaceIDs.isEmpty {
                     // Edge case where the access type is already space members, but it does not contain any id
                     // So if the user wants to add their own parent they need to do it from the selection menu
@@ -197,22 +197,22 @@ struct SecurityAndPrivacySettings: Equatable {
 enum SecurityAndPrivacyRoomAccessType: Equatable {
     case inviteOnly
     case askToJoin
-    case askToJoinWithSpaceUsers(spaceIDs: [String])
+    case askToJoinWithSpaceMembers(spaceIDs: [String])
     case anyone
-    case spaceUsers(spaceIDs: [String])
+    case spaceMembers(spaceIDs: [String])
     
-    var isSpaceUsers: Bool {
+    var isSpaceMembers: Bool {
         switch self {
-        case .spaceUsers:
+        case .spaceMembers:
             true
         default:
             false
         }
     }
     
-    var isAskToJoinWithSpaceUsers: Bool {
+    var isAskToJoinWithSpaceMembers: Bool {
         switch self {
-        case .askToJoinWithSpaceUsers:
+        case .askToJoinWithSpaceMembers:
             true
         default:
             false
@@ -221,16 +221,16 @@ enum SecurityAndPrivacyRoomAccessType: Equatable {
     
     var isAddressRequired: Bool {
         switch self {
-        case .inviteOnly, .spaceUsers:
+        case .inviteOnly, .spaceMembers:
             false
-        case .anyone, .askToJoin, .askToJoinWithSpaceUsers:
+        case .anyone, .askToJoin, .askToJoinWithSpaceMembers:
             true
         }
     }
     
     var spaceIDs: [String] {
         switch self {
-        case .spaceUsers(let spaceIDs), .askToJoinWithSpaceUsers(let spaceIDs):
+        case .spaceMembers(let spaceIDs), .askToJoinWithSpaceMembers(let spaceIDs):
             return spaceIDs
         case .inviteOnly, .askToJoin, .anyone:
             return []
