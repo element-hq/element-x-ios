@@ -246,7 +246,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             if state.bindings.isSearchFieldFocused {
                 roomSummaryProvider?.setFilter(.search(query: state.bindings.searchQuery))
             } else {
-                roomSummaryProvider?.setFilter(.all(filters: state.bindings.filtersState.activeFilters.set))
+                if state.bindings.filtersState.activeFilters.contains(.groupedSpaces) {
+                    roomSummaryProvider?.setFilter(.groupedSpaces)
+                } else {
+                    roomSummaryProvider?.setFilter(.all(filters: state.bindings.filtersState.activeFilters.set))
+                }
             }
         }
     }

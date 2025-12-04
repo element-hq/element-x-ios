@@ -17,6 +17,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         rawValue
     }
     
+    case groupedSpaces
     case unreads
     case people
     case rooms
@@ -42,6 +43,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return L10n.screenRoomlistFilterInvites
         case .lowPriority:
             return L10n.screenRoomlistFilterLowPriority
+        case .groupedSpaces:
+            return L10n.screenHomeTabSpaces // TODO: Fix this
         }
     }
     
@@ -59,6 +62,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return [.rooms, .people, .unreads, .favourites, .lowPriority]
         case .lowPriority:
             return [.favourites, .invites]
+        case .groupedSpaces:
+            return [.unreads, .people, .rooms, .favourites, .invites, .lowPriority]
         }
     }
     
@@ -77,6 +82,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         case .lowPriority:
             // Note: When not activated, the setFilter method automatically applies the .nonLowPriority filter.
             return .all(filters: [.lowPriority, .joined])
+        case .groupedSpaces:
+            return .none // TODO: Is this right?
         }
     }
 }

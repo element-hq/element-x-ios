@@ -63,6 +63,8 @@ extension RoomSummaryProviderMock {
                 roomListSubject.send(rooms)
             case .excludeAll:
                 roomListSubject.send([])
+            case .groupedSpaces:
+                break
             }
         }
     }

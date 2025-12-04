@@ -9520,15 +9520,15 @@ open class GroupedRoomListServiceSDKMock: MatrixRustSDK.GroupedRoomListService, 
 
     //MARK: - setFilter
 
-    var setFilterKindUnderlyingCallsCount = 0
-    open var setFilterKindCallsCount: Int {
+    var setFilterFilterUnderlyingCallsCount = 0
+    open var setFilterFilterCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return setFilterKindUnderlyingCallsCount
+                return setFilterFilterUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = setFilterKindUnderlyingCallsCount
+                    returnValue = setFilterFilterUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -9536,57 +9536,28 @@ open class GroupedRoomListServiceSDKMock: MatrixRustSDK.GroupedRoomListService, 
         }
         set {
             if Thread.isMainThread {
-                setFilterKindUnderlyingCallsCount = newValue
+                setFilterFilterUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    setFilterKindUnderlyingCallsCount = newValue
+                    setFilterFilterUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var setFilterKindCalled: Bool {
-        return setFilterKindCallsCount > 0
+    open var setFilterFilterCalled: Bool {
+        return setFilterFilterCallsCount > 0
     }
-    open var setFilterKindReceivedKind: RoomListEntriesDynamicFilterKind?
-    open var setFilterKindReceivedInvocations: [RoomListEntriesDynamicFilterKind?] = []
+    open var setFilterFilterReceivedFilter: GroupedRoomListFilterType?
+    open var setFilterFilterReceivedInvocations: [GroupedRoomListFilterType] = []
+    open var setFilterFilterClosure: ((GroupedRoomListFilterType) async -> Void)?
 
-    var setFilterKindUnderlyingReturnValue: Bool!
-    open var setFilterKindReturnValue: Bool! {
-        get {
-            if Thread.isMainThread {
-                return setFilterKindUnderlyingReturnValue
-            } else {
-                var returnValue: Bool? = nil
-                DispatchQueue.main.sync {
-                    returnValue = setFilterKindUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                setFilterKindUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    setFilterKindUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var setFilterKindClosure: ((RoomListEntriesDynamicFilterKind?) async -> Bool)?
-
-    open override func setFilter(kind: RoomListEntriesDynamicFilterKind?) async -> Bool {
-        setFilterKindCallsCount += 1
-        setFilterKindReceivedKind = kind
+    open override func setFilter(filter: GroupedRoomListFilterType) async {
+        setFilterFilterCallsCount += 1
+        setFilterFilterReceivedFilter = filter
         DispatchQueue.main.async {
-            self.setFilterKindReceivedInvocations.append(kind)
+            self.setFilterFilterReceivedInvocations.append(filter)
         }
-        if let setFilterKindClosure = setFilterKindClosure {
-            return await setFilterKindClosure(kind)
-        } else {
-            return setFilterKindReturnValue
-        }
+        await setFilterFilterClosure?(filter)
     }
 
     //MARK: - setup

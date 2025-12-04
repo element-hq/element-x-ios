@@ -26,6 +26,8 @@ struct RoomListFiltersEmptyStateView: View {
                 return L10n.screenRoomlistFilterInvitesEmptyStateTitle
             case .lowPriority:
                 return L10n.screenRoomlistFilterLowPriorityEmptyStateTitle
+            case .groupedSpaces:
+                return "You ain't got no spaces." // TODO: ?
             }
         }
         return L10n.screenRoomlistFilterMixedEmptyStateTitle

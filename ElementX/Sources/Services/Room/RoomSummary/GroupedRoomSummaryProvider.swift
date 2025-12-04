@@ -121,7 +121,7 @@ class GroupedRoomSummaryProvider: RoomSummaryProviderProtocol {
             
             switch filter {
             case .excludeAll:
-                await self.groupedRoomListService.setFilter(kind: .none)
+                await self.groupedRoomListService.setFilter(filter: .standard(filter: .none))
             case let .search(query):
                 let filters = if appSettings.fuzzyRoomListSearchEnabled {
                     [.fuzzyMatchRoomName(pattern: query)] + baseFilter
@@ -129,14 +129,17 @@ class GroupedRoomSummaryProvider: RoomSummaryProviderProtocol {
                     [.normalizedMatchRoomName(pattern: query)] + baseFilter
                 }
                 
-                await self.groupedRoomListService.setFilter(kind: .all(filters: filters))
+                await self.groupedRoomListService.setFilter(filter: .standard(filter: .all(filters: filters)))
             case let .all(filters):
-                if filters.isEmpty {
-                    await self.groupedRoomListService.setFilter(kind: nil)
-                } else {
-                    var rustFilters = filters.map(\.rustFilter) + baseFilter
-                    await self.groupedRoomListService.setFilter(kind: .all(filters: rustFilters))
+                var rustFilters = filters.map(\.rustFilter) + baseFilter
+                
+                if !filters.contains(.lowPriority), appSettings.lowPriorityFilterEnabled {
+                    rustFilters.append(.nonLowPriority)
                 }
+                
+                await self.groupedRoomListService.setFilter(filter: .standard(filter: .all(filters: rustFilters)))
+            case .groupedSpaces:
+                await self.groupedRoomListService.setFilter(filter: .groupedSpaces)
             }
         }
     }

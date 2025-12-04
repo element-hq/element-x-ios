@@ -49,6 +49,8 @@ enum RoomSummaryProviderFilter: Equatable {
     case search(query: String)
     /// Includes only what satisfies the filters used
     case all(filters: Set<RoomListFilter>)
+    /// A custom mode where the room list shows spaces and their latest room's message
+    case groupedSpaces
 }
 
 // sourcery: AutoMockable

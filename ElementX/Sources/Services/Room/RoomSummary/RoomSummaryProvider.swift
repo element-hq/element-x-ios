@@ -141,6 +141,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
             
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: rustFilters))
+        case .groupedSpaces:
+            break
         }
     }
     
