@@ -81,7 +81,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         case .selectedSpaceMembersAccess:
             handleSelectedSpaceMembersAccess()
         case .manageSpaces:
-            displayManageAuthorizedSpacesScreen(isAskToJoin: state.bindings.desiredSettings.accessType.isAskToJoinWithSpaceUsers)
+            displayManageAuthorizedSpacesScreen(isAskToJoin: state.bindings.desiredSettings.accessType.isAskToJoinWithSpaceMembers)
         case .selectedAskToJoinWithSpaceMembersAccess:
             handleSelectedAskToJoinWithSpaceMembersAccess()
         }
@@ -237,16 +237,16 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     }
     
     private func handleSelectedSpaceMembersAccess() {
-        guard !state.bindings.desiredSettings.accessType.isSpaceUsers else {
+        guard !state.bindings.desiredSettings.accessType.isSpaceMembers else {
             // If the user is tapping the space members access again we do nothing
             return
         }
         
         switch state.spaceSelection {
         case .singleJoined(let joinedParent):
-            state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: [joinedParent.id])
+            state.bindings.desiredSettings.accessType = .spaceMembers(spaceIDs: [joinedParent.id])
         case .singleUnknown(let id):
-            state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: [id])
+            state.bindings.desiredSettings.accessType = .spaceMembers(spaceIDs: [id])
         case .empty:
             break // Very edge case. We do nothing in this case.
         case .multiple:
@@ -255,16 +255,16 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     }
     
     private func handleSelectedAskToJoinWithSpaceMembersAccess() {
-        guard !state.bindings.desiredSettings.accessType.isAskToJoinWithSpaceUsers else {
+        guard !state.bindings.desiredSettings.accessType.isAskToJoinWithSpaceMembers else {
             // If the user is tapping the ask to join with space members access again we do nothing
             return
         }
         
         switch state.spaceSelection {
         case .singleJoined(let joinedParent):
-            state.bindings.desiredSettings.accessType = .askToJoinWithSpaceUsers(spaceIDs: [joinedParent.id])
+            state.bindings.desiredSettings.accessType = .askToJoinWithSpaceMembers(spaceIDs: [joinedParent.id])
         case .singleUnknown(let id):
-            state.bindings.desiredSettings.accessType = .askToJoinWithSpaceUsers(spaceIDs: [id])
+            state.bindings.desiredSettings.accessType = .askToJoinWithSpaceMembers(spaceIDs: [id])
         case .empty:
             break // Very edge case. We do nothing in this case.
         case .multiple:
@@ -284,7 +284,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         authorizedSpacesSelection.selectedIDs
             .sink { [weak self] desiredSelectedIDs in
                 let sortedIDs = desiredSelectedIDs.sorted()
-                self?.state.bindings.desiredSettings.accessType = isAskToJoin ? .askToJoinWithSpaceUsers(spaceIDs: sortedIDs) : .spaceUsers(spaceIDs: sortedIDs)
+                self?.state.bindings.desiredSettings.accessType = isAskToJoin ? .askToJoinWithSpaceMembers(spaceIDs: sortedIDs) : .spaceMembers(spaceIDs: sortedIDs)
             }
             .store(in: &cancellables)
         
@@ -314,9 +314,9 @@ private extension SecurityAndPrivacyRoomAccessType {
             .knock
         case .anyone:
             .public
-        case .spaceUsers(let spaceIDs):
+        case .spaceMembers(let spaceIDs):
             .restricted(rules: spaceIDs.map { .roomMembership(roomId: $0) })
-        case .askToJoinWithSpaceUsers(let spaceIDs):
+        case .askToJoinWithSpaceMembers(let spaceIDs):
             .knockRestricted(rules: spaceIDs.map { .roomMembership(roomId: $0) })
         }
     }
@@ -358,9 +358,9 @@ private extension Optional where Wrapped == JoinRule {
         case .knock:
             return .askToJoin
         case .knockRestricted(let rules):
-            return .askToJoinWithSpaceUsers(spaceIDs: Self.spaceIDs(from: rules))
+            return .askToJoinWithSpaceMembers(spaceIDs: Self.spaceIDs(from: rules))
         case .restricted(let rules):
-            return .spaceUsers(spaceIDs: Self.spaceIDs(from: rules))
+            return .spaceMembers(spaceIDs: Self.spaceIDs(from: rules))
         default:
             return .inviteOnly
         }
