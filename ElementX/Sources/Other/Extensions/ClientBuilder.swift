@@ -53,6 +53,8 @@ extension ClientBuilder {
             }
         }
 
+        // Set trust requirement even if `setupEncryption` is false.
+        // See https://github.com/element-hq/element-x-ios/issues/4702.
         if enableOnlySignedDeviceIsolationMode {
             builder = builder
                 .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .crossSignedOrLegacy))
