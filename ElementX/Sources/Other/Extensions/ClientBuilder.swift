@@ -47,12 +47,18 @@ extension ClientBuilder {
             if enableOnlySignedDeviceIsolationMode {
                 builder = builder
                     .roomKeyRecipientStrategy(strategy: .identityBasedStrategy)
-                    .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .crossSignedOrLegacy))
             } else {
                 builder = builder
                     .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
-                    .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .untrusted))
             }
+        }
+
+        if enableOnlySignedDeviceIsolationMode {
+            builder = builder
+                .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .crossSignedOrLegacy))
+        } else {
+            builder = builder
+                .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .untrusted))
         }
         
         if let httpProxy {
