@@ -30,6 +30,7 @@ struct RoomDetailsEditScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .track(screen: .RoomSettings)
+        .alert(item: $context.alertInfo)
     }
     
     // MARK: - Private
@@ -91,7 +92,7 @@ struct RoomDetailsEditScreen: View {
                 })
             }
         } header: {
-            Text(L10n.commonRoomName)
+            Text(L10n.commonName)
                 .compoundListSectionHeader()
         }
     }
@@ -99,7 +100,7 @@ struct RoomDetailsEditScreen: View {
     private var topicSection: some View {
         Section {
             if context.viewState.canEditTopic {
-                ListRow(label: .plain(title: L10n.commonTopicPlaceholder),
+                ListRow(label: .plain(title: context.viewState.isSpace ? L10n.commonSpaceTopicPlaceholder : L10n.commonTopicPlaceholder),
                         kind: .textField(text: $context.topic, axis: .vertical))
                     .focused($focus, equals: .topic)
                     .lineLimit(3...)

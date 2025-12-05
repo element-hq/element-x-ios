@@ -155,6 +155,14 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              userIndicatorController: flowParameters.userIndicatorController,
                                                                              appSettings: flowParameters.appSettings))
+        coordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .dismiss:
+                    self?.navigationStackCoordinator.pop()
+                }
+            }
+            .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator)
     }
@@ -215,7 +223,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentDeveloperOptions() {
-        let coordinator = DeveloperOptionsScreenCoordinator(appSettings: flowParameters.appSettings)
+        let coordinator = DeveloperOptionsScreenCoordinator(appSettings: flowParameters.appSettings, appHooks: flowParameters.appHooks)
         
         coordinator.actions
             .sink { [weak self] action in

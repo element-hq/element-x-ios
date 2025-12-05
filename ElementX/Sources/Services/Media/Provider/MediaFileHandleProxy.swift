@@ -58,7 +58,7 @@ extension MediaFileHandleProxy: Hashable {
 /// An unmanaged file handle that can be created direct from a URL.
 ///
 /// This type allows for mocking but doesn't provide the automatic clean-up mechanism provided by the SDK.
-private class UnmanagedMediaFileHandle: MediaFileHandleProtocol {
+private final class UnmanagedMediaFileHandle: MediaFileHandleProtocol {
     func persist(path: String) throws -> Bool {
         false
     }

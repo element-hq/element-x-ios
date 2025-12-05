@@ -32,6 +32,7 @@ class HomeScreenRoomTests: XCTestCase {
                                   activeMembersCount: 0,
                                   lastMessage: nil,
                                   lastMessageDate: nil,
+                                  lastMessageState: nil,
                                   unreadMessagesCount: unreadMessagesCount,
                                   unreadMentionsCount: unreadMentionsCount,
                                   unreadNotificationsCount: unreadNotificationsCount,

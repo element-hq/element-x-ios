@@ -71,7 +71,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.canSave)
     }
     
-    func testSaveShowsSheet() {
+    func testAvatarPickerShowsSheet() {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.name = "name"
         XCTAssertFalse(context.showMediaSheet)
@@ -91,6 +91,47 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         
         let action = try await deferred.fulfill()
         XCTAssertEqual(action, .saveFinished)
+    }
+    
+    func testCancelWithoutChanges() async throws {
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
+        XCTAssertFalse(context.viewState.canSave)
+        XCTAssertNil(context.alertInfo)
+        
+        var deferred = deferFulfillment(viewModel.actions) { $0 == .cancel }
+        context.send(viewAction: .cancel)
+        try await deferred.fulfill()
+        XCTAssertNil(context.alertInfo)
+    }
+    
+    func testCancelWithChangesAndDiscard() async throws {
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
+        context.name = "name"
+        XCTAssertTrue(context.viewState.canSave)
+        XCTAssertNil(context.alertInfo)
+        
+        context.send(viewAction: .cancel)
+        
+        XCTAssertNotNil(context.alertInfo)
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .cancel }
+        context.alertInfo?.secondaryButton?.action?() // Discard
+        try await deferred.fulfill()
+    }
+    
+    func testCancelWithChangesAndSave() async throws {
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
+        context.name = "name"
+        XCTAssertTrue(context.viewState.canSave)
+        XCTAssertNil(context.alertInfo)
+        
+        context.send(viewAction: .cancel)
+        
+        XCTAssertNotNil(context.alertInfo)
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .saveFinished }
+        context.alertInfo?.primaryButton.action?() // Save
+        try await deferred.fulfill()
     }
     
     func testErrorShownOnFailedFetchOfMedia() async throws {

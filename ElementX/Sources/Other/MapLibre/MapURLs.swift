@@ -9,18 +9,20 @@
 import CoreLocation
 
 extension MapTilerConfiguration: MapTilerURLBuilderProtocol {
-    func dynamicMapURL(for style: MapTilerStyle) -> URL? {
-        var url = makeNewURL(for: style)
+    /// For interactive MGLMap components
+    func interactiveMapURL(for style: MapTilerStyle) -> URL? {
+        var url = styleURL(for: style)
         url?.appendPathComponent("style.json", conformingTo: .json)
         return url
     }
     
-    func staticMapURL(for style: MapTilerStyle,
-                      coordinates: CLLocationCoordinate2D,
-                      zoomLevel: Double,
-                      size: CGSize,
-                      attribution: MapTilerAttributionPlacement) -> URL? {
-        var url = makeNewURL(for: style)
+    /// Used in the timeline where a full MGLMapView loading is unwanted
+    func staticMapTileImageURL(for style: MapTilerStyle,
+                               coordinates: CLLocationCoordinate2D,
+                               zoomLevel: Double,
+                               size: CGSize,
+                               attribution: MapTilerAttributionPlacement) -> URL? {
+        var url = styleURL(for: style)
         url?.appendPathComponent(String(format: "static/%f,%f,%f/%dx%d@2x.png",
                                         coordinates.longitude,
                                         coordinates.latitude,
@@ -34,7 +36,7 @@ extension MapTilerConfiguration: MapTilerURLBuilderProtocol {
     
     // MARK: Private
     
-    private func makeNewURL(for style: MapTilerStyle) -> URL? {
+    private func styleURL(for style: MapTilerStyle) -> URL? {
         guard let apiKey else { return nil }
         
         var url: URL = baseURL

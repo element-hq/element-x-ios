@@ -82,9 +82,9 @@ extension ClientProxyMock {
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        loadUserAvatarURLReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        setUserAvatarMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        removeUserAvatarReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        loadUserAvatarURLReturnValue = .success(())
+        setUserAvatarMediaReturnValue = .success(())
+        removeUserAvatarReturnValue = .success(())
         isAliasAvailableReturnValue = .success(true)
         searchUsersSearchTermLimitReturnValue = .success(.init(results: [], limited: false))
         profileForReturnValue = .success(.init(userID: "@a:b.com", displayName: "Some user"))
@@ -140,7 +140,7 @@ extension ClientProxyMock {
             }
         }
         
-        userIdentityForReturnValue = .success(UserIdentityProxyMock(configuration: .init()))
+        userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init()))
         
         underlyingIsReportRoomSupported = true
         underlyingIsLiveKitRTCSupported = true

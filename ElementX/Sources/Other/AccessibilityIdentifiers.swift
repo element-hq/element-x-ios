@@ -197,9 +197,7 @@ enum A11yIdentifiers {
     struct RoomRolesAndPermissionsScreen {
         let administrators = "room_roles_and_permissions-administrators"
         let moderators = "room_roles_and_permissions-moderators"
-        let roomDetails = "room_roles_and_permissions-room_details"
-        let messagesAndContent = "room_roles_and_permissions-messages_and_content"
-        let memberModeration = "room_roles_and_permissions-member_moderation"
+        let permissions = "room_roles_and_permissions-permissions"
     }
     
     struct SecureBackupScreen {

@@ -16,6 +16,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     private let roomProxy: JoinedRoomProxyProtocol
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appSettings: AppSettings
     
     private let actionsSubject: PassthroughSubject<SecurityAndPrivacyScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SecurityAndPrivacyScreenViewModelAction, Never> {
@@ -24,17 +25,35 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     
     init(roomProxy: JoinedRoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appSettings: AppSettings) {
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
+        
         super.init(initialViewState: SecurityAndPrivacyScreenViewState(serverName: clientProxy.userIDServerName ?? "",
                                                                        accessType: roomProxy.infoPublisher.value.joinRule.toSecurityAndPrivacyRoomAccessType,
                                                                        isEncryptionEnabled: roomProxy.infoPublisher.value.isEncrypted,
-                                                                       historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility))
+                                                                       historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility,
+                                                                       isSpace: roomProxy.infoPublisher.value.isSpace,
+                                                                       isKnockingEnabled: appSettings.knockingEnabled,
+                                                                       isSpaceSettingsEnabled: appSettings.spaceSettingsEnabled))
+        
+        if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
+            setupPermissions(powerLevels: powerLevels)
+        }
         
         setupRoomDirectoryVisibility()
         setupSubscriptions()
+        Task {
+            switch await clientProxy.spaceService.joinedParents(childID: roomProxy.id) {
+            case .success(let joinedParentSpaces):
+                state.joinedParentSpaces = joinedParentSpaces
+            case .failure:
+                break
+            }
+        }
     }
     
     // MARK: - Public
@@ -43,10 +62,10 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
+        case .cancel:
+            showUnsavedChangesAlert() // The cancel button is only shown when there are unsaved changes.
         case .save:
-            Task {
-                await saveDesiredSettings()
-            }
+            Task { await saveDesiredSettings() }
         case .tryUpdatingEncryption(let updatedValue):
             if updatedValue {
                 state.bindings.alertInfo = .init(id: .enableEncryption,
@@ -59,6 +78,12 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             }
         case .editAddress:
             actionsSubject.send(.displayEditAddressScreen)
+        case .selectedSpaceMembersAccess:
+            handleSelectedSpaceMembersAccess()
+        case .manageSpaces:
+            displayManageAuthorizedSpacesScreen(isAskToJoin: state.bindings.desiredSettings.accessType.isAskToJoinWithSpaceMembers)
+        case .selectedAskToJoinWithSpaceMembersAccess:
+            handleSelectedAskToJoinWithSpaceMembersAccess()
         }
     }
     
@@ -82,7 +107,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         
         let userIDServerName = clientProxy.userIDServerName
         
-        roomProxy.infoPublisher
+        let infoPublisher = roomProxy.infoPublisher
+        infoPublisher
             .compactMap { roomInfo in
                 guard let userIDServerName else {
                     return nil
@@ -96,6 +122,37 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.canonicalAlias, on: self)
             .store(in: &cancellables)
+        
+        infoPublisher
+            .compactMap(\.powerLevels)
+            .removeDuplicates { $0.userPowerLevels == $1.userPowerLevels && $0.values == $1.values }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] powerLevels in
+                self?.setupPermissions(powerLevels: powerLevels)
+            }
+            .store(in: &cancellables)
+        
+        infoPublisher
+            .map(\.isSpace)
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.isSpace, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$knockingEnabled
+            .weakAssign(to: \.state.isKnockingEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$spaceSettingsEnabled
+            .weakAssign(to: \.state.isSpaceSettingsEnabled, on: self)
+            .store(in: &cancellables)
+    }
+    
+    private func setupPermissions(powerLevels: RoomPowerLevelsProxyProtocol) {
+        state.canEditAddress = powerLevels.canOwnUser(sendStateEvent: .roomAliases)
+        state.canEditJoinRule = powerLevels.canOwnUser(sendStateEvent: .roomJoinRules)
+        state.canEditHistoryVisibility = powerLevels.canOwnUser(sendStateEvent: .roomHistoryVisibility)
+        state.canEnableEncryption = powerLevels.canOwnUser(sendStateEvent: .roomEncryption)
     }
     
     private func setupRoomDirectoryVisibility() {
@@ -112,12 +169,19 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         }
     }
     
-    private func saveDesiredSettings() async {
+    private func showUnsavedChangesAlert() {
+        state.bindings.alertInfo = .init(id: .unsavedChanges,
+                                         title: L10n.dialogUnsavedChangesTitle,
+                                         message: L10n.dialogUnsavedChangesDescription,
+                                         primaryButton: .init(title: L10n.actionSave) { Task { await self.saveDesiredSettings(shouldDismiss: true) } },
+                                         secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.dismiss) })
+    }
+    
+    private func saveDesiredSettings(shouldDismiss: Bool = false) async {
         showLoadingIndicator()
+        defer { hideLoadingIndicator() }
         
-        defer {
-            hideLoadingIndicator()
-        }
+        var hasFailures = false
         
         if state.currentSettings.isEncryptionEnabled != state.bindings.desiredSettings.isEncryptionEnabled {
             switch await roomProxy.enableEncryption() {
@@ -125,6 +189,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.currentSettings.isEncryptionEnabled = state.bindings.desiredSettings.isEncryptionEnabled
             case .failure:
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                hasFailures = true
             }
         }
         
@@ -134,6 +199,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.currentSettings.historyVisibility = state.bindings.desiredSettings.historyVisibility
             case .failure:
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                hasFailures = true
             }
         }
         
@@ -149,6 +215,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.currentSettings.accessType = state.bindings.desiredSettings.accessType
             case .failure:
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                hasFailures = true
             }
         }
         
@@ -160,8 +227,68 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.currentSettings.isVisibileInRoomDirectory = state.bindings.desiredSettings.isVisibileInRoomDirectory
             case .failure:
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                hasFailures = true
             }
         }
+        
+        if shouldDismiss, !hasFailures {
+            actionsSubject.send(.dismiss)
+        }
+    }
+    
+    private func handleSelectedSpaceMembersAccess() {
+        guard !state.bindings.desiredSettings.accessType.isSpaceMembers else {
+            // If the user is tapping the space members access again we do nothing
+            return
+        }
+        
+        switch state.spaceSelection {
+        case .singleJoined(let joinedParent):
+            state.bindings.desiredSettings.accessType = .spaceMembers(spaceIDs: [joinedParent.id])
+        case .singleUnknown(let id):
+            state.bindings.desiredSettings.accessType = .spaceMembers(spaceIDs: [id])
+        case .empty:
+            break // Very edge case. We do nothing in this case.
+        case .multiple:
+            displayManageAuthorizedSpacesScreen(isAskToJoin: false)
+        }
+    }
+    
+    private func handleSelectedAskToJoinWithSpaceMembersAccess() {
+        guard !state.bindings.desiredSettings.accessType.isAskToJoinWithSpaceMembers else {
+            // If the user is tapping the ask to join with space members access again we do nothing
+            return
+        }
+        
+        switch state.spaceSelection {
+        case .singleJoined(let joinedParent):
+            state.bindings.desiredSettings.accessType = .askToJoinWithSpaceMembers(spaceIDs: [joinedParent.id])
+        case .singleUnknown(let id):
+            state.bindings.desiredSettings.accessType = .askToJoinWithSpaceMembers(spaceIDs: [id])
+        case .empty:
+            break // Very edge case. We do nothing in this case.
+        case .multiple:
+            displayManageAuthorizedSpacesScreen(isAskToJoin: true)
+        }
+    }
+
+    private func displayManageAuthorizedSpacesScreen(isAskToJoin: Bool) {
+        let joinedParentSpaces = state.joinedParentSpaces
+        let unknownSpaceIDs = state.currentSettings.accessType.spaceIDs.filter { id in
+            !joinedParentSpaces.contains { $0.id == id }
+        }
+        let selectedIDs = Set(state.bindings.desiredSettings.accessType.spaceIDs)
+        let authorizedSpacesSelection = AuthorizedSpacesSelection(joinedParentSpaces: joinedParentSpaces,
+                                                                  unknownSpacesIDs: unknownSpaceIDs,
+                                                                  initialSelectedIDs: selectedIDs)
+        authorizedSpacesSelection.selectedIDs
+            .sink { [weak self] desiredSelectedIDs in
+                let sortedIDs = desiredSelectedIDs.sorted()
+                self?.state.bindings.desiredSettings.accessType = isAskToJoin ? .askToJoinWithSpaceMembers(spaceIDs: sortedIDs) : .spaceMembers(spaceIDs: sortedIDs)
+            }
+            .store(in: &cancellables)
+        
+        actionsSubject.send(.displayManageAuthorizedSpacesScreen(authorizedSpacesSelection))
     }
     
     private static let loadingIndicatorIdentifier = "\(EditRoomAddressScreenViewModel.self)-Loading"
@@ -187,25 +314,10 @@ private extension SecurityAndPrivacyRoomAccessType {
             .knock
         case .anyone:
             .public
-        case .spaceUsers:
-            fatalError("The user shouldn't be able to select this rule")
-        }
-    }
-}
-
-private extension Optional where Wrapped == JoinRule {
-    var toSecurityAndPrivacyRoomAccessType: SecurityAndPrivacyRoomAccessType {
-        switch self {
-        case .none, .public:
-            return .anyone
-        case .invite:
-            return .inviteOnly
-        case .knock, .knockRestricted:
-            return .askToJoin
-        case .restricted:
-            return .spaceUsers
-        default:
-            return .inviteOnly
+        case .spaceMembers(let spaceIDs):
+            .restricted(rules: spaceIDs.map { .roomMembership(roomId: $0) })
+        case .askToJoinWithSpaceMembers(let spaceIDs):
+            .knockRestricted(rules: spaceIDs.map { .roomMembership(roomId: $0) })
         }
     }
 }
@@ -232,6 +344,35 @@ private extension SecurityAndPrivacyHistoryVisibility {
             return .invited
         case .anyone:
             return .worldReadable
+        }
+    }
+}
+
+private extension Optional where Wrapped == JoinRule {
+    var toSecurityAndPrivacyRoomAccessType: SecurityAndPrivacyRoomAccessType {
+        switch self {
+        case .none, .public:
+            return .anyone
+        case .invite:
+            return .inviteOnly
+        case .knock:
+            return .askToJoin
+        case .knockRestricted(let rules):
+            return .askToJoinWithSpaceMembers(spaceIDs: Self.spaceIDs(from: rules))
+        case .restricted(let rules):
+            return .spaceMembers(spaceIDs: Self.spaceIDs(from: rules))
+        default:
+            return .inviteOnly
+        }
+    }
+    
+    private static func spaceIDs(from rules: [AllowRule]) -> [String] {
+        rules.compactMap { rule in
+            if case let .roomMembership(id) = rule {
+                id
+            } else {
+                nil
+            }
         }
     }
 }

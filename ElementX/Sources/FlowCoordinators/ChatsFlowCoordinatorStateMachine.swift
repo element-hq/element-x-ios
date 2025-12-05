@@ -154,8 +154,9 @@ class ChatsFlowCoordinatorStateMachine {
             switch (fromState, event) {
             case (.roomList, .selectRoom(let roomID, _, _)):
                 return .roomList(detailState: .room(roomID: roomID))
-            case (.roomList, .deselectRoom):
-                return .roomList(detailState: nil)
+            case (.roomList(let detailState), .deselectRoom):
+                // Ignore the flow's dismissal if it has already been replaced with a space.
+                return detailState == .space ? nil : .roomList(detailState: nil)
             
             case (.roomList, .startSpaceFlow):
                 return .roomList(detailState: .space)

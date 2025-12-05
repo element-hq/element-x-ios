@@ -306,6 +306,22 @@
 			<string>%1$d messages épinglés</string>
 		</dict>
 	</dict>
+	<key>screen_room_member_list_banned_header_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d Banni(e)</string>
+			<key>other</key>
+			<string>%1$d Banni(e)s</string>
+		</dict>
+	</dict>
 	<key>screen_room_member_list_header_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -317,9 +333,25 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d personne</string>
+			<string>%1$d Personne</string>
 			<key>other</key>
-			<string>%1$d personnes</string>
+			<string>%1$d Personnes</string>
+		</dict>
+	</dict>
+	<key>screen_room_member_list_pending_header_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d Invité(e)</string>
+			<key>other</key>
+			<string>%1$d Invité(e)s</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>

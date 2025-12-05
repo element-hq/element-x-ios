@@ -15,12 +15,6 @@ enum RoomDetailsEditScreenViewModelAction {
     case displayMediaPicker
 }
 
-struct RoomDetailsEditScreenViewStateBindings {
-    var name: String
-    var topic: String
-    var showMediaSheet = false
-}
-
 struct RoomDetailsEditScreenViewState: BindableState {
     let roomID: String
     let isSpace: Bool
@@ -41,7 +35,7 @@ struct RoomDetailsEditScreenViewState: BindableState {
     
     /// The string shown for the room's name when it can't be edited.
     var nameRowTitle: String {
-        bindings.name.isEmpty ? L10n.commonRoomName : bindings.name
+        bindings.name.isEmpty ? L10n.commonName : bindings.name
     }
     
     /// The string shown for the room's topic when it can't be edited.
@@ -64,6 +58,18 @@ struct RoomDetailsEditScreenViewState: BindableState {
     var showDeleteImageAction: Bool {
         localMedia != nil || avatarURL != nil
     }
+}
+
+struct RoomDetailsEditScreenViewStateBindings {
+    var name: String
+    var topic: String
+    var showMediaSheet = false
+    
+    var alertInfo: AlertInfo<RoomDetailsEditScreenAlertType>?
+}
+
+enum RoomDetailsEditScreenAlertType {
+    case unsavedChanges
 }
 
 enum RoomDetailsEditScreenViewAction {

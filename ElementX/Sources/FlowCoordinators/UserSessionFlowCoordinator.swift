@@ -246,16 +246,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 MXLog.info("Homeserver reachability: \(homeserverReachability)")
                 
                 guard let self else { return }
-                switch (homeserverReachability, networkReachability) {
-                case (.reachable, _):
+                switch (networkReachability, homeserverReachability) {
+                case (.reachable, .reachable):
                     flowParameters.userIndicatorController.retractIndicatorWithId(reachabilityNotificationID)
-                case (.unreachable, .unreachable):
-                    flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
-                                                                                 title: L10n.commonOffline,
-                                                                                 persistent: true))
-                case (.unreachable, .reachable):
+                case (.reachable, .unreachable):
                     flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
                                                                                  title: L10n.commonServerUnreachable,
+                                                                                 persistent: true))
+                case (.unreachable, _):
+                    flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
+                                                                                 title: L10n.commonOffline,
                                                                                  persistent: true))
                 }
             }

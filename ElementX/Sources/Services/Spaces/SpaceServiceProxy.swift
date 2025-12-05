@@ -49,6 +49,15 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
+    func joinedParents(childID: String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError> {
+        do {
+            return try await .success(spaceService.joinedParentsOfChild(childId: childID).map(SpaceRoomProxy.init))
+        } catch {
+            MXLog.error("Failed to get joined parents for \(childID): \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func handleUpdates(_ updates: [SpaceListUpdate]) {

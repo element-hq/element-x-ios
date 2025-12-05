@@ -19,7 +19,7 @@ struct RoomChangeRolesScreenRow: View {
     
     var body: some View {
         ListRow(label: .avatar(title: member.name ?? member.id,
-                               status: member.isInvited ? L10n.screenRoomMemberListPendingHeaderTitle : nil,
+                               status: member.isInvited ? L10n.screenRoomMemberListPendingStatus : nil,
                                description: member.name == nil ? nil : member.id,
                                icon: avatar),
                 kind: .multiSelection(isSelected: isSelected, action: action))

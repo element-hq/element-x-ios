@@ -9,6 +9,7 @@
 @testable import ElementX
 import XCTest
 
+@MainActor
 class DeferredFulfillmentTests: XCTestCase {
     private let observable = SomeObservable()
     
@@ -70,7 +71,8 @@ class DeferredFulfillmentTests: XCTestCase {
 
 // MARK: - Helpers
 
-@Observable private class SomeObservable {
+@Observable
+@MainActor private class SomeObservable {
     var counter = 0
     
     func setCounter(_ newValue: Int, delay: Duration? = nil) async throws {

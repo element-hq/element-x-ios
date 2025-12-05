@@ -36,11 +36,11 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
     
     var body: some View {
         GeometryReader { geometry in
-            if let url = mapURLBuilder.staticMapURL(for: colorScheme.mapStyle,
-                                                    coordinates: coordinates,
-                                                    zoomLevel: zoomLevel,
-                                                    size: mapSize, // temporary using a fixed size since the refresh doesn't work properly on the UITableView based timeline
-                                                    attribution: mapTilerAttributionPlacement) {
+            if let url = mapURLBuilder.staticMapTileImageURL(for: colorScheme.mapStyle,
+                                                             coordinates: coordinates,
+                                                             zoomLevel: zoomLevel,
+                                                             size: mapSize, // temporary using a fixed size since the refresh doesn't work properly on the UITableView based timeline
+                                                             attribution: mapTilerAttributionPlacement) {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
@@ -114,13 +114,13 @@ struct MapLibreStaticMapView_Previews: PreviewProvider, TestablePreview {
 }
 
 private struct MapTilerURLBuilderMock: MapTilerURLBuilderProtocol {
-    func dynamicMapURL(for style: MapTilerStyle) -> URL? { nil }
+    func interactiveMapURL(for style: MapTilerStyle) -> URL? { nil }
     
-    func staticMapURL(for style: MapTilerStyle,
-                      coordinates: CLLocationCoordinate2D,
-                      zoomLevel: Double,
-                      size: CGSize,
-                      attribution: MapTilerAttributionPlacement) -> URL? {
+    func staticMapTileImageURL(for style: MapTilerStyle,
+                               coordinates: CLLocationCoordinate2D,
+                               zoomLevel: Double,
+                               size: CGSize,
+                               attribution: MapTilerAttributionPlacement) -> URL? {
         switch style {
         case .light:
             return URL(string: "https://www.maptiler.com/img/cloud/home/map5.webp")

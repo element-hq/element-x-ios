@@ -104,11 +104,15 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             self.members = members
             self.currentUserProxy = members.first { $0.userID == roomProxy.ownUserID }
             
+            var newBindings = state.bindings
+            if roomMembersDetails.bannedMembers.count == 0 {
+                newBindings.mode = .members
+            }
             self.state = .init(joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
                                joinedMembers: roomMembersDetails.joinedMembers,
                                invitedMembers: roomMembersDetails.invitedMembers,
                                bannedMembers: roomMembersDetails.bannedMembers,
-                               bindings: state.bindings)
+                               bindings: newBindings)
             
             if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
                 self.state.canInviteUsers = powerLevels.canOwnUserInvite()
@@ -128,7 +132,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             for member in members {
                 var verificationState: UserIdentityVerificationState = .notVerified
                 if roomProxy.infoPublisher.value.isEncrypted, // We don't care about identity statuses on non-encrypted rooms
-                   case let .success(userIdentity) = await userSession.clientProxy.userIdentity(for: member.userID),
+                   case let .success(userIdentity) = await userSession.clientProxy.userIdentity(for: member.userID, fallBackToServer: false),
                    let userIdentity {
                     verificationState = userIdentity.verificationState
                 }

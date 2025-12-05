@@ -1077,7 +1077,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 
                 switch state {
                 case .loading:
-                    if self?.userSession?.clientProxy.homeserverReachabilityPublisher.value == .reachable {
+                    if self?.userSession?.clientProxy.homeserverReachabilityPublisher.value == .reachable,
+                       self?.appMediator.networkMonitor.reachabilityPublisher.value == .reachable {
                         ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
                     }
                 case .notLoading:

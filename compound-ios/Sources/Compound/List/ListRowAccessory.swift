@@ -23,6 +23,15 @@ public struct ListRowAccessory: View {
         case multiSelected
         /// An empty circle.
         case multiUnselected
+        
+        var isMultiSelection: Bool {
+            switch self {
+            case .multiSelected, .multiUnselected:
+                true
+            default:
+                false
+            }
+        }
     }
     
     /// A chevron to indicate that the button pushes another screen.

@@ -32,7 +32,7 @@ struct EditRoomAddressScreen: View {
                             .foregroundStyle(.compound.textCriticalPrimary)
                             .font(.compound.bodySM)
                     }
-                    Text(L10n.screenCreateRoomRoomAddressSectionFooter)
+                    Text(L10n.screenEditRoomAddressRoomAddressSectionFooter)
                         .compoundListSectionFooter()
                         .font(.compound.bodySM)
                 }

@@ -35,11 +35,11 @@ enum Application {
     private static func checkEnvironments() {
         let requirediPhoneSimulator = "iPhone18,3" // iPhone 17
         let requirediPadSimulator = "iPad15,7" // iPad (A16)
-        let requiredOSVersion = 26
+        let requiredOSVersion = (major: 26, minor: 1)
         
         let osVersion = ProcessInfo().operatingSystemVersion
-        guard osVersion.majorVersion == requiredOSVersion else {
-            fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
+        guard osVersion.majorVersion == requiredOSVersion.major, osVersion.minorVersion == requiredOSVersion.minor else {
+            fatalError("Switch to iOS \(requiredOSVersion.major).\(requiredOSVersion.minor) for these tests.")
         }
         
         guard let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] else {
@@ -47,9 +47,6 @@ enum Application {
         }
         guard deviceModel == requirediPhoneSimulator || deviceModel == requirediPadSimulator else {
             fatalError("Running on \(deviceModel) but we only support \(requirediPhoneSimulator) and \(requirediPadSimulator).")
-        }
-        guard UIDevice.current.snapshotName == "iPhone-26.0" || UIDevice.current.snapshotName == "iPad-26.0" else {
-            fatalError("Running on a simulator that hasn't been renamed to match the expected snapshot filenames.")
         }
     }
 }
@@ -92,7 +89,11 @@ extension XCUIApplication {
     }
     
     private var deviceName: String {
-        UIDevice.current.snapshotName
+        switch UIDevice.current.userInterfaceIdiom {
+        case .pad: return "iPad"
+        case .phone: return "iPhone"
+        default: fatalError("Unsupported device type: \(UIDevice.current.userInterfaceIdiom)")
+        }
     }
     
     private var localeCode: String {
@@ -108,20 +109,6 @@ extension XCUIApplication {
 
     private var regionCode: String {
         Locale.current.language.region?.identifier ?? ""
-    }
-}
-
-private extension UIDevice {
-    var snapshotName: String {
-        var name = name
-        
-        // When running with parallel execution simulators are named "Clone 2 of iPhone 14" etc.
-        // Tidy this prefix out of the name to generate snapshots with the correct name.
-        if name.starts(with: "Clone "), let range = name.range(of: " of ") {
-            name = String(name[range.upperBound...])
-        }
-        
-        return name
     }
 }
 

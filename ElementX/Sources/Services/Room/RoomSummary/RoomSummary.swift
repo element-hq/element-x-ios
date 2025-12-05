@@ -29,6 +29,8 @@ struct RoomSummary {
             }
         }
     }
+    
+    enum LastMessageState { case sending, failed }
 
     let room: Room
     
@@ -46,6 +48,7 @@ struct RoomSummary {
     
     let lastMessage: AttributedString?
     let lastMessageDate: Date?
+    let lastMessageState: LastMessageState?
     let unreadMessagesCount: UInt
     let unreadMentionsCount: UInt
     let unreadNotificationsCount: UInt
@@ -117,6 +120,7 @@ extension RoomSummary {
         
         lastMessage = AttributedString(string)
         lastMessageDate = .mock
+        lastMessageState = nil
         unreadMessagesCount = hasUnreadMessages ? 1 : 0
         unreadMentionsCount = hasUnreadMentions ? 1 : 0
         unreadNotificationsCount = hasUnreadNotifications ? 1 : 0

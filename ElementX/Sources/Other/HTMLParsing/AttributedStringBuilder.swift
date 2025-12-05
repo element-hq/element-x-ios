@@ -111,7 +111,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
     // MARK: - Private
     
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     func attributedString(element: Element,
                           documentBody: Element,
                           preserveFormatting: Bool,
@@ -236,19 +236,25 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 }
                 
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: tag, listIndex: &listIndex, indentLevel: indentLevel + 1)
+                
+                if indentLevel > 0 {
+                    content.insert(NSAttributedString("\n"), at: 0)
+                }
 
             case "li":
-                var bullet = ""
+                var bullet = String(repeating: "  ", count: indentLevel)
                 if listTag == "ol" {
-                    bullet = "\(listIndex). "
+                    bullet += "\(listIndex). "
                     listIndex += 1
                 } else {
-                    bullet = "• "
+                    bullet += "• "
                 }
                 
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel + 1)
                 content.insert(NSAttributedString(string: bullet), at: 0)
-                content.append(NSAttributedString(string: "\n"))
+                if !(content.string.last?.isNewline ?? false) {
+                    content.append(NSAttributedString(string: "\n"))
+                }
                 
             case "img":
                 if let alt = try? childElement.attr("alt"), !alt.isEmpty {

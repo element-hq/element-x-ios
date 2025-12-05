@@ -472,6 +472,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentSecurityAndPrivacyScreen, .securityAndPrivacy):
                 presentSecurityAndPrivacyScreen()
                 
+            case (.securityAndPrivacy, .presentManageAuthorizedSpacesScreen, .manageAuthorizedSpacesScreen):
+                guard let selection = (context.userInfo as? EventUserInfo)?.authorizedSpacesSelection else {
+                    fatalError("Missing required AuthorizedSpacesSelection")
+                }
+                presentManageAuthorizedSpacesScreen(selection: selection)
+                
             case (.roomDetails, .presentReportRoomScreen, .reportRoom):
                 presentReportRoom()
                 
@@ -1346,7 +1352,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSecurityAndPrivacyScreen() {
         let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                                 clientProxy: userSession.clientProxy,
-                                                                                userIndicatorController: flowParameters.userIndicatorController))
+                                                                                userIndicatorController: flowParameters.userIndicatorController,
+                                                                                appSetting: flowParameters.appSettings))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -1354,12 +1361,35 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .displayEditAddressScreen:
                 presentEditAddressScreen()
+            case .dismiss:
+                navigationStackCoordinator.pop()
+            case .displayManageAuthorizedSpacesScreen(let selection):
+                stateMachine.tryEvent(.presentManageAuthorizedSpacesScreen, userInfo: EventUserInfo(animated: true, authorizedSpacesSelection: selection))
             }
         }
         .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissSecurityAndPrivacyScreen)
+        }
+    }
+    
+    private func presentManageAuthorizedSpacesScreen(selection: AuthorizedSpacesSelection) {
+        let navigationStack = NavigationStackCoordinator()
+        let coordinator = ManageAuthorizedSpacesScreenCoordinator(parameters: .init(authorizedSpacesSelection: selection,
+                                                                                    mediaProvider: flowParameters.userSession.mediaProvider))
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStack.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(navigationStack) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedManageAuthorizedSpacesScreen)
         }
     }
     

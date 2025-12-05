@@ -196,17 +196,18 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         homeserverReachabilitySubject.send(.reachable)
         try await Task.sleep(for: .milliseconds(100))
         
-        // Then the indicator should be hidden even if the network isn't reachable.
-        XCTAssertEqual(userIndicatorController.submitIndicatorDelayCallsCount, 2)
-        XCTAssertEqual(retractReachabilityIndicatorCallsCount, 2)
+        // Then there should still be an offline indicator (as we don't yet support air-gapped servers on iOS).
+        XCTAssertEqual(userIndicatorController.submitIndicatorDelayCallsCount, 3)
+        XCTAssertEqual(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title, L10n.commonOffline)
+        XCTAssertEqual(retractReachabilityIndicatorCallsCount, 1)
         
         // When the network becomes reachable again.
         networkReachabilitySubject.send(.reachable)
         try await Task.sleep(for: .milliseconds(100))
         
-        // Then nothing else should happen.
-        XCTAssertEqual(userIndicatorController.submitIndicatorDelayCallsCount, 2)
-        XCTAssertEqual(retractReachabilityIndicatorCallsCount, 3)
+        // Then the indicator should be hidden now as everything is back to normal
+        XCTAssertEqual(userIndicatorController.submitIndicatorDelayCallsCount, 3)
+        XCTAssertEqual(retractReachabilityIndicatorCallsCount, 2)
     }
     
     // MARK: - Helpers

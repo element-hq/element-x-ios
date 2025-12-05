@@ -9,10 +9,19 @@
 import Foundation
 import MatrixRustSDK
 
-final class NSEUserSession {
-    let sessionDirectories: SessionDirectories
-    let appSettings: CommonSettingsProtocol
+// sourcery: AutoMockable
+protocol NSEUserSessionProtocol {
+    var inviteAvatarsVisibility: InviteAvatars { get async }
+    var mediaPreviewVisibility: MediaPreviews { get async }
+    var threadsEnabled: Bool { get }
     
+    func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol?
+    func roomForIdentifier(_ roomID: String) -> Room?
+}
+
+final class NSEUserSession: NSEUserSessionProtocol {
+    private let sessionDirectories: SessionDirectories
+    private let appSettings: CommonSettingsProtocol
     private let baseClient: Client
     private let notificationClient: NotificationClient
     private let userID: String
@@ -41,6 +50,10 @@ final class NSEUserSession {
                 return .on
             }
         }
+    }
+    
+    var threadsEnabled: Bool {
+        appSettings.threadsEnabled
     }
 
     init(credentials: KeychainCredentials,
@@ -117,7 +130,7 @@ final class NSEUserSession {
     }
 }
 
-private class ClientDelegateWrapper: ClientDelegate {
+private final class ClientDelegateWrapper: ClientDelegate {
     // MARK: - ClientDelegate
 
     func didReceiveAuthError(isSoftLogout: Bool) {

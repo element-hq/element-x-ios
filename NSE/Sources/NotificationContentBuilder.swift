@@ -16,7 +16,7 @@ import Version
 
 struct NotificationContentBuilder {
     let messageEventStringBuilder: RoomMessageEventStringBuilder
-    let userSession: NSEUserSession
+    let userSession: NSEUserSessionProtocol
     
     /// Process the given notification item proxy
     /// - Parameters:
@@ -38,7 +38,7 @@ struct NotificationContentBuilder {
         }
         
         // So that the UI groups notification that are received for the same room/thread but also for the same user
-        let threadIdentifier = if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+        let threadIdentifier = if userSession.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
             // If a threaded message we group notifications also by thread root id
             "\(notificationItem.receiverID)\(notificationItem.roomID)\(threadRootEventID)"
         } else {
@@ -49,7 +49,7 @@ struct NotificationContentBuilder {
         notificationContent.threadIdentifier = threadIdentifier.replacingOccurrences(of: "@", with: "")
         
         MXLog.info("isNoisy: \(notificationItem.isNoisy)")
-        notificationContent.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: AppSettings.isDevelopmentBuild ? "new-message.caf" : "message.caf")) : nil
+        notificationContent.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
         
         switch notificationItem.event {
         case .none:
@@ -99,22 +99,23 @@ struct NotificationContentBuilder {
                                 notificationItem: NotificationItemProxyProtocol,
                                 mediaProvider: MediaProviderProtocol) async {
         notificationContent.categoryIdentifier = NotificationConstants.Category.invite
-
-        let body: String
-        if !notificationItem.isDM {
-            body = L10n.notificationRoomInviteBody
+        
+        notificationContent.body = if notificationItem.isDM {
+            L10n.notificationInviteBody
+        } else if notificationItem.isRoomSpace {
+            L10n.notificationSpaceInviteBody
         } else {
-            body = L10n.notificationInviteBody
+            L10n.notificationRoomInviteBody
         }
         
-        notificationContent.body = body
-        
-        await addSenderIcon(notificationContent: &notificationContent,
-                            senderID: notificationItem.senderID,
-                            senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
-                            icon: icon(for: notificationItem),
-                            forcePlaceholder: userSession.inviteAvatarsVisibility == .off,
-                            mediaProvider: mediaProvider)
+        let name = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
+        await addCommunicationContext(notificationContent: &notificationContent,
+                                      senderID: notificationItem.senderID,
+                                      senderAvatarDisplayName: name,
+                                      senderDisplayName: name,
+                                      icon: icon(for: notificationItem),
+                                      forcePlaceholder: userSession.inviteAvatarsVisibility == .off,
+                                      mediaProvider: mediaProvider)
     }
     
     private func processMessageLike(notificationContent: inout UNMutableNotificationContent,
@@ -126,36 +127,42 @@ struct NotificationContentBuilder {
         }
         notificationContent.categoryIdentifier = NotificationConstants.Category.message
         
-        let senderName = if let displayName = notificationItem.senderDisplayName {
-            notificationItem.hasMention ? L10n.notificationSenderMentionReply(displayName) : displayName
+        let senderAvatarDisplayName = if let displayName = notificationItem.senderDisplayName {
+            displayName
         } else {
-            notificationItem.roomDisplayName
+            notificationItem.senderID
         }
         
-        await addSenderIcon(notificationContent: &notificationContent,
-                            senderID: notificationItem.senderID,
-                            senderName: senderName,
-                            icon: icon(for: notificationItem),
-                            mediaProvider: mediaProvider)
+        let senderDisplayName = notificationItem.hasMention ? L10n.notificationSenderMentionReply(senderAvatarDisplayName) : senderAvatarDisplayName
+        
+        await addCommunicationContext(notificationContent: &notificationContent,
+                                      senderID: notificationItem.senderID,
+                                      senderAvatarDisplayName: senderAvatarDisplayName,
+                                      senderDisplayName: senderDisplayName,
+                                      icon: icon(for: notificationItem),
+                                      mediaProvider: mediaProvider)
     }
     
     private func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
         if notificationItem.isDM {
-            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+            if userSession.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
                 .init(mediaSource: notificationItem.senderAvatarMediaSource,
-                      groupInfo: .init(name: L10n.commonThread,
+                      groupInfo: .init(avatarDisplayName: notificationItem.senderDisplayName ?? notificationItem.senderID,
+                                       displayName: L10n.commonThread,
                                        id: "\(notificationItem.roomID)\(threadRootEventID)"))
             } else {
                 .init(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
             }
         } else {
-            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+            if userSession.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
                 .init(mediaSource: notificationItem.roomAvatarMediaSource,
-                      groupInfo: .init(name: L10n.notificationThreadInRoom(notificationItem.roomDisplayName),
+                      groupInfo: .init(avatarDisplayName: notificationItem.roomDisplayName,
+                                       displayName: L10n.notificationThreadInRoom(notificationItem.roomDisplayName),
                                        id: "\(notificationItem.roomID)\(threadRootEventID)"))
             } else {
                 .init(mediaSource: notificationItem.roomAvatarMediaSource,
-                      groupInfo: .init(name: notificationItem.roomDisplayName,
+                      groupInfo: .init(avatarDisplayName: notificationItem.roomDisplayName,
+                                       displayName: notificationItem.roomDisplayName,
                                        id: notificationItem.roomID))
             }
         }
@@ -223,12 +230,13 @@ struct NotificationContentBuilder {
         }
     }
 
-    private func addSenderIcon(notificationContent: inout UNMutableNotificationContent,
-                               senderID: String,
-                               senderName: String,
-                               icon: NotificationIcon,
-                               forcePlaceholder: Bool = false,
-                               mediaProvider: MediaProviderProtocol) async {
+    private func addCommunicationContext(notificationContent: inout UNMutableNotificationContent,
+                                         senderID: String,
+                                         senderAvatarDisplayName: String,
+                                         senderDisplayName: String,
+                                         icon: NotificationIcon,
+                                         forcePlaceholder: Bool = false,
+                                         mediaProvider: MediaProviderProtocol) async {
         var fetchedImage: INImage?
         let image: INImage
         if !forcePlaceholder,
@@ -243,7 +251,7 @@ struct NotificationContentBuilder {
 
         if let fetchedImage {
             image = fetchedImage
-        } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
+        } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.avatarDisplayName ?? senderAvatarDisplayName,
                                                                  id: icon.groupInfo?.id ?? senderID) {
             image = INImage(imageData: data)
         } else {
@@ -253,7 +261,7 @@ struct NotificationContentBuilder {
         let senderHandle = INPersonHandle(value: senderID, type: .unknown)
         let sender = INPerson(personHandle: senderHandle,
                               nameComponents: nil,
-                              displayName: senderName,
+                              displayName: senderDisplayName,
                               image: !icon.shouldDisplayAsGroup ? image : nil,
                               contactIdentifier: nil,
                               customIdentifier: nil)
@@ -264,7 +272,7 @@ struct NotificationContentBuilder {
         if let groupInfo = icon.groupInfo {
             let meHandle = INPersonHandle(value: notificationContent.receiverID, type: .unknown)
             let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
-            speakableGroupName = INSpeakableString(spokenPhrase: groupInfo.name)
+            speakableGroupName = INSpeakableString(spokenPhrase: groupInfo.displayName)
             recipients = [sender, me]
         }
 
@@ -288,7 +296,9 @@ struct NotificationContentBuilder {
         interaction.direction = .incoming
 
         // Donate the interaction before updating notification content.
-        try? await interaction.donate()
+        if !ProcessInfo.isRunningTests {
+            try? await interaction.donate()
+        }
         
         // Update notification content before displaying the
         // communication notification.
@@ -330,7 +340,8 @@ struct NotificationContentBuilder {
 
 private struct NotificationIcon {
     struct GroupInfo {
-        let name: String
+        let avatarDisplayName: String
+        let displayName: String
         let id: String
     }
     

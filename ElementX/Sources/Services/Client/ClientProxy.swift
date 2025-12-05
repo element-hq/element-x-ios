@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Combine
+@preconcurrency import Combine
 import CryptoKit
 import Foundation
 import OrderedCollections
@@ -208,7 +208,7 @@ class ClientProxy: ClientProxyProtocol {
 
         loadUserAvatarURLFromCache()
         
-        ignoredUsersListenerTaskHandle = client.subscribeToIgnoredUsers(listener: IgnoredUsersListenerProxy { [weak self] ignoredUsers in
+        ignoredUsersListenerTaskHandle = client.subscribeToIgnoredUsers(listener: SDKListener { [weak self] ignoredUsers in
             self?.ignoredUsersSubject.send(ignoredUsers)
         })
         
@@ -218,7 +218,7 @@ class ClientProxy: ClientProxyProtocol {
             Task { await self?.updateVerificationState(verificationState) }
         })
         
-        sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SendQueueRoomErrorListenerProxy { [weak self] roomID, error in
+        sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SDKListener { [weak self] roomID, error in
             MXLog.error("Send queue failed in room: \(roomID) with error: \(error)")
             self?.sendQueueStatusSubject.send(false)
         })
@@ -591,8 +591,8 @@ class ClientProxy: ClientProxyProtocol {
             return room
         }
         
-        if !roomSummaryProvider.statePublisher.value.isLoaded {
-            _ = await roomSummaryProvider.statePublisher.values.first { $0.isLoaded }
+        if !staticRoomSummaryProvider.statePublisher.value.isLoaded {
+            _ = await staticRoomSummaryProvider.statePublisher.values.first { $0.isLoaded }
         }
         
         if shouldAwait {
@@ -1097,7 +1097,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Pinning current identity for user: \(userID)")
         
         do {
-            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID, fallbackToServer: true) else {
                 MXLog.error("Failed retrieving identity for user: \(userID)")
                 return .failure(.failedRetrievingUserIdentity)
             }
@@ -1113,7 +1113,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Withdrawing current identity verification for user: \(userID)")
         
         do {
-            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID, fallbackToServer: true) else {
                 MXLog.error("Failed retrieving identity for user: \(userID)")
                 return .failure(.failedRetrievingUserIdentity)
             }
@@ -1133,9 +1133,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
+    func userIdentity(for userID: String, fallBackToServer: Bool) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
         do {
-            return try await .success(client.encryption().userIdentity(userId: userID).map(UserIdentityProxy.init))
+            return try await .success(client.encryption().userIdentity(userId: userID, fallbackToServer: fallBackToServer).map(UserIdentityProxy.init))
         } catch {
             MXLog.error("Failed retrieving user identity: \(error)")
             return .failure(.sdkError(error))
@@ -1143,10 +1143,10 @@ class ClientProxy: ClientProxyProtocol {
     }
 }
 
-private class ClientDelegateWrapper: ClientDelegate {
-    private let authErrorCallback: (Bool) -> Void
+private final class ClientDelegateWrapper: ClientDelegate {
+    private let authErrorCallback: @Sendable (Bool) -> Void
     
-    init(authErrorCallback: @escaping (Bool) -> Void) {
+    init(authErrorCallback: @escaping @Sendable (Bool) -> Void) {
         self.authErrorCallback = authErrorCallback
     }
     
@@ -1162,7 +1162,7 @@ private class ClientDelegateWrapper: ClientDelegate {
     }
 }
 
-private class ClientDecryptionErrorDelegate: UnableToDecryptDelegate {
+private final class ClientDecryptionErrorDelegate: UnableToDecryptDelegate {
     private let actionsSubject: PassthroughSubject<ClientProxyAction, Never>
     
     init(actionsSubject: PassthroughSubject<ClientProxyAction, Never>) {
@@ -1171,30 +1171,6 @@ private class ClientDecryptionErrorDelegate: UnableToDecryptDelegate {
     
     func onUtd(info: UnableToDecryptInfo) {
         actionsSubject.send(.receivedDecryptionError(info))
-    }
-}
-
-private class IgnoredUsersListenerProxy: IgnoredUsersListener {
-    private let onUpdateClosure: ([String]) -> Void
-
-    init(onUpdateClosure: @escaping ([String]) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func call(ignoredUserIds: [String]) {
-        onUpdateClosure(ignoredUserIds)
-    }
-}
-
-private class SendQueueRoomErrorListenerProxy: SendQueueRoomErrorListener {
-    private let onErrorClosure: (String, ClientError) -> Void
-    
-    init(onErrorClosure: @escaping (String, ClientError) -> Void) {
-        self.onErrorClosure = onErrorClosure
-    }
-    
-    func onError(roomId: String, error: ClientError) {
-        onErrorClosure(roomId, error)
     }
 }
 

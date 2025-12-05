@@ -10,7 +10,7 @@ jobs:
   tests:
     name: Tests
     runs-on: macos-15
-    timeout-minutes: 120
+    timeout-minutes: 150
 
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.

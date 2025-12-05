@@ -6,6 +6,7 @@
 
 import AnalyticsEvents
 import AVFoundation
+import CallKit
 import Foundation
 import LocalAuthentication
 import Photos

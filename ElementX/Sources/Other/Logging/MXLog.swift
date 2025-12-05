@@ -19,7 +19,7 @@ enum MXLog {
     static func configure(currentTarget: String) {
         self.currentTarget = currentTarget
         
-        rootSpan = Span(file: #file, line: #line, level: .info, target: self.currentTarget, name: "root")
+        rootSpan = Span(file: #file, line: #line, level: .info, target: self.currentTarget, name: "root", bridgeTraceId: nil)
         rootSpan.enter()
     }
     
@@ -122,7 +122,7 @@ enum MXLog {
             rootSpan.enter()
         }
         
-        return Span(file: file, line: UInt32(line), level: level.rustLogLevel, target: currentTarget, name: name)
+        return Span(file: file, line: UInt32(line), level: level.rustLogLevel, target: currentTarget, name: name, bridgeTraceId: nil)
     }
     
     // periphery:ignore:parameters function,column

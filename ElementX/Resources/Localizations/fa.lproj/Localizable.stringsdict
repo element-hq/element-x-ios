@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
+			<string>%1$d رقم وارد شده</string>
 			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>%1$d رقم وارد شده</string>
 		</dict>
 	</dict>
 	<key>a11y_polls_percent_of_total</key>
@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>خوانده شده توسط%1$@ و%2$d نفر دیگر</string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>خوانده شده توسط%1$@ و%2$d نفر دیگر</string>
 		</dict>
 	</dict>
 	<key>common_many_members</key>
@@ -77,9 +77,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Member</string>
+			<string>%1$d عضو</string>
 			<key>other</key>
-			<string>%1$d Members</string>
+			<string>%1$d عضو</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -93,9 +93,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d vote</string>
+			<string>%d رأی</string>
 			<key>other</key>
-			<string>%d votes</string>
+			<string>%d رأی</string>
 		</dict>
 	</dict>
 	<key>common_replies</key>
@@ -157,9 +157,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d message</string>
+			<string>%1$@:%2$d پیام</string>
 			<key>other</key>
-			<string>%1$@: %2$d messages</string>
+			<string>%1$@:%2$d پیام‌</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -173,9 +173,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d notification</string>
+			<string>%dاعلان</string>
 			<key>other</key>
-			<string>%d notifications</string>
+			<string>%dاعلان‌</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -189,9 +189,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d invitation</string>
+			<string>%d دعوت</string>
 			<key>other</key>
-			<string>%d invitations</string>
+			<string>%d دعوت</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -205,9 +205,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d new message</string>
+			<string>%d پیام جدید</string>
 			<key>other</key>
-			<string>%d new messages</string>
+			<string>%d پیام جدید</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -221,9 +221,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d unread notified message</string>
+			<string>%d پیام اعلان نشده</string>
 			<key>other</key>
-			<string>%d unread notified messages</string>
+			<string>%d پیام اعلان نشده</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -237,9 +237,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d room</string>
+			<string>%d اتاق</string>
 			<key>other</key>
-			<string>%d rooms</string>
+			<string>%d اتاق</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -253,9 +253,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>شما %1$d تلاش برای باز کردن قفل دارید</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>شما %1$d تلاش برای باز کردن قفل دارید</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -269,9 +269,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
+			<string>پین اشتباه است. شما %1$d شانس دیگر دارید</string>
 			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>پین اشتباه است. شما %1$d شانس دیگر دارید</string>
 		</dict>
 	</dict>
 	<key>screen_leave_space_submit</key>
@@ -306,6 +306,22 @@
 			<string>%1$d Pinned messages</string>
 		</dict>
 	</dict>
+	<key>screen_room_member_list_banned_header_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d Banned</string>
+			<key>other</key>
+			<string>%1$d Banned</string>
+		</dict>
+	</dict>
 	<key>screen_room_member_list_header_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -317,9 +333,25 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>%1$d نفر</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d نفر</string>
+		</dict>
+	</dict>
+	<key>screen_room_member_list_pending_header_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d Invited</string>
+			<key>other</key>
+			<string>%1$d Invited</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -381,9 +413,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d room change</string>
+			<string>%1$dتغییر اتاق</string>
 			<key>other</key>
-			<string>%1$d room changes</string>
+			<string>%1$dتغییر اتاق</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>

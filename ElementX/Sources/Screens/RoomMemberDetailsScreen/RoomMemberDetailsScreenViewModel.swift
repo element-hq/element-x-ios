@@ -112,7 +112,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             actionsSubject.send(.openUserProfile)
         }
         
-        if case let .success(.some(identity)) = await userSession.clientProxy.userIdentity(for: state.userID) {
+        if case let .success(.some(identity)) = await userSession.clientProxy.userIdentity(for: state.userID, fallBackToServer: true) {
             state.verificationState = identity.verificationState
         } else {
             MXLog.error("Failed to find the member's identity.")

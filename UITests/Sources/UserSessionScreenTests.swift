@@ -52,7 +52,7 @@ class UserSessionScreenTests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
 
         let cell = app.cells.element(boundBy: 1) // Skip the typing indicator cell
-        cell.swipeRight(velocity: .fast)
+        cell.swipeRight(velocity: .slow) // The iOS 26 simulator doesn't like a fast swipe.
 
         try await app.assertScreenshot()
     }
@@ -130,9 +130,15 @@ class UserSessionScreenTests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.spaceScreen)
         
-        // Go back to the room list.
-        app.navigationBars.buttons["Chats"].firstMatch.tap(.center)
-        XCTAssert(app.staticTexts["Chats"].waitForExistence(timeout: 5.0))
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            // Go back to the room list on iPhone.
+            app.navigationBars.buttons["Chats"].firstMatch.tap(.center)
+            XCTAssert(app.staticTexts["Chats"].waitForExistence(timeout: 5.0))
+        } else {
+            // Select a different room on iPad (otherwise nothing changes when the join button is tapped below).
+            app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
+            XCTAssert(app.staticTexts[firstRoomName].waitForExistence(timeout: 5.0))
+        }
         
         // Tap the join button in the space invite cell.
         app.buttons.matching(NSPredicate(format: "identifier == %@ && label == %@",

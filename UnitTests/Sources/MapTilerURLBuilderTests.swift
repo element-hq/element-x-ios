@@ -26,29 +26,29 @@ final class MapTilerURLBuilderTests: XCTestCase {
     }
 
     func testStaticMapBuilder() {
-        let url = builder.staticMapURL(for: .light,
-                                       coordinates: .init(latitude: 1, longitude: 2),
-                                       zoomLevel: 5,
-                                       size: .init(width: 300, height: 200),
-                                       attribution: .hidden)
+        let url = builder.staticMapTileImageURL(for: .light,
+                                                coordinates: .init(latitude: 1, longitude: 2),
+                                                zoomLevel: 5,
+                                                size: .init(width: 300, height: 200),
+                                                attribution: .hidden)
 
         let expectedURL: URL = "http://www.foo.com/9bc819c8-e627-474a-a348-ec144fe3d810/static/2.000000,1.000000,5.000000/300x200@2x.png?key=some_key&attribution=false"
         XCTAssertEqual(url, expectedURL)
     }
 
     func testStaticMapBuilderWithAttribution() {
-        let url = builder.staticMapURL(for: .dark,
-                                       coordinates: .init(latitude: 1, longitude: 2),
-                                       zoomLevel: 5,
-                                       size: .init(width: 300, height: 200),
-                                       attribution: .topLeft)
+        let url = builder.staticMapTileImageURL(for: .dark,
+                                                coordinates: .init(latitude: 1, longitude: 2),
+                                                zoomLevel: 5,
+                                                size: .init(width: 300, height: 200),
+                                                attribution: .topLeft)
 
         let expectedURL: URL = "http://www.foo.com/dea61faf-292b-4774-9660-58fcef89a7f3/static/2.000000,1.000000,5.000000/300x200@2x.png?key=some_key&attribution=topleft"
         XCTAssertEqual(url, expectedURL)
     }
 
     func testDynamicMapBuilder() {
-        let url = builder.dynamicMapURL(for: .dark)
+        let url = builder.interactiveMapURL(for: .dark)
         let expectedURL: URL = "http://www.foo.com/dea61faf-292b-4774-9660-58fcef89a7f3/style.json?key=some_key"
         XCTAssertEqual(url, expectedURL)
     }
@@ -62,14 +62,14 @@ final class MapTilerURLBuilderTests: XCTestCase {
         
         builder = configuration
         
-        let staticMapURL = builder.staticMapURL(for: .dark,
-                                                coordinates: .init(latitude: 1, longitude: 2),
-                                                zoomLevel: 5,
-                                                size: .init(width: 300, height: 200),
-                                                attribution: .topLeft)
+        let staticMapURL = builder.staticMapTileImageURL(for: .dark,
+                                                         coordinates: .init(latitude: 1, longitude: 2),
+                                                         zoomLevel: 5,
+                                                         size: .init(width: 300, height: 200),
+                                                         attribution: .topLeft)
         XCTAssertNil(staticMapURL)
         
-        let dynamicMapURL = builder.dynamicMapURL(for: .light)
+        let dynamicMapURL = builder.interactiveMapURL(for: .light)
         XCTAssertNil(dynamicMapURL)
     }
 }
