@@ -18,6 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Danger
-        uses: danger/swift@2dc204311befdf33eae93dec92a1f059ca673425 #v3.22.0
+        uses: danger/swift@434d7c25f3b02d490a340b23f5e78dd15a5670bc # 3.22.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
