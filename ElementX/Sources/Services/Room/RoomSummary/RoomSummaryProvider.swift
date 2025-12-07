@@ -236,7 +236,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         Task {
             do {
-                result.latestEvent = await room.newLatestEvent()
+                result.latestEvent = await room.latestEvent()
                 result.roomInfo = try await room.roomInfo()
             } catch {
                 MXLog.error("Failed fetching room info with error: \(error)")

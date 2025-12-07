@@ -274,52 +274,6 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
-    //MARK: - addRecentEmoji
-
-    open var addRecentEmojiEmojiThrowableError: Error?
-    var addRecentEmojiEmojiUnderlyingCallsCount = 0
-    open var addRecentEmojiEmojiCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return addRecentEmojiEmojiUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = addRecentEmojiEmojiUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                addRecentEmojiEmojiUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    addRecentEmojiEmojiUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var addRecentEmojiEmojiCalled: Bool {
-        return addRecentEmojiEmojiCallsCount > 0
-    }
-    open var addRecentEmojiEmojiReceivedEmoji: String?
-    open var addRecentEmojiEmojiReceivedInvocations: [String] = []
-    open var addRecentEmojiEmojiClosure: ((String) async throws -> Void)?
-
-    open override func addRecentEmoji(emoji: String) async throws {
-        if let error = addRecentEmojiEmojiThrowableError {
-            throw error
-        }
-        addRecentEmojiEmojiCallsCount += 1
-        addRecentEmojiEmojiReceivedEmoji = emoji
-        DispatchQueue.main.async {
-            self.addRecentEmojiEmojiReceivedInvocations.append(emoji)
-        }
-        try await addRecentEmojiEmojiClosure?(emoji)
-    }
-
     //MARK: - availableSlidingSyncVersions
 
     var availableSlidingSyncVersionsUnderlyingCallsCount = 0
@@ -1925,75 +1879,6 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
-    //MARK: - getRecentEmojis
-
-    open var getRecentEmojisThrowableError: Error?
-    var getRecentEmojisUnderlyingCallsCount = 0
-    open var getRecentEmojisCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getRecentEmojisUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getRecentEmojisUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getRecentEmojisUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getRecentEmojisUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var getRecentEmojisCalled: Bool {
-        return getRecentEmojisCallsCount > 0
-    }
-
-    var getRecentEmojisUnderlyingReturnValue: [RecentEmoji]!
-    open var getRecentEmojisReturnValue: [RecentEmoji]! {
-        get {
-            if Thread.isMainThread {
-                return getRecentEmojisUnderlyingReturnValue
-            } else {
-                var returnValue: [RecentEmoji]? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getRecentEmojisUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getRecentEmojisUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getRecentEmojisUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var getRecentEmojisClosure: (() async throws -> [RecentEmoji])?
-
-    open override func getRecentEmojis() async throws -> [RecentEmoji] {
-        if let error = getRecentEmojisThrowableError {
-            throw error
-        }
-        getRecentEmojisCallsCount += 1
-        if let getRecentEmojisClosure = getRecentEmojisClosure {
-            return try await getRecentEmojisClosure()
-        } else {
-            return getRecentEmojisReturnValue
-        }
-    }
-
     //MARK: - getRecentlyVisitedRooms
 
     open var getRecentlyVisitedRoomsThrowableError: Error?
@@ -2354,6 +2239,75 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return try await getSessionVerificationControllerClosure()
         } else {
             return getSessionVerificationControllerReturnValue
+        }
+    }
+
+    //MARK: - getStoreSizes
+
+    open var getStoreSizesThrowableError: Error?
+    var getStoreSizesUnderlyingCallsCount = 0
+    open var getStoreSizesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getStoreSizesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getStoreSizesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getStoreSizesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getStoreSizesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getStoreSizesCalled: Bool {
+        return getStoreSizesCallsCount > 0
+    }
+
+    var getStoreSizesUnderlyingReturnValue: StoreSizes!
+    open var getStoreSizesReturnValue: StoreSizes! {
+        get {
+            if Thread.isMainThread {
+                return getStoreSizesUnderlyingReturnValue
+            } else {
+                var returnValue: StoreSizes? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getStoreSizesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getStoreSizesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getStoreSizesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getStoreSizesClosure: (() async throws -> StoreSizes)?
+
+    open override func getStoreSizes() async throws -> StoreSizes {
+        if let error = getStoreSizesThrowableError {
+            throw error
+        }
+        getStoreSizesCallsCount += 1
+        if let getStoreSizesClosure = getStoreSizesClosure {
+            return try await getStoreSizesClosure()
+        } else {
+            return getStoreSizesReturnValue
         }
     }
 
@@ -2743,6 +2697,75 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return try await isLivekitRtcSupportedClosure()
         } else {
             return isLivekitRtcSupportedReturnValue
+        }
+    }
+
+    //MARK: - isLoginWithQrCodeSupported
+
+    open var isLoginWithQrCodeSupportedThrowableError: Error?
+    var isLoginWithQrCodeSupportedUnderlyingCallsCount = 0
+    open var isLoginWithQrCodeSupportedCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isLoginWithQrCodeSupportedUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isLoginWithQrCodeSupportedUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isLoginWithQrCodeSupportedUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isLoginWithQrCodeSupportedUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var isLoginWithQrCodeSupportedCalled: Bool {
+        return isLoginWithQrCodeSupportedCallsCount > 0
+    }
+
+    var isLoginWithQrCodeSupportedUnderlyingReturnValue: Bool!
+    open var isLoginWithQrCodeSupportedReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return isLoginWithQrCodeSupportedUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isLoginWithQrCodeSupportedUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isLoginWithQrCodeSupportedUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isLoginWithQrCodeSupportedUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var isLoginWithQrCodeSupportedClosure: (() async throws -> Bool)?
+
+    open override func isLoginWithQrCodeSupported() async throws -> Bool {
+        if let error = isLoginWithQrCodeSupportedThrowableError {
+            throw error
+        }
+        isLoginWithQrCodeSupportedCallsCount += 1
+        if let isLoginWithQrCodeSupportedClosure = isLoginWithQrCodeSupportedClosure {
+            return try await isLoginWithQrCodeSupportedClosure()
+        } else {
+            return isLoginWithQrCodeSupportedReturnValue
         }
     }
 
@@ -3648,6 +3671,46 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         } else {
             return observeRoomAccountDataEventRoomIdEventTypeListenerReturnValue
         }
+    }
+
+    //MARK: - optimizeStores
+
+    open var optimizeStoresThrowableError: Error?
+    var optimizeStoresUnderlyingCallsCount = 0
+    open var optimizeStoresCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return optimizeStoresUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = optimizeStoresUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                optimizeStoresUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    optimizeStoresUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var optimizeStoresCalled: Bool {
+        return optimizeStoresCallsCount > 0
+    }
+    open var optimizeStoresClosure: (() async throws -> Void)?
+
+    open override func optimizeStores() async throws {
+        if let error = optimizeStoresThrowableError {
+            throw error
+        }
+        optimizeStoresCallsCount += 1
+        try await optimizeStoresClosure?()
     }
 
     //MARK: - registerNotificationHandler
@@ -5919,6 +5982,121 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return try userIdServerNameClosure()
         } else {
             return userIdServerNameReturnValue
+        }
+    }
+
+    //MARK: - addRecentEmoji
+
+    open var addRecentEmojiEmojiThrowableError: Error?
+    var addRecentEmojiEmojiUnderlyingCallsCount = 0
+    open var addRecentEmojiEmojiCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addRecentEmojiEmojiUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addRecentEmojiEmojiUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addRecentEmojiEmojiUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addRecentEmojiEmojiUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var addRecentEmojiEmojiCalled: Bool {
+        return addRecentEmojiEmojiCallsCount > 0
+    }
+    open var addRecentEmojiEmojiReceivedEmoji: String?
+    open var addRecentEmojiEmojiReceivedInvocations: [String] = []
+    open var addRecentEmojiEmojiClosure: ((String) async throws -> Void)?
+
+    open override func addRecentEmoji(emoji: String) async throws {
+        if let error = addRecentEmojiEmojiThrowableError {
+            throw error
+        }
+        addRecentEmojiEmojiCallsCount += 1
+        addRecentEmojiEmojiReceivedEmoji = emoji
+        DispatchQueue.main.async {
+            self.addRecentEmojiEmojiReceivedInvocations.append(emoji)
+        }
+        try await addRecentEmojiEmojiClosure?(emoji)
+    }
+
+    //MARK: - getRecentEmojis
+
+    open var getRecentEmojisThrowableError: Error?
+    var getRecentEmojisUnderlyingCallsCount = 0
+    open var getRecentEmojisCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRecentEmojisUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRecentEmojisUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRecentEmojisUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRecentEmojisUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getRecentEmojisCalled: Bool {
+        return getRecentEmojisCallsCount > 0
+    }
+
+    var getRecentEmojisUnderlyingReturnValue: [RecentEmoji]!
+    open var getRecentEmojisReturnValue: [RecentEmoji]! {
+        get {
+            if Thread.isMainThread {
+                return getRecentEmojisUnderlyingReturnValue
+            } else {
+                var returnValue: [RecentEmoji]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRecentEmojisUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRecentEmojisUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRecentEmojisUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getRecentEmojisClosure: (() async throws -> [RecentEmoji])?
+
+    open override func getRecentEmojis() async throws -> [RecentEmoji] {
+        if let error = getRecentEmojisThrowableError {
+            throw error
+        }
+        getRecentEmojisCallsCount += 1
+        if let getRecentEmojisClosure = getRecentEmojisClosure {
+            return try await getRecentEmojisClosure()
+        } else {
+            return getRecentEmojisReturnValue
         }
     }
 }
@@ -14837,13 +15015,13 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return latestEventCallsCount > 0
     }
 
-    var latestEventUnderlyingReturnValue: EventTimelineItem?
-    open var latestEventReturnValue: EventTimelineItem? {
+    var latestEventUnderlyingReturnValue: LatestEventValue!
+    open var latestEventReturnValue: LatestEventValue! {
         get {
             if Thread.isMainThread {
                 return latestEventUnderlyingReturnValue
             } else {
-                var returnValue: EventTimelineItem?? = nil
+                var returnValue: LatestEventValue? = nil
                 DispatchQueue.main.sync {
                     returnValue = latestEventUnderlyingReturnValue
                 }
@@ -14861,9 +15039,9 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             }
         }
     }
-    open var latestEventClosure: (() async -> EventTimelineItem?)?
+    open var latestEventClosure: (() async -> LatestEventValue)?
 
-    open override func latestEvent() async -> EventTimelineItem? {
+    open override func latestEvent() async -> LatestEventValue {
         latestEventCallsCount += 1
         if let latestEventClosure = latestEventClosure {
             return await latestEventClosure()
@@ -15798,71 +15976,6 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return membershipClosure()
         } else {
             return membershipReturnValue
-        }
-    }
-
-    //MARK: - newLatestEvent
-
-    var newLatestEventUnderlyingCallsCount = 0
-    open var newLatestEventCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return newLatestEventUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = newLatestEventUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                newLatestEventUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    newLatestEventUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var newLatestEventCalled: Bool {
-        return newLatestEventCallsCount > 0
-    }
-
-    var newLatestEventUnderlyingReturnValue: LatestEventValue!
-    open var newLatestEventReturnValue: LatestEventValue! {
-        get {
-            if Thread.isMainThread {
-                return newLatestEventUnderlyingReturnValue
-            } else {
-                var returnValue: LatestEventValue? = nil
-                DispatchQueue.main.sync {
-                    returnValue = newLatestEventUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                newLatestEventUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    newLatestEventUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var newLatestEventClosure: (() async -> LatestEventValue)?
-
-    open override func newLatestEvent() async -> LatestEventValue {
-        newLatestEventCallsCount += 1
-        if let newLatestEventClosure = newLatestEventClosure {
-            return await newLatestEventClosure()
-        } else {
-            return newLatestEventReturnValue
         }
     }
 
@@ -26120,81 +26233,6 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
     }
 
-    //MARK: - sendGallery
-
-    open var sendGalleryParamsItemInfosThrowableError: Error?
-    var sendGalleryParamsItemInfosUnderlyingCallsCount = 0
-    open var sendGalleryParamsItemInfosCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return sendGalleryParamsItemInfosUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sendGalleryParamsItemInfosUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sendGalleryParamsItemInfosUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sendGalleryParamsItemInfosUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var sendGalleryParamsItemInfosCalled: Bool {
-        return sendGalleryParamsItemInfosCallsCount > 0
-    }
-    open var sendGalleryParamsItemInfosReceivedArguments: (params: GalleryUploadParameters, itemInfos: [GalleryItemInfo])?
-    open var sendGalleryParamsItemInfosReceivedInvocations: [(params: GalleryUploadParameters, itemInfos: [GalleryItemInfo])] = []
-
-    var sendGalleryParamsItemInfosUnderlyingReturnValue: SendGalleryJoinHandle!
-    open var sendGalleryParamsItemInfosReturnValue: SendGalleryJoinHandle! {
-        get {
-            if Thread.isMainThread {
-                return sendGalleryParamsItemInfosUnderlyingReturnValue
-            } else {
-                var returnValue: SendGalleryJoinHandle? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sendGalleryParamsItemInfosUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sendGalleryParamsItemInfosUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sendGalleryParamsItemInfosUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var sendGalleryParamsItemInfosClosure: ((GalleryUploadParameters, [GalleryItemInfo]) throws -> SendGalleryJoinHandle)?
-
-    open override func sendGallery(params: GalleryUploadParameters, itemInfos: [GalleryItemInfo]) throws -> SendGalleryJoinHandle {
-        if let error = sendGalleryParamsItemInfosThrowableError {
-            throw error
-        }
-        sendGalleryParamsItemInfosCallsCount += 1
-        sendGalleryParamsItemInfosReceivedArguments = (params: params, itemInfos: itemInfos)
-        DispatchQueue.main.async {
-            self.sendGalleryParamsItemInfosReceivedInvocations.append((params: params, itemInfos: itemInfos))
-        }
-        if let sendGalleryParamsItemInfosClosure = sendGalleryParamsItemInfosClosure {
-            return try sendGalleryParamsItemInfosClosure(params, itemInfos)
-        } else {
-            return sendGalleryParamsItemInfosReturnValue
-        }
-    }
-
     //MARK: - sendImage
 
     open var sendImageParamsThumbnailSourceImageInfoThrowableError: Error?
@@ -26826,6 +26864,81 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
             return try await unpinEventEventIdClosure(eventId)
         } else {
             return unpinEventEventIdReturnValue
+        }
+    }
+
+    //MARK: - sendGallery
+
+    open var sendGalleryParamsItemInfosThrowableError: Error?
+    var sendGalleryParamsItemInfosUnderlyingCallsCount = 0
+    open var sendGalleryParamsItemInfosCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendGalleryParamsItemInfosUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendGalleryParamsItemInfosUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendGalleryParamsItemInfosUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendGalleryParamsItemInfosUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sendGalleryParamsItemInfosCalled: Bool {
+        return sendGalleryParamsItemInfosCallsCount > 0
+    }
+    open var sendGalleryParamsItemInfosReceivedArguments: (params: GalleryUploadParameters, itemInfos: [GalleryItemInfo])?
+    open var sendGalleryParamsItemInfosReceivedInvocations: [(params: GalleryUploadParameters, itemInfos: [GalleryItemInfo])] = []
+
+    var sendGalleryParamsItemInfosUnderlyingReturnValue: SendGalleryJoinHandle!
+    open var sendGalleryParamsItemInfosReturnValue: SendGalleryJoinHandle! {
+        get {
+            if Thread.isMainThread {
+                return sendGalleryParamsItemInfosUnderlyingReturnValue
+            } else {
+                var returnValue: SendGalleryJoinHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendGalleryParamsItemInfosUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendGalleryParamsItemInfosUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendGalleryParamsItemInfosUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var sendGalleryParamsItemInfosClosure: ((GalleryUploadParameters, [GalleryItemInfo]) throws -> SendGalleryJoinHandle)?
+
+    open override func sendGallery(params: GalleryUploadParameters, itemInfos: [GalleryItemInfo]) throws -> SendGalleryJoinHandle {
+        if let error = sendGalleryParamsItemInfosThrowableError {
+            throw error
+        }
+        sendGalleryParamsItemInfosCallsCount += 1
+        sendGalleryParamsItemInfosReceivedArguments = (params: params, itemInfos: itemInfos)
+        DispatchQueue.main.async {
+            self.sendGalleryParamsItemInfosReceivedInvocations.append((params: params, itemInfos: itemInfos))
+        }
+        if let sendGalleryParamsItemInfosClosure = sendGalleryParamsItemInfosClosure {
+            return try sendGalleryParamsItemInfosClosure(params, itemInfos)
+        } else {
+            return sendGalleryParamsItemInfosReturnValue
         }
     }
 }
