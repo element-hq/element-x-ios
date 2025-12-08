@@ -230,6 +230,7 @@
 "common_light" = "Deschis";
 "common_line_copied_to_clipboard" = "Linie copiată în clipboard";
 "common_link_copied_to_clipboard" = "Linkul a fost copiat în clipboard";
+"common_link_new_device" = "Link new device";
 "common_loading" = "Se încarcă…";
 "common_loading_more" = "Se încarcă…";
 "common_message" = "Mesaj";
@@ -239,6 +240,7 @@
 "common_message_removed" = "Mesaj șters";
 "common_modern" = "Modern";
 "common_mute" = "Dezactivați sunetul";
+"common_name" = "Name";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Niciun rezultat";
 "common_no_room_name" = "Fără nume de cameră";
@@ -300,6 +302,7 @@
 "common_something_went_wrong" = "Ceva nu a mers bine";
 "common_something_went_wrong_message" = "Am întâmpinat o problemă. Vă rugăm să încercați din nou.";
 "common_space" = "Spațiu";
+"common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "Se începe conversația…";
 "common_sticker" = "Autocolant";
 "common_success" = "Succes";
@@ -374,6 +377,7 @@
 "dialog_default_video_quality_selector_subtitle" = "Selectați calitatea implicită a videoclipurilor pe care le încărcați.";
 "dialog_title_confirmation" = "Confirmare";
 "dialog_title_warning" = "Avertisment";
+"dialog_unsaved_changes_description" = "Aveți modificări nesalvate.";
 "dialog_unsaved_changes_description_ios" = "Modificările dumneavoastră nu vor fi salvate";
 "dialog_unsaved_changes_title" = "Salvați modificările?";
 "dialog_video_quality_selector_subtitle_file_size" = "Dimensiunea maximă permisă pentru fișiere este: %1$@";
@@ -441,6 +445,8 @@
 "notification_room_invite_body_with_sender" = "%1$@ v-a invitat să vă alăturați camerei";
 "notification_sender_me" = "Eu";
 "notification_sender_mention_reply" = "%1$@ v-a menționat sau răspuns";
+"notification_space_invite_body" = "Invited you to join the space";
+"notification_space_invite_body_with_sender" = "%1$@ invited you to join the space";
 "notification_test_push_notification_content" = "Vizualizați o notificare! Faceți clic pe mine!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -582,6 +588,9 @@
 "screen_leave_space_subtitle_only_last_admin" = "Nu veți părăsi următoarele camere deoarece sunteți singurul administrator:";
 "screen_leave_space_title" = "Părăsiți %1$@?";
 "screen_leave_space_title_last_admin" = "Sunteți singurul administrator pentru %1$@";
+"screen_link_new_device_desktop_computer" = "Desktop computer";
+"screen_link_new_device_mobile_device" = "Mobile device";
+"screen_link_new_device_title" = "What type of device do you want to link?";
 "screen_manage_authorized_spaces_header" = "Spaces where members can join the room without an invitation.";
 "screen_manage_authorized_spaces_title" = "Manage spaces";
 "screen_manage_authorized_spaces_unknown_space" = "(Unknown space)";
@@ -648,7 +657,9 @@
 "screen_roomlist_clear_filters" = "Ștergeți filtrele";
 "screen_roomlist_tombstoned_room_description" = "Această cameră a fost modernizată.";
 "screen_security_and_privacy_add_room_address_action" = "Adăugați adresa camerei";
+"screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorized spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Oricine poate cere să se alăture camerei, dar un administrator sau moderator va trebui să accepte cererea.";
+"screen_security_and_privacy_ask_to_join_single_space_members_option_description" = "Anyone in %1$@ can join, but everyone else must request access.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Da, activați criptarea";
 "screen_security_and_privacy_enable_encryption_alert_description" = "Odată activată, criptarea pentru o cameră nu poate fi dezactivată. Mesajele anterioare vor fi vizibile numai pentru membrii camerei de la momentul la care au fost invitați sau de la momentul la care s-au alăturat camerei. \nNimeni în afară de membrii camerei nu va putea citi messaje. Acest lucru poate împiedica funcționarea corectă a boților și a punților. \nNu recomandăm activarea criptării pentru camerele pe care oricine le poate găsi și la care se poate alătura.";
 "screen_security_and_privacy_enable_encryption_alert_title" = "Activați criptarea?";
@@ -1041,7 +1052,6 @@
 "screen_room_change_role_moderators_owner_section_footer" = "Proprietarii au automat privilegii de administrator.";
 "screen_room_change_role_moderators_title" = "Editați moderatorii";
 "screen_room_change_role_owners_title" = "Alegeți proprietari";
-"screen_room_change_role_unsaved_changes_description" = "Aveți modificări nesalvate.";
 "screen_room_details_add_topic_title" = "Adăugare subiect";
 "screen_room_details_badge_encrypted" = "Criptat";
 "screen_room_details_badge_not_encrypted" = "Necriptat";
@@ -1425,6 +1435,7 @@
 "screen_room_change_role_section_administrators" = "Administratori";
 "screen_room_change_role_section_moderators" = "Moderatori";
 "screen_room_change_role_section_users" = "Membri";
+"screen_room_change_role_unsaved_changes_description" = "Aveți modificări nesalvate.";
 "screen_room_change_role_unsaved_changes_title" = "Salvați modificările?";
 "screen_room_details_badge_public" = "Cameră publică";
 "screen_room_details_invite_people_title" = "Invitați prieteni";

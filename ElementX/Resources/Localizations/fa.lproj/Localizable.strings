@@ -230,6 +230,7 @@
 "common_light" = "روشن";
 "common_line_copied_to_clipboard" = "خط در تخته‌گیره رونوشت شد";
 "common_link_copied_to_clipboard" = "پیوند در تخته‌گیره رونوشت شد";
+"common_link_new_device" = "Link new device";
 "common_loading" = "بار کردن…";
 "common_loading_more" = "بار کردن بیش‌تر…";
 "common_message" = "پیام";
@@ -239,6 +240,7 @@
 "common_message_removed" = "پیام برداشته شد";
 "common_modern" = "نوین";
 "common_mute" = "بی‌صدا";
+"common_name" = "Name";
 "common_name_and_id" = "%1$@ ‏(%2$@)";
 "common_no_results" = "بدون نتیجه";
 "common_no_room_name" = "بدون نام اتاق";
@@ -300,6 +302,7 @@
 "common_something_went_wrong" = "چیزی اشتباه پیش رفت";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_space" = "فاصله";
+"common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "آغازیدن گپ…";
 "common_sticker" = "عکس برگردان";
 "common_success" = "موفّقیت";
@@ -374,6 +377,7 @@
 "dialog_default_video_quality_selector_subtitle" = "Select the default quality of videos you upload.";
 "dialog_title_confirmation" = "تایید";
 "dialog_title_warning" = "هشدار";
+"dialog_unsaved_changes_description" = "تغییراتی ذخیره نشده دارید.";
 "dialog_unsaved_changes_description_ios" = "تغییراتتان ذخیره نمی‌شوند";
 "dialog_unsaved_changes_title" = "ذخیرهٔ تغییرات؟";
 "dialog_video_quality_selector_subtitle_file_size" = "The max file size allowed is: %1$@";
@@ -441,6 +445,8 @@
 "notification_room_invite_body_with_sender" = "%1$@ دعوت کرد به اتاق بپیوندید";
 "notification_sender_me" = "خودم";
 "notification_sender_mention_reply" = "%1$@ اشاره کرد یا پاسخ داد";
+"notification_space_invite_body" = "Invited you to join the space";
+"notification_space_invite_body_with_sender" = "%1$@ invited you to join the space";
 "notification_test_push_notification_content" = "دارید آگاهی را مشاهده می‌کنید! کلیک کنید!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -582,6 +588,9 @@
 "screen_leave_space_subtitle_only_last_admin" = "از اتاق(های) زیر برداشته نخواهید شد؛ چرا که تنها مدیر هستید:";
 "screen_leave_space_title" = "ترک %1$@؟";
 "screen_leave_space_title_last_admin" = "تنها مدیر %1$@ هستید";
+"screen_link_new_device_desktop_computer" = "Desktop computer";
+"screen_link_new_device_mobile_device" = "Mobile device";
+"screen_link_new_device_title" = "What type of device do you want to link?";
 "screen_manage_authorized_spaces_header" = "Spaces where members can join the room without an invitation.";
 "screen_manage_authorized_spaces_title" = "Manage spaces";
 "screen_manage_authorized_spaces_unknown_space" = "(Unknown space)";
@@ -648,7 +657,9 @@
 "screen_roomlist_clear_filters" = "پاک کردن پالایه‌ها";
 "screen_roomlist_tombstoned_room_description" = "این اتاق ارتقا یافته";
 "screen_security_and_privacy_add_room_address_action" = "افزودن نشانی اتاق";
+"screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorized spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Everyone must request access.";
+"screen_security_and_privacy_ask_to_join_single_space_members_option_description" = "Anyone in %1$@ can join, but everyone else must request access.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "بله. به کار انداختن رمزنگاری";
 "screen_security_and_privacy_enable_encryption_alert_description" = "Once enabled, encryption for a room cannot be disabled, Message history will only be visible for room members since they were invited or since they joined the room.\nNo one besides the room members will be able to read messages. This may prevent bots and bridges to work correctly.\nWe do not recommend enabling encryption for rooms that anyone can find and join.";
 "screen_security_and_privacy_enable_encryption_alert_title" = "رمزگذاری فعال شود؟";
@@ -1041,7 +1052,6 @@
 "screen_room_change_role_moderators_owner_section_footer" = "ماکان به صورت خودکار اجازه‌های مدیریتی را دارند.";
 "screen_room_change_role_moderators_title" = "ویرایش ناظران";
 "screen_room_change_role_owners_title" = "گزینش مالکان";
-"screen_room_change_role_unsaved_changes_description" = "تغییراتی ذخیره نشده دارید.";
 "screen_room_details_add_topic_title" = "افزودن موضوع";
 "screen_room_details_badge_encrypted" = "رمز شده";
 "screen_room_details_badge_not_encrypted" = "رمزنگاری نشده";
@@ -1425,6 +1435,7 @@
 "screen_room_change_role_section_administrators" = "مدیران";
 "screen_room_change_role_section_moderators" = "ناظم‌ها";
 "screen_room_change_role_section_users" = "اعضا";
+"screen_room_change_role_unsaved_changes_description" = "تغییراتی ذخیره نشده دارید.";
 "screen_room_change_role_unsaved_changes_title" = "ذخیرهٔ تغییرات؟";
 "screen_room_details_badge_public" = "اتاق عمومی";
 "screen_room_details_invite_people_title" = "دعوت افراد";

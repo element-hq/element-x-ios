@@ -349,9 +349,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Invited</string>
+			<string>%1$d saatis kutse</string>
 			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d saatis kutse</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
