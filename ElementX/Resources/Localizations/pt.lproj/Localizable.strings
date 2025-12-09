@@ -230,6 +230,7 @@
 "common_light" = "Claro";
 "common_line_copied_to_clipboard" = "Linha copiada para a área de transferência";
 "common_link_copied_to_clipboard" = "Ligação copiada para a área de transferência";
+"common_link_new_device" = "Link new device";
 "common_loading" = "A carregar…";
 "common_loading_more" = "A carregar mais…";
 "common_message" = "Mensagem";
@@ -239,6 +240,7 @@
 "common_message_removed" = "Mensagem removida";
 "common_modern" = "Moderno";
 "common_mute" = "Silenciar";
+"common_name" = "Name";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Sem resultados";
 "common_no_room_name" = "Sala sem nome";
@@ -300,6 +302,7 @@
 "common_something_went_wrong" = "Algo correu mal";
 "common_something_went_wrong_message" = "Encontramos um erro. Por favor, tenta novamente.";
 "common_space" = "Espaço";
+"common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "A iniciar conversa…";
 "common_sticker" = "Autocolante";
 "common_success" = "Sucesso";
@@ -374,6 +377,7 @@
 "dialog_default_video_quality_selector_subtitle" = "Seleciona a qualidade predefinida dos vídeos que carregas.";
 "dialog_title_confirmation" = "Confirmação";
 "dialog_title_warning" = "Aviso";
+"dialog_unsaved_changes_description" = "Tens alterações por guardar.";
 "dialog_unsaved_changes_description_ios" = "As tuas alterações não serão guardadas";
 "dialog_unsaved_changes_title" = "Guardar alterações?";
 "dialog_video_quality_selector_subtitle_file_size" = "O tamanho máximo de ficheiro permitido é: %1$@";
@@ -441,6 +445,8 @@
 "notification_room_invite_body_with_sender" = "%1$@ convidou-te a entrares na sala";
 "notification_sender_me" = "Eu";
 "notification_sender_mention_reply" = "%1$@ mencionou ou respondeu";
+"notification_space_invite_body" = "Invited you to join the space";
+"notification_space_invite_body_with_sender" = "%1$@ invited you to join the space";
 "notification_test_push_notification_content" = "Estás a ver a notificação! Clica em mim!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -582,6 +588,9 @@
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Sair de %1$@?";
 "screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
+"screen_link_new_device_desktop_computer" = "Desktop computer";
+"screen_link_new_device_mobile_device" = "Mobile device";
+"screen_link_new_device_title" = "What type of device do you want to link?";
 "screen_manage_authorized_spaces_header" = "Spaces where members can join the room without an invitation.";
 "screen_manage_authorized_spaces_title" = "Manage spaces";
 "screen_manage_authorized_spaces_unknown_space" = "(Unknown space)";
@@ -648,7 +657,9 @@
 "screen_roomlist_clear_filters" = "Limpar filtros";
 "screen_roomlist_tombstoned_room_description" = "Esta sala foi atualizada";
 "screen_security_and_privacy_add_room_address_action" = "Adicionar endereço de sala";
+"screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorized spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou moderador tem que aceitar o pedido.";
+"screen_security_and_privacy_ask_to_join_single_space_members_option_description" = "Anyone in %1$@ can join, but everyone else must request access.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Sim, ativar cifragem";
 "screen_security_and_privacy_enable_encryption_alert_description" = "Uma vez ativada, a cifragem não pode ser desativada. O histórico de mensagens só será visível a membros a partir do momento em que foram convidados ou que entraram na sala.\nNinguém além dos membros poderão ler quaisquer mensagens. Isto pode impedir que robôs (\"bots\") e pontes (\"bridges\") funcionem devidamente.\nNão recomendamos ativar a cifragem em salas que qualquer pessoa possa encontrar e entrar.";
 "screen_security_and_privacy_enable_encryption_alert_title" = "Ativar cifragem?";
@@ -1041,7 +1052,6 @@
 "screen_room_change_role_moderators_owner_section_footer" = "Os donos têm permissões de administrador automaticamente";
 "screen_room_change_role_moderators_title" = "Editar Moderadores";
 "screen_room_change_role_owners_title" = "Escolher donos";
-"screen_room_change_role_unsaved_changes_description" = "Tens alterações por guardar.";
 "screen_room_details_add_topic_title" = "Adicionar descrição";
 "screen_room_details_badge_encrypted" = "Cifrada";
 "screen_room_details_badge_not_encrypted" = "Não cifrada";
@@ -1425,6 +1435,7 @@
 "screen_room_change_role_section_administrators" = "Administradores";
 "screen_room_change_role_section_moderators" = "Moderadores";
 "screen_room_change_role_section_users" = "Participantes";
+"screen_room_change_role_unsaved_changes_description" = "Tens alterações por guardar.";
 "screen_room_change_role_unsaved_changes_title" = "Guardar alterações?";
 "screen_room_details_badge_public" = "Sala pública";
 "screen_room_details_invite_people_title" = "Convidar pessoas";

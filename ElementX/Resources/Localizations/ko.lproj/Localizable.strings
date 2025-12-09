@@ -230,6 +230,7 @@
 "common_light" = "라이트";
 "common_line_copied_to_clipboard" = "줄이 클립보드에 복사되었습니다.";
 "common_link_copied_to_clipboard" = "링크가 클립보드에 복사됨";
+"common_link_new_device" = "Link new device";
 "common_loading" = "로딩 중…";
 "common_loading_more" = "더 많은 내용이 로딩 중…";
 "common_message" = "메시지";
@@ -239,6 +240,7 @@
 "common_message_removed" = "메시지 제거됨";
 "common_modern" = "모던";
 "common_mute" = "음소거";
+"common_name" = "Name";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "결과 없음";
 "common_no_room_name" = "방 이름 없음";
@@ -300,6 +302,7 @@
 "common_something_went_wrong" = "뭔가 잘못됐어요";
 "common_something_went_wrong_message" = "문제가 발생했습니다. 다시 시도해 주세요.";
 "common_space" = "스페이스";
+"common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "채팅 시작 중…";
 "common_sticker" = "스티커";
 "common_success" = "성공";
@@ -374,6 +377,7 @@
 "dialog_default_video_quality_selector_subtitle" = "업로드하는 비디오의 기본 품질을 선택하세요.";
 "dialog_title_confirmation" = "확인";
 "dialog_title_warning" = "경고";
+"dialog_unsaved_changes_description" = "저장되지 않은 변경 사항이 있습니다.";
 "dialog_unsaved_changes_description_ios" = "변경 내용은 저장되지 않습니다.";
 "dialog_unsaved_changes_title" = "변경 사항을 저장하시겠습니까?";
 "dialog_video_quality_selector_subtitle_file_size" = "허용되는 최대 파일 크기: %1$@\n";
@@ -441,6 +445,8 @@
 "notification_room_invite_body_with_sender" = "%1$@ 가 당신을 이 방에 초대했습니다";
 "notification_sender_me" = "나";
 "notification_sender_mention_reply" = "%1$@ 언급하거나 답변함";
+"notification_space_invite_body" = "Invited you to join the space";
+"notification_space_invite_body_with_sender" = "%1$@ invited you to join the space";
 "notification_test_push_notification_content" = "알림을 보고 있습니다! 클릭해주세요!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -582,6 +588,9 @@
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
 "screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
+"screen_link_new_device_desktop_computer" = "Desktop computer";
+"screen_link_new_device_mobile_device" = "Mobile device";
+"screen_link_new_device_title" = "What type of device do you want to link?";
 "screen_manage_authorized_spaces_header" = "Spaces where members can join the room without an invitation.";
 "screen_manage_authorized_spaces_title" = "Manage spaces";
 "screen_manage_authorized_spaces_unknown_space" = "(Unknown space)";
@@ -648,7 +657,9 @@
 "screen_roomlist_clear_filters" = "필터 지우기";
 "screen_roomlist_tombstoned_room_description" = "이 방이 업그레이드되었습니다";
 "screen_security_and_privacy_add_room_address_action" = "방 주소 추가";
+"screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorized spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "누구나 방에 참여 요청을 할 수 있지만, 관리자나 운영자가 요청을 수락해야 합니다.";
+"screen_security_and_privacy_ask_to_join_single_space_members_option_description" = "Anyone in %1$@ can join, but everyone else must request access.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "예, 암호화 활성화";
 "screen_security_and_privacy_enable_encryption_alert_description" = "일단 활성화되면, 방의 암호화는 비활성화할 수 없습니다. 메시지 기록은 방에 초대된 후 또는 방에 참여한 이후부터 방 구성원만 볼 수 있습니다.\n방 구성원 외에는 아무도 메시지를 읽을 수 없습니다. 이로 인해 봇과 브리지가 제대로 작동하지 않을 수 있습니다.\n누구나 찾고 참여할 수 있는 방에는 암호화를 활성화하지 않는 것이 좋습니다.";
 "screen_security_and_privacy_enable_encryption_alert_title" = "암호화 활성화?";
@@ -1041,7 +1052,6 @@
 "screen_room_change_role_moderators_owner_section_footer" = "소유자는 자동으로 관리자 권한을 갖습니다.";
 "screen_room_change_role_moderators_title" = "편집 중재자";
 "screen_room_change_role_owners_title" = "소유자 선택";
-"screen_room_change_role_unsaved_changes_description" = "저장되지 않은 변경 사항이 있습니다.";
 "screen_room_details_add_topic_title" = "화제 추가";
 "screen_room_details_badge_encrypted" = "암호화됨";
 "screen_room_details_badge_not_encrypted" = "암호화되지 않음";
@@ -1425,6 +1435,7 @@
 "screen_room_change_role_section_administrators" = "관리자";
 "screen_room_change_role_section_moderators" = "중재자";
 "screen_room_change_role_section_users" = "회원들";
+"screen_room_change_role_unsaved_changes_description" = "저장되지 않은 변경 사항이 있습니다.";
 "screen_room_change_role_unsaved_changes_title" = "변경 사항을 저장하시겠습니까?";
 "screen_room_details_badge_public" = "공개 방";
 "screen_room_details_invite_people_title" = "사람 초대하기";
