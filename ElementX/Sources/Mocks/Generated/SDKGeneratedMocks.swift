@@ -12857,6 +12857,71 @@ open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
             return serverNameReturnValue
         }
     }
+
+    //MARK: - toBytes
+
+    var toBytesUnderlyingCallsCount = 0
+    open var toBytesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return toBytesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = toBytesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                toBytesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    toBytesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var toBytesCalled: Bool {
+        return toBytesCallsCount > 0
+    }
+
+    var toBytesUnderlyingReturnValue: Data!
+    open var toBytesReturnValue: Data! {
+        get {
+            if Thread.isMainThread {
+                return toBytesUnderlyingReturnValue
+            } else {
+                var returnValue: Data? = nil
+                DispatchQueue.main.sync {
+                    returnValue = toBytesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                toBytesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    toBytesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var toBytesClosure: (() -> Data)?
+
+    open override func toBytes() -> Data {
+        toBytesCallsCount += 1
+        if let toBytesClosure = toBytesClosure {
+            return toBytesClosure()
+        } else {
+            return toBytesReturnValue
+        }
+    }
 }
 open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     init() {
