@@ -76,12 +76,12 @@ extension XCUIApplication {
         let webUsernameTextField = textFields["Username or Email"]
         XCTAssertTrue(webUsernameTextField.waitForExistence(timeout: 10.0))
         webUsernameTextField.clearAndTypeText(username, app: self)
-        webAuthenticationView.buttons["selected"].firstMatch.tap() // Dismiss the keyboard so that the password text field is fully hittable.
+        webAuthenticationView.buttons["Done"].firstMatch.tap() // Dismiss the keyboard so that the password text field is fully hittable.
         
         let webPasswordTextField = secureTextFields["Password"]
         XCTAssertTrue(webPasswordTextField.waitForExistence(timeout: 10.0))
         webPasswordTextField.clearAndTypeText(password, app: self)
-        webAuthenticationView.buttons["selected"].firstMatch.tap() // Dismiss the keyboard so that the continue button is fully hittable.
+        webAuthenticationView.buttons["Done"].firstMatch.tap() // Dismiss the keyboard so that the continue button is fully hittable.
         
         let webLoginButton = webAuthenticationView.buttons["Continue"]
         XCTAssertTrue(webLoginButton.waitForExistence(timeout: 10.0))
