@@ -76,8 +76,8 @@ class PreviewTests: XCTestCase {
         case .publisher(let publisher):
             let deferred = deferFulfillment(publisher) { $0 == true }
             try await deferred.fulfill()
-        case .stream(let stream):
-            let deferred = deferFulfillment(stream) { $0 == true }
+        case .sequence(let sequence):
+            let deferred = deferFulfillment(sequence) { $0 == true }
             try await deferred.fulfill()
         case .none:
             break

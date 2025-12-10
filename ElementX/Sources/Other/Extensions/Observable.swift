@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Mutex
+import Synchronization
 
 extension Observable {
     /// Creates an async stream for the specified property on this object. We probably won't need this once SE-0475 is available:

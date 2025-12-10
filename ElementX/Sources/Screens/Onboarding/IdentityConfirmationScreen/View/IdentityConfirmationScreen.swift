@@ -127,7 +127,7 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Actions")
         .snapshotPreferences(expect: viewModel.context.observe(\.viewState.availableActions).map { actions in
             actions?.contains([.interactiveVerification, .recovery]) == true
-        }.eraseToStream())
+        })
         
         NavigationStack {
             IdentityConfirmationScreen(context: loadingViewModel.context)

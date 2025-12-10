@@ -109,7 +109,7 @@ struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         EmojiPickerScreen(context: viewModel.context)
             .previewDisplayName("Screen")
-            .snapshotPreferences(expect: viewModel.context.observe(\.viewState.categories).map { !$0.isEmpty }.eraseToStream())
+            .snapshotPreferences(expect: viewModel.context.observe(\.viewState.categories).map { !$0.isEmpty })
     }
 }
 

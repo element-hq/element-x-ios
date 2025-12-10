@@ -94,7 +94,7 @@ enum UITestsSignalling {
                 try rawMessage(.ready).write(to: fileURL, atomically: false, encoding: .utf8)
             case .app:
                 // The app client is started second and checks that there is a ready signal from the tests.
-                guard try String(contentsOf: fileURL) == Message(mode: .tests, signal: .ready).rawValue else { throw UITestsSignalError.testsClientNotReady }
+                guard try String(contentsOf: fileURL, encoding: .utf8) == Message(mode: .tests, signal: .ready).rawValue else { throw UITestsSignalError.testsClientNotReady }
                 isConnected = true
                 // The app client then echoes back to the tests that it is now ready.
                 try send(.ready)

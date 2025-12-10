@@ -137,13 +137,13 @@ struct LoginScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             LoginScreen(context: viewModel.context)
         }
-        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.homeserver.loginMode).map { $0 == .password }.eraseToStream())
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.homeserver.loginMode).map { $0 == .password })
         .previewDisplayName("Initial State")
         
         NavigationStack {
             LoginScreen(context: credentialsViewModel.context)
         }
-        .snapshotPreferences(expect: credentialsViewModel.context.observe(\.viewState.homeserver.loginMode).map { $0 == .password }.eraseToStream())
+        .snapshotPreferences(expect: credentialsViewModel.context.observe(\.viewState.homeserver.loginMode).map { $0 == .password })
         .previewDisplayName("Credentials Entered")
         
         NavigationStack {
