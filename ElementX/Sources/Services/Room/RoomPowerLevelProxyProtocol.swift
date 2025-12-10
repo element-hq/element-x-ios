@@ -46,7 +46,18 @@ extension RoomPowerLevelsProxyProtocol {
     }
     
     /// Can own user edit any of the security and privacy settings.
-    func canOwnUserEditSecurityAndPrivacy() -> Bool {
-        canOwnUser(sendStateEvent: .roomEncryption) || canOwnUser(sendStateEvent: .roomAliases) || canOwnUser(sendStateEvent: .roomJoinRules) || canOwnUser(sendStateEvent: .roomHistoryVisibility)
+    func canOwnUserEditSecurityAndPrivacy(isSpace: Bool, joinRule: JoinRule?) -> Bool {
+        let canOwnUserChangeAddress = switch joinRule {
+        case .knockRestricted, .knock, .public:
+            canOwnUser(sendStateEvent: .roomAliases)
+        default:
+            false
+        }
+        
+        return if isSpace {
+            canOwnUser(sendStateEvent: .roomJoinRules) || canOwnUserChangeAddress
+        } else {
+            canOwnUser(sendStateEvent: .roomEncryption) || canOwnUser(sendStateEvent: .roomJoinRules) || canOwnUser(sendStateEvent: .roomHistoryVisibility) || canOwnUserChangeAddress
+        }
     }
 }
