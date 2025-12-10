@@ -235,7 +235,6 @@ targets:
     - package: LoremSwiftum
     - package: LRUCache
     - package: Mapbox
-    - package: Mutex
     - package: PostHog
     - package: SwiftState
     - package: GZIP
