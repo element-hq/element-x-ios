@@ -261,7 +261,7 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
         NavigationStack {
             SecureBackupRecoveryKeyScreen(context: setupViewModel.context)
         }
-        .snapshotPreferences(expect: setupViewModel.context.observe(\.viewState.recoveryKey).map { $0 != nil }.eraseToStream())
+        .snapshotPreferences(expect: setupViewModel.context.observe(\.viewState.recoveryKey).map { $0 != nil })
         .previewDisplayName("Set up")
         
         NavigationStack {
