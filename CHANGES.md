@@ -1,3 +1,32 @@
+## Changes in 25.12.1 (2025-12-10)
+
+### What's Changed
+
+🙌 Improvements
+* Updated edit details screen copies to reflect the usage of spaces. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4809
+* Use generic "update details..." copy when saving details change by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4818
+
+🐛 Bugfixes
+* Fix issues with the last message in the room list being cleared, going missing or being slow to update. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4834
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4830
+
+🚧 In development 🚧
+* Ask to join restricted/space members access option by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4812
+
+Others
+* Update GitHub Actions by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4824
+* Bump the RustSDK to v25.12.07 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4825
+* Set trust requirement even if `setEncryption` is `false`. by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4823
+* Bump the RustSDK to v25.12.09 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4832
+* Update peter-evans/create-pull-request action to v8 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4833
+
+### New Contributors
+* @kaylendog made their first contribution in https://github.com/element-hq/element-x-ios/pull/4823
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.12.0...release/25.12.1
+
 ## Changes in 25.12.0 (2025-12-02)
 
 ### What's Changed
