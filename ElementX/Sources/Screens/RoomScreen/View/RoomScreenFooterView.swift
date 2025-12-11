@@ -155,7 +155,7 @@ struct RoomScreenFooterView: View {
     
     private func historyVisibleAlertDescriptionWithLearnMoreLink(learnMoreURL: URL) -> AttributedString {
         let linkPlaceholder = "{link}"
-        var description = AttributedString(UntranslatedL10n.cryptoHistoryVisible(linkPlaceholder))
+        var description = AttributedString(L10n.cryptoHistoryVisible(linkPlaceholder))
         var linkString = AttributedString(L10n.actionLearnMore)
         linkString.link = learnMoreURL
         linkString.bold()
