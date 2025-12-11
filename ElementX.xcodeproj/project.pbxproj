@@ -25,6 +25,7 @@
 /* Begin PBXBuildFile section */
 		0033481EE363E4914295F188 /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070FD43DC6BF4E50217965A /* LocalizationTests.swift */; };
 		00C3023B6DF55024D8876B76 /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3D8BEEFCA07BEA43F4F4BF77 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		012D9DDCDE6278E4E0CDCC0F /* LinkNewDeviceFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EE2C5F0A06F146BBE3A1B1 /* LinkNewDeviceFlowCoordinator.swift */; };
 		01373C1AC4839604C4FDA404 /* test_apple_image.heic in Resources */ = {isa = PBXBuildFile; fileRef = BB576F4118C35E6B5124FA22 /* test_apple_image.heic */; };
 		01681E8B20AD6F0D237F2DC1 /* IdentityConfirmedScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6624240FFD32B7F0834229 /* IdentityConfirmedScreenViewModel.swift */; };
 		0180C44B997EDA8D21F883AC /* RoomNotificationSettingsCustomSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B746EFA112532A7B701FB914 /* RoomNotificationSettingsCustomSectionView.swift */; };
@@ -2319,6 +2320,7 @@
 		94028A227645FA880B966211 /* WaveformSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformSource.swift; sourceTree = "<group>"; };
 		9475FD81B13D50103E5290EB /* SpaceSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceSettingsScreen.swift; sourceTree = "<group>"; };
 		94D670124FC3E84F23A62CCF /* APNSPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APNSPayload.swift; sourceTree = "<group>"; };
+		94EE2C5F0A06F146BBE3A1B1 /* LinkNewDeviceFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkNewDeviceFlowCoordinator.swift; sourceTree = "<group>"; };
 		9501D11B4258DFA33BA3B40F /* ServerSelectionScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionScreenModels.swift; sourceTree = "<group>"; };
 		951F277E0585E50AC91987C8 /* DeclineAndBlockScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeclineAndBlockScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		955336CBD5ED73C792D1F580 /* EncryptionAuthenticity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionAuthenticity.swift; sourceTree = "<group>"; };
@@ -4362,6 +4364,7 @@
 				566FB9DA81607C2739D8C6A0 /* ChatsFlowCoordinatorStateMachine.swift */,
 				A07B011547B201A836C03052 /* EncryptionResetFlowCoordinator.swift */,
 				ECB836DD8BE31931F51B8AC9 /* EncryptionSettingsFlowCoordinator.swift */,
+				94EE2C5F0A06F146BBE3A1B1 /* LinkNewDeviceFlowCoordinator.swift */,
 				2178B951602AA921A5FD9DC8 /* MediaEventsTimelineFlowCoordinator.swift */,
 				C3285BD95B564CA2A948E511 /* OnboardingFlowCoordinator.swift */,
 				A54AAF72E821B4084B7E4298 /* PinnedEventsTimelineFlowCoordinator.swift */,
@@ -8027,6 +8030,7 @@
 				A9D349478F7D4A2B1E40CEF9 /* LegalInformationScreenViewModelProtocol.swift in Sources */,
 				5E597B9959BDAE7A67DBD5B2 /* LinkMetadataProvider.swift in Sources */,
 				112C6F1C493B3F26AB22716A /* LinkMetadataProviderProtocol.swift in Sources */,
+				012D9DDCDE6278E4E0CDCC0F /* LinkNewDeviceFlowCoordinator.swift in Sources */,
 				DE3BF0ED68E56BF625591D49 /* LinkNewDeviceScreen.swift in Sources */,
 				B466827F3766FF8E0CD0D34F /* LinkNewDeviceScreenCoordinator.swift in Sources */,
 				69B9CC733A880E1BB097C113 /* LinkNewDeviceScreenModels.swift in Sources */,
