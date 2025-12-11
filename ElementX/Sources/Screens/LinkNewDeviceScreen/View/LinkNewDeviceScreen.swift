@@ -21,6 +21,7 @@ struct LinkNewDeviceScreen: View {
         .backgroundStyle(.compound.bgSubtleSecondary)
         .navigationTitle(L10n.commonLinkNewDevice)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
     }
     
     @ViewBuilder
@@ -98,6 +99,14 @@ struct LinkNewDeviceScreen: View {
                 context.send(viewAction: .dismiss)
             }
             .buttonStyle(.compound(.primary))
+        }
+    }
+    
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(L10n.actionCancel) {
+                context.send(viewAction: .dismiss)
+            }
         }
     }
 }
