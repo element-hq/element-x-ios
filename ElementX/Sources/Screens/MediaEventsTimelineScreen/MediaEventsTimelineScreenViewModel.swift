@@ -54,18 +54,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
         
         super.init(initialViewState: .init(activeTimelineContext: activeTimelineContext, bindings: .init(screenMode: initialScreenMode)), mediaProvider: mediaProvider)
-        
-        context.$viewState.map(\.bindings.screenMode)
-            .removeDuplicates()
-            .map {
-                switch $0 {
-                case .media: mediaTimelineViewModel.context
-                case .files: filesTimelineViewModel.context
-                }
-            }
-            .weakAssign(to: \.state.activeTimelineContext, on: self)
-            .store(in: &cancellables)
-        
+                
         mediaTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
             guard let self, state.bindings.screenMode == .media else {
                 return
@@ -126,6 +115,11 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         
         switch viewAction {
         case .changedScreenMode:
+            switch state.bindings.screenMode {
+            case .media: state.activeTimelineContext = mediaTimelineViewModel.context
+            case .files: state.activeTimelineContext = filesTimelineViewModel.context
+            }
+            
             updateWithTimelineViewState(activeTimelineViewModel.context.viewState)
         case .oldestItemDidAppear:
             isOldestItemVisible = true
