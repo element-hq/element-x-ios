@@ -10,10 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum UntranslatedL10n {
-  /// Messages you send will be shared with new members invited to this room. %1$s
-  internal static func cryptoHistoryVisible(_ p1: UnsafePointer<CChar>) -> String {
-    return UntranslatedL10n.tr("Untranslated", "crypto_history_visible", p1)
-  }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
