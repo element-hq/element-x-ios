@@ -47,12 +47,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         setupRoomDirectoryVisibility()
         setupSubscriptions()
         Task {
-            switch await clientProxy.spaceService.joinedParents(childID: roomProxy.id) {
-            case .success(let joinedParentSpaces):
-                state.joinedParentSpaces = joinedParentSpaces
-            case .failure:
-                break
-            }
+            await setupSelectableJoinedSpaces()
         }
     }
     
@@ -233,6 +228,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         
         if shouldDismiss, !hasFailures {
             actionsSubject.send(.dismiss)
+        } else if !shouldDismiss {
+            await setupSelectableJoinedSpaces()
         }
     }
     
@@ -243,8 +240,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         }
         
         switch state.spaceSelection {
-        case .singleJoined(let joinedParent):
-            state.bindings.desiredSettings.accessType = .spaceMembers(spaceIDs: [joinedParent.id])
+        case .singleJoined(let joinedSpace):
+            state.bindings.desiredSettings.accessType = .spaceMembers(spaceIDs: [joinedSpace.id])
         case .singleUnknown(let id):
             state.bindings.desiredSettings.accessType = .spaceMembers(spaceIDs: [id])
         case .empty:
@@ -261,8 +258,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         }
         
         switch state.spaceSelection {
-        case .singleJoined(let joinedParent):
-            state.bindings.desiredSettings.accessType = .askToJoinWithSpaceMembers(spaceIDs: [joinedParent.id])
+        case .singleJoined(let joinedSpace):
+            state.bindings.desiredSettings.accessType = .askToJoinWithSpaceMembers(spaceIDs: [joinedSpace.id])
         case .singleUnknown(let id):
             state.bindings.desiredSettings.accessType = .askToJoinWithSpaceMembers(spaceIDs: [id])
         case .empty:
@@ -273,12 +270,12 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     }
 
     private func displayManageAuthorizedSpacesScreen(isAskToJoin: Bool) {
-        let joinedParentSpaces = state.joinedParentSpaces
+        let joinedSpaces = state.selectableJoinedSpaces
         let unknownSpaceIDs = state.currentSettings.accessType.spaceIDs.filter { id in
-            !joinedParentSpaces.contains { $0.id == id }
+            !joinedSpaces.contains { $0.id == id }
         }
         let selectedIDs = Set(state.bindings.desiredSettings.accessType.spaceIDs)
-        let authorizedSpacesSelection = AuthorizedSpacesSelection(joinedParentSpaces: joinedParentSpaces,
+        let authorizedSpacesSelection = AuthorizedSpacesSelection(joinedSpaces: joinedSpaces,
                                                                   unknownSpacesIDs: unknownSpaceIDs,
                                                                   initialSelectedIDs: selectedIDs)
         authorizedSpacesSelection.selectedIDs
@@ -289,6 +286,28 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             .store(in: &cancellables)
         
         actionsSubject.send(.displayManageAuthorizedSpacesScreen(authorizedSpacesSelection))
+    }
+    
+    private func setupSelectableJoinedSpaces() async {
+        var joinedParentSpaces: [SpaceRoomProxyProtocol] = []
+        switch await clientProxy.spaceService.joinedParents(childID: roomProxy.id) {
+        case .success(let value):
+            joinedParentSpaces = value
+        case .failure:
+            break
+        }
+        
+        var nonParentJoinedSpaces: [SpaceRoomProxyProtocol] = []
+        for spaceID in state.currentSettings.accessType.spaceIDs where !joinedParentSpaces.contains(where: { $0.id == spaceID }) {
+            if case let .success(.some(space)) = await clientProxy.spaceService.spaceForIdentifier(spaceID: spaceID) {
+                nonParentJoinedSpaces.append(space)
+            }
+        }
+        
+        // By default we only want to allow selection among joined parents but
+        // if there is a non parent joined space already set in the access type
+        // we also include it in the known spaces selection list.
+        state.selectableJoinedSpaces = joinedParentSpaces + nonParentJoinedSpaces
     }
     
     private static let loadingIndicatorIdentifier = "\(EditRoomAddressScreenViewModel.self)-Loading"

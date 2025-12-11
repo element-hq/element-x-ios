@@ -40,6 +40,15 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
+    func spaceForIdentifier(spaceID: String) async -> Result<SpaceRoomProxyProtocol?, SpaceServiceProxyError> {
+        do {
+            return try await .success(spaceService.getSpaceRoom(roomId: spaceID).map(SpaceRoomProxy.init))
+        } catch {
+            MXLog.error("Failed getting space room for \(spaceID): \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func leaveSpace(spaceID: String) async -> Result<LeaveSpaceHandleProxy, SpaceServiceProxyError> {
         do {
             return try await .success(.init(spaceID: spaceID, leaveHandle: spaceService.leaveSpace(spaceId: spaceID)))

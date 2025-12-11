@@ -15,6 +15,7 @@ import XCTest
 @MainActor
 class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     var viewModel: SecurityAndPrivacyScreenViewModelProtocol!
+    var spaceServiceProxy: SpaceServiceProxyMock!
     var roomProxy: JoinedRoomProxyMock!
     
     var context: SecurityAndPrivacyScreenViewModelType.Context {
@@ -32,7 +33,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let space = singleRoom[0]
         setupViewModel(joinedParentSpaces: singleRoom, joinRule: .public)
         
-        let deferred = deferFulfillment(context.$viewState) { $0.joinedParentSpaces.count == 1 }
+        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 1 }
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.currentSettings.accessType, .anyone)
@@ -63,7 +64,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let space = singleRoom[0]
         setupViewModel(joinedParentSpaces: singleRoom, joinRule: .public)
         
-        let deferred = deferFulfillment(context.$viewState) { $0.joinedParentSpaces.count == 1 }
+        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 1 }
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.currentSettings.accessType, .anyone)
@@ -94,7 +95,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let space = singleRoom[0]
         setupViewModel(joinedParentSpaces: [], joinRule: .restricted(rules: [.roomMembership(roomId: space.id)]))
         
-        let deferred = deferFulfillment(context.$viewState) { $0.joinedParentSpaces.count == 0 }
+        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 0 }
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.currentSettings.accessType, .spaceMembers(spaceIDs: [space.id]))
@@ -124,7 +125,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let spaces = [SpaceRoomProxyProtocol].mockJoinedSpaces2
         setupViewModel(joinedParentSpaces: spaces, joinRule: .public)
         
-        let deferred = deferFulfillment(context.$viewState) { $0.joinedParentSpaces.count == 3 }
+        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 3 }
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.currentSettings.accessType, .anyone)
@@ -140,7 +141,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
             switch action {
             case .displayManageAuthorizedSpacesScreen(let authorizedSpacesSelection):
                 defer { selectedIDs = authorizedSpacesSelection.selectedIDs }
-                return authorizedSpacesSelection.joinedParentSpaces.map(\.id) == spaces.map(\.id) &&
+                return authorizedSpacesSelection.joinedSpaces.map(\.id) == spaces.map(\.id) &&
                     authorizedSpacesSelection.unknownSpacesIDs.isEmpty &&
                     authorizedSpacesSelection.initialSelectedIDs.isEmpty
             default:
@@ -168,7 +169,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let spaces = [SpaceRoomProxyProtocol].mockJoinedSpaces2
         setupViewModel(joinedParentSpaces: spaces, joinRule: .public)
         
-        let deferred = deferFulfillment(context.$viewState) { $0.joinedParentSpaces.count == 3 }
+        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 3 }
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.currentSettings.accessType, .anyone)
@@ -184,7 +185,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
             switch action {
             case .displayManageAuthorizedSpacesScreen(let authorizedSpacesSelection):
                 defer { selectedIDs = authorizedSpacesSelection.selectedIDs }
-                return authorizedSpacesSelection.joinedParentSpaces.map(\.id) == spaces.map(\.id) &&
+                return authorizedSpacesSelection.joinedSpaces.map(\.id) == spaces.map(\.id) &&
                     authorizedSpacesSelection.unknownSpacesIDs.isEmpty &&
                     authorizedSpacesSelection.initialSelectedIDs.isEmpty
             default:
@@ -230,7 +231,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
             case .displayManageAuthorizedSpacesScreen(let authorizedSpacesSelection):
                 // We need the
                 defer { selectedIDs = authorizedSpacesSelection.selectedIDs }
-                return authorizedSpacesSelection.joinedParentSpaces.map(\.id) == spaces.map(\.id) &&
+                return authorizedSpacesSelection.joinedSpaces.map(\.id) == spaces.map(\.id) &&
                     authorizedSpacesSelection.unknownSpacesIDs == ["unknownSpaceID"] &&
                     authorizedSpacesSelection.initialSelectedIDs == ["unknownSpaceID"]
             default:
@@ -252,6 +253,48 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         }
         context.send(viewAction: .save)
         await fulfillment(of: [expectation])
+    }
+    
+    func testMultipleSpacesMembersSelectionWithAnExistingNonParentButJoinedSpace() async throws {
+        let joinedParentSpaces = [SpaceRoomProxyProtocol].mockJoinedSpaces2
+        let singleRoom = [SpaceRoomProxyProtocol].mockSingleRoom
+        let space = singleRoom[0]
+        let allSpaces = joinedParentSpaces + singleRoom
+        setupViewModel(joinedParentSpaces: joinedParentSpaces,
+                       joinedSpaces: allSpaces,
+                       joinRule: .restricted(rules: [.roomMembership(roomId: space.id),
+                                                     .roomMembership(roomId: "unknownSpaceID")]))
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 5 }
+        try await deferred.fulfill()
+        
+        XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceMembers)
+        XCTAssertTrue(context.viewState.isSaveDisabled)
+        XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
+        guard case .multiple = context.viewState.spaceSelection else {
+            XCTFail("Expected spaceSelection to be .multiple")
+            return
+        }
+        
+        var selectedIDs: PassthroughSubject<Set<String>, Never>!
+        let deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
+            switch action {
+            case .displayManageAuthorizedSpacesScreen(let authorizedSpacesSelection):
+                // We need the
+                defer { selectedIDs = authorizedSpacesSelection.selectedIDs }
+                return authorizedSpacesSelection.joinedSpaces.map(\.id) == allSpaces.map(\.id) &&
+                    authorizedSpacesSelection.unknownSpacesIDs == ["unknownSpaceID"] &&
+                    authorizedSpacesSelection.initialSelectedIDs == [space.id, "unknownSpaceID"]
+            default:
+                return false
+            }
+        }
+        context.send(viewAction: .manageSpaces)
+        try await deferredAction.fulfill()
+        selectedIDs.send([allSpaces[0].id, "unknownSpaceID"])
+        XCTAssertEqual(context.desiredSettings.accessType, .spaceMembers(spaceIDs: [allSpaces[0].id, "unknownSpaceID"]))
+        XCTAssertNotNil(context.viewState.accessSectionFooter)
+        XCTAssertFalse(context.viewState.isSaveDisabled)
     }
     
     func testEmptySpaceMembersSelectionEdgeCase() async throws {
@@ -295,7 +338,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
             switch action {
             case .displayManageAuthorizedSpacesScreen(let authorizedSpacesSelection):
-                return authorizedSpacesSelection.joinedParentSpaces.map(\.id) == singleRoom.map(\.id) &&
+                return authorizedSpacesSelection.joinedSpaces.map(\.id) == singleRoom.map(\.id) &&
                     authorizedSpacesSelection.unknownSpacesIDs.isEmpty &&
                     authorizedSpacesSelection.initialSelectedIDs.isEmpty
             default:
@@ -382,6 +425,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     // MARK: - Helpers
     
     private func setupViewModel(joinedParentSpaces: [SpaceRoomProxyProtocol],
+                                joinedSpaces: [SpaceRoomProxyProtocol] = [],
                                 joinRule: JoinRule) {
         let appSettings = AppSettings()
         appSettings.spaceSettingsEnabled = true
@@ -396,7 +440,8 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         
         viewModel = SecurityAndPrivacyScreenViewModel(roomProxy: roomProxy,
                                                       clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",
-                                                                                         spaceServiceConfiguration: .init(joinedParentSpaces: joinedParentSpaces))),
+                                                                                         spaceServiceConfiguration: .init(joinedSpaces: joinedSpaces,
+                                                                                                                          joinedParentSpaces: joinedParentSpaces))),
                                                       userIndicatorController: UserIndicatorControllerMock(),
                                                       appSettings: appSettings)
     }

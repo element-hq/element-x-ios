@@ -23265,6 +23265,81 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
         }
     }
 
+    //MARK: - getSpaceRoom
+
+    open var getSpaceRoomRoomIdThrowableError: Error?
+    var getSpaceRoomRoomIdUnderlyingCallsCount = 0
+    open var getSpaceRoomRoomIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getSpaceRoomRoomIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getSpaceRoomRoomIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getSpaceRoomRoomIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getSpaceRoomRoomIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getSpaceRoomRoomIdCalled: Bool {
+        return getSpaceRoomRoomIdCallsCount > 0
+    }
+    open var getSpaceRoomRoomIdReceivedRoomId: String?
+    open var getSpaceRoomRoomIdReceivedInvocations: [String] = []
+
+    var getSpaceRoomRoomIdUnderlyingReturnValue: SpaceRoom?
+    open var getSpaceRoomRoomIdReturnValue: SpaceRoom? {
+        get {
+            if Thread.isMainThread {
+                return getSpaceRoomRoomIdUnderlyingReturnValue
+            } else {
+                var returnValue: SpaceRoom?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getSpaceRoomRoomIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getSpaceRoomRoomIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getSpaceRoomRoomIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getSpaceRoomRoomIdClosure: ((String) async throws -> SpaceRoom?)?
+
+    open override func getSpaceRoom(roomId: String) async throws -> SpaceRoom? {
+        if let error = getSpaceRoomRoomIdThrowableError {
+            throw error
+        }
+        getSpaceRoomRoomIdCallsCount += 1
+        getSpaceRoomRoomIdReceivedRoomId = roomId
+        DispatchQueue.main.async {
+            self.getSpaceRoomRoomIdReceivedInvocations.append(roomId)
+        }
+        if let getSpaceRoomRoomIdClosure = getSpaceRoomRoomIdClosure {
+            return try await getSpaceRoomRoomIdClosure(roomId)
+        } else {
+            return getSpaceRoomRoomIdReturnValue
+        }
+    }
+
     //MARK: - joinedParentsOfChild
 
     open var joinedParentsOfChildChildIdThrowableError: Error?
