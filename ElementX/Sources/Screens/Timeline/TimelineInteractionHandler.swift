@@ -26,6 +26,7 @@ enum TimelineInteractionHandlerAction {
     
     case viewInRoomTimeline(eventID: String)
     case displayThread(itemID: TimelineItemIdentifier)
+    case showTranslation(text: String)
 }
 
 /// The interaction handler groups logic for dealing with various actions the user can take on a timeline's
@@ -198,6 +199,9 @@ class TimelineInteractionHandler {
             break // Handled inline in the media preview screen with a ShareLink.
         case .save:
             break // Handled inline in the media preview screen.
+        case .translate:
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
+            actionsSubject.send(.showTranslation(text: messageTimelineItem.body))
         }
         
         if action.switchToDefaultComposer {

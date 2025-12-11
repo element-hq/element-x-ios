@@ -133,6 +133,7 @@
 "action_retry" = "Ceisio eto";
 "action_retry_decryption" = "Cynnig arall ar ddadgryptio";
 "action_save" = "Cadw";
+"action_translate" = "Cyfieithu";
 "action_search" = "Chwilio";
 "action_select_all" = "Dewis y cyfan";
 "action_send" = "Anfon";

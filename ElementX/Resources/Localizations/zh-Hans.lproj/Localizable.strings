@@ -133,6 +133,7 @@
 "action_retry" = "重试";
 "action_retry_decryption" = "重试解密";
 "action_save" = "保存";
+"action_translate" = "翻译";
 "action_search" = "搜索";
 "action_select_all" = "全选";
 "action_send" = "发送";

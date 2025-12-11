@@ -133,6 +133,7 @@
 "action_retry" = "Újra";
 "action_retry_decryption" = "Visszafejtés újbóli megpróbálása";
 "action_save" = "Mentés";
+"action_translate" = "Fordítás";
 "action_search" = "Keresés";
 "action_select_all" = "Összes kijelölése";
 "action_send" = "Küldés";
