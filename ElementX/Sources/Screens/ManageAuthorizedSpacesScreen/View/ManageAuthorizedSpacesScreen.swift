@@ -15,8 +15,8 @@ struct ManageAuthorizedSpacesScreen: View {
         Form {
             header
             
-            if !context.viewState.authorizedSpacesSelection.joinedParentSpaces.isEmpty {
-                joinedParentsSection
+            if !context.viewState.authorizedSpacesSelection.joinedSpaces.isEmpty {
+                joinedSpacesSection
             }
             
             if !context.viewState.authorizedSpacesSelection.unknownSpacesIDs.isEmpty {
@@ -46,9 +46,9 @@ struct ManageAuthorizedSpacesScreen: View {
         }
     }
     
-    private var joinedParentsSection: some View {
+    private var joinedSpacesSection: some View {
         Section {
-            ForEach(context.viewState.authorizedSpacesSelection.joinedParentSpaces, id: \.id) { space in
+            ForEach(context.viewState.authorizedSpacesSelection.joinedSpaces, id: \.id) { space in
                 ListRow(label: .avatar(title: space.name,
                                        description: space.canonicalAlias,
                                        icon: avatar(space: space)),
@@ -102,7 +102,7 @@ struct ManageAuthorizedSpacesScreen: View {
 // MARK: - Previews
 
 struct ManageAuthorizedSpacesScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = ManageAuthorizedSpacesScreenViewModel(authorizedSpacesSelection: .init(joinedParentSpaces: .mockJoinedSpaces2,
+    static let viewModel = ManageAuthorizedSpacesScreenViewModel(authorizedSpacesSelection: .init(joinedSpaces: .mockJoinedSpaces2,
                                                                                                   unknownSpacesIDs: ["!unknown-space-id-1",
                                                                                                                      "!unknown-space-id-2",
                                                                                                                      "!unknown-space-id-3"],

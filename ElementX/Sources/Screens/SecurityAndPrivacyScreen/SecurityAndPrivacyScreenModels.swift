@@ -38,11 +38,12 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     var canEditJoinRule = false
     var canEnableEncryption = false
     var canEditHistoryVisibility = false
-    var joinedParentSpaces: [SpaceRoomProxyProtocol] = []
+    /// The union of joined parent spaces and the joined spaces in the current access type
+    var selectableJoinedSpaces: [SpaceRoomProxyProtocol] = []
     
     /// The count of the intersection between the set of joined parent spaces and the set of spaces in the current access type
     var selectableSpacesCount: Int {
-        Set(joinedParentSpaces.map(\.id) + currentSettings.accessType.spaceIDs).count
+        Set(selectableJoinedSpaces.map(\.id) + currentSettings.accessType.spaceIDs).count
     }
     
     private var hasChanges: Bool {
@@ -85,8 +86,8 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     var spaceMembersDescription: String {
         if isSpaceMembersOptionSelectable {
             switch spaceSelection {
-            case .singleJoined(let joinedParentSpace):
-                L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionSingleParentDescription(joinedParentSpace.name)
+            case .singleJoined(let joinedSpace):
+                L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionSingleParentDescription(joinedSpace.name)
             case .singleUnknown(let id):
                 L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionSingleParentDescription(id)
             case .multiple, .empty:
@@ -100,8 +101,8 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     var askToJoinWithSpaceMembersDescription: String {
         if isAskToJoinWithSpaceMembersOptionSelectable {
             switch spaceSelection {
-            case .singleJoined(let joinedParentSpace):
-                L10n.screenSecurityAndPrivacyAskToJoinSingleSpaceMembersOptionDescription(joinedParentSpace.name)
+            case .singleJoined(let joinedSpace):
+                L10n.screenSecurityAndPrivacyAskToJoinSingleSpaceMembersOptionDescription(joinedSpace.name)
             case .singleUnknown(let id):
                 L10n.screenSecurityAndPrivacyAskToJoinSingleSpaceMembersOptionDescription(id)
             case .multiple, .empty:
@@ -140,17 +141,17 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
             .empty
         } else if selectableSpacesCount > 1 {
             .multiple
-        } else if let joinedParent = joinedParentSpaces.first {
+        } else if let joinedSpace = selectableJoinedSpaces.first {
             if currentSettings.accessType.isSpaceMembers || currentSettings.accessType.isAskToJoinWithSpaceMembers {
                 if currentSettings.accessType.spaceIDs.isEmpty {
                     // Edge case where the access type is already space members, but it does not contain any id
                     // So if the user wants to add their own parent they need to do it from the selection menu
                     .multiple
                 } else {
-                    .singleJoined(joinedParent)
+                    .singleJoined(joinedSpace)
                 }
             } else {
-                .singleJoined(joinedParent)
+                .singleJoined(joinedSpace)
             }
         } else if let unknownSpaceID = currentSettings.accessType.spaceIDs.first {
             // The space is not joined by the user but is currently selected

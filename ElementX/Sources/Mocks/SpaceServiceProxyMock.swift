@@ -34,6 +34,9 @@ extension SpaceServiceProxyMock {
             .success(LeaveSpaceHandleProxy(spaceID: spaceID,
                                            leaveHandle: LeaveSpaceHandleSDKMock(.init(rooms: configuration.leaveSpaceRooms))))
         }
+        spaceForIdentifierSpaceIDClosure = { spaceID in
+            .success(configuration.joinedSpaces.first { $0.id == spaceID })
+        }
     }
 }
 
