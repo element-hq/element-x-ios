@@ -16,12 +16,10 @@ struct RoomScreenFooterView: View {
     
     private var borderColor: Color {
         switch details {
-        case .pinViolation:
+        case .pinViolation, .historyVisible:
             .compound.borderInfoSubtle
         case .verificationViolation:
             .compound.borderCriticalSubtle
-        case .historyVisible:
-            .compound.borderInfoSubtle
         case .none:
             Color.compound.bgCanvasDefault
         }
@@ -29,12 +27,10 @@ struct RoomScreenFooterView: View {
     
     private var gradient: Gradient {
         switch details {
-        case .pinViolation:
+        case .pinViolation, .historyVisible:
             .compound.info
         case .verificationViolation:
             Gradient(colors: [.compound.bgCriticalSubtle, .clear])
-        case .historyVisible:
-            Gradient(colors: [.compound.bgInfoSubtle, .clear])
         case .none:
             Gradient(colors: [.clear])
         }
@@ -59,7 +55,7 @@ struct RoomScreenFooterView: View {
         case .verificationViolation(member: let member, learnMoreURL: let learnMoreURL):
             verificationViolation(member: member, learnMoreURL: learnMoreURL)
         case .historyVisible(learnMoreURL: let learnMoreURL):
-            historyVisibleAlert(learnMoreUrl: learnMoreURL)
+            historyVisibleAlert(learnMoreURL: learnMoreURL)
         }
     }
     
@@ -157,18 +153,23 @@ struct RoomScreenFooterView: View {
         return description
     }
     
+    private func historyVisibleAlertDescriptionWithLearnMoreLink(learnMoreURL: URL) -> AttributedString {
+        let linkPlaceholder = "{link}"
+        var description = AttributedString(UntranslatedL10n.cryptoHistoryVisible(linkPlaceholder))
+        var linkString = AttributedString(L10n.actionLearnMore)
+        linkString.link = learnMoreURL
+        linkString.bold()
+        description.replace(linkPlaceholder, with: linkString)
+        return description
+    }
+    
     private func fallbackDisplayName(_ userID: String) -> String {
         guard let localpart = userID.components(separatedBy: ":").first else { return userID }
         return String(localpart.trimmingPrefix("@"))
     }
     
-    private func historyVisibleAlert(learnMoreUrl: URL) -> some View {
-        let linkPlaceholder = "{link}"
-        var description = AttributedString(UntranslatedL10n.cryptoHistoryVisible(linkPlaceholder))
-        var linkString = AttributedString(L10n.actionLearnMore)
-        linkString.link = learnMoreUrl
-        linkString.bold()
-        description.replace(linkPlaceholder, with: linkString)
+    private func historyVisibleAlert(learnMoreURL: URL) -> some View {
+        let description = historyVisibleAlertDescriptionWithLearnMoreLink(learnMoreURL: learnMoreURL)
         
         return VStack(spacing: 16) {
             HStack(spacing: 16) {
