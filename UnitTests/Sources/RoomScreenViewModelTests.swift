@@ -548,7 +548,7 @@ class RoomScreenViewModelTests: XCTestCase {
         }
         
         ServiceLocator.shared.settings.hasSeenHistoryVisibleBannerRooms.insert("$room:example.com")
-        viewModel.context.send(viewAction: RoomScreenViewAction.footerViewAction(RoomScreenFooterViewAction.dismissHistoryVisibleAlert))
+        viewModel.context.send(viewAction: .footerViewAction(RoomScreenFooterViewAction.dismissHistoryVisibleAlert))
         
         try await deferred.fulfill()
     }
