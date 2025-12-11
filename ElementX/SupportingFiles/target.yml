@@ -225,6 +225,7 @@ targets:
       embed: true
     - package: Compound
     - package: Algorithms
+    - package: AsyncAlgorithms
     - package: AnalyticsEvents
     - package: Collections
     - package: DeviceKit
