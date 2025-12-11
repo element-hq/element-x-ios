@@ -51,7 +51,7 @@ settings:
   ENABLE_BITCODE: false
   APP_NAME: ElementX
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 25.12.1
+  MARKETING_VERSION: 25.12.2
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
 
@@ -71,7 +71,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 25.12.07
+    exactVersion: 25.12.10
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
@@ -138,9 +138,6 @@ packages:
   Mapbox:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
     minorVersion: 5.13.0
-  Mutex: # Backports Swift's built in Mutex so we can use it on iOS 17.
-    url: https://github.com/swhitty/swift-mutex
-    minorVersion: 0.0.6
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     minorVersion: 3.27.0

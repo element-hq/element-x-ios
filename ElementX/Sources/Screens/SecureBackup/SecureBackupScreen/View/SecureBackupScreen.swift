@@ -129,25 +129,25 @@ struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             SecureBackupScreen(context: bothSetupViewModel.context)
         }
-        .snapshotPreferences(expect: bothSetupViewModel.context.observe(\.viewState.keyBackupState).map { $0 == .enabled }.eraseToStream())
+        .snapshotPreferences(expect: bothSetupViewModel.context.observe(\.viewState.keyBackupState).map { $0 == .enabled })
         .previewDisplayName("Both setup")
         
         NavigationStack {
             SecureBackupScreen(context: onlyKeyBackupSetUpViewModel.context)
         }
-        .snapshotPreferences(expect: onlyKeyBackupSetUpViewModel.context.observe(\.viewState.keyBackupState).map { $0 == .enabled }.eraseToStream())
+        .snapshotPreferences(expect: onlyKeyBackupSetUpViewModel.context.observe(\.viewState.keyBackupState).map { $0 == .enabled })
         .previewDisplayName("Only key backup setup")
         
         NavigationStack {
             SecureBackupScreen(context: keyBackupDisabledViewModel.context)
         }
-        .snapshotPreferences(expect: keyBackupDisabledViewModel.context.observe(\.viewState.keyBackupState).map { $0 == .unknown }.eraseToStream())
+        .snapshotPreferences(expect: keyBackupDisabledViewModel.context.observe(\.viewState.keyBackupState).map { $0 == .unknown })
         .previewDisplayName("Key backup disabled")
         
         NavigationStack {
             SecureBackupScreen(context: recoveryIncompleteViewModel.context)
         }
-        .snapshotPreferences(expect: recoveryIncompleteViewModel.context.observe(\.viewState.recoveryState).map { $0 == .incomplete }.eraseToStream())
+        .snapshotPreferences(expect: recoveryIncompleteViewModel.context.observe(\.viewState.recoveryState).map { $0 == .incomplete })
         .previewDisplayName("Recovery incomplete")
     }
     

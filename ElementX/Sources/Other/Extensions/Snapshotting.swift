@@ -34,7 +34,7 @@ struct SnapshotFulfillmentPreferenceKey: PreferenceKey {
     
     enum Source {
         case publisher(AnyPublisher<Bool, Never>)
-        case stream(AsyncStream<Bool>)
+        case sequence(any AsyncSequence<Bool, Never>)
     }
     
     struct Wrapper: Equatable {
@@ -69,14 +69,14 @@ extension SwiftUI.View {
     /// These preferences can then be retrieved and used elsewhere in your view hierarchy.
     ///
     /// - Parameters:
-    ///   - expect: A stream that indicates when the preview is ready for snapshotting.
+    ///   - expect: An async sequence that indicates when the preview is ready for snapshotting.
     ///   - precision: The percentage of pixels that must match.
     ///   - perceptualPrecision: The percentage a pixel must match the source pixel to be considered a match. 98-99% mimics the precision of the human eye.
-    func snapshotPreferences(expect fulfillmentStream: AsyncStream<Bool>? = nil,
+    func snapshotPreferences(expect fulfillmentSequence: (any AsyncSequence<Bool, Never>)? = nil,
                              precision: Float = 1.0,
                              perceptualPrecision: Float = 0.98) -> some SwiftUI.View {
         preference(key: SnapshotPrecisionPreferenceKey.self, value: precision)
             .preference(key: SnapshotPerceptualPrecisionPreferenceKey.self, value: perceptualPrecision)
-            .preference(key: SnapshotFulfillmentPreferenceKey.self, value: fulfillmentStream.map { SnapshotFulfillmentPreferenceKey.Wrapper(source: .stream($0)) })
+            .preference(key: SnapshotFulfillmentPreferenceKey.self, value: fulfillmentSequence.map { SnapshotFulfillmentPreferenceKey.Wrapper(source: .sequence($0)) })
     }
 }

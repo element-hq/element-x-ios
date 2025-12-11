@@ -230,6 +230,7 @@
 "common_light" = "Lyst tema";
 "common_line_copied_to_clipboard" = "Linje kopieret til udklipsholder";
 "common_link_copied_to_clipboard" = "Linket er kopieret til udklipsholderen";
+"common_link_new_device" = "Link new device";
 "common_loading" = "Indlæser...";
 "common_loading_more" = "Indlæser flere...";
 "common_message" = "Besked";
@@ -239,6 +240,7 @@
 "common_message_removed" = "Beskeden er fjernet";
 "common_modern" = "Moderne";
 "common_mute" = "Lydløs";
+"common_name" = "Name";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Ingen resultater";
 "common_no_room_name" = "Intet rumnavn";
@@ -300,6 +302,7 @@
 "common_something_went_wrong" = "Noget gik galt";
 "common_something_went_wrong_message" = "Vi stødte på et problem. Prøv venligst igen.";
 "common_space" = "Gruppe";
+"common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "Starter samtale...";
 "common_sticker" = "Klistermærke";
 "common_success" = "Succes";
@@ -374,6 +377,7 @@
 "dialog_default_video_quality_selector_subtitle" = "Vælg standardkvaliteten for de videoer, du uploader.";
 "dialog_title_confirmation" = "Bekræftelse";
 "dialog_title_warning" = "Advarsel";
+"dialog_unsaved_changes_description" = "Du har ændringer, der ikke er gemt.";
 "dialog_unsaved_changes_description_ios" = "Dine ændringer vil ikke blive gemt";
 "dialog_unsaved_changes_title" = "Gem ændringer?";
 "dialog_video_quality_selector_subtitle_file_size" = "Den maksimalt tilladte filstørrelse er: %1$@";
@@ -441,6 +445,8 @@
 "notification_room_invite_body_with_sender" = "%1$@ inviterede dig til at deltage i rummet";
 "notification_sender_me" = "Mig";
 "notification_sender_mention_reply" = "%1$@ nævnt eller besvaret";
+"notification_space_invite_body" = "Invited you to join the space";
+"notification_space_invite_body_with_sender" = "%1$@ invited you to join the space";
 "notification_test_push_notification_content" = "Du ser notifikationen! Klik på mig!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -582,6 +588,9 @@
 "screen_leave_space_subtitle_only_last_admin" = "Du vil ikke blive fjernet fra følgende rum, fordi du er den eneste administrator:";
 "screen_leave_space_title" = "Forlad %1$@?";
 "screen_leave_space_title_last_admin" = "Du er den eneste administrator for %1$@";
+"screen_link_new_device_desktop_computer" = "Desktop computer";
+"screen_link_new_device_mobile_device" = "Mobile device";
+"screen_link_new_device_title" = "What type of device do you want to link?";
 "screen_manage_authorized_spaces_header" = "Spaces where members can join the room without an invitation.";
 "screen_manage_authorized_spaces_title" = "Manage spaces";
 "screen_manage_authorized_spaces_unknown_space" = "(Unknown space)";
@@ -648,7 +657,9 @@
 "screen_roomlist_clear_filters" = "Ryd filtre";
 "screen_roomlist_tombstoned_room_description" = "Dette rum er blevet opgraderet";
 "screen_security_and_privacy_add_room_address_action" = "Tilføj adresse på rum";
+"screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorized spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Alle kan bede om at deltage i lokalet, men en administrator eller moderator skal acceptere anmodningen.";
+"screen_security_and_privacy_ask_to_join_single_space_members_option_description" = "Anyone in %1$@ can join, but everyone else must request access.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Ja, aktivér kryptering";
 "screen_security_and_privacy_enable_encryption_alert_description" = "Når det først er aktiveret, kan kryptering for et rum ikke deaktiveres igen. Beskedhistorik vil kun være synlig for rummedlemmer, siden de blev inviteret, eller siden de blev medlem af rummet.\nIngen udover medlemmer af rummet vil være i stand til at læse beskeder. Dette kan forhindre bots og broer i at fungere korrekt.\nVi anbefaler ikke at aktivere kryptering for rum, som alle kan finde og deltage i.";
 "screen_security_and_privacy_enable_encryption_alert_title" = "Aktivér kryptering?";
@@ -1041,7 +1052,6 @@
 "screen_room_change_role_moderators_owner_section_footer" = "Ejere har automatisk administratorrettigheder.";
 "screen_room_change_role_moderators_title" = "Redigér moderatorer";
 "screen_room_change_role_owners_title" = "Vælg ejere";
-"screen_room_change_role_unsaved_changes_description" = "Du har ændringer, der ikke er gemt.";
 "screen_room_details_add_topic_title" = "Tilføj emne";
 "screen_room_details_badge_encrypted" = "Krypteret";
 "screen_room_details_badge_not_encrypted" = "Ikke krypteret";
@@ -1425,6 +1435,7 @@
 "screen_room_change_role_section_administrators" = "Administratorer";
 "screen_room_change_role_section_moderators" = "Moderatorer";
 "screen_room_change_role_section_users" = "Medlemmer";
+"screen_room_change_role_unsaved_changes_description" = "Du har ændringer, der ikke er gemt.";
 "screen_room_change_role_unsaved_changes_title" = "Gem ændringer?";
 "screen_room_details_badge_public" = "Offentligt rum";
 "screen_room_details_invite_people_title" = "Invitér andre";

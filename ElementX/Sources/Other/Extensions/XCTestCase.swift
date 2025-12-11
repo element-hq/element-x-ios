@@ -49,23 +49,23 @@ extension XCTestCase {
         }
     }
     
-    /// XCTest utility that assists in observing an async stream, deferring the fulfilment and results until some condition has been met.
+    /// XCTest utility that assists in observing an async sequence, deferring the fulfilment and results until some condition has been met.
     /// - Parameters:
-    ///   - asyncStream: The stream to wait on.
+    ///   - asyncSequence: The sequence to wait on.
     ///   - timeout: A timeout after which we give up.
     ///   - message: An optional custom expectation message
     ///   - until: callback that evaluates outputs until some condition is reached
-    /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the stream.
-    func deferFulfillment<Value>(_ asyncStream: AsyncStream<Value>,
+    /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the sequence.
+    func deferFulfillment<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
                                  timeout: TimeInterval = 10,
                                  message: String? = nil,
                                  until condition: @escaping (Value) -> Bool) -> DeferredFulfillment<Value> {
         var result: Result<Value, Error>?
-        let expectation = expectation(description: message ?? "Awaiting stream")
+        let expectation = expectation(description: message ?? "Awaiting sequence")
         var hasFulfilled = false
         
         let task = Task {
-            for await value in asyncStream {
+            for await value in asyncSequence {
                 if condition(value), !hasFulfilled {
                     result = .success(value)
                     expectation.fulfill()
@@ -77,7 +77,7 @@ extension XCTestCase {
         return DeferredFulfillment<Value> {
             await self.fulfillment(of: [expectation], timeout: timeout)
             task.cancel()
-            let unwrappedResult = try XCTUnwrap(result, "Awaited stream did not produce any output")
+            let unwrappedResult = try XCTUnwrap(result, "Awaited sequence did not produce any output")
             return try unwrappedResult.get()
         }
     }
@@ -108,19 +108,19 @@ extension XCTestCase {
         return deferred
     }
     
-    /// XCTest utility that assists in subscribing to an async stream and deferring the fulfilment and results until some other actions have been performed.
+    /// XCTest utility that assists in subscribing to an async sequence and deferring the fulfilment and results until some other actions have been performed.
     /// - Parameters:
-    ///   - asyncStream: The stream to wait on.
-    ///   - transitionValues: the values through which the stream needs to transition through
+    ///   - asyncSequence: The sequence to wait on.
+    ///   - transitionValues: the values through which the sequence needs to transition through
     ///   - timeout: A timeout after which we give up.
     ///   - message: An optional custom expectation message
-    /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the stream.
-    func deferFulfillment<Value: Equatable>(_ asyncStream: AsyncStream<Value>,
+    /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the sequence.
+    func deferFulfillment<Value: Equatable>(_ asyncSequence: any AsyncSequence<Value, Never>,
                                             transitionValues: [Value],
                                             timeout: TimeInterval = 10,
                                             message: String? = nil) -> DeferredFulfillment<Value> {
         var expectedOrder = transitionValues
-        let deferred = deferFulfillment(asyncStream, timeout: timeout, message: message) { value in
+        let deferred = deferFulfillment(asyncSequence, timeout: timeout, message: message) { value in
             if let index = expectedOrder.firstIndex(where: { $0 == value }), index == 0 {
                 expectedOrder.remove(at: index)
             }
@@ -159,23 +159,23 @@ extension XCTestCase {
         }
     }
     
-    /// XCTest utility that assists in subscribing to an async stream and deferring the failure for a particular value until some other actions have been performed.
+    /// XCTest utility that assists in subscribing to an async sequence and deferring the failure for a particular value until some other actions have been performed.
     /// - Parameters:
-    ///   - asyncStream: The stream to wait on.
+    ///   - asyncSequence: The sequence to wait on.
     ///   - timeout: A timeout after which we give up.
     ///   - message: An optional custom expectation message
     ///   - until: callback that evaluates outputs until some condition is reached
-    /// - Returns: The deferred fulfilment to be executed after some actions. The stream's result is not returned from this fulfilment.
-    func deferFailure<Value>(_ asyncStream: AsyncStream<Value>,
+    /// - Returns: The deferred fulfilment to be executed after some actions. The sequence's result is not returned from this fulfilment.
+    func deferFailure<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
                              timeout: TimeInterval,
                              message: String? = nil,
                              until condition: @escaping (Value) -> Bool) -> DeferredFulfillment<Void> {
-        let expectation = expectation(description: message ?? "Awaiting stream")
+        let expectation = expectation(description: message ?? "Awaiting sequence")
         expectation.isInverted = true
         var hasFulfilled = false
         
         let task = Task {
-            for await value in asyncStream {
+            for await value in asyncSequence {
                 if condition(value), !hasFulfilled {
                     expectation.fulfill()
                     hasFulfilled = true

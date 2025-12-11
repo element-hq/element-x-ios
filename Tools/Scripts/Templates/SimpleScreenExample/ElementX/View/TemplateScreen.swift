@@ -56,7 +56,7 @@ struct TemplateScreen_Previews: PreviewProvider, TestablePreview {
             TemplateScreen(context: incrementedViewModel.context)
         }
         .previewDisplayName("Incremented")
-        .snapshotPreferences(expect: incrementedViewModel.context.observe(\.viewState.counter).map { $0 == 1 }.eraseToStream())
+        .snapshotPreferences(expect: incrementedViewModel.context.observe(\.viewState.counter).map { $0 == 1 })
     }
     
     static func makeViewModel(counterValue: Int = 0) -> TemplateScreenViewModel {

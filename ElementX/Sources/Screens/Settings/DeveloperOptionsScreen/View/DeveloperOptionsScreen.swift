@@ -34,6 +34,9 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("General") {
+                Toggle(isOn: $context.linkNewDeviceEnabled) {
+                    Text("Link new device with QR code")
+                }
                 Toggle(isOn: $context.spaceSettingsEnabled) {
                     Text("Space settings")
                 }

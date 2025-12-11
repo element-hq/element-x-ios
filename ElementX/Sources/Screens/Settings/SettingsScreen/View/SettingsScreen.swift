@@ -108,6 +108,14 @@ struct SettingsScreen: View {
     
     private var manageAccountSection: some View {
         Section {
+            if context.viewState.showLinkNewDeviceButton {
+                ListRow(label: .default(title: L10n.commonLinkNewDevice,
+                                        icon: \.devices),
+                        kind: .navigationLink {
+                            context.send(viewAction: .linkNewDevice)
+                        })
+            }
+            
             if let url = context.viewState.accountProfileURL {
                 ListRow(label: .default(title: L10n.actionManageAccount,
                                         icon: \.userProfile),
@@ -262,13 +270,13 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             SettingsScreen(context: viewModel.context)
         }
-        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil }.eraseToStream())
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil })
         .previewDisplayName("Default")
         
         NavigationStack {
             SettingsScreen(context: bugReportDisabledViewModel.context)
         }
-        .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil }.eraseToStream())
+        .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil })
         .previewDisplayName("Bug report disabled")
     }
     

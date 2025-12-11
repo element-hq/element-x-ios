@@ -67,6 +67,7 @@ final class AppSettings {
         case linkPreviewsEnabled
         case spaceSettingsEnabled
         case focusEventOnNotificationTap
+        case linkNewDeviceEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -407,6 +408,9 @@ final class AppSettings {
         
     @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkPreviewsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.linkNewDeviceEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var linkNewDeviceEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled

@@ -230,6 +230,7 @@
 "common_light" = "Világos";
 "common_line_copied_to_clipboard" = "A sor a vágólapra másolva";
 "common_link_copied_to_clipboard" = "Hivatkozás a vágólapra másolva";
+"common_link_new_device" = "Link new device";
 "common_loading" = "Betöltés…";
 "common_loading_more" = "Továbbiak betöltése…";
 "common_message" = "Üzenet";
@@ -239,6 +240,7 @@
 "common_message_removed" = "Üzenet eltávolítva";
 "common_modern" = "Modern";
 "common_mute" = "Némítás";
+"common_name" = "Name";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Nincs találat";
 "common_no_room_name" = "Nincs szobanév";
@@ -300,6 +302,7 @@
 "common_something_went_wrong" = "Valamilyen hiba történt";
 "common_something_went_wrong_message" = "Problémába ütköztünk. Próbálja újra.";
 "common_space" = "Tér";
+"common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "Csevegés megkezdése…";
 "common_sticker" = "Matrica";
 "common_success" = "Sikeres";
@@ -374,6 +377,7 @@
 "dialog_default_video_quality_selector_subtitle" = "Válaszd ki a feltöltött videók alapértelmezett minőségét.";
 "dialog_title_confirmation" = "Megerősítés";
 "dialog_title_warning" = "Figyelmeztetés";
+"dialog_unsaved_changes_description" = "Mentetlen módosításai vannak.";
 "dialog_unsaved_changes_description_ios" = "A módosításai nem lesznek mentve";
 "dialog_unsaved_changes_title" = "Menti a módosításokat?";
 "dialog_video_quality_selector_subtitle_file_size" = "A legnagyobb megengedett fájlméret: %1$@";
@@ -441,6 +445,8 @@
 "notification_room_invite_body_with_sender" = "%1$@ meghívta, hogy csatlakozzon a szobához";
 "notification_sender_me" = "Én";
 "notification_sender_mention_reply" = "%1$@ megemlítette vagy válaszolt";
+"notification_space_invite_body" = "Invited you to join the space";
+"notification_space_invite_body_with_sender" = "%1$@ invited you to join the space";
 "notification_test_push_notification_content" = "Az értesítést nézi! Kattintson ide!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -582,6 +588,9 @@
 "screen_leave_space_subtitle_only_last_admin" = "Nem lesz eltávolítva a következő szobá(k)ból, mert ön az egyetlen adminisztrátor:";
 "screen_leave_space_title" = "Kilép innen: %1$@?";
 "screen_leave_space_title_last_admin" = "Ön az egyetlen adminisztrátor itt: %1$@";
+"screen_link_new_device_desktop_computer" = "Desktop computer";
+"screen_link_new_device_mobile_device" = "Mobile device";
+"screen_link_new_device_title" = "What type of device do you want to link?";
 "screen_manage_authorized_spaces_header" = "Spaces where members can join the room without an invitation.";
 "screen_manage_authorized_spaces_title" = "Manage spaces";
 "screen_manage_authorized_spaces_unknown_space" = "(Unknown space)";
@@ -648,7 +657,9 @@
 "screen_roomlist_clear_filters" = "Szűrők törlése";
 "screen_roomlist_tombstoned_room_description" = "A szoba verzióját frissítették";
 "screen_security_and_privacy_add_room_address_action" = "Cím hozzáadása";
+"screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorized spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Mindenkinek hozzáférést kell kérnie.";
+"screen_security_and_privacy_ask_to_join_single_space_members_option_description" = "Anyone in %1$@ can join, but everyone else must request access.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Igen, engedélyezze a titkosítást";
 "screen_security_and_privacy_enable_encryption_alert_description" = "Az engedélyezés után a szoba titkosítása nem tiltható le. Az üzenetek előzményei csak a szobatagok számára láthatók, amikor meghívást kaptak, vagy mióta csatlakoztak a szobához.\nA szobatagokon kívül senki sem tudja olvasni az üzeneteket. Ez megakadályozhatja a botok és a hidak megfelelő működését.\nNem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket bárki megtalálhat és csatlakozhat.";
 "screen_security_and_privacy_enable_encryption_alert_title" = "Engedélyezi a titkosítást?";
@@ -1041,7 +1052,6 @@
 "screen_room_change_role_moderators_owner_section_footer" = "A tulajdonosok automatikusan adminisztrátori jogosultsággal rendelkeznek.";
 "screen_room_change_role_moderators_title" = "Moderátorok szerkesztése";
 "screen_room_change_role_owners_title" = "Tulajdonosok kiválasztása";
-"screen_room_change_role_unsaved_changes_description" = "Mentetlen módosításai vannak.";
 "screen_room_details_add_topic_title" = "Téma hozzáadása";
 "screen_room_details_badge_encrypted" = "Titkosított";
 "screen_room_details_badge_not_encrypted" = "Nem titkosított";
@@ -1425,6 +1435,7 @@
 "screen_room_change_role_section_administrators" = "Adminisztrátorok";
 "screen_room_change_role_section_moderators" = "Moderátorok";
 "screen_room_change_role_section_users" = "Tagok";
+"screen_room_change_role_unsaved_changes_description" = "Mentetlen módosításai vannak.";
 "screen_room_change_role_unsaved_changes_title" = "Menti a módosításokat?";
 "screen_room_details_badge_public" = "Nyilvános szoba";
 "screen_room_details_invite_people_title" = "Ismerősök meghívása";

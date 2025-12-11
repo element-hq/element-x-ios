@@ -334,6 +334,8 @@ internal enum L10n {
   internal static var actionStart: String { return L10n.tr("Localizable", "action_start") }
   /// Start chat
   internal static var actionStartChat: String { return L10n.tr("Localizable", "action_start_chat") }
+  /// Start over
+  internal static var actionStartOver: String { return L10n.tr("Localizable", "action_start_over") }
   /// Start verification
   internal static var actionStartVerification: String { return L10n.tr("Localizable", "action_start_verification") }
   /// Tap to load map
@@ -1888,12 +1890,72 @@ internal enum L10n {
   internal static func screenLeaveSpaceTitleLastAdmin(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_leave_space_title_last_admin", String(describing: p1))
   }
+  /// Scan the QR code
+  internal static var screenLinkNewDeviceDesktopScanningTitle: String { return L10n.tr("Localizable", "screen_link_new_device_desktop_scanning_title") }
+  /// Open %1$@ on a laptop or desktop computer
+  internal static func screenLinkNewDeviceDesktopStep1(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_link_new_device_desktop_step1", String(describing: p1))
+  }
+  /// Scan the QR code with this device
+  internal static var screenLinkNewDeviceDesktopStep3: String { return L10n.tr("Localizable", "screen_link_new_device_desktop_step3") }
+  /// Ready to scan
+  internal static var screenLinkNewDeviceDesktopSubmit: String { return L10n.tr("Localizable", "screen_link_new_device_desktop_submit") }
+  /// Open %1$@ on a desktop computer to get the QR code
+  internal static func screenLinkNewDeviceDesktopTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_link_new_device_desktop_title", String(describing: p1))
+  }
+  /// The numbers don’t match
+  internal static var screenLinkNewDeviceEnterNumberErrorNumbersDoNotMatch: String { return L10n.tr("Localizable", "screen_link_new_device_enter_number_error_numbers_do_not_match") }
+  /// Enter 2-digit code
+  internal static var screenLinkNewDeviceEnterNumberNotice: String { return L10n.tr("Localizable", "screen_link_new_device_enter_number_notice") }
+  /// This will verify that the connection to your other device is secure.
+  internal static var screenLinkNewDeviceEnterNumberSubtitle: String { return L10n.tr("Localizable", "screen_link_new_device_enter_number_subtitle") }
+  /// Enter the number shown on your other device
+  internal static var screenLinkNewDeviceEnterNumberTitle: String { return L10n.tr("Localizable", "screen_link_new_device_enter_number_title") }
+  /// Your account provider does not support %1$@.
+  internal static func screenLinkNewDeviceErrorAppNotSupportedSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_link_new_device_error_app_not_supported_subtitle", String(describing: p1))
+  }
+  /// %1$@ not supported
+  internal static func screenLinkNewDeviceErrorAppNotSupportedTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_link_new_device_error_app_not_supported_title", String(describing: p1))
+  }
+  /// Your account provider doesn’t support signing into a new device with a QR code.
+  internal static var screenLinkNewDeviceErrorNotSupportedSubtitle: String { return L10n.tr("Localizable", "screen_link_new_device_error_not_supported_subtitle") }
+  /// QR code not supported
+  internal static var screenLinkNewDeviceErrorNotSupportedTitle: String { return L10n.tr("Localizable", "screen_link_new_device_error_not_supported_title") }
+  /// The sign in was cancelled on the other device.
+  internal static var screenLinkNewDeviceErrorRequestCancelledSubtitle: String { return L10n.tr("Localizable", "screen_link_new_device_error_request_cancelled_subtitle") }
+  /// Sign in request cancelled
+  internal static var screenLinkNewDeviceErrorRequestCancelledTitle: String { return L10n.tr("Localizable", "screen_link_new_device_error_request_cancelled_title") }
+  /// Sign in expired. Please try again.
+  internal static var screenLinkNewDeviceErrorRequestTimeoutSubtitle: String { return L10n.tr("Localizable", "screen_link_new_device_error_request_timeout_subtitle") }
+  /// The sign in was not completed in time
+  internal static var screenLinkNewDeviceErrorRequestTimeoutTitle: String { return L10n.tr("Localizable", "screen_link_new_device_error_request_timeout_title") }
+  /// Open %1$@ on the other device
+  internal static func screenLinkNewDeviceMobileStep1(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_link_new_device_mobile_step1", String(describing: p1))
+  }
+  /// Select %1$@
+  internal static func screenLinkNewDeviceMobileStep2(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_link_new_device_mobile_step2", String(describing: p1))
+  }
+  /// “Sign in with QR code”
+  internal static var screenLinkNewDeviceMobileStep2Action: String { return L10n.tr("Localizable", "screen_link_new_device_mobile_step2_action") }
+  /// Scan the QR code shown here with the other device
+  internal static var screenLinkNewDeviceMobileStep3: String { return L10n.tr("Localizable", "screen_link_new_device_mobile_step3") }
+  /// Open %1$@ on the other device
+  internal static func screenLinkNewDeviceMobileTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_link_new_device_mobile_title", String(describing: p1))
+  }
   /// Desktop computer
-  internal static var screenLinkNewDeviceDesktopComputer: String { return L10n.tr("Localizable", "screen_link_new_device_desktop_computer") }
+  internal static var screenLinkNewDeviceRootDesktopComputer: String { return L10n.tr("Localizable", "screen_link_new_device_root_desktop_computer") }
+  /// Loading QR code…
+  internal static var screenLinkNewDeviceRootLoadingQrCode: String { return L10n.tr("Localizable", "screen_link_new_device_root_loading_qr_code") }
   /// Mobile device
-  internal static var screenLinkNewDeviceMobileDevice: String { return L10n.tr("Localizable", "screen_link_new_device_mobile_device") }
+  internal static var screenLinkNewDeviceRootMobileDevice: String { return L10n.tr("Localizable", "screen_link_new_device_root_mobile_device") }
   /// What type of device do you want to link?
-  internal static var screenLinkNewDeviceTitle: String { return L10n.tr("Localizable", "screen_link_new_device_title") }
+  internal static var screenLinkNewDeviceRootTitle: String { return L10n.tr("Localizable", "screen_link_new_device_root_title") }
   /// This account has been deactivated.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password
@@ -2782,7 +2844,7 @@ internal enum L10n {
   internal static var screenRoomlistTombstonedRoomDescription: String { return L10n.tr("Localizable", "screen_roomlist_tombstoned_room_description") }
   /// Add address
   internal static var screenSecurityAndPrivacyAddRoomAddressAction: String { return L10n.tr("Localizable", "screen_security_and_privacy_add_room_address_action") }
-  /// Anyone in authorized spaces can join, but everyone else must request access.
+  /// Anyone in authorised spaces can join, but everyone else must request access.
   internal static var screenSecurityAndPrivacyAskToJoinMultipleSpacesMembersOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description") }
   /// Everyone must request access.
   internal static var screenSecurityAndPrivacyAskToJoinOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_ask_to_join_option_description") }
@@ -2822,7 +2884,7 @@ internal enum L10n {
   internal static var screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_invite_only_option_title") }
   /// Access
   internal static var screenSecurityAndPrivacyRoomAccessSectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_section_header") }
-  /// Anyone in authorized spaces can join.
+  /// Anyone in authorised spaces can join.
   internal static var screenSecurityAndPrivacyRoomAccessSpaceMembersOptionMultipleParentsDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description") }
   /// Anyone in %1$@ can join.
   internal static func screenSecurityAndPrivacyRoomAccessSpaceMembersOptionSingleParentDescription(_ p1: Any) -> String {

@@ -396,7 +396,7 @@ struct MediaUploadingPreprocessor {
     /// - Parameter url: the video URL
     /// - Returns: the URL for the resulting thumbnail and its sizing info as an `ImageProcessingResult`
     private func generateThumbnailForVideoAt(_ url: URL) async throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
-        let assetImageGenerator = AVAssetImageGenerator(asset: AVAsset(url: url))
+        let assetImageGenerator = AVAssetImageGenerator(asset: AVURLAsset(url: url))
         assetImageGenerator.appliesPreferredTrackTransform = true
         assetImageGenerator.maximumSize = Constants.maximumThumbnailSize
         
