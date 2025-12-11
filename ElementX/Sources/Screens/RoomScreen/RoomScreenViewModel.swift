@@ -353,7 +353,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         // Whenever the user opens an encrypted room with non-join history visbility, we show them a warning banner if they have not already dismissed it.
         else if roomInfo.isEncrypted, !appSettings.hasSeenHistoryVisibleBannerRooms.contains(roomInfo.id) {
-            state.footerDetails = .historyVisible(learnMoreURL: "https://element.io")
+            state.footerDetails = .historyVisible(learnMoreURL: appSettings.historyVisibleDetailsURL)
         }
     }
     

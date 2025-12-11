@@ -125,6 +125,7 @@ final class AppSettings {
                   deviceVerificationURL: URL,
                   chatBackupDetailsURL: URL,
                   identityPinningViolationDetailsURL: URL,
+                  historyVisibleDetailsURL: URL,
                   elementWebHosts: [String],
                   accountProvisioningHost: String,
                   bugReportApplicationID: String,
@@ -144,6 +145,7 @@ final class AppSettings {
         self.deviceVerificationURL = deviceVerificationURL
         self.chatBackupDetailsURL = chatBackupDetailsURL
         self.identityPinningViolationDetailsURL = identityPinningViolationDetailsURL
+        self.historyVisibleDetailsURL = historyVisibleDetailsURL
         self.elementWebHosts = elementWebHosts
         self.accountProvisioningHost = accountProvisioningHost
         self.bugReportApplicationID = bugReportApplicationID
@@ -206,6 +208,8 @@ final class AppSettings {
     private(set) var chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
     /// A URL where users can go read more about identity pinning violations
     private(set) var identityPinningViolationDetailsURL: URL = "https://element.io/help#encryption18"
+    /// A URL where users can go to read more about room history sharing.
+    private(set) var historyVisibleDetailsURL: URL = "https://element.io/en/help#e2ee-history-sharing"
     /// Any domains that Element web may be hosted on - used for handling links.
     private(set) var elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
     /// The domain that account provisioning links will be hosted on - used for handling the links.
