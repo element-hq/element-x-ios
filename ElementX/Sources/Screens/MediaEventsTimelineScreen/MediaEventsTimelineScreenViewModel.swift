@@ -9,7 +9,7 @@
 import Combine
 import SwiftUI
 
-typealias MediaEventsTimelineScreenViewModelType = StateStoreViewModel<MediaEventsTimelineScreenViewState, MediaEventsTimelineScreenViewAction>
+typealias MediaEventsTimelineScreenViewModelType = StateStoreViewModelV2<MediaEventsTimelineScreenViewState, MediaEventsTimelineScreenViewAction>
 
 class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType, MediaEventsTimelineScreenViewModelProtocol {
     private let mediaTimelineViewModel: TimelineViewModelProtocol

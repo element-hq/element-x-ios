@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct MediaEventsTimelineScreen: View {
-    @ObservedObject var context: MediaEventsTimelineScreenViewModel.Context
+    @Bindable var context: MediaEventsTimelineScreenViewModel.Context
     @State private var sheetHeight = CGFloat.zero
     
     var body: some View {
