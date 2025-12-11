@@ -133,6 +133,7 @@
 "action_retry" = "Reîncercați";
 "action_retry_decryption" = "Reîncercați decriptarea";
 "action_save" = "Salvați";
+"action_translate" = "Traduceți";
 "action_search" = "Căutați";
 "action_select_all" = "Selectați tot";
 "action_send" = "Trimiteți";

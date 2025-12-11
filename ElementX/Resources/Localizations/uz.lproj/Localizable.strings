@@ -133,6 +133,7 @@
 "action_retry" = "Qayta urinish";
 "action_retry_decryption" = "Shifrni ochishni qayta urinish";
 "action_save" = "Saqlash";
+"action_translate" = "Tarjima";
 "action_search" = "Qidirmoq";
 "action_select_all" = "Select all";
 "action_send" = "Yuborish";

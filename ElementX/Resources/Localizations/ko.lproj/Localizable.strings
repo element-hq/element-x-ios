@@ -133,6 +133,7 @@
 "action_retry" = "재시도";
 "action_retry_decryption" = "복호화 재시도";
 "action_save" = "저장";
+"action_translate" = "번역";
 "action_search" = "검색";
 "action_select_all" = "Select all";
 "action_send" = "보내기";

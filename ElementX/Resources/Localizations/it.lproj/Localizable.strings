@@ -133,6 +133,7 @@
 "action_retry" = "Riprova";
 "action_retry_decryption" = "Riprova la decrittazione";
 "action_save" = "Salva";
+"action_translate" = "Traduci";
 "action_search" = "Ricerca";
 "action_select_all" = "Seleziona tutti";
 "action_send" = "Invia";

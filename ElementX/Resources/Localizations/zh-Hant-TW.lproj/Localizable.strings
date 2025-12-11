@@ -133,6 +133,7 @@
 "action_retry" = "再試一次";
 "action_retry_decryption" = "再次嘗試解密";
 "action_save" = "儲存";
+"action_translate" = "翻譯";
 "action_search" = "搜尋";
 "action_select_all" = "選取全部";
 "action_send" = "傳送";

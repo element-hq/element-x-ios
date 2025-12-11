@@ -133,6 +133,7 @@
 "action_retry" = "Réessayer";
 "action_retry_decryption" = "Réessayer le déchiffrement";
 "action_save" = "Enregistrer";
+"action_translate" = "Traduire";
 "action_search" = "Rechercher";
 "action_select_all" = "Tout sélectionner";
 "action_send" = "Envoyer";

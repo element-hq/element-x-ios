@@ -133,6 +133,7 @@
 "action_retry" = "Försök igen";
 "action_retry_decryption" = "Försök att avkryptera igen";
 "action_save" = "Spara";
+"action_translate" = "Översätt";
 "action_search" = "Sök";
 "action_select_all" = "Select all";
 "action_send" = "Skicka";

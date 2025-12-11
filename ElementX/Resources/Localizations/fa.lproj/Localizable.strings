@@ -133,6 +133,7 @@
 "action_retry" = "تلاش دوباره";
 "action_retry_decryption" = "تلاش دوباره برای رمزگشایی";
 "action_save" = "ذخیره";
+"action_translate" = "ترجمه";
 "action_search" = "جست‌وجو";
 "action_select_all" = "گزینش همه";
 "action_send" = "فرستادن";

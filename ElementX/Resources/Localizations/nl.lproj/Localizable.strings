@@ -133,6 +133,7 @@
 "action_retry" = "Opnieuw proberen";
 "action_retry_decryption" = "Decryptie opnieuw proberen";
 "action_save" = "Opslaan";
+"action_translate" = "Vertalen";
 "action_search" = "Zoeken";
 "action_select_all" = "Select all";
 "action_send" = "Verzenden";

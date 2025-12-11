@@ -133,6 +133,7 @@
 "action_retry" = "پھر کوشش کریں";
 "action_retry_decryption" = "رمزکشائی کی پھر کوشش کریں";
 "action_save" = "محفوظ کریں";
+"action_translate" = "ترجمہ کریں";
 "action_search" = "تلاش کریں";
 "action_select_all" = "Select all";
 "action_send" = "بھیجیں";
