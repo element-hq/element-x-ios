@@ -106,12 +106,14 @@ struct HomeScreenRoomCell: View {
                 HStack(alignment: .top, spacing: 4.0) {
                     switch room.lastMessageState {
                     case .sending:
-                        CompoundIcon(\.time, size: .xSmall, relativeTo: .compound.bodyLGSemibold)
+                        CompoundIcon(\.time, size: .small, relativeTo: .compound.bodyMD)
                             .foregroundStyle(.compound.iconTertiary)
+                            .offset(y: -1)
                             .accessibilityLabel(L10n.commonSending)
                     case .failed:
-                        CompoundIcon(\.errorSolid, size: .xSmall, relativeTo: .compound.bodyLGSemibold)
+                        CompoundIcon(\.errorSolid, size: .small, relativeTo: .compound.bodyMD)
                             .foregroundStyle(.compound.iconCriticalPrimary)
+                            .offset(y: -1)
                             .accessibilityHidden(true) // The last message contains the error.
                     case .none:
                         EmptyView()
