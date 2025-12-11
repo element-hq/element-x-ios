@@ -133,6 +133,7 @@
 "action_retry" = "Saiatu berriro";
 "action_retry_decryption" = "Saiatu berriro deszifratzen";
 "action_save" = "Gorde";
+"action_translate" = "Itzuli";
 "action_search" = "Bilatu";
 "action_select_all" = "Select all";
 "action_send" = "Bidali";

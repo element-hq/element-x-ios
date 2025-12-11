@@ -133,6 +133,7 @@
 "action_retry" = "Yeniden dene";
 "action_retry_decryption" = "Şifre çözmeyi tekrar deneyin";
 "action_save" = "Kaydet";
+"action_translate" = "Çevir";
 "action_search" = "Ara";
 "action_select_all" = "Select all";
 "action_send" = "Gönder";

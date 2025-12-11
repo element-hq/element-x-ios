@@ -133,6 +133,7 @@
 "action_retry" = "Bandyti dar kartą";
 "action_retry_decryption" = "Pakartoti iššifravimą";
 "action_save" = "Išsaugoti";
+"action_translate" = "Išversti";
 "action_search" = "Ieškoti";
 "action_select_all" = "Select all";
 "action_send" = "Siųsti";

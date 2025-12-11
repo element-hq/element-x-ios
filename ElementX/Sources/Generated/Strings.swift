@@ -342,6 +342,8 @@ internal enum L10n {
   internal static var actionTakePhoto: String { return L10n.tr("Localizable", "action_take_photo") }
   /// Tap for options
   internal static var actionTapForOptions: String { return L10n.tr("Localizable", "action_tap_for_options") }
+  /// Translate
+  internal static var actionTranslate: String { return L10n.tr("Localizable", "action_translate") }
   /// Try again
   internal static var actionTryAgain: String { return L10n.tr("Localizable", "action_try_again") }
   /// Unpin

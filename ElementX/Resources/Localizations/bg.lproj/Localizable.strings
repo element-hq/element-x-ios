@@ -133,6 +133,7 @@
 "action_retry" = "Повторен опит";
 "action_retry_decryption" = "Повторен опит за разшифроване";
 "action_save" = "Запазване";
+"action_translate" = "Превод";
 "action_search" = "Търсене";
 "action_select_all" = "Select all";
 "action_send" = "Изпращане";

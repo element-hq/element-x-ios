@@ -133,6 +133,7 @@
 "action_retry" = "Tentar novamente";
 "action_retry_decryption" = "Tentar descriptografar novamente";
 "action_save" = "Salvar";
+"action_translate" = "Traduzir";
 "action_search" = "Pesquisar";
 "action_select_all" = "Selecionar tudo";
 "action_send" = "Enviar";

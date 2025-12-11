@@ -133,6 +133,7 @@
 "action_retry" = "Coba lagi";
 "action_retry_decryption" = "Coba dekripsi ulang";
 "action_save" = "Simpan";
+"action_translate" = "Terjemahkan";
 "action_search" = "Cari";
 "action_select_all" = "Select all";
 "action_send" = "Kirim";

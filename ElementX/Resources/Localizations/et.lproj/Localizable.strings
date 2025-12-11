@@ -133,6 +133,7 @@
 "action_retry" = "Proovi uuesti";
 "action_retry_decryption" = "Proovi dekrüptimist uuesti";
 "action_save" = "Salvesta";
+"action_translate" = "Tõlgi";
 "action_search" = "Otsi";
 "action_select_all" = "Vali kõik";
 "action_send" = "Saada";
