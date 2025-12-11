@@ -32,6 +32,7 @@ final class AppSettings {
         case seenInvites
         case hasSeenSpacesAnnouncement
         case hasSeenNewSoundBanner
+        case hasSeenHistoryVisibleBannerRooms
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
         case timelineStyle
@@ -53,8 +54,6 @@ final class AppSettings {
         case sharePresence
         
         case elementCallBaseURLOverride
-        
-        case acknowledgedHistoryVisibleRooms
         
         // Feature flags
         case publicSearchEnabled
@@ -173,8 +172,8 @@ final class AppSettings {
     var hasSeenNewSoundBanner
     
     /// The Set of room identifiers that the user has acknowledged have visible history.
-    @UserPreference(key: UserDefaultsKeys.acknowledgedHistoryVisibleRooms, defaultValue: [], storageType: .userDefaults(store))
-    var acknowledgedHistoryVisibleRooms: Set<String>
+    @UserPreference(key: UserDefaultsKeys.hasSeenHistoryVisibleBannerRooms, defaultValue: [], storageType: .userDefaults(store))
+    var hasSeenHistoryVisibleBannerRooms: Set<String>
     
     /// The initial set of account providers shown to the user in the authentication flow.
     ///
