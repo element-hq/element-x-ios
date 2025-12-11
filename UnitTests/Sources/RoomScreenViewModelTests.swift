@@ -466,7 +466,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomProxyMock = JoinedRoomProxyMock(configuration)
 
         let roomInfoProxyMock = RoomInfoProxyMock(configuration)
-        roomInfoProxyMock.historyVisibility = RoomHistoryVisibility.joined
+        roomInfoProxyMock.historyVisibility = .joined
 
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
@@ -495,7 +495,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomProxyMock = JoinedRoomProxyMock(configuration)
 
         let roomInfoProxyMock = RoomInfoProxyMock(configuration)
-        roomInfoProxyMock.historyVisibility = RoomHistoryVisibility.shared
+        roomInfoProxyMock.historyVisibility = .shared
 
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
@@ -522,7 +522,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomProxyMock = JoinedRoomProxyMock(configuration)
 
         let roomInfoProxyMock = RoomInfoProxyMock(configuration)
-        roomInfoProxyMock.historyVisibility = RoomHistoryVisibility.shared
+        roomInfoProxyMock.historyVisibility = .shared
 
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
@@ -543,13 +543,13 @@ class RoomScreenViewModelTests: XCTestCase {
         }
         try await deferred.fulfill()
 
-        ServiceLocator.shared.settings.hasSeenHistoryVisibleBannerRooms.insert("$room:example.com")
-
-        viewModel.context.send(viewAction: RoomScreenViewAction.footerViewAction(RoomScreenFooterViewAction.dismissHistoryVisibleAlert))
-
         deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.footerDetails == nil
         }
+        
+        ServiceLocator.shared.settings.hasSeenHistoryVisibleBannerRooms.insert("$room:example.com")
+        viewModel.context.send(viewAction: RoomScreenViewAction.footerViewAction(RoomScreenFooterViewAction.dismissHistoryVisibleAlert))
+        
         try await deferred.fulfill()
     }
 }
