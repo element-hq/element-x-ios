@@ -438,4 +438,118 @@ class RoomScreenViewModelTests: XCTestCase {
         }
         try await deferred.fulfill()
     }
+
+    // MARK: History Sharing
+
+    func testHistoryVisibleBannerDoesNotAppearIfNotEncrypted() async throws {
+        let roomProxyMock = JoinedRoomProxyMock(.init(isEncrypted: false))
+
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+
+        self.viewModel = viewModel
+
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.footerDetails == nil
+        }
+        try await deferred.fulfill()
+    }
+
+    func testHistoryVisibleBannerDoesNotAppearIfJoined() async throws {
+        let configuration = JoinedRoomProxyMockConfiguration(isEncrypted: false)
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.historyVisibility = .joined
+
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+
+        self.viewModel = viewModel
+
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.footerDetails == nil
+        }
+        try await deferred.fulfill()
+    }
+
+    func testHistoryVisibleBannerDoesNotAppearIfAcknowledged() async throws {
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms.insert("$room:example.com")
+
+        let configuration = JoinedRoomProxyMockConfiguration(id: "$room:example.com", isEncrypted: false)
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.historyVisibility = .shared
+
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+
+        self.viewModel = viewModel
+
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.footerDetails == nil
+        }
+        try await deferred.fulfill()
+    }
+
+    func testHistoryVisibleBannerAppearsThenDisappearsOnAcknowledge() async throws {
+        let configuration = JoinedRoomProxyMockConfiguration(id: "$room:example.com", isEncrypted: true)
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.historyVisibility = .shared
+
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+
+        self.viewModel = viewModel
+
+        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.footerDetails != nil
+        }
+        try await deferred.fulfill()
+
+        deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.footerDetails == nil
+        }
+        
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms.insert("$room:example.com")
+        viewModel.context.send(viewAction: .footerViewAction(RoomScreenFooterViewAction.dismissHistoryVisibleAlert))
+        
+        try await deferred.fulfill()
+    }
 }
