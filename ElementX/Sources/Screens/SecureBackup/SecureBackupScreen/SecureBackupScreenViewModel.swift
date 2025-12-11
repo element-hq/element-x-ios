@@ -55,7 +55,7 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
             switch (keyBackupState, enable) {
             case (.unknown, true):
                 state.bindings.keyStorageEnabled = keyBackupState.keyStorageToggleState // Reset the toggle in case enabling fails
-                enableBackup()
+                Task { await enableBackup() }
             case (.enabled, false):
                 state.bindings.keyStorageEnabled = keyBackupState.keyStorageToggleState // Reset the toggle in case the user cancels
                 actionsSubject.send(.disableKeyBackup)
@@ -67,20 +67,18 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
     
     // MARK: - Private
     
-    private func enableBackup() {
-        Task {
-            let loadingIndicatorIdentifier = "SecureBackupScreenLoading"
-            userIndicatorController.submitIndicator(.init(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
-            switch await secureBackupController.enable() {
-            case .success:
-                break
-            case .failure(let error):
-                MXLog.error("Failed enabling key backup with error: \(error)")
-                state.bindings.alertInfo = .init(id: .init())
-            }
-            
-            userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+    private func enableBackup() async {
+        let loadingIndicatorIdentifier = "SecureBackupScreenLoading"
+        userIndicatorController.submitIndicator(.init(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+        switch await secureBackupController.enable() {
+        case .success:
+            break
+        case .failure(let error):
+            MXLog.error("Failed enabling key backup with error: \(error)")
+            state.bindings.alertInfo = .init(id: .init())
         }
+        
+        userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
     }
 }
 
