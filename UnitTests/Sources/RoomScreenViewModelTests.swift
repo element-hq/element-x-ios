@@ -489,7 +489,7 @@ class RoomScreenViewModelTests: XCTestCase {
     }
 
     func testHistoryVisibleBannerDoesNotAppearIfAcknowledged() async throws {
-        ServiceLocator.shared.settings.hasSeenHistoryVisibleBannerRooms.insert("$room:example.com")
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms.insert("$room:example.com")
 
         let configuration = JoinedRoomProxyMockConfiguration(id: "$room:example.com", isEncrypted: false)
         let roomProxyMock = JoinedRoomProxyMock(configuration)
@@ -547,7 +547,7 @@ class RoomScreenViewModelTests: XCTestCase {
             state.footerDetails == nil
         }
         
-        ServiceLocator.shared.settings.hasSeenHistoryVisibleBannerRooms.insert("$room:example.com")
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms.insert("$room:example.com")
         viewModel.context.send(viewAction: .footerViewAction(RoomScreenFooterViewAction.dismissHistoryVisibleAlert))
         
         try await deferred.fulfill()
