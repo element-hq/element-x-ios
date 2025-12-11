@@ -25,7 +25,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userID: userSession.clientProxy.userID,
-                                           showLinkNewDeviceButton: appSettings.newQRCodeLoginFlowsEnabled,
+                                           showLinkNewDeviceButton: appSettings.linkNewDeviceEnabled,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
                                            showDeveloperOptions: appSettings.developerOptionsEnabled,
                                            showAnalyticsSettings: appSettings.canPromptForAnalytics,
@@ -36,7 +36,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.showDeveloperOptions, on: self)
             .store(in: &cancellables)
         
-        appSettings.$newQRCodeLoginFlowsEnabled
+        appSettings.$linkNewDeviceEnabled
             .weakAssign(to: \.state.showLinkNewDeviceButton, on: self)
             .store(in: &cancellables)
         
