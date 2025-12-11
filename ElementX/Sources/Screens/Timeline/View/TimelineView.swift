@@ -56,7 +56,7 @@ struct TimelineView: View {
                 ReadReceiptsSummaryView(orderedReadReceipts: $0.orderedReceipts)
                     .environmentObject(timelineContext)
             }
-            .translationPresentation(isPresented: $timelineContext.showTranslation, text: timelineContext.actionMenuInfo?.item.body ?? "")
+            .translationPresentation(isPresented: $timelineContext.showTranslation, text: timelineContext.textToBeTranslated ?? "")
             .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
                 let supportedProviders = providers.filter(\.isSupportedForPasteOrDrop)
                 
