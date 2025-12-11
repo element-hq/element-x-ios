@@ -132,6 +132,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     var isLiveKitRTCSupported: Bool { get async }
     
+    var isLoginWithQRCodeSupported: Bool { get async }
+    
     var maxMediaUploadSize: Result<UInt, ClientProxyError> { get async }
     
     func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError>
