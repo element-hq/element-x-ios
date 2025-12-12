@@ -53,7 +53,7 @@ jobs:
         run: zip -r UnitTests.zip UnitTests.xcresult
       
       - name: Archive artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         # We only care about artefacts if the tests fail
         if: failure()
         with:
