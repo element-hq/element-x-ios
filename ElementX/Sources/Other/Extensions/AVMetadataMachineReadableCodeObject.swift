@@ -28,7 +28,7 @@ extension AVMetadataMachineReadableCodeObject {
             return nil
         }
     }
-
+    
     var binaryValueWithProtocol: Data? {
         guard let descriptor else {
             return nil
@@ -46,91 +46,156 @@ extension AVMetadataMachineReadableCodeObject {
             return nil
         }
     }
-
+    
     static func removeQrProtocolData(_ input: Data, symbolVersion: Int) -> Data? {
-        var halves = input.halfBytes()
-        var batch = takeBatch(&halves, version: symbolVersion)
-        var output = batch
-        while !batch.isEmpty {
-            batch = takeBatch(&halves, version: symbolVersion)
-            output.append(contentsOf: batch)
-        }
-        let data = Data(output)
-        return data
+        var bits = input.bits()
+        var segment: [UInt8]
+        var output: [UInt8] = []
+        repeat {
+            segment = takeSegment(&bits, version: symbolVersion)
+            output.append(contentsOf: segment)
+        } while !segment.isEmpty
+        return Data(output)
     }
+    
+    private static func takeSegment(_ input: inout [Bit], version: Int) -> [UInt8] {
+        let mode = input.takeBits(4)
 
-    private static func takeBatch(_ input: inout [HalfByte], version: Int) -> [UInt8] {
-        let characterCountLength = version > 9 ? 16 : 8
-        let mode = input.remove(at: 0)
-        var output = [UInt8]()
-        switch mode.value {
-        // If there is not only binary in the QRCode, then cases should be added here.
+        switch mode {
+        case 0x02: // Alphanumeric
+            return input.takeAlphanumericSegment(version)
         case 0x04: // Binary
-            let charactersCount: UInt16
-            if characterCountLength == 8 {
-                charactersCount = UInt16(input.takeUInt8())
-            } else {
-                charactersCount = UInt16(input.takeUInt16())
-            }
-            for _ in 0..<charactersCount {
-                output.append(input.takeUInt8())
-            }
-            return output
+            return input.takeBinarySegment(version)
         case 0x00: // End of data
             return []
         default:
-            return []
+            preconditionFailure("Unhandled QR segment mode: \(mode)")
         }
     }
 }
 
-private struct HalfByte {
+private struct Bit {
     let value: UInt8
 }
 
-private extension [HalfByte] {
-    mutating func takeUInt8() -> UInt8 {
-        let left = remove(at: 0)
-        let right = remove(at: 0)
-        return UInt8(left, right)
+private extension [Bit] {
+    mutating func takeBits(_ count: Int) -> UInt8 {
+        if count > 8 {
+            preconditionFailure("Maximum of 8 bits can be taken at a time.")
+        }
+        var value: UInt8 = 0
+        for _ in 0..<count {
+            value = (value << 1) | remove(at: 0).value
+        }
+        return value
     }
 
+    mutating func takeBits16(_ count: Int) -> UInt16 {
+        if count > 16 {
+            preconditionFailure("Maximum of 16 bits can be taken at a time.")
+        }
+        var value: UInt16 = 0
+        for _ in 0..<count {
+            value = (value << 1) | UInt16(remove(at: 0).value)
+        }
+        return value
+    }
+
+    mutating func takeUInt8() -> UInt8 {
+        takeBits(8)
+    }
+    
     mutating func takeUInt16() -> UInt16 {
-        let first = remove(at: 0)
-        let second = remove(at: 0)
-        let third = remove(at: 0)
-        let fourth = remove(at: 0)
-        return UInt16(first, second, third, fourth)
+        takeBits16(16)
+    }
+    
+    mutating func takeBinarySegment(_ version: Int) -> [UInt8] {
+        var output = [UInt8]()
+        
+        let characterCountLength = version > 9 ? 16 : 8
+        
+        let charactersCount = takeBits16(characterCountLength)
+
+        for _ in 0..<charactersCount {
+            output.append(takeUInt8())
+        }
+        return output
+    }
+    
+    mutating func takeAlphanumericSegment(_ version: Int) -> [UInt8] {
+        var output = [UInt8]()
+
+        let characterCountLength = version > 9 ? (version > 26 ? 13 : 11) : 9
+
+        let charactersCount = takeBits16(characterCountLength)
+        var charactersRemaining = charactersCount
+        while charactersRemaining > 1 {
+            if count < 11 {
+                // done
+                return output
+            }
+            // read the 11 bits
+            let nextTwoCharacters = takeBits16(11)
+            // split into the two characters
+            output.append(Array<Bit>.alphaToByte(UInt8(nextTwoCharacters / 45)))
+            output.append(Array<Bit>.alphaToByte(UInt8(nextTwoCharacters % 45)))
+            charactersRemaining -= 2
+        }
+        
+        if charactersRemaining == 1 {
+            if count < 6 {
+                // done
+                return output
+            }
+            let nextCharacter = takeBits(6)
+            output.append(Array<Bit>.alphaToByte(nextCharacter))
+        }
+        return output
+    }
+    
+    private static func alphaToByte(_ input: UInt8) -> UInt8 {
+        if input <= 9 {
+            // 0-9
+            return UInt8(input + 0x30)
+        }
+        if input <= 35 {
+            // A-Z
+            return UInt8(input - 10 + 0x41)
+        }
+        switch input {
+        case 36: return " ".utf8.first!
+        case 37: return "$".utf8.first!
+        case 38: return "%".utf8.first!
+        case 39: return "*".utf8.first!
+        case 40: return "+".utf8.first!
+        case 41: return "-".utf8.first!
+        case 42: return ".".utf8.first!
+        case 43: return "/".utf8.first!
+        case 44: return ":".utf8.first!
+            
+        default:
+            preconditionFailure("Unhandled alphanumeric character: \(input)")
+        }
     }
 }
 
 private extension Data {
-    func halfBytes() -> [HalfByte] {
-        var result = [HalfByte]()
+    func bits() -> [Bit] {
+        var result = [Bit]()
         forEach { (byte: UInt8) in
-            result.append(contentsOf: byte.halfBytes())
+            result.append(contentsOf: byte.bits())
         }
         return result
     }
 }
 
 private extension UInt8 {
-    func halfBytes() -> [HalfByte] {
-        [HalfByte(value: self >> 4), HalfByte(value: self & 0x0F)]
-    }
-
-    init(_ left: HalfByte, _ right: HalfByte) {
-        self.init((left.value << 4) + (right.value & 0x0F))
-    }
-}
-
-private extension UInt16 {
-    init(_ first: HalfByte, _ second: HalfByte, _ third: HalfByte, _ fourth: HalfByte) {
-        let first = UInt16(first.value) << 12
-        let second = UInt16(second.value) << 8
-        let third = UInt16(third.value) << 4
-        let fourth = UInt16(fourth.value) & 0x0F
-        let result = first + second + third + fourth
-        self.init(result)
+    func bits() -> [Bit] {
+        var bits: [Bit] = []
+        for i in 0..<8 {
+            let bitValue = (self >> (7 - i)) & 1
+            bits.append(Bit(value: bitValue))
+        }
+        return bits
     }
 }

@@ -50,9 +50,9 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .linkMobileDevice(let progressPublisher):
-                    break
+                    presentLinkNewDeviceQRCodeScreen(mode: .generateQRCode(progressPublisher))
                 case .linkDesktopComputer:
-                    break
+                    presentLinkNewDeviceQRCodeScreen(mode: .scanQRCode)
                 case .dismiss:
                     actionsSubject.send(.dismiss)
                 }
@@ -60,5 +60,29 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+    
+    private func presentLinkNewDeviceQRCodeScreen(mode: LinkNewDeviceQRCodeScreenMode) {
+        let coordinator = LinkNewDeviceQRCodeScreenCoordinator(parameters: .init(mode: mode,
+                                                                                 linkNewDeviceService: flowParameters.userSession.clientProxy.linkNewDeviceService(),
+                                                                                 orientationManager: flowParameters.appMediator.windowManager,
+                                                                                 appMediator: flowParameters.appMediator,
+                                                                                 appSettings: flowParameters.appSettings))
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .cancel:
+                    navigationStackCoordinator.pop()
+                case .done:
+                    actionsSubject.send(.dismiss)
+                case .requestOIDCAuthorisation(let url):
+                    actionsSubject.send(.requestOIDCAuthorisation(url))
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator)
     }
 }

@@ -36,12 +36,6 @@ struct QRCodeLoginScreenViewState: BindableState {
         AttributedString(L10n.screenQrCodeLoginInitialStateItem4)
     ]
     
-    let connectionNotSecureListItems = [
-        AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem1),
-        AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem2),
-        AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem3)
-    ]
-    
     var bindings = QRCodeLoginScreenViewStateBindings()
 }
 

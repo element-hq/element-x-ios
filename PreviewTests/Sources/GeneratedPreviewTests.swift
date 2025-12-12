@@ -413,6 +413,12 @@ extension PreviewTests {
         }
     }
 
+    func testLinkNewDeviceQRCodeScreen() async throws {
+        for (index, preview) in LinkNewDeviceQRCodeScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testLinkNewDeviceScreen() async throws {
         for (index, preview) in LinkNewDeviceScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

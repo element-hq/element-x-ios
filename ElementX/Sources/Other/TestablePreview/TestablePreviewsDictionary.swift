@@ -76,6 +76,7 @@ enum TestablePreviewsDictionary {
         "LeaveSpaceRoomDetailsCell_Previews" : LeaveSpaceRoomDetailsCell_Previews.self,
         "LeaveSpaceView_Previews" : LeaveSpaceView_Previews.self,
         "LegalInformationScreen_Previews" : LegalInformationScreen_Previews.self,
+        "LinkNewDeviceQRCodeScreen_Previews" : LinkNewDeviceQRCodeScreen_Previews.self,
         "LinkNewDeviceScreen_Previews" : LinkNewDeviceScreen_Previews.self,
         "LoadableImage_Previews" : LoadableImage_Previews.self,
         "LocationMarkerView_Previews" : LocationMarkerView_Previews.self,
