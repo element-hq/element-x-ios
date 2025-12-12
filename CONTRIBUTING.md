@@ -1,8 +1,14 @@
-# Contributing code to Matrix
+# Contributing to Element X iOS
 
-Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md.
+Before opening a PR please make sure that there is a well defined issue. When adding a new feature or updating the user interface, the issue **must** have input from our Product team outlining the desired solution.
 
-Element X iOS support can be found in this room: [![Element X iOS Matrix room #element-x-ios:matrix.org](https://img.shields.io/matrix/element-x-ios:matrix.org.svg?label=%23element-x-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-ios:matrix.org).
+Please note: [element-meta](https://github.com/element-hq/element-meta) is where we centralise all product level and cross platform requests. If the change you would like to make will create a disparity between platforms then there must also be a meta-issue before contributing.
+
+Support can be found in [![Element X iOS Matrix room #element-x-ios:matrix.org](https://img.shields.io/matrix/element-x-ios:matrix.org.svg?label=%23element-x-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-ios:matrix.org).
+
+## Contributing code to Matrix
+
+Please read https://github.com/element-hq/synapse/blob/master/CONTRIBUTING.md.
 
 ## Setting up a development environment
 
@@ -23,7 +29,7 @@ This will:
 
 We suggest using an Xcode version later than 15.0.1.
 
-The Xcode project can be directly compiled through the shared ElementX scheme which includes the main application as well as the unit and UI tests.
+The Xcode project can be directly compiled through the shared Element X scheme which includes the main application as well as the unit and UI tests.
 
 The Xcode project itself is generated through [xcodegen](https://github.com/yonaskolb/XcodeGen) so any changes shouldn't be made directly to it but to the configuration files.
 
@@ -37,7 +43,7 @@ To setup the RustSDK in local development mode run the following command
 swift run tools build-sdk
 ```
 
-This will clone a copy of the SDK if needed, build it for all supported architectures and configure ElementX to use the built framework. To learn about additional options run
+This will clone a copy of the SDK if needed, build it for all supported architectures and configure Element X to use the built framework. To learn about additional options run
 
 ```
 swift run tools build-sdk --help
@@ -71,19 +77,21 @@ git config core.hooksPath .githooks
 
 ### Strings and Translations
 
-The project uses Localazy and is sharing its translations with the ElementX Android project: https://localazy.com/p/element 
+The project uses Localazy and is sharing its translations with the Element X Android project: https://localazy.com/p/element
 
 Please read the [Android docs](https://github.com/element-hq/element-x-android/blob/develop/tools/localazy/README.md) for more information about how this works. Note: On iOS we don't have the additional step of filtering strings per module.
 
+Please do **not** manually edit the `Localizable.strings`, `Localizable.stringsdict` or `InfoPlist.strings` files! If your PR requires new strings to be added, add the `en` values to `Untranslated.strings`/`Untranslated.stringsdict` and one of the team will transfer them over to Localazy for you.
+
 ### Continuous Integration
 
-ElementX uses Fastlane for running actions on the CI and tries to keep the configuration confined to either [fastlane](fastlane/Fastfile) or [xcodegen](project.yml). 
+Element X uses Fastlane for running actions on the CI and tries to keep the configuration confined to either [fastlane](fastlane/Fastfile) or [xcodegen](project.yml). 
 
 Please run `bundle exec fastlane` to see available options.
 
 ### Network debugging proxy
 
-It's possible to debug the app's network traffic with a proxy server by setting the `HTTPS_PROXY` environment variable in the ElementX scheme to the proxy's address (e.g. localhost:8080 for mitmproxy).
+It's possible to debug the app's network traffic with a proxy server by setting the `HTTPS_PROXY` environment variable in the Element X scheme to the proxy's address (e.g. localhost:8080 for mitmproxy).
 
 ## Pull requests
 
