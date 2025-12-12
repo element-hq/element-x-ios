@@ -440,8 +440,41 @@ class RoomScreenViewModelTests: XCTestCase {
     }
 
     // MARK: History Sharing
+    
+    func testHistoryVisibleBannerDoesNotAppearIfFeatureDisabled() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = false
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms = Set()
+        
+        let configuration = JoinedRoomProxyMockConfiguration(isEncrypted: false)
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+        
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.historyVisibility = .shared
+        
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        
+        self.viewModel = viewModel
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.footerDetails == nil
+        }
+        try await deferred.fulfill()
+    }
 
     func testHistoryVisibleBannerDoesNotAppearIfNotEncrypted() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms = Set()
+        
         let roomProxyMock = JoinedRoomProxyMock(.init(isEncrypted: false))
 
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
@@ -462,6 +495,9 @@ class RoomScreenViewModelTests: XCTestCase {
     }
 
     func testHistoryVisibleBannerDoesNotAppearIfJoined() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms = Set()
+        
         let configuration = JoinedRoomProxyMockConfiguration(isEncrypted: false)
         let roomProxyMock = JoinedRoomProxyMock(configuration)
 
@@ -489,6 +525,8 @@ class RoomScreenViewModelTests: XCTestCase {
     }
 
     func testHistoryVisibleBannerDoesNotAppearIfAcknowledged() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms = Set()
         ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms.insert("$room:example.com")
 
         let configuration = JoinedRoomProxyMockConfiguration(id: "$room:example.com", isEncrypted: false)
@@ -518,6 +556,9 @@ class RoomScreenViewModelTests: XCTestCase {
     }
 
     func testHistoryVisibleBannerAppearsThenDisappearsOnAcknowledge() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms = Set()
+        
         let configuration = JoinedRoomProxyMockConfiguration(id: "$room:example.com", isEncrypted: true)
         let roomProxyMock = JoinedRoomProxyMock(configuration)
 
@@ -550,6 +591,61 @@ class RoomScreenViewModelTests: XCTestCase {
         ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms.insert("$room:example.com")
         viewModel.context.send(viewAction: .footerViewAction(RoomScreenFooterViewAction.dismissHistoryVisibleAlert))
         
+        try await deferred.fulfill()
+    }
+    
+    func testHistoryVisibleBannerAppearsFullFlow() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = false
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms = Set()
+        
+        let configuration = JoinedRoomProxyMockConfiguration(id: "$room:example.com", isEncrypted: true)
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+        
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.historyVisibility = .joined
+        
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        
+        var viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        
+        self.viewModel = viewModel
+        
+        // When the history is not shared, the banner should not be visible.
+        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.footerDetails == nil
+        }
+        try await deferred.fulfill()
+        
+        roomInfoProxyMock.historyVisibility = .shared
+        infoSubject.send(roomInfoProxyMock)
+        
+        // When the feature is off, the banner should not be visible.
+        deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.footerDetails == nil
+        }
+        try await deferred.fulfill()
+        
+        // When the history is shared, and the feature is on, the banner should be visible.
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                        roomProxy: roomProxyMock,
+                                        initialSelectedPinnedEventID: nil,
+                                        ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                        appSettings: ServiceLocator.shared.settings,
+                                        appHooks: AppHooks(),
+                                        analyticsService: ServiceLocator.shared.analytics,
+                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.footerDetails != nil
+        }
         try await deferred.fulfill()
     }
 }

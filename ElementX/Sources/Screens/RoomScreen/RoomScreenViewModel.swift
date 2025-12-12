@@ -346,14 +346,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canBan = powerLevels.canOwnUserBan()
         }
         
-        // Whever the user opens a room with joined history visibility, we clear the dismiss flag to ensure that the banner is displayed again if the history is made visible in the future.
-        if roomInfo.historyVisibility == RoomHistoryVisibility.joined {
-            appSettings.acknowledgedHistoryVisibleRooms.remove(roomInfo.id)
-            state.footerDetails = nil
-        }
-        // Whenever the user opens an encrypted room with non-join history visbility, we show them a warning banner if they have not already dismissed it.
-        else if roomInfo.isEncrypted, !appSettings.acknowledgedHistoryVisibleRooms.contains(roomInfo.id) {
-            state.footerDetails = .historyVisible(learnMoreURL: appSettings.historyVisibleDetailsURL)
+        if appSettings.enableKeyShareOnInvite {
+            // Whever the user opens a room with joined history visibility, we clear the dismiss flag to ensure that the banner is displayed again if the history is made visible in the future.
+            if roomInfo.historyVisibility == RoomHistoryVisibility.joined {
+                appSettings.acknowledgedHistoryVisibleRooms.remove(roomInfo.id)
+                state.footerDetails = nil
+            }
+            // Whenever the user opens an encrypted room with non-join history visbility, we show them a warning banner if they have not already dismissed it.
+            else if appSettings.enableKeyShareOnInvite, roomInfo.isEncrypted, !appSettings.acknowledgedHistoryVisibleRooms.contains(roomInfo.id) {
+                state.footerDetails = .historyVisible(learnMoreURL: appSettings.historyVisibleDetailsURL)
+            }
         }
     }
     
