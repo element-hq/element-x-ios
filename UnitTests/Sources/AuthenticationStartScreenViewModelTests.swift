@@ -172,7 +172,6 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
                              deviceVerificationURL: appSettings.deviceVerificationURL,
                              chatBackupDetailsURL: appSettings.chatBackupDetailsURL,
                              identityPinningViolationDetailsURL: appSettings.identityPinningViolationDetailsURL,
-                             historyVisibleDetailsURL: appSettings.historyVisibleDetailsURL,
                              elementWebHosts: appSettings.elementWebHosts,
                              accountProvisioningHost: appSettings.accountProvisioningHost,
                              bugReportApplicationID: appSettings.bugReportApplicationID,
