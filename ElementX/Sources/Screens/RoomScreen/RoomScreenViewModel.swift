@@ -345,7 +345,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canDeclineKnocks = powerLevels.canOwnUserKick()
             state.canBan = powerLevels.canOwnUserBan()
         }
-
+        
         if appSettings.enableKeyShareOnInvite {
             // Whever the user opens a room with joined history visibility, we clear the dismiss flag to ensure that the banner is displayed again if the history is made visible in the future.
             if roomInfo.historyVisibility == RoomHistoryVisibility.joined {
