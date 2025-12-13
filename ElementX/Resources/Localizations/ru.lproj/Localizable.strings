@@ -133,6 +133,7 @@
 "action_retry" = "Повторить";
 "action_retry_decryption" = "Повторите расшифровку";
 "action_save" = "Сохранить";
+"action_translate" = "Перевести";
 "action_search" = "Поиск";
 "action_select_all" = "Выбрать все";
 "action_send" = "Отправить";

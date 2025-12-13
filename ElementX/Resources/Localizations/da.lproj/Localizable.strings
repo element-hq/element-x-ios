@@ -133,6 +133,7 @@
 "action_retry" = "Prøv igen";
 "action_retry_decryption" = "Prøv at dekryptere igen";
 "action_save" = "Gem";
+"action_translate" = "Oversæt";
 "action_search" = "Søg";
 "action_select_all" = "Vælg alle";
 "action_send" = "Send";

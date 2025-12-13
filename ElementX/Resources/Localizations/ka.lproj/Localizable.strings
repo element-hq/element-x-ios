@@ -133,6 +133,7 @@
 "action_retry" = "ხელახლა ცდა";
 "action_retry_decryption" = "გაშიფვრის ხელახლა ცდა";
 "action_save" = "შენახვა";
+"action_translate" = "თარგმნა";
 "action_search" = "ძიება";
 "action_select_all" = "Select all";
 "action_send" = "გაგზავნა";

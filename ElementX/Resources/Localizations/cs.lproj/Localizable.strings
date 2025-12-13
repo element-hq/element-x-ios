@@ -133,6 +133,7 @@
 "action_retry" = "Zkusit znovu";
 "action_retry_decryption" = "Opakovat dešifrování";
 "action_save" = "Uložit";
+"action_translate" = "Přeložit";
 "action_search" = "Hledat";
 "action_select_all" = "Vybrat vše";
 "action_send" = "Odeslat";

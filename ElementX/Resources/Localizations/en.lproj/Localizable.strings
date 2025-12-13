@@ -133,6 +133,7 @@
 "action_retry" = "Retry";
 "action_retry_decryption" = "Retry decryption";
 "action_save" = "Save";
+"action_translate" = "Translate";
 "action_search" = "Search";
 "action_select_all" = "Select all";
 "action_send" = "Send";

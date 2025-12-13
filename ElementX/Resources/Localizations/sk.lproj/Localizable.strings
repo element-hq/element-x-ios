@@ -133,6 +133,7 @@
 "action_retry" = "Skúsiť znova";
 "action_retry_decryption" = "Opakovať dešifrovanie";
 "action_save" = "Uložiť";
+"action_translate" = "Preložiť";
 "action_search" = "Hľadať";
 "action_select_all" = "Vybrať všetko";
 "action_send" = "Odoslať";
