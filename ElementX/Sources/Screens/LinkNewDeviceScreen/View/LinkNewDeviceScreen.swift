@@ -21,6 +21,7 @@ struct LinkNewDeviceScreen: View {
         .backgroundStyle(.compound.bgSubtleSecondary)
         .navigationTitle(L10n.commonLinkNewDevice)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
     }
     
     @ViewBuilder
@@ -86,11 +87,13 @@ struct LinkNewDeviceScreen: View {
                     }
                 }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.mobileDevice)
                 
                 Button { context.send(viewAction: .linkDesktopComputer) } label: {
                     Label(L10n.screenLinkNewDeviceRootDesktopComputer, icon: \.computer)
                 }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.desktopComputer)
             }
             .disabled(isGeneratingCode)
         case .notSupported:
@@ -98,6 +101,15 @@ struct LinkNewDeviceScreen: View {
                 context.send(viewAction: .dismiss)
             }
             .buttonStyle(.compound(.primary))
+        }
+    }
+    
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(L10n.actionCancel) {
+                context.send(viewAction: .dismiss)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.cancel)
         }
     }
 }
@@ -148,6 +160,7 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
                 return false
             }
         }
+        clientProxy.linkNewDeviceServiceReturnValue = .init(handler: GrantLoginWithQrCodeHandlerSDKMock(.init(generateDelay: .seconds(20))))
         
         let viewModel = LinkNewDeviceScreenViewModel(clientProxy: clientProxy)
         

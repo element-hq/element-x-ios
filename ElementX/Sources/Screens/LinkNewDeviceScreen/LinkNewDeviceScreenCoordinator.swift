@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 enum LinkNewDeviceScreenCoordinatorAction {
-    case linkMobileDevice
+    case linkMobileDevice(LinkNewDeviceService.GenerateProgressPublisher)
     case linkDesktopComputer
     case dismiss
 }
@@ -38,8 +38,8 @@ final class LinkNewDeviceScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .linkMobileDevice:
-                actionsSubject.send(.linkMobileDevice)
+            case .linkMobileDevice(let progressPublisher):
+                actionsSubject.send(.linkMobileDevice(progressPublisher))
             case .linkDesktopComputer:
                 actionsSubject.send(.linkDesktopComputer)
             case .dismiss:

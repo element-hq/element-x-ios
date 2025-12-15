@@ -28,6 +28,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var encryptionSettingsFlowCoordinator: EncryptionSettingsFlowCoordinator?
+    // periphery:ignore - retaining purpose
+    private var linkNewDeviceFlowCoordinator: LinkNewDeviceFlowCoordinator?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -84,7 +86,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .userDetails:
                     presentUserDetailsEditScreen()
                 case .linkNewDevice:
-                    presentLinkNewDeviceScreen()
+                    startLinkNewDeviceFlow()
                 case let .manageAccount(url):
                     presentAccountManagementURL(url)
                 case .analytics:
@@ -167,6 +169,31 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func startLinkNewDeviceFlow() {
+        let stackCoordinator = NavigationStackCoordinator()
+        let flowCoordinator = LinkNewDeviceFlowCoordinator(navigationStackCoordinator: stackCoordinator,
+                                                           flowParameters: flowParameters)
+        flowCoordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .dismiss:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                case .requestOIDCAuthorisation(let url):
+                    presentAccountManagementURL(url)
+                }
+            }
+            .store(in: &cancellables)
+        
+        linkNewDeviceFlowCoordinator = flowCoordinator
+        flowCoordinator.start()
+        
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.linkNewDeviceFlowCoordinator = nil
+        }
     }
     
     private func presentAnalyticsScreen() {
@@ -259,9 +286,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.push(coordinator)
     }
-
+    
     // MARK: OIDC Account Management
-        
+    
     private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
     private func presentAccountManagementURL(_ url: URL) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
@@ -270,28 +297,5 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                 presentationAnchor: flowParameters.windowManager.mainWindow,
                                                                 appSettings: flowParameters.appSettings)
         accountSettingsPresenter?.start()
-    }
-    
-    // MARK: - Link New Device
-
-    private func presentLinkNewDeviceScreen() {
-        let parameters = LinkNewDeviceScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy)
-        let coordinator = LinkNewDeviceScreenCoordinator(parameters: parameters)
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .linkMobileDevice:
-                    break
-                case .linkDesktopComputer:
-                    break
-                case .dismiss:
-                    navigationStackCoordinator.pop()
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationStackCoordinator.push(coordinator)
     }
 }
