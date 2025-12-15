@@ -60,8 +60,7 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         let progressPublisher = linkNewDeviceService.generateQRCode()
         
         do {
-            _ = try await linkNewDeviceService.generateQRCode()
-                .values
+            _ = try await progressPublisher.values
                 .first { progress in
                     switch progress {
                     case .qrReady: true
@@ -72,7 +71,7 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
             actionsSubject.send(.linkMobileDevice(progressPublisher))
             state.mode = .readyToLink(isGeneratingCode: false)
         } catch {
-            #warning("Nope this is dumb…")
+            #warning("Needs some form of re-usable error handling, will handle with the next screen.")
             state.mode = .notSupported
         }
     }

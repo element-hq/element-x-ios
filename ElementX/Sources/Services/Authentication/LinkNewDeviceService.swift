@@ -10,8 +10,25 @@ import Foundation
 import MatrixRustSDK
 
 class LinkNewDeviceService {
-    typealias GenerateProgressPublisher = CurrentValuePublisher<GrantGeneratedQrLoginProgress, QRCodeLoginError>
-    typealias ScanProgressPublisher = CurrentValuePublisher<GrantQrLoginProgress, QRCodeLoginError>
+    typealias GenerateProgressPublisher = CurrentValuePublisher<GenerateProgress, QRCodeLoginError>
+    typealias ScanProgressPublisher = CurrentValuePublisher<ScanProgress, QRCodeLoginError>
+    
+    enum GenerateProgress {
+        case starting
+        case qrReady(QrCodeData)
+        case qrScanned(CheckCodeSenderProtocol)
+        case waitingForAuthorisation(verificationURI: String)
+        case syncingSecrets
+        case done
+    }
+
+    enum ScanProgress {
+        case starting
+        case establishingSecureChannel(checkCode: UInt8, checkCodeString: String)
+        case waitingForAuth(verificationURI: String)
+        case syncingSecrets
+        case done
+    }
     
     private let grantLoginHandler: GrantLoginWithQrCodeHandlerProtocol
     
@@ -20,8 +37,8 @@ class LinkNewDeviceService {
     }
     
     func generateQRCode() -> GenerateProgressPublisher {
-        let progressSubject = CurrentValueSubject<GrantGeneratedQrLoginProgress, QRCodeLoginError>(.starting)
-        let listener = SDKListener { progressSubject.send($0) }
+        let progressSubject = CurrentValueSubject<GenerateProgress, QRCodeLoginError>(.starting)
+        let listener = SDKListener { progressSubject.send(.init(rustProgress: $0)) }
         
         Task {
             do {
@@ -40,8 +57,8 @@ class LinkNewDeviceService {
     }
     
     func scanQRCode(_ scannedQRData: Data) -> ScanProgressPublisher {
-        let progressSubject = CurrentValueSubject<GrantQrLoginProgress, QRCodeLoginError>(.starting)
-        let listener = SDKListener { progressSubject.send($0) }
+        let progressSubject = CurrentValueSubject<ScanProgress, QRCodeLoginError>(.starting)
+        let listener = SDKListener { progressSubject.send(.init(rustProgress: $0)) }
         
         let qrCodeData: QrCodeData
         do {
@@ -68,6 +85,52 @@ class LinkNewDeviceService {
         }
         
         return progressSubject.asCurrentValuePublisher()
+    }
+}
+
+extension LinkNewDeviceService.GenerateProgress: CustomStringConvertible {
+    init(rustProgress: GrantGeneratedQrLoginProgress) {
+        self = switch rustProgress {
+        case .starting: .starting
+        case .qrReady(let qrCode): .qrReady(qrCode)
+        case .qrScanned(let checkCodeSender): .qrScanned(checkCodeSender)
+        case .waitingForAuth(let verificationUri): .waitingForAuthorisation(verificationURI: verificationUri)
+        case .syncingSecrets: .syncingSecrets
+        case .done: .done
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .starting: "starting"
+        case .qrReady: "qrReady"
+        case .qrScanned: "qrScanned"
+        case .waitingForAuthorisation: "waitingForAuthorisation"
+        case .syncingSecrets: "syncingSecrets"
+        case .done: "done"
+        }
+    }
+}
+
+extension LinkNewDeviceService.ScanProgress: CustomStringConvertible {
+    init(rustProgress: GrantQrLoginProgress) {
+        self = switch rustProgress {
+        case .starting: .starting
+        case .establishingSecureChannel(let checkCode, let checkCodeString): .establishingSecureChannel(checkCode: checkCode, checkCodeString: checkCodeString)
+        case .waitingForAuth(let verificationUri): .waitingForAuth(verificationURI: verificationUri)
+        case .syncingSecrets: .syncingSecrets
+        case .done: .done
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .starting: "starting"
+        case .establishingSecureChannel: "establishingSecureChannel"
+        case .waitingForAuth: "waitingForAuth"
+        case .syncingSecrets: "syncingSecrets"
+        case .done: "done"
+        }
     }
 }
 
