@@ -25,6 +25,7 @@ enum UITestsScreenIdentifier: String {
     case encryptionSettings
     case encryptionSettingsOutOfSync
     case encryptionReset
+    case linkNewDevice
     case roomLayoutBottom
     case roomLayoutMiddle
     case roomLayoutTop

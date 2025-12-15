@@ -87,11 +87,13 @@ struct LinkNewDeviceScreen: View {
                     }
                 }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.mobileDevice)
                 
                 Button { context.send(viewAction: .linkDesktopComputer) } label: {
                     Label(L10n.screenLinkNewDeviceRootDesktopComputer, icon: \.computer)
                 }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.desktopComputer)
             }
             .disabled(isGeneratingCode)
         case .notSupported:
@@ -107,6 +109,7 @@ struct LinkNewDeviceScreen: View {
             Button(L10n.actionCancel) {
                 context.send(viewAction: .dismiss)
             }
+            .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.cancel)
         }
     }
 }

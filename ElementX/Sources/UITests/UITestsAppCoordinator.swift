@@ -734,6 +734,40 @@ class MockScreen: Identifiable {
             coordinator.start()
             
             return navigationStackCoordinator
+        case .linkNewDevice:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let flowCoordinator = LinkNewDeviceFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
+                                                               flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init()),
+                                                                                                    bugReportService: BugReportServiceMock(.init()),
+                                                                                                    elementCallService: ElementCallServiceMock(.init()),
+                                                                                                    timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                                                                                    emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                                                                    linkMetadataProvider: LinkMetadataProvider(),
+                                                                                                    appMediator: AppMediatorMock.default,
+                                                                                                    appSettings: ServiceLocator.shared.settings,
+                                                                                                    appHooks: AppHooks(),
+                                                                                                    analytics: ServiceLocator.shared.analytics,
+                                                                                                    userIndicatorController: UserIndicatorControllerMock(),
+                                                                                                    notificationManager: NotificationManagerMock(),
+                                                                                                    stateMachineFactory: StateMachineFactory()))
+            flowCoordinator.actionsPublisher
+                .sink { [weak self] action in
+                    guard let self else { return }
+                    switch action {
+                    case .dismiss:
+                        navigationRootCoordinator.setSheetCoordinator(nil)
+                    case .requestOIDCAuthorisation:
+                        break
+                    }
+                }
+                .store(in: &cancellables)
+            
+            retainedState.append(flowCoordinator)
+            flowCoordinator.start()
+            
+            // Use a sheet on top the the placeholder so we can test the dismissal.
+            navigationRootCoordinator.setSheetCoordinator(navigationStackCoordinator)
+            return PlaceholderScreenCoordinator(hideBrandChrome: false)
         case .autoUpdatingTimeline:
             let appSettings: AppSettings = ServiceLocator.shared.settings
             appSettings.hasRunIdentityConfirmationOnboarding = true
