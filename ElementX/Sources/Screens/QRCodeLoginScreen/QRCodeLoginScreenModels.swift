@@ -52,21 +52,20 @@ struct QRCodeLoginScreenViewStateBindings {
 enum QRCodeLoginScreenViewAction {
     case cancel
     case startScan
-    case signInManually
-    case openSettings
+    case errorAction(QRCodeErrorView.Action)
 }
 
 enum QRCodeLoginState: Equatable {
     /// Initial state where the user is informed how to perform the scan
     case initial
     /// The camera is scanning
-    case scan(QRCodeLoginScanningState)
+    case scan(ScanningState)
     /// Codes are being shown
     case displayCode(QRCodeLoginDisplayCodeState)
     /// Any full screen error state
-    case error(QRCodeLoginErrorState)
+    case error(ErrorState)
     
-    enum QRCodeLoginErrorState: Equatable {
+    enum ErrorState: Equatable {
         case noCameraPermission
         case connectionNotSecure
         case cancelled
@@ -77,21 +76,23 @@ enum QRCodeLoginState: Equatable {
         case unknown
     }
     
-    enum QRCodeLoginScanningState: Equatable {
-        /// the QR code is scanning
+    enum ScanningState: Equatable {
+        /// The QR code is scanning.
         case scanning
-        /// the QR code has been detected and is being processed
+        /// The QR code has been detected and is being processed.
         case connecting
-        /// the QR code was scanned, but an error occurred.
+        /// The QR code was scanned, but an error occurred.
         case scanFailed(Error)
         
         enum Error: Equatable {
-            /// the QR code has been processed and is invalid
+            /// The QR code has been processed and is invalid.
             case invalid
-            /// the QR code has been processed but it is for an account provider that isn't allowed.
+            /// The QR code has been processed but it is for an account provider that isn't allowed.
             case notAllowed(scannedProvider: String, allowedProviders: [String])
-            /// the QR code has been processed but it belongs to a device not signed in
+            /// The QR code has been processed but it belongs to a device not signed in.
             case deviceNotSignedIn
+            /// Expected a QR code for a new device, however the processed code belongs to a device that is already signed in.
+            case deviceAlreadySignedIn
             
             var title: String {
                 switch self {
@@ -101,6 +102,8 @@ enum QRCodeLoginState: Equatable {
                     L10n.screenChangeServerErrorUnauthorizedHomeserverTitle(scannedProvider)
                 case .deviceNotSignedIn:
                     L10n.screenQrCodeLoginDeviceNotSignedInScanStateSubtitle
+                case .deviceAlreadySignedIn:
+                    L10n.screenQrCodeLoginDeviceNotSignedInScanStateSubtitle // FIXME: Update string
                 }
             }
             
@@ -112,6 +115,8 @@ enum QRCodeLoginState: Equatable {
                     L10n.screenChangeServerErrorUnauthorizedHomeserverContent(allowedProviders.formatted(.list(type: .and)))
                 case .deviceNotSignedIn:
                     L10n.screenQrCodeLoginDeviceNotSignedInScanStateDescription
+                case .deviceAlreadySignedIn:
+                    L10n.screenQrCodeLoginDeviceNotSignedInScanStateDescription // FIXME: Update string
                 }
             }
         }

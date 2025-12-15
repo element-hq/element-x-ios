@@ -35,13 +35,13 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     
     override func process(viewAction: QRCodeLoginScreenViewAction) {
         switch viewAction {
-        case .cancel:
+        case .cancel, .errorAction(.cancel):
             actionsSubject.send(.cancel)
-        case .startScan:
+        case .startScan, .errorAction(.startScan):
             Task { await startScanIfPossible() }
-        case .openSettings:
+        case .errorAction(.openSettings):
             appMediator.openAppSettings()
-        case .signInManually:
+        case .errorAction(.signInManually):
             actionsSubject.send(.signInManually)
         }
     }
@@ -128,6 +128,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             state.state = .scan(.scanFailed(.notAllowed(scannedProvider: scannedProvider, allowedProviders: allowedProviders)))
         case .deviceNotSignedIn:
             state.state = .scan(.scanFailed(.deviceNotSignedIn))
+        case .deviceAlreadySignedIn:
+            state.state = .scan(.scanFailed(.deviceAlreadySignedIn))
         case .cancelled:
             state.state = .error(.cancelled)
         case .connectionInsecure:
@@ -140,7 +142,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             state.state = .error(.expired)
         case .deviceNotSupported:
             state.state = .error(.deviceNotSupported)
-        case .deviceAlreadySignedIn, .unknown:
+        case .unknown:
             state.state = .error(.unknown)
         }
     }
