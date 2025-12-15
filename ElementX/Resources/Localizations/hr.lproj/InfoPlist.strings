@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Element X treba pristup kameri kako biste mogli fotografirati i snimati videozapise te ih slati kao poruke.";
+"NSFaceIDUsageDescription" = "Face ID se koristi za pristup vašoj aplikaciji.";
+"NSLocationWhenInUseUsageDescription" = "Omogućite pristup lokaciji kako bi Element X mogao dijeliti vašu lokaciju.";
+"NSMicrophoneUsageDescription" = "Element X treba pristup mikrofonu kako biste mogli snimati i slati poruke sa zvukom.";
+"NSPhotoLibraryUsageDescription" = "To vam omogućuje spremanje slika i videozapisa u fotogaleriju.";
