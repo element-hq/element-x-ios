@@ -90,8 +90,20 @@ class LinkNewDeviceService {
             return progressSubject.asCurrentValuePublisher()
         }
         
-        #warning("Check intent/server name??")
-        #warning("Check Element Pro here??")
+        if qrCodeData.intent() != .login {
+            MXLog.error("The QR code is from a device that is already signed in.")
+            progressSubject.send(completion: .failure(.deviceAlreadySignedIn))
+            return progressSubject.asCurrentValuePublisher()
+        }
+        
+        let scannedBaseURL = qrCodeData.baseUrl()
+        
+        // FIXME: Is this even necessary given we're the device that is already signed in???
+        if !appSettings.allowOtherAccountProviders, !appSettings.accountProviders.contains(scannedBaseURL) {
+            MXLog.error("The scanned device's server is not allowed: \(scannedBaseURL)")
+            progressSubject.send(completion: .failure(.providerNotAllowed(scannedProvider: scannedBaseURL, allowedProviders: appSettings.accountProviders)))
+            return progressSubject.asCurrentValuePublisher()
+        }
         
         Task {
             do {

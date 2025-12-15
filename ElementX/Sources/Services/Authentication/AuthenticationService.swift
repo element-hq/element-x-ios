@@ -160,16 +160,18 @@ class AuthenticationService: AuthenticationServiceProtocol {
             return progressSubject.asCurrentValuePublisher()
         }
         
-        guard let scannedServerName = qrData.serverName() else {
+        if qrData.intent() != .reciprocate {
             MXLog.error("The QR code is from a device that is not yet signed in.")
             progressSubject.send(completion: .failure(.qrCodeError(.deviceNotSignedIn)))
             return progressSubject.asCurrentValuePublisher()
         }
         
-        if !appSettings.allowOtherAccountProviders, !appSettings.accountProviders.contains(scannedServerName) {
-            MXLog.error("The scanned device's server is not allowed: \(scannedServerName)")
-            progressSubject.send(completion: .failure(.qrCodeError(.providerNotAllowed(scannedProvider: scannedServerName, allowedProviders: appSettings.accountProviders))))
-            return progressSubject.asCurrentValuePublisher()
+        let scannedBaseUrl = qrData.baseUrl()
+        
+        // TODO: this probably needs fixing up to work with base URL vs server name
+        if !appSettings.allowOtherAccountProviders, !appSettings.accountProviders.contains(scannedBaseUrl) {
+            MXLog.error("The scanned device's server is not allowed: \(scannedBaseUrl)")
+            return .failure(.qrCodeError(.providerNotAllowed(scannedProvider: scannedBaseUrl, allowedProviders: appSettings.accountProviders)))
         }
         
         let listener = SDKListener { progress in
