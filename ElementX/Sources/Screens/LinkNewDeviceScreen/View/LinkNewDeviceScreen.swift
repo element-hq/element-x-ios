@@ -160,6 +160,7 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
                 return false
             }
         }
+        clientProxy.linkNewDeviceServiceReturnValue = .init(handler: GrantLoginWithQrCodeHandlerSDKMock(.init(generateDelay: .seconds(20))))
         
         let viewModel = LinkNewDeviceScreenViewModel(clientProxy: clientProxy)
         
