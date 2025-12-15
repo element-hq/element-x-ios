@@ -13,11 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d cifră introdusă</string>
+			<string>%1$d unesena znamenka</string>
 			<key>few</key>
-			<string>%1$d cifre introduse</string>
+			<string>%1$d unesene znamenke</string>
 			<key>other</key>
-			<string>%1$d cifre introduse</string>
+			<string>%1$d unesenih znamenaka</string>
 		</dict>
 	</dict>
 	<key>a11y_polls_percent_of_total</key>
@@ -31,11 +31,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d la suta din totalul voturilor</string>
+			<string>%1$d posto ukupnog broja glasova</string>
 			<key>few</key>
-			<string>%1$d la suta din totalul voturilor</string>
+			<string>%1$d posto ukupnog broja glasova</string>
 			<key>other</key>
-			<string>%1$d la suta din totalul voturilor</string>
+			<string>%1$d posto ukupnog broja glasova</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -49,11 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Citit de %1$@ și incă %2$d</string>
+			<string>Pročitao %1$@ i ostalih %2$d</string>
 			<key>few</key>
-			<string>Citit de %1$@ și incă %2$d</string>
+			<string>Pročitala %1$@ i ostala %2$d</string>
 			<key>other</key>
-			<string>Citit de %1$@ și incă %2$d</string>
+			<string>Pročitalo %1$@ i ostalih %2$d</string>
 		</dict>
 	</dict>
 	<key>common_many_members</key>
@@ -67,11 +67,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d altul</string>
+			<string>još %d</string>
 			<key>few</key>
-			<string>%d alții</string>
+			<string>još %d</string>
 			<key>other</key>
-			<string>%d alții</string>
+			<string>još %d</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -85,11 +85,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Membru</string>
+			<string>%1$d član</string>
 			<key>few</key>
-			<string>%1$d Membri</string>
+			<string>%1$d člana</string>
 			<key>other</key>
-			<string>%1$d Membri</string>
+			<string>%1$d članova</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -103,11 +103,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d vot</string>
+			<string>%d glas</string>
 			<key>few</key>
-			<string>%d voturi</string>
+			<string>%d glasa</string>
 			<key>other</key>
-			<string>%d voturi</string>
+			<string>%d glasova</string>
 		</dict>
 	</dict>
 	<key>common_replies</key>
@@ -121,11 +121,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d răspuns</string>
+			<string>%1$d odgovor</string>
 			<key>few</key>
-			<string>%1$d răspunsuri</string>
+			<string>%1$d odgovora</string>
 			<key>other</key>
-			<string>%1$d răspunsuri</string>
+			<string>%1$d odgovora</string>
 		</dict>
 	</dict>
 	<key>common_rooms</key>
@@ -139,11 +139,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Camera</string>
+			<string>%1$d soba</string>
 			<key>few</key>
-			<string>%1$d Camere</string>
+			<string>%1$d sobe</string>
 			<key>other</key>
-			<string>%1$d Camere</string>
+			<string>%1$d soba</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -157,11 +157,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Spațiu</string>
+			<string>%1$d prostor</string>
 			<key>few</key>
-			<string>%1$d Spații</string>
+			<string>%1$d prostora</string>
 			<key>other</key>
-			<string>%1$d Spații</string>
+			<string>%1$d prostora</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -175,9 +175,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d mesaj</string>
+			<string>%1$@: %2$d poruka</string>
+			<key>few</key>
+			<string>%1$@: %2$d poruke</string>
 			<key>other</key>
-			<string>%1$@: %2$d mesaje</string>
+			<string>%1$@: %2$d poruka</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -191,9 +193,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d notificare</string>
+			<string>%d obavijest</string>
+			<key>few</key>
+			<string>%d obavijesti</string>
 			<key>other</key>
-			<string>%d notificări</string>
+			<string>%d obavijesti</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -207,9 +211,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d invitație</string>
+			<string>%d pozivnica</string>
+			<key>few</key>
+			<string>%d pozivnice</string>
 			<key>other</key>
-			<string>%d invitații</string>
+			<string>%d pozivnica</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -223,9 +229,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d mesaj nou</string>
+			<string>%d nova poruka</string>
+			<key>few</key>
+			<string>%d nove poruke</string>
 			<key>other</key>
-			<string>%d mesaje noi</string>
+			<string>%d novih poruka</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -239,9 +247,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d mesaj notificat necitit</string>
+			<string>%d nepročitana poruka s obavijesti</string>
+			<key>few</key>
+			<string>%d nepročitane poruke s obavijesti</string>
 			<key>other</key>
-			<string>%d mesaje notificate necitite</string>
+			<string>%d nepročitanih poruka s obavijesti</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -255,9 +265,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d cameră</string>
+			<string>%d soba</string>
+			<key>few</key>
+			<string>%d sobe</string>
 			<key>other</key>
-			<string>%d camere</string>
+			<string>%d soba</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -271,11 +283,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Aveți %1$d încercare de deblocare</string>
+			<string>Imate %1$d pokušaj otključavanja</string>
 			<key>few</key>
-			<string>Aveți %1$d încercări de deblocare</string>
+			<string>Imate %1$d pokušaja otključavanja</string>
 			<key>other</key>
-			<string>Aveți %1$d încercări de deblocare</string>
+			<string>Imate %1$d pokušaja otključavanja</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -289,11 +301,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>PIN greșit. Mai aveți %1$d sansa</string>
+			<string>Pogrešan PIN. Imate još %1$d pokušaj</string>
 			<key>few</key>
-			<string>PIN greșit. Mai aveți %1$d sanse</string>
+			<string>Pogrešan PIN. Imate još %1$d pokušaja</string>
 			<key>other</key>
-			<string>PIN greșit. Mai aveți %1$d sanse</string>
+			<string>Pogrešan PIN. Imate još %1$d pokušaja</string>
 		</dict>
 	</dict>
 	<key>screen_leave_space_submit</key>
@@ -307,11 +319,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Părăsiți %1$d cameră și spațiul</string>
+			<string>Napusti %1$d sobu i prostor</string>
 			<key>few</key>
-			<string>Părăsiți %1$d camere și spațiul</string>
+			<string>Napusti %1$d sobe i prostor</string>
 			<key>other</key>
-			<string>Părăsiți %1$d camere și spațiul</string>
+			<string>Napusti %1$d soba i prostor</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -325,11 +337,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Mesaj fixat</string>
+			<string>%1$d prikvačena poruka</string>
 			<key>few</key>
-			<string>%1$d Mesaje fixate</string>
+			<string>%1$d prikvačene poruke</string>
 			<key>other</key>
-			<string>%1$d Mesaje fixate</string>
+			<string>%1$d prikvačenih poruka</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_banned_header_title</key>
@@ -343,11 +355,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Interzis</string>
+			<string>%1$d zabranjen</string>
 			<key>few</key>
-			<string>%1$d Interziși</string>
+			<string>%1$d zabranjena</string>
 			<key>other</key>
-			<string>%1$d Interziși</string>
+			<string>%1$d zabranjenih</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -361,11 +373,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d persoană</string>
+			<string>%1$d osoba</string>
 			<key>few</key>
-			<string>%1$d persoane</string>
+			<string>%1$d osobe</string>
 			<key>other</key>
-			<string>%1$d persoane</string>
+			<string>%1$d ljudi</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_pending_header_title</key>
@@ -379,11 +391,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Invitat</string>
+			<string>%1$d pozvan</string>
 			<key>few</key>
-			<string>%1$d Invitați</string>
+			<string>%1$d pozvana</string>
 			<key>other</key>
-			<string>%1$d Invitați</string>
+			<string>%1$d pozvanih</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -397,11 +409,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ +%2$d utilizator doresc să se alăture acestei camere</string>
+			<string>%1$@ i još %2$d želi se pridružiti ovoj sobi</string>
 			<key>few</key>
-			<string>%1$@ +%2$d utilizatori doresc să se alăture acestei camere</string>
+			<string>%1$@ i još %2$d želi se pridružiti ovoj sobi</string>
 			<key>other</key>
-			<string>%1$@ +%2$d utilizatori doresc să se alăture acestei camere</string>
+			<string>%1$@ i još %2$d želi se pridružiti ovoj sobi</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
@@ -415,11 +427,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d membru a reacționat cu %2$@</string>
+			<string>%1$d član reagirao je s %2$@</string>
 			<key>few</key>
-			<string>%1$d membri au reacționat cu %2$@</string>
+			<string>%1$d člana reagirala su s %2$@</string>
 			<key>other</key>
-			<string>%1$d membri au reacționat cu %2$@</string>
+			<string>%1$d članova reagiralo je s %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_including_you_a11y</key>
@@ -433,11 +445,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Dumneavoastră si %1$d membru ați reacționat cu %2$@</string>
+			<string>Vi i %1$d član reagirali ste s %2$@</string>
 			<key>few</key>
-			<string>Dumneavoastră si %1$d membri ați reacționat cu %2$@</string>
+			<string>Vi i %1$d člana reagirali ste s %2$@</string>
 			<key>other</key>
-			<string>Dumneavoastră si %1$d membri ați reacționat cu %2$@</string>
+			<string>Vi i %1$d članova reagirali ste s %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -451,11 +463,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d schimbare a camerii</string>
+			<string>%1$d promjena sobe</string>
 			<key>few</key>
-			<string>%1$d schimbări ale camerei</string>
+			<string>%1$d promjene sobe</string>
 			<key>other</key>
-			<string>%1$d schimbări ale camerei</string>
+			<string>%1$d promjena sobe</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
@@ -469,11 +481,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ și încă %3$d</string>
+			<string>%1$@, %2$@ i ostalih %3$d</string>
 			<key>few</key>
-			<string>%1$@, %2$@ și încă %3$d</string>
+			<string>%1$@, %2$@ i ostalih %3$d</string>
 			<key>other</key>
-			<string>%1$@, %2$@ și încă %3$d</string>
+			<string>%1$@, %2$@ i ostalih %3$d</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -487,11 +499,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ tastează</string>
+			<string>%1$@ tipka</string>
 			<key>few</key>
-			<string>%1$@ tastează</string>
+			<string>%1$@ tipka</string>
 			<key>other</key>
-			<string>%1$@ tastează</string>
+			<string>%1$@ tipka</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>
@@ -505,11 +517,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Ai blocat%1$d utilizator. Nu veți primi notificări pentru acest utilizator.</string>
+			<string>Blokirali ste %1$d korisnika. Nećete primati obavijesti za ovog korisnika.</string>
 			<key>few</key>
-			<string>Ai blocat%1$d utilizatori. Nu veți primi notificări pentru acești utilizatori.</string>
+			<string>Blokirali ste %1$d korisnika. Nećete primati obavijesti za te korisnike.</string>
 			<key>other</key>
-			<string>Ai blocat%1$d utilizatori. Nu veți primi notificări pentru acești utilizatori.</string>
+			<string>Blokirali ste %1$d korisnika. Nećete primati obavijesti za te korisnike.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
@@ -523,11 +535,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>S-a găsit %1$d furnizor push: %2$@</string>
+			<string>Pronađen je %1$d pružatelj push obavijesti: %2$@</string>
 			<key>few</key>
-			<string>S-au găsit %1$d furnizori push: %2$@</string>
+			<string>Pronađena su %1$d pružatelja push obavijesti: %2$@</string>
 			<key>other</key>
-			<string>S-au găsit %1$d furnizori push: %2$@</string>
+			<string>Pronađeno je %1$d pružatelja push obavijesti: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -541,11 +553,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d distribuitor găsit: %2$@.</string>
+			<string>Pronađen je %1$d distributer: %2$@.</string>
 			<key>few</key>
-			<string>%1$d distribuitori găsiți: %2$@.</string>
+			<string>Pronađena su %1$d distributera: %2$@.</string>
 			<key>other</key>
-			<string>%1$d distribuitori găsiți: %2$@.</string>
+			<string>Pronađeno je %1$d distributera: %2$@.</string>
 		</dict>
 	</dict>
 </dict>
