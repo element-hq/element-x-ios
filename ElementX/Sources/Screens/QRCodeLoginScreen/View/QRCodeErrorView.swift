@@ -166,3 +166,47 @@ struct QRCodeErrorView: View {
         }
     }
 }
+
+// MARK: - Previews
+
+struct QRCodeErrorView_Previews: PreviewProvider, TestablePreview {
+    static var previews: some View {
+        QRCodeErrorViewSnapshot(errorState: .noCameraPermission, canSignInManually: false)
+            .previewDisplayName("No Camera Permission")
+        
+        QRCodeErrorViewSnapshot(errorState: .connectionNotSecure, canSignInManually: false)
+            .previewDisplayName("Connection not secure")
+        
+        QRCodeErrorViewSnapshot(errorState: .linkingNotSupported, canSignInManually: true)
+            .previewDisplayName("Linking unsupported")
+        QRCodeErrorViewSnapshot(errorState: .linkingNotSupported, canSignInManually: false)
+            .previewDisplayName("Linking unsupported restricted flow")
+        
+        QRCodeErrorViewSnapshot(errorState: .cancelled, canSignInManually: false)
+            .previewDisplayName("Cancelled")
+        
+        QRCodeErrorViewSnapshot(errorState: .declined, canSignInManually: false)
+            .previewDisplayName("Declined")
+        
+        QRCodeErrorViewSnapshot(errorState: .expired, canSignInManually: false)
+            .previewDisplayName("Expired")
+        
+        QRCodeErrorViewSnapshot(errorState: .deviceNotSupported, canSignInManually: false)
+            .previewDisplayName("Device not supported")
+        
+        QRCodeErrorViewSnapshot(errorState: .unknown, canSignInManually: false)
+            .previewDisplayName("Unknown error")
+    }
+}
+
+private struct QRCodeErrorViewSnapshot: View {
+    let errorState: QRCodeLoginState.ErrorState
+    let canSignInManually: Bool
+    
+    var body: some View {
+        NavigationStack {
+            QRCodeErrorView(errorState: errorState, canSignInManually: canSignInManually) { _ in }
+                .toolbar(.visible, for: .navigationBar)
+        }
+    }
+}

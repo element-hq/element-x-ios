@@ -271,23 +271,8 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     
     static let verificationCodeStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayCode(.verificationCode("123456")))
     
-    // Errors
-    static let noCameraPermissionStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.noCameraPermission))
-    
-    static let connectionNotSecureStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.connectionNotSecure))
-    
-    static let linkingUnsupportedStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.linkingNotSupported))
-    static let linkingUnsupportedRestrictedFlowViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.linkingNotSupported), canSignInManually: false)
-    
-    static let cancelledStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.cancelled))
-    
-    static let declinedStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.declined))
-    
-    static let expiredStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.expired))
-    
-    static let deviceNoSupportedViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.deviceNotSupported))
-    
-    static let unknownErrorStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.unknown))
+    // Errors (no need to test them all QRCodeErrorView covers that).
+    static let errorStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.declined))
     
     static var previews: some View {
         QRCodeLoginScreen(context: initialStateViewModel.context)
@@ -314,30 +299,7 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
         QRCodeLoginScreen(context: verificationCodeStateViewModel.context)
             .previewDisplayName("Verification code")
         
-        QRCodeLoginScreen(context: noCameraPermissionStateViewModel.context)
-            .previewDisplayName("No Camera Permission")
-        
-        QRCodeLoginScreen(context: connectionNotSecureStateViewModel.context)
-            .previewDisplayName("Connection not secure")
-        
-        QRCodeLoginScreen(context: linkingUnsupportedStateViewModel.context)
-            .previewDisplayName("Linking unsupported")
-        QRCodeLoginScreen(context: linkingUnsupportedRestrictedFlowViewModel.context)
-            .previewDisplayName("Linking unsupported restricted flow")
-        
-        QRCodeLoginScreen(context: cancelledStateViewModel.context)
-            .previewDisplayName("Cancelled")
-        
-        QRCodeLoginScreen(context: declinedStateViewModel.context)
-            .previewDisplayName("Declined")
-        
-        QRCodeLoginScreen(context: expiredStateViewModel.context)
-            .previewDisplayName("Expired")
-        
-        QRCodeLoginScreen(context: deviceNoSupportedViewModel.context)
-            .previewDisplayName("Device not supported")
-        
-        QRCodeLoginScreen(context: unknownErrorStateViewModel.context)
-            .previewDisplayName("Unknown error")
+        QRCodeLoginScreen(context: errorStateViewModel.context)
+            .previewDisplayName("Error")
     }
 }

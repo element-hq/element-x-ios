@@ -629,6 +629,12 @@ extension PreviewTests {
         }
     }
 
+    func testQRCodeErrorView() async throws {
+        for (index, preview) in QRCodeErrorView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testQRCodeLoginScreen() async throws {
         for (index, preview) in QRCodeLoginScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
