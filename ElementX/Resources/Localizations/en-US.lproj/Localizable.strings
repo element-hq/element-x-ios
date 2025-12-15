@@ -702,9 +702,11 @@
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Allow for this room to be found by searching %1$@ public room directory";
 "screen_security_and_privacy_room_directory_visibility_toggle_description" = "Allow to be found by searching the public directory.";
 "screen_security_and_privacy_room_directory_visibility_toggle_title" = "Visible in public directory";
+"screen_security_and_privacy_room_history_anyone_option_title" = "Anyone (history is public)";
+"screen_security_and_privacy_room_history_section_footer" = "Changes won't affect past messages, only new ones. %@";
 "screen_security_and_privacy_room_history_section_header" = "Who can read history";
-"screen_security_and_privacy_room_history_since_invite_option_title" = "Members only since they were invited";
-"screen_security_and_privacy_room_history_since_selecting_option_title" = "Members only since selecting this option";
+"screen_security_and_privacy_room_history_since_invite_option_title" = "Members since invited";
+"screen_security_and_privacy_room_history_since_selecting_option_title" = "Members (full history)";
 "screen_security_and_privacy_room_publishing_section_footer" = "Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.\nYou can choose to publish your room in your homeserver public room directory.";
 "screen_security_and_privacy_room_publishing_section_header" = "Room publishing";
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
@@ -1411,7 +1413,6 @@
 "screen_security_and_privacy_room_access_anyone_option_title" = "Anyone";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
 "screen_security_and_privacy_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
-"screen_security_and_privacy_room_history_anyone_option_title" = "Anyone";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_space_settings_security_and_privacy" = "Security & privacy";

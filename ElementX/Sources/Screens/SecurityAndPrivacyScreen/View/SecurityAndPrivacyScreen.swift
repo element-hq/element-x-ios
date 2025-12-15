@@ -80,15 +80,27 @@ struct SecurityAndPrivacyScreen: View {
             Text(L10n.screenSecurityAndPrivacyRoomAccessSectionHeader)
                 .compoundListSectionHeader()
         } footer: {
-            if let footer = context.viewState.accessSectionFooter {
-                Text(footer)
-                    .compoundListSectionFooter()
-                    .environment(\.openURL, OpenURLAction { _ in
-                        context.send(viewAction: .manageSpaces)
-                        return .handled
-                    })
+            if context.viewState.shouldShowAccessSectionFooter {
+                accessSectionFooter
             }
         }
+    }
+    
+    private var accessSectionFooter: some View {
+        let linkPlaceholder = "{link}"
+        var footerString = AttributedString(L10n.screenSecurityAndPrivacyRoomAccessFooter(linkPlaceholder))
+        var linkString = AttributedString(L10n.screenSecurityAndPrivacyRoomAccessFooterManageSpacesAction)
+        // Doesn't really matter
+        linkString.link = .init(stringLiteral: "action://manageSpace")
+        linkString.bold()
+        footerString.replace(linkPlaceholder, with: linkString)
+        
+        return Text(footerString)
+            .compoundListSectionFooter()
+            .environment(\.openURL, OpenURLAction { _ in
+                context.send(viewAction: .manageSpaces)
+                return .handled
+            })
     }
     
     private var askToJoinOption: some View {
@@ -133,21 +145,36 @@ struct SecurityAndPrivacyScreen: View {
         Section {
             ForEach(context.viewState.availableVisibilityOptions, id: \.self) { option in
                 switch option {
-                case .sinceSelection:
-                    ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistorySinceSelectingOptionTitle),
-                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .sinceSelection) { context.desiredSettings.historyVisibility = .sinceSelection })
-                case .anyone:
-                    ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistoryAnyoneOptionTitle),
-                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .anyone) { context.desiredSettings.historyVisibility = .anyone })
-                case .sinceInvite:
+                case .invited:
                     ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistorySinceInviteOptionTitle),
-                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .sinceInvite) { context.desiredSettings.historyVisibility = .sinceInvite })
+                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .invited) { context.desiredSettings.historyVisibility = .invited })
+                case .shared:
+                    ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistorySinceSelectingOptionTitle),
+                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .shared) { context.desiredSettings.historyVisibility = .shared })
+                case .worldReadable:
+                    ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistoryAnyoneOptionTitle),
+                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .worldReadable) { context.desiredSettings.historyVisibility = .worldReadable })
                 }
             }
         } header: {
             Text(L10n.screenSecurityAndPrivacyRoomHistorySectionHeader)
                 .compoundListSectionHeader()
+        } footer: {
+            historySectionFooter
         }
+    }
+    
+    private var historySectionFooter: some View {
+        let linkPlaceholder = "{link}"
+        var footerText = AttributedString(L10n.screenSecurityAndPrivacyRoomHistorySectionFooter(linkPlaceholder))
+        
+        var linkString = AttributedString(L10n.actionLearnMore)
+        linkString.link = context.viewState.historySharingDetailsURL
+        linkString.bold()
+        footerText.replace(linkPlaceholder, with: linkString)
+        
+        return Text(footerText)
+            .compoundListSectionFooter()
     }
     
     private var visibilitySection: some View {

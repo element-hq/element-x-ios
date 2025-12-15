@@ -15,17 +15,6 @@ enum SecurityAndPrivacyScreenViewModelAction {
 }
 
 struct SecurityAndPrivacyScreenViewState: BindableState {
-    private static let accessSectionFooterAttributedString = {
-        let linkPlaceholder = "{link}"
-        var footer = AttributedString(L10n.screenSecurityAndPrivacyRoomAccessFooter(linkPlaceholder))
-        var linkString = AttributedString(L10n.screenSecurityAndPrivacyRoomAccessFooterManageSpacesAction)
-        // Doesn't really matter
-        linkString.link = .init(stringLiteral: "action://manageSpace")
-        linkString.bold()
-        footer.replace(linkPlaceholder, with: linkString)
-        return footer
-    }()
-    
     let serverName: String
     var currentSettings: SecurityAndPrivacySettings
     var bindings: SecurityAndPrivacyScreenViewStateBindings
@@ -33,6 +22,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     var isKnockingEnabled: Bool
     var isSpaceSettingsEnabled: Bool
     var isSpace: Bool
+    var historySharingDetailsURL: URL
     
     var canEditAddress = false
     var canEditJoinRule = false
@@ -58,13 +48,13 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     }
     
     var availableVisibilityOptions: [SecurityAndPrivacyHistoryVisibility] {
-        var options = [SecurityAndPrivacyHistoryVisibility.sinceSelection]
+        var options = [SecurityAndPrivacyHistoryVisibility.shared]
         if !bindings.desiredSettings.isEncryptionEnabled, bindings.desiredSettings.accessType == .anyone {
-            options.append(.anyone)
+            options.append(.worldReadable)
         } else {
-            options.append(.sinceInvite)
+            options.append(.invited)
         }
-        return options
+        return options.sorted()
     }
     
     var isSpaceMembersOptionAvailable: Bool {
@@ -113,16 +103,14 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
         }
     }
     
-    var accessSectionFooter: AttributedString? {
-        if (bindings.desiredSettings.accessType.isSpaceMembers &&
-            isSpaceMembersOptionSelectable) ||
-            (bindings.desiredSettings.accessType.isAskToJoinWithSpaceMembers &&
-                isAskToJoinWithSpaceMembersOptionSelectable),
+    var shouldShowAccessSectionFooter: Bool {
+        if (bindings.desiredSettings.accessType.isSpaceMembers && isSpaceMembersOptionSelectable) ||
+            (bindings.desiredSettings.accessType.isAskToJoinWithSpaceMembers && isAskToJoinWithSpaceMembersOptionSelectable),
             case .multiple = spaceSelection {
-            Self.accessSectionFooterAttributedString
-        } else {
-            nil
+            return true
         }
+        
+        return false
     }
     
     enum SpaceSelection {
@@ -169,11 +157,13 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
          historyVisibility: SecurityAndPrivacyHistoryVisibility,
          isSpace: Bool,
          isKnockingEnabled: Bool,
-         isSpaceSettingsEnabled: Bool) {
+         isSpaceSettingsEnabled: Bool,
+         historySharingDetailsURL: URL) {
         self.serverName = serverName
         self.isKnockingEnabled = isKnockingEnabled
         self.isSpace = isSpace
         self.isSpaceSettingsEnabled = isSpaceSettingsEnabled
+        self.historySharingDetailsURL = historySharingDetailsURL
         
         let settings = SecurityAndPrivacySettings(accessType: accessType,
                                                   isEncryptionEnabled: isEncryptionEnabled,
@@ -254,17 +244,21 @@ enum SecurityAndPrivacyScreenViewAction {
     case manageSpaces
 }
 
-enum SecurityAndPrivacyHistoryVisibility {
-    case sinceSelection
-    case sinceInvite
-    case anyone
+enum SecurityAndPrivacyHistoryVisibility: Int, Comparable {
+    case invited
+    case shared
+    case worldReadable
     
     var fallbackOption: Self {
         switch self {
-        case .sinceInvite, .sinceSelection:
-            return .sinceSelection
-        case .anyone:
-            return .sinceInvite
+        case .invited, .shared:
+            return .shared
+        case .worldReadable:
+            return .invited
         }
+    }
+    
+    static func < (lhs: SecurityAndPrivacyHistoryVisibility, rhs: SecurityAndPrivacyHistoryVisibility) -> Bool {
+        lhs.rawValue < rhs.rawValue
     }
 }
