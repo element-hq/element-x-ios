@@ -25,10 +25,6 @@
     {
       "matchManagers": ["bundler"],
       "groupName" : "Ruby"
-    },
-    {
-      "matchPackageNames": ["codecov/codecov-action"],
-      "allowedVersions": "^3.0.0"
     }
   ]
 }
