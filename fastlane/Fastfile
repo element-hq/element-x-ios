@@ -27,7 +27,7 @@ lane :unit_tests do |options|
     result_bundle: true,
     number_of_retries: 3,
     reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --is-ci --renderer github-actions"
+    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
   )
   
   if !options[:skip_previews]
@@ -43,7 +43,7 @@ lane :unit_tests do |options|
       result_bundle: true,
       number_of_retries: 3,
       reset_simulator: reset_simulator,
-      xcodebuild_formatter: "xcbeautify --is-ci --renderer github-actions"
+      xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
     )
   end
   
@@ -89,7 +89,7 @@ lane :ui_tests do |options|
     only_testing: test_to_run,
     number_of_retries: 3,
     reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --is-ci --renderer github-actions"
+    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
   )
 end
 
@@ -104,7 +104,7 @@ lane :accessibility_tests do |options|
     result_bundle: true,
     number_of_retries: 0,
     reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --is-ci --renderer github-actions"
+    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
   )
 end
 
@@ -120,7 +120,7 @@ lane :integration_tests do
     ensure_devices_found: true,
     result_bundle: true,
     reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --is-ci --renderer github-actions"
+    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
   )
 end
 
