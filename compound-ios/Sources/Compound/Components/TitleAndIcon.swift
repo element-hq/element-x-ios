@@ -10,25 +10,29 @@ import SwiftUI
 /// Our standard screen header that includes a title and icon along with
 /// optional subtitle and button components.
 ///
-/// **Note:** This component includes pre-defined padding as specified
-/// in the Figma: 24pt top and horizontal and 40pt on the bottom.
+/// **Note:** By default this component includes the standard padding
+/// specified in the Figma, however you may need to customise it using
+/// the `insets` parameter.
 public struct TitleAndIcon: View {
     private let title: String
     private let subtitle: String?
     private let icon: KeyPath<CompoundIcons, Image>
     private let iconStyle: BigIcon.Style
     private let button: ButtonDetails?
+    private let insets: EdgeInsets
     
     public init(title: String,
                 subtitle: String? = nil,
                 icon: KeyPath<CompoundIcons, Image>,
                 iconStyle: BigIcon.Style,
-                button: ButtonDetails? = nil) {
+                button: ButtonDetails? = nil,
+                insets: EdgeInsets = .init(top: 24, leading: 24, bottom: 40, trailing: 24)) {
         self.title = title
         self.subtitle = subtitle
         self.icon = icon
         self.iconStyle = iconStyle
         self.button = button
+        self.insets = insets
     }
     
     public var body: some View {
@@ -54,9 +58,7 @@ public struct TitleAndIcon: View {
                     .buttonStyle(.compound(.tertiary, size: .small))
             }
         }
-        .padding(.horizontal, 24)
-        .padding(.top, 24)
-        .padding(.bottom, 40)
+        .padding(insets)
     }
 }
 
