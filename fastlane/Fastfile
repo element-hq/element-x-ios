@@ -26,7 +26,8 @@ lane :unit_tests do |options|
     ensure_devices_found: true,
     result_bundle: true,
     number_of_retries: 3,
-    reset_simulator: reset_simulator
+    reset_simulator: reset_simulator,
+    xcodebuild_formatter: "xcbeautify --is-ci --renderer github-actions"
   )
   
   if !options[:skip_previews]
@@ -41,7 +42,8 @@ lane :unit_tests do |options|
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
-      reset_simulator: reset_simulator
+      reset_simulator: reset_simulator,
+      xcodebuild_formatter: "xcbeautify --is-ci --renderer github-actions"
     )
   end
   
@@ -86,7 +88,8 @@ lane :ui_tests do |options|
     result_bundle: true,
     only_testing: test_to_run,
     number_of_retries: 3,
-    reset_simulator: reset_simulator
+    reset_simulator: reset_simulator,
+    xcodebuild_formatter: "xcbeautify --is-ci --renderer github-actions"
   )
 end
 
@@ -100,7 +103,8 @@ lane :accessibility_tests do |options|
     prelaunch_simulator: false,
     result_bundle: true,
     number_of_retries: 0,
-    reset_simulator: reset_simulator
+    reset_simulator: reset_simulator,
+    xcodebuild_formatter: "xcbeautify --is-ci --renderer github-actions"
   )
 end
 
@@ -115,7 +119,8 @@ lane :integration_tests do
     device: "iPhone 17 (#{simulator_version})",
     ensure_devices_found: true,
     result_bundle: true,
-    reset_simulator: reset_simulator
+    reset_simulator: reset_simulator,
+    xcodebuild_formatter: "xcbeautify --is-ci --renderer github-actions"
   )
 end
 
