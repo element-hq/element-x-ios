@@ -46,13 +46,14 @@ jobs:
             bundle exec fastlane ui_tests device:${{ matrix.device }} test_name:${{ github.event.inputs.test_name }}
           fi
 
-      - name: Zip results # for faster upload
+      - name: Zip results # Faster uploads
         if: failure()
         working-directory: fastlane/test_output
         run: zip -r UITests.xcresult.zip UITests.xcresult
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v6
+        # We only care about artefacts if the tests fail
         if: failure()
         with:
           name: ${{ matrix.device }}
@@ -61,9 +62,13 @@ jobs:
           if-no-files-found: ignore
 
       - name: Collect coverage
+        # Skip if cancelled and in forks
+        if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         run: xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/UITests.xcresult > fastlane/test_output/ui-cobertura.xml
 
       - name: Upload coverage to Codecov
+        # Skip if cancelled and in forks
+        if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3.1.6
         with:
           report_type: coverage
@@ -72,11 +77,13 @@ jobs:
           flags: uitests
 
       - name: Collect test results
-        if: ${{ !cancelled() }}
+        # Skip if cancelled and in forks
+        if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         run: xcresultparser -q -o junit -p $(pwd) fastlane/test_output/UITests.xcresult > fastlane/test_output/ui-junit.xml
 
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
+        # Skip if cancelled and in forks
+        if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3.1.6
         continue-on-error: true
         with:
