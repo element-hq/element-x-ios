@@ -68,6 +68,8 @@ jobs:
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           report_type: coverage
+          files: fastlane/test_output/unit-cobertura.xml,fastlane/test_output/preview-cobertura.xml
+          disable_search: true
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unittests
@@ -86,6 +88,8 @@ jobs:
         continue-on-error: true
         with:
           report_type: test_results
+          files: fastlane/test_output/unit-junit.xml,fastlane/test_output/preview-junit.xml
+          disable_search: true
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unittests
