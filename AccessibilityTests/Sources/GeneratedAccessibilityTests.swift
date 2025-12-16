@@ -55,10 +55,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "BadgeLabel_Previews")
     }
 
-    func testBigIcon() async throws {
-        try await performAccessibilityAudit(named: "BigIcon_Previews")
-    }
-
     func testBlockedUsersScreen() async throws {
         try await performAccessibilityAudit(named: "BlockedUsersScreen_Previews")
     }

@@ -45,6 +45,9 @@ struct SidebarList: View {
             NavigationLink(value: Screen.list) {
                 Label("List", systemImage: "list.bullet.clipboard")
             }
+            NavigationLink(value: Screen.bigIcon) {
+                Label("Big Icon", systemImage: "square.dashed")
+            }
         }
     }
     

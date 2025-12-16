@@ -6,14 +6,13 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Compound
 import SwiftUI
 
 /// An image that is styled for use as the main/top/hero screen icon. This component
 /// takes a compound icon. If you would like to apply it to an SFSymbol, you can call
 /// the `bigIcon()` modifier directly on the Image.
-struct BigIcon: View {
-    enum Style {
+public struct BigIcon: View {
+    public enum Style {
         case defaultSolid
         case `default`
         case alertSolid
@@ -47,16 +46,21 @@ struct BigIcon: View {
     }
     
     /// The icon that is shown.
-    let icon: KeyPath<CompoundIcons, Image>
-    var style: Style = .defaultSolid
+    private let icon: KeyPath<CompoundIcons, Image>
+    private let style: Style
     
-    var body: some View {
+    public init(icon: KeyPath<CompoundIcons, Image>, style: Style = .defaultSolid) {
+        self.icon = icon
+        self.style = style
+    }
+    
+    public var body: some View {
         CompoundIcon(icon, size: .custom(32), relativeTo: .compound.headingLG)
             .modifier(BigIconModifier(style: style))
     }
 }
 
-extension Image {
+public extension Image {
     /// Styles the image for use as the main/top/hero screen icon. You should prefer
     /// the BigIcon component when possible, by using an icon from Compound.
     func bigIcon(insets: CGFloat = 16, style: BigIcon.Style = .defaultSolid) -> some View {
@@ -85,32 +89,36 @@ private struct BigIconModifier: ViewModifier {
 
 // MARK: - Previews
 
-struct BigIcon_Previews: PreviewProvider, TestablePreview {
-    static var previews: some View {
+public struct BigIcon_Previews: PreviewProvider, TestablePreview {
+    public static var previews: some View {
         VStack(spacing: 40) {
             HStack(spacing: 20) {
                 BigIcon(icon: \.lockSolid)
                 Image(systemName: "hourglass")
                     .bigIcon()
-                Image(asset: Asset.Images.serverSelectionIcon)
+                Image(systemSymbol: .serverRack)
                     .bigIcon(insets: 19)
             }
             
-            VStack(spacing: 20) {
-                HStack(spacing: 20) {
-                    BigIcon(icon: \.helpSolid)
-                    BigIcon(icon: \.helpSolid, style: .default)
-                }
-                
-                HStack(spacing: 20) {
-                    BigIcon(icon: \.errorSolid, style: .alertSolid)
-                    BigIcon(icon: \.errorSolid, style: .alert)
-                }
-                
-                HStack(spacing: 20) {
-                    BigIcon(icon: \.checkCircleSolid, style: .successSolid)
-                    BigIcon(icon: \.checkCircleSolid, style: .success)
-                }
+            states
+        }
+    }
+    
+    public static var states: some View {
+        VStack(spacing: 20) {
+            HStack(spacing: 20) {
+                BigIcon(icon: \.helpSolid)
+                BigIcon(icon: \.helpSolid, style: .default)
+            }
+            
+            HStack(spacing: 20) {
+                BigIcon(icon: \.errorSolid, style: .alertSolid)
+                BigIcon(icon: \.errorSolid, style: .alert)
+            }
+            
+            HStack(spacing: 20) {
+                BigIcon(icon: \.checkCircleSolid, style: .successSolid)
+                BigIcon(icon: \.checkCircleSolid, style: .success)
             }
         }
     }

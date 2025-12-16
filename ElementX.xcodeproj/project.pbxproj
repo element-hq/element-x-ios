@@ -1425,7 +1425,6 @@
 		FB595EC9C00AB32F39034055 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A37E2FACFD041CE466223CD /* SceneDelegate.swift */; };
 		FBD402E3170EB1ED0D1AA672 /* EncryptionKeyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2355398E4A55DA5A89128AD1 /* EncryptionKeyProvider.swift */; };
 		FBF09B6C900415800DDF2A21 /* EmojiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C113E0CB7E15E9765B1817A /* EmojiProvider.swift */; };
-		FC0EEFF630F34899953BB950 /* BigIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01FD1171FF40E34D707FD00 /* BigIcon.swift */; };
 		FC10228E73323BDC09526F97 /* Mapbox in Frameworks */ = {isa = PBXBuildFile; productRef = C1BF15833233CD3BDB7E2B1D /* Mapbox */; };
 		FC31493979ED1FDF7D5EA3F9 /* KeychainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36CB905A2B9EC2C92A2DA7C /* KeychainController.swift */; };
 		FCD3F2B82CAB29A07887A127 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = DE8DC9B3FBA402117DC4C49F /* Kingfisher */; };
@@ -2644,7 +2643,6 @@
 		CF19027E7FFA5E63D148873A /* CreateRoomScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomScreenViewModel.swift; sourceTree = "<group>"; };
 		CF847A34FC4C8C937CD39E08 /* LabsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		CFFA5E881D281810AB428EA3 /* RoomPowerLevelsProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPowerLevelsProxy.swift; sourceTree = "<group>"; };
-		D01FD1171FF40E34D707FD00 /* BigIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigIcon.swift; sourceTree = "<group>"; };
 		D03D7ECAC68C2FFB8CF01BCB /* DeactivateAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeactivateAccountScreen.swift; sourceTree = "<group>"; };
 		D046ABB22E680F7C5054441B /* SecurityAndPrivacyScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityAndPrivacyScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		D071F86CD47582B9196C9D16 /* UserDiscoverySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDiscoverySection.swift; sourceTree = "<group>"; };
@@ -3662,7 +3660,6 @@
 				CC743C7A85E3171BCBF0A653 /* AvatarHeaderView.swift */,
 				9A028783CFFF861C5E44FFB1 /* BadgeLabel.swift */,
 				C1FA515B3B0D61EF1E907D2D /* BadgeView.swift */,
-				D01FD1171FF40E34D707FD00 /* BigIcon.swift */,
 				07934EF08BB39353E4A94272 /* BlurEffectView.swift */,
 				8CC23C63849452BC86EA2852 /* ButtonStyle.swift */,
 				FEC4B431B0117BDEE697DB4A /* ComposerDisabledView.swift */,
@@ -7774,7 +7771,6 @@
 				A4B0BAD62A12ED76BD611B79 /* BadgeView.swift in Sources */,
 				2B52B2A5A6496C5C0F952776 /* BannedRoomProxy.swift in Sources */,
 				7F0B6EB5CB52D7B7A2BB7D15 /* BannedRoomProxyMock.swift in Sources */,
-				FC0EEFF630F34899953BB950 /* BigIcon.swift in Sources */,
 				38546A6010A2CF240EC9AF73 /* BindableState.swift in Sources */,
 				EB9F4688006B52E69DF5358F /* BlankFormCoordinator.swift in Sources */,
 				369BF960E52BBEE61F8A5BD1 /* BlockedUsersScreen.swift in Sources */,
