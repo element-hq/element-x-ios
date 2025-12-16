@@ -13,13 +13,21 @@ struct QRCodeLoginScreen: View {
     @ObservedObject var context: QRCodeLoginScreenViewModel.Context
     @State private var qrFrame = CGRect.zero
     
+    var backgroundStyle: Color {
+        if case .error = context.viewState.state {
+            .compound.bgCanvasDefault
+        } else {
+            .compound.bgSubtleSecondary
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             mainContent
                 .toolbar { toolbar }
                 .toolbar(.visible, for: .navigationBar)
                 .background()
-                .backgroundStyle(.compound.bgSubtleSecondary)
+                .backgroundStyle(backgroundStyle)
                 .interactiveDismissDisabled()
         }
     }
@@ -33,8 +41,10 @@ struct QRCodeLoginScreen: View {
             qrScanContent
         case .displayCode:
             displayCodeContent
-        case .error:
-            errorContent
+        case .error(let errorState):
+            QRCodeErrorView(errorState: errorState, canSignInManually: context.viewState.canSignInManually) { action in
+                context.send(viewAction: .errorAction(action))
+            }
         }
     }
     
@@ -218,157 +228,6 @@ struct QRCodeLoginScreen: View {
             }
         }
     }
-        
-    @ViewBuilder
-    private var errorContent: some View {
-        if case let .error(errorState) = context.viewState.state {
-            FullscreenDialog {
-                errorContentHeader(errorState: errorState)
-            } bottomContent: {
-                errorContentFooter(errorState: errorState)
-            }
-            .padding(.horizontal, 24)
-        }
-    }
-    
-    @ViewBuilder
-    private func errorContentHeader(errorState: QRCodeLoginState.QRCodeLoginErrorState) -> some View {
-        switch errorState {
-        case .noCameraPermission:
-            VStack(spacing: 16) {
-                BigIcon(icon: \.takePhotoSolid, style: .default)
-                
-                VStack(spacing: 8) {
-                    Text(L10n.screenQrCodeLoginNoCameraPermissionStateTitle)
-                        .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
-                        .multilineTextAlignment(.center)
-                    
-                    Text(L10n.screenQrCodeLoginNoCameraPermissionStateDescription(InfoPlistReader.main.productionAppName))
-                        .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
-                        .multilineTextAlignment(.center)
-                }
-            }
-        case .connectionNotSecure:
-            VStack(spacing: 40) {
-                VStack(spacing: 16) {
-                    BigIcon(icon: \.errorSolid, style: .alert)
-                    
-                    VStack(spacing: 8) {
-                        Text(L10n.screenQrCodeLoginConnectionNoteSecureStateTitle)
-                            .foregroundColor(.compound.textPrimary)
-                            .font(.compound.headingMDBold)
-                            .multilineTextAlignment(.center)
-                        
-                        Text(L10n.screenQrCodeLoginConnectionNoteSecureStateDescription)
-                            .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodyMD)
-                            .multilineTextAlignment(.center)
-                    }
-                }
-                
-                VStack(spacing: 24) {
-                    Text(L10n.screenQrCodeLoginConnectionNoteSecureStateListHeader)
-                        .foregroundColor(.compound.textPrimary)
-                        .font(.compound.bodyLGSemibold)
-                        .multilineTextAlignment(.center)
-                    
-                    SFNumberedListView(items: context.viewState.connectionNotSecureListItems)
-                }
-            }
-        default:
-            simpleErrorStack(errorState: errorState)
-        }
-    }
-    
-    @ViewBuilder
-    private func simpleErrorStack(errorState: QRCodeLoginState.QRCodeLoginErrorState) -> some View {
-        let title = switch errorState {
-        case .cancelled:
-            L10n.screenQrCodeLoginErrorCancelledTitle
-        case .declined:
-            L10n.screenQrCodeLoginErrorDeclinedTitle
-        case .expired:
-            L10n.screenQrCodeLoginErrorExpiredTitle
-        case .linkingNotSupported:
-            L10n.screenQrCodeLoginErrorLinkingNotSuportedTitle
-        case .deviceNotSupported:
-            L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedTitle(InfoPlistReader.main.bundleDisplayName)
-        case .unknown:
-            L10n.commonSomethingWentWrong
-        default:
-            fatalError("This should not be displayed")
-        }
-        
-        let subtitle: String = switch errorState {
-        case .cancelled:
-            L10n.screenQrCodeLoginErrorCancelledSubtitle
-        case .declined:
-            L10n.screenQrCodeLoginErrorDeclinedSubtitle
-        case .expired:
-            L10n.screenQrCodeLoginErrorExpiredSubtitle
-        case .linkingNotSupported:
-            L10n.screenQrCodeLoginErrorLinkingNotSuportedSubtitle(InfoPlistReader.main.bundleDisplayName)
-        case .deviceNotSupported:
-            L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedSubtitle(InfoPlistReader.main.bundleDisplayName)
-        case .unknown:
-            L10n.screenQrCodeLoginUnknownErrorDescription
-        default:
-            fatalError("This should not be displayed")
-        }
-        
-        VStack(spacing: 16) {
-            BigIcon(icon: \.errorSolid, style: .alert)
-            
-            VStack(spacing: 8) {
-                Text(title)
-                    .foregroundColor(.compound.textPrimary)
-                    .font(.compound.headingMDBold)
-                    .multilineTextAlignment(.center)
-                
-                Text(subtitle)
-                    .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodyMD)
-                    .multilineTextAlignment(.center)
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private func errorContentFooter(errorState: QRCodeLoginState.QRCodeLoginErrorState) -> some View {
-        switch errorState {
-        case .noCameraPermission:
-            Button(L10n.screenQrCodeLoginNoCameraPermissionButton) {
-                context.send(viewAction: .openSettings)
-            }
-            .buttonStyle(.compound(.primary))
-        case .connectionNotSecure, .unknown, .expired, .declined, .deviceNotSupported:
-            Button(L10n.screenQrCodeLoginStartOverButton) {
-                context.send(viewAction: .startScan)
-            }
-            .buttonStyle(.compound(.primary))
-        case .cancelled:
-            Button(L10n.actionTryAgain) {
-                context.send(viewAction: .startScan)
-            }
-            .buttonStyle(.compound(.primary))
-        case .linkingNotSupported:
-            VStack(spacing: 16) {
-                if context.viewState.canSignInManually {
-                    Button(L10n.screenOnboardingSignInManually) {
-                        context.send(viewAction: .signInManually)
-                    }
-                    .buttonStyle(.compound(.primary))
-                }
-                
-                Button(L10n.actionCancel) {
-                    context.send(viewAction: .cancel)
-                }
-                .buttonStyle(.compound(.tertiary))
-            }
-        }
-    }
 }
 
 private struct QRScannerViewOverlay: View {
@@ -420,23 +279,8 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     
     static let verificationCodeStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayCode(.verificationCode("123456")))
     
-    // Errors
-    static let noCameraPermissionStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.noCameraPermission))
-    
-    static let connectionNotSecureStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.connectionNotSecure))
-    
-    static let linkingUnsupportedStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.linkingNotSupported))
-    static let linkingUnsupportedRestrictedFlowViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.linkingNotSupported), canSignInManually: false)
-    
-    static let cancelledStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.cancelled))
-    
-    static let declinedStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.declined))
-    
-    static let expiredStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.expired))
-    
-    static let deviceNoSupportedViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.deviceNotSupported))
-    
-    static let unknownErrorStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.unknown))
+    // Errors (no need to test them all QRCodeErrorView covers that).
+    static let errorStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.declined))
     
     static var previews: some View {
         QRCodeLoginScreen(context: initialStateViewModel.context)
@@ -463,30 +307,7 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
         QRCodeLoginScreen(context: verificationCodeStateViewModel.context)
             .previewDisplayName("Verification code")
         
-        QRCodeLoginScreen(context: noCameraPermissionStateViewModel.context)
-            .previewDisplayName("No Camera Permission")
-        
-        QRCodeLoginScreen(context: connectionNotSecureStateViewModel.context)
-            .previewDisplayName("Connection not secure")
-        
-        QRCodeLoginScreen(context: linkingUnsupportedStateViewModel.context)
-            .previewDisplayName("Linking unsupported")
-        QRCodeLoginScreen(context: linkingUnsupportedRestrictedFlowViewModel.context)
-            .previewDisplayName("Linking unsupported restricted flow")
-        
-        QRCodeLoginScreen(context: cancelledStateViewModel.context)
-            .previewDisplayName("Cancelled")
-        
-        QRCodeLoginScreen(context: declinedStateViewModel.context)
-            .previewDisplayName("Declined")
-        
-        QRCodeLoginScreen(context: expiredStateViewModel.context)
-            .previewDisplayName("Expired")
-        
-        QRCodeLoginScreen(context: deviceNoSupportedViewModel.context)
-            .previewDisplayName("Device not supported")
-        
-        QRCodeLoginScreen(context: unknownErrorStateViewModel.context)
-            .previewDisplayName("Unknown error")
+        QRCodeLoginScreen(context: errorStateViewModel.context)
+            .previewDisplayName("Error")
     }
 }

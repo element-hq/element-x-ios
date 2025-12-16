@@ -6,8 +6,9 @@
 //
 
 import Combine
-import Foundation
+import CoreImage.CIFilterBuiltins
 import MatrixRustSDK
+import SwiftUI
 
 class LinkNewDeviceService {
     typealias GenerateProgressPublisher = CurrentValuePublisher<GenerateProgress, QRCodeLoginError>
@@ -15,9 +16,9 @@ class LinkNewDeviceService {
     
     enum GenerateProgress {
         case starting
-        case qrReady(QrCodeData)
+        case qrReady(UIImage)
         case qrScanned(CheckCodeSenderProtocol)
-        case waitingForAuthorisation(verificationURI: String)
+        case waitingForAuthorisation(verificationURL: URL)
         case syncingSecrets
         case done
     }
@@ -25,7 +26,7 @@ class LinkNewDeviceService {
     enum ScanProgress {
         case starting
         case establishingSecureChannel(checkCode: UInt8, checkCodeString: String)
-        case waitingForAuth(verificationURI: String)
+        case waitingForAuthorisation(verificationURL: URL)
         case syncingSecrets
         case done
     }
@@ -38,7 +39,14 @@ class LinkNewDeviceService {
     
     func generateQRCode() -> GenerateProgressPublisher {
         let progressSubject = CurrentValueSubject<GenerateProgress, QRCodeLoginError>(.starting)
-        let listener = SDKListener { progressSubject.send(.init(rustProgress: $0)) }
+        let listener = SDKListener {
+            do {
+                try progressSubject.send(.init(rustProgress: $0))
+            } catch {
+                MXLog.error("Invalid GenerateProgress")
+                progressSubject.send(completion: .failure(.unknown))
+            }
+        }
         
         Task {
             do {
@@ -58,7 +66,14 @@ class LinkNewDeviceService {
     
     func scanQRCode(_ scannedQRData: Data) -> ScanProgressPublisher {
         let progressSubject = CurrentValueSubject<ScanProgress, QRCodeLoginError>(.starting)
-        let listener = SDKListener { progressSubject.send(.init(rustProgress: $0)) }
+        let listener = SDKListener {
+            do {
+                try progressSubject.send(.init(rustProgress: $0))
+            } catch {
+                MXLog.error("Invalid ScanProgress")
+                progressSubject.send(completion: .failure(.unknown))
+            }
+        }
         
         let qrCodeData: QrCodeData
         do {
@@ -89,12 +104,28 @@ class LinkNewDeviceService {
 }
 
 extension LinkNewDeviceService.GenerateProgress: CustomStringConvertible {
-    init(rustProgress: GrantGeneratedQrLoginProgress) {
+    enum Error: Swift.Error {
+        case invalidQRCodeData
+        case invalidVerificationURI(String)
+    }
+    
+    init(rustProgress: GrantGeneratedQrLoginProgress) throws {
         self = switch rustProgress {
         case .starting: .starting
-        case .qrReady(let qrCode): .qrReady(qrCode)
+        case .qrReady(let qrCode):
+            if let image = UIImage(qrCodeData: qrCode.toBytes()) {
+                .qrReady(image)
+            } else {
+                throw Error.invalidQRCodeData
+            }
         case .qrScanned(let checkCodeSender): .qrScanned(checkCodeSender)
-        case .waitingForAuth(let verificationUri): .waitingForAuthorisation(verificationURI: verificationUri)
+        case .waitingForAuth(let verificationURI):
+            // verificationURI is a String; ASWebAuthenticationSession requires a URL.
+            if let url = URL(string: verificationURI) {
+                .waitingForAuthorisation(verificationURL: url)
+            } else {
+                throw Error.invalidVerificationURI(verificationURI)
+            }
         case .syncingSecrets: .syncingSecrets
         case .done: .done
         }
@@ -113,11 +144,19 @@ extension LinkNewDeviceService.GenerateProgress: CustomStringConvertible {
 }
 
 extension LinkNewDeviceService.ScanProgress: CustomStringConvertible {
-    init(rustProgress: GrantQrLoginProgress) {
+    enum Error: Swift.Error { case invalidVerificationURI(String) }
+    
+    init(rustProgress: GrantQrLoginProgress) throws {
         self = switch rustProgress {
         case .starting: .starting
         case .establishingSecureChannel(let checkCode, let checkCodeString): .establishingSecureChannel(checkCode: checkCode, checkCodeString: checkCodeString)
-        case .waitingForAuth(let verificationUri): .waitingForAuth(verificationURI: verificationUri)
+        case .waitingForAuth(let verificationURI):
+            // verificationURI is a String; ASWebAuthenticationSession requires a URL.
+            if let url = URL(string: verificationURI) {
+                .waitingForAuthorisation(verificationURL: url)
+            } else {
+                throw Error.invalidVerificationURI(verificationURI)
+            }
         case .syncingSecrets: .syncingSecrets
         case .done: .done
         }
@@ -127,7 +166,7 @@ extension LinkNewDeviceService.ScanProgress: CustomStringConvertible {
         switch self {
         case .starting: "starting"
         case .establishingSecureChannel: "establishingSecureChannel"
-        case .waitingForAuth: "waitingForAuth"
+        case .waitingForAuthorisation: "waitingForAuthorisation"
         case .syncingSecrets: "syncingSecrets"
         case .done: "done"
         }
@@ -144,5 +183,23 @@ private extension QRCodeLoginError {
         case .Unknown, .NotFound, .MissingSecretsBackup, .DeviceIdAlreadyInUse, .UnableToCreateDevice:
             .unknown
         }
+    }
+}
+
+private extension UIImage {
+    convenience init?(qrCodeData: Data) {
+        let qrContext = CIContext()
+        let qrFilter = CIFilter.qrCodeGenerator()
+        
+        qrFilter.message = qrCodeData
+        qrFilter.correctionLevel = "Q"
+        
+        guard let outputImage = qrFilter.outputImage,
+              let cgImage = qrContext.createCGImage(outputImage, from: outputImage.extent) else {
+            MXLog.error("Failed to generate an image from the supplied QR code data.")
+            return nil
+        }
+        
+        self.init(cgImage: cgImage)
     }
 }

@@ -112,6 +112,7 @@ enum TestablePreviewsDictionary {
         "PollOptionView_Previews" : PollOptionView_Previews.self,
         "PollRoomTimelineView_Previews" : PollRoomTimelineView_Previews.self,
         "PollView_Previews" : PollView_Previews.self,
+        "QRCodeErrorView_Previews" : QRCodeErrorView_Previews.self,
         "QRCodeLoginScreen_Previews" : QRCodeLoginScreen_Previews.self,
         "ReactionsSummaryView_Previews" : ReactionsSummaryView_Previews.self,
         "ReadMarkerRoomTimelineView_Previews" : ReadMarkerRoomTimelineView_Previews.self,

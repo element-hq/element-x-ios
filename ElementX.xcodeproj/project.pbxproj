@@ -949,6 +949,7 @@
 		A4B0BAD62A12ED76BD611B79 /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FA515B3B0D61EF1E907D2D /* BadgeView.swift */; };
 		A4B123C635F70DDD4BC2FAC9 /* BlockedUsersScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76A706B3EEA32B882DA5E2D /* BlockedUsersScreenViewModelProtocol.swift */; };
 		A4C29D373986AFE4559696D5 /* SecureBackupKeyBackupScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525E8C0FBDD27D1ACE90952 /* SecureBackupKeyBackupScreenViewModelProtocol.swift */; };
+		A4CCFCD320600E27AF60EAC9 /* QRCodeErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3082001D373607455CB08A1 /* QRCodeErrorView.swift */; };
 		A4E885358D7DD5A072A06824 /* SwiftState in Frameworks */ = {isa = PBXBuildFile; productRef = 3853B78FB8531B83936C5DA6 /* SwiftState */; };
 		A51C65E5A3C9F2464A91A380 /* AuthenticationClientBuilderFactoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0554FEA301486A8CFA475D5A /* AuthenticationClientBuilderFactoryMock.swift */; };
 		A52090A4FE0DB826578DFC03 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0724EBDFE8BB4C9E5547C57D /* Client.swift */; };
@@ -2833,6 +2834,7 @@
 		F276F31C1AEC19E52B951B62 /* SendInviteConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendInviteConfirmationView.swift; sourceTree = "<group>"; };
 		F2DC502B1A566E99969D34DD /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F2E4EF80DFB8FE7C4469B15D /* RoomDirectorySearchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDirectorySearchScreen.swift; sourceTree = "<group>"; };
+		F3082001D373607455CB08A1 /* QRCodeErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeErrorView.swift; sourceTree = "<group>"; };
 		F31F59030205A6F65B057E1A /* MatrixEntityRegexTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixEntityRegexTests.swift; sourceTree = "<group>"; };
 		F320003F490B11F808ECC5E9 /* JoinedMembersBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedMembersBadgeView.swift; sourceTree = "<group>"; };
 		F348B5F2C12F9D4F4B4D3884 /* VideoRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRoomTimelineItem.swift; sourceTree = "<group>"; };
@@ -6008,6 +6010,7 @@
 		C844840F3DD48A154C65AE0C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F3082001D373607455CB08A1 /* QRCodeErrorView.swift */,
 				BFA9EA59D5C0DA1BFC7B3621 /* QRCodeLoginScreen.swift */,
 				92DB574F954CC2B40F7BE892 /* QRCodeScannerView.swift */,
 			);
@@ -8222,6 +8225,7 @@
 				C7ABEBECDC513F7887DACF66 /* ProgressMaskModifier.swift in Sources */,
 				9B356742E035D90A8BB5CABE /* ProposedViewSize.swift in Sources */,
 				2835FD52F3F618D07F799B3D /* Publisher.swift in Sources */,
+				A4CCFCD320600E27AF60EAC9 /* QRCodeErrorView.swift in Sources */,
 				4949C8C12669D1B5E082366E /* QRCodeLoginScreen.swift in Sources */,
 				4D23D41B8109E010304050F8 /* QRCodeLoginScreenCoordinator.swift in Sources */,
 				46FCD999E92D9717D24AAB94 /* QRCodeLoginScreenModels.swift in Sources */,

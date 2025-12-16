@@ -419,6 +419,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "PollView_Previews")
     }
 
+    func testQRCodeErrorView() async throws {
+        try await performAccessibilityAudit(named: "QRCodeErrorView_Previews")
+    }
+
     func testQRCodeLoginScreen() async throws {
         try await performAccessibilityAudit(named: "QRCodeLoginScreen_Previews")
     }
