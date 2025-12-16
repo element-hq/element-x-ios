@@ -65,7 +65,7 @@ enum QRCodeLoginState: Equatable {
     /// Any full screen error state
     case error(ErrorState)
     
-    enum ErrorState: Equatable {
+    enum ErrorState: Equatable, CaseIterable {
         case noCameraPermission
         case connectionNotSecure
         case cancelled
@@ -73,6 +73,8 @@ enum QRCodeLoginState: Equatable {
         case expired
         case linkingNotSupported
         case deviceNotSupported
+        /// Expected a QR code for a new device, however the processed code belongs to a device that is already signed in.
+        case deviceAlreadySignedIn
         case unknown
     }
     
@@ -91,8 +93,6 @@ enum QRCodeLoginState: Equatable {
             case notAllowed(scannedProvider: String, allowedProviders: [String])
             /// The QR code has been processed but it belongs to a device not signed in.
             case deviceNotSignedIn
-            /// Expected a QR code for a new device, however the processed code belongs to a device that is already signed in.
-            case deviceAlreadySignedIn
             
             var title: String {
                 switch self {
@@ -102,8 +102,6 @@ enum QRCodeLoginState: Equatable {
                     L10n.screenChangeServerErrorUnauthorizedHomeserverTitle(scannedProvider)
                 case .deviceNotSignedIn:
                     L10n.screenQrCodeLoginDeviceNotSignedInScanStateSubtitle
-                case .deviceAlreadySignedIn:
-                    L10n.screenQrCodeLoginDeviceNotSignedInScanStateSubtitle // FIXME: Update string
                 }
             }
             
@@ -115,8 +113,6 @@ enum QRCodeLoginState: Equatable {
                     L10n.screenChangeServerErrorUnauthorizedHomeserverContent(allowedProviders.formatted(.list(type: .and)))
                 case .deviceNotSignedIn:
                     L10n.screenQrCodeLoginDeviceNotSignedInScanStateDescription
-                case .deviceAlreadySignedIn:
-                    L10n.screenQrCodeLoginDeviceNotSignedInScanStateDescription // FIXME: Update string
                 }
             }
         }
