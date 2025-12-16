@@ -14,6 +14,48 @@ struct QRCodeErrorView: View {
     enum Action { case openSettings, startScan, signInManually, cancel }
     let action: (Action) -> Void
     
+    var title: String {
+        switch errorState {
+        case .noCameraPermission:
+            L10n.screenQrCodeLoginNoCameraPermissionStateTitle
+        case .connectionNotSecure:
+            L10n.screenQrCodeLoginConnectionNoteSecureStateTitle
+        case .cancelled:
+            L10n.screenQrCodeLoginErrorCancelledTitle
+        case .declined:
+            L10n.screenQrCodeLoginErrorDeclinedTitle
+        case .expired:
+            L10n.screenQrCodeLoginErrorExpiredTitle
+        case .linkingNotSupported:
+            L10n.screenQrCodeLoginErrorLinkingNotSuportedTitle
+        case .deviceNotSupported:
+            L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedTitle(InfoPlistReader.main.bundleDisplayName)
+        case .unknown:
+            L10n.commonSomethingWentWrong
+        }
+    }
+    
+    var subtitle: String {
+        switch errorState {
+        case .noCameraPermission:
+            L10n.screenQrCodeLoginNoCameraPermissionStateDescription(InfoPlistReader.main.productionAppName)
+        case .connectionNotSecure:
+            L10n.screenQrCodeLoginConnectionNoteSecureStateDescription
+        case .cancelled:
+            L10n.screenQrCodeLoginErrorCancelledSubtitle
+        case .declined:
+            L10n.screenQrCodeLoginErrorDeclinedSubtitle
+        case .expired:
+            L10n.screenQrCodeLoginErrorExpiredSubtitle
+        case .linkingNotSupported:
+            L10n.screenQrCodeLoginErrorLinkingNotSuportedSubtitle(InfoPlistReader.main.bundleDisplayName)
+        case .deviceNotSupported:
+            L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedSubtitle(InfoPlistReader.main.bundleDisplayName)
+        case .unknown:
+            L10n.screenQrCodeLoginUnknownErrorDescription
+        }
+    }
+    
     var body: some View {
         FullscreenDialog {
             header
@@ -28,15 +70,15 @@ struct QRCodeErrorView: View {
         switch errorState {
         case .noCameraPermission:
             VStack(spacing: 16) {
-                BigIcon(icon: \.takePhotoSolid, style: .default)
+                BigIcon(icon: \.takePhotoSolid, style: .defaultSolid)
                 
                 VStack(spacing: 8) {
-                    Text(L10n.screenQrCodeLoginNoCameraPermissionStateTitle)
+                    Text(title)
                         .foregroundColor(.compound.textPrimary)
                         .font(.compound.headingMDBold)
                         .multilineTextAlignment(.center)
                     
-                    Text(L10n.screenQrCodeLoginNoCameraPermissionStateDescription(InfoPlistReader.main.productionAppName))
+                    Text(subtitle)
                         .foregroundColor(.compound.textSecondary)
                         .font(.compound.bodyMD)
                         .multilineTextAlignment(.center)
@@ -45,15 +87,15 @@ struct QRCodeErrorView: View {
         case .connectionNotSecure:
             VStack(spacing: 40) {
                 VStack(spacing: 16) {
-                    BigIcon(icon: \.errorSolid, style: .alert)
+                    BigIcon(icon: \.errorSolid, style: .alertSolid)
                     
                     VStack(spacing: 8) {
-                        Text(L10n.screenQrCodeLoginConnectionNoteSecureStateTitle)
+                        Text(title)
                             .foregroundColor(.compound.textPrimary)
                             .font(.compound.headingMDBold)
                             .multilineTextAlignment(.center)
                         
-                        Text(L10n.screenQrCodeLoginConnectionNoteSecureStateDescription)
+                        Text(subtitle)
                             .foregroundColor(.compound.textSecondary)
                             .font(.compound.bodyMD)
                             .multilineTextAlignment(.center)
@@ -74,48 +116,14 @@ struct QRCodeErrorView: View {
                 }
             }
         default:
-            simpleErrorStack(errorState: errorState)
+            simpleErrorStack
         }
     }
     
     @ViewBuilder
-    private func simpleErrorStack(errorState: QRCodeLoginState.ErrorState) -> some View {
-        let title = switch errorState {
-        case .cancelled:
-            L10n.screenQrCodeLoginErrorCancelledTitle
-        case .declined:
-            L10n.screenQrCodeLoginErrorDeclinedTitle
-        case .expired:
-            L10n.screenQrCodeLoginErrorExpiredTitle
-        case .linkingNotSupported:
-            L10n.screenQrCodeLoginErrorLinkingNotSuportedTitle
-        case .deviceNotSupported:
-            L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedTitle(InfoPlistReader.main.bundleDisplayName)
-        case .unknown:
-            L10n.commonSomethingWentWrong
-        default:
-            fatalError("This should not be displayed")
-        }
-        
-        let subtitle: String = switch errorState {
-        case .cancelled:
-            L10n.screenQrCodeLoginErrorCancelledSubtitle
-        case .declined:
-            L10n.screenQrCodeLoginErrorDeclinedSubtitle
-        case .expired:
-            L10n.screenQrCodeLoginErrorExpiredSubtitle
-        case .linkingNotSupported:
-            L10n.screenQrCodeLoginErrorLinkingNotSuportedSubtitle(InfoPlistReader.main.bundleDisplayName)
-        case .deviceNotSupported:
-            L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedSubtitle(InfoPlistReader.main.bundleDisplayName)
-        case .unknown:
-            L10n.screenQrCodeLoginUnknownErrorDescription
-        default:
-            fatalError("This should not be displayed")
-        }
-        
+    private var simpleErrorStack: some View {
         VStack(spacing: 16) {
-            BigIcon(icon: \.errorSolid, style: .alert)
+            BigIcon(icon: \.errorSolid, style: .alertSolid)
             
             VStack(spacing: 8) {
                 Text(title)

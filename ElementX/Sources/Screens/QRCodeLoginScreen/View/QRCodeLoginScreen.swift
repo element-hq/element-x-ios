@@ -13,13 +13,21 @@ struct QRCodeLoginScreen: View {
     @ObservedObject var context: QRCodeLoginScreenViewModel.Context
     @State private var qrFrame = CGRect.zero
     
+    var backgroundStyle: Color {
+        if case .error = context.viewState.state {
+            .compound.bgCanvasDefault
+        } else {
+            .compound.bgSubtleSecondary
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             mainContent
                 .toolbar { toolbar }
                 .toolbar(.visible, for: .navigationBar)
                 .background()
-                .backgroundStyle(.compound.bgSubtleSecondary)
+                .backgroundStyle(backgroundStyle)
                 .interactiveDismissDisabled()
         }
     }
