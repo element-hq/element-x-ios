@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct QRCodeErrorView: View {
