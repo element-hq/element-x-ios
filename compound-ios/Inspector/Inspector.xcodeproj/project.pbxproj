@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		70AC7B23011C802F750E470E /* Pods_Compound_Inspector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2E28F45EEA9A8DE6AFB10E9 /* Pods_Compound_Inspector.framework */; };
 		912974102A864F5E004BEA88 /* ListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9129740F2A864F5E004BEA88 /* ListScreen.swift */; };
+		912EA03C2EF18F1F006485DF /* TitleAndIconScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912EA03B2EF18F1D006485DF /* TitleAndIconScreen.swift */; };
 		9132C62D2A72708400EAEF3D /* ActionSheetScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9132C62C2A72708400EAEF3D /* ActionSheetScreen.swift */; };
 		9132C62F2A72785500EAEF3D /* AlertScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9132C62E2A72785400EAEF3D /* AlertScreen.swift */; };
 		9132C6312A7280A500EAEF3D /* ContextMenuScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9132C6302A7280A500EAEF3D /* ContextMenuScreen.swift */; };
@@ -44,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		9129740F2A864F5E004BEA88 /* ListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListScreen.swift; sourceTree = "<group>"; };
+		912EA03B2EF18F1D006485DF /* TitleAndIconScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleAndIconScreen.swift; sourceTree = "<group>"; };
 		9132C62C2A72708400EAEF3D /* ActionSheetScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetScreen.swift; sourceTree = "<group>"; };
 		9132C62E2A72785400EAEF3D /* AlertScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertScreen.swift; sourceTree = "<group>"; };
 		9132C6302A7280A500EAEF3D /* ContextMenuScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuScreen.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				917F562A28256DCD00D19543 /* ButtonsScreen.swift */,
 				9129740F2A864F5E004BEA88 /* ListScreen.swift */,
 				917F563028256DDC00D19543 /* TextFieldsScreen.swift */,
+				912EA03B2EF18F1D006485DF /* TitleAndIconScreen.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				91A6CAA02EF1844E0090A2B4 /* BigIconScreen.swift in Sources */,
 				9188246A2A2DE882001606AE /* Screen.swift in Sources */,
 				9184AC022825741600227C3A /* ScreenContent.swift in Sources */,
+				912EA03C2EF18F1F006485DF /* TitleAndIconScreen.swift in Sources */,
 				912974102A864F5E004BEA88 /* ListScreen.swift in Sources */,
 				9132C6312A7280A500EAEF3D /* ContextMenuScreen.swift in Sources */,
 				9132C62F2A72785500EAEF3D /* AlertScreen.swift in Sources */,

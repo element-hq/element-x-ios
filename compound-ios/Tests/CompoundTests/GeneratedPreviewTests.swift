@@ -112,6 +112,12 @@ extension PreviewTests {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
+
+    func testTitleAndIcon() async throws {
+        for (index, preview) in TitleAndIcon_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
 }
 
 // swiftlint:enable all
