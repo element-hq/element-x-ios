@@ -72,13 +72,13 @@ jobs:
           if-no-files-found: ignore
 
       - name: Collect coverage
-        # Skip if cancelled and in forks
-        if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+        # Skip if not successful and in forks
+        if: ${{ success() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         run: xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/IntegrationTests.xcresult > fastlane/test_output/integration-cobertura.xml
 
       - name: Upload coverage to Codecov
-        # Skip if cancelled and in forks
-        if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+        # Skip if not successful and in forks
+        if: ${{ success() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           report_type: coverage
