@@ -53,7 +53,7 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         XCTAssertTrue(appMediatorMock.requestAuthorizationIfNeededCalled)
         
-        context.send(viewAction: .openSettings)
+        context.send(viewAction: .errorAction(.openSettings))
         await Task.yield()
         XCTAssertTrue(appMediatorMock.openAppSettingsCalled)
         XCTAssertNil(context.qrResult)
