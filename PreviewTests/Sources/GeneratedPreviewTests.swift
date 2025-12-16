@@ -83,12 +83,6 @@ extension PreviewTests {
         }
     }
 
-    func testBigIcon() async throws {
-        for (index, preview) in BigIcon_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
     func testBlockedUsersScreen() async throws {
         for (index, preview) in BlockedUsersScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

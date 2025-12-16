@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.6 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.3.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -10,6 +10,12 @@ import XCTest
 extension PreviewTests {
 
     // MARK: - PreviewProvider
+
+    func testBigIcon() async throws {
+        for (index, preview) in BigIcon_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
 
     func testCompoundButtonStyle() async throws {
         for (index, preview) in CompoundButtonStyle_Previews._allPreviews.enumerated() {
@@ -103,6 +109,12 @@ extension PreviewTests {
 
     func testSendButton() async throws {
         for (index, preview) in SendButton_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    func testTitleAndIcon() async throws {
+        for (index, preview) in TitleAndIcon_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }

@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 /// A prompt that asks the user whether they would like to enable Analytics or not.

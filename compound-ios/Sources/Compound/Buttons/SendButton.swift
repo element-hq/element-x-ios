@@ -13,7 +13,7 @@ public struct SendButton: View {
     @Environment(\.colorScheme) private var colorScheme
     
     /// The action to perform when the user triggers the button.
-    public let action: () -> Void
+    private let action: () -> Void
     
     private var iconColor: Color {
         guard isEnabled else { return .compound.iconQuaternary }

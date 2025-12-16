@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct ServerSelectionScreen: View {
@@ -32,8 +33,7 @@ struct ServerSelectionScreen: View {
     /// The title, message and icon at the top of the screen.
     var header: some View {
         VStack(spacing: 8) {
-            Image(asset: Asset.Images.serverSelectionIcon)
-                .bigIcon(insets: 19)
+            BigIcon(icon: \.host)
                 .padding(.bottom, 8)
             
             Text(L10n.screenChangeServerTitle)

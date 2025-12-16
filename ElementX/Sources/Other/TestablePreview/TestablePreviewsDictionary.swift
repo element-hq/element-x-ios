@@ -21,7 +21,6 @@ enum TestablePreviewsDictionary {
         "AuthenticationStartScreen_Previews" : AuthenticationStartScreen_Previews.self,
         "AvatarHeaderView_Previews" : AvatarHeaderView_Previews.self,
         "BadgeLabel_Previews" : BadgeLabel_Previews.self,
-        "BigIcon_Previews" : BigIcon_Previews.self,
         "BlockedUsersScreen_Previews" : BlockedUsersScreen_Previews.self,
         "BloomModifier_Previews" : BloomModifier_Previews.self,
         "BugReportScreen_Previews" : BugReportScreen_Previews.self,
