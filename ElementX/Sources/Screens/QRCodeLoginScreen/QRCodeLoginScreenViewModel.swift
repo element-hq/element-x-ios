@@ -129,7 +129,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         case .deviceNotSignedIn:
             state.state = .scan(.scanFailed(.deviceNotSignedIn))
         case .deviceAlreadySignedIn:
-            state.state = .scan(.scanFailed(.deviceAlreadySignedIn))
+            state.state = .error(.deviceAlreadySignedIn)
         case .cancelled:
             state.state = .error(.cancelled)
         case .connectionInsecure:

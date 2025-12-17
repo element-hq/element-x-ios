@@ -10,29 +10,27 @@ import SwiftUI
 /// Our standard screen header that includes a title and icon along with
 /// optional subtitle and button components.
 ///
-/// **Note:** By default this component includes the standard padding
-/// specified in the Figma, however you may need to customise it using
-/// the `insets` parameter.
+/// **Note:** In Figma this component includes some pre-defined padding
+/// which this implementation doesn't include as it sometimes needs to be
+/// changed and is generally easier to use global padding within the screen
+/// than it is to add/subtract additional padding to some arbitrary defaults.
 public struct TitleAndIcon: View {
     private let title: String
     private let subtitle: String?
     private let icon: KeyPath<CompoundIcons, Image>
     private let iconStyle: BigIcon.Style
     private let button: ButtonDetails?
-    private let insets: EdgeInsets
     
     public init(title: String,
                 subtitle: String? = nil,
                 icon: KeyPath<CompoundIcons, Image>,
                 iconStyle: BigIcon.Style,
-                button: ButtonDetails? = nil,
-                insets: EdgeInsets = .init(top: 24, leading: 24, bottom: 40, trailing: 24)) {
+                button: ButtonDetails? = nil) {
         self.title = title
         self.subtitle = subtitle
         self.icon = icon
         self.iconStyle = iconStyle
         self.button = button
-        self.insets = insets
     }
     
     public var body: some View {
@@ -58,7 +56,6 @@ public struct TitleAndIcon: View {
                     .buttonStyle(.compound(.tertiary, size: .small))
             }
         }
-        .padding(insets)
     }
 }
 
@@ -83,7 +80,7 @@ public struct TitleAndIcon_Previews: PreviewProvider, TestablePreview {
     }
     
     public static var states: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 84) {
             TitleAndIcon(title: "Headline",
                          icon: \.circle,
                          iconStyle: .defaultSolid)
@@ -99,5 +96,7 @@ public struct TitleAndIcon_Previews: PreviewProvider, TestablePreview {
                          iconStyle: .defaultSolid,
                          button: .init(title: "Learn more") { })
         }
+        .padding(24)
+        .padding(.bottom, 16)
     }
 }

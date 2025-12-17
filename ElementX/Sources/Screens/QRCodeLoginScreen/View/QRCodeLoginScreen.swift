@@ -49,24 +49,12 @@ struct QRCodeLoginScreen: View {
     }
     
     private var initialContent: some View {
-        FullscreenDialog {
+        FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
             VStack(alignment: .leading, spacing: 40) {
-                VStack(spacing: 16) {
-                    BigIcon(icon: \.computer, style: .default)
-                    
-                    VStack(spacing: 8) {
-                        Text(L10n.screenQrCodeLoginInitialStateTitle(InfoPlistReader.main.productionAppName))
-                            .foregroundColor(.compound.textPrimary)
-                            .font(.compound.headingMDBold)
-                            .multilineTextAlignment(.center)
-                        
-                        Text(L10n.screenQrCodeLoginInitialStateSubtitle)
-                            .font(.compound.bodyMD)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.compound.textSecondary)
-                    }
-                }
-                .padding(.horizontal, 24)
+                TitleAndIcon(title: L10n.screenQrCodeLoginInitialStateTitle(InfoPlistReader.main.productionAppName),
+                             subtitle: L10n.screenQrCodeLoginInitialStateSubtitle,
+                             icon: \.computer,
+                             iconStyle: .default)
                 
                 SFNumberedListView(items: context.viewState.initialStateListItems)
             }
@@ -81,17 +69,21 @@ struct QRCodeLoginScreen: View {
     @ViewBuilder
     private var displayCodeContent: some View {
         if case let .displayCode(displayCodeState) = context.viewState.state {
-            FullscreenDialog {
+            FullscreenDialog(topPadding: 24) {
                 VStack(spacing: 32) {
-                    VStack(spacing: 40) {
+                    VStack(spacing: 24) {
                         displayCodeHeader(state: displayCodeState)
+                            .padding(.horizontal, 8)
+                        
                         PINTextField(pinCode: .constant(displayCodeState.code),
                                      maxLength: displayCodeState.code.count,
                                      size: .small)
                             .disabled(true)
                     }
+                    
                     VStack(spacing: 4) {
                         ProgressView()
+                        
                         Text(L10n.screenQrCodeLoginVerifyCodeLoading)
                             .foregroundColor(.compound.textSecondary)
                             .font(.compound.bodySM)
@@ -104,63 +96,36 @@ struct QRCodeLoginScreen: View {
                 }
                 .buttonStyle(.compound(.secondary))
             }
-            .padding(.horizontal, 24)
         }
     }
     
     private func displayCodeHeader(state: QRCodeLoginState.QRCodeLoginDisplayCodeState) -> some View {
-        VStack(spacing: 16) {
-            switch state {
-            case .deviceCode:
-                BigIcon(icon: \.computer, style: .default)
-                
-                VStack(spacing: 8) {
-                    Text(L10n.screenQrCodeLoginDeviceCodeTitle)
-                        .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
-                        .multilineTextAlignment(.center)
-                    
-                    Text(L10n.screenQrCodeLoginDeviceCodeSubtitle)
-                        .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
-                        .multilineTextAlignment(.center)
-                }
-            case .verificationCode:
-                BigIcon(icon: \.lock, style: .default)
-                
-                VStack(spacing: 8) {
-                    Text(L10n.screenQrCodeLoginVerifyCodeTitle)
-                        .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
-                        .multilineTextAlignment(.center)
-                    
-                    Text(L10n.screenQrCodeLoginVerifyCodeSubtitle)
-                        .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
-                        .multilineTextAlignment(.center)
-                }
-            }
+        switch state {
+        case .deviceCode:
+            TitleAndIcon(title: L10n.screenQrCodeLoginDeviceCodeTitle,
+                         subtitle: L10n.screenQrCodeLoginDeviceCodeSubtitle,
+                         icon: \.computer,
+                         iconStyle: .default)
+        case .verificationCode:
+            TitleAndIcon(title: L10n.screenQrCodeLoginVerifyCodeTitle,
+                         subtitle: L10n.screenQrCodeLoginVerifyCodeSubtitle,
+                         icon: \.lock,
+                         iconStyle: .default)
         }
     }
     
     private var qrScanContent: some View {
-        FullscreenDialog {
+        FullscreenDialog(topPadding: 24) {
             VStack(spacing: 40) {
-                VStack(spacing: 16) {
-                    BigIcon(icon: \.takePhotoSolid, style: .default)
-                    
-                    Text(L10n.screenQrCodeLoginScanningStateTitle)
-                        .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
-                        .multilineTextAlignment(.center)
-                }
+                TitleAndIcon(title: L10n.screenQrCodeLoginScanningStateTitle,
+                             icon: \.takePhotoSolid,
+                             iconStyle: .default)
                 
                 qrScanner
             }
         } bottomContent: {
             qrScanFooter
         }
-        .padding(.horizontal, 24)
     }
     
     @ViewBuilder
