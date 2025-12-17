@@ -80,7 +80,16 @@ struct RoomScreenViewState: BindableState {
             (canAcceptKnocks || canDeclineKnocks || canBan)
     }
     
-    var footerDetails: RoomScreenFooterViewDetails?
+    var identityViolationDetails: RoomScreenFooterViewDetails?
+    var historyVisibileDetails: RoomScreenFooterViewDetails?
+    
+    var footerDetails: RoomScreenFooterViewDetails? {
+        if identityViolationDetails != nil {
+            return identityViolationDetails
+        } else {
+            return historyVisibileDetails
+        }
+    }
     
     var bindings = RoomScreenViewStateBindings()
 }

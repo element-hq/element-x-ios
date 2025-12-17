@@ -103,7 +103,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 Task { await resolveIdentityVerificationViolation(userID) }
             case .dismissHistoryVisibleAlert:
                 appSettings.acknowledgedHistoryVisibleRooms.insert(roomProxy.id)
-                state.footerDetails = nil
+                state.historyVisibileDetails = nil
             }
         case .acceptKnock(let eventID):
             Task { await acceptKnock(eventID: eventID) }
@@ -247,13 +247,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         if let member = identityVerificationViolations.values.first {
-            state.footerDetails = .verificationViolation(member: member,
-                                                         learnMoreURL: appSettings.identityPinningViolationDetailsURL)
+            state.identityViolationDetails = .verificationViolation(member: member,
+                                                                    learnMoreURL: appSettings.identityPinningViolationDetailsURL)
         } else if let member = identityPinningViolations.values.first {
-            state.footerDetails = .pinViolation(member: member,
-                                                learnMoreURL: appSettings.identityPinningViolationDetailsURL)
+            state.identityViolationDetails = .pinViolation(member: member,
+                                                           learnMoreURL: appSettings.identityPinningViolationDetailsURL)
         } else {
-            state.footerDetails = nil
+            state.identityViolationDetails = nil
         }
     }
     
@@ -346,15 +346,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canBan = powerLevels.canOwnUserBan()
         }
         
-        if appSettings.enableKeyShareOnInvite {
-            // Whever the user opens a room with joined history visibility, we clear the dismiss flag to ensure that the banner is displayed again if the history is made visible in the future.
+        if appSettings.enableKeyShareOnInvite, roomInfo.isEncrypted {
             if roomInfo.historyVisibility == RoomHistoryVisibility.joined {
+                // Whever the user opens a room with joined history visibility, we clear the dismiss flag to ensure that the banner is displayed again if the history is made visible in the future.
                 appSettings.acknowledgedHistoryVisibleRooms.remove(roomInfo.id)
-                state.footerDetails = nil
-            }
-            // Whenever the user opens an encrypted room with non-join history visbility, we show them a warning banner if they have not already dismissed it.
-            else if appSettings.enableKeyShareOnInvite, roomInfo.isEncrypted, !appSettings.acknowledgedHistoryVisibleRooms.contains(roomInfo.id) {
-                state.footerDetails = .historyVisible(learnMoreURL: appSettings.historySharingDetailsURL)
+                state.historyVisibileDetails = nil
+            } else if !appSettings.acknowledgedHistoryVisibleRooms.contains(roomInfo.id) {
+                // Whenever the user opens an encrypted room with non-join history visbility, we show them a warning banner if they have not already dismissed it.
+                state.historyVisibileDetails = .historyVisible(learnMoreURL: appSettings.historySharingDetailsURL)
             }
         }
     }
