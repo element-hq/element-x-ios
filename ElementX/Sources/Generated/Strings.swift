@@ -2906,13 +2906,17 @@ internal enum L10n {
   internal static var screenSecurityAndPrivacyRoomDirectoryVisibilityToggleDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_directory_visibility_toggle_description") }
   /// Visible in public directory
   internal static var screenSecurityAndPrivacyRoomDirectoryVisibilityToggleTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_directory_visibility_toggle_title") }
-  /// Anyone
+  /// Anyone (history is public)
   internal static var screenSecurityAndPrivacyRoomHistoryAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_anyone_option_title") }
+  /// Changes won't affect past messages, only new ones. %@
+  internal static func screenSecurityAndPrivacyRoomHistorySectionFooter(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_security_and_privacy_room_history_section_footer", String(describing: p1))
+  }
   /// Who can read history
   internal static var screenSecurityAndPrivacyRoomHistorySectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_section_header") }
-  /// Members only since they were invited
+  /// Members since invited
   internal static var screenSecurityAndPrivacyRoomHistorySinceInviteOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_since_invite_option_title") }
-  /// Members only since selecting this option
+  /// Members (full history)
   internal static var screenSecurityAndPrivacyRoomHistorySinceSelectingOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_since_selecting_option_title") }
   /// Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.
   /// You can choose to publish your room in your homeserver public room directory.

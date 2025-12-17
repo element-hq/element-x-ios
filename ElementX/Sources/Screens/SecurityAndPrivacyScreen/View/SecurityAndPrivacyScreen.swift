@@ -80,8 +80,8 @@ struct SecurityAndPrivacyScreen: View {
             Text(L10n.screenSecurityAndPrivacyRoomAccessSectionHeader)
                 .compoundListSectionHeader()
         } footer: {
-            if let footer = context.viewState.accessSectionFooter {
-                Text(footer)
+            if context.viewState.shouldShowAccessSectionFooter {
+                Text(context.viewState.strings.accessSectionFooterString)
                     .compoundListSectionFooter()
                     .environment(\.openURL, OpenURLAction { _ in
                         context.send(viewAction: .manageSpaces)
@@ -133,20 +133,23 @@ struct SecurityAndPrivacyScreen: View {
         Section {
             ForEach(context.viewState.availableVisibilityOptions, id: \.self) { option in
                 switch option {
-                case .sinceSelection:
-                    ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistorySinceSelectingOptionTitle),
-                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .sinceSelection) { context.desiredSettings.historyVisibility = .sinceSelection })
-                case .anyone:
-                    ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistoryAnyoneOptionTitle),
-                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .anyone) { context.desiredSettings.historyVisibility = .anyone })
-                case .sinceInvite:
+                case .invited:
                     ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistorySinceInviteOptionTitle),
-                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .sinceInvite) { context.desiredSettings.historyVisibility = .sinceInvite })
+                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .invited) { context.desiredSettings.historyVisibility = .invited })
+                case .shared:
+                    ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistorySinceSelectingOptionTitle),
+                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .shared) { context.desiredSettings.historyVisibility = .shared })
+                case .worldReadable:
+                    ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistoryAnyoneOptionTitle),
+                            kind: .selection(isSelected: context.desiredSettings.historyVisibility == .worldReadable) { context.desiredSettings.historyVisibility = .worldReadable })
                 }
             }
         } header: {
             Text(L10n.screenSecurityAndPrivacyRoomHistorySectionHeader)
                 .compoundListSectionHeader()
+        } footer: {
+            Text(context.viewState.strings.historySectionFooterString)
+                .compoundListSectionFooter()
         }
     }
     

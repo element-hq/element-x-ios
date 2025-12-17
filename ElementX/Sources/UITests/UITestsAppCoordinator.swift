@@ -140,6 +140,7 @@ class MockScreen: Identifiable {
                                      deviceVerificationURL: appSettings.deviceVerificationURL,
                                      chatBackupDetailsURL: appSettings.chatBackupDetailsURL,
                                      identityPinningViolationDetailsURL: appSettings.identityPinningViolationDetailsURL,
+                                     historySharingDetailsURL: appSettings.historySharingDetailsURL,
                                      elementWebHosts: appSettings.elementWebHosts,
                                      accountProvisioningHost: appSettings.accountProvisioningHost,
                                      bugReportApplicationID: appSettings.bugReportApplicationID,

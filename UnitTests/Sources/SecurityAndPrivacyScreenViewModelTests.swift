@@ -46,7 +46,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         
         context.send(viewAction: .selectedSpaceMembersAccess)
         XCTAssertEqual(context.desiredSettings.accessType, .spaceMembers(spaceIDs: [space.id]))
-        XCTAssertNil(context.viewState.accessSectionFooter)
+        XCTAssertFalse(context.viewState.shouldShowAccessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
         
         let expectation = expectation(description: "Join rule has updated")
@@ -77,7 +77,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         
         context.send(viewAction: .selectedAskToJoinWithSpaceMembersAccess)
         XCTAssertEqual(context.desiredSettings.accessType, .askToJoinWithSpaceMembers(spaceIDs: [space.id]))
-        XCTAssertNil(context.viewState.accessSectionFooter)
+        XCTAssertFalse(context.viewState.shouldShowAccessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
         
         let expectation = expectation(description: "Join rule has updated")
@@ -101,7 +101,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.currentSettings.accessType, .spaceMembers(spaceIDs: [space.id]))
         XCTAssertEqual(context.desiredSettings, context.viewState.currentSettings)
         XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
-        XCTAssertNil(context.viewState.accessSectionFooter)
+        XCTAssertFalse(context.viewState.shouldShowAccessSectionFooter)
         XCTAssertTrue(context.viewState.isSaveDisabled)
         guard case .singleUnknown = context.viewState.spaceSelection else {
             XCTFail("Expected spaceSelection to be .singleUnknown")
@@ -152,7 +152,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         try await deferredAction.fulfill()
         selectedIDs.send([spaces[0].id])
         XCTAssertEqual(context.desiredSettings.accessType, .spaceMembers(spaceIDs: [spaces[0].id]))
-        XCTAssertNotNil(context.viewState.accessSectionFooter)
+        XCTAssertTrue(context.viewState.shouldShowAccessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
 
         let expectation = expectation(description: "Join rule has updated")
@@ -196,7 +196,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         try await deferredAction.fulfill()
         selectedIDs.send([spaces[0].id])
         XCTAssertEqual(context.desiredSettings.accessType, .askToJoinWithSpaceMembers(spaceIDs: [spaces[0].id]))
-        XCTAssertNotNil(context.viewState.accessSectionFooter)
+        XCTAssertTrue(context.viewState.shouldShowAccessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
 
         let expectation = expectation(description: "Join rule has updated")
@@ -242,7 +242,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         try await deferredAction.fulfill()
         selectedIDs.send([spaces[0].id, "unknownSpaceID"])
         XCTAssertEqual(context.desiredSettings.accessType, .spaceMembers(spaceIDs: [spaces[0].id, "unknownSpaceID"]))
-        XCTAssertNotNil(context.viewState.accessSectionFooter)
+        XCTAssertTrue(context.viewState.shouldShowAccessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
 
         let expectation = expectation(description: "Join rule has updated")
@@ -293,7 +293,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         try await deferredAction.fulfill()
         selectedIDs.send([allSpaces[0].id, "unknownSpaceID"])
         XCTAssertEqual(context.desiredSettings.accessType, .spaceMembers(spaceIDs: [allSpaces[0].id, "unknownSpaceID"]))
-        XCTAssertNotNil(context.viewState.accessSectionFooter)
+        XCTAssertTrue(context.viewState.shouldShowAccessSectionFooter)
         XCTAssertFalse(context.viewState.isSaveDisabled)
     }
     
@@ -309,7 +309,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceMembers)
         XCTAssertTrue(context.viewState.isSaveDisabled)
         XCTAssertFalse(context.viewState.isSpaceMembersOptionSelectable)
-        XCTAssertNil(context.viewState.accessSectionFooter)
+        XCTAssertFalse(context.viewState.shouldShowAccessSectionFooter)
         guard case .empty = context.viewState.spaceSelection else {
             XCTFail("Expected spaceSelection to be .empty")
             return
@@ -329,7 +329,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.currentSettings.accessType.isSpaceMembers)
         XCTAssertTrue(context.viewState.isSaveDisabled)
         XCTAssertTrue(context.viewState.isSpaceMembersOptionSelectable)
-        XCTAssertNotNil(context.viewState.accessSectionFooter)
+        XCTAssertTrue(context.viewState.shouldShowAccessSectionFooter)
         guard case .multiple = context.viewState.spaceSelection else {
             XCTFail("Expected spaceSelection to be .multiple")
             return

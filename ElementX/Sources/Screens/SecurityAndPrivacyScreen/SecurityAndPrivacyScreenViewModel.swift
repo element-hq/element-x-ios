@@ -38,7 +38,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                                                                        historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility,
                                                                        isSpace: roomProxy.infoPublisher.value.isSpace,
                                                                        isKnockingEnabled: appSettings.knockingEnabled,
-                                                                       isSpaceSettingsEnabled: appSettings.spaceSettingsEnabled))
+                                                                       isSpaceSettingsEnabled: appSettings.spaceSettingsEnabled,
+                                                                       historySharingDetailsURL: appSettings.historySharingDetailsURL))
         
         if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
             setupPermissions(powerLevels: powerLevels)
@@ -345,11 +346,11 @@ private extension RoomHistoryVisibility {
     var toSecurityAndPrivacyHistoryVisibility: SecurityAndPrivacyHistoryVisibility {
         switch self {
         case .joined, .invited:
-            return .sinceInvite
+            return .invited
         case .shared, .custom:
-            return .sinceSelection
+            return .shared
         case .worldReadable:
-            return .anyone
+            return .worldReadable
         }
     }
 }
@@ -357,11 +358,11 @@ private extension RoomHistoryVisibility {
 private extension SecurityAndPrivacyHistoryVisibility {
     var toRoomHistoryVisibility: RoomHistoryVisibility {
         switch self {
-        case .sinceSelection:
+        case .shared:
             return .shared
-        case .sinceInvite:
+        case .invited:
             return .invited
-        case .anyone:
+        case .worldReadable:
             return .worldReadable
         }
     }
