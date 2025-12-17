@@ -23,7 +23,7 @@ public struct BigIcon: View {
         var foregroundColor: Color {
             switch self {
             case .defaultSolid, .default:
-                .compound.iconSecondary
+                .compound.iconPrimary
             case .alertSolid, .alert:
                 .compound.iconCriticalPrimary
             case .successSolid, .success:

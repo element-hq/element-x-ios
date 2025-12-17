@@ -31,6 +31,8 @@ enum Screen: Hashable, View {
     case textFields
     /// The `BigIcon` component.
     case bigIcon
+    /// The `TitleAndIcon` component.
+    case titleAndIcon
     
     /// The system's confirmation dialog component
     case actionSheet
@@ -56,6 +58,7 @@ enum Screen: Hashable, View {
         case .buttons: ButtonsScreen()
         case .textFields: EmptyView()
         case .bigIcon: BigIconScreen()
+        case .titleAndIcon: TitleAndIconScreen()
         
         case .actionSheet: ActionSheetScreen()
         case .alert: AlertScreen()
