@@ -16,18 +16,21 @@ enum SecurityAndPrivacyScreenViewModelAction {
 
 struct SecurityAndPrivacyScreenViewState: BindableState {
     let serverName: String
+    
     var currentSettings: SecurityAndPrivacySettings
     var bindings: SecurityAndPrivacyScreenViewStateBindings
+    let strings: SecurityAndPrivacyScreenStrings
+    
     var canonicalAlias: String?
     var isKnockingEnabled: Bool
     var isSpaceSettingsEnabled: Bool
     var isSpace: Bool
-    var historySharingDetailsURL: URL
     
     var canEditAddress = false
     var canEditJoinRule = false
     var canEnableEncryption = false
     var canEditHistoryVisibility = false
+    
     /// The union of joined parent spaces and the joined spaces in the current access type
     var selectableJoinedSpaces: [SpaceRoomProxyProtocol] = []
     
@@ -163,13 +166,13 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
         self.isKnockingEnabled = isKnockingEnabled
         self.isSpace = isSpace
         self.isSpaceSettingsEnabled = isSpaceSettingsEnabled
-        self.historySharingDetailsURL = historySharingDetailsURL
         
         let settings = SecurityAndPrivacySettings(accessType: accessType,
                                                   isEncryptionEnabled: isEncryptionEnabled,
                                                   historyVisibility: historyVisibility)
         currentSettings = settings
         bindings = SecurityAndPrivacyScreenViewStateBindings(desiredSettings: settings)
+        strings = SecurityAndPrivacyScreenStrings(historySharingDetailsURL: historySharingDetailsURL)
     }
 }
 
@@ -260,5 +263,28 @@ enum SecurityAndPrivacyHistoryVisibility: Int, Comparable {
     
     static func < (lhs: SecurityAndPrivacyHistoryVisibility, rhs: SecurityAndPrivacyHistoryVisibility) -> Bool {
         lhs.rawValue < rhs.rawValue
+    }
+}
+
+struct SecurityAndPrivacyScreenStrings {
+    let accessSectionFooterString: AttributedString
+    let historySectionFooterString: AttributedString
+    
+    init(historySharingDetailsURL: URL) {
+        let linkPlaceholder = "{link}"
+        
+        var accessFooterString = AttributedString(L10n.screenSecurityAndPrivacyRoomAccessFooter(linkPlaceholder))
+        var accessLinkString = AttributedString(L10n.screenSecurityAndPrivacyRoomAccessFooterManageSpacesAction)
+        accessLinkString.link = .init(stringLiteral: "action://manageSpace") // The link address doesn't matter
+        accessLinkString.bold()
+        accessFooterString.replace(linkPlaceholder, with: accessLinkString)
+        accessSectionFooterString = accessFooterString
+        
+        var historyFooterString = AttributedString(L10n.screenSecurityAndPrivacyRoomHistorySectionFooter(linkPlaceholder))
+        var historyLinkString = AttributedString(L10n.actionLearnMore)
+        historyLinkString.link = historySharingDetailsURL
+        historyLinkString.bold()
+        historyFooterString.replace(linkPlaceholder, with: historyLinkString)
+        historySectionFooterString = historyFooterString
     }
 }

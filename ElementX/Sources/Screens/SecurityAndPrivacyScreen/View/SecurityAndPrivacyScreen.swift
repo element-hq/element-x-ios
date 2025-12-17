@@ -81,26 +81,14 @@ struct SecurityAndPrivacyScreen: View {
                 .compoundListSectionHeader()
         } footer: {
             if context.viewState.shouldShowAccessSectionFooter {
-                accessSectionFooter
+                Text(context.viewState.strings.accessSectionFooterString)
+                    .compoundListSectionFooter()
+                    .environment(\.openURL, OpenURLAction { _ in
+                        context.send(viewAction: .manageSpaces)
+                        return .handled
+                    })
             }
         }
-    }
-    
-    private var accessSectionFooter: some View {
-        let linkPlaceholder = "{link}"
-        var footerString = AttributedString(L10n.screenSecurityAndPrivacyRoomAccessFooter(linkPlaceholder))
-        var linkString = AttributedString(L10n.screenSecurityAndPrivacyRoomAccessFooterManageSpacesAction)
-        // Doesn't really matter
-        linkString.link = .init(stringLiteral: "action://manageSpace")
-        linkString.bold()
-        footerString.replace(linkPlaceholder, with: linkString)
-        
-        return Text(footerString)
-            .compoundListSectionFooter()
-            .environment(\.openURL, OpenURLAction { _ in
-                context.send(viewAction: .manageSpaces)
-                return .handled
-            })
     }
     
     private var askToJoinOption: some View {
@@ -160,21 +148,9 @@ struct SecurityAndPrivacyScreen: View {
             Text(L10n.screenSecurityAndPrivacyRoomHistorySectionHeader)
                 .compoundListSectionHeader()
         } footer: {
-            historySectionFooter
+            Text(context.viewState.strings.historySectionFooterString)
+                .compoundListSectionFooter()
         }
-    }
-    
-    private var historySectionFooter: some View {
-        let linkPlaceholder = "{link}"
-        var footerText = AttributedString(L10n.screenSecurityAndPrivacyRoomHistorySectionFooter(linkPlaceholder))
-        
-        var linkString = AttributedString(L10n.actionLearnMore)
-        linkString.link = context.viewState.historySharingDetailsURL
-        linkString.bold()
-        footerText.replace(linkPlaceholder, with: linkString)
-        
-        return Text(footerText)
-            .compoundListSectionFooter()
     }
     
     private var visibilitySection: some View {
