@@ -12,7 +12,7 @@ struct LinkNewDeviceScreen: View {
     @Bindable var context: LinkNewDeviceScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: 0) {
+        FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
             mainContent
         } bottomContent: {
             buttons
@@ -31,7 +31,6 @@ struct LinkNewDeviceScreen: View {
             TitleAndIcon(title: L10n.screenLinkNewDeviceRootTitle,
                          icon: \.computer,
                          iconStyle: .default)
-                .padding(.horizontal, -16) // Remove the FullscreenDialog's default padding in this state.
         case .notSupported:
             TitleAndIcon(title: L10n.screenLinkNewDeviceErrorNotSupportedTitle,
                          subtitle: L10n.screenLinkNewDeviceErrorNotSupportedSubtitle,
