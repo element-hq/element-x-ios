@@ -21,8 +21,10 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
     
     /// Padding applied to the top of the content automatically. Use `UIConstants` for preset values.
     var topPadding: CGFloat = UIConstants.titleTopPaddingToNavigationBar
-    /// Padding applied to the content and buttons automatically
+    /// Padding applied to the content automatically
     var horizontalPadding: CGFloat = 16
+    /// Padding applied to the buttons automatically
+    var bottomHorizontalPadding: CGFloat = 16
     /// The spacing between the content and the buttons.
     var spacing: CGFloat = 16
     
@@ -83,7 +85,7 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
                 VStack(spacing: 0) {
                     bottomContent()
                         .readableFrame()
-                        .padding(.horizontal, horizontalPadding)
+                        .padding(.horizontal, bottomHorizontalPadding)
                         .padding(.top, spacing)
                         .padding(.bottom, UIConstants.actionButtonBottomPadding)
                     
@@ -113,7 +115,7 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
                     
                     bottomContent()
                         .readableFrame()
-                        .padding(.horizontal, horizontalPadding)
+                        .padding(.horizontal, bottomHorizontalPadding)
                         .padding(.bottom, UIConstants.actionButtonBottomPadding)
                     
                     Spacer()

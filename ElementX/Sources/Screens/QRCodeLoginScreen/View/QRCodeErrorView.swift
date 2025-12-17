@@ -78,12 +78,11 @@ struct QRCodeErrorView: View {
     }
     
     var body: some View {
-        FullscreenDialog {
+        FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
             mainContent
         } bottomContent: {
             buttons
         }
-        .padding(.horizontal, 24)
     }
     
     @ViewBuilder

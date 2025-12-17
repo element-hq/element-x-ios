@@ -49,13 +49,12 @@ struct QRCodeLoginScreen: View {
     }
     
     private var initialContent: some View {
-        FullscreenDialog {
+        FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
             VStack(alignment: .leading, spacing: 40) {
                 TitleAndIcon(title: L10n.screenQrCodeLoginInitialStateTitle(InfoPlistReader.main.productionAppName),
                              subtitle: L10n.screenQrCodeLoginInitialStateSubtitle,
                              icon: \.computer,
                              iconStyle: .default)
-                    .padding(.horizontal, 24)
                 
                 SFNumberedListView(items: context.viewState.initialStateListItems)
             }
@@ -70,17 +69,21 @@ struct QRCodeLoginScreen: View {
     @ViewBuilder
     private var displayCodeContent: some View {
         if case let .displayCode(displayCodeState) = context.viewState.state {
-            FullscreenDialog {
+            FullscreenDialog(topPadding: 24) {
                 VStack(spacing: 32) {
-                    VStack(spacing: 40) {
+                    VStack(spacing: 24) {
                         displayCodeHeader(state: displayCodeState)
+                            .padding(.horizontal, 8)
+                        
                         PINTextField(pinCode: .constant(displayCodeState.code),
                                      maxLength: displayCodeState.code.count,
                                      size: .small)
                             .disabled(true)
                     }
+                    
                     VStack(spacing: 4) {
                         ProgressView()
+                        
                         Text(L10n.screenQrCodeLoginVerifyCodeLoading)
                             .foregroundColor(.compound.textSecondary)
                             .font(.compound.bodySM)
@@ -93,7 +96,6 @@ struct QRCodeLoginScreen: View {
                 }
                 .buttonStyle(.compound(.secondary))
             }
-            .padding(.horizontal, 24)
         }
     }
     
@@ -113,7 +115,7 @@ struct QRCodeLoginScreen: View {
     }
     
     private var qrScanContent: some View {
-        FullscreenDialog {
+        FullscreenDialog(topPadding: 24) {
             VStack(spacing: 40) {
                 TitleAndIcon(title: L10n.screenQrCodeLoginScanningStateTitle,
                              icon: \.takePhotoSolid,
@@ -124,7 +126,6 @@ struct QRCodeLoginScreen: View {
         } bottomContent: {
             qrScanFooter
         }
-        .padding(.horizontal, 24)
     }
     
     @ViewBuilder
