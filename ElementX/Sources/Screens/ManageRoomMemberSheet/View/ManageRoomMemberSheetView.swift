@@ -40,25 +40,33 @@ struct ManageRoomMemberSheetView: View {
             
             Section {
                 if context.viewState.permissions.canKick {
-                    ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberRemove,
-                                            icon: \.close,
-                                            role: .destructive),
-                            kind: .button {
-                                context.send(viewAction: .kick)
-                            })
-                            .disabled(context.viewState.isKickDisabled)
+                    // Unbanning requires only the kick permission according to the specs.
+                    if context.viewState.isMemberBanned {
+                        ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberUnban,
+                                                icon: \.restart,
+                                                role: .destructive),
+                                kind: .button {
+                                    context.send(viewAction: .unban)
+                                })
+                                .disabled(context.viewState.isBanUnbanDisabled)
+                    } else {
+                        ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberRemove,
+                                                icon: \.close,
+                                                role: .destructive),
+                                kind: .button {
+                                    context.send(viewAction: .kick)
+                                })
+                                .disabled(context.viewState.isKickDisabled)
+                    }
                 }
                 
-                if context.viewState.permissions.canBan {
-                    let title = context.viewState.isMemberBanned ? L10n.screenBottomSheetManageRoomMemberUnban : L10n.screenBottomSheetManageRoomMemberBan
-                    let icon: KeyPath<CompoundIcons, Image> = context.viewState.isMemberBanned ? \.restart : \.block
-                    let action: ManageRoomMemberSheetViewAction = context.viewState.isMemberBanned ? .unban : .ban
-                    
-                    ListRow(label: .default(title: title,
-                                            icon: icon,
+                if context.viewState.permissions.canBan,
+                   !context.viewState.isMemberBanned {
+                    ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberBan,
+                                            icon: \.block,
                                             role: .destructive),
                             kind: .button {
-                                context.send(viewAction: action)
+                                context.send(viewAction: .ban)
                             })
                             .disabled(context.viewState.isBanUnbanDisabled)
                 }
@@ -81,7 +89,7 @@ struct ManageRoomMemberSheetView_Previews: PreviewProvider, TestablePreview {
     
     static let banOnlyViewModel = ManageRoomMemberSheetViewModel.mock(canKick: false)
     
-    static let unbanOnlyViewModel = ManageRoomMemberSheetViewModel.mock(canKick: false, memberIsBanned: true)
+    static let unbanOnlyViewModel = ManageRoomMemberSheetViewModel.mock(canKick: true, memberIsBanned: true)
     
     static var previews: some View {
         ManageRoomMemberSheetView(context: allActionsViewModel.context)

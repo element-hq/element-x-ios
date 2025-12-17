@@ -192,21 +192,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         actionsSubject.send(.selectMember(member))
     }
     
-    // MARK: - Member Management
-    
-    private func unbanMember(_ member: RoomMemberDetails) async {
-        let indicatorTitle = L10n.screenRoomMemberListUnbanningUser(member.name ?? member.id)
-        showManageMemberIndicator(title: indicatorTitle)
-        
-        switch await roomProxy.unbanUser(member.id) {
-        case .success:
-            hideManageMemberIndicator(title: indicatorTitle)
-            analytics.trackRoomModeration(action: .UnbanMember, role: nil)
-        case .failure:
-            showManageMemberFailure(title: indicatorTitle)
-        }
-    }
-    
     // MARK: - Indicators
     
     private static let setupMembersLoadingIndicatorIdentifier = "\(RoomMembersListScreenViewModel.self)-SetupMembers"
