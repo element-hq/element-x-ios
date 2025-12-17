@@ -465,9 +465,7 @@ class RoomScreenViewModelTests: XCTestCase {
         
         self.viewModel = viewModel
         
-        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.footerDetails == nil
-        }
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { $0.footerDetails != nil }
         try await deferred.fulfill()
     }
 
@@ -488,9 +486,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         self.viewModel = viewModel
 
-        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.footerDetails == nil
-        }
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { $0.footerDetails != nil }
         try await deferred.fulfill()
     }
 
@@ -518,9 +514,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         self.viewModel = viewModel
 
-        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.footerDetails == nil
-        }
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { $0.footerDetails != nil }
         try await deferred.fulfill()
     }
 
@@ -549,9 +543,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         self.viewModel = viewModel
 
-        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.footerDetails == nil
-        }
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { $0.footerDetails != nil }
         try await deferred.fulfill()
     }
 
@@ -649,3 +641,5 @@ class RoomScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
 }
+
+g
