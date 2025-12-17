@@ -78,7 +78,7 @@ struct QRCodeErrorView: View {
     }
     
     var body: some View {
-        FullscreenDialog(topPadding: 8) {
+        FullscreenDialog {
             mainContent
         } bottomContent: {
             buttons
@@ -90,7 +90,7 @@ struct QRCodeErrorView: View {
     private var mainContent: some View {
         switch errorState {
         case .connectionNotSecure:
-            VStack(spacing: 0) {
+            VStack(spacing: 40) {
                 header
                 
                 VStack(spacing: 24) {
@@ -115,8 +115,7 @@ struct QRCodeErrorView: View {
         TitleAndIcon(title: title,
                      subtitle: subtitle,
                      icon: icon,
-                     iconStyle: iconStyle,
-                     insets: .init(top: 24, leading: 0, bottom: 40, trailing: 0)) // FIXME: Match the padding to the design.
+                     iconStyle: iconStyle)
     }
     
     @ViewBuilder

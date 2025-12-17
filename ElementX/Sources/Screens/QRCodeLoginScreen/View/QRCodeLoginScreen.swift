@@ -51,22 +51,11 @@ struct QRCodeLoginScreen: View {
     private var initialContent: some View {
         FullscreenDialog {
             VStack(alignment: .leading, spacing: 40) {
-                VStack(spacing: 16) {
-                    BigIcon(icon: \.computer, style: .default)
-                    
-                    VStack(spacing: 8) {
-                        Text(L10n.screenQrCodeLoginInitialStateTitle(InfoPlistReader.main.productionAppName))
-                            .foregroundColor(.compound.textPrimary)
-                            .font(.compound.headingMDBold)
-                            .multilineTextAlignment(.center)
-                        
-                        Text(L10n.screenQrCodeLoginInitialStateSubtitle)
-                            .font(.compound.bodyMD)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.compound.textSecondary)
-                    }
-                }
-                .padding(.horizontal, 24)
+                TitleAndIcon(title: L10n.screenQrCodeLoginInitialStateTitle(InfoPlistReader.main.productionAppName),
+                             subtitle: L10n.screenQrCodeLoginInitialStateSubtitle,
+                             icon: \.computer,
+                             iconStyle: .default)
+                    .padding(.horizontal, 24)
                 
                 SFNumberedListView(items: context.viewState.initialStateListItems)
             }
@@ -109,51 +98,26 @@ struct QRCodeLoginScreen: View {
     }
     
     private func displayCodeHeader(state: QRCodeLoginState.QRCodeLoginDisplayCodeState) -> some View {
-        VStack(spacing: 16) {
-            switch state {
-            case .deviceCode:
-                BigIcon(icon: \.computer, style: .default)
-                
-                VStack(spacing: 8) {
-                    Text(L10n.screenQrCodeLoginDeviceCodeTitle)
-                        .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
-                        .multilineTextAlignment(.center)
-                    
-                    Text(L10n.screenQrCodeLoginDeviceCodeSubtitle)
-                        .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
-                        .multilineTextAlignment(.center)
-                }
-            case .verificationCode:
-                BigIcon(icon: \.lock, style: .default)
-                
-                VStack(spacing: 8) {
-                    Text(L10n.screenQrCodeLoginVerifyCodeTitle)
-                        .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
-                        .multilineTextAlignment(.center)
-                    
-                    Text(L10n.screenQrCodeLoginVerifyCodeSubtitle)
-                        .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
-                        .multilineTextAlignment(.center)
-                }
-            }
+        switch state {
+        case .deviceCode:
+            TitleAndIcon(title: L10n.screenQrCodeLoginDeviceCodeTitle,
+                         subtitle: L10n.screenQrCodeLoginDeviceCodeSubtitle,
+                         icon: \.computer,
+                         iconStyle: .default)
+        case .verificationCode:
+            TitleAndIcon(title: L10n.screenQrCodeLoginVerifyCodeTitle,
+                         subtitle: L10n.screenQrCodeLoginVerifyCodeSubtitle,
+                         icon: \.lock,
+                         iconStyle: .default)
         }
     }
     
     private var qrScanContent: some View {
         FullscreenDialog {
             VStack(spacing: 40) {
-                VStack(spacing: 16) {
-                    BigIcon(icon: \.takePhotoSolid, style: .default)
-                    
-                    Text(L10n.screenQrCodeLoginScanningStateTitle)
-                        .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
-                        .multilineTextAlignment(.center)
-                }
+                TitleAndIcon(title: L10n.screenQrCodeLoginScanningStateTitle,
+                             icon: \.takePhotoSolid,
+                             iconStyle: .default)
                 
                 qrScanner
             }
