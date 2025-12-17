@@ -10,7 +10,6 @@ if [ ! $# -eq 1 ]; then
 fi
 
 SCREENS_DIR="../../ElementX/Sources/Screens"/$1Screen
-UI_TESTS_DIR="../../UITests/Sources"
 UNIT_TESTS_DIR="../../UnitTests/Sources"
 
 if [ -e $SCREENS_DIR ]; then
@@ -27,8 +26,6 @@ echo "Copying screen files"
 cp -R "Templates/SimpleScreenExample/ElementX/" $SCREENS_DIR/
 
 echo "Copying tests"
-
-cp -R "Templates/SimpleScreenExample/Tests/UI/" $UI_TESTS_DIR/
 
 cp -R "Templates/SimpleScreenExample/Tests/Unit/" $UNIT_TESTS_DIR/
 
