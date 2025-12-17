@@ -81,14 +81,10 @@ struct RoomScreenViewState: BindableState {
     }
     
     var identityViolationDetails: RoomScreenFooterViewDetails?
-    var historyVisibileDetails: RoomScreenFooterViewDetails?
+    var historyVisibleDetails: RoomScreenFooterViewDetails?
     
     var footerDetails: RoomScreenFooterViewDetails? {
-        if identityViolationDetails != nil {
-            return identityViolationDetails
-        } else {
-            return historyVisibileDetails
-        }
+        identityViolationDetails ?? historyVisibleDetails
     }
     
     var bindings = RoomScreenViewStateBindings()

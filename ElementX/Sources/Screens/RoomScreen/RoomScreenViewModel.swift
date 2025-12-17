@@ -103,7 +103,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 Task { await resolveIdentityVerificationViolation(userID) }
             case .dismissHistoryVisibleAlert:
                 appSettings.acknowledgedHistoryVisibleRooms.insert(roomProxy.id)
-                state.historyVisibileDetails = nil
+                state.historyVisibleDetails = nil
             }
         case .acceptKnock(let eventID):
             Task { await acceptKnock(eventID: eventID) }
@@ -350,10 +350,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if roomInfo.historyVisibility == RoomHistoryVisibility.joined {
                 // Whever the user opens a room with joined history visibility, we clear the dismiss flag to ensure that the banner is displayed again if the history is made visible in the future.
                 appSettings.acknowledgedHistoryVisibleRooms.remove(roomInfo.id)
-                state.historyVisibileDetails = nil
+                state.historyVisibleDetails = nil
             } else if !appSettings.acknowledgedHistoryVisibleRooms.contains(roomInfo.id) {
                 // Whenever the user opens an encrypted room with non-join history visbility, we show them a warning banner if they have not already dismissed it.
-                state.historyVisibileDetails = .historyVisible(learnMoreURL: appSettings.historySharingDetailsURL)
+                state.historyVisibleDetails = .historyVisible(learnMoreURL: appSettings.historySharingDetailsURL)
             }
         }
     }

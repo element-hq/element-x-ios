@@ -210,6 +210,7 @@ struct RoomScreenFooterView_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("Without displayname")
         RoomScreenFooterView(details: verificationViolationDetails, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
             .previewDisplayName("Verification Violation")
-        RoomScreenFooterView(details: historyVisibleDetails, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }.previewDisplayName("History Visible")
+        RoomScreenFooterView(details: historyVisibleDetails, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+            .previewDisplayName("History Visible")
     }
 }
