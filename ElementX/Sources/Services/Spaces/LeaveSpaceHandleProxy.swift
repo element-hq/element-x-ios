@@ -42,9 +42,9 @@ final class LeaveSpaceHandleProxy {
         
         mode = if space?.isLastAdmin == true {
             .lastSpaceAdmin
-        } else if rooms.isEmpty {
+        } else if self.rooms.isEmpty {
             .noRooms
-        } else if rooms.count(where: { !$0.isLastAdmin }) == 0 {
+        } else if self.rooms.count(where: { !$0.isLastAdmin }) == 0 {
             .onlyAdminRooms
         } else {
             .manyRooms

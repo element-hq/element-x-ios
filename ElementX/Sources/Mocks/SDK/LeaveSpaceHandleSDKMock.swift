@@ -22,14 +22,18 @@ extension LeaveSpaceHandleSDKMock {
 }
 
 extension [LeaveSpaceRoom] {
-    static func mockLastSpaceAdmin(spaceRoomProxy: SpaceRoomProxyProtocol) -> [LeaveSpaceRoom] {
-        mockRooms + [LeaveSpaceRoom(spaceRoom: SpaceRoom(id: spaceRoomProxy.id,
-                                                         name: spaceRoomProxy.name,
-                                                         avatarURL: spaceRoomProxy.avatarURL,
-                                                         isSpace: true,
-                                                         memberCount: UInt64(spaceRoomProxy.joinedMembersCount),
-                                                         joinRule: spaceRoomProxy.joinRule),
-                                    isLastAdmin: true)]
+    static func mockRoomsWithSpace(spaceRoomProxy: SpaceRoomProxyProtocol, isLastAdmin: Bool) -> [LeaveSpaceRoom] {
+        mockRooms + mockSingleSpace(spaceRoomProxy: spaceRoomProxy, isLastAdmin: isLastAdmin)
+    }
+    
+    static func mockSingleSpace(spaceRoomProxy: SpaceRoomProxyProtocol, isLastAdmin: Bool) -> [LeaveSpaceRoom] {
+        [LeaveSpaceRoom(spaceRoom: SpaceRoom(id: spaceRoomProxy.id,
+                                             name: spaceRoomProxy.name,
+                                             avatarURL: spaceRoomProxy.avatarURL,
+                                             isSpace: true,
+                                             memberCount: UInt64(spaceRoomProxy.joinedMembersCount),
+                                             joinRule: spaceRoomProxy.joinRule),
+                        isLastAdmin: isLastAdmin)]
     }
     
     static var mockAdminRooms: [LeaveSpaceRoom] {

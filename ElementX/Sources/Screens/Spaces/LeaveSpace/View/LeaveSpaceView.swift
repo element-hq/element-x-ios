@@ -148,8 +148,8 @@ struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
         let rooms: [LeaveSpaceRoom] = switch mode {
         case .manyRooms: .mockRooms
         case .onlyAdminRooms: .mockAdminRooms
-        case .noRooms: []
-        case .lastSpaceAdmin: .mockLastSpaceAdmin(spaceRoomProxy: spaceRoomProxy)
+        case .noRooms: .mockSingleSpace(spaceRoomProxy: spaceRoomProxy, isLastAdmin: false)
+        case .lastSpaceAdmin: .mockRoomsWithSpace(spaceRoomProxy: spaceRoomProxy, isLastAdmin: true)
         }
         
         let leaveHandle = LeaveSpaceHandleProxy(spaceID: spaceRoomProxy.id,
