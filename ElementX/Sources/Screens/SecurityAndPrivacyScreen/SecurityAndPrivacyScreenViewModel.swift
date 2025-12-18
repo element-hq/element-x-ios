@@ -145,7 +145,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     }
     
     private func setupPermissions(powerLevels: RoomPowerLevelsProxyProtocol) {
-        state.canEditAddress = powerLevels.canOwnUser(sendStateEvent: .roomAliases)
+        state.canEditAddress = powerLevels.canOwnUser(sendStateEvent: .roomCanonicalAlias)
         state.canEditJoinRule = powerLevels.canOwnUser(sendStateEvent: .roomJoinRules)
         state.canEditHistoryVisibility = powerLevels.canOwnUser(sendStateEvent: .roomHistoryVisibility)
         state.canEnableEncryption = powerLevels.canOwnUser(sendStateEvent: .roomEncryption)
