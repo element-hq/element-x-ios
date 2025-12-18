@@ -4707,6 +4707,70 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return optimizeStoresReturnValue
         }
     }
+    //MARK: - storeSizes
+
+    var storeSizesUnderlyingCallsCount = 0
+    var storeSizesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return storeSizesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = storeSizesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                storeSizesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    storeSizesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var storeSizesCalled: Bool {
+        return storeSizesCallsCount > 0
+    }
+
+    var storeSizesUnderlyingReturnValue: Result<StoreSizes, ClientProxyError>!
+    var storeSizesReturnValue: Result<StoreSizes, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return storeSizesUnderlyingReturnValue
+            } else {
+                var returnValue: Result<StoreSizes, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = storeSizesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                storeSizesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    storeSizesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var storeSizesClosure: (() async -> Result<StoreSizes, ClientProxyError>)?
+
+    func storeSizes() async -> Result<StoreSizes, ClientProxyError> {
+        storeSizesCallsCount += 1
+        if let storeSizesClosure = storeSizesClosure {
+            return await storeSizesClosure()
+        } else {
+            return storeSizesReturnValue
+        }
+    }
     //MARK: - fetchMediaPreviewConfiguration
 
     var fetchMediaPreviewConfigurationUnderlyingCallsCount = 0

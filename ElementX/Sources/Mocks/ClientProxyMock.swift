@@ -150,5 +150,7 @@ extension ClientProxyMock {
         underlyingHideInviteAvatarsPublisher = CurrentValueSubject<Bool, Never>(configuration.hideInviteAvatars).asCurrentValuePublisher()
         
         underlyingMaxMediaUploadSize = .success(configuration.maxMediaUploadSize)
+        
+        storeSizesReturnValue = .success(.init(cryptoStore: 1, stateStore: 9, eventCacheStore: 8, mediaStore: 6))
     }
 }

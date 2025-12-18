@@ -21,6 +21,14 @@ struct DeveloperOptionsScreen: View {
     
     var body: some View {
         Form {
+            if let storeSizes = context.viewState.storeSizes {
+                Section("Usage") {
+                    ForEach(storeSizes) { storeSize in
+                        LabeledContent(storeSize.name, value: storeSize.size)
+                    }
+                }
+            }
+            
             Section("Logging") {
                 LogLevelConfigurationView(logLevel: $context.logLevel)
                 
@@ -207,7 +215,8 @@ private extension Set<TraceLogPack> {
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
     static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings,
                                                            elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL,
-                                                           appHooks: AppHooks())
+                                                           appHooks: AppHooks(),
+                                                           clientProxy: ClientProxyMock(.init()))
     static var previews: some View {
         NavigationStack {
             DeveloperOptionsScreen(context: viewModel.context)
