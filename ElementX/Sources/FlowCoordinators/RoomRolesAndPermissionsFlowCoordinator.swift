@@ -119,10 +119,10 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .finishedChangingRoles, transitions: [.changingRoles => .rolesAndPermissionsScreen])
         
         stateMachine.addRoutes(event: .changePermissions, transitions: [.rolesAndPermissionsScreen => .changingPermissions]) { [weak self] context in
-            guard let permissions = context.userInfo as? RoomPermissions else {
+            guard let (ownPowerLevel, permissions) = context.userInfo as? (RoomPowerLevel, RoomPermissions) else {
                 fatalError("Expected a group and the current permissions")
             }
-            self?.presentChangePermissionsScreen(permissions: permissions)
+            self?.presentChangePermissionsScreen(ownPowerLevel: ownPowerLevel, permissions: permissions)
         }
         stateMachine.addRoutes(event: .finishedChangingPermissions, transitions: [.changingPermissions => .rolesAndPermissionsScreen])
         
@@ -144,8 +144,8 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .editRoles(let role):
                 stateMachine.tryEvent(.changeRoles, userInfo: role)
-            case .editPermissions(let permissions):
-                stateMachine.tryEvent(.changePermissions, userInfo: permissions)
+            case .editPermissions(let ownPowerLevel, let permissions):
+                stateMachine.tryEvent(.changePermissions, userInfo: (ownPowerLevel, permissions))
             case .demotedOwnUser:
                 stateMachine.tryEvent(.demotedOwnUser)
             }
@@ -179,8 +179,9 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentChangePermissionsScreen(permissions: RoomPermissions) {
-        let parameters = RoomChangePermissionsScreenCoordinatorParameters(permissions: permissions,
+    private func presentChangePermissionsScreen(ownPowerLevel: RoomPowerLevel, permissions: RoomPermissions) {
+        let parameters = RoomChangePermissionsScreenCoordinatorParameters(ownPowerLevel: ownPowerLevel,
+                                                                          permissions: permissions,
                                                                           roomProxy: roomProxy,
                                                                           userIndicatorController: userIndicatorController,
                                                                           analytics: analytics)

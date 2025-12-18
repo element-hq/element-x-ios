@@ -17,7 +17,7 @@ struct RoomRolesAndPermissionsScreenCoordinatorParameters {
 
 enum RoomRolesAndPermissionsScreenCoordinatorAction {
     case editRoles(RoomRolesAndPermissionsScreenRole)
-    case editPermissions(permissions: RoomPermissions)
+    case editPermissions(ownPowerLevel: RoomPowerLevel, permissions: RoomPermissions)
     case demotedOwnUser
 }
 
@@ -44,8 +44,8 @@ final class RoomRolesAndPermissionsScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .editRoles(let role):
                 actionsSubject.send(.editRoles(role))
-            case .editPermissions(let permissions):
-                actionsSubject.send(.editPermissions(permissions: permissions))
+            case .editPermissions(let ownPowerLevel, let permissions):
+                actionsSubject.send(.editPermissions(ownPowerLevel: ownPowerLevel, permissions: permissions))
             case .demotedOwnUser:
                 actionsSubject.send(.demotedOwnUser)
             }

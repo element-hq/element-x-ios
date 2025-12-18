@@ -12,13 +12,13 @@ enum RoomRolesAndPermissionsScreenViewModelAction {
     /// The user would like to edit member roles.
     case editRoles(RoomRolesAndPermissionsScreenRole)
     /// The user would like to edit room permissions.
-    case editPermissions(permissions: RoomPermissions)
+    case editPermissions(ownPowerLevel: RoomPowerLevel, permissions: RoomPermissions)
     /// The user has demoted themself.
     case demotedOwnUser
 }
 
 struct RoomRolesAndPermissionsScreenViewState: BindableState {
-    var ownRole: RoomRole
+    var ownPowerLevel: RoomPowerLevel
     
     var administratorsAndOwnersCount: Int?
     /// The number of administrators in the room.

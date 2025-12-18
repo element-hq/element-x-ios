@@ -110,21 +110,25 @@ extension RoomRole {
     /// To be used when setting the power level of a user to get the suggested equivalent power level value for that specific role
     /// NOTE: Do not use for comparison, use the true power level instead.
     var powerLevelValue: Int64 {
+        switch powerLevel {
+        case .infinite:
+            fatalError("Impossible")
+        case .value(let value):
+            return Int64(value)
+        }
+    }
+    
+    var powerLevel: RoomPowerLevel {
         guard self != .owner else {
             // Would be better if the SDK would return this, maybe a `suggestedPowerLevelValueForRole` function would solve the problem
-            return 150
+            return .value(150)
         }
         
         do {
-            switch try suggestedPowerLevelForRole(role: rustRole) {
-            case .infinite:
-                fatalError("Impossible")
-            case .value(let value):
-                return value
-            }
+            return try RoomPowerLevel(rustPowerLevel: suggestedPowerLevelForRole(role: rustRole))
         } catch {
             MXLog.error("Falied to convert role to power level value: \(error)")
-            return 0
+            return .value(0)
         }
     }
 }

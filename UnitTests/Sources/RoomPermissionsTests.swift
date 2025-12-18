@@ -30,16 +30,16 @@ class RoomPermissionsTests: XCTestCase {
         let permissions = RoomPermissions(powerLevels: powerLevels)
         
         // Then the permissions should be created with values mapped to the correct role.
-        XCTAssertEqual(permissions.ban, .administrator)
-        XCTAssertEqual(permissions.invite, .administrator)
-        XCTAssertEqual(permissions.kick, .administrator)
-        XCTAssertEqual(permissions.redact, .moderator)
-        XCTAssertEqual(permissions.eventsDefault, .moderator)
-        XCTAssertEqual(permissions.stateDefault, .moderator)
-        XCTAssertEqual(permissions.usersDefault, .user)
-        XCTAssertEqual(permissions.roomName, .user)
-        XCTAssertEqual(permissions.roomAvatar, .user)
-        XCTAssertEqual(permissions.roomTopic, .user)
-        XCTAssertEqual(permissions.spaceChild, .administrator)
+        XCTAssertEqual(permissions.ban, RoomRole.administrator.powerLevelValue)
+        XCTAssertEqual(permissions.invite, RoomRole.administrator.powerLevelValue)
+        XCTAssertEqual(permissions.kick, RoomRole.administrator.powerLevelValue)
+        XCTAssertEqual(permissions.redact, RoomRole.moderator.powerLevelValue)
+        XCTAssertEqual(permissions.eventsDefault, RoomRole.moderator.powerLevelValue)
+        XCTAssertEqual(permissions.stateDefault, RoomRole.moderator.powerLevelValue)
+        XCTAssertEqual(permissions.usersDefault, RoomRole.user.powerLevelValue)
+        XCTAssertEqual(permissions.roomName, RoomRole.user.powerLevelValue)
+        XCTAssertEqual(permissions.roomAvatar, RoomRole.user.powerLevelValue)
+        XCTAssertEqual(permissions.roomTopic, RoomRole.user.powerLevelValue)
+        XCTAssertEqual(permissions.spaceChild, RoomRole.administrator.powerLevelValue)
     }
 }

@@ -10,6 +10,7 @@ import Combine
 import SwiftUI
 
 struct RoomChangePermissionsScreenCoordinatorParameters {
+    let ownPowerLevel: RoomPowerLevel
     let permissions: RoomPermissions
     let roomProxy: JoinedRoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -21,7 +22,6 @@ enum RoomChangePermissionsScreenCoordinatorAction {
 }
 
 final class RoomChangePermissionsScreenCoordinator: CoordinatorProtocol {
-    private let parameters: RoomChangePermissionsScreenCoordinatorParameters
     private var viewModel: RoomChangePermissionsScreenViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     
@@ -31,9 +31,8 @@ final class RoomChangePermissionsScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomChangePermissionsScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: parameters.permissions,
+                                                         ownPowerLevel: parameters.ownPowerLevel,
                                                          roomProxy: parameters.roomProxy,
                                                          userIndicatorController: parameters.userIndicatorController,
                                                          analytics: parameters.analytics)
