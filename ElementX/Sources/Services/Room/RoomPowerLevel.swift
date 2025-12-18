@@ -30,6 +30,10 @@ enum RoomPowerLevel: Hashable, Comparable {
         case .value(let value): .value(value: Int64(value))
         }
     }
+    
+    var role: RoomRole {
+        RoomRole(powerLevel: self)
+    }
 }
 
 extension PowerLevel {

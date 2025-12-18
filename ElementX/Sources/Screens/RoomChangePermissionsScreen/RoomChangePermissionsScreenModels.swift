@@ -69,7 +69,7 @@ extension RoomChangePermissionsScreenViewState {
     /// - Parameters:
     ///   - currentPermissions: The current permissions for the room.
     ///   - isSpace: if the room is a space or a normal room.
-    init(currentPermissions: RoomPermissions, isSpace: Bool) {
+    init(ownPowerLevel: RoomPowerLevel, currentPermissions: RoomPermissions, isSpace: Bool) {
         var settings = [RoomChangePermissionsScreenGroup: [RoomPermissionsSetting]]()
         for group in RoomChangePermissionsScreenGroup.allCases {
             switch group {
@@ -77,12 +77,15 @@ extension RoomChangePermissionsScreenViewState {
                 settings[group] = [
                     RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRoomName,
                                            value: currentPermissions.roomName,
+                                           ownPowerLevel: ownPowerLevel,
                                            keyPath: \.roomName),
                     RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRoomAvatar,
                                            value: currentPermissions.roomAvatar,
+                                           ownPowerLevel: ownPowerLevel,
                                            keyPath: \.roomAvatar),
                     RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRoomTopic,
                                            value: currentPermissions.roomTopic,
+                                           ownPowerLevel: ownPowerLevel,
                                            keyPath: \.roomTopic)
                 ]
                 
@@ -90,12 +93,15 @@ extension RoomChangePermissionsScreenViewState {
                 settings[group] = [
                     RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsInvitePeople,
                                            value: currentPermissions.invite,
+                                           ownPowerLevel: ownPowerLevel,
                                            keyPath: \.invite),
                     RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRemovePeople,
                                            value: currentPermissions.kick,
+                                           ownPowerLevel: ownPowerLevel,
                                            keyPath: \.kick),
                     RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsBanPeople,
                                            value: currentPermissions.ban,
+                                           ownPowerLevel: ownPowerLevel,
                                            keyPath: \.ban)
                 ]
             case .messagesAndContent:
@@ -103,9 +109,11 @@ extension RoomChangePermissionsScreenViewState {
                     settings[group] = [
                         RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsSendMessages,
                                                value: currentPermissions.eventsDefault,
+                                               ownPowerLevel: ownPowerLevel,
                                                keyPath: \.eventsDefault),
                         RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsDeleteMessages,
                                                value: currentPermissions.redact,
+                                               ownPowerLevel: ownPowerLevel,
                                                keyPath: \.redact)
                     ]
                 }
@@ -114,6 +122,7 @@ extension RoomChangePermissionsScreenViewState {
                     settings[group] = [
                         RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsManageSpaceRooms,
                                                value: currentPermissions.spaceChild,
+                                               ownPowerLevel: ownPowerLevel,
                                                keyPath: \.spaceChild)
                     ]
                 }

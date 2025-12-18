@@ -26,7 +26,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
-        super.init(initialViewState: RoomRolesAndPermissionsScreenViewState(ownRole: roomProxy.membersPublisher.value.first { $0.userID == roomProxy.ownUserID }?.role ?? .administrator,
+        super.init(initialViewState: RoomRolesAndPermissionsScreenViewState(ownPowerLevel: roomProxy.membersPublisher.value.first { $0.userID == roomProxy.ownUserID }?.powerLevel ?? .value(Int(RoomRole.administrator.powerLevelValue)),
                                                                             permissions: initialPermissions))
         
         // Automatically update the admin/moderator counts.
@@ -91,7 +91,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         state.administratorCount = members.filter { $0.role == .administrator && $0.isActive }.count
         state.moderatorCount = members.filter { $0.role == .moderator && $0.isActive }.count
         if let ownUser = members.first(where: { $0.userID == roomProxy.ownUserID }) {
-            state.ownRole = ownUser.role
+            state.ownPowerLevel = ownUser.powerLevel
         }
     }
     
@@ -132,7 +132,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
             MXLog.error("Missing permissions.")
             return
         }
-        actionsSubject.send(.editPermissions(permissions: permissions))
+        actionsSubject.send(.editPermissions(ownPowerLevel: state.ownPowerLevel, permissions: permissions))
     }
     
     private func resetPermissions() async {
