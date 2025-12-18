@@ -4642,6 +4642,71 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return clearCachesReturnValue
         }
     }
+    //MARK: - optimizeStores
+
+    var optimizeStoresUnderlyingCallsCount = 0
+    var optimizeStoresCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return optimizeStoresUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = optimizeStoresUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                optimizeStoresUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    optimizeStoresUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var optimizeStoresCalled: Bool {
+        return optimizeStoresCallsCount > 0
+    }
+
+    var optimizeStoresUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var optimizeStoresReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return optimizeStoresUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = optimizeStoresUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                optimizeStoresUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    optimizeStoresUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var optimizeStoresClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    @discardableResult
+    func optimizeStores() async -> Result<Void, ClientProxyError> {
+        optimizeStoresCallsCount += 1
+        if let optimizeStoresClosure = optimizeStoresClosure {
+            return await optimizeStoresClosure()
+        } else {
+            return optimizeStoresReturnValue
+        }
+    }
     //MARK: - fetchMediaPreviewConfiguration
 
     var fetchMediaPreviewConfigurationUnderlyingCallsCount = 0
