@@ -31,9 +31,10 @@ struct SpaceScreenViewState: BindableState {
     
     var canEditBaseInfo = false
     var canEditRolesAndPermissions = false
+    var canEditSecurityAndPrivacy = false
     
     var isSpaceManagementEnabled: Bool {
-        canEditBaseInfo || canEditRolesAndPermissions
+        canEditBaseInfo || canEditRolesAndPermissions || canEditSecurityAndPrivacy
     }
     
     var bindings = SpaceScreenViewStateBindings()
