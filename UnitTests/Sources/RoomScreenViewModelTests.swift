@@ -445,7 +445,7 @@ class RoomScreenViewModelTests: XCTestCase {
         ServiceLocator.shared.settings.enableKeyShareOnInvite = false
         ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms = Set()
         
-        let configuration = JoinedRoomProxyMockConfiguration(isEncrypted: false)
+        let configuration = JoinedRoomProxyMockConfiguration(isEncrypted: true)
         let roomProxyMock = JoinedRoomProxyMock(configuration)
         
         let roomInfoProxyMock = RoomInfoProxyMock(configuration)
@@ -490,11 +490,11 @@ class RoomScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
 
-    func testHistoryVisibleBannerDoesNotAppearIfJoined() async throws {
+    func testHistoryVisibleBannerDoesNotAppearIfJoinedOrInvited() async throws {
         ServiceLocator.shared.settings.enableKeyShareOnInvite = true
         ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms = Set()
         
-        let configuration = JoinedRoomProxyMockConfiguration(isEncrypted: false)
+        let configuration = JoinedRoomProxyMockConfiguration(isEncrypted: true)
         let roomProxyMock = JoinedRoomProxyMock(configuration)
 
         let roomInfoProxyMock = RoomInfoProxyMock(configuration)
@@ -514,7 +514,14 @@ class RoomScreenViewModelTests: XCTestCase {
 
         self.viewModel = viewModel
 
-        let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { $0.footerDetails != nil }
+        var deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { $0.footerDetails != nil }
+        try await deferred.fulfill()
+        
+        // Update visibility to invited
+        roomInfoProxyMock.historyVisibility = .invited
+        infoSubject.send(roomInfoProxyMock)
+        
+        deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { $0.footerDetails != nil }
         try await deferred.fulfill()
     }
 
@@ -523,7 +530,7 @@ class RoomScreenViewModelTests: XCTestCase {
         ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms = Set()
         ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms.insert("$room:example.com")
 
-        let configuration = JoinedRoomProxyMockConfiguration(id: "$room:example.com", isEncrypted: false)
+        let configuration = JoinedRoomProxyMockConfiguration(id: "$room:example.com", isEncrypted: true)
         let roomProxyMock = JoinedRoomProxyMock(configuration)
 
         let roomInfoProxyMock = RoomInfoProxyMock(configuration)
