@@ -49,7 +49,7 @@ extension RoomPowerLevelsProxyProtocol {
     func canOwnUserEditSecurityAndPrivacy(isSpace: Bool, joinRule: JoinRule?) -> Bool {
         let canOwnUserChangeAddress = switch joinRule {
         case .knockRestricted, .knock, .public:
-            canOwnUser(sendStateEvent: .roomAliases)
+            canOwnUser(sendStateEvent: .roomCanonicalAlias)
         default:
             false
         }
