@@ -88,10 +88,13 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                         guard isEnabled, let powerLevels = roomInfo.powerLevels else {
                             state.canEditBaseInfo = false
                             state.canEditRolesAndPermissions = false
+                            state.canEditSecurityAndPrivacy = false
                             return
                         }
                         state.canEditBaseInfo = powerLevels.canOwnUserEditBaseInfo()
                         state.canEditRolesAndPermissions = powerLevels.canOwnUserEditRolesAndPermissions()
+                        state.canEditSecurityAndPrivacy = powerLevels.canOwnUserEditSecurityAndPrivacy(isSpace: roomInfo.isSpace,
+                                                                                                       joinRule: roomInfo.joinRule)
                     }
                     .store(in: &cancellables)
             }
