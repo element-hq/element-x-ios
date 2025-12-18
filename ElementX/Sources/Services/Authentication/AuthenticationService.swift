@@ -185,7 +185,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 
                 switch await userSession(for: client) {
                 case .success(let userSession):
-                    progressSubject.send(.done(userSession))
+                    progressSubject.send(.signedIn(userSession))
                 case .failure(let error):
                     progressSubject.send(completion: .failure(error))
                 }

@@ -12,7 +12,7 @@ struct QRCodeErrorView: View {
     let errorState: QRCodeLoginState.ErrorState
     let canSignInManually: Bool
     
-    enum Action { case openSettings, startScan, signInManually, cancel }
+    enum Action { case openSettings, startOver, signInManually, dismiss }
     let action: (Action) -> Void
     
     var title: String {
@@ -127,12 +127,12 @@ struct QRCodeErrorView: View {
             .buttonStyle(.compound(.primary))
         case .connectionNotSecure, .unknown, .expired, .declined, .deviceNotSupported:
             Button(L10n.screenQrCodeLoginStartOverButton) {
-                action(.startScan)
+                action(.startOver)
             }
             .buttonStyle(.compound(.primary))
         case .cancelled:
             Button(L10n.actionTryAgain) {
-                action(.startScan)
+                action(.startOver)
             }
             .buttonStyle(.compound(.primary))
         case .linkingNotSupported:
@@ -145,13 +145,13 @@ struct QRCodeErrorView: View {
                 }
                 
                 Button(L10n.actionCancel) {
-                    action(.cancel)
+                    action(.dismiss)
                 }
                 .buttonStyle(.compound(.tertiary))
             }
         case .deviceAlreadySignedIn:
             Button(L10n.actionContinue) {
-                action(.cancel)
+                action(.dismiss)
             }
             .buttonStyle(.compound(.primary))
         }

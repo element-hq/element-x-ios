@@ -275,10 +275,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "LegalInformationScreen_Previews")
     }
 
-    func testLinkNewDeviceQRCodeScreen() async throws {
-        try await performAccessibilityAudit(named: "LinkNewDeviceQRCodeScreen_Previews")
-    }
-
     func testLinkNewDeviceScreen() async throws {
         try await performAccessibilityAudit(named: "LinkNewDeviceScreen_Previews")
     }

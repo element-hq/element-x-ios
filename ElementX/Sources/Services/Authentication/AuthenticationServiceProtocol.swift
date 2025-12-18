@@ -120,7 +120,7 @@ enum QRLoginProgress {
     case establishingSecureChannel(checkCode: UInt8, checkCodeString: String)
     case waitingForToken(userCode: String)
     case syncingSecrets
-    case done(UserSessionProtocol)
+    case signedIn(UserSessionProtocol)
     
     init?(rustProgress: QrLoginProgress) {
         switch rustProgress {
@@ -134,6 +134,35 @@ enum QRLoginProgress {
             self = .syncingSecrets
         case .done:
             return nil // The SDK is done, but the app still needs to set up the UserSession.
+        }
+    }
+}
+
+extension QRLoginProgress: Equatable, CustomStringConvertible {
+    static func == (lhs: QRLoginProgress, rhs: QRLoginProgress) -> Bool {
+        switch (lhs, rhs) {
+        case (.starting, .starting):
+            true
+        case let (.establishingSecureChannel(lhsCheckCode, lhsCheckCodeString), .establishingSecureChannel(rhsCheckCode, rhsCheckCodeString)):
+            lhsCheckCode == rhsCheckCode && lhsCheckCodeString == rhsCheckCodeString
+        case let (.waitingForToken(lhsUserCode), .waitingForToken(rhsUserCode)):
+            lhsUserCode == rhsUserCode
+        case (.syncingSecrets, .syncingSecrets):
+            true
+        case (.signedIn, .signedIn):
+            true
+        default:
+            false
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .starting: "starting"
+        case .establishingSecureChannel: "establishingSecureChannel"
+        case .waitingForToken: "waitingForToken"
+        case .syncingSecrets: "syncingSecrets"
+        case .signedIn: "signedIn"
         }
     }
 }

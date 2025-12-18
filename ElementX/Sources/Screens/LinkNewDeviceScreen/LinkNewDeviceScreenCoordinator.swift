@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 enum LinkNewDeviceScreenCoordinatorAction {
-    case linkMobileDevice(LinkNewDeviceService.GenerateProgressPublisher)
+    case linkMobileDevice(LinkNewDeviceService.LinkMobileProgressPublisher)
     case linkDesktopComputer
     case dismiss
 }

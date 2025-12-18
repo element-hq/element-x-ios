@@ -57,7 +57,7 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         
         let linkNewDeviceService = clientProxy.linkNewDeviceService()
         
-        let progressPublisher = linkNewDeviceService.generateQRCode()
+        let progressPublisher = linkNewDeviceService.linkMobileDevice()
         
         do {
             _ = try await progressPublisher.values

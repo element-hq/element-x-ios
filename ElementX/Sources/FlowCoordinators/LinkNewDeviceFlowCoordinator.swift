@@ -50,9 +50,9 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .linkMobileDevice(let progressPublisher):
-                    presentLinkNewDeviceQRCodeScreen(mode: .generateQRCode(progressPublisher))
+                    presentQRCodeScreen(mode: .linkMobile(progressPublisher))
                 case .linkDesktopComputer:
-                    presentLinkNewDeviceQRCodeScreen(mode: .scanQRCode)
+                    presentQRCodeScreen(mode: .linkDesktop(flowParameters.userSession.clientProxy.linkNewDeviceService()))
                 case .dismiss:
                     actionsSubject.send(.dismiss)
                 }
@@ -62,21 +62,20 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
-    private func presentLinkNewDeviceQRCodeScreen(mode: LinkNewDeviceQRCodeScreenMode) {
-        let coordinator = LinkNewDeviceQRCodeScreenCoordinator(parameters: .init(mode: mode,
-                                                                                 linkNewDeviceService: flowParameters.userSession.clientProxy.linkNewDeviceService(),
-                                                                                 orientationManager: flowParameters.appMediator.windowManager,
-                                                                                 appMediator: flowParameters.appMediator,
-                                                                                 appSettings: flowParameters.appSettings))
+    private func presentQRCodeScreen(mode: QRCodeLoginScreenMode) {
+        let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(mode: mode,
+                                                                         canSignInManually: false, // No need to worry about this when linking a device.
+                                                                         orientationManager: flowParameters.appMediator.windowManager,
+                                                                         appMediator: flowParameters.appMediator))
         coordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
                 
                 switch action {
-                case .cancel:
+                case .signInManually, .signedIn:
+                    fatalError("QR linking shouldn't send sign-in actions.")
+                case .dismiss:
                     navigationStackCoordinator.pop()
-                case .done:
-                    actionsSubject.send(.dismiss)
                 case .requestOIDCAuthorisation(let url):
                     actionsSubject.send(.requestOIDCAuthorisation(url))
                 }
