@@ -15,7 +15,17 @@ enum DeveloperOptionsScreenViewModelAction {
 struct DeveloperOptionsScreenViewState: BindableState {
     let elementCallBaseURL: URL
     let appHooks: AppHooks
+    var storeSizes: [StoreSize]?
     var bindings: DeveloperOptionsScreenViewStateBindings
+    
+    struct StoreSize: Identifiable {
+        let name: String
+        let size: String
+        
+        var id: String {
+            name + size
+        }
+    }
 }
 
 // periphery: ignore - subscripts are seen as false positive

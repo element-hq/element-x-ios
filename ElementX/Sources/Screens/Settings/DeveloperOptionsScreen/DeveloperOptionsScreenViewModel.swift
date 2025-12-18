@@ -18,11 +18,32 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(developerOptions: DeveloperOptionsProtocol, elementCallBaseURL: URL, appHooks: AppHooks) {
-        let bindings = DeveloperOptionsScreenViewStateBindings(developerOptions: developerOptions)
-        let state = DeveloperOptionsScreenViewState(elementCallBaseURL: elementCallBaseURL, appHooks: appHooks, bindings: bindings)
+    init(developerOptions: DeveloperOptionsProtocol, elementCallBaseURL: URL, appHooks: AppHooks, clientProxy: ClientProxyProtocol) {
+        super.init(initialViewState: .init(elementCallBaseURL: elementCallBaseURL,
+                                           appHooks: appHooks,
+                                           bindings: .init(developerOptions: developerOptions)))
         
-        super.init(initialViewState: state)
+        Task {
+            if case let .success(sizes) = await clientProxy.storeSizes() {
+                let formatter = ByteCountFormatStyle(style: .file)
+                
+                var components = [DeveloperOptionsScreenViewState.StoreSize]()
+                if let cryptoStore = sizes.cryptoStore {
+                    components.append(.init(name: "CryptoStore", size: formatter.format(Int64(cryptoStore))))
+                }
+                if let stateStore = sizes.stateStore {
+                    components.append(.init(name: "StateStore", size: formatter.format(Int64(stateStore))))
+                }
+                if let eventCacheStore = sizes.eventCacheStore {
+                    components.append(.init(name: "EventCacheStore", size: formatter.format(Int64(eventCacheStore))))
+                }
+                if let mediaStore = sizes.mediaStore {
+                    components.append(.init(name: "MediaStore", size: formatter.format(Int64(mediaStore))))
+                }
+            
+                state.storeSizes = components
+            }
+        }
     }
     
     override func process(viewAction: DeveloperOptionsScreenViewAction) {

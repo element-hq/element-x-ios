@@ -217,6 +217,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     @discardableResult func optimizeStores() async -> Result<Void, ClientProxyError>
     
+    func storeSizes() async -> Result<StoreSizes, ClientProxyError>
+    
     func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError>
 
     // MARK: - Ignored users
