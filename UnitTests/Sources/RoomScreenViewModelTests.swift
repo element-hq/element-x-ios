@@ -641,5 +641,3 @@ class RoomScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
 }
-
-g
