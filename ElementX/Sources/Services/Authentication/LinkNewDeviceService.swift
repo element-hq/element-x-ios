@@ -84,7 +84,8 @@ class LinkNewDeviceService {
             return progressSubject.asCurrentValuePublisher()
         }
         
-        #warning("Check intent/server name here…")
+        #warning("Check intent/server name??")
+        #warning("Check Element Pro here??")
         
         Task {
             do {

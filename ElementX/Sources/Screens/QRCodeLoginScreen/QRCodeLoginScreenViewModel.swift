@@ -60,29 +60,6 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 self?.handleScan(qrData: qrData)
             }
             .store(in: &cancellables)
-        
-        qrCodeLoginService.qrLoginProgressPublisher
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] progress in
-                MXLog.info("QR Login Progress changed to: \(progress)")
-
-                guard let self,
-                      // Let's not advance the state if the current state is already invalid
-                      !state.state.isError else {
-                    return
-                }
-                
-                switch progress {
-                case .establishingSecureChannel(_, let stringCode):
-                    state.state = .displayCode(.deviceCode(stringCode))
-                case .waitingForToken(let code):
-                    state.state = .displayCode(.verificationCode(code))
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
     }
     
     private func startScanIfPossible() async {
@@ -91,31 +68,53 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
     
     private func handleScan(qrData: Data) {
-        guard scanTask == nil else {
-            return
-        }
+        guard scanTask == nil else { return }
         
         state.state = .scan(.connecting)
         
         scanTask = Task { [weak self] in
-            guard let self else {
-                return
-            }
+            guard let self else { return }
+            defer { scanTask = nil }
             
-            defer {
-                scanTask = nil
-            }
+            let progressPublisher = qrCodeLoginService.loginWithQRCode(data: qrData)
             
-            MXLog.info("Scanning QR code: \(qrData)")
-            switch await qrCodeLoginService.loginWithQRCode(data: qrData) {
-            case let .success(session):
-                MXLog.info("QR Login completed")
-                actionsSubject.send(.done(userSession: session))
-            case .failure(.qrCodeError(let error)):
-                handleError(error)
-            case .failure:
-                handleError(.unknown)
-            }
+            progressPublisher
+                // .removeDuplicates() FIXME: not Equatable
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    guard let self else { return }
+                    
+                    switch completion {
+                    case .finished: break
+                    case .failure(.qrCodeError(let error)):
+                        handleError(error)
+                    case .failure:
+                        handleError(.unknown)
+                    }
+                } receiveValue: { [weak self] progress in
+                    MXLog.info("QR Login Progress changed to: \(progress)")
+                    
+                    guard let self,
+                          // Let's not advance the state if the current state is already invalid
+                          !state.state.isError else {
+                        return
+                    }
+                    
+                    switch progress {
+                    case .starting:
+                        break // The UI is updated above, nothing to do.
+                    case .establishingSecureChannel(_, let stringCode):
+                        state.state = .displayCode(.deviceCode(stringCode))
+                    case .waitingForToken(let code):
+                        state.state = .displayCode(.verificationCode(code))
+                    case .syncingSecrets:
+                        break // Nothing to do.
+                    case .done(let session):
+                        MXLog.info("QR Login completed")
+                        actionsSubject.send(.done(userSession: session))
+                    }
+                }
+                .store(in: &cancellables)
         }
     }
     

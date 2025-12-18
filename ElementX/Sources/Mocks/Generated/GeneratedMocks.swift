@@ -13732,11 +13732,6 @@ class PollInteractionHandlerMock: PollInteractionHandlerProtocol, @unchecked Sen
     }
 }
 class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol, @unchecked Sendable {
-    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
-        get { return underlyingQrLoginProgressPublisher }
-        set(value) { underlyingQrLoginProgressPublisher = value }
-    }
-    var underlyingQrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never>!
 
     //MARK: - loginWithQRCode
 
@@ -13770,13 +13765,13 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol, @unchecked Sendable {
     var loginWithQRCodeDataReceivedData: Data?
     var loginWithQRCodeDataReceivedInvocations: [Data] = []
 
-    var loginWithQRCodeDataUnderlyingReturnValue: Result<UserSessionProtocol, AuthenticationServiceError>!
-    var loginWithQRCodeDataReturnValue: Result<UserSessionProtocol, AuthenticationServiceError>! {
+    var loginWithQRCodeDataUnderlyingReturnValue: QRLoginProgressPublisher!
+    var loginWithQRCodeDataReturnValue: QRLoginProgressPublisher! {
         get {
             if Thread.isMainThread {
                 return loginWithQRCodeDataUnderlyingReturnValue
             } else {
-                var returnValue: Result<UserSessionProtocol, AuthenticationServiceError>? = nil
+                var returnValue: QRLoginProgressPublisher? = nil
                 DispatchQueue.main.sync {
                     returnValue = loginWithQRCodeDataUnderlyingReturnValue
                 }
@@ -13794,16 +13789,16 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol, @unchecked Sendable {
             }
         }
     }
-    var loginWithQRCodeDataClosure: ((Data) async -> Result<UserSessionProtocol, AuthenticationServiceError>)?
+    var loginWithQRCodeDataClosure: ((Data) -> QRLoginProgressPublisher)?
 
-    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func loginWithQRCode(data: Data) -> QRLoginProgressPublisher {
         loginWithQRCodeDataCallsCount += 1
         loginWithQRCodeDataReceivedData = data
         DispatchQueue.main.async {
             self.loginWithQRCodeDataReceivedInvocations.append(data)
         }
         if let loginWithQRCodeDataClosure = loginWithQRCodeDataClosure {
-            return await loginWithQRCodeDataClosure(data)
+            return loginWithQRCodeDataClosure(data)
         } else {
             return loginWithQRCodeDataReturnValue
         }

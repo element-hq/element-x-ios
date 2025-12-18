@@ -15,7 +15,7 @@ import MatrixRustSDK
 
 @MainActor
 final class QRCodeLoginScreenViewModelTests: XCTestCase {
-    private var qrProgressSubject: PassthroughSubject<QrLoginProgress, Never>!
+    private var qrProgressSubject: CurrentValueSubject<QRLoginProgress, AuthenticationServiceError>!
     private var qrServiceMock: QRCodeLoginServiceMock!
     private var appMediatorMock: AppMediatorMock!
     private var viewModel: QRCodeLoginScreenViewModelProtocol!
@@ -25,9 +25,9 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
     }
     
     override func setUp() {
-        qrProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
+        qrProgressSubject = .init(.starting)
         qrServiceMock = QRCodeLoginServiceMock()
-        qrServiceMock.underlyingQrLoginProgressPublisher = qrProgressSubject.eraseToAnyPublisher()
+        qrServiceMock.loginWithQRCodeDataReturnValue = qrProgressSubject.asCurrentValuePublisher()
         appMediatorMock = AppMediatorMock.default
         viewModel = QRCodeLoginScreenViewModel(qrCodeLoginService: qrServiceMock,
                                                canSignInManually: true,
@@ -60,14 +60,6 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
     }
     
     func testLogin() async throws {
-        var isCompleted = false
-        qrServiceMock.loginWithQRCodeDataClosure = { _ in
-            while !isCompleted {
-                await Task.yield()
-            }
-            return .success(UserSessionMock(.init(clientProxy: ClientProxyMock())))
-        }
-        
         XCTAssert(context.viewState.state == .initial)
         
         var deferred = deferFulfillment(context.$viewState) { state in
@@ -97,14 +89,11 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
         
         let deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
             switch action {
-            case .done:
-                return true
-            default:
-                return false
+            case .done: true
+            default: false
             }
         }
-        qrProgressSubject.send(.done)
-        isCompleted = true
+        qrProgressSubject.send(.done(UserSessionMock(.init(clientProxy: ClientProxyMock()))))
         try await deferredAction.fulfill()
     }
 }
