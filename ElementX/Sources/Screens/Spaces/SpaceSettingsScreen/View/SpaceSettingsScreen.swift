@@ -14,7 +14,7 @@ struct SpaceSettingsScreen: View {
     var body: some View {
         Form {
             editSection
-            if context.viewState.canEditRolesOrPermissions {
+            if context.viewState.canSeeSecurityAndPrivacy {
                 securitySection
             }
             peopleSection
