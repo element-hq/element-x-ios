@@ -24,7 +24,7 @@ final class AVMetadataMachineReadableCodeObjectExtensionsTest: XCTestCase {
             return
         }
         
-        guard let resultData = AVMetadataMachineReadableCodeObject.removeQrProtocolData(data, symbolVersion: symbolVersion) else {
+        guard let resultData = try? AVMetadataMachineReadableCodeObject.removeQRProtocolData(data, symbolVersion: symbolVersion) else {
             XCTFail("Could not remove the protocol data")
             return
         }

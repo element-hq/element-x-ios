@@ -41,16 +41,18 @@ struct QRCodeScannerView: UIViewControllerRepresentable {
      
         func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
             // Check if the metadataObjects array is not nil and it contains at least one object.
-            guard metadataObjects.count > 0,
-                  let metadataObj = metadataObjects[0] as? AVMetadataMachineReadableCodeObject,
-                  metadataObj.type == AVMetadataObject.ObjectType.qr,
-                  let data = metadataObj.binaryValue else {
-                MXLog.info("QRCodeScannerView: invalid qr scan")
+            guard let metadataObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject else {
+                MXLog.error("Invalid QR scan")
                 return
             }
             
-            scanResult = data
-            MXLog.info("QRCodeScannerView: scanned data")
+            do {
+                let data = try metadataObject.qrBinaryValue
+                scanResult = data
+                MXLog.info("Scanned data")
+            } catch {
+                MXLog.error("Invalid QR code: \(error)")
+            }
         }
     }
 }
