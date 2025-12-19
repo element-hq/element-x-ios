@@ -353,8 +353,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if isHistoryVisible, !isHistoryVisibleBannerAcknowledged {
                 // Whenever the user opens an encrypted room with shared/world-readable history visbility, we show them a warning banner if they have not already dismissed it.
                 state.historyVisibleDetails = .historyVisible(learnMoreURL: appSettings.historySharingDetailsURL)
-            }
-            if !isHistoryVisible, isHistoryVisibleBannerAcknowledged {
+            } else if !isHistoryVisible, isHistoryVisibleBannerAcknowledged {
                 // Whenever the user opens a room with non-shared history visibility, we clear the dismiss flag to ensure that the banner is displayed again if the history is made visible in the future.
                 appSettings.acknowledgedHistoryVisibleRooms.remove(roomInfo.id)
                 state.historyVisibleDetails = nil
