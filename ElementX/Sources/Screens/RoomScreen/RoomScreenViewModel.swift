@@ -101,6 +101,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 Task { await resolveIdentityPinningViolation(userID) }
             case .resolveVerificationViolation(let userID):
                 Task { await resolveIdentityVerificationViolation(userID) }
+            case .dismissHistoryVisibleAlert:
+                appSettings.acknowledgedHistoryVisibleRooms.insert(roomProxy.id)
+                state.historyVisibleDetails = nil
             }
         case .acceptKnock(let eventID):
             Task { await acceptKnock(eventID: eventID) }
@@ -244,13 +247,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         if let member = identityVerificationViolations.values.first {
-            state.footerDetails = .verificationViolation(member: member,
-                                                         learnMoreURL: appSettings.identityPinningViolationDetailsURL)
+            state.identityViolationDetails = .verificationViolation(member: member,
+                                                                    learnMoreURL: appSettings.identityPinningViolationDetailsURL)
         } else if let member = identityPinningViolations.values.first {
-            state.footerDetails = .pinViolation(member: member,
-                                                learnMoreURL: appSettings.identityPinningViolationDetailsURL)
+            state.identityViolationDetails = .pinViolation(member: member,
+                                                           learnMoreURL: appSettings.identityPinningViolationDetailsURL)
         } else {
-            state.footerDetails = nil
+            state.identityViolationDetails = nil
         }
     }
     
@@ -341,6 +344,20 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canAcceptKnocks = powerLevels.canOwnUserInvite()
             state.canDeclineKnocks = powerLevels.canOwnUserKick()
             state.canBan = powerLevels.canOwnUserBan()
+        }
+        
+        let isHistoryVisible = roomInfo.historyVisibility == .shared || roomInfo.historyVisibility == .worldReadable
+        let isHistoryVisibleBannerAcknowledged = appSettings.acknowledgedHistoryVisibleRooms.contains(roomInfo.id)
+
+        if appSettings.enableKeyShareOnInvite, roomInfo.isEncrypted {
+            if isHistoryVisible, !isHistoryVisibleBannerAcknowledged {
+                // Whenever the user opens an encrypted room with shared/world-readable history visbility, we show them a warning banner if they have not already dismissed it.
+                state.historyVisibleDetails = .historyVisible(learnMoreURL: appSettings.historySharingDetailsURL)
+            } else if !isHistoryVisible, isHistoryVisibleBannerAcknowledged {
+                // Whenever the user opens a room with non-shared history visibility, we clear the dismiss flag to ensure that the banner is displayed again if the history is made visible in the future.
+                appSettings.acknowledgedHistoryVisibleRooms.remove(roomInfo.id)
+                state.historyVisibleDetails = nil
+            }
         }
     }
     
