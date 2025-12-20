@@ -133,7 +133,6 @@
 "action_retry" = "Prøv igen";
 "action_retry_decryption" = "Prøv at dekryptere igen";
 "action_save" = "Gem";
-"action_translate" = "Oversæt";
 "action_search" = "Søg";
 "action_select_all" = "Vælg alle";
 "action_send" = "Send";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Tryk for at indlæse kort";
 "action_take_photo" = "Tag billede";
 "action_tap_for_options" = "Tryk for indstillinger";
+"action_translate" = "Translate";
 "action_try_again" = "Prøv igen";
 "action_unpin" = "Frigør";
 "action_view" = "Vis";

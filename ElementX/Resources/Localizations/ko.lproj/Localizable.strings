@@ -133,7 +133,6 @@
 "action_retry" = "재시도";
 "action_retry_decryption" = "복호화 재시도";
 "action_save" = "저장";
-"action_translate" = "번역";
 "action_search" = "검색";
 "action_select_all" = "Select all";
 "action_send" = "보내기";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "탭해서 지도 불러오기";
 "action_take_photo" = "사진 찍기";
 "action_tap_for_options" = "옵션을 보려면 탭하세요";
+"action_translate" = "Translate";
 "action_try_again" = "다시 시도하기";
 "action_unpin" = "고정 해제";
 "action_view" = "보기";

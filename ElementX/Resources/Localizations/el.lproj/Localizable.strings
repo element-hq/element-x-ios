@@ -133,7 +133,6 @@
 "action_retry" = "Επανάληψη";
 "action_retry_decryption" = "Επανάληψη αποκρυπτογράφησης";
 "action_save" = "Αποθήκευση";
-"action_translate" = "Μετάφραση";
 "action_search" = "Αναζήτηση";
 "action_select_all" = "Select all";
 "action_send" = "Αποστολή";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Πάτα για φόρτωση χάρτη";
 "action_take_photo" = "Τράβηξε φωτογραφία";
 "action_tap_for_options" = "Πάτα για επιλογές";
+"action_translate" = "Translate";
 "action_try_again" = "Προσπάθησε ξανά";
 "action_unpin" = "Ξεκαρφίτσωμα";
 "action_view" = "View";

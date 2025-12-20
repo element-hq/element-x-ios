@@ -133,7 +133,6 @@
 "action_retry" = "Opnieuw proberen";
 "action_retry_decryption" = "Decryptie opnieuw proberen";
 "action_save" = "Opslaan";
-"action_translate" = "Vertalen";
 "action_search" = "Zoeken";
 "action_select_all" = "Select all";
 "action_send" = "Verzenden";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Tik om kaart te laden";
 "action_take_photo" = "Foto maken";
 "action_tap_for_options" = "Tik voor opties";
+"action_translate" = "Translate";
 "action_try_again" = "Probeer het opnieuw";
 "action_unpin" = "Losmaken";
 "action_view" = "Bekijken";

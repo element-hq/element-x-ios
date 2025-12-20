@@ -133,7 +133,6 @@
 "action_retry" = "Yritä uudelleen";
 "action_retry_decryption" = "Yritä salauksen purkamista uudelleen";
 "action_save" = "Tallenna";
-"action_translate" = "Käännä";
 "action_search" = "Hae";
 "action_select_all" = "Valitse kaikki";
 "action_send" = "Lähetä";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Lataa kartta napauttamalla";
 "action_take_photo" = "Ota kuva";
 "action_tap_for_options" = "Näytä vaihtoehdot napauttamalla";
+"action_translate" = "Translate";
 "action_try_again" = "Yritä uudelleen";
 "action_unpin" = "Poista kiinnitys";
 "action_view" = "Näytä";

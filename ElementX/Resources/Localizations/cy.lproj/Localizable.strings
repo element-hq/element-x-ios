@@ -133,7 +133,6 @@
 "action_retry" = "Ceisio eto";
 "action_retry_decryption" = "Cynnig arall ar ddadgryptio";
 "action_save" = "Cadw";
-"action_translate" = "Cyfieithu";
 "action_search" = "Chwilio";
 "action_select_all" = "Dewis y cyfan";
 "action_send" = "Anfon";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Tapio i lwytho map";
 "action_take_photo" = "Cymryd llun";
 "action_tap_for_options" = "Tapio am ddewisiadau";
+"action_translate" = "Translate";
 "action_try_again" = "Ceisiwch eto";
 "action_unpin" = "Dad-binio";
 "action_view" = "Golwg";

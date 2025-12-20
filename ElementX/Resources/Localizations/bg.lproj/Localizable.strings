@@ -133,7 +133,6 @@
 "action_retry" = "Повторен опит";
 "action_retry_decryption" = "Повторен опит за разшифроване";
 "action_save" = "Запазване";
-"action_translate" = "Превод";
 "action_search" = "Търсене";
 "action_select_all" = "Select all";
 "action_send" = "Изпращане";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Докоснете за зареждане на карта";
 "action_take_photo" = "Снимка";
 "action_tap_for_options" = "Докоснете за опции";
+"action_translate" = "Translate";
 "action_try_again" = "Повторен опит";
 "action_unpin" = "Откачване";
 "action_view" = "View";

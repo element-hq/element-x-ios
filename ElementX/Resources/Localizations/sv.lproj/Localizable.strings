@@ -133,7 +133,6 @@
 "action_retry" = "Försök igen";
 "action_retry_decryption" = "Försök att avkryptera igen";
 "action_save" = "Spara";
-"action_translate" = "Översätt";
 "action_search" = "Sök";
 "action_select_all" = "Select all";
 "action_send" = "Skicka";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Tryck för att ladda kartan";
 "action_take_photo" = "Ta ett foto";
 "action_tap_for_options" = "Tryck för alternativ";
+"action_translate" = "Translate";
 "action_try_again" = "Försök igen";
 "action_unpin" = "Frigör";
 "action_view" = "Visa";

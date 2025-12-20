@@ -133,7 +133,6 @@
 "action_retry" = "Saiatu berriro";
 "action_retry_decryption" = "Saiatu berriro deszifratzen";
 "action_save" = "Gorde";
-"action_translate" = "Itzuli";
 "action_search" = "Bilatu";
 "action_select_all" = "Select all";
 "action_send" = "Bidali";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Sakatu mapa kargatzeko";
 "action_take_photo" = "Egin argazkia";
 "action_tap_for_options" = "Sakatu aukerak ikusteko";
+"action_translate" = "Translate";
 "action_try_again" = "Saiatu berriro";
 "action_unpin" = "Utzi finkatzeari";
 "action_view" = "Ikusi";

@@ -133,7 +133,6 @@
 "action_retry" = "ხელახლა ცდა";
 "action_retry_decryption" = "გაშიფვრის ხელახლა ცდა";
 "action_save" = "შენახვა";
-"action_translate" = "თარგმნა";
 "action_search" = "ძიება";
 "action_select_all" = "Select all";
 "action_send" = "გაგზავნა";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "დააწკაპუნეთ რუკის ჩასატვირთად";
 "action_take_photo" = "ფოტოს გადაღება";
 "action_tap_for_options" = "შეეხეთ ვარიანტების სანახავად";
+"action_translate" = "Translate";
 "action_try_again" = "ხელახლა ცდა";
 "action_unpin" = "Unpin";
 "action_view" = "View";

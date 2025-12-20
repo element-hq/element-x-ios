@@ -133,7 +133,6 @@
 "action_retry" = "Spróbuj ponownie";
 "action_retry_decryption" = "Ponów próbę odszyfrowania";
 "action_save" = "Zapisz";
-"action_translate" = "Przetłumacz";
 "action_search" = "Szukaj";
 "action_select_all" = "Zaznacz wszystko";
 "action_send" = "Wyślij";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Stuknij, aby załadować mapę";
 "action_take_photo" = "Zrób zdjęcie";
 "action_tap_for_options" = "Stuknij, by wyświetlić opcje";
+"action_translate" = "Translate";
 "action_try_again" = "Spróbuj ponownie";
 "action_unpin" = "Odepnij";
 "action_view" = "Wyświetl";

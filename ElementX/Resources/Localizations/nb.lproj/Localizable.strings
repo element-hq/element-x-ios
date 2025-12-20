@@ -133,7 +133,6 @@
 "action_retry" = "Prøv på nytt";
 "action_retry_decryption" = "Prøv dekryptering på nytt";
 "action_save" = "Lagre";
-"action_translate" = "Oversett";
 "action_search" = "Søke";
 "action_select_all" = "Velg alle";
 "action_send" = "Sende";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Trykk for å laste inn kart";
 "action_take_photo" = "Ta bilde";
 "action_tap_for_options" = "Trykk for alternativer";
+"action_translate" = "Translate";
 "action_try_again" = "Prøv igjen";
 "action_unpin" = "Løsne";
 "action_view" = "Vis";

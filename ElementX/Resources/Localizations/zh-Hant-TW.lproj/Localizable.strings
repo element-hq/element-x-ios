@@ -133,7 +133,6 @@
 "action_retry" = "再試一次";
 "action_retry_decryption" = "再次嘗試解密";
 "action_save" = "儲存";
-"action_translate" = "翻譯";
 "action_search" = "搜尋";
 "action_select_all" = "選取全部";
 "action_send" = "傳送";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "點擊以載入地圖";
 "action_take_photo" = "拍照";
 "action_tap_for_options" = "點擊以查看選項";
+"action_translate" = "Translate";
 "action_try_again" = "再試一次";
 "action_unpin" = "取消釘選";
 "action_view" = "檢視";

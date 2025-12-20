@@ -133,7 +133,6 @@
 "action_retry" = "تلاش دوباره";
 "action_retry_decryption" = "تلاش دوباره برای رمزگشایی";
 "action_save" = "ذخیره";
-"action_translate" = "ترجمه";
 "action_search" = "جست‌وجو";
 "action_select_all" = "گزینش همه";
 "action_send" = "فرستادن";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "زدن برای بار کردن نقشه";
 "action_take_photo" = "عکس گرفتن";
 "action_tap_for_options" = "زدن برای گزینه‌ها";
+"action_translate" = "Translate";
 "action_try_again" = "تلاش دوباره";
 "action_unpin" = "سنجاق نکردن";
 "action_view" = "نما";

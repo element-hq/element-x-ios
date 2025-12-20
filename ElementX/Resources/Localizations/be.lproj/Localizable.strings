@@ -133,7 +133,6 @@
 "action_retry" = "Паўтарыць";
 "action_retry_decryption" = "Паўтарыць расшыфроўку";
 "action_save" = "Захаваць";
-"action_translate" = "Перакласці";
 "action_search" = "Пошук";
 "action_select_all" = "Select all";
 "action_send" = "Адправіць";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Націсніце, каб загрузіць карту";
 "action_take_photo" = "Зрабіць фота";
 "action_tap_for_options" = "Дакраніцеся, каб убачыць параметры";
+"action_translate" = "Translate";
 "action_try_again" = "Паўтарыць спробу";
 "action_unpin" = "Адмацаваць";
 "action_view" = "View";

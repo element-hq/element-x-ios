@@ -133,7 +133,6 @@
 "action_retry" = "پھر کوشش کریں";
 "action_retry_decryption" = "رمزکشائی کی پھر کوشش کریں";
 "action_save" = "محفوظ کریں";
-"action_translate" = "ترجمہ کریں";
 "action_search" = "تلاش کریں";
 "action_select_all" = "Select all";
 "action_send" = "بھیجیں";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "نقشہ لادنے کیلئے تھپتھپائیں";
 "action_take_photo" = "تصویر لیں";
 "action_tap_for_options" = "اختیارات کے لیے تھپتھپائیں";
+"action_translate" = "Translate";
 "action_try_again" = "دوبارہ کوشش کریں";
 "action_unpin" = "غیر تثبیت کریں";
 "action_view" = "View";

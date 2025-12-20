@@ -133,7 +133,6 @@
 "action_retry" = "Zkusit znovu";
 "action_retry_decryption" = "Opakovat dešifrování";
 "action_save" = "Uložit";
-"action_translate" = "Přeložit";
 "action_search" = "Hledat";
 "action_select_all" = "Vybrat vše";
 "action_send" = "Odeslat";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Klepnutím načtete mapu";
 "action_take_photo" = "Vyfotit";
 "action_tap_for_options" = "Klepnutím zobrazíte možnosti";
+"action_translate" = "Translate";
 "action_try_again" = "Zkusit znovu";
 "action_unpin" = "Odepnout";
 "action_view" = "Zobrazit";

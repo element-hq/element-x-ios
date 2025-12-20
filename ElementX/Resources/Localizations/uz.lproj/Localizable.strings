@@ -133,7 +133,6 @@
 "action_retry" = "Qayta urinish";
 "action_retry_decryption" = "Shifrni ochishni qayta urinish";
 "action_save" = "Saqlash";
-"action_translate" = "Tarjima";
 "action_search" = "Qidirmoq";
 "action_select_all" = "Select all";
 "action_send" = "Yuborish";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Xaritani yuklash uchun bosing";
 "action_take_photo" = "Rasmga olmoq";
 "action_tap_for_options" = "Variantlar uchun bosing";
+"action_translate" = "Translate";
 "action_try_again" = "Qayta urinib ko'ring";
 "action_unpin" = "Olib tashlash";
 "action_view" = "Ko'rish";

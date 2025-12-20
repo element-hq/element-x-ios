@@ -133,7 +133,6 @@
 "action_retry" = "Erneut versuchen";
 "action_retry_decryption" = "Entschlüsselung wiederholen";
 "action_save" = "Speichern";
-"action_translate" = "Übersetzen";
 "action_search" = "Suchen";
 "action_select_all" = "Alles auswählen";
 "action_send" = "Senden";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Tippe, um die Karte zu laden";
 "action_take_photo" = "Foto aufnehmen";
 "action_tap_for_options" = "Für Optionen tippen";
+"action_translate" = "Translate";
 "action_try_again" = "Erneut versuchen";
 "action_unpin" = "Lösen";
 "action_view" = "Ansicht";

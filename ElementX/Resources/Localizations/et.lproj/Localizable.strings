@@ -133,7 +133,6 @@
 "action_retry" = "Proovi uuesti";
 "action_retry_decryption" = "Proovi dekrüptimist uuesti";
 "action_save" = "Salvesta";
-"action_translate" = "Tõlgi";
 "action_search" = "Otsi";
 "action_select_all" = "Vali kõik";
 "action_send" = "Saada";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Kaardi laadimiseks klõpsa";
 "action_take_photo" = "Tee pilt";
 "action_tap_for_options" = "Valikuteks klõpsa";
+"action_translate" = "Translate";
 "action_try_again" = "Proovi uuesti";
 "action_unpin" = "Eemalda esiletõstmine";
 "action_view" = "Vaata";

@@ -133,7 +133,6 @@
 "action_retry" = "Yeniden dene";
 "action_retry_decryption" = "Şifre çözmeyi tekrar deneyin";
 "action_save" = "Kaydet";
-"action_translate" = "Çevir";
 "action_search" = "Ara";
 "action_select_all" = "Select all";
 "action_send" = "Gönder";
@@ -154,6 +153,7 @@
 "action_static_map_load" = "Haritayı yüklemek için dokunun";
 "action_take_photo" = "Fotoğraf çek";
 "action_tap_for_options" = "Seçenekler için dokunun";
+"action_translate" = "Translate";
 "action_try_again" = "Tekrar deneyin";
 "action_unpin" = "Sabitlemeyi kaldır";
 "action_view" = "View";
