@@ -381,6 +381,12 @@ class TimelineController: TimelineControllerProtocol {
         await activeTimeline.endPoll(pollStartID: pollStartID, text: text).mapError(TimelineControllerError.timelineProxyError)
     }
     
+    // MARK: - Search
+    
+    func createSearchManager() -> TimelineSearchManager {
+        return TimelineSearchManager(timelineController: self)
+    }
+    
     // MARK: - Private
     
     /// The cancellable used to update the timeline items.

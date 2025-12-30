@@ -137,7 +137,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                     break
                 case .composer(let action):
                     composerViewModel.process(timelineAction: action)
-                case .viewInRoomTimeline, .displayThread:
+                case .viewInRoomTimeline, .displayThread, .displayTimelineSearch, .timelineSearchResult(_):
                     fatalError("The action: \(action) should not be sent to this coordinator")
                 }
             }

@@ -15,6 +15,7 @@ struct RoomScreen: View {
     @ObservedObject private var timelineContext: TimelineViewModelType.Context
     let composerToolbar: ComposerToolbar
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
+    @State private var isPresentingSearchSheet = false
 
     init(context: RoomScreenViewModelType.Context,
          timelineContext: TimelineViewModelType.Context,
@@ -68,6 +69,18 @@ struct RoomScreen: View {
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
+            .sheet(isPresented: $isPresentingSearchSheet) {
+                if let searchManager = timelineContext.viewState.searchManager {
+                    TimelineSearchResultsView(
+                        searchManager: searchManager,
+                        onResultTapped: { result in
+                            isPresentingSearchSheet = false
+                            timelineContext.send(viewAction: .focusOnEventID(result.eventID))
+                        },
+                        onCancel: { isPresentingSearchSheet = false }
+                    )
+                }
+            }
             .track(screen: .Room)
             .sentryTrace("\(Self.self)")
     }
@@ -169,9 +182,18 @@ struct RoomScreen: View {
         
         if !ProcessInfo.processInfo.isiOSAppOnMac {
             ToolbarItem(placement: .primaryAction) {
-                if context.viewState.shouldShowCallButton {
-                    callButton
-                        .disabled(!context.viewState.canJoinCall)
+                HStack(spacing: 16) {
+                    Button {
+                        isPresentingSearchSheet = true
+                    } label: {
+                        CompoundIcon(\.search)
+                    }
+                    .accessibilityLabel("Seach message")
+                    
+                    if context.viewState.shouldShowCallButton {
+                        callButton
+                            .disabled(!context.viewState.canJoinCall)
+                    }
                 }
             }
         }

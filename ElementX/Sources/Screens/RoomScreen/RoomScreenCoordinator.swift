@@ -152,7 +152,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     roomViewModel.timelineHasScrolled(direction: direction)
                 case .displayRoom(let roomID, let via):
                     actionsSubject.send(.presentRoom(roomID: roomID, via: via))
-                case .viewInRoomTimeline, .displayMediaDetails:
+                case .viewInRoomTimeline, .displayMediaDetails, .displayTimelineSearch, .timelineSearchResult(_):
                     fatalError("The action: \(action) should not be sent to this coordinator")
                 }
             }

@@ -147,6 +147,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         // Note: beware if we get to e.g. restore a reply / edit,
         // maybe we are tracking a non-needed first initial state
         trackComposerMode(.default)
+        state.searchManager = timelineController.createSearchManager()
     }
     
     // MARK: - Public
@@ -310,6 +311,24 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private func focusLive() {
         timelineController.focusLive()
+    }
+    
+    private func handleSearch(term: String) {
+        guard let searchManager = state.searchManager else { return }
+        
+        // Start the search
+        searchManager.performFullTextSearch(term: term)
+        
+        // Show the search results screen
+        actionsSubject.send(.displayTimelineSearch)
+    }
+    
+    func handleSearchResult(_ searchResult: TimelineSearchResult) {
+        // Focus on the selected event
+        Task { await focusOnEvent(eventID: searchResult.eventID) }
+        
+        // Send action to close search and return to timeline
+        actionsSubject.send(.timelineSearchResult(searchResult))
     }
     
     private func didScrollToFocussedItem() {

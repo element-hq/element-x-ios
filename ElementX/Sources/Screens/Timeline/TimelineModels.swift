@@ -31,6 +31,8 @@ enum TimelineViewModelAction {
     case viewInRoomTimeline(eventID: String, threadRootEventID: String?)
     case displayRoom(roomID: String, via: [String])
     case displayMediaDetails(item: EventBasedMessageTimelineItemProtocol)
+    case displayTimelineSearch
+    case timelineSearchResult(TimelineSearchResult)
 }
 
 enum TimelineViewPollAction {
@@ -100,7 +102,7 @@ struct TimelineViewState: BindableState {
     var showReadReceipts = false
     var isDirectOneToOneRoom = false
     var timelineState: TimelineState // check the doc before changing this
-
+    var searchManager: TimelineSearchManager?
     var ownUserID: String
     var canCurrentUserSendMessage = false
     var canCurrentUserRedactOthers = false

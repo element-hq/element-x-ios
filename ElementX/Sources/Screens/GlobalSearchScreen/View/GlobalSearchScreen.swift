@@ -129,17 +129,22 @@ struct GlobalSearchScreen: View {
     }
 }
 
-private struct GlobalSearchTextFieldRepresentable: UIViewRepresentable {
+struct GlobalSearchTextFieldRepresentable: UIViewRepresentable {
     let placeholder: String
     @Binding var text: String
     let keyPressHandler: (UIKeyboardHIDUsage) -> Bool
     let endEditingHandler: () -> Void
+    var returnKeyType: UIReturnKeyType = .default
 
     func makeUIView(context: Context) -> UITextField {
         let textField = GlobalSearchTextField(keyPressHandler: keyPressHandler)
         textField.delegate = context.coordinator
         textField.autocorrectionType = .no
         textField.placeholder = placeholder
+        textField.returnKeyType = returnKeyType
+        if returnKeyType != .default {
+            textField.enablesReturnKeyAutomatically = true
+        }
         return textField
     }
 

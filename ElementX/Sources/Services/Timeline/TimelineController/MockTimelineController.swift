@@ -343,4 +343,8 @@ class MockTimelineController: TimelineControllerProtocol {
         
         try client?.send(.success)
     }
+    
+    func createSearchManager() -> TimelineSearchManager {
+        return TimelineSearchManager(timelineController: self)
+    }
 }

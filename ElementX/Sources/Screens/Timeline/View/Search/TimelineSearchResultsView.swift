@@ -100,7 +100,7 @@ struct TimelineSearchResultsView: View {
                         performSearch()
                         searchFieldFocus = false
                     },
-                    returnKeyType: .search
+                    returnKeyType: UIReturnKeyType.search
                 )
                 .focused($searchFieldFocus)
                 .autocorrectionDisabled(true)

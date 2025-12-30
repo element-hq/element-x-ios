@@ -145,4 +145,7 @@ protocol TimelineControllerProtocol {
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineControllerError>
     
     func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineControllerError>
+    
+    // MARK: - Search
+    func createSearchManager() -> TimelineSearchManager
 }
