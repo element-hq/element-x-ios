@@ -1,5 +1,0 @@
-"NSCameraUsageDescription" = "Pentru a face fotografii sau videoclipuri și a le trimite ca mesaje, Element X are nevoie de acces la cameră.";
-"NSFaceIDUsageDescription" = "Face ID este utilizat pentru a accesa aplicația.";
-"NSLocationWhenInUseUsageDescription" = "Acordați acces astfel încât Element X să vă poată partaja locația.";
-"NSMicrophoneUsageDescription" = "Pentru a înregistra și trimite mesaje audio, Element X trebuie să acceseze microfonul.";
-"NSPhotoLibraryUsageDescription" = "Permiteți salvarea fotografiilor și videoclipurilor în biblioteca dumneavoastră.";

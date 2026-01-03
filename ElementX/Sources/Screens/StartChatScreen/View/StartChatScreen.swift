@@ -94,6 +94,10 @@ struct StartChatScreen: View {
                                     icon: \.plus),
                     kind: .navigationLink { context.send(viewAction: .createRoom) })
                 .accessibilityIdentifier(A11yIdentifiers.startChatScreen.createRoom)
+            
+            ListRow(label: .default(title: "Dial Pad",
+                                    icon: \.grid),
+                    kind: .navigationLink { context.send(viewAction: .openDialPad) })
         }
     }
     

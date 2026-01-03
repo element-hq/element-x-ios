@@ -1,7 +1,0 @@
-sources:
-  include:
-    - ../../ElementX
-templates:
-  - PreviewTests.stencil
-output:
-  ../../PreviewTests/Sources/GeneratedPreviewTests.swift

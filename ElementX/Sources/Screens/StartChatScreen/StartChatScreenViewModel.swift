@@ -79,6 +79,8 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             joinRoomByAddress()
         case .openRoomDirectorySearch:
             actionsSubject.send(.openRoomDirectorySearch)
+        case .openDialPad:
+            actionsSubject.send(.openDialPad)
         }
     }
     

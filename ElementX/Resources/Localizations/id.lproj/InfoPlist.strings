@@ -1,5 +1,0 @@
-"NSCameraUsageDescription" = "Untuk mengambil gambar atau video dan mengirimkannya sebagai pesan, Element X memerlukan akses ke kamera.";
-"NSFaceIDUsageDescription" = "Face ID digunakan untuk mengakses aplikasi Anda.";
-"NSLocationWhenInUseUsageDescription" = "Berikan akses lokasi supaya Element X dapat berbagi lokasi Anda.";
-"NSMicrophoneUsageDescription" = "Untuk merekam dan mengirim pesan dengan audio, Element X perlu mengakses mikrofon.";
-"NSPhotoLibraryUsageDescription" = "Ini memungkinkan Anda menyimpan gambar dan video ke perpustakaan foto Anda.";

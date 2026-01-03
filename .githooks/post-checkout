@@ -1,9 +1,0 @@
-#!/bin/sh
-command -v git-lfs >/dev/null 2>&1 || { echo >&2 "\nThis repository is configured for Git LFS but 'git-lfs' was not found on your path. If you no longer wish to use Git LFS, remove this hook by deleting '.git/hooks/post-checkout'.\n"; exit 2; }
-git lfs post-checkout "$@"
-
-#!/bin/bash
-export PATH="$PATH:/opt/homebrew/bin"
-
-# ignores updates of 'Secrets.swift' to avoid pushing sensitive data by mistake
-git update-index --assume-unchanged Secrets/Secrets.swift

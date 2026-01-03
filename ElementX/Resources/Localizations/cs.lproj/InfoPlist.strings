@@ -1,5 +1,0 @@
-"NSCameraUsageDescription" = "Chcete-li pořizovat snímky nebo videa a odesílat je jako zprávu, potřebuje Element X přístup k fotoaparátu.";
-"NSFaceIDUsageDescription" = "K přístupu do aplikace se používá Face ID.";
-"NSLocationWhenInUseUsageDescription" = "Udělte přístup k poloze, aby mohl Element X sdílet vaši polohu.";
-"NSMicrophoneUsageDescription" = "Aby bylo možné nahrávat a odesílat zprávy se zvukem, potřebuje Element X přístup k mikrofonu.";
-"NSPhotoLibraryUsageDescription" = "To vám umožní ukládat obrázky a videa do knihovny fotografií.";

@@ -22,6 +22,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     private let flowParameters: CommonFlowParameters
     
     private var createRoomScreenCoordinator: CreateRoomScreenCoordinator?
+    private var dialPadScreenCoordinator: DialPadScreenCoordinator?
     
     indirect enum State: StateType {
         /// The state machine hasn't started.
@@ -35,6 +36,8 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         case roomAvatarPicker
         /// The user is inviting users to a newly created room.
         case inviteUsers
+        /// The user is using the dial pad.
+        case dialPad
     }
     
     enum Event: EventType {
@@ -45,6 +48,11 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         case createRoom
         /// The user dismissed the create room screen.
         case dismissedCreateRoom
+        
+        /// The user would like to use the dial pad.
+        case dialPad
+        /// The user dismissed the dial pad.
+        case dismissedDialPad
         
         /// The user would like to pick an avatar for the room.
         case presentRoomAvatarPicker
@@ -100,6 +108,9 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
             navigationStackCoordinator.pop(animated: animated) // InviteUsersScreen
             navigationStackCoordinator.pop(animated: animated) // CreateRoomScreen
             navigationStackCoordinator.setRootCoordinator(nil, animated: animated) // StartChatScreen
+        case .dialPad:
+            navigationStackCoordinator.pop(animated: animated) // DialPadScreen
+            navigationStackCoordinator.setRootCoordinator(nil, animated: animated) // StartChatScreen
         }
     }
     
@@ -115,6 +126,13 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         }
         stateMachine.addRoutes(event: .dismissedCreateRoom, transitions: [.createRoom => .startChat]) { [weak self] _ in
             self?.createRoomScreenCoordinator = nil
+        }
+        
+        stateMachine.addRoutes(event: .dialPad, transitions: [.startChat => .dialPad]) { [weak self] _ in
+            self?.presentDialPadScreen()
+        }
+        stateMachine.addRoutes(event: .dismissedDialPad, transitions: [.dialPad => .startChat]) { [weak self] _ in
+            self?.dialPadScreenCoordinator = nil
         }
         
         stateMachine.addRoutes(event: .presentRoomAvatarPicker, transitions: [.createRoom => .roomAvatarPicker]) { [weak self] context in
@@ -160,6 +178,8 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
                 actionsSubject.send(.finished(roomID: roomID))
             case .openRoomDirectorySearch:
                 actionsSubject.send(.showRoomDirectory)
+            case .openDialPad:
+                stateMachine.tryEvent(.dialPad)
             }
         }
         .store(in: &cancellables)
@@ -233,5 +253,27 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentDialPadScreen() {
+        let dialPadParameters = DialPadScreenCoordinatorParameters(userSession: flowParameters.userSession,
+                                                                   userIndicatorController: flowParameters.userIndicatorController,
+                                                                   analytics: flowParameters.analytics)
+        let coordinator = DialPadScreenCoordinator(parameters: dialPadParameters)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .createdRoom(let roomProxy):
+                actionsSubject.send(.finished(roomID: roomProxy.id))
+            case .close:
+                stateMachine.tryEvent(.dismissedDialPad)
+            }
+        }
+        .store(in: &cancellables)
+        
+        dialPadScreenCoordinator = coordinator
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedDialPad)
+        }
     }
 }
