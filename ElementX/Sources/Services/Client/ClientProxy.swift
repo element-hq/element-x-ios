@@ -172,7 +172,7 @@ class ClientProxy: ClientProxyProtocol {
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
-        spaceService = SpaceServiceProxy(spaceService: client.spaceService())
+        spaceService = await SpaceServiceProxy(spaceService: client.spaceService())
         
         let configuredAppService = try await ClientProxyServices(client: client,
                                                                  actionsSubject: actionsSubject,

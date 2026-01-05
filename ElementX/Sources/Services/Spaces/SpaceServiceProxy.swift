@@ -26,7 +26,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
     }
     
     private func setupSubscriptions() async {
-        joinedSpacesHandle = await spaceService.subscribeToJoinedSpaces(listener: SDKListener { [weak self] updates in
+        joinedSpacesHandle = await spaceService.subscribeToTopLevelJoinedSpaces(listener: SDKListener { [weak self] updates in
             self?.handleUpdates(updates)
         })
     }
