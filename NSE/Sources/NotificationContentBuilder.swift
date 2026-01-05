@@ -59,8 +59,7 @@ struct NotificationContentBuilder {
                                  notificationItem: notificationItem,
                                  mediaProvider: mediaProvider)
         case .timeline(let event):
-            guard let eventType = try? event.eventType(),
-                  case let .messageLike(content) = eventType else {
+            guard case let .messageLike(messageContent) = try? event.content() else {
                 processEmpty(&notificationContent)
                 return
             }
@@ -69,7 +68,7 @@ struct NotificationContentBuilder {
                                      notificationItem: notificationItem,
                                      mediaProvider: mediaProvider)
             
-            switch content {
+            switch messageContent {
             case .roomMessage(let messageType, _):
                 await processRoomMessage(notificationContent: &notificationContent,
                                          notificationItem: notificationItem,

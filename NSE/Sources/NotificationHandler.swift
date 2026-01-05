@@ -98,9 +98,9 @@ class NotificationHandler {
             return .shouldDisplay
         }
         
-        switch try? event.eventType() {
-        case .messageLike(let content):
-            switch content {
+        switch try? event.content() {
+        case .messageLike(let messageContent):
+            switch messageContent {
             case .poll,
                  .roomEncrypted,
                  .sticker:
