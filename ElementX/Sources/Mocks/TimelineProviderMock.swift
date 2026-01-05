@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 @MainActor
 class AutoUpdatingTimelineItemProviderMock: TimelineItemProvider {

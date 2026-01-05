@@ -8,6 +8,7 @@
 
 @testable import ElementX
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 import Combine
 import XCTest

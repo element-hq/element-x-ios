@@ -9,6 +9,7 @@
 import XCTest
 
 @testable import ElementX
+import MatrixRustSDKMocks
 
 class AuthenticationServiceTests: XCTestCase {
     var client: ClientSDKMock!

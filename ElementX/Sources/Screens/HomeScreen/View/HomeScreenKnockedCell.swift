@@ -97,6 +97,10 @@ struct HomeScreenKnockedCell: View {
     }
 }
 
+// MARK: - Previews
+
+import MatrixRustSDKMocks
+
 struct HomeScreenKnockedCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ScrollView {

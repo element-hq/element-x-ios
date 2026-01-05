@@ -7,6 +7,7 @@
 
 import Foundation
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 struct NotificationItemProxyMockConfiguration {
     var event: NotificationEvent? = {

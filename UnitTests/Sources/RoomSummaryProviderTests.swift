@@ -7,6 +7,7 @@
 //
 
 import MatrixRustSDK
+import MatrixRustSDKMocks
 import XCTest
 
 @testable import ElementX

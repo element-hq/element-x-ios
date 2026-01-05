@@ -7,7 +7,7 @@
 import Foundation
 
 open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -24,7 +24,7 @@ open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sen
     //MARK: - send
 
     open var sendCodeThrowableError: Error?
-    var sendCodeUnderlyingCallsCount = 0
+    open var sendCodeUnderlyingCallsCount = 0
     open var sendCodeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -68,7 +68,7 @@ open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sen
     }
 }
 open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -84,7 +84,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - abortOidcAuth
 
-    var abortOidcAuthAuthorizationDataUnderlyingCallsCount = 0
+    open var abortOidcAuthAuthorizationDataUnderlyingCallsCount = 0
     open var abortOidcAuthAuthorizationDataCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -127,7 +127,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - accountData
 
     open var accountDataEventTypeThrowableError: Error?
-    var accountDataEventTypeUnderlyingCallsCount = 0
+    open var accountDataEventTypeUnderlyingCallsCount = 0
     open var accountDataEventTypeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -157,7 +157,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var accountDataEventTypeReceivedEventType: String?
     open var accountDataEventTypeReceivedInvocations: [String] = []
 
-    var accountDataEventTypeUnderlyingReturnValue: String?
+    open var accountDataEventTypeUnderlyingReturnValue: String?
     open var accountDataEventTypeReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -202,7 +202,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - accountUrl
 
     open var accountUrlActionThrowableError: Error?
-    var accountUrlActionUnderlyingCallsCount = 0
+    open var accountUrlActionUnderlyingCallsCount = 0
     open var accountUrlActionCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -232,7 +232,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var accountUrlActionReceivedAction: AccountManagementAction?
     open var accountUrlActionReceivedInvocations: [AccountManagementAction?] = []
 
-    var accountUrlActionUnderlyingReturnValue: String?
+    open var accountUrlActionUnderlyingReturnValue: String?
     open var accountUrlActionReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -276,7 +276,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - availableSlidingSyncVersions
 
-    var availableSlidingSyncVersionsUnderlyingCallsCount = 0
+    open var availableSlidingSyncVersionsUnderlyingCallsCount = 0
     open var availableSlidingSyncVersionsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -304,7 +304,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return availableSlidingSyncVersionsCallsCount > 0
     }
 
-    var availableSlidingSyncVersionsUnderlyingReturnValue: [SlidingSyncVersion]!
+    open var availableSlidingSyncVersionsUnderlyingReturnValue: [SlidingSyncVersion]!
     open var availableSlidingSyncVersionsReturnValue: [SlidingSyncVersion]! {
         get {
             if Thread.isMainThread {
@@ -342,7 +342,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - avatarUrl
 
     open var avatarUrlThrowableError: Error?
-    var avatarUrlUnderlyingCallsCount = 0
+    open var avatarUrlUnderlyingCallsCount = 0
     open var avatarUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -370,7 +370,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return avatarUrlCallsCount > 0
     }
 
-    var avatarUrlUnderlyingReturnValue: String?
+    open var avatarUrlUnderlyingReturnValue: String?
     open var avatarUrlReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -411,7 +411,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - awaitRoomRemoteEcho
 
     open var awaitRoomRemoteEchoRoomIdThrowableError: Error?
-    var awaitRoomRemoteEchoRoomIdUnderlyingCallsCount = 0
+    open var awaitRoomRemoteEchoRoomIdUnderlyingCallsCount = 0
     open var awaitRoomRemoteEchoRoomIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -441,7 +441,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var awaitRoomRemoteEchoRoomIdReceivedRoomId: String?
     open var awaitRoomRemoteEchoRoomIdReceivedInvocations: [String] = []
 
-    var awaitRoomRemoteEchoRoomIdUnderlyingReturnValue: Room!
+    open var awaitRoomRemoteEchoRoomIdUnderlyingReturnValue: Room!
     open var awaitRoomRemoteEchoRoomIdReturnValue: Room! {
         get {
             if Thread.isMainThread {
@@ -486,7 +486,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - cachedAvatarUrl
 
     open var cachedAvatarUrlThrowableError: Error?
-    var cachedAvatarUrlUnderlyingCallsCount = 0
+    open var cachedAvatarUrlUnderlyingCallsCount = 0
     open var cachedAvatarUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -514,7 +514,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return cachedAvatarUrlCallsCount > 0
     }
 
-    var cachedAvatarUrlUnderlyingReturnValue: String?
+    open var cachedAvatarUrlUnderlyingReturnValue: String?
     open var cachedAvatarUrlReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -554,7 +554,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - canDeactivateAccount
 
-    var canDeactivateAccountUnderlyingCallsCount = 0
+    open var canDeactivateAccountUnderlyingCallsCount = 0
     open var canDeactivateAccountCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -582,7 +582,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return canDeactivateAccountCallsCount > 0
     }
 
-    var canDeactivateAccountUnderlyingReturnValue: Bool!
+    open var canDeactivateAccountUnderlyingReturnValue: Bool!
     open var canDeactivateAccountReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -620,7 +620,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - clearCaches
 
     open var clearCachesSyncServiceThrowableError: Error?
-    var clearCachesSyncServiceUnderlyingCallsCount = 0
+    open var clearCachesSyncServiceUnderlyingCallsCount = 0
     open var clearCachesSyncServiceCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -666,7 +666,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - createRoom
 
     open var createRoomRequestThrowableError: Error?
-    var createRoomRequestUnderlyingCallsCount = 0
+    open var createRoomRequestUnderlyingCallsCount = 0
     open var createRoomRequestCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -696,7 +696,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var createRoomRequestReceivedRequest: CreateRoomParameters?
     open var createRoomRequestReceivedInvocations: [CreateRoomParameters] = []
 
-    var createRoomRequestUnderlyingReturnValue: String!
+    open var createRoomRequestUnderlyingReturnValue: String!
     open var createRoomRequestReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -741,7 +741,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - customLoginWithJwt
 
     open var customLoginWithJwtJwtInitialDeviceNameDeviceIdThrowableError: Error?
-    var customLoginWithJwtJwtInitialDeviceNameDeviceIdUnderlyingCallsCount = 0
+    open var customLoginWithJwtJwtInitialDeviceNameDeviceIdUnderlyingCallsCount = 0
     open var customLoginWithJwtJwtInitialDeviceNameDeviceIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -787,7 +787,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - deactivateAccount
 
     open var deactivateAccountAuthDataEraseDataThrowableError: Error?
-    var deactivateAccountAuthDataEraseDataUnderlyingCallsCount = 0
+    open var deactivateAccountAuthDataEraseDataUnderlyingCallsCount = 0
     open var deactivateAccountAuthDataEraseDataCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -833,7 +833,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - deletePusher
 
     open var deletePusherIdentifiersThrowableError: Error?
-    var deletePusherIdentifiersUnderlyingCallsCount = 0
+    open var deletePusherIdentifiersUnderlyingCallsCount = 0
     open var deletePusherIdentifiersCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -879,7 +879,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - deviceId
 
     open var deviceIdThrowableError: Error?
-    var deviceIdUnderlyingCallsCount = 0
+    open var deviceIdUnderlyingCallsCount = 0
     open var deviceIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -907,7 +907,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return deviceIdCallsCount > 0
     }
 
-    var deviceIdUnderlyingReturnValue: String!
+    open var deviceIdUnderlyingReturnValue: String!
     open var deviceIdReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -948,7 +948,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - displayName
 
     open var displayNameThrowableError: Error?
-    var displayNameUnderlyingCallsCount = 0
+    open var displayNameUnderlyingCallsCount = 0
     open var displayNameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -976,7 +976,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return displayNameCallsCount > 0
     }
 
-    var displayNameUnderlyingReturnValue: String!
+    open var displayNameUnderlyingReturnValue: String!
     open var displayNameReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -1016,7 +1016,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - enableAllSendQueues
 
-    var enableAllSendQueuesEnableUnderlyingCallsCount = 0
+    open var enableAllSendQueuesEnableUnderlyingCallsCount = 0
     open var enableAllSendQueuesEnableCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1058,7 +1058,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - enableSendQueueUploadProgress
 
-    var enableSendQueueUploadProgressEnableUnderlyingCallsCount = 0
+    open var enableSendQueueUploadProgressEnableUnderlyingCallsCount = 0
     open var enableSendQueueUploadProgressEnableCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1100,7 +1100,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - encryption
 
-    var encryptionUnderlyingCallsCount = 0
+    open var encryptionUnderlyingCallsCount = 0
     open var encryptionCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1128,7 +1128,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return encryptionCallsCount > 0
     }
 
-    var encryptionUnderlyingReturnValue: Encryption!
+    open var encryptionUnderlyingReturnValue: Encryption!
     open var encryptionReturnValue: Encryption! {
         get {
             if Thread.isMainThread {
@@ -1166,7 +1166,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - fetchMediaPreviewConfig
 
     open var fetchMediaPreviewConfigThrowableError: Error?
-    var fetchMediaPreviewConfigUnderlyingCallsCount = 0
+    open var fetchMediaPreviewConfigUnderlyingCallsCount = 0
     open var fetchMediaPreviewConfigCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1194,7 +1194,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return fetchMediaPreviewConfigCallsCount > 0
     }
 
-    var fetchMediaPreviewConfigUnderlyingReturnValue: MediaPreviewConfig?
+    open var fetchMediaPreviewConfigUnderlyingReturnValue: MediaPreviewConfig?
     open var fetchMediaPreviewConfigReturnValue: MediaPreviewConfig? {
         get {
             if Thread.isMainThread {
@@ -1235,7 +1235,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getDmRoom
 
     open var getDmRoomUserIdThrowableError: Error?
-    var getDmRoomUserIdUnderlyingCallsCount = 0
+    open var getDmRoomUserIdUnderlyingCallsCount = 0
     open var getDmRoomUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1265,7 +1265,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getDmRoomUserIdReceivedUserId: String?
     open var getDmRoomUserIdReceivedInvocations: [String] = []
 
-    var getDmRoomUserIdUnderlyingReturnValue: Room?
+    open var getDmRoomUserIdUnderlyingReturnValue: Room?
     open var getDmRoomUserIdReturnValue: Room? {
         get {
             if Thread.isMainThread {
@@ -1310,7 +1310,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getInviteAvatarsDisplayPolicy
 
     open var getInviteAvatarsDisplayPolicyThrowableError: Error?
-    var getInviteAvatarsDisplayPolicyUnderlyingCallsCount = 0
+    open var getInviteAvatarsDisplayPolicyUnderlyingCallsCount = 0
     open var getInviteAvatarsDisplayPolicyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1338,7 +1338,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return getInviteAvatarsDisplayPolicyCallsCount > 0
     }
 
-    var getInviteAvatarsDisplayPolicyUnderlyingReturnValue: InviteAvatars?
+    open var getInviteAvatarsDisplayPolicyUnderlyingReturnValue: InviteAvatars?
     open var getInviteAvatarsDisplayPolicyReturnValue: InviteAvatars? {
         get {
             if Thread.isMainThread {
@@ -1379,7 +1379,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getMaxMediaUploadSize
 
     open var getMaxMediaUploadSizeThrowableError: Error?
-    var getMaxMediaUploadSizeUnderlyingCallsCount = 0
+    open var getMaxMediaUploadSizeUnderlyingCallsCount = 0
     open var getMaxMediaUploadSizeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1407,7 +1407,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return getMaxMediaUploadSizeCallsCount > 0
     }
 
-    var getMaxMediaUploadSizeUnderlyingReturnValue: UInt64!
+    open var getMaxMediaUploadSizeUnderlyingReturnValue: UInt64!
     open var getMaxMediaUploadSizeReturnValue: UInt64! {
         get {
             if Thread.isMainThread {
@@ -1448,7 +1448,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getMediaContent
 
     open var getMediaContentMediaSourceThrowableError: Error?
-    var getMediaContentMediaSourceUnderlyingCallsCount = 0
+    open var getMediaContentMediaSourceUnderlyingCallsCount = 0
     open var getMediaContentMediaSourceCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1478,7 +1478,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getMediaContentMediaSourceReceivedMediaSource: MediaSource?
     open var getMediaContentMediaSourceReceivedInvocations: [MediaSource] = []
 
-    var getMediaContentMediaSourceUnderlyingReturnValue: Data!
+    open var getMediaContentMediaSourceUnderlyingReturnValue: Data!
     open var getMediaContentMediaSourceReturnValue: Data! {
         get {
             if Thread.isMainThread {
@@ -1523,7 +1523,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getMediaFile
 
     open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirThrowableError: Error?
-    var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount = 0
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount = 0
     open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1553,7 +1553,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedArguments: (mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?)?
     open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedInvocations: [(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?)] = []
 
-    var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReturnValue: MediaFileHandle!
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReturnValue: MediaFileHandle!
     open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReturnValue: MediaFileHandle! {
         get {
             if Thread.isMainThread {
@@ -1598,7 +1598,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getMediaPreviewDisplayPolicy
 
     open var getMediaPreviewDisplayPolicyThrowableError: Error?
-    var getMediaPreviewDisplayPolicyUnderlyingCallsCount = 0
+    open var getMediaPreviewDisplayPolicyUnderlyingCallsCount = 0
     open var getMediaPreviewDisplayPolicyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1626,7 +1626,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return getMediaPreviewDisplayPolicyCallsCount > 0
     }
 
-    var getMediaPreviewDisplayPolicyUnderlyingReturnValue: MediaPreviews?
+    open var getMediaPreviewDisplayPolicyUnderlyingReturnValue: MediaPreviews?
     open var getMediaPreviewDisplayPolicyReturnValue: MediaPreviews? {
         get {
             if Thread.isMainThread {
@@ -1667,7 +1667,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getMediaThumbnail
 
     open var getMediaThumbnailMediaSourceWidthHeightThrowableError: Error?
-    var getMediaThumbnailMediaSourceWidthHeightUnderlyingCallsCount = 0
+    open var getMediaThumbnailMediaSourceWidthHeightUnderlyingCallsCount = 0
     open var getMediaThumbnailMediaSourceWidthHeightCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1697,7 +1697,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getMediaThumbnailMediaSourceWidthHeightReceivedArguments: (mediaSource: MediaSource, width: UInt64, height: UInt64)?
     open var getMediaThumbnailMediaSourceWidthHeightReceivedInvocations: [(mediaSource: MediaSource, width: UInt64, height: UInt64)] = []
 
-    var getMediaThumbnailMediaSourceWidthHeightUnderlyingReturnValue: Data!
+    open var getMediaThumbnailMediaSourceWidthHeightUnderlyingReturnValue: Data!
     open var getMediaThumbnailMediaSourceWidthHeightReturnValue: Data! {
         get {
             if Thread.isMainThread {
@@ -1741,7 +1741,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - getNotificationSettings
 
-    var getNotificationSettingsUnderlyingCallsCount = 0
+    open var getNotificationSettingsUnderlyingCallsCount = 0
     open var getNotificationSettingsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1769,7 +1769,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return getNotificationSettingsCallsCount > 0
     }
 
-    var getNotificationSettingsUnderlyingReturnValue: NotificationSettings!
+    open var getNotificationSettingsUnderlyingReturnValue: NotificationSettings!
     open var getNotificationSettingsReturnValue: NotificationSettings! {
         get {
             if Thread.isMainThread {
@@ -1807,7 +1807,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getProfile
 
     open var getProfileUserIdThrowableError: Error?
-    var getProfileUserIdUnderlyingCallsCount = 0
+    open var getProfileUserIdUnderlyingCallsCount = 0
     open var getProfileUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1837,7 +1837,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getProfileUserIdReceivedUserId: String?
     open var getProfileUserIdReceivedInvocations: [String] = []
 
-    var getProfileUserIdUnderlyingReturnValue: UserProfile!
+    open var getProfileUserIdUnderlyingReturnValue: UserProfile!
     open var getProfileUserIdReturnValue: UserProfile! {
         get {
             if Thread.isMainThread {
@@ -1882,7 +1882,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getRecentlyVisitedRooms
 
     open var getRecentlyVisitedRoomsThrowableError: Error?
-    var getRecentlyVisitedRoomsUnderlyingCallsCount = 0
+    open var getRecentlyVisitedRoomsUnderlyingCallsCount = 0
     open var getRecentlyVisitedRoomsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1910,7 +1910,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return getRecentlyVisitedRoomsCallsCount > 0
     }
 
-    var getRecentlyVisitedRoomsUnderlyingReturnValue: [String]!
+    open var getRecentlyVisitedRoomsUnderlyingReturnValue: [String]!
     open var getRecentlyVisitedRoomsReturnValue: [String]! {
         get {
             if Thread.isMainThread {
@@ -1951,7 +1951,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getRoom
 
     open var getRoomRoomIdThrowableError: Error?
-    var getRoomRoomIdUnderlyingCallsCount = 0
+    open var getRoomRoomIdUnderlyingCallsCount = 0
     open var getRoomRoomIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -1981,7 +1981,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getRoomRoomIdReceivedRoomId: String?
     open var getRoomRoomIdReceivedInvocations: [String] = []
 
-    var getRoomRoomIdUnderlyingReturnValue: Room?
+    open var getRoomRoomIdUnderlyingReturnValue: Room?
     open var getRoomRoomIdReturnValue: Room? {
         get {
             if Thread.isMainThread {
@@ -2026,7 +2026,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getRoomPreviewFromRoomAlias
 
     open var getRoomPreviewFromRoomAliasRoomAliasThrowableError: Error?
-    var getRoomPreviewFromRoomAliasRoomAliasUnderlyingCallsCount = 0
+    open var getRoomPreviewFromRoomAliasRoomAliasUnderlyingCallsCount = 0
     open var getRoomPreviewFromRoomAliasRoomAliasCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2056,7 +2056,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getRoomPreviewFromRoomAliasRoomAliasReceivedRoomAlias: String?
     open var getRoomPreviewFromRoomAliasRoomAliasReceivedInvocations: [String] = []
 
-    var getRoomPreviewFromRoomAliasRoomAliasUnderlyingReturnValue: RoomPreview!
+    open var getRoomPreviewFromRoomAliasRoomAliasUnderlyingReturnValue: RoomPreview!
     open var getRoomPreviewFromRoomAliasRoomAliasReturnValue: RoomPreview! {
         get {
             if Thread.isMainThread {
@@ -2101,7 +2101,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getRoomPreviewFromRoomId
 
     open var getRoomPreviewFromRoomIdRoomIdViaServersThrowableError: Error?
-    var getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingCallsCount = 0
+    open var getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingCallsCount = 0
     open var getRoomPreviewFromRoomIdRoomIdViaServersCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2131,7 +2131,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getRoomPreviewFromRoomIdRoomIdViaServersReceivedArguments: (roomId: String, viaServers: [String])?
     open var getRoomPreviewFromRoomIdRoomIdViaServersReceivedInvocations: [(roomId: String, viaServers: [String])] = []
 
-    var getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingReturnValue: RoomPreview!
+    open var getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingReturnValue: RoomPreview!
     open var getRoomPreviewFromRoomIdRoomIdViaServersReturnValue: RoomPreview! {
         get {
             if Thread.isMainThread {
@@ -2176,7 +2176,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getSessionVerificationController
 
     open var getSessionVerificationControllerThrowableError: Error?
-    var getSessionVerificationControllerUnderlyingCallsCount = 0
+    open var getSessionVerificationControllerUnderlyingCallsCount = 0
     open var getSessionVerificationControllerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2204,7 +2204,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return getSessionVerificationControllerCallsCount > 0
     }
 
-    var getSessionVerificationControllerUnderlyingReturnValue: SessionVerificationController!
+    open var getSessionVerificationControllerUnderlyingReturnValue: SessionVerificationController!
     open var getSessionVerificationControllerReturnValue: SessionVerificationController! {
         get {
             if Thread.isMainThread {
@@ -2245,7 +2245,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getStoreSizes
 
     open var getStoreSizesThrowableError: Error?
-    var getStoreSizesUnderlyingCallsCount = 0
+    open var getStoreSizesUnderlyingCallsCount = 0
     open var getStoreSizesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2273,7 +2273,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return getStoreSizesCallsCount > 0
     }
 
-    var getStoreSizesUnderlyingReturnValue: StoreSizes!
+    open var getStoreSizesUnderlyingReturnValue: StoreSizes!
     open var getStoreSizesReturnValue: StoreSizes! {
         get {
             if Thread.isMainThread {
@@ -2314,7 +2314,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getUrl
 
     open var getUrlUrlThrowableError: Error?
-    var getUrlUrlUnderlyingCallsCount = 0
+    open var getUrlUrlUnderlyingCallsCount = 0
     open var getUrlUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2344,7 +2344,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getUrlUrlReceivedUrl: String?
     open var getUrlUrlReceivedInvocations: [String] = []
 
-    var getUrlUrlUnderlyingReturnValue: Data!
+    open var getUrlUrlUnderlyingReturnValue: Data!
     open var getUrlUrlReturnValue: Data! {
         get {
             if Thread.isMainThread {
@@ -2388,7 +2388,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - homeserver
 
-    var homeserverUnderlyingCallsCount = 0
+    open var homeserverUnderlyingCallsCount = 0
     open var homeserverCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2416,7 +2416,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return homeserverCallsCount > 0
     }
 
-    var homeserverUnderlyingReturnValue: String!
+    open var homeserverUnderlyingReturnValue: String!
     open var homeserverReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -2453,7 +2453,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - homeserverLoginDetails
 
-    var homeserverLoginDetailsUnderlyingCallsCount = 0
+    open var homeserverLoginDetailsUnderlyingCallsCount = 0
     open var homeserverLoginDetailsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2481,7 +2481,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return homeserverLoginDetailsCallsCount > 0
     }
 
-    var homeserverLoginDetailsUnderlyingReturnValue: HomeserverLoginDetails!
+    open var homeserverLoginDetailsUnderlyingReturnValue: HomeserverLoginDetails!
     open var homeserverLoginDetailsReturnValue: HomeserverLoginDetails! {
         get {
             if Thread.isMainThread {
@@ -2519,7 +2519,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - ignoreUser
 
     open var ignoreUserUserIdThrowableError: Error?
-    var ignoreUserUserIdUnderlyingCallsCount = 0
+    open var ignoreUserUserIdUnderlyingCallsCount = 0
     open var ignoreUserUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2565,7 +2565,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - ignoredUsers
 
     open var ignoredUsersThrowableError: Error?
-    var ignoredUsersUnderlyingCallsCount = 0
+    open var ignoredUsersUnderlyingCallsCount = 0
     open var ignoredUsersCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2593,7 +2593,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return ignoredUsersCallsCount > 0
     }
 
-    var ignoredUsersUnderlyingReturnValue: [String]!
+    open var ignoredUsersUnderlyingReturnValue: [String]!
     open var ignoredUsersReturnValue: [String]! {
         get {
             if Thread.isMainThread {
@@ -2634,7 +2634,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - isLivekitRtcSupported
 
     open var isLivekitRtcSupportedThrowableError: Error?
-    var isLivekitRtcSupportedUnderlyingCallsCount = 0
+    open var isLivekitRtcSupportedUnderlyingCallsCount = 0
     open var isLivekitRtcSupportedCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2662,7 +2662,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return isLivekitRtcSupportedCallsCount > 0
     }
 
-    var isLivekitRtcSupportedUnderlyingReturnValue: Bool!
+    open var isLivekitRtcSupportedUnderlyingReturnValue: Bool!
     open var isLivekitRtcSupportedReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -2703,7 +2703,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - isLoginWithQrCodeSupported
 
     open var isLoginWithQrCodeSupportedThrowableError: Error?
-    var isLoginWithQrCodeSupportedUnderlyingCallsCount = 0
+    open var isLoginWithQrCodeSupportedUnderlyingCallsCount = 0
     open var isLoginWithQrCodeSupportedCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2731,7 +2731,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return isLoginWithQrCodeSupportedCallsCount > 0
     }
 
-    var isLoginWithQrCodeSupportedUnderlyingReturnValue: Bool!
+    open var isLoginWithQrCodeSupportedUnderlyingReturnValue: Bool!
     open var isLoginWithQrCodeSupportedReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -2772,7 +2772,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - isReportRoomApiSupported
 
     open var isReportRoomApiSupportedThrowableError: Error?
-    var isReportRoomApiSupportedUnderlyingCallsCount = 0
+    open var isReportRoomApiSupportedUnderlyingCallsCount = 0
     open var isReportRoomApiSupportedCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2800,7 +2800,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return isReportRoomApiSupportedCallsCount > 0
     }
 
-    var isReportRoomApiSupportedUnderlyingReturnValue: Bool!
+    open var isReportRoomApiSupportedUnderlyingReturnValue: Bool!
     open var isReportRoomApiSupportedReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -2841,7 +2841,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - isRoomAliasAvailable
 
     open var isRoomAliasAvailableAliasThrowableError: Error?
-    var isRoomAliasAvailableAliasUnderlyingCallsCount = 0
+    open var isRoomAliasAvailableAliasUnderlyingCallsCount = 0
     open var isRoomAliasAvailableAliasCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2871,7 +2871,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var isRoomAliasAvailableAliasReceivedAlias: String?
     open var isRoomAliasAvailableAliasReceivedInvocations: [String] = []
 
-    var isRoomAliasAvailableAliasUnderlyingReturnValue: Bool!
+    open var isRoomAliasAvailableAliasUnderlyingReturnValue: Bool!
     open var isRoomAliasAvailableAliasReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -2916,7 +2916,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - joinRoomById
 
     open var joinRoomByIdRoomIdThrowableError: Error?
-    var joinRoomByIdRoomIdUnderlyingCallsCount = 0
+    open var joinRoomByIdRoomIdUnderlyingCallsCount = 0
     open var joinRoomByIdRoomIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -2946,7 +2946,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var joinRoomByIdRoomIdReceivedRoomId: String?
     open var joinRoomByIdRoomIdReceivedInvocations: [String] = []
 
-    var joinRoomByIdRoomIdUnderlyingReturnValue: Room!
+    open var joinRoomByIdRoomIdUnderlyingReturnValue: Room!
     open var joinRoomByIdRoomIdReturnValue: Room! {
         get {
             if Thread.isMainThread {
@@ -2991,7 +2991,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - joinRoomByIdOrAlias
 
     open var joinRoomByIdOrAliasRoomIdOrAliasServerNamesThrowableError: Error?
-    var joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingCallsCount = 0
+    open var joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingCallsCount = 0
     open var joinRoomByIdOrAliasRoomIdOrAliasServerNamesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3021,7 +3021,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var joinRoomByIdOrAliasRoomIdOrAliasServerNamesReceivedArguments: (roomIdOrAlias: String, serverNames: [String])?
     open var joinRoomByIdOrAliasRoomIdOrAliasServerNamesReceivedInvocations: [(roomIdOrAlias: String, serverNames: [String])] = []
 
-    var joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingReturnValue: Room!
+    open var joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingReturnValue: Room!
     open var joinRoomByIdOrAliasRoomIdOrAliasServerNamesReturnValue: Room! {
         get {
             if Thread.isMainThread {
@@ -3066,7 +3066,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - knock
 
     open var knockRoomIdOrAliasReasonServerNamesThrowableError: Error?
-    var knockRoomIdOrAliasReasonServerNamesUnderlyingCallsCount = 0
+    open var knockRoomIdOrAliasReasonServerNamesUnderlyingCallsCount = 0
     open var knockRoomIdOrAliasReasonServerNamesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3096,7 +3096,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var knockRoomIdOrAliasReasonServerNamesReceivedArguments: (roomIdOrAlias: String, reason: String?, serverNames: [String])?
     open var knockRoomIdOrAliasReasonServerNamesReceivedInvocations: [(roomIdOrAlias: String, reason: String?, serverNames: [String])] = []
 
-    var knockRoomIdOrAliasReasonServerNamesUnderlyingReturnValue: Room!
+    open var knockRoomIdOrAliasReasonServerNamesUnderlyingReturnValue: Room!
     open var knockRoomIdOrAliasReasonServerNamesReturnValue: Room! {
         get {
             if Thread.isMainThread {
@@ -3141,7 +3141,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - login
 
     open var loginUsernamePasswordInitialDeviceNameDeviceIdThrowableError: Error?
-    var loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = 0
+    open var loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = 0
     open var loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3187,7 +3187,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - loginWithEmail
 
     open var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdThrowableError: Error?
-    var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = 0
+    open var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = 0
     open var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3233,7 +3233,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - loginWithOidcCallback
 
     open var loginWithOidcCallbackCallbackUrlThrowableError: Error?
-    var loginWithOidcCallbackCallbackUrlUnderlyingCallsCount = 0
+    open var loginWithOidcCallbackCallbackUrlUnderlyingCallsCount = 0
     open var loginWithOidcCallbackCallbackUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3279,7 +3279,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - logout
 
     open var logoutThrowableError: Error?
-    var logoutUnderlyingCallsCount = 0
+    open var logoutUnderlyingCallsCount = 0
     open var logoutCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3318,7 +3318,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - newGrantLoginWithQrCodeHandler
 
-    var newGrantLoginWithQrCodeHandlerUnderlyingCallsCount = 0
+    open var newGrantLoginWithQrCodeHandlerUnderlyingCallsCount = 0
     open var newGrantLoginWithQrCodeHandlerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3346,7 +3346,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return newGrantLoginWithQrCodeHandlerCallsCount > 0
     }
 
-    var newGrantLoginWithQrCodeHandlerUnderlyingReturnValue: GrantLoginWithQrCodeHandler!
+    open var newGrantLoginWithQrCodeHandlerUnderlyingReturnValue: GrantLoginWithQrCodeHandler!
     open var newGrantLoginWithQrCodeHandlerReturnValue: GrantLoginWithQrCodeHandler! {
         get {
             if Thread.isMainThread {
@@ -3383,7 +3383,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - newLoginWithQrCodeHandler
 
-    var newLoginWithQrCodeHandlerOidcConfigurationUnderlyingCallsCount = 0
+    open var newLoginWithQrCodeHandlerOidcConfigurationUnderlyingCallsCount = 0
     open var newLoginWithQrCodeHandlerOidcConfigurationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3413,7 +3413,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var newLoginWithQrCodeHandlerOidcConfigurationReceivedOidcConfiguration: OidcConfiguration?
     open var newLoginWithQrCodeHandlerOidcConfigurationReceivedInvocations: [OidcConfiguration] = []
 
-    var newLoginWithQrCodeHandlerOidcConfigurationUnderlyingReturnValue: LoginWithQrCodeHandler!
+    open var newLoginWithQrCodeHandlerOidcConfigurationUnderlyingReturnValue: LoginWithQrCodeHandler!
     open var newLoginWithQrCodeHandlerOidcConfigurationReturnValue: LoginWithQrCodeHandler! {
         get {
             if Thread.isMainThread {
@@ -3455,7 +3455,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - notificationClient
 
     open var notificationClientProcessSetupThrowableError: Error?
-    var notificationClientProcessSetupUnderlyingCallsCount = 0
+    open var notificationClientProcessSetupUnderlyingCallsCount = 0
     open var notificationClientProcessSetupCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3485,7 +3485,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var notificationClientProcessSetupReceivedProcessSetup: NotificationProcessSetup?
     open var notificationClientProcessSetupReceivedInvocations: [NotificationProcessSetup] = []
 
-    var notificationClientProcessSetupUnderlyingReturnValue: NotificationClient!
+    open var notificationClientProcessSetupUnderlyingReturnValue: NotificationClient!
     open var notificationClientProcessSetupReturnValue: NotificationClient! {
         get {
             if Thread.isMainThread {
@@ -3529,7 +3529,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - observeAccountDataEvent
 
-    var observeAccountDataEventEventTypeListenerUnderlyingCallsCount = 0
+    open var observeAccountDataEventEventTypeListenerUnderlyingCallsCount = 0
     open var observeAccountDataEventEventTypeListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3559,7 +3559,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var observeAccountDataEventEventTypeListenerReceivedArguments: (eventType: AccountDataEventType, listener: AccountDataListener)?
     open var observeAccountDataEventEventTypeListenerReceivedInvocations: [(eventType: AccountDataEventType, listener: AccountDataListener)] = []
 
-    var observeAccountDataEventEventTypeListenerUnderlyingReturnValue: TaskHandle!
+    open var observeAccountDataEventEventTypeListenerUnderlyingReturnValue: TaskHandle!
     open var observeAccountDataEventEventTypeListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -3601,7 +3601,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - observeRoomAccountDataEvent
 
     open var observeRoomAccountDataEventRoomIdEventTypeListenerThrowableError: Error?
-    var observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingCallsCount = 0
+    open var observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingCallsCount = 0
     open var observeRoomAccountDataEventRoomIdEventTypeListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3631,7 +3631,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var observeRoomAccountDataEventRoomIdEventTypeListenerReceivedArguments: (roomId: String, eventType: RoomAccountDataEventType, listener: RoomAccountDataListener)?
     open var observeRoomAccountDataEventRoomIdEventTypeListenerReceivedInvocations: [(roomId: String, eventType: RoomAccountDataEventType, listener: RoomAccountDataListener)] = []
 
-    var observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingReturnValue: TaskHandle!
+    open var observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingReturnValue: TaskHandle!
     open var observeRoomAccountDataEventRoomIdEventTypeListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -3676,7 +3676,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - optimizeStores
 
     open var optimizeStoresThrowableError: Error?
-    var optimizeStoresUnderlyingCallsCount = 0
+    open var optimizeStoresUnderlyingCallsCount = 0
     open var optimizeStoresCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3715,7 +3715,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - registerNotificationHandler
 
-    var registerNotificationHandlerListenerUnderlyingCallsCount = 0
+    open var registerNotificationHandlerListenerUnderlyingCallsCount = 0
     open var registerNotificationHandlerListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3758,7 +3758,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - removeAvatar
 
     open var removeAvatarThrowableError: Error?
-    var removeAvatarUnderlyingCallsCount = 0
+    open var removeAvatarUnderlyingCallsCount = 0
     open var removeAvatarCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3798,7 +3798,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - resetSupportedVersions
 
     open var resetSupportedVersionsThrowableError: Error?
-    var resetSupportedVersionsUnderlyingCallsCount = 0
+    open var resetSupportedVersionsUnderlyingCallsCount = 0
     open var resetSupportedVersionsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3838,7 +3838,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - resetWellKnown
 
     open var resetWellKnownThrowableError: Error?
-    var resetWellKnownUnderlyingCallsCount = 0
+    open var resetWellKnownUnderlyingCallsCount = 0
     open var resetWellKnownCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3878,7 +3878,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - resolveRoomAlias
 
     open var resolveRoomAliasRoomAliasThrowableError: Error?
-    var resolveRoomAliasRoomAliasUnderlyingCallsCount = 0
+    open var resolveRoomAliasRoomAliasUnderlyingCallsCount = 0
     open var resolveRoomAliasRoomAliasCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3908,7 +3908,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var resolveRoomAliasRoomAliasReceivedRoomAlias: String?
     open var resolveRoomAliasRoomAliasReceivedInvocations: [String] = []
 
-    var resolveRoomAliasRoomAliasUnderlyingReturnValue: ResolvedRoomAlias?
+    open var resolveRoomAliasRoomAliasUnderlyingReturnValue: ResolvedRoomAlias?
     open var resolveRoomAliasRoomAliasReturnValue: ResolvedRoomAlias? {
         get {
             if Thread.isMainThread {
@@ -3953,7 +3953,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - restoreSession
 
     open var restoreSessionSessionThrowableError: Error?
-    var restoreSessionSessionUnderlyingCallsCount = 0
+    open var restoreSessionSessionUnderlyingCallsCount = 0
     open var restoreSessionSessionCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -3999,7 +3999,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - restoreSessionWith
 
     open var restoreSessionWithSessionRoomLoadSettingsThrowableError: Error?
-    var restoreSessionWithSessionRoomLoadSettingsUnderlyingCallsCount = 0
+    open var restoreSessionWithSessionRoomLoadSettingsUnderlyingCallsCount = 0
     open var restoreSessionWithSessionRoomLoadSettingsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4045,7 +4045,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - roomAliasExists
 
     open var roomAliasExistsRoomAliasThrowableError: Error?
-    var roomAliasExistsRoomAliasUnderlyingCallsCount = 0
+    open var roomAliasExistsRoomAliasUnderlyingCallsCount = 0
     open var roomAliasExistsRoomAliasCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4075,7 +4075,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var roomAliasExistsRoomAliasReceivedRoomAlias: String?
     open var roomAliasExistsRoomAliasReceivedInvocations: [String] = []
 
-    var roomAliasExistsRoomAliasUnderlyingReturnValue: Bool!
+    open var roomAliasExistsRoomAliasUnderlyingReturnValue: Bool!
     open var roomAliasExistsRoomAliasReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -4119,7 +4119,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - roomDirectorySearch
 
-    var roomDirectorySearchUnderlyingCallsCount = 0
+    open var roomDirectorySearchUnderlyingCallsCount = 0
     open var roomDirectorySearchCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4147,7 +4147,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return roomDirectorySearchCallsCount > 0
     }
 
-    var roomDirectorySearchUnderlyingReturnValue: RoomDirectorySearch!
+    open var roomDirectorySearchUnderlyingReturnValue: RoomDirectorySearch!
     open var roomDirectorySearchReturnValue: RoomDirectorySearch! {
         get {
             if Thread.isMainThread {
@@ -4184,7 +4184,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - rooms
 
-    var roomsUnderlyingCallsCount = 0
+    open var roomsUnderlyingCallsCount = 0
     open var roomsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4212,7 +4212,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return roomsCallsCount > 0
     }
 
-    var roomsUnderlyingReturnValue: [Room]!
+    open var roomsUnderlyingReturnValue: [Room]!
     open var roomsReturnValue: [Room]! {
         get {
             if Thread.isMainThread {
@@ -4250,7 +4250,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - searchUsers
 
     open var searchUsersSearchTermLimitThrowableError: Error?
-    var searchUsersSearchTermLimitUnderlyingCallsCount = 0
+    open var searchUsersSearchTermLimitUnderlyingCallsCount = 0
     open var searchUsersSearchTermLimitCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4280,7 +4280,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var searchUsersSearchTermLimitReceivedArguments: (searchTerm: String, limit: UInt64)?
     open var searchUsersSearchTermLimitReceivedInvocations: [(searchTerm: String, limit: UInt64)] = []
 
-    var searchUsersSearchTermLimitUnderlyingReturnValue: SearchUsersResults!
+    open var searchUsersSearchTermLimitUnderlyingReturnValue: SearchUsersResults!
     open var searchUsersSearchTermLimitReturnValue: SearchUsersResults! {
         get {
             if Thread.isMainThread {
@@ -4324,7 +4324,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - server
 
-    var serverUnderlyingCallsCount = 0
+    open var serverUnderlyingCallsCount = 0
     open var serverCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4352,7 +4352,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return serverCallsCount > 0
     }
 
-    var serverUnderlyingReturnValue: String?
+    open var serverUnderlyingReturnValue: String?
     open var serverReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -4390,7 +4390,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - serverVendorInfo
 
     open var serverVendorInfoThrowableError: Error?
-    var serverVendorInfoUnderlyingCallsCount = 0
+    open var serverVendorInfoUnderlyingCallsCount = 0
     open var serverVendorInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4418,7 +4418,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return serverVendorInfoCallsCount > 0
     }
 
-    var serverVendorInfoUnderlyingReturnValue: ServerVendorInfo!
+    open var serverVendorInfoUnderlyingReturnValue: ServerVendorInfo!
     open var serverVendorInfoReturnValue: ServerVendorInfo! {
         get {
             if Thread.isMainThread {
@@ -4459,7 +4459,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - session
 
     open var sessionThrowableError: Error?
-    var sessionUnderlyingCallsCount = 0
+    open var sessionUnderlyingCallsCount = 0
     open var sessionCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4487,7 +4487,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return sessionCallsCount > 0
     }
 
-    var sessionUnderlyingReturnValue: Session!
+    open var sessionUnderlyingReturnValue: Session!
     open var sessionReturnValue: Session! {
         get {
             if Thread.isMainThread {
@@ -4528,7 +4528,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - setAccountData
 
     open var setAccountDataEventTypeContentThrowableError: Error?
-    var setAccountDataEventTypeContentUnderlyingCallsCount = 0
+    open var setAccountDataEventTypeContentUnderlyingCallsCount = 0
     open var setAccountDataEventTypeContentCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4574,7 +4574,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - setDelegate
 
     open var setDelegateDelegateThrowableError: Error?
-    var setDelegateDelegateUnderlyingCallsCount = 0
+    open var setDelegateDelegateUnderlyingCallsCount = 0
     open var setDelegateDelegateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4604,7 +4604,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var setDelegateDelegateReceivedDelegate: ClientDelegate?
     open var setDelegateDelegateReceivedInvocations: [ClientDelegate?] = []
 
-    var setDelegateDelegateUnderlyingReturnValue: TaskHandle?
+    open var setDelegateDelegateUnderlyingReturnValue: TaskHandle?
     open var setDelegateDelegateReturnValue: TaskHandle? {
         get {
             if Thread.isMainThread {
@@ -4649,7 +4649,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - setDisplayName
 
     open var setDisplayNameNameThrowableError: Error?
-    var setDisplayNameNameUnderlyingCallsCount = 0
+    open var setDisplayNameNameUnderlyingCallsCount = 0
     open var setDisplayNameNameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4695,7 +4695,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - setInviteAvatarsDisplayPolicy
 
     open var setInviteAvatarsDisplayPolicyPolicyThrowableError: Error?
-    var setInviteAvatarsDisplayPolicyPolicyUnderlyingCallsCount = 0
+    open var setInviteAvatarsDisplayPolicyPolicyUnderlyingCallsCount = 0
     open var setInviteAvatarsDisplayPolicyPolicyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4741,7 +4741,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - setMediaPreviewDisplayPolicy
 
     open var setMediaPreviewDisplayPolicyPolicyThrowableError: Error?
-    var setMediaPreviewDisplayPolicyPolicyUnderlyingCallsCount = 0
+    open var setMediaPreviewDisplayPolicyPolicyUnderlyingCallsCount = 0
     open var setMediaPreviewDisplayPolicyPolicyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4787,7 +4787,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - setMediaRetentionPolicy
 
     open var setMediaRetentionPolicyPolicyThrowableError: Error?
-    var setMediaRetentionPolicyPolicyUnderlyingCallsCount = 0
+    open var setMediaRetentionPolicyPolicyUnderlyingCallsCount = 0
     open var setMediaRetentionPolicyPolicyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4833,7 +4833,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - setPusher
 
     open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangThrowableError: Error?
-    var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount = 0
+    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount = 0
     open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4879,7 +4879,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - setUtdDelegate
 
     open var setUtdDelegateUtdDelegateThrowableError: Error?
-    var setUtdDelegateUtdDelegateUnderlyingCallsCount = 0
+    open var setUtdDelegateUtdDelegateUnderlyingCallsCount = 0
     open var setUtdDelegateUtdDelegateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4924,7 +4924,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - slidingSyncVersion
 
-    var slidingSyncVersionUnderlyingCallsCount = 0
+    open var slidingSyncVersionUnderlyingCallsCount = 0
     open var slidingSyncVersionCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -4952,7 +4952,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return slidingSyncVersionCallsCount > 0
     }
 
-    var slidingSyncVersionUnderlyingReturnValue: SlidingSyncVersion!
+    open var slidingSyncVersionUnderlyingReturnValue: SlidingSyncVersion!
     open var slidingSyncVersionReturnValue: SlidingSyncVersion! {
         get {
             if Thread.isMainThread {
@@ -4989,7 +4989,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - spaceService
 
-    var spaceServiceUnderlyingCallsCount = 0
+    open var spaceServiceUnderlyingCallsCount = 0
     open var spaceServiceCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5017,7 +5017,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return spaceServiceCallsCount > 0
     }
 
-    var spaceServiceUnderlyingReturnValue: SpaceService!
+    open var spaceServiceUnderlyingReturnValue: SpaceService!
     open var spaceServiceReturnValue: SpaceService! {
         get {
             if Thread.isMainThread {
@@ -5041,12 +5041,12 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             }
         }
     }
-    open var spaceServiceClosure: (() -> SpaceService)?
+    open var spaceServiceClosure: (() async -> SpaceService)?
 
-    open override func spaceService() -> SpaceService {
+    open override func spaceService() async -> SpaceService {
         spaceServiceCallsCount += 1
         if let spaceServiceClosure = spaceServiceClosure {
-            return spaceServiceClosure()
+            return await spaceServiceClosure()
         } else {
             return spaceServiceReturnValue
         }
@@ -5055,7 +5055,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - startSsoLogin
 
     open var startSsoLoginRedirectUrlIdpIdThrowableError: Error?
-    var startSsoLoginRedirectUrlIdpIdUnderlyingCallsCount = 0
+    open var startSsoLoginRedirectUrlIdpIdUnderlyingCallsCount = 0
     open var startSsoLoginRedirectUrlIdpIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5085,7 +5085,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var startSsoLoginRedirectUrlIdpIdReceivedArguments: (redirectUrl: String, idpId: String?)?
     open var startSsoLoginRedirectUrlIdpIdReceivedInvocations: [(redirectUrl: String, idpId: String?)] = []
 
-    var startSsoLoginRedirectUrlIdpIdUnderlyingReturnValue: SsoHandler!
+    open var startSsoLoginRedirectUrlIdpIdUnderlyingReturnValue: SsoHandler!
     open var startSsoLoginRedirectUrlIdpIdReturnValue: SsoHandler! {
         get {
             if Thread.isMainThread {
@@ -5129,7 +5129,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - subscribeToIgnoredUsers
 
-    var subscribeToIgnoredUsersListenerUnderlyingCallsCount = 0
+    open var subscribeToIgnoredUsersListenerUnderlyingCallsCount = 0
     open var subscribeToIgnoredUsersListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5159,7 +5159,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var subscribeToIgnoredUsersListenerReceivedListener: IgnoredUsersListener?
     open var subscribeToIgnoredUsersListenerReceivedInvocations: [IgnoredUsersListener] = []
 
-    var subscribeToIgnoredUsersListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToIgnoredUsersListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToIgnoredUsersListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -5201,7 +5201,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - subscribeToMediaPreviewConfig
 
     open var subscribeToMediaPreviewConfigListenerThrowableError: Error?
-    var subscribeToMediaPreviewConfigListenerUnderlyingCallsCount = 0
+    open var subscribeToMediaPreviewConfigListenerUnderlyingCallsCount = 0
     open var subscribeToMediaPreviewConfigListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5231,7 +5231,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var subscribeToMediaPreviewConfigListenerReceivedListener: MediaPreviewConfigListener?
     open var subscribeToMediaPreviewConfigListenerReceivedInvocations: [MediaPreviewConfigListener] = []
 
-    var subscribeToMediaPreviewConfigListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToMediaPreviewConfigListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToMediaPreviewConfigListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -5276,7 +5276,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - subscribeToRoomInfo
 
     open var subscribeToRoomInfoRoomIdListenerThrowableError: Error?
-    var subscribeToRoomInfoRoomIdListenerUnderlyingCallsCount = 0
+    open var subscribeToRoomInfoRoomIdListenerUnderlyingCallsCount = 0
     open var subscribeToRoomInfoRoomIdListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5306,7 +5306,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var subscribeToRoomInfoRoomIdListenerReceivedArguments: (roomId: String, listener: RoomInfoListener)?
     open var subscribeToRoomInfoRoomIdListenerReceivedInvocations: [(roomId: String, listener: RoomInfoListener)] = []
 
-    var subscribeToRoomInfoRoomIdListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToRoomInfoRoomIdListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToRoomInfoRoomIdListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -5350,7 +5350,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - subscribeToSendQueueStatus
 
-    var subscribeToSendQueueStatusListenerUnderlyingCallsCount = 0
+    open var subscribeToSendQueueStatusListenerUnderlyingCallsCount = 0
     open var subscribeToSendQueueStatusListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5380,7 +5380,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var subscribeToSendQueueStatusListenerReceivedListener: SendQueueRoomErrorListener?
     open var subscribeToSendQueueStatusListenerReceivedInvocations: [SendQueueRoomErrorListener] = []
 
-    var subscribeToSendQueueStatusListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToSendQueueStatusListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToSendQueueStatusListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -5422,7 +5422,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - subscribeToSendQueueUpdates
 
     open var subscribeToSendQueueUpdatesListenerThrowableError: Error?
-    var subscribeToSendQueueUpdatesListenerUnderlyingCallsCount = 0
+    open var subscribeToSendQueueUpdatesListenerUnderlyingCallsCount = 0
     open var subscribeToSendQueueUpdatesListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5452,7 +5452,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var subscribeToSendQueueUpdatesListenerReceivedListener: SendQueueRoomUpdateListener?
     open var subscribeToSendQueueUpdatesListenerReceivedInvocations: [SendQueueRoomUpdateListener] = []
 
-    var subscribeToSendQueueUpdatesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToSendQueueUpdatesListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToSendQueueUpdatesListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -5496,7 +5496,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - syncService
 
-    var syncServiceUnderlyingCallsCount = 0
+    open var syncServiceUnderlyingCallsCount = 0
     open var syncServiceCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5524,7 +5524,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return syncServiceCallsCount > 0
     }
 
-    var syncServiceUnderlyingReturnValue: SyncServiceBuilder!
+    open var syncServiceUnderlyingReturnValue: SyncServiceBuilder!
     open var syncServiceReturnValue: SyncServiceBuilder! {
         get {
             if Thread.isMainThread {
@@ -5562,7 +5562,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - trackRecentlyVisitedRoom
 
     open var trackRecentlyVisitedRoomRoomThrowableError: Error?
-    var trackRecentlyVisitedRoomRoomUnderlyingCallsCount = 0
+    open var trackRecentlyVisitedRoomRoomUnderlyingCallsCount = 0
     open var trackRecentlyVisitedRoomRoomCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5608,7 +5608,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - unignoreUser
 
     open var unignoreUserUserIdThrowableError: Error?
-    var unignoreUserUserIdUnderlyingCallsCount = 0
+    open var unignoreUserUserIdUnderlyingCallsCount = 0
     open var unignoreUserUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5654,7 +5654,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - uploadAvatar
 
     open var uploadAvatarMimeTypeDataThrowableError: Error?
-    var uploadAvatarMimeTypeDataUnderlyingCallsCount = 0
+    open var uploadAvatarMimeTypeDataUnderlyingCallsCount = 0
     open var uploadAvatarMimeTypeDataCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5700,7 +5700,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - uploadMedia
 
     open var uploadMediaMimeTypeDataProgressWatcherThrowableError: Error?
-    var uploadMediaMimeTypeDataProgressWatcherUnderlyingCallsCount = 0
+    open var uploadMediaMimeTypeDataProgressWatcherUnderlyingCallsCount = 0
     open var uploadMediaMimeTypeDataProgressWatcherCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5730,7 +5730,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var uploadMediaMimeTypeDataProgressWatcherReceivedArguments: (mimeType: String, data: Data, progressWatcher: ProgressWatcher?)?
     open var uploadMediaMimeTypeDataProgressWatcherReceivedInvocations: [(mimeType: String, data: Data, progressWatcher: ProgressWatcher?)] = []
 
-    var uploadMediaMimeTypeDataProgressWatcherUnderlyingReturnValue: String!
+    open var uploadMediaMimeTypeDataProgressWatcherUnderlyingReturnValue: String!
     open var uploadMediaMimeTypeDataProgressWatcherReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -5775,7 +5775,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - urlForOidc
 
     open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesThrowableError: Error?
-    var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingCallsCount = 0
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingCallsCount = 0
     open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5805,7 +5805,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments: (oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?, additionalScopes: [String]?)?
     open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedInvocations: [(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?, additionalScopes: [String]?)] = []
 
-    var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingReturnValue: OAuthAuthorizationData!
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingReturnValue: OAuthAuthorizationData!
     open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReturnValue: OAuthAuthorizationData! {
         get {
             if Thread.isMainThread {
@@ -5850,7 +5850,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - userId
 
     open var userIdThrowableError: Error?
-    var userIdUnderlyingCallsCount = 0
+    open var userIdUnderlyingCallsCount = 0
     open var userIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5878,7 +5878,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return userIdCallsCount > 0
     }
 
-    var userIdUnderlyingReturnValue: String!
+    open var userIdUnderlyingReturnValue: String!
     open var userIdReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -5919,7 +5919,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - userIdServerName
 
     open var userIdServerNameThrowableError: Error?
-    var userIdServerNameUnderlyingCallsCount = 0
+    open var userIdServerNameUnderlyingCallsCount = 0
     open var userIdServerNameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -5947,7 +5947,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return userIdServerNameCallsCount > 0
     }
 
-    var userIdServerNameUnderlyingReturnValue: String!
+    open var userIdServerNameUnderlyingReturnValue: String!
     open var userIdServerNameReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -5988,7 +5988,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - addRecentEmoji
 
     open var addRecentEmojiEmojiThrowableError: Error?
-    var addRecentEmojiEmojiUnderlyingCallsCount = 0
+    open var addRecentEmojiEmojiUnderlyingCallsCount = 0
     open var addRecentEmojiEmojiCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6034,7 +6034,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     //MARK: - getRecentEmojis
 
     open var getRecentEmojisThrowableError: Error?
-    var getRecentEmojisUnderlyingCallsCount = 0
+    open var getRecentEmojisUnderlyingCallsCount = 0
     open var getRecentEmojisCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6062,7 +6062,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         return getRecentEmojisCallsCount > 0
     }
 
-    var getRecentEmojisUnderlyingReturnValue: [RecentEmoji]!
+    open var getRecentEmojisUnderlyingReturnValue: [RecentEmoji]!
     open var getRecentEmojisReturnValue: [RecentEmoji]! {
         get {
             if Thread.isMainThread {
@@ -6101,7 +6101,7 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     }
 }
 open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -6117,7 +6117,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - addRootCertificates
 
-    var addRootCertificatesCertificatesUnderlyingCallsCount = 0
+    open var addRootCertificatesCertificatesUnderlyingCallsCount = 0
     open var addRootCertificatesCertificatesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6147,7 +6147,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var addRootCertificatesCertificatesReceivedCertificates: [Data]?
     open var addRootCertificatesCertificatesReceivedInvocations: [[Data]] = []
 
-    var addRootCertificatesCertificatesUnderlyingReturnValue: ClientBuilder!
+    open var addRootCertificatesCertificatesUnderlyingReturnValue: ClientBuilder!
     open var addRootCertificatesCertificatesReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6188,7 +6188,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - autoEnableBackups
 
-    var autoEnableBackupsAutoEnableBackupsUnderlyingCallsCount = 0
+    open var autoEnableBackupsAutoEnableBackupsUnderlyingCallsCount = 0
     open var autoEnableBackupsAutoEnableBackupsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6218,7 +6218,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var autoEnableBackupsAutoEnableBackupsReceivedAutoEnableBackups: Bool?
     open var autoEnableBackupsAutoEnableBackupsReceivedInvocations: [Bool] = []
 
-    var autoEnableBackupsAutoEnableBackupsUnderlyingReturnValue: ClientBuilder!
+    open var autoEnableBackupsAutoEnableBackupsUnderlyingReturnValue: ClientBuilder!
     open var autoEnableBackupsAutoEnableBackupsReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6259,7 +6259,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - autoEnableCrossSigning
 
-    var autoEnableCrossSigningAutoEnableCrossSigningUnderlyingCallsCount = 0
+    open var autoEnableCrossSigningAutoEnableCrossSigningUnderlyingCallsCount = 0
     open var autoEnableCrossSigningAutoEnableCrossSigningCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6289,7 +6289,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var autoEnableCrossSigningAutoEnableCrossSigningReceivedAutoEnableCrossSigning: Bool?
     open var autoEnableCrossSigningAutoEnableCrossSigningReceivedInvocations: [Bool] = []
 
-    var autoEnableCrossSigningAutoEnableCrossSigningUnderlyingReturnValue: ClientBuilder!
+    open var autoEnableCrossSigningAutoEnableCrossSigningUnderlyingReturnValue: ClientBuilder!
     open var autoEnableCrossSigningAutoEnableCrossSigningReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6330,7 +6330,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - backupDownloadStrategy
 
-    var backupDownloadStrategyBackupDownloadStrategyUnderlyingCallsCount = 0
+    open var backupDownloadStrategyBackupDownloadStrategyUnderlyingCallsCount = 0
     open var backupDownloadStrategyBackupDownloadStrategyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6360,7 +6360,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var backupDownloadStrategyBackupDownloadStrategyReceivedBackupDownloadStrategy: BackupDownloadStrategy?
     open var backupDownloadStrategyBackupDownloadStrategyReceivedInvocations: [BackupDownloadStrategy] = []
 
-    var backupDownloadStrategyBackupDownloadStrategyUnderlyingReturnValue: ClientBuilder!
+    open var backupDownloadStrategyBackupDownloadStrategyUnderlyingReturnValue: ClientBuilder!
     open var backupDownloadStrategyBackupDownloadStrategyReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6402,7 +6402,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     //MARK: - build
 
     open var buildThrowableError: Error?
-    var buildUnderlyingCallsCount = 0
+    open var buildUnderlyingCallsCount = 0
     open var buildCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6430,7 +6430,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         return buildCallsCount > 0
     }
 
-    var buildUnderlyingReturnValue: Client!
+    open var buildUnderlyingReturnValue: Client!
     open var buildReturnValue: Client! {
         get {
             if Thread.isMainThread {
@@ -6470,7 +6470,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - crossProcessStoreLocksHolderName
 
-    var crossProcessStoreLocksHolderNameHolderNameUnderlyingCallsCount = 0
+    open var crossProcessStoreLocksHolderNameHolderNameUnderlyingCallsCount = 0
     open var crossProcessStoreLocksHolderNameHolderNameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6500,7 +6500,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var crossProcessStoreLocksHolderNameHolderNameReceivedHolderName: String?
     open var crossProcessStoreLocksHolderNameHolderNameReceivedInvocations: [String] = []
 
-    var crossProcessStoreLocksHolderNameHolderNameUnderlyingReturnValue: ClientBuilder!
+    open var crossProcessStoreLocksHolderNameHolderNameUnderlyingReturnValue: ClientBuilder!
     open var crossProcessStoreLocksHolderNameHolderNameReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6541,7 +6541,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - decryptionSettings
 
-    var decryptionSettingsDecryptionSettingsUnderlyingCallsCount = 0
+    open var decryptionSettingsDecryptionSettingsUnderlyingCallsCount = 0
     open var decryptionSettingsDecryptionSettingsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6571,7 +6571,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var decryptionSettingsDecryptionSettingsReceivedDecryptionSettings: DecryptionSettings?
     open var decryptionSettingsDecryptionSettingsReceivedInvocations: [DecryptionSettings] = []
 
-    var decryptionSettingsDecryptionSettingsUnderlyingReturnValue: ClientBuilder!
+    open var decryptionSettingsDecryptionSettingsUnderlyingReturnValue: ClientBuilder!
     open var decryptionSettingsDecryptionSettingsReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6612,7 +6612,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - disableAutomaticTokenRefresh
 
-    var disableAutomaticTokenRefreshUnderlyingCallsCount = 0
+    open var disableAutomaticTokenRefreshUnderlyingCallsCount = 0
     open var disableAutomaticTokenRefreshCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6640,7 +6640,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         return disableAutomaticTokenRefreshCallsCount > 0
     }
 
-    var disableAutomaticTokenRefreshUnderlyingReturnValue: ClientBuilder!
+    open var disableAutomaticTokenRefreshUnderlyingReturnValue: ClientBuilder!
     open var disableAutomaticTokenRefreshReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6677,7 +6677,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - disableBuiltInRootCertificates
 
-    var disableBuiltInRootCertificatesUnderlyingCallsCount = 0
+    open var disableBuiltInRootCertificatesUnderlyingCallsCount = 0
     open var disableBuiltInRootCertificatesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6705,7 +6705,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         return disableBuiltInRootCertificatesCallsCount > 0
     }
 
-    var disableBuiltInRootCertificatesUnderlyingReturnValue: ClientBuilder!
+    open var disableBuiltInRootCertificatesUnderlyingReturnValue: ClientBuilder!
     open var disableBuiltInRootCertificatesReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6742,7 +6742,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - disableSslVerification
 
-    var disableSslVerificationUnderlyingCallsCount = 0
+    open var disableSslVerificationUnderlyingCallsCount = 0
     open var disableSslVerificationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6770,7 +6770,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         return disableSslVerificationCallsCount > 0
     }
 
-    var disableSslVerificationUnderlyingReturnValue: ClientBuilder!
+    open var disableSslVerificationUnderlyingReturnValue: ClientBuilder!
     open var disableSslVerificationReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6807,7 +6807,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - enableOidcRefreshLock
 
-    var enableOidcRefreshLockUnderlyingCallsCount = 0
+    open var enableOidcRefreshLockUnderlyingCallsCount = 0
     open var enableOidcRefreshLockCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6835,7 +6835,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         return enableOidcRefreshLockCallsCount > 0
     }
 
-    var enableOidcRefreshLockUnderlyingReturnValue: ClientBuilder!
+    open var enableOidcRefreshLockUnderlyingReturnValue: ClientBuilder!
     open var enableOidcRefreshLockReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6872,7 +6872,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - enableShareHistoryOnInvite
 
-    var enableShareHistoryOnInviteEnableShareHistoryOnInviteUnderlyingCallsCount = 0
+    open var enableShareHistoryOnInviteEnableShareHistoryOnInviteUnderlyingCallsCount = 0
     open var enableShareHistoryOnInviteEnableShareHistoryOnInviteCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6902,7 +6902,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var enableShareHistoryOnInviteEnableShareHistoryOnInviteReceivedEnableShareHistoryOnInvite: Bool?
     open var enableShareHistoryOnInviteEnableShareHistoryOnInviteReceivedInvocations: [Bool] = []
 
-    var enableShareHistoryOnInviteEnableShareHistoryOnInviteUnderlyingReturnValue: ClientBuilder!
+    open var enableShareHistoryOnInviteEnableShareHistoryOnInviteUnderlyingReturnValue: ClientBuilder!
     open var enableShareHistoryOnInviteEnableShareHistoryOnInviteReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -6943,7 +6943,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - homeserverUrl
 
-    var homeserverUrlUrlUnderlyingCallsCount = 0
+    open var homeserverUrlUrlUnderlyingCallsCount = 0
     open var homeserverUrlUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -6973,7 +6973,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var homeserverUrlUrlReceivedUrl: String?
     open var homeserverUrlUrlReceivedInvocations: [String] = []
 
-    var homeserverUrlUrlUnderlyingReturnValue: ClientBuilder!
+    open var homeserverUrlUrlUnderlyingReturnValue: ClientBuilder!
     open var homeserverUrlUrlReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7014,7 +7014,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - inMemoryStore
 
-    var inMemoryStoreUnderlyingCallsCount = 0
+    open var inMemoryStoreUnderlyingCallsCount = 0
     open var inMemoryStoreCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7042,7 +7042,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         return inMemoryStoreCallsCount > 0
     }
 
-    var inMemoryStoreUnderlyingReturnValue: ClientBuilder!
+    open var inMemoryStoreUnderlyingReturnValue: ClientBuilder!
     open var inMemoryStoreReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7079,7 +7079,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - proxy
 
-    var proxyUrlUnderlyingCallsCount = 0
+    open var proxyUrlUnderlyingCallsCount = 0
     open var proxyUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7109,7 +7109,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var proxyUrlReceivedUrl: String?
     open var proxyUrlReceivedInvocations: [String] = []
 
-    var proxyUrlUnderlyingReturnValue: ClientBuilder!
+    open var proxyUrlUnderlyingReturnValue: ClientBuilder!
     open var proxyUrlReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7150,7 +7150,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - requestConfig
 
-    var requestConfigConfigUnderlyingCallsCount = 0
+    open var requestConfigConfigUnderlyingCallsCount = 0
     open var requestConfigConfigCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7180,7 +7180,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var requestConfigConfigReceivedConfig: RequestConfig?
     open var requestConfigConfigReceivedInvocations: [RequestConfig] = []
 
-    var requestConfigConfigUnderlyingReturnValue: ClientBuilder!
+    open var requestConfigConfigUnderlyingReturnValue: ClientBuilder!
     open var requestConfigConfigReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7221,7 +7221,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - roomKeyRecipientStrategy
 
-    var roomKeyRecipientStrategyStrategyUnderlyingCallsCount = 0
+    open var roomKeyRecipientStrategyStrategyUnderlyingCallsCount = 0
     open var roomKeyRecipientStrategyStrategyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7251,7 +7251,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var roomKeyRecipientStrategyStrategyReceivedStrategy: CollectStrategy?
     open var roomKeyRecipientStrategyStrategyReceivedInvocations: [CollectStrategy] = []
 
-    var roomKeyRecipientStrategyStrategyUnderlyingReturnValue: ClientBuilder!
+    open var roomKeyRecipientStrategyStrategyUnderlyingReturnValue: ClientBuilder!
     open var roomKeyRecipientStrategyStrategyReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7292,7 +7292,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - serverName
 
-    var serverNameServerNameUnderlyingCallsCount = 0
+    open var serverNameServerNameUnderlyingCallsCount = 0
     open var serverNameServerNameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7322,7 +7322,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var serverNameServerNameReceivedServerName: String?
     open var serverNameServerNameReceivedInvocations: [String] = []
 
-    var serverNameServerNameUnderlyingReturnValue: ClientBuilder!
+    open var serverNameServerNameUnderlyingReturnValue: ClientBuilder!
     open var serverNameServerNameReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7363,7 +7363,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - serverNameOrHomeserverUrl
 
-    var serverNameOrHomeserverUrlServerNameOrUrlUnderlyingCallsCount = 0
+    open var serverNameOrHomeserverUrlServerNameOrUrlUnderlyingCallsCount = 0
     open var serverNameOrHomeserverUrlServerNameOrUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7393,7 +7393,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var serverNameOrHomeserverUrlServerNameOrUrlReceivedServerNameOrUrl: String?
     open var serverNameOrHomeserverUrlServerNameOrUrlReceivedInvocations: [String] = []
 
-    var serverNameOrHomeserverUrlServerNameOrUrlUnderlyingReturnValue: ClientBuilder!
+    open var serverNameOrHomeserverUrlServerNameOrUrlUnderlyingReturnValue: ClientBuilder!
     open var serverNameOrHomeserverUrlServerNameOrUrlReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7434,7 +7434,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - sessionPaths
 
-    var sessionPathsDataPathCachePathUnderlyingCallsCount = 0
+    open var sessionPathsDataPathCachePathUnderlyingCallsCount = 0
     open var sessionPathsDataPathCachePathCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7464,7 +7464,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var sessionPathsDataPathCachePathReceivedArguments: (dataPath: String, cachePath: String)?
     open var sessionPathsDataPathCachePathReceivedInvocations: [(dataPath: String, cachePath: String)] = []
 
-    var sessionPathsDataPathCachePathUnderlyingReturnValue: ClientBuilder!
+    open var sessionPathsDataPathCachePathUnderlyingReturnValue: ClientBuilder!
     open var sessionPathsDataPathCachePathReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7505,7 +7505,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - setSessionDelegate
 
-    var setSessionDelegateSessionDelegateUnderlyingCallsCount = 0
+    open var setSessionDelegateSessionDelegateUnderlyingCallsCount = 0
     open var setSessionDelegateSessionDelegateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7535,7 +7535,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var setSessionDelegateSessionDelegateReceivedSessionDelegate: ClientSessionDelegate?
     open var setSessionDelegateSessionDelegateReceivedInvocations: [ClientSessionDelegate] = []
 
-    var setSessionDelegateSessionDelegateUnderlyingReturnValue: ClientBuilder!
+    open var setSessionDelegateSessionDelegateUnderlyingReturnValue: ClientBuilder!
     open var setSessionDelegateSessionDelegateReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7576,7 +7576,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - slidingSyncVersionBuilder
 
-    var slidingSyncVersionBuilderVersionBuilderUnderlyingCallsCount = 0
+    open var slidingSyncVersionBuilderVersionBuilderUnderlyingCallsCount = 0
     open var slidingSyncVersionBuilderVersionBuilderCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7606,7 +7606,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var slidingSyncVersionBuilderVersionBuilderReceivedVersionBuilder: SlidingSyncVersionBuilder?
     open var slidingSyncVersionBuilderVersionBuilderReceivedInvocations: [SlidingSyncVersionBuilder] = []
 
-    var slidingSyncVersionBuilderVersionBuilderUnderlyingReturnValue: ClientBuilder!
+    open var slidingSyncVersionBuilderVersionBuilderUnderlyingReturnValue: ClientBuilder!
     open var slidingSyncVersionBuilderVersionBuilderReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7647,7 +7647,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - sqliteStore
 
-    var sqliteStoreConfigUnderlyingCallsCount = 0
+    open var sqliteStoreConfigUnderlyingCallsCount = 0
     open var sqliteStoreConfigCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7677,7 +7677,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var sqliteStoreConfigReceivedConfig: SqliteStoreBuilder?
     open var sqliteStoreConfigReceivedInvocations: [SqliteStoreBuilder] = []
 
-    var sqliteStoreConfigUnderlyingReturnValue: ClientBuilder!
+    open var sqliteStoreConfigUnderlyingReturnValue: ClientBuilder!
     open var sqliteStoreConfigReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7718,7 +7718,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - systemIsMemoryConstrained
 
-    var systemIsMemoryConstrainedUnderlyingCallsCount = 0
+    open var systemIsMemoryConstrainedUnderlyingCallsCount = 0
     open var systemIsMemoryConstrainedCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7746,7 +7746,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         return systemIsMemoryConstrainedCallsCount > 0
     }
 
-    var systemIsMemoryConstrainedUnderlyingReturnValue: ClientBuilder!
+    open var systemIsMemoryConstrainedUnderlyingReturnValue: ClientBuilder!
     open var systemIsMemoryConstrainedReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7783,7 +7783,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - threadsEnabled
 
-    var threadsEnabledEnabledThreadSubscriptionsUnderlyingCallsCount = 0
+    open var threadsEnabledEnabledThreadSubscriptionsUnderlyingCallsCount = 0
     open var threadsEnabledEnabledThreadSubscriptionsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7813,7 +7813,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var threadsEnabledEnabledThreadSubscriptionsReceivedArguments: (enabled: Bool, threadSubscriptions: Bool)?
     open var threadsEnabledEnabledThreadSubscriptionsReceivedInvocations: [(enabled: Bool, threadSubscriptions: Bool)] = []
 
-    var threadsEnabledEnabledThreadSubscriptionsUnderlyingReturnValue: ClientBuilder!
+    open var threadsEnabledEnabledThreadSubscriptionsUnderlyingReturnValue: ClientBuilder!
     open var threadsEnabledEnabledThreadSubscriptionsReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7854,7 +7854,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - userAgent
 
-    var userAgentUserAgentUnderlyingCallsCount = 0
+    open var userAgentUserAgentUnderlyingCallsCount = 0
     open var userAgentUserAgentCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7884,7 +7884,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var userAgentUserAgentReceivedUserAgent: String?
     open var userAgentUserAgentReceivedInvocations: [String] = []
 
-    var userAgentUserAgentUnderlyingReturnValue: ClientBuilder!
+    open var userAgentUserAgentUnderlyingReturnValue: ClientBuilder!
     open var userAgentUserAgentReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7925,7 +7925,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - username
 
-    var usernameUsernameUnderlyingCallsCount = 0
+    open var usernameUsernameUnderlyingCallsCount = 0
     open var usernameUsernameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -7955,7 +7955,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     open var usernameUsernameReceivedUsername: String?
     open var usernameUsernameReceivedInvocations: [String] = []
 
-    var usernameUsernameUnderlyingReturnValue: ClientBuilder!
+    open var usernameUsernameUnderlyingReturnValue: ClientBuilder!
     open var usernameUsernameReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
@@ -7995,7 +7995,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
     }
 }
 open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -8012,7 +8012,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - backupExistsOnServer
 
     open var backupExistsOnServerThrowableError: Error?
-    var backupExistsOnServerUnderlyingCallsCount = 0
+    open var backupExistsOnServerUnderlyingCallsCount = 0
     open var backupExistsOnServerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8040,7 +8040,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         return backupExistsOnServerCallsCount > 0
     }
 
-    var backupExistsOnServerUnderlyingReturnValue: Bool!
+    open var backupExistsOnServerUnderlyingReturnValue: Bool!
     open var backupExistsOnServerReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -8080,7 +8080,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - backupState
 
-    var backupStateUnderlyingCallsCount = 0
+    open var backupStateUnderlyingCallsCount = 0
     open var backupStateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8108,7 +8108,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         return backupStateCallsCount > 0
     }
 
-    var backupStateUnderlyingReturnValue: BackupState!
+    open var backupStateUnderlyingReturnValue: BackupState!
     open var backupStateReturnValue: BackupState! {
         get {
             if Thread.isMainThread {
@@ -8145,7 +8145,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - backupStateListener
 
-    var backupStateListenerListenerUnderlyingCallsCount = 0
+    open var backupStateListenerListenerUnderlyingCallsCount = 0
     open var backupStateListenerListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8175,7 +8175,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     open var backupStateListenerListenerReceivedListener: BackupStateListener?
     open var backupStateListenerListenerReceivedInvocations: [BackupStateListener] = []
 
-    var backupStateListenerListenerUnderlyingReturnValue: TaskHandle!
+    open var backupStateListenerListenerUnderlyingReturnValue: TaskHandle!
     open var backupStateListenerListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -8216,7 +8216,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - curve25519Key
 
-    var curve25519KeyUnderlyingCallsCount = 0
+    open var curve25519KeyUnderlyingCallsCount = 0
     open var curve25519KeyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8244,7 +8244,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         return curve25519KeyCallsCount > 0
     }
 
-    var curve25519KeyUnderlyingReturnValue: String?
+    open var curve25519KeyUnderlyingReturnValue: String?
     open var curve25519KeyReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -8282,7 +8282,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - disableRecovery
 
     open var disableRecoveryThrowableError: Error?
-    var disableRecoveryUnderlyingCallsCount = 0
+    open var disableRecoveryUnderlyingCallsCount = 0
     open var disableRecoveryCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8321,7 +8321,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - ed25519Key
 
-    var ed25519KeyUnderlyingCallsCount = 0
+    open var ed25519KeyUnderlyingCallsCount = 0
     open var ed25519KeyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8349,7 +8349,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         return ed25519KeyCallsCount > 0
     }
 
-    var ed25519KeyUnderlyingReturnValue: String?
+    open var ed25519KeyUnderlyingReturnValue: String?
     open var ed25519KeyReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -8387,7 +8387,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - enableBackups
 
     open var enableBackupsThrowableError: Error?
-    var enableBackupsUnderlyingCallsCount = 0
+    open var enableBackupsUnderlyingCallsCount = 0
     open var enableBackupsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8427,7 +8427,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - enableRecovery
 
     open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerThrowableError: Error?
-    var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingCallsCount = 0
+    open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingCallsCount = 0
     open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8457,7 +8457,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedArguments: (waitForBackupsToUpload: Bool, passphrase: String?, progressListener: EnableRecoveryProgressListener)?
     open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedInvocations: [(waitForBackupsToUpload: Bool, passphrase: String?, progressListener: EnableRecoveryProgressListener)] = []
 
-    var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReturnValue: String!
+    open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReturnValue: String!
     open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -8502,7 +8502,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - hasDevicesToVerifyAgainst
 
     open var hasDevicesToVerifyAgainstThrowableError: Error?
-    var hasDevicesToVerifyAgainstUnderlyingCallsCount = 0
+    open var hasDevicesToVerifyAgainstUnderlyingCallsCount = 0
     open var hasDevicesToVerifyAgainstCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8530,7 +8530,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         return hasDevicesToVerifyAgainstCallsCount > 0
     }
 
-    var hasDevicesToVerifyAgainstUnderlyingReturnValue: Bool!
+    open var hasDevicesToVerifyAgainstUnderlyingReturnValue: Bool!
     open var hasDevicesToVerifyAgainstReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -8571,7 +8571,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - isLastDevice
 
     open var isLastDeviceThrowableError: Error?
-    var isLastDeviceUnderlyingCallsCount = 0
+    open var isLastDeviceUnderlyingCallsCount = 0
     open var isLastDeviceCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8599,7 +8599,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         return isLastDeviceCallsCount > 0
     }
 
-    var isLastDeviceUnderlyingReturnValue: Bool!
+    open var isLastDeviceUnderlyingReturnValue: Bool!
     open var isLastDeviceReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -8640,7 +8640,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - recover
 
     open var recoverRecoveryKeyThrowableError: Error?
-    var recoverRecoveryKeyUnderlyingCallsCount = 0
+    open var recoverRecoveryKeyUnderlyingCallsCount = 0
     open var recoverRecoveryKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8686,7 +8686,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - recoverAndReset
 
     open var recoverAndResetOldRecoveryKeyThrowableError: Error?
-    var recoverAndResetOldRecoveryKeyUnderlyingCallsCount = 0
+    open var recoverAndResetOldRecoveryKeyUnderlyingCallsCount = 0
     open var recoverAndResetOldRecoveryKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8716,7 +8716,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     open var recoverAndResetOldRecoveryKeyReceivedOldRecoveryKey: String?
     open var recoverAndResetOldRecoveryKeyReceivedInvocations: [String] = []
 
-    var recoverAndResetOldRecoveryKeyUnderlyingReturnValue: String!
+    open var recoverAndResetOldRecoveryKeyUnderlyingReturnValue: String!
     open var recoverAndResetOldRecoveryKeyReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -8760,7 +8760,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - recoveryState
 
-    var recoveryStateUnderlyingCallsCount = 0
+    open var recoveryStateUnderlyingCallsCount = 0
     open var recoveryStateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8788,7 +8788,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         return recoveryStateCallsCount > 0
     }
 
-    var recoveryStateUnderlyingReturnValue: RecoveryState!
+    open var recoveryStateUnderlyingReturnValue: RecoveryState!
     open var recoveryStateReturnValue: RecoveryState! {
         get {
             if Thread.isMainThread {
@@ -8825,7 +8825,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - recoveryStateListener
 
-    var recoveryStateListenerListenerUnderlyingCallsCount = 0
+    open var recoveryStateListenerListenerUnderlyingCallsCount = 0
     open var recoveryStateListenerListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8855,7 +8855,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     open var recoveryStateListenerListenerReceivedListener: RecoveryStateListener?
     open var recoveryStateListenerListenerReceivedInvocations: [RecoveryStateListener] = []
 
-    var recoveryStateListenerListenerUnderlyingReturnValue: TaskHandle!
+    open var recoveryStateListenerListenerUnderlyingReturnValue: TaskHandle!
     open var recoveryStateListenerListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -8897,7 +8897,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - resetIdentity
 
     open var resetIdentityThrowableError: Error?
-    var resetIdentityUnderlyingCallsCount = 0
+    open var resetIdentityUnderlyingCallsCount = 0
     open var resetIdentityCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8925,7 +8925,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         return resetIdentityCallsCount > 0
     }
 
-    var resetIdentityUnderlyingReturnValue: IdentityResetHandle?
+    open var resetIdentityUnderlyingReturnValue: IdentityResetHandle?
     open var resetIdentityReturnValue: IdentityResetHandle? {
         get {
             if Thread.isMainThread {
@@ -8966,7 +8966,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - resetRecoveryKey
 
     open var resetRecoveryKeyThrowableError: Error?
-    var resetRecoveryKeyUnderlyingCallsCount = 0
+    open var resetRecoveryKeyUnderlyingCallsCount = 0
     open var resetRecoveryKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -8994,7 +8994,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         return resetRecoveryKeyCallsCount > 0
     }
 
-    var resetRecoveryKeyUnderlyingReturnValue: String!
+    open var resetRecoveryKeyUnderlyingReturnValue: String!
     open var resetRecoveryKeyReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -9035,7 +9035,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - userIdentity
 
     open var userIdentityUserIdFallbackToServerThrowableError: Error?
-    var userIdentityUserIdFallbackToServerUnderlyingCallsCount = 0
+    open var userIdentityUserIdFallbackToServerUnderlyingCallsCount = 0
     open var userIdentityUserIdFallbackToServerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9065,7 +9065,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     open var userIdentityUserIdFallbackToServerReceivedArguments: (userId: String, fallbackToServer: Bool)?
     open var userIdentityUserIdFallbackToServerReceivedInvocations: [(userId: String, fallbackToServer: Bool)] = []
 
-    var userIdentityUserIdFallbackToServerUnderlyingReturnValue: UserIdentity?
+    open var userIdentityUserIdFallbackToServerUnderlyingReturnValue: UserIdentity?
     open var userIdentityUserIdFallbackToServerReturnValue: UserIdentity? {
         get {
             if Thread.isMainThread {
@@ -9109,7 +9109,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - verificationState
 
-    var verificationStateUnderlyingCallsCount = 0
+    open var verificationStateUnderlyingCallsCount = 0
     open var verificationStateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9137,7 +9137,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         return verificationStateCallsCount > 0
     }
 
-    var verificationStateUnderlyingReturnValue: VerificationState!
+    open var verificationStateUnderlyingReturnValue: VerificationState!
     open var verificationStateReturnValue: VerificationState! {
         get {
             if Thread.isMainThread {
@@ -9174,7 +9174,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - verificationStateListener
 
-    var verificationStateListenerListenerUnderlyingCallsCount = 0
+    open var verificationStateListenerListenerUnderlyingCallsCount = 0
     open var verificationStateListenerListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9204,7 +9204,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     open var verificationStateListenerListenerReceivedListener: VerificationStateListener?
     open var verificationStateListenerListenerReceivedInvocations: [VerificationStateListener] = []
 
-    var verificationStateListenerListenerUnderlyingReturnValue: TaskHandle!
+    open var verificationStateListenerListenerUnderlyingReturnValue: TaskHandle!
     open var verificationStateListenerListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -9246,7 +9246,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     //MARK: - waitForBackupUploadSteadyState
 
     open var waitForBackupUploadSteadyStateProgressListenerThrowableError: Error?
-    var waitForBackupUploadSteadyStateProgressListenerUnderlyingCallsCount = 0
+    open var waitForBackupUploadSteadyStateProgressListenerUnderlyingCallsCount = 0
     open var waitForBackupUploadSteadyStateProgressListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9291,7 +9291,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - waitForE2eeInitializationTasks
 
-    var waitForE2eeInitializationTasksUnderlyingCallsCount = 0
+    open var waitForE2eeInitializationTasksUnderlyingCallsCount = 0
     open var waitForE2eeInitializationTasksCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9326,7 +9326,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     }
 }
 open class GrantLoginWithQrCodeHandlerSDKMock: MatrixRustSDK.GrantLoginWithQrCodeHandler, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -9343,7 +9343,7 @@ open class GrantLoginWithQrCodeHandlerSDKMock: MatrixRustSDK.GrantLoginWithQrCod
     //MARK: - generate
 
     open var generateProgressListenerThrowableError: Error?
-    var generateProgressListenerUnderlyingCallsCount = 0
+    open var generateProgressListenerUnderlyingCallsCount = 0
     open var generateProgressListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9389,7 +9389,7 @@ open class GrantLoginWithQrCodeHandlerSDKMock: MatrixRustSDK.GrantLoginWithQrCod
     //MARK: - scan
 
     open var scanQrCodeDataProgressListenerThrowableError: Error?
-    var scanQrCodeDataProgressListenerUnderlyingCallsCount = 0
+    open var scanQrCodeDataProgressListenerUnderlyingCallsCount = 0
     open var scanQrCodeDataProgressListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9433,7 +9433,7 @@ open class GrantLoginWithQrCodeHandlerSDKMock: MatrixRustSDK.GrantLoginWithQrCod
     }
 }
 open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -9449,7 +9449,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
 
     //MARK: - slidingSyncVersion
 
-    var slidingSyncVersionUnderlyingCallsCount = 0
+    open var slidingSyncVersionUnderlyingCallsCount = 0
     open var slidingSyncVersionCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9477,7 +9477,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
         return slidingSyncVersionCallsCount > 0
     }
 
-    var slidingSyncVersionUnderlyingReturnValue: SlidingSyncVersion!
+    open var slidingSyncVersionUnderlyingReturnValue: SlidingSyncVersion!
     open var slidingSyncVersionReturnValue: SlidingSyncVersion! {
         get {
             if Thread.isMainThread {
@@ -9514,7 +9514,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
 
     //MARK: - supportedOidcPrompts
 
-    var supportedOidcPromptsUnderlyingCallsCount = 0
+    open var supportedOidcPromptsUnderlyingCallsCount = 0
     open var supportedOidcPromptsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9542,7 +9542,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
         return supportedOidcPromptsCallsCount > 0
     }
 
-    var supportedOidcPromptsUnderlyingReturnValue: [OidcPrompt]!
+    open var supportedOidcPromptsUnderlyingReturnValue: [OidcPrompt]!
     open var supportedOidcPromptsReturnValue: [OidcPrompt]! {
         get {
             if Thread.isMainThread {
@@ -9579,7 +9579,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
 
     //MARK: - supportsOidcLogin
 
-    var supportsOidcLoginUnderlyingCallsCount = 0
+    open var supportsOidcLoginUnderlyingCallsCount = 0
     open var supportsOidcLoginCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9607,7 +9607,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
         return supportsOidcLoginCallsCount > 0
     }
 
-    var supportsOidcLoginUnderlyingReturnValue: Bool!
+    open var supportsOidcLoginUnderlyingReturnValue: Bool!
     open var supportsOidcLoginReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -9644,7 +9644,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
 
     //MARK: - supportsPasswordLogin
 
-    var supportsPasswordLoginUnderlyingCallsCount = 0
+    open var supportsPasswordLoginUnderlyingCallsCount = 0
     open var supportsPasswordLoginCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9672,7 +9672,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
         return supportsPasswordLoginCallsCount > 0
     }
 
-    var supportsPasswordLoginUnderlyingReturnValue: Bool!
+    open var supportsPasswordLoginUnderlyingReturnValue: Bool!
     open var supportsPasswordLoginReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -9709,7 +9709,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
 
     //MARK: - supportsSsoLogin
 
-    var supportsSsoLoginUnderlyingCallsCount = 0
+    open var supportsSsoLoginUnderlyingCallsCount = 0
     open var supportsSsoLoginCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9737,7 +9737,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
         return supportsSsoLoginCallsCount > 0
     }
 
-    var supportsSsoLoginUnderlyingReturnValue: Bool!
+    open var supportsSsoLoginUnderlyingReturnValue: Bool!
     open var supportsSsoLoginReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -9774,7 +9774,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
 
     //MARK: - url
 
-    var urlUnderlyingCallsCount = 0
+    open var urlUnderlyingCallsCount = 0
     open var urlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9802,7 +9802,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
         return urlCallsCount > 0
     }
 
-    var urlUnderlyingReturnValue: String!
+    open var urlUnderlyingReturnValue: String!
     open var urlReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -9838,7 +9838,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
     }
 }
 open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -9854,7 +9854,7 @@ open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle, @unche
 
     //MARK: - authType
 
-    var authTypeUnderlyingCallsCount = 0
+    open var authTypeUnderlyingCallsCount = 0
     open var authTypeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9882,7 +9882,7 @@ open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle, @unche
         return authTypeCallsCount > 0
     }
 
-    var authTypeUnderlyingReturnValue: CrossSigningResetAuthType!
+    open var authTypeUnderlyingReturnValue: CrossSigningResetAuthType!
     open var authTypeReturnValue: CrossSigningResetAuthType! {
         get {
             if Thread.isMainThread {
@@ -9919,7 +9919,7 @@ open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle, @unche
 
     //MARK: - cancel
 
-    var cancelUnderlyingCallsCount = 0
+    open var cancelUnderlyingCallsCount = 0
     open var cancelCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -9956,7 +9956,7 @@ open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle, @unche
     //MARK: - reset
 
     open var resetAuthThrowableError: Error?
-    var resetAuthUnderlyingCallsCount = 0
+    open var resetAuthUnderlyingCallsCount = 0
     open var resetAuthCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10000,7 +10000,7 @@ open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle, @unche
     }
 }
 open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -10016,7 +10016,7 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails, @unchecked S
 
     //MARK: - event
 
-    var eventUnderlyingCallsCount = 0
+    open var eventUnderlyingCallsCount = 0
     open var eventCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10044,7 +10044,7 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails, @unchecked S
         return eventCallsCount > 0
     }
 
-    var eventUnderlyingReturnValue: EmbeddedEventDetails!
+    open var eventUnderlyingReturnValue: EmbeddedEventDetails!
     open var eventReturnValue: EmbeddedEventDetails! {
         get {
             if Thread.isMainThread {
@@ -10081,7 +10081,7 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails, @unchecked S
 
     //MARK: - eventId
 
-    var eventIdUnderlyingCallsCount = 0
+    open var eventIdUnderlyingCallsCount = 0
     open var eventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10109,7 +10109,7 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails, @unchecked S
         return eventIdCallsCount > 0
     }
 
-    var eventIdUnderlyingReturnValue: String!
+    open var eventIdUnderlyingReturnValue: String!
     open var eventIdReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -10145,7 +10145,7 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails, @unchecked S
     }
 }
 open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -10162,7 +10162,7 @@ open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions, @unche
     //MARK: - accept
 
     open var acceptThrowableError: Error?
-    var acceptUnderlyingCallsCount = 0
+    open var acceptUnderlyingCallsCount = 0
     open var acceptCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10202,7 +10202,7 @@ open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions, @unche
     //MARK: - decline
 
     open var declineReasonThrowableError: Error?
-    var declineReasonUnderlyingCallsCount = 0
+    open var declineReasonUnderlyingCallsCount = 0
     open var declineReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10248,7 +10248,7 @@ open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions, @unche
     //MARK: - declineAndBan
 
     open var declineAndBanReasonThrowableError: Error?
-    var declineAndBanReasonUnderlyingCallsCount = 0
+    open var declineAndBanReasonUnderlyingCallsCount = 0
     open var declineAndBanReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10294,7 +10294,7 @@ open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions, @unche
     //MARK: - markAsSeen
 
     open var markAsSeenThrowableError: Error?
-    var markAsSeenUnderlyingCallsCount = 0
+    open var markAsSeenUnderlyingCallsCount = 0
     open var markAsSeenCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10332,7 +10332,7 @@ open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions, @unche
     }
 }
 open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvider, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -10348,7 +10348,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
 
     //MARK: - containsOnlyEmojis
 
-    var containsOnlyEmojisUnderlyingCallsCount = 0
+    open var containsOnlyEmojisUnderlyingCallsCount = 0
     open var containsOnlyEmojisCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10376,7 +10376,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
         return containsOnlyEmojisCallsCount > 0
     }
 
-    var containsOnlyEmojisUnderlyingReturnValue: Bool!
+    open var containsOnlyEmojisUnderlyingReturnValue: Bool!
     open var containsOnlyEmojisReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -10413,7 +10413,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
 
     //MARK: - debugInfo
 
-    var debugInfoUnderlyingCallsCount = 0
+    open var debugInfoUnderlyingCallsCount = 0
     open var debugInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10441,7 +10441,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
         return debugInfoCallsCount > 0
     }
 
-    var debugInfoUnderlyingReturnValue: EventTimelineItemDebugInfo!
+    open var debugInfoUnderlyingReturnValue: EventTimelineItemDebugInfo!
     open var debugInfoReturnValue: EventTimelineItemDebugInfo! {
         get {
             if Thread.isMainThread {
@@ -10478,7 +10478,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
 
     //MARK: - getSendHandle
 
-    var getSendHandleUnderlyingCallsCount = 0
+    open var getSendHandleUnderlyingCallsCount = 0
     open var getSendHandleCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10506,7 +10506,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
         return getSendHandleCallsCount > 0
     }
 
-    var getSendHandleUnderlyingReturnValue: SendHandle?
+    open var getSendHandleUnderlyingReturnValue: SendHandle?
     open var getSendHandleReturnValue: SendHandle? {
         get {
             if Thread.isMainThread {
@@ -10543,7 +10543,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
 
     //MARK: - getShields
 
-    var getShieldsStrictUnderlyingCallsCount = 0
+    open var getShieldsStrictUnderlyingCallsCount = 0
     open var getShieldsStrictCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10573,7 +10573,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
     open var getShieldsStrictReceivedStrict: Bool?
     open var getShieldsStrictReceivedInvocations: [Bool] = []
 
-    var getShieldsStrictUnderlyingReturnValue: ShieldState?
+    open var getShieldsStrictUnderlyingReturnValue: ShieldState?
     open var getShieldsStrictReturnValue: ShieldState? {
         get {
             if Thread.isMainThread {
@@ -10613,7 +10613,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
     }
 }
 open class LeaveSpaceHandleSDKMock: MatrixRustSDK.LeaveSpaceHandle, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -10630,7 +10630,7 @@ open class LeaveSpaceHandleSDKMock: MatrixRustSDK.LeaveSpaceHandle, @unchecked S
     //MARK: - leave
 
     open var leaveRoomIdsThrowableError: Error?
-    var leaveRoomIdsUnderlyingCallsCount = 0
+    open var leaveRoomIdsUnderlyingCallsCount = 0
     open var leaveRoomIdsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10675,7 +10675,7 @@ open class LeaveSpaceHandleSDKMock: MatrixRustSDK.LeaveSpaceHandle, @unchecked S
 
     //MARK: - rooms
 
-    var roomsUnderlyingCallsCount = 0
+    open var roomsUnderlyingCallsCount = 0
     open var roomsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10703,7 +10703,7 @@ open class LeaveSpaceHandleSDKMock: MatrixRustSDK.LeaveSpaceHandle, @unchecked S
         return roomsCallsCount > 0
     }
 
-    var roomsUnderlyingReturnValue: [LeaveSpaceRoom]!
+    open var roomsUnderlyingReturnValue: [LeaveSpaceRoom]!
     open var roomsReturnValue: [LeaveSpaceRoom]! {
         get {
             if Thread.isMainThread {
@@ -10739,7 +10739,7 @@ open class LeaveSpaceHandleSDKMock: MatrixRustSDK.LeaveSpaceHandle, @unchecked S
     }
 }
 open class LoginWithQrCodeHandlerSDKMock: MatrixRustSDK.LoginWithQrCodeHandler, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -10756,7 +10756,7 @@ open class LoginWithQrCodeHandlerSDKMock: MatrixRustSDK.LoginWithQrCodeHandler, 
     //MARK: - generate
 
     open var generateProgressListenerThrowableError: Error?
-    var generateProgressListenerUnderlyingCallsCount = 0
+    open var generateProgressListenerUnderlyingCallsCount = 0
     open var generateProgressListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10802,7 +10802,7 @@ open class LoginWithQrCodeHandlerSDKMock: MatrixRustSDK.LoginWithQrCodeHandler, 
     //MARK: - scan
 
     open var scanQrCodeDataProgressListenerThrowableError: Error?
-    var scanQrCodeDataProgressListenerUnderlyingCallsCount = 0
+    open var scanQrCodeDataProgressListenerUnderlyingCallsCount = 0
     open var scanQrCodeDataProgressListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10846,7 +10846,7 @@ open class LoginWithQrCodeHandlerSDKMock: MatrixRustSDK.LoginWithQrCodeHandler, 
     }
 }
 open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -10863,7 +10863,7 @@ open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sen
     //MARK: - path
 
     open var pathThrowableError: Error?
-    var pathUnderlyingCallsCount = 0
+    open var pathUnderlyingCallsCount = 0
     open var pathCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10891,7 +10891,7 @@ open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sen
         return pathCallsCount > 0
     }
 
-    var pathUnderlyingReturnValue: String!
+    open var pathUnderlyingReturnValue: String!
     open var pathReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -10932,7 +10932,7 @@ open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sen
     //MARK: - persist
 
     open var persistPathThrowableError: Error?
-    var persistPathUnderlyingCallsCount = 0
+    open var persistPathUnderlyingCallsCount = 0
     open var persistPathCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -10962,7 +10962,7 @@ open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sen
     open var persistPathReceivedPath: String?
     open var persistPathReceivedInvocations: [String] = []
 
-    var persistPathUnderlyingReturnValue: Bool!
+    open var persistPathUnderlyingReturnValue: Bool!
     open var persistPathReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -11005,7 +11005,7 @@ open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sen
     }
 }
 open class MediaSourceSDKMock: MatrixRustSDK.MediaSource, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -11024,7 +11024,7 @@ open class MediaSourceSDKMock: MatrixRustSDK.MediaSource, @unchecked Sendable {
 
     //MARK: - toJson
 
-    var toJsonUnderlyingCallsCount = 0
+    open var toJsonUnderlyingCallsCount = 0
     open var toJsonCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11052,7 +11052,7 @@ open class MediaSourceSDKMock: MatrixRustSDK.MediaSource, @unchecked Sendable {
         return toJsonCallsCount > 0
     }
 
-    var toJsonUnderlyingReturnValue: String!
+    open var toJsonUnderlyingReturnValue: String!
     open var toJsonReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -11089,7 +11089,7 @@ open class MediaSourceSDKMock: MatrixRustSDK.MediaSource, @unchecked Sendable {
 
     //MARK: - url
 
-    var urlUnderlyingCallsCount = 0
+    open var urlUnderlyingCallsCount = 0
     open var urlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11117,7 +11117,7 @@ open class MediaSourceSDKMock: MatrixRustSDK.MediaSource, @unchecked Sendable {
         return urlCallsCount > 0
     }
 
-    var urlUnderlyingReturnValue: String!
+    open var urlUnderlyingReturnValue: String!
     open var urlReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -11153,7 +11153,7 @@ open class MediaSourceSDKMock: MatrixRustSDK.MediaSource, @unchecked Sendable {
     }
 }
 open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -11170,7 +11170,7 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
     //MARK: - getNotification
 
     open var getNotificationRoomIdEventIdThrowableError: Error?
-    var getNotificationRoomIdEventIdUnderlyingCallsCount = 0
+    open var getNotificationRoomIdEventIdUnderlyingCallsCount = 0
     open var getNotificationRoomIdEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11200,7 +11200,7 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
     open var getNotificationRoomIdEventIdReceivedArguments: (roomId: String, eventId: String)?
     open var getNotificationRoomIdEventIdReceivedInvocations: [(roomId: String, eventId: String)] = []
 
-    var getNotificationRoomIdEventIdUnderlyingReturnValue: NotificationStatus!
+    open var getNotificationRoomIdEventIdUnderlyingReturnValue: NotificationStatus!
     open var getNotificationRoomIdEventIdReturnValue: NotificationStatus! {
         get {
             if Thread.isMainThread {
@@ -11245,7 +11245,7 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
     //MARK: - getNotifications
 
     open var getNotificationsRequestsThrowableError: Error?
-    var getNotificationsRequestsUnderlyingCallsCount = 0
+    open var getNotificationsRequestsUnderlyingCallsCount = 0
     open var getNotificationsRequestsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11275,7 +11275,7 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
     open var getNotificationsRequestsReceivedRequests: [NotificationItemsRequest]?
     open var getNotificationsRequestsReceivedInvocations: [[NotificationItemsRequest]] = []
 
-    var getNotificationsRequestsUnderlyingReturnValue: [String: BatchNotificationResult]!
+    open var getNotificationsRequestsUnderlyingReturnValue: [String: BatchNotificationResult]!
     open var getNotificationsRequestsReturnValue: [String: BatchNotificationResult]! {
         get {
             if Thread.isMainThread {
@@ -11320,7 +11320,7 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
     //MARK: - getRoom
 
     open var getRoomRoomIdThrowableError: Error?
-    var getRoomRoomIdUnderlyingCallsCount = 0
+    open var getRoomRoomIdUnderlyingCallsCount = 0
     open var getRoomRoomIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11350,7 +11350,7 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
     open var getRoomRoomIdReceivedRoomId: String?
     open var getRoomRoomIdReceivedInvocations: [String] = []
 
-    var getRoomRoomIdUnderlyingReturnValue: Room?
+    open var getRoomRoomIdUnderlyingReturnValue: Room?
     open var getRoomRoomIdReturnValue: Room? {
         get {
             if Thread.isMainThread {
@@ -11393,7 +11393,7 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
     }
 }
 open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -11409,7 +11409,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
 
     //MARK: - canHomeserverPushEncryptedEventToDevice
 
-    var canHomeserverPushEncryptedEventToDeviceUnderlyingCallsCount = 0
+    open var canHomeserverPushEncryptedEventToDeviceUnderlyingCallsCount = 0
     open var canHomeserverPushEncryptedEventToDeviceCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11437,7 +11437,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         return canHomeserverPushEncryptedEventToDeviceCallsCount > 0
     }
 
-    var canHomeserverPushEncryptedEventToDeviceUnderlyingReturnValue: Bool!
+    open var canHomeserverPushEncryptedEventToDeviceUnderlyingReturnValue: Bool!
     open var canHomeserverPushEncryptedEventToDeviceReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -11474,7 +11474,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
 
     //MARK: - canPushEncryptedEventToDevice
 
-    var canPushEncryptedEventToDeviceUnderlyingCallsCount = 0
+    open var canPushEncryptedEventToDeviceUnderlyingCallsCount = 0
     open var canPushEncryptedEventToDeviceCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11502,7 +11502,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         return canPushEncryptedEventToDeviceCallsCount > 0
     }
 
-    var canPushEncryptedEventToDeviceUnderlyingReturnValue: Bool!
+    open var canPushEncryptedEventToDeviceUnderlyingReturnValue: Bool!
     open var canPushEncryptedEventToDeviceReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -11539,7 +11539,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
 
     //MARK: - containsKeywordsRules
 
-    var containsKeywordsRulesUnderlyingCallsCount = 0
+    open var containsKeywordsRulesUnderlyingCallsCount = 0
     open var containsKeywordsRulesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11567,7 +11567,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         return containsKeywordsRulesCallsCount > 0
     }
 
-    var containsKeywordsRulesUnderlyingReturnValue: Bool!
+    open var containsKeywordsRulesUnderlyingReturnValue: Bool!
     open var containsKeywordsRulesReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -11604,7 +11604,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
 
     //MARK: - getDefaultRoomNotificationMode
 
-    var getDefaultRoomNotificationModeIsEncryptedIsOneToOneUnderlyingCallsCount = 0
+    open var getDefaultRoomNotificationModeIsEncryptedIsOneToOneUnderlyingCallsCount = 0
     open var getDefaultRoomNotificationModeIsEncryptedIsOneToOneCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11634,7 +11634,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     open var getDefaultRoomNotificationModeIsEncryptedIsOneToOneReceivedArguments: (isEncrypted: Bool, isOneToOne: Bool)?
     open var getDefaultRoomNotificationModeIsEncryptedIsOneToOneReceivedInvocations: [(isEncrypted: Bool, isOneToOne: Bool)] = []
 
-    var getDefaultRoomNotificationModeIsEncryptedIsOneToOneUnderlyingReturnValue: RoomNotificationMode!
+    open var getDefaultRoomNotificationModeIsEncryptedIsOneToOneUnderlyingReturnValue: RoomNotificationMode!
     open var getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue: RoomNotificationMode! {
         get {
             if Thread.isMainThread {
@@ -11676,7 +11676,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - getRawPushRules
 
     open var getRawPushRulesThrowableError: Error?
-    var getRawPushRulesUnderlyingCallsCount = 0
+    open var getRawPushRulesUnderlyingCallsCount = 0
     open var getRawPushRulesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11704,7 +11704,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         return getRawPushRulesCallsCount > 0
     }
 
-    var getRawPushRulesUnderlyingReturnValue: String?
+    open var getRawPushRulesUnderlyingReturnValue: String?
     open var getRawPushRulesReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -11745,7 +11745,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - getRoomNotificationSettings
 
     open var getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError: Error?
-    var getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneUnderlyingCallsCount = 0
+    open var getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneUnderlyingCallsCount = 0
     open var getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11775,7 +11775,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     open var getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneReceivedArguments: (roomId: String, isEncrypted: Bool, isOneToOne: Bool)?
     open var getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneReceivedInvocations: [(roomId: String, isEncrypted: Bool, isOneToOne: Bool)] = []
 
-    var getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneUnderlyingReturnValue: RoomNotificationSettings!
+    open var getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneUnderlyingReturnValue: RoomNotificationSettings!
     open var getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue: RoomNotificationSettings! {
         get {
             if Thread.isMainThread {
@@ -11819,7 +11819,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
 
     //MARK: - getRoomsWithUserDefinedRules
 
-    var getRoomsWithUserDefinedRulesEnabledUnderlyingCallsCount = 0
+    open var getRoomsWithUserDefinedRulesEnabledUnderlyingCallsCount = 0
     open var getRoomsWithUserDefinedRulesEnabledCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11849,7 +11849,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     open var getRoomsWithUserDefinedRulesEnabledReceivedEnabled: Bool?
     open var getRoomsWithUserDefinedRulesEnabledReceivedInvocations: [Bool?] = []
 
-    var getRoomsWithUserDefinedRulesEnabledUnderlyingReturnValue: [String]!
+    open var getRoomsWithUserDefinedRulesEnabledUnderlyingReturnValue: [String]!
     open var getRoomsWithUserDefinedRulesEnabledReturnValue: [String]! {
         get {
             if Thread.isMainThread {
@@ -11891,7 +11891,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - getUserDefinedRoomNotificationMode
 
     open var getUserDefinedRoomNotificationModeRoomIdThrowableError: Error?
-    var getUserDefinedRoomNotificationModeRoomIdUnderlyingCallsCount = 0
+    open var getUserDefinedRoomNotificationModeRoomIdUnderlyingCallsCount = 0
     open var getUserDefinedRoomNotificationModeRoomIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11921,7 +11921,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     open var getUserDefinedRoomNotificationModeRoomIdReceivedRoomId: String?
     open var getUserDefinedRoomNotificationModeRoomIdReceivedInvocations: [String] = []
 
-    var getUserDefinedRoomNotificationModeRoomIdUnderlyingReturnValue: RoomNotificationMode?
+    open var getUserDefinedRoomNotificationModeRoomIdUnderlyingReturnValue: RoomNotificationMode?
     open var getUserDefinedRoomNotificationModeRoomIdReturnValue: RoomNotificationMode? {
         get {
             if Thread.isMainThread {
@@ -11966,7 +11966,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - isCallEnabled
 
     open var isCallEnabledThrowableError: Error?
-    var isCallEnabledUnderlyingCallsCount = 0
+    open var isCallEnabledUnderlyingCallsCount = 0
     open var isCallEnabledCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -11994,7 +11994,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         return isCallEnabledCallsCount > 0
     }
 
-    var isCallEnabledUnderlyingReturnValue: Bool!
+    open var isCallEnabledUnderlyingReturnValue: Bool!
     open var isCallEnabledReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -12035,7 +12035,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - isInviteForMeEnabled
 
     open var isInviteForMeEnabledThrowableError: Error?
-    var isInviteForMeEnabledUnderlyingCallsCount = 0
+    open var isInviteForMeEnabledUnderlyingCallsCount = 0
     open var isInviteForMeEnabledCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12063,7 +12063,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         return isInviteForMeEnabledCallsCount > 0
     }
 
-    var isInviteForMeEnabledUnderlyingReturnValue: Bool!
+    open var isInviteForMeEnabledUnderlyingReturnValue: Bool!
     open var isInviteForMeEnabledReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -12104,7 +12104,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - isRoomMentionEnabled
 
     open var isRoomMentionEnabledThrowableError: Error?
-    var isRoomMentionEnabledUnderlyingCallsCount = 0
+    open var isRoomMentionEnabledUnderlyingCallsCount = 0
     open var isRoomMentionEnabledCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12132,7 +12132,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         return isRoomMentionEnabledCallsCount > 0
     }
 
-    var isRoomMentionEnabledUnderlyingReturnValue: Bool!
+    open var isRoomMentionEnabledUnderlyingReturnValue: Bool!
     open var isRoomMentionEnabledReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -12173,7 +12173,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - isUserMentionEnabled
 
     open var isUserMentionEnabledThrowableError: Error?
-    var isUserMentionEnabledUnderlyingCallsCount = 0
+    open var isUserMentionEnabledUnderlyingCallsCount = 0
     open var isUserMentionEnabledCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12201,7 +12201,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         return isUserMentionEnabledCallsCount > 0
     }
 
-    var isUserMentionEnabledUnderlyingReturnValue: Bool!
+    open var isUserMentionEnabledUnderlyingReturnValue: Bool!
     open var isUserMentionEnabledReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -12242,7 +12242,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - restoreDefaultRoomNotificationMode
 
     open var restoreDefaultRoomNotificationModeRoomIdThrowableError: Error?
-    var restoreDefaultRoomNotificationModeRoomIdUnderlyingCallsCount = 0
+    open var restoreDefaultRoomNotificationModeRoomIdUnderlyingCallsCount = 0
     open var restoreDefaultRoomNotificationModeRoomIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12288,7 +12288,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - setCallEnabled
 
     open var setCallEnabledEnabledThrowableError: Error?
-    var setCallEnabledEnabledUnderlyingCallsCount = 0
+    open var setCallEnabledEnabledUnderlyingCallsCount = 0
     open var setCallEnabledEnabledCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12334,7 +12334,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - setCustomPushRule
 
     open var setCustomPushRuleRuleIdRuleKindActionsConditionsThrowableError: Error?
-    var setCustomPushRuleRuleIdRuleKindActionsConditionsUnderlyingCallsCount = 0
+    open var setCustomPushRuleRuleIdRuleKindActionsConditionsUnderlyingCallsCount = 0
     open var setCustomPushRuleRuleIdRuleKindActionsConditionsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12380,7 +12380,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - setDefaultRoomNotificationMode
 
     open var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError: Error?
-    var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeUnderlyingCallsCount = 0
+    open var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeUnderlyingCallsCount = 0
     open var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12425,7 +12425,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
 
     //MARK: - setDelegate
 
-    var setDelegateDelegateUnderlyingCallsCount = 0
+    open var setDelegateDelegateUnderlyingCallsCount = 0
     open var setDelegateDelegateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12468,7 +12468,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - setInviteForMeEnabled
 
     open var setInviteForMeEnabledEnabledThrowableError: Error?
-    var setInviteForMeEnabledEnabledUnderlyingCallsCount = 0
+    open var setInviteForMeEnabledEnabledUnderlyingCallsCount = 0
     open var setInviteForMeEnabledEnabledCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12514,7 +12514,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - setRoomMentionEnabled
 
     open var setRoomMentionEnabledEnabledThrowableError: Error?
-    var setRoomMentionEnabledEnabledUnderlyingCallsCount = 0
+    open var setRoomMentionEnabledEnabledUnderlyingCallsCount = 0
     open var setRoomMentionEnabledEnabledCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12560,7 +12560,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - setRoomNotificationMode
 
     open var setRoomNotificationModeRoomIdModeThrowableError: Error?
-    var setRoomNotificationModeRoomIdModeUnderlyingCallsCount = 0
+    open var setRoomNotificationModeRoomIdModeUnderlyingCallsCount = 0
     open var setRoomNotificationModeRoomIdModeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12606,7 +12606,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - setUserMentionEnabled
 
     open var setUserMentionEnabledEnabledThrowableError: Error?
-    var setUserMentionEnabledEnabledUnderlyingCallsCount = 0
+    open var setUserMentionEnabledEnabledUnderlyingCallsCount = 0
     open var setUserMentionEnabledEnabledCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12652,7 +12652,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     //MARK: - unmuteRoom
 
     open var unmuteRoomRoomIdIsEncryptedIsOneToOneThrowableError: Error?
-    var unmuteRoomRoomIdIsEncryptedIsOneToOneUnderlyingCallsCount = 0
+    open var unmuteRoomRoomIdIsEncryptedIsOneToOneUnderlyingCallsCount = 0
     open var unmuteRoomRoomIdIsEncryptedIsOneToOneCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12696,7 +12696,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
     }
 }
 open class OAuthAuthorizationDataSDKMock: MatrixRustSDK.OAuthAuthorizationData, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -12712,7 +12712,7 @@ open class OAuthAuthorizationDataSDKMock: MatrixRustSDK.OAuthAuthorizationData, 
 
     //MARK: - loginUrl
 
-    var loginUrlUnderlyingCallsCount = 0
+    open var loginUrlUnderlyingCallsCount = 0
     open var loginUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12740,7 +12740,7 @@ open class OAuthAuthorizationDataSDKMock: MatrixRustSDK.OAuthAuthorizationData, 
         return loginUrlCallsCount > 0
     }
 
-    var loginUrlUnderlyingReturnValue: String!
+    open var loginUrlUnderlyingReturnValue: String!
     open var loginUrlReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -12776,7 +12776,7 @@ open class OAuthAuthorizationDataSDKMock: MatrixRustSDK.OAuthAuthorizationData, 
     }
 }
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -12795,7 +12795,7 @@ open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
 
     //MARK: - serverName
 
-    var serverNameUnderlyingCallsCount = 0
+    open var serverNameUnderlyingCallsCount = 0
     open var serverNameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12823,7 +12823,7 @@ open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
         return serverNameCallsCount > 0
     }
 
-    var serverNameUnderlyingReturnValue: String?
+    open var serverNameUnderlyingReturnValue: String?
     open var serverNameReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -12860,7 +12860,7 @@ open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
 
     //MARK: - toBytes
 
-    var toBytesUnderlyingCallsCount = 0
+    open var toBytesUnderlyingCallsCount = 0
     open var toBytesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12888,7 +12888,7 @@ open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
         return toBytesCallsCount > 0
     }
 
-    var toBytesUnderlyingReturnValue: Data!
+    open var toBytesUnderlyingReturnValue: Data!
     open var toBytesReturnValue: Data! {
         get {
             if Thread.isMainThread {
@@ -12924,7 +12924,7 @@ open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
     }
 }
 open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -12940,7 +12940,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - activeMembersCount
 
-    var activeMembersCountUnderlyingCallsCount = 0
+    open var activeMembersCountUnderlyingCallsCount = 0
     open var activeMembersCountCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -12968,7 +12968,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return activeMembersCountCallsCount > 0
     }
 
-    var activeMembersCountUnderlyingReturnValue: UInt64!
+    open var activeMembersCountUnderlyingReturnValue: UInt64!
     open var activeMembersCountReturnValue: UInt64! {
         get {
             if Thread.isMainThread {
@@ -13005,7 +13005,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - activeRoomCallParticipants
 
-    var activeRoomCallParticipantsUnderlyingCallsCount = 0
+    open var activeRoomCallParticipantsUnderlyingCallsCount = 0
     open var activeRoomCallParticipantsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13033,7 +13033,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return activeRoomCallParticipantsCallsCount > 0
     }
 
-    var activeRoomCallParticipantsUnderlyingReturnValue: [String]!
+    open var activeRoomCallParticipantsUnderlyingReturnValue: [String]!
     open var activeRoomCallParticipantsReturnValue: [String]! {
         get {
             if Thread.isMainThread {
@@ -13070,7 +13070,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - alternativeAliases
 
-    var alternativeAliasesUnderlyingCallsCount = 0
+    open var alternativeAliasesUnderlyingCallsCount = 0
     open var alternativeAliasesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13098,7 +13098,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return alternativeAliasesCallsCount > 0
     }
 
-    var alternativeAliasesUnderlyingReturnValue: [String]!
+    open var alternativeAliasesUnderlyingReturnValue: [String]!
     open var alternativeAliasesReturnValue: [String]! {
         get {
             if Thread.isMainThread {
@@ -13136,7 +13136,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - applyPowerLevelChanges
 
     open var applyPowerLevelChangesChangesThrowableError: Error?
-    var applyPowerLevelChangesChangesUnderlyingCallsCount = 0
+    open var applyPowerLevelChangesChangesUnderlyingCallsCount = 0
     open var applyPowerLevelChangesChangesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13181,7 +13181,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - avatarUrl
 
-    var avatarUrlUnderlyingCallsCount = 0
+    open var avatarUrlUnderlyingCallsCount = 0
     open var avatarUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13209,7 +13209,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return avatarUrlCallsCount > 0
     }
 
-    var avatarUrlUnderlyingReturnValue: String?
+    open var avatarUrlUnderlyingReturnValue: String?
     open var avatarUrlReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -13247,7 +13247,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - banUser
 
     open var banUserUserIdReasonThrowableError: Error?
-    var banUserUserIdReasonUnderlyingCallsCount = 0
+    open var banUserUserIdReasonUnderlyingCallsCount = 0
     open var banUserUserIdReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13292,7 +13292,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - canonicalAlias
 
-    var canonicalAliasUnderlyingCallsCount = 0
+    open var canonicalAliasUnderlyingCallsCount = 0
     open var canonicalAliasCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13320,7 +13320,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return canonicalAliasCallsCount > 0
     }
 
-    var canonicalAliasUnderlyingReturnValue: String?
+    open var canonicalAliasUnderlyingReturnValue: String?
     open var canonicalAliasReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -13358,7 +13358,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - clearComposerDraft
 
     open var clearComposerDraftThreadRootThrowableError: Error?
-    var clearComposerDraftThreadRootUnderlyingCallsCount = 0
+    open var clearComposerDraftThreadRootUnderlyingCallsCount = 0
     open var clearComposerDraftThreadRootCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13404,7 +13404,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - clearEventCacheStorage
 
     open var clearEventCacheStorageThrowableError: Error?
-    var clearEventCacheStorageUnderlyingCallsCount = 0
+    open var clearEventCacheStorageUnderlyingCallsCount = 0
     open var clearEventCacheStorageCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13444,7 +13444,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - declineCall
 
     open var declineCallRtcNotificationEventIdThrowableError: Error?
-    var declineCallRtcNotificationEventIdUnderlyingCallsCount = 0
+    open var declineCallRtcNotificationEventIdUnderlyingCallsCount = 0
     open var declineCallRtcNotificationEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13490,7 +13490,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - discardRoomKey
 
     open var discardRoomKeyThrowableError: Error?
-    var discardRoomKeyUnderlyingCallsCount = 0
+    open var discardRoomKeyUnderlyingCallsCount = 0
     open var discardRoomKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13529,7 +13529,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - displayName
 
-    var displayNameUnderlyingCallsCount = 0
+    open var displayNameUnderlyingCallsCount = 0
     open var displayNameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13557,7 +13557,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return displayNameCallsCount > 0
     }
 
-    var displayNameUnderlyingReturnValue: String?
+    open var displayNameUnderlyingReturnValue: String?
     open var displayNameReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -13595,7 +13595,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - edit
 
     open var editEventIdNewContentThrowableError: Error?
-    var editEventIdNewContentUnderlyingCallsCount = 0
+    open var editEventIdNewContentUnderlyingCallsCount = 0
     open var editEventIdNewContentCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13641,7 +13641,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - enableEncryption
 
     open var enableEncryptionThrowableError: Error?
-    var enableEncryptionUnderlyingCallsCount = 0
+    open var enableEncryptionUnderlyingCallsCount = 0
     open var enableEncryptionCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13680,7 +13680,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - enableSendQueue
 
-    var enableSendQueueEnableUnderlyingCallsCount = 0
+    open var enableSendQueueEnableUnderlyingCallsCount = 0
     open var enableSendQueueEnableCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13722,7 +13722,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - encryptionState
 
-    var encryptionStateUnderlyingCallsCount = 0
+    open var encryptionStateUnderlyingCallsCount = 0
     open var encryptionStateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13750,7 +13750,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return encryptionStateCallsCount > 0
     }
 
-    var encryptionStateUnderlyingReturnValue: EncryptionState!
+    open var encryptionStateUnderlyingReturnValue: EncryptionState!
     open var encryptionStateReturnValue: EncryptionState! {
         get {
             if Thread.isMainThread {
@@ -13788,7 +13788,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - fetchThreadSubscription
 
     open var fetchThreadSubscriptionThreadRootEventIdThrowableError: Error?
-    var fetchThreadSubscriptionThreadRootEventIdUnderlyingCallsCount = 0
+    open var fetchThreadSubscriptionThreadRootEventIdUnderlyingCallsCount = 0
     open var fetchThreadSubscriptionThreadRootEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13818,7 +13818,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var fetchThreadSubscriptionThreadRootEventIdReceivedThreadRootEventId: String?
     open var fetchThreadSubscriptionThreadRootEventIdReceivedInvocations: [String] = []
 
-    var fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue: ThreadSubscription?
+    open var fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue: ThreadSubscription?
     open var fetchThreadSubscriptionThreadRootEventIdReturnValue: ThreadSubscription? {
         get {
             if Thread.isMainThread {
@@ -13863,7 +13863,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - forget
 
     open var forgetThrowableError: Error?
-    var forgetUnderlyingCallsCount = 0
+    open var forgetUnderlyingCallsCount = 0
     open var forgetCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13903,7 +13903,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - getPowerLevels
 
     open var getPowerLevelsThrowableError: Error?
-    var getPowerLevelsUnderlyingCallsCount = 0
+    open var getPowerLevelsUnderlyingCallsCount = 0
     open var getPowerLevelsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -13931,7 +13931,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return getPowerLevelsCallsCount > 0
     }
 
-    var getPowerLevelsUnderlyingReturnValue: RoomPowerLevels!
+    open var getPowerLevelsUnderlyingReturnValue: RoomPowerLevels!
     open var getPowerLevelsReturnValue: RoomPowerLevels! {
         get {
             if Thread.isMainThread {
@@ -13972,7 +13972,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - getRoomVisibility
 
     open var getRoomVisibilityThrowableError: Error?
-    var getRoomVisibilityUnderlyingCallsCount = 0
+    open var getRoomVisibilityUnderlyingCallsCount = 0
     open var getRoomVisibilityCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14000,7 +14000,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return getRoomVisibilityCallsCount > 0
     }
 
-    var getRoomVisibilityUnderlyingReturnValue: RoomVisibility!
+    open var getRoomVisibilityUnderlyingReturnValue: RoomVisibility!
     open var getRoomVisibilityReturnValue: RoomVisibility! {
         get {
             if Thread.isMainThread {
@@ -14040,7 +14040,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - hasActiveRoomCall
 
-    var hasActiveRoomCallUnderlyingCallsCount = 0
+    open var hasActiveRoomCallUnderlyingCallsCount = 0
     open var hasActiveRoomCallCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14068,7 +14068,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return hasActiveRoomCallCallsCount > 0
     }
 
-    var hasActiveRoomCallUnderlyingReturnValue: Bool!
+    open var hasActiveRoomCallUnderlyingReturnValue: Bool!
     open var hasActiveRoomCallReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -14105,7 +14105,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - heroes
 
-    var heroesUnderlyingCallsCount = 0
+    open var heroesUnderlyingCallsCount = 0
     open var heroesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14133,7 +14133,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return heroesCallsCount > 0
     }
 
-    var heroesUnderlyingReturnValue: [RoomHero]!
+    open var heroesUnderlyingReturnValue: [RoomHero]!
     open var heroesReturnValue: [RoomHero]! {
         get {
             if Thread.isMainThread {
@@ -14170,7 +14170,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - id
 
-    var idUnderlyingCallsCount = 0
+    open var idUnderlyingCallsCount = 0
     open var idCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14198,7 +14198,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return idCallsCount > 0
     }
 
-    var idUnderlyingReturnValue: String!
+    open var idUnderlyingReturnValue: String!
     open var idReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -14236,7 +14236,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - ignoreDeviceTrustAndResend
 
     open var ignoreDeviceTrustAndResendDevicesSendHandleThrowableError: Error?
-    var ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingCallsCount = 0
+    open var ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingCallsCount = 0
     open var ignoreDeviceTrustAndResendDevicesSendHandleCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14282,7 +14282,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - ignoreUser
 
     open var ignoreUserUserIdThrowableError: Error?
-    var ignoreUserUserIdUnderlyingCallsCount = 0
+    open var ignoreUserUserIdUnderlyingCallsCount = 0
     open var ignoreUserUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14328,7 +14328,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - inviteUserById
 
     open var inviteUserByIdUserIdThrowableError: Error?
-    var inviteUserByIdUserIdUnderlyingCallsCount = 0
+    open var inviteUserByIdUserIdUnderlyingCallsCount = 0
     open var inviteUserByIdUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14373,7 +14373,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - invitedMembersCount
 
-    var invitedMembersCountUnderlyingCallsCount = 0
+    open var invitedMembersCountUnderlyingCallsCount = 0
     open var invitedMembersCountCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14401,7 +14401,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return invitedMembersCountCallsCount > 0
     }
 
-    var invitedMembersCountUnderlyingReturnValue: UInt64!
+    open var invitedMembersCountUnderlyingReturnValue: UInt64!
     open var invitedMembersCountReturnValue: UInt64! {
         get {
             if Thread.isMainThread {
@@ -14439,7 +14439,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - inviter
 
     open var inviterThrowableError: Error?
-    var inviterUnderlyingCallsCount = 0
+    open var inviterUnderlyingCallsCount = 0
     open var inviterCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14467,7 +14467,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return inviterCallsCount > 0
     }
 
-    var inviterUnderlyingReturnValue: RoomMember?
+    open var inviterUnderlyingReturnValue: RoomMember?
     open var inviterReturnValue: RoomMember? {
         get {
             if Thread.isMainThread {
@@ -14507,7 +14507,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - isDirect
 
-    var isDirectUnderlyingCallsCount = 0
+    open var isDirectUnderlyingCallsCount = 0
     open var isDirectCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14535,7 +14535,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return isDirectCallsCount > 0
     }
 
-    var isDirectUnderlyingReturnValue: Bool!
+    open var isDirectUnderlyingReturnValue: Bool!
     open var isDirectReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -14572,7 +14572,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - isEncrypted
 
-    var isEncryptedUnderlyingCallsCount = 0
+    open var isEncryptedUnderlyingCallsCount = 0
     open var isEncryptedCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14600,7 +14600,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return isEncryptedCallsCount > 0
     }
 
-    var isEncryptedUnderlyingReturnValue: Bool!
+    open var isEncryptedUnderlyingReturnValue: Bool!
     open var isEncryptedReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -14637,7 +14637,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - isPublic
 
-    var isPublicUnderlyingCallsCount = 0
+    open var isPublicUnderlyingCallsCount = 0
     open var isPublicCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14665,7 +14665,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return isPublicCallsCount > 0
     }
 
-    var isPublicUnderlyingReturnValue: Bool?
+    open var isPublicUnderlyingReturnValue: Bool?
     open var isPublicReturnValue: Bool? {
         get {
             if Thread.isMainThread {
@@ -14702,7 +14702,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - isSendQueueEnabled
 
-    var isSendQueueEnabledUnderlyingCallsCount = 0
+    open var isSendQueueEnabledUnderlyingCallsCount = 0
     open var isSendQueueEnabledCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14730,7 +14730,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return isSendQueueEnabledCallsCount > 0
     }
 
-    var isSendQueueEnabledUnderlyingReturnValue: Bool!
+    open var isSendQueueEnabledUnderlyingReturnValue: Bool!
     open var isSendQueueEnabledReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -14767,7 +14767,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - isSpace
 
-    var isSpaceUnderlyingCallsCount = 0
+    open var isSpaceUnderlyingCallsCount = 0
     open var isSpaceCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14795,7 +14795,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return isSpaceCallsCount > 0
     }
 
-    var isSpaceUnderlyingReturnValue: Bool!
+    open var isSpaceUnderlyingReturnValue: Bool!
     open var isSpaceReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -14833,7 +14833,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - join
 
     open var joinThrowableError: Error?
-    var joinUnderlyingCallsCount = 0
+    open var joinUnderlyingCallsCount = 0
     open var joinCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14872,7 +14872,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - joinedMembersCount
 
-    var joinedMembersCountUnderlyingCallsCount = 0
+    open var joinedMembersCountUnderlyingCallsCount = 0
     open var joinedMembersCountCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14900,7 +14900,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return joinedMembersCountCallsCount > 0
     }
 
-    var joinedMembersCountUnderlyingReturnValue: UInt64!
+    open var joinedMembersCountUnderlyingReturnValue: UInt64!
     open var joinedMembersCountReturnValue: UInt64! {
         get {
             if Thread.isMainThread {
@@ -14938,7 +14938,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - kickUser
 
     open var kickUserUserIdReasonThrowableError: Error?
-    var kickUserUserIdReasonUnderlyingCallsCount = 0
+    open var kickUserUserIdReasonUnderlyingCallsCount = 0
     open var kickUserUserIdReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -14984,7 +14984,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - latestEncryptionState
 
     open var latestEncryptionStateThrowableError: Error?
-    var latestEncryptionStateUnderlyingCallsCount = 0
+    open var latestEncryptionStateUnderlyingCallsCount = 0
     open var latestEncryptionStateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15012,7 +15012,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return latestEncryptionStateCallsCount > 0
     }
 
-    var latestEncryptionStateUnderlyingReturnValue: EncryptionState!
+    open var latestEncryptionStateUnderlyingReturnValue: EncryptionState!
     open var latestEncryptionStateReturnValue: EncryptionState! {
         get {
             if Thread.isMainThread {
@@ -15052,7 +15052,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - latestEvent
 
-    var latestEventUnderlyingCallsCount = 0
+    open var latestEventUnderlyingCallsCount = 0
     open var latestEventCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15080,7 +15080,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return latestEventCallsCount > 0
     }
 
-    var latestEventUnderlyingReturnValue: LatestEventValue!
+    open var latestEventUnderlyingReturnValue: LatestEventValue!
     open var latestEventReturnValue: LatestEventValue! {
         get {
             if Thread.isMainThread {
@@ -15118,7 +15118,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - leave
 
     open var leaveThrowableError: Error?
-    var leaveUnderlyingCallsCount = 0
+    open var leaveUnderlyingCallsCount = 0
     open var leaveCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15158,7 +15158,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - loadComposerDraft
 
     open var loadComposerDraftThreadRootThrowableError: Error?
-    var loadComposerDraftThreadRootUnderlyingCallsCount = 0
+    open var loadComposerDraftThreadRootUnderlyingCallsCount = 0
     open var loadComposerDraftThreadRootCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15188,7 +15188,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var loadComposerDraftThreadRootReceivedThreadRoot: String?
     open var loadComposerDraftThreadRootReceivedInvocations: [String?] = []
 
-    var loadComposerDraftThreadRootUnderlyingReturnValue: ComposerDraft?
+    open var loadComposerDraftThreadRootUnderlyingReturnValue: ComposerDraft?
     open var loadComposerDraftThreadRootReturnValue: ComposerDraft? {
         get {
             if Thread.isMainThread {
@@ -15233,7 +15233,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - loadOrFetchEvent
 
     open var loadOrFetchEventEventIdThrowableError: Error?
-    var loadOrFetchEventEventIdUnderlyingCallsCount = 0
+    open var loadOrFetchEventEventIdUnderlyingCallsCount = 0
     open var loadOrFetchEventEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15263,7 +15263,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var loadOrFetchEventEventIdReceivedEventId: String?
     open var loadOrFetchEventEventIdReceivedInvocations: [String] = []
 
-    var loadOrFetchEventEventIdUnderlyingReturnValue: TimelineEvent!
+    open var loadOrFetchEventEventIdUnderlyingReturnValue: TimelineEvent!
     open var loadOrFetchEventEventIdReturnValue: TimelineEvent! {
         get {
             if Thread.isMainThread {
@@ -15308,7 +15308,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - markAsFullyReadUnchecked
 
     open var markAsFullyReadUncheckedEventIdThrowableError: Error?
-    var markAsFullyReadUncheckedEventIdUnderlyingCallsCount = 0
+    open var markAsFullyReadUncheckedEventIdUnderlyingCallsCount = 0
     open var markAsFullyReadUncheckedEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15354,7 +15354,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - markAsRead
 
     open var markAsReadReceiptTypeThrowableError: Error?
-    var markAsReadReceiptTypeUnderlyingCallsCount = 0
+    open var markAsReadReceiptTypeUnderlyingCallsCount = 0
     open var markAsReadReceiptTypeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15400,7 +15400,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - matrixToEventPermalink
 
     open var matrixToEventPermalinkEventIdThrowableError: Error?
-    var matrixToEventPermalinkEventIdUnderlyingCallsCount = 0
+    open var matrixToEventPermalinkEventIdUnderlyingCallsCount = 0
     open var matrixToEventPermalinkEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15430,7 +15430,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var matrixToEventPermalinkEventIdReceivedEventId: String?
     open var matrixToEventPermalinkEventIdReceivedInvocations: [String] = []
 
-    var matrixToEventPermalinkEventIdUnderlyingReturnValue: String!
+    open var matrixToEventPermalinkEventIdUnderlyingReturnValue: String!
     open var matrixToEventPermalinkEventIdReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -15475,7 +15475,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - matrixToPermalink
 
     open var matrixToPermalinkThrowableError: Error?
-    var matrixToPermalinkUnderlyingCallsCount = 0
+    open var matrixToPermalinkUnderlyingCallsCount = 0
     open var matrixToPermalinkCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15503,7 +15503,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return matrixToPermalinkCallsCount > 0
     }
 
-    var matrixToPermalinkUnderlyingReturnValue: String!
+    open var matrixToPermalinkUnderlyingReturnValue: String!
     open var matrixToPermalinkReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -15544,7 +15544,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - member
 
     open var memberUserIdThrowableError: Error?
-    var memberUserIdUnderlyingCallsCount = 0
+    open var memberUserIdUnderlyingCallsCount = 0
     open var memberUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15574,7 +15574,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var memberUserIdReceivedUserId: String?
     open var memberUserIdReceivedInvocations: [String] = []
 
-    var memberUserIdUnderlyingReturnValue: RoomMember!
+    open var memberUserIdUnderlyingReturnValue: RoomMember!
     open var memberUserIdReturnValue: RoomMember! {
         get {
             if Thread.isMainThread {
@@ -15619,7 +15619,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - memberAvatarUrl
 
     open var memberAvatarUrlUserIdThrowableError: Error?
-    var memberAvatarUrlUserIdUnderlyingCallsCount = 0
+    open var memberAvatarUrlUserIdUnderlyingCallsCount = 0
     open var memberAvatarUrlUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15649,7 +15649,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var memberAvatarUrlUserIdReceivedUserId: String?
     open var memberAvatarUrlUserIdReceivedInvocations: [String] = []
 
-    var memberAvatarUrlUserIdUnderlyingReturnValue: String?
+    open var memberAvatarUrlUserIdUnderlyingReturnValue: String?
     open var memberAvatarUrlUserIdReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -15694,7 +15694,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - memberDisplayName
 
     open var memberDisplayNameUserIdThrowableError: Error?
-    var memberDisplayNameUserIdUnderlyingCallsCount = 0
+    open var memberDisplayNameUserIdUnderlyingCallsCount = 0
     open var memberDisplayNameUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15724,7 +15724,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var memberDisplayNameUserIdReceivedUserId: String?
     open var memberDisplayNameUserIdReceivedInvocations: [String] = []
 
-    var memberDisplayNameUserIdUnderlyingReturnValue: String?
+    open var memberDisplayNameUserIdUnderlyingReturnValue: String?
     open var memberDisplayNameUserIdReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -15769,7 +15769,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - memberWithSenderInfo
 
     open var memberWithSenderInfoUserIdThrowableError: Error?
-    var memberWithSenderInfoUserIdUnderlyingCallsCount = 0
+    open var memberWithSenderInfoUserIdUnderlyingCallsCount = 0
     open var memberWithSenderInfoUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15799,7 +15799,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var memberWithSenderInfoUserIdReceivedUserId: String?
     open var memberWithSenderInfoUserIdReceivedInvocations: [String] = []
 
-    var memberWithSenderInfoUserIdUnderlyingReturnValue: RoomMemberWithSenderInfo!
+    open var memberWithSenderInfoUserIdUnderlyingReturnValue: RoomMemberWithSenderInfo!
     open var memberWithSenderInfoUserIdReturnValue: RoomMemberWithSenderInfo! {
         get {
             if Thread.isMainThread {
@@ -15844,7 +15844,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - members
 
     open var membersThrowableError: Error?
-    var membersUnderlyingCallsCount = 0
+    open var membersUnderlyingCallsCount = 0
     open var membersCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15872,7 +15872,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return membersCallsCount > 0
     }
 
-    var membersUnderlyingReturnValue: RoomMembersIterator!
+    open var membersUnderlyingReturnValue: RoomMembersIterator!
     open var membersReturnValue: RoomMembersIterator! {
         get {
             if Thread.isMainThread {
@@ -15913,7 +15913,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - membersNoSync
 
     open var membersNoSyncThrowableError: Error?
-    var membersNoSyncUnderlyingCallsCount = 0
+    open var membersNoSyncUnderlyingCallsCount = 0
     open var membersNoSyncCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -15941,7 +15941,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return membersNoSyncCallsCount > 0
     }
 
-    var membersNoSyncUnderlyingReturnValue: RoomMembersIterator!
+    open var membersNoSyncUnderlyingReturnValue: RoomMembersIterator!
     open var membersNoSyncReturnValue: RoomMembersIterator! {
         get {
             if Thread.isMainThread {
@@ -15981,7 +15981,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - membership
 
-    var membershipUnderlyingCallsCount = 0
+    open var membershipUnderlyingCallsCount = 0
     open var membershipCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16009,7 +16009,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return membershipCallsCount > 0
     }
 
-    var membershipUnderlyingReturnValue: Membership!
+    open var membershipUnderlyingReturnValue: Membership!
     open var membershipReturnValue: Membership! {
         get {
             if Thread.isMainThread {
@@ -16046,7 +16046,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - ownUserId
 
-    var ownUserIdUnderlyingCallsCount = 0
+    open var ownUserIdUnderlyingCallsCount = 0
     open var ownUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16074,7 +16074,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return ownUserIdCallsCount > 0
     }
 
-    var ownUserIdUnderlyingReturnValue: String!
+    open var ownUserIdUnderlyingReturnValue: String!
     open var ownUserIdReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -16111,7 +16111,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - predecessorRoom
 
-    var predecessorRoomUnderlyingCallsCount = 0
+    open var predecessorRoomUnderlyingCallsCount = 0
     open var predecessorRoomCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16139,7 +16139,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return predecessorRoomCallsCount > 0
     }
 
-    var predecessorRoomUnderlyingReturnValue: PredecessorRoom?
+    open var predecessorRoomUnderlyingReturnValue: PredecessorRoom?
     open var predecessorRoomReturnValue: PredecessorRoom? {
         get {
             if Thread.isMainThread {
@@ -16177,7 +16177,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - previewRoom
 
     open var previewRoomViaThrowableError: Error?
-    var previewRoomViaUnderlyingCallsCount = 0
+    open var previewRoomViaUnderlyingCallsCount = 0
     open var previewRoomViaCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16207,7 +16207,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var previewRoomViaReceivedVia: [String]?
     open var previewRoomViaReceivedInvocations: [[String]] = []
 
-    var previewRoomViaUnderlyingReturnValue: RoomPreview!
+    open var previewRoomViaUnderlyingReturnValue: RoomPreview!
     open var previewRoomViaReturnValue: RoomPreview! {
         get {
             if Thread.isMainThread {
@@ -16252,7 +16252,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - publishRoomAliasInRoomDirectory
 
     open var publishRoomAliasInRoomDirectoryAliasThrowableError: Error?
-    var publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount = 0
+    open var publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount = 0
     open var publishRoomAliasInRoomDirectoryAliasCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16282,7 +16282,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var publishRoomAliasInRoomDirectoryAliasReceivedAlias: String?
     open var publishRoomAliasInRoomDirectoryAliasReceivedInvocations: [String] = []
 
-    var publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue: Bool!
+    open var publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue: Bool!
     open var publishRoomAliasInRoomDirectoryAliasReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -16326,7 +16326,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - rawName
 
-    var rawNameUnderlyingCallsCount = 0
+    open var rawNameUnderlyingCallsCount = 0
     open var rawNameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16354,7 +16354,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return rawNameCallsCount > 0
     }
 
-    var rawNameUnderlyingReturnValue: String?
+    open var rawNameUnderlyingReturnValue: String?
     open var rawNameReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -16392,7 +16392,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - redact
 
     open var redactEventIdReasonThrowableError: Error?
-    var redactEventIdReasonUnderlyingCallsCount = 0
+    open var redactEventIdReasonUnderlyingCallsCount = 0
     open var redactEventIdReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16438,7 +16438,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - removeAvatar
 
     open var removeAvatarThrowableError: Error?
-    var removeAvatarUnderlyingCallsCount = 0
+    open var removeAvatarUnderlyingCallsCount = 0
     open var removeAvatarCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16478,7 +16478,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - removeRoomAliasFromRoomDirectory
 
     open var removeRoomAliasFromRoomDirectoryAliasThrowableError: Error?
-    var removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount = 0
+    open var removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount = 0
     open var removeRoomAliasFromRoomDirectoryAliasCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16508,7 +16508,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var removeRoomAliasFromRoomDirectoryAliasReceivedAlias: String?
     open var removeRoomAliasFromRoomDirectoryAliasReceivedInvocations: [String] = []
 
-    var removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue: Bool!
+    open var removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue: Bool!
     open var removeRoomAliasFromRoomDirectoryAliasReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -16553,7 +16553,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - reportContent
 
     open var reportContentEventIdScoreReasonThrowableError: Error?
-    var reportContentEventIdScoreReasonUnderlyingCallsCount = 0
+    open var reportContentEventIdScoreReasonUnderlyingCallsCount = 0
     open var reportContentEventIdScoreReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16599,7 +16599,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - reportRoom
 
     open var reportRoomReasonThrowableError: Error?
-    var reportRoomReasonUnderlyingCallsCount = 0
+    open var reportRoomReasonUnderlyingCallsCount = 0
     open var reportRoomReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16645,7 +16645,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - resetPowerLevels
 
     open var resetPowerLevelsThrowableError: Error?
-    var resetPowerLevelsUnderlyingCallsCount = 0
+    open var resetPowerLevelsUnderlyingCallsCount = 0
     open var resetPowerLevelsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16673,7 +16673,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return resetPowerLevelsCallsCount > 0
     }
 
-    var resetPowerLevelsUnderlyingReturnValue: RoomPowerLevels!
+    open var resetPowerLevelsUnderlyingReturnValue: RoomPowerLevels!
     open var resetPowerLevelsReturnValue: RoomPowerLevels! {
         get {
             if Thread.isMainThread {
@@ -16714,7 +16714,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - roomEventsDebugString
 
     open var roomEventsDebugStringThrowableError: Error?
-    var roomEventsDebugStringUnderlyingCallsCount = 0
+    open var roomEventsDebugStringUnderlyingCallsCount = 0
     open var roomEventsDebugStringCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16742,7 +16742,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return roomEventsDebugStringCallsCount > 0
     }
 
-    var roomEventsDebugStringUnderlyingReturnValue: [String]!
+    open var roomEventsDebugStringUnderlyingReturnValue: [String]!
     open var roomEventsDebugStringReturnValue: [String]! {
         get {
             if Thread.isMainThread {
@@ -16783,7 +16783,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - roomInfo
 
     open var roomInfoThrowableError: Error?
-    var roomInfoUnderlyingCallsCount = 0
+    open var roomInfoUnderlyingCallsCount = 0
     open var roomInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16811,7 +16811,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return roomInfoCallsCount > 0
     }
 
-    var roomInfoUnderlyingReturnValue: RoomInfo!
+    open var roomInfoUnderlyingReturnValue: RoomInfo!
     open var roomInfoReturnValue: RoomInfo! {
         get {
             if Thread.isMainThread {
@@ -16852,7 +16852,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - saveComposerDraft
 
     open var saveComposerDraftDraftThreadRootThrowableError: Error?
-    var saveComposerDraftDraftThreadRootUnderlyingCallsCount = 0
+    open var saveComposerDraftDraftThreadRootUnderlyingCallsCount = 0
     open var saveComposerDraftDraftThreadRootCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16898,7 +16898,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - sendLiveLocation
 
     open var sendLiveLocationGeoUriThrowableError: Error?
-    var sendLiveLocationGeoUriUnderlyingCallsCount = 0
+    open var sendLiveLocationGeoUriUnderlyingCallsCount = 0
     open var sendLiveLocationGeoUriCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16944,7 +16944,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - sendRaw
 
     open var sendRawEventTypeContentThrowableError: Error?
-    var sendRawEventTypeContentUnderlyingCallsCount = 0
+    open var sendRawEventTypeContentUnderlyingCallsCount = 0
     open var sendRawEventTypeContentCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -16990,7 +16990,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - setIsFavourite
 
     open var setIsFavouriteIsFavouriteTagOrderThrowableError: Error?
-    var setIsFavouriteIsFavouriteTagOrderUnderlyingCallsCount = 0
+    open var setIsFavouriteIsFavouriteTagOrderUnderlyingCallsCount = 0
     open var setIsFavouriteIsFavouriteTagOrderCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17036,7 +17036,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - setIsLowPriority
 
     open var setIsLowPriorityIsLowPriorityTagOrderThrowableError: Error?
-    var setIsLowPriorityIsLowPriorityTagOrderUnderlyingCallsCount = 0
+    open var setIsLowPriorityIsLowPriorityTagOrderUnderlyingCallsCount = 0
     open var setIsLowPriorityIsLowPriorityTagOrderCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17082,7 +17082,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - setName
 
     open var setNameNameThrowableError: Error?
-    var setNameNameUnderlyingCallsCount = 0
+    open var setNameNameUnderlyingCallsCount = 0
     open var setNameNameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17128,7 +17128,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - setThreadSubscription
 
     open var setThreadSubscriptionThreadRootEventIdSubscribedThrowableError: Error?
-    var setThreadSubscriptionThreadRootEventIdSubscribedUnderlyingCallsCount = 0
+    open var setThreadSubscriptionThreadRootEventIdSubscribedUnderlyingCallsCount = 0
     open var setThreadSubscriptionThreadRootEventIdSubscribedCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17174,7 +17174,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - setTopic
 
     open var setTopicTopicThrowableError: Error?
-    var setTopicTopicUnderlyingCallsCount = 0
+    open var setTopicTopicUnderlyingCallsCount = 0
     open var setTopicTopicCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17220,7 +17220,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - setUnreadFlag
 
     open var setUnreadFlagNewValueThrowableError: Error?
-    var setUnreadFlagNewValueUnderlyingCallsCount = 0
+    open var setUnreadFlagNewValueUnderlyingCallsCount = 0
     open var setUnreadFlagNewValueCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17266,7 +17266,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - startLiveLocationShare
 
     open var startLiveLocationShareDurationMillisThrowableError: Error?
-    var startLiveLocationShareDurationMillisUnderlyingCallsCount = 0
+    open var startLiveLocationShareDurationMillisUnderlyingCallsCount = 0
     open var startLiveLocationShareDurationMillisCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17312,7 +17312,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - stopLiveLocationShare
 
     open var stopLiveLocationShareThrowableError: Error?
-    var stopLiveLocationShareUnderlyingCallsCount = 0
+    open var stopLiveLocationShareUnderlyingCallsCount = 0
     open var stopLiveLocationShareCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17352,7 +17352,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - subscribeToCallDeclineEvents
 
     open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerThrowableError: Error?
-    var subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount = 0
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount = 0
     open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17382,7 +17382,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerReceivedArguments: (rtcNotificationEventId: String, listener: CallDeclineListener)?
     open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerReceivedInvocations: [(rtcNotificationEventId: String, listener: CallDeclineListener)] = []
 
-    var subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -17427,7 +17427,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - subscribeToIdentityStatusChanges
 
     open var subscribeToIdentityStatusChangesListenerThrowableError: Error?
-    var subscribeToIdentityStatusChangesListenerUnderlyingCallsCount = 0
+    open var subscribeToIdentityStatusChangesListenerUnderlyingCallsCount = 0
     open var subscribeToIdentityStatusChangesListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17457,7 +17457,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var subscribeToIdentityStatusChangesListenerReceivedListener: IdentityStatusChangeListener?
     open var subscribeToIdentityStatusChangesListenerReceivedInvocations: [IdentityStatusChangeListener] = []
 
-    var subscribeToIdentityStatusChangesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToIdentityStatusChangesListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToIdentityStatusChangesListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -17502,7 +17502,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - subscribeToKnockRequests
 
     open var subscribeToKnockRequestsListenerThrowableError: Error?
-    var subscribeToKnockRequestsListenerUnderlyingCallsCount = 0
+    open var subscribeToKnockRequestsListenerUnderlyingCallsCount = 0
     open var subscribeToKnockRequestsListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17532,7 +17532,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var subscribeToKnockRequestsListenerReceivedListener: KnockRequestsListener?
     open var subscribeToKnockRequestsListenerReceivedInvocations: [KnockRequestsListener] = []
 
-    var subscribeToKnockRequestsListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToKnockRequestsListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToKnockRequestsListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -17576,7 +17576,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - subscribeToLiveLocationShares
 
-    var subscribeToLiveLocationSharesListenerUnderlyingCallsCount = 0
+    open var subscribeToLiveLocationSharesListenerUnderlyingCallsCount = 0
     open var subscribeToLiveLocationSharesListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17606,7 +17606,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var subscribeToLiveLocationSharesListenerReceivedListener: LiveLocationShareListener?
     open var subscribeToLiveLocationSharesListenerReceivedInvocations: [LiveLocationShareListener] = []
 
-    var subscribeToLiveLocationSharesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToLiveLocationSharesListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToLiveLocationSharesListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -17647,7 +17647,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - subscribeToRoomInfoUpdates
 
-    var subscribeToRoomInfoUpdatesListenerUnderlyingCallsCount = 0
+    open var subscribeToRoomInfoUpdatesListenerUnderlyingCallsCount = 0
     open var subscribeToRoomInfoUpdatesListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17677,7 +17677,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var subscribeToRoomInfoUpdatesListenerReceivedListener: RoomInfoListener?
     open var subscribeToRoomInfoUpdatesListenerReceivedInvocations: [RoomInfoListener] = []
 
-    var subscribeToRoomInfoUpdatesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToRoomInfoUpdatesListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToRoomInfoUpdatesListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -17719,7 +17719,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - subscribeToSendQueueUpdates
 
     open var subscribeToSendQueueUpdatesListenerThrowableError: Error?
-    var subscribeToSendQueueUpdatesListenerUnderlyingCallsCount = 0
+    open var subscribeToSendQueueUpdatesListenerUnderlyingCallsCount = 0
     open var subscribeToSendQueueUpdatesListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17749,7 +17749,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var subscribeToSendQueueUpdatesListenerReceivedListener: SendQueueListener?
     open var subscribeToSendQueueUpdatesListenerReceivedInvocations: [SendQueueListener] = []
 
-    var subscribeToSendQueueUpdatesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToSendQueueUpdatesListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToSendQueueUpdatesListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -17793,7 +17793,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - subscribeToTypingNotifications
 
-    var subscribeToTypingNotificationsListenerUnderlyingCallsCount = 0
+    open var subscribeToTypingNotificationsListenerUnderlyingCallsCount = 0
     open var subscribeToTypingNotificationsListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17823,7 +17823,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var subscribeToTypingNotificationsListenerReceivedListener: TypingNotificationsListener?
     open var subscribeToTypingNotificationsListenerReceivedInvocations: [TypingNotificationsListener] = []
 
-    var subscribeToTypingNotificationsListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToTypingNotificationsListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToTypingNotificationsListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -17864,7 +17864,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - successorRoom
 
-    var successorRoomUnderlyingCallsCount = 0
+    open var successorRoomUnderlyingCallsCount = 0
     open var successorRoomCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17892,7 +17892,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return successorRoomCallsCount > 0
     }
 
-    var successorRoomUnderlyingReturnValue: SuccessorRoom?
+    open var successorRoomUnderlyingReturnValue: SuccessorRoom?
     open var successorRoomReturnValue: SuccessorRoom? {
         get {
             if Thread.isMainThread {
@@ -17930,7 +17930,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - suggestedRoleForUser
 
     open var suggestedRoleForUserUserIdThrowableError: Error?
-    var suggestedRoleForUserUserIdUnderlyingCallsCount = 0
+    open var suggestedRoleForUserUserIdUnderlyingCallsCount = 0
     open var suggestedRoleForUserUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -17960,7 +17960,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var suggestedRoleForUserUserIdReceivedUserId: String?
     open var suggestedRoleForUserUserIdReceivedInvocations: [String] = []
 
-    var suggestedRoleForUserUserIdUnderlyingReturnValue: RoomMemberRole!
+    open var suggestedRoleForUserUserIdUnderlyingReturnValue: RoomMemberRole!
     open var suggestedRoleForUserUserIdReturnValue: RoomMemberRole! {
         get {
             if Thread.isMainThread {
@@ -18005,7 +18005,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - timeline
 
     open var timelineThrowableError: Error?
-    var timelineUnderlyingCallsCount = 0
+    open var timelineUnderlyingCallsCount = 0
     open var timelineCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18033,7 +18033,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return timelineCallsCount > 0
     }
 
-    var timelineUnderlyingReturnValue: Timeline!
+    open var timelineUnderlyingReturnValue: Timeline!
     open var timelineReturnValue: Timeline! {
         get {
             if Thread.isMainThread {
@@ -18074,7 +18074,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - timelineWithConfiguration
 
     open var timelineWithConfigurationConfigurationThrowableError: Error?
-    var timelineWithConfigurationConfigurationUnderlyingCallsCount = 0
+    open var timelineWithConfigurationConfigurationUnderlyingCallsCount = 0
     open var timelineWithConfigurationConfigurationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18104,7 +18104,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var timelineWithConfigurationConfigurationReceivedConfiguration: TimelineConfiguration?
     open var timelineWithConfigurationConfigurationReceivedInvocations: [TimelineConfiguration] = []
 
-    var timelineWithConfigurationConfigurationUnderlyingReturnValue: Timeline!
+    open var timelineWithConfigurationConfigurationUnderlyingReturnValue: Timeline!
     open var timelineWithConfigurationConfigurationReturnValue: Timeline! {
         get {
             if Thread.isMainThread {
@@ -18148,7 +18148,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - topic
 
-    var topicUnderlyingCallsCount = 0
+    open var topicUnderlyingCallsCount = 0
     open var topicCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18176,7 +18176,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return topicCallsCount > 0
     }
 
-    var topicUnderlyingReturnValue: String?
+    open var topicUnderlyingReturnValue: String?
     open var topicReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -18214,7 +18214,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - typingNotice
 
     open var typingNoticeIsTypingThrowableError: Error?
-    var typingNoticeIsTypingUnderlyingCallsCount = 0
+    open var typingNoticeIsTypingUnderlyingCallsCount = 0
     open var typingNoticeIsTypingCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18260,7 +18260,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - unbanUser
 
     open var unbanUserUserIdReasonThrowableError: Error?
-    var unbanUserUserIdReasonUnderlyingCallsCount = 0
+    open var unbanUserUserIdReasonUnderlyingCallsCount = 0
     open var unbanUserUserIdReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18306,7 +18306,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - updateCanonicalAlias
 
     open var updateCanonicalAliasAliasAltAliasesThrowableError: Error?
-    var updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount = 0
+    open var updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount = 0
     open var updateCanonicalAliasAliasAltAliasesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18352,7 +18352,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - updateHistoryVisibility
 
     open var updateHistoryVisibilityVisibilityThrowableError: Error?
-    var updateHistoryVisibilityVisibilityUnderlyingCallsCount = 0
+    open var updateHistoryVisibilityVisibilityUnderlyingCallsCount = 0
     open var updateHistoryVisibilityVisibilityCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18398,7 +18398,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - updateJoinRules
 
     open var updateJoinRulesNewRuleThrowableError: Error?
-    var updateJoinRulesNewRuleUnderlyingCallsCount = 0
+    open var updateJoinRulesNewRuleUnderlyingCallsCount = 0
     open var updateJoinRulesNewRuleCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18444,7 +18444,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - updatePowerLevelsForUsers
 
     open var updatePowerLevelsForUsersUpdatesThrowableError: Error?
-    var updatePowerLevelsForUsersUpdatesUnderlyingCallsCount = 0
+    open var updatePowerLevelsForUsersUpdatesUnderlyingCallsCount = 0
     open var updatePowerLevelsForUsersUpdatesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18490,7 +18490,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - updateRoomVisibility
 
     open var updateRoomVisibilityVisibilityThrowableError: Error?
-    var updateRoomVisibilityVisibilityUnderlyingCallsCount = 0
+    open var updateRoomVisibilityVisibilityUnderlyingCallsCount = 0
     open var updateRoomVisibilityVisibilityCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18536,7 +18536,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - uploadAvatar
 
     open var uploadAvatarMimeTypeDataMediaInfoThrowableError: Error?
-    var uploadAvatarMimeTypeDataMediaInfoUnderlyingCallsCount = 0
+    open var uploadAvatarMimeTypeDataMediaInfoUnderlyingCallsCount = 0
     open var uploadAvatarMimeTypeDataMediaInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18582,7 +18582,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     //MARK: - withdrawVerificationAndResend
 
     open var withdrawVerificationAndResendUserIdsSendHandleThrowableError: Error?
-    var withdrawVerificationAndResendUserIdsSendHandleUnderlyingCallsCount = 0
+    open var withdrawVerificationAndResendUserIdsSendHandleUnderlyingCallsCount = 0
     open var withdrawVerificationAndResendUserIdsSendHandleCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18626,7 +18626,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     }
 }
 open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -18643,7 +18643,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unche
     //MARK: - isAtLastPage
 
     open var isAtLastPageThrowableError: Error?
-    var isAtLastPageUnderlyingCallsCount = 0
+    open var isAtLastPageUnderlyingCallsCount = 0
     open var isAtLastPageCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18671,7 +18671,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unche
         return isAtLastPageCallsCount > 0
     }
 
-    var isAtLastPageUnderlyingReturnValue: Bool!
+    open var isAtLastPageUnderlyingReturnValue: Bool!
     open var isAtLastPageReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -18712,7 +18712,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unche
     //MARK: - loadedPages
 
     open var loadedPagesThrowableError: Error?
-    var loadedPagesUnderlyingCallsCount = 0
+    open var loadedPagesUnderlyingCallsCount = 0
     open var loadedPagesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18740,7 +18740,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unche
         return loadedPagesCallsCount > 0
     }
 
-    var loadedPagesUnderlyingReturnValue: UInt32!
+    open var loadedPagesUnderlyingReturnValue: UInt32!
     open var loadedPagesReturnValue: UInt32! {
         get {
             if Thread.isMainThread {
@@ -18781,7 +18781,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unche
     //MARK: - nextPage
 
     open var nextPageThrowableError: Error?
-    var nextPageUnderlyingCallsCount = 0
+    open var nextPageUnderlyingCallsCount = 0
     open var nextPageCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18820,7 +18820,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unche
 
     //MARK: - results
 
-    var resultsListenerUnderlyingCallsCount = 0
+    open var resultsListenerUnderlyingCallsCount = 0
     open var resultsListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18850,7 +18850,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unche
     open var resultsListenerReceivedListener: RoomDirectorySearchEntriesListener?
     open var resultsListenerReceivedInvocations: [RoomDirectorySearchEntriesListener] = []
 
-    var resultsListenerUnderlyingReturnValue: TaskHandle!
+    open var resultsListenerUnderlyingReturnValue: TaskHandle!
     open var resultsListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -18892,7 +18892,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unche
     //MARK: - search
 
     open var searchFilterBatchSizeViaServerNameThrowableError: Error?
-    var searchFilterBatchSizeViaServerNameUnderlyingCallsCount = 0
+    open var searchFilterBatchSizeViaServerNameUnderlyingCallsCount = 0
     open var searchFilterBatchSizeViaServerNameCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18936,7 +18936,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unche
     }
 }
 open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -18952,7 +18952,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
 
     //MARK: - entriesWithDynamicAdapters
 
-    var entriesWithDynamicAdaptersPageSizeListenerUnderlyingCallsCount = 0
+    open var entriesWithDynamicAdaptersPageSizeListenerUnderlyingCallsCount = 0
     open var entriesWithDynamicAdaptersPageSizeListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -18982,7 +18982,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
     open var entriesWithDynamicAdaptersPageSizeListenerReceivedArguments: (pageSize: UInt32, listener: RoomListEntriesListener)?
     open var entriesWithDynamicAdaptersPageSizeListenerReceivedInvocations: [(pageSize: UInt32, listener: RoomListEntriesListener)] = []
 
-    var entriesWithDynamicAdaptersPageSizeListenerUnderlyingReturnValue: RoomListEntriesWithDynamicAdaptersResult!
+    open var entriesWithDynamicAdaptersPageSizeListenerUnderlyingReturnValue: RoomListEntriesWithDynamicAdaptersResult!
     open var entriesWithDynamicAdaptersPageSizeListenerReturnValue: RoomListEntriesWithDynamicAdaptersResult! {
         get {
             if Thread.isMainThread {
@@ -19023,7 +19023,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
 
     //MARK: - entriesWithDynamicAdaptersWith
 
-    var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount = 0
+    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount = 0
     open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19053,7 +19053,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
     open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReceivedArguments: (pageSize: UInt32, enableLatestEventSorter: Bool, listener: RoomListEntriesListener)?
     open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReceivedInvocations: [(pageSize: UInt32, enableLatestEventSorter: Bool, listener: RoomListEntriesListener)] = []
 
-    var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue: RoomListEntriesWithDynamicAdaptersResult!
+    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue: RoomListEntriesWithDynamicAdaptersResult!
     open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReturnValue: RoomListEntriesWithDynamicAdaptersResult! {
         get {
             if Thread.isMainThread {
@@ -19095,7 +19095,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
     //MARK: - loadingState
 
     open var loadingStateListenerThrowableError: Error?
-    var loadingStateListenerUnderlyingCallsCount = 0
+    open var loadingStateListenerUnderlyingCallsCount = 0
     open var loadingStateListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19125,7 +19125,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
     open var loadingStateListenerReceivedListener: RoomListLoadingStateListener?
     open var loadingStateListenerReceivedInvocations: [RoomListLoadingStateListener] = []
 
-    var loadingStateListenerUnderlyingReturnValue: RoomListLoadingStateResult!
+    open var loadingStateListenerUnderlyingReturnValue: RoomListLoadingStateResult!
     open var loadingStateListenerReturnValue: RoomListLoadingStateResult! {
         get {
             if Thread.isMainThread {
@@ -19170,7 +19170,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
     //MARK: - room
 
     open var roomRoomIdThrowableError: Error?
-    var roomRoomIdUnderlyingCallsCount = 0
+    open var roomRoomIdUnderlyingCallsCount = 0
     open var roomRoomIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19200,7 +19200,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
     open var roomRoomIdReceivedRoomId: String?
     open var roomRoomIdReceivedInvocations: [String] = []
 
-    var roomRoomIdUnderlyingReturnValue: Room!
+    open var roomRoomIdUnderlyingReturnValue: Room!
     open var roomRoomIdReturnValue: Room! {
         get {
             if Thread.isMainThread {
@@ -19243,7 +19243,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
     }
 }
 open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynamicEntriesController, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -19259,7 +19259,7 @@ open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynami
 
     //MARK: - addOnePage
 
-    var addOnePageUnderlyingCallsCount = 0
+    open var addOnePageUnderlyingCallsCount = 0
     open var addOnePageCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19295,7 +19295,7 @@ open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynami
 
     //MARK: - resetToOnePage
 
-    var resetToOnePageUnderlyingCallsCount = 0
+    open var resetToOnePageUnderlyingCallsCount = 0
     open var resetToOnePageCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19331,7 +19331,7 @@ open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynami
 
     //MARK: - setFilter
 
-    var setFilterKindUnderlyingCallsCount = 0
+    open var setFilterKindUnderlyingCallsCount = 0
     open var setFilterKindCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19361,7 +19361,7 @@ open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynami
     open var setFilterKindReceivedKind: RoomListEntriesDynamicFilterKind?
     open var setFilterKindReceivedInvocations: [RoomListEntriesDynamicFilterKind] = []
 
-    var setFilterKindUnderlyingReturnValue: Bool!
+    open var setFilterKindUnderlyingReturnValue: Bool!
     open var setFilterKindReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -19401,7 +19401,7 @@ open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynami
     }
 }
 open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomListEntriesWithDynamicAdaptersResult, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -19417,7 +19417,7 @@ open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomLi
 
     //MARK: - controller
 
-    var controllerUnderlyingCallsCount = 0
+    open var controllerUnderlyingCallsCount = 0
     open var controllerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19445,7 +19445,7 @@ open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomLi
         return controllerCallsCount > 0
     }
 
-    var controllerUnderlyingReturnValue: RoomListDynamicEntriesController!
+    open var controllerUnderlyingReturnValue: RoomListDynamicEntriesController!
     open var controllerReturnValue: RoomListDynamicEntriesController! {
         get {
             if Thread.isMainThread {
@@ -19482,7 +19482,7 @@ open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomLi
 
     //MARK: - entriesStream
 
-    var entriesStreamUnderlyingCallsCount = 0
+    open var entriesStreamUnderlyingCallsCount = 0
     open var entriesStreamCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19510,7 +19510,7 @@ open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomLi
         return entriesStreamCallsCount > 0
     }
 
-    var entriesStreamUnderlyingReturnValue: TaskHandle!
+    open var entriesStreamUnderlyingReturnValue: TaskHandle!
     open var entriesStreamReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -19546,7 +19546,7 @@ open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomLi
     }
 }
 open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -19563,7 +19563,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
     //MARK: - allRooms
 
     open var allRoomsThrowableError: Error?
-    var allRoomsUnderlyingCallsCount = 0
+    open var allRoomsUnderlyingCallsCount = 0
     open var allRoomsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19591,7 +19591,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
         return allRoomsCallsCount > 0
     }
 
-    var allRoomsUnderlyingReturnValue: RoomList!
+    open var allRoomsUnderlyingReturnValue: RoomList!
     open var allRoomsReturnValue: RoomList! {
         get {
             if Thread.isMainThread {
@@ -19632,7 +19632,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
     //MARK: - room
 
     open var roomRoomIdThrowableError: Error?
-    var roomRoomIdUnderlyingCallsCount = 0
+    open var roomRoomIdUnderlyingCallsCount = 0
     open var roomRoomIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19662,7 +19662,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
     open var roomRoomIdReceivedRoomId: String?
     open var roomRoomIdReceivedInvocations: [String] = []
 
-    var roomRoomIdUnderlyingReturnValue: Room!
+    open var roomRoomIdUnderlyingReturnValue: Room!
     open var roomRoomIdReturnValue: Room! {
         get {
             if Thread.isMainThread {
@@ -19706,7 +19706,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
 
     //MARK: - state
 
-    var stateListenerUnderlyingCallsCount = 0
+    open var stateListenerUnderlyingCallsCount = 0
     open var stateListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19736,7 +19736,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
     open var stateListenerReceivedListener: RoomListServiceStateListener?
     open var stateListenerReceivedInvocations: [RoomListServiceStateListener] = []
 
-    var stateListenerUnderlyingReturnValue: TaskHandle!
+    open var stateListenerUnderlyingReturnValue: TaskHandle!
     open var stateListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -19778,7 +19778,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
     //MARK: - subscribeToRooms
 
     open var subscribeToRoomsRoomIdsThrowableError: Error?
-    var subscribeToRoomsRoomIdsUnderlyingCallsCount = 0
+    open var subscribeToRoomsRoomIdsUnderlyingCallsCount = 0
     open var subscribeToRoomsRoomIdsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19823,7 +19823,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
 
     //MARK: - syncIndicator
 
-    var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerUnderlyingCallsCount = 0
+    open var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerUnderlyingCallsCount = 0
     open var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19853,7 +19853,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
     open var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerReceivedArguments: (delayBeforeShowingInMs: UInt32, delayBeforeHidingInMs: UInt32, listener: RoomListServiceSyncIndicatorListener)?
     open var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerReceivedInvocations: [(delayBeforeShowingInMs: UInt32, delayBeforeHidingInMs: UInt32, listener: RoomListServiceSyncIndicatorListener)] = []
 
-    var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerUnderlyingReturnValue: TaskHandle!
+    open var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerUnderlyingReturnValue: TaskHandle!
     open var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -19893,7 +19893,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
     }
 }
 open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -19909,7 +19909,7 @@ open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator, @unche
 
     //MARK: - len
 
-    var lenUnderlyingCallsCount = 0
+    open var lenUnderlyingCallsCount = 0
     open var lenCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -19937,7 +19937,7 @@ open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator, @unche
         return lenCallsCount > 0
     }
 
-    var lenUnderlyingReturnValue: UInt32!
+    open var lenUnderlyingReturnValue: UInt32!
     open var lenReturnValue: UInt32! {
         get {
             if Thread.isMainThread {
@@ -19974,7 +19974,7 @@ open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator, @unche
 
     //MARK: - nextChunk
 
-    var nextChunkChunkSizeUnderlyingCallsCount = 0
+    open var nextChunkChunkSizeUnderlyingCallsCount = 0
     open var nextChunkChunkSizeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20004,7 +20004,7 @@ open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator, @unche
     open var nextChunkChunkSizeReceivedChunkSize: UInt32?
     open var nextChunkChunkSizeReceivedInvocations: [UInt32] = []
 
-    var nextChunkChunkSizeUnderlyingReturnValue: [RoomMember]?
+    open var nextChunkChunkSizeUnderlyingReturnValue: [RoomMember]?
     open var nextChunkChunkSizeReturnValue: [RoomMember]? {
         get {
             if Thread.isMainThread {
@@ -20044,7 +20044,7 @@ open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator, @unche
     }
 }
 open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMessageEventContentWithoutRelation, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -20060,7 +20060,7 @@ open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMess
 
     //MARK: - withMentions
 
-    var withMentionsMentionsUnderlyingCallsCount = 0
+    open var withMentionsMentionsUnderlyingCallsCount = 0
     open var withMentionsMentionsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20090,7 +20090,7 @@ open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMess
     open var withMentionsMentionsReceivedMentions: Mentions?
     open var withMentionsMentionsReceivedInvocations: [Mentions] = []
 
-    var withMentionsMentionsUnderlyingReturnValue: RoomMessageEventContentWithoutRelation!
+    open var withMentionsMentionsUnderlyingReturnValue: RoomMessageEventContentWithoutRelation!
     open var withMentionsMentionsReturnValue: RoomMessageEventContentWithoutRelation! {
         get {
             if Thread.isMainThread {
@@ -20130,7 +20130,7 @@ open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMess
     }
 }
 open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -20146,7 +20146,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 
     //MARK: - canOwnUserBan
 
-    var canOwnUserBanUnderlyingCallsCount = 0
+    open var canOwnUserBanUnderlyingCallsCount = 0
     open var canOwnUserBanCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20174,7 +20174,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
         return canOwnUserBanCallsCount > 0
     }
 
-    var canOwnUserBanUnderlyingReturnValue: Bool!
+    open var canOwnUserBanUnderlyingReturnValue: Bool!
     open var canOwnUserBanReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20211,7 +20211,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 
     //MARK: - canOwnUserInvite
 
-    var canOwnUserInviteUnderlyingCallsCount = 0
+    open var canOwnUserInviteUnderlyingCallsCount = 0
     open var canOwnUserInviteCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20239,7 +20239,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
         return canOwnUserInviteCallsCount > 0
     }
 
-    var canOwnUserInviteUnderlyingReturnValue: Bool!
+    open var canOwnUserInviteUnderlyingReturnValue: Bool!
     open var canOwnUserInviteReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20276,7 +20276,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 
     //MARK: - canOwnUserKick
 
-    var canOwnUserKickUnderlyingCallsCount = 0
+    open var canOwnUserKickUnderlyingCallsCount = 0
     open var canOwnUserKickCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20304,7 +20304,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
         return canOwnUserKickCallsCount > 0
     }
 
-    var canOwnUserKickUnderlyingReturnValue: Bool!
+    open var canOwnUserKickUnderlyingReturnValue: Bool!
     open var canOwnUserKickReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20341,7 +20341,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 
     //MARK: - canOwnUserPinUnpin
 
-    var canOwnUserPinUnpinUnderlyingCallsCount = 0
+    open var canOwnUserPinUnpinUnderlyingCallsCount = 0
     open var canOwnUserPinUnpinCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20369,7 +20369,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
         return canOwnUserPinUnpinCallsCount > 0
     }
 
-    var canOwnUserPinUnpinUnderlyingReturnValue: Bool!
+    open var canOwnUserPinUnpinUnderlyingReturnValue: Bool!
     open var canOwnUserPinUnpinReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20406,7 +20406,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 
     //MARK: - canOwnUserRedactOther
 
-    var canOwnUserRedactOtherUnderlyingCallsCount = 0
+    open var canOwnUserRedactOtherUnderlyingCallsCount = 0
     open var canOwnUserRedactOtherCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20434,7 +20434,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
         return canOwnUserRedactOtherCallsCount > 0
     }
 
-    var canOwnUserRedactOtherUnderlyingReturnValue: Bool!
+    open var canOwnUserRedactOtherUnderlyingReturnValue: Bool!
     open var canOwnUserRedactOtherReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20471,7 +20471,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 
     //MARK: - canOwnUserRedactOwn
 
-    var canOwnUserRedactOwnUnderlyingCallsCount = 0
+    open var canOwnUserRedactOwnUnderlyingCallsCount = 0
     open var canOwnUserRedactOwnCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20499,7 +20499,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
         return canOwnUserRedactOwnCallsCount > 0
     }
 
-    var canOwnUserRedactOwnUnderlyingReturnValue: Bool!
+    open var canOwnUserRedactOwnUnderlyingReturnValue: Bool!
     open var canOwnUserRedactOwnReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20536,7 +20536,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 
     //MARK: - canOwnUserSendMessage
 
-    var canOwnUserSendMessageMessageUnderlyingCallsCount = 0
+    open var canOwnUserSendMessageMessageUnderlyingCallsCount = 0
     open var canOwnUserSendMessageMessageCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20566,7 +20566,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canOwnUserSendMessageMessageReceivedMessage: MessageLikeEventType?
     open var canOwnUserSendMessageMessageReceivedInvocations: [MessageLikeEventType] = []
 
-    var canOwnUserSendMessageMessageUnderlyingReturnValue: Bool!
+    open var canOwnUserSendMessageMessageUnderlyingReturnValue: Bool!
     open var canOwnUserSendMessageMessageReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20607,7 +20607,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 
     //MARK: - canOwnUserSendState
 
-    var canOwnUserSendStateStateEventUnderlyingCallsCount = 0
+    open var canOwnUserSendStateStateEventUnderlyingCallsCount = 0
     open var canOwnUserSendStateStateEventCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20637,7 +20637,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canOwnUserSendStateStateEventReceivedStateEvent: StateEventType?
     open var canOwnUserSendStateStateEventReceivedInvocations: [StateEventType] = []
 
-    var canOwnUserSendStateStateEventUnderlyingReturnValue: Bool!
+    open var canOwnUserSendStateStateEventUnderlyingReturnValue: Bool!
     open var canOwnUserSendStateStateEventReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20678,7 +20678,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 
     //MARK: - canOwnUserTriggerRoomNotification
 
-    var canOwnUserTriggerRoomNotificationUnderlyingCallsCount = 0
+    open var canOwnUserTriggerRoomNotificationUnderlyingCallsCount = 0
     open var canOwnUserTriggerRoomNotificationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20706,7 +20706,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
         return canOwnUserTriggerRoomNotificationCallsCount > 0
     }
 
-    var canOwnUserTriggerRoomNotificationUnderlyingReturnValue: Bool!
+    open var canOwnUserTriggerRoomNotificationUnderlyingReturnValue: Bool!
     open var canOwnUserTriggerRoomNotificationReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20744,7 +20744,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     //MARK: - canUserBan
 
     open var canUserBanUserIdThrowableError: Error?
-    var canUserBanUserIdUnderlyingCallsCount = 0
+    open var canUserBanUserIdUnderlyingCallsCount = 0
     open var canUserBanUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20774,7 +20774,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canUserBanUserIdReceivedUserId: String?
     open var canUserBanUserIdReceivedInvocations: [String] = []
 
-    var canUserBanUserIdUnderlyingReturnValue: Bool!
+    open var canUserBanUserIdUnderlyingReturnValue: Bool!
     open var canUserBanUserIdReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20819,7 +20819,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     //MARK: - canUserInvite
 
     open var canUserInviteUserIdThrowableError: Error?
-    var canUserInviteUserIdUnderlyingCallsCount = 0
+    open var canUserInviteUserIdUnderlyingCallsCount = 0
     open var canUserInviteUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20849,7 +20849,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canUserInviteUserIdReceivedUserId: String?
     open var canUserInviteUserIdReceivedInvocations: [String] = []
 
-    var canUserInviteUserIdUnderlyingReturnValue: Bool!
+    open var canUserInviteUserIdUnderlyingReturnValue: Bool!
     open var canUserInviteUserIdReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20894,7 +20894,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     //MARK: - canUserKick
 
     open var canUserKickUserIdThrowableError: Error?
-    var canUserKickUserIdUnderlyingCallsCount = 0
+    open var canUserKickUserIdUnderlyingCallsCount = 0
     open var canUserKickUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20924,7 +20924,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canUserKickUserIdReceivedUserId: String?
     open var canUserKickUserIdReceivedInvocations: [String] = []
 
-    var canUserKickUserIdUnderlyingReturnValue: Bool!
+    open var canUserKickUserIdUnderlyingReturnValue: Bool!
     open var canUserKickUserIdReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -20969,7 +20969,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     //MARK: - canUserPinUnpin
 
     open var canUserPinUnpinUserIdThrowableError: Error?
-    var canUserPinUnpinUserIdUnderlyingCallsCount = 0
+    open var canUserPinUnpinUserIdUnderlyingCallsCount = 0
     open var canUserPinUnpinUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -20999,7 +20999,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canUserPinUnpinUserIdReceivedUserId: String?
     open var canUserPinUnpinUserIdReceivedInvocations: [String] = []
 
-    var canUserPinUnpinUserIdUnderlyingReturnValue: Bool!
+    open var canUserPinUnpinUserIdUnderlyingReturnValue: Bool!
     open var canUserPinUnpinUserIdReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -21044,7 +21044,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     //MARK: - canUserRedactOther
 
     open var canUserRedactOtherUserIdThrowableError: Error?
-    var canUserRedactOtherUserIdUnderlyingCallsCount = 0
+    open var canUserRedactOtherUserIdUnderlyingCallsCount = 0
     open var canUserRedactOtherUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21074,7 +21074,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canUserRedactOtherUserIdReceivedUserId: String?
     open var canUserRedactOtherUserIdReceivedInvocations: [String] = []
 
-    var canUserRedactOtherUserIdUnderlyingReturnValue: Bool!
+    open var canUserRedactOtherUserIdUnderlyingReturnValue: Bool!
     open var canUserRedactOtherUserIdReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -21119,7 +21119,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     //MARK: - canUserRedactOwn
 
     open var canUserRedactOwnUserIdThrowableError: Error?
-    var canUserRedactOwnUserIdUnderlyingCallsCount = 0
+    open var canUserRedactOwnUserIdUnderlyingCallsCount = 0
     open var canUserRedactOwnUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21149,7 +21149,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canUserRedactOwnUserIdReceivedUserId: String?
     open var canUserRedactOwnUserIdReceivedInvocations: [String] = []
 
-    var canUserRedactOwnUserIdUnderlyingReturnValue: Bool!
+    open var canUserRedactOwnUserIdUnderlyingReturnValue: Bool!
     open var canUserRedactOwnUserIdReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -21194,7 +21194,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     //MARK: - canUserSendMessage
 
     open var canUserSendMessageUserIdMessageThrowableError: Error?
-    var canUserSendMessageUserIdMessageUnderlyingCallsCount = 0
+    open var canUserSendMessageUserIdMessageUnderlyingCallsCount = 0
     open var canUserSendMessageUserIdMessageCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21224,7 +21224,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canUserSendMessageUserIdMessageReceivedArguments: (userId: String, message: MessageLikeEventType)?
     open var canUserSendMessageUserIdMessageReceivedInvocations: [(userId: String, message: MessageLikeEventType)] = []
 
-    var canUserSendMessageUserIdMessageUnderlyingReturnValue: Bool!
+    open var canUserSendMessageUserIdMessageUnderlyingReturnValue: Bool!
     open var canUserSendMessageUserIdMessageReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -21269,7 +21269,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     //MARK: - canUserSendState
 
     open var canUserSendStateUserIdStateEventThrowableError: Error?
-    var canUserSendStateUserIdStateEventUnderlyingCallsCount = 0
+    open var canUserSendStateUserIdStateEventUnderlyingCallsCount = 0
     open var canUserSendStateUserIdStateEventCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21299,7 +21299,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canUserSendStateUserIdStateEventReceivedArguments: (userId: String, stateEvent: StateEventType)?
     open var canUserSendStateUserIdStateEventReceivedInvocations: [(userId: String, stateEvent: StateEventType)] = []
 
-    var canUserSendStateUserIdStateEventUnderlyingReturnValue: Bool!
+    open var canUserSendStateUserIdStateEventUnderlyingReturnValue: Bool!
     open var canUserSendStateUserIdStateEventReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -21344,7 +21344,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     //MARK: - canUserTriggerRoomNotification
 
     open var canUserTriggerRoomNotificationUserIdThrowableError: Error?
-    var canUserTriggerRoomNotificationUserIdUnderlyingCallsCount = 0
+    open var canUserTriggerRoomNotificationUserIdUnderlyingCallsCount = 0
     open var canUserTriggerRoomNotificationUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21374,7 +21374,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     open var canUserTriggerRoomNotificationUserIdReceivedUserId: String?
     open var canUserTriggerRoomNotificationUserIdReceivedInvocations: [String] = []
 
-    var canUserTriggerRoomNotificationUserIdUnderlyingReturnValue: Bool!
+    open var canUserTriggerRoomNotificationUserIdUnderlyingReturnValue: Bool!
     open var canUserTriggerRoomNotificationUserIdReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -21416,9 +21416,74 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
         }
     }
 
+    //MARK: - events
+
+    open var eventsUnderlyingCallsCount = 0
+    open var eventsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return eventsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = eventsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                eventsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    eventsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var eventsCalled: Bool {
+        return eventsCallsCount > 0
+    }
+
+    open var eventsUnderlyingReturnValue: [TimelineEventType: Int64]!
+    open var eventsReturnValue: [TimelineEventType: Int64]! {
+        get {
+            if Thread.isMainThread {
+                return eventsUnderlyingReturnValue
+            } else {
+                var returnValue: [TimelineEventType: Int64]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = eventsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                eventsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    eventsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var eventsClosure: (() -> [TimelineEventType: Int64])?
+
+    open override func events() -> [TimelineEventType: Int64] {
+        eventsCallsCount += 1
+        if let eventsClosure = eventsClosure {
+            return eventsClosure()
+        } else {
+            return eventsReturnValue
+        }
+    }
+
     //MARK: - userPowerLevels
 
-    var userPowerLevelsUnderlyingCallsCount = 0
+    open var userPowerLevelsUnderlyingCallsCount = 0
     open var userPowerLevelsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21446,7 +21511,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
         return userPowerLevelsCallsCount > 0
     }
 
-    var userPowerLevelsUnderlyingReturnValue: [String: Int64]!
+    open var userPowerLevelsUnderlyingReturnValue: [String: Int64]!
     open var userPowerLevelsReturnValue: [String: Int64]! {
         get {
             if Thread.isMainThread {
@@ -21483,7 +21548,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 
     //MARK: - values
 
-    var valuesUnderlyingCallsCount = 0
+    open var valuesUnderlyingCallsCount = 0
     open var valuesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21511,7 +21576,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
         return valuesCallsCount > 0
     }
 
-    var valuesUnderlyingReturnValue: RoomPowerLevelsValues!
+    open var valuesUnderlyingReturnValue: RoomPowerLevelsValues!
     open var valuesReturnValue: RoomPowerLevelsValues! {
         get {
             if Thread.isMainThread {
@@ -21547,7 +21612,7 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     }
 }
 open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -21564,7 +21629,7 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
     //MARK: - forget
 
     open var forgetThrowableError: Error?
-    var forgetUnderlyingCallsCount = 0
+    open var forgetUnderlyingCallsCount = 0
     open var forgetCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21603,7 +21668,7 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
 
     //MARK: - info
 
-    var infoUnderlyingCallsCount = 0
+    open var infoUnderlyingCallsCount = 0
     open var infoCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21631,7 +21696,7 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
         return infoCallsCount > 0
     }
 
-    var infoUnderlyingReturnValue: RoomPreviewInfo!
+    open var infoUnderlyingReturnValue: RoomPreviewInfo!
     open var infoReturnValue: RoomPreviewInfo! {
         get {
             if Thread.isMainThread {
@@ -21668,7 +21733,7 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
 
     //MARK: - inviter
 
-    var inviterUnderlyingCallsCount = 0
+    open var inviterUnderlyingCallsCount = 0
     open var inviterCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21696,7 +21761,7 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
         return inviterCallsCount > 0
     }
 
-    var inviterUnderlyingReturnValue: RoomMember?
+    open var inviterUnderlyingReturnValue: RoomMember?
     open var inviterReturnValue: RoomMember? {
         get {
             if Thread.isMainThread {
@@ -21734,7 +21799,7 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
     //MARK: - leave
 
     open var leaveThrowableError: Error?
-    var leaveUnderlyingCallsCount = 0
+    open var leaveUnderlyingCallsCount = 0
     open var leaveCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21773,7 +21838,7 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
 
     //MARK: - ownMembershipDetails
 
-    var ownMembershipDetailsUnderlyingCallsCount = 0
+    open var ownMembershipDetailsUnderlyingCallsCount = 0
     open var ownMembershipDetailsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21801,7 +21866,7 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
         return ownMembershipDetailsCallsCount > 0
     }
 
-    var ownMembershipDetailsUnderlyingReturnValue: RoomMemberWithSenderInfo?
+    open var ownMembershipDetailsUnderlyingReturnValue: RoomMemberWithSenderInfo?
     open var ownMembershipDetailsReturnValue: RoomMemberWithSenderInfo? {
         get {
             if Thread.isMainThread {
@@ -21837,7 +21902,7 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
     }
 }
 open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -21853,7 +21918,7 @@ open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHand
 
     //MARK: - cancel
 
-    var cancelUnderlyingCallsCount = 0
+    open var cancelUnderlyingCallsCount = 0
     open var cancelCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21890,7 +21955,7 @@ open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHand
     //MARK: - join
 
     open var joinThrowableError: Error?
-    var joinUnderlyingCallsCount = 0
+    open var joinUnderlyingCallsCount = 0
     open var joinCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21928,7 +21993,7 @@ open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHand
     }
 }
 open class SendGalleryJoinHandleSDKMock: MatrixRustSDK.SendGalleryJoinHandle, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -21944,7 +22009,7 @@ open class SendGalleryJoinHandleSDKMock: MatrixRustSDK.SendGalleryJoinHandle, @u
 
     //MARK: - cancel
 
-    var cancelUnderlyingCallsCount = 0
+    open var cancelUnderlyingCallsCount = 0
     open var cancelCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -21981,7 +22046,7 @@ open class SendGalleryJoinHandleSDKMock: MatrixRustSDK.SendGalleryJoinHandle, @u
     //MARK: - join
 
     open var joinThrowableError: Error?
-    var joinUnderlyingCallsCount = 0
+    open var joinUnderlyingCallsCount = 0
     open var joinCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22019,7 +22084,7 @@ open class SendGalleryJoinHandleSDKMock: MatrixRustSDK.SendGalleryJoinHandle, @u
     }
 }
 open class SendHandleSDKMock: MatrixRustSDK.SendHandle, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -22036,7 +22101,7 @@ open class SendHandleSDKMock: MatrixRustSDK.SendHandle, @unchecked Sendable {
     //MARK: - abort
 
     open var abortThrowableError: Error?
-    var abortUnderlyingCallsCount = 0
+    open var abortUnderlyingCallsCount = 0
     open var abortCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22064,7 +22129,7 @@ open class SendHandleSDKMock: MatrixRustSDK.SendHandle, @unchecked Sendable {
         return abortCallsCount > 0
     }
 
-    var abortUnderlyingReturnValue: Bool!
+    open var abortUnderlyingReturnValue: Bool!
     open var abortReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -22105,7 +22170,7 @@ open class SendHandleSDKMock: MatrixRustSDK.SendHandle, @unchecked Sendable {
     //MARK: - tryResend
 
     open var tryResendThrowableError: Error?
-    var tryResendUnderlyingCallsCount = 0
+    open var tryResendUnderlyingCallsCount = 0
     open var tryResendCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22143,7 +22208,7 @@ open class SendHandleSDKMock: MatrixRustSDK.SendHandle, @unchecked Sendable {
     }
 }
 open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificationController, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -22160,7 +22225,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
     //MARK: - acceptVerificationRequest
 
     open var acceptVerificationRequestThrowableError: Error?
-    var acceptVerificationRequestUnderlyingCallsCount = 0
+    open var acceptVerificationRequestUnderlyingCallsCount = 0
     open var acceptVerificationRequestCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22200,7 +22265,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
     //MARK: - acknowledgeVerificationRequest
 
     open var acknowledgeVerificationRequestSenderIdFlowIdThrowableError: Error?
-    var acknowledgeVerificationRequestSenderIdFlowIdUnderlyingCallsCount = 0
+    open var acknowledgeVerificationRequestSenderIdFlowIdUnderlyingCallsCount = 0
     open var acknowledgeVerificationRequestSenderIdFlowIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22246,7 +22311,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
     //MARK: - approveVerification
 
     open var approveVerificationThrowableError: Error?
-    var approveVerificationUnderlyingCallsCount = 0
+    open var approveVerificationUnderlyingCallsCount = 0
     open var approveVerificationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22286,7 +22351,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
     //MARK: - cancelVerification
 
     open var cancelVerificationThrowableError: Error?
-    var cancelVerificationUnderlyingCallsCount = 0
+    open var cancelVerificationUnderlyingCallsCount = 0
     open var cancelVerificationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22326,7 +22391,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
     //MARK: - declineVerification
 
     open var declineVerificationThrowableError: Error?
-    var declineVerificationUnderlyingCallsCount = 0
+    open var declineVerificationUnderlyingCallsCount = 0
     open var declineVerificationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22366,7 +22431,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
     //MARK: - requestDeviceVerification
 
     open var requestDeviceVerificationThrowableError: Error?
-    var requestDeviceVerificationUnderlyingCallsCount = 0
+    open var requestDeviceVerificationUnderlyingCallsCount = 0
     open var requestDeviceVerificationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22406,7 +22471,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
     //MARK: - requestUserVerification
 
     open var requestUserVerificationUserIdThrowableError: Error?
-    var requestUserVerificationUserIdUnderlyingCallsCount = 0
+    open var requestUserVerificationUserIdUnderlyingCallsCount = 0
     open var requestUserVerificationUserIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22451,7 +22516,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
 
     //MARK: - setDelegate
 
-    var setDelegateDelegateUnderlyingCallsCount = 0
+    open var setDelegateDelegateUnderlyingCallsCount = 0
     open var setDelegateDelegateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22494,7 +22559,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
     //MARK: - startSasVerification
 
     open var startSasVerificationThrowableError: Error?
-    var startSasVerificationUnderlyingCallsCount = 0
+    open var startSasVerificationUnderlyingCallsCount = 0
     open var startSasVerificationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22532,7 +22597,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
     }
 }
 open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmoji, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -22548,7 +22613,7 @@ open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmo
 
     //MARK: - description
 
-    var descriptionUnderlyingCallsCount = 0
+    open var descriptionUnderlyingCallsCount = 0
     open var descriptionCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22576,7 +22641,7 @@ open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmo
         return descriptionCallsCount > 0
     }
 
-    var descriptionUnderlyingReturnValue: String!
+    open var descriptionUnderlyingReturnValue: String!
     open var descriptionReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -22613,7 +22678,7 @@ open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmo
 
     //MARK: - symbol
 
-    var symbolUnderlyingCallsCount = 0
+    open var symbolUnderlyingCallsCount = 0
     open var symbolCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22641,7 +22706,7 @@ open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmo
         return symbolCallsCount > 0
     }
 
-    var symbolUnderlyingReturnValue: String!
+    open var symbolUnderlyingReturnValue: String!
     open var symbolReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -22677,7 +22742,7 @@ open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmo
     }
 }
 open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -22694,7 +22759,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
     //MARK: - paginate
 
     open var paginateThrowableError: Error?
-    var paginateUnderlyingCallsCount = 0
+    open var paginateUnderlyingCallsCount = 0
     open var paginateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22733,7 +22798,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
 
     //MARK: - paginationState
 
-    var paginationStateUnderlyingCallsCount = 0
+    open var paginationStateUnderlyingCallsCount = 0
     open var paginationStateCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22761,7 +22826,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
         return paginationStateCallsCount > 0
     }
 
-    var paginationStateUnderlyingReturnValue: SpaceRoomListPaginationState!
+    open var paginationStateUnderlyingReturnValue: SpaceRoomListPaginationState!
     open var paginationStateReturnValue: SpaceRoomListPaginationState! {
         get {
             if Thread.isMainThread {
@@ -22798,7 +22863,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
 
     //MARK: - rooms
 
-    var roomsUnderlyingCallsCount = 0
+    open var roomsUnderlyingCallsCount = 0
     open var roomsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22826,7 +22891,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
         return roomsCallsCount > 0
     }
 
-    var roomsUnderlyingReturnValue: [SpaceRoom]!
+    open var roomsUnderlyingReturnValue: [SpaceRoom]!
     open var roomsReturnValue: [SpaceRoom]! {
         get {
             if Thread.isMainThread {
@@ -22863,7 +22928,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
 
     //MARK: - space
 
-    var spaceUnderlyingCallsCount = 0
+    open var spaceUnderlyingCallsCount = 0
     open var spaceCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22891,7 +22956,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
         return spaceCallsCount > 0
     }
 
-    var spaceUnderlyingReturnValue: SpaceRoom?
+    open var spaceUnderlyingReturnValue: SpaceRoom?
     open var spaceReturnValue: SpaceRoom? {
         get {
             if Thread.isMainThread {
@@ -22928,7 +22993,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
 
     //MARK: - subscribeToPaginationStateUpdates
 
-    var subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount = 0
+    open var subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount = 0
     open var subscribeToPaginationStateUpdatesListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -22958,7 +23023,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
     open var subscribeToPaginationStateUpdatesListenerReceivedListener: SpaceRoomListPaginationStateListener?
     open var subscribeToPaginationStateUpdatesListenerReceivedInvocations: [SpaceRoomListPaginationStateListener] = []
 
-    var subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToPaginationStateUpdatesListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -22999,7 +23064,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
 
     //MARK: - subscribeToRoomUpdate
 
-    var subscribeToRoomUpdateListenerUnderlyingCallsCount = 0
+    open var subscribeToRoomUpdateListenerUnderlyingCallsCount = 0
     open var subscribeToRoomUpdateListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23029,7 +23094,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
     open var subscribeToRoomUpdateListenerReceivedListener: SpaceRoomListEntriesListener?
     open var subscribeToRoomUpdateListenerReceivedInvocations: [SpaceRoomListEntriesListener] = []
 
-    var subscribeToRoomUpdateListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToRoomUpdateListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToRoomUpdateListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -23070,7 +23135,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
 
     //MARK: - subscribeToSpaceUpdates
 
-    var subscribeToSpaceUpdatesListenerUnderlyingCallsCount = 0
+    open var subscribeToSpaceUpdatesListenerUnderlyingCallsCount = 0
     open var subscribeToSpaceUpdatesListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23100,7 +23165,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
     open var subscribeToSpaceUpdatesListenerReceivedListener: SpaceRoomListSpaceListener?
     open var subscribeToSpaceUpdatesListenerReceivedInvocations: [SpaceRoomListSpaceListener] = []
 
-    var subscribeToSpaceUpdatesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToSpaceUpdatesListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToSpaceUpdatesListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -23140,7 +23205,7 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
     }
 }
 open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -23157,7 +23222,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
     //MARK: - addChildToSpace
 
     open var addChildToSpaceChildIdSpaceIdThrowableError: Error?
-    var addChildToSpaceChildIdSpaceIdUnderlyingCallsCount = 0
+    open var addChildToSpaceChildIdSpaceIdUnderlyingCallsCount = 0
     open var addChildToSpaceChildIdSpaceIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23202,7 +23267,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
 
     //MARK: - editableSpaces
 
-    var editableSpacesUnderlyingCallsCount = 0
+    open var editableSpacesUnderlyingCallsCount = 0
     open var editableSpacesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23230,7 +23295,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
         return editableSpacesCallsCount > 0
     }
 
-    var editableSpacesUnderlyingReturnValue: [SpaceRoom]!
+    open var editableSpacesUnderlyingReturnValue: [SpaceRoom]!
     open var editableSpacesReturnValue: [SpaceRoom]! {
         get {
             if Thread.isMainThread {
@@ -23268,7 +23333,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
     //MARK: - getSpaceRoom
 
     open var getSpaceRoomRoomIdThrowableError: Error?
-    var getSpaceRoomRoomIdUnderlyingCallsCount = 0
+    open var getSpaceRoomRoomIdUnderlyingCallsCount = 0
     open var getSpaceRoomRoomIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23298,7 +23363,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
     open var getSpaceRoomRoomIdReceivedRoomId: String?
     open var getSpaceRoomRoomIdReceivedInvocations: [String] = []
 
-    var getSpaceRoomRoomIdUnderlyingReturnValue: SpaceRoom?
+    open var getSpaceRoomRoomIdUnderlyingReturnValue: SpaceRoom?
     open var getSpaceRoomRoomIdReturnValue: SpaceRoom? {
         get {
             if Thread.isMainThread {
@@ -23343,7 +23408,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
     //MARK: - joinedParentsOfChild
 
     open var joinedParentsOfChildChildIdThrowableError: Error?
-    var joinedParentsOfChildChildIdUnderlyingCallsCount = 0
+    open var joinedParentsOfChildChildIdUnderlyingCallsCount = 0
     open var joinedParentsOfChildChildIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23373,7 +23438,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
     open var joinedParentsOfChildChildIdReceivedChildId: String?
     open var joinedParentsOfChildChildIdReceivedInvocations: [String] = []
 
-    var joinedParentsOfChildChildIdUnderlyingReturnValue: [SpaceRoom]!
+    open var joinedParentsOfChildChildIdUnderlyingReturnValue: [SpaceRoom]!
     open var joinedParentsOfChildChildIdReturnValue: [SpaceRoom]! {
         get {
             if Thread.isMainThread {
@@ -23415,75 +23480,10 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
         }
     }
 
-    //MARK: - joinedSpaces
-
-    var joinedSpacesUnderlyingCallsCount = 0
-    open var joinedSpacesCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return joinedSpacesUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = joinedSpacesUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                joinedSpacesUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    joinedSpacesUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var joinedSpacesCalled: Bool {
-        return joinedSpacesCallsCount > 0
-    }
-
-    var joinedSpacesUnderlyingReturnValue: [SpaceRoom]!
-    open var joinedSpacesReturnValue: [SpaceRoom]! {
-        get {
-            if Thread.isMainThread {
-                return joinedSpacesUnderlyingReturnValue
-            } else {
-                var returnValue: [SpaceRoom]? = nil
-                DispatchQueue.main.sync {
-                    returnValue = joinedSpacesUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                joinedSpacesUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    joinedSpacesUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var joinedSpacesClosure: (() async -> [SpaceRoom])?
-
-    open override func joinedSpaces() async -> [SpaceRoom] {
-        joinedSpacesCallsCount += 1
-        if let joinedSpacesClosure = joinedSpacesClosure {
-            return await joinedSpacesClosure()
-        } else {
-            return joinedSpacesReturnValue
-        }
-    }
-
     //MARK: - leaveSpace
 
     open var leaveSpaceSpaceIdThrowableError: Error?
-    var leaveSpaceSpaceIdUnderlyingCallsCount = 0
+    open var leaveSpaceSpaceIdUnderlyingCallsCount = 0
     open var leaveSpaceSpaceIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23513,7 +23513,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
     open var leaveSpaceSpaceIdReceivedSpaceId: String?
     open var leaveSpaceSpaceIdReceivedInvocations: [String] = []
 
-    var leaveSpaceSpaceIdUnderlyingReturnValue: LeaveSpaceHandle!
+    open var leaveSpaceSpaceIdUnderlyingReturnValue: LeaveSpaceHandle!
     open var leaveSpaceSpaceIdReturnValue: LeaveSpaceHandle! {
         get {
             if Thread.isMainThread {
@@ -23558,7 +23558,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
     //MARK: - removeChildFromSpace
 
     open var removeChildFromSpaceChildIdSpaceIdThrowableError: Error?
-    var removeChildFromSpaceChildIdSpaceIdUnderlyingCallsCount = 0
+    open var removeChildFromSpaceChildIdSpaceIdUnderlyingCallsCount = 0
     open var removeChildFromSpaceChildIdSpaceIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23604,7 +23604,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
     //MARK: - spaceRoomList
 
     open var spaceRoomListSpaceIdThrowableError: Error?
-    var spaceRoomListSpaceIdUnderlyingCallsCount = 0
+    open var spaceRoomListSpaceIdUnderlyingCallsCount = 0
     open var spaceRoomListSpaceIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23634,7 +23634,7 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
     open var spaceRoomListSpaceIdReceivedSpaceId: String?
     open var spaceRoomListSpaceIdReceivedInvocations: [String] = []
 
-    var spaceRoomListSpaceIdUnderlyingReturnValue: SpaceRoomList!
+    open var spaceRoomListSpaceIdUnderlyingReturnValue: SpaceRoomList!
     open var spaceRoomListSpaceIdReturnValue: SpaceRoomList! {
         get {
             if Thread.isMainThread {
@@ -23676,17 +23676,17 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
         }
     }
 
-    //MARK: - subscribeToJoinedSpaces
+    //MARK: - subscribeToTopLevelJoinedSpaces
 
-    var subscribeToJoinedSpacesListenerUnderlyingCallsCount = 0
-    open var subscribeToJoinedSpacesListenerCallsCount: Int {
+    open var subscribeToTopLevelJoinedSpacesListenerUnderlyingCallsCount = 0
+    open var subscribeToTopLevelJoinedSpacesListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return subscribeToJoinedSpacesListenerUnderlyingCallsCount
+                return subscribeToTopLevelJoinedSpacesListenerUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = subscribeToJoinedSpacesListenerUnderlyingCallsCount
+                    returnValue = subscribeToTopLevelJoinedSpacesListenerUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -23694,29 +23694,29 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
         }
         set {
             if Thread.isMainThread {
-                subscribeToJoinedSpacesListenerUnderlyingCallsCount = newValue
+                subscribeToTopLevelJoinedSpacesListenerUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    subscribeToJoinedSpacesListenerUnderlyingCallsCount = newValue
+                    subscribeToTopLevelJoinedSpacesListenerUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var subscribeToJoinedSpacesListenerCalled: Bool {
-        return subscribeToJoinedSpacesListenerCallsCount > 0
+    open var subscribeToTopLevelJoinedSpacesListenerCalled: Bool {
+        return subscribeToTopLevelJoinedSpacesListenerCallsCount > 0
     }
-    open var subscribeToJoinedSpacesListenerReceivedListener: SpaceServiceJoinedSpacesListener?
-    open var subscribeToJoinedSpacesListenerReceivedInvocations: [SpaceServiceJoinedSpacesListener] = []
+    open var subscribeToTopLevelJoinedSpacesListenerReceivedListener: SpaceServiceJoinedSpacesListener?
+    open var subscribeToTopLevelJoinedSpacesListenerReceivedInvocations: [SpaceServiceJoinedSpacesListener] = []
 
-    var subscribeToJoinedSpacesListenerUnderlyingReturnValue: TaskHandle!
-    open var subscribeToJoinedSpacesListenerReturnValue: TaskHandle! {
+    open var subscribeToTopLevelJoinedSpacesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToTopLevelJoinedSpacesListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
-                return subscribeToJoinedSpacesListenerUnderlyingReturnValue
+                return subscribeToTopLevelJoinedSpacesListenerUnderlyingReturnValue
             } else {
                 var returnValue: TaskHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = subscribeToJoinedSpacesListenerUnderlyingReturnValue
+                    returnValue = subscribeToTopLevelJoinedSpacesListenerUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -23724,31 +23724,96 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
         }
         set {
             if Thread.isMainThread {
-                subscribeToJoinedSpacesListenerUnderlyingReturnValue = newValue
+                subscribeToTopLevelJoinedSpacesListenerUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    subscribeToJoinedSpacesListenerUnderlyingReturnValue = newValue
+                    subscribeToTopLevelJoinedSpacesListenerUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var subscribeToJoinedSpacesListenerClosure: ((SpaceServiceJoinedSpacesListener) async -> TaskHandle)?
+    open var subscribeToTopLevelJoinedSpacesListenerClosure: ((SpaceServiceJoinedSpacesListener) async -> TaskHandle)?
 
-    open override func subscribeToJoinedSpaces(listener: SpaceServiceJoinedSpacesListener) async -> TaskHandle {
-        subscribeToJoinedSpacesListenerCallsCount += 1
-        subscribeToJoinedSpacesListenerReceivedListener = listener
+    open override func subscribeToTopLevelJoinedSpaces(listener: SpaceServiceJoinedSpacesListener) async -> TaskHandle {
+        subscribeToTopLevelJoinedSpacesListenerCallsCount += 1
+        subscribeToTopLevelJoinedSpacesListenerReceivedListener = listener
         DispatchQueue.main.async {
-            self.subscribeToJoinedSpacesListenerReceivedInvocations.append(listener)
+            self.subscribeToTopLevelJoinedSpacesListenerReceivedInvocations.append(listener)
         }
-        if let subscribeToJoinedSpacesListenerClosure = subscribeToJoinedSpacesListenerClosure {
-            return await subscribeToJoinedSpacesListenerClosure(listener)
+        if let subscribeToTopLevelJoinedSpacesListenerClosure = subscribeToTopLevelJoinedSpacesListenerClosure {
+            return await subscribeToTopLevelJoinedSpacesListenerClosure(listener)
         } else {
-            return subscribeToJoinedSpacesListenerReturnValue
+            return subscribeToTopLevelJoinedSpacesListenerReturnValue
+        }
+    }
+
+    //MARK: - topLevelJoinedSpaces
+
+    open var topLevelJoinedSpacesUnderlyingCallsCount = 0
+    open var topLevelJoinedSpacesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return topLevelJoinedSpacesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = topLevelJoinedSpacesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                topLevelJoinedSpacesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    topLevelJoinedSpacesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var topLevelJoinedSpacesCalled: Bool {
+        return topLevelJoinedSpacesCallsCount > 0
+    }
+
+    open var topLevelJoinedSpacesUnderlyingReturnValue: [SpaceRoom]!
+    open var topLevelJoinedSpacesReturnValue: [SpaceRoom]! {
+        get {
+            if Thread.isMainThread {
+                return topLevelJoinedSpacesUnderlyingReturnValue
+            } else {
+                var returnValue: [SpaceRoom]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = topLevelJoinedSpacesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                topLevelJoinedSpacesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    topLevelJoinedSpacesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var topLevelJoinedSpacesClosure: (() async -> [SpaceRoom])?
+
+    open override func topLevelJoinedSpaces() async -> [SpaceRoom] {
+        topLevelJoinedSpacesCallsCount += 1
+        if let topLevelJoinedSpacesClosure = topLevelJoinedSpacesClosure {
+            return await topLevelJoinedSpacesClosure()
+        } else {
+            return topLevelJoinedSpacesReturnValue
         }
     }
 }
 open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -23767,7 +23832,7 @@ open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
 
     //MARK: - enter
 
-    var enterUnderlyingCallsCount = 0
+    open var enterUnderlyingCallsCount = 0
     open var enterCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23803,7 +23868,7 @@ open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
 
     //MARK: - exit
 
-    var exitUnderlyingCallsCount = 0
+    open var exitUnderlyingCallsCount = 0
     open var exitCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23839,7 +23904,7 @@ open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
 
     //MARK: - isNone
 
-    var isNoneUnderlyingCallsCount = 0
+    open var isNoneUnderlyingCallsCount = 0
     open var isNoneCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23867,7 +23932,7 @@ open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
         return isNoneCallsCount > 0
     }
 
-    var isNoneUnderlyingReturnValue: Bool!
+    open var isNoneUnderlyingReturnValue: Bool!
     open var isNoneReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -23903,7 +23968,7 @@ open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
     }
 }
 open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -23919,7 +23984,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
 
     //MARK: - cacheSize
 
-    var cacheSizeCacheSizeUnderlyingCallsCount = 0
+    open var cacheSizeCacheSizeUnderlyingCallsCount = 0
     open var cacheSizeCacheSizeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -23949,7 +24014,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
     open var cacheSizeCacheSizeReceivedCacheSize: UInt32?
     open var cacheSizeCacheSizeReceivedInvocations: [UInt32?] = []
 
-    var cacheSizeCacheSizeUnderlyingReturnValue: SqliteStoreBuilder!
+    open var cacheSizeCacheSizeUnderlyingReturnValue: SqliteStoreBuilder!
     open var cacheSizeCacheSizeReturnValue: SqliteStoreBuilder! {
         get {
             if Thread.isMainThread {
@@ -23990,7 +24055,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
 
     //MARK: - journalSizeLimit
 
-    var journalSizeLimitLimitUnderlyingCallsCount = 0
+    open var journalSizeLimitLimitUnderlyingCallsCount = 0
     open var journalSizeLimitLimitCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24020,7 +24085,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
     open var journalSizeLimitLimitReceivedLimit: UInt32?
     open var journalSizeLimitLimitReceivedInvocations: [UInt32?] = []
 
-    var journalSizeLimitLimitUnderlyingReturnValue: SqliteStoreBuilder!
+    open var journalSizeLimitLimitUnderlyingReturnValue: SqliteStoreBuilder!
     open var journalSizeLimitLimitReturnValue: SqliteStoreBuilder! {
         get {
             if Thread.isMainThread {
@@ -24061,7 +24126,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
 
     //MARK: - passphrase
 
-    var passphrasePassphraseUnderlyingCallsCount = 0
+    open var passphrasePassphraseUnderlyingCallsCount = 0
     open var passphrasePassphraseCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24091,7 +24156,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
     open var passphrasePassphraseReceivedPassphrase: String?
     open var passphrasePassphraseReceivedInvocations: [String?] = []
 
-    var passphrasePassphraseUnderlyingReturnValue: SqliteStoreBuilder!
+    open var passphrasePassphraseUnderlyingReturnValue: SqliteStoreBuilder!
     open var passphrasePassphraseReturnValue: SqliteStoreBuilder! {
         get {
             if Thread.isMainThread {
@@ -24132,7 +24197,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
 
     //MARK: - poolMaxSize
 
-    var poolMaxSizePoolMaxSizeUnderlyingCallsCount = 0
+    open var poolMaxSizePoolMaxSizeUnderlyingCallsCount = 0
     open var poolMaxSizePoolMaxSizeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24162,7 +24227,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
     open var poolMaxSizePoolMaxSizeReceivedPoolMaxSize: UInt32?
     open var poolMaxSizePoolMaxSizeReceivedInvocations: [UInt32?] = []
 
-    var poolMaxSizePoolMaxSizeUnderlyingReturnValue: SqliteStoreBuilder!
+    open var poolMaxSizePoolMaxSizeUnderlyingReturnValue: SqliteStoreBuilder!
     open var poolMaxSizePoolMaxSizeReturnValue: SqliteStoreBuilder! {
         get {
             if Thread.isMainThread {
@@ -24203,7 +24268,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
 
     //MARK: - systemIsMemoryConstrained
 
-    var systemIsMemoryConstrainedUnderlyingCallsCount = 0
+    open var systemIsMemoryConstrainedUnderlyingCallsCount = 0
     open var systemIsMemoryConstrainedCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24231,7 +24296,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
         return systemIsMemoryConstrainedCallsCount > 0
     }
 
-    var systemIsMemoryConstrainedUnderlyingReturnValue: SqliteStoreBuilder!
+    open var systemIsMemoryConstrainedUnderlyingReturnValue: SqliteStoreBuilder!
     open var systemIsMemoryConstrainedReturnValue: SqliteStoreBuilder! {
         get {
             if Thread.isMainThread {
@@ -24267,7 +24332,7 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
     }
 }
 open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -24284,7 +24349,7 @@ open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler, @unchecked Sendable {
     //MARK: - finish
 
     open var finishCallbackUrlThrowableError: Error?
-    var finishCallbackUrlUnderlyingCallsCount = 0
+    open var finishCallbackUrlUnderlyingCallsCount = 0
     open var finishCallbackUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24329,7 +24394,7 @@ open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler, @unchecked Sendable {
 
     //MARK: - url
 
-    var urlUnderlyingCallsCount = 0
+    open var urlUnderlyingCallsCount = 0
     open var urlCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24357,7 +24422,7 @@ open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler, @unchecked Sendable {
         return urlCallsCount > 0
     }
 
-    var urlUnderlyingReturnValue: String!
+    open var urlUnderlyingReturnValue: String!
     open var urlReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -24393,7 +24458,7 @@ open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler, @unchecked Sendable {
     }
 }
 open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -24409,7 +24474,7 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
 
     //MARK: - expireSessions
 
-    var expireSessionsUnderlyingCallsCount = 0
+    open var expireSessionsUnderlyingCallsCount = 0
     open var expireSessionsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24445,7 +24510,7 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
 
     //MARK: - roomListService
 
-    var roomListServiceUnderlyingCallsCount = 0
+    open var roomListServiceUnderlyingCallsCount = 0
     open var roomListServiceCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24473,7 +24538,7 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
         return roomListServiceCallsCount > 0
     }
 
-    var roomListServiceUnderlyingReturnValue: RoomListService!
+    open var roomListServiceUnderlyingReturnValue: RoomListService!
     open var roomListServiceReturnValue: RoomListService! {
         get {
             if Thread.isMainThread {
@@ -24510,7 +24575,7 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
 
     //MARK: - start
 
-    var startUnderlyingCallsCount = 0
+    open var startUnderlyingCallsCount = 0
     open var startCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24546,7 +24611,7 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
 
     //MARK: - state
 
-    var stateListenerUnderlyingCallsCount = 0
+    open var stateListenerUnderlyingCallsCount = 0
     open var stateListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24576,7 +24641,7 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
     open var stateListenerReceivedListener: SyncServiceStateObserver?
     open var stateListenerReceivedInvocations: [SyncServiceStateObserver] = []
 
-    var stateListenerUnderlyingReturnValue: TaskHandle!
+    open var stateListenerUnderlyingReturnValue: TaskHandle!
     open var stateListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -24617,7 +24682,7 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
 
     //MARK: - stop
 
-    var stopUnderlyingCallsCount = 0
+    open var stopUnderlyingCallsCount = 0
     open var stopCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24652,7 +24717,7 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
     }
 }
 open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -24669,7 +24734,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
     //MARK: - finish
 
     open var finishThrowableError: Error?
-    var finishUnderlyingCallsCount = 0
+    open var finishUnderlyingCallsCount = 0
     open var finishCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24697,7 +24762,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
         return finishCallsCount > 0
     }
 
-    var finishUnderlyingReturnValue: SyncService!
+    open var finishUnderlyingReturnValue: SyncService!
     open var finishReturnValue: SyncService! {
         get {
             if Thread.isMainThread {
@@ -24737,7 +24802,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
 
     //MARK: - withCrossProcessLock
 
-    var withCrossProcessLockUnderlyingCallsCount = 0
+    open var withCrossProcessLockUnderlyingCallsCount = 0
     open var withCrossProcessLockCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24765,7 +24830,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
         return withCrossProcessLockCallsCount > 0
     }
 
-    var withCrossProcessLockUnderlyingReturnValue: SyncServiceBuilder!
+    open var withCrossProcessLockUnderlyingReturnValue: SyncServiceBuilder!
     open var withCrossProcessLockReturnValue: SyncServiceBuilder! {
         get {
             if Thread.isMainThread {
@@ -24802,7 +24867,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
 
     //MARK: - withOfflineMode
 
-    var withOfflineModeUnderlyingCallsCount = 0
+    open var withOfflineModeUnderlyingCallsCount = 0
     open var withOfflineModeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24830,7 +24895,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
         return withOfflineModeCallsCount > 0
     }
 
-    var withOfflineModeUnderlyingReturnValue: SyncServiceBuilder!
+    open var withOfflineModeUnderlyingReturnValue: SyncServiceBuilder!
     open var withOfflineModeReturnValue: SyncServiceBuilder! {
         get {
             if Thread.isMainThread {
@@ -24867,7 +24932,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
 
     //MARK: - withSharePos
 
-    var withSharePosEnableUnderlyingCallsCount = 0
+    open var withSharePosEnableUnderlyingCallsCount = 0
     open var withSharePosEnableCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24897,7 +24962,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
     open var withSharePosEnableReceivedEnable: Bool?
     open var withSharePosEnableReceivedInvocations: [Bool] = []
 
-    var withSharePosEnableUnderlyingReturnValue: SyncServiceBuilder!
+    open var withSharePosEnableUnderlyingReturnValue: SyncServiceBuilder!
     open var withSharePosEnableReturnValue: SyncServiceBuilder! {
         get {
             if Thread.isMainThread {
@@ -24937,7 +25002,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
     }
 }
 open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -24953,7 +25018,7 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
 
     //MARK: - cancel
 
-    var cancelUnderlyingCallsCount = 0
+    open var cancelUnderlyingCallsCount = 0
     open var cancelCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -24989,7 +25054,7 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
 
     //MARK: - isFinished
 
-    var isFinishedUnderlyingCallsCount = 0
+    open var isFinishedUnderlyingCallsCount = 0
     open var isFinishedCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25017,7 +25082,7 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
         return isFinishedCallsCount > 0
     }
 
-    var isFinishedUnderlyingReturnValue: Bool!
+    open var isFinishedUnderlyingReturnValue: Bool!
     open var isFinishedReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -25053,7 +25118,7 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
     }
 }
 open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -25069,7 +25134,7 @@ open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendabl
 
     //MARK: - latestEvent
 
-    var latestEventUnderlyingCallsCount = 0
+    open var latestEventUnderlyingCallsCount = 0
     open var latestEventCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25097,7 +25162,7 @@ open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendabl
         return latestEventCallsCount > 0
     }
 
-    var latestEventUnderlyingReturnValue: EmbeddedEventDetails!
+    open var latestEventUnderlyingReturnValue: EmbeddedEventDetails!
     open var latestEventReturnValue: EmbeddedEventDetails! {
         get {
             if Thread.isMainThread {
@@ -25134,7 +25199,7 @@ open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendabl
 
     //MARK: - numReplies
 
-    var numRepliesUnderlyingCallsCount = 0
+    open var numRepliesUnderlyingCallsCount = 0
     open var numRepliesCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25162,7 +25227,7 @@ open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendabl
         return numRepliesCallsCount > 0
     }
 
-    var numRepliesUnderlyingReturnValue: UInt64!
+    open var numRepliesUnderlyingReturnValue: UInt64!
     open var numRepliesReturnValue: UInt64! {
         get {
             if Thread.isMainThread {
@@ -25198,7 +25263,7 @@ open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendabl
     }
 }
 open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -25214,7 +25279,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - addListener
 
-    var addListenerListenerUnderlyingCallsCount = 0
+    open var addListenerListenerUnderlyingCallsCount = 0
     open var addListenerListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25244,7 +25309,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var addListenerListenerReceivedListener: TimelineListener?
     open var addListenerListenerReceivedInvocations: [TimelineListener] = []
 
-    var addListenerListenerUnderlyingReturnValue: TaskHandle!
+    open var addListenerListenerUnderlyingReturnValue: TaskHandle!
     open var addListenerListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -25285,7 +25350,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - createMessageContent
 
-    var createMessageContentMsgTypeUnderlyingCallsCount = 0
+    open var createMessageContentMsgTypeUnderlyingCallsCount = 0
     open var createMessageContentMsgTypeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25315,7 +25380,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var createMessageContentMsgTypeReceivedMsgType: MessageType?
     open var createMessageContentMsgTypeReceivedInvocations: [MessageType] = []
 
-    var createMessageContentMsgTypeUnderlyingReturnValue: RoomMessageEventContentWithoutRelation?
+    open var createMessageContentMsgTypeUnderlyingReturnValue: RoomMessageEventContentWithoutRelation?
     open var createMessageContentMsgTypeReturnValue: RoomMessageEventContentWithoutRelation? {
         get {
             if Thread.isMainThread {
@@ -25357,7 +25422,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - createPoll
 
     open var createPollQuestionAnswersMaxSelectionsPollKindThrowableError: Error?
-    var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = 0
+    open var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = 0
     open var createPollQuestionAnswersMaxSelectionsPollKindCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25403,7 +25468,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - edit
 
     open var editEventOrTransactionIdNewContentThrowableError: Error?
-    var editEventOrTransactionIdNewContentUnderlyingCallsCount = 0
+    open var editEventOrTransactionIdNewContentUnderlyingCallsCount = 0
     open var editEventOrTransactionIdNewContentCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25449,7 +25514,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - endPoll
 
     open var endPollPollStartEventIdTextThrowableError: Error?
-    var endPollPollStartEventIdTextUnderlyingCallsCount = 0
+    open var endPollPollStartEventIdTextUnderlyingCallsCount = 0
     open var endPollPollStartEventIdTextCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25495,7 +25560,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - fetchDetailsForEvent
 
     open var fetchDetailsForEventEventIdThrowableError: Error?
-    var fetchDetailsForEventEventIdUnderlyingCallsCount = 0
+    open var fetchDetailsForEventEventIdUnderlyingCallsCount = 0
     open var fetchDetailsForEventEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25540,7 +25605,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - fetchMembers
 
-    var fetchMembersUnderlyingCallsCount = 0
+    open var fetchMembersUnderlyingCallsCount = 0
     open var fetchMembersCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25577,7 +25642,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - getEventTimelineItemByEventId
 
     open var getEventTimelineItemByEventIdEventIdThrowableError: Error?
-    var getEventTimelineItemByEventIdEventIdUnderlyingCallsCount = 0
+    open var getEventTimelineItemByEventIdEventIdUnderlyingCallsCount = 0
     open var getEventTimelineItemByEventIdEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25607,7 +25672,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var getEventTimelineItemByEventIdEventIdReceivedEventId: String?
     open var getEventTimelineItemByEventIdEventIdReceivedInvocations: [String] = []
 
-    var getEventTimelineItemByEventIdEventIdUnderlyingReturnValue: EventTimelineItem!
+    open var getEventTimelineItemByEventIdEventIdUnderlyingReturnValue: EventTimelineItem!
     open var getEventTimelineItemByEventIdEventIdReturnValue: EventTimelineItem! {
         get {
             if Thread.isMainThread {
@@ -25651,7 +25716,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - latestEventId
 
-    var latestEventIdUnderlyingCallsCount = 0
+    open var latestEventIdUnderlyingCallsCount = 0
     open var latestEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25679,7 +25744,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         return latestEventIdCallsCount > 0
     }
 
-    var latestEventIdUnderlyingReturnValue: String?
+    open var latestEventIdUnderlyingReturnValue: String?
     open var latestEventIdReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -25717,7 +25782,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - loadReplyDetails
 
     open var loadReplyDetailsEventIdStrThrowableError: Error?
-    var loadReplyDetailsEventIdStrUnderlyingCallsCount = 0
+    open var loadReplyDetailsEventIdStrUnderlyingCallsCount = 0
     open var loadReplyDetailsEventIdStrCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25747,7 +25812,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var loadReplyDetailsEventIdStrReceivedEventIdStr: String?
     open var loadReplyDetailsEventIdStrReceivedInvocations: [String] = []
 
-    var loadReplyDetailsEventIdStrUnderlyingReturnValue: InReplyToDetails!
+    open var loadReplyDetailsEventIdStrUnderlyingReturnValue: InReplyToDetails!
     open var loadReplyDetailsEventIdStrReturnValue: InReplyToDetails! {
         get {
             if Thread.isMainThread {
@@ -25792,7 +25857,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - markAsRead
 
     open var markAsReadReceiptTypeThrowableError: Error?
-    var markAsReadReceiptTypeUnderlyingCallsCount = 0
+    open var markAsReadReceiptTypeUnderlyingCallsCount = 0
     open var markAsReadReceiptTypeCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25838,7 +25903,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - paginateBackwards
 
     open var paginateBackwardsNumEventsThrowableError: Error?
-    var paginateBackwardsNumEventsUnderlyingCallsCount = 0
+    open var paginateBackwardsNumEventsUnderlyingCallsCount = 0
     open var paginateBackwardsNumEventsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25868,7 +25933,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var paginateBackwardsNumEventsReceivedNumEvents: UInt16?
     open var paginateBackwardsNumEventsReceivedInvocations: [UInt16] = []
 
-    var paginateBackwardsNumEventsUnderlyingReturnValue: Bool!
+    open var paginateBackwardsNumEventsUnderlyingReturnValue: Bool!
     open var paginateBackwardsNumEventsReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -25913,7 +25978,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - paginateForwards
 
     open var paginateForwardsNumEventsThrowableError: Error?
-    var paginateForwardsNumEventsUnderlyingCallsCount = 0
+    open var paginateForwardsNumEventsUnderlyingCallsCount = 0
     open var paginateForwardsNumEventsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -25943,7 +26008,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var paginateForwardsNumEventsReceivedNumEvents: UInt16?
     open var paginateForwardsNumEventsReceivedInvocations: [UInt16] = []
 
-    var paginateForwardsNumEventsUnderlyingReturnValue: Bool!
+    open var paginateForwardsNumEventsUnderlyingReturnValue: Bool!
     open var paginateForwardsNumEventsReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -25988,7 +26053,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - pinEvent
 
     open var pinEventEventIdThrowableError: Error?
-    var pinEventEventIdUnderlyingCallsCount = 0
+    open var pinEventEventIdUnderlyingCallsCount = 0
     open var pinEventEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26018,7 +26083,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var pinEventEventIdReceivedEventId: String?
     open var pinEventEventIdReceivedInvocations: [String] = []
 
-    var pinEventEventIdUnderlyingReturnValue: Bool!
+    open var pinEventEventIdUnderlyingReturnValue: Bool!
     open var pinEventEventIdReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -26063,7 +26128,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - redactEvent
 
     open var redactEventEventOrTransactionIdReasonThrowableError: Error?
-    var redactEventEventOrTransactionIdReasonUnderlyingCallsCount = 0
+    open var redactEventEventOrTransactionIdReasonUnderlyingCallsCount = 0
     open var redactEventEventOrTransactionIdReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26108,7 +26173,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - retryDecryption
 
-    var retryDecryptionSessionIdsUnderlyingCallsCount = 0
+    open var retryDecryptionSessionIdsUnderlyingCallsCount = 0
     open var retryDecryptionSessionIdsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26151,7 +26216,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - send
 
     open var sendMsgThrowableError: Error?
-    var sendMsgUnderlyingCallsCount = 0
+    open var sendMsgUnderlyingCallsCount = 0
     open var sendMsgCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26181,7 +26246,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var sendMsgReceivedMsg: RoomMessageEventContentWithoutRelation?
     open var sendMsgReceivedInvocations: [RoomMessageEventContentWithoutRelation] = []
 
-    var sendMsgUnderlyingReturnValue: SendHandle!
+    open var sendMsgUnderlyingReturnValue: SendHandle!
     open var sendMsgReturnValue: SendHandle! {
         get {
             if Thread.isMainThread {
@@ -26226,7 +26291,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - sendAudio
 
     open var sendAudioParamsAudioInfoThrowableError: Error?
-    var sendAudioParamsAudioInfoUnderlyingCallsCount = 0
+    open var sendAudioParamsAudioInfoUnderlyingCallsCount = 0
     open var sendAudioParamsAudioInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26256,7 +26321,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var sendAudioParamsAudioInfoReceivedArguments: (params: UploadParameters, audioInfo: AudioInfo)?
     open var sendAudioParamsAudioInfoReceivedInvocations: [(params: UploadParameters, audioInfo: AudioInfo)] = []
 
-    var sendAudioParamsAudioInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendAudioParamsAudioInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
     open var sendAudioParamsAudioInfoReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
@@ -26301,7 +26366,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - sendFile
 
     open var sendFileParamsFileInfoThrowableError: Error?
-    var sendFileParamsFileInfoUnderlyingCallsCount = 0
+    open var sendFileParamsFileInfoUnderlyingCallsCount = 0
     open var sendFileParamsFileInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26331,7 +26396,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var sendFileParamsFileInfoReceivedArguments: (params: UploadParameters, fileInfo: FileInfo)?
     open var sendFileParamsFileInfoReceivedInvocations: [(params: UploadParameters, fileInfo: FileInfo)] = []
 
-    var sendFileParamsFileInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendFileParamsFileInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
     open var sendFileParamsFileInfoReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
@@ -26376,7 +26441,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - sendImage
 
     open var sendImageParamsThumbnailSourceImageInfoThrowableError: Error?
-    var sendImageParamsThumbnailSourceImageInfoUnderlyingCallsCount = 0
+    open var sendImageParamsThumbnailSourceImageInfoUnderlyingCallsCount = 0
     open var sendImageParamsThumbnailSourceImageInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26406,7 +26471,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var sendImageParamsThumbnailSourceImageInfoReceivedArguments: (params: UploadParameters, thumbnailSource: UploadSource?, imageInfo: ImageInfo)?
     open var sendImageParamsThumbnailSourceImageInfoReceivedInvocations: [(params: UploadParameters, thumbnailSource: UploadSource?, imageInfo: ImageInfo)] = []
 
-    var sendImageParamsThumbnailSourceImageInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendImageParamsThumbnailSourceImageInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
     open var sendImageParamsThumbnailSourceImageInfoReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
@@ -26451,7 +26516,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - sendLocation
 
     open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdThrowableError: Error?
-    var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdUnderlyingCallsCount = 0
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdUnderlyingCallsCount = 0
     open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26497,7 +26562,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - sendPollResponse
 
     open var sendPollResponsePollStartEventIdAnswersThrowableError: Error?
-    var sendPollResponsePollStartEventIdAnswersUnderlyingCallsCount = 0
+    open var sendPollResponsePollStartEventIdAnswersUnderlyingCallsCount = 0
     open var sendPollResponsePollStartEventIdAnswersCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26543,7 +26608,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - sendReadReceipt
 
     open var sendReadReceiptReceiptTypeEventIdThrowableError: Error?
-    var sendReadReceiptReceiptTypeEventIdUnderlyingCallsCount = 0
+    open var sendReadReceiptReceiptTypeEventIdUnderlyingCallsCount = 0
     open var sendReadReceiptReceiptTypeEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26589,7 +26654,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - sendReply
 
     open var sendReplyMsgEventIdThrowableError: Error?
-    var sendReplyMsgEventIdUnderlyingCallsCount = 0
+    open var sendReplyMsgEventIdUnderlyingCallsCount = 0
     open var sendReplyMsgEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26635,7 +26700,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - sendVideo
 
     open var sendVideoParamsThumbnailSourceVideoInfoThrowableError: Error?
-    var sendVideoParamsThumbnailSourceVideoInfoUnderlyingCallsCount = 0
+    open var sendVideoParamsThumbnailSourceVideoInfoUnderlyingCallsCount = 0
     open var sendVideoParamsThumbnailSourceVideoInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26665,7 +26730,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var sendVideoParamsThumbnailSourceVideoInfoReceivedArguments: (params: UploadParameters, thumbnailSource: UploadSource?, videoInfo: VideoInfo)?
     open var sendVideoParamsThumbnailSourceVideoInfoReceivedInvocations: [(params: UploadParameters, thumbnailSource: UploadSource?, videoInfo: VideoInfo)] = []
 
-    var sendVideoParamsThumbnailSourceVideoInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendVideoParamsThumbnailSourceVideoInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
     open var sendVideoParamsThumbnailSourceVideoInfoReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
@@ -26710,7 +26775,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - sendVoiceMessage
 
     open var sendVoiceMessageParamsAudioInfoWaveformThrowableError: Error?
-    var sendVoiceMessageParamsAudioInfoWaveformUnderlyingCallsCount = 0
+    open var sendVoiceMessageParamsAudioInfoWaveformUnderlyingCallsCount = 0
     open var sendVoiceMessageParamsAudioInfoWaveformCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26740,7 +26805,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var sendVoiceMessageParamsAudioInfoWaveformReceivedArguments: (params: UploadParameters, audioInfo: AudioInfo, waveform: [Float])?
     open var sendVoiceMessageParamsAudioInfoWaveformReceivedInvocations: [(params: UploadParameters, audioInfo: AudioInfo, waveform: [Float])] = []
 
-    var sendVoiceMessageParamsAudioInfoWaveformUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendVoiceMessageParamsAudioInfoWaveformUnderlyingReturnValue: SendAttachmentJoinHandle!
     open var sendVoiceMessageParamsAudioInfoWaveformReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
@@ -26785,7 +26850,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - subscribeToBackPaginationStatus
 
     open var subscribeToBackPaginationStatusListenerThrowableError: Error?
-    var subscribeToBackPaginationStatusListenerUnderlyingCallsCount = 0
+    open var subscribeToBackPaginationStatusListenerUnderlyingCallsCount = 0
     open var subscribeToBackPaginationStatusListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26815,7 +26880,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var subscribeToBackPaginationStatusListenerReceivedListener: PaginationStatusListener?
     open var subscribeToBackPaginationStatusListenerReceivedInvocations: [PaginationStatusListener] = []
 
-    var subscribeToBackPaginationStatusListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToBackPaginationStatusListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToBackPaginationStatusListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
@@ -26860,7 +26925,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - toggleReaction
 
     open var toggleReactionItemIdKeyThrowableError: Error?
-    var toggleReactionItemIdKeyUnderlyingCallsCount = 0
+    open var toggleReactionItemIdKeyUnderlyingCallsCount = 0
     open var toggleReactionItemIdKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26890,7 +26955,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var toggleReactionItemIdKeyReceivedArguments: (itemId: EventOrTransactionId, key: String)?
     open var toggleReactionItemIdKeyReceivedInvocations: [(itemId: EventOrTransactionId, key: String)] = []
 
-    var toggleReactionItemIdKeyUnderlyingReturnValue: Bool!
+    open var toggleReactionItemIdKeyUnderlyingReturnValue: Bool!
     open var toggleReactionItemIdKeyReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -26935,7 +27000,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - unpinEvent
 
     open var unpinEventEventIdThrowableError: Error?
-    var unpinEventEventIdUnderlyingCallsCount = 0
+    open var unpinEventEventIdUnderlyingCallsCount = 0
     open var unpinEventEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -26965,7 +27030,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var unpinEventEventIdReceivedEventId: String?
     open var unpinEventEventIdReceivedInvocations: [String] = []
 
-    var unpinEventEventIdUnderlyingReturnValue: Bool!
+    open var unpinEventEventIdUnderlyingReturnValue: Bool!
     open var unpinEventEventIdReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -27010,7 +27075,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     //MARK: - sendGallery
 
     open var sendGalleryParamsItemInfosThrowableError: Error?
-    var sendGalleryParamsItemInfosUnderlyingCallsCount = 0
+    open var sendGalleryParamsItemInfosUnderlyingCallsCount = 0
     open var sendGalleryParamsItemInfosCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27040,7 +27105,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var sendGalleryParamsItemInfosReceivedArguments: (params: GalleryUploadParameters, itemInfos: [GalleryItemInfo])?
     open var sendGalleryParamsItemInfosReceivedInvocations: [(params: GalleryUploadParameters, itemInfos: [GalleryItemInfo])] = []
 
-    var sendGalleryParamsItemInfosUnderlyingReturnValue: SendGalleryJoinHandle!
+    open var sendGalleryParamsItemInfosUnderlyingReturnValue: SendGalleryJoinHandle!
     open var sendGalleryParamsItemInfosReturnValue: SendGalleryJoinHandle! {
         get {
             if Thread.isMainThread {
@@ -27083,7 +27148,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     }
 }
 open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -27097,9 +27162,78 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
     }
     fileprivate var underlyingHandle: UInt64!
 
+    //MARK: - content
+
+    open var contentThrowableError: Error?
+    open var contentUnderlyingCallsCount = 0
+    open var contentCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return contentUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = contentUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                contentUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    contentUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var contentCalled: Bool {
+        return contentCallsCount > 0
+    }
+
+    open var contentUnderlyingReturnValue: TimelineEventContent!
+    open var contentReturnValue: TimelineEventContent! {
+        get {
+            if Thread.isMainThread {
+                return contentUnderlyingReturnValue
+            } else {
+                var returnValue: TimelineEventContent? = nil
+                DispatchQueue.main.sync {
+                    returnValue = contentUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                contentUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    contentUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var contentClosure: (() throws -> TimelineEventContent)?
+
+    open override func content() throws -> TimelineEventContent {
+        if let error = contentThrowableError {
+            throw error
+        }
+        contentCallsCount += 1
+        if let contentClosure = contentClosure {
+            return try contentClosure()
+        } else {
+            return contentReturnValue
+        }
+    }
+
     //MARK: - eventId
 
-    var eventIdUnderlyingCallsCount = 0
+    open var eventIdUnderlyingCallsCount = 0
     open var eventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27127,7 +27261,7 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
         return eventIdCallsCount > 0
     }
 
-    var eventIdUnderlyingReturnValue: String!
+    open var eventIdUnderlyingReturnValue: String!
     open var eventIdReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -27162,78 +27296,9 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
         }
     }
 
-    //MARK: - eventType
-
-    open var eventTypeThrowableError: Error?
-    var eventTypeUnderlyingCallsCount = 0
-    open var eventTypeCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return eventTypeUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = eventTypeUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                eventTypeUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    eventTypeUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var eventTypeCalled: Bool {
-        return eventTypeCallsCount > 0
-    }
-
-    var eventTypeUnderlyingReturnValue: TimelineEventType!
-    open var eventTypeReturnValue: TimelineEventType! {
-        get {
-            if Thread.isMainThread {
-                return eventTypeUnderlyingReturnValue
-            } else {
-                var returnValue: TimelineEventType? = nil
-                DispatchQueue.main.sync {
-                    returnValue = eventTypeUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                eventTypeUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    eventTypeUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var eventTypeClosure: (() throws -> TimelineEventType)?
-
-    open override func eventType() throws -> TimelineEventType {
-        if let error = eventTypeThrowableError {
-            throw error
-        }
-        eventTypeCallsCount += 1
-        if let eventTypeClosure = eventTypeClosure {
-            return try eventTypeClosure()
-        } else {
-            return eventTypeReturnValue
-        }
-    }
-
     //MARK: - senderId
 
-    var senderIdUnderlyingCallsCount = 0
+    open var senderIdUnderlyingCallsCount = 0
     open var senderIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27261,7 +27326,7 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
         return senderIdCallsCount > 0
     }
 
-    var senderIdUnderlyingReturnValue: String!
+    open var senderIdUnderlyingReturnValue: String!
     open var senderIdReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -27298,7 +27363,7 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
 
     //MARK: - threadRootEventId
 
-    var threadRootEventIdUnderlyingCallsCount = 0
+    open var threadRootEventIdUnderlyingCallsCount = 0
     open var threadRootEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27326,7 +27391,7 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
         return threadRootEventIdCallsCount > 0
     }
 
-    var threadRootEventIdUnderlyingReturnValue: String?
+    open var threadRootEventIdUnderlyingReturnValue: String?
     open var threadRootEventIdReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -27363,7 +27428,7 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
 
     //MARK: - timestamp
 
-    var timestampUnderlyingCallsCount = 0
+    open var timestampUnderlyingCallsCount = 0
     open var timestampCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27391,7 +27456,7 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
         return timestampCallsCount > 0
     }
 
-    var timestampUnderlyingReturnValue: Timestamp!
+    open var timestampUnderlyingReturnValue: Timestamp!
     open var timestampReturnValue: Timestamp! {
         get {
             if Thread.isMainThread {
@@ -27427,7 +27492,7 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
     }
 }
 open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -27445,7 +27510,7 @@ open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter
     }
 }
 open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -27461,7 +27526,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable 
 
     //MARK: - asEvent
 
-    var asEventUnderlyingCallsCount = 0
+    open var asEventUnderlyingCallsCount = 0
     open var asEventCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27489,7 +27554,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable 
         return asEventCallsCount > 0
     }
 
-    var asEventUnderlyingReturnValue: EventTimelineItem?
+    open var asEventUnderlyingReturnValue: EventTimelineItem?
     open var asEventReturnValue: EventTimelineItem? {
         get {
             if Thread.isMainThread {
@@ -27526,7 +27591,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable 
 
     //MARK: - asVirtual
 
-    var asVirtualUnderlyingCallsCount = 0
+    open var asVirtualUnderlyingCallsCount = 0
     open var asVirtualCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27554,7 +27619,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable 
         return asVirtualCallsCount > 0
     }
 
-    var asVirtualUnderlyingReturnValue: VirtualTimelineItem?
+    open var asVirtualUnderlyingReturnValue: VirtualTimelineItem?
     open var asVirtualReturnValue: VirtualTimelineItem? {
         get {
             if Thread.isMainThread {
@@ -27591,7 +27656,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable 
 
     //MARK: - fmtDebug
 
-    var fmtDebugUnderlyingCallsCount = 0
+    open var fmtDebugUnderlyingCallsCount = 0
     open var fmtDebugCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27619,7 +27684,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable 
         return fmtDebugCallsCount > 0
     }
 
-    var fmtDebugUnderlyingReturnValue: String!
+    open var fmtDebugUnderlyingReturnValue: String!
     open var fmtDebugReturnValue: String! {
         get {
             if Thread.isMainThread {
@@ -27656,7 +27721,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable 
 
     //MARK: - uniqueId
 
-    var uniqueIdUnderlyingCallsCount = 0
+    open var uniqueIdUnderlyingCallsCount = 0
     open var uniqueIdCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27684,7 +27749,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable 
         return uniqueIdCallsCount > 0
     }
 
-    var uniqueIdUnderlyingReturnValue: TimelineUniqueId!
+    open var uniqueIdUnderlyingReturnValue: TimelineUniqueId!
     open var uniqueIdReturnValue: TimelineUniqueId! {
         get {
             if Thread.isMainThread {
@@ -27720,7 +27785,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable 
     }
 }
 open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCount, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -27736,7 +27801,7 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
 
     //MARK: - hasNotifications
 
-    var hasNotificationsUnderlyingCallsCount = 0
+    open var hasNotificationsUnderlyingCallsCount = 0
     open var hasNotificationsCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27764,7 +27829,7 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
         return hasNotificationsCallsCount > 0
     }
 
-    var hasNotificationsUnderlyingReturnValue: Bool!
+    open var hasNotificationsUnderlyingReturnValue: Bool!
     open var hasNotificationsReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -27801,7 +27866,7 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
 
     //MARK: - highlightCount
 
-    var highlightCountUnderlyingCallsCount = 0
+    open var highlightCountUnderlyingCallsCount = 0
     open var highlightCountCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27829,7 +27894,7 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
         return highlightCountCallsCount > 0
     }
 
-    var highlightCountUnderlyingReturnValue: UInt32!
+    open var highlightCountUnderlyingReturnValue: UInt32!
     open var highlightCountReturnValue: UInt32! {
         get {
             if Thread.isMainThread {
@@ -27866,7 +27931,7 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
 
     //MARK: - notificationCount
 
-    var notificationCountUnderlyingCallsCount = 0
+    open var notificationCountUnderlyingCallsCount = 0
     open var notificationCountCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27894,7 +27959,7 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
         return notificationCountCallsCount > 0
     }
 
-    var notificationCountUnderlyingReturnValue: UInt32!
+    open var notificationCountUnderlyingReturnValue: UInt32!
     open var notificationCountReturnValue: UInt32! {
         get {
             if Thread.isMainThread {
@@ -27930,7 +27995,7 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
     }
 }
 open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -27946,7 +28011,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
 
     //MARK: - hasVerificationViolation
 
-    var hasVerificationViolationUnderlyingCallsCount = 0
+    open var hasVerificationViolationUnderlyingCallsCount = 0
     open var hasVerificationViolationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -27974,7 +28039,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
         return hasVerificationViolationCallsCount > 0
     }
 
-    var hasVerificationViolationUnderlyingReturnValue: Bool!
+    open var hasVerificationViolationUnderlyingReturnValue: Bool!
     open var hasVerificationViolationReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -28011,7 +28076,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
 
     //MARK: - isVerified
 
-    var isVerifiedUnderlyingCallsCount = 0
+    open var isVerifiedUnderlyingCallsCount = 0
     open var isVerifiedCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -28039,7 +28104,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
         return isVerifiedCallsCount > 0
     }
 
-    var isVerifiedUnderlyingReturnValue: Bool!
+    open var isVerifiedUnderlyingReturnValue: Bool!
     open var isVerifiedReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -28076,7 +28141,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
 
     //MARK: - masterKey
 
-    var masterKeyUnderlyingCallsCount = 0
+    open var masterKeyUnderlyingCallsCount = 0
     open var masterKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -28104,7 +28169,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
         return masterKeyCallsCount > 0
     }
 
-    var masterKeyUnderlyingReturnValue: String?
+    open var masterKeyUnderlyingReturnValue: String?
     open var masterKeyReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -28142,7 +28207,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
     //MARK: - pin
 
     open var pinThrowableError: Error?
-    var pinUnderlyingCallsCount = 0
+    open var pinUnderlyingCallsCount = 0
     open var pinCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -28181,7 +28246,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
 
     //MARK: - wasPreviouslyVerified
 
-    var wasPreviouslyVerifiedUnderlyingCallsCount = 0
+    open var wasPreviouslyVerifiedUnderlyingCallsCount = 0
     open var wasPreviouslyVerifiedCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -28209,7 +28274,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
         return wasPreviouslyVerifiedCallsCount > 0
     }
 
-    var wasPreviouslyVerifiedUnderlyingReturnValue: Bool!
+    open var wasPreviouslyVerifiedUnderlyingReturnValue: Bool!
     open var wasPreviouslyVerifiedReturnValue: Bool! {
         get {
             if Thread.isMainThread {
@@ -28247,7 +28312,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
     //MARK: - withdrawVerification
 
     open var withdrawVerificationThrowableError: Error?
-    var withdrawVerificationUnderlyingCallsCount = 0
+    open var withdrawVerificationUnderlyingCallsCount = 0
     open var withdrawVerificationCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -28285,7 +28350,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
     }
 }
 open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -28301,7 +28366,7 @@ open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver, @unchecked Sendable 
 
     //MARK: - run
 
-    var runRoomCapabilitiesProviderUnderlyingCallsCount = 0
+    open var runRoomCapabilitiesProviderUnderlyingCallsCount = 0
     open var runRoomCapabilitiesProviderCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -28342,7 +28407,7 @@ open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver, @unchecked Sendable 
     }
 }
 open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle, @unchecked Sendable {
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 
@@ -28358,7 +28423,7 @@ open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle, @uncheck
 
     //MARK: - recv
 
-    var recvUnderlyingCallsCount = 0
+    open var recvUnderlyingCallsCount = 0
     open var recvCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -28386,7 +28451,7 @@ open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle, @uncheck
         return recvCallsCount > 0
     }
 
-    var recvUnderlyingReturnValue: String?
+    open var recvUnderlyingReturnValue: String?
     open var recvReturnValue: String? {
         get {
             if Thread.isMainThread {
@@ -28423,7 +28488,7 @@ open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle, @uncheck
 
     //MARK: - send
 
-    var sendMsgUnderlyingCallsCount = 0
+    open var sendMsgUnderlyingCallsCount = 0
     open var sendMsgCallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -28453,7 +28518,7 @@ open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle, @uncheck
     open var sendMsgReceivedMsg: String?
     open var sendMsgReceivedInvocations: [String] = []
 
-    var sendMsgUnderlyingReturnValue: Bool!
+    open var sendMsgUnderlyingReturnValue: Bool!
     open var sendMsgReturnValue: Bool! {
         get {
             if Thread.isMainThread {

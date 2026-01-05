@@ -8,6 +8,7 @@
 
 @testable import ElementX
 import MatrixRustSDK
+import MatrixRustSDKMocks
 import XCTest
 
 final class MediaLoaderTests: XCTestCase {

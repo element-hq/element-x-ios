@@ -153,6 +153,10 @@ struct HomeScreenInviteCell: View {
     }
 }
 
+// MARK: - Previews
+
+import MatrixRustSDKMocks
+
 struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 0) {

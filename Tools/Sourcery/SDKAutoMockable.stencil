@@ -54,7 +54,7 @@ import {{ import }}
         {% call methodThrowableErrorDeclaration method %}
     {% endif %}
     {% if not method.isInitializer %}
-    var {% call swiftifyMethodName method.selectorName %}UnderlyingCallsCount = 0
+    {% call accessLevel method.accessLevel %}var {% call swiftifyMethodName method.selectorName %}UnderlyingCallsCount = 0
     {% call accessLevel method.accessLevel %}{% call staticSpecifier method %}var {% call swiftifyMethodName method.selectorName %}CallsCount: Int {
         get {
             if Thread.isMainThread {
@@ -96,7 +96,7 @@ import {{ import }}
     {% endif %}
     {% if not method.returnTypeName.isVoid and not method.isInitializer %}
 
-    var {% call swiftifyMethodName method.selectorName %}UnderlyingReturnValue: {{ '(' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ method.returnTypeName }}{{ ')' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '!' if not method.isOptionalReturnType }}
+    {% call accessLevel method.accessLevel %}var {% call swiftifyMethodName method.selectorName %}UnderlyingReturnValue: {{ '(' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ method.returnTypeName }}{{ ')' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '!' if not method.isOptionalReturnType }}
     {% call accessLevel method.accessLevel %}{% call staticSpecifier method %}var {% call swiftifyMethodName method.selectorName %}ReturnValue: {{ '(' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ method.returnTypeName }}{{ ')' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '!' if not method.isOptionalReturnType }} {
         get {
             if Thread.isMainThread {
@@ -224,7 +224,7 @@ import {{ import }}
 {% for type in types.classes %}{% if type.name != "AutoMockable" %}{% if type.accessLevel == "open" %}
 {% call accessLevel type.accessLevel %}class {{ type.name | replace:"Protocol","" }}SDKMock: MatrixRustSDK.{{ type.name }}, @unchecked Sendable {
     {% if type.accessLevel == "open" %}
-    init() {
+    public init() {
         super.init(noHandle: .init())
     }
 

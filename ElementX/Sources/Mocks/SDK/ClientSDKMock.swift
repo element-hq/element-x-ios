@@ -8,6 +8,7 @@
 
 import Foundation
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 extension ClientSDKMock {
     struct Configuration {
