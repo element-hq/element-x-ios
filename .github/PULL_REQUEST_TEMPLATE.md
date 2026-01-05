@@ -1,6 +1,6 @@
 ### Pull Request Checklist
 
-- [ ] I read the [contributing guide](https://github.com/element-hq/element-ios/blob/develop/CONTRIBUTING.md).
+- [ ] I read the [contributing guide](https://github.com/element-hq/element-x-ios/blob/develop/CONTRIBUTING.md).
 - [ ] Pull request contains a [changelog label](https://github.com/element-hq/element-x-ios/blob/develop/CONTRIBUTING.md#changelog).
 
 **UI changes have been tested with:**
