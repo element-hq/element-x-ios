@@ -149,8 +149,6 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .translate:
             Label { Text(L10n.actionTranslate) } icon: {
                 Image(systemSymbol: .translate)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
                     .scaledFrame(size: 24)
             }
         case .copyCaption:
