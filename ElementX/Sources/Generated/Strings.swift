@@ -344,6 +344,8 @@ internal enum L10n {
   internal static var actionTakePhoto: String { return L10n.tr("Localizable", "action_take_photo") }
   /// Tap for options
   internal static var actionTapForOptions: String { return L10n.tr("Localizable", "action_tap_for_options") }
+  /// Translate
+  internal static var actionTranslate: String { return L10n.tr("Localizable", "action_translate") }
   /// Try again
   internal static var actionTryAgain: String { return L10n.tr("Localizable", "action_try_again") }
   /// Unpin
@@ -2916,7 +2918,7 @@ internal enum L10n {
   internal static var screenSecurityAndPrivacyRoomDirectoryVisibilityToggleTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_directory_visibility_toggle_title") }
   /// Anyone (history is public)
   internal static var screenSecurityAndPrivacyRoomHistoryAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_anyone_option_title") }
-  /// Changes won't affect past messages, only new ones. %@
+  /// Changes won't affect past messages, only new ones. %1$@
   internal static func screenSecurityAndPrivacyRoomHistorySectionFooter(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_security_and_privacy_room_history_section_footer", String(describing: p1))
   }
