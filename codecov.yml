@@ -15,6 +15,7 @@ ignore:
   - "ElementX/Sources/UITests"
   - "ElementX/Sources/UnitTests"
   - "ElementX/Sources/Settings/DeveloperOptionsScreen"
+  - "SDKMocks/Sources/Generated"
   - "Tools"
   - "**/Mock*.swift"
   - "**/*Mock.swift"

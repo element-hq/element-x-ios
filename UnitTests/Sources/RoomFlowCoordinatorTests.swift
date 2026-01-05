@@ -10,6 +10,7 @@ import XCTest
 
 import Combine
 @testable import ElementX
+import MatrixRustSDKMocks
 
 @MainActor
 class RoomFlowCoordinatorTests: XCTestCase {

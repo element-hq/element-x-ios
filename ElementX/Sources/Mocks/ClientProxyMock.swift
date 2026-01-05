@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDKMocks
 
 struct ClientProxyMockConfiguration {
     var homeserver = ""

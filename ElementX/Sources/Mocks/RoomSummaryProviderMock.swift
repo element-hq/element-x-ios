@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDKMocks
 
 enum RoomSummaryProviderMockConfigurationState {
     case loading

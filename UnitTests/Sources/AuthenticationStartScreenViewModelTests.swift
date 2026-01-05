@@ -9,6 +9,7 @@
 import XCTest
 
 @testable import ElementX
+import MatrixRustSDKMocks
 
 @MainActor
 class AuthenticationStartScreenViewModelTests: XCTestCase {

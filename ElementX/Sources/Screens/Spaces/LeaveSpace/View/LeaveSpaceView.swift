@@ -117,6 +117,7 @@ struct LeaveSpaceView: View {
 // MARK: - Previews
 
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
     static let manyViewModel = makeViewModel(mode: .manyRooms)

@@ -9,6 +9,7 @@
 import Foundation
 import LoremSwiftum
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 struct EventTimelineItemSDKMockConfiguration {
     var eventID: String = UUID().uuidString

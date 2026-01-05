@@ -24,6 +24,7 @@ options:
     - AccessibilityTests
     - IntegrationTests
     - DevelopmentAssets
+    - SDKMocks
     - Secrets
     - Tools
   - pattern: ElementX
@@ -58,12 +59,13 @@ settings:
 include:
 - path: app.yml
 - path: ElementX/SupportingFiles/target.yml
+- path: NSE/SupportingFiles/target.yml
+- path: ShareExtension/SupportingFiles/target.yml
+- path: SDKMocks/SupportingFiles/target.yml
 - path: UnitTests/SupportingFiles/target.yml
 - path: PreviewTests/SupportingFiles/target.yml
 - path: UITests/SupportingFiles/target.yml
 - path: IntegrationTests/SupportingFiles/target.yml
-- path: NSE/SupportingFiles/target.yml
-- path: ShareExtension/SupportingFiles/target.yml
 - path: AccessibilityTests/SupportingFiles/target.yml
 # - path: MyAppVariant/override.yml
 

@@ -1,0 +1,16 @@
+name: SDKMocks
+
+targets:
+  MatrixRustSDKMocks:
+    type: library.static
+    platform: iOS
+
+    dependencies:
+    - package: MatrixRustSDK
+
+    settings:
+      base:
+        PRODUCT_NAME: MatrixRustSDKMocks
+
+    sources:
+      - ../Sources

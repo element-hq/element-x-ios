@@ -11,6 +11,7 @@ import XCTest
 
 @testable import ElementX
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 @MainActor
 class SpaceScreenViewModelTests: XCTestCase {
