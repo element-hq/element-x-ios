@@ -287,7 +287,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        userSession.clientProxy.spaceService.joinedSpacesPublisher
+        userSession.clientProxy.spaceService.topLevelSpacesPublisher
             .map { $0.isEmpty ? .hidden : nil }
             .weakAssign(to: \.chatsTabDetails.barVisibilityOverride, on: self)
             .store(in: &cancellables)

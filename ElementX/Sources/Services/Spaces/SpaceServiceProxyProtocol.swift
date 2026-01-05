@@ -15,7 +15,7 @@ enum SpaceServiceProxyError: Error {
 
 // sourcery: AutoMockable
 protocol SpaceServiceProxyProtocol {
-    var joinedSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> { get }
+    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> { get }
     
     func spaceRoomList(spaceID: String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>
     /// Returns a joined space given its identifier

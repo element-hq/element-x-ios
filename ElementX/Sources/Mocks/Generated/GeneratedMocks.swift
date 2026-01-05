@@ -16685,11 +16685,11 @@ class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
 
 }
 class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
-    var joinedSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
-        get { return underlyingJoinedSpacesPublisher }
-        set(value) { underlyingJoinedSpacesPublisher = value }
+    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
+        get { return underlyingTopLevelSpacesPublisher }
+        set(value) { underlyingTopLevelSpacesPublisher = value }
     }
-    var underlyingJoinedSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never>!
+    var underlyingTopLevelSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never>!
 
     //MARK: - spaceRoomList
 
