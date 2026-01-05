@@ -317,9 +317,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Banned</string>
+			<string>%1$d suhtluskeeluga kasutaja</string>
 			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d suhtluskeeluga kasutajat</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
