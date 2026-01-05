@@ -30,13 +30,13 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SpaceListScreenViewState(userID: userSession.clientProxy.userID,
-                                                              joinedSpaces: spaceServiceProxy.joinedSpacesPublisher.value,
+                                                              topLevelSpaces: spaceServiceProxy.topLevelSpacesPublisher.value,
                                                               bindings: .init()),
                    mediaProvider: userSession.mediaProvider)
         
-        spaceServiceProxy.joinedSpacesPublisher
+        spaceServiceProxy.topLevelSpacesPublisher
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.joinedSpaces, on: self)
+            .weakAssign(to: \.state.topLevelSpaces, on: self)
             .store(in: &cancellables)
         
         selectedSpacePublisher

@@ -40,7 +40,7 @@ struct SpaceListScreen: View {
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
-                Text(L10n.commonSpaces(context.viewState.joinedSpaces.count))
+                Text(L10n.commonSpaces(context.viewState.topLevelSpaces.count))
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
                     .multilineTextAlignment(.center)
@@ -63,7 +63,7 @@ struct SpaceListScreen: View {
     }
     
     var spaces: some View {
-        ForEach(context.viewState.joinedSpaces, id: \.id) { spaceRoomProxy in
+        ForEach(context.viewState.topLevelSpaces, id: \.id) { spaceRoomProxy in
             SpaceRoomCell(spaceRoomProxy: spaceRoomProxy,
                           isSelected: spaceRoomProxy.id == context.viewState.selectedSpaceID,
                           mediaProvider: context.mediaProvider) { action in
@@ -111,7 +111,7 @@ struct SpaceListScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel() -> SpaceListScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.spaceService = SpaceServiceProxyMock(.init(joinedSpaces: .mockJoinedSpaces))
+        clientProxy.spaceService = SpaceServiceProxyMock(.init(topLevelSpaces: .mockJoinedSpaces))
         
         let viewModel = SpaceListScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                  selectedSpacePublisher: .init(nil),

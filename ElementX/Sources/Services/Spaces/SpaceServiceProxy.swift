@@ -13,9 +13,9 @@ import MatrixRustSDK
 class SpaceServiceProxy: SpaceServiceProxyProtocol {
     private let spaceService: SpaceServiceProtocol
     
-    private var joinedSpacesHandle: TaskHandle?
+    private var topLevelSpacesHandle: TaskHandle?
     private let spacesSubject = CurrentValueSubject<[SpaceRoomProxyProtocol], Never>([])
-    var joinedSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
+    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
         spacesSubject.asCurrentValuePublisher()
     }
     
@@ -26,7 +26,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
     }
     
     private func setupSubscriptions() async {
-        joinedSpacesHandle = await spaceService.subscribeToTopLevelJoinedSpaces(listener: SDKListener { [weak self] updates in
+        topLevelSpacesHandle = await spaceService.subscribeToTopLevelJoinedSpaces(listener: SDKListener { [weak self] updates in
             self?.handleUpdates(updates)
         })
     }

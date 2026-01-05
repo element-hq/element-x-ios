@@ -261,7 +261,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         let space = singleRoom[0]
         let allSpaces = joinedParentSpaces + singleRoom
         setupViewModel(joinedParentSpaces: joinedParentSpaces,
-                       joinedSpaces: allSpaces,
+                       topLevelSpaces: allSpaces,
                        joinRule: .restricted(rules: [.roomMembership(roomId: space.id),
                                                      .roomMembership(roomId: "unknownSpaceID")]))
         
@@ -425,7 +425,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     // MARK: - Helpers
     
     private func setupViewModel(joinedParentSpaces: [SpaceRoomProxyProtocol],
-                                joinedSpaces: [SpaceRoomProxyProtocol] = [],
+                                topLevelSpaces: [SpaceRoomProxyProtocol] = [],
                                 joinRule: JoinRule) {
         let appSettings = AppSettings()
         appSettings.spaceSettingsEnabled = true
@@ -440,7 +440,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
         
         viewModel = SecurityAndPrivacyScreenViewModel(roomProxy: roomProxy,
                                                       clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",
-                                                                                         spaceServiceConfiguration: .init(joinedSpaces: joinedSpaces,
+                                                                                         spaceServiceConfiguration: .init(topLevelSpaces: topLevelSpaces,
                                                                                                                           joinedParentSpaces: joinedParentSpaces))),
                                                       userIndicatorController: UserIndicatorControllerMock(),
                                                       appSettings: appSettings)

@@ -18,7 +18,7 @@ struct SpaceListScreenViewState: BindableState {
     var userDisplayName: String?
     var userAvatarURL: URL?
     
-    var joinedSpaces: [SpaceRoomProxyProtocol]
+    var topLevelSpaces: [SpaceRoomProxyProtocol]
     var selectedSpaceID: String?
     
     var bindings: SpaceListScreenViewStateBindings
