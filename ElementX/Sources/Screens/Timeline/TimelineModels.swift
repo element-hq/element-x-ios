@@ -160,6 +160,9 @@ struct TimelineViewStateBindings {
     var readReceiptsSummaryInfo: ReadReceiptSummaryInfo?
     
     var manageMemberViewModel: ManageRoomMemberSheetViewModel?
+
+    var showTranslation = false
+    var textToBeTranslated: String?
 }
 
 struct TimelineItemActionMenuInfo: Equatable, Identifiable {

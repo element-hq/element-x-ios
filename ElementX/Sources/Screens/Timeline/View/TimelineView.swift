@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Translation
 import WysiwygComposer
 
 struct TimelineView: View {
@@ -54,6 +55,13 @@ struct TimelineView: View {
             .sheet(item: $timelineContext.readReceiptsSummaryInfo) {
                 ReadReceiptsSummaryView(orderedReadReceipts: $0.orderedReceipts)
                     .environmentObject(timelineContext)
+            }
+            .translationPresentation(isPresented: $timelineContext.showTranslation, text: timelineContext.textToBeTranslated ?? "")
+            .onChange(of: timelineContext.showTranslation) { oldValue, newValue in
+                if oldValue, !newValue {
+                    // clear texts after translation was dismissed
+                    timelineContext.textToBeTranslated = nil
+                }
             }
             .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
                 let supportedProviders = providers.filter(\.isSupportedForPasteOrDrop)
