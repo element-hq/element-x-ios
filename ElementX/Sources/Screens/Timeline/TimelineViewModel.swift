@@ -498,6 +498,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     Task { await self.viewInRoomTimeline(eventID: eventID) }
                 case .displayThread(let itemID):
                     actionsSubject.send(.displayThread(itemID: itemID))
+                case .showTranslation(let text):
+                    self.state.bindings.textToBeTranslated = text
+                    self.state.bindings.showTranslation = true
                 }
             }
             .store(in: &cancellables)
