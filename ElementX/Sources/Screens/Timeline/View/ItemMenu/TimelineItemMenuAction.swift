@@ -147,10 +147,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .copy:
             Label(L10n.actionCopyText, icon: \.copy)
         case .translate:
-            Label { Text(L10n.actionTranslate) } icon: {
-                Image(systemSymbol: .translate)
-                    .scaledFrame(size: 24)
-            }
+            Label(L10n.actionTranslate, icon: \.translate)
         case .copyCaption:
             Label(L10n.actionCopyCaption, icon: \.copy)
         case .edit:
