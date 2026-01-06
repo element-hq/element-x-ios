@@ -22,9 +22,6 @@ struct MediaEventsTimelineScreen: View {
             .toolbar { toolbar }
             .environmentObject(context.viewState.activeTimelineContext)
             .environment(\.timelineContext, context.viewState.activeTimelineContext)
-            .onChange(of: context.screenMode) { _, _ in
-                context.send(viewAction: .changedScreenMode)
-            }
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .sheet(item: $context.mediaPreviewSheetViewModel) { sheet in
                 if case let .media(media) = sheet.state.currentItem {
@@ -243,7 +240,7 @@ struct MediaEventsTimelineScreen: View {
     }
     
     private var screenModePicker: some View {
-        Picker("", selection: $context.screenMode) {
+        Picker("", selection: screenModeBinding) {
             Text(L10n.screenMediaBrowserListModeMedia)
                 .padding()
                 .tag(MediaEventsTimelineScreenMode.media)
@@ -253,7 +250,17 @@ struct MediaEventsTimelineScreen: View {
         }
         .pickerStyle(.segmented)
     }
-    
+
+    private var screenModeBinding: Binding<MediaEventsTimelineScreenMode> {
+        Binding {
+            context.screenMode
+        } set: { newValue in
+            guard context.screenMode != newValue else { return }
+            context.screenMode = newValue
+            context.send(viewAction: .changedScreenMode)
+        }
+    }
+
     func tappedItem(_ item: RoomTimelineItemViewState) {
         context.send(viewAction: .tappedItem(item: item))
     }
