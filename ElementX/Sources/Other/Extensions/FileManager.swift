@@ -59,6 +59,19 @@ extension FileManager {
         
         return size
     }
+
+    func sizeForDirectory(at url: URL) throws -> UInt {
+        guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey, .isDirectoryKey]) else {
+            throw FileManagerError.invalidFileSize
+        }
+        
+        return try enumerator
+            .compactMap {
+                guard let fileURL = $0 as? URL else { return nil }
+                return try UInt(fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0)
+            }
+            .reduce(0, +)
+    }
     
     func numberOfItems(at url: URL) throws -> Int {
         try contentsOfDirectory(at: url, includingPropertiesForKeys: nil).count
