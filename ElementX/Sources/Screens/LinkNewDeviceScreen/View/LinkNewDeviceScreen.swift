@@ -97,8 +97,6 @@ struct LinkNewDeviceScreen: View {
 
 // MARK: - Previews
 
-import MatrixRustSDKMocks
-
 struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(mode: .readyToLink(isGeneratingCode: false))
     static let generatingViewModel = makeViewModel(mode: .readyToLink(isGeneratingCode: true))
@@ -143,7 +141,7 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
                 return false
             }
         }
-        clientProxy.linkNewDeviceServiceReturnValue = .init(handler: GrantLoginWithQrCodeHandlerSDKMock(.init(generateDelay: .seconds(20))))
+        clientProxy.linkNewDeviceServiceReturnValue = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: .init(.starting)))
         
         let viewModel = LinkNewDeviceScreenViewModel(clientProxy: clientProxy)
         

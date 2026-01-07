@@ -19,7 +19,7 @@ enum QRCodeLoginScreenMode {
     /// Configures the screen to login this device by scanning a QR code.
     case login(QRCodeLoginServiceProtocol)
     /// Configures the screen to link another device by scanning a QR code.
-    case linkDesktop(LinkNewDeviceService)
+    case linkDesktop(LinkNewDeviceServiceProtocol)
     /// Configures the screen to link another device by showing it a QR code.
     case linkMobile(LinkNewDeviceService.LinkMobileProgressPublisher)
 }

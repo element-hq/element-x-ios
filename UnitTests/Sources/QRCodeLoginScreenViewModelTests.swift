@@ -9,41 +9,66 @@
 import Combine
 import XCTest
 
-import MatrixRustSDK
-
 @testable import ElementX
 
 @MainActor
 final class QRCodeLoginScreenViewModelTests: XCTestCase {
-    private var qrProgressSubject: CurrentValueSubject<QRLoginProgress, AuthenticationServiceError>!
-    private var qrServiceMock: QRCodeLoginServiceMock!
-    private var appMediatorMock: AppMediatorMock!
+    private var qrLoginProgressSubject: CurrentValueSubject<QRLoginProgress, AuthenticationServiceError>!
+    private var qrCodeLoginService: QRCodeLoginServiceMock!
+    
+    private var linkMobileProgressSubject: CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError>!
+    private var linkNewDeviceService: LinkNewDeviceServiceMock!
+    
+    private var appMediator: AppMediatorMock!
+    
     private var viewModel: QRCodeLoginScreenViewModelProtocol!
-
-    private var context: QRCodeLoginScreenViewModelType.Context {
-        viewModel.context
-    }
+    private var context: QRCodeLoginScreenViewModelType.Context { viewModel.context }
     
-    override func setUp() {
-        qrProgressSubject = .init(.starting)
-        qrServiceMock = QRCodeLoginServiceMock()
-        qrServiceMock.loginWithQRCodeDataReturnValue = qrProgressSubject.asCurrentValuePublisher()
-        appMediatorMock = AppMediatorMock.default
-        viewModel = QRCodeLoginScreenViewModel(mode: .login(qrServiceMock),
-                                               canSignInManually: true,
-                                               appMediator: appMediatorMock)
-    }
-    
-    func testInitialState() {
+    func testLoginInitialState() {
+        setupViewModel(mode: .login)
+        
         XCTAssertEqual(context.viewState.state, .loginInstructions)
         XCTAssertNil(context.qrResult)
-        XCTAssertFalse(qrServiceMock.loginWithQRCodeDataCalled)
-        XCTAssertFalse(appMediatorMock.requestAuthorizationIfNeededCalled)
-        XCTAssertFalse(appMediatorMock.openAppSettingsCalled)
+        XCTAssertFalse(qrCodeLoginService.loginWithQRCodeDataCalled)
+        XCTAssertFalse(appMediator.requestAuthorizationIfNeededCalled)
+        XCTAssertFalse(appMediator.openAppSettingsCalled)
+        
+        XCTAssertFalse(linkNewDeviceService.linkMobileDeviceCalled)
+        XCTAssertFalse(linkNewDeviceService.linkDesktopDeviceWithCalled)
+    }
+    
+    func testLinkDesktopInitialState() {
+        setupViewModel(mode: .linkDesktop)
+        
+        XCTAssertEqual(context.viewState.state, .linkDesktopInstructions)
+        XCTAssertNil(context.qrResult)
+        XCTAssertFalse(linkNewDeviceService.linkDesktopDeviceWithCalled)
+        XCTAssertFalse(appMediator.requestAuthorizationIfNeededCalled)
+        XCTAssertFalse(appMediator.openAppSettingsCalled)
+        
+        XCTAssertFalse(linkNewDeviceService.linkMobileDeviceCalled)
+        XCTAssertFalse(qrCodeLoginService.loginWithQRCodeDataCalled)
+    }
+    
+    func testLinkMobileInitialState() {
+        setupViewModel(mode: .linkMobile)
+        
+        let isDisplayingQRCode = switch context.viewState.state {
+        case .displayQR: true
+        default: false
+        }
+        
+        XCTAssertTrue(isDisplayingQRCode)
+        XCTAssertTrue(linkNewDeviceService.linkMobileDeviceCalled)
+        
+        XCTAssertFalse(linkNewDeviceService.linkDesktopDeviceWithCalled)
+        XCTAssertFalse(qrCodeLoginService.loginWithQRCodeDataCalled)
+        XCTAssertNil(context.qrResult)
     }
     
     func testRequestCameraPermission() async throws {
-        appMediatorMock.requestAuthorizationIfNeededReturnValue = false
+        setupViewModel(mode: .login)
+        appMediator.requestAuthorizationIfNeededReturnValue = false
         XCTAssert(context.viewState.state == .loginInstructions)
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -51,15 +76,16 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
         }
         context.send(viewAction: .startScan)
         try await deferred.fulfill()
-        XCTAssertTrue(appMediatorMock.requestAuthorizationIfNeededCalled)
+        XCTAssertTrue(appMediator.requestAuthorizationIfNeededCalled)
         
         context.send(viewAction: .errorAction(.openSettings))
         await Task.yield()
-        XCTAssertTrue(appMediatorMock.openAppSettingsCalled)
+        XCTAssertTrue(appMediator.openAppSettingsCalled)
         XCTAssertNil(context.qrResult)
     }
     
     func testLogin() async throws {
+        setupViewModel(mode: .login)
         XCTAssert(context.viewState.state == .loginInstructions)
         
         var deferred = deferFulfillment(context.$viewState) { state in
@@ -67,7 +93,7 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
         }
         context.send(viewAction: .startScan)
         try await deferred.fulfill()
-        XCTAssertTrue(appMediatorMock.requestAuthorizationIfNeededCalled)
+        XCTAssertTrue(appMediator.requestAuthorizationIfNeededCalled)
         
         deferred = deferFulfillment(context.$viewState) { state in
             state.state == .scan(.connecting)
@@ -78,13 +104,13 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
         deferred = deferFulfillment(context.$viewState) { state in
             state.state == .displayCode(.deviceCode("01"))
         }
-        qrProgressSubject.send(.establishingSecureChannel(checkCode: 1, checkCodeString: "01"))
+        qrLoginProgressSubject.send(.establishingSecureChannel(checkCode: 1, checkCodeString: "01"))
         try await deferred.fulfill()
         
         deferred = deferFulfillment(context.$viewState) { state in
             state.state == .displayCode(.verificationCode("ABCDEF"))
         }
-        qrProgressSubject.send(.waitingForToken(userCode: "ABCDEF"))
+        qrLoginProgressSubject.send(.waitingForToken(userCode: "ABCDEF"))
         try await deferred.fulfill()
         
         let deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
@@ -93,7 +119,37 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
             default: false
             }
         }
-        qrProgressSubject.send(.signedIn(UserSessionMock(.init(clientProxy: ClientProxyMock()))))
+        qrLoginProgressSubject.send(.signedIn(UserSessionMock(.init(clientProxy: ClientProxyMock()))))
         try await deferredAction.fulfill()
+    }
+    
+    #warning("Add tests for linking.")
+    
+    // MARK: - Helpers
+    
+    enum Mode { case login, linkDesktop, linkMobile }
+    
+    private func setupViewModel(mode: Mode) {
+        qrLoginProgressSubject = .init(.starting)
+        qrCodeLoginService = QRCodeLoginServiceMock()
+        qrCodeLoginService.loginWithQRCodeDataReturnValue = qrLoginProgressSubject.asCurrentValuePublisher()
+        
+        linkMobileProgressSubject = .init(.qrReady(LinkNewDeviceServiceMock.mockQRCodeImage))
+        linkNewDeviceService = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: linkMobileProgressSubject.asCurrentValuePublisher()))
+        
+        let screenMode: QRCodeLoginScreenMode
+        switch mode {
+        case .login:
+            screenMode = .login(qrCodeLoginService)
+        case .linkDesktop:
+            screenMode = .linkDesktop(linkNewDeviceService)
+        case .linkMobile:
+            screenMode = .linkMobile(linkNewDeviceService.linkMobileDevice())
+        }
+        
+        appMediator = AppMediatorMock.default
+        viewModel = QRCodeLoginScreenViewModel(mode: screenMode,
+                                               canSignInManually: true,
+                                               appMediator: appMediator)
     }
 }

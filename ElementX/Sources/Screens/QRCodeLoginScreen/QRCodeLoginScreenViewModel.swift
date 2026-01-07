@@ -153,7 +153,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     
     // TODO: when user cancels in UI then the underlying login needs to be cancelled too. It's unclear if we have that exposed in the bindings yet.
     
-    private func handleScan(qrData: Data, linkService: LinkNewDeviceService) {
+    private func handleScan(qrData: Data, linkService: LinkNewDeviceServiceProtocol) {
         guard currentTask == nil else { return }
         
         state.state = .scan(.connecting)

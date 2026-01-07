@@ -195,7 +195,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     func removeUserAvatar() async -> Result<Void, ClientProxyError>
     
-    func linkNewDeviceService() -> LinkNewDeviceService
+    func linkNewDeviceService() -> LinkNewDeviceServiceProtocol
     
     func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError>
     
