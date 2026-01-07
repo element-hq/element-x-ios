@@ -10573,13 +10573,13 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
     open var getShieldsStrictReceivedStrict: Bool?
     open var getShieldsStrictReceivedInvocations: [Bool] = []
 
-    open var getShieldsStrictUnderlyingReturnValue: ShieldState?
-    open var getShieldsStrictReturnValue: ShieldState? {
+    open var getShieldsStrictUnderlyingReturnValue: ShieldState!
+    open var getShieldsStrictReturnValue: ShieldState! {
         get {
             if Thread.isMainThread {
                 return getShieldsStrictUnderlyingReturnValue
             } else {
-                var returnValue: ShieldState?? = nil
+                var returnValue: ShieldState? = nil
                 DispatchQueue.main.sync {
                     returnValue = getShieldsStrictUnderlyingReturnValue
                 }
@@ -10597,9 +10597,9 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
             }
         }
     }
-    open var getShieldsStrictClosure: ((Bool) -> ShieldState?)?
+    open var getShieldsStrictClosure: ((Bool) -> ShieldState)?
 
-    open override func getShields(strict: Bool) -> ShieldState? {
+    open override func getShields(strict: Bool) -> ShieldState {
         getShieldsStrictCallsCount += 1
         getShieldsStrictReceivedStrict = strict
         DispatchQueue.main.async {
