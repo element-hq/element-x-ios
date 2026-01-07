@@ -68,16 +68,16 @@ enum EncryptionAuthenticity: Hashable {
 extension EncryptionAuthenticity {
     init?(shieldState: ShieldState) {
         switch shieldState {
-        case .red(let code, _):
+        case .red(let code):
             self.init(shieldStateCode: code, color: .red)
-        case .grey(let code, _):
+        case .grey(let code):
             self.init(shieldStateCode: code, color: .gray)
         case .none:
             return nil
         }
     }
     
-    init(shieldStateCode: ShieldStateCode, color: EncryptionAuthenticity.Color) {
+    init(shieldStateCode: TimelineEventShieldStateCode, color: EncryptionAuthenticity.Color) {
         switch shieldStateCode {
         case .authenticityNotGuaranteed:
             self = .notGuaranteed(color: color)
