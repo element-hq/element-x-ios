@@ -22,6 +22,9 @@ struct MediaEventsTimelineScreen: View {
             .toolbar { toolbar }
             .environmentObject(context.viewState.activeTimelineContext)
             .environment(\.timelineContext, context.viewState.activeTimelineContext)
+            .onChange(of: context.screenMode) { _, _ in
+                context.send(viewAction: .changedScreenMode)
+            }
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .sheet(item: $context.mediaPreviewSheetViewModel) { sheet in
                 if case let .media(media) = sheet.state.currentItem {
@@ -67,12 +70,13 @@ struct MediaEventsTimelineScreen: View {
             }
         }
         .scaleEffect(.init(width: 1, height: -1))
+        .id(context.viewState.bindings.screenMode)
     }
     
-    @ViewBuilder
+    private let mediaContentColumns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
+
     private var mediaContent: some View {
-        let columns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
-        LazyVGrid(columns: columns, alignment: .center, spacing: 1) {
+        LazyVGrid(columns: mediaContentColumns, alignment: .center, spacing: 1) {
             ForEach(context.viewState.groups) { group in
                 Section {
                     ForEach(group.items) { item in
@@ -85,6 +89,7 @@ struct MediaEventsTimelineScreen: View {
                         .accessibleLongPress(named: L10n.actionOpenContextMenu) {
                             context.send(viewAction: .longPressedItem(item: item))
                         }
+                        .id(item.identifier)
                     }
                 } footer: {
                     // Use a footer as the header because the scrollView is flipped
@@ -96,7 +101,6 @@ struct MediaEventsTimelineScreen: View {
         .scaleEffect(.init(width: -1, height: 1))
     }
     
-    @ViewBuilder
     private var filesContent: some View {
         LazyVStack(alignment: .center, spacing: 16) {
             ForEach(context.viewState.groups) { group in
@@ -121,6 +125,7 @@ struct MediaEventsTimelineScreen: View {
                         }
                         .accessibilityElement(children: .combine)
                         .padding(.horizontal, 16)
+                        .id(item.identifier)
                     }
                 } footer: {
                     // Use a footer as the header because the scrollView is flipped
@@ -240,7 +245,7 @@ struct MediaEventsTimelineScreen: View {
     }
     
     private var screenModePicker: some View {
-        Picker("", selection: screenModeBinding) {
+        Picker("", selection: $context.screenMode) {
             Text(L10n.screenMediaBrowserListModeMedia)
                 .padding()
                 .tag(MediaEventsTimelineScreenMode.media)
@@ -250,17 +255,7 @@ struct MediaEventsTimelineScreen: View {
         }
         .pickerStyle(.segmented)
     }
-
-    private var screenModeBinding: Binding<MediaEventsTimelineScreenMode> {
-        Binding {
-            context.screenMode
-        } set: { newValue in
-            guard context.screenMode != newValue else { return }
-            context.screenMode = newValue
-            context.send(viewAction: .changedScreenMode)
-        }
-    }
-
+    
     func tappedItem(_ item: RoomTimelineItemViewState) {
         context.send(viewAction: .tappedItem(item: item))
     }
