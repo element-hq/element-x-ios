@@ -14,9 +14,6 @@ struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            // Don't use RoomTimelineViewLabelStyle with FormattedBodyText as the formatted text
-            // adds additional padding so the spacing between the icon and text is inconsistent.
-            
             // Spacing: 6 = label spacing - formatted text padding
             
             Label {

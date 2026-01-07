@@ -35,19 +35,20 @@ struct EncryptedRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             Label(timelineItem.body, icon: icon, iconSize: .small, relativeTo: .compound.bodyLG)
-                .labelStyle(RoomTimelineViewLabelStyle())
+                .labelStyle(RoomTimelineViewPlaceholderLabelStyle())
                 .font(.compound.bodyLG)
         }
     }
 }
 
-struct RoomTimelineViewLabelStyle: LabelStyle {
+struct RoomTimelineViewPlaceholderLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: .center, spacing: 8) {
             configuration.icon
                 .foregroundColor(.compound.iconSecondary)
             configuration.title
-                .foregroundColor(.compound.textPrimary)
+                .font(.compound.bodyLG.italic())
+                .foregroundColor(.compound.textSecondary)
         }
         .padding(.horizontal, 4)
     }
