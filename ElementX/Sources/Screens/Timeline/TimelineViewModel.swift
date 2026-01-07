@@ -674,6 +674,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             actionsSubject.send(.displayResolveSendFailure(failure: failure,
                                                            sendHandle: sendHandle))
             
+        } else if let forwarderMessage = eventTimelineItem.properties.encryptionForwarder?.message {
+            displayAlert(.encryptionForwarder(forwarderMessage))
         } else if let authenticityMessage = eventTimelineItem.properties.encryptionAuthenticity?.message {
             displayAlert(.encryptionAuthenticity(authenticityMessage))
         }
@@ -1003,6 +1005,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.bindings.alertInfo = .init(id: type,
                                              title: message,
                                              primaryButton: .init(title: L10n.actionOk, action: nil))
+        case .encryptionForwarder(let message):
+            state.bindings.alertInfo = .init(id: type,
+                                             title: message,
+                                             primaryButton: .init(title: L10n.actionOk, action: nil),
+                                             secondaryButton: .init(title: L10n.actionLearnMore) { UIApplication.shared.open(self.appSettings.historySharingDetailsURL) })
         }
     }
     

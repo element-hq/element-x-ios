@@ -60,6 +60,7 @@ private struct TimelineItemSendInfoLabel: View {
         switch sendInfo.status {
         case .sendingFailed: \.errorSolid
         case .encryptionAuthenticity(let authenticity): authenticity.icon
+        case .encryptionForwarder: \.info
         case .none: nil
         }
     }
@@ -68,6 +69,7 @@ private struct TimelineItemSendInfoLabel: View {
         switch sendInfo.status {
         case .sendingFailed: L10n.commonSendingFailed
         case .encryptionAuthenticity(let authenticity): authenticity.message
+        case .encryptionForwarder: ""
         case .none: nil
         }
     }
@@ -111,7 +113,7 @@ private struct TimelineItemSendInfoLabel: View {
 
 /// All the data needed to render a timeline item's send info label.
 private struct TimelineItemSendInfo {
-    enum Status { case sendingFailed, encryptionAuthenticity(EncryptionAuthenticity) }
+    enum Status { case sendingFailed, encryptionAuthenticity(EncryptionAuthenticity), encryptionForwarder(TimelineItemForwarder) }
     
     /// Describes how the content and the send info should be arranged inside a bubble
     enum LayoutType {
@@ -131,6 +133,8 @@ private struct TimelineItemSendInfo {
             .compound.textCriticalPrimary
         case .encryptionAuthenticity(let authenticity):
             authenticity.foregroundStyle
+        case .encryptionForwarder:
+            .compound.textSecondary
         case .none:
             .compound.textSecondary
         }
@@ -207,6 +211,10 @@ struct TimelineItemSendInfoLabel_Previews: PreviewProvider, TestablePreview {
             TimelineItemSendInfoLabel(sendInfo: .init(itemID: .randomEvent,
                                                       localizedString: "09:47 AM",
                                                       status: .encryptionAuthenticity(.sentInClear(color: .red)),
+                                                      layoutType: .horizontal()))
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .randomEvent,
+                                                      localizedString: "09:47 AM",
+                                                      status: .encryptionForwarder(.test),
                                                       layoutType: .horizontal()))
         }
     }
