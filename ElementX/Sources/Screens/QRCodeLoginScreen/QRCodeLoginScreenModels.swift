@@ -180,6 +180,13 @@ enum QRCodeLoginState: Equatable {
         }
     }
     
+    var isDisplayQR: Bool {
+        switch self {
+        case .displayQR: true
+        default: false
+        }
+    }
+    
     var isError: Bool {
         switch self {
         case .error, .scan(.scanFailed): true
