@@ -50,9 +50,9 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .linkMobileDevice(let progressPublisher):
-                    break
+                    presentQRCodeScreen(mode: .linkMobile(progressPublisher))
                 case .linkDesktopComputer:
-                    break
+                    presentQRCodeScreen(mode: .linkDesktop(flowParameters.userSession.clientProxy.linkNewDeviceService()))
                 case .dismiss:
                     actionsSubject.send(.dismiss)
                 }
@@ -60,5 +60,28 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+    
+    private func presentQRCodeScreen(mode: QRCodeLoginScreenMode) {
+        let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(mode: mode,
+                                                                         canSignInManually: false, // No need to worry about this when linking a device.
+                                                                         orientationManager: flowParameters.appMediator.windowManager,
+                                                                         appMediator: flowParameters.appMediator))
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .signInManually, .signedIn:
+                    fatalError("QR linking shouldn't send sign-in actions.")
+                case .dismiss:
+                    navigationStackCoordinator.pop()
+                case .requestOIDCAuthorisation(let url):
+                    actionsSubject.send(.requestOIDCAuthorisation(url))
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator)
     }
 }

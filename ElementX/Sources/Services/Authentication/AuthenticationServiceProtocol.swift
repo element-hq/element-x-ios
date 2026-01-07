@@ -111,7 +111,58 @@ enum QRCodeLoginError: Error, Equatable {
 
 // sourcery: AutoMockable
 protocol QRCodeLoginServiceProtocol {
-    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> { get }
+    typealias QRLoginProgressPublisher = CurrentValuePublisher<QRLoginProgress, AuthenticationServiceError>
+    func loginWithQRCode(data: Data) -> QRLoginProgressPublisher
+}
+
+enum QRLoginProgress {
+    case starting
+    case establishingSecureChannel(checkCode: UInt8, checkCodeString: String)
+    case waitingForToken(userCode: String)
+    case syncingSecrets
+    case signedIn(UserSessionProtocol)
     
-    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    init?(rustProgress: QrLoginProgress) {
+        switch rustProgress {
+        case .starting:
+            self = .starting
+        case .establishingSecureChannel(let checkCode, let checkCodeString):
+            self = .establishingSecureChannel(checkCode: checkCode, checkCodeString: checkCodeString)
+        case .waitingForToken(let userCode):
+            self = .waitingForToken(userCode: userCode)
+        case .syncingSecrets:
+            self = .syncingSecrets
+        case .done:
+            return nil // The SDK is done, but the app still needs to set up the UserSession.
+        }
+    }
+}
+
+extension QRLoginProgress: Equatable, CustomStringConvertible {
+    static func == (lhs: QRLoginProgress, rhs: QRLoginProgress) -> Bool {
+        switch (lhs, rhs) {
+        case (.starting, .starting):
+            true
+        case let (.establishingSecureChannel(lhsCheckCode, lhsCheckCodeString), .establishingSecureChannel(rhsCheckCode, rhsCheckCodeString)):
+            lhsCheckCode == rhsCheckCode && lhsCheckCodeString == rhsCheckCodeString
+        case let (.waitingForToken(lhsUserCode), .waitingForToken(rhsUserCode)):
+            lhsUserCode == rhsUserCode
+        case (.syncingSecrets, .syncingSecrets):
+            true
+        case (.signedIn, .signedIn):
+            true
+        default:
+            false
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .starting: "starting"
+        case .establishingSecureChannel: "establishingSecureChannel"
+        case .waitingForToken: "waitingForToken"
+        case .syncingSecrets: "syncingSecrets"
+        case .signedIn: "signedIn"
+        }
+    }
 }

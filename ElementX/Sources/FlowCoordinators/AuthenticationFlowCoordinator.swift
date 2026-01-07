@@ -298,7 +298,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - QR Code
     
     private func showQRCodeLoginScreen() {
-        let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginService: authenticationService,
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(mode: .login(authenticationService),
                                                                          canSignInManually: appSettings.allowOtherAccountProviders, // No need to worry about provisioning links as we hide QR login.
                                                                          orientationManager: appMediator.windowManager,
                                                                          appMediator: appMediator))
@@ -311,20 +312,24 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.cancelledLoginWithQR)
                 stateMachine.tryEvent(.confirmServer(.login))
-            case .cancel:
+            case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.cancelledLoginWithQR)
-            case .done(let userSession):
+            case .signedIn(let userSession):
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 // Since the qr code login flow includes verification
                 appSettings.hasRunIdentityConfirmationOnboarding = true
                 DispatchQueue.main.async {
                     self.stateMachine.tryEvent(.signedIn, userInfo: userSession)
                 }
+            case .requestOIDCAuthorisation:
+                fatalError("QR code login shouldn't request an OIDC flow.")
             }
         }
         .store(in: &cancellables)
-        navigationStackCoordinator.setSheetCoordinator(coordinator) // Don't use the callback (interactive dismiss disabled), choose the event with the action.
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) // Don't use the callback (interactive dismiss disabled), choose the event with the action.
     }
     
     // MARK: - Manual Authentication

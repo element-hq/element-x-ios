@@ -24,11 +24,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     private(set) var flow: AuthenticationFlow
     
-    private let qrLoginProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
-    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
-        qrLoginProgressSubject.eraseToAnyPublisher()
-    }
-    
     init(userSessionStore: UserSessionStoreProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
          clientFactory: AuthenticationClientFactoryProtocol = AuthenticationClientFactory(),
@@ -153,43 +148,59 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
-    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func loginWithQRCode(data: Data) -> QRLoginProgressPublisher {
+        let progressSubject = CurrentValueSubject<QRLoginProgress, AuthenticationServiceError>(.starting)
+        
         let qrData: QrCodeData
         do {
             qrData = try QrCodeData.fromBytes(bytes: data)
         } catch {
             MXLog.error("QRCode decode error: \(error)")
-            return .failure(.qrCodeError(.invalidQRCode))
+            progressSubject.send(completion: .failure(.qrCodeError(.invalidQRCode)))
+            return progressSubject.asCurrentValuePublisher()
         }
         
         guard let scannedServerName = qrData.serverName() else {
             MXLog.error("The QR code is from a device that is not yet signed in.")
-            return .failure(.qrCodeError(.deviceNotSignedIn))
+            progressSubject.send(completion: .failure(.qrCodeError(.deviceNotSignedIn)))
+            return progressSubject.asCurrentValuePublisher()
         }
         
         if !appSettings.allowOtherAccountProviders, !appSettings.accountProviders.contains(scannedServerName) {
             MXLog.error("The scanned device's server is not allowed: \(scannedServerName)")
-            return .failure(.qrCodeError(.providerNotAllowed(scannedProvider: scannedServerName, allowedProviders: appSettings.accountProviders)))
+            progressSubject.send(completion: .failure(.qrCodeError(.providerNotAllowed(scannedProvider: scannedServerName, allowedProviders: appSettings.accountProviders))))
+            return progressSubject.asCurrentValuePublisher()
         }
         
-        let listener = SDKListener { [weak self] progress in
-            self?.qrLoginProgressSubject.send(progress)
+        let listener = SDKListener { progress in
+            guard let progress = QRLoginProgress(rustProgress: progress) else { return }
+            progressSubject.send(progress)
         }
         
-        do {
-            let client = try await makeClient(homeserverAddress: scannedServerName)
-            let qrCodeHandler = client.newLoginWithQrCodeHandler(oidcConfiguration: appSettings.oidcConfiguration.rustValue)
-            try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener)
-            return await userSession(for: client)
-        } catch let error as HumanQrLoginError {
-            MXLog.error("QRCode login error: \(error)")
-            return .failure(error.serviceError)
-        } catch RemoteSettingsError.elementProRequired(let serverName) {
-            return .failure(.elementProRequired(serverName: serverName))
-        } catch {
-            MXLog.error("QRCode login unknown error: \(error)")
-            return .failure(.qrCodeError(.unknown))
+        Task {
+            do {
+                let client = try await makeClient(homeserverAddress: scannedServerName)
+                let qrCodeHandler = client.newLoginWithQrCodeHandler(oidcConfiguration: appSettings.oidcConfiguration.rustValue)
+                try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener)
+                
+                switch await userSession(for: client) {
+                case .success(let userSession):
+                    progressSubject.send(.signedIn(userSession))
+                case .failure(let error):
+                    progressSubject.send(completion: .failure(error))
+                }
+            } catch let error as HumanQrLoginError {
+                MXLog.error("QRCode login error: \(error)")
+                progressSubject.send(completion: .failure(error.serviceError))
+            } catch RemoteSettingsError.elementProRequired(let serverName) {
+                progressSubject.send(completion: .failure(.elementProRequired(serverName: serverName)))
+            } catch {
+                MXLog.error("QRCode login unknown error: \(error)")
+                progressSubject.send(completion: .failure(.qrCodeError(.unknown)))
+            }
         }
+        
+        return progressSubject.asCurrentValuePublisher()
     }
     
     func reset() {
