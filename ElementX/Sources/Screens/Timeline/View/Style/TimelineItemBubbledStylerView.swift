@@ -327,6 +327,7 @@ private extension View {
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel: TimelineViewModel = {
         let appSettings = AppSettings()
+        appSettings.enableKeyShareOnInvite = true
         appSettings.threadsEnabled = true
         
         let roomProxy = JoinedRoomProxyMock(.init())
@@ -385,6 +386,8 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             .padding(.bottom, 20)
         encryptionAuthenticity
             .previewDisplayName("Encryption Indicators")
+        encryptionForwarder
+            .previewDisplayName("Encryption Forwarder Info")
         pinned
             .previewDisplayName("Pinned messages")
             .previewLayout(.fixed(width: 390, height: 1150))
