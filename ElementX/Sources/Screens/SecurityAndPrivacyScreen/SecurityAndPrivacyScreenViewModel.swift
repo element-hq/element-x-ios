@@ -179,27 +179,29 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         
         var hasFailures = false
         
-        if state.currentSettings.isEncryptionEnabled != state.bindings.desiredSettings.isEncryptionEnabled {
-            switch await roomProxy.enableEncryption() {
-            case .success:
-                state.currentSettings.isEncryptionEnabled = state.bindings.desiredSettings.isEncryptionEnabled
-            case .failure:
-                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-                hasFailures = true
+        if !state.isSpace {
+            if state.canEnableEncryption, state.currentSettings.isEncryptionEnabled != state.bindings.desiredSettings.isEncryptionEnabled {
+                switch await roomProxy.enableEncryption() {
+                case .success:
+                    state.currentSettings.isEncryptionEnabled = state.bindings.desiredSettings.isEncryptionEnabled
+                case .failure:
+                    userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                    hasFailures = true
+                }
+            }
+            
+            if state.canEditHistoryVisibility, state.currentSettings.historyVisibility != state.bindings.desiredSettings.historyVisibility {
+                switch await roomProxy.updateHistoryVisibility(state.bindings.desiredSettings.historyVisibility.toRoomHistoryVisibility) {
+                case .success:
+                    state.currentSettings.historyVisibility = state.bindings.desiredSettings.historyVisibility
+                case .failure:
+                    userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                    hasFailures = true
+                }
             }
         }
         
-        if state.currentSettings.historyVisibility != state.bindings.desiredSettings.historyVisibility {
-            switch await roomProxy.updateHistoryVisibility(state.bindings.desiredSettings.historyVisibility.toRoomHistoryVisibility) {
-            case .success:
-                state.currentSettings.historyVisibility = state.bindings.desiredSettings.historyVisibility
-            case .failure:
-                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-                hasFailures = true
-            }
-        }
-        
-        if state.currentSettings.accessType != state.bindings.desiredSettings.accessType {
+        if state.canEditJoinRule, state.currentSettings.accessType != state.bindings.desiredSettings.accessType {
             // When a user changes join rules to something other than knock or public,
             // the room should be automatically made invisible (private) in the room directory.
             if state.currentSettings.accessType != .askToJoin, state.currentSettings.accessType != .anyone {
@@ -215,7 +217,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             }
         }
         
-        if state.currentSettings.isVisibileInRoomDirectory != state.bindings.desiredSettings.isVisibileInRoomDirectory {
+        if state.canEditAddress, state.currentSettings.isVisibileInRoomDirectory != state.bindings.desiredSettings.isVisibileInRoomDirectory {
             let visibility: RoomVisibility = state.bindings.desiredSettings.isVisibileInRoomDirectory == true ? .public : .private
             
             switch await roomProxy.updateRoomDirectoryVisibility(visibility) {
