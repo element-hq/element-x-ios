@@ -39,9 +39,27 @@ struct ManageRoomMemberSheetView: View {
             }
             
             Section {
-                if context.viewState.permissions.canKick {
-                    // Unbanning requires only the kick permission according to the specs.
-                    if context.viewState.isMemberBanned {
+                if context.viewState.permissions.canKick, !context.viewState.isMemberBanned {
+                    ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberRemove,
+                                            icon: \.close,
+                                            role: .destructive),
+                            kind: .button {
+                                context.send(viewAction: .kick)
+                            })
+                            .disabled(context.viewState.isKickDisabled)
+                }
+                
+                if context.viewState.permissions.canBan {
+                    if !context.viewState.isMemberBanned {
+                        ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberBan,
+                                                icon: \.block,
+                                                role: .destructive),
+                                kind: .button {
+                                    context.send(viewAction: .ban)
+                                })
+                                .disabled(context.viewState.isBanUnbanDisabled)
+                        // Kick permission is also needed to unban
+                    } else if context.viewState.permissions.canKick {
                         ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberUnban,
                                                 icon: \.restart,
                                                 role: .destructive),
@@ -49,26 +67,7 @@ struct ManageRoomMemberSheetView: View {
                                     context.send(viewAction: .unban)
                                 })
                                 .disabled(context.viewState.isBanUnbanDisabled)
-                    } else {
-                        ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberRemove,
-                                                icon: \.close,
-                                                role: .destructive),
-                                kind: .button {
-                                    context.send(viewAction: .kick)
-                                })
-                                .disabled(context.viewState.isKickDisabled)
                     }
-                }
-                
-                if context.viewState.permissions.canBan,
-                   !context.viewState.isMemberBanned {
-                    ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberBan,
-                                            icon: \.block,
-                                            role: .destructive),
-                            kind: .button {
-                                context.send(viewAction: .ban)
-                            })
-                            .disabled(context.viewState.isBanUnbanDisabled)
                 }
             }
         }
