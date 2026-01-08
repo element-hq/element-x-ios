@@ -543,6 +543,82 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         .environmentObject(viewModel.context)
         .environment(\.timelineContext, viewModel.context)
     }
+    
+    static var encryptionForwarder: some View {
+        VStack(spacing: 0) {
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
+                                                                             timestamp: .mock,
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "A long message that should be on multiple lines."),
+                                                                             properties: RoomTimelineItemProperties(isEdited: true, encryptionForwarder: .test)),
+                                                  groupStyle: .single))
+            
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
+                                                                             timestamp: .mock,
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "A long message that should be on multiple lines."),
+                                                                             properties: RoomTimelineItemProperties(encryptionForwarder: .test)),
+                                                  groupStyle: .single))
+            
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
+                                                                             timestamp: .mock,
+                                                                             isOutgoing: false,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "Short message"),
+                                                                             properties: RoomTimelineItemProperties(encryptionForwarder: .test)),
+                                                  groupStyle: .first))
+            
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
+                                                                             timestamp: .mock,
+                                                                             isOutgoing: false,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "Message goes Here"),
+                                                                             properties: RoomTimelineItemProperties(encryptionForwarder: .test)),
+                                                  groupStyle: .last))
+            
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .randomEvent,
+                                                                      timestamp: .mock,
+                                                                      isOutgoing: false,
+                                                                      isEditable: false,
+                                                                      canBeRepliedTo: true,
+                                                                      sender: .init(id: "Bob"),
+                                                                      content: .init(filename: "other.png",
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: nil),
+                                                                      properties: RoomTimelineItemProperties(encryptionForwarder: .test)))
+            
+            VoiceMessageRoomTimelineView(timelineItem: .init(id: .randomEvent,
+                                                             timestamp: .mock,
+                                                             isOutgoing: true,
+                                                             isEditable: false,
+                                                             canBeRepliedTo: true,
+                                                             sender: .init(id: ""),
+                                                             content: .init(filename: "audio.ogg",
+                                                                            duration: 100,
+                                                                            waveform: EstimatedWaveform.mockWaveform,
+                                                                            source: nil,
+                                                                            fileSize: nil,
+                                                                            contentType: nil),
+                                                             properties: RoomTimelineItemProperties(isThreaded: true,
+                                                                                                    encryptionForwarder: .test)),
+                                         playerState: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),
+                                                                       title: L10n.commonVoiceMessage,
+                                                                       duration: 10,
+                                                                       waveform: EstimatedWaveform.mockWaveform))
+        }
+        .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
+    }
 }
 
 private struct MockTimelineContent: View {
