@@ -20,7 +20,7 @@ enum QRCodeLoginScreenCoordinatorAction {
     case dismiss
     case signInManually
     case signedIn(userSession: UserSessionProtocol)
-    case requestOIDCAuthorisation(URL)
+    case requestOIDCAuthorisation(URL, OIDCAccountSettingsPresenter.Continuation)
     case linkedDevice
 }
 
@@ -54,8 +54,8 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.dismiss)
             case .signedIn(let userSession):
                 actionsSubject.send(.signedIn(userSession: userSession))
-            case .requestOIDCAuthorisation(let url):
-                actionsSubject.send(.requestOIDCAuthorisation(url))
+            case .requestOIDCAuthorisation(let url, let continuation):
+                actionsSubject.send(.requestOIDCAuthorisation(url, continuation))
             case .linkedDevice:
                 actionsSubject.send(.linkedDevice)
             }

@@ -21,6 +21,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
     
     private var currentTask: AnyCancellable?
+    private var oidcResultTask: AnyCancellable?
     
     init(mode: QRCodeLoginScreenMode,
          canSignInManually: Bool,
@@ -186,7 +187,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 case .establishingSecureChannel(let checkCodeString):
                     state.state = .displayCode(.deviceCode(checkCodeString))
                 case .waitingForAuthorisation(let url):
-                    actionsSubject.send(.requestOIDCAuthorisation(url))
+                    requestOIDCAuthorization(url: url)
                 case .syncingSecrets:
                     break // Nothing to do.
                 case .done:
@@ -226,7 +227,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 case .qrScanned(let checkCodeSender):
                     state.state = .confirmCode(.inputCode(checkCodeSender))
                 case .waitingForAuthorisation(let url):
-                    actionsSubject.send(.requestOIDCAuthorisation(url))
+                    requestOIDCAuthorization(url: url)
                 case .syncingSecrets:
                     // break // Nothing to do.
                     // .done is rarely received at the moment, so lets consider linking to be done here.
@@ -261,6 +262,27 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             MXLog.error("Failed to send check code: \(error)")
             handleError(.unknown)
         }
+    }
+    
+    private func requestOIDCAuthorization(url: URL) {
+        let (stream, continuation) = AsyncStream<Result<Void, OIDCError>>.makeStream()
+        actionsSubject.send(.requestOIDCAuthorisation(url, continuation))
+        
+        oidcResultTask = Task { [weak self] in
+            for await result in stream {
+                guard let self else { return }
+                switch result {
+                case .success:
+                    break // The state will be updated by the status publisher.
+                case .failure(.userCancellation):
+                    MXLog.info("User cancelled the WAS, dismissing.")
+                    actionsSubject.send(.dismiss)
+                case .failure:
+                    handleError(.unknown)
+                }
+            }
+        }
+        .asCancellable()
     }
     
     private func handleError(_ error: QRCodeLoginError) {

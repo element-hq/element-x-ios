@@ -12,7 +12,7 @@ enum QRCodeLoginScreenViewModelAction {
     case dismiss
     case signInManually
     case signedIn(userSession: UserSessionProtocol)
-    case requestOIDCAuthorisation(URL)
+    case requestOIDCAuthorisation(URL, OIDCAccountSettingsPresenter.Continuation)
     case linkedDevice
 }
 
