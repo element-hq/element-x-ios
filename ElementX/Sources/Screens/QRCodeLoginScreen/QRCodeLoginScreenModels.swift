@@ -13,6 +13,7 @@ enum QRCodeLoginScreenViewModelAction {
     case signInManually
     case signedIn(userSession: UserSessionProtocol)
     case requestOIDCAuthorisation(URL)
+    case linkedDevice
 }
 
 enum QRCodeLoginScreenMode {

@@ -78,6 +78,8 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
                     navigationStackCoordinator.pop()
                 case .requestOIDCAuthorisation(let url):
                     actionsSubject.send(.requestOIDCAuthorisation(url))
+                case .linkedDevice:
+                    actionsSubject.send(.dismiss)
                 }
             }
             .store(in: &cancellables)

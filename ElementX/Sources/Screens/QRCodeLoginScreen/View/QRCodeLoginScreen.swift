@@ -260,13 +260,14 @@ struct QRCodeLoginScreen: View {
                     }
                 }
             } bottomContent: {
-                if case .inputCode = confirmCode {
+                switch confirmCode {
+                case .inputCode, .sendingCode:
                     Button(L10n.actionContinue) {
                         context.send(viewAction: .sendCheckCode)
                     }
                     .buttonStyle(.compound(.primary))
                     .disabled(context.checkCodeInput.count < 2 || confirmCode.isSending)
-                } else {
+                case .invalidCode:
                     Button(L10n.actionStartOver) {
                         context.send(viewAction: .errorAction(.startOver))
                     }

@@ -322,8 +322,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 DispatchQueue.main.async {
                     self.stateMachine.tryEvent(.signedIn, userInfo: userSession)
                 }
-            case .requestOIDCAuthorisation:
-                fatalError("QR code login shouldn't request an OIDC flow.")
+            case .requestOIDCAuthorisation, .linkedDevice:
+                fatalError("QR code login shouldn't request an OIDC flow or link a device.")
             }
         }
         .store(in: &cancellables)
