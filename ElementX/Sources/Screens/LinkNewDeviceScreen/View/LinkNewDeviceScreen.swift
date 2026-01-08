@@ -70,11 +70,13 @@ struct LinkNewDeviceScreen: View {
                 .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.mobileDevice)
                 
-                Button { context.send(viewAction: .linkDesktopComputer) } label: {
-                    Label(L10n.screenLinkNewDeviceRootDesktopComputer, icon: \.computer)
+                if context.viewState.showLinkDesktopComputerButton {
+                    Button { context.send(viewAction: .linkDesktopComputer) } label: {
+                        Label(L10n.screenLinkNewDeviceRootDesktopComputer, icon: \.computer)
+                    }
+                    .buttonStyle(.compound(.primary))
+                    .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.desktopComputer)
                 }
-                .buttonStyle(.compound(.primary))
-                .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.desktopComputer)
             }
             .disabled(isGeneratingCode)
         case .notSupported:

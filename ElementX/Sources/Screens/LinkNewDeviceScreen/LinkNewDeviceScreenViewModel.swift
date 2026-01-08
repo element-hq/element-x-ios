@@ -22,7 +22,9 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
     init(clientProxy: ClientProxyProtocol) {
         self.clientProxy = clientProxy
         
-        super.init(initialViewState: LinkNewDeviceScreenViewState())
+        let isQRCodeScanningSupported = !ProcessInfo.processInfo.isiOSAppOnMac
+        
+        super.init(initialViewState: LinkNewDeviceScreenViewState(showLinkDesktopComputerButton: isQRCodeScanningSupported))
         
         Task { await checkQRCodeLoginSupport() }
     }
