@@ -736,9 +736,15 @@ class MockScreen: Identifiable {
             
             return navigationStackCoordinator
         case .linkNewDevice:
+            let linkMobileProgressSubject: CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError> = .init(.qrReady(LinkNewDeviceServiceMock.mockQRCodeImage))
+            let linkNewDeviceService = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: linkMobileProgressSubject.asCurrentValuePublisher()))
+            
+            let clientProxy = ClientProxyMock(.init())
+            clientProxy.linkNewDeviceServiceReturnValue = linkNewDeviceService
+            
             let navigationStackCoordinator = NavigationStackCoordinator()
             let flowCoordinator = LinkNewDeviceFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
-                                                               flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init()),
+                                                               flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                                                     bugReportService: BugReportServiceMock(.init()),
                                                                                                     elementCallService: ElementCallServiceMock(.init()),
                                                                                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),

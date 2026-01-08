@@ -141,7 +141,6 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
                 return false
             }
         }
-        clientProxy.linkNewDeviceServiceReturnValue = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: .init(.starting)))
         
         let viewModel = LinkNewDeviceScreenViewModel(clientProxy: clientProxy)
         

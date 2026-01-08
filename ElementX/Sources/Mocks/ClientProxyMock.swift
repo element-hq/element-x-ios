@@ -106,6 +106,7 @@ extension ClientProxyMock {
         resetIdentityReturnValue = .success(IdentityResetHandleSDKMock(.init()))
         
         spaceService = SpaceServiceProxyMock(configuration.spaceServiceConfiguration)
+        linkNewDeviceServiceReturnValue = LinkNewDeviceServiceMock(.init())
         
         roomForIdentifierClosure = { [weak self] identifier in
             if let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) {
