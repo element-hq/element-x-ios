@@ -67,6 +67,7 @@
 "action_copy_text" = "Copy text";
 "action_create" = "Create";
 "action_create_a_room" = "Create a room";
+"action_create_space" = "Create space";
 "action_deactivate" = "Deactivate";
 "action_deactivate_account" = "Deactivate account";
 "action_decline" = "Decline";
@@ -188,6 +189,7 @@
 "common_copied_to_clipboard" = "Copied to clipboard";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Creating room…";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Left room";
 "common_current_user_left_space" = "Left space";
@@ -307,6 +309,7 @@
 "common_starting_chat" = "Starting chat…";
 "common_sticker" = "Sticker";
 "common_success" = "Success";
+"common_suggested" = "Suggested";
 "common_suggestions" = "Suggestions";
 "common_syncing" = "Syncing";
 "common_system" = "System";
@@ -526,14 +529,19 @@
 "screen_create_poll_options_section_title" = "Options";
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
 "screen_create_poll_settings_section_title" = "Settings";
-"screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_room_access_section_anyone_option_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
-"screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Ask to join";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
 "screen_create_room_room_address_section_title" = "Room address";
 "screen_create_room_room_visibility_section_title" = "Room visibility";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
 "screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
@@ -679,7 +687,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Once enabled, encryption cannot be disabled.";
 "screen_security_and_privacy_encryption_toggle_title" = "Enable end-to-end encryption";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join.";
-"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Only invited people can join.";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Invite only";
 "screen_security_and_privacy_room_access_section_header" = "Access";
@@ -712,6 +720,7 @@
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
@@ -835,8 +844,10 @@
 "screen_create_poll_title" = "Create Poll";
 "screen_create_room_action_create_room" = "New room";
 "screen_create_room_error_creating_room" = "An error occurred when creating the room";
-"screen_create_room_private_option_description" = "Only people invited can access this room. All messages are end-to-end encrypted.";
+"screen_create_room_private_option_description" = "Only people invited can join.";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Anyone can find this room.\nYou can change this anytime in room settings.";
+"screen_create_room_public_option_title" = "Public";
 "screen_create_room_topic_label" = "Topic (optional)";
 "screen_deactivate_account_confirmation_dialog_content" = "Please confirm that you want to deactivate your account. This action cannot be undone.";
 "screen_deactivate_account_delete_all_messages" = "Delete all my messages";
@@ -1434,8 +1445,6 @@
 "screen_create_account_title" = "Create account";
 "screen_create_poll_cancel_confirmation_content_ios" = "Your changes won’t be saved";
 "screen_create_room_add_people_title" = "Invite people";
-"screen_create_room_private_option_title" = "Private room";
-"screen_create_room_public_option_title" = "Public room";
 "screen_create_room_room_name_label" = "Room name";
 "screen_create_room_title" = "Create a room";
 "screen_deactivate_account_title" = "Deactivate account";

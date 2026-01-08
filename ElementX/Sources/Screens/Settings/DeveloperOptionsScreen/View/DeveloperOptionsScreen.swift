@@ -45,13 +45,20 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.linkNewDeviceEnabled) {
                     Text("Link new device with QR code")
                 }
-                Toggle(isOn: $context.spaceSettingsEnabled) {
-                    Text("Space settings")
-                }
                 
                 context.viewState.appHooks
                     .developerOptionsScreenHook
                     .generalSectionRows()
+            }
+            
+            Section("Spaces") {
+                Toggle(isOn: $context.spaceSettingsEnabled) {
+                    Text("Space settings")
+                }
+                
+                Toggle(isOn: $context.createSpaceEnabled) {
+                    Text("Create space")
+                }
             }
             
             Section("Room List") {

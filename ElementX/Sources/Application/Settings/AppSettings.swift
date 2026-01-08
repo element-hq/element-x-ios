@@ -65,9 +65,12 @@ final class AppSettings {
         case threadsEnabled
         case developerOptionsEnabled
         case linkPreviewsEnabled
-        case spaceSettingsEnabled
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
+        
+        // Spaces
+        case spaceSettingsEnabled
+        case createSpaceEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -375,6 +378,14 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.sharePresence, defaultValue: true, storageType: .userDefaults(store))
     var sharePresence
     
+    // MARK: - Spaces
+    
+    @UserPreference(key: UserDefaultsKeys.spaceSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var spaceSettingsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.createSpaceEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var createSpaceEnabled
+    
     // MARK: - Feature Flags
     
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
@@ -402,9 +413,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.focusEventOnNotificationTap, defaultValue: false, storageType: .userDefaults(store))
     var focusEventOnNotificationTap
-    
-    @UserPreference(key: UserDefaultsKeys.spaceSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var spaceSettingsEnabled
         
     @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkPreviewsEnabled

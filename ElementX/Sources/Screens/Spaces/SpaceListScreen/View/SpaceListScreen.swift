@@ -13,24 +13,47 @@ struct SpaceListScreen: View {
     @Bindable var context: SpaceListScreenViewModel.Context
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                header
-                spaces
+        mainContent
+            .navigationTitle(L10n.screenSpaceListTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { toolbar }
+            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            .toolbarBloom(hasSearchBar: false)
+            .onAppear { context.send(viewAction: .screenAppeared) }
+            .sheet(isPresented: $context.isPresentingFeatureAnnouncement) {
+                SpacesAnnouncementSheetView(context: context)
             }
-        }
-        .navigationTitle(L10n.screenSpaceListTitle)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar { toolbar }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .toolbarBloom(hasSearchBar: false)
-        .onAppear { context.send(viewAction: .screenAppeared) }
-        .sheet(isPresented: $context.isPresentingFeatureAnnouncement) {
-            SpacesAnnouncementSheetView(context: context)
+    }
+    
+    @ViewBuilder
+    private var mainContent: some View {
+        if context.viewState.isCreateSpaceEnabled, context.viewState.topLevelSpaces.isEmpty {
+            emptyState
+        } else {
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    header
+                    spaces
+                }
+            }
         }
     }
     
-    var header: some View {
+    private var emptyState: some View {
+        FullscreenDialog(horizontalPadding: 40) {
+            TitleAndIcon(title: L10n.screenSpaceListEmptyStateTitle,
+                         icon: \.spaceSolid,
+                         iconStyle: .defaultSolid,
+                         button: .init(title: L10n.actionLearnMore) { })
+        } bottomContent: {
+            Button(L10n.actionCreateSpace) {
+                context.send(viewAction: .createSpace)
+            }
+            .buttonStyle(.compound(.primary))
+        }
+    }
+    
+    private var header: some View {
         VStack(spacing: 16) {
             BigIcon(icon: \.spaceSolid)
             
@@ -62,7 +85,7 @@ struct SpaceListScreen: View {
         }
     }
     
-    var spaces: some View {
+    private var spaces: some View {
         ForEach(context.viewState.topLevelSpaces, id: \.id) { spaceRoomProxy in
             SpaceRoomCell(spaceRoomProxy: spaceRoomProxy,
                           isSelected: spaceRoomProxy.id == context.viewState.selectedSpaceID,
@@ -73,7 +96,7 @@ struct SpaceListScreen: View {
     }
     
     @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
+    private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             Button {
                 context.send(viewAction: .showSettings)
@@ -95,6 +118,18 @@ struct SpaceListScreen: View {
             Text("").accessibilityHidden(true)
         }
         .backportSharedBackgroundVisibility(.hidden)
+        
+        if context.viewState.isCreateSpaceEnabled {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    context.send(viewAction: .createSpace)
+                } label: {
+                    CompoundIcon(\.plus)
+                        .accessibilityHidden(true)
+                }
+                .accessibilityLabel(L10n.actionCreateSpace)
+            }
+        }
     }
 }
 
@@ -102,20 +137,31 @@ struct SpaceListScreen: View {
 
 struct SpaceListScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
+    static let emptyViewModel = makeViewModel(isEmpty: true)
     
     static var previews: some View {
         NavigationStack {
             SpaceListScreen(context: viewModel.context)
         }
+        
+        NavigationStack {
+            SpaceListScreen(context: emptyViewModel.context)
+        }
+        .previewDisplayName("Empty")
     }
     
-    static func makeViewModel() -> SpaceListScreenViewModel {
+    static func makeViewModel(isEmpty: Bool = false) -> SpaceListScreenViewModel {
+        AppSettings.resetAllSettings()
+        let appSettings = AppSettings()
+        appSettings.createSpaceEnabled = true
+        appSettings.hasSeenSpacesAnnouncement = true
+        
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.spaceService = SpaceServiceProxyMock(.init(topLevelSpaces: .mockJoinedSpaces))
+        clientProxy.spaceService = SpaceServiceProxyMock(.init(topLevelSpaces: isEmpty ? [] : .mockJoinedSpaces))
         
         let viewModel = SpaceListScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                  selectedSpacePublisher: .init(nil),
-                                                 appSettings: ServiceLocator.shared.settings,
+                                                 appSettings: appSettings,
                                                  userIndicatorController: UserIndicatorControllerMock())
         
         return viewModel
