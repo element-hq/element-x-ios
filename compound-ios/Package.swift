@@ -13,7 +13,7 @@ let package = Package(
         // .package(path: "../compound-design-tokens"),
         .package(url: "https://github.com/siteline/SwiftUI-Introspect", from: "26.0.0"),
         .package(url: "https://github.com/SFSafeSymbols/SFSafeSymbols", from: "7.0.0"),
-        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", exact: "1.18.3")
+        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", exact: "1.18.7")
     ],
     targets: [
         .target(
