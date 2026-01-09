@@ -980,11 +980,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         if AppSettings.isDevelopmentBuild {
             options.sampleRate = 1.0
             options.tracesSampleRate = 1.0
-            options.profilesSampleRate = 1.0
+            options.configureProfiling = { $0.sessionSampleRate = 1.0 }
         } else {
             options.sampleRate = 0.5
             options.tracesSampleRate = 0.5
-            options.profilesSampleRate = 0.5
+            options.configureProfiling = { $0.sessionSampleRate = 1.0 }
         }
 
         // This callback is only executed once during the entire run of the program to avoid
