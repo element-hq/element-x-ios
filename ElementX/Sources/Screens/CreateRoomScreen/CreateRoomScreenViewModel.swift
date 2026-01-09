@@ -37,8 +37,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         self.userIndicatorController = userIndicatorController
         
         let bindings = CreateRoomScreenViewStateBindings(roomTopic: "",
-                                                         isRoomPrivate: true,
-                                                         isKnockingOnly: false)
+                                                         selectedAccessType: .private)
 
         super.init(initialViewState: CreateRoomScreenViewState(isSpace: isSpace,
                                                                roomName: "",
@@ -111,13 +110,12 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         // Reset the state related to public rooms if the user choses the room to be empty
         context.$viewState
             .dropFirst()
-            .map(\.bindings.isRoomPrivate)
+            .map(\.bindings.selectedAccessType)
             .removeDuplicates()
-            .filter { $0 }
+            .filter(\.isPrivate)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
-                state.bindings.isKnockingOnly = false
                 state.aliasErrors = []
                 state.aliasLocalPart = roomAliasNameFromRoomDisplayName(roomName: state.roomName)
                 syncNameAndAlias = true
@@ -134,7 +132,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 }
                 
                 guard state.isKnockingFeatureEnabled,
-                      !state.bindings.isRoomPrivate,
+                      !state.bindings.selectedAccessType.isPrivate,
                       let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: aliasLocalPart,
                                                                      serverName: state.serverName) else {
                     // While is empty or private room we don't change or display the error
@@ -175,7 +173,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         showLoadingIndicator()
         
         // Better to double check the errors also when trying to create the room
-        if state.isKnockingFeatureEnabled, !state.bindings.isRoomPrivate {
+        if state.isKnockingFeatureEnabled, !state.bindings.selectedAccessType.isPrivate {
             guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: state.aliasLocalPart,
                                                                  serverName: state.serverName),
                 isRoomAliasFormatValid(alias: canonicalAlias) else {
@@ -223,12 +221,11 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         
         switch await userSession.clientProxy.createRoom(name: state.roomName,
                                                         topic: state.bindings.roomTopic.isBlank ? nil : state.bindings.roomTopic,
-                                                        isRoomPrivate: state.bindings.isRoomPrivate,
-                                                        // As of right now we don't want to make private rooms with the knock rule
-                                                        isKnockingOnly: state.bindings.isRoomPrivate ? false : state.bindings.isKnockingOnly,
+                                                        accessType: state.bindings.selectedAccessType,
+                                                        isSpace: state.isSpace,
                                                         userIDs: [], // The invite users screen is shown next so we don't need to invite anyone right now.
                                                         avatarURL: avatarURL,
-                                                        aliasLocalPart: state.bindings.isRoomPrivate ? nil : state.aliasLocalPart) {
+                                                        aliasLocalPart: state.bindings.selectedAccessType.isPrivate ? nil : state.aliasLocalPart) {
         case .success(let roomID):
             guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
                 state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,

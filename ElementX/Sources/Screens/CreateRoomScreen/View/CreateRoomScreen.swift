@@ -39,10 +39,9 @@ struct CreateRoomScreen: View {
         Form {
             roomSection
             topicSection
-            securitySection
+            roomAccessSection
             if context.viewState.isKnockingFeatureEnabled,
-               !context.isRoomPrivate {
-                roomAccessSection
+               context.selectedAccessType != .private {
                 roomAliasSection
             }
         }
@@ -139,36 +138,24 @@ struct CreateRoomScreen: View {
         }
     }
     
-    private var securitySection: some View {
-        Section {
-            ListRow(label: .default(title: L10n.screenCreateRoomPrivateOptionTitle,
-                                    description: L10n.screenCreateRoomPrivateOptionDescription,
-                                    icon: \.lock,
-                                    iconAlignment: .top),
-                    kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
-            ListRow(label: .default(title: L10n.screenCreateRoomPublicOptionTitle,
-                                    description: L10n.screenCreateRoomPublicOptionDescription,
-                                    icon: \.public,
-                                    iconAlignment: .top),
-                    kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
-        } header: {
-            Text(L10n.screenCreateRoomRoomVisibilitySectionTitle)
-                .compoundListSectionHeader()
-        }
-    }
-    
     private var roomAccessSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
-                                  description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
-                    kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
-            ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle,
-                                  description: L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription),
-                    kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
+            ForEach(context.viewState.availableAccessTypes, id: \.self) { accessType in
+                roomAccessRow(for: accessType)
+            }
         } header: {
             Text(L10n.screenCreateRoomRoomAccessSectionHeader)
                 .compoundListSectionHeader()
         }
+    }
+    
+    private func roomAccessRow(for accessType: CreateRoomAccessType) -> some View {
+        ListRow(label: .default(title: accessType.title,
+                                description: accessType.description,
+                                icon: accessType.icon),
+                kind: .selection(isSelected: context.selectedAccessType == accessType) {
+                    context.selectedAccessType = accessType
+                })
     }
     
     private var roomAliasSection: some View {
@@ -207,6 +194,41 @@ struct CreateRoomScreen: View {
     }
 }
 
+private extension CreateRoomAccessType {
+    var title: String {
+        switch self {
+        case .public:
+            L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle
+        case .askToJoin:
+            L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle
+        case .private:
+            "Private"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .public:
+            L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription
+        case .askToJoin:
+            L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription
+        case .private:
+            "Private"
+        }
+    }
+    
+    var icon: KeyPath<CompoundIcons, Image> {
+        switch self {
+        case .public:
+            \.public
+        case .askToJoin:
+            \.userAdd
+        case .private:
+            \.lock
+        }
+    }
+}
+
 // MARK: - Previews
 
 struct CreateRoom_Previews: PreviewProvider, TestablePreview {
@@ -227,7 +249,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   appSettings: ServiceLocator.shared.settings)
-        viewModel.context.isRoomPrivate = false
+        viewModel.context.selectedAccessType = .public
         return viewModel
     }()
     
@@ -239,7 +261,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   appSettings: ServiceLocator.shared.settings)
-        viewModel.context.isRoomPrivate = false
+        viewModel.context.selectedAccessType = .public
         viewModel.context.send(viewAction: .updateAliasLocalPart("#:"))
         return viewModel
     }()
@@ -254,7 +276,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   appSettings: ServiceLocator.shared.settings)
-        viewModel.context.isRoomPrivate = false
+        viewModel.context.selectedAccessType = .public
         viewModel.context.send(viewAction: .updateAliasLocalPart("existing"))
         return viewModel
     }()

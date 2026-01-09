@@ -48,6 +48,21 @@ enum SlidingSyncConstants {
     static let maximumVisibleRangeSize = 30
 }
 
+enum CreateRoomAccessType: CaseIterable {
+    case `public`
+    case askToJoin
+    case `private`
+    
+    var isPrivate: Bool {
+        switch self {
+        case .private:
+            true
+        case .public, .askToJoin:
+            false
+        }
+    }
+}
+
 /// This struct represents the configuration that we are using to register the application through Pusher to Sygnal
 /// using the Matrix Rust SDK, more info here:
 /// https://github.com/matrix-org/sygnal
@@ -156,8 +171,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     func createRoom(name: String,
                     topic: String?,
-                    isRoomPrivate: Bool,
-                    isKnockingOnly: Bool,
+                    accessType: CreateRoomAccessType,
+                    isSpace: Bool,
                     userIDs: [String],
                     avatarURL: URL?,
                     aliasLocalPart: String?) async -> Result<String, ClientProxyError>

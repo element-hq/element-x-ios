@@ -474,25 +474,26 @@ class ClientProxy: ClientProxyProtocol {
     
     func createRoom(name: String,
                     topic: String?,
-                    isRoomPrivate: Bool,
-                    isKnockingOnly: Bool,
+                    accessType: CreateRoomAccessType,
+                    isSpace: Bool,
                     userIDs: [String],
                     avatarURL: URL?,
                     aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
         do {
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
-                                                  isEncrypted: isRoomPrivate,
+                                                  isEncrypted: isSpace ? false : accessType.isEncrypted,
                                                   isDirect: false,
-                                                  visibility: isRoomPrivate ? .private : .public,
-                                                  preset: isRoomPrivate ? .privateChat : .publicChat,
+                                                  visibility: accessType.visibility,
+                                                  preset: accessType.preset,
                                                   invite: userIDs,
                                                   avatar: avatarURL?.absoluteString,
-                                                  powerLevelContentOverride: isKnockingOnly ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
-                                                  joinRuleOverride: isKnockingOnly ? .knock : nil,
-                                                  historyVisibilityOverride: isRoomPrivate ? .invited : nil,
+                                                  powerLevelContentOverride: accessType == .askToJoin ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
+                                                  joinRuleOverride: accessType.joinRuleOverride,
+                                                  historyVisibilityOverride: isSpace ? nil : accessType.historyVisibilityOverride,
                                                   // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
-                                                  canonicalAlias: aliasLocalPart)
+                                                  canonicalAlias: aliasLocalPart,
+                                                  isSpace: isSpace)
             let roomID = try await client.createRoom(request: parameters)
             
             await waitForRoomToSync(roomID: roomID)
@@ -1297,6 +1298,38 @@ private extension TimelineMediaVisibility {
             .off
         case .privateOnly:
             .private
+        }
+    }
+}
+
+private extension CreateRoomAccessType {
+    var isEncrypted: Bool {
+        switch self {
+        case .public:
+            false
+        case .askToJoin, .private:
+            true
+        }
+    }
+    
+    var visibility: RoomVisibility {
+        isPrivate ? .private : .public
+    }
+    
+    var preset: RoomPreset {
+        isPrivate ? .privateChat : .publicChat
+    }
+    
+    var historyVisibilityOverride: RoomHistoryVisibility? {
+        isPrivate ? .invited : nil
+    }
+    
+    var joinRuleOverride: JoinRule? {
+        switch self {
+        case .askToJoin:
+            .knock
+        case .private, .public:
+            nil
         }
     }
 }
