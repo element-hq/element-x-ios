@@ -13,6 +13,7 @@ extension PostHogConfig {
         let postHogConfiguration = PostHogConfig(apiKey: analyticsConfiguration.apiKey, host: analyticsConfiguration.host)
         // We capture screens manually
         postHogConfiguration.captureScreenViews = false
+        postHogConfiguration.surveys = false
         
         return postHogConfiguration
     }

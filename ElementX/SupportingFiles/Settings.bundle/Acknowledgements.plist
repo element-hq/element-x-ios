@@ -180,6 +180,14 @@
 		</dict>
 		<dict>
 			<key>File</key>
+			<string>Packages/swift-atomics</string>
+			<key>Title</key>
+			<string>swift-atomics</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
 			<string>Packages/swift-clocks</string>
 			<key>Title</key>
 			<string>swift-clocks</string>
