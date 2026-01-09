@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 enum LinkNewDeviceFlowCoordinatorAction {
-    case requestOIDCAuthorisation(URL)
+    case requestOIDCAuthorisation(URL, OIDCAccountSettingsPresenter.Continuation)
     case dismiss
 }
 
@@ -76,8 +76,10 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
                     fatalError("QR linking shouldn't send sign-in actions.")
                 case .dismiss:
                     navigationStackCoordinator.pop()
-                case .requestOIDCAuthorisation(let url):
-                    actionsSubject.send(.requestOIDCAuthorisation(url))
+                case .requestOIDCAuthorisation(let url, let continuation):
+                    actionsSubject.send(.requestOIDCAuthorisation(url, continuation))
+                case .linkedDevice:
+                    actionsSubject.send(.dismiss)
                 }
             }
             .store(in: &cancellables)

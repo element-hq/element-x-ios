@@ -50,11 +50,7 @@ class OIDCAuthenticationPresenter: NSObject {
         
         guard let url else {
             // Check for user cancellation to avoid showing an alert in that instance.
-            if let nsError = error as? NSError,
-               nsError.domain == ASWebAuthenticationSessionErrorDomain,
-               nsError.code == ASWebAuthenticationSessionError.canceledLogin.rawValue,
-               // If there's a failure reason then the cancellation wasn't made by the user.
-               nsError.localizedFailureReason == nil {
+            if error?.isOIDCUserCancellation == true {
                 // No need to show an error here, just abort and return a failure.
                 await authenticationService.abortOIDCLogin(data: oidcData)
                 return .failure(.oidcError(.userCancellation))
@@ -119,5 +115,22 @@ extension ASWebAuthenticationSession.Callback {
         } else {
             fatalError("Invalid OIDC redirect URL: \(url)")
         }
+    }
+}
+
+// MARK: - Helpers
+
+extension Error {
+    var isOIDCUserCancellation: Bool {
+        let nsError = self as NSError
+        
+        if nsError.domain == ASWebAuthenticationSessionErrorDomain,
+           nsError.code == ASWebAuthenticationSessionError.canceledLogin.rawValue,
+           // If there's a failure reason then the cancellation wasn't made by the user.
+           nsError.localizedFailureReason == nil {
+            return true
+        }
+        
+        return false
     }
 }

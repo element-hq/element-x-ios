@@ -182,8 +182,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .dismiss:
                     navigationStackCoordinator.setSheetCoordinator(nil)
-                case .requestOIDCAuthorisation(let url):
-                    presentAccountManagementURL(url)
+                case .requestOIDCAuthorisation(let url, let continuation):
+                    presentAccountManagementURL(url, continuation: continuation)
                 }
             }
             .store(in: &cancellables)
@@ -292,12 +292,13 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: OIDC Account Management
     
     private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
-    private func presentAccountManagementURL(_ url: URL) {
+    private func presentAccountManagementURL(_ url: URL, continuation: OIDCAccountSettingsPresenter.Continuation? = nil) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
         accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url,
                                                                 presentationAnchor: flowParameters.windowManager.mainWindow,
-                                                                appSettings: flowParameters.appSettings)
+                                                                appSettings: flowParameters.appSettings,
+                                                                continuation: continuation)
         accountSettingsPresenter?.start()
     }
 }

@@ -8,11 +8,22 @@
 
 import SwiftUI
 
-enum QRCodeLoginScreenViewModelAction {
+enum QRCodeLoginScreenViewModelAction: CustomStringConvertible {
     case dismiss
     case signInManually
     case signedIn(userSession: UserSessionProtocol)
-    case requestOIDCAuthorisation(URL)
+    case requestOIDCAuthorisation(URL, OIDCAccountSettingsPresenter.Continuation)
+    case linkedDevice
+    
+    var description: String {
+        switch self {
+        case .dismiss: "dismiss"
+        case .signInManually: "signInManually"
+        case .signedIn: "signedIn"
+        case .requestOIDCAuthorisation: "requestOIDCAuthorisation"
+        case .linkedDevice: "linkedDevice"
+        }
+    }
 }
 
 enum QRCodeLoginScreenMode {

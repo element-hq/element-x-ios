@@ -16,11 +16,22 @@ struct QRCodeLoginScreenCoordinatorParameters {
     let appMediator: AppMediatorProtocol
 }
 
-enum QRCodeLoginScreenCoordinatorAction {
+enum QRCodeLoginScreenCoordinatorAction: CustomStringConvertible {
     case dismiss
     case signInManually
     case signedIn(userSession: UserSessionProtocol)
-    case requestOIDCAuthorisation(URL)
+    case requestOIDCAuthorisation(URL, OIDCAccountSettingsPresenter.Continuation)
+    case linkedDevice
+    
+    var description: String {
+        switch self {
+        case .dismiss: "dismiss"
+        case .signInManually: "signInManually"
+        case .signedIn: "signedIn"
+        case .requestOIDCAuthorisation: "requestOIDCAuthorisation"
+        case .linkedDevice: "linkedDevice"
+        }
+    }
 }
 
 final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
@@ -53,8 +64,10 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.dismiss)
             case .signedIn(let userSession):
                 actionsSubject.send(.signedIn(userSession: userSession))
-            case .requestOIDCAuthorisation(let url):
-                actionsSubject.send(.requestOIDCAuthorisation(url))
+            case .requestOIDCAuthorisation(let url, let continuation):
+                actionsSubject.send(.requestOIDCAuthorisation(url, continuation))
+            case .linkedDevice:
+                actionsSubject.send(.linkedDevice)
             }
         }
         .store(in: &cancellables)
