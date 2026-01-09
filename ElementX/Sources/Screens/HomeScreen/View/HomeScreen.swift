@@ -40,9 +40,13 @@ struct HomeScreen: View {
         .backportSharedBackgroundVisibility(.hidden)
         
         ToolbarItem(placement: .primaryAction) {
-            newRoomButton
+            if #available(iOS 26, *) {
+                newRoomButton
+            } else {
+                newRoomButton
+                    .buttonStyle(.compound(.super, size: .toolbarIcon))
+            }
         }
-        .backportSharedBackgroundVisibility(.hidden)
     }
     
     private var settingsButton: some View {
@@ -71,7 +75,6 @@ struct HomeScreen: View {
             } label: {
                 CompoundIcon(\.plus)
             }
-            .buttonStyle(.compound(.super, size: .toolbarIcon))
             .accessibilityLabel(L10n.actionStartChat)
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)
         default:

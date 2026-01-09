@@ -378,16 +378,16 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.sharePresence, defaultValue: true, storageType: .userDefaults(store))
     var sharePresence
     
-    // MARK: - Spaces
+    // MARK: - Feature Flags
     
+    // Spaces
     @UserPreference(key: UserDefaultsKeys.spaceSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var spaceSettingsEnabled
     
     @UserPreference(key: UserDefaultsKeys.createSpaceEnabled, defaultValue: false, storageType: .userDefaults(store))
     var createSpaceEnabled
     
-    // MARK: - Feature Flags
-    
+    // Others
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var publicSearchEnabled
     
