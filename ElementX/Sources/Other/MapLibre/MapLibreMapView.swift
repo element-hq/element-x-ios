@@ -7,7 +7,7 @@
 //
 
 import Combine
-import Mapbox
+import MapLibre
 import SwiftUI
 
 struct MapLibreMapView: UIViewRepresentable {
@@ -54,14 +54,14 @@ struct MapLibreMapView: UIViewRepresentable {
     
     // MARK: - UIViewRepresentable
     
-    func makeUIView(context: Context) -> MGLMapView {
+    func makeUIView(context: Context) -> MLNMapView {
         let mapView = makeMapView()
         mapView.delegate = context.coordinator
         setupMap(mapView: mapView, with: options)
         return mapView
     }
     
-    func updateUIView(_ mapView: MGLMapView, context: Context) {
+    func updateUIView(_ mapView: MLNMapView, context: Context) {
         // Don't set the same value twice. Otherwise, if there is an error loading the map, a loop
         // is caused as the `error` binding being set, which triggers this update, which sets a
         // new URL, which causes another error, and so it goes on round and round in a circle.
@@ -79,14 +79,14 @@ struct MapLibreMapView: UIViewRepresentable {
     
     // MARK: - Private
 
-    private func setupMap(mapView: MGLMapView, with options: Options) {
+    private func setupMap(mapView: MLNMapView, with options: Options) {
         mapView.addAnnotations(options.annotations)
         mapView.zoomLevel = options.annotations.isEmpty ? options.initialZoomLevel : options.zoomLevel
         mapView.centerCoordinate = options.mapCenter
     }
     
-    private func makeMapView() -> MGLMapView {
-        let mapView = MGLMapView(frame: .zero, styleURL: mapURLBuilder.interactiveMapURL(for: colorScheme == .dark ? .dark : .light))
+    private func makeMapView() -> MLNMapView {
+        let mapView = MLNMapView(frame: .zero, styleURL: mapURLBuilder.interactiveMapURL(for: colorScheme == .dark ? .dark : .light))
         mapView.logoViewPosition = .topLeft
         mapView.attributionButtonPosition = .topLeft
         mapView.attributionButtonMargins = .init(x: mapView.logoView.frame.maxX + 8, y: mapView.logoView.center.y / 2)
@@ -96,7 +96,7 @@ struct MapLibreMapView: UIViewRepresentable {
         return mapView
     }
     
-    private func showUserLocation(in mapView: MGLMapView) {
+    private func showUserLocation(in mapView: MLNMapView) {
         switch (showsUserLocationMode, options.annotations) {
         case (.showAndFollow, _):
             mapView.userTrackingMode = .follow
@@ -119,12 +119,12 @@ struct MapLibreMapView: UIViewRepresentable {
 // MARK: - Coordinator
 
 extension MapLibreMapView {
-    class Coordinator: NSObject, MGLMapViewDelegate {
+    class Coordinator: NSObject, MLNMapViewDelegate {
         // MARK: - Properties
 
         var mapLibreView: MapLibreMapView
         
-        private var previousUserLocation: MGLUserLocation?
+        private var previousUserLocation: MLNUserLocation?
 
         // MARK: - Setup
 
@@ -132,22 +132,22 @@ extension MapLibreMapView {
             self.mapLibreView = mapLibreView
         }
         
-        // MARK: - MGLMapViewDelegate
+        // MARK: - MLNMapViewDelegate
         
-        func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
+        func mapView(_ mapView: MLNMapView, viewFor annotation: MLNAnnotation) -> MLNAnnotationView? {
             guard let annotation = annotation as? LocationAnnotation else {
                 return nil
             }
             return LocationAnnotationView(annotation: annotation)
         }
         
-        func mapViewDidFailLoadingMap(_ mapView: MGLMapView, withError error: Error) {
+        func mapViewDidFailLoadingMap(_ mapView: MLNMapView, withError error: Error) {
             if mapLibreView.error != .failedLoadingMap {
                 mapLibreView.error = .failedLoadingMap
             }
         }
         
-        func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) {
+        func mapView(_ mapView: MLNMapView, didUpdate userLocation: MLNUserLocation?) {
             guard let userLocation else { return }
 
             if previousUserLocation == nil, mapLibreView.options.annotations.isEmpty {
@@ -160,7 +160,7 @@ extension MapLibreMapView {
             updateGeolocationUncertainty(location: userLocation)
         }
         
-        func mapView(_ mapView: MGLMapView, didChangeLocationManagerAuthorization manager: MGLLocationManager) {
+        func mapView(_ mapView: MLNMapView, didChangeLocationManagerAuthorization manager: MLNLocationManager) {
             switch manager.authorizationStatus {
             case .denied, .restricted:
                 mapLibreView.isLocationAuthorized = false
@@ -173,14 +173,14 @@ extension MapLibreMapView {
             }
         }
         
-        func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
+        func mapView(_ mapView: MLNMapView, regionDidChangeAnimated animated: Bool) {
             // Avoid `Publishing changes from within view update` warnings
             DispatchQueue.main.async { [mapLibreView] in
                 mapLibreView.mapCenterCoordinate = mapView.centerCoordinate
             }
         }
 
-        func mapView(_ mapView: MGLMapView, shouldChangeFrom oldCamera: MGLMapCamera, to newCamera: MGLMapCamera, reason: MGLCameraChangeReason) -> Bool {
+        func mapView(_ mapView: MLNMapView, shouldChangeFrom oldCamera: MLNMapCamera, to newCamera: MLNMapCamera, reason: MLNCameraChangeReason) -> Bool {
             // we send the userDidPan event only for the reasons that actually will change the map center, and not zoom only / rotations only events.
             switch reason {
             case .gesturePan,
@@ -203,13 +203,13 @@ extension MapLibreMapView {
 
         // MARK: Callout
 
-        func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
+        func mapView(_ mapView: MLNMapView, annotationCanShowCallout annotation: MLNAnnotation) -> Bool {
             false
         }
 
         // MARK: Private
 
-        private func updateGeolocationUncertainty(location: MGLUserLocation) {
+        private func updateGeolocationUncertainty(location: MLNUserLocation) {
             guard let clLocation = location.location, clLocation.horizontalAccuracy >= 0 else {
                 mapLibreView.geolocationUncertainty = nil
                 return
@@ -220,7 +220,7 @@ extension MapLibreMapView {
     }
 }
 
-// MARK: - MGLMapView convenient methods
+// MARK: - MLNMapView convenient methods
 
 private extension MapTilerStyle {
     init(_ colorScheme: ColorScheme) {

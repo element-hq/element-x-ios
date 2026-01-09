@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import Mapbox
+import MapLibre
 import SwiftUI
 
-final class LocationAnnotation: NSObject, MGLAnnotation {
+final class LocationAnnotation: NSObject, MLNAnnotation {
     let coordinate: CLLocationCoordinate2D
     let anchorPoint: CGPoint
     let view: AnyView
@@ -27,10 +27,10 @@ final class LocationAnnotation: NSObject, MGLAnnotation {
     }
 }
 
-final class LocationAnnotationView: MGLUserLocationAnnotationView {
+final class LocationAnnotationView: MLNUserLocationAnnotationView {
     // MARK: - Setup
     
-    override init(annotation: MGLAnnotation?, reuseIdentifier: String?) {
+    override init(annotation: MLNAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier:
             reuseIdentifier)
     }

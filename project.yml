@@ -137,9 +137,9 @@ packages:
   LRUCache:
     url: https://github.com/nicklockwood/LRUCache
     minorVersion: 1.2.0
-  Mapbox:
+  MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
-    minorVersion: 5.13.0
+    minorVersion: 6.22.1
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     minorVersion: 3.37.1
