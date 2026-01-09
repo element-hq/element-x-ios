@@ -13,17 +13,7 @@ import SwiftUI
 typealias CreateRoomScreenViewModelType = StateStoreViewModel<CreateRoomScreenViewState, CreateRoomScreenViewAction>
 
 class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreenViewModelProtocol {
-    struct Parameters {
-        var name = ""
-        var topic = ""
-        var isRoomPrivate = true
-        var isKnockingOnly = false
-        var avatarImageMedia: MediaInfo?
-        var aliasLocalPart: String?
-    }
-    
     private let userSession: UserSessionProtocol
-    private var parameters: Parameters
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -36,25 +26,25 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol,
-         initialParameters: Parameters = .init(),
+    init(isSpace: Bool,
+         userSession: UserSessionProtocol,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
         self.userSession = userSession
-        parameters = initialParameters
         mediaUploadingPreprocessor = MediaUploadingPreprocessor(appSettings: appSettings)
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
-        let bindings = CreateRoomScreenViewStateBindings(roomTopic: parameters.topic,
-                                                         isRoomPrivate: parameters.isRoomPrivate,
-                                                         isKnockingOnly: appSettings.knockingEnabled ? parameters.isKnockingOnly : false)
+        let bindings = CreateRoomScreenViewStateBindings(roomTopic: "",
+                                                         isRoomPrivate: true,
+                                                         isKnockingOnly: false)
 
-        super.init(initialViewState: CreateRoomScreenViewState(roomName: parameters.name,
+        super.init(initialViewState: CreateRoomScreenViewState(isSpace: isSpace,
+                                                               roomName: "",
                                                                serverName: userSession.clientProxy.userIDServerName ?? "",
                                                                isKnockingFeatureEnabled: appSettings.knockingEnabled,
-                                                               aliasLocalPart: parameters.aliasLocalPart ?? roomAliasNameFromRoomDisplayName(roomName: parameters.name),
+                                                               aliasLocalPart: roomAliasNameFromRoomDisplayName(roomName: ""),
                                                                bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
@@ -72,8 +62,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         case .displayMediaPicker:
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
-            parameters.avatarImageMedia = nil
-            state.avatarURL = nil
+            state.mediaInfo = nil
         case .updateAliasLocalPart(let aliasLocalPart):
             state.aliasLocalPart = aliasLocalPart.lowercased()
             // If this has been called this means that the user wants a custom address not necessarily reflecting the name
@@ -104,9 +93,8 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 let mediaInfo = try await mediaUploadingPreprocessor.processMedia(at: fileURL, maxUploadSize: maxUploadSize).get()
                 
                 switch mediaInfo {
-                case .image(_, let thumbnailURL, _):
-                    parameters.avatarImageMedia = mediaInfo
-                    state.avatarURL = thumbnailURL
+                case .image:
+                    state.mediaInfo = mediaInfo
                 default:
                     break
                 }
@@ -133,21 +121,6 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 state.aliasErrors = []
                 state.aliasLocalPart = roomAliasNameFromRoomDisplayName(roomName: state.roomName)
                 syncNameAndAlias = true
-            }
-            .store(in: &cancellables)
-        
-        context.$viewState
-            .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
-            .removeDuplicates { old, new in
-                old.roomName == new.roomName &&
-                    old.bindings.roomTopic == new.bindings.roomTopic &&
-                    old.bindings.isRoomPrivate == new.bindings.isRoomPrivate &&
-                    old.bindings.isKnockingOnly == new.bindings.isKnockingOnly &&
-                    old.aliasLocalPart == new.aliasLocalPart
-            }
-            .sink { [weak self] state in
-                guard let self else { return }
-                updateParameters(state: state)
             }
             .store(in: &cancellables)
         
@@ -195,30 +168,15 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
             .store(in: &cancellables)
     }
     
-    private func updateParameters(state: CreateRoomScreenViewState) {
-        parameters.name = state.roomName
-        parameters.topic = state.bindings.roomTopic
-        parameters.isRoomPrivate = state.bindings.isRoomPrivate
-        parameters.isKnockingOnly = state.bindings.isKnockingOnly
-        if state.isKnockingFeatureEnabled, !state.aliasLocalPart.isEmpty {
-            parameters.aliasLocalPart = state.aliasLocalPart
-        } else {
-            parameters.aliasLocalPart = nil
-        }
-    }
-    
     private func createRoom() async {
         defer {
             hideLoadingIndicator()
         }
         showLoadingIndicator()
         
-        // Since the parameters are throttled, we need to make sure that the latest values are used
-        updateParameters(state: state)
-        
         // Better to double check the errors also when trying to create the room
-        if state.isKnockingFeatureEnabled, !parameters.isRoomPrivate {
-            guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: parameters.aliasLocalPart,
+        if state.isKnockingFeatureEnabled, !state.bindings.isRoomPrivate {
+            guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: state.aliasLocalPart,
                                                                  serverName: state.serverName),
                 isRoomAliasFormatValid(alias: canonicalAlias) else {
                 state.aliasErrors = [.invalidSymbols]
@@ -238,7 +196,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         }
         
         let avatarURL: URL?
-        if let media = parameters.avatarImageMedia {
+        if let media = state.mediaInfo {
             switch await userSession.clientProxy.uploadMedia(media) {
             case .success(let url):
                 avatarURL = URL(string: url)
@@ -263,14 +221,14 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
             avatarURL = nil
         }
         
-        switch await userSession.clientProxy.createRoom(name: parameters.name,
-                                                        topic: parameters.topic.isBlank ? nil : parameters.topic,
-                                                        isRoomPrivate: parameters.isRoomPrivate,
+        switch await userSession.clientProxy.createRoom(name: state.roomName,
+                                                        topic: state.bindings.roomTopic.isBlank ? nil : state.bindings.roomTopic,
+                                                        isRoomPrivate: state.bindings.isRoomPrivate,
                                                         // As of right now we don't want to make private rooms with the knock rule
-                                                        isKnockingOnly: parameters.isRoomPrivate ? false : parameters.isKnockingOnly,
+                                                        isKnockingOnly: state.bindings.isRoomPrivate ? false : state.bindings.isKnockingOnly,
                                                         userIDs: [], // The invite users screen is shown next so we don't need to invite anyone right now.
                                                         avatarURL: avatarURL,
-                                                        aliasLocalPart: parameters.isRoomPrivate ? nil : parameters.aliasLocalPart) {
+                                                        aliasLocalPart: state.bindings.isRoomPrivate ? nil : state.aliasLocalPart) {
         case .success(let roomID):
             guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
                 state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,

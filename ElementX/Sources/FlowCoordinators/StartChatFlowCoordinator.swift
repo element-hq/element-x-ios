@@ -16,6 +16,7 @@ enum StartChatFlowCoordinatorAction {
 }
 
 class StartChatFlowCoordinator: FlowCoordinatorProtocol {
+    private let isSpace: Bool
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     
@@ -63,9 +64,11 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userDiscoveryService: UserDiscoveryServiceProtocol,
+    init(isSpace: Bool,
+         userDiscoveryService: UserDiscoveryServiceProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
+        self.isSpace = isSpace
         self.userDiscoveryService = userDiscoveryService
         self.navigationStackCoordinator = navigationStackCoordinator
         
@@ -168,7 +171,8 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentCreateRoomScreen() {
-        let createParameters = CreateRoomScreenCoordinatorParameters(userSession: flowParameters.userSession,
+        let createParameters = CreateRoomScreenCoordinatorParameters(isSpace: isSpace,
+                                                                     userSession: flowParameters.userSession,
                                                                      userIndicatorController: flowParameters.userIndicatorController,
                                                                      appSettings: flowParameters.appSettings,
                                                                      analytics: flowParameters.analytics)

@@ -23,12 +23,13 @@ enum CreateRoomScreenViewModelAction {
 }
 
 struct CreateRoomScreenViewState: BindableState {
+    let isSpace: Bool
     var roomName: String
     let serverName: String
     let isKnockingFeatureEnabled: Bool
     var aliasLocalPart: String
     var bindings: CreateRoomScreenViewStateBindings
-    var avatarURL: URL?
+    var mediaInfo: MediaInfo?
     var canCreateRoom: Bool {
         !roomName.isEmpty && aliasErrors.isEmpty
     }

@@ -10,6 +10,7 @@ import Combine
 import SwiftUI
 
 struct CreateRoomScreenCoordinatorParameters {
+    let isSpace: Bool
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let appSettings: AppSettings
@@ -31,7 +32,8 @@ final class CreateRoomScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: CreateRoomScreenCoordinatorParameters) {
-        viewModel = CreateRoomScreenViewModel(userSession: parameters.userSession,
+        viewModel = CreateRoomScreenViewModel(isSpace: parameters.isSpace,
+                                              userSession: parameters.userSession,
                                               analytics: parameters.analytics,
                                               userIndicatorController: parameters.userIndicatorController,
                                               appSettings: parameters.appSettings)
