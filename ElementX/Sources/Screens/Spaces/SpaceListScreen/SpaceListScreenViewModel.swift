@@ -31,6 +31,7 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
         
         super.init(initialViewState: SpaceListScreenViewState(userID: userSession.clientProxy.userID,
                                                               topLevelSpaces: spaceServiceProxy.topLevelSpacesPublisher.value,
+                                                              isCreateSpaceEnabled: appSettings.createSpaceEnabled,
                                                               bindings: .init()),
                    mediaProvider: userSession.mediaProvider)
         
@@ -51,6 +52,10 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
         userSession.clientProxy.userDisplayNamePublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userDisplayName, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$createSpaceEnabled
+            .weakAssign(to: \.state.isCreateSpaceEnabled, on: self)
             .store(in: &cancellables)
     }
     
@@ -73,6 +78,9 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
             }
         case .featureAnnouncementAppeared:
             appSettings.hasSeenSpacesAnnouncement = true
+        case .createSpace:
+            // TODO: Implement
+            break
         }
     }
     

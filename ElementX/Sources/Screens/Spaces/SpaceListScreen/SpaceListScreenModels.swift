@@ -21,6 +21,8 @@ struct SpaceListScreenViewState: BindableState {
     var topLevelSpaces: [SpaceRoomProxyProtocol]
     var selectedSpaceID: String?
     
+    var isCreateSpaceEnabled: Bool
+    
     var bindings: SpaceListScreenViewStateBindings
 }
 
@@ -33,4 +35,5 @@ enum SpaceListScreenViewAction {
     case showSettings
     case screenAppeared
     case featureAnnouncementAppeared
+    case createSpace
 }

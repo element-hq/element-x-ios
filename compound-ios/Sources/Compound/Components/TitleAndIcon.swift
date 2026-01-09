@@ -65,7 +65,7 @@ public extension TitleAndIcon {
         public let title: String
         public let action: () -> Void
         
-        init(title: String, action: @escaping () -> Void) {
+        public init(title: String, action: @escaping () -> Void) {
             self.title = title
             self.action = action
         }

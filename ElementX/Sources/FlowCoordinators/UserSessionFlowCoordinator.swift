@@ -288,7 +288,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         userSession.clientProxy.spaceService.topLevelSpacesPublisher
-            .map { $0.isEmpty ? .hidden : nil }
+            .combineLatest(flowParameters.appSettings.$createSpaceEnabled)
+            .map { topLevelSpaces, isCreateSpaceEnabled in
+                !isCreateSpaceEnabled && topLevelSpaces.isEmpty ? .hidden : nil
+            }
             .weakAssign(to: \.chatsTabDetails.barVisibilityOverride, on: self)
             .store(in: &cancellables)
     }
