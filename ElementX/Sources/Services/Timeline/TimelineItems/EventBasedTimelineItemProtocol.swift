@@ -44,7 +44,7 @@ extension EventBasedTimelineItemProtocol {
     }
     
     var hasStatusIcon: Bool {
-        hasFailedToSend || properties.encryptionAuthenticity != nil
+        hasFailedToSend || properties.encryptionAuthenticity != nil || properties.encryptionForwarder != nil
     }
     
     var hasFailedToSend: Bool {
