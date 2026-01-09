@@ -70,11 +70,13 @@ struct LinkNewDeviceScreen: View {
                 .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.mobileDevice)
                 
-                Button { context.send(viewAction: .linkDesktopComputer) } label: {
-                    Label(L10n.screenLinkNewDeviceRootDesktopComputer, icon: \.computer)
+                if context.viewState.showLinkDesktopComputerButton {
+                    Button { context.send(viewAction: .linkDesktopComputer) } label: {
+                        Label(L10n.screenLinkNewDeviceRootDesktopComputer, icon: \.computer)
+                    }
+                    .buttonStyle(.compound(.primary))
+                    .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.desktopComputer)
                 }
-                .buttonStyle(.compound(.primary))
-                .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.desktopComputer)
             }
             .disabled(isGeneratingCode)
         case .notSupported:
@@ -96,8 +98,6 @@ struct LinkNewDeviceScreen: View {
 }
 
 // MARK: - Previews
-
-import MatrixRustSDKMocks
 
 struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(mode: .readyToLink(isGeneratingCode: false))
@@ -143,7 +143,6 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
                 return false
             }
         }
-        clientProxy.linkNewDeviceServiceReturnValue = .init(handler: GrantLoginWithQrCodeHandlerSDKMock(.init(generateDelay: .seconds(20))))
         
         let viewModel = LinkNewDeviceScreenViewModel(clientProxy: clientProxy)
         

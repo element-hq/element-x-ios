@@ -4049,13 +4049,13 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         return linkNewDeviceServiceCallsCount > 0
     }
 
-    var linkNewDeviceServiceUnderlyingReturnValue: LinkNewDeviceService!
-    var linkNewDeviceServiceReturnValue: LinkNewDeviceService! {
+    var linkNewDeviceServiceUnderlyingReturnValue: LinkNewDeviceServiceProtocol!
+    var linkNewDeviceServiceReturnValue: LinkNewDeviceServiceProtocol! {
         get {
             if Thread.isMainThread {
                 return linkNewDeviceServiceUnderlyingReturnValue
             } else {
-                var returnValue: LinkNewDeviceService? = nil
+                var returnValue: LinkNewDeviceServiceProtocol? = nil
                 DispatchQueue.main.sync {
                     returnValue = linkNewDeviceServiceUnderlyingReturnValue
                 }
@@ -4073,9 +4073,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var linkNewDeviceServiceClosure: (() -> LinkNewDeviceService)?
+    var linkNewDeviceServiceClosure: (() -> LinkNewDeviceServiceProtocol)?
 
-    func linkNewDeviceService() -> LinkNewDeviceService {
+    func linkNewDeviceService() -> LinkNewDeviceServiceProtocol {
         linkNewDeviceServiceCallsCount += 1
         if let linkNewDeviceServiceClosure = linkNewDeviceServiceClosure {
             return linkNewDeviceServiceClosure()
@@ -10914,6 +10914,143 @@ class KnockedRoomProxyMock: KnockedRoomProxyProtocol, @unchecked Sendable {
             return await cancelKnockClosure()
         } else {
             return cancelKnockReturnValue
+        }
+    }
+}
+class LinkNewDeviceServiceMock: LinkNewDeviceServiceProtocol, @unchecked Sendable {
+
+    //MARK: - linkMobileDevice
+
+    var linkMobileDeviceUnderlyingCallsCount = 0
+    var linkMobileDeviceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return linkMobileDeviceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = linkMobileDeviceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                linkMobileDeviceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    linkMobileDeviceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var linkMobileDeviceCalled: Bool {
+        return linkMobileDeviceCallsCount > 0
+    }
+
+    var linkMobileDeviceUnderlyingReturnValue: LinkNewDeviceService.LinkMobileProgressPublisher!
+    var linkMobileDeviceReturnValue: LinkNewDeviceService.LinkMobileProgressPublisher! {
+        get {
+            if Thread.isMainThread {
+                return linkMobileDeviceUnderlyingReturnValue
+            } else {
+                var returnValue: LinkNewDeviceService.LinkMobileProgressPublisher? = nil
+                DispatchQueue.main.sync {
+                    returnValue = linkMobileDeviceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                linkMobileDeviceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    linkMobileDeviceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var linkMobileDeviceClosure: (() -> LinkNewDeviceService.LinkMobileProgressPublisher)?
+
+    func linkMobileDevice() -> LinkNewDeviceService.LinkMobileProgressPublisher {
+        linkMobileDeviceCallsCount += 1
+        if let linkMobileDeviceClosure = linkMobileDeviceClosure {
+            return linkMobileDeviceClosure()
+        } else {
+            return linkMobileDeviceReturnValue
+        }
+    }
+    //MARK: - linkDesktopDevice
+
+    var linkDesktopDeviceWithUnderlyingCallsCount = 0
+    var linkDesktopDeviceWithCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return linkDesktopDeviceWithUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = linkDesktopDeviceWithUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                linkDesktopDeviceWithUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    linkDesktopDeviceWithUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var linkDesktopDeviceWithCalled: Bool {
+        return linkDesktopDeviceWithCallsCount > 0
+    }
+    var linkDesktopDeviceWithReceivedScannedQRData: Data?
+    var linkDesktopDeviceWithReceivedInvocations: [Data] = []
+
+    var linkDesktopDeviceWithUnderlyingReturnValue: LinkNewDeviceService.LinkDesktopProgressPublisher!
+    var linkDesktopDeviceWithReturnValue: LinkNewDeviceService.LinkDesktopProgressPublisher! {
+        get {
+            if Thread.isMainThread {
+                return linkDesktopDeviceWithUnderlyingReturnValue
+            } else {
+                var returnValue: LinkNewDeviceService.LinkDesktopProgressPublisher? = nil
+                DispatchQueue.main.sync {
+                    returnValue = linkDesktopDeviceWithUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                linkDesktopDeviceWithUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    linkDesktopDeviceWithUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var linkDesktopDeviceWithClosure: ((Data) -> LinkNewDeviceService.LinkDesktopProgressPublisher)?
+
+    func linkDesktopDevice(with scannedQRData: Data) -> LinkNewDeviceService.LinkDesktopProgressPublisher {
+        linkDesktopDeviceWithCallsCount += 1
+        linkDesktopDeviceWithReceivedScannedQRData = scannedQRData
+        DispatchQueue.main.async {
+            self.linkDesktopDeviceWithReceivedInvocations.append(scannedQRData)
+        }
+        if let linkDesktopDeviceWithClosure = linkDesktopDeviceWithClosure {
+            return linkDesktopDeviceWithClosure(scannedQRData)
+        } else {
+            return linkDesktopDeviceWithReturnValue
         }
     }
 }

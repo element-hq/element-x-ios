@@ -337,11 +337,7 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     static let deviceNotSignedInStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.deviceNotSignedIn)))
     
     // Showing
-    static let showingStateViewModel = {
-        let base64QRCode = GrantLoginWithQrCodeHandlerSDKMock.Configuration().generatedBase64QRCode
-        let image = base64QRCode.data(using: .utf8).flatMap { UIImage(qrCodeData: $0) } ?? UIImage()
-        return QRCodeLoginScreenViewModel.mock(state: .displayQR(image))
-    }()
+    static let showingStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayQR(LinkNewDeviceServiceMock.mockQRCodeImage))
     
     // Displaying codes
     static let deviceCodeStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayCode(.deviceCode("12")))

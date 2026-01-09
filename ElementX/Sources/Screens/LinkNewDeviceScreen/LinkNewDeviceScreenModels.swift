@@ -16,6 +16,8 @@ enum LinkNewDeviceScreenViewModelAction {
 struct LinkNewDeviceScreenViewState: BindableState {
     enum Mode: Equatable { case loading, readyToLink(isGeneratingCode: Bool), notSupported }
     var mode: Mode = .loading
+    
+    let showLinkDesktopComputerButton: Bool
 }
 
 enum LinkNewDeviceScreenViewAction {
