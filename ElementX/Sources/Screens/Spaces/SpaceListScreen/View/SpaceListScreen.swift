@@ -40,11 +40,10 @@ struct SpaceListScreen: View {
     }
     
     private var emptyState: some View {
-        FullscreenDialog(horizontalPadding: 40) {
+        FullscreenDialog(horizontalPadding: 24) {
             TitleAndIcon(title: L10n.screenSpaceListEmptyStateTitle,
                          icon: \.spaceSolid,
-                         iconStyle: .defaultSolid,
-                         button: .init(title: L10n.actionLearnMore) { })
+                         iconStyle: .defaultSolid)
         } bottomContent: {
             Button(L10n.actionCreateSpace) {
                 context.send(viewAction: .createSpace)
