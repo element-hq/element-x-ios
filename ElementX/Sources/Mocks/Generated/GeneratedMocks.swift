@@ -5047,15 +5047,15 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - recentlyVisitedRooms
 
-    var recentlyVisitedRoomsUnderlyingCallsCount = 0
-    var recentlyVisitedRoomsCallsCount: Int {
+    var recentlyVisitedRoomsFilterUnderlyingCallsCount = 0
+    var recentlyVisitedRoomsFilterCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return recentlyVisitedRoomsUnderlyingCallsCount
+                return recentlyVisitedRoomsFilterUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = recentlyVisitedRoomsUnderlyingCallsCount
+                    returnValue = recentlyVisitedRoomsFilterUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5063,27 +5063,27 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                recentlyVisitedRoomsUnderlyingCallsCount = newValue
+                recentlyVisitedRoomsFilterUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    recentlyVisitedRoomsUnderlyingCallsCount = newValue
+                    recentlyVisitedRoomsFilterUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var recentlyVisitedRoomsCalled: Bool {
-        return recentlyVisitedRoomsCallsCount > 0
+    var recentlyVisitedRoomsFilterCalled: Bool {
+        return recentlyVisitedRoomsFilterCallsCount > 0
     }
 
-    var recentlyVisitedRoomsUnderlyingReturnValue: Result<[String], ClientProxyError>!
-    var recentlyVisitedRoomsReturnValue: Result<[String], ClientProxyError>! {
+    var recentlyVisitedRoomsFilterUnderlyingReturnValue: [JoinedRoomProxyProtocol]!
+    var recentlyVisitedRoomsFilterReturnValue: [JoinedRoomProxyProtocol]! {
         get {
             if Thread.isMainThread {
-                return recentlyVisitedRoomsUnderlyingReturnValue
+                return recentlyVisitedRoomsFilterUnderlyingReturnValue
             } else {
-                var returnValue: Result<[String], ClientProxyError>? = nil
+                var returnValue: [JoinedRoomProxyProtocol]? = nil
                 DispatchQueue.main.sync {
-                    returnValue = recentlyVisitedRoomsUnderlyingReturnValue
+                    returnValue = recentlyVisitedRoomsFilterUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -5091,22 +5091,22 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                recentlyVisitedRoomsUnderlyingReturnValue = newValue
+                recentlyVisitedRoomsFilterUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    recentlyVisitedRoomsUnderlyingReturnValue = newValue
+                    recentlyVisitedRoomsFilterUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var recentlyVisitedRoomsClosure: (() async -> Result<[String], ClientProxyError>)?
+    var recentlyVisitedRoomsFilterClosure: (((JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol])?
 
-    func recentlyVisitedRooms() async -> Result<[String], ClientProxyError> {
-        recentlyVisitedRoomsCallsCount += 1
-        if let recentlyVisitedRoomsClosure = recentlyVisitedRoomsClosure {
-            return await recentlyVisitedRoomsClosure()
+    func recentlyVisitedRooms(filter: (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol] {
+        recentlyVisitedRoomsFilterCallsCount += 1
+        if let recentlyVisitedRoomsFilterClosure = recentlyVisitedRoomsFilterClosure {
+            return await recentlyVisitedRoomsFilterClosure(filter)
         } else {
-            return recentlyVisitedRoomsReturnValue
+            return recentlyVisitedRoomsFilterReturnValue
         }
     }
     //MARK: - recentConversationCounterparts
@@ -17058,6 +17058,76 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             return await joinedParentsChildIDClosure(childID)
         } else {
             return joinedParentsChildIDReturnValue
+        }
+    }
+    //MARK: - addChild
+
+    var addChildToUnderlyingCallsCount = 0
+    var addChildToCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addChildToUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addChildToUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addChildToUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addChildToUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addChildToCalled: Bool {
+        return addChildToCallsCount > 0
+    }
+    var addChildToReceivedArguments: (childID: String, spaceID: String)?
+    var addChildToReceivedInvocations: [(childID: String, spaceID: String)] = []
+
+    var addChildToUnderlyingReturnValue: Result<Void, SpaceServiceProxyError>!
+    var addChildToReturnValue: Result<Void, SpaceServiceProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return addChildToUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, SpaceServiceProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addChildToUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addChildToUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addChildToUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addChildToClosure: ((String, String) async -> Result<Void, SpaceServiceProxyError>)?
+
+    func addChild(_ childID: String, to spaceID: String) async -> Result<Void, SpaceServiceProxyError> {
+        addChildToCallsCount += 1
+        addChildToReceivedArguments = (childID: childID, spaceID: spaceID)
+        DispatchQueue.main.async {
+            self.addChildToReceivedInvocations.append((childID: childID, spaceID: spaceID))
+        }
+        if let addChildToClosure = addChildToClosure {
+            return await addChildToClosure(childID, spaceID)
+        } else {
+            return addChildToReturnValue
         }
     }
 }

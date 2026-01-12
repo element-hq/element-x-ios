@@ -93,7 +93,7 @@ extension ClientProxyMock {
         unignoreUserReturnValue = .success(())
         
         trackRecentlyVisitedRoomReturnValue = .success(())
-        recentlyVisitedRoomsReturnValue = .success([])
+        recentlyVisitedRoomsFilterReturnValue = []
         recentConversationCounterpartsReturnValue = []
         
         let mediaLoader = MediaLoaderMock()

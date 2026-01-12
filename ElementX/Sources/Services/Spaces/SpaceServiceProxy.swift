@@ -67,6 +67,15 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
+    func addChild(_ childID: String, to spaceID: String) async -> Result<Void, SpaceServiceProxyError> {
+        do {
+            return try await .success(spaceService.addChildToSpace(childId: childID, spaceId: spaceID))
+        } catch {
+            MXLog.error("Failed to add child \(childID) to space \(spaceID)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func handleUpdates(_ updates: [SpaceListUpdate]) {

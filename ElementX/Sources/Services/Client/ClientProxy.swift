@@ -870,20 +870,35 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func recentlyVisitedRooms() async -> Result<[String], ClientProxyError> {
-        do {
-            let result = try await client.getRecentlyVisitedRooms()
-            return .success(result)
-        } catch {
-            MXLog.error("Failed retrieving recently visited rooms with error: \(error)")
-            return .failure(.sdkError(error))
+    func recentlyVisitedRooms(filter: (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol] {
+        let maxResultsToReturn = 5
+        
+        guard case let .success(roomIdentifiers) = await recentlyVisitedRoomIDs() else {
+            return []
         }
+        
+        var rooms: [JoinedRoomProxyProtocol] = []
+        
+        for roomID in roomIdentifiers {
+            guard case let .joined(roomProxy) = await roomForIdentifier(roomID),
+                  filter(roomProxy) else {
+                continue
+            }
+            
+            rooms.append(roomProxy)
+            
+            if rooms.count >= maxResultsToReturn {
+                return rooms
+            }
+        }
+        
+        return rooms
     }
     
     func recentConversationCounterparts() async -> [UserProfileProxy] {
         let maxResultsToReturn = 5
         
-        guard case let .success(roomIdentifiers) = await recentlyVisitedRooms() else {
+        guard case let .success(roomIdentifiers) = await recentlyVisitedRoomIDs() else {
             return []
         }
         
@@ -907,6 +922,16 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         return users.elements
+    }
+    
+    private func recentlyVisitedRoomIDs() async -> Result<[String], ClientProxyError> {
+        do {
+            let result = try await client.getRecentlyVisitedRooms()
+            return .success(result)
+        } catch {
+            MXLog.error("Failed retrieving recently visited rooms with error: \(error)")
+            return .failure(.sdkError(error))
+        }
     }
     
     // MARK: Moderation & Safety
