@@ -482,7 +482,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
-                                                  isEncrypted: isSpace ? false : accessType.isEncrypted,
+                                                  isEncrypted: accessType.isEncrypted,
                                                   isDirect: false,
                                                   visibility: accessType.visibility,
                                                   preset: accessType.preset,
@@ -490,7 +490,7 @@ class ClientProxy: ClientProxyProtocol {
                                                   avatar: avatarURL?.absoluteString,
                                                   powerLevelContentOverride: accessType == .askToJoin ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
                                                   joinRuleOverride: accessType.joinRuleOverride,
-                                                  historyVisibilityOverride: isSpace ? nil : accessType.historyVisibilityOverride,
+                                                  historyVisibilityOverride: accessType.historyVisibilityOverride,
                                                   // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
                                                   canonicalAlias: aliasLocalPart,
                                                   isSpace: isSpace)
