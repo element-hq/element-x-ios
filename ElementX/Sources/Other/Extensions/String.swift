@@ -125,10 +125,11 @@ extension String {
             link.insert(contentsOf: "https://", at: link.startIndex)
         }
         
-        // Don't include punctuation characters at the end of links
-        // e.g `https://element.io/blog:` <- which is a valid link but the wrong place
+        // Don't include punctuation characters at the end of links but keep
+        // closing brackets as per https://github.com/element-hq/element-x-ios/issues/4946
+        // e.g `https://element.io/blog:` which is a valid link but the wrong place
         while !link.isEmpty,
-              link.rangeOfCharacter(from: .punctuationCharacters, options: .backwards)?.upperBound == link.endIndex {
+              link.rangeOfCharacter(from: .punctuationWithoutClosingBracketCharacters, options: .backwards)?.upperBound == link.endIndex {
             link = String(link.dropLast())
         }
         
