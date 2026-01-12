@@ -114,6 +114,18 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(link, "https://matrix.org")
     }
     
+    func testMailToLinks() {
+        let plainString = "Linking to email addresses like stefan@matrix.org should work as well"
+        
+        guard let attributedString = attributedStringBuilder.fromPlain(plainString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        let link = attributedString.runs.first { $0.link != nil }?.link
+        XCTAssertEqual(link, "mailto:stefan@matrix.org")
+    }
+    
     func testRenderHTMLStringWithLinkInHeader() {
         let h1HTMLString = "<h1><a href=\"https://matrix.org/\">Matrix.org</a></h1>"
         let h2HTMLString = "<h2><a href=\"https://matrix.org/\">Matrix.org</a></h2>"

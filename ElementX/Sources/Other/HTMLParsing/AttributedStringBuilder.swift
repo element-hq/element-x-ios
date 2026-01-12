@@ -330,12 +330,17 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         })
         
         matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string).compactMap { match in
-            guard let matchRange = Range(match.range, in: string) else {
+            guard let matchRange = Range(match.range, in: string), let url = match.url else {
                 return nil
             }
             
-            let link = String(string[matchRange]).asSanitizedLink
-            return TextParsingMatch(type: .link(urlString: link), range: match.range)
+            // If the NSDataDetector found a hyperlink then sanitise it
+            if url.scheme?.contains("http") ?? false {
+                // Use the underlying string so it gets an `https` scheme if it didn't have any
+                return TextParsingMatch(type: .link(urlString: String(string[matchRange]).asSanitizedLink), range: match.range)
+            } else { // otherwise use it as it is e.g. mailto: (https://github.com/element-hq/element-x-ios/issues/4913)
+                return TextParsingMatch(type: .link(urlString: url.absoluteString), range: match.range)
+            }
         })
         
         matches.append(contentsOf: MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string).map { match in
