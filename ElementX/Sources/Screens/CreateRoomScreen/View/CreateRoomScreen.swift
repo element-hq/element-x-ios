@@ -246,9 +246,17 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                          appSettings: ServiceLocator.shared.settings)
     }()
     
+    static let spaceViewModel = {
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        return CreateRoomScreenViewModel(isSpace: true,
+                                         userSession: userSession,
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
+    }()
+    
     static let publicRoomViewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
-        ServiceLocator.shared.settings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
@@ -258,9 +266,22 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         return viewModel
     }()
     
+    static let askToJoinViewModel = {
+        AppSettings.resetAllSettings()
+        let appSettings = AppSettings()
+        appSettings.knockingEnabled = true
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
+        let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: appSettings)
+        viewModel.context.selectedAccessType = .askToJoin
+        return viewModel
+    }()
+    
     static let publicRoomInvalidAliasViewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
-        ServiceLocator.shared.settings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
@@ -275,7 +296,6 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         let clientProxy = ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))
         clientProxy.isAliasAvailableReturnValue = .success(false)
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        ServiceLocator.shared.settings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
@@ -293,9 +313,19 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Create Room")
         
         NavigationStack {
+            CreateRoomScreen(context: spaceViewModel.context)
+        }
+        .previewDisplayName("Create Space")
+        
+        NavigationStack {
             CreateRoomScreen(context: publicRoomViewModel.context)
         }
         .previewDisplayName("Create Public Room")
+        
+        NavigationStack {
+            CreateRoomScreen(context: askToJoinViewModel.context)
+        }
+        .previewDisplayName("Create Knockable Room")
         
         NavigationStack {
             CreateRoomScreen(context: publicRoomInvalidAliasViewModel.context)
