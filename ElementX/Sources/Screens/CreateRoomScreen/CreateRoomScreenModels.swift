@@ -23,12 +23,13 @@ enum CreateRoomScreenViewModelAction {
 }
 
 struct CreateRoomScreenViewState: BindableState {
+    let isSpace: Bool
     var roomName: String
     let serverName: String
     let isKnockingFeatureEnabled: Bool
     var aliasLocalPart: String
     var bindings: CreateRoomScreenViewStateBindings
-    var avatarURL: URL?
+    var avatarMediaInfo: MediaInfo?
     var canCreateRoom: Bool {
         !roomName.isEmpty && aliasErrors.isEmpty
     }
@@ -43,12 +44,19 @@ struct CreateRoomScreenViewState: BindableState {
             nil
         }
     }
+    
+    var availableAccessTypes: [CreateRoomAccessType] {
+        var availableTypes = CreateRoomAccessType.allCases
+        if !isKnockingFeatureEnabled {
+            availableTypes.removeAll { $0 == .askToJoin }
+        }
+        return availableTypes
+    }
 }
 
 struct CreateRoomScreenViewStateBindings {
     var roomTopic: String
-    var isRoomPrivate: Bool
-    var isKnockingOnly: Bool
+    var selectedAccessType: CreateRoomAccessType
     var showAttachmentConfirmationDialog = false
     
     /// Information describing the currently displayed alert.

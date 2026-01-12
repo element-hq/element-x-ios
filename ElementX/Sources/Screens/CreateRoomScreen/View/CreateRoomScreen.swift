@@ -39,17 +39,15 @@ struct CreateRoomScreen: View {
         Form {
             roomSection
             topicSection
-            securitySection
-            if context.viewState.isKnockingFeatureEnabled,
-               !context.isRoomPrivate {
-                roomAccessSection
+            roomAccessSection
+            if !context.selectedAccessType.isPrivate {
                 roomAliasSection
             }
         }
         .compoundList()
         .track(screen: .CreateRoom)
         .scrollDismissesKeyboard(.immediately)
-        .navigationTitle(L10n.screenCreateRoomTitle)
+        .navigationTitle(context.viewState.isSpace ? L10n.screenCreateRoomNewSpaceTitle : L10n.screenCreateRoomNewRoomTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
@@ -60,15 +58,20 @@ struct CreateRoomScreen: View {
         Section {
             HStack(alignment: .center, spacing: 16) {
                 roomAvatarButton
+                let nameLabel = if #available(iOS 26, *) {
+                    L10n.commonName
+                } else {
+                    L10n.commonName.uppercased()
+                }
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
+                    Text(nameLabel)
                         .padding(.leading, ListRowPadding.horizontal)
                         .compoundListSectionHeader()
                     
-                    TextField(L10n.screenCreateRoomRoomNameLabel,
+                    TextField(L10n.commonName,
                               text: roomNameBinding,
-                              prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textSecondary),
+                              prompt: Text(L10n.screenCreateRoomNamePlaceholder).foregroundColor(.compound.textSecondary),
                               axis: .horizontal)
                         .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textPrimary)
@@ -90,7 +93,7 @@ struct CreateRoomScreen: View {
             focus = nil
             context.showAttachmentConfirmationDialog = true
         } label: {
-            if let url = context.viewState.avatarURL {
+            if let url = context.viewState.avatarMediaInfo?.thumbnailURL {
                 AsyncImage(url: url) { image in
                     image
                         .resizable()
@@ -118,7 +121,7 @@ struct CreateRoomScreen: View {
             }
             .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.mediaPicker)
             
-            if context.viewState.avatarURL != nil {
+            if context.viewState.avatarMediaInfo?.thumbnailURL != nil {
                 Button(L10n.actionRemove, role: .destructive) {
                     context.send(viewAction: .removeImage)
                 }
@@ -128,7 +131,7 @@ struct CreateRoomScreen: View {
     
     private var topicSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.commonTopicPlaceholder),
+            ListRow(label: .plain(title: L10n.screenCreateRoomTopicPlaceholder),
                     kind: .textField(text: $context.roomTopic, axis: .vertical))
                 .lineLimit(3, reservesSpace: false)
                 .focused($focus, equals: .topic)
@@ -139,34 +142,16 @@ struct CreateRoomScreen: View {
         }
     }
     
-    private var securitySection: some View {
-        Section {
-            ListRow(label: .default(title: L10n.screenCreateRoomPrivateOptionTitle,
-                                    description: L10n.screenCreateRoomPrivateOptionDescription,
-                                    icon: \.lock,
-                                    iconAlignment: .top),
-                    kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
-            ListRow(label: .default(title: L10n.screenCreateRoomPublicOptionTitle,
-                                    description: L10n.screenCreateRoomPublicOptionDescription,
-                                    icon: \.public,
-                                    iconAlignment: .top),
-                    kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
-        } header: {
-            Text(L10n.screenCreateRoomRoomVisibilitySectionTitle)
-                .compoundListSectionHeader()
-        }
-    }
-    
     private var roomAccessSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
-                                  description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
-                    kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
-            ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle,
-                                  description: L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription),
-                    kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
+            ForEach(context.viewState.availableAccessTypes, id: \.self) { accessType in
+                CreateRoomAccessRow(access: accessType,
+                                    isSelected: context.selectedAccessType == accessType) {
+                    context.selectedAccessType = accessType
+                }
+            }
         } header: {
-            Text(L10n.screenCreateRoomRoomAccessSectionHeader)
+            Text(L10n.screenCreateRoomRoomAccessSectionTitle)
                 .compoundListSectionHeader()
         }
     }
@@ -207,48 +192,129 @@ struct CreateRoomScreen: View {
     }
 }
 
+private struct CreateRoomAccessRow: View {
+    let access: CreateRoomAccessType
+    let isSelected: Bool
+    let onSelection: () -> Void
+    
+    var title: String {
+        switch access {
+        case .public:
+            L10n.screenCreateRoomRoomAccessSectionPublicOptionTitle
+        case .askToJoin:
+            L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle
+        case .private:
+            L10n.screenCreateRoomRoomAccessSectionPrivateOptionTitle
+        }
+    }
+    
+    var description: String {
+        switch access {
+        case .public:
+            L10n.screenCreateRoomRoomAccessSectionPublicOptionDescription
+        case .askToJoin:
+            L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription
+        case .private:
+            L10n.screenCreateRoomRoomAccessSectionPrivateOptionDescription
+        }
+    }
+    
+    var icon: KeyPath<CompoundIcons, Image> {
+        switch access {
+        case .public:
+            \.public
+        case .askToJoin:
+            \.userAdd
+        case .private:
+            \.lock
+        }
+    }
+    
+    var body: some View {
+        ListRow(label: .default(title: title,
+                                description: description,
+                                icon: icon,
+                                iconAlignment: .top),
+                kind: .selection(isSelected: isSelected,
+                                 action: onSelection))
+    }
+}
+
 // MARK: - Previews
 
 struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
+        AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
-        return CreateRoomScreenViewModel(userSession: userSession,
-                                         initialParameters: .init(),
+        return CreateRoomScreenViewModel(isSpace: false,
+                                         userSession: userSession,
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
+    }()
+    
+    static let spaceViewModel = {
+        AppSettings.resetAllSettings()
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        return CreateRoomScreenViewModel(isSpace: true,
+                                         userSession: userSession,
                                          analytics: ServiceLocator.shared.analytics,
                                          userIndicatorController: UserIndicatorControllerMock(),
                                          appSettings: ServiceLocator.shared.settings)
     }()
     
     static let publicRoomViewModel = {
+        AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
-        ServiceLocator.shared.settings.knockingEnabled = true
-        return CreateRoomScreenViewModel(userSession: userSession,
-                                         initialParameters: .init(isRoomPrivate: false),
-                                         analytics: ServiceLocator.shared.analytics,
-                                         userIndicatorController: UserIndicatorControllerMock(),
-                                         appSettings: ServiceLocator.shared.settings)
+        let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: ServiceLocator.shared.settings)
+        viewModel.context.selectedAccessType = .public
+        return viewModel
+    }()
+    
+    static let askToJoinViewModel = {
+        AppSettings.resetAllSettings()
+        let appSettings = AppSettings()
+        appSettings.knockingEnabled = true
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
+        let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: appSettings)
+        viewModel.context.selectedAccessType = .askToJoin
+        return viewModel
     }()
     
     static let publicRoomInvalidAliasViewModel = {
+        AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
-        ServiceLocator.shared.settings.knockingEnabled = true
-        return CreateRoomScreenViewModel(userSession: userSession,
-                                         initialParameters: .init(isRoomPrivate: false, aliasLocalPart: "#:"),
-                                         analytics: ServiceLocator.shared.analytics,
-                                         userIndicatorController: UserIndicatorControllerMock(),
-                                         appSettings: ServiceLocator.shared.settings)
+        let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: ServiceLocator.shared.settings)
+        viewModel.context.selectedAccessType = .public
+        viewModel.context.send(viewAction: .updateAliasLocalPart("#:"))
+        return viewModel
     }()
     
     static let publicRoomExistingAliasViewModel = {
+        AppSettings.resetAllSettings()
         let clientProxy = ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))
         clientProxy.isAliasAvailableReturnValue = .success(false)
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        ServiceLocator.shared.settings.knockingEnabled = true
-        return CreateRoomScreenViewModel(userSession: userSession,
-                                         initialParameters: .init(isRoomPrivate: false, aliasLocalPart: "existing"),
-                                         analytics: ServiceLocator.shared.analytics,
-                                         userIndicatorController: UserIndicatorControllerMock(),
-                                         appSettings: ServiceLocator.shared.settings)
+        let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: ServiceLocator.shared.settings)
+        viewModel.context.selectedAccessType = .public
+        viewModel.context.send(viewAction: .updateAliasLocalPart("existing"))
+        return viewModel
     }()
 
     static var previews: some View {
@@ -258,9 +324,19 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Create Room")
         
         NavigationStack {
+            CreateRoomScreen(context: spaceViewModel.context)
+        }
+        .previewDisplayName("Create Space")
+        
+        NavigationStack {
             CreateRoomScreen(context: publicRoomViewModel.context)
         }
         .previewDisplayName("Create Public Room")
+        
+        NavigationStack {
+            CreateRoomScreen(context: askToJoinViewModel.context)
+        }
+        .previewDisplayName("Create Knockable Room")
         
         NavigationStack {
             CreateRoomScreen(context: publicRoomInvalidAliasViewModel.context)
