@@ -445,7 +445,7 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
         }
         
         let source: JoinRoomScreenSource = if isSpace {
-            .space(SpaceRoomProxyMock(mode: mode))
+            .space(SpaceServiceRoomMock(mode: mode))
         } else {
             .generic(roomID: "1", via: [])
         }

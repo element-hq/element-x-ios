@@ -13,7 +13,7 @@ import XCTest
 
 @MainActor
 class SpaceListScreenViewModelTests: XCTestCase {
-    var topLevelSpacesSubject: CurrentValueSubject<[SpaceRoomProxyProtocol], Never>!
+    var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoomProtocol], Never>!
     var spaceServiceProxy: SpaceServiceProxyMock!
     var appSettings: AppSettings!
     
@@ -47,7 +47,7 @@ class SpaceListScreenViewModelTests: XCTestCase {
         
         deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.count == 1 }
         topLevelSpacesSubject.send([
-            SpaceRoomProxyMock(.init(isSpace: true))
+            SpaceServiceRoomMock(.init(isSpace: true))
         ])
         try await deferred.fulfill()
         XCTAssertEqual(context.viewState.topLevelSpaces.count, 1)
@@ -97,15 +97,15 @@ class SpaceListScreenViewModelTests: XCTestCase {
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         topLevelSpacesSubject = .init([
-            SpaceRoomProxyMock(.init(id: "space1", isSpace: true)),
-            SpaceRoomProxyMock(.init(id: "space2", isSpace: true)),
-            SpaceRoomProxyMock(.init(id: "space3", isSpace: true))
+            SpaceServiceRoomMock(.init(id: "space1", isSpace: true)),
+            SpaceServiceRoomMock(.init(id: "space2", isSpace: true)),
+            SpaceServiceRoomMock(.init(id: "space3", isSpace: true))
         ])
         spaceServiceProxy = SpaceServiceProxyMock(.init())
         spaceServiceProxy.topLevelSpacesPublisher = topLevelSpacesSubject.asCurrentValuePublisher()
         spaceServiceProxy.spaceRoomListSpaceIDClosure = { [topLevelSpacesSubject] spaceID in
-            guard let spaceRoomProxy = topLevelSpacesSubject?.value.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
-            return .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: spaceRoomProxy)))
+            guard let spaceServiceRoom = topLevelSpacesSubject?.value.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
+            return .success(SpaceRoomListProxyMock(.init(spaceServiceRoom: spaceServiceRoom)))
         }
         clientProxy.spaceService = spaceServiceProxy
         

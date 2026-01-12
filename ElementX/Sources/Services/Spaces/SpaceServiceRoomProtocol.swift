@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum SpaceRoomProxyVisibility: Equatable {
+enum SpaceServiceRoomVisibility: Equatable {
     case `public`
     case `private`
     case restricted
@@ -17,7 +17,7 @@ enum SpaceRoomProxyVisibility: Equatable {
 }
 
 // sourcery: AutoMockable
-protocol SpaceRoomProxyProtocol {
+protocol SpaceServiceRoomProtocol {
     var id: String { get }
     var name: String { get }
     var rawName: String? { get }
@@ -39,7 +39,7 @@ protocol SpaceRoomProxyProtocol {
     var via: [String] { get }
 }
 
-extension SpaceRoomProxyProtocol {
+extension SpaceServiceRoomProtocol {
     var avatar: RoomAvatar {
         if isSpace {
             .space(id: id, name: name, avatarURL: avatarURL)
@@ -50,7 +50,7 @@ extension SpaceRoomProxyProtocol {
         }
     }
     
-    var visibility: SpaceRoomProxyVisibility? {
+    var visibility: SpaceServiceRoomVisibility? {
         switch joinRule {
         case .public:
             .public

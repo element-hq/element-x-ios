@@ -17,8 +17,8 @@ enum SpaceRoomListProxyError: Error {
 protocol SpaceRoomListProxyProtocol {
     var id: String { get }
     
-    var spaceRoomProxyPublisher: CurrentValuePublisher<SpaceRoomProxyProtocol, Never> { get }
-    var spaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> { get }
+    var spaceServiceRoomPublisher: CurrentValuePublisher<SpaceServiceRoomProtocol, Never> { get }
+    var spaceRoomsPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> { get }
     var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> { get }
     
     func paginate() async

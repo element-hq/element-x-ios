@@ -172,8 +172,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         switch source {
         case .generic(let roomID, _):
             await updateGenericRoomDetails(roomID: roomID, roomInfo: roomInfo, inviter: inviter)
-        case .space(let spaceRoomProxy):
-            await updateSpaceRoomDetails(spaceRoomProxy: spaceRoomProxy, inviter: inviter)
+        case .space(let spaceServiceRoom):
+            await updateSpaceRoomDetails(spaceServiceRoom: spaceServiceRoom, inviter: inviter)
         }
         await updateMode()
     }
@@ -200,18 +200,18 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                       spaceVisibility: nil)
     }
     
-    private func updateSpaceRoomDetails(spaceRoomProxy: SpaceRoomProxyProtocol, inviter: RoomInviterDetails?) async {
-        state.roomDetails = JoinRoomScreenRoomDetails(name: spaceRoomProxy.name,
-                                                      topic: spaceRoomProxy.topic,
-                                                      canonicalAlias: spaceRoomProxy.canonicalAlias,
-                                                      avatar: spaceRoomProxy.avatar,
-                                                      memberCount: spaceRoomProxy.joinedMembersCount,
-                                                      heroes: spaceRoomProxy.heroes,
+    private func updateSpaceRoomDetails(spaceServiceRoom: SpaceServiceRoomProtocol, inviter: RoomInviterDetails?) async {
+        state.roomDetails = JoinRoomScreenRoomDetails(name: spaceServiceRoom.name,
+                                                      topic: spaceServiceRoom.topic,
+                                                      canonicalAlias: spaceServiceRoom.canonicalAlias,
+                                                      avatar: spaceServiceRoom.avatar,
+                                                      memberCount: spaceServiceRoom.joinedMembersCount,
+                                                      heroes: spaceServiceRoom.heroes,
                                                       inviter: inviter,
-                                                      isDirect: spaceRoomProxy.isDirect,
-                                                      isSpace: spaceRoomProxy.isSpace,
-                                                      childrenCount: spaceRoomProxy.childrenCount,
-                                                      spaceVisibility: spaceRoomProxy.visibility)
+                                                      isDirect: spaceServiceRoom.isDirect,
+                                                      isSpace: spaceServiceRoom.isSpace,
+                                                      childrenCount: spaceServiceRoom.childrenCount,
+                                                      spaceVisibility: spaceServiceRoom.visibility)
     }
     
     private func updateMode() async {
@@ -225,16 +225,16 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             return
         }
         
-        if case .space(let spaceRoomProxy) = source {
-            switch spaceRoomProxy.state {
+        if case .space(let spaceServiceRoom) = source {
+            switch spaceServiceRoom.state {
             case .invited:
-                state.mode = .invited(isDM: spaceRoomProxy.isDirect == true && spaceRoomProxy.joinedMembersCount == 1)
+                state.mode = .invited(isDM: spaceServiceRoom.isDirect == true && spaceServiceRoom.joinedMembersCount == 1)
             case .knocked:
                 state.mode = .knocked
             case .banned:
                 state.mode = .banned(sender: nil, reason: nil)
             default:
-                switch spaceRoomProxy.joinRule {
+                switch spaceServiceRoom.joinRule {
                 case .private, .invite:
                     state.mode = .inviteRequired
                 case .knock, .knockRestricted:

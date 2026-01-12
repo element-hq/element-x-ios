@@ -37,7 +37,7 @@ enum ManageAuthorizedSpacesScreenViewAction {
 }
 
 struct AuthorizedSpacesSelection {
-    let joinedSpaces: [SpaceRoomProxyProtocol]
+    let joinedSpaces: [SpaceServiceRoomProtocol]
     let unknownSpacesIDs: [String]
     let initialSelectedIDs: Set<String>
     let selectedIDs: PassthroughSubject<Set<String>, Never> = .init()

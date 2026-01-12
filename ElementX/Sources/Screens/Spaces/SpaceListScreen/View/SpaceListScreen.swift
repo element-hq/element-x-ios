@@ -85,9 +85,9 @@ struct SpaceListScreen: View {
     }
     
     private var spaces: some View {
-        ForEach(context.viewState.topLevelSpaces, id: \.id) { spaceRoomProxy in
-            SpaceRoomCell(spaceRoomProxy: spaceRoomProxy,
-                          isSelected: spaceRoomProxy.id == context.viewState.selectedSpaceID,
+        ForEach(context.viewState.topLevelSpaces, id: \.id) { spaceServiceRoom in
+            SpaceRoomCell(spaceServiceRoom: spaceServiceRoom,
+                          isSelected: spaceServiceRoom.id == context.viewState.selectedSpaceID,
                           mediaProvider: context.mediaProvider) { action in
                 context.send(viewAction: .spaceAction(action))
             }

@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-class SpaceRoomProxy: SpaceRoomProxyProtocol {
+class SpaceServiceRoom: SpaceServiceRoomProtocol {
     private let spaceRoom: SpaceRoom
     
     init(spaceRoom: SpaceRoom) {

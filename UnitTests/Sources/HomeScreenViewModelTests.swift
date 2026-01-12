@@ -311,7 +311,7 @@ class HomeScreenViewModelTests: XCTestCase {
         XCTAssertEqual(invitedRoomIDs.count, 2)
         
         let deferred = deferFulfillment(viewModel.actions) {
-            $0 == .presentSpace(SpaceRoomListProxyMock(.init(spaceRoomProxy: SpaceRoomProxyMock(.init(id: invitedRoomIDs[0], isSpace: true)))))
+            $0 == .presentSpace(SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(id: invitedRoomIDs[0], isSpace: true)))))
         }
         context.send(viewAction: .acceptInvite(roomIdentifier: invitedRoomIDs[0]))
         try await deferred.fulfill()
@@ -408,7 +408,7 @@ class HomeScreenViewModelTests: XCTestCase {
             
             let spaceServiceProxy = SpaceServiceProxyMock(.init())
             spaceServiceProxy.spaceRoomListSpaceIDClosure = { spaceID in
-                .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: SpaceRoomProxyMock(.init(id: spaceID, isSpace: true)))))
+                .success(SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(id: spaceID, isSpace: true)))))
             }
             clientProxy.underlyingSpaceService = spaceServiceProxy
         case nil:

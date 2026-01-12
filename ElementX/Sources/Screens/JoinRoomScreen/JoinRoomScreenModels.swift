@@ -49,7 +49,7 @@ struct JoinRoomScreenRoomDetails {
     
     let isSpace: Bool?
     let childrenCount: Int?
-    let spaceVisibility: SpaceRoomProxyVisibility?
+    let spaceVisibility: SpaceServiceRoomVisibility?
 }
 
 struct JoinRoomScreenViewState: BindableState {

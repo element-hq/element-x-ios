@@ -77,7 +77,7 @@ struct ManageAuthorizedSpacesScreen: View {
         }
     }
     
-    private func avatar(space: SpaceRoomProxyProtocol) -> some View {
+    private func avatar(space: SpaceServiceRoomProtocol) -> some View {
         RoomAvatarImage(avatar: space.avatar,
                         avatarSize: .room(on: .authorizedSpaces),
                         mediaProvider: context.mediaProvider)

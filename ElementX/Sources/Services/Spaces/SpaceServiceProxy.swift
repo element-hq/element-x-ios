@@ -14,8 +14,8 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
     private let spaceService: SpaceServiceProtocol
     
     private var topLevelSpacesHandle: TaskHandle?
-    private let spacesSubject = CurrentValueSubject<[SpaceRoomProxyProtocol], Never>([])
-    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
+    private let spacesSubject = CurrentValueSubject<[SpaceServiceRoomProtocol], Never>([])
+    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> {
         spacesSubject.asCurrentValuePublisher()
     }
     
@@ -40,9 +40,9 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
-    func spaceForIdentifier(spaceID: String) async -> Result<SpaceRoomProxyProtocol?, SpaceServiceProxyError> {
+    func spaceForIdentifier(spaceID: String) async -> Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError> {
         do {
-            return try await .success(spaceService.getSpaceRoom(roomId: spaceID).map(SpaceRoomProxy.init))
+            return try await .success(spaceService.getSpaceRoom(roomId: spaceID).map(SpaceServiceRoom.init))
         } catch {
             MXLog.error("Failed getting space room for \(spaceID): \(error)")
             return .failure(.sdkError(error))
@@ -58,9 +58,9 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
-    func joinedParents(childID: String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError> {
+    func joinedParents(childID: String) async -> Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError> {
         do {
-            return try await .success(spaceService.joinedParentsOfChild(childId: childID).map(SpaceRoomProxy.init))
+            return try await .success(spaceService.joinedParentsOfChild(childId: childID).map(SpaceServiceRoom.init))
         } catch {
             MXLog.error("Failed to get joined parents for \(childID): \(error)")
             return .failure(.sdkError(error))
@@ -75,27 +75,27 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         for update in updates {
             switch update {
             case .append(let spaceRooms):
-                spaces.append(contentsOf: spaceRooms.map(SpaceRoomProxy.init))
+                spaces.append(contentsOf: spaceRooms.map(SpaceServiceRoom.init))
             case .clear:
                 spaces.removeAll()
             case .pushFront(let spaceRoom):
-                spaces.insert(SpaceRoomProxy(spaceRoom: spaceRoom), at: 0)
+                spaces.insert(SpaceServiceRoom(spaceRoom: spaceRoom), at: 0)
             case .pushBack(let spaceRoom):
-                spaces.append(SpaceRoomProxy(spaceRoom: spaceRoom))
+                spaces.append(SpaceServiceRoom(spaceRoom: spaceRoom))
             case .popFront:
                 spaces.removeFirst()
             case .popBack:
                 spaces.removeLast()
             case .insert(let index, let spaceRoom):
-                spaces.insert(SpaceRoomProxy(spaceRoom: spaceRoom), at: Int(index))
+                spaces.insert(SpaceServiceRoom(spaceRoom: spaceRoom), at: Int(index))
             case .set(let index, let spaceRoom):
-                spaces[Int(index)] = SpaceRoomProxy(spaceRoom: spaceRoom)
+                spaces[Int(index)] = SpaceServiceRoom(spaceRoom: spaceRoom)
             case .remove(let index):
                 spaces.remove(at: Int(index))
             case .truncate(let length):
                 spaces.removeSubrange(Int(length)..<spaces.count)
             case .reset(let spaceRooms):
-                spaces = spaceRooms.map(SpaceRoomProxy.init)
+                spaces = spaceRooms.map(SpaceServiceRoom.init)
             }
         }
         

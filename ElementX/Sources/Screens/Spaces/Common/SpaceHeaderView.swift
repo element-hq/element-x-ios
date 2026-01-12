@@ -10,36 +10,36 @@ import Compound
 import SwiftUI
 
 struct SpaceHeaderView: View {
-    let spaceRoomProxy: SpaceRoomProxyProtocol
+    let spaceServiceRoom: SpaceServiceRoomProtocol
     let mediaProvider: MediaProviderProtocol?
     
     @State private var isPresentingTopic = false
     
     var body: some View {
         VStack(spacing: 16) {
-            RoomAvatarImage(avatar: spaceRoomProxy.avatar,
+            RoomAvatarImage(avatar: spaceServiceRoom.avatar,
                             avatarSize: .room(on: .spaceHeader),
                             mediaProvider: mediaProvider)
                 .accessibilityHidden(true)
             
             VStack(spacing: 8) {
-                Text(spaceRoomProxy.name)
+                Text(spaceServiceRoom.name)
                     .font(.compound.headingLGBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
-                if let alias = spaceRoomProxy.canonicalAlias {
+                if let alias = spaceServiceRoom.canonicalAlias {
                     CopyTextButton(content: alias)
                 }
                 
                 spaceDetails
                 
-                JoinedMembersBadgeView(heroes: spaceRoomProxy.heroes,
-                                       joinedCount: spaceRoomProxy.joinedMembersCount,
+                JoinedMembersBadgeView(heroes: spaceServiceRoom.heroes,
+                                       joinedCount: spaceServiceRoom.joinedMembersCount,
                                        mediaProvider: mediaProvider)
             }
             
-            if let topic = spaceRoomProxy.topic {
+            if let topic = spaceServiceRoom.topic {
                 Button { isPresentingTopic = true } label: {
                     Text(topic)
                         .font(.compound.bodyMD)
@@ -60,7 +60,7 @@ struct SpaceHeaderView: View {
                 .frame(height: 1 / UIScreen.main.scale)
         }
         .sheet(isPresented: $isPresentingTopic) {
-            if let topic = spaceRoomProxy.topic {
+            if let topic = spaceServiceRoom.topic {
                 SpaceHeaderTopicSheetView(topic: topic)
             }
         }
@@ -79,7 +79,7 @@ struct SpaceHeaderView: View {
     }
     
     private var spaceDetailsVisibilityTitle: String {
-        switch spaceRoomProxy.visibility {
+        switch spaceServiceRoom.visibility {
         case .public: L10n.commonPublicSpace
         case .private: L10n.commonPrivateSpace
         case .restricted: L10n.commonSharedSpace
@@ -88,7 +88,7 @@ struct SpaceHeaderView: View {
     }
     
     private var spaceDetailsVisibilityIcon: KeyPath<CompoundIcons, Image> {
-        switch spaceRoomProxy.visibility {
+        switch spaceServiceRoom.visibility {
         case .public: \.public
         case .private: \.lock
         case .restricted: \.space
@@ -107,41 +107,41 @@ struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 0) {
             ForEach(spaces, id: \.id) { space in
-                SpaceHeaderView(spaceRoomProxy: space, mediaProvider: mediaProvider)
+                SpaceHeaderView(spaceServiceRoom: space, mediaProvider: mediaProvider)
             }
         }
     }
     
-    static func makeSpaceRooms() -> [SpaceRoomProxyMock] {
+    static func makeSpaceRooms() -> [SpaceServiceRoomMock] {
         [
-            SpaceRoomProxyMock(.init(id: "!space1:matrix.org",
-                                     name: "Company Space",
-                                     isSpace: true,
-                                     childrenCount: 10,
-                                     joinedMembersCount: 50)),
-            SpaceRoomProxyMock(.init(id: "!space2:matrix.org",
-                                     name: "Community Space",
-                                     avatarURL: .mockMXCAvatar,
-                                     isSpace: true,
-                                     childrenCount: 20,
-                                     joinedMembersCount: 78,
-                                     topic: "Description of the space goes right here.",
-                                     canonicalAlias: "#space:matrix.org",
-                                     joinRule: .public)),
-            SpaceRoomProxyMock(.init(id: "!space3:matrix.org",
-                                     name: "Subspace",
-                                     isSpace: true,
-                                     childrenCount: 30,
-                                     joinedMembersCount: 123,
-                                     heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
-                                     topic: ["Description of the space goes right here.",
-                                             "Lorem ipsum dolor sit amet consectetur.",
-                                             "Leo viverra morbi habitant in.",
-                                             "Sem amet enim habitant nibh augue mauris.",
-                                             "Interdum mauris ultrices tincidunt proin morbi erat aenean risus nibh.",
-                                             "Diam amet sit fermentum vulputate faucibus."].joined(separator: " "),
-                                     canonicalAlias: "#subspace:matrix.org",
-                                     joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
+            SpaceServiceRoomMock(.init(id: "!space1:matrix.org",
+                                       name: "Company Space",
+                                       isSpace: true,
+                                       childrenCount: 10,
+                                       joinedMembersCount: 50)),
+            SpaceServiceRoomMock(.init(id: "!space2:matrix.org",
+                                       name: "Community Space",
+                                       avatarURL: .mockMXCAvatar,
+                                       isSpace: true,
+                                       childrenCount: 20,
+                                       joinedMembersCount: 78,
+                                       topic: "Description of the space goes right here.",
+                                       canonicalAlias: "#space:matrix.org",
+                                       joinRule: .public)),
+            SpaceServiceRoomMock(.init(id: "!space3:matrix.org",
+                                       name: "Subspace",
+                                       isSpace: true,
+                                       childrenCount: 30,
+                                       joinedMembersCount: 123,
+                                       heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
+                                       topic: ["Description of the space goes right here.",
+                                               "Lorem ipsum dolor sit amet consectetur.",
+                                               "Leo viverra morbi habitant in.",
+                                               "Sem amet enim habitant nibh augue mauris.",
+                                               "Interdum mauris ultrices tincidunt proin morbi erat aenean risus nibh.",
+                                               "Diam amet sit fermentum vulputate faucibus."].joined(separator: " "),
+                                       canonicalAlias: "#subspace:matrix.org",
+                                       joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
         ]
     }
 }

@@ -13,8 +13,8 @@ import MatrixRustSDKMocks
 
 extension SpaceServiceProxyMock {
     struct Configuration {
-        var topLevelSpaces: [SpaceRoomProxyProtocol] = []
-        var joinedParentSpaces: [SpaceRoomProxyProtocol] = []
+        var topLevelSpaces: [SpaceServiceRoomProtocol] = []
+        var joinedParentSpaces: [SpaceServiceRoomProtocol] = []
         var spaceRoomLists: [String: SpaceRoomListProxyMock] = [:]
         var leaveSpaceRooms: [LeaveSpaceRoom] = []
     }
@@ -43,11 +43,11 @@ extension SpaceServiceProxyMock {
 
 extension SpaceServiceProxyMock.Configuration {
     static var populated: SpaceServiceProxyMock.Configuration {
-        let spaceRoomLists = [SpaceRoomProxyProtocol].mockJoinedSpaces.map {
-            ($0.id, SpaceRoomListProxyMock(.init(spaceRoomProxy: $0, initialSpaceRooms: .mockSpaceList)))
+        let spaceRoomLists = [SpaceServiceRoomProtocol].mockJoinedSpaces.map {
+            ($0.id, SpaceRoomListProxyMock(.init(spaceServiceRoom: $0, initialSpaceRooms: .mockSpaceList)))
         }
-        let subSpaceRoomLists = [SpaceRoomProxyProtocol].mockSpaceList.map {
-            ($0.id, SpaceRoomListProxyMock(.init(spaceRoomProxy: $0, initialSpaceRooms: .mockSingleRoom)))
+        let subSpaceRoomLists = [SpaceServiceRoomProtocol].mockSpaceList.map {
+            ($0.id, SpaceRoomListProxyMock(.init(spaceServiceRoom: $0, initialSpaceRooms: .mockSingleRoom)))
         }
         
         return .init(topLevelSpaces: .mockJoinedSpaces, spaceRoomLists: .init(uniqueKeysWithValues: spaceRoomLists + subSpaceRoomLists))

@@ -18,12 +18,12 @@ enum SpaceFlowCoordinatorAction {
 
 enum SpaceFlowCoordinatorEntryPoint {
     case space(SpaceRoomListProxyProtocol)
-    case joinSpace(SpaceRoomProxyProtocol)
+    case joinSpace(SpaceServiceRoomProtocol)
     
     var spaceID: String {
         switch self {
         case .space(let spaceRoomListProxy): spaceRoomListProxy.id
-        case .joinSpace(let spaceRoomProxy): spaceRoomProxy.id
+        case .joinSpace(let spaceServiceRoom): spaceServiceRoom.id
         }
     }
 }
@@ -294,8 +294,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .selectSpace(let spaceRoomListProxy):
                     stateMachine.tryEvent(.startChildFlow, userInfo: SpaceFlowCoordinatorEntryPoint.space(spaceRoomListProxy))
-                case .selectUnjoinedSpace(let spaceRoomProxy):
-                    stateMachine.tryEvent(.startChildFlow, userInfo: SpaceFlowCoordinatorEntryPoint.joinSpace(spaceRoomProxy))
+                case .selectUnjoinedSpace(let spaceServiceRoom):
+                    stateMachine.tryEvent(.startChildFlow, userInfo: SpaceFlowCoordinatorEntryPoint.joinSpace(spaceServiceRoom))
                 case .selectRoom(let roomID):
                     stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
                 case .leftSpace:
@@ -322,9 +322,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentJoinSpaceScreen() {
-        guard case let .joinSpace(spaceRoomProxy) = entryPoint else { fatalError("Attempting to join a space with the wrong entry point.") }
+        guard case let .joinSpace(spaceServiceRoom) = entryPoint else { fatalError("Attempting to join a space with the wrong entry point.") }
         
-        let parameters = JoinRoomScreenCoordinatorParameters(source: .space(spaceRoomProxy),
+        let parameters = JoinRoomScreenCoordinatorParameters(source: .space(spaceServiceRoom),
                                                              userSession: flowParameters.userSession,
                                                              userIndicatorController: flowParameters.userIndicatorController,
                                                              appSettings: flowParameters.appSettings)

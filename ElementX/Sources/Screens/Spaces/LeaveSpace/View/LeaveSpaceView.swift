@@ -64,11 +64,11 @@ struct LeaveSpaceView: View {
            context.viewState.leaveHandle.canLeave {
             LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                 Section {
-                    ForEach(context.viewState.leaveHandle.rooms, id: \.spaceRoomProxy.id) { room in
+                    ForEach(context.viewState.leaveHandle.rooms, id: \.spaceServiceRoom.id) { room in
                         LeaveSpaceRoomDetailsCell(room: room,
                                                   hideSelection: context.viewState.leaveHandle.mode == .onlyAdminRooms,
                                                   mediaProvider: context.mediaProvider) {
-                            context.send(viewAction: .toggleRoom(roomID: room.spaceRoomProxy.id))
+                            context.send(viewAction: .toggleRoom(roomID: room.spaceServiceRoom.id))
                         }
                         .disabled(room.isLastAdmin)
                     }
@@ -136,27 +136,27 @@ struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("Last Space Admin")
     }
     
-    static let spaceRoomProxy = SpaceRoomProxyMock(.init(id: "!eng-space:matrix.org",
-                                                         name: "Engineering Team",
-                                                         isSpace: true,
-                                                         childrenCount: 30,
-                                                         joinedMembersCount: 76,
-                                                         heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
-                                                         topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in.",
-                                                         joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
+    static let spaceServiceRoom = SpaceServiceRoomMock(.init(id: "!eng-space:matrix.org",
+                                                             name: "Engineering Team",
+                                                             isSpace: true,
+                                                             childrenCount: 30,
+                                                             joinedMembersCount: 76,
+                                                             heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
+                                                             topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in.",
+                                                             joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
     
     static func makeViewModel(mode: LeaveSpaceHandleProxy.Mode) -> LeaveSpaceViewModel {
         let rooms: [LeaveSpaceRoom] = switch mode {
         case .manyRooms: .mockRooms
         case .onlyAdminRooms: .mockAdminRooms
-        case .noRooms: .mockSingleSpace(spaceRoomProxy: spaceRoomProxy, isLastAdmin: false)
-        case .lastSpaceAdmin: .mockRoomsWithSpace(spaceRoomProxy: spaceRoomProxy, isLastAdmin: true)
+        case .noRooms: .mockSingleSpace(spaceServiceRoom: spaceServiceRoom, isLastAdmin: false)
+        case .lastSpaceAdmin: .mockRoomsWithSpace(spaceServiceRoom: spaceServiceRoom, isLastAdmin: true)
         }
         
-        let leaveHandle = LeaveSpaceHandleProxy(spaceID: spaceRoomProxy.id,
+        let leaveHandle = LeaveSpaceHandleProxy(spaceID: spaceServiceRoom.id,
                                                 leaveHandle: LeaveSpaceHandleSDKMock(.init(rooms: rooms)))
         
-        return LeaveSpaceViewModel(spaceName: spaceRoomProxy.name,
+        return LeaveSpaceViewModel(spaceName: spaceServiceRoom.name,
                                    canEditRolesAndPermissions: true,
                                    leaveHandle: leaveHandle,
                                    userIndicatorController: UserIndicatorControllerMock(),
