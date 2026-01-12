@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "Your avatar";
 "action_accept" = "Приемане";
 "action_add_caption" = "Add caption";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "Добавяне към хронологията";
 "action_back" = "Назад";
 "action_call" = "Обаждане";
@@ -67,6 +68,7 @@
 "action_copy_text" = "Копиране на текста";
 "action_create" = "Създаване";
 "action_create_a_room" = "Създаване на стая";
+"action_create_space" = "Create space";
 "action_deactivate" = "Деактивиране";
 "action_deactivate_account" = "Деактивиране на акаунта";
 "action_decline" = "Отхвърляне";
@@ -104,6 +106,7 @@
 "action_load_more" = "Зареждане на още";
 "action_manage_account" = "Управление на профила";
 "action_manage_devices" = "Управление на устройствата";
+"action_manage_rooms" = "Manage rooms";
 "action_message" = "Съобщение";
 "action_minimize" = "Minimise";
 "action_next" = "Напред";
@@ -188,6 +191,7 @@
 "common_copied_to_clipboard" = "Copied to clipboard";
 "common_copyright" = "Авторски права";
 "common_creating_room" = "Създаване на стая…";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Стаята е напусната";
 "common_current_user_left_space" = "Пространството е напуснато";
@@ -307,6 +311,7 @@
 "common_starting_chat" = "Започване на чат…";
 "common_sticker" = "Стикер";
 "common_success" = "Успешно";
+"common_suggested" = "Suggested";
 "common_suggestions" = "Предложения";
 "common_syncing" = "Синхронизиране";
 "common_system" = "Система";
@@ -526,14 +531,19 @@
 "screen_create_poll_options_section_title" = "Options";
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
 "screen_create_poll_settings_section_title" = "Settings";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_description" = "Всеки може да се присъедини към тази стая";
 "screen_create_room_room_access_section_anyone_option_title" = "Всеки";
 "screen_create_room_room_access_section_header" = "Room Access";
-"screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Ask to join";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "За да бъде тази стая видима в директорията на общодостъпните стаи, ще ви е необходим адрес на стаята.";
 "screen_create_room_room_address_section_title" = "Room address";
 "screen_create_room_room_visibility_section_title" = "Видимост на стаята";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
 "screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
@@ -651,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_change_permissions_change_settings" = "Change settings";
 "screen_room_change_permissions_manage_space" = "Manage space";
-"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Edit Admins or Owners";
 "screen_room_details_pinned_events_row_title" = "Закачени съобщения";
@@ -679,7 +688,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Веднъж включено, шифроването не може да бъде изключено.";
 "screen_security_and_privacy_encryption_toggle_title" = "Включване на шифроване от край до край";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Всеки може да намери и да се присъедини";
-"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Хората могат да се присъединят само ако са поканени";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Само с покана";
 "screen_security_and_privacy_room_access_section_header" = "Достъп до стаята";
@@ -712,6 +721,7 @@
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "%1$@ пространство";
 "screen_space_list_title" = "Пространства";
 "screen_start_chat_join_room_by_address_action" = "Присъединяване към стая по адрес";
@@ -836,7 +846,9 @@
 "screen_create_room_action_create_room" = "Нова стая";
 "screen_create_room_error_creating_room" = "Възникна грешка при създаването на стаята";
 "screen_create_room_private_option_description" = "Само поканени хора имат достъп до тази стая. Всички съобщения са шифровани от край до край.";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Всеки може да намери тази стая.\nМожете да промените това по всяко време в настройките на стаята.";
+"screen_create_room_public_option_title" = "Публична стая (всеки)";
 "screen_create_room_topic_label" = "Тема за разговор (незадължително)";
 "screen_deactivate_account_confirmation_dialog_content" = "Моля, потвърдете, че искате да деактивирате акаунта си. Това действие не може да бъде отменено.";
 "screen_deactivate_account_delete_all_messages" = "Delete all my messages";
@@ -1408,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "Всеки";
 "screen_room_single_knock_request_accept_button_title" = "Приемане";
 "screen_room_single_knock_request_view_button_title" = "View";
+"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_details_profile_row_title" = "Профил";
 "screen_room_details_security_and_privacy_title" = "Защита и поверителност";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
@@ -1434,8 +1447,6 @@
 "screen_create_account_title" = "Създаване на акаунт";
 "screen_create_poll_cancel_confirmation_content_ios" = "Your changes won’t be saved";
 "screen_create_room_add_people_title" = "Поканване на хора";
-"screen_create_room_private_option_title" = "Частна стая";
-"screen_create_room_public_option_title" = "Общодостъпна стая";
 "screen_create_room_room_name_label" = "Име на стаята";
 "screen_create_room_title" = "Създаване на стая";
 "screen_deactivate_account_title" = "Деактивиране на акаунта";
@@ -1473,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "Медия и файлове";
 "screen_room_details_notification_title" = "Известия";
 "screen_room_details_roles_and_permissions" = "Роли и разрешения";
-"screen_room_details_room_name_label" = "Име на стаята";
+"screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_title" = "Защита";
 "screen_room_details_topic_title" = "Тема";
 "screen_room_error_failed_processing_media" = "Неуспешна обработка на мултимедия за качване, моля, опитайте отново.";

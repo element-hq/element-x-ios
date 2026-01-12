@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "Ваш аватар";
 "action_accept" = "Разрешить";
 "action_add_caption" = "Добавить подпись";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "Добавить в хронологию";
 "action_back" = "Назад";
 "action_call" = "Позвонить";
@@ -67,6 +68,7 @@
 "action_copy_text" = "Копировать текст";
 "action_create" = "Создать";
 "action_create_a_room" = "Создать комнату";
+"action_create_space" = "Create space";
 "action_deactivate" = "Отключить";
 "action_deactivate_account" = "Отключить учётную запись";
 "action_decline" = "Отклонить";
@@ -104,6 +106,7 @@
 "action_load_more" = "Загрузить еще";
 "action_manage_account" = "Настройки учетной записи";
 "action_manage_devices" = "Управление устройствами";
+"action_manage_rooms" = "Управление комнатами";
 "action_message" = "Сообщение";
 "action_minimize" = "Свернуть";
 "action_next" = "Далее";
@@ -188,6 +191,7 @@
 "common_copied_to_clipboard" = "Скопировано в буфер обмена";
 "common_copyright" = "Авторское право";
 "common_creating_room" = "Создание комнаты…";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "Запрос отменен";
 "common_current_user_left_room" = "Покинул комнату";
 "common_current_user_left_space" = "Покинуть пространство";
@@ -307,6 +311,7 @@
 "common_starting_chat" = "Чат запускается…";
 "common_sticker" = "Стикер";
 "common_success" = "Успешно";
+"common_suggested" = "Suggested";
 "common_suggestions" = "Предложения";
 "common_syncing" = "Синхронизация";
 "common_system" = "Системное";
@@ -526,14 +531,19 @@
 "screen_create_poll_options_section_title" = "Параметры";
 "screen_create_poll_remove_accessibility_label" = "Удалить %1$@";
 "screen_create_poll_settings_section_title" = "Настройки";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_description" = "Любой желающий может присоединиться к этой комнате";
 "screen_create_room_room_access_section_anyone_option_title" = "Любой";
 "screen_create_room_room_access_section_header" = "Доступ в комнату";
 "screen_create_room_room_access_section_knocking_option_description" = "Любой желающий может подать заявку на присоединение к комнате, но администратор или модератор должен будет принять запрос.";
 "screen_create_room_room_access_section_knocking_option_title" = "Попросить присоединиться";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "Чтобы эта комната была видна в каталоге общедоступных, вам необходим ее адрес";
 "screen_create_room_room_address_section_title" = "Адрес комнаты";
 "screen_create_room_room_visibility_section_title" = "Видимость комнаты";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "Вы не увидите сообщений или приглашений в комнату от этого пользователя";
 "screen_decline_and_block_report_user_option_description" = "Сообщите об этой комнате своему поставщику учетной записи.";
 "screen_edit_room_address_room_address_section_footer" = "Вам понадобится адрес комнаты, чтобы сделать ее видимой в каталоге.";
@@ -651,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@ хочет присоединиться к этой комнате";
 "screen_room_change_permissions_change_settings" = "Изменить настройки";
 "screen_room_change_permissions_manage_space" = "Управление пространством";
-"screen_room_change_permissions_manage_space_rooms" = "Управление комнатами";
 "screen_room_change_permissions_title" = "Разрешения";
 "screen_room_change_role_administrators_or_owners_title" = "Редактировать роль владельца и администратора";
 "screen_room_details_pinned_events_row_title" = "Закрепленные сообщения";
@@ -679,7 +688,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "После включения, шифрование не может быть отключено.";
 "screen_security_and_privacy_encryption_toggle_title" = "Включить сквозное шифрование";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Любой желающий может найти и присоединиться";
-"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Присоединиться могут только приглашенные люди.";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Только по приглашению";
 "screen_security_and_privacy_room_access_section_header" = "Доступ";
@@ -712,6 +721,7 @@
 "screen_space_announcement_title" = "Представляем пространства";
 "screen_space_list_description" = "Пространства, которые вы создали или к которым присоединились.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "%1$@ пространство";
 "screen_space_list_title" = "Пространства";
 "screen_start_chat_join_room_by_address_action" = "Присоединиться к комнате по адресу";
@@ -836,7 +846,9 @@
 "screen_create_room_action_create_room" = "Создать новую комнату";
 "screen_create_room_error_creating_room" = "Произошла ошибка при создании комнаты";
 "screen_create_room_private_option_description" = "Доступ в эту комнату имеют только приглашенные пользователи. Все сообщения защищены сквозным шифрованием.";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Любой желающий может найти эту комнату.\nВы можете изменить это в любое время в настройках комнаты.";
+"screen_create_room_public_option_title" = "Общедоступная комната";
 "screen_create_room_topic_label" = "Тема (необязательно)";
 "screen_deactivate_account_confirmation_dialog_content" = "Вы уверены, что хотите отключить свою учётную запись? Данное действие не может быть отменено.";
 "screen_deactivate_account_delete_all_messages" = "Удалить все мои сообщения";
@@ -1408,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "Все";
 "screen_room_single_knock_request_accept_button_title" = "Разрешить";
 "screen_room_single_knock_request_view_button_title" = "Просмотр";
+"screen_room_change_permissions_manage_space_rooms" = "Управление комнатами";
 "screen_room_details_profile_row_title" = "Профиль";
 "screen_room_details_security_and_privacy_title" = "Безопасность и конфиденциальность";
 "screen_roomlist_knock_event_sent_description" = "Запрос на присоединение отправлен";
@@ -1434,8 +1447,6 @@
 "screen_create_account_title" = "Создать учетную запись";
 "screen_create_poll_cancel_confirmation_content_ios" = "Ваши изменения не будут сохранены";
 "screen_create_room_add_people_title" = "Пригласить в комнату";
-"screen_create_room_private_option_title" = "Частная комната";
-"screen_create_room_public_option_title" = "Общедоступная комната";
 "screen_create_room_room_name_label" = "Название комнаты";
 "screen_create_room_title" = "Создать комнату";
 "screen_deactivate_account_title" = "Отключить учётную запись";
@@ -1473,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "Медиа и файлы";
 "screen_room_details_notification_title" = "Уведомления";
 "screen_room_details_roles_and_permissions" = "Роли и разрешения";
-"screen_room_details_room_name_label" = "Название комнаты";
+"screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_title" = "Безопасность";
 "screen_room_details_topic_title" = "Тема";
 "screen_room_error_failed_processing_media" = "Не удалось обработать медиафайл для загрузки, попробуйте еще раз.";

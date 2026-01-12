@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "Your avatar";
 "action_accept" = "قبول کریں";
 "action_add_caption" = "Add caption";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "جدول زمانی میں شامل کریں";
 "action_back" = "واپس";
 "action_call" = "مکالمہ کریں";
@@ -67,6 +68,7 @@
 "action_copy_text" = "Copy text";
 "action_create" = "تخلیق کریں";
 "action_create_a_room" = "ایک کمرہ بنائیں";
+"action_create_space" = "Create space";
 "action_deactivate" = "غیر فعال کریں";
 "action_deactivate_account" = "اکاؤنٹ کو غیر فعال کریں";
 "action_decline" = "مسترد کریں";
@@ -104,6 +106,7 @@
 "action_load_more" = "مزید لادیں";
 "action_manage_account" = "کھاتہ کا انتظام کریں";
 "action_manage_devices" = "آلات کا نظم کریں";
+"action_manage_rooms" = "Manage rooms";
 "action_message" = "ارسال";
 "action_minimize" = "Minimise";
 "action_next" = "اگلا";
@@ -188,6 +191,7 @@
 "common_copied_to_clipboard" = "کلپ بورڈ میں کاپى کیا گیا";
 "common_copyright" = "حقوقِ طبع و نشر";
 "common_creating_room" = "کمرہ تخلیق کررہاہے…";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "کمرہ چھوڑ لیا";
 "common_current_user_left_space" = "Left space";
@@ -307,6 +311,7 @@
 "common_starting_chat" = "گفتگو شروع کر رہا ہے۔۔۔";
 "common_sticker" = "برچسب";
 "common_success" = "کامیابی";
+"common_suggested" = "Suggested";
 "common_suggestions" = "تجاویز";
 "common_syncing" = "ہمسات سازی";
 "common_system" = "نظام";
@@ -526,14 +531,19 @@
 "screen_create_poll_options_section_title" = "Options";
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
 "screen_create_poll_settings_section_title" = "Settings";
-"screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_room_access_section_anyone_option_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
-"screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Ask to join";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
 "screen_create_room_room_address_section_title" = "Room address";
 "screen_create_room_room_visibility_section_title" = "Room visibility";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
 "screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
@@ -651,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_change_permissions_change_settings" = "Change settings";
 "screen_room_change_permissions_manage_space" = "Manage space";
-"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Edit Admins or Owners";
 "screen_room_details_pinned_events_row_title" = "مثبوتہ پیغامات";
@@ -679,7 +688,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Once enabled, encryption cannot be disabled.";
 "screen_security_and_privacy_encryption_toggle_title" = "Enable end-to-end encryption";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join.";
-"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Only invited people can join.";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Invite only";
 "screen_security_and_privacy_room_access_section_header" = "Access";
@@ -712,6 +721,7 @@
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
@@ -836,7 +846,9 @@
 "screen_create_room_action_create_room" = "نیا کمرہ";
 "screen_create_room_error_creating_room" = "کمرہ تخلیق کرتے ہوئے ایک نقص واقع ہوا";
 "screen_create_room_private_option_description" = "صرف مدعو لوگ ہی اس کمرے تک رسائی حاصل کر سکتے ہیں۔ تمام پیغامات آخر تا آخر مرموز کردہ ہیں۔";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "کوئی بھی یہ کمرہ ڈھونڈ سکتا ہے۔\nآپ اسے کمرے کی ترتیبات میں کسی بھی وقت تبدیل کرسکتے ہیں۔";
+"screen_create_room_public_option_title" = "Public";
 "screen_create_room_topic_label" = "موضوع (اختیاری)";
 "screen_deactivate_account_confirmation_dialog_content" = "براہ کرم تصدیق کریں کہ آپ اپنا اکاؤنٹ غیر فعال کرنا چاہتے ہیں۔ اس کارروائی کو کالعدم نہیں کیا جا سکتا۔";
 "screen_deactivate_account_delete_all_messages" = "میرے تمام پیغامات ڈیلیٹ کریں۔";
@@ -1408,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "ہر کوئی";
 "screen_room_single_knock_request_accept_button_title" = "قبول کریں";
 "screen_room_single_knock_request_view_button_title" = "View";
+"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_details_profile_row_title" = "نمایہ";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
@@ -1434,8 +1447,6 @@
 "screen_create_account_title" = "کھاتہ تخلیق کریں";
 "screen_create_poll_cancel_confirmation_content_ios" = "آپ کی تبدیلیاں محفوظ نہیں کی جائیں گی";
 "screen_create_room_add_people_title" = "لوگوں کو مدعو کریں";
-"screen_create_room_private_option_title" = "نجی کمرہ";
-"screen_create_room_public_option_title" = "عوامی کمرہ";
 "screen_create_room_room_name_label" = "کمرے کا نام";
 "screen_create_room_title" = "ایک کمرہ بنائیں";
 "screen_deactivate_account_title" = "اکاؤنٹ کو غیر فعال کریں";
@@ -1473,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "Media and files";
 "screen_room_details_notification_title" = "اطلاعات";
 "screen_room_details_roles_and_permissions" = "کردارہا اور اجازتیں";
-"screen_room_details_room_name_label" = "کمرے کا نام";
+"screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_title" = "حفاظت";
 "screen_room_details_topic_title" = "موضوع";
 "screen_room_error_failed_processing_media" = "وسائط کا معالجہ برائے ترفیع ناکام، برائے مہربانی دوبارہ کوشش کریں۔";

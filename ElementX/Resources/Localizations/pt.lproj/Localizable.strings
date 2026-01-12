@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "O teu avatar";
 "action_accept" = "Aceitar";
 "action_add_caption" = "Adicionar legenda";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "Adicionar à cronologia";
 "action_back" = "Voltar";
 "action_call" = "Chamar";
@@ -67,6 +68,7 @@
 "action_copy_text" = "Copiar texto";
 "action_create" = "Criar";
 "action_create_a_room" = "Criar uma sala";
+"action_create_space" = "Create space";
 "action_deactivate" = "Desativar";
 "action_deactivate_account" = "Desativar conta";
 "action_decline" = "Recusar";
@@ -104,6 +106,7 @@
 "action_load_more" = "Carregar mais";
 "action_manage_account" = "Gerir conta";
 "action_manage_devices" = "Gerir dispositivos";
+"action_manage_rooms" = "Manage rooms";
 "action_message" = "Enviar mensagem";
 "action_minimize" = "Minimise";
 "action_next" = "Próximo";
@@ -188,6 +191,7 @@
 "common_copied_to_clipboard" = "Copiado para a área de transferência";
 "common_copyright" = "Direitos de autor";
 "common_creating_room" = "A criar sala…";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "Pedido cancelado";
 "common_current_user_left_room" = "Saíste da sala";
 "common_current_user_left_space" = "Saíste do espaço";
@@ -307,6 +311,7 @@
 "common_starting_chat" = "A iniciar conversa…";
 "common_sticker" = "Autocolante";
 "common_success" = "Sucesso";
+"common_suggested" = "Suggested";
 "common_suggestions" = "Sugestões";
 "common_syncing" = "A sincronizar…";
 "common_system" = "Sistema";
@@ -526,14 +531,19 @@
 "screen_create_poll_options_section_title" = "Opções";
 "screen_create_poll_remove_accessibility_label" = "Remover %1$@";
 "screen_create_poll_settings_section_title" = "Configurações";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_description" = "Qualquer pessoa pode entrar nesta sala";
 "screen_create_room_room_access_section_anyone_option_title" = "Qualquer pessoa";
 "screen_create_room_room_access_section_header" = "Acesso à sala";
 "screen_create_room_room_access_section_knocking_option_description" = "Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou um moderador terá de aceitar o pedido";
 "screen_create_room_room_access_section_knocking_option_title" = "Pedir para participar";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "Para que esta sala seja visível no diretório público de salas, precisas de um endereço de sala.";
 "screen_create_room_room_address_section_title" = "Endereço da sala";
 "screen_create_room_room_visibility_section_title" = "Visibilidade da sala";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "Não vais ver quaisquer mensagens ou convites para sala deste utilizador";
 "screen_decline_and_block_report_user_option_description" = "Denunciar esta sala ao fornecedor da tua conta.";
 "screen_edit_room_address_room_address_section_footer" = "É necessário um endereço para tornar a sala visível no diretório.";
@@ -651,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@ quer entrar nesta sala";
 "screen_room_change_permissions_change_settings" = "Change settings";
 "screen_room_change_permissions_manage_space" = "Manage space";
-"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Editar administradores ou proprietários";
 "screen_room_details_pinned_events_row_title" = "Mensagens afixadas";
@@ -679,7 +688,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Uma vez ativada, a cifragem não pode ser desativada.";
 "screen_security_and_privacy_encryption_toggle_title" = "Ativar cifragem ponta-a-ponta";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Qualquer pessoa pode encontrar a sala e entrar";
-"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Só é possível entrar tendo um convite";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Apenas por convite";
 "screen_security_and_privacy_room_access_section_header" = "Acesso à sala";
@@ -712,6 +721,7 @@
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Espaços que criaste ou nos quais entraste.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "Espaço %1$@";
 "screen_space_list_title" = "Espaços";
 "screen_start_chat_join_room_by_address_action" = "Entrar na sala pelo endereço";
@@ -836,7 +846,9 @@
 "screen_create_room_action_create_room" = "Nova sala";
 "screen_create_room_error_creating_room" = "Ocorreu um erro ao criar a sala";
 "screen_create_room_private_option_description" = "Apenas as pessoas convidadas podem aceder a esta sala. Todas as mensagens são cifradas ponta-a-ponta.";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Qualquer um pode encontrar esta sala. \nPode alterar esta opção nas definições da sala.";
+"screen_create_room_public_option_title" = "Sala pública";
 "screen_create_room_topic_label" = "Descrição (opcional)";
 "screen_deactivate_account_confirmation_dialog_content" = "Confirma que pretendes desativar a tua conta. Esta ação não pode ser desfeita.";
 "screen_deactivate_account_delete_all_messages" = "Eliminar todas as minhas mensagens";
@@ -1408,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "Toda a gente";
 "screen_room_single_knock_request_accept_button_title" = "Aceitar";
 "screen_room_single_knock_request_view_button_title" = "Ver";
+"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_details_profile_row_title" = "Perfil";
 "screen_room_details_security_and_privacy_title" = "Segurança e privacidade";
 "screen_roomlist_knock_event_sent_description" = "Pedido de adesão enviado";
@@ -1434,8 +1447,6 @@
 "screen_create_account_title" = "Criar conta";
 "screen_create_poll_cancel_confirmation_content_ios" = "As tuas alterações não serão guardadas";
 "screen_create_room_add_people_title" = "Convidar pessoas";
-"screen_create_room_private_option_title" = "Sala privada";
-"screen_create_room_public_option_title" = "Sala pública";
 "screen_create_room_room_name_label" = "Nome da sala";
 "screen_create_room_title" = "Criar uma sala";
 "screen_deactivate_account_title" = "Desativar conta";
@@ -1473,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "Multimédia e ficheiros";
 "screen_room_details_notification_title" = "Notificações";
 "screen_room_details_roles_and_permissions" = "Cargos e permissões";
-"screen_room_details_room_name_label" = "Nome da sala";
+"screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_title" = "Segurança";
 "screen_room_details_topic_title" = "Descrição";
 "screen_room_error_failed_processing_media" = "Falha ao processar multimédia para carregamento, por favor tente novamente.";

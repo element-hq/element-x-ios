@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "Your avatar";
 "action_accept" = "Αποδοχή";
 "action_add_caption" = "Προσθήκη λεζάντας";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "Προσθήκη στο χρονοδιάγραμμα";
 "action_back" = "Πίσω";
 "action_call" = "Κάλεσε";
@@ -67,6 +68,7 @@
 "action_copy_text" = "Αντιγραφή κειμένου";
 "action_create" = "Δημιουργία";
 "action_create_a_room" = "Δημιουργία αίθουσας";
+"action_create_space" = "Create space";
 "action_deactivate" = "Απενεργοποίηση";
 "action_deactivate_account" = "Απενεργοποίηση λογαριασμού";
 "action_decline" = "Απόρριψη";
@@ -104,6 +106,7 @@
 "action_load_more" = "Φόρτωσε περισσότερα";
 "action_manage_account" = "Διαχείριση λογαριασμού";
 "action_manage_devices" = "Διαχείριση συσκευών";
+"action_manage_rooms" = "Manage rooms";
 "action_message" = "Στείλε";
 "action_minimize" = "Minimise";
 "action_next" = "Επόμενο";
@@ -188,6 +191,7 @@
 "common_copied_to_clipboard" = "Αντιγράφηκε στο πρόχειρο";
 "common_copyright" = "Πνευματικά δικαιώματα";
 "common_creating_room" = "Δημιουργία αίθουσας...";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "Το αίτημα ακυρώθηκε";
 "common_current_user_left_room" = "Αποχώρησε από την αίθουσα";
 "common_current_user_left_space" = "Left space";
@@ -307,6 +311,7 @@
 "common_starting_chat" = "Έναρξη συνομιλίας...";
 "common_sticker" = "Αυτοκόλλητο";
 "common_success" = "Επιτυχία";
+"common_suggested" = "Suggested";
 "common_suggestions" = "Προτάσεις";
 "common_syncing" = "Συγχρονισμός";
 "common_system" = "Σύστημα";
@@ -526,14 +531,19 @@
 "screen_create_poll_options_section_title" = "Επιλογές";
 "screen_create_poll_remove_accessibility_label" = "Αφαίρεση %1$@";
 "screen_create_poll_settings_section_title" = "Ρυθμίσεις";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_description" = "Οποιοσδήποτε μπορεί να συμμετάσχει σε αυτή την αίθουσα";
 "screen_create_room_room_access_section_anyone_option_title" = "Οποιοσδήποτε";
 "screen_create_room_room_access_section_header" = "Πρόσβαση στην Αίθουσα";
 "screen_create_room_room_access_section_knocking_option_description" = "Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στην αίθουσα, αλλά ένας διαχειριστής ή ένας συντονιστής θα πρέπει να αποδεχτεί το αίτημα";
 "screen_create_room_room_access_section_knocking_option_title" = "Αίτημα συμμετοχής";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "Για να είναι ορατή αυτή η αίθουσα στον δημόσιο κατάλογο αιθουσών, θα χρειαστείτε μια διεύθυνση αίθουσας.";
 "screen_create_room_room_address_section_title" = "Διεύθυνση δωματίου";
 "screen_create_room_room_visibility_section_title" = "Ορατότητα αίθουσας";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "Δεν θα βλέπετε μηνύματα ή προσκλήσεις αίθουσας από αυτόν τον χρήστη";
 "screen_decline_and_block_report_user_option_description" = "Αναφέρετε αυτή την αίθουσα στον πάροχο του λογαριασμού σας.";
 "screen_edit_room_address_room_address_section_footer" = "Θα χρειαστείτε μια διεύθυνση αίθουσας για να την κάνετε ορατή στον κατάλογο.";
@@ -651,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@ θέλει να συμμετάσχει σε αυτή την αίθουσα";
 "screen_room_change_permissions_change_settings" = "Change settings";
 "screen_room_change_permissions_manage_space" = "Manage space";
-"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Edit Admins or Owners";
 "screen_room_details_pinned_events_row_title" = "Καρφιτσωμένα μηνύματα";
@@ -679,7 +688,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Μόλις ενεργοποιηθεί, η κρυπτογράφηση δεν μπορεί να απενεργοποιηθεί.";
 "screen_security_and_privacy_encryption_toggle_title" = "Ενεργοποίηση κρυπτογράφησης από άκρο σε άκρο";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Οποιοσδήποτε μπορεί να βρει και να συμμετάσχει";
-"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Τα άτομα μπορούν να συμμετάσχουν μόνο εάν έχουν προσκληθεί";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Μόνο πρόσκληση";
 "screen_security_and_privacy_room_access_section_header" = "Πρόσβαση στην αίθουσα";
@@ -712,6 +721,7 @@
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Συμμετοχή σε αίθουσα μέσω διεύθυνσης";
@@ -836,7 +846,9 @@
 "screen_create_room_action_create_room" = "Νέα αίθουσα";
 "screen_create_room_error_creating_room" = "Προέκυψε σφάλμα κατά τη δημιουργία της αίθουσας";
 "screen_create_room_private_option_description" = "Μόνο τα άτομα που έχουν προσκληθεί μπορούν να έχουν πρόσβαση σε αυτή την αίθουσα. Όλα τα μηνύματα είναι κρυπτογραφημένα από άκρο σε άκρο.";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Ο καθένας μπορεί να βρει αυτή την αίθουσα.\nΑυτό μπορείτε να το αλλάξετε ανά πάσα στιγμή στις ρυθμίσεις της αίθουσας.";
+"screen_create_room_public_option_title" = "Δημόσιο δωμάτιο";
 "screen_create_room_topic_label" = "Θέμα (προαιρετικό)";
 "screen_deactivate_account_confirmation_dialog_content" = "Παρακαλώ επιβεβαίωσε ότι θες να απενεργοποιήσεις τον λογαριασμό σου. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
 "screen_deactivate_account_delete_all_messages" = "Διαγραφή όλων των μηνυμάτων μου";
@@ -1408,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "Όλοι";
 "screen_room_single_knock_request_accept_button_title" = "Αποδοχή";
 "screen_room_single_knock_request_view_button_title" = "View";
+"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_details_profile_row_title" = "Προφίλ";
 "screen_room_details_security_and_privacy_title" = "Ασφάλεια & απόρρητο";
 "screen_roomlist_knock_event_sent_description" = "Το αίτημα συμμετοχής στάλθηκε";
@@ -1434,8 +1447,6 @@
 "screen_create_account_title" = "Δημιουργία λογαριασμού";
 "screen_create_poll_cancel_confirmation_content_ios" = "Οι αλλαγές σου δεν θα αποθηκευτούν";
 "screen_create_room_add_people_title" = "Πρόσκληση ατόμων";
-"screen_create_room_private_option_title" = "Ιδιωτική αίθουσα";
-"screen_create_room_public_option_title" = "Δημόσια αίθουσα";
 "screen_create_room_room_name_label" = "Όνομα αίθουσας";
 "screen_create_room_title" = "Δημιουργία αίθουσας";
 "screen_deactivate_account_title" = "Απενεργοποίηση λογαριασμού";
@@ -1473,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "Πολυμέσα και αρχεία";
 "screen_room_details_notification_title" = "Ειδοποιήσεις";
 "screen_room_details_roles_and_permissions" = "Ρόλοι και δικαιώματα";
-"screen_room_details_room_name_label" = "Όνομα αίθουσας";
+"screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_title" = "Ασφάλεια";
 "screen_room_details_topic_title" = "Θέμα";
 "screen_room_error_failed_processing_media" = "Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά.";

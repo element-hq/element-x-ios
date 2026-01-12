@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "Your avatar";
 "action_accept" = "Accept";
 "action_add_caption" = "Add caption";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "Add to timeline";
 "action_back" = "Back";
 "action_call" = "Call";
@@ -105,6 +106,7 @@
 "action_load_more" = "Load more";
 "action_manage_account" = "Manage account";
 "action_manage_devices" = "Manage devices";
+"action_manage_rooms" = "Manage rooms";
 "action_message" = "Message";
 "action_minimize" = "Minimise";
 "action_next" = "Next";
@@ -659,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_change_permissions_change_settings" = "Change settings";
 "screen_room_change_permissions_manage_space" = "Manage space";
-"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Edit Admins or Owners";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
@@ -1419,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "Everyone";
 "screen_room_single_knock_request_accept_button_title" = "Accept";
 "screen_room_single_knock_request_view_button_title" = "View";
+"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
@@ -1482,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "Media and files";
 "screen_room_details_notification_title" = "Notifications";
 "screen_room_details_roles_and_permissions" = "Roles & permissions";
-"screen_room_details_room_name_label" = "Room name";
+"screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_title" = "Security";
 "screen_room_details_topic_title" = "Topic";
 "screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";

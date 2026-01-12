@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "您的头像";
 "action_accept" = "接受";
 "action_add_caption" = "添加标题";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "添加到时间线";
 "action_back" = "返回";
 "action_call" = "呼叫";
@@ -67,6 +68,7 @@
 "action_copy_text" = "复制文本";
 "action_create" = "创建";
 "action_create_a_room" = "创建聊天室";
+"action_create_space" = "Create space";
 "action_deactivate" = "停用";
 "action_deactivate_account" = "停用账户";
 "action_decline" = "拒绝";
@@ -104,6 +106,7 @@
 "action_load_more" = "载入更多";
 "action_manage_account" = "管理账户";
 "action_manage_devices" = "管理设备";
+"action_manage_rooms" = "Manage rooms";
 "action_message" = "发送消息给";
 "action_minimize" = "最小化";
 "action_next" = "下一步";
@@ -188,6 +191,7 @@
 "common_copied_to_clipboard" = "已复制到剪贴板";
 "common_copyright" = "版权";
 "common_creating_room" = "正在创建聊天室...";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "请求已取消";
 "common_current_user_left_room" = "离开聊天室";
 "common_current_user_left_space" = "离开空间";
@@ -307,6 +311,7 @@
 "common_starting_chat" = "开始聊天...";
 "common_sticker" = "贴纸";
 "common_success" = "成功";
+"common_suggested" = "Suggested";
 "common_suggestions" = "建议";
 "common_syncing" = "正在同步";
 "common_system" = "系统";
@@ -526,14 +531,19 @@
 "screen_create_poll_options_section_title" = "选项";
 "screen_create_poll_remove_accessibility_label" = "移除%1$@";
 "screen_create_poll_settings_section_title" = "设置";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_description" = "任何人都可以加入此房间";
 "screen_create_room_room_access_section_anyone_option_title" = "任何人";
 "screen_create_room_room_access_section_header" = "房间访问权限";
 "screen_create_room_room_access_section_knocking_option_description" = "任何人都可以请求加入房间，但必须由管理员或审核人接受";
 "screen_create_room_room_access_section_knocking_option_title" = "请求加入";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "要使该房间在公开房间目录中可见，您需要一个房间地址。";
 "screen_create_room_room_address_section_title" = "房间地址";
 "screen_create_room_room_visibility_section_title" = "房间可见性";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "您不会看到来自该用户的任何信息或房间邀请";
 "screen_decline_and_block_report_user_option_description" = "向您的帐户提供商举报此房间。";
 "screen_edit_room_address_room_address_section_footer" = "你需要房间地址才能使其在目录中可见。";
@@ -651,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@想加入这个房间";
 "screen_room_change_permissions_change_settings" = "Change settings";
 "screen_room_change_permissions_manage_space" = "Manage space";
-"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "编辑管理员或所有者";
 "screen_room_details_pinned_events_row_title" = "置顶消息";
@@ -679,7 +688,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "加密一旦启用，就无法禁用。";
 "screen_security_and_privacy_encryption_toggle_title" = "启用端到端加密";
 "screen_security_and_privacy_room_access_anyone_option_description" = "任何人都可以找到并加入";
-"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "只有受邀者才能加入";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "仅限邀请";
 "screen_security_and_privacy_room_access_section_header" = "房间访问权限";
@@ -712,6 +721,7 @@
 "screen_space_announcement_title" = "Spaces 简介";
 "screen_space_list_description" = "您创建或加入的空间。";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "%1$@空间";
 "screen_space_list_title" = "空间";
 "screen_start_chat_join_room_by_address_action" = "输入地址加入房间";
@@ -836,7 +846,9 @@
 "screen_create_room_action_create_room" = "新聊天室";
 "screen_create_room_error_creating_room" = "创建聊天室时出错";
 "screen_create_room_private_option_description" = "只有受邀用户才能访问此聊天室。所有消息均经过端到端加密。";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "任何人都能找到此聊天室。\n你可以随时在聊天室设置中更改。";
+"screen_create_room_public_option_title" = "公开聊天室";
 "screen_create_room_topic_label" = "主题（可选）";
 "screen_deactivate_account_confirmation_dialog_content" = "请确认您要停用您的账户。此操作无法撤消。";
 "screen_deactivate_account_delete_all_messages" = "删除我的所有消息";
@@ -1408,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "所有人";
 "screen_room_single_knock_request_accept_button_title" = "接受";
 "screen_room_single_knock_request_view_button_title" = "查看";
+"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_details_profile_row_title" = "个人资料";
 "screen_room_details_security_and_privacy_title" = "安全与隐私";
 "screen_roomlist_knock_event_sent_description" = "加入请求已发送";
@@ -1434,8 +1447,6 @@
 "screen_create_account_title" = "创建账户";
 "screen_create_poll_cancel_confirmation_content_ios" = "更改不会保存";
 "screen_create_room_add_people_title" = "邀请朋友";
-"screen_create_room_private_option_title" = "私有聊天室";
-"screen_create_room_public_option_title" = "公共聊天室";
 "screen_create_room_room_name_label" = "聊天室名称";
 "screen_create_room_title" = "创建聊天室";
 "screen_deactivate_account_title" = "停用账户";
@@ -1473,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "媒体和文件";
 "screen_room_details_notification_title" = "通知";
 "screen_room_details_roles_and_permissions" = "角色与权限";
-"screen_room_details_room_name_label" = "聊天室名称";
+"screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_title" = "安全";
 "screen_room_details_topic_title" = "主题";
 "screen_room_error_failed_processing_media" = "处理要上传的媒体失败，请重试。";

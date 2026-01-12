@@ -130,6 +130,8 @@ internal enum L10n {
   internal static var actionAccept: String { return L10n.tr("Localizable", "action_accept") }
   /// Add caption
   internal static var actionAddCaption: String { return L10n.tr("Localizable", "action_add_caption") }
+  /// Add existing rooms
+  internal static var actionAddExistingRooms: String { return L10n.tr("Localizable", "action_add_existing_rooms") }
   /// Add to timeline
   internal static var actionAddToTimeline: String { return L10n.tr("Localizable", "action_add_to_timeline") }
   /// Back
@@ -248,6 +250,8 @@ internal enum L10n {
   internal static var actionManageAccount: String { return L10n.tr("Localizable", "action_manage_account") }
   /// Manage devices
   internal static var actionManageDevices: String { return L10n.tr("Localizable", "action_manage_devices") }
+  /// Manage rooms
+  internal static var actionManageRooms: String { return L10n.tr("Localizable", "action_manage_rooms") }
   /// Message
   internal static var actionMessage: String { return L10n.tr("Localizable", "action_message") }
   /// Minimise
@@ -2542,7 +2546,7 @@ internal enum L10n {
   internal static var screenRoomDetailsRequestsToJoinTitle: String { return L10n.tr("Localizable", "screen_room_details_requests_to_join_title") }
   /// Roles & permissions
   internal static var screenRoomDetailsRolesAndPermissions: String { return L10n.tr("Localizable", "screen_room_details_roles_and_permissions") }
-  /// Room name
+  /// Name
   internal static var screenRoomDetailsRoomNameLabel: String { return L10n.tr("Localizable", "screen_room_details_room_name_label") }
   /// Security & privacy
   internal static var screenRoomDetailsSecurityAndPrivacyTitle: String { return L10n.tr("Localizable", "screen_room_details_security_and_privacy_title") }
