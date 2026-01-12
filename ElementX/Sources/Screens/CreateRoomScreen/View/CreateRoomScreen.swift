@@ -40,15 +40,14 @@ struct CreateRoomScreen: View {
             roomSection
             topicSection
             roomAccessSection
-            if context.viewState.isKnockingFeatureEnabled,
-               context.selectedAccessType != .private {
+            if !context.selectedAccessType.isPrivate {
                 roomAliasSection
             }
         }
         .compoundList()
         .track(screen: .CreateRoom)
         .scrollDismissesKeyboard(.immediately)
-        .navigationTitle(L10n.screenCreateRoomTitle)
+        .navigationTitle(context.viewState.isSpace ? L10n.screenCreateRoomNewSpaceTitle : L10n.screenCreateRoomNewRoomTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
@@ -59,13 +58,18 @@ struct CreateRoomScreen: View {
         Section {
             HStack(alignment: .center, spacing: 16) {
                 roomAvatarButton
+                let nameLabel = if #available(iOS 26, *) {
+                    L10n.commonName
+                } else {
+                    L10n.commonName.uppercased()
+                }
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
+                    Text(nameLabel)
                         .padding(.leading, ListRowPadding.horizontal)
                         .compoundListSectionHeader()
                     
-                    TextField(L10n.screenCreateRoomRoomNameLabel,
+                    TextField(L10n.commonName,
                               text: roomNameBinding,
                               prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textSecondary),
                               axis: .horizontal)
@@ -144,7 +148,7 @@ struct CreateRoomScreen: View {
                 roomAccessRow(for: accessType)
             }
         } header: {
-            Text(L10n.screenCreateRoomRoomAccessSectionHeader)
+            Text(L10n.screenCreateRoomRoomAccessSectionTitle)
                 .compoundListSectionHeader()
         }
     }
@@ -152,7 +156,8 @@ struct CreateRoomScreen: View {
     private func roomAccessRow(for accessType: CreateRoomAccessType) -> some View {
         ListRow(label: .default(title: accessType.title,
                                 description: accessType.description,
-                                icon: accessType.icon),
+                                icon: accessType.icon,
+                                iconAlignment: .top),
                 kind: .selection(isSelected: context.selectedAccessType == accessType) {
                     context.selectedAccessType = accessType
                 })
@@ -198,22 +203,22 @@ private extension CreateRoomAccessType {
     var title: String {
         switch self {
         case .public:
-            L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle
+            L10n.screenCreateRoomRoomAccessSectionPublicOptionTitle
         case .askToJoin:
             L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle
         case .private:
-            "Private"
+            L10n.screenCreateRoomRoomAccessSectionPrivateOptionTitle
         }
     }
     
     var description: String {
         switch self {
         case .public:
-            L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription
+            L10n.screenCreateRoomRoomAccessSectionPublicOptionDescription
         case .askToJoin:
             L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription
         case .private:
-            "Private"
+            L10n.screenCreateRoomRoomAccessSectionPrivateOptionDescription
         }
     }
     
