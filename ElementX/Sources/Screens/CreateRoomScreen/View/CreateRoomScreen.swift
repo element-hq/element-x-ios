@@ -93,7 +93,7 @@ struct CreateRoomScreen: View {
             focus = nil
             context.showAttachmentConfirmationDialog = true
         } label: {
-            if let url = context.viewState.mediaInfo?.thumbnailURL {
+            if let url = context.viewState.avatarMediaInfo?.thumbnailURL {
                 AsyncImage(url: url) { image in
                     image
                         .resizable()
@@ -121,7 +121,7 @@ struct CreateRoomScreen: View {
             }
             .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.mediaPicker)
             
-            if context.viewState.mediaInfo?.thumbnailURL != nil {
+            if context.viewState.avatarMediaInfo?.thumbnailURL != nil {
                 Button(L10n.actionRemove, role: .destructive) {
                     context.send(viewAction: .removeImage)
                 }
@@ -145,22 +145,15 @@ struct CreateRoomScreen: View {
     private var roomAccessSection: some View {
         Section {
             ForEach(context.viewState.availableAccessTypes, id: \.self) { accessType in
-                roomAccessRow(for: accessType)
+                CreateRoomAccessRow(access: accessType,
+                                    isSelected: context.selectedAccessType == accessType) {
+                    context.selectedAccessType = accessType
+                }
             }
         } header: {
             Text(L10n.screenCreateRoomRoomAccessSectionTitle)
                 .compoundListSectionHeader()
         }
-    }
-    
-    private func roomAccessRow(for accessType: CreateRoomAccessType) -> some View {
-        ListRow(label: .default(title: accessType.title,
-                                description: accessType.description,
-                                icon: accessType.icon,
-                                iconAlignment: .top),
-                kind: .selection(isSelected: context.selectedAccessType == accessType) {
-                    context.selectedAccessType = accessType
-                })
     }
     
     private var roomAliasSection: some View {
@@ -199,9 +192,13 @@ struct CreateRoomScreen: View {
     }
 }
 
-private extension CreateRoomAccessType {
+private struct CreateRoomAccessRow: View {
+    let access: CreateRoomAccessType
+    let isSelected: Bool
+    let onSelection: () -> Void
+    
     var title: String {
-        switch self {
+        switch access {
         case .public:
             L10n.screenCreateRoomRoomAccessSectionPublicOptionTitle
         case .askToJoin:
@@ -212,7 +209,7 @@ private extension CreateRoomAccessType {
     }
     
     var description: String {
-        switch self {
+        switch access {
         case .public:
             L10n.screenCreateRoomRoomAccessSectionPublicOptionDescription
         case .askToJoin:
@@ -223,7 +220,7 @@ private extension CreateRoomAccessType {
     }
     
     var icon: KeyPath<CompoundIcons, Image> {
-        switch self {
+        switch access {
         case .public:
             \.public
         case .askToJoin:
@@ -231,6 +228,15 @@ private extension CreateRoomAccessType {
         case .private:
             \.lock
         }
+    }
+    
+    var body: some View {
+        ListRow(label: .default(title: title,
+                                description: description,
+                                icon: icon,
+                                iconAlignment: .top),
+                kind: .selection(isSelected: isSelected,
+                                 action: onSelection))
     }
 }
 

@@ -61,7 +61,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         case .displayMediaPicker:
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
-            state.mediaInfo = nil
+            state.avatarMediaInfo = nil
         case .updateAliasLocalPart(let aliasLocalPart):
             state.aliasLocalPart = aliasLocalPart.lowercased()
             // If this has been called this means that the user wants a custom address not necessarily reflecting the name
@@ -93,7 +93,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 
                 switch mediaInfo {
                 case .image:
-                    state.mediaInfo = mediaInfo
+                    state.avatarMediaInfo = mediaInfo
                 default:
                     break
                 }
@@ -193,7 +193,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         }
         
         let avatarURL: URL?
-        if let media = state.mediaInfo {
+        if let media = state.avatarMediaInfo {
             switch await userSession.clientProxy.uploadMedia(media) {
             case .success(let url):
                 avatarURL = URL(string: url)

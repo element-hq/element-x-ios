@@ -29,7 +29,7 @@ struct CreateRoomScreenViewState: BindableState {
     let isKnockingFeatureEnabled: Bool
     var aliasLocalPart: String
     var bindings: CreateRoomScreenViewStateBindings
-    var mediaInfo: MediaInfo?
+    var avatarMediaInfo: MediaInfo?
     var canCreateRoom: Bool {
         !roomName.isEmpty && aliasErrors.isEmpty
     }
