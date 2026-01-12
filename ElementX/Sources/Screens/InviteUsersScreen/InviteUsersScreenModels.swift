@@ -37,8 +37,6 @@ struct InviteUsersScreenViewState: BindableState {
         !isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
     
-    var scrollToLastID: String?
-    
     func isUserSelected(_ user: UserProfileProxy) -> Bool {
         isUserDisabled(user) || selectedUsers.contains { $0.userID == user.userID }
     }
@@ -69,6 +67,7 @@ struct InviteUsersScreenViewState: BindableState {
 
 struct InviteUsersScreenViewStateBindings {
     var searchQuery = ""
+    var selectedUsersPosition: String?
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<InviteUsersScreenErrorType>?

@@ -105,24 +105,18 @@ struct InviteUsersScreen: View {
 
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            ScrollViewReader { scrollView in
-                HStack(spacing: 16) {
-                    ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                        InviteUsersScreenSelectedItem(user: user, mediaProvider: context.mediaProvider) {
-                            deselect(user)
-                        }
-                        .frame(width: cellWidth)
+            HStack(spacing: 16) {
+                ForEach(context.viewState.selectedUsers, id: \.userID) { user in
+                    InviteUsersScreenSelectedItem(user: user, mediaProvider: context.mediaProvider) {
+                        deselect(user)
                     }
+                    .frame(width: cellWidth)
                 }
-                .onChange(of: context.viewState.scrollToLastID) { _, lastAddedID in
-                    guard let id = lastAddedID else { return }
-                    withElementAnimation(.easeInOut) {
-                        scrollView.scrollTo(id)
-                    }
-                }
-                .padding(.horizontal, 14)
             }
+            .padding(.horizontal, 14)
+            .scrollTargetLayout()
         }
+        .scrollPosition(id: $context.selectedUsersPosition, anchor: .trailing)
     }
     
     @ToolbarContentBuilder

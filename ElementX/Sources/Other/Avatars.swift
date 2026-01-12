@@ -153,6 +153,8 @@ enum RoomAvatarSizeOnScreen {
     case roomDirectorySearch
     case joinRoom
     case spaceHeader
+    case spaceAddRooms
+    case spaceAddRoomsSelected
     case completionSuggestions
 
     var value: CGFloat {
@@ -164,12 +166,10 @@ enum RoomAvatarSizeOnScreen {
             return 32
         case .notificationSettings:
             return 30
-        case .messageForwarding:
+        case .messageForwarding, .globalSearch, .roomSelection, .spaceAddRooms:
             return 36
-        case .globalSearch:
-            return 36
-        case .roomSelection:
-            return 36
+        case .spaceAddRoomsSelected:
+            return 56
         case .details:
             return 96
         case .joinRoom:
