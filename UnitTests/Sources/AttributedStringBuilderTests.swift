@@ -80,7 +80,7 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testPunctuationAtTheEndOfPlainStringLinks() {
-        let plainString = "This text contains a https://www.matrix.org:;., link."
+        let plainString = "Most punctuation marks are removed https://www.matrix.org:;., but closing brackets are kept https://example.com/(test)"
         
         guard let attributedString = attributedStringBuilder.fromPlain(plainString) else {
             XCTFail("Could not build the attributed string")
@@ -89,11 +89,12 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(String(attributedString.characters), plainString)
         
-        XCTAssertEqual(attributedString.runs.count, 3)
+        XCTAssertEqual(attributedString.runs.count, 4)
         
-        let link = attributedString.runs.first { $0.link != nil }?.link
-        
-        XCTAssertEqual(link?.host, "www.matrix.org")
+        let firstLink = attributedString.runs.first { $0.link != nil }?.link
+        XCTAssertEqual(firstLink, "https://www.matrix.org")
+        let secondLink = attributedString.runs.last { $0.link != nil }?.link
+        XCTAssertEqual(secondLink, "https://example.com/(test)")
     }
     
     func testLinkDefaultScheme() {
