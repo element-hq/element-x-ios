@@ -244,6 +244,7 @@ private struct CreateRoomAccessRow: View {
 
 struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
+        AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
         return CreateRoomScreenViewModel(isSpace: false,
                                          userSession: userSession,
@@ -253,6 +254,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let spaceViewModel = {
+        AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
         return CreateRoomScreenViewModel(isSpace: true,
                                          userSession: userSession,
@@ -262,6 +264,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let publicRoomViewModel = {
+        AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
                                                   userSession: userSession,
@@ -287,6 +290,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let publicRoomInvalidAliasViewModel = {
+        AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
                                                   userSession: userSession,
@@ -299,6 +303,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let publicRoomExistingAliasViewModel = {
+        AppSettings.resetAllSettings()
         let clientProxy = ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))
         clientProxy.isAliasAvailableReturnValue = .success(false)
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
