@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "Jouw afbeelding";
 "action_accept" = "Accepteren";
 "action_add_caption" = "Beschrijving toevoegen";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "Toevoegen aan tijdlijn";
 "action_back" = "Terug";
 "action_call" = "Bellen";
@@ -67,6 +68,7 @@
 "action_copy_text" = "Tekst kopiëren";
 "action_create" = "Aanmaken";
 "action_create_a_room" = "Creëer een kamer";
+"action_create_space" = "Create space";
 "action_deactivate" = "Sluiten";
 "action_deactivate_account" = "Account sluiten";
 "action_decline" = "Weigeren";
@@ -104,6 +106,7 @@
 "action_load_more" = "Meer laden";
 "action_manage_account" = "Account beheren";
 "action_manage_devices" = "Apparaten beheren";
+"action_manage_rooms" = "Manage rooms";
 "action_message" = "Bericht";
 "action_minimize" = "Minimise";
 "action_next" = "Volgende";
@@ -188,6 +191,7 @@
 "common_copied_to_clipboard" = "Gekopieerd naar klembord";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Kamer maken...";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Heeft de kamer verlaten";
 "common_current_user_left_space" = "Left space";
@@ -307,6 +311,7 @@
 "common_starting_chat" = "Chat starten…";
 "common_sticker" = "Sticker";
 "common_success" = "Geslaagd";
+"common_suggested" = "Suggested";
 "common_suggestions" = "Suggesties";
 "common_syncing" = "Synchroniseren";
 "common_system" = "Systeem";
@@ -526,14 +531,19 @@
 "screen_create_poll_options_section_title" = "Options";
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
 "screen_create_poll_settings_section_title" = "Settings";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_description" = "Iedereen kan toetreden tot deze kamer";
 "screen_create_room_room_access_section_anyone_option_title" = "Iedereen";
 "screen_create_room_room_access_section_header" = "Toegang tot de kamer";
 "screen_create_room_room_access_section_knocking_option_description" = "Iedereen kan vragen om toe te treden tot de kamer, maar een beheerder of moderator moet het verzoek accepteren";
 "screen_create_room_room_access_section_knocking_option_title" = "Vraag om toe te treden";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
 "screen_create_room_room_address_section_title" = "Room address";
 "screen_create_room_room_visibility_section_title" = "Room visibility";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
 "screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
@@ -651,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_change_permissions_change_settings" = "Change settings";
 "screen_room_change_permissions_manage_space" = "Manage space";
-"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Edit Admins or Owners";
 "screen_room_details_pinned_events_row_title" = "Vastgezette berichten";
@@ -679,7 +688,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Once enabled, encryption cannot be disabled.";
 "screen_security_and_privacy_encryption_toggle_title" = "Enable end-to-end encryption";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join.";
-"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Only invited people can join.";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Invite only";
 "screen_security_and_privacy_room_access_section_header" = "Access";
@@ -712,6 +721,7 @@
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
@@ -836,7 +846,9 @@
 "screen_create_room_action_create_room" = "Nieuwe kamer";
 "screen_create_room_error_creating_room" = "Er is een fout opgetreden bij het aanmaken van de kamer";
 "screen_create_room_private_option_description" = "Alleen uitgenodigde personen hebben toegang tot deze kamer. Alle berichten zijn end-to-end versleuteld.";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Iedereen kan deze kamer vinden.\nJe kunt dit op elk gewenst moment wijzigen in de kamerinstellingen.";
+"screen_create_room_public_option_title" = "Openbare kamer";
 "screen_create_room_topic_label" = "Onderwerp (optioneel)";
 "screen_deactivate_account_confirmation_dialog_content" = "Bevestig dat je je account wilt sluiten. Deze actie kan niet ongedaan worden gemaakt.";
 "screen_deactivate_account_delete_all_messages" = "Verwijder al mijn berichten";
@@ -1408,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "Iedereen";
 "screen_room_single_knock_request_accept_button_title" = "Accepteren";
 "screen_room_single_knock_request_view_button_title" = "Bekijken";
+"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_details_profile_row_title" = "Profiel";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Verzoek om toe te treden verzonden";
@@ -1434,8 +1447,6 @@
 "screen_create_account_title" = "Account aanmaken";
 "screen_create_poll_cancel_confirmation_content_ios" = "Je wijzigingen worden niet opgeslagen";
 "screen_create_room_add_people_title" = "Mensen uitnodigen";
-"screen_create_room_private_option_title" = "Privé kamer";
-"screen_create_room_public_option_title" = "Openbare kamer";
 "screen_create_room_room_name_label" = "Naam van de kamer";
 "screen_create_room_title" = "Creëer een kamer";
 "screen_deactivate_account_title" = "Account sluiten";
@@ -1473,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "Media and files";
 "screen_room_details_notification_title" = "Meldingen";
 "screen_room_details_roles_and_permissions" = "Rollen en rechten";
-"screen_room_details_room_name_label" = "Naam van de kamer";
+"screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_title" = "Beveiliging";
 "screen_room_details_topic_title" = "Onderwerp";
 "screen_room_error_failed_processing_media" = "Het verwerken van media voor uploaden is mislukt. Probeer het opnieuw.";

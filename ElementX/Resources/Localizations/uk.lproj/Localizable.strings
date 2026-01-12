@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "Ваш аватар";
 "action_accept" = "Прийняти";
 "action_add_caption" = "Додати підпис";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "Додати до стрічки";
 "action_back" = "Назад";
 "action_call" = "Зателефонувати";
@@ -67,6 +68,7 @@
 "action_copy_text" = "Скопіювати текст";
 "action_create" = "Створити";
 "action_create_a_room" = "Створити кімнату";
+"action_create_space" = "Create space";
 "action_deactivate" = "Деактивувати";
 "action_deactivate_account" = "Деактивувати обліковий запис";
 "action_decline" = "Відхилити";
@@ -104,6 +106,7 @@
 "action_load_more" = "Завантажити ще";
 "action_manage_account" = "Керування обліковим записом";
 "action_manage_devices" = "Керування пристроями";
+"action_manage_rooms" = "Manage rooms";
 "action_message" = "Написати";
 "action_minimize" = "Minimise";
 "action_next" = "Далі";
@@ -188,6 +191,7 @@
 "common_copied_to_clipboard" = "Скопійовано до буферу обміну";
 "common_copyright" = "Авторське право";
 "common_creating_room" = "Створення кімнати...";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "Запит скасовано";
 "common_current_user_left_room" = "Виходить з кімнати";
 "common_current_user_left_space" = "Left space";
@@ -307,6 +311,7 @@
 "common_starting_chat" = "Початок бесіди...";
 "common_sticker" = "Наліпка";
 "common_success" = "Успіх";
+"common_suggested" = "Suggested";
 "common_suggestions" = "Пропозиції";
 "common_syncing" = "Синхронізація";
 "common_system" = "Системна";
@@ -526,14 +531,19 @@
 "screen_create_poll_options_section_title" = "Варіанти";
 "screen_create_poll_remove_accessibility_label" = "Вилучити %1$@";
 "screen_create_poll_settings_section_title" = "Налаштування";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_description" = "Будь-хто може приєднатися до цієї кімнати";
 "screen_create_room_room_access_section_anyone_option_title" = "Кожний";
 "screen_create_room_room_access_section_header" = "Доступ до кімнати";
 "screen_create_room_room_access_section_knocking_option_description" = "Будь-хто може попросити приєднатися до кімнати, але адміністратор або модератор повинен буде прийняти запит";
 "screen_create_room_room_access_section_knocking_option_title" = "Запросити приєднатися";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "Щоб цю кімнату було видно в каталозі загальнодоступних кімнат, вам знадобиться її адреса.";
 "screen_create_room_room_address_section_title" = "Адреса кімнати";
 "screen_create_room_room_visibility_section_title" = "Видимість кімнати";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "Ви не бачитимете повідомлень або запрошень у кімнату від цього користувача";
 "screen_decline_and_block_report_user_option_description" = "Поскаржитися на цю кімнату постачальнику облікового запису.";
 "screen_edit_room_address_room_address_section_footer" = "Вам знадобиться адреса кімнати, щоб зробити її видимою в каталозі.";
@@ -651,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@ хоче приєднатися до цієї кімнати";
 "screen_room_change_permissions_change_settings" = "Change settings";
 "screen_room_change_permissions_manage_space" = "Manage space";
-"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_title" = "Permissions";
 "screen_room_change_role_administrators_or_owners_title" = "Змінити адміністраторів або власників";
 "screen_room_details_pinned_events_row_title" = "Закріплені повідомлення";
@@ -679,7 +688,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Після ввімкнення шифрування неможливо вимкнути.";
 "screen_security_and_privacy_encryption_toggle_title" = "Увімкнути наскрізне шифрування";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Будь-хто може знайти та приєднатися.";
-"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation.  %1$@";
+"screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Люди можуть приєднатися, лише якщо їх запросили";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Лише запрошені";
 "screen_security_and_privacy_room_access_section_header" = "Доступ до кімнати";
@@ -712,6 +721,7 @@
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Простори, які ви створили або до яких приєдналися.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Простори";
 "screen_start_chat_join_room_by_address_action" = "Приєднатися до кімнати за адресою";
@@ -836,7 +846,9 @@
 "screen_create_room_action_create_room" = "Нова кімната";
 "screen_create_room_error_creating_room" = "Під час створення кімнати сталася помилка";
 "screen_create_room_private_option_description" = "Лише запрошені люди мають доступ до цієї кімнати. Усі повідомлення захищені наскрізним шифруванням.";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Будь-хто може знайти цю кімнату. \nВи можете змінити це в будь-який час у налаштуваннях кімнати.";
+"screen_create_room_public_option_title" = "Публічна кімната";
 "screen_create_room_topic_label" = "Тема (необов'язково)";
 "screen_deactivate_account_confirmation_dialog_content" = "Будь ласка, підтвердіть, що ви хочете деактивувати свій обліковий запис. Ця дія не може бути скасована.";
 "screen_deactivate_account_delete_all_messages" = "Видалити всі мої повідомлення";
@@ -1408,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "Усі";
 "screen_room_single_knock_request_accept_button_title" = "Прийняти";
 "screen_room_single_knock_request_view_button_title" = "Переглянути";
+"screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_details_profile_row_title" = "Профіль";
 "screen_room_details_security_and_privacy_title" = "Безпека й приватність";
 "screen_roomlist_knock_event_sent_description" = "Запит на приєднання надіслано";
@@ -1434,8 +1447,6 @@
 "screen_create_account_title" = "Створити обліковий запис";
 "screen_create_poll_cancel_confirmation_content_ios" = "Внесені зміни не буде збережено";
 "screen_create_room_add_people_title" = "Запросити людей";
-"screen_create_room_private_option_title" = "Приватна кімната (тільки за запрошенням)";
-"screen_create_room_public_option_title" = "Загальнодоступна кімната";
 "screen_create_room_room_name_label" = "Назва кімнати";
 "screen_create_room_title" = "Створити кімнату";
 "screen_deactivate_account_title" = "Деактивувати обліковий запис";
@@ -1473,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "Медіа та файли";
 "screen_room_details_notification_title" = "Сповіщення";
 "screen_room_details_roles_and_permissions" = "Ролі та дозволи";
-"screen_room_details_room_name_label" = "Назва кімнати";
+"screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_title" = "Безпека";
 "screen_room_details_topic_title" = "Тема";
 "screen_room_error_failed_processing_media" = "Не вдалося обробити медіафайл для завантаження, спробуйте ще раз.";

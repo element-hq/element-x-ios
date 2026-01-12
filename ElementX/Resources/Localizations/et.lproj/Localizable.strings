@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "Sinu tunnuspilt";
 "action_accept" = "Nõustu";
 "action_add_caption" = "Lisa selgitus";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "Lisa ajajoonele";
 "action_back" = "Tagasi";
 "action_call" = "Helista";
@@ -67,6 +68,7 @@
 "action_copy_text" = "Kopeeri tekst";
 "action_create" = "Loo";
 "action_create_a_room" = "Loo jututuba";
+"action_create_space" = "Create space";
 "action_deactivate" = "Eemalda konto";
 "action_deactivate_account" = "Eemalda konto kasutusest";
 "action_decline" = "Keeldu";
@@ -104,6 +106,7 @@
 "action_load_more" = "Näita veel";
 "action_manage_account" = "Halda kasutajakontot";
 "action_manage_devices" = "Halda seadmeid";
+"action_manage_rooms" = "Halda jututuba";
 "action_message" = "Saada sõnum";
 "action_minimize" = "Minimeeri";
 "action_next" = "Edasi";
@@ -188,6 +191,7 @@
 "common_copied_to_clipboard" = "Kopeeritud lõikelauale";
 "common_copyright" = "Autoriõigused";
 "common_creating_room" = "Loome jututoa…";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "Päring on tühistatud";
 "common_current_user_left_room" = "Lahkus jututoast";
 "common_current_user_left_space" = "Lahkus kogukonnast";
@@ -307,6 +311,7 @@
 "common_starting_chat" = "Alustame vestlust…";
 "common_sticker" = "Kleeps";
 "common_success" = "Õnnestus";
+"common_suggested" = "Suggested";
 "common_suggestions" = "Soovitused";
 "common_syncing" = "Sünkroniseerime";
 "common_system" = "Süsteem";
@@ -526,14 +531,19 @@
 "screen_create_poll_options_section_title" = "Valikud";
 "screen_create_poll_remove_accessibility_label" = "Kustuta: %1$@";
 "screen_create_poll_settings_section_title" = "Seadistused";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_description" = "Kõik võivad selle jututoaga liituda";
 "screen_create_room_room_access_section_anyone_option_title" = "Kõik kasutajad";
 "screen_create_room_room_access_section_header" = "Ligipääs jututoale";
 "screen_create_room_room_access_section_knocking_option_description" = "Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama";
 "screen_create_room_room_access_section_knocking_option_title" = "Küsi võimalust liitumiseks";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "Selleks, et see jututuba oleks nähtav jututubade avalikus kataloogis, sa vajad jututoa aadressi.";
 "screen_create_room_room_address_section_title" = "Jututoa aadress";
 "screen_create_room_room_visibility_section_title" = "Jututoa nähtavus";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "Sa ei näe enam selle kasutaja saadetud sõnumeid ja jututubade kutseid";
 "screen_decline_and_block_report_user_option_description" = "Teata sellest jututoast oma teenusepakkujale.";
 "screen_edit_room_address_room_address_section_footer" = "Selleks, et jututuba oleks nähtav jututubade avalikus kataloogis, vajab ta aadressi.";
@@ -651,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@ soovib selle jututoaga liituda";
 "screen_room_change_permissions_change_settings" = "Muuda seadistusi";
 "screen_room_change_permissions_manage_space" = "Halda kogukonda";
-"screen_room_change_permissions_manage_space_rooms" = "Halda jututuba";
 "screen_room_change_permissions_title" = "Õigused";
 "screen_room_change_role_administrators_or_owners_title" = "Muuda peakasutajaid või omanikke";
 "screen_room_details_pinned_events_row_title" = "Esiletõstetud sõnumid";
@@ -712,6 +721,7 @@
 "screen_space_announcement_title" = "Võtame kasutusele kogukonnad";
 "screen_space_list_description" = "Sinu loodud kogukonnad ning need, millega oled liitunud.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "Kogukond: %1$@";
 "screen_space_list_title" = "Kogukonnad";
 "screen_start_chat_join_room_by_address_action" = "Liitu jututoaga aadressi alusel";
@@ -836,7 +846,9 @@
 "screen_create_room_action_create_room" = "Uus jututuba";
 "screen_create_room_error_creating_room" = "Jututoa loomisel tekkis viga";
 "screen_create_room_private_option_description" = "Ligipääs siia jututuppa on vaid kutse alusel. Kõik sõnumid siin jututoas on läbivalt krüptitud.";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Kõik saavad seda jututuba leida.\nSa võid seda jututoa seadistustest alati muuta.";
+"screen_create_room_public_option_title" = "Avalik jututuba";
 "screen_create_room_topic_label" = "Teema (kui soovid lisada)";
 "screen_deactivate_account_confirmation_dialog_content" = "Palun kinnita uuesti, et soovid eemaldada oma konto kasutusest";
 "screen_deactivate_account_delete_all_messages" = "Kustuta kõik minu sõnumid";
@@ -1408,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "Kõik";
 "screen_room_single_knock_request_accept_button_title" = "Nõustu";
 "screen_room_single_knock_request_view_button_title" = "Vaata";
+"screen_room_change_permissions_manage_space_rooms" = "Halda jututuba";
 "screen_room_details_profile_row_title" = "Profiil";
 "screen_room_details_security_and_privacy_title" = "Turvalisus ja privaatsus";
 "screen_roomlist_knock_event_sent_description" = "Liitumispalve on saadetud";
@@ -1434,8 +1447,6 @@
 "screen_create_account_title" = "Loo kasutajakonto";
 "screen_create_poll_cancel_confirmation_content_ios" = "Sinu tehtud muudatused jäävad salvestamata";
 "screen_create_room_add_people_title" = "Kutsu osalejaid";
-"screen_create_room_private_option_title" = "Privaatne jututuba";
-"screen_create_room_public_option_title" = "Avalik jututuba";
 "screen_create_room_room_name_label" = "Jututoa nimi";
 "screen_create_room_title" = "Loo jututuba";
 "screen_deactivate_account_title" = "Eemalda konto kasutusest";
@@ -1473,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "Meedia ja failid";
 "screen_room_details_notification_title" = "Teavitused";
 "screen_room_details_roles_and_permissions" = "Rollid ja õigused";
-"screen_room_details_room_name_label" = "Jututoa nimi";
+"screen_room_details_room_name_label" = "Nimi";
 "screen_room_details_security_title" = "Turvalisus";
 "screen_room_details_topic_title" = "Teema";
 "screen_room_error_failed_processing_media" = "Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti.";

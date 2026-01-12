@@ -48,6 +48,7 @@
 "a11y.your_avatar" = "Vaš avatar";
 "action_accept" = "Prihvati";
 "action_add_caption" = "Dodaj opis";
+"action_add_existing_rooms" = "Add existing rooms";
 "action_add_to_timeline" = "Dodaj na vremensku traku";
 "action_back" = "Natrag";
 "action_call" = "Poziv";
@@ -67,6 +68,7 @@
 "action_copy_text" = "Kopiraj tekst";
 "action_create" = "Stvori";
 "action_create_a_room" = "Stvori sobu";
+"action_create_space" = "Create space";
 "action_deactivate" = "Deaktiviraj";
 "action_deactivate_account" = "Deaktiviraj račun";
 "action_decline" = "Odbij";
@@ -104,6 +106,7 @@
 "action_load_more" = "Učitaj više";
 "action_manage_account" = "Upravljanje računom";
 "action_manage_devices" = "Upravljanje uređajima";
+"action_manage_rooms" = "Upravljaj sobama";
 "action_message" = "Poruka";
 "action_minimize" = "Minimiziraj";
 "action_next" = "Dalje";
@@ -188,6 +191,7 @@
 "common_copied_to_clipboard" = "Kopirano u međuspremnik";
 "common_copyright" = "Autorsko pravo";
 "common_creating_room" = "Stvaranje sobe…";
+"common_creating_space" = "Creating space…";
 "common_current_user_canceled_knock" = "Zahtjev je otkazan";
 "common_current_user_left_room" = "Napustio/la je sobu";
 "common_current_user_left_space" = "Napušteni prostor";
@@ -307,6 +311,7 @@
 "common_starting_chat" = "Započinjanje razgovora...";
 "common_sticker" = "Naljepnica";
 "common_success" = "Uspjeh";
+"common_suggested" = "Suggested";
 "common_suggestions" = "Prijedlozi";
 "common_syncing" = "Sinkronizacija";
 "common_system" = "Sustav";
@@ -526,14 +531,19 @@
 "screen_create_poll_options_section_title" = "Mogućnosti";
 "screen_create_poll_remove_accessibility_label" = "Ukloni %1$@";
 "screen_create_poll_settings_section_title" = "Postavke";
+"screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_new_space_title" = "New space";
+"screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_anyone_option_description" = "Svatko se može pridružiti ovoj sobi";
 "screen_create_room_room_access_section_anyone_option_title" = "Svatko";
 "screen_create_room_room_access_section_header" = "Pristup sobi";
 "screen_create_room_room_access_section_knocking_option_description" = "Svatko može zatražiti pridruživanje sobi, ali administrator ili moderator morat će prihvatiti zahtjev.";
 "screen_create_room_room_access_section_knocking_option_title" = "Zatraži pridruživanje";
+"screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "Da bi ova soba bila vidljiva u javnom direktoriju soba, trebat će vam adresa sobe.";
 "screen_create_room_room_address_section_title" = "Adresa sobe";
 "screen_create_room_room_visibility_section_title" = "Vidljivost sobe";
+"screen_create_room_title_new_space" = "New space";
 "screen_decline_and_block_block_user_option_description" = "Nećete vidjeti nikakve poruke ili pozivnice za sobu od ovog korisnika";
 "screen_decline_and_block_report_user_option_description" = "Prijavite ovu sobu svom davatelju usluga računa.";
 "screen_edit_room_address_room_address_section_footer" = "Trebat će vam adresa kako bi bila vidljiva u javnom direktoriju.";
@@ -651,7 +661,6 @@
 "screen_room_single_knock_request_title" = "%1$@ želi se pridružiti ovoj sobi";
 "screen_room_change_permissions_change_settings" = "Promijeni postavke";
 "screen_room_change_permissions_manage_space" = "Upravljaj prostorom";
-"screen_room_change_permissions_manage_space_rooms" = "Upravljaj sobama";
 "screen_room_change_permissions_title" = "Dopuštenja";
 "screen_room_change_role_administrators_or_owners_title" = "Uredi administratore ili vlasnike";
 "screen_room_details_pinned_events_row_title" = "Prikvačene poruke";
@@ -712,6 +721,7 @@
 "screen_space_announcement_title" = "Predstavljamo prostore";
 "screen_space_list_description" = "Prostori koje ste stvorili ili kojima ste se pridružili.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_empty_state_title" = "Create spaces to organize rooms";
 "screen_space_list_parent_space" = "Prostor %1$@";
 "screen_space_list_title" = "Prostori";
 "screen_start_chat_join_room_by_address_action" = "Pridruži se sobi putem adrese";
@@ -836,7 +846,9 @@
 "screen_create_room_action_create_room" = "Nova soba";
 "screen_create_room_error_creating_room" = "Došlo je do pogreške prilikom stvaranja sobe";
 "screen_create_room_private_option_description" = "Samo pozvane osobe mogu pristupiti ovoj sobi. Sve su poruke sveobuhvatno šifrirane.";
+"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Svatko može pronaći ovu sobu.\nTo možete u svakom trenutku promijeniti u postavkama sobe.";
+"screen_create_room_public_option_title" = "Public";
 "screen_create_room_topic_label" = "Tema (neobavezno)";
 "screen_deactivate_account_confirmation_dialog_content" = "Potvrdite da želite deaktivirati svoj račun. Ova se radnja ne može poništiti.";
 "screen_deactivate_account_delete_all_messages" = "Izbriši sve moje poruke";
@@ -1408,6 +1420,7 @@
 "screen_room_mentions_at_room_title" = "Svi";
 "screen_room_single_knock_request_accept_button_title" = "Prihvati";
 "screen_room_single_knock_request_view_button_title" = "Prikaz";
+"screen_room_change_permissions_manage_space_rooms" = "Upravljaj sobama";
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_security_and_privacy_title" = "Sigurnost i privatnost";
 "screen_roomlist_knock_event_sent_description" = "Zahtjev za pridruživanje je poslan";
@@ -1434,8 +1447,6 @@
 "screen_create_account_title" = "Izradi račun";
 "screen_create_poll_cancel_confirmation_content_ios" = "Vaše promjene neće se spremiti";
 "screen_create_room_add_people_title" = "Pozovi osobe";
-"screen_create_room_private_option_title" = "Privatna soba";
-"screen_create_room_public_option_title" = "Javna soba";
 "screen_create_room_room_name_label" = "Naziv sobe";
 "screen_create_room_title" = "Stvori sobu";
 "screen_deactivate_account_title" = "Deaktiviraj račun";
@@ -1473,7 +1484,7 @@
 "screen_room_details_media_gallery_title" = "Mediji i datoteke";
 "screen_room_details_notification_title" = "Obavijesti";
 "screen_room_details_roles_and_permissions" = "Uloge i dopuštenja";
-"screen_room_details_room_name_label" = "Naziv sobe";
+"screen_room_details_room_name_label" = "Naziv";
 "screen_room_details_security_title" = "Sigurnost";
 "screen_room_details_topic_title" = "Tema";
 "screen_room_error_failed_processing_media" = "Prijenos medija za obradu nije uspio, pokušajte ponovno.";
