@@ -131,8 +131,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                     return
                 }
                 
-                guard state.isKnockingFeatureEnabled,
-                      !state.bindings.selectedAccessType.isPrivate,
+                guard !state.bindings.selectedAccessType.isPrivate,
                       let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: aliasLocalPart,
                                                                      serverName: state.serverName) else {
                     // While is empty or private room we don't change or display the error
@@ -173,7 +172,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         showLoadingIndicator()
         
         // Better to double check the errors also when trying to create the room
-        if state.isKnockingFeatureEnabled, !state.bindings.selectedAccessType.isPrivate {
+        if !state.bindings.selectedAccessType.isPrivate {
             guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: state.aliasLocalPart,
                                                                  serverName: state.serverName),
                 isRoomAliasFormatValid(alias: canonicalAlias) else {
