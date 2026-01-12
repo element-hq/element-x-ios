@@ -640,7 +640,7 @@ internal enum L10n {
   internal static var commonRoom: String { return L10n.tr("Localizable", "common_room") }
   /// Room name
   internal static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
-  /// Add name…
+  /// e.g. your project name
   internal static var commonRoomNamePlaceholder: String { return L10n.tr("Localizable", "common_room_name_placeholder") }
   /// Plural format key: "%#@COUNT@"
   internal static func commonRooms(_ p1: Int) -> String {
@@ -720,7 +720,7 @@ internal enum L10n {
   internal static var commonThread: String { return L10n.tr("Localizable", "common_thread") }
   /// Topic
   internal static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
-  /// Add description…
+  /// What is this room about?
   internal static var commonTopicPlaceholder: String { return L10n.tr("Localizable", "common_topic_placeholder") }
   /// Touch ID
   internal static var commonTouchIdIos: String { return L10n.tr("Localizable", "common_touch_id_ios") }
@@ -1571,6 +1571,8 @@ internal enum L10n {
   internal static var screenCreateRoomErrorCreatingRoom: String { return L10n.tr("Localizable", "screen_create_room_error_creating_room") }
   /// The space could not be created because of an unknown error. Try again later.
   internal static var screenCreateRoomErrorCreatingSpace: String { return L10n.tr("Localizable", "screen_create_room_error_creating_space") }
+  /// Add name…
+  internal static var screenCreateRoomNamePlaceholder: String { return L10n.tr("Localizable", "screen_create_room_name_placeholder") }
   /// New room
   internal static var screenCreateRoomNewRoomTitle: String { return L10n.tr("Localizable", "screen_create_room_new_room_title") }
   /// New space
@@ -1608,6 +1610,8 @@ internal enum L10n {
   internal static var screenCreateRoomRoomVisibilitySectionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_visibility_section_title") }
   /// Topic (optional)
   internal static var screenCreateRoomTopicLabel: String { return L10n.tr("Localizable", "screen_create_room_topic_label") }
+  /// Add description…
+  internal static var screenCreateRoomTopicPlaceholder: String { return L10n.tr("Localizable", "screen_create_room_topic_placeholder") }
   /// Please confirm that you want to deactivate your account. This action cannot be undone.
   internal static var screenDeactivateAccountConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_deactivate_account_confirmation_dialog_content") }
   /// Delete all my messages

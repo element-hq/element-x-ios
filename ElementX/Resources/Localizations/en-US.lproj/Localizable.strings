@@ -283,7 +283,7 @@
 "common_rich_text_editor" = "Rich text editor";
 "common_room" = "Room";
 "common_room_name" = "Room name";
-"common_room_name_placeholder" = "Add name…";
+"common_room_name_placeholder" = "e.g. your project name";
 "common_saved_changes" = "Saved changes";
 "common_saving" = "Saving";
 "common_screen_lock" = "Screen lock";
@@ -319,7 +319,7 @@
 "common_third_party_notices" = "Third-party notices";
 "common_thread" = "Thread";
 "common_topic" = "Topic";
-"common_topic_placeholder" = "Add description…";
+"common_topic_placeholder" = "What is this room about?";
 "common_touch_id_ios" = "Touch ID";
 "common_unable_to_decrypt" = "Unable to decrypt";
 "common_unable_to_decrypt_no_access" = "You don't have access to this message";
@@ -532,6 +532,7 @@
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
 "screen_create_poll_settings_section_title" = "Settings";
 "screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_name_placeholder" = "Add name…";
 "screen_create_room_new_room_title" = "New room";
 "screen_create_room_new_space_title" = "New space";
 "screen_create_room_public_option_short_description" = "Anyone can join.";
@@ -545,6 +546,7 @@
 "screen_create_room_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
 "screen_create_room_room_address_section_title" = "Address";
 "screen_create_room_room_visibility_section_title" = "Room visibility";
+"screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
 "screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";

@@ -71,7 +71,7 @@ struct CreateRoomScreen: View {
                     
                     TextField(L10n.commonName,
                               text: roomNameBinding,
-                              prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textSecondary),
+                              prompt: Text(L10n.screenCreateRoomNamePlaceholder).foregroundColor(.compound.textSecondary),
                               axis: .horizontal)
                         .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textPrimary)
@@ -131,7 +131,7 @@ struct CreateRoomScreen: View {
     
     private var topicSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.commonTopicPlaceholder),
+            ListRow(label: .plain(title: L10n.screenCreateRoomTopicPlaceholder),
                     kind: .textField(text: $context.roomTopic, axis: .vertical))
                 .lineLimit(3, reservesSpace: false)
                 .focused($focus, equals: .topic)
