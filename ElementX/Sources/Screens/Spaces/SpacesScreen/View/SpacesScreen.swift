@@ -9,8 +9,8 @@
 import Compound
 import SwiftUI
 
-struct SpaceListScreen: View {
-    @Bindable var context: SpaceListScreenViewModel.Context
+struct SpacesScreen: View {
+    @Bindable var context: SpacesScreenViewModel.Context
     
     var body: some View {
         mainContent
@@ -134,22 +134,22 @@ struct SpaceListScreen: View {
 
 // MARK: - Previews
 
-struct SpaceListScreen_Previews: PreviewProvider, TestablePreview {
+struct SpacesScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let emptyViewModel = makeViewModel(isEmpty: true)
     
     static var previews: some View {
         NavigationStack {
-            SpaceListScreen(context: viewModel.context)
+            SpacesScreen(context: viewModel.context)
         }
         
         NavigationStack {
-            SpaceListScreen(context: emptyViewModel.context)
+            SpacesScreen(context: emptyViewModel.context)
         }
         .previewDisplayName("Empty")
     }
     
-    static func makeViewModel(isEmpty: Bool = false) -> SpaceListScreenViewModel {
+    static func makeViewModel(isEmpty: Bool = false) -> SpacesScreenViewModel {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
         appSettings.createSpaceEnabled = true
@@ -158,10 +158,10 @@ struct SpaceListScreen_Previews: PreviewProvider, TestablePreview {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.spaceService = SpaceServiceProxyMock(.init(topLevelSpaces: isEmpty ? [] : .mockJoinedSpaces))
         
-        let viewModel = SpaceListScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                 selectedSpacePublisher: .init(nil),
-                                                 appSettings: appSettings,
-                                                 userIndicatorController: UserIndicatorControllerMock())
+        let viewModel = SpacesScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                              selectedSpacePublisher: .init(nil),
+                                              appSettings: appSettings,
+                                              userIndicatorController: UserIndicatorControllerMock())
         
         return viewModel
     }

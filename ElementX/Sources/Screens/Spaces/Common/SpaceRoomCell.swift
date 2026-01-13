@@ -74,7 +74,7 @@ struct SpaceRoomCell: View {
             .accessibilityElement(children: .combine)
         }
         .buttonStyle(SpaceRoomCellButtonStyle(isSelected: isSelected))
-        .accessibilityIdentifier(A11yIdentifiers.spaceListScreen.spaceRoomName(spaceServiceRoom.name))
+        .accessibilityIdentifier(A11yIdentifiers.spacesScreen.spaceRoomName(spaceServiceRoom.name))
     }
     
     @ViewBuilder @MainActor
