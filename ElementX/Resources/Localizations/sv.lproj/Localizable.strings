@@ -359,6 +359,8 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Glömt din återställningsnyckel?";
 "confirm_recovery_key_banner_title" = "Din nyckellagring är inte synkroniserad";
 "crash_detection_dialog_content" = "%1$@ kraschade senast den användes. Vill du dela en kraschrapport med oss?";
+"crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
+"crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "Identitet för %1$@ återställdes. %2$@";
 "crypto_identity_change_pin_violation_new" = "Identitet för %1$@ %2$@ återställdes. %3$@";
@@ -532,18 +534,21 @@
 "screen_create_poll_remove_accessibility_label" = "Ta bort %1$@";
 "screen_create_poll_settings_section_title" = "Inställningar";
 "screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_name_placeholder" = "Add name…";
+"screen_create_room_new_room_title" = "New room";
 "screen_create_room_new_space_title" = "New space";
 "screen_create_room_public_option_short_description" = "Anyone can join.";
-"screen_create_room_room_access_section_anyone_option_description" = "Vem som helst kan gå med i det här rummet";
-"screen_create_room_room_access_section_anyone_option_title" = "Vem som helst";
-"screen_create_room_room_access_section_header" = "Rumsåtkomst";
 "screen_create_room_room_access_section_knocking_option_description" = "Vem som helst kan be om att gå med i rummet men en administratör eller en moderator måste acceptera begäran";
 "screen_create_room_room_access_section_knocking_option_title" = "Be om att gå med";
+"screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_description" = "Vem som helst kan gå med i det här rummet";
+"screen_create_room_room_access_section_public_option_title" = "Vem som helst";
 "screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "För att detta rum ska vara synligt i den allmänna rumskatalogen behöver du en rumsadress.";
 "screen_create_room_room_address_section_title" = "Rumsadress";
 "screen_create_room_room_visibility_section_title" = "Rumssynlighet";
-"screen_create_room_title_new_space" = "New space";
+"screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Du kommer inte att se några meddelanden eller rumsinbjudningar från den här användaren";
 "screen_decline_and_block_report_user_option_description" = "Rapportera det här rummet till din kontoleverantör.";
 "screen_edit_room_address_room_address_section_footer" = "Du behöver en rumsadress för att göra den synlig i katalogen.";
@@ -681,6 +686,7 @@
 "screen_security_and_privacy_add_room_address_action" = "Lägg till rumsadress";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorised spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Vem som helst kan be om att gå med i rummet men en administratör eller moderator måste acceptera begäran.";
+"screen_security_and_privacy_ask_to_join_option_title" = "Be om att gå med";
 "screen_security_and_privacy_ask_to_join_single_space_members_option_description" = "Anyone in %1$@ can join, but everyone else must request access.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Ja, aktivera kryptering";
 "screen_security_and_privacy_enable_encryption_alert_description" = "När det är aktiverat kan kryptering för ett rum inte inaktiveras, meddelandehistoriken visas bara för rumsmedlemmar sedan de blev inbjudna eller sedan de gick med i rummet.\nIngen förutom rumsmedlemmarna kommer att kunna läsa meddelanden. Detta kan förhindra att bots och bridges fungerar korrekt.\nVi rekommenderar inte att aktivera kryptering för rum som vem som helst kan hitta och gå med i.";
@@ -688,6 +694,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Efter aktivering kan kryptering inte inaktiveras.";
 "screen_security_and_privacy_encryption_toggle_title" = "Aktivera totalsträckskryptering";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Vem som helst kan hitta och gå med";
+"screen_security_and_privacy_room_access_anyone_option_title" = "Vem som helst";
 "screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Användare kan bara gå med om de är inbjudna";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Endast inbjudan";
@@ -711,6 +718,7 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Säkerhet och sekretess";
 "screen_space_menu_action_members" = "View members";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
@@ -1424,9 +1432,7 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_security_and_privacy_title" = "Säkerhet och sekretess";
 "screen_roomlist_knock_event_sent_description" = "Begäran om att gå med skickad";
-"screen_security_and_privacy_ask_to_join_option_title" = "Be om att gå med";
 "screen_security_and_privacy_encryption_section_header" = "Kryptering";
-"screen_security_and_privacy_room_access_anyone_option_title" = "Vem som helst";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
 "screen_security_and_privacy_room_address_section_footer" = "Du behöver en rumsadress för att göra den synlig i katalogen.";
 "screen_space_settings_leave_space" = "Leave space";
@@ -1447,8 +1453,6 @@
 "screen_create_account_title" = "Skapa konto";
 "screen_create_poll_cancel_confirmation_content_ios" = "Dina ändringar kommer inte att sparas";
 "screen_create_room_add_people_title" = "Bjud in personer";
-"screen_create_room_room_name_label" = "Rumsnamn";
-"screen_create_room_title" = "Skapa ett rum";
 "screen_deactivate_account_title" = "Inaktivera konto";
 "screen_dm_details_block_alert_action" = "Blockera";
 "screen_dm_details_block_alert_description" = "Blockerade användare kommer inte att kunna skicka meddelanden till dig och alla deras meddelanden kommer att döljas. Du kan avblockera dem när som helst.";

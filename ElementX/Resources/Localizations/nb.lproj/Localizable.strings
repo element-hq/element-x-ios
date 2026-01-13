@@ -359,6 +359,8 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Har du glemt din gjenopprettingsnøkkel?";
 "confirm_recovery_key_banner_title" = "Nøkkellagringen din er ikke synkronisert";
 "crash_detection_dialog_content" = "%1$@ krasjet sist gang den ble brukt. Vil du dele en krasjrapport med oss?";
+"crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
+"crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@'s identitet ble tilbakestilt. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@s %2$@-identitet ble tilbakestilt. %3$@";
@@ -532,18 +534,21 @@
 "screen_create_poll_remove_accessibility_label" = "Fjern %1$@";
 "screen_create_poll_settings_section_title" = "Innstillinger";
 "screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
+"screen_create_room_name_placeholder" = "Add name…";
+"screen_create_room_new_room_title" = "New room";
 "screen_create_room_new_space_title" = "New space";
 "screen_create_room_public_option_short_description" = "Anyone can join.";
-"screen_create_room_room_access_section_anyone_option_description" = "Alle kan bli med i dette rommet";
-"screen_create_room_room_access_section_anyone_option_title" = "Alle";
-"screen_create_room_room_access_section_header" = "Tilgang til rom";
 "screen_create_room_room_access_section_knocking_option_description" = "Alle kan be om å få bli med i rommet, men en administrator eller moderator må godta forespørselen";
 "screen_create_room_room_access_section_knocking_option_title" = "Be om å bli med";
+"screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_description" = "Alle kan bli med i dette rommet";
+"screen_create_room_room_access_section_public_option_title" = "Alle";
 "screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "For at dette rommet skal være synlig i den offentlige romkatalogen, trenger du en romadresse.";
 "screen_create_room_room_address_section_title" = "Romadresse";
 "screen_create_room_room_visibility_section_title" = "Romsynlighet";
-"screen_create_room_title_new_space" = "New space";
+"screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Du vil ikke se noen meldinger eller rominvitasjoner fra denne brukeren";
 "screen_decline_and_block_report_user_option_description" = "Rapporter dette rommet til din kontoleverandør.";
 "screen_edit_room_address_room_address_section_footer" = "Du trenger en adresse for å gjøre den synlig i den offentlige katalogen.";
@@ -681,6 +686,7 @@
 "screen_security_and_privacy_add_room_address_action" = "Legg til adresse";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorised spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Alle må be om tilgang.";
+"screen_security_and_privacy_ask_to_join_option_title" = "Ask to join";
 "screen_security_and_privacy_ask_to_join_single_space_members_option_description" = "Anyone in %1$@ can join, but everyone else must request access.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Ja, aktiver kryptering";
 "screen_security_and_privacy_enable_encryption_alert_description" = "Når kryptering for et rom er aktivert, kan den ikke deaktiveres. Meldingshistorikken vil bare være synlig for rommedlemmer siden de ble invitert eller siden de ble med i rommet.\nIngen andre enn rommedlemmene vil kunne lese meldingene. Dette kan føre til at bots og broer ikke fungerer som de skal.\nVi anbefaler ikke å aktivere kryptering for rom som hvem som helst kan finne og bli med i.";
@@ -688,6 +694,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Når kryptering er aktivert, kan det ikke deaktiveres.";
 "screen_security_and_privacy_encryption_toggle_title" = "Aktiver ende-til-ende-kryptering";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Alle kan bli med.";
+"screen_security_and_privacy_room_access_anyone_option_title" = "Anyone";
 "screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Bare inviterte personer kan bli med.";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Kun for inviterte";
@@ -711,6 +718,7 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Synlighet";
 "screen_security_and_privacy_title" = "Sikkerhet og personvern";
 "screen_space_menu_action_members" = "Vis medlemmer";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_announcement_item1" = "Se områder du har opprettet eller blitt med i";
 "screen_space_announcement_item2" = "Godta eller avslå invitasjoner til områder";
 "screen_space_announcement_item3" = "Oppdag alle rom du kan bli med i i dine områder";
@@ -1424,9 +1432,7 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_security_and_privacy_title" = "Sikkerhet og personvern";
 "screen_roomlist_knock_event_sent_description" = "Forespørsel om å bli med sendt";
-"screen_security_and_privacy_ask_to_join_option_title" = "Be om å bli med";
 "screen_security_and_privacy_encryption_section_header" = "Kryptering";
-"screen_security_and_privacy_room_access_anyone_option_title" = "Alle";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
 "screen_security_and_privacy_room_address_section_footer" = "Du trenger en adresse for å gjøre den synlig i den offentlige katalogen.";
 "screen_space_settings_leave_space" = "Forlat område";
@@ -1447,8 +1453,6 @@
 "screen_create_account_title" = "Opprett konto";
 "screen_create_poll_cancel_confirmation_content_ios" = "Endringene dine blir ikke lagret";
 "screen_create_room_add_people_title" = "Inviter folk";
-"screen_create_room_room_name_label" = "Romnavn";
-"screen_create_room_title" = "Opprett et rom";
 "screen_deactivate_account_title" = "Deaktiver kontoen";
 "screen_dm_details_block_alert_action" = "Blokker";
 "screen_dm_details_block_alert_description" = "Blokkerte brukere vil ikke kunne sende deg meldinger, og alle meldingene deres vil være skjult. Du kan oppheve blokkeringen når som helst.";
