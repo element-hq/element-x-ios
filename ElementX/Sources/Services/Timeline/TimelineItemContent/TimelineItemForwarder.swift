@@ -9,8 +9,6 @@ import MatrixRustSDK
 import SwiftUI
 
 struct TimelineItemForwarder: Identifiable, Hashable {
-    static let test = TimelineItemForwarder(id: "@alice:matrix.org", displayName: "alice")
-    
     let id: String
     let displayName: String?
     

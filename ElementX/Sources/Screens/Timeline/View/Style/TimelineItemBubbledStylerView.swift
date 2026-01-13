@@ -322,6 +322,12 @@ private extension View {
     }
 }
 
+private extension TimelineItemForwarder {
+    static var test: TimelineItemForwarder {
+        TimelineItemForwarder(id: "@alice:matrix.org", displayName: "alice")
+    }
+}
+
 // MARK: - Previews
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {

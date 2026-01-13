@@ -70,7 +70,7 @@ private struct TimelineItemSendInfoLabel: View {
         switch sendInfo.status {
         case .sendingFailed: L10n.commonSendingFailed
         case .encryptionAuthenticity(let authenticity): authenticity.message
-        case .encryptionForwarder(let forwarder): UntranslatedL10n.encryptionForwarderDialogContent(forwarder.displayName ?? "Unknown", forwarder.id)
+        case .encryptionForwarder(let forwarder): forwarder.message
         case .none: nil
         }
     }
@@ -114,7 +114,11 @@ private struct TimelineItemSendInfoLabel: View {
 
 /// All the data needed to render a timeline item's send info label.
 private struct TimelineItemSendInfo {
-    enum Status { case sendingFailed, encryptionAuthenticity(EncryptionAuthenticity), encryptionForwarder(TimelineItemForwarder) }
+    enum Status {
+        case sendingFailed
+        case encryptionAuthenticity(EncryptionAuthenticity)
+        case encryptionForwarder(TimelineItemForwarder)
+    }
     
     /// Describes how the content and the send info should be arranged inside a bubble
     enum LayoutType {
@@ -151,7 +155,7 @@ private extension TimelineItemSendInfo {
             .sendingFailed
         } else if let authenticity = timelineItem.properties.encryptionAuthenticity {
             .encryptionAuthenticity(authenticity)
-        } else if let forwarder = timelineItem.properties.encryptionForwarder, enableKeyShareOnInvite {
+        } else if enableKeyShareOnInvite, let forwarder = timelineItem.properties.encryptionForwarder {
             .encryptionForwarder(forwarder)
         } else {
             nil
@@ -188,6 +192,12 @@ private extension EncryptionAuthenticity {
         case .red: .compound.textCriticalPrimary
         case .gray: .compound.textSecondary
         }
+    }
+}
+
+private extension TimelineItemForwarder {
+    static var test: TimelineItemForwarder {
+        TimelineItemForwarder(id: "@alice:matrix.org", displayName: "alice")
     }
 }
 
