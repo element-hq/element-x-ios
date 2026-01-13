@@ -794,6 +794,14 @@ internal enum L10n {
   internal static func crashDetectionDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crash_detection_dialog_content", String(describing: p1))
   }
+  /// %1$@ (%2$@) shared this message since you were not in the room when it was sent.
+  internal static func cryptoEventKeyForwardedKnownProfileDialogContent(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "crypto_event_key_forwarded_known_profile_dialog_content", String(describing: p1), String(describing: p2))
+  }
+  /// %1$@ shared this message since you were not in the room when it was sent.
+  internal static func cryptoEventKeyForwardedUnknownProfileDialogContent(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "crypto_event_key_forwarded_unknown_profile_dialog_content", String(describing: p1))
+  }
   /// This room has been configured so that new members can read history. %1$@
   internal static func cryptoHistoryVisible(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_history_visible", String(describing: p1))
@@ -3113,6 +3121,8 @@ internal enum L10n {
   internal static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
   /// Have you saved your recovery key?
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
+  /// Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.
+  internal static var screenSpaceAddRoomsRoomAccessDescription: String { return L10n.tr("Localizable", "screen_space_add_rooms_room_access_description") }
   /// View spaces you've created or joined
   internal static var screenSpaceAnnouncementItem1: String { return L10n.tr("Localizable", "screen_space_announcement_item1") }
   /// Accept or decline invites to spaces
