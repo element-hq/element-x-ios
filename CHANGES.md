@@ -1,3 +1,91 @@
+## Changes in 26.01.0 (2026-01-13)
+
+### What's Changed
+
+✨ Features
+* Add a banner to encrypted rooms with visible history. by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4738
+* Run client store optimizations when upgrating versions by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4888
+
+🙌 Improvements
+* Change permissions screen is now responsive to the current user's power level by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4889
+* Update the font style for placeholder messages (redacted/encrypted/unsupported). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4927
+* Create room redesign and refactor by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4942
+
+🐛 Bugfixes
+* Improve canSee Sec & Privacy check. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4835
+* Revert "Add a banner to encrypted rooms with visible history. (#4738)" by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4850
+* Fix voice message crashes on the Files tab of the Media and Files room section by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4839
+* Unban correctly depends on kick PL + removed Change Settings permission by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4878
+* Use the right check to show sec n privacy section in space settings by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4880
+* Fix for leaving spaces with 0 joined rooms by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4883
+* Fix for unbanning requiring both kick and ban permissions by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4925
+* Fix icon alignment on placeholder message items. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4930
+* Check permissions before indirectly updating desired settings in sec & privacy by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4926
+* Fix how email addresses and links with trailing closing brackets are detected by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4949
+* Hide the Translate action on macOS in favour of selecting the text. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4954
+
+⚠️ API Changes
+* Move BigIcon into Compound and add a new TitleAndIcon component. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4866
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4857
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4894
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4948
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4956
+
+🧱 Build
+* Have fastlane's xcbeautify use a special github actions formatter and reporter. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4864
+* Various codecov and workflow action tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4863
+* Use the quiet argument on Fastlane's xcbeautify output formatter by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4867
+* Remove now unnecessary screen creation UI tests copying step by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4868
+* Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4905
+
+📄 Documentation
+* Clarify product input requirements and how to add translations for contributions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4849
+
+🚧 In development 🚧
+* Add a Link New Device screen (behind a feature flag). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4811
+* Handle the edge case of one or more non parent joined spaces present in the existing allowed list by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4842
+* Add a service and flow coordinator for the LinkNewDevice feature. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4859
+* Tapping on the space screen title can open settings by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4890
+* Add a banner to encrypted rooms with visible history. by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4851
+* Do not show history visible banner when the user cannot send messages. by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4892
+* Add a Log Files entry to the Usage sizes. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4921
+* Add support for linking new devices in the QRCodeLoginScreen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4891
+* Add tests for linking a new device. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4934
+* Handle OIDC cancellation and workaround missing progress when linking a new device. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4935
+* Empty spaces list screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4936
+
+Others
+* Remove `eraseToStream` now that `any AsyncSequence` is available to us. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4836
+* Fix the integration test and improve the EncryptionSettings UI ones. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4838
+* Move the room list sending state icons to the front of the latest event. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4840
+* Update actions/cache action to v5 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4848
+* Update actions/upload-artifact action to v6 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4855
+* Remove unused imports by @mgcm in https://github.com/element-hq/element-x-ios/pull/4793
+* Update codecov/test-results-action action to v1.2.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4862
+* General tidy-up related to QR codes. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4865
+* Bump the RustSDK to v25.12.17 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4870
+* Update the foreground colour of BigIcon's default style. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4871
+* Update history visible settings by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4861
+* RTE update 2.41.0 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4872
+* Final tweaks to the existing QR code screens to match the designs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4874
+* Update dependency apple/swift-argument-parser to from: "1.7.0" by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4879
+* Tweaks to the Translate action. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4912
+* Update the SDK by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4914
+* Update dependency element-hq/compound-design-tokens to v6.5.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4920
+* Update dependency element-hq/compound-design-tokens to v6.6.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4928
+* Bump the Rust SDK to v26.01.06 by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4933
+* Update SDK to 26.01.09 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4941
+* Update dependencies. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4940
+* Update SDK to 26.01.13 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4953
+* Rename SpaceRoomProxy to SpaceServiceRoom and stop proxying the struct. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4952
+
+### New Contributors
+* @mgcm made their first contribution in https://github.com/element-hq/element-x-ios/pull/4793
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.12.1...release/26.01.0
+
 ## Changes in 25.12.1 (2025-12-10)
 
 ### What's Changed
