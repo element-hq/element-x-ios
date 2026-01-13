@@ -29,6 +29,10 @@ struct TimelineItemForwarder: Identifiable, Hashable {
     }
     
     var message: String {
-        UntranslatedL10n.encryptionForwarderDialogContent(displayName ?? "Unknown", id)
+        if let displayName {
+            L10n.cryptoEventKeyForwardedKnownProfileDialogContent(displayName, id)
+        } else {
+            L10n.cryptoEventKeyForwardedUnknownProfileDialogContent(id)
+        }
     }
 }
