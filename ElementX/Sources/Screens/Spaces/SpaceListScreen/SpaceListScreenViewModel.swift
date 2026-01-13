@@ -65,8 +65,8 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .spaceAction(.select(let spaceRoomProxy)):
-            Task { await selectSpace(spaceRoomProxy) }
+        case .spaceAction(.select(let spaceServiceRoom)):
+            Task { await selectSpace(spaceServiceRoom) }
         case .spaceAction(.join):
             fatalError("There shouldn't be any unjoined spaces in the joined spaces list.")
         case .showSettings:
@@ -86,8 +86,8 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
     
     // MARK: - Private
     
-    private func selectSpace(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {
-        switch await spaceServiceProxy.spaceRoomList(spaceID: spaceRoomProxy.id) {
+    private func selectSpace(_ spaceServiceRoom: SpaceServiceRoomProtocol) async {
+        switch await spaceServiceProxy.spaceRoomList(spaceID: spaceServiceRoom.id) {
         case .success(let spaceRoomListProxy):
             actionsSubject.send(.selectSpace(spaceRoomListProxy))
         case .failure(let error):

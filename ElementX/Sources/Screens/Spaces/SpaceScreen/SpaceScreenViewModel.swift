@@ -37,12 +37,12 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings
         
-        super.init(initialViewState: SpaceScreenViewState(space: spaceRoomListProxy.spaceRoomProxyPublisher.value,
+        super.init(initialViewState: SpaceScreenViewState(space: spaceRoomListProxy.spaceServiceRoomPublisher.value,
                                                           rooms: spaceRoomListProxy.spaceRoomsPublisher.value,
                                                           selectedSpaceRoomID: selectedSpaceRoomPublisher.value),
                    mediaProvider: userSession.mediaProvider)
         
-        spaceRoomListProxy.spaceRoomProxyPublisher
+        spaceRoomListProxy.spaceServiceRoomPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.space, on: self)
             .store(in: &cancellables)
@@ -107,19 +107,19 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .spaceAction(.select(let spaceRoomProxy)):
-            if spaceRoomProxy.isSpace {
-                if spaceRoomProxy.state != .joined {
-                    actionsSubject.send(.selectUnjoinedSpace(spaceRoomProxy))
+        case .spaceAction(.select(let spaceServiceRoom)):
+            if spaceServiceRoom.isSpace {
+                if spaceServiceRoom.state != .joined {
+                    actionsSubject.send(.selectUnjoinedSpace(spaceServiceRoom))
                 } else {
-                    Task { await selectSpace(spaceRoomProxy) }
+                    Task { await selectSpace(spaceServiceRoom) }
                 }
             } else {
                 // No need to check the join state, the room flow will show an appropriately configured join screen if needed.
-                actionsSubject.send(.selectRoom(roomID: spaceRoomProxy.id))
+                actionsSubject.send(.selectRoom(roomID: spaceServiceRoom.id))
             }
-        case .spaceAction(.join(let spaceRoomProxy)):
-            Task { await join(spaceRoomProxy) }
+        case .spaceAction(.join(let spaceServiceRoom)):
+            Task { await join(spaceServiceRoom) }
         case .leaveSpace:
             Task { await showLeaveSpaceConfirmation() }
         case .displayMembers(let roomProxy):
@@ -136,11 +136,11 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     
     // MARK: - Private
     
-    private func join(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {
-        state.joiningRoomIDs.insert(spaceRoomProxy.id)
-        defer { state.joiningRoomIDs.remove(spaceRoomProxy.id) }
+    private func join(_ spaceServiceRoom: SpaceServiceRoomProtocol) async {
+        state.joiningRoomIDs.insert(spaceServiceRoom.id)
+        defer { state.joiningRoomIDs.remove(spaceServiceRoom.id) }
         
-        guard case .success = await clientProxy.joinRoom(spaceRoomProxy.id, via: spaceRoomProxy.via) else {
+        guard case .success = await clientProxy.joinRoom(spaceServiceRoom.id, via: spaceServiceRoom.via) else {
             showFailureIndicator()
             return
         }
@@ -148,8 +148,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         // We don't want to show the space room after joining it this way 🤷‍♂️
     }
     
-    private func selectSpace(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {
-        switch await spaceServiceProxy.spaceRoomList(spaceID: spaceRoomProxy.id) {
+    private func selectSpace(_ spaceServiceRoom: SpaceServiceRoomProtocol) async {
+        switch await spaceServiceProxy.spaceRoomList(spaceID: spaceServiceRoom.id) {
         case .success(let spaceRoomListProxy):
             actionsSubject.send(.selectSpace(spaceRoomListProxy))
         case .failure(let error):

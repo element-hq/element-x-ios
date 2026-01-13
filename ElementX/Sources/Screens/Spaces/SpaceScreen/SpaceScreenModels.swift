@@ -10,7 +10,7 @@ import Foundation
 
 enum SpaceScreenViewModelAction {
     case selectSpace(SpaceRoomListProxyProtocol)
-    case selectUnjoinedSpace(SpaceRoomProxyProtocol)
+    case selectUnjoinedSpace(SpaceServiceRoomProtocol)
     case selectRoom(roomID: String)
     case leftSpace
     case presentRolesAndPermissions(roomProxy: JoinedRoomProxyProtocol)
@@ -19,13 +19,13 @@ enum SpaceScreenViewModelAction {
 }
 
 struct SpaceScreenViewState: BindableState {
-    var space: SpaceRoomProxyProtocol
+    var space: SpaceServiceRoomProtocol
     
     var permalink: URL?
     var roomProxy: JoinedRoomProxyProtocol?
     
     var isPaginating = false
-    var rooms: [SpaceRoomProxyProtocol]
+    var rooms: [SpaceServiceRoomProtocol]
     var selectedSpaceRoomID: String?
     var joiningRoomIDs: Set<String> = []
     

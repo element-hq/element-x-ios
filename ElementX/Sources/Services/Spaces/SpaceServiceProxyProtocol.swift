@@ -15,12 +15,12 @@ enum SpaceServiceProxyError: Error {
 
 // sourcery: AutoMockable
 protocol SpaceServiceProxyProtocol {
-    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> { get }
+    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> { get }
     
     func spaceRoomList(spaceID: String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>
     /// Returns a joined space given its identifier
-    func spaceForIdentifier(spaceID: String) async -> Result<SpaceRoomProxyProtocol?, SpaceServiceProxyError>
+    func spaceForIdentifier(spaceID: String) async -> Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError>
     func leaveSpace(spaceID: String) async -> Result<LeaveSpaceHandleProxy, SpaceServiceProxyError>
     /// Returns all the parent spaces of a child that user has joined.
-    func joinedParents(childID: String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>
+    func joinedParents(childID: String) async -> Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>
 }

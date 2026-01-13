@@ -13,32 +13,32 @@ import SwiftUI
 struct SpaceRoomCell: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
-    let spaceRoomProxy: SpaceRoomProxyProtocol
+    let spaceServiceRoom: SpaceServiceRoomProtocol
     let isSelected: Bool
     var isJoining = false
     let mediaProvider: MediaProviderProtocol!
     
-    enum Action { case select(SpaceRoomProxyProtocol), join(SpaceRoomProxyProtocol) }
+    enum Action { case select(SpaceServiceRoomProtocol), join(SpaceServiceRoomProtocol) }
     let action: (Action) -> Void
     
     private let verticalInsets = 12.0
     private let horizontalInsets = 16.0
     
     private var subtitle: String {
-        if spaceRoomProxy.isSpace {
-            switch spaceRoomProxy.visibility {
+        if spaceServiceRoom.isSpace {
+            switch spaceServiceRoom.visibility {
             case .public: L10n.commonPublicSpace
             case .private: L10n.commonPrivateSpace
             case .restricted: L10n.commonSharedSpace
             case .none: L10n.commonPrivateSpace
             }
         } else {
-            L10n.commonMemberCount(spaceRoomProxy.joinedMembersCount)
+            L10n.commonMemberCount(spaceServiceRoom.joinedMembersCount)
         }
     }
     
     var visibilityIcon: KeyPath<CompoundIcons, Image>? {
-        switch spaceRoomProxy.visibility {
+        switch spaceServiceRoom.visibility {
         case .public: \.public
         case .private: \.lockSolid
         case .restricted: nil
@@ -47,16 +47,16 @@ struct SpaceRoomCell: View {
     }
     
     private var details: String {
-        if spaceRoomProxy.isSpace {
-            L10n.commonMemberCount(spaceRoomProxy.joinedMembersCount)
+        if spaceServiceRoom.isSpace {
+            L10n.commonMemberCount(spaceServiceRoom.joinedMembersCount)
         } else {
-            spaceRoomProxy.topic ?? " " // Use a single space to reserve a consistent amount of space.
+            spaceServiceRoom.topic ?? " " // Use a single space to reserve a consistent amount of space.
         }
     }
     
     var body: some View {
         Button {
-            action(.select(spaceRoomProxy))
+            action(.select(spaceServiceRoom))
         } label: {
             HStack(spacing: 16.0) {
                 avatar
@@ -74,13 +74,13 @@ struct SpaceRoomCell: View {
             .accessibilityElement(children: .combine)
         }
         .buttonStyle(SpaceRoomCellButtonStyle(isSelected: isSelected))
-        .accessibilityIdentifier(A11yIdentifiers.spaceListScreen.spaceRoomName(spaceRoomProxy.name))
+        .accessibilityIdentifier(A11yIdentifiers.spaceListScreen.spaceRoomName(spaceServiceRoom.name))
     }
     
     @ViewBuilder @MainActor
     private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
-            RoomAvatarImage(avatar: spaceRoomProxy.avatar,
+            RoomAvatarImage(avatar: spaceServiceRoom.avatar,
                             avatarSize: .room(on: .spaces),
                             mediaProvider: mediaProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
@@ -91,7 +91,7 @@ struct SpaceRoomCell: View {
     private var content: some View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(spaceRoomProxy.name)
+                Text(spaceServiceRoom.name)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
@@ -128,9 +128,9 @@ struct SpaceRoomCell: View {
     
     @ViewBuilder
     private var accessory: some View {
-        switch spaceRoomProxy.state {
+        switch spaceServiceRoom.state {
         case .none, .left, .invited:
-            Button(L10n.actionJoin) { action(.join(spaceRoomProxy)) }
+            Button(L10n.actionJoin) { action(.join(spaceServiceRoom)) }
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textActionAccent)
                 .opacity(isJoining ? 0 : 1)
@@ -159,21 +159,21 @@ struct SpaceRoomCellButtonStyle: ButtonStyle {
 struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
     static let mediaProvider = MediaProviderMock(configuration: .init())
     
-    static let spaces = [SpaceRoomProxyProtocol].mockSpaceList
+    static let spaces = [SpaceServiceRoomProtocol].mockSpaceList
     
     static var previews: some View {
         VStack(spacing: 0) {
             ForEach(spaces, id: \.id) { space in
-                SpaceRoomCell(spaceRoomProxy: space,
+                SpaceRoomCell(spaceServiceRoom: space,
                               isSelected: false,
                               mediaProvider: mediaProvider) { _ in }
             }
             
-            SpaceRoomCell(spaceRoomProxy: SpaceRoomProxyMock(.init(id: "Space being joined", isSpace: true)),
+            SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Space being joined", isSpace: true)),
                           isSelected: false,
                           isJoining: true,
                           mediaProvider: mediaProvider) { _ in }
-            SpaceRoomCell(spaceRoomProxy: SpaceRoomProxyMock(.init(id: "Room being joined", isSpace: false)),
+            SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Room being joined", isSpace: false)),
                           isSelected: false,
                           isJoining: true,
                           mediaProvider: mediaProvider) { _ in }

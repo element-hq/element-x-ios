@@ -597,7 +597,7 @@ class MockScreen: Identifiable {
                                                     deviceID: "MOCKCLIENT",
                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
                                                     spaceServiceConfiguration: .init(topLevelSpaces: .mockSingleRoom),
-                                                    roomPreviews: [SpaceRoomProxyProtocol].mockSpaceList.map(RoomPreviewProxyMock.init)))
+                                                    roomPreviews: [SpaceServiceRoomProtocol].mockSpaceList.map(RoomPreviewProxyMock.init)))
             
             // The tab bar remains hidden for the non-spaces tests as we don't supply any mock spaces.
             let spaceServiceProxy = SpaceServiceProxyMock(id == .userSessionSpacesFlow ? .populated : .init())

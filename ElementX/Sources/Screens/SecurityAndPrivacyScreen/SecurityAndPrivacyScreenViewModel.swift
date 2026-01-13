@@ -305,7 +305,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     }
     
     private func setupSelectableJoinedSpaces() async {
-        var joinedParentSpaces: [SpaceRoomProxyProtocol] = []
+        var joinedParentSpaces: [SpaceServiceRoomProtocol] = []
         switch await clientProxy.spaceService.joinedParents(childID: roomProxy.id) {
         case .success(let value):
             joinedParentSpaces = value
@@ -313,7 +313,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             break
         }
         
-        var nonParentJoinedSpaces: [SpaceRoomProxyProtocol] = []
+        var nonParentJoinedSpaces: [SpaceServiceRoomProtocol] = []
         for spaceID in state.currentSettings.accessType.spaceIDs where !joinedParentSpaces.contains(where: { $0.id == spaceID }) {
             if case let .success(.some(space)) = await clientProxy.spaceService.spaceForIdentifier(spaceID: spaceID) {
                 nonParentJoinedSpaces.append(space)

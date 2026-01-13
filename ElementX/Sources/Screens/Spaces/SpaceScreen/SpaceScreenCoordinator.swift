@@ -22,7 +22,7 @@ struct SpaceScreenCoordinatorParameters {
 
 enum SpaceScreenCoordinatorAction {
     case selectSpace(SpaceRoomListProxyProtocol)
-    case selectUnjoinedSpace(SpaceRoomProxyProtocol)
+    case selectUnjoinedSpace(SpaceServiceRoomProtocol)
     case selectRoom(roomID: String)
     case leftSpace
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
@@ -60,8 +60,8 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .selectSpace(let spaceRoomListProxy):
                 actionsSubject.send(.selectSpace(spaceRoomListProxy))
-            case .selectUnjoinedSpace(let spaceRoomProxy):
-                actionsSubject.send(.selectUnjoinedSpace(spaceRoomProxy))
+            case .selectUnjoinedSpace(let spaceServiceRoom):
+                actionsSubject.send(.selectUnjoinedSpace(spaceServiceRoom))
             case .selectRoom(let roomID):
                 actionsSubject.send(.selectRoom(roomID: roomID))
             case .leftSpace:

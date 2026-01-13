@@ -18,14 +18,14 @@ struct JoinRoomScreenCoordinatorParameters {
 
 enum JoinRoomScreenSource {
     case generic(roomID: String, via: [String])
-    case space(SpaceRoomProxyProtocol)
+    case space(SpaceServiceRoomProtocol)
     
     func roomIDAndVia() -> (roomID: String, via: [String]) {
         switch self {
         case let .generic(roomID: roomID, via: via):
             return (roomID: roomID, via: via)
-        case let .space(spaceRoomProxy):
-            return (roomID: spaceRoomProxy.id, via: spaceRoomProxy.via)
+        case let .space(spaceServiceRoom):
+            return (roomID: spaceServiceRoom.id, via: spaceServiceRoom.via)
         }
     }
 }

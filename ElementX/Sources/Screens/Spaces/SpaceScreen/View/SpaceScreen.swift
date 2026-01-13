@@ -15,7 +15,7 @@ struct SpaceScreen: View {
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                SpaceHeaderView(spaceRoomProxy: context.viewState.space,
+                SpaceHeaderView(spaceServiceRoom: context.viewState.space,
                                 mediaProvider: context.mediaProvider)
                 rooms
             }
@@ -32,10 +32,10 @@ struct SpaceScreen: View {
     
     @ViewBuilder
     var rooms: some View {
-        ForEach(context.viewState.rooms, id: \.id) { spaceRoomProxy in
-            SpaceRoomCell(spaceRoomProxy: spaceRoomProxy,
-                          isSelected: spaceRoomProxy.id == context.viewState.selectedSpaceRoomID,
-                          isJoining: context.viewState.joiningRoomIDs.contains(spaceRoomProxy.id),
+        ForEach(context.viewState.rooms, id: \.id) { spaceServiceRoom in
+            SpaceRoomCell(spaceServiceRoom: spaceServiceRoom,
+                          isSelected: spaceServiceRoom.id == context.viewState.selectedSpaceRoomID,
+                          isJoining: context.viewState.joiningRoomIDs.contains(spaceServiceRoom.id),
                           mediaProvider: context.mediaProvider) { action in
                 context.send(viewAction: .spaceAction(action))
             }
@@ -114,16 +114,16 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel() -> SpaceScreenViewModel {
-        let spaceRoomProxy = SpaceRoomProxyMock(.init(id: "!eng-space:matrix.org",
-                                                      name: "Engineering Team",
-                                                      isSpace: true,
-                                                      childrenCount: 30,
-                                                      joinedMembersCount: 76,
-                                                      heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
-                                                      topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in.",
-                                                      canonicalAlias: "#engineering-team:element.io",
-                                                      joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
-        let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceRoomProxy: spaceRoomProxy,
+        let spaceServiceRoom = SpaceServiceRoomMock(.init(id: "!eng-space:matrix.org",
+                                                          name: "Engineering Team",
+                                                          isSpace: true,
+                                                          childrenCount: 30,
+                                                          joinedMembersCount: 76,
+                                                          heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
+                                                          topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in.",
+                                                          canonicalAlias: "#engineering-team:element.io",
+                                                          joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
+        let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: spaceServiceRoom,
                                                               initialSpaceRooms: .mockSpaceList))
         
         let clientProxy = ClientProxyMock(.init())

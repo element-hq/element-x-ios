@@ -35,7 +35,7 @@ final class LeaveSpaceHandleProxy {
                       room.spaceRoom.roomId != spaceID else {
                     return nil
                 }
-                return .init(spaceRoomProxy: SpaceRoomProxy(spaceRoom: room.spaceRoom),
+                return .init(spaceServiceRoom: SpaceServiceRoom(spaceRoom: room.spaceRoom),
                              isLastAdmin: room.isLastAdmin,
                              isSelected: !room.isLastAdmin)
             }
@@ -64,21 +64,21 @@ final class LeaveSpaceHandleProxy {
     }
     
     func toggleRoom(roomID: String) {
-        guard let room = rooms.first(where: { $0.spaceRoomProxy.id == roomID }) else {
+        guard let room = rooms.first(where: { $0.spaceServiceRoom.id == roomID }) else {
             return
         }
         room.isSelected.toggle()
     }
     
     func leave() async -> Result<Void, SpaceServiceProxyError> {
-        let selectedRoomIDs = rooms.filter(\.isSelected).map(\.spaceRoomProxy.id)
+        let selectedRoomIDs = rooms.filter(\.isSelected).map(\.spaceServiceRoom.id)
         
         do {
             return try await .success(leaveHandle.leave(roomIds: selectedRoomIDs + [id]))
         } catch {
             MXLog.error("Failed leaving space \(id): \(error)")
             rooms = rooms.filter { leaveRoom in
-                leaveHandle.rooms().contains { $0.spaceRoom.roomId == leaveRoom.spaceRoomProxy.id }
+                leaveHandle.rooms().contains { $0.spaceRoom.roomId == leaveRoom.spaceServiceRoom.id }
             }
             return .failure(.sdkError(error))
         }
@@ -86,12 +86,12 @@ final class LeaveSpaceHandleProxy {
 }
 
 @Observable class LeaveSpaceRoomDetails {
-    let spaceRoomProxy: SpaceRoomProxyProtocol
+    let spaceServiceRoom: SpaceServiceRoomProtocol
     let isLastAdmin: Bool
     var isSelected: Bool
     
-    init(spaceRoomProxy: SpaceRoomProxyProtocol, isLastAdmin: Bool, isSelected: Bool) {
-        self.spaceRoomProxy = spaceRoomProxy
+    init(spaceServiceRoom: SpaceServiceRoomProtocol, isLastAdmin: Bool, isSelected: Bool) {
+        self.spaceServiceRoom = spaceServiceRoom
         self.isLastAdmin = isLastAdmin
         self.isSelected = isSelected
     }
