@@ -10,13 +10,13 @@ import Combine
 import Foundation
 import SwiftState
 
-enum SpaceExplorerFlowCoordinatorAction {
+enum SpacesTabFlowCoordinatorAction {
     case showSettings
     case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
     case verifyUser(userID: String)
 }
 
-class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
+class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     
     private var flowParameters: CommonFlowParameters
@@ -49,8 +49,8 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     
     private let selectedSpaceSubject = CurrentValueSubject<String?, Never>(nil)
     
-    private let actionsSubject: PassthroughSubject<SpaceExplorerFlowCoordinatorAction, Never> = .init()
-    var actionsPublisher: AnyPublisher<SpaceExplorerFlowCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<SpacesTabFlowCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<SpacesTabFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -117,9 +117,9 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSpacesScreen() {
         let parameters = SpacesScreenCoordinatorParameters(userSession: userSession,
-                                                              selectedSpacePublisher: selectedSpaceSubject.asCurrentValuePublisher(),
-                                                              appSettings: flowParameters.appSettings,
-                                                              userIndicatorController: flowParameters.userIndicatorController)
+                                                           selectedSpacePublisher: selectedSpaceSubject.asCurrentValuePublisher(),
+                                                           appSettings: flowParameters.appSettings,
+                                                           userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpacesScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher
             .sink { [weak self] action in

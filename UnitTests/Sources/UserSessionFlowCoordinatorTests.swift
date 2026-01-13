@@ -214,7 +214,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     
     private func process(route: AppRoute,
                          expectedUserSessionState: UserSessionFlowCoordinator.State? = nil,
-                         expectedChatsState: ChatsFlowCoordinatorStateMachine.State? = nil) async throws {
+                         expectedChatsState: ChatsTabFlowCoordinatorStateMachine.State? = nil) async throws {
         let deferredUserSession: DeferredFulfillment? = if let expectedUserSessionState {
             deferFulfillment(stateMachineFactory.userSessionFlowStatePublisher.delay(for: .milliseconds(100), scheduler: DispatchQueue.main)) {
                 $0 == expectedUserSessionState
@@ -224,7 +224,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         }
         
         let deferredChatsState: DeferredFulfillment? = if let expectedChatsState {
-            deferFulfillment(stateMachineFactory.chatsFlowStatePublisher.delay(for: .milliseconds(100), scheduler: DispatchQueue.main)) {
+            deferFulfillment(stateMachineFactory.chatsTabFlowStatePublisher.delay(for: .milliseconds(100), scheduler: DispatchQueue.main)) {
                 $0 == expectedChatsState
             }
         } else {
