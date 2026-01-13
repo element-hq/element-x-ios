@@ -19,17 +19,24 @@ struct SpaceAddRoomsScreen: View {
     
     var body: some View {
         Form {
-            if showTopSection {
-                // this is a fix for having the carousel not clipped, and inside the form, so when the search is dismissed, it wont break the design
-                Section {
-                    EmptyView()
-                } header: {
-                    VStack(spacing: 16) {
+            Section {
+                EmptyView()
+            } header: {
+                VStack(alignment: .leading, spacing: 24) {
+                    Text(L10n.screenSpaceAddRoomsRoomAccessDescription)
+                        .font(.compound.bodySM)
+                        .foregroundStyle(.compound.textSecondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+                    
+                    if showTopSection {
                         selectedRoomsSection
                             .textCase(.none)
                             .frame(width: formWidth)
+                            .padding(.bottom, -8)
                     }
                 }
+                .listRowInsets(EdgeInsets())
             }
             
             if !context.viewState.roomsSection.rooms.isEmpty {
@@ -47,19 +54,19 @@ struct SpaceAddRoomsScreen: View {
         .readWidth($formWidth)
     }
     
-    @ScaledMetric private var cellWidth: CGFloat = 72
+    @ScaledMetric private var selectedRoomCellWidth: CGFloat = 80
     
     private var selectedRoomsSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
+            HStack(spacing: 8) {
                 ForEach(context.viewState.selectedRooms, id: \.id) { room in
                     SpaceAddRoomsScreenSelectedItem(room: room, mediaProvider: context.mediaProvider) {
                         context.send(viewAction: .toggleRoom(room))
                     }
-                    .frame(width: cellWidth)
+                    .frame(width: selectedRoomCellWidth)
                 }
             }
-            .padding(.horizontal, 14)
+            .padding(.horizontal, 16)
             .scrollTargetLayout()
         }
         .scrollPosition(id: $context.selectedRoomsPosition, anchor: .trailing)
@@ -176,7 +183,7 @@ struct SpaceAddRoomsScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false) -> SpaceAddRoomsScreenViewModel {
-        let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceRoomProxy: SpaceRoomProxyMock(.init(isSpace: true))))
+        let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true))))
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentlyVisitedRoomsFilterReturnValue = [

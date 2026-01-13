@@ -101,19 +101,19 @@ struct InviteUsersScreen: View {
         }
     }
     
-    @ScaledMetric private var cellWidth: CGFloat = 72
+    @ScaledMetric private var selectedUserCellWidth: CGFloat = 80
 
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
+            HStack(spacing: 8) {
                 ForEach(context.viewState.selectedUsers, id: \.userID) { user in
                     InviteUsersScreenSelectedItem(user: user, mediaProvider: context.mediaProvider) {
                         deselect(user)
                     }
-                    .frame(width: cellWidth)
+                    .frame(width: selectedUserCellWidth)
                 }
             }
-            .padding(.horizontal, 14)
+            .padding(.horizontal, 16)
             .scrollTargetLayout()
         }
         .scrollPosition(id: $context.selectedUsersPosition, anchor: .trailing)
@@ -146,20 +146,57 @@ struct InviteUsersScreen: View {
 // MARK: - Previews
 
 struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = {
-        let userDiscoveryService = UserDiscoveryServiceMock()
-        userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-        return InviteUsersScreenViewModel(userSession: UserSessionMock(.init()),
-                                          roomProxy: JoinedRoomProxyMock(.init()),
-                                          isSkippable: true,
-                                          userDiscoveryService: userDiscoveryService,
-                                          userIndicatorController: UserIndicatorControllerMock(),
-                                          appSettings: ServiceLocator.shared.settings)
-    }()
+    static let viewModel = makeViewModel()
+    static let searchingViewModel = makeViewModel(searchQuery: "Alice")
+    static let selectedViewModel = makeViewModel(hasSelection: true)
     
     static var previews: some View {
         NavigationStack {
             InviteUsersScreen(context: viewModel.context)
         }
+        .previewDisplayName("Suggestions")
+        .snapshotPreferences(expect: viewModel.context.$viewState.map { !$0.usersSection.users.isEmpty })
+        
+        NavigationStack {
+            InviteUsersScreen(context: searchingViewModel.context)
+        }
+        .previewDisplayName("Searching")
+        .snapshotPreferences(expect: searchingViewModel.context.$viewState.map {
+            $0.usersSection.type == .searchResult && !$0.usersSection.users.isEmpty
+        })
+        
+        NavigationStack {
+            InviteUsersScreen(context: selectedViewModel.context)
+        }
+        .previewDisplayName("Selected")
+        .snapshotPreferences(expect: selectedViewModel.context.$viewState.map { !$0.selectedUsers.isEmpty })
+    }
+    
+    static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false) -> InviteUsersScreenViewModel {
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.recentConversationCounterpartsReturnValue = [.mockAlice, .mockBob, .mockCharlie, .mockDan, .mockVerbose]
+        
+        let userDiscoveryService = UserDiscoveryServiceMock()
+        userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
+        
+        let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                   roomProxy: JoinedRoomProxyMock(.init(members: [])),
+                                                   isSkippable: true,
+                                                   userDiscoveryService: userDiscoveryService,
+                                                   userIndicatorController: UserIndicatorControllerMock(),
+                                                   appSettings: ServiceLocator.shared.settings)
+        
+        if let searchQuery {
+            viewModel.context.searchQuery = searchQuery
+        }
+        
+        if hasSelection {
+            Task {
+                try await Task.sleep(for: .milliseconds(100)) // Make sure the users have loaded.
+                viewModel.context.send(viewAction: .toggleUser(viewModel.context.viewState.usersSection.users[0]))
+            }
+        }
+        
+        return viewModel
     }
 }

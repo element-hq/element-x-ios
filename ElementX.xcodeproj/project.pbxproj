@@ -772,6 +772,7 @@
 		866FA35E7A2339EF8B6D91CA /* LinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B6FFCE5B28AA03DD46F46 /* LinkPreviewView.swift */; };
 		86769B62BAE17601B3AE1B60 /* TimelineMediaPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F41CEAAE2BB4E74CDC2278 /* TimelineMediaPreviewViewModel.swift */; };
 		8691186F9B99BCDDB7CACDD8 /* KeychainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36CB905A2B9EC2C92A2DA7C /* KeychainController.swift */; };
+		8696659B8905EE4693B96EAA /* RemoveItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95547A6C69606B5282C765D3 /* RemoveItemButton.swift */; };
 		86DFA58FBBEB0AF671D2A1E1 /* HomeScreenKnockedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A103580EBA06155B1343EF16 /* HomeScreenKnockedCell.swift */; };
 		86F9D3028A1F4AE819D75560 /* RoomChangePermissionsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D879FC4E881E748BB9B34DC /* RoomChangePermissionsScreenCoordinator.swift */; };
 		872A6457DF573AF8CEAE927A /* LoginHomeserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9349F590E35CE514A71E6764 /* LoginHomeserver.swift */; };
@@ -2353,6 +2354,7 @@
 		9501D11B4258DFA33BA3B40F /* ServerSelectionScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionScreenModels.swift; sourceTree = "<group>"; };
 		951F277E0585E50AC91987C8 /* DeclineAndBlockScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeclineAndBlockScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		955336CBD5ED73C792D1F580 /* EncryptionAuthenticity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionAuthenticity.swift; sourceTree = "<group>"; };
+		95547A6C69606B5282C765D3 /* RemoveItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveItemButton.swift; sourceTree = "<group>"; };
 		95A2E4BD7C0CAD25EF924A4C /* GeneratedPreviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedPreviewTests.swift; sourceTree = "<group>"; };
 		95BAC0F6C9644336E9567EE6 /* NSRegularExpresion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpresion.swift; sourceTree = "<group>"; };
 		964093C7CA8823CAB7FFD88E /* UserIdentityProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIdentityProxy.swift; sourceTree = "<group>"; };
@@ -3701,6 +3703,7 @@
 				50E31AB0E77BB70E2BC77463 /* MatrixUserShareLink.swift */,
 				648DD1C10E4957CB791FE0B8 /* OverridableAvatarImage.swift */,
 				C705E605EF57C19DBE86FFA1 /* PlaceholderAvatarImage.swift */,
+				95547A6C69606B5282C765D3 /* RemoveItemButton.swift */,
 				BEF5FE93A06F563B477F024A /* RoomAvatarImage.swift */,
 				1627F2D56477BD331F6D732C /* RoomHeaderView.swift */,
 				7EB58E4E8D6D634C246AD5C2 /* RoomInviterLabel.swift */,
@@ -8354,6 +8357,7 @@
 				8CFDA5F1562479CB3A34D277 /* RedactedRoomTimelineView.swift in Sources */,
 				3A2640C52505BAB3D983A92A /* RemotePreference.swift in Sources */,
 				6A64546ABE648ED9E6DBB459 /* RemoteSettingsHook.swift in Sources */,
+				8696659B8905EE4693B96EAA /* RemoveItemButton.swift in Sources */,
 				C413D36D44F89DE63D3ADFA4 /* ReportContentScreen.swift in Sources */,
 				C1A5C386319835FB0C77736B /* ReportContentScreenCoordinator.swift in Sources */,
 				46A261AA898344A1F3C406B1 /* ReportContentScreenModels.swift in Sources */,

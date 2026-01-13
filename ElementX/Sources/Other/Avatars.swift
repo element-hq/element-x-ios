@@ -115,7 +115,7 @@ enum UserAvatarSizeOnScreen {
         case .memberDetails:
             return 96
         case .inviteUsers:
-            return 56
+            return 52
         case .editUserDetails:
             return 96
         case .dmDetails:
@@ -169,7 +169,7 @@ enum RoomAvatarSizeOnScreen {
         case .messageForwarding, .globalSearch, .roomSelection, .spaceAddRooms:
             return 36
         case .spaceAddRoomsSelected:
-            return 56
+            return 52
         case .details:
             return 96
         case .joinRoom:

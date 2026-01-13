@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct SpaceAddRoomsScreenSelectedItem: View {
@@ -14,13 +15,13 @@ struct SpaceAddRoomsScreenSelectedItem: View {
     let dismissAction: () -> Void
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 10) {
             avatar
                 .accessibilityHidden(true)
             
             Text(room.title)
-                .font(.compound.bodyMD)
-                .foregroundColor(.compound.textPrimary)
+                .font(.compound.bodySM)
+                .foregroundColor(.compound.textSecondary)
                 .lineLimit(1)
         }
         .accessibilityElement(children: .combine)
@@ -33,15 +34,7 @@ struct SpaceAddRoomsScreenSelectedItem: View {
         RoomAvatarImage(avatar: room.avatar,
                         avatarSize: .room(on: .spaceAddRoomsSelected),
                         mediaProvider: mediaProvider)
-            .overlay(alignment: .topTrailing) {
-                Button(action: dismissAction) {
-                    Image(systemName: "xmark.circle.fill")
-                        .resizable()
-                        .scaledFrame(size: 20)
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(Color.compound.iconOnSolidPrimary, Color.compound.iconPrimary)
-                }
-            }
+            .overlayRemoveItemButton(action: dismissAction)
     }
 }
 
@@ -54,6 +47,6 @@ struct SpaceAddRoomsScreenSelectedItem_Previews: PreviewProvider, TestablePrevie
                                                                   name: "Selected Room",
                                                                   avatarURL: .mockMXCAvatar)),
                                         mediaProvider: MediaProviderMock(configuration: .init())) { }
-            .frame(width: 72)
+            .frame(width: 80)
     }
 }

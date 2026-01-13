@@ -45,7 +45,7 @@ class SpaceAddRoomsScreenViewModelTests: XCTestCase {
     
     func setupViewModel() {
         let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-        let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceRoomProxy: SpaceRoomProxyMock(.init(isSpace: true))))
+        let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true))))
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentlyVisitedRoomsFilterReturnValue = .init(repeating: JoinedRoomProxyMock(.init()), count: 5)
