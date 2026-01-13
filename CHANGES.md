@@ -4,6 +4,7 @@
 
 ✨ Features
 * Add a banner to encrypted rooms with visible history. by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4738
+* Add "Translate" to TimelineItemMenuActions by @bo2themax in https://github.com/element-hq/element-x-ios/pull/4846
 * Run client store optimizations when upgrating versions by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4888
 
 🙌 Improvements
@@ -83,6 +84,7 @@ Others
 
 ### New Contributors
 * @mgcm made their first contribution in https://github.com/element-hq/element-x-ios/pull/4793
+* @bo2themax made their first contribution in https://github.com/element-hq/element-x-ios/pull/4846
 
 **Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.12.1...release/26.01.0
 
