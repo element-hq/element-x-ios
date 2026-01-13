@@ -9,30 +9,46 @@
 import Foundation
 import MatrixRustSDK
 
-class SpaceServiceRoom: SpaceServiceRoomProtocol {
-    private let spaceRoom: SpaceRoom
+struct SpaceServiceRoom: SpaceServiceRoomProtocol {
+    var id: String
+    var name: String
+    var rawName: String?
+    var avatarURL: URL?
+    
+    var isSpace: Bool
+    var isDirect: Bool?
+    var childrenCount: Int
+    
+    var joinedMembersCount: Int
+    var heroes: [UserProfileProxy]
+    var topic: String?
+    var canonicalAlias: String?
+    
+    var joinRule: JoinRule?
+    var worldReadable: Bool?
+    var guestCanJoin: Bool
+    var state: Membership?
+    var via: [String]
     
     init(spaceRoom: SpaceRoom) {
-        self.spaceRoom = spaceRoom
+        id = spaceRoom.roomId
+        name = spaceRoom.displayName
+        rawName = spaceRoom.rawName
+        avatarURL = spaceRoom.avatarUrl.flatMap(URL.init)
+        
+        isSpace = spaceRoom.roomType == .space
+        isDirect = spaceRoom.isDirect
+        childrenCount = Int(spaceRoom.childrenCount)
+        
+        joinedMembersCount = Int(spaceRoom.numJoinedMembers)
+        heroes = (spaceRoom.heroes ?? []).map(UserProfileProxy.init)
+        topic = spaceRoom.topic
+        canonicalAlias = spaceRoom.canonicalAlias
+        
+        joinRule = spaceRoom.joinRule
+        worldReadable = spaceRoom.worldReadable
+        guestCanJoin = spaceRoom.guestCanJoin
+        state = spaceRoom.state
+        via = spaceRoom.via
     }
-    
-    lazy var id = spaceRoom.roomId
-    var name: String { spaceRoom.displayName }
-    var rawName: String? { spaceRoom.rawName }
-    var avatarURL: URL? { spaceRoom.avatarUrl.flatMap(URL.init) }
-    
-    var isSpace: Bool { spaceRoom.roomType == .space }
-    var isDirect: Bool? { spaceRoom.isDirect }
-    var childrenCount: Int { Int(spaceRoom.childrenCount) }
-    
-    var joinedMembersCount: Int { Int(spaceRoom.numJoinedMembers) }
-    var heroes: [UserProfileProxy] { (spaceRoom.heroes ?? []).map(UserProfileProxy.init) }
-    var topic: String? { spaceRoom.topic }
-    var canonicalAlias: String? { spaceRoom.canonicalAlias }
-    
-    var joinRule: JoinRule? { spaceRoom.joinRule }
-    var worldReadable: Bool? { spaceRoom.worldReadable }
-    var guestCanJoin: Bool { spaceRoom.guestCanJoin }
-    var state: Membership? { spaceRoom.state }
-    var via: [String] { spaceRoom.via }
 }
