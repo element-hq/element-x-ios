@@ -27,6 +27,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     }
     
     init(isSpace: Bool,
+         shouldShowCancelButton: Bool,
          userSession: UserSessionProtocol,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
@@ -40,6 +41,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                                                          selectedAccessType: .private)
 
         super.init(initialViewState: CreateRoomScreenViewState(isSpace: isSpace,
+                                                               shouldShowCancelButton: shouldShowCancelButton,
                                                                roomName: "",
                                                                serverName: userSession.clientProxy.userIDServerName ?? "",
                                                                isKnockingFeatureEnabled: appSettings.knockingEnabled,
@@ -54,6 +56,8 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     
     override func process(viewAction: CreateRoomScreenViewAction) {
         switch viewAction {
+        case .dismiss:
+            actionsSubject.send(.dismiss)
         case .createRoom:
             Task { await createRoom() }
         case .displayCameraPicker:

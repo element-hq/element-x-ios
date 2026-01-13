@@ -11,6 +11,7 @@ import Foundation
 enum SpacesScreenViewModelAction {
     case selectSpace(SpaceRoomListProxyProtocol)
     case showSettings
+    case showCreateSpace
 }
 
 struct SpacesScreenViewState: BindableState {

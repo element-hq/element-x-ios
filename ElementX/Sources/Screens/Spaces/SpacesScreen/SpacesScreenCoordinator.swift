@@ -19,6 +19,7 @@ struct SpacesScreenCoordinatorParameters {
 enum SpacesScreenCoordinatorAction {
     case selectSpace(SpaceRoomListProxyProtocol)
     case showSettings
+    case showCreateSpace
 }
 
 final class SpacesScreenCoordinator: CoordinatorProtocol {
@@ -51,6 +52,8 @@ final class SpacesScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.selectSpace(spaceRoomListProxy))
             case .showSettings:
                 actionsSubject.send(.showSettings)
+            case .showCreateSpace:
+                actionsSubject.send(.showCreateSpace)
             }
         }
         .store(in: &cancellables)

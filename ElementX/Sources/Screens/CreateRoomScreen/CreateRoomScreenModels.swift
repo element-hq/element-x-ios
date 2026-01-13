@@ -20,10 +20,12 @@ enum CreateRoomScreenViewModelAction {
     case createdRoom(JoinedRoomProxyProtocol)
     case displayMediaPicker
     case displayCameraPicker
+    case dismiss
 }
 
 struct CreateRoomScreenViewState: BindableState {
     let isSpace: Bool
+    let shouldShowCancelButton: Bool
     var roomName: String
     let serverName: String
     let isKnockingFeatureEnabled: Bool
@@ -64,6 +66,7 @@ struct CreateRoomScreenViewStateBindings {
 }
 
 enum CreateRoomScreenViewAction {
+    case dismiss
     case createRoom
     case displayCameraPicker
     case displayMediaPicker

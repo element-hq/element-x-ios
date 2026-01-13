@@ -11,12 +11,23 @@ import Foundation
 import SwiftState
 
 enum StartChatFlowCoordinatorAction {
-    case finished(roomID: String?)
+    case finished(result: FinishedResult?)
     case showRoomDirectory
+    
+    enum FinishedResult {
+        case room(roomID: String)
+        case space(spaceRoomListProxy: SpaceRoomListProxyProtocol)
+    }
+}
+
+/// A value that represents where the flow will be started.
+enum StartChatFlowCoordinatorEntryPoint {
+    case startChat
+    case createSpace
 }
 
 class StartChatFlowCoordinator: FlowCoordinatorProtocol {
-    private let isSpace: Bool
+    private let entryPoint: StartChatFlowCoordinatorEntryPoint
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     
@@ -40,7 +51,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     
     enum Event: EventType {
         /// The flow is being started.
-        case start
+        case start(entryPoint: StartChatFlowCoordinatorEntryPoint)
         
         /// The user would like to create a room.
         case createRoom
@@ -64,11 +75,11 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(isSpace: Bool,
+    init(entryPoint: StartChatFlowCoordinatorEntryPoint,
          userDiscoveryService: UserDiscoveryServiceProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
-        self.isSpace = isSpace
+        self.entryPoint = entryPoint
         self.userDiscoveryService = userDiscoveryService
         self.navigationStackCoordinator = navigationStackCoordinator
         
@@ -79,7 +90,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func start(animated: Bool) {
-        stateMachine.tryEvent(.start)
+        stateMachine.tryEvent(.start(entryPoint: entryPoint))
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -109,12 +120,16 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func configureStateMachine() {
-        stateMachine.addRoutes(event: .start, transitions: [.initial => .startChat]) { [weak self] _ in
+        stateMachine.addRoutes(event: .start(entryPoint: .startChat), transitions: [.initial => .startChat]) { [weak self] _ in
             self?.presentStartChatScreen()
         }
         
+        stateMachine.addRoutes(event: .start(entryPoint: .createSpace), transitions: [.initial => .createRoom]) { [weak self] _ in
+            self?.presentCreateRoomScreen(isSpace: true, isRoot: true)
+        }
+        
         stateMachine.addRoutes(event: .createRoom, transitions: [.startChat => .createRoom]) { [weak self] _ in
-            self?.presentCreateRoomScreen()
+            self?.presentCreateRoomScreen(isSpace: false, isRoot: false)
         }
         stateMachine.addRoutes(event: .dismissedCreateRoom, transitions: [.createRoom => .startChat]) { [weak self] _ in
             self?.createRoomScreenCoordinator = nil
@@ -156,11 +171,11 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .close:
-                actionsSubject.send(.finished(roomID: nil))
+                actionsSubject.send(.finished(result: nil))
             case .createRoom:
                 stateMachine.tryEvent(.createRoom)
             case .openRoom(let roomID):
-                actionsSubject.send(.finished(roomID: roomID))
+                actionsSubject.send(.finished(result: .room(roomID: roomID)))
             case .openRoomDirectorySearch:
                 actionsSubject.send(.showRoomDirectory)
             }
@@ -170,8 +185,9 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
-    private func presentCreateRoomScreen() {
+    private func presentCreateRoomScreen(isSpace: Bool, isRoot: Bool) {
         let createParameters = CreateRoomScreenCoordinatorParameters(isSpace: isSpace,
+                                                                     shouldShowCancelButton: isRoot,
                                                                      userSession: flowParameters.userSession,
                                                                      userIndicatorController: flowParameters.userIndicatorController,
                                                                      appSettings: flowParameters.appSettings,
@@ -184,13 +200,21 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.createdRoom, userInfo: roomProxy)
             case .displayMediaPickerWithMode(let mode):
                 stateMachine.tryEvent(.presentRoomAvatarPicker, userInfo: mode)
+            case .dismiss:
+                // Only used when isRoot
+                actionsSubject.send(.finished(result: nil))
             }
         }
         .store(in: &cancellables)
         
         createRoomScreenCoordinator = coordinator
-        navigationStackCoordinator.push(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissedCreateRoom)
+        
+        if isRoot {
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+        } else {
+            navigationStackCoordinator.push(coordinator) { [weak self] in
+                self?.stateMachine.tryEvent(.dismissedCreateRoom)
+            }
         }
     }
     
@@ -231,7 +255,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .dismiss:
-                actionsSubject.send(.finished(roomID: roomProxy.id))
+                actionsSubject.send(.finished(result: .room(roomID: roomProxy.id)))
             }
         }
         .store(in: &cancellables)

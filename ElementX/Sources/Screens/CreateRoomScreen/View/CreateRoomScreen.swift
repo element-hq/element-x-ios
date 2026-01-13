@@ -180,9 +180,18 @@ struct CreateRoomScreen: View {
         }
     }
     
+    @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
+        if context.viewState.shouldShowCancelButton {
+            ToolbarItem(placement: .topBarLeading) {
+                ToolbarButton(role: .cancel) {
+                    context.send(viewAction: .dismiss)
+                }
+            }
+        }
+        
         ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.actionCreate) {
+            ToolbarButton(role: .confirm(title: L10n.actionCreate)) {
                 focus = nil
                 context.send(viewAction: .createRoom)
             }
@@ -247,6 +256,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
         return CreateRoomScreenViewModel(isSpace: false,
+                                         shouldShowCancelButton: false,
                                          userSession: userSession,
                                          analytics: ServiceLocator.shared.analytics,
                                          userIndicatorController: UserIndicatorControllerMock(),
@@ -257,6 +267,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
         return CreateRoomScreenViewModel(isSpace: true,
+                                         shouldShowCancelButton: true,
                                          userSession: userSession,
                                          analytics: ServiceLocator.shared.analytics,
                                          userIndicatorController: UserIndicatorControllerMock(),
@@ -267,6 +278,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
@@ -281,6 +293,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         appSettings.knockingEnabled = true
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
@@ -293,6 +306,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
@@ -308,6 +322,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         clientProxy.isAliasAvailableReturnValue = .success(false)
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),

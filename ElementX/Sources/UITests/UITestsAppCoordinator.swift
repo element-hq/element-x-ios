@@ -659,7 +659,7 @@ class MockScreen: Identifiable {
             userDiscoveryService.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
             
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let flowCoordinator = StartChatFlowCoordinator(isSpace: false,
+            let flowCoordinator = StartChatFlowCoordinator(entryPoint: .startChat,
                                                            userDiscoveryService: userDiscoveryService,
                                                            navigationStackCoordinator: navigationStackCoordinator,
                                                            flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),

@@ -567,7 +567,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startStartChatFlow(animated: Bool) {
         let navigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = StartChatFlowCoordinator(isSpace: false,
+        let coordinator = StartChatFlowCoordinator(entryPoint: .startChat,
                                                    userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
                                                    navigationStackCoordinator: navigationStackCoordinator,
                                                    flowParameters: flowParameters)
@@ -576,11 +576,15 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .finished(let roomID):
+                case .finished(let result):
                     navigationSplitCoordinator.setSheetCoordinator(nil)
                     
-                    if let roomID {
+                    switch result {
+                    case .room(let roomID):
                         stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
+                    default:
+                        // Not handled
+                        break
                     }
                 case .showRoomDirectory:
                     navigationSplitCoordinator.setSheetCoordinator(nil)
