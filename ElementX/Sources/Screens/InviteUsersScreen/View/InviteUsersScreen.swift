@@ -191,10 +191,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         }
         
         if hasSelection {
-            Task {
-                try await Task.sleep(for: .milliseconds(100)) // Make sure the users have loaded.
-                viewModel.context.send(viewAction: .toggleUser(viewModel.context.viewState.usersSection.users[0]))
-            }
+            viewModel.state.selectedUsers = [.mockAlice]
         }
         
         return viewModel

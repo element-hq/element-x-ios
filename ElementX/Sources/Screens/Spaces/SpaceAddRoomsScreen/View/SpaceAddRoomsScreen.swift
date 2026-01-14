@@ -203,11 +203,7 @@ struct SpaceAddRoomsScreen_Previews: PreviewProvider, TestablePreview {
         }
         
         if hasSelection {
-            Task {
-                // Inside a Task to make sure that the rooms have loaded.
-                viewModel.context.send(viewAction: .toggleRoom(viewModel.context.viewState.roomsSection.rooms[0]))
-                viewModel.context.send(viewAction: .toggleRoom(viewModel.context.viewState.roomsSection.rooms[1]))
-            }
+            viewModel.state.selectedRooms = Array(summaryProvider.roomListPublisher.value.prefix(2)).map(SpaceAddRoomsScreenRoom.init)
         }
         
         return viewModel
