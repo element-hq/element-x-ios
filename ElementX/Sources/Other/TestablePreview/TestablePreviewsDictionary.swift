@@ -163,6 +163,8 @@ enum TestablePreviewsDictionary {
         "SettingsScreen_Previews" : SettingsScreen_Previews.self,
         "ShimmerOverlay_Previews" : ShimmerOverlay_Previews.self,
         "SoftLogoutScreen_Previews" : SoftLogoutScreen_Previews.self,
+        "SpaceAddRoomsScreenSelectedItem_Previews" : SpaceAddRoomsScreenSelectedItem_Previews.self,
+        "SpaceAddRoomsScreen_Previews" : SpaceAddRoomsScreen_Previews.self,
         "SpaceHeaderTopicSheetView_Previews" : SpaceHeaderTopicSheetView_Previews.self,
         "SpaceHeaderView_Previews" : SpaceHeaderView_Previews.self,
         "SpaceListScreen_Previews" : SpaceListScreen_Previews.self,

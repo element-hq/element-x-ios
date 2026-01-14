@@ -42,7 +42,7 @@ struct RoomChangeRolesScreenSelectedItem: View {
         LoadableAvatarImage(url: member.avatarURL,
                             name: member.name,
                             contentID: member.id,
-                            avatarSize: .user(on: .inviteUsers),
+                            avatarSize: .user(on: .roomChangeRoles),
                             mediaProvider: mediaProvider)
             .accessibilityHidden(true)
             .overlay(alignment: .topTrailing) {

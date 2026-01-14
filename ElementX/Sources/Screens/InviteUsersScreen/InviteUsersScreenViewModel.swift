@@ -69,11 +69,10 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private func toggleUser(_ user: UserProfileProxy) {
         if state.selectedUsers.contains(user) {
-            state.scrollToLastID = nil
             state.selectedUsers.removeAll { $0.userID == user.userID }
         } else {
-            state.scrollToLastID = user.userID
             state.selectedUsers.append(user)
+            withElementAnimation(.easeInOut) { state.bindings.selectedUsersPosition = user.userID }
         }
     }
     

@@ -623,6 +623,14 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "SoftLogoutScreen_Previews")
     }
 
+    func testSpaceAddRoomsScreenSelectedItem() async throws {
+        try await performAccessibilityAudit(named: "SpaceAddRoomsScreenSelectedItem_Previews")
+    }
+
+    func testSpaceAddRoomsScreen() async throws {
+        try await performAccessibilityAudit(named: "SpaceAddRoomsScreen_Previews")
+    }
+
     func testSpaceHeaderTopicSheetView() async throws {
         try await performAccessibilityAudit(named: "SpaceHeaderTopicSheetView_Previews")
     }

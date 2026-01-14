@@ -38,6 +38,7 @@ extension SpaceServiceProxyMock {
         spaceForIdentifierSpaceIDClosure = { spaceID in
             .success(configuration.topLevelSpaces.first { $0.id == spaceID })
         }
+        addChildToReturnValue = .success(())
     }
 }
 

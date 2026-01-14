@@ -66,6 +66,7 @@ enum UserAvatarSizeOnScreen {
     case settings
     case roomDetails
     case roomMembersList
+    case roomChangeRoles
     case dmDetails
     case startChat
     case memberDetails
@@ -110,12 +111,14 @@ enum UserAvatarSizeOnScreen {
             return 44
         case .roomMembersList:
             return 32
+        case .roomChangeRoles:
+            return 56
         case .startChat:
             return 36
         case .memberDetails:
             return 96
         case .inviteUsers:
-            return 56
+            return 52
         case .editUserDetails:
             return 96
         case .dmDetails:
@@ -153,6 +156,8 @@ enum RoomAvatarSizeOnScreen {
     case roomDirectorySearch
     case joinRoom
     case spaceHeader
+    case spaceAddRooms
+    case spaceAddRoomsSelected
     case completionSuggestions
 
     var value: CGFloat {
@@ -164,12 +169,10 @@ enum RoomAvatarSizeOnScreen {
             return 32
         case .notificationSettings:
             return 30
-        case .messageForwarding:
+        case .messageForwarding, .globalSearch, .roomSelection, .spaceAddRooms:
             return 36
-        case .globalSearch:
-            return 36
-        case .roomSelection:
-            return 36
+        case .spaceAddRoomsSelected:
+            return 52
         case .details:
             return 96
         case .joinRoom:
