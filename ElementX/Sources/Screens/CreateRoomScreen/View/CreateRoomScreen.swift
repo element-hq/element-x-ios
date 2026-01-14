@@ -54,8 +54,18 @@ struct CreateRoomScreen: View {
         .shouldScrollOnKeyboardDidShow(focus == .alias, to: Focus.alias)
     }
     
+    private var nameTextFieldShape: AnyShape {
+        if #available(iOS 26, *) {
+            AnyShape(ConcentricRectangle(corners: .concentric(minimum: 26)))
+        } else {
+            AnyShape(RoundedRectangle(cornerRadius: 12))
+        }
+    }
+    
     private var roomSection: some View {
         Section {
+            EmptyView()
+        } header: {
             HStack(alignment: .center, spacing: 16) {
                 roomAvatarButton
                 let nameLabel = if #available(iOS 26, *) {
@@ -80,11 +90,11 @@ struct CreateRoomScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
                         .padding(.horizontal, ListRowPadding.horizontal)
                         .padding(.vertical, ListRowPadding.vertical)
-                        .background(.compound.bgCanvasDefaultLevel1, in: RoundedRectangle(cornerRadius: 12))
+                        .background(.compound.bgCanvasDefaultLevel1, in: nameTextFieldShape)
                 }
             }
             .listRowInsets(.init())
-            .listRowBackground(Color.clear)
+            .padding(.top, 16)
         }
     }
     
@@ -102,12 +112,17 @@ struct CreateRoomScreen: View {
                     ProgressView()
                 }
                 .scaledFrame(size: 70)
-                .clipShape(Circle())
+                .clipShape(context.viewState.isSpace ? AnyShape(RoundedRectangle(cornerRadius: 16)) : AnyShape(Circle()))
             } else {
-                CompoundIcon(\.takePhoto, size: .custom(36), relativeTo: .title)
-                    .foregroundColor(.compound.iconSecondary)
-                    .scaledFrame(size: 70, relativeTo: .title)
-                    .background(.compound.bgSubtlePrimary, in: Circle())
+                CompoundIcon(\.takePhoto, size: .medium, relativeTo: .title)
+                    .foregroundColor(.compound.iconPrimary)
+                    .scaledFrame(size: 50, relativeTo: .title)
+                    .background(.compound.bgCanvasDefault, in: Circle())
+                    .overlay(
+                        Circle()
+                            .stroke(.compound.borderInteractiveSecondary, lineWidth: 1)
+                    )
+                    .padding(10)
             }
         }
         .buttonStyle(.plain)
@@ -263,6 +278,19 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                          appSettings: ServiceLocator.shared.settings)
     }()
     
+    static let avatarViewModel = {
+        AppSettings.resetAllSettings()
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: ServiceLocator.shared.settings)
+        viewModel.updateAvatar(fileURL: Bundle.main.url(forResource: "preview_avatar_room", withExtension: "jpg")!)
+        return viewModel
+    }()
+    
     static let spaceViewModel = {
         AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
@@ -272,6 +300,19 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                          analytics: ServiceLocator.shared.analytics,
                                          userIndicatorController: UserIndicatorControllerMock(),
                                          appSettings: ServiceLocator.shared.settings)
+    }()
+    
+    static let spaceWithAvatarViewModel = {
+        AppSettings.resetAllSettings()
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        let viewModel = CreateRoomScreenViewModel(isSpace: true,
+                                                  shouldShowCancelButton: true,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: ServiceLocator.shared.settings)
+        viewModel.updateAvatar(fileURL: Bundle.main.url(forResource: "preview_avatar_room", withExtension: "jpg")!)
+        return viewModel
     }()
     
     static let publicRoomViewModel = {
@@ -339,9 +380,21 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Create Room")
         
         NavigationStack {
+            CreateRoomScreen(context: avatarViewModel.context)
+        }
+        .previewDisplayName("Create Room with avatar")
+        .snapshotPreferences(expect: publicRoomInvalidAliasViewModel.context.$viewState.map { $0.avatarMediaInfo != nil })
+        
+        NavigationStack {
             CreateRoomScreen(context: spaceViewModel.context)
         }
         .previewDisplayName("Create Space")
+        
+        NavigationStack {
+            CreateRoomScreen(context: spaceWithAvatarViewModel.context)
+        }
+        .previewDisplayName("Create Space with avatar")
+        .snapshotPreferences(expect: publicRoomInvalidAliasViewModel.context.$viewState.map { $0.avatarMediaInfo != nil })
         
         NavigationStack {
             CreateRoomScreen(context: publicRoomViewModel.context)

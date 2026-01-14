@@ -583,7 +583,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                     case .room(let roomID):
                         stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
                     case .space(let spaceRoomListProxy):
-                        // This automatically handles selecting the space.
+                        // This also automatically handles selecting the space.
                         stateMachine.processEvent(.selectRoom(roomID: spaceRoomListProxy.id, via: [], entryPoint: .room))
                     case .none:
                         break
