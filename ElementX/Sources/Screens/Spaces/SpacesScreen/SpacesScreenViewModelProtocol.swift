@@ -9,7 +9,7 @@
 import Combine
 
 @MainActor
-protocol SpaceListScreenViewModelProtocol {
-    var actionsPublisher: AnyPublisher<SpaceListScreenViewModelAction, Never> { get }
-    var context: SpaceListScreenViewModelType.Context { get }
+protocol SpacesScreenViewModelProtocol {
+    var actionsPublisher: AnyPublisher<SpacesScreenViewModelAction, Never> { get }
+    var context: SpacesScreenViewModelType.Context { get }
 }

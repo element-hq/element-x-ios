@@ -12,10 +12,10 @@ import Combine
 @testable import ElementX
 
 @MainActor
-class ChatsFlowCoordinatorTests: XCTestCase {
+class ChatsTabFlowCoordinatorTests: XCTestCase {
     var clientProxy: ClientProxyMock!
     var timelineControllerFactory: TimelineControllerFactoryMock!
-    var chatsFlowCoordinator: ChatsFlowCoordinator!
+    var chatsTabFlowCoordinator: ChatsTabFlowCoordinator!
     var splitCoordinator: NavigationSplitCoordinator!
     var notificationManager: NotificationManagerMock!
     let stateMachineFactory = PublishedStateMachineFactory()
@@ -47,12 +47,12 @@ class ChatsFlowCoordinatorTests: XCTestCase {
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: notificationManager,
                                                   stateMachineFactory: stateMachineFactory)
-        chatsFlowCoordinator = ChatsFlowCoordinator(isNewLogin: false,
-                                                    navigationSplitCoordinator: splitCoordinator,
-                                                    flowParameters: flowParameters)
+        chatsTabFlowCoordinator = ChatsTabFlowCoordinator(isNewLogin: false,
+                                                          navigationSplitCoordinator: splitCoordinator,
+                                                          flowParameters: flowParameters)
         
-        let deferred = deferFulfillment(stateMachineFactory.chatsFlowStatePublisher) { $0 == .roomList(detailState: nil) }
-        chatsFlowCoordinator.start()
+        let deferred = deferFulfillment(stateMachineFactory.chatsTabFlowStatePublisher) { $0 == .roomList(detailState: nil) }
+        chatsTabFlowCoordinator.start()
         try await deferred.fulfill()
     }
     
@@ -133,8 +133,8 @@ class ChatsFlowCoordinatorTests: XCTestCase {
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
-        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsFlowStatePublisher, timeout: 1) { _ in true }
-        chatsFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
+        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsTabFlowStatePublisher, timeout: 1) { _ in true }
+        chatsTabFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
         try await unexpectedFulfillment.fulfill()
         
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
@@ -156,8 +156,8 @@ class ChatsFlowCoordinatorTests: XCTestCase {
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
-        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsFlowStatePublisher, timeout: 1) { _ in true }
-        chatsFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
+        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsTabFlowStatePublisher, timeout: 1) { _ in true }
+        chatsTabFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
         try await unexpectedFulfillment.fulfill()
         
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -197,7 +197,7 @@ class ChatsFlowCoordinatorTests: XCTestCase {
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
         XCTAssertNotNil(detailCoordinator)
         
-        chatsFlowCoordinator.handleAppRoute(.childRoom(roomID: "2", via: []), animated: true)
+        chatsTabFlowCoordinator.handleAppRoute(.childRoom(roomID: "2", via: []), animated: true)
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 1)
@@ -220,7 +220,7 @@ class ChatsFlowCoordinatorTests: XCTestCase {
         XCTAssertEqual(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderReceivedArguments?.initialFocussedEventID, "1")
         
         // A child event route should push a new room screen onto the stack and focus on the event.
-        chatsFlowCoordinator.handleAppRoute(.childEvent(eventID: "2", roomID: "2", via: []), animated: true)
+        chatsTabFlowCoordinator.handleAppRoute(.childEvent(eventID: "2", roomID: "2", via: []), animated: true)
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 1)
@@ -273,12 +273,12 @@ class ChatsFlowCoordinatorTests: XCTestCase {
     
     // MARK: - Private
     
-    private func process(route: AppRoute, expectedState: ChatsFlowCoordinatorStateMachine.State) async throws {
+    private func process(route: AppRoute, expectedState: ChatsTabFlowCoordinatorStateMachine.State) async throws {
         // Sometimes the state machine's state changes before the coordinators have updated the stack.
-        let delayedPublisher = stateMachineFactory.chatsFlowStatePublisher.delay(for: .milliseconds(100), scheduler: DispatchQueue.main)
+        let delayedPublisher = stateMachineFactory.chatsTabFlowStatePublisher.delay(for: .milliseconds(100), scheduler: DispatchQueue.main)
         
         let deferred = deferFulfillment(delayedPublisher) { $0 == expectedState }
-        chatsFlowCoordinator.handleAppRoute(route, animated: true)
+        chatsTabFlowCoordinator.handleAppRoute(route, animated: true)
         try await deferred.fulfill()
     }
 }

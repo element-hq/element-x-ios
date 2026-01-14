@@ -44,7 +44,7 @@ enum A11yIdentifiers {
     static let pollFormScreen = PollFormScreen()
     static let roomPollsHistoryScreen = RoomPollsHistoryScreen()
     static let manageRoomMemberSheet = ManageRoomMemberSheet()
-    static let spaceListScreen = SpaceListScreen()
+    static let spacesScreen = SpacesScreen()
     static let linkNewDeviceScreen = LinkNewDeviceScreen()
     
     struct AlertInfo {
@@ -307,10 +307,10 @@ enum A11yIdentifiers {
         let viewProfile = "manage_room_member_sheet-view_profile"
     }
     
-    struct SpaceListScreen {
-        let userAvatar = "space_list_screen-user_avatar"
+    struct SpacesScreen {
+        let userAvatar = "spaces_screen-user_avatar"
         
-        let roomNamePrefix = "space_list_screen-room_name"
+        let roomNamePrefix = "spaces_screen-room_name"
         func spaceRoomName(_ name: String) -> String {
             "\(roomNamePrefix):\(name)"
         }

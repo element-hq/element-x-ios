@@ -11,7 +11,7 @@ import Combine
 import MatrixRustSDK
 import SwiftUI
 
-enum ChatsFlowCoordinatorAction {
+enum ChatsTabFlowCoordinatorAction {
     case switchToChatsTab
     case showSettings
     case showChatBackupSettings
@@ -21,13 +21,13 @@ enum ChatsFlowCoordinatorAction {
     case logout
 }
 
-class ChatsFlowCoordinator: FlowCoordinatorProtocol {
+class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let flowParameters: CommonFlowParameters
     
     private var userSession: UserSessionProtocol { flowParameters.userSession }
     
-    private let stateMachine: ChatsFlowCoordinatorStateMachine
+    private let stateMachine: ChatsTabFlowCoordinatorStateMachine
     
     // periphery:ignore - retaining purpose
     private var roomFlowCoordinator: RoomFlowCoordinator?
@@ -50,15 +50,15 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
 
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
     
-    private let actionsSubject: PassthroughSubject<ChatsFlowCoordinatorAction, Never> = .init()
-    var actionsPublisher: AnyPublisher<ChatsFlowCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<ChatsTabFlowCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<ChatsTabFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init(isNewLogin: Bool,
          navigationSplitCoordinator: NavigationSplitCoordinator,
          flowParameters: CommonFlowParameters) {
-        stateMachine = flowParameters.stateMachineFactory.makeChatsFlowStateMachine()
+        stateMachine = flowParameters.stateMachineFactory.makeChatsTabFlowStateMachine()
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.flowParameters = flowParameters
         
@@ -188,7 +188,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
             
-            let userInfo = context.userInfo as? ChatsFlowCoordinatorStateMachine.EventUserInfo
+            let userInfo = context.userInfo as? ChatsTabFlowCoordinatorStateMachine.EventUserInfo
             let animated = userInfo?.animated ?? true
             
             switch (context.fromState, context.event, context.toState) {
@@ -289,7 +289,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func handleSelectRoomTransition(roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint, detailState: ChatsFlowCoordinatorStateMachine.DetailState?, animated: Bool) {
+    private func handleSelectRoomTransition(roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint, detailState: ChatsTabFlowCoordinatorStateMachine.DetailState?, animated: Bool) {
         if case .room(roomID) = detailState,
            !entryPoint.isEventID, // Don't reuse the existing room so the live timeline is hidden while the detached timeline is loading.
            let roomFlowCoordinator {
@@ -798,8 +798,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: Toasts and loading indicators
     
-    private static let loadingIndicatorIdentifier = "\(ChatsFlowCoordinator.self)-Loading"
-    private static let failureIndicatorIdentifier = "\(ChatsFlowCoordinator.self)-Failure"
+    private static let loadingIndicatorIdentifier = "\(ChatsTabFlowCoordinator.self)-Loading"
+    private static let failureIndicatorIdentifier = "\(ChatsTabFlowCoordinator.self)-Failure"
     
     private func showLoadingIndicator(delay: Duration? = nil) {
         flowParameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

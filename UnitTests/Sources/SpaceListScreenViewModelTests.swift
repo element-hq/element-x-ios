@@ -12,14 +12,14 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class SpaceListScreenViewModelTests: XCTestCase {
+class SpacesScreenViewModelTests: XCTestCase {
     var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoomProtocol], Never>!
     var spaceServiceProxy: SpaceServiceProxyMock!
     var appSettings: AppSettings!
     
-    var viewModel: SpaceListScreenViewModelProtocol!
+    var viewModel: SpacesScreenViewModelProtocol!
     
-    var context: SpaceListScreenViewModelType.Context {
+    var context: SpacesScreenViewModelType.Context {
         viewModel.context
     }
     
@@ -109,9 +109,9 @@ class SpaceListScreenViewModelTests: XCTestCase {
         }
         clientProxy.spaceService = spaceServiceProxy
         
-        viewModel = SpaceListScreenViewModel(userSession: userSession,
-                                             selectedSpacePublisher: .init(nil),
-                                             appSettings: ServiceLocator.shared.settings,
-                                             userIndicatorController: UserIndicatorControllerMock())
+        viewModel = SpacesScreenViewModel(userSession: userSession,
+                                          selectedSpacePublisher: .init(nil),
+                                          appSettings: ServiceLocator.shared.settings,
+                                          userIndicatorController: UserIndicatorControllerMock())
     }
 }

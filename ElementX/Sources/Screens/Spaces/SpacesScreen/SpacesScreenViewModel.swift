@@ -9,15 +9,15 @@
 import Combine
 import SwiftUI
 
-typealias SpaceListScreenViewModelType = StateStoreViewModelV2<SpaceListScreenViewState, SpaceListScreenViewAction>
+typealias SpacesScreenViewModelType = StateStoreViewModelV2<SpacesScreenViewState, SpacesScreenViewAction>
 
-class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenViewModelProtocol {
+class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelProtocol {
     private let spaceServiceProxy: SpaceServiceProxyProtocol
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    private let actionsSubject: PassthroughSubject<SpaceListScreenViewModelAction, Never> = .init()
-    var actionsPublisher: AnyPublisher<SpaceListScreenViewModelAction, Never> {
+    private let actionsSubject: PassthroughSubject<SpacesScreenViewModelAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<SpacesScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
@@ -29,10 +29,10 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: SpaceListScreenViewState(userID: userSession.clientProxy.userID,
-                                                              topLevelSpaces: spaceServiceProxy.topLevelSpacesPublisher.value,
-                                                              isCreateSpaceEnabled: appSettings.createSpaceEnabled,
-                                                              bindings: .init()),
+        super.init(initialViewState: SpacesScreenViewState(userID: userSession.clientProxy.userID,
+                                                           topLevelSpaces: spaceServiceProxy.topLevelSpacesPublisher.value,
+                                                           isCreateSpaceEnabled: appSettings.createSpaceEnabled,
+                                                           bindings: .init()),
                    mediaProvider: userSession.mediaProvider)
         
         spaceServiceProxy.topLevelSpacesPublisher
@@ -61,7 +61,7 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
     
     // MARK: - Public
     
-    override func process(viewAction: SpaceListScreenViewAction) {
+    override func process(viewAction: SpacesScreenViewAction) {
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {

@@ -12,7 +12,7 @@ import SwiftUI
 struct SpacesAnnouncementSheetView: View {
     @Environment(\.dismiss) private var dismiss
     
-    let context: SpaceListScreenViewModel.Context
+    let context: SpacesScreenViewModel.Context
     
     var body: some View {
         FullscreenDialog(topPadding: 44, horizontalPadding: 24) {
@@ -105,10 +105,10 @@ struct SpacesAnnouncementSheetView: View {
 // MARK: - Previews
 
 struct SpacesAnnouncementSheetView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = SpaceListScreenViewModel(userSession: UserSessionMock(.init()),
-                                                    selectedSpacePublisher: .init(nil),
-                                                    appSettings: ServiceLocator.shared.settings,
-                                                    userIndicatorController: UserIndicatorControllerMock())
+    static let viewModel = SpacesScreenViewModel(userSession: UserSessionMock(.init()),
+                                                 selectedSpacePublisher: .init(nil),
+                                                 appSettings: ServiceLocator.shared.settings,
+                                                 userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {
         SpacesAnnouncementSheetView(context: viewModel.context)

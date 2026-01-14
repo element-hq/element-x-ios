@@ -639,10 +639,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "SpaceHeaderView_Previews")
     }
 
-    func testSpaceListScreen() async throws {
-        try await performAccessibilityAudit(named: "SpaceListScreen_Previews")
-    }
-
     func testSpaceRoomCell() async throws {
         try await performAccessibilityAudit(named: "SpaceRoomCell_Previews")
     }
@@ -657,6 +653,10 @@ extension AccessibilityTests {
 
     func testSpacesAnnouncementSheetView() async throws {
         try await performAccessibilityAudit(named: "SpacesAnnouncementSheetView_Previews")
+    }
+
+    func testSpacesScreen() async throws {
+        try await performAccessibilityAudit(named: "SpacesScreen_Previews")
     }
 
     func testSplashScreen() async throws {

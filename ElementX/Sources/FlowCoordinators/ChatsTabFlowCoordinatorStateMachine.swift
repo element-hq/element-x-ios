@@ -10,7 +10,7 @@ import Combine
 import Foundation
 import SwiftState
 
-class ChatsFlowCoordinatorStateMachine {
+class ChatsTabFlowCoordinatorStateMachine {
     enum DetailState: Hashable {
         case room(roomID: String)
         case space
@@ -138,7 +138,7 @@ class ChatsFlowCoordinatorStateMachine {
     
     private let stateMachine: StateMachine<State, Event>
     
-    var state: ChatsFlowCoordinatorStateMachine.State {
+    var state: ChatsTabFlowCoordinatorStateMachine.State {
         stateMachine.state
     }
     
