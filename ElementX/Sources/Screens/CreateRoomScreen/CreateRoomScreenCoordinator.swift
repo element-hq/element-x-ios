@@ -19,7 +19,7 @@ struct CreateRoomScreenCoordinatorParameters {
 }
 
 enum CreateRoomScreenCoordinatorAction {
-    case createdRoom(JoinedRoomProxyProtocol)
+    case createdRoom(JoinedRoomProxyProtocol, SpaceRoomListProxyProtocol?)
     case displayMediaPickerWithMode(MediaPickerScreenMode)
     case dismiss
 }
@@ -46,8 +46,8 @@ final class CreateRoomScreenCoordinator: CoordinatorProtocol {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .createdRoom(let roomProxy):
-                actionsSubject.send(.createdRoom(roomProxy))
+            case .createdRoom(let roomProxy, let spaceRoomListProxy):
+                actionsSubject.send(.createdRoom(roomProxy, spaceRoomListProxy))
             case .displayCameraPicker:
                 actionsSubject.send(.displayMediaPickerWithMode(.init(source: .camera, selectionType: .single)))
             case .displayMediaPicker:

@@ -578,12 +578,14 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .finished(let result):
                     navigationSplitCoordinator.setSheetCoordinator(nil)
-                    
+
                     switch result {
                     case .room(let roomID):
                         stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
-                    default:
-                        // Not handled
+                    case .space(let spaceRoomListProxy):
+                        // This automatically handles selecting the space.
+                        stateMachine.processEvent(.selectRoom(roomID: spaceRoomListProxy.id, via: [], entryPoint: .room))
+                    case .none:
                         break
                     }
                 case .showRoomDirectory:

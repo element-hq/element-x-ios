@@ -11,11 +11,11 @@ import Foundation
 import SwiftState
 
 enum StartChatFlowCoordinatorAction {
-    case finished(result: FinishedResult?)
+    case finished(Result?)
     case showRoomDirectory
     
-    enum FinishedResult {
-        case room(roomID: String)
+    enum Result {
+        case room(id: String)
         case space(spaceRoomListProxy: SpaceRoomListProxyProtocol)
     }
 }
@@ -27,6 +27,11 @@ enum StartChatFlowCoordinatorEntryPoint {
 }
 
 class StartChatFlowCoordinator: FlowCoordinatorProtocol {
+    struct CreatedRoomResult {
+        let roomProxy: JoinedRoomProxyProtocol
+        let spaceRoomListProxy: SpaceRoomListProxyProtocol?
+    }
+    
     private let entryPoint: StartChatFlowCoordinatorEntryPoint
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
@@ -144,10 +149,10 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .dismissedRoomAvatarPicker, transitions: [.roomAvatarPicker => .createRoom])
         
         stateMachine.addRoutes(event: .createdRoom, transitions: [.createRoom => .inviteUsers]) { [weak self] context in
-            guard let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else {
+            guard let result = context.userInfo as? CreatedRoomResult else {
                 fatalError("A room proxy is required to invite users.")
             }
-            self?.presentInviteUsersScreen(roomProxy: roomProxy)
+            self?.presentInviteUsersScreen(roomProxy: result.roomProxy, spaceRoomListProxy: result.spaceRoomListProxy)
         }
         
         stateMachine.addErrorHandler { context in
@@ -171,11 +176,11 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .close:
-                actionsSubject.send(.finished(result: nil))
+                actionsSubject.send(.finished(nil))
             case .createRoom:
                 stateMachine.tryEvent(.createRoom)
             case .openRoom(let roomID):
-                actionsSubject.send(.finished(result: .room(roomID: roomID)))
+                actionsSubject.send(.finished(.room(id: roomID)))
             case .openRoomDirectorySearch:
                 actionsSubject.send(.showRoomDirectory)
             }
@@ -196,13 +201,13 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .createdRoom(let roomProxy):
-                stateMachine.tryEvent(.createdRoom, userInfo: roomProxy)
+            case .createdRoom(let roomProxy, let spaceRoomListProxy):
+                stateMachine.tryEvent(.createdRoom, userInfo: CreatedRoomResult(roomProxy: roomProxy, spaceRoomListProxy: spaceRoomListProxy))
             case .displayMediaPickerWithMode(let mode):
                 stateMachine.tryEvent(.presentRoomAvatarPicker, userInfo: mode)
             case .dismiss:
                 // Only used when isRoot
-                actionsSubject.send(.finished(result: nil))
+                actionsSubject.send(.finished(nil))
             }
         }
         .store(in: &cancellables)
@@ -243,7 +248,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentInviteUsersScreen(roomProxy: JoinedRoomProxyProtocol) {
+    private func presentInviteUsersScreen(roomProxy: JoinedRoomProxyProtocol, spaceRoomListProxy: SpaceRoomListProxyProtocol?) {
         let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.userSession,
                                                                       roomProxy: roomProxy,
                                                                       isSkippable: true,
@@ -255,7 +260,11 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .dismiss:
-                actionsSubject.send(.finished(result: .room(roomID: roomProxy.id)))
+                if let spaceRoomListProxy {
+                    actionsSubject.send(.finished(.space(spaceRoomListProxy: spaceRoomListProxy)))
+                } else {
+                    actionsSubject.send(.finished(.room(id: roomProxy.id)))
+                }
             }
         }
         .store(in: &cancellables)

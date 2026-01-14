@@ -237,7 +237,19 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 return
             }
             analytics.trackCreatedRoom(isDM: false)
-            actionsSubject.send(.createdRoom(roomProxy))
+            
+            var spaceRoomListProxy: SpaceRoomListProxyProtocol?
+            if state.isSpace {
+                switch await userSession.clientProxy.spaceService.spaceRoomList(spaceID: roomProxy.id) {
+                case .success(let value):
+                    spaceRoomListProxy = value
+                case .failure:
+                    MXLog.error("Failed to get space room list for newly created space with id: \(roomProxy.id)")
+                    userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                }
+            }
+            
+            actionsSubject.send(.createdRoom(roomProxy, spaceRoomListProxy))
         case .failure:
             state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
                                                  title: L10n.commonError,

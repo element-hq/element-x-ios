@@ -17,7 +17,7 @@ enum CreateRoomScreenErrorType: Error {
 }
 
 enum CreateRoomScreenViewModelAction {
-    case createdRoom(JoinedRoomProxyProtocol)
+    case createdRoom(JoinedRoomProxyProtocol, SpaceRoomListProxyProtocol?)
     case displayMediaPicker
     case displayCameraPicker
     case dismiss

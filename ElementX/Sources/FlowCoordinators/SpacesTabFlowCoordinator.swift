@@ -136,9 +136,15 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
             self?.startCreateSpaceFlow()
         }
         
-        stateMachine.addRoutes(event: .dismissedCreateSpaceFlow, transitions: [.createSpaceFlow => .spaceList(selectedSpaceID: nil)]) { [weak self] _ in
-            self?.startChatFlowCoordinator = nil
-            // TODO: Handle navigation to the created space if any
+        stateMachine.addRouteMapping { event, fromState, userInfo in
+            guard event == .dismissedCreateSpaceFlow, case .createSpaceFlow = fromState else { return nil }
+            return .spaceList(selectedSpaceID: (userInfo as? SpaceRoomListProxyProtocol)?.id)
+        } handler: { [weak self] context in
+            guard let self else { return }
+            startChatFlowCoordinator = nil
+            if let spaceRoomListProxy = context.userInfo as? SpaceRoomListProxyProtocol {
+                startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy)
+            }
         }
         
         stateMachine.addErrorHandler { context in
@@ -208,11 +214,18 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
                                                        navigationStackCoordinator: coordinator,
                                                        flowParameters: flowParameters)
         
+        var spaceRoomListProxy: SpaceRoomListProxyProtocol?
         flowCoordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .finished:
+                case .finished(let result):
+                    switch result {
+                    case .space(let value):
+                        spaceRoomListProxy = value
+                    case .room, .none:
+                        break
+                    }
                     navigationSplitCoordinator.setSheetCoordinator(nil)
                 case .showRoomDirectory:
                     fatalError("Not handled here")
@@ -221,8 +234,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationSplitCoordinator.setSheetCoordinator(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissedCreateSpaceFlow)
-            // TODO: Implement navigation to the selected space after dismissal
+            self?.stateMachine.tryEvent(.dismissedCreateSpaceFlow, userInfo: spaceRoomListProxy)
         }
         
         flowCoordinator.start(animated: true)
