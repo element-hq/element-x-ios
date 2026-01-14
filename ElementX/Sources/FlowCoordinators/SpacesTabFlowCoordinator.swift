@@ -31,7 +31,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
         /// The state machine hasn't started.
         case initial
         /// The root screen for this flow.
-        case spaceScreen(selectedSpaceID: String?)
+        case spacesScreen(selectedSpaceID: String?)
         /// The create space flow is currently being presented
         case createSpaceFlow
     }
@@ -96,6 +96,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Private
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func configureStateMachine() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .spacesScreen(selectedSpaceID: nil)]) { [weak self] _ in
             self?.presentSpacesScreen()
@@ -111,9 +112,9 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
         }
                 
         stateMachine.addRouteMapping { event, fromState, userInfo in
-            guard event == .selectSpace, case .spaceList = fromState else { return nil }
+            guard event == .selectSpace, case .spacesScreen = fromState else { return nil }
             guard let spaceRoomListProxy = userInfo as? SpaceRoomListProxyProtocol else { fatalError("A space proxy must be provided.") }
-            return .spaceList(selectedSpaceID: spaceRoomListProxy.id)
+            return .spacesScreen(selectedSpaceID: spaceRoomListProxy.id)
         } handler: { [weak self] context in
             guard let self, let spaceRoomListProxy = context.userInfo as? SpaceRoomListProxyProtocol else { return }
             startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy)
@@ -130,7 +131,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .startCreateSpaceFlow, case .spaceList = fromState else { return nil }
+            guard event == .startCreateSpaceFlow, case .spacesScreen = fromState else { return nil }
             return .createSpaceFlow
         } handler: { [weak self] _ in
             self?.startCreateSpaceFlow()
@@ -138,7 +139,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addRouteMapping { event, fromState, userInfo in
             guard event == .dismissedCreateSpaceFlow, case .createSpaceFlow = fromState else { return nil }
-            return .spaceList(selectedSpaceID: (userInfo as? SpaceRoomListProxyProtocol)?.id)
+            return .spacesScreen(selectedSpaceID: (userInfo as? SpaceRoomListProxyProtocol)?.id)
         } handler: { [weak self] context in
             guard let self else { return }
             startChatFlowCoordinator = nil

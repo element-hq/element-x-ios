@@ -91,6 +91,44 @@ class ClientProxy: ClientProxyProtocol {
                   "org.matrix.msc3401.call.member": Int32(0)
               ])
     }
+    
+    private static var standardSpaceCreationPowerLevelOverrides: PowerLevels {
+        .init(usersDefault: nil,
+              eventsDefault: Int32(100),
+              stateDefault: nil,
+              ban: nil,
+              kick: nil,
+              redact: nil,
+              invite: Int32(50),
+              notifications: nil,
+              users: [:],
+              events: [
+                  "m.room.power_levels": Int32(100),
+                  "m.room.history_visibility": Int32(100),
+                  "m.room.tombstone": Int32(100),
+                  "m.room.server_acl": Int32(100),
+                  "m.room.encryption": Int32(100)
+              ])
+    }
+    
+    private static var publicSpaceCreationPowerLevelOverrides: PowerLevels {
+        .init(usersDefault: nil,
+              eventsDefault: Int32(100),
+              stateDefault: nil,
+              ban: nil,
+              kick: nil,
+              redact: nil,
+              invite: nil,
+              notifications: nil,
+              users: [:],
+              events: [
+                  "m.room.power_levels": Int32(100),
+                  "m.room.history_visibility": Int32(100),
+                  "m.room.tombstone": Int32(100),
+                  "m.room.server_acl": Int32(100),
+                  "m.room.encryption": Int32(100)
+              ])
+    }
 
     private var loadCachedAvatarURLTask: Task<Void, Never>?
     private let userAvatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
@@ -480,6 +518,20 @@ class ClientProxy: ClientProxyProtocol {
                     avatarURL: URL?,
                     aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
         do {
+            let powerLevelContentOverride = if isSpace {
+                if accessType == .public {
+                    Self.publicSpaceCreationPowerLevelOverrides
+                } else {
+                    Self.standardSpaceCreationPowerLevelOverrides
+                }
+            } else {
+                if accessType == .askToJoin {
+                    Self.knockingRoomCreationPowerLevelOverrides
+                } else {
+                    Self.roomCreationPowerLevelOverrides
+                }
+            }
+            
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
                                                   isEncrypted: accessType.isEncrypted,
@@ -488,7 +540,7 @@ class ClientProxy: ClientProxyProtocol {
                                                   preset: accessType.preset,
                                                   invite: userIDs,
                                                   avatar: avatarURL?.absoluteString,
-                                                  powerLevelContentOverride: accessType == .askToJoin ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
+                                                  powerLevelContentOverride: powerLevelContentOverride,
                                                   joinRuleOverride: accessType.joinRuleOverride,
                                                   historyVisibilityOverride: accessType.historyVisibilityOverride,
                                                   // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias

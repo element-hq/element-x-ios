@@ -111,8 +111,13 @@ struct CreateRoomScreen: View {
                 } placeholder: {
                     ProgressView()
                 }
-                .scaledFrame(size: 70)
+                .scaledFrame(size: 70, relativeTo: .title)
                 .clipShape(context.viewState.isSpace ? AnyShape(RoundedRectangle(cornerRadius: 16)) : AnyShape(Circle()))
+                .overlay(alignment: .bottomTrailing) {
+                    editAvatarBadge
+                        .scaledOffset(x: 12, y: 4, relativeTo: .title)
+                        .accessibilityHidden(true)
+                }
             } else {
                 CompoundIcon(\.takePhoto, size: .medium, relativeTo: .title)
                     .foregroundColor(.compound.iconPrimary)
@@ -123,8 +128,10 @@ struct CreateRoomScreen: View {
                             .stroke(.compound.borderInteractiveSecondary, lineWidth: 1)
                     )
                     .padding(10)
+                    .accessibilityHidden(true)
             }
         }
+        .accessibilityLabel(L10n.a11yEditAvatar)
         .buttonStyle(.plain)
         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomAvatar)
         .confirmationDialog("", isPresented: $context.showAttachmentConfirmationDialog) {
@@ -142,6 +149,23 @@ struct CreateRoomScreen: View {
                 }
             }
         }
+    }
+    
+    private var editAvatarBadge: some View {
+        CompoundIcon(\.edit, size: .small, relativeTo: .body)
+            .foregroundStyle(.compound.iconPrimary)
+            .scaledPadding(5, relativeTo: .title)
+            .background {
+                Circle()
+                    .fill(Color.compound.bgCanvasDefault)
+                    .overlay {
+                        Circle()
+                            .inset(by: 0.5)
+                            .stroke(.compound.borderInteractiveSecondary, lineWidth: 1)
+                    }
+            }
+            .scaledPadding(3.5, relativeTo: .title)
+            .background(.compound.bgSubtleSecondaryLevel0, in: Circle())
     }
     
     private var topicSection: some View {
@@ -383,7 +407,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
             CreateRoomScreen(context: avatarViewModel.context)
         }
         .previewDisplayName("Create Room with avatar")
-        .snapshotPreferences(expect: publicRoomInvalidAliasViewModel.context.$viewState.map { $0.avatarMediaInfo != nil })
+        .snapshotPreferences(expect: avatarViewModel.context.$viewState.map { $0.avatarMediaInfo != nil })
         
         NavigationStack {
             CreateRoomScreen(context: spaceViewModel.context)
@@ -394,7 +418,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
             CreateRoomScreen(context: spaceWithAvatarViewModel.context)
         }
         .previewDisplayName("Create Space with avatar")
-        .snapshotPreferences(expect: publicRoomInvalidAliasViewModel.context.$viewState.map { $0.avatarMediaInfo != nil })
+        .snapshotPreferences(expect: spaceWithAvatarViewModel.context.$viewState.map { $0.avatarMediaInfo != nil })
         
         NavigationStack {
             CreateRoomScreen(context: publicRoomViewModel.context)
