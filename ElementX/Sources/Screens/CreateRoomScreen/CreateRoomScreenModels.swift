@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
+import SwiftUI
 
 enum CreateRoomScreenErrorType: Error {
     case failedCreatingRoom
@@ -31,7 +31,19 @@ struct CreateRoomScreenViewState: BindableState {
     let isKnockingFeatureEnabled: Bool
     var aliasLocalPart: String
     var bindings: CreateRoomScreenViewStateBindings
-    var avatarMediaInfo: MediaInfo?
+    var avatarMediaInfo: MediaInfo? {
+        didSet {
+            switch avatarMediaInfo {
+            case .image(_, let thumbnailURL, _):
+                avatarImage = UIImage(contentsOfFile: thumbnailURL.path(percentEncoded: false))
+            default:
+                avatarImage = nil
+            }
+        }
+    }
+    
+    var avatarImage: UIImage?
+    
     var canCreateRoom: Bool {
         !roomName.isEmpty && aliasErrors.isEmpty
     }
