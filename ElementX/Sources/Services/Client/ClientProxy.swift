@@ -112,7 +112,7 @@ class ClientProxy: ClientProxyProtocol {
               ban: nil,
               kick: nil,
               redact: nil,
-              invite: nil,
+              invite: Int32(0),
               notifications: nil,
               users: [:],
               events: [:])
