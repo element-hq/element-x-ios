@@ -393,6 +393,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         encryptionAuthenticity
             .previewDisplayName("Encryption Indicators")
         encryptionForwarder
+            .previewLayout(.sizeThatFits)
             .previewDisplayName("Encryption Forwarder Info")
         pinned
             .previewDisplayName("Pinned messages")
