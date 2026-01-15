@@ -11,6 +11,7 @@ import SwiftUI
 
 struct CreateRoomScreenCoordinatorParameters {
     let isSpace: Bool
+    let shouldShowCancelButton: Bool
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let appSettings: AppSettings
@@ -18,8 +19,9 @@ struct CreateRoomScreenCoordinatorParameters {
 }
 
 enum CreateRoomScreenCoordinatorAction {
-    case createdRoom(JoinedRoomProxyProtocol)
+    case createdRoom(JoinedRoomProxyProtocol, SpaceRoomListProxyProtocol?)
     case displayMediaPickerWithMode(MediaPickerScreenMode)
+    case dismiss
 }
 
 final class CreateRoomScreenCoordinator: CoordinatorProtocol {
@@ -33,6 +35,7 @@ final class CreateRoomScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: CreateRoomScreenCoordinatorParameters) {
         viewModel = CreateRoomScreenViewModel(isSpace: parameters.isSpace,
+                                              shouldShowCancelButton: parameters.shouldShowCancelButton,
                                               userSession: parameters.userSession,
                                               analytics: parameters.analytics,
                                               userIndicatorController: parameters.userIndicatorController,
@@ -43,12 +46,14 @@ final class CreateRoomScreenCoordinator: CoordinatorProtocol {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .createdRoom(let roomProxy):
-                actionsSubject.send(.createdRoom(roomProxy))
+            case .createdRoom(let roomProxy, let spaceRoomListProxy):
+                actionsSubject.send(.createdRoom(roomProxy, spaceRoomListProxy))
             case .displayCameraPicker:
                 actionsSubject.send(.displayMediaPickerWithMode(.init(source: .camera, selectionType: .single)))
             case .displayMediaPicker:
                 actionsSubject.send(.displayMediaPickerWithMode(.init(source: .photoLibrary, selectionType: .single)))
+            case .dismiss:
+                actionsSubject.send(.dismiss)
             }
         }
         .store(in: &cancellables)

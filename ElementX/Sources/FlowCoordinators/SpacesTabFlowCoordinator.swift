@@ -25,12 +25,15 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
     
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
+    private var startChatFlowCoordinator: StartChatFlowCoordinator?
     
     enum State: StateType {
         /// The state machine hasn't started.
         case initial
         /// The root screen for this flow.
         case spacesScreen(selectedSpaceID: String?)
+        /// The create space flow is currently being presented
+        case createSpaceFlow
     }
     
     enum Event: EventType {
@@ -42,6 +45,10 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
         case selectSpace
         /// The space screen has been dismissed.
         case deselectSpace
+        /// Start the create a new space flow
+        case startCreateSpaceFlow
+        /// Create space has finished
+        case dismissedCreateSpaceFlow
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -81,16 +88,20 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
         switch stateMachine.state {
         case .initial, .spacesScreen:
             break
+        case .createSpaceFlow:
+            startChatFlowCoordinator?.clearRoute(animated: animated)
+            clearRoute(animated: animated)
         }
     }
     
     // MARK: - Private
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func configureStateMachine() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .spacesScreen(selectedSpaceID: nil)]) { [weak self] _ in
             self?.presentSpacesScreen()
         }
-        
+                
         stateMachine.addRouteMapping { event, fromState, userInfo in
             guard event == .selectSpace, case .spacesScreen = fromState else { return nil }
             guard let spaceRoomListProxy = userInfo as? SpaceRoomListProxyProtocol else { fatalError("A space proxy must be provided.") }
@@ -108,6 +119,24 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
             navigationSplitCoordinator.setDetailCoordinator(nil) // If we forget to do this, the tab bar remains hidden.
             selectedSpaceSubject.send(nil)
             spaceFlowCoordinator = nil
+        }
+        
+        stateMachine.addRouteMapping { event, fromState, _ in
+            guard event == .startCreateSpaceFlow, case .spacesScreen = fromState else { return nil }
+            return .createSpaceFlow
+        } handler: { [weak self] _ in
+            self?.startCreateSpaceFlow()
+        }
+        
+        stateMachine.addRouteMapping { event, fromState, userInfo in
+            guard event == .dismissedCreateSpaceFlow, case .createSpaceFlow = fromState else { return nil }
+            return .spacesScreen(selectedSpaceID: (userInfo as? SpaceRoomListProxyProtocol)?.id)
+        } handler: { [weak self] context in
+            guard let self else { return }
+            startChatFlowCoordinator = nil
+            if let spaceRoomListProxy = context.userInfo as? SpaceRoomListProxyProtocol {
+                startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy)
+            }
         }
         
         stateMachine.addErrorHandler { context in
@@ -129,6 +158,8 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.selectSpace, userInfo: spaceRoomListProxy)
                 case .showSettings:
                     actionsSubject.send(.showSettings)
+                case .showCreateSpace:
+                    stateMachine.tryEvent(.startCreateSpaceFlow)
                 }
             }
             .store(in: &cancellables)
@@ -166,5 +197,39 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
         
         coordinator.start()
         selectedSpaceSubject.send(spaceRoomListProxy.id)
+    }
+    
+    private func startCreateSpaceFlow() {
+        let coordinator = NavigationStackCoordinator()
+        let flowCoordinator = StartChatFlowCoordinator(entryPoint: .createSpace,
+                                                       userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.userSession.clientProxy),
+                                                       navigationStackCoordinator: coordinator,
+                                                       flowParameters: flowParameters)
+        
+        var spaceRoomListProxy: SpaceRoomListProxyProtocol?
+        flowCoordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .finished(let result):
+                    switch result {
+                    case .space(let value):
+                        spaceRoomListProxy = value
+                    case .room, .cancelled:
+                        break
+                    }
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                case .showRoomDirectory:
+                    fatalError("Not handled here")
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationSplitCoordinator.setSheetCoordinator(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedCreateSpaceFlow, userInfo: spaceRoomListProxy)
+        }
+        
+        flowCoordinator.start(animated: true)
+        startChatFlowCoordinator = flowCoordinator
     }
 }

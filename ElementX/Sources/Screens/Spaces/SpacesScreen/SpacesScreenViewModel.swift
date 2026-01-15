@@ -79,8 +79,7 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
         case .featureAnnouncementAppeared:
             appSettings.hasSeenSpacesAnnouncement = true
         case .createSpace:
-            // TODO: Implement
-            break
+            actionsSubject.send(.showCreateSpace)
         }
     }
     

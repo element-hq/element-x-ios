@@ -29,6 +29,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
         ServiceLocator.shared.settings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
@@ -38,6 +39,9 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     override func tearDown() {
         AppSettings.resetAllSettings()
+        viewModel = nil
+        clientProxy = nil
+        userSession = nil
     }
     
     func testDefaultSecurity() {
@@ -60,7 +64,46 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         // When creating the room.
         clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
         let deferred = deferFulfillment(viewModel.actions) { action in
-            guard case .createdRoom(let roomProxy) = action, roomProxy.id == "1" else { return false }
+            guard case .createdRoom(let roomProxy, nil) = action, roomProxy.id == "1" else { return false }
+            return true
+        }
+        context.send(viewAction: .createRoom)
+        try await deferred.fulfill()
+        
+        // Then the room should be created and a topic should not be set.
+        XCTAssertTrue(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
+        XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name, "A")
+        XCTAssertNil(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.topic,
+                     "The topic should be sent as nil when it is empty.")
+    }
+    
+    func testCreateSpace() async throws {
+        clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org",
+                                            userID: "@a:b.com",
+                                            spaceServiceConfiguration: .init(spaceRoomLists: ["1": .init()])))
+        clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
+        userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        ServiceLocator.shared.settings.knockingEnabled = true
+        let viewModel = CreateRoomScreenViewModel(isSpace: true,
+                                                  shouldShowCancelButton: false,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: ServiceLocator.shared.settings)
+        self.viewModel = viewModel
+        
+        // Given a form with a blank topic.
+        context.send(viewAction: .updateRoomName("A"))
+        context.roomTopic = ""
+        context.selectedAccessType = .private
+        XCTAssertTrue(context.viewState.canCreateRoom)
+        
+        // When creating the room.
+        clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            guard case .createdRoom(let roomProxy, let spaceRoomListProxy) = action,
+                  spaceRoomListProxy != nil,
+                  roomProxy.id == "1" else { return false }
             return true
         }
         context.send(viewAction: .createRoom)

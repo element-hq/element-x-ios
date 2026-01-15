@@ -10,18 +10,17 @@ import SwiftUI
 
 struct ToolbarButton: View {
     enum Role {
-        case cancel
-        case done
-        case save
+        static let cancel = Role.cancel(title: L10n.actionCancel)
+        static let done = Role.confirm(title: L10n.actionDone)
+        static let save = Role.confirm(title: L10n.actionSave)
+
+        case cancel(title: String)
+        case confirm(title: String)
         
         var title: String {
             switch self {
-            case .cancel:
-                L10n.actionCancel
-            case .done:
-                L10n.actionDone
-            case .save:
-                L10n.actionSave
+            case .cancel(let title), .confirm(let title):
+                title
             }
         }
         
@@ -31,7 +30,7 @@ struct ToolbarButton: View {
             case .cancel:
                 CompoundIcon(\.close)
                     .foregroundStyle(.compound.iconPrimary)
-            case .done, .save:
+            case .confirm:
                 CompoundIcon(\.check)
                     .foregroundStyle(.compound.iconOnSolidPrimary)
             }
@@ -41,7 +40,7 @@ struct ToolbarButton: View {
             switch self {
             case .cancel:
                 .compound.bgCanvasDefault
-            case .done, .save:
+            case .confirm:
                 .compound.bgAccentRest
             }
         }

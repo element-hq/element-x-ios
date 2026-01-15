@@ -27,6 +27,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     }
     
     init(isSpace: Bool,
+         shouldShowCancelButton: Bool,
          userSession: UserSessionProtocol,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
@@ -40,6 +41,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                                                          selectedAccessType: .private)
 
         super.init(initialViewState: CreateRoomScreenViewState(isSpace: isSpace,
+                                                               shouldShowCancelButton: shouldShowCancelButton,
                                                                roomName: "",
                                                                serverName: userSession.clientProxy.userIDServerName ?? "",
                                                                isKnockingFeatureEnabled: appSettings.knockingEnabled,
@@ -54,6 +56,8 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     
     override func process(viewAction: CreateRoomScreenViewAction) {
         switch viewAction {
+        case .dismiss:
+            actionsSubject.send(.dismiss)
         case .createRoom:
             Task { await createRoom() }
         case .displayCameraPicker:
@@ -233,7 +237,19 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 return
             }
             analytics.trackCreatedRoom(isDM: false)
-            actionsSubject.send(.createdRoom(roomProxy))
+            
+            var spaceRoomListProxy: SpaceRoomListProxyProtocol?
+            if state.isSpace {
+                switch await userSession.clientProxy.spaceService.spaceRoomList(spaceID: roomProxy.id) {
+                case .success(let value):
+                    spaceRoomListProxy = value
+                case .failure:
+                    MXLog.error("Failed to get space room list for newly created space with id: \(roomProxy.id)")
+                    userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                }
+            }
+            
+            actionsSubject.send(.createdRoom(roomProxy, spaceRoomListProxy))
         case .failure:
             state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
                                                  title: L10n.commonError,

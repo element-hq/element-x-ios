@@ -17,13 +17,15 @@ enum CreateRoomScreenErrorType: Error {
 }
 
 enum CreateRoomScreenViewModelAction {
-    case createdRoom(JoinedRoomProxyProtocol)
+    case createdRoom(JoinedRoomProxyProtocol, SpaceRoomListProxyProtocol?)
     case displayMediaPicker
     case displayCameraPicker
+    case dismiss
 }
 
 struct CreateRoomScreenViewState: BindableState {
     let isSpace: Bool
+    let shouldShowCancelButton: Bool
     var roomName: String
     let serverName: String
     let isKnockingFeatureEnabled: Bool
@@ -47,7 +49,7 @@ struct CreateRoomScreenViewState: BindableState {
     
     var availableAccessTypes: [CreateRoomAccessType] {
         var availableTypes = CreateRoomAccessType.allCases
-        if !isKnockingFeatureEnabled {
+        if isSpace || !isKnockingFeatureEnabled {
             availableTypes.removeAll { $0 == .askToJoin }
         }
         return availableTypes
@@ -64,6 +66,7 @@ struct CreateRoomScreenViewStateBindings {
 }
 
 enum CreateRoomScreenViewAction {
+    case dismiss
     case createRoom
     case displayCameraPicker
     case displayMediaPicker
