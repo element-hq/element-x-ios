@@ -27,5 +27,5 @@ struct RoomTimelineItemProperties: Hashable {
     /// Authenticity warnings for item's sent in encrypted rooms.
     var encryptionAuthenticity: EncryptionAuthenticity?
     /// Information about the forwarder of the keys used to decrypt this message.
-    var encryptionForwarder: TimelineItemForwarder?
+    var encryptionForwarder: TimelineItemKeyForwarder?
 }

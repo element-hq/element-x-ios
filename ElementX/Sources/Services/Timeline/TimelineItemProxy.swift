@@ -110,11 +110,11 @@ class EventTimelineItemProxy {
     
     lazy var sender = TimelineItemSender(senderID: item.sender, senderProfile: item.senderProfile)
     
-    lazy var forwarder: TimelineItemForwarder? = {
+    lazy var forwarder: TimelineItemKeyForwarder? = {
         guard let forwarderID = item.forwarder, let forwarderProfile = item.forwarderProfile else {
             return nil
         }
-        return TimelineItemForwarder(forwarderID: forwarderID, forwarderProfile: forwarderProfile)
+        return TimelineItemKeyForwarder(forwarderID: forwarderID, forwarderProfile: forwarderProfile)
     }()
     
     lazy var timestamp = Date(timeIntervalSince1970: TimeInterval(item.timestamp / 1000))

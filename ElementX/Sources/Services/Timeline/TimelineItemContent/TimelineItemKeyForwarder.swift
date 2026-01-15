@@ -8,7 +8,7 @@
 import MatrixRustSDK
 import SwiftUI
 
-struct TimelineItemForwarder: Identifiable, Hashable {
+struct TimelineItemKeyForwarder: Identifiable, Hashable {
     let id: String
     let displayName: String?
     

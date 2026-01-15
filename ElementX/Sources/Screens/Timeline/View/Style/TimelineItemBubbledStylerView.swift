@@ -322,9 +322,9 @@ private extension View {
     }
 }
 
-private extension TimelineItemForwarder {
-    static var test: TimelineItemForwarder {
-        TimelineItemForwarder(id: "@alice:matrix.org", displayName: "alice")
+private extension TimelineItemKeyForwarder {
+    static var test: TimelineItemKeyForwarder {
+        TimelineItemKeyForwarder(id: "@alice:matrix.org", displayName: "alice")
     }
 }
 

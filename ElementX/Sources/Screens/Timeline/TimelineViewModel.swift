@@ -1010,7 +1010,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.bindings.alertInfo = .init(id: type,
                                              title: message,
                                              primaryButton: .init(title: L10n.actionOk, action: nil),
-                                             secondaryButton: .init(title: L10n.actionLearnMore) { self.appMediator.open(self.appSettings.historySharingDetailsURL) })
+                                             secondaryButton: .init(title: L10n.actionLearnMore) { [weak self] in
+                                                 guard let self else { return }
+                                                 appMediator.open(appSettings.historySharingDetailsURL)
+                                             })
         }
     }
     

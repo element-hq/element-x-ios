@@ -117,7 +117,7 @@ private struct TimelineItemSendInfo {
     enum Status {
         case sendingFailed
         case encryptionAuthenticity(EncryptionAuthenticity)
-        case encryptionForwarder(TimelineItemForwarder)
+        case encryptionForwarder(TimelineItemKeyForwarder)
     }
     
     /// Describes how the content and the send info should be arranged inside a bubble
@@ -195,9 +195,9 @@ private extension EncryptionAuthenticity {
     }
 }
 
-private extension TimelineItemForwarder {
-    static var test: TimelineItemForwarder {
-        TimelineItemForwarder(id: "@alice:matrix.org", displayName: "alice")
+private extension TimelineItemKeyForwarder {
+    static var test: TimelineItemKeyForwarder {
+        TimelineItemKeyForwarder(id: "@alice:matrix.org", displayName: "alice")
     }
 }
 
