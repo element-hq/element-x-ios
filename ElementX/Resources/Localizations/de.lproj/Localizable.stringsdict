@@ -130,6 +130,22 @@
 			<string>%1$d Chats</string>
 		</dict>
 	</dict>
+	<key>common_selected_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d selected</string>
+			<key>other</key>
+			<string>%1$d selected</string>
+		</dict>
+	</dict>
 	<key>common_spaces</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -448,6 +464,22 @@
 			<string>%1$@ schreibt…</string>
 			<key>other</key>
 			<string>%1$@ schreiben…</string>
+		</dict>
+	</dict>
+	<key>screen_space_remove_rooms_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d chat aus %2$@ entfernen</string>
+			<key>other</key>
+			<string>%1$d chats aus %2$@ entfernen</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>

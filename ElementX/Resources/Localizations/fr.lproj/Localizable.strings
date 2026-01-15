@@ -718,6 +718,7 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilité";
 "screen_security_and_privacy_title" = "Sécurité & confidentialité";
 "screen_space_menu_action_members" = "Voir les membres";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_announcement_item1" = "Voir les espaces que vous avez créés ou rejoints";
 "screen_space_announcement_item2" = "Accepter ou refuser les invitations aux espaces";

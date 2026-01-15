@@ -718,6 +718,7 @@
 "screen_security_and_privacy_room_visibility_section_header" = "房间可见性";
 "screen_security_and_privacy_title" = "安全与隐私";
 "screen_space_menu_action_members" = "查看成员";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_announcement_item1" = "查看您创建或加入的空间";
 "screen_space_announcement_item2" = "接受或拒绝空间邀请";

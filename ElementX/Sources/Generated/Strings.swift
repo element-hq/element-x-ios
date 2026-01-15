@@ -660,6 +660,10 @@ internal enum L10n {
   internal static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Seen by
   internal static var commonSeenBy: String { return L10n.tr("Localizable", "common_seen_by") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func commonSelectedCount(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_selected_count", p1)
+  }
   /// Send to
   internal static var commonSendTo: String { return L10n.tr("Localizable", "common_send_to") }
   /// Sending…
@@ -3155,6 +3159,12 @@ internal enum L10n {
   internal static var screenSpaceListTitle: String { return L10n.tr("Localizable", "screen_space_list_title") }
   /// View members
   internal static var screenSpaceMenuActionMembers: String { return L10n.tr("Localizable", "screen_space_menu_action_members") }
+  /// Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.
+  internal static var screenSpaceRemoveRoomsConfirmationContent: String { return L10n.tr("Localizable", "screen_space_remove_rooms_confirmation_content") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenSpaceRemoveRoomsConfirmationTitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_space_remove_rooms_confirmation_title", p1)
+  }
   /// Leave space
   internal static var screenSpaceSettingsLeaveSpace: String { return L10n.tr("Localizable", "screen_space_settings_leave_space") }
   /// Roles & permissions

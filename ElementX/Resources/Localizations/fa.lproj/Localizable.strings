@@ -718,6 +718,7 @@
 "screen_security_and_privacy_room_visibility_section_header" = "نمایانی اتاق";
 "screen_security_and_privacy_title" = "امنیت و محرمانگی";
 "screen_space_menu_action_members" = "دیدن اعضا";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_announcement_item1" = "دیدن فضاهایی که ساخته یا پیوسته‌اید";
 "screen_space_announcement_item2" = "پذیرش یا رد دعوت‌ها به فضاها";
