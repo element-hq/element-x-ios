@@ -103,21 +103,17 @@ struct CreateRoomScreen: View {
             focus = nil
             context.showAttachmentConfirmationDialog = true
         } label: {
-            if let url = context.viewState.avatarMediaInfo?.thumbnailURL {
-                AsyncImage(url: url) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    ProgressView()
-                }
-                .scaledFrame(size: 70, relativeTo: .title)
-                .clipShape(context.viewState.isSpace ? AnyShape(RoundedRectangle(cornerRadius: 16)) : AnyShape(Circle()))
-                .overlay(alignment: .bottomTrailing) {
-                    editAvatarBadge
-                        .scaledOffset(x: 12, y: 4, relativeTo: .title)
-                        .accessibilityHidden(true)
-                }
+            if let avatarImage = context.viewState.avatarImage {
+                Image(uiImage: avatarImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .scaledFrame(size: 70, relativeTo: .title)
+                    .clipShape(context.viewState.isSpace ? AnyShape(RoundedRectangle(cornerRadius: 16)) : AnyShape(Circle()))
+                    .overlay(alignment: .bottomTrailing) {
+                        editAvatarBadge
+                            .scaledOffset(x: 12, y: 4, relativeTo: .title)
+                            .accessibilityHidden(true)
+                    }
             } else {
                 CompoundIcon(\.takePhoto, size: .medium, relativeTo: .title)
                     .foregroundColor(.compound.iconPrimary)
@@ -143,7 +139,7 @@ struct CreateRoomScreen: View {
             }
             .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.mediaPicker)
             
-            if context.viewState.avatarMediaInfo?.thumbnailURL != nil {
+            if context.viewState.avatarImage != nil {
                 Button(L10n.actionRemove, role: .destructive) {
                     context.send(viewAction: .removeImage)
                 }
@@ -407,7 +403,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
             CreateRoomScreen(context: avatarViewModel.context)
         }
         .previewDisplayName("Create Room with avatar")
-        .snapshotPreferences(expect: avatarViewModel.context.$viewState.map { $0.avatarMediaInfo != nil })
+        .snapshotPreferences(expect: avatarViewModel.context.$viewState.map { $0.avatarImage != nil })
         
         NavigationStack {
             CreateRoomScreen(context: spaceViewModel.context)
@@ -418,7 +414,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
             CreateRoomScreen(context: spaceWithAvatarViewModel.context)
         }
         .previewDisplayName("Create Space with avatar")
-        .snapshotPreferences(expect: spaceWithAvatarViewModel.context.$viewState.map { $0.avatarMediaInfo != nil })
+        .snapshotPreferences(expect: spaceWithAvatarViewModel.context.$viewState.map { $0.avatarImage != nil })
         
         NavigationStack {
             CreateRoomScreen(context: publicRoomViewModel.context)
