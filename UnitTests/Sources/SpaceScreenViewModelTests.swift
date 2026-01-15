@@ -16,6 +16,7 @@ import MatrixRustSDKMocks
 @MainActor
 class SpaceScreenViewModelTests: XCTestCase {
     var spaceRoomListProxy: SpaceRoomListProxyMock!
+    var spaceServiceProxy: SpaceServiceProxyMock!
     let mockSpaceRooms = [SpaceServiceRoomProtocol].mockSpaceList
     var clientProxy: ClientProxyMock!
     var paginationStateSubject: CurrentValueSubject<SpaceRoomListPaginationState, Never> = .init(.idle(endReached: true))
@@ -177,6 +178,64 @@ class SpaceScreenViewModelTests: XCTestCase {
         try await deferredState.fulfill()
     }
     
+    func testManageRoomsWithoutRemoving() async throws {
+        setupViewModel(initialSpaceRooms: mockSpaceRooms)
+        XCTAssertEqual(context.viewState.editMode, .inactive)
+        XCTAssertTrue(context.viewState.editModeSelectedIDs.isEmpty)
+        XCTAssertTrue(context.viewState.visibleRooms.contains { $0.isSpace })
+        
+        context.send(viewAction: .manageChildren)
+        XCTAssertEqual(context.viewState.editMode, .transient, "Managing rooms should enable edit mode.")
+        XCTAssertTrue(context.viewState.editModeSelectedIDs.isEmpty, "No rooms should be selected to begin with.")
+        XCTAssertFalse(context.viewState.visibleRooms.contains { $0.isSpace }, "Spaces should be filtered out when managing rooms.")
+        
+        let selectedRoom = try XCTUnwrap(mockSpaceRooms.first { !$0.isSpace }, "There should be a room to select.")
+        XCTAssertFalse(context.viewState.isSpaceIDSelected(selectedRoom.id))
+        context.send(viewAction: .spaceAction(.select(selectedRoom)))
+        XCTAssertEqual(context.viewState.editModeSelectedIDs.count, 1, "The selected room should be included.")
+        XCTAssertTrue(context.viewState.isSpaceIDSelected(selectedRoom.id), "The room should be selected.")
+        
+        context.send(viewAction: .finishManagingChildren)
+        XCTAssertEqual(context.viewState.editMode, .inactive, "Cancelling should disable edit mode.")
+        XCTAssertTrue(context.viewState.editModeSelectedIDs.isEmpty, "Cancelling should clear all selected rooms.")
+        XCTAssertTrue(context.viewState.visibleRooms.contains { $0.isSpace }, "Cancelling should restore the hidden spaces.")
+        
+        XCTAssertFalse(spaceServiceProxy.removeChildFromCalled, "There should be no attempt to remove children when cancelling.")
+    }
+    
+    func testManageRoomsRemovingChildren() async throws {
+        setupViewModel(initialSpaceRooms: mockSpaceRooms)
+        XCTAssertEqual(context.viewState.editMode, .inactive)
+        XCTAssertTrue(context.viewState.editModeSelectedIDs.isEmpty)
+        XCTAssertTrue(context.viewState.visibleRooms.contains { $0.isSpace })
+        
+        context.send(viewAction: .manageChildren)
+        XCTAssertEqual(context.viewState.editMode, .transient, "Managing rooms should enable edit mode.")
+        XCTAssertTrue(context.viewState.editModeSelectedIDs.isEmpty, "No rooms should be selected to begin with.")
+        XCTAssertFalse(context.viewState.visibleRooms.contains { $0.isSpace }, "Spaces should be filtered out when managing rooms.")
+        
+        let firstRoom = try XCTUnwrap(mockSpaceRooms.first { !$0.isSpace }, "There should be a room to select.")
+        let lastRoom = try XCTUnwrap(mockSpaceRooms.last { !$0.isSpace }, "There should be a room to select.")
+        XCTAssertNotEqual(firstRoom.id, lastRoom.id, "There should be more than one room in the list.")
+        context.send(viewAction: .spaceAction(.select(firstRoom)))
+        context.send(viewAction: .spaceAction(.select(lastRoom)))
+        XCTAssertEqual(context.viewState.editModeSelectedIDs.count, 2, "The selected rooms should be included.")
+        
+        context.send(viewAction: .removeSelectedChildren)
+        XCTAssertTrue(context.isPresentingRemoveChildrenConfirmation, "A confirmation prompt should be shown before removing children.")
+        XCTAssertFalse(spaceServiceProxy.removeChildFromCalled, "There should be no attempt to remove children before confirming.")
+        
+        let deferred = deferFulfillment(context.observe(\.viewState.editMode)) { $0 == .inactive }
+        context.send(viewAction: .confirmRemoveSelectedChildren)
+        try await deferred.fulfill()
+        XCTAssertFalse(context.isPresentingRemoveChildrenConfirmation, "Confirming should dismiss the confirmation prompt.")
+        XCTAssertEqual(context.viewState.editMode, .inactive, "Confirming should disable edit mode when done.")
+        XCTAssertTrue(context.viewState.editModeSelectedIDs.isEmpty, "Confirming should clear all selected rooms when done.")
+        XCTAssertTrue(context.viewState.visibleRooms.contains { $0.isSpace }, "Confirming should restore the hidden spaces when done.")
+        
+        XCTAssertEqual(spaceServiceProxy.removeChildFromCallsCount, 2, "Each selected room should have been removed.")
+    }
+    
     func testLeavingSpace() async throws {
         setupViewModel()
         XCTAssertNil(context.leaveSpaceViewModel)
@@ -211,12 +270,13 @@ class SpaceScreenViewModelTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func setupViewModel(paginationResponses: [[SpaceServiceRoomProtocol]] = []) {
+    private func setupViewModel(initialSpaceRooms: [SpaceServiceRoomProtocol] = [], paginationResponses: [[SpaceServiceRoomProtocol]] = []) {
         spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true)),
+                                                          initialSpaceRooms: initialSpaceRooms,
                                                           paginationStateSubject: paginationStateSubject,
                                                           paginationResponses: paginationResponses))
         
-        let spaceServiceProxy = SpaceServiceProxyMock(.init())
+        spaceServiceProxy = SpaceServiceProxyMock(.init())
         spaceServiceProxy.spaceRoomListSpaceIDClosure = { [mockSpaceRooms] spaceID in
             guard let spaceServiceRoom = mockSpaceRooms.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
             return .success(SpaceRoomListProxyMock(.init(spaceServiceRoom: spaceServiceRoom)))

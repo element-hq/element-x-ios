@@ -959,6 +959,12 @@ extension PreviewTests {
         }
     }
 
+    func testSpaceRemoveChildrenConfirmationView() async throws {
+        for (index, preview) in SpaceRemoveChildrenConfirmationView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testSpaceRoomCell() async throws {
         for (index, preview) in SpaceRoomCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

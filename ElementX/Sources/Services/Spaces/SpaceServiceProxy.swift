@@ -76,6 +76,15 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
+    func removeChild(_ childID: String, from spaceID: String) async -> Result<Void, SpaceServiceProxyError> {
+        do {
+            return try await .success(spaceService.removeChildFromSpace(childId: childID, spaceId: spaceID))
+        } catch {
+            MXLog.error("Failed to remove child \(childID) to space \(spaceID)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func handleUpdates(_ updates: [SpaceListUpdate]) {

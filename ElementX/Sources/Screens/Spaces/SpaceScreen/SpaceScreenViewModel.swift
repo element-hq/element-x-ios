@@ -107,7 +107,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .spaceAction(.select(let spaceServiceRoom)):
+        case .spaceAction(.select(let spaceServiceRoom)) where state.editMode == .inactive:
             if spaceServiceRoom.isSpace {
                 if spaceServiceRoom.state != .joined {
                     actionsSubject.send(.selectUnjoinedSpace(spaceServiceRoom))
@@ -118,6 +118,14 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                 // No need to check the join state, the room flow will show an appropriately configured join screen if needed.
                 actionsSubject.send(.selectRoom(roomID: spaceServiceRoom.id))
             }
+        case .spaceAction(.select(let spaceServiceRoom)): // isEditModeActive == true
+            withTransaction(\.disablesAnimations, true) { // The button adds an unwanted animation.
+                if state.editModeSelectedIDs.contains(spaceServiceRoom.id) {
+                    state.editModeSelectedIDs.remove(spaceServiceRoom.id)
+                } else {
+                    state.editModeSelectedIDs.insert(spaceServiceRoom.id)
+                }
+            }
         case .spaceAction(.join(let spaceServiceRoom)):
             Task { await join(spaceServiceRoom) }
         case .leaveSpace:
@@ -126,6 +134,20 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             actionsSubject.send(.displayMembers(roomProxy: roomProxy))
         case .spaceSettings(let roomProxy):
             actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
+        case .manageChildren:
+            withAnimation(.easeOut(duration: 0.25).disabledDuringTests()) {
+                state.editMode = .transient
+            }
+        case .removeSelectedChildren:
+            state.bindings.isPresentingRemoveChildrenConfirmation = true
+        case .confirmRemoveSelectedChildren:
+            Task { await removeSelectedChildren() }
+        case .finishManagingChildren:
+            withAnimation(.easeOut(duration: 0.25).disabledDuringTests()) {
+                state.editMode = .inactive
+            } completion: {
+                self.state.editModeSelectedIDs.removeAll()
+            }
         }
     }
     
@@ -156,6 +178,25 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             MXLog.error("Unable to select space: \(error)")
             showFailureIndicator()
         }
+    }
+    
+    private func removeSelectedChildren() async {
+        showRemovingIndicator()
+        defer { hideRemovingIndicator() }
+        
+        state.bindings.isPresentingRemoveChildrenConfirmation = false
+        
+        for childID in state.editModeSelectedIDs {
+            switch await spaceServiceProxy.removeChild(childID, from: spaceRoomListProxy.id) {
+            case .success:
+                MXLog.info("Successfully removed \(childID) from \(spaceRoomListProxy.id)")
+            case .failure:
+                showFailureIndicator()
+                return
+            }
+        }
+        
+        process(viewAction: .finishManagingChildren)
     }
     
     private func showLeaveSpaceConfirmation() async {
@@ -192,8 +233,19 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         
     // MARK: - Indicators
     
-    private static var leavingIndicatorID: String { "\(Self.self)-Leaving" }
+    private static var removingIndicatorID: String { "\(Self.self)-Removing" }
     private static var failureIndicatorID: String { "\(Self.self)-Failure" }
+    
+    private func showRemovingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.removingIndicatorID,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.commonRemoving,
+                                                              persistent: true))
+    }
+    
+    private func hideRemovingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.removingIndicatorID)
+    }
     
     private func showFailureIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorID,
