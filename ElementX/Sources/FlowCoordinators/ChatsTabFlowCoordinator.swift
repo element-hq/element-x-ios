@@ -585,7 +585,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                     case .space(let spaceRoomListProxy):
                         // This also automatically handles selecting the space.
                         stateMachine.processEvent(.selectRoom(roomID: spaceRoomListProxy.id, via: [], entryPoint: .room))
-                    case .none:
+                    case .cancelled:
                         break
                     }
                 case .showRoomDirectory:
