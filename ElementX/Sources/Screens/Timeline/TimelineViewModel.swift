@@ -675,7 +675,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             actionsSubject.send(.displayResolveSendFailure(failure: failure,
                                                            sendHandle: sendHandle))
             
-        } else if let forwarderMessage = eventTimelineItem.properties.encryptionForwarder?.message, appSettings.enableKeyShareOnInvite {
+        } else if appSettings.enableKeyShareOnInvite, let forwarderMessage = eventTimelineItem.properties.encryptionForwarder?.message {
             displayAlert(.encryptionForwarder(forwarderMessage))
         } else if let authenticityMessage = eventTimelineItem.properties.encryptionAuthenticity?.message {
             displayAlert(.encryptionAuthenticity(authenticityMessage))
