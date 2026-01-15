@@ -101,15 +101,6 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .spacesScreen(selectedSpaceID: nil)]) { [weak self] _ in
             self?.presentSpacesScreen()
         }
-        
-        stateMachine.addRouteMapping { event, fromState, userInfo in
-            guard event == .selectSpace, case .spacesScreen = fromState else { return nil }
-            guard let spaceRoomListProxy = userInfo as? SpaceRoomListProxyProtocol else { fatalError("A space proxy must be provided.") }
-            return .spacesScreen(selectedSpaceID: spaceRoomListProxy.id)
-        } handler: { [weak self] context in
-            guard let self, let spaceRoomListProxy = context.userInfo as? SpaceRoomListProxyProtocol else { return }
-            startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy)
-        }
                 
         stateMachine.addRouteMapping { event, fromState, userInfo in
             guard event == .selectSpace, case .spacesScreen = fromState else { return nil }
@@ -224,7 +215,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
                     switch result {
                     case .space(let value):
                         spaceRoomListProxy = value
-                    case .room, .none:
+                    case .room, .cancelled:
                         break
                     }
                     navigationSplitCoordinator.setSheetCoordinator(nil)

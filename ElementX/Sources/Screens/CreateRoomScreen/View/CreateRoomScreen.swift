@@ -123,10 +123,10 @@ struct CreateRoomScreen: View {
                     .foregroundColor(.compound.iconPrimary)
                     .scaledFrame(size: 50, relativeTo: .title)
                     .background(.compound.bgCanvasDefault, in: Circle())
-                    .overlay(
+                    .overlay {
                         Circle()
                             .stroke(.compound.borderInteractiveSecondary, lineWidth: 1)
-                    )
+                    }
                     .padding(10)
                     .accessibilityHidden(true)
             }

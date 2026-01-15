@@ -11,12 +11,13 @@ import Foundation
 import SwiftState
 
 enum StartChatFlowCoordinatorAction {
-    case finished(Result?)
+    case finished(Result)
     case showRoomDirectory
     
     enum Result {
         case room(id: String)
         case space(spaceRoomListProxy: SpaceRoomListProxyProtocol)
+        case cancelled
     }
 }
 
@@ -176,7 +177,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .close:
-                actionsSubject.send(.finished(nil))
+                actionsSubject.send(.finished(.cancelled))
             case .createRoom:
                 stateMachine.tryEvent(.createRoom)
             case .openRoom(let roomID):
@@ -207,7 +208,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentRoomAvatarPicker, userInfo: mode)
             case .dismiss:
                 // Only used when isRoot
-                actionsSubject.send(.finished(nil))
+                actionsSubject.send(.finished(.cancelled))
             }
         }
         .store(in: &cancellables)
