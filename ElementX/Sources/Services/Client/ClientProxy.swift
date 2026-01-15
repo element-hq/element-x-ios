@@ -102,13 +102,7 @@ class ClientProxy: ClientProxyProtocol {
               invite: Int32(50),
               notifications: nil,
               users: [:],
-              events: [
-                  "m.room.power_levels": Int32(100),
-                  "m.room.history_visibility": Int32(100),
-                  "m.room.tombstone": Int32(100),
-                  "m.room.server_acl": Int32(100),
-                  "m.room.encryption": Int32(100)
-              ])
+              events: [:])
     }
     
     private static var publicSpaceCreationPowerLevelOverrides: PowerLevels {
@@ -121,13 +115,7 @@ class ClientProxy: ClientProxyProtocol {
               invite: nil,
               notifications: nil,
               users: [:],
-              events: [
-                  "m.room.power_levels": Int32(100),
-                  "m.room.history_visibility": Int32(100),
-                  "m.room.tombstone": Int32(100),
-                  "m.room.server_acl": Int32(100),
-                  "m.room.encryption": Int32(100)
-              ])
+              events: [:])
     }
 
     private var loadCachedAvatarURLTask: Task<Void, Never>?

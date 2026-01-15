@@ -49,7 +49,7 @@ struct CreateRoomScreenViewState: BindableState {
     
     var availableAccessTypes: [CreateRoomAccessType] {
         var availableTypes = CreateRoomAccessType.allCases
-        if !isKnockingFeatureEnabled {
+        if isSpace || !isKnockingFeatureEnabled {
             availableTypes.removeAll { $0 == .askToJoin }
         }
         return availableTypes
