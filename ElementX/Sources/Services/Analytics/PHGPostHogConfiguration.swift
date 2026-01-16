@@ -15,6 +15,9 @@ extension PostHogConfig {
         postHogConfiguration.captureScreenViews = false
         postHogConfiguration.surveys = false
         
+        // We only want to track the events provided by the AnalyticsEvents package
+        postHogConfiguration.enableSwizzling = false
+        
         return postHogConfiguration
     }
 }
