@@ -755,10 +755,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "TimelineThreadSummaryView_Previews")
     }
 
-    func testTimelineView() async throws {
-        try await performAccessibilityAudit(named: "TimelineView_Previews")
-    }
-
     func testTombstonedAvatarImage() async throws {
         try await performAccessibilityAudit(named: "TombstonedAvatarImage_Previews")
     }
