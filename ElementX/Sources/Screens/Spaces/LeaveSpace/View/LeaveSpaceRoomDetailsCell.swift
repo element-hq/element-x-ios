@@ -61,7 +61,7 @@ struct LeaveSpaceRoomDetailsCell: View {
             }
             .padding(.horizontal, 16)
         }
-        .buttonStyle(SpaceRoomCellButtonStyle(isSelected: false))
+        .buttonStyle(SpaceRoomCellButtonStyle(isHighlighted: false))
     }
     
     @ViewBuilder

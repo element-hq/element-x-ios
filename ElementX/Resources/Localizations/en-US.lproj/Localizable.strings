@@ -276,6 +276,7 @@
 "common_reason" = "Reason";
 "common_recovery_key" = "Recovery key";
 "common_refreshing" = "Refreshing…";
+"common_removing" = "Removing…";
 "common_replying_to" = "Replying to %1$@";
 "common_report_a_bug" = "Report a bug";
 "common_report_a_problem" = "Report a problem";
@@ -718,6 +719,8 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Security & privacy";
 "screen_space_menu_action_members" = "View members";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
 "screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";

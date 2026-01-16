@@ -17130,6 +17130,76 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             return addChildToReturnValue
         }
     }
+    //MARK: - removeChild
+
+    var removeChildFromUnderlyingCallsCount = 0
+    var removeChildFromCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeChildFromUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeChildFromUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeChildFromUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeChildFromUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var removeChildFromCalled: Bool {
+        return removeChildFromCallsCount > 0
+    }
+    var removeChildFromReceivedArguments: (childID: String, spaceID: String)?
+    var removeChildFromReceivedInvocations: [(childID: String, spaceID: String)] = []
+
+    var removeChildFromUnderlyingReturnValue: Result<Void, SpaceServiceProxyError>!
+    var removeChildFromReturnValue: Result<Void, SpaceServiceProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return removeChildFromUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, SpaceServiceProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeChildFromUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeChildFromUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeChildFromUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var removeChildFromClosure: ((String, String) async -> Result<Void, SpaceServiceProxyError>)?
+
+    func removeChild(_ childID: String, from spaceID: String) async -> Result<Void, SpaceServiceProxyError> {
+        removeChildFromCallsCount += 1
+        removeChildFromReceivedArguments = (childID: childID, spaceID: spaceID)
+        DispatchQueue.main.async {
+            self.removeChildFromReceivedInvocations.append((childID: childID, spaceID: spaceID))
+        }
+        if let removeChildFromClosure = removeChildFromClosure {
+            return await removeChildFromClosure(childID, spaceID)
+        } else {
+            return removeChildFromReturnValue
+        }
+    }
 }
 class SpaceServiceRoomMock: SpaceServiceRoomProtocol, @unchecked Sendable {
     var id: String {

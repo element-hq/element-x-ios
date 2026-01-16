@@ -26,4 +26,5 @@ protocol SpaceServiceProxyProtocol {
     
     /// Adds a room (or space) as a child of another space.
     func addChild(_ childID: String, to spaceID: String) async -> Result<Void, SpaceServiceProxyError>
+    func removeChild(_ childID: String, from spaceID: String) async -> Result<Void, SpaceServiceProxyError>
 }

@@ -39,6 +39,7 @@ extension SpaceServiceProxyMock {
             .success(configuration.topLevelSpaces.first { $0.id == spaceID })
         }
         addChildToReturnValue = .success(())
+        removeChildFromReturnValue = .success(())
     }
 }
 

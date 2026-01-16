@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
+import SwiftUI
 
 enum SpaceScreenViewModelAction {
     case selectSpace(SpaceRoomListProxyProtocol)
@@ -33,14 +33,30 @@ struct SpaceScreenViewState: BindableState {
     var canEditRolesAndPermissions = false
     var canEditSecurityAndPrivacy = false
     
+    var editMode: EditMode = .inactive
+    var editModeSelectedIDs: Set<String> = []
+    
+    var bindings = SpaceScreenViewStateBindings()
+    
+    var visibleRooms: [SpaceServiceRoomProtocol] {
+        if editMode == .inactive {
+            rooms
+        } else {
+            rooms.filter { !$0.isSpace }
+        }
+    }
+    
     var isSpaceManagementEnabled: Bool {
         canEditBaseInfo || canEditRolesAndPermissions || canEditSecurityAndPrivacy
     }
     
-    var bindings = SpaceScreenViewStateBindings()
+    func isSpaceIDSelected(_ spaceID: String) -> Bool {
+        selectedSpaceRoomID == spaceID || editModeSelectedIDs.contains(spaceID)
+    }
 }
 
 struct SpaceScreenViewStateBindings {
+    var isPresentingRemoveChildrenConfirmation = false
     var leaveSpaceViewModel: LeaveSpaceViewModel?
 }
 
@@ -49,4 +65,8 @@ enum SpaceScreenViewAction {
     case leaveSpace
     case spaceSettings(roomProxy: JoinedRoomProxyProtocol)
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
+    case manageChildren
+    case removeSelectedChildren
+    case confirmRemoveSelectedChildren
+    case finishManagingChildren
 }

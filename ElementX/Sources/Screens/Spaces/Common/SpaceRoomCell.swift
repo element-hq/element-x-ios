@@ -11,7 +11,8 @@ import Compound
 import SwiftUI
 
 struct SpaceRoomCell: View {
-    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.editMode) private var editMode
     
     let spaceServiceRoom: SpaceServiceRoomProtocol
     let isSelected: Bool
@@ -23,6 +24,9 @@ struct SpaceRoomCell: View {
     
     private let verticalInsets = 12.0
     private let horizontalInsets = 16.0
+    
+    private var isEditModeActive: Bool { editMode?.wrappedValue ?? .inactive != .inactive }
+    private var isHighlighted: Bool { isSelected && !isEditModeActive }
     
     private var subtitle: String {
         if spaceServiceRoom.isSpace {
@@ -58,22 +62,34 @@ struct SpaceRoomCell: View {
         Button {
             action(.select(spaceServiceRoom))
         } label: {
-            HStack(spacing: 16.0) {
-                avatar
-                
-                content
-                    .padding(.vertical, verticalInsets)
-                    .overlay(alignment: .bottom) {
-                        Rectangle()
-                            .fill(Color.compound.borderDisabled)
-                            .frame(height: 1 / UIScreen.main.scale)
-                            .padding(.trailing, -horizontalInsets)
+            HStack(spacing: 0) {
+                if isEditModeActive {
+                    ZStack {
+                        ListRowAccessory.multiSelection(isSelected)
                     }
+                    // Use padding rather than spacing to improve the animation.
+                    .padding(.trailing, 16)
+                    // Put the transition on a ZStack to prevent it from being applied during selection/deselection.
+                    .transition(.move(edge: .leading).combined(with: .opacity))
+                }
+                
+                HStack(spacing: 16) {
+                    avatar
+                    
+                    content
+                        .padding(.vertical, verticalInsets)
+                        .overlay(alignment: .bottom) {
+                            Rectangle()
+                                .fill(Color.compound.borderDisabled)
+                                .frame(height: 1 / UIScreen.main.scale)
+                                .padding(.trailing, -horizontalInsets)
+                        }
+                }
             }
             .padding(.horizontal, horizontalInsets)
             .accessibilityElement(children: .combine)
         }
-        .buttonStyle(SpaceRoomCellButtonStyle(isSelected: isSelected))
+        .buttonStyle(SpaceRoomCellButtonStyle(isHighlighted: isHighlighted))
         .accessibilityIdentifier(A11yIdentifiers.spacesScreen.spaceRoomName(spaceServiceRoom.name))
     }
     
@@ -146,13 +162,13 @@ struct SpaceRoomCell: View {
 }
 
 struct SpaceRoomCellButtonStyle: ButtonStyle {
-    let isSelected: Bool
+    let isHighlighted: Bool
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .background(isSelected || configuration.isPressed ? Color.compound.bgSubtleSecondary : Color.compound.bgCanvasDefault)
+            .background(isHighlighted || configuration.isPressed ? Color.compound.bgSubtleSecondary : Color.compound.bgCanvasDefault)
             .contentShape(Rectangle())
-            .animation(isSelected ? .none : .easeOut(duration: 0.1).disabledDuringTests(), value: isSelected)
+            .animation(isHighlighted ? .none : .easeOut(duration: 0.1).disabledDuringTests(), value: isHighlighted)
     }
 }
 
@@ -162,21 +178,35 @@ struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
     static let spaces = [SpaceServiceRoomProtocol].mockSpaceList
     
     static var previews: some View {
-        VStack(spacing: 0) {
-            ForEach(spaces, id: \.id) { space in
-                SpaceRoomCell(spaceServiceRoom: space,
+        ScrollView {
+            VStack(spacing: 0) {
+                ForEach(spaces, id: \.id) { space in
+                    SpaceRoomCell(spaceServiceRoom: space,
+                                  isSelected: false,
+                                  mediaProvider: mediaProvider) { _ in }
+                }
+                
+                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Space being joined", isSpace: true)),
                               isSelected: false,
+                              isJoining: true,
                               mediaProvider: mediaProvider) { _ in }
+                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Room being joined", isSpace: false)),
+                              isSelected: false,
+                              isJoining: true,
+                              mediaProvider: mediaProvider) { _ in }
+                
+                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Selected", isSpace: false, state: .joined)),
+                              isSelected: true,
+                              isJoining: false,
+                              mediaProvider: mediaProvider) { _ in }
+                    .environment(\.editMode, .constant(.active))
+                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Unselected", isSpace: false, state: .joined)),
+                              isSelected: false,
+                              isJoining: false,
+                              mediaProvider: mediaProvider) { _ in }
+                    .environment(\.editMode, .constant(.active))
             }
-            
-            SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Space being joined", isSpace: true)),
-                          isSelected: false,
-                          isJoining: true,
-                          mediaProvider: mediaProvider) { _ in }
-            SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Room being joined", isSpace: false)),
-                          isSelected: false,
-                          isJoining: true,
-                          mediaProvider: mediaProvider) { _ in }
         }
+        .previewLayout(.fixed(width: 390, height: 850))
     }
 }

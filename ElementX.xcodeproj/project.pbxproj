@@ -314,6 +314,7 @@
 		36AC963F2F04069B7FF1AA0C /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6D88E8AFFBF2C1D589C0FA /* UIConstants.swift */; };
 		36AD4DD4C798E22584ED3200 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 7731767AE437BA3BD2CC14A8 /* Sentry */; };
 		36CD6E11B37396E14F032CB6 /* SentrySwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 75361A9D8A3C5501EADB225D /* SentrySwiftUI */; };
+		36DCA11EA7320A45A4CC8D07 /* SpaceRemoveChildrenConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44AC61A375CC2E47938B5D12 /* SpaceRemoveChildrenConfirmationView.swift */; };
 		36DE961B784087D5E18EF9BA /* LogViewerScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A07692536D66E3DA32C4964 /* LogViewerScreen.swift */; };
 		370AF5BFCD4384DD455479B6 /* ElementCallWidgetDriverProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C11AD9813045E44F950410 /* ElementCallWidgetDriverProtocol.swift */; };
 		37906355E207DB5703754675 /* AppLockSetupBiometricsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F893F4A111CB7BA5C96949 /* AppLockSetupBiometricsScreenViewModel.swift */; };
@@ -1924,6 +1925,7 @@
 		43C2067FF58B4996323EB40C /* SessionDirectories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDirectories.swift; sourceTree = "<group>"; };
 		4481799F455B3DA243BDA2AC /* ShareToMapsAppActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareToMapsAppActivity.swift; sourceTree = "<group>"; };
 		44ABA63DBE7F76C58260B43B /* EmoteRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmoteRoomTimelineView.swift; sourceTree = "<group>"; };
+		44AC61A375CC2E47938B5D12 /* SpaceRemoveChildrenConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceRemoveChildrenConfirmationView.swift; sourceTree = "<group>"; };
 		44AEEE13AC1BF303AE48CBF8 /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		44B71F6D9062E8EB8929BB97 /* KnockRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnockRequestCell.swift; sourceTree = "<group>"; };
 		44C314C00533E2C297796B60 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -6712,6 +6714,7 @@
 		FA1D480A302295CFC3582543 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				44AC61A375CC2E47938B5D12 /* SpaceRemoveChildrenConfirmationView.swift */,
 				646B50583A2CE6DA67F7739A /* SpaceScreen.swift */,
 			);
 			path = View;
@@ -8587,6 +8590,7 @@
 				C8E11A335456FCF94A744E6E /* SpaceFlowCoordinator.swift in Sources */,
 				BF523D9E12E3C4AABBA2F6CB /* SpaceHeaderTopicSheetView.swift in Sources */,
 				E9B4742B3D6E103327466513 /* SpaceHeaderView.swift in Sources */,
+				36DCA11EA7320A45A4CC8D07 /* SpaceRemoveChildrenConfirmationView.swift in Sources */,
 				9B84F55288AB98783C11CC49 /* SpaceRoomCell.swift in Sources */,
 				913BCABB99796F82E3D8D93D /* SpaceRoomInfoMock.swift in Sources */,
 				0DAB08C117E0391F3ADB2031 /* SpaceRoomListProxy.swift in Sources */,

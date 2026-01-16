@@ -39,6 +39,28 @@ extension View {
             self
         }
     }
+    
+    @ViewBuilder func backportButtonStyleGlass() -> some View {
+        if #available(iOS 26, *) {
+            buttonStyle(.glass)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder func backportButtonStyleGlassProminent() -> some View {
+        if #available(iOS 26, *) {
+            // `.glassProminent` breaks our preview tests so we need to disable it when running tests.
+            // https://github.com/pointfreeco/swift-snapshot-testing/issues/1029#issuecomment-3366942138
+            if ProcessInfo.isRunningTests {
+                self
+            } else {
+                buttonStyle(.glassProminent)
+            }
+        } else {
+            buttonStyle(.borderedProminent)
+        }
+    }
 }
 
 extension ToolbarContent {
