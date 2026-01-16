@@ -52,6 +52,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case joinSpace
         /// The root screen for this flow.
         case space
+        /// The user is adding rooms to the space.
+        case addingRooms
         /// A child (space) flow is in progress.
         case presentingChild(childSpaceID: String, previousState: State)
         /// A room flow is in progress
@@ -76,6 +78,11 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case joinedSpace
         /// The space screen left the space.
         case leftSpace
+        
+        /// Allow the user to add existing rooms to this space.
+        case addRooms
+        /// The user finished adding rooms to this space.
+        case dismissedAddRooms
         
         /// Request the presentation of a child space flow.
         ///
@@ -145,6 +152,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 navigationStackCoordinator.setRootCoordinator(nil, animated: animated)
             }
+        case .addingRooms:
+            navigationStackCoordinator.setSheetCoordinator(nil)
+            clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         case .presentingChild:
             childSpaceFlowCoordinator?.clearRoute(animated: animated)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
@@ -181,6 +191,11 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .leftSpace, transitions: [.space => .leftSpace]) { [weak self] _ in
             self?.clearRoute(animated: true)
         }
+        
+        stateMachine.addRoutes(event: .addRooms, transitions: [.space => .addingRooms]) { [weak self] _ in
+            self?.presentSpaceAddRoomsScreen()
+        }
+        stateMachine.addRoutes(event: .dismissedAddRooms, transitions: [.addingRooms => .space])
         
         stateMachine.addRouteMapping { event, fromState, userInfo in
             guard event == .startChildFlow else { return nil }
@@ -306,6 +321,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.startSettingsFlow, userInfo: roomProxy)
                 case .displayRolesAndPermissions(let roomProxy):
                     stateMachine.tryEvent(.startRolesAndPermissionsFlow, userInfo: roomProxy)
+                case .addExistingChildren:
+                    stateMachine.tryEvent(.addRooms)
                 }
             }
             .store(in: &cancellables)
@@ -369,6 +386,31 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         presentSpace()
+    }
+    
+    private func presentSpaceAddRoomsScreen() {
+        guard case let .space(spaceRoomListProxy) = entryPoint else { fatalError("Attempting to show a space with the wrong entry point.") }
+        
+        let stackCoordinator = NavigationStackCoordinator()
+        let parameters = SpaceAddRoomsScreenCoordinatorParameters(spaceRoomListProxy: spaceRoomListProxy,
+                                                                  userSession: flowParameters.userSession,
+                                                                  roomSummaryProvider: flowParameters.userSession.clientProxy.alternateRoomSummaryProvider,
+                                                                  userIndicatorController: flowParameters.userIndicatorController)
+        let coordinator = SpaceAddRoomsScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .dismiss:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedAddRooms)
+        }
     }
     
     // MARK: - Other flows

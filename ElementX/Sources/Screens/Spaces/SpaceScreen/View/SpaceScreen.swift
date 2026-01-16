@@ -85,6 +85,17 @@ struct SpaceScreen: View {
         // controller attempts to anchor itself to the button that is no longer visible.
         ToolbarItem(placement: .primaryAction) {
             Menu {
+                if context.viewState.canEditChildren {
+                    Section {
+                        Button { context.send(viewAction: .addExistingRooms) } label: {
+                            Label(L10n.actionAddExistingRooms, icon: \.room)
+                        }
+                        Button { context.send(viewAction: .manageChildren) } label: {
+                            Label(L10n.actionManageRooms, icon: \.edit)
+                        }
+                    }
+                }
+                
                 Section {
                     if let roomProxy = context.viewState.roomProxy {
                         Button { context.send(viewAction: .displayMembers(roomProxy: roomProxy)) } label: {
