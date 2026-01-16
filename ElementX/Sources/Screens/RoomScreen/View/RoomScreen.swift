@@ -177,14 +177,9 @@ struct RoomScreen: View {
     @ViewBuilder
     private var callButton: some View {
         if context.viewState.hasOngoingCall {
-            Button {
+            JoinCallButton {
                 context.send(viewAction: .displayCall)
-            } label: {
-                Label(L10n.actionJoin, icon: \.videoCallSolid)
-                    .labelStyle(.titleAndIcon)
             }
-            .buttonStyle(ElementCallButtonStyle())
-            .accessibilityLabel(L10n.a11yJoinCall)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         } else {
             Button {

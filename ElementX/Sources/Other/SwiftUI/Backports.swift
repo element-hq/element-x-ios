@@ -52,7 +52,7 @@ extension View {
         if #available(iOS 26, *) {
             // `.glassProminent` breaks our preview tests so we need to disable it when running tests.
             // https://github.com/pointfreeco/swift-snapshot-testing/issues/1029#issuecomment-3366942138
-            if ProcessInfo.isRunningTests {
+            if ProcessInfo.isRunningUnitTests {
                 self
             } else {
                 buttonStyle(.glassProminent)
