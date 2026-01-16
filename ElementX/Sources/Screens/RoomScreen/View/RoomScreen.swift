@@ -159,12 +159,9 @@ struct RoomScreen: View {
             RoomHeaderView(roomName: context.viewState.roomTitle,
                            roomAvatar: context.viewState.roomAvatar,
                            dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
-                           mediaProvider: context.mediaProvider)
-                // Using a button stops it from getting truncated in the navigation bar
-                .contentShape(.rect)
-                .onTapGesture {
-                    context.send(viewAction: .displayRoomDetails)
-                }
+                           mediaProvider: context.mediaProvider) {
+                context.send(viewAction: .displayRoomDetails)
+            }
         }
         
         if !ProcessInfo.processInfo.isiOSAppOnMac {
