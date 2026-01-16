@@ -18,16 +18,24 @@ struct RoomHeaderView: View {
     
     let mediaProvider: MediaProviderProtocol?
     
+    let action: () -> Void
+    
     var body: some View {
         if #available(iOS 26.0, *) {
-            // On iOS 26+ we use the toolbarRole(.editor) to leading align.
-            content
+            Button(action: action) {
+                // On iOS 26+ we use the toolbarRole(.editor) to leading align.
+                content
+            }
+            .backportButtonStyleGlass()
         } else {
             // On iOS 18 and lower, the editor role causes an animation glitch with the back button whenever
             // you push a screen whilst the large title is visible on the room screen.
             content
                 // So take up as much space as possible, with a leading alignment for use in the default principal toolbar position
                 .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
+                // Using a button stops it from getting truncated in the navigation bar
+                .contentShape(.rect)
+                .onTapGesture(perform: action)
         }
     }
     
@@ -98,7 +106,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                                          name: "Some Room Name",
                                          avatarURL: avatarURL),
                        dmRecipientVerificationState: verificationState,
-                       mediaProvider: MediaProviderMock(configuration: .init()))
+                       mediaProvider: MediaProviderMock(configuration: .init())) { }
             .padding()
     }
 }

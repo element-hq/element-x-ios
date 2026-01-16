@@ -1133,12 +1133,6 @@ extension PreviewTests {
         }
     }
 
-    func testTimelineView() async throws {
-        for (index, preview) in TimelineView_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
     func testTombstonedAvatarImage() async throws {
         for (index, preview) in TombstonedAvatarImage_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

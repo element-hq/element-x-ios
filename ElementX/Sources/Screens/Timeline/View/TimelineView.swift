@@ -140,7 +140,7 @@ struct TimelineViewRepresentable: UIViewControllerRepresentable {
 
 // MARK: - Previews
 
-struct TimelineView_Previews: PreviewProvider, TestablePreview {
+struct TimelineView_Previews: PreviewProvider { // Not testable as this preview is built the same way as RoomScreen.
     static let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
                                                          name: "Preview room"))
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
