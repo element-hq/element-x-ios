@@ -31,6 +31,7 @@ struct CreateRoomScreenViewState: BindableState {
     let isKnockingFeatureEnabled: Bool
     let canSelectSpace: Bool
     var aliasLocalPart: String
+    var topLevelSpaces: [SpaceServiceRoomProtocol]
     var bindings: CreateRoomScreenViewStateBindings
     var avatarMediaInfo: MediaInfo? {
         didSet {
@@ -59,14 +60,12 @@ struct CreateRoomScreenViewState: BindableState {
             nil
         }
     }
-    
-    var selectedSpace: SpaceServiceRoomProtocol?
-    
+        
     var availableAccessTypes: [CreateRoomScreenAccessType] {
         var availableAccessTypes: [CreateRoomScreenAccessType] = []
         if isSpace {
             availableAccessTypes = [.public]
-        } else if let selectedSpace, selectedSpace.joinRule != .public {
+        } else if let selectedSpace = bindings.selectedSpace, selectedSpace.joinRule != .public {
             availableAccessTypes = [.spaceMembers]
             if isKnockingFeatureEnabled {
                 availableAccessTypes.append(.askToJoinWithSpaceMembers)
@@ -86,9 +85,9 @@ struct CreateRoomScreenViewState: BindableState {
         case .public:
             return .public
         case .spaceMembers:
-            return .spaceMembers(spaceID: selectedSpace?.id ?? "")
+            return .spaceMembers(spaceID: bindings.selectedSpace?.id ?? "")
         case .askToJoinWithSpaceMembers:
-            return .askToJoinWithSpaceMembers(spaceID: selectedSpace?.id ?? "")
+            return .askToJoinWithSpaceMembers(spaceID: bindings.selectedSpace?.id ?? "")
         case .askToJoin:
             return .askToJoin
         case .private:
@@ -100,7 +99,10 @@ struct CreateRoomScreenViewState: BindableState {
 struct CreateRoomScreenViewStateBindings {
     var roomTopic: String
     var selectedAccessType: CreateRoomScreenAccessType
+    var selectedSpace: SpaceServiceRoomProtocol?
+    
     var showAttachmentConfirmationDialog = false
+    var showSpaceSelectionSheet = false
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<CreateRoomScreenErrorType>?
@@ -138,4 +140,9 @@ enum CreateRoomScreenAccessType {
     case askToJoinWithSpaceMembers
     case askToJoin
     case `private`
+}
+
+enum CreateRoomScreenSpaceSelectionMode {
+    case list
+    case selected(SpaceServiceRoomProtocol)
 }

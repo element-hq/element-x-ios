@@ -29,6 +29,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
         ServiceLocator.shared.settings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  spaceSelectionMode: .list,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
@@ -85,6 +86,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
         ServiceLocator.shared.settings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: true,
+                                                  spaceSelectionMode: nil,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
