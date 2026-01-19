@@ -138,6 +138,8 @@ struct TimelineViewState: BindableState {
     var linkMetadataProvider: LinkMetadataProviderProtocol?
     
     var mapTilerConfiguration: MapTilerConfiguration
+
+    var enableKeyShareOnInvite: Bool
     
     var bindings: TimelineViewStateBindings
 }
@@ -196,6 +198,7 @@ enum TimelineAlertInfoType: Hashable {
     case pollEndConfirmation(String)
     case sendingFailed
     case encryptionAuthenticity(String)
+    case encryptionForwarder(String)
 }
 
 struct RoomMemberState {

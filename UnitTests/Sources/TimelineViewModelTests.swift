@@ -527,6 +527,36 @@ class TimelineViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
+    // MARK: - Tap Actions
+    
+    func testTapSendInfoEncryptionAuthentictyDisplaysAlert() {
+        // Given a room with an event whose authenticity could not be verified
+        let items = [TextRoomTimelineItem(eventID: "t1", encryptionAuthenticity: .verificationViolation(color: .red))]
+        let timelineController = MockTimelineController()
+        timelineController.timelineItems = items
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        XCTAssertNil(viewModel.state.bindings.alertInfo)
+        
+        viewModel.process(viewAction: .itemSendInfoTapped(itemID: items[0].id))
+        
+        XCTAssertEqual(viewModel.state.bindings.alertInfo?.title, "Encrypted by a previously-verified user.")
+    }
+    
+    func testTapSendInfoEncryptionForwarderDisplaysAlert() {
+        // Given a room with an event whose key was forwarded
+        let items = [TextRoomTimelineItem(eventID: "t1", keyForwarder: .test)]
+        let timelineController = MockTimelineController()
+        timelineController.timelineItems = items
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        XCTAssertNil(viewModel.state.bindings.alertInfo)
+        
+        viewModel.process(viewAction: .itemSendInfoTapped(itemID: items[0].id))
+        
+        XCTAssertEqual(viewModel.state.bindings.alertInfo?.title, "alice (@alice:matrix.org) shared this message since you were not in the room when it was sent.")
+    }
+    
     // MARK: - Helpers
     
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
@@ -579,11 +609,43 @@ private extension TextRoomTimelineItem {
     }
 }
 
+private extension TextRoomTimelineItem {
+    init(eventID: String, keyForwarder: TimelineItemKeyForwarder) {
+        self.init(id: .event(uniqueID: .init(UUID().uuidString), eventOrTransactionID: .eventID(eventID)),
+                  timestamp: .mock,
+                  isOutgoing: false,
+                  isEditable: false,
+                  canBeRepliedTo: true,
+                  sender: .init(id: ""),
+                  content: .init(body: "Hello, World!"),
+                  properties: RoomTimelineItemProperties(encryptionForwarder: keyForwarder))
+    }
+}
+
+private extension TextRoomTimelineItem {
+    init(eventID: String, encryptionAuthenticity: EncryptionAuthenticity) {
+        self.init(id: .event(uniqueID: .init(UUID().uuidString), eventOrTransactionID: .eventID(eventID)),
+                  timestamp: .mock,
+                  isOutgoing: false,
+                  isEditable: false,
+                  canBeRepliedTo: true,
+                  sender: .init(id: ""),
+                  content: .init(body: "Hello, World!"),
+                  properties: RoomTimelineItemProperties(encryptionAuthenticity: encryptionAuthenticity))
+    }
+}
+
 private extension TimelineItemSender {
     init(with proxy: RoomMemberProxyMock) {
         self.init(id: proxy.userID,
                   displayName: proxy.displayName ?? "",
                   isDisplayNameAmbiguous: false,
                   avatarURL: proxy.avatarURL)
+    }
+}
+
+private extension TimelineItemKeyForwarder {
+    static var test: TimelineItemKeyForwarder {
+        TimelineItemKeyForwarder(id: "@alice:matrix.org", displayName: "alice")
     }
 }
