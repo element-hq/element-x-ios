@@ -276,6 +276,7 @@
 "common_reason" = "Ok";
 "common_recovery_key" = "Helyreállítási kulcs";
 "common_refreshing" = "Frissítés…";
+"common_removing" = "Removing…";
 "common_replying_to" = "Válasz %1$@ számára";
 "common_report_a_bug" = "Hiba jelentése";
 "common_report_a_problem" = "Probléma jelentése";
@@ -683,6 +684,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "Reakció-összefoglaló megjelenítése";
 "screen_roomlist_clear_filters" = "Szűrők törlése";
 "screen_roomlist_tombstoned_room_description" = "A szoba verzióját frissítették";
+"screen_roomlist_your_spaces" = "Your spaces";
 "screen_security_and_privacy_add_room_address_action" = "Cím hozzáadása";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorised spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Mindenkinek hozzáférést kell kérnie.";
@@ -718,7 +720,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Láthatóság";
 "screen_security_and_privacy_title" = "Biztonság és adatvédelem";
 "screen_space_menu_action_members" = "Tagok megtekintése";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
 "screen_space_announcement_item1" = "Az Ön által létrehozott vagy csatlakozott térek megtekintése";
 "screen_space_announcement_item2" = "A meghívások elfogadására vagy elutasítására a terekhez";
 "screen_space_announcement_item3" = "Szobák felfedezése a terekben, amelyekhez csatlakozhat";

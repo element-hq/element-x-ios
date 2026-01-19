@@ -276,6 +276,7 @@
 "common_reason" = "理由";
 "common_recovery_key" = "恢复密钥";
 "common_refreshing" = "正在刷新…";
+"common_removing" = "Removing…";
 "common_replying_to" = "正在回复 %1$@";
 "common_report_a_bug" = "报告错误";
 "common_report_a_problem" = "报告问题";
@@ -683,6 +684,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "显示反应摘要";
 "screen_roomlist_clear_filters" = "清除筛选条件";
 "screen_roomlist_tombstoned_room_description" = "此房间已升级";
+"screen_roomlist_your_spaces" = "Your spaces";
 "screen_security_and_privacy_add_room_address_action" = "添加房间地址";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorised spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "任何人都可以请求加入房间，但必须由管理员或版主接受请求。";
@@ -718,7 +720,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "房间可见性";
 "screen_security_and_privacy_title" = "安全与隐私";
 "screen_space_menu_action_members" = "查看成员";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
 "screen_space_announcement_item1" = "查看您创建或加入的空间";
 "screen_space_announcement_item2" = "接受或拒绝空间邀请";
 "screen_space_announcement_item3" = "发现您可以加入空间的所有房间";

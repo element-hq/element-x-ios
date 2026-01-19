@@ -276,6 +276,7 @@
 "common_reason" = "Årsak";
 "common_recovery_key" = "Gjenopprettingsnøkkel";
 "common_refreshing" = "Oppdaterer…";
+"common_removing" = "Removing…";
 "common_replying_to" = "Svar til %1$@";
 "common_report_a_bug" = "Rapporter en feil";
 "common_report_a_problem" = "Rapporter et problem";
@@ -683,6 +684,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "Vis sammendrag av reaksjoner";
 "screen_roomlist_clear_filters" = "Fjern filtre";
 "screen_roomlist_tombstoned_room_description" = "Dette rommet har blitt oppgradert";
+"screen_roomlist_your_spaces" = "Your spaces";
 "screen_security_and_privacy_add_room_address_action" = "Legg til adresse";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorised spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Alle må be om tilgang.";
@@ -718,7 +720,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Synlighet";
 "screen_security_and_privacy_title" = "Sikkerhet og personvern";
 "screen_space_menu_action_members" = "Vis medlemmer";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
 "screen_space_announcement_item1" = "Se områder du har opprettet eller blitt med i";
 "screen_space_announcement_item2" = "Godta eller avslå invitasjoner til områder";
 "screen_space_announcement_item3" = "Oppdag alle rom du kan bli med i i dine områder";

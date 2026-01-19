@@ -276,6 +276,7 @@
 "common_reason" = "Grund";
 "common_recovery_key" = "Wiederherstellungsschlüssel";
 "common_refreshing" = "Wird erneuert...";
+"common_removing" = "Removing…";
 "common_replying_to" = "%1$@ antworten";
 "common_report_a_bug" = "Einen Fehler melden";
 "common_report_a_problem" = "Ein Problem melden";
@@ -683,6 +684,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "Zusammenfassung der Reaktionen anzeigen";
 "screen_roomlist_clear_filters" = "Filter zurücksetzen";
 "screen_roomlist_tombstoned_room_description" = "Die Chat-Version wurde aktualisiert";
+"screen_roomlist_your_spaces" = "Your spaces";
 "screen_security_and_privacy_add_room_address_action" = "Chat-Adresse hinzufügen";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Jedes Mitglied eines autorisierten Space kann beitreten, aber alle anderen müssen einen Beitritt anfragen.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Zugang nur auf Anfrage.";
@@ -718,7 +720,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Sichtbarkeit";
 "screen_security_and_privacy_title" = "Sicherheit & Datenschutz";
 "screen_space_menu_action_members" = "Mitglieder anzeigen";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Das Entfernen eines Chats hat keinen Einfluss auf die Beitrittsregeln. Um die Regeln zu ändern, gehe zu \"Raum Info\" und dann zu \"Datenschutz und Sicherheit\"";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Das Hinzufügen eines Chats hat keinen Einfluss auf die Beitrittsregeln. Um die Regeln zu ändern, gehe zu \"Raum Info\" und dann zu \"Datenschutz und Sicherheit\"";
 "screen_space_announcement_item1" = "Von dir erstellte oder beigetretene Spaces anzeigen";
 "screen_space_announcement_item2" = "Einladungen zu Spaces annehmen oder ablehnen";
 "screen_space_announcement_item3" = "Chats innerhalb deiner Spaces entdecken, um ihnen beizutreten";

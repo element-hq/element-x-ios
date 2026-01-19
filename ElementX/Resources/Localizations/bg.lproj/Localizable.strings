@@ -276,6 +276,7 @@
 "common_reason" = "Причина";
 "common_recovery_key" = "Ключ за възстановяване";
 "common_refreshing" = "Опреснява се…";
+"common_removing" = "Removing…";
 "common_replying_to" = "В отговор на %1$@";
 "common_report_a_bug" = "Съобщаване за грешка";
 "common_report_a_problem" = "Съобщаване за проблем";
@@ -683,6 +684,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
 "screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
+"screen_roomlist_your_spaces" = "Your spaces";
 "screen_security_and_privacy_add_room_address_action" = "Добавяне на адрес на стаята";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorised spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Everyone must request access.";
@@ -718,7 +720,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Защита и поверителност";
 "screen_space_menu_action_members" = "Преглед на членовете";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";

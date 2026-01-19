@@ -276,6 +276,7 @@
 "common_reason" = "Alasan";
 "common_recovery_key" = "Kunci pemulihan";
 "common_refreshing" = "Menyegarkan…";
+"common_removing" = "Removing…";
 "common_replying_to" = "Membalas %1$@";
 "common_report_a_bug" = "Laporkan kutu";
 "common_report_a_problem" = "Laporkan masalah";
@@ -683,6 +684,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "Tampilkan ringkasan reaksi";
 "screen_roomlist_clear_filters" = "Hapus filter";
 "screen_roomlist_tombstoned_room_description" = "Ruangan ini telah ditingkatkan";
+"screen_roomlist_your_spaces" = "Your spaces";
 "screen_security_and_privacy_add_room_address_action" = "Tambahkan alamat ruangan";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorised spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Siapa pun dapat meminta untuk bergabung dengan ruangan tetapi administrator atau moderator harus menerima permintaan tersebut.";
@@ -718,7 +720,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Keamanan & privasi";
 "screen_space_menu_action_members" = "View members";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
