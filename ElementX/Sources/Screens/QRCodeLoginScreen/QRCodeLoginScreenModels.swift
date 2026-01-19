@@ -37,33 +37,36 @@ enum QRCodeLoginScreenMode {
 
 struct QRCodeLoginScreenViewState: BindableState {
     var state: QRCodeLoginState
+    let mode: QRCodeLoginScreenMode
     /// Whether or not it is possible for the screen to start the manual sign in flow. This was added to avoid
     /// having to handle server configuration when ``AppSettings.allowOtherAccountProviders`` is false.
     let canSignInManually: Bool
-    let isPresentedModally: Bool
     
     let instructions = QRCodeLoginScreenInstructions()
     var bindings = QRCodeLoginScreenViewStateBindings()
     
     var shouldDisplayCancelButton: Bool {
-        // TODO: Simplify/validate these assumptions.
-        if isPresentedModally {
+        switch mode {
+        case .login:
             switch state {
             case .loginInstructions, .scan, .error(.noCameraPermission): true
-            default: false
+            case .error: false
+            case .linkDesktopInstructions, .displayCode, .displayQR, .confirmCode: false // Unreachable states.
             }
-        } else {
+        case .linkDesktop, .linkMobile:
             switch state {
             case .displayCode, .confirmCode, .scan, .error(.noCameraPermission): true
-            case .loginInstructions, .linkDesktopInstructions, .displayQR, .error: false
+            case .linkDesktopInstructions, .displayQR, .error: false
+            case .loginInstructions: false // Unreachable state.
             }
         }
     }
 
     var shouldDisplayBackButton: Bool {
-        if isPresentedModally {
-            false
-        } else {
+        switch mode {
+        case .login:
+            false // Login is presented modally, never show the back button.
+        case .linkDesktop, .linkMobile:
             switch state {
             case .loginInstructions, .linkDesktopInstructions, .displayQR: true
             case .displayCode, .confirmCode, .scan, .error: false

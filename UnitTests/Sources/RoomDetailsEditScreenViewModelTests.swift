@@ -98,7 +98,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.canSave)
         XCTAssertNil(context.alertInfo)
         
-        var deferred = deferFulfillment(viewModel.actions) { $0 == .cancel }
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .cancel }
         context.send(viewAction: .cancel)
         try await deferred.fulfill()
         XCTAssertNil(context.alertInfo)

@@ -226,7 +226,7 @@ final class NotificationManagerTests: XCTestCase {
     }
 }
 
-extension NotificationManagerTests: NotificationManagerDelegate {
+extension NotificationManagerTests: @MainActor NotificationManagerDelegate {
     func registerForRemoteNotifications() {
         authorizationStatusWasGranted = true
         registerForRemoteNotificationsDelegateCalled?()

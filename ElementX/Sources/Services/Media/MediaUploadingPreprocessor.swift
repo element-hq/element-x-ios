@@ -451,9 +451,6 @@ struct MediaUploadingPreprocessor {
         
         try? FileManager.default.removeItem(at: outputURL)
         
-        exportSession.outputURL = outputURL
-        exportSession.outputFileType = AVFileType.mp4
-        
         guard exportSession.supportedFileTypes.contains(AVFileType.mp4) else {
             throw .failedConvertingVideo
         }
@@ -463,9 +460,10 @@ struct MediaUploadingPreprocessor {
             exportSession.fileLengthLimit = Int64(Double(targetFileSize) * 0.9)
         }
         
-        await exportSession.export()
-        
-        guard exportSession.status == .completed else {
+        do {
+            try await exportSession.export(to: outputURL, as: .mp4)
+        } catch {
+            MXLog.error("Video conversion failed: \(error)")
             throw .failedConvertingVideo
         }
         
