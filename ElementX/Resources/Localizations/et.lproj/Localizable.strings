@@ -276,6 +276,7 @@
 "common_reason" = "Põhjus";
 "common_recovery_key" = "Taastevõti";
 "common_refreshing" = "Värskendame andmeid…";
+"common_removing" = "Removing…";
 "common_replying_to" = "Vastates kasutajale %1$@";
 "common_report_a_bug" = "Teata veast";
 "common_report_a_problem" = "Teata veast";
@@ -718,7 +719,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Nähtavus";
 "screen_security_and_privacy_title" = "Turvalisus ja privaatsus";
 "screen_space_menu_action_members" = "Vaata liikmeid";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security &amp; privacy.";
 "screen_space_announcement_item1" = "Vaadata kogukondi, mille oled loonud või millega oled liitunud";
 "screen_space_announcement_item2" = "Nõustuda kutsetega liitumiseks kogukonnaga või sellest keelduda";
 "screen_space_announcement_item3" = "Uurida neis kogukondades leiduvaid jututube ning nendega liituda";

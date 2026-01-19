@@ -276,6 +276,7 @@
 "common_reason" = "Raison";
 "common_recovery_key" = "Clé de récupération";
 "common_refreshing" = "Actualisation…";
+"common_removing" = "Suppression…";
 "common_replying_to" = "En réponse à %1$@";
 "common_report_a_bug" = "Signaler un problème";
 "common_report_a_problem" = "Remonter un problème";
@@ -718,7 +719,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilité";
 "screen_security_and_privacy_title" = "Sécurité & confidentialité";
 "screen_space_menu_action_members" = "Voir les membres";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Supprimer un salon n'affectera pas ses paramètres d'accès. Pour modifier l'accès, aller dans les settings du salon puis \"Sécurité & confidentialité\".";
+"screen_space_remove_rooms_confirmation_title_ios" = "Supprimer les salons de %1$@?";
+"screen_space_add_rooms_room_access_description" = "Ajouter un salon ne changera pas l'accès au salon. Pour modifier l'accès, aller dans les paramètres du salon puis dans Sécurité & confidentialité.";
 "screen_space_announcement_item1" = "Voir les espaces que vous avez créés ou rejoints";
 "screen_space_announcement_item2" = "Accepter ou refuser les invitations aux espaces";
 "screen_space_announcement_item3" = "Découvrir les salons que vous pouvez joindre depuis vos espaces";

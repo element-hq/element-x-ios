@@ -276,6 +276,7 @@
 "common_reason" = "Razlog";
 "common_recovery_key" = "Ključ za oporavak";
 "common_refreshing" = "Osvježavanje…";
+"common_removing" = "Removing…";
 "common_replying_to" = "Odgovara korisniku %1$@";
 "common_report_a_bug" = "Prijavi pogrešku";
 "common_report_a_problem" = "Prijavi problem";
@@ -718,7 +719,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Vidljivost";
 "screen_security_and_privacy_title" = "Sigurnost i privatnost";
 "screen_space_menu_action_members" = "Prikaži članove";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security &amp; privacy.";
 "screen_space_announcement_item1" = "Pregledajte prostore koje ste stvorili ili kojima ste se pridružili";
 "screen_space_announcement_item2" = "Prihvatite ili odbijte pozivnice za prostore";
 "screen_space_announcement_item3" = "Otkrijte sve sobe kojima se možete pridružiti u svojim prostorima";

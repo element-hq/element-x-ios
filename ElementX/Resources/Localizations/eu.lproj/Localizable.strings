@@ -276,6 +276,7 @@
 "common_reason" = "Arrazoia";
 "common_recovery_key" = "Berreskuratze-gakoa";
 "common_refreshing" = "Freskatzen…";
+"common_removing" = "Removing…";
 "common_replying_to" = "%1$@(r)i erantzuten";
 "common_report_a_bug" = "Eman akats baten berri";
 "common_report_a_problem" = "Eman arazo baten berri";
@@ -718,7 +719,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Gelaren ikusgarritasuna";
 "screen_security_and_privacy_title" = "Segurtasuna eta pribatutasuna";
 "screen_space_menu_action_members" = "View members";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security &amp; privacy.";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";

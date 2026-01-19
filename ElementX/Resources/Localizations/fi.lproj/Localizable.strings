@@ -276,6 +276,7 @@
 "common_reason" = "Syy";
 "common_recovery_key" = "Palautusavain";
 "common_refreshing" = "Päivitetään...";
+"common_removing" = "Removing…";
 "common_replying_to" = "Vastataan käyttäjälle %1$@";
 "common_report_a_bug" = "Ilmoita virheestä";
 "common_report_a_problem" = "Ilmoita ongelmasta";
@@ -718,7 +719,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Näkyvyys";
 "screen_security_and_privacy_title" = "Turvallisuus ja yksityisyys";
 "screen_space_menu_action_members" = "Näytä jäsenet";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security &amp; privacy.";
 "screen_space_announcement_item1" = "Nähdä luomasi tai liittymäsi tilat";
 "screen_space_announcement_item2" = "Hyväksyä tai hylätä kutsuja tiloihin";
 "screen_space_announcement_item3" = "Löytää kaikki huoneet, joihin voit liittyä tiloissasi";

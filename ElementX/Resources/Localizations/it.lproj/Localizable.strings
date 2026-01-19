@@ -276,6 +276,7 @@
 "common_reason" = "Motivo";
 "common_recovery_key" = "Chiave di recupero";
 "common_refreshing" = "Aggiornamento…";
+"common_removing" = "Removing…";
 "common_replying_to" = "Risposta a %1$@";
 "common_report_a_bug" = "Segnala un problema";
 "common_report_a_problem" = "Segnala un problema";
@@ -718,7 +719,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilità";
 "screen_security_and_privacy_title" = "Sicurezza e privacy";
 "screen_space_menu_action_members" = "Visualizza membri";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security &amp; privacy.";
 "screen_space_announcement_item1" = "Visualizza gli spazi che hai creato o a cui partecipi";
 "screen_space_announcement_item2" = "Accetta o rifiuta gli inviti agli spazi";
 "screen_space_announcement_item3" = "Scopri tutte le stanze a cui puoi partecipare nei tuoi spazi";
