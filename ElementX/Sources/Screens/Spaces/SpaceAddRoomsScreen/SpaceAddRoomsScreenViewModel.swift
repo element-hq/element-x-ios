@@ -140,6 +140,9 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
             }
         }
         
+        await spaceRoomListProxy.reset()
+        await _ = spaceRoomListProxy.paginationStatePublisher.values.first { $0 == .idle(endReached: true) }
+        
         actionsSubject.send(.dismiss)
     }
     

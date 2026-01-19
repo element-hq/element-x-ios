@@ -22,4 +22,5 @@ protocol SpaceRoomListProxyProtocol {
     var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> { get }
     
     func paginate() async
+    func reset() async
 }

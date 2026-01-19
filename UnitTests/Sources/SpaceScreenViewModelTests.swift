@@ -234,6 +234,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.visibleRooms.contains { $0.isSpace }, "Confirming should restore the hidden spaces when done.")
         
         XCTAssertEqual(spaceServiceProxy.removeChildFromCallsCount, 2, "Each selected room should have been removed.")
+        XCTAssertTrue(spaceRoomListProxy.resetCalled, "The room list should be reset to pick up the changes.")
     }
     
     func testLeavingSpace() async throws {

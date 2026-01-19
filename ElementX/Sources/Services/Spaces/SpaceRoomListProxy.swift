@@ -60,6 +60,10 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
         }
     }
     
+    func reset() async {
+        await spaceRoomList.reset()
+    }
+    
     // MARK: - Private
     
     private func handleUpdates(_ updates: [SpaceListUpdate]) {

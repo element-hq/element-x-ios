@@ -200,6 +200,9 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             }
         }
         
+        await spaceRoomListProxy.reset()
+        await _ = spaceRoomListProxy.paginationStatePublisher.values.first { $0 == .idle(endReached: true) }
+        
         process(viewAction: .finishManagingChildren)
     }
     
