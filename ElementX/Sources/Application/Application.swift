@@ -33,6 +33,12 @@ struct Application: App {
         WindowGroup {
             appCoordinator.toPresentable()
                 .statusBarHidden(shouldHideStatusBar)
+                .overlay(alignment: .top) {
+                    if #available(iOS 26, *), ProcessInfo.processInfo.isiOSAppOnMac {
+                        // Fake an old-school titlebar to reduce the "floaty-ness" of everything with liquid glass.
+                        Divider().ignoresSafeArea()
+                    }
+                }
                 .environment(\.openURL, OpenURLAction { url in
                     if appCoordinator.handleDeepLink(url, isExternalURL: false) {
                         return .handled
