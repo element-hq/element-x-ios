@@ -128,15 +128,41 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
     }
     
     private func save() async {
+        showSavingIndicator()
+        defer { hideSavingIndicator() }
+        
         for room in state.selectedRooms {
             if case .failure(let error) = await spaceServiceProxy.addChild(room.id, to: spaceRoomListProxy.id) {
                 MXLog.error("Failed adding room to space: \(error)")
-                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                showErrorIndicator()
                 updateRooms() // Hide any rooms that were already added.
                 return
             }
         }
         
         actionsSubject.send(.dismiss)
+    }
+    
+    // MARK: User Indicators
+    
+    private var savingIndicatorID: String { "\(Self.self)-Saving" }
+    private var failureIndicatorID: String { "\(Self.self)-Failure" }
+    
+    private func showSavingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: savingIndicatorID,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.commonSaving,
+                                                              persistent: true))
+    }
+    
+    private func hideSavingIndicator() {
+        userIndicatorController.retractIndicatorWithId(savingIndicatorID)
+    }
+    
+    private func showErrorIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: failureIndicatorID,
+                                                              type: .toast,
+                                                              title: L10n.errorUnknown,
+                                                              iconName: "xmark"))
     }
 }
