@@ -276,6 +276,7 @@
 "common_reason" = "Razlog";
 "common_recovery_key" = "Ključ za oporavak";
 "common_refreshing" = "Osvježavanje…";
+"common_removing" = "Removing…";
 "common_replying_to" = "Odgovara korisniku %1$@";
 "common_report_a_bug" = "Prijavi pogrešku";
 "common_report_a_problem" = "Prijavi problem";
@@ -683,6 +684,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "Prikaži sažetak reakcija";
 "screen_roomlist_clear_filters" = "Ukloni filtre";
 "screen_roomlist_tombstoned_room_description" = "Ova je soba nadograđena";
+"screen_roomlist_your_spaces" = "Your spaces";
 "screen_security_and_privacy_add_room_address_action" = "Dodaj adresu";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Svatko tko se nalazi u ovlaštenim prostorima može se pridružiti, ali svi ostali moraju zatražiti pristup.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Svi moraju zatražiti pristup.";
@@ -718,7 +720,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Vidljivost";
 "screen_security_and_privacy_title" = "Sigurnost i privatnost";
 "screen_space_menu_action_members" = "Prikaži članove";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
 "screen_space_announcement_item1" = "Pregledajte prostore koje ste stvorili ili kojima ste se pridružili";
 "screen_space_announcement_item2" = "Prihvatite ili odbijte pozivnice za prostore";
 "screen_space_announcement_item3" = "Otkrijte sve sobe kojima se možete pridružiti u svojim prostorima";

@@ -128,6 +128,22 @@
 			<string>%1$d szoba</string>
 		</dict>
 	</dict>
+	<key>common_selected_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d selected</string>
+			<key>other</key>
+			<string>%1$d selected</string>
+		</dict>
+	</dict>
 	<key>common_spaces</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -446,6 +462,22 @@
 			<string>%1$@ éppen ír…</string>
 			<key>other</key>
 			<string>%1$@ éppen ír…</string>
+		</dict>
+	</dict>
+	<key>screen_space_remove_rooms_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Remove %1$d room from %2$@</string>
+			<key>other</key>
+			<string>Remove %1$d rooms from %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>

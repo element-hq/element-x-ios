@@ -146,6 +146,24 @@
 			<string>%1$d Комнат</string>
 		</dict>
 	</dict>
+	<key>common_selected_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d выбран</string>
+			<key>few</key>
+			<string>%1$d выбрано</string>
+			<key>many</key>
+			<string>%1$d выбрано</string>
+		</dict>
+	</dict>
 	<key>common_spaces</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -355,9 +373,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Banned</string>
-			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d заблокирован</string>
+			<key>few</key>
+			<string>%1$d заблокированы</string>
+			<key>many</key>
+			<string>%1$d заблокированы</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -389,9 +409,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Invited</string>
-			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d приглашён</string>
+			<key>few</key>
+			<string>%1$d приглашены</string>
+			<key>many</key>
+			<string>%1$d приглашены</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -500,6 +522,24 @@
 			<string>%1$@ набирают сообщения</string>
 			<key>many</key>
 			<string>%1$@ набирают сообщения</string>
+		</dict>
+	</dict>
+	<key>screen_space_remove_rooms_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Удалить %1$d комнату из %2$@</string>
+			<key>few</key>
+			<string>Удалить %1$d комнаты из %2$@</string>
+			<key>many</key>
+			<string>Удалить %1$d комнат из %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>

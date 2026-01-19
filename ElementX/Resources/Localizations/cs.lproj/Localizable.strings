@@ -276,6 +276,7 @@
 "common_reason" = "Důvod";
 "common_recovery_key" = "Klíč pro obnovení";
 "common_refreshing" = "Obnovování...";
+"common_removing" = "Removing…";
 "common_replying_to" = "Odpověď na %1$@";
 "common_report_a_bug" = "Nahlásit chybu";
 "common_report_a_problem" = "Nahlásit problém";
@@ -683,6 +684,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "Zobrazit souhrn reakcí";
 "screen_roomlist_clear_filters" = "Vymazat filtry";
 "screen_roomlist_tombstoned_room_description" = "Tato místnost byla aktualizována";
+"screen_roomlist_your_spaces" = "Your spaces";
 "screen_security_and_privacy_add_room_address_action" = "Přidat adresu";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Připojit se může kdokoli v autorizovaných prostorách, ale všichni ostatní musí o přístup požádat.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Všichni musí požádat o přístup.";
@@ -718,7 +720,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Viditelnost";
 "screen_security_and_privacy_title" = "Zabezpečení a soukromí";
 "screen_space_menu_action_members" = "Zobrazit členy";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
 "screen_space_announcement_item1" = "Zobrazit prostory, které jste vytvořili nebo ke kterým jste se připojili";
 "screen_space_announcement_item2" = "Přijmout nebo odmítnout pozvánky do prostorů";
 "screen_space_announcement_item3" = "Objevte všechny místnosti, do kterých můžete vstoupit ve svých prostorech";

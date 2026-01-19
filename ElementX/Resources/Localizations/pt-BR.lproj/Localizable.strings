@@ -276,6 +276,7 @@
 "common_reason" = "Motivo";
 "common_recovery_key" = "Chave de recuperação";
 "common_refreshing" = "Recarregando…";
+"common_removing" = "Removing…";
 "common_replying_to" = "Respondendo a %1$@";
 "common_report_a_bug" = "Denunciar um bug";
 "common_report_a_problem" = "Relatar um problema";
@@ -683,6 +684,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "Mostrar resumo das reações";
 "screen_roomlist_clear_filters" = "Limpar filtros";
 "screen_roomlist_tombstoned_room_description" = "Esta sala foi atualizada";
+"screen_roomlist_your_spaces" = "Your spaces";
 "screen_security_and_privacy_add_room_address_action" = "Adicionar endereço";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Qualquer um nos espaços autorizados podem entrar, mas todos os outros devem pedir acesso.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Qualquer um pode pedir acesso, mas um administrador terá que aceitar o pedido.";
@@ -718,7 +720,9 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilidade";
 "screen_security_and_privacy_title" = "Segurança e privacidade";
 "screen_space_menu_action_members" = "Ver membros";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
+"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
 "screen_space_announcement_item1" = "Visualizar espaços que criou ou entrou";
 "screen_space_announcement_item2" = "Aceitar ou recusar convites aos espaços";
 "screen_space_announcement_item3" = "Descobrir quaisquer salas que você pode entrar nos espaços";
