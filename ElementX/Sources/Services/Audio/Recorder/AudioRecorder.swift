@@ -113,7 +113,7 @@ class AudioRecorder: AudioRecorderProtocol {
         MXLog.info("setup audio session")
         
         try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
-        try audioSession.setCategory(.playAndRecord, mode: .default, options: [.allowBluetooth])
+        try audioSession.setCategory(.playAndRecord, mode: .default, options: [.allowBluetoothHFP])
         try audioSession.setActive(true)
         addObservers()
     }

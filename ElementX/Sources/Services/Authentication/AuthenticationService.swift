@@ -160,6 +160,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
             return progressSubject.asCurrentValuePublisher()
         }
         
+        // At some stage the SDK will have a `qrCodeData.intent` which we should check before continuing here.
+        // Note the equivalent check will also happen for linking a device by QR in the LinkNewDeviceService.
+        
         guard let scannedServerName = qrData.serverName() else {
             MXLog.error("The QR code is from a device that is not yet signed in.")
             progressSubject.send(completion: .failure(.qrCodeError(.deviceNotSignedIn)))

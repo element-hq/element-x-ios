@@ -63,7 +63,7 @@ class LinkNewDeviceService: LinkNewDeviceServiceProtocol {
         
         Task {
             do {
-                // TODO: we need a way to cancel the in progress grant if the user hit the cancel button
+                // Note: The SDK doesn't provide us with a way to cancel the grant if the user hit the cancel button 🤷‍♂️
                 try await grantLoginHandler.generate(progressListener: listener) // The success state is handled by the listener.
             } catch let error as HumanQrGrantLoginError {
                 MXLog.error("QR code reciprocate error: \(error)")
@@ -98,12 +98,12 @@ class LinkNewDeviceService: LinkNewDeviceServiceProtocol {
             return progressSubject.asCurrentValuePublisher()
         }
         
-        #warning("Check intent/server name??")
-        #warning("Check Element Pro here??")
+        // At some stage the SDK will have a `qrCodeData.intent` which we should check before continuing here.
+        // Note the equivalent check will also happen for sign in with QR code in the AuthenticationService.
         
         Task {
             do {
-                // TODO: it would be nice to be able to cancel the grant at the SDK level if the user hits the cancel button
+                // Note: The SDK doesn't provide us with a way to cancel the grant if the user hit the cancel button 🤷‍♂️
                 try await grantLoginHandler.scan(qrCodeData: qrCodeData, progressListener: listener) // The success state is handled by the listener.
             } catch let error as HumanQrGrantLoginError {
                 MXLog.error("QR code reciprocate error: \(error)")
@@ -216,7 +216,9 @@ class CheckCodeSenderProxy: Equatable {
         try await underlyingSender.send(code: code)
     }
     
-    #warning("Waiting for an SDK update to use the underlying sender.")
+    // Bypassed for now whilst we wait for an SDK update (however its worth noting that
+    // things should still fail if the wrong code is provided, just not necessarily with
+    // the right error being shown). https://github.com/matrix-org/matrix-rust-sdk/pull/5957
     func validate(checkCode: UInt8) -> Bool { true }
 }
 

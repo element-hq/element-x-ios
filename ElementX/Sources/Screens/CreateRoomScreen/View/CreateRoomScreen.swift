@@ -307,7 +307,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   appSettings: ServiceLocator.shared.settings)
-        viewModel.updateAvatar(fileURL: Bundle.main.url(forResource: "preview_avatar_room", withExtension: "jpg")!)
+        viewModel.updateAvatar(fileURL: Bundle.main.url(forResource: "preview_avatar_room", withExtension: "jpg") ?? .picturesDirectory)
         return viewModel
     }()
     
@@ -331,7 +331,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   appSettings: ServiceLocator.shared.settings)
-        viewModel.updateAvatar(fileURL: Bundle.main.url(forResource: "preview_avatar_room", withExtension: "jpg")!)
+        viewModel.updateAvatar(fileURL: Bundle.main.url(forResource: "preview_avatar_room", withExtension: "jpg") ?? .picturesDirectory)
         return viewModel
     }()
     

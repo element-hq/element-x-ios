@@ -96,7 +96,6 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Private
     
-    // swiftlint:disable:next cyclomatic_complexity
     private func configureStateMachine() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .spacesScreen(selectedSpaceID: nil)]) { [weak self] _ in
             self?.presentSpacesScreen()

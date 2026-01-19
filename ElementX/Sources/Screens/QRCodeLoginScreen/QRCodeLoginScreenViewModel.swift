@@ -12,7 +12,6 @@ import Foundation
 typealias QRCodeLoginScreenViewModelType = StateStoreViewModel<QRCodeLoginScreenViewState, QRCodeLoginScreenViewAction>
 
 class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScreenViewModelProtocol {
-    private let mode: QRCodeLoginScreenMode
     private let appMediator: AppMediatorProtocol
     
     private let actionsSubject: PassthroughSubject<QRCodeLoginScreenViewModelAction, Never> = .init()
@@ -26,24 +25,19 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     init(mode: QRCodeLoginScreenMode,
          canSignInManually: Bool,
          appMediator: AppMediatorProtocol) {
-        self.mode = mode
         self.appMediator = appMediator
         
-        let initialState: QRCodeLoginScreenViewState = switch mode {
-        case .login:
-            .init(state: .loginInstructions, canSignInManually: canSignInManually, isPresentedModally: true)
-        case .linkDesktop:
-            .init(state: .linkDesktopInstructions, canSignInManually: canSignInManually, isPresentedModally: false)
+        let initialViewState: QRCodeLoginState = switch mode {
+        case .login: .loginInstructions
+        case .linkDesktop: .linkDesktopInstructions
         case .linkMobile(let progressPublisher):
             switch progressPublisher.value {
-            case .qrReady(let image):
-                .init(state: .displayQR(image), canSignInManually: canSignInManually, isPresentedModally: false)
-            default:
-                .init(state: .error(.unknown), canSignInManually: canSignInManually, isPresentedModally: false)
+            case .qrReady(let image): .displayQR(image)
+            default: .error(.unknown)
             }
         }
         
-        super.init(initialViewState: initialState)
+        super.init(initialViewState: .init(state: initialViewState, mode: mode, canSignInManually: canSignInManually))
         setupSubscriptions()
         
         if case .linkMobile(let progressPublisher) = mode {
@@ -62,7 +56,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         case .sendCheckCode:
             Task { await sendCheckCode() }
         case .errorAction(.startOver):
-            switch mode {
+            switch state.mode {
             case .login:
                 Task { await startScanIfPossible() }
             case .linkDesktop, .linkMobile:
@@ -88,7 +82,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             .receive(on: DispatchQueue.main)
             .sink { [weak self] qrData in
                 guard let self else { return }
-                switch mode {
+                switch state.mode {
                 case .login(let qrCodeLoginService):
                     handleScan(qrData: qrData, loginService: qrCodeLoginService)
                 case .linkDesktop(let linkNewDeviceService):
@@ -151,8 +145,6 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 }
             }
     }
-    
-    // TODO: when user cancels in UI then the underlying login needs to be cancelled too. It's unclear if we have that exposed in the bindings yet.
     
     private func handleScan(qrData: Data, linkService: LinkNewDeviceServiceProtocol) {
         guard currentTask == nil else { return }
@@ -314,24 +306,23 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
         
     /// Only for mocking initial states
-    fileprivate init(state: QRCodeLoginState, canSignInManually: Bool, isPresentedModally: Bool, checkCodeInput: String) {
-        mode = .login(QRCodeLoginServiceMock())
+    fileprivate init(state: QRCodeLoginState, mode: QRCodeLoginScreenMode, canSignInManually: Bool, checkCodeInput: String) {
         appMediator = AppMediatorMock.default
         super.init(initialViewState: .init(state: state,
+                                           mode: mode,
                                            canSignInManually: canSignInManually,
-                                           isPresentedModally: isPresentedModally,
                                            bindings: .init(checkCodeInput: checkCodeInput)))
     }
 }
 
 extension QRCodeLoginScreenViewModel {
     static func mock(state: QRCodeLoginState,
+                     mode: QRCodeLoginScreenMode = .login(QRCodeLoginServiceMock()),
                      canSignInManually: Bool = true,
-                     isPresentedModally: Bool = true,
                      checkCodeInput: String = "") -> QRCodeLoginScreenViewModel {
         QRCodeLoginScreenViewModel(state: state,
+                                   mode: mode,
                                    canSignInManually: canSignInManually,
-                                   isPresentedModally: isPresentedModally,
                                    checkCodeInput: checkCodeInput)
     }
 }

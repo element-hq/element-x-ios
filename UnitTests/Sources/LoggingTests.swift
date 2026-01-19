@@ -34,7 +34,7 @@ class LoggingTests: XCTestCase {
             return
         }
         
-        try XCTAssertTrue(String(contentsOf: logFile).contains(infoLog))
+        try XCTAssertTrue(String(contentsOf: logFile, encoding: .utf8).contains(infoLog))
     }
         
     func testLogLevels() throws {
@@ -48,7 +48,7 @@ class LoggingTests: XCTestCase {
             return
         }
         
-        try XCTAssertFalse(String(contentsOf: logFile).contains(verboseLog))
+        try XCTAssertFalse(String(contentsOf: logFile, encoding: .utf8).contains(verboseLog))
     }
     
     /// This is meant to test the `Target.tests.configure(…)`, but at this stage the test is somewhat pointless
@@ -103,7 +103,7 @@ class LoggingTests: XCTestCase {
             return
         }
         
-        let content = try String(contentsOf: logFile)
+        let content = try String(contentsOf: logFile, encoding: .utf8)
         XCTAssertTrue(content.contains(roomSummary.id))
         XCTAssertFalse(content.contains(roomName))
         XCTAssertFalse(content.contains(lastMessage))
@@ -185,7 +185,7 @@ class LoggingTests: XCTestCase {
             return
         }
         
-        let content = try String(contentsOf: logFile)
+        let content = try String(contentsOf: logFile, encoding: .utf8)
         XCTAssertTrue(content.contains(textMessage.id.uniqueID.value))
         XCTAssertFalse(content.contains(textMessage.body))
         XCTAssertFalse(content.contains(textAttributedString))
@@ -254,7 +254,7 @@ class LoggingTests: XCTestCase {
             return
         }
 
-        let content = try String(contentsOf: logFile)
+        let content = try String(contentsOf: logFile, encoding: .utf8)
         XCTAssertTrue(content.contains(String(describing: TextMessageContent.self)))
         XCTAssertFalse(content.contains(textString))
         
