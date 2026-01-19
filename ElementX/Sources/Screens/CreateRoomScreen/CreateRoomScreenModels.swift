@@ -29,6 +29,7 @@ struct CreateRoomScreenViewState: BindableState {
     var roomName: String
     let serverName: String
     let isKnockingFeatureEnabled: Bool
+    let canSelectSpace: Bool
     var aliasLocalPart: String
     var bindings: CreateRoomScreenViewStateBindings
     var avatarMediaInfo: MediaInfo? {
@@ -59,18 +60,46 @@ struct CreateRoomScreenViewState: BindableState {
         }
     }
     
-    var availableAccessTypes: [CreateRoomAccessType] {
-        var availableTypes = CreateRoomAccessType.allCases
-        if isSpace || !isKnockingFeatureEnabled {
-            availableTypes.removeAll { $0 == .askToJoin }
+    var selectedSpace: SpaceServiceRoomProtocol?
+    
+    var availableAccessTypes: [CreateRoomScreenAccessType] {
+        var availableAccessTypes: [CreateRoomScreenAccessType] = []
+        if isSpace {
+            availableAccessTypes = [.public]
+        } else if let selectedSpace, selectedSpace.joinRule != .public {
+            availableAccessTypes = [.spaceMembers]
+            if isKnockingFeatureEnabled {
+                availableAccessTypes.append(.askToJoinWithSpaceMembers)
+            }
+        } else {
+            availableAccessTypes = [.public]
+            if isKnockingFeatureEnabled {
+                availableAccessTypes.append(.askToJoin)
+            }
         }
-        return availableTypes
+        availableAccessTypes.append(.private)
+        return availableAccessTypes
+    }
+    
+    var roomAccessType: CreateRoomAccessType {
+        switch bindings.selectedAccessType {
+        case .public:
+            return .public
+        case .spaceMembers:
+            return .spaceMembers(spaceID: selectedSpace?.id ?? "")
+        case .askToJoinWithSpaceMembers:
+            return .askToJoinWithSpaceMembers(spaceID: selectedSpace?.id ?? "")
+        case .askToJoin:
+            return .askToJoin
+        case .private:
+            return .private
+        }
     }
 }
 
 struct CreateRoomScreenViewStateBindings {
     var roomTopic: String
-    var selectedAccessType: CreateRoomAccessType
+    var selectedAccessType: CreateRoomScreenAccessType
     var showAttachmentConfirmationDialog = false
     
     /// Information describing the currently displayed alert.
@@ -101,4 +130,12 @@ extension Set<CreateRoomScreenAliasErrorState> {
         }
         return nil
     }
+}
+
+enum CreateRoomScreenAccessType {
+    case `public`
+    case spaceMembers
+    case askToJoinWithSpaceMembers
+    case askToJoin
+    case `private`
 }
