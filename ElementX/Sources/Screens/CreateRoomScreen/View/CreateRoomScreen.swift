@@ -39,8 +39,11 @@ struct CreateRoomScreen: View {
         Form {
             roomSection
             topicSection
+            if context.viewState.canSelectSpace {
+                selectSpaceSection
+            }
             roomAccessSection
-            if !context.selectedAccessType.isPrivate {
+            if !context.viewState.roomAccessType.isPrivate {
                 roomAliasSection
             }
         }
@@ -181,6 +184,7 @@ struct CreateRoomScreen: View {
         Section {
             ForEach(context.viewState.availableAccessTypes, id: \.self) { accessType in
                 CreateRoomAccessRow(access: accessType,
+                                    spaceName: context.viewState.selectedSpace?.name ?? "",
                                     isSelected: context.selectedAccessType == accessType) {
                     context.selectedAccessType = accessType
                 }
@@ -215,6 +219,15 @@ struct CreateRoomScreen: View {
         }
     }
     
+    private var selectSpaceSection: some View {
+        Section {
+            EmptyView()
+        } header: {
+            Text(L10n.commonSpace)
+                .compoundListSectionHeader()
+        }
+    }
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         if context.viewState.shouldShowCancelButton {
@@ -237,7 +250,8 @@ struct CreateRoomScreen: View {
 }
 
 private struct CreateRoomAccessRow: View {
-    let access: CreateRoomAccessType
+    let access: CreateRoomScreenAccessType
+    let spaceName: String
     let isSelected: Bool
     let onSelection: () -> Void
     
@@ -249,6 +263,10 @@ private struct CreateRoomAccessRow: View {
             L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle
         case .private:
             L10n.screenCreateRoomRoomAccessSectionPrivateOptionTitle
+        case .spaceMembers:
+            L10n.screenCreateRoomRoomAccessSectionRestrictedOptionTitle
+        case .askToJoinWithSpaceMembers:
+            L10n.screenCreateRoomRoomAccessSectionKnockingRestrictedOptionTitle
         }
     }
     
@@ -260,6 +278,10 @@ private struct CreateRoomAccessRow: View {
             L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription
         case .private:
             L10n.screenCreateRoomRoomAccessSectionPrivateOptionDescription
+        case .spaceMembers:
+            L10n.screenCreateRoomRoomAccessSectionRestrictedOptionDescription(spaceName)
+        case .askToJoinWithSpaceMembers:
+            L10n.screenCreateRoomRoomAccessSectionKnockingRestrictedOptionDescription(spaceName)
         }
     }
     
@@ -271,6 +293,10 @@ private struct CreateRoomAccessRow: View {
             \.userAdd
         case .private:
             \.lock
+        case .spaceMembers:
+            \.space
+        case .askToJoinWithSpaceMembers:
+            \.userAdd
         }
     }
     

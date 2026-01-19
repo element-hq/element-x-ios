@@ -48,14 +48,16 @@ enum SlidingSyncConstants {
     static let maximumVisibleRangeSize = 30
 }
 
-enum CreateRoomAccessType: CaseIterable {
+enum CreateRoomAccessType: Equatable {
     case `public`
+    case spaceMembers(spaceID: String)
+    case askToJoinWithSpaceMembers(spaceID: String)
     case askToJoin
     case `private`
     
     var isPrivate: Bool {
         switch self {
-        case .private:
+        case .private, .spaceMembers, .askToJoinWithSpaceMembers:
             true
         case .public, .askToJoin:
             false
