@@ -99,6 +99,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "CopyTextButton_Previews")
     }
 
+    func testCreateRoomSpaceSelectionSheet() async throws {
+        try await performAccessibilityAudit(named: "CreateRoomSpaceSelectionSheet_Previews")
+    }
+
     func testCreateRoom() async throws {
         try await performAccessibilityAudit(named: "CreateRoom_Previews")
     }

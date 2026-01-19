@@ -193,6 +193,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentCreateRoomScreen(isSpace: Bool, isRoot: Bool) {
         let createParameters = CreateRoomScreenCoordinatorParameters(isSpace: isSpace,
+                                                                     spaceSelectionMode: !isSpace && flowParameters.appSettings.createSpaceEnabled ? .list : nil,
                                                                      shouldShowCancelButton: isRoot,
                                                                      userSession: flowParameters.userSession,
                                                                      userIndicatorController: flowParameters.userIndicatorController,

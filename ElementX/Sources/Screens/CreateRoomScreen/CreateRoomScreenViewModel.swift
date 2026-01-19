@@ -17,6 +17,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
+    
     private var syncNameAndAlias = true
     @CancellableTask private var checkAliasAvailabilityTask: Task<Void, Never>?
     
@@ -27,6 +28,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     }
     
     init(isSpace: Bool,
+         spaceSelectionMode: CreateRoomScreenSpaceSelectionMode?,
          shouldShowCancelButton: Bool,
          userSession: UserSessionProtocol,
          analytics: AnalyticsService,
@@ -37,16 +39,29 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
+        var selectedSpace: SpaceServiceRoomProtocol?
+        var canSelectSpace = false
+        switch spaceSelectionMode {
+        case .list:
+            canSelectSpace = true
+        case .selected(let value):
+            selectedSpace = value
+        case .none:
+            break
+        }
+        
         let bindings = CreateRoomScreenViewStateBindings(roomTopic: "",
-                                                         selectedAccessType: .private)
+                                                         selectedAccessType: .private,
+                                                         selectedSpace: selectedSpace)
 
         super.init(initialViewState: CreateRoomScreenViewState(isSpace: isSpace,
                                                                shouldShowCancelButton: shouldShowCancelButton,
                                                                roomName: "",
                                                                serverName: userSession.clientProxy.userIDServerName ?? "",
                                                                isKnockingFeatureEnabled: appSettings.knockingEnabled,
-                                                               canSelectSpace: isSpace ? false : appSettings.createSpaceEnabled,
+                                                               canSelectSpace: canSelectSpace,
                                                                aliasLocalPart: roomAliasNameFromRoomDisplayName(roomName: ""),
+                                                               topLevelSpaces: canSelectSpace ? userSession.clientProxy.spaceService.topLevelSpacesPublisher.value : [],
                                                                bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
@@ -180,6 +195,15 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 }
             }
             .store(in: &cancellables)
+        
+        if state.canSelectSpace {
+            userSession
+                .clientProxy
+                .spaceService
+                .topLevelSpacesPublisher
+                .weakAssign(to: \.state.topLevelSpaces, on: self)
+                .store(in: &cancellables)
+        }
     }
     
     private func createRoom() async {
