@@ -123,6 +123,8 @@ private struct CallView: UIViewRepresentable {
             webView.navigationDelegate = self
             webView.isInspectable = true
             
+            webView.customUserAgent = UserAgentBuilder.makeASCIIUserAgent()
+            
             // https://stackoverflow.com/a/77963877/730924
             webView.allowsLinkPreview = true
             
