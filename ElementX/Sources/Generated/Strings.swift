@@ -1606,6 +1606,12 @@ internal enum L10n {
   internal static var screenCreateRoomRoomAccessSectionKnockingOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_description") }
   /// Allow ask to join
   internal static var screenCreateRoomRoomAccessSectionKnockingOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_title") }
+  /// Anyone in %1$@ can join but everyone else must request access.
+  internal static func screenCreateRoomRoomAccessSectionKnockingRestrictedOptionDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_restricted_option_description", String(describing: p1))
+  }
+  /// Ask to join
+  internal static var screenCreateRoomRoomAccessSectionKnockingRestrictedOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_restricted_option_title") }
   /// Only people invited can join.
   internal static var screenCreateRoomRoomAccessSectionPrivateOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_private_option_description") }
   /// Private
@@ -1614,6 +1620,12 @@ internal enum L10n {
   internal static var screenCreateRoomRoomAccessSectionPublicOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_public_option_description") }
   /// Public
   internal static var screenCreateRoomRoomAccessSectionPublicOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_public_option_title") }
+  /// Anyone in %1$@ can join.
+  internal static func screenCreateRoomRoomAccessSectionRestrictedOptionDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_create_room_room_access_section_restricted_option_description", String(describing: p1))
+  }
+  /// Standard
+  internal static var screenCreateRoomRoomAccessSectionRestrictedOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_restricted_option_title") }
   /// Who has access
   internal static var screenCreateRoomRoomAccessSectionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_title") }
   /// You’ll need an address in order to make it visible in the public directory.
