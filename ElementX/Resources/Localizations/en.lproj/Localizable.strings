@@ -85,6 +85,7 @@
 "action_enable" = "Enable";
 "action_end_poll" = "End poll";
 "action_enter_pin" = "Enter PIN";
+"action_explore_public_spaces" = "Explore public spaces";
 "action_finish" = "Finish";
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
@@ -553,6 +554,9 @@
 "screen_create_room_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
 "screen_create_room_room_address_section_title" = "Address";
 "screen_create_room_room_visibility_section_title" = "Room visibility";
+"screen_create_room_space_selection_no_space_description" = "(no space)";
+"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
 "screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";

@@ -234,7 +234,10 @@ struct CreateRoomScreen: View {
                             context.showSpaceSelectionSheet = true
                         })
             } else {
-                ListRow(label: .default(title: "Test", icon: \.home),
+                ListRow(label: .default(title: L10n.screenCreateRoomSpaceSelectionNoSpaceTitle,
+                                        description: L10n.screenCreateRoomSpaceSelectionNoSpaceDescription,
+                                        icon: \.home,
+                                        iconAlignment: .top),
                         kind: .navigationLink {
                             context.showSpaceSelectionSheet = true
                         })
