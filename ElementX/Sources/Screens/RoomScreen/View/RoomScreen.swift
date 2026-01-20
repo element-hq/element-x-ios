@@ -226,6 +226,10 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false) -> ViewModels {
+        // TimelineItemBubbledStylerView sets enableKeyShareOnInvite to true which if run
+        // before these tests, ends up adding a banner to the snapshots.
+        AppSettings.resetAllSettings()
+        
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
                                                       name: "Preview room",
                                                       hasOngoingCall: true,
