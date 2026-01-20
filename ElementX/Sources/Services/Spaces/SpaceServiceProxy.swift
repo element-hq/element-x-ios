@@ -19,6 +19,12 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         spacesSubject.asCurrentValuePublisher()
     }
     
+    private var spaceFilterHandle: TaskHandle?
+    private let spaceFilterSubject = CurrentValueSubject<[SpaceServiceFilter], Never>([])
+    var spaceFilterPublisher: CurrentValuePublisher<[SpaceServiceFilter], Never> {
+        spaceFilterSubject.asCurrentValuePublisher()
+    }
+    
     init(spaceService: SpaceServiceProtocol) {
         self.spaceService = spaceService
         
@@ -27,7 +33,11 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
     
     private func setupSubscriptions() async {
         topLevelSpacesHandle = await spaceService.subscribeToTopLevelJoinedSpaces(listener: SDKListener { [weak self] updates in
-            self?.handleUpdates(updates)
+            self?.handleSpaceListUpdates(updates)
+        })
+        
+        spaceFilterHandle = await spaceService.subscribeToSpaceFilters(listener: SDKListener { [weak self] updates in
+            self?.handleSpaceFilterUpdates(updates)
         })
     }
     
@@ -87,7 +97,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
     
     // MARK: - Private
     
-    private func handleUpdates(_ updates: [SpaceListUpdate]) {
+    private func handleSpaceListUpdates(_ updates: [SpaceListUpdate]) {
         var spaces = spacesSubject.value
         
         for update in updates {
@@ -118,5 +128,44 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
         
         spacesSubject.send(spaces)
+    }
+    
+    private func handleSpaceFilterUpdates(_ updates: [SpaceFilterUpdate]) {
+        var filters = spaceFilterSubject.value
+        
+        for update in updates {
+            switch update {
+            case .append(let spaceFilters):
+                filters.append(contentsOf: spaceFilters.map { buildSpaceFilter(from: $0) })
+            case .clear:
+                filters.removeAll()
+            case .pushFront(let filter):
+                filters.insert(buildSpaceFilter(from: filter), at: 0)
+            case .pushBack(let filter):
+                filters.append(buildSpaceFilter(from: filter))
+            case .popFront:
+                filters.removeFirst()
+            case .popBack:
+                filters.removeLast()
+            case .insert(let index, let filter):
+                filters.insert(buildSpaceFilter(from: filter), at: Int(index))
+            case .set(let index, let filter):
+                filters[Int(index)] = buildSpaceFilter(from: filter)
+            case .remove(let index):
+                filters.remove(at: Int(index))
+            case .truncate(let length):
+                filters.removeSubrange(Int(length)..<filters.count)
+            case .reset(let spaceFilters):
+                filters = spaceFilters.map { buildSpaceFilter(from: $0) }
+            }
+        }
+        
+        spaceFilterSubject.send(filters)
+    }
+    
+    private func buildSpaceFilter(from filter: MatrixRustSDK.SpaceFilter) -> SpaceServiceFilter {
+        SpaceServiceFilter(room: SpaceServiceRoom(spaceRoom: filter.spaceRoom),
+                           level: UInt(max(filter.level, 0)),
+                           descendants: Set(filter.descendants))
     }
 }

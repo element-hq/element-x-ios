@@ -113,6 +113,10 @@ extension SDKListener: SpaceRoomListSpaceListener where T == SpaceRoom? {
     func onUpdate(space: SpaceRoom?) { onUpdateClosure(space) }
 }
 
+extension SDKListener: SpaceServiceSpaceFiltersListener where T == [SpaceFilterUpdate] {
+    func onUpdate(filterUpdates: [SpaceFilterUpdate]) { onUpdateClosure(filterUpdates) }
+}
+
 // MARK: Room
 
 extension SDKListener: RoomInfoListener where T == RoomInfo {
