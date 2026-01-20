@@ -25,8 +25,8 @@ struct RoomHeaderView: View {
             // On iOS 26+ we use the toolbarRole(.editor) to leading align.
             content
                 // Not using a Button here so that we get our custom padding around the avatar. This also
-                // helps fix a bug on iOS 26.2 where the top pixel gets clipped during the push/pop animation
-                // as the resulting frame is no longer the full height of the navigation bar.
+                // helps fix a bug where the top pixel was being clipped during the push/pop animation as
+                // the Button styling results in a view that is slightly taller than a bar item should be.
                 .padding(6)
                 .padding(.trailing, 6)
                 .glassEffect(.regular.interactive())
