@@ -70,6 +70,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     
     var spaceSettingsEnabled: Bool { get set }
     var createSpaceEnabled: Bool { get set }
+    var spaceFiltersEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
