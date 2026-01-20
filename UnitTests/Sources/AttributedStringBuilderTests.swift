@@ -23,12 +23,12 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(String(attributedString.characters), "H1 Header\n\nH2 Header\n\nH3 Header\n\nH4 Header\n\nH5 Header\n\nH6 Header")
+        XCTAssertEqual(String(attributedString.characters), "H1 Header\nH2 Header\nH3 Header\nH4 Header\nH5 Header\nH6 Header")
         
-        XCTAssertEqual(attributedString.runs.count, 11) // newlines hold no attributes
+        XCTAssertEqual(attributedString.runs.count, 4) // newlines hold no attributes
         
         let pointSizes = attributedString.runs.compactMap(\.uiKit.font?.pointSize)
-        XCTAssertEqual(pointSizes, [23, 23, 23, 21, 19, 17])
+        XCTAssertEqual(pointSizes, [23, 21, 19, 17])
     }
     
     func testRenderHTMLStringWithPreCode() {
@@ -46,7 +46,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 18)
+        XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 13)
     }
     
     func testRenderHTMLStringWithLink() {
@@ -270,22 +270,24 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testSingleBlockquote() {
-        let htmlString = "<blockquote>Blockquote</blockquote>"
+        let htmlString = "<blockquote>Blockquote</blockquote><p>Another paragraph</p>"
         
         guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
         
-        XCTAssertEqual(attributedString.runs.count, 1)
+        XCTAssertEqual(attributedString.runs.count, 2)
         
-        XCTAssertEqual(attributedString.formattedComponents.count, 1)
+        XCTAssertEqual(attributedString.formattedComponents.count, 2)
         
         for run in attributedString.runs where run.elementX.blockquote ?? false {
             return
         }
         
         XCTFail("Couldn't find blockquote")
+        
+        XCTAssertEqual(String(attributedString.characters), "Blockquote\nAnother paragraph")
     }
     
     // swiftlint:disable line_length
@@ -699,7 +701,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(String(attributedString.characters), "like\n\n   • this\ntest")
+        XCTAssertEqual(String(attributedString.characters), "like\n    • this\ntest")
     }
     
     func testUnorderedList() {
@@ -766,6 +768,30 @@ class AttributedStringBuilderTests: XCTestCase {
         }
         
         XCTAssertEqual(String(attributedString.characters), "  1. A\n      • A1\n      • A2\n      • A3\n  2. B\n  3. C")
+    }
+    
+    // https://github.com/element-hq/element-x-ios/issues/4856
+    func testNormalisedWhitespaces() {
+        let html = """
+        <a href="https://github.com/stefan">Stefan</a>      pushed
+                <a href="https://github.com">2 commits</a>
+            to
+         main:<ul>         <li>
+                    <a href="https://github.com"><code>Some update</code></a>
+                    
+                </li>
+                <li>
+                    <a href="https://github.com"><code>Some other update</code></a>
+                    
+                </li>
+         </ul>
+        """
+        guard let attributedString = attributedStringBuilder.fromHTML(html) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "Stefan pushed 2 commits to main:\n   •  Some update \n   •  Some other update")
     }
     
     // MARK: - Phishing prevention

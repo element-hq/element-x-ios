@@ -122,9 +122,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         for node in element.getChildNodes() {
             if let textNode = node as? TextNode {
-                // If this node is plain text just append its preformatted contents
+                // If this node is plain text append the whitespace normalised version
                 if node.parent() == documentBody {
-                    result.append(NSAttributedString(string: textNode.getWholeText()))
+                    result.append(NSAttributedString(string: textNode.text()))
                     continue
                 }
                 
@@ -237,7 +237,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: tag, listIndex: &listIndex, indentLevel: indentLevel + 1)
                 
-                if indentLevel > 0 {
+                if indentLevel > 0 || !element.ownText().isEmpty {
                     content.insert(NSAttributedString("\n"), at: 0)
                 }
 
