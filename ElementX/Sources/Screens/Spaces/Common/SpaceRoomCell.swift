@@ -63,7 +63,8 @@ struct SpaceRoomCell: View {
             action(.select(spaceServiceRoom))
         } label: {
             HStack(spacing: 0) {
-                if isEditModeActive {
+                if isEditModeActive,
+                   !spaceServiceRoom.isSpace { // We only support selection of rooms (so don't show this while removing the cell).
                     ZStack {
                         ListRowAccessory.multiSelection(isSelected)
                     }
@@ -87,6 +88,9 @@ struct SpaceRoomCell: View {
                 }
             }
             .padding(.horizontal, horizontalInsets)
+            // Ensure the EditMode transition stays inside this cell if there are other insertions/removals in the list.
+            // Seems to slow down the animations a bit in Xcode previews but its fine in the simulator and on a device.
+            .drawingGroup()
             .accessibilityElement(children: .combine)
         }
         .buttonStyle(SpaceRoomCellButtonStyle(isHighlighted: isHighlighted))
