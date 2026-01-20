@@ -17125,6 +17125,52 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         try await setNameNameClosure?(name)
     }
 
+    //MARK: - setOwnMemberDisplayName
+
+    open var setOwnMemberDisplayNameDisplayNameThrowableError: Error?
+    open var setOwnMemberDisplayNameDisplayNameUnderlyingCallsCount = 0
+    open var setOwnMemberDisplayNameDisplayNameCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setOwnMemberDisplayNameDisplayNameUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setOwnMemberDisplayNameDisplayNameUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setOwnMemberDisplayNameDisplayNameUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setOwnMemberDisplayNameDisplayNameUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var setOwnMemberDisplayNameDisplayNameCalled: Bool {
+        return setOwnMemberDisplayNameDisplayNameCallsCount > 0
+    }
+    open var setOwnMemberDisplayNameDisplayNameReceivedDisplayName: String?
+    open var setOwnMemberDisplayNameDisplayNameReceivedInvocations: [String?] = []
+    open var setOwnMemberDisplayNameDisplayNameClosure: ((String?) async throws -> Void)?
+
+    open override func setOwnMemberDisplayName(displayName: String?) async throws {
+        if let error = setOwnMemberDisplayNameDisplayNameThrowableError {
+            throw error
+        }
+        setOwnMemberDisplayNameDisplayNameCallsCount += 1
+        setOwnMemberDisplayNameDisplayNameReceivedDisplayName = displayName
+        DispatchQueue.main.async {
+            self.setOwnMemberDisplayNameDisplayNameReceivedInvocations.append(displayName)
+        }
+        try await setOwnMemberDisplayNameDisplayNameClosure?(displayName)
+    }
+
     //MARK: - setThreadSubscription
 
     open var setThreadSubscriptionThreadRootEventIdSubscribedThrowableError: Error?
@@ -23601,6 +23647,71 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
         try await removeChildFromSpaceChildIdSpaceIdClosure?(childId, spaceId)
     }
 
+    //MARK: - spaceFilters
+
+    open var spaceFiltersUnderlyingCallsCount = 0
+    open var spaceFiltersCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return spaceFiltersUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceFiltersUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceFiltersUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceFiltersUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var spaceFiltersCalled: Bool {
+        return spaceFiltersCallsCount > 0
+    }
+
+    open var spaceFiltersUnderlyingReturnValue: [SpaceFilter]!
+    open var spaceFiltersReturnValue: [SpaceFilter]! {
+        get {
+            if Thread.isMainThread {
+                return spaceFiltersUnderlyingReturnValue
+            } else {
+                var returnValue: [SpaceFilter]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceFiltersUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceFiltersUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceFiltersUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var spaceFiltersClosure: (() async -> [SpaceFilter])?
+
+    open override func spaceFilters() async -> [SpaceFilter] {
+        spaceFiltersCallsCount += 1
+        if let spaceFiltersClosure = spaceFiltersClosure {
+            return await spaceFiltersClosure()
+        } else {
+            return spaceFiltersReturnValue
+        }
+    }
+
     //MARK: - spaceRoomList
 
     open var spaceRoomListSpaceIdThrowableError: Error?
@@ -23673,6 +23784,77 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
             return try await spaceRoomListSpaceIdClosure(spaceId)
         } else {
             return spaceRoomListSpaceIdReturnValue
+        }
+    }
+
+    //MARK: - subscribeToSpaceFilters
+
+    open var subscribeToSpaceFiltersListenerUnderlyingCallsCount = 0
+    open var subscribeToSpaceFiltersListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToSpaceFiltersListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToSpaceFiltersListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToSpaceFiltersListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToSpaceFiltersListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToSpaceFiltersListenerCalled: Bool {
+        return subscribeToSpaceFiltersListenerCallsCount > 0
+    }
+    open var subscribeToSpaceFiltersListenerReceivedListener: SpaceServiceSpaceFiltersListener?
+    open var subscribeToSpaceFiltersListenerReceivedInvocations: [SpaceServiceSpaceFiltersListener] = []
+
+    open var subscribeToSpaceFiltersListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToSpaceFiltersListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToSpaceFiltersListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToSpaceFiltersListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToSpaceFiltersListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToSpaceFiltersListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToSpaceFiltersListenerClosure: ((SpaceServiceSpaceFiltersListener) async -> TaskHandle)?
+
+    open override func subscribeToSpaceFilters(listener: SpaceServiceSpaceFiltersListener) async -> TaskHandle {
+        subscribeToSpaceFiltersListenerCallsCount += 1
+        subscribeToSpaceFiltersListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToSpaceFiltersListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToSpaceFiltersListenerClosure = subscribeToSpaceFiltersListenerClosure {
+            return await subscribeToSpaceFiltersListenerClosure(listener)
+        } else {
+            return subscribeToSpaceFiltersListenerReturnValue
         }
     }
 
