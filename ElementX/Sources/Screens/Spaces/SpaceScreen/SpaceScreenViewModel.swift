@@ -201,7 +201,11 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         }
         
         await spaceRoomListProxy.reset()
-        await _ = spaceRoomListProxy.paginationStatePublisher.values.first { $0 == .idle(endReached: true) }
+        
+        let runner = ExpiringTaskRunner { [spaceRoomListProxy] in
+            await _ = spaceRoomListProxy.paginationStatePublisher.values.first { $0 == .idle(endReached: true) }
+        }
+        try? await runner.run(timeout: .seconds(10))
         
         process(viewAction: .finishManagingChildren)
     }
