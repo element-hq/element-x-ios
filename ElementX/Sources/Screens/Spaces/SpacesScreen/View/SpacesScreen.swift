@@ -108,9 +108,9 @@ struct SpacesScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
                     .compositingGroup()
             }
+            .buttonStyle(.borderless)
             .accessibilityLabel(L10n.commonSettings)
         }
-        .backportSharedBackgroundVisibility(.hidden)
         
         ToolbarItem(placement: .principal) {
             // Hides the navigationTitle (which is set for the navigation stack label).

@@ -88,11 +88,7 @@ enum UserAvatarSizeOnScreen {
     var value: CGFloat {
         switch self {
         case .chats, .spaces:
-            if #available(iOS 26, *) {
-                return 40
-            } else {
-                return 32
-            }
+            return 32
         case .timeline:
             return 32
         case .readReceipt:
