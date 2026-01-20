@@ -202,6 +202,7 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
         
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   spaceFilterPublisher: CurrentValueSubject<SpaceServiceFilter?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
                                    analyticsService: ServiceLocator.shared.analytics,
                                    notificationManager: NotificationManagerMock(),

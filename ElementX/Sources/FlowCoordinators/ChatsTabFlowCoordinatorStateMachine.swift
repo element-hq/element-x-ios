@@ -23,6 +23,9 @@ class ChatsTabFlowCoordinatorStateMachine {
                 
         /// Showing the home screen. The `roomListSelectedRoomID` represents the timeline shown on the detail panel (if any)
         case roomList(detailState: DetailState?)
+        
+        /// Show the space filters pertaining to the room list
+        case spaceFiltersScreen(detailState: DetailState?)
                 
         /// Showing the feedback screen.
         case feedbackScreen(detailState: DetailState?)
@@ -52,12 +55,13 @@ class ChatsTabFlowCoordinatorStateMachine {
         
         case declineAndBlockUserScreen(detailState: DetailState?)
         
-        /// The selected room ID from the state if available.
+        /// The state of the currently selected room
         var detailState: DetailState? {
             switch self {
             case .initial, .userProfileScreen, .shareExtensionRoomList:
                 nil
             case .roomList(let detailState),
+                 .spaceFiltersScreen(let detailState),
                  .feedbackScreen(let detailState),
                  .recoveryKeyScreen(let detailState),
                  .encryptionResetFlow(let detailState),
@@ -88,6 +92,9 @@ class ChatsTabFlowCoordinatorStateMachine {
         case selectRoom(roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint)
         /// The room screen has been dismissed
         case deselectRoom
+        
+        case presentSpaceFiltersScreen
+        case dismissedSpaceFiltersScreen
         
         /// Request presentation of a space.
         ///
@@ -157,7 +164,13 @@ class ChatsTabFlowCoordinatorStateMachine {
             case (.roomList(let detailState), .deselectRoom):
                 // Ignore the flow's dismissal if it has already been replaced with a space.
                 return detailState == .space ? nil : .roomList(detailState: nil)
-            
+                
+            case (.roomList(let detailState), .presentSpaceFiltersScreen):
+                guard detailState == nil else { return nil }
+                return .spaceFiltersScreen(detailState: detailState)
+            case (.spaceFiltersScreen(let detailState), .dismissedSpaceFiltersScreen):
+                return .roomList(detailState: detailState)
+                
             case (.roomList, .startSpaceFlow):
                 return .roomList(detailState: .space)
             case (.roomList, .finishedSpaceFlow):

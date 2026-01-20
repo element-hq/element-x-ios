@@ -22,7 +22,7 @@ struct HomeScreen: View {
             .alert(item: $context.leaveRoomAlertItem,
                    actions: leaveRoomAlertActions,
                    message: leaveRoomAlertMessage)
-            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
+            .navigationTitle(title)
             .toolbar { toolbar }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .track(screen: .Home)
@@ -31,6 +31,14 @@ struct HomeScreen: View {
     }
     
     // MARK: - Private
+    
+    private var title: String {
+        if let selectedSpace = context.viewState.selectedSpaceFilter {
+            selectedSpace.room.name
+        } else {
+            L10n.screenRoomlistMainSpaceTitle
+        }
+    }
         
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
@@ -45,6 +53,18 @@ struct HomeScreen: View {
             } else {
                 newRoomButton
                     .buttonStyle(.compound(.super, size: .toolbarIcon))
+            }
+        }
+        
+        if context.viewState.spaceFiltersEnabled {
+            if #available(iOS 26, *) {
+                ToolbarSpacer(.fixed, placement: .primaryAction)
+            }
+               
+            ToolbarItem(placement: .primaryAction) {
+                SpaceFiltersButton(selected: context.viewState.selectedSpaceFilter != nil) {
+                    context.send(viewAction: .spaceFilters)
+                }
             }
         }
     }
@@ -92,6 +112,41 @@ struct HomeScreen: View {
     
     private func leaveRoomAlertMessage(_ item: LeaveRoomAlertItem) -> some View {
         Text(item.subtitle)
+    }
+    
+    private struct SpaceFiltersButton: View {
+        var selected = false
+        var action: () -> Void
+        
+        var body: some View {
+            if #available(iOS 26, *) {
+                if selected {
+                    content
+                        .backportButtonStyleGlassProminent()
+                        .tint(.compound.bgAccentRest)
+                } else {
+                    content
+                }
+            } else {
+                if selected {
+                    content
+                        .buttonStyle(.compound(.primary, size: .toolbarIcon))
+                } else {
+                    content
+                        .buttonStyle(.compound(.tertiary, size: .toolbarIcon))
+                }
+            }
+        }
+        
+        private var content: some View {
+            Button {
+                action()
+            } label: {
+                CompoundIcon(\.filter)
+            }
+            .accessibilityLabel(L10n.screenRoomlistYourSpaces)
+            .accessibilityIdentifier(A11yIdentifiers.homeScreen.spaceFilters)
+        }
     }
 }
 
@@ -147,6 +202,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   spaceFilterPublisher: CurrentValueSubject<SpaceServiceFilter?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
                                    analyticsService: ServiceLocator.shared.analytics,
                                    notificationManager: NotificationManagerMock(),
