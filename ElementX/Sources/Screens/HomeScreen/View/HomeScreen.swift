@@ -36,8 +36,8 @@ struct HomeScreen: View {
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             settingsButton
+                .buttonStyle(.borderless)
         }
-        .backportSharedBackgroundVisibility(.hidden)
         
         ToolbarItem(placement: .primaryAction) {
             if #available(iOS 26, *) {
