@@ -113,7 +113,9 @@ struct SpaceScreen: View {
                             Button { context.send(viewAction: .displayMembers(roomProxy: roomProxy)) } label: {
                                 Label(L10n.screenSpaceMenuActionMembers, icon: \.user)
                             }
+                            .accessibilityIdentifier(A11yIdentifiers.spaceScreen.viewMembers)
                         }
+                        
                         if let permalink = context.viewState.permalink {
                             ShareLink(item: permalink) {
                                 Label(L10n.actionShare, icon: \.shareIos)

@@ -43,6 +43,7 @@ enum A11yIdentifiers {
     static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
     static let pollFormScreen = PollFormScreen()
     static let roomPollsHistoryScreen = RoomPollsHistoryScreen()
+    static let roomMembersListScreen = RoomMembersListScreen()
     static let manageRoomMemberSheet = ManageRoomMemberSheet()
     static let spacesScreen = SpacesScreen()
     static let spaceScreen = SpaceScreen()
@@ -305,6 +306,10 @@ enum A11yIdentifiers {
         let loadMore = "room_polls_history_screen-load_more"
     }
     
+    struct RoomMembersListScreen {
+        let invite = "room_members_list_screen-invite"
+    }
+    
     struct ManageRoomMemberSheet {
         let viewProfile = "manage_room_member_sheet-view_profile"
     }
@@ -321,6 +326,7 @@ enum A11yIdentifiers {
     struct SpaceScreen {
         let moreMenu = "space_screen-more_menu"
         let addExistingRooms = "space_screen-add_existing_rooms"
+        let viewMembers = "space_screen-view_members"
     }
     
     struct SpaceAddRoomsScreen {

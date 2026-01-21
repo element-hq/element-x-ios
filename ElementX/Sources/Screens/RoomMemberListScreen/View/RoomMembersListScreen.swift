@@ -102,6 +102,7 @@ struct RoomMembersListScreen: View {
                 Button(L10n.actionInvite) {
                     context.send(viewAction: .invite)
                 }
+                .accessibilityIdentifier(A11yIdentifiers.roomMembersListScreen.invite)
             }
         }
     }

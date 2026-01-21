@@ -28,6 +28,7 @@ class UserSessionScreenTests: XCTestCase {
         static let subspaceRoomScreen = 8
         static let spaceJoinRoomScreen = 9
         static let spaceAddRoomsScreen = 10
+        static let spaceMembersListScreen = 11
     }
     
     func testUserSessionFlows() async throws {
@@ -102,6 +103,15 @@ class UserSessionScreenTests: XCTestCase {
         try await app.assertScreenshot(step: Step.spaceAddRoomsScreen)
         
         app.buttons[A11yIdentifiers.spaceAddRoomsScreen.cancel].tap()
+        XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
+        
+        app.buttons[A11yIdentifiers.spaceScreen.moreMenu].tap()
+        app.buttons[A11yIdentifiers.spaceScreen.viewMembers].tap()
+        XCTAssert(app.buttons[A11yIdentifiers.roomMembersListScreen.invite].waitForExistence(timeout: 5.0))
+        try await Task.sleep(for: .seconds(1))
+        try await app.assertScreenshot(step: Step.spaceMembersListScreen)
+        
+        app.navigationBars.buttons[joinedSubspaceName].firstMatch.tap(.center)
         XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
         
         app.buttons[A11yIdentifiers.spacesScreen.spaceRoomName(joinedSubspaceRoomName)].tap()

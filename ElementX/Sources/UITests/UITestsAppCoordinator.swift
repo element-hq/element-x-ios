@@ -596,7 +596,7 @@ class MockScreen: Identifiable {
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com",
                                                     deviceID: "MOCKCLIENT",
                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
-                                                    spaceServiceConfiguration: .init(topLevelSpaces: .mockSingleRoom),
+                                                    spaceServiceConfiguration: .init(topLevelSpaces: .mockSpaceList.filter(\.isSpace) + .mockSingleRoom),
                                                     roomPreviews: [SpaceServiceRoomProtocol].mockSpaceList.map(RoomPreviewProxyMock.init)))
             clientProxy.recentlyVisitedRoomsFilterReturnValue = .mockRooms
             
