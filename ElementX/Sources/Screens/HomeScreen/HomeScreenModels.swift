@@ -25,8 +25,6 @@ enum HomeScreenViewModelAction {
     case presentFeedbackScreen
     case presentStartChatScreen
     case presentGlobalSearch
-    case presentSpaceFilters
-    case cancelSpaceFilters
     case logout
 }
 
@@ -157,6 +155,8 @@ struct HomeScreenViewStateBindings {
     
     var alertInfo: AlertInfo<UUID>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
+    
+    var spaceFiltersViewModel: ChatsSpaceFiltersScreenViewModel?
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {

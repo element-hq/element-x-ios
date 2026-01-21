@@ -49,7 +49,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
 
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
-    private let spaceFilterSubject = CurrentValueSubject<SpaceServiceFilter?, Never>(nil)
     
     private let actionsSubject: PassthroughSubject<ChatsTabFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<ChatsTabFlowCoordinatorAction, Never> {
@@ -199,12 +198,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 handleSelectRoomTransition(roomID: roomID, via: via, entryPoint: entryPoint, detailState: detailState, animated: animated)
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
-                
-            case(.roomList, .presentSpaceFiltersScreen, .spaceFiltersScreen):
-                presentSpaceFilters()
-            case(.spaceFiltersScreen, .dismissedSpaceFiltersScreen, .roomList):
-                break
-            
+                            
             case(.roomList, .startSpaceFlow, .roomList):
                 guard let spaceRoomListProxy = userInfo?.spaceRoomListProxy else { fatalError("A space room list proxy is required.") }
                 startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy, animated: animated)
@@ -371,7 +365,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          bugReportService: flowParameters.bugReportService,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
-                                                         spaceFilterPublisher: spaceFilterSubject.asCurrentValuePublisher(),
                                                          appSettings: flowParameters.appSettings,
                                                          analyticsService: flowParameters.analytics,
                                                          notificationManager: flowParameters.notificationManager,
@@ -410,10 +403,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.startStartChatFlow)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
-                case .presentSpaceFilters:
-                    stateMachine.processEvent(.presentSpaceFiltersScreen)
-                case .cancelSpaceFilters:
-                    spaceFilterSubject.send(nil)
                 case .logout:
                     actionsSubject.send(.logout)
                 case .presentDeclineAndBlock(let userID, let roomID):
@@ -698,35 +687,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
 
         flowParameters.windowManager.showGlobalSearch()
     }
-    
-    // MARK: Space filtering
-    
-    private func presentSpaceFilters() {
-        let navigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = ChatsSpaceFiltersScreenCoordinator(parameters: .init(spaceService: userSession.clientProxy.spaceService,
-                                                                               mediaProvider: userSession.mediaProvider))
         
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .confirm(let spaceFilter):
-                    spaceFilterSubject.send(spaceFilter)
-                    navigationSplitCoordinator.setSheetCoordinator(nil)
-                case .cancel:
-                    navigationSplitCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedSpaceFiltersScreen)
-        }
-    }
-    
     private func dismissGlobalSearch() {
         flowParameters.windowManager.globalSearchWindow.rootViewController = nil
         flowParameters.windowManager.hideGlobalSearch()

@@ -12,19 +12,21 @@ struct ChatsSpaceFiltersScreen: View {
     @Bindable var context: ChatsSpaceFiltersScreenViewModel.Context
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(context.viewState.filters) { filter in
-                    ChatsSpaceFilterCell(filter: filter,
-                                         mediaProvider: context.mediaProvider) { filter in
-                        context.send(viewAction: .confirm(filter))
+        NavigationStack {
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(context.viewState.filters) { filter in
+                        ChatsSpaceFilterCell(filter: filter,
+                                             mediaProvider: context.mediaProvider) { filter in
+                            context.send(viewAction: .confirm(filter))
+                        }
                     }
                 }
             }
+            .toolbar { toolbar }
+            .navigationTitle(L10n.screenRoomlistYourSpaces)
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .toolbar { toolbar }
-        .navigationTitle(L10n.screenRoomlistYourSpaces)
-        .navigationBarTitleDisplayMode(.inline)
         .presentationDragIndicator(.visible)
     }
     

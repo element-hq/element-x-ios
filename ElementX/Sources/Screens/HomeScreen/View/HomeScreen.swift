@@ -16,6 +16,11 @@ struct HomeScreen: View {
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
+    @Namespace private var navigationTransitionNamespace
+    private enum NavigationTransitionSourceID {
+        case spaceFilters
+    }
+    
     var body: some View {
         HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
             .alert(item: $context.alertInfo)
@@ -28,6 +33,11 @@ struct HomeScreen: View {
             .track(screen: .Home)
             .toolbarBloom(hasSearchBar: true)
             .sentryTrace("\(Self.self)")
+            .sheet(item: $context.spaceFiltersViewModel) { vm in
+                ChatsSpaceFiltersScreen(context: vm.context)
+                    .navigationTransition(.zoom(sourceID: NavigationTransitionSourceID.spaceFilters,
+                                                in: navigationTransitionNamespace))
+            }
     }
     
     // MARK: - Private
@@ -65,6 +75,8 @@ struct HomeScreen: View {
                 SpaceFiltersButton(selected: context.viewState.selectedSpaceFilter != nil) {
                     context.send(viewAction: .spaceFilters)
                 }
+                .matchedTransitionSource(id: NavigationTransitionSourceID.spaceFilters,
+                                         in: navigationTransitionNamespace)
             }
         }
     }
@@ -202,7 +214,6 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   spaceFilterPublisher: CurrentValueSubject<SpaceServiceFilter?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
                                    analyticsService: ServiceLocator.shared.analytics,
                                    notificationManager: NotificationManagerMock(),
