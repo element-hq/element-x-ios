@@ -41,6 +41,8 @@ class ChatsSpaceFiltersScreenViewModel: ChatsSpaceFiltersScreenViewModelType, Ch
         switch viewAction {
         case .confirm(let filter):
             actionsSubject.send(.confirm(filter))
+        case .cancel:
+            actionsSubject.send(.cancel)
         }
     }
 }

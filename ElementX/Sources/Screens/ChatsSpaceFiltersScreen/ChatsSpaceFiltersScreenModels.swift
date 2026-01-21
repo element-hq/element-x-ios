@@ -9,6 +9,7 @@ import Foundation
 
 enum ChatsSpaceFiltersScreenViewModelAction {
     case confirm(SpaceServiceFilter)
+    case cancel
 }
 
 struct ChatsSpaceFiltersScreenViewState: BindableState {
@@ -20,4 +21,5 @@ struct ChatsSpaceFiltersScreenViewStateBindings { }
 
 enum ChatsSpaceFiltersScreenViewAction {
     case confirm(SpaceServiceFilter)
+    case cancel
 }

@@ -22,9 +22,19 @@ struct ChatsSpaceFiltersScreen: View {
                 }
             }
         }
+        .toolbar { toolbar }
         .navigationTitle(L10n.screenRoomlistYourSpaces)
         .navigationBarTitleDisplayMode(.inline)
         .presentationDragIndicator(.visible)
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            ToolbarButton(role: .cancel) {
+                context.send(viewAction: .cancel)
+            }
+        }
     }
 }
 

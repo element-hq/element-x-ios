@@ -17,6 +17,7 @@ struct ChatsSpaceFiltersScreenCoordinatorParameters {
 
 enum ChatsSpaceFiltersScreenCoordinatorAction {
     case confirm(SpaceServiceFilter)
+    case cancel
 }
 
 final class ChatsSpaceFiltersScreenCoordinator: CoordinatorProtocol {
@@ -45,6 +46,8 @@ final class ChatsSpaceFiltersScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .confirm(let spaceFilter):
                 actionsSubject.send(.confirm(spaceFilter))
+            case .cancel:
+                actionsSubject.send(.cancel)
             }
         }
         .store(in: &cancellables)

@@ -714,6 +714,8 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 case .confirm(let spaceFilter):
                     spaceFilterSubject.send(spaceFilter)
                     navigationSplitCoordinator.setSheetCoordinator(nil)
+                case .cancel:
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
             }
             .store(in: &cancellables)
