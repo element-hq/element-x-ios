@@ -75,6 +75,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             .weakAssign(to: \.state.selectedSpaceRoomID, on: self)
             .store(in: &cancellables)
         
+        appSettings.$createSpaceEnabled
+            .weakAssign(to: \.state.canCreateRoom, on: self)
+            .store(in: &cancellables)
+        
         Task {
             if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.id) {
                 // Required to listen for membership updates in the members flow
@@ -155,6 +159,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             } completion: {
                 self.state.editModeSelectedIDs.removeAll()
             }
+        case .createChildRoom:
+            Task { await createChildRoom() }
         }
     }
     
@@ -164,6 +170,16 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     }
     
     // MARK: - Private
+    
+    private func createChildRoom() async {
+        switch await spaceServiceProxy.spaceForIdentifier(spaceID: spaceRoomListProxy.id) {
+        case .success(.some(let space)):
+            actionsSubject.send(.displayCreateChildRoomFlow(space: space))
+        default:
+            MXLog.error("Unable to create child room: space not found")
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+        }
+    }
     
     private func join(_ spaceServiceRoom: SpaceServiceRoomProtocol) async {
         state.joiningRoomIDs.insert(spaceServiceRoom.id)

@@ -17,6 +17,7 @@ enum SpaceScreenViewModelAction {
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
     case displaySpaceSettings(roomProxy: JoinedRoomProxyProtocol)
     case addExistingChildren
+    case displayCreateChildRoomFlow(space: SpaceServiceRoomProtocol)
 }
 
 struct SpaceScreenViewState: BindableState {
@@ -34,6 +35,7 @@ struct SpaceScreenViewState: BindableState {
     var canEditRolesAndPermissions = false
     var canEditSecurityAndPrivacy = false
     var canEditChildren = false
+    var canCreateRoom = false
     
     var editMode: EditMode = .inactive
     var editModeSelectedIDs: Set<String> = []
@@ -72,6 +74,7 @@ enum SpaceScreenViewAction {
     case spaceSettings(roomProxy: JoinedRoomProxyProtocol)
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
     case addExistingRooms
+    case createChildRoom
     case manageChildren
     case removeSelectedChildren
     case confirmRemoveSelectedChildren

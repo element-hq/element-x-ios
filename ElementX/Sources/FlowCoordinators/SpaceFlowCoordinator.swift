@@ -44,6 +44,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
     private var settingsFlowCoordinator: SpaceSettingsFlowCoordinator?
     private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
+    private var createChildRoomFlowCoordinator: StartChatFlowCoordinator?
     
     indirect enum State: StateType {
         /// The state machine hasn't started.
@@ -64,6 +65,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case settingsFlow
         
         case rolesAndPermissionsFlow
+        
+        case createChildRoomFlow
         
         case leftSpace
     }
@@ -102,6 +105,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         
         case startRolesAndPermissionsFlow
         case stopRolesAndPermissionsFlow
+        
+        case startCreateChildRoomFlow
+        case stopCreateChildRoomFlow
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -170,12 +176,15 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case .rolesAndPermissionsFlow:
             rolesAndPermissionsFlowCoordinator?.clearRoute(animated: animated)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
+        case .createChildRoomFlow:
+            createChildRoomFlowCoordinator?.clearRoute(animated: animated)
+            clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         }
     }
     
     // MARK: - Private
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     private func configureStateMachine() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .space]) { [weak self] _ in
             self?.presentSpace()
@@ -288,6 +297,21 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             rolesAndPermissionsFlowCoordinator = nil
         }
         
+        stateMachine.addRouteMapping { event, fromState, _ in
+            guard event == .startCreateChildRoomFlow, case .space = fromState else { return nil }
+            return .createChildRoomFlow
+        } handler: { [weak self] context in
+            guard let space = context.userInfo as? SpaceServiceRoomProtocol else { fatalError("The space is missing") }
+            self?.startCreateChildFlow(space: space)
+        }
+        
+        stateMachine.addRouteMapping { event, fromState, _ in
+            guard event == .stopCreateChildRoomFlow, case .createChildRoomFlow = fromState else { return nil }
+            return .space
+        } handler: { [weak self] _ in
+            self?.createChildRoomFlowCoordinator = nil
+        }
+        
         stateMachine.addErrorHandler { context in
             fatalError("Unexpected transition: \(context)")
         }
@@ -323,6 +347,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.startRolesAndPermissionsFlow, userInfo: roomProxy)
                 case .addExistingChildren:
                     stateMachine.tryEvent(.addRooms)
+                case .displayCreateChildRoomFlow(let space):
+                    stateMachine.tryEvent(.startCreateChildRoomFlow, userInfo: space)
                 }
             }
             .store(in: &cancellables)
@@ -532,6 +558,43 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         rolesAndPermissionsFlowCoordinator = flowCoordinator
+        flowCoordinator.start()
+    }
+    
+    private func startCreateChildFlow(space: SpaceServiceRoomProtocol) {
+        let stackCoordinator = NavigationStackCoordinator()
+        let flowCoordinator = StartChatFlowCoordinator(entryPoint: .createRoomInSpace(space),
+                                                       userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.userSession.clientProxy),
+                                                       navigationStackCoordinator: stackCoordinator,
+                                                       flowParameters: flowParameters)
+        
+        var flowCoordinatorResult: StartChatFlowCoordinatorAction.Result?
+        flowCoordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .finished(let result):
+                flowCoordinatorResult = result
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            case .showRoomDirectory:
+                fatalError("Not implemented yet")
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            guard let self else { return }
+            stateMachine.tryEvent(.stopCreateChildRoomFlow)
+            switch flowCoordinatorResult {
+            case .room(let id):
+                stateMachine.tryEvent(.startRoomFlow(roomID: id))
+            case .space(let spaceRoomListProxy):
+                stateMachine.tryEvent(.startChildFlow, userInfo: spaceRoomListProxy)
+            case .cancelled, .none:
+                break
+            }
+        }
+        
+        createChildRoomFlowCoordinator = flowCoordinator
         flowCoordinator.start()
     }
 }
