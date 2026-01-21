@@ -24,3 +24,18 @@ protocol SpaceRoomListProxyProtocol {
     func paginate() async
     func reset() async
 }
+
+extension SpaceRoomListProxyProtocol {
+    /// Resets the list and then waits everything to be paginated back in again before returning.
+    ///
+    /// **Note:** It's the caller's responsibility to handle the calls to ``paginate``. This method
+    /// purely acts as a helper to wait until the list has reloaded.
+    func resetAndWaitForFullReload(timeout: Duration) async {
+        await reset()
+        
+        let runner = ExpiringTaskRunner { [paginationStatePublisher] in
+            await _ = paginationStatePublisher.values.first { $0 == .idle(endReached: true) }
+        }
+        try? await runner.run(timeout: timeout)
+    }
+}

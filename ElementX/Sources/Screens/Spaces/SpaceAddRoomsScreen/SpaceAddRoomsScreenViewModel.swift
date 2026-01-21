@@ -140,12 +140,7 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
             }
         }
         
-        await spaceRoomListProxy.reset()
-        
-        let runner = ExpiringTaskRunner { [spaceRoomListProxy] in
-            await _ = spaceRoomListProxy.paginationStatePublisher.values.first { $0 == .idle(endReached: true) }
-        }
-        try? await runner.run(timeout: .seconds(10))
+        await spaceRoomListProxy.resetAndWaitForFullReload(timeout: .seconds(10))
         
         actionsSubject.send(.dismiss)
     }
