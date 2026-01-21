@@ -61,11 +61,16 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                                                                isKnockingFeatureEnabled: appSettings.knockingEnabled,
                                                                canSelectSpace: canSelectSpace,
                                                                aliasLocalPart: roomAliasNameFromRoomDisplayName(roomName: ""),
-                                                               topLevelSpaces: canSelectSpace ? userSession.clientProxy.spaceService.topLevelSpacesPublisher.value : [],
                                                                bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
         setupBindings()
+        
+        if canSelectSpace {
+            Task {
+                state.editableSpaces = await userSession.clientProxy.spaceService.editableSpaces()
+            }
+        }
     }
     
     // MARK: - Public
@@ -195,15 +200,6 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 }
             }
             .store(in: &cancellables)
-        
-        if state.canSelectSpace {
-            userSession
-                .clientProxy
-                .spaceService
-                .topLevelSpacesPublisher
-                .weakAssign(to: \.state.topLevelSpaces, on: self)
-                .store(in: &cancellables)
-        }
     }
     
     private func createRoom() async {
@@ -277,13 +273,19 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
             
             var spaceRoomListProxy: SpaceRoomListProxyProtocol?
             if state.isSpace {
-                switch await userSession.clientProxy.spaceService.spaceRoomList(spaceID: roomProxy.id) {
+                switch await userSession.clientProxy.spaceService.spaceRoomList(spaceID: roomID) {
                 case .success(let value):
                     spaceRoomListProxy = value
                 case .failure:
-                    MXLog.error("Failed to get space room list for newly created space with id: \(roomProxy.id)")
+                    MXLog.error("Failed to get space room list for newly created space with id: \(roomID)")
                     userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
                 }
+            }
+            
+            if let selectedSpace = state.bindings.selectedSpace,
+               case .failure = await userSession.clientProxy.spaceService.addChild(roomID, to: selectedSpace.id) {
+                MXLog.error("Failed to add the created room with id: \(roomID) to the space with id: \(selectedSpace.id)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
             }
             
             actionsSubject.send(.createdRoom(roomProxy, spaceRoomListProxy))

@@ -77,6 +77,10 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
+    func editableSpaces() async -> [SpaceServiceRoomProtocol] {
+        await spaceService.editableSpaces().map(SpaceServiceRoom.init)
+    }
+
     func addChild(_ childID: String, to spaceID: String) async -> Result<Void, SpaceServiceProxyError> {
         do {
             return try await .success(spaceService.addChildToSpace(childId: childID, spaceId: spaceID))
@@ -94,7 +98,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-    
+        
     // MARK: - Private
     
     private func handleSpaceListUpdates(_ updates: [SpaceListUpdate]) {

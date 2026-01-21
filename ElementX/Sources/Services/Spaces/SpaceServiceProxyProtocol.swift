@@ -52,6 +52,8 @@ protocol SpaceServiceProxyProtocol {
     func leaveSpace(spaceID: String) async -> Result<LeaveSpaceHandleProxy, SpaceServiceProxyError>
     /// Returns all the parent spaces of a child that user has joined.
     func joinedParents(childID: String) async -> Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>
+    /// Returns all the parent spaces that can be edited by the user
+    func editableSpaces() async -> [SpaceServiceRoomProtocol]
     
     /// Adds a room (or space) as a child of another space.
     func addChild(_ childID: String, to spaceID: String) async -> Result<Void, SpaceServiceProxyError>

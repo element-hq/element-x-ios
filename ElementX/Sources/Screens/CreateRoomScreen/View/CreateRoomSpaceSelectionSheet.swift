@@ -26,12 +26,16 @@ struct CreateRoomSpaceSelectionSheet: View {
                 Section {
                     ListRow(label: .default(title: L10n.screenCreateRoomSpaceSelectionNoSpaceTitle,
                                             description: L10n.screenCreateRoomSpaceSelectionNoSpaceDescription,
-                                            icon: \.home),
+                                            icon: CompoundIcon(\.homeSolid, size: .small, relativeTo: .body)
+                                                .foregroundColor(.compound.iconPrimary)
+                                                .background(.compound.bgSubtleSecondary)
+                                                .scaledFrame(size: 32)
+                                                .clipAvatar(isSpace: true, size: 32)),
                             kind: .selection(isSelected: context.selectedSpace == nil) {
                                 context.selectedSpace = nil
                                 dismiss()
                             })
-                    ForEach(context.viewState.topLevelSpaces, id: \.id) { space in
+                    ForEach(context.viewState.editableSpaces, id: \.id) { space in
                         ListRow(label: .avatar(title: space.name,
                                                description: space.canonicalAlias,
                                                icon: RoomAvatarImage(avatar: space.avatar,
@@ -66,7 +70,7 @@ struct CreateRoomSpaceSelectionSheet: View {
 struct CreateRoomSpaceSelectionSheet_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let clientProxy = ClientProxyMock(.init(userID: "@userid:example.com"))
-        clientProxy.spaceService = SpaceServiceProxyMock(.init(topLevelSpaces: .mockJoinedSpaces2))
+        clientProxy.spaceService = SpaceServiceProxyMock(.init(editableSpaces: .mockJoinedSpaces2))
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         return CreateRoomScreenViewModel(isSpace: false,
@@ -80,5 +84,6 @@ struct CreateRoomSpaceSelectionSheet_Previews: PreviewProvider, TestablePreview 
     
     static var previews: some View {
         CreateRoomSpaceSelectionSheet(context: viewModel.context)
+            .snapshotPreferences(expect: viewModel.context.$viewState.map { $0.editableSpaces.count > 0 })
     }
 }

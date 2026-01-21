@@ -236,8 +236,11 @@ struct CreateRoomScreen: View {
             } else {
                 ListRow(label: .default(title: L10n.screenCreateRoomSpaceSelectionNoSpaceTitle,
                                         description: L10n.screenCreateRoomSpaceSelectionNoSpaceDescription,
-                                        icon: \.home,
-                                        iconAlignment: .top),
+                                        icon: CompoundIcon(\.homeSolid, size: .small, relativeTo: .body)
+                                            .foregroundColor(.compound.iconPrimary)
+                                            .background(.compound.bgSubtleSecondary)
+                                            .scaledFrame(size: 32)
+                                            .clipAvatar(isSpace: true, size: 32)),
                         kind: .navigationLink {
                             context.showSpaceSelectionSheet = true
                         })
@@ -446,6 +449,56 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         viewModel.context.send(viewAction: .updateAliasLocalPart("existing"))
         return viewModel
     }()
+    
+    static let selectedSpaceViewModel = {
+        AppSettings.resetAllSettings()
+        let mockedSpace = SpaceServiceRoomMock(.init(name: "Awesome Space", isSpace: true, joinRule: .private))
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        return CreateRoomScreenViewModel(isSpace: false,
+                                         spaceSelectionMode: .selected(mockedSpace),
+                                         shouldShowCancelButton: false,
+                                         userSession: userSession,
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
+    }()
+    
+    static let selectedSpaceWithListViewModel = {
+        let clientProxy = ClientProxyMock(.init(userID: "@userid:example.com"))
+        let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces2
+        clientProxy.spaceService = SpaceServiceProxyMock(.init(editableSpaces: spaces))
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        
+        let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  spaceSelectionMode: .list,
+                                                  shouldShowCancelButton: false,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: ServiceLocator.shared.settings)
+        
+        viewModel.context.selectedSpace = spaces[0]
+        return viewModel
+    }()
+    
+    static let selectedSpaceWithAskToJoinViewModel = {
+        AppSettings.resetAllSettings()
+        let appSettings = AppSettings()
+        appSettings.knockingEnabled = true
+        
+        let mockedSpace = SpaceServiceRoomMock(.init(name: "Awesome Space", isSpace: true, joinRule: .private))
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  spaceSelectionMode: .selected(mockedSpace),
+                                                  shouldShowCancelButton: false,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: appSettings)
+        
+        viewModel.context.selectedAccessType = .askToJoinWithSpaceMembers
+        return viewModel
+    }()
 
     static var previews: some View {
         NavigationStack {
@@ -491,5 +544,20 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         }
         .snapshotPreferences(expect: publicRoomExistingAliasViewModel.context.$viewState.map { !$0.aliasErrors.isEmpty })
         .previewDisplayName("Create Public Room, existing alias")
+        
+        NavigationStack {
+            CreateRoomScreen(context: selectedSpaceViewModel.context)
+        }
+        .previewDisplayName("Create Room with already selected Space")
+        
+        NavigationStack {
+            CreateRoomScreen(context: selectedSpaceWithListViewModel.context)
+        }
+        .previewDisplayName("Create Room with a selected Space from the list")
+        
+        NavigationStack {
+            CreateRoomScreen(context: selectedSpaceWithAskToJoinViewModel.context)
+        }
+        .previewDisplayName("Create Knockable Room with already selected Space")
     }
 }

@@ -16,6 +16,7 @@ extension SpaceServiceProxyMock {
         var topLevelSpaces: [SpaceServiceRoomProtocol] = []
         var spaceFilters: [SpaceServiceFilter] = []
         var joinedParentSpaces: [SpaceServiceRoomProtocol] = []
+        var editableSpaces: [SpaceServiceRoomProtocol] = []
         var spaceRoomLists: [String: SpaceRoomListProxyMock] = [:]
         var leaveSpaceRooms: [LeaveSpaceRoom] = []
     }
@@ -27,6 +28,7 @@ extension SpaceServiceProxyMock {
         spaceFilterPublisher = .init(configuration.spaceFilters)
         
         joinedParentsChildIDReturnValue = .success(configuration.joinedParentSpaces)
+        editableSpacesReturnValue = configuration.editableSpaces
         spaceRoomListSpaceIDClosure = { spaceID in
             if let spaceRoomList = configuration.spaceRoomLists[spaceID] {
                 .success(spaceRoomList)
