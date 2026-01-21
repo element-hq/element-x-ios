@@ -16772,6 +16772,41 @@ class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
         paginateCallsCount += 1
         await paginateClosure?()
     }
+    //MARK: - reset
+
+    var resetUnderlyingCallsCount = 0
+    var resetCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() async -> Void)?
+
+    func reset() async {
+        resetCallsCount += 1
+        await resetClosure?()
+    }
 }
 class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
     var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> {

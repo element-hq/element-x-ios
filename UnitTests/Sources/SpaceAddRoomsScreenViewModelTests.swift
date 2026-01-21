@@ -13,6 +13,8 @@ import XCTest
 
 @MainActor
 class SpaceAddRoomsScreenViewModelTests: XCTestCase {
+    var spaceRoomListProxy: SpaceRoomListProxyMock!
+    
     var viewModel: SpaceAddRoomsScreenViewModelProtocol!
     var context: SpaceAddRoomsScreenViewModelType.Context { viewModel.context }
     
@@ -41,11 +43,13 @@ class SpaceAddRoomsScreenViewModelTests: XCTestCase {
         context.send(viewAction: .save)
         
         try await deferredAction.fulfill()
+        
+        XCTAssertTrue(spaceRoomListProxy.resetCalled, "The room list should be reset to pick up the changes.")
     }
     
     func setupViewModel() {
         let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-        let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true))))
+        spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true))))
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentlyVisitedRoomsFilterReturnValue = .init(repeating: JoinedRoomProxyMock(.init()), count: 5)

@@ -89,12 +89,14 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                             state.canEditBaseInfo = false
                             state.canEditRolesAndPermissions = false
                             state.canEditSecurityAndPrivacy = false
+                            state.canEditChildren = false
                             return
                         }
                         state.canEditBaseInfo = powerLevels.canOwnUserEditBaseInfo()
                         state.canEditRolesAndPermissions = powerLevels.canOwnUserEditRolesAndPermissions()
                         state.canEditSecurityAndPrivacy = powerLevels.canOwnUserEditSecurityAndPrivacy(isSpace: roomInfo.isSpace,
                                                                                                        joinRule: roomInfo.joinRule)
+                        state.canEditChildren = powerLevels.canOwnUser(sendStateEvent: .spaceChild)
                     }
                     .store(in: &cancellables)
             }
@@ -134,6 +136,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             actionsSubject.send(.displayMembers(roomProxy: roomProxy))
         case .spaceSettings(let roomProxy):
             actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
+        case .addExistingRooms:
+            actionsSubject.send(.addExistingChildren)
         case .manageChildren:
             withAnimation(.easeOut(duration: 0.25).disabledDuringTests()) {
                 state.editMode = .transient
@@ -195,6 +199,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                 return
             }
         }
+        
+        await spaceRoomListProxy.resetAndWaitForFullReload(timeout: .seconds(10))
         
         process(viewAction: .finishManagingChildren)
     }

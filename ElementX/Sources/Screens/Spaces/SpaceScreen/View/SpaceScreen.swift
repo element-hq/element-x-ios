@@ -27,17 +27,11 @@ struct SpaceScreen: View {
         }
         .environment(\.editMode, .constant(context.viewState.editMode))
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .toolbarRole(isEditModeActive ? .automatic : RoomHeaderView.toolbarRole)
+        .toolbarRole(RoomHeaderView.toolbarRole)
         .navigationTitle(context.viewState.space.name)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(isEditModeActive)
-        .toolbar {
-            if isEditModeActive {
-                editModeToolbar
-            } else {
-                toolbar
-            }
-        }
+        .toolbar { toolbar }
         .sheet(isPresented: $context.isPresentingRemoveChildrenConfirmation) {
             SpaceRemoveChildrenConfirmationView(spaceName: context.viewState.space.name) {
                 context.send(viewAction: .confirmRemoveSelectedChildren)
@@ -67,6 +61,14 @@ struct SpaceScreen: View {
     
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
+        if isEditModeActive {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(L10n.actionCancel, role: .cancel) {
+                    context.send(viewAction: .finishManagingChildren)
+                }
+            }
+        }
+        
         // Use the same trick as the RoomScreen for a leading title view that
         // also hides the navigation title.
         ToolbarItem(placement: .principal) {
@@ -80,60 +82,60 @@ struct SpaceScreen: View {
             }
         }
         
-        // This should really use a ToolbarItemGroup(placement: .secondaryAction), however it
-        // was crashing on iOS 26.0 when tapping the ShareLink as the popover presentation
-        // controller attempts to anchor itself to the button that is no longer visible.
-        ToolbarItem(placement: .primaryAction) {
-            Menu {
-                Section {
-                    if let roomProxy = context.viewState.roomProxy {
-                        Button { context.send(viewAction: .displayMembers(roomProxy: roomProxy)) } label: {
-                            Label(L10n.screenSpaceMenuActionMembers, icon: \.user)
-                        }
-                    }
-                    if let permalink = context.viewState.permalink {
-                        ShareLink(item: permalink) {
-                            Label(L10n.actionShare, icon: \.shareIos)
+        if isEditModeActive {
+            ToolbarItem(placement: .primaryAction) {
+                ToolbarButton(role: .destructive(title: L10n.actionRemove)) {
+                    context.send(viewAction: .removeSelectedChildren)
+                }
+                .disabled(context.viewState.editModeSelectedIDs.isEmpty)
+            }
+        } else {
+            // This should really use a ToolbarItemGroup(placement: .secondaryAction), however it
+            // was crashing on iOS 26.0 when tapping the ShareLink as the popover presentation
+            // controller attempts to anchor itself to the button that is no longer visible.
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    if true {
+                        Section {
+                            Button { context.send(viewAction: .addExistingRooms) } label: {
+                                Label(L10n.actionAddExistingRooms, icon: \.room)
+                            }
+                            Button { context.send(viewAction: .manageChildren) } label: {
+                                Label(L10n.actionManageRooms, icon: \.edit)
+                            }
                         }
                     }
                     
-                    if context.viewState.isSpaceManagementEnabled,
-                       let roomProxy = context.viewState.roomProxy {
-                        Button { context.send(viewAction: .spaceSettings(roomProxy: roomProxy)) } label: {
-                            Label(L10n.commonSettings, icon: \.settings)
+                    Section {
+                        if let roomProxy = context.viewState.roomProxy {
+                            Button { context.send(viewAction: .displayMembers(roomProxy: roomProxy)) } label: {
+                                Label(L10n.screenSpaceMenuActionMembers, icon: \.user)
+                            }
+                        }
+                        if let permalink = context.viewState.permalink {
+                            ShareLink(item: permalink) {
+                                Label(L10n.actionShare, icon: \.shareIos)
+                            }
+                        }
+                        
+                        if context.viewState.isSpaceManagementEnabled,
+                           let roomProxy = context.viewState.roomProxy {
+                            Button { context.send(viewAction: .spaceSettings(roomProxy: roomProxy)) } label: {
+                                Label(L10n.commonSettings, icon: \.settings)
+                            }
                         }
                     }
-                }
-                
-                Section {
-                    Button(role: .destructive) { context.send(viewAction: .leaveSpace) } label: {
-                        Label(L10n.actionLeaveSpace, icon: \.leave)
+                    
+                    Section {
+                        Button(role: .destructive) { context.send(viewAction: .leaveSpace) } label: {
+                            Label(L10n.actionLeaveSpace, icon: \.leave)
+                        }
                     }
+                } label: {
+                    // Use an SF Symbol to match what ToolbarItemGroup(placement: .secondaryAction) would give us.
+                    Image(systemSymbol: .ellipsis)
                 }
-            } label: {
-                // Use an SF Symbol to match what ToolbarItemGroup(placement: .secondaryAction) would give us.
-                Image(systemSymbol: .ellipsis)
             }
-        }
-    }
-    
-    @ToolbarContentBuilder
-    var editModeToolbar: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCancel, role: .cancel) {
-                context.send(viewAction: .finishManagingChildren)
-            }
-        }
-        
-        ToolbarItem(placement: .principal) {
-            Text(L10n.commonSelectedCount(context.viewState.editModeSelectedIDs.count))
-        }
-        
-        ToolbarItem(placement: .primaryAction) {
-            ToolbarButton(role: .destructive(title: L10n.actionRemove)) {
-                context.send(viewAction: .removeSelectedChildren)
-            }
-            .disabled(context.viewState.editModeSelectedIDs.isEmpty)
         }
     }
 }
