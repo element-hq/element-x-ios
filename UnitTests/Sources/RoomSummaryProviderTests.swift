@@ -82,6 +82,25 @@ final class RoomSummaryProviderTests: XCTestCase {
                        .all(filters: [.all(filters: [.category(expect: .group), .joined])] + baseFilters + [.nonLowPriority]))
     }
     
+    func testRoomIdentifierFilters() async {
+        setupProvider()
+        await Task.yield()
+        
+        // Then it should have the default Rust filters enabled.
+        XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 1)
+        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
+                       .all(filters: baseFilters))
+        
+        // When setting one our user filters.
+        roomSummaryProvider.setFilter(.rooms(roomsIDs: ["SomeRoom"], filters: [.favourites]))
+        await Task.yield()
+        
+        // Then that filter should be added to the default Rust filters.
+        XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 2)
+        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
+                       .all(filters: [.all(filters: [.favourite, .joined])] + baseFilters + [.identifiers(identifiers: ["SomeRoom"])]))
+    }
+    
     // MARK: - Helpers
     
     private func setupProvider(isLowPriorityFilterEnabled: Bool = false) {

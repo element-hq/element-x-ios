@@ -52,6 +52,10 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("Spaces") {
+                Toggle(isOn: $context.spaceFiltersEnabled) {
+                    Text("Space filters")
+                }
+                
                 Toggle(isOn: $context.spaceSettingsEnabled) {
                     Text("Space settings")
                 }

@@ -108,6 +108,7 @@ enum A11yIdentifiers {
         let userAvatar = "home_screen-user_avatar"
         let recoveryKeyConfirmationBannerContinue = "home_screen-recovery_key_confirmation_continue"
         let startChat = "home_screen-start_chat"
+        let spaceFilters = "home_screen-space_filters"
         
         let roomNamePrefix = "home_screen-room_name"
         func roomName(_ name: String) -> String {

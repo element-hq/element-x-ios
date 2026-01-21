@@ -40,6 +40,8 @@ enum RoomSummaryProviderFilter: Equatable {
     case search(query: String)
     /// Includes only what satisfies the filters used
     case all(filters: Set<RoomListFilter>)
+    /// Include only rooms from the given that satisfy the given filters
+    case rooms(roomsIDs: Set<String>, filters: Set<RoomListFilter>)
 }
 
 // sourcery: AutoMockable

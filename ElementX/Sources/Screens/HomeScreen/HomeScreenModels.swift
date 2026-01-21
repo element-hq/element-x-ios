@@ -43,6 +43,7 @@ enum HomeScreenViewAction {
     case dismissNewSoundBanner
     case updateVisibleItemRange(Range<Int>)
     case globalSearch
+    case spaceFilters
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
     case markRoomAsFavourite(roomIdentifier: String, isFavourite: Bool)
@@ -109,6 +110,10 @@ struct HomeScreenViewState: BindableState {
     
     var reportRoomEnabled = false
     
+    var spaceFiltersEnabled = false
+    
+    var selectedSpaceFilter: SpaceServiceFilter?
+    
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
             return placeholderRooms
@@ -150,6 +155,8 @@ struct HomeScreenViewStateBindings {
     
     var alertInfo: AlertInfo<UUID>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
+    
+    var spaceFiltersViewModel: ChatsSpaceFiltersScreenViewModel?
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {

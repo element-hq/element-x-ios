@@ -51,7 +51,7 @@ extension RoomSummaryProviderMock {
                 }
                 
                 roomListSubject.send(rooms)
-            case let .all(filters):
+            case let .rooms(_, filters), let .all(filters):
                 var rooms = initialRooms
                 
                 if filters.count > 1 {

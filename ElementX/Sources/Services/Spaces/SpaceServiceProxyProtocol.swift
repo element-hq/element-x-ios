@@ -7,15 +7,44 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 enum SpaceServiceProxyError: Error {
     case sdkError(Error)
     case missingSpace
 }
 
+struct SpaceServiceFilter: Identifiable, Equatable {
+    let room: SpaceServiceRoomProtocol
+    let level: UInt
+    let descendants: Set<String>
+    
+    init(room: SpaceServiceRoomProtocol, level: UInt, descendants: Set<String>) {
+        self.room = room
+        self.level = level
+        self.descendants = descendants
+    }
+    
+    init(filter: SpaceFilter) {
+        room = SpaceServiceRoom(spaceRoom: filter.spaceRoom)
+        level = UInt(max(filter.level, 0))
+        descendants = Set(filter.descendants)
+    }
+    
+    // Same rooms might appear on multiple levels
+    var id: String {
+        room.id + "\(level)"
+    }
+    
+    static func == (lhs: SpaceServiceFilter, rhs: SpaceServiceFilter) -> Bool {
+        lhs.room.id == rhs.room.id
+    }
+}
+
 // sourcery: AutoMockable
 protocol SpaceServiceProxyProtocol {
     var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> { get }
+    var spaceFilterPublisher: CurrentValuePublisher<[SpaceServiceFilter], Never> { get }
     
     func spaceRoomList(spaceID: String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>
     /// Returns a joined space given its identifier

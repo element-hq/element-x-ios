@@ -23,7 +23,7 @@ class ChatsTabFlowCoordinatorStateMachine {
                 
         /// Showing the home screen. The `roomListSelectedRoomID` represents the timeline shown on the detail panel (if any)
         case roomList(detailState: DetailState?)
-                
+                        
         /// Showing the feedback screen.
         case feedbackScreen(detailState: DetailState?)
         
@@ -52,7 +52,7 @@ class ChatsTabFlowCoordinatorStateMachine {
         
         case declineAndBlockUserScreen(detailState: DetailState?)
         
-        /// The selected room ID from the state if available.
+        /// The state of the currently selected room
         var detailState: DetailState? {
             switch self {
             case .initial, .userProfileScreen, .shareExtensionRoomList:
@@ -157,7 +157,7 @@ class ChatsTabFlowCoordinatorStateMachine {
             case (.roomList(let detailState), .deselectRoom):
                 // Ignore the flow's dismissal if it has already been replaced with a space.
                 return detailState == .space ? nil : .roomList(detailState: nil)
-            
+                                
             case (.roomList, .startSpaceFlow):
                 return .roomList(detailState: .space)
             case (.roomList, .finishedSpaceFlow):
