@@ -85,7 +85,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         do {
             return try await .success(spaceService.addChildToSpace(childId: childID, spaceId: spaceID))
         } catch {
-            MXLog.error("Failed to add child \(childID) to space \(spaceID)")
+            MXLog.error("Failed to add child \(childID) to space \(spaceID): \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -94,7 +94,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         do {
             return try await .success(spaceService.removeChildFromSpace(childId: childID, spaceId: spaceID))
         } catch {
-            MXLog.error("Failed to remove child \(childID) to space \(spaceID)")
+            MXLog.error("Failed to remove child \(childID) to space \(spaceID): \(error)")
             return .failure(.sdkError(error))
         }
     }
