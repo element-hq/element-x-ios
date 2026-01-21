@@ -27,6 +27,7 @@ extension PreviewTests {
 
     {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" %}
     func test{{ type.name|replace:"_Previews", "" }}() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in {{ type.name }}._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
