@@ -587,6 +587,7 @@ class MockScreen: Identifiable {
             appSettings.hasRunNotificationPermissionsOnboarding = true
             appSettings.analyticsConsentState = .optedOut
             appSettings.hasSeenSpacesAnnouncement = true
+            appSettings.spaceSettingsEnabled = true
             
             let roomSummaries: [RoomSummary] = if id == .userSessionSpacesFlow {
                 [[RoomSummary].mockSpaceInvites[0]] + .mockRooms
@@ -597,7 +598,8 @@ class MockScreen: Identifiable {
                                                     deviceID: "MOCKCLIENT",
                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
                                                     spaceServiceConfiguration: .init(topLevelSpaces: .mockSpaceList.filter(\.isSpace) + .mockSingleRoom),
-                                                    roomPreviews: [SpaceServiceRoomProtocol].mockSpaceList.map(RoomPreviewProxyMock.init)))
+                                                    roomPreviews: [SpaceServiceRoomProtocol].mockSpaceList.map(RoomPreviewProxyMock.init),
+                                                    defaultRoomMembers: .allMembersAsAdmin))
             clientProxy.recentlyVisitedRoomsFilterReturnValue = .mockRooms
             
             // The tab bar remains hidden for the non-spaces tests as we don't supply any mock spaces.
