@@ -115,6 +115,7 @@ struct SpaceAddRoomsScreen: View {
             ToolbarButton(role: .cancel) {
                 context.send(viewAction: .cancel)
             }
+            .accessibilityIdentifier(A11yIdentifiers.spaceAddRoomsScreen.cancel)
         }
         
         ToolbarItem(placement: .confirmationAction) {
@@ -186,11 +187,7 @@ struct SpaceAddRoomsScreen_Previews: PreviewProvider, TestablePreview {
         let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true))))
         
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.recentlyVisitedRoomsFilterReturnValue = [
-            JoinedRoomProxyMock(.init(id: "1", name: "Room Name", canonicalAlias: "#room-name:example.com")),
-            JoinedRoomProxyMock(.init(id: "2", name: "Room Name", canonicalAlias: "#room-name:example.com")),
-            JoinedRoomProxyMock(.init(id: "3", name: "Room Name", canonicalAlias: "#room-name:example.com"))
-        ]
+        clientProxy.recentlyVisitedRoomsFilterReturnValue = .mockRooms
         
         let viewModel = SpaceAddRoomsScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
                                                      userSession: UserSessionMock(.init(clientProxy: clientProxy)),

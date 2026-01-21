@@ -203,3 +203,14 @@ private extension RoomHero {
                   avatarUrl: memberProxy.avatarURL?.absoluteString)
     }
 }
+
+@MainActor
+extension Array where Element == JoinedRoomProxyProtocol {
+    static var mockRooms: [JoinedRoomProxyProtocol] {
+        [
+            JoinedRoomProxyMock(.init(id: "1", name: "Room Name", canonicalAlias: "#room-name:example.com")),
+            JoinedRoomProxyMock(.init(id: "2", name: "Room Name", canonicalAlias: "#room-name:example.com")),
+            JoinedRoomProxyMock(.init(id: "3", name: "Room Name", canonicalAlias: "#room-name:example.com"))
+        ]
+    }
+}

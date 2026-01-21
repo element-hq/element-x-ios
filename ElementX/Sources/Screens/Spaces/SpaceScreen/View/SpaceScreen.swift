@@ -100,6 +100,8 @@ struct SpaceScreen: View {
                             Button { context.send(viewAction: .addExistingRooms) } label: {
                                 Label(L10n.actionAddExistingRooms, icon: \.room)
                             }
+                            .accessibilityIdentifier(A11yIdentifiers.spaceScreen.addExistingRooms)
+                            
                             Button { context.send(viewAction: .manageChildren) } label: {
                                 Label(L10n.actionManageRooms, icon: \.edit)
                             }
@@ -135,6 +137,7 @@ struct SpaceScreen: View {
                     // Use an SF Symbol to match what ToolbarItemGroup(placement: .secondaryAction) would give us.
                     Image(systemSymbol: .ellipsis)
                 }
+                .accessibilityIdentifier(A11yIdentifiers.spaceScreen.moreMenu)
             }
         }
     }
