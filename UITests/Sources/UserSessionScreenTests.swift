@@ -27,6 +27,8 @@ class UserSessionScreenTests: XCTestCase {
         static let subspaceScreen = 7
         static let subspaceRoomScreen = 8
         static let spaceJoinRoomScreen = 9
+        static let spaceAddRoomsScreen = 10
+        static let spaceMembersListScreen = 11
     }
     
     func testUserSessionFlows() async throws {
@@ -37,7 +39,7 @@ class UserSessionScreenTests: XCTestCase {
         try await app.assertScreenshot(step: Step.homeScreen)
 
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
-        XCTAssert(app.staticTexts[firstRoomName].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.roomScreen)
 
@@ -48,7 +50,7 @@ class UserSessionScreenTests: XCTestCase {
     func testUserSessionReply() async throws {
         let app = Application.launch(.userSessionScreenReply, disableTimelineAccessibility: false)
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
-        XCTAssert(app.staticTexts[firstRoomName].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
 
         let cell = app.cells.element(boundBy: 1) // Skip the typing indicator cell
@@ -61,7 +63,7 @@ class UserSessionScreenTests: XCTestCase {
         let app = Application.launch(.userSessionScreen)
 
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
-        XCTAssert(app.staticTexts[firstRoomName].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
 
         app.buttons[A11yIdentifiers.roomScreen.joinCall].tap()
         
@@ -94,8 +96,26 @@ class UserSessionScreenTests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.subspaceScreen)
         
+        app.buttons[A11yIdentifiers.spaceScreen.moreMenu].tap()
+        app.buttons[A11yIdentifiers.spaceScreen.addExistingRooms].tap()
+        XCTAssert(app.buttons[A11yIdentifiers.spaceAddRoomsScreen.cancel].waitForExistence(timeout: 5.0))
+        try await Task.sleep(for: .seconds(1))
+        try await app.assertScreenshot(step: Step.spaceAddRoomsScreen)
+        
+        app.buttons[A11yIdentifiers.spaceAddRoomsScreen.cancel].tap()
+        XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
+        
+        app.buttons[A11yIdentifiers.spaceScreen.moreMenu].tap()
+        app.buttons[A11yIdentifiers.spaceScreen.viewMembers].tap()
+        XCTAssert(app.buttons[A11yIdentifiers.roomMembersListScreen.invite].waitForExistence(timeout: 5.0))
+        try await Task.sleep(for: .seconds(1))
+        try await app.assertScreenshot(step: Step.spaceMembersListScreen)
+        
+        app.navigationBars.buttons[joinedSubspaceName].firstMatch.tap(.center)
+        XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
+        
         app.buttons[A11yIdentifiers.spacesScreen.spaceRoomName(joinedSubspaceRoomName)].tap()
-        XCTAssert(app.staticTexts[joinedSubspaceRoomName].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons[joinedSubspaceRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.subspaceRoomScreen)
         
@@ -126,7 +146,7 @@ class UserSessionScreenTests: XCTestCase {
         
         // Tap join on the join room screen.
         app.buttons[A11yIdentifiers.joinRoomScreen.join].tap()
-        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].waitForExistence(timeout: 5.0)) // The space screen reuses the room screen header
+        XCTAssert(app.buttons[A11yIdentifiers.roomScreen.name].waitForExistence(timeout: 5.0)) // The space screen reuses the room screen header
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.spaceScreen)
         
@@ -144,7 +164,7 @@ class UserSessionScreenTests: XCTestCase {
         app.buttons.matching(NSPredicate(format: "identifier == %@ && label == %@",
                                          A11yIdentifiers.homeScreen.roomName(spaceInviteName),
                                          "Accept")).firstMatch.tap()
-        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].waitForExistence(timeout: 5.0)) // The space screen reuses the room screen header
+        XCTAssert(app.buttons[A11yIdentifiers.roomScreen.name].waitForExistence(timeout: 5.0)) // The space screen reuses the room screen header
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.spaceScreen)
     }
