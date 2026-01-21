@@ -18,6 +18,7 @@ struct ClientProxyMockConfiguration {
     var roomSummaryProvider: RoomSummaryProviderProtocol = RoomSummaryProviderMock(.init())
     var spaceServiceConfiguration: SpaceServiceProxyMock.Configuration = .init()
     var roomPreviews: [RoomPreviewProxyProtocol]?
+    var defaultRoomMembers: [RoomMemberProxyMock] = .allMembers
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
     var overrides = Overrides()
     
@@ -119,12 +120,12 @@ extension ClientProxyMock {
                     let roomProxy = await KnockedRoomProxyMock(.init(id: room.id, name: room.name))
                     return .knocked(roomProxy)
                 default:
-                    let roomProxy = await JoinedRoomProxyMock(.init(id: room.id, name: room.name, isSpace: room.isSpace))
+                    let roomProxy = await JoinedRoomProxyMock(.init(id: room.id, name: room.name, isSpace: room.isSpace, members: configuration.defaultRoomMembers))
                     roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                     return .joined(roomProxy)
                 }
             } else if let spaceServiceRoom = configuration.spaceServiceConfiguration.topLevelSpaces.first(where: { $0.id == identifier }) {
-                let roomProxy = await JoinedRoomProxyMock(.init(id: spaceServiceRoom.id, name: spaceServiceRoom.name, isSpace: spaceServiceRoom.isSpace))
+                let roomProxy = await JoinedRoomProxyMock(.init(id: spaceServiceRoom.id, name: spaceServiceRoom.name, isSpace: spaceServiceRoom.isSpace, members: configuration.defaultRoomMembers))
                 roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                 return .joined(roomProxy)
             } else {
