@@ -198,7 +198,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 handleSelectRoomTransition(roomID: roomID, via: via, entryPoint: entryPoint, detailState: detailState, animated: animated)
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
-                            
+            
             case(.roomList, .startSpaceFlow, .roomList):
                 guard let spaceRoomListProxy = userInfo?.spaceRoomListProxy else { fatalError("A space room list proxy is required.") }
                 startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy, animated: animated)
@@ -684,10 +684,10 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         let hostingController = UIHostingController(rootView: coordinator.toPresentable())
         hostingController.view.backgroundColor = .clear
         flowParameters.windowManager.globalSearchWindow.rootViewController = hostingController
-
+        
         flowParameters.windowManager.showGlobalSearch()
     }
-        
+    
     private func dismissGlobalSearch() {
         flowParameters.windowManager.globalSearchWindow.rootViewController = nil
         flowParameters.windowManager.hideGlobalSearch()

@@ -117,7 +117,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         appSettings.$spaceFiltersEnabled
-            .sink { [weak self] state in self?.state.spaceFiltersEnabled = state }
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.spaceFiltersEnabled, on: self)
             .store(in: &cancellables)
         
         userSession.clientProxy.hideInviteAvatarsPublisher

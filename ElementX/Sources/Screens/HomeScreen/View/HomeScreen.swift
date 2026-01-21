@@ -157,6 +157,7 @@ struct HomeScreen: View {
                 CompoundIcon(\.filter)
             }
             .accessibilityLabel(L10n.screenRoomlistYourSpaces)
+            .accessibilityAddTraits(selected ? .isSelected : [])
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.spaceFilters)
         }
     }

@@ -136,36 +136,30 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         for update in updates {
             switch update {
             case .append(let spaceFilters):
-                filters.append(contentsOf: spaceFilters.map { buildSpaceFilter(from: $0) })
+                filters.append(contentsOf: spaceFilters.map(SpaceServiceFilter.init))
             case .clear:
                 filters.removeAll()
             case .pushFront(let filter):
-                filters.insert(buildSpaceFilter(from: filter), at: 0)
+                filters.insert(SpaceServiceFilter(filter: filter), at: 0)
             case .pushBack(let filter):
-                filters.append(buildSpaceFilter(from: filter))
+                filters.append(SpaceServiceFilter(filter: filter))
             case .popFront:
                 filters.removeFirst()
             case .popBack:
                 filters.removeLast()
             case .insert(let index, let filter):
-                filters.insert(buildSpaceFilter(from: filter), at: Int(index))
+                filters.insert(SpaceServiceFilter(filter: filter), at: Int(index))
             case .set(let index, let filter):
-                filters[Int(index)] = buildSpaceFilter(from: filter)
+                filters[Int(index)] = SpaceServiceFilter(filter: filter)
             case .remove(let index):
                 filters.remove(at: Int(index))
             case .truncate(let length):
                 filters.removeSubrange(Int(length)..<filters.count)
             case .reset(let spaceFilters):
-                filters = spaceFilters.map { buildSpaceFilter(from: $0) }
+                filters = spaceFilters.map(SpaceServiceFilter.init)
             }
         }
         
         spaceFilterSubject.send(filters)
-    }
-    
-    private func buildSpaceFilter(from filter: MatrixRustSDK.SpaceFilter) -> SpaceServiceFilter {
-        SpaceServiceFilter(room: SpaceServiceRoom(spaceRoom: filter.spaceRoom),
-                           level: UInt(max(filter.level, 0)),
-                           descendants: Set(filter.descendants))
     }
 }

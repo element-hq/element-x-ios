@@ -131,12 +131,14 @@ extension PreviewTests {
     }
 
     func testChatsSpaceFilterCell() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ChatsSpaceFilterCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
     func testChatsSpaceFiltersScreen() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ChatsSpaceFiltersScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }

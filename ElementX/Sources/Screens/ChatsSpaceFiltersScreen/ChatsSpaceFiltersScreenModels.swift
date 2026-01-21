@@ -19,7 +19,14 @@ struct ChatsSpaceFiltersScreenViewState: BindableState {
 
 struct ChatsSpaceFiltersScreenViewStateBindings { }
 
-enum ChatsSpaceFiltersScreenViewAction {
+enum ChatsSpaceFiltersScreenViewAction: CustomStringConvertible {
     case confirm(SpaceServiceFilter)
     case cancel
+    
+    var description: String {
+        switch self {
+        case .confirm: "Confirm"
+        case .cancel: "Cancel"
+        }
+    }
 }

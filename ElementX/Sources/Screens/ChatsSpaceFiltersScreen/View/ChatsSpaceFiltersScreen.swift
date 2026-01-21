@@ -46,9 +46,7 @@ struct ChatsSpaceFiltersScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     
     static var previews: some View {
-        NavigationStack {
-            ChatsSpaceFiltersScreen(context: viewModel.context)
-        }
+        ChatsSpaceFiltersScreen(context: viewModel.context)
     }
     
     static func makeViewModel() -> ChatsSpaceFiltersScreenViewModel {
