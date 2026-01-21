@@ -225,7 +225,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationSplitCoordinator.setSheetCoordinator(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissedCreateSpaceFlow, userInfo: spaceRoomListProxy)
+            self?.stateMachine.tryEvent(.dismissedCreateSpaceFlow)
         }
         
         flowCoordinator.start(animated: true)

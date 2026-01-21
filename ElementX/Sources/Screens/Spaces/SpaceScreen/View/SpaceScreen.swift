@@ -121,6 +121,11 @@ struct SpaceScreen: View {
                 Menu {
                     if context.viewState.canEditChildren {
                         Section {
+                            if context.viewState.canCreateRoom {
+                                Button { context.send(viewAction: .createChildRoom) } label: {
+                                    Label(L10n.actionCreateARoom, icon: \.plus)
+                                }
+                            }
                             Button { context.send(viewAction: .addExistingRooms) } label: {
                                 Label(L10n.actionAddExistingRooms, icon: \.room)
                             }
