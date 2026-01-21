@@ -61,7 +61,6 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                                                                isKnockingFeatureEnabled: appSettings.knockingEnabled,
                                                                canSelectSpace: canSelectSpace,
                                                                aliasLocalPart: roomAliasNameFromRoomDisplayName(roomName: ""),
-                                                               topLevelSpaces: canSelectSpace ? userSession.clientProxy.spaceService.topLevelSpacesPublisher.value : [],
                                                                bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
@@ -201,15 +200,6 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 }
             }
             .store(in: &cancellables)
-        
-        if state.canSelectSpace {
-            userSession
-                .clientProxy
-                .spaceService
-                .topLevelSpacesPublisher
-                .weakAssign(to: \.state.topLevelSpaces, on: self)
-                .store(in: &cancellables)
-        }
     }
     
     private func createRoom() async {
