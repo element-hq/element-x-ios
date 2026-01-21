@@ -111,6 +111,7 @@ extension [SpaceServiceRoomProtocol] {
                                        childrenCount: 1,
                                        joinedMembersCount: 500,
                                        canonicalAlias: "#the-foundation:matrix.org",
+                                       joinRule: .private,
                                        state: .joined)),
             SpaceServiceRoomMock(.init(id: "space2",
                                        name: "The Second Foundation",

@@ -31,7 +31,7 @@ struct CreateRoomScreenViewState: BindableState {
     let isKnockingFeatureEnabled: Bool
     let canSelectSpace: Bool
     var aliasLocalPart: String
-    var topLevelSpaces: [SpaceServiceRoomProtocol]
+    var editableSpaces: [SpaceServiceRoomProtocol] = []
     var bindings: CreateRoomScreenViewStateBindings
     var avatarMediaInfo: MediaInfo? {
         didSet {
