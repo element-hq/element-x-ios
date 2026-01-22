@@ -136,7 +136,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         context.$viewState
             .dropFirst()
             .map(\.roomAccessType)
-            .filter(\.isPrivate)
+            .filter(\.isVisibilityPrivate)
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -156,7 +156,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                     return
                 }
                 
-                guard !state.roomAccessType.isPrivate,
+                guard !state.roomAccessType.isVisibilityPrivate,
                       let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: aliasLocalPart,
                                                                      serverName: state.serverName) else {
                     // While is empty or private room we don't change or display the error
@@ -209,7 +209,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         showLoadingIndicator()
         
         // Better to double check the errors also when trying to create the room
-        if !state.roomAccessType.isPrivate {
+        if !state.roomAccessType.isVisibilityPrivate {
             guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: state.aliasLocalPart,
                                                                  serverName: state.serverName),
                 isRoomAliasFormatValid(alias: canonicalAlias) else {
@@ -261,7 +261,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                                                         isSpace: state.isSpace,
                                                         userIDs: [], // The invite users screen is shown next so we don't need to invite anyone right now.
                                                         avatarURL: avatarURL,
-                                                        aliasLocalPart: state.roomAccessType.isPrivate ? nil : state.aliasLocalPart) {
+                                                        aliasLocalPart: state.roomAccessType.isVisibilityPrivate ? nil : state.aliasLocalPart) {
         case .success(let roomID):
             guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
                 state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
