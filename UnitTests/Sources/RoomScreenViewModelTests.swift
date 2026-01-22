@@ -73,7 +73,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // setup the loaded pinned events injection in the timeline
         let pinnedTimelineMock = TimelineProxyMock()
         let pinnedTimelineItemProviderMock = TimelineItemProviderMock()
-        let providerUpdateSubject = PassthroughSubject<([TimelineItemProxy], PaginationState), Never>()
+        let providerUpdateSubject = PassthroughSubject<([TimelineItemProxy], TimelinePaginationState), Never>()
         pinnedTimelineItemProviderMock.underlyingUpdatePublisher = providerUpdateSubject.eraseToAnyPublisher()
         pinnedTimelineMock.timelineItemProvider = pinnedTimelineItemProviderMock
         pinnedTimelineItemProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init("1"))),
@@ -116,7 +116,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let pinnedTimelineMock = TimelineProxyMock()
         let pinnedTimelineItemProviderMock = TimelineItemProviderMock()
         pinnedTimelineMock.timelineItemProvider = pinnedTimelineItemProviderMock
-        pinnedTimelineItemProviderMock.underlyingUpdatePublisher = Empty<([TimelineItemProxy], PaginationState), Never>().eraseToAnyPublisher()
+        pinnedTimelineItemProviderMock.underlyingUpdatePublisher = Empty<([TimelineItemProxy], TimelinePaginationState), Never>().eraseToAnyPublisher()
         pinnedTimelineItemProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init("1"))),
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init("2"))),
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test3")), uniqueID: .init("3")))]
@@ -175,7 +175,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let pinnedTimelineMock = TimelineProxyMock()
         let pinnedTimelineItemProviderMock = TimelineItemProviderMock()
         pinnedTimelineMock.timelineItemProvider = pinnedTimelineItemProviderMock
-        pinnedTimelineItemProviderMock.underlyingUpdatePublisher = Empty<([TimelineItemProxy], PaginationState), Never>().eraseToAnyPublisher()
+        pinnedTimelineItemProviderMock.underlyingUpdatePublisher = Empty<([TimelineItemProxy], TimelinePaginationState), Never>().eraseToAnyPublisher()
         pinnedTimelineItemProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init("1"))),
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init("2"))),
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test3")), uniqueID: .init("3")))]

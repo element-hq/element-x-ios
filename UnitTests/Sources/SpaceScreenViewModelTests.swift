@@ -31,7 +31,7 @@ class SpaceScreenViewModelTests: XCTestCase {
     func testInitialState() {
         setupViewModel()
         
-        XCTAssertFalse(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .idle)
         XCTAssertTrue(context.viewState.rooms.isEmpty)
         XCTAssertFalse(spaceRoomListProxy.paginateCalled)
     }
@@ -41,7 +41,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         let response = mockSpaceRooms.prefix(3)
         setupViewModel(paginationResponses: [Array(response)])
         
-        XCTAssertFalse(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .idle)
         XCTAssertTrue(context.viewState.rooms.isEmpty)
         XCTAssertFalse(spaceRoomListProxy.paginateCalled)
         XCTAssertFalse(response.isEmpty, "There should be some test rooms.")
@@ -52,7 +52,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the screen should show a paginating indicator.
-        XCTAssertTrue(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .paginating)
         XCTAssertEqual(spaceRoomListProxy.paginateCallsCount, 1)
         
         // When waiting for the pagination to finish.
@@ -60,7 +60,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then no more pagination requests should be made the the space rooms should be populated.
-        XCTAssertFalse(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .endReached)
         XCTAssertEqual(spaceRoomListProxy.paginateCallsCount, 1)
         XCTAssertEqual(context.viewState.rooms.map(\.id), response.map(\.id))
     }
@@ -71,14 +71,14 @@ class SpaceScreenViewModelTests: XCTestCase {
         let response2 = mockSpaceRooms.suffix(mockSpaceRooms.count - 3)
         setupViewModel(paginationResponses: [Array(response1), Array(response2)])
         
-        XCTAssertFalse(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .idle)
         XCTAssertTrue(context.viewState.rooms.isEmpty)
         XCTAssertFalse(spaceRoomListProxy.paginateCalled)
         XCTAssertFalse(response1.isEmpty, "There should be some test rooms.")
         XCTAssertFalse(response2.isEmpty, "There should be more test rooms.")
         
         // When the pagination is triggered.
-        let deferredIsPaginating = deferFulfillment(context.observe(\.viewState.isPaginating), transitionValues: [true, false, true, false])
+        let deferredIsPaginating = deferFulfillment(context.observe(\.viewState.paginationState), transitionValues: [.paginating, .idle, .paginating, .endReached])
         let deferredState = deferFulfillment(spaceRoomListProxy.paginationStatePublisher, keyPath: \.self, transitionValues: [.loading,
                                                                                                                               .idle(endReached: false),
                                                                                                                               .loading,
@@ -89,7 +89,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         try await deferredIsPaginating.fulfill()
         try await deferredState.fulfill()
         
-        XCTAssertFalse(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .endReached)
         XCTAssertEqual(spaceRoomListProxy.paginateCallsCount, 2)
         XCTAssertEqual(context.viewState.rooms.map(\.id), mockSpaceRooms.map(\.id))
     }

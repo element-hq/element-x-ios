@@ -16,8 +16,8 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
     
     private var roomTimelineObservationToken: TaskHandle?
 
-    private let paginationStateSubject = CurrentValueSubject<PaginationState, Never>(.initial)
-    var paginationState: PaginationState {
+    private let paginationStateSubject = CurrentValueSubject<TimelinePaginationState, Never>(.initial)
+    var paginationState: TimelinePaginationState {
         paginationStateSubject.value
     }
 
@@ -28,7 +28,7 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
         }
     }
 
-    var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
+    var updatePublisher: AnyPublisher<([TimelineItemProxy], TimelinePaginationState), Never> {
         itemProxiesSubject
             .combineLatest(paginationStateSubject)
             .eraseToAnyPublisher()
@@ -46,7 +46,7 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
         roomTimelineObservationToken?.cancel()
     }
 
-    init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<PaginationState, Never>) {
+    init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<TimelinePaginationState, Never>) {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.timeline_item_provider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
         self.kind = kind

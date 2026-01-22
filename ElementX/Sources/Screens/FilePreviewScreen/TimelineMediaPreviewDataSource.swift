@@ -33,12 +33,12 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     private var backwardPadding: Int
     private var forwardPadding: Int
     
-    var paginationState: PaginationState
+    var paginationState: TimelinePaginationState
     
     init(itemViewStates: [RoomTimelineItemViewState],
          initialItem: EventBasedMessageTimelineItemProtocol,
          initialPadding: Int = 100,
-         paginationState: PaginationState) {
+         paginationState: TimelinePaginationState) {
         previewItems = itemViewStates.compactMap(TimelineMediaPreviewItem.Media.init)
         self.initialItem = initialItem
         

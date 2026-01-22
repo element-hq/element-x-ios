@@ -17622,17 +17622,17 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
     }
 }
 class TimelineItemProviderMock: TimelineItemProviderProtocol, @unchecked Sendable {
-    var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
+    var updatePublisher: AnyPublisher<([TimelineItemProxy], TimelinePaginationState), Never> {
         get { return underlyingUpdatePublisher }
         set(value) { underlyingUpdatePublisher = value }
     }
-    var underlyingUpdatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never>!
+    var underlyingUpdatePublisher: AnyPublisher<([TimelineItemProxy], TimelinePaginationState), Never>!
     var itemProxies: [TimelineItemProxy] = []
-    var paginationState: PaginationState {
+    var paginationState: TimelinePaginationState {
         get { return underlyingPaginationState }
         set(value) { underlyingPaginationState = value }
     }
-    var underlyingPaginationState: PaginationState!
+    var underlyingPaginationState: TimelinePaginationState!
     var kind: TimelineKind {
         get { return underlyingKind }
         set(value) { underlyingKind = value }
