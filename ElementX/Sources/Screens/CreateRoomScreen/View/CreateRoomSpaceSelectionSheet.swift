@@ -28,6 +28,7 @@ struct CreateRoomSpaceSelectionSheet: View {
                                             description: L10n.screenCreateRoomSpaceSelectionNoSpaceDescription,
                                             icon: CompoundIcon(\.homeSolid, size: .small, relativeTo: .body)
                                                 .foregroundColor(.compound.iconPrimary)
+                                                .scaledFrame(size: 32)
                                                 .background(.compound.bgSubtleSecondary)
                                                 .scaledFrame(size: 32)
                                                 .clipAvatar(isSpace: true, size: 32)),

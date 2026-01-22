@@ -282,10 +282,8 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 }
             }
             
-            if let selectedSpace = state.bindings.selectedSpace,
-               case .failure = await userSession.clientProxy.spaceService.addChild(roomID, to: selectedSpace.id) {
-                MXLog.error("Failed to add the created room with id: \(roomID) to the space with id: \(selectedSpace.id)")
-                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            if let spaceID = state.bindings.selectedSpace?.id {
+                await addRoomToSpace(roomProxy: roomProxy, spaceID: spaceID)
             }
             
             actionsSubject.send(.createdRoom(roomProxy, spaceRoomListProxy))
@@ -293,6 +291,25 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
             state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
                                                  title: L10n.commonError,
                                                  message: L10n.screenStartChatErrorStartingChat)
+        }
+    }
+    
+    private func addRoomToSpace(roomProxy: JoinedRoomProxyProtocol, spaceID: String) async {
+        roomProxy.subscribeToRoomInfoUpdates()
+        let runner = ExpiringTaskRunner {
+            // Necessary to build the room cache so that the space can be added as a parent.
+            _ = await roomProxy.infoPublisher.values.first { $0.powerLevels != nil }
+        }
+        
+        do {
+            try await runner.run(timeout: .seconds(30))
+            if case .failure = await userSession.clientProxy.spaceService.addChild(roomProxy.id, to: spaceID) {
+                MXLog.error("Failed to add the created room with id: \(roomProxy.id) to the space with id: \(spaceID)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        } catch {
+            MXLog.error("Timed out waiting for power levels to load for room with id: \(roomProxy.id)")
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
         }
     }
     
