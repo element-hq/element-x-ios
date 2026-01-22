@@ -378,9 +378,9 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         return viewModel
     }()
     
-    static let selectedSpaceViewModel = makeViewModel(selectionMode: .selected(SpaceServiceRoomMock(.init(name: "Awesome Space",
-                                                                                                          isSpace: true,
-                                                                                                          joinRule: .private))))
+    static let selectedSpaceViewModel = makeViewModel(selectionMode: .preSelected(SpaceServiceRoomMock(.init(name: "Awesome Space",
+                                                                                                             isSpace: true,
+                                                                                                             joinRule: .private))))
     
     static let selectedSpaceWithListViewModel = {
         let viewModel = makeViewModel()
@@ -390,9 +390,9 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     
     static let selectedSpaceWithAskToJoinViewModel = {
         let viewModel = makeViewModel(isKnockingEnabled: true,
-                                      selectionMode: .selected(SpaceServiceRoomMock(.init(name: "Awesome Space",
-                                                                                          isSpace: true,
-                                                                                          joinRule: .private))))
+                                      selectionMode: .preSelected(SpaceServiceRoomMock(.init(name: "Awesome Space",
+                                                                                             isSpace: true,
+                                                                                             joinRule: .private))))
         viewModel.context.selectedAccessType = .askToJoinWithSpaceMembers
         return viewModel
     }()
@@ -460,7 +460,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     
     private static func makeViewModel(isKnockingEnabled: Bool = false,
                                       isSpace: Bool = false,
-                                      selectionMode: CreateRoomScreenSpaceSelectionMode? = .list,
+                                      selectionMode: CreateRoomScreenSpaceSelectionMode? = .editableSpacesList,
                                       isAliasAvailable: Bool = true) -> CreateRoomScreenViewModel {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()

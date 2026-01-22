@@ -273,7 +273,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     func testCreateRoomInAnAlreadySelectedSpace() async throws {
         let space = SpaceServiceRoomMock(.init(isSpace: true, joinRule: .private))
-        setup(spacesSelectionMode: .selected(space))
+        setup(spacesSelectionMode: .preSelected(space))
         
         context.send(viewAction: .updateRoomName("A"))
         context.selectedAccessType = .spaceMembers
@@ -308,7 +308,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     func testCreateRoomInAnPublicSpaceAvailableTypes() async throws {
         let space = SpaceServiceRoomMock(.init(isSpace: true, joinRule: .public))
-        setup(spacesSelectionMode: .selected(space))
+        setup(spacesSelectionMode: .preSelected(space))
         
         // Given a form with a blank topic.
         context.send(viewAction: .updateRoomName("A"))
@@ -320,7 +320,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.canSelectSpace)
     }
     
-    private func setup(isSpace: Bool = false, spacesSelectionMode: CreateRoomScreenSpaceSelectionMode = .list) {
+    private func setup(isSpace: Bool = false, spacesSelectionMode: CreateRoomScreenSpaceSelectionMode = .editableSpacesList) {
         spaceService = SpaceServiceProxyMock(.init(editableSpaces: .mockJoinedSpaces2,
                                                    spaceRoomLists: ["1": .init()]))
         clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org",
