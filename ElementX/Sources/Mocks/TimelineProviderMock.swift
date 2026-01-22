@@ -15,7 +15,7 @@ import MatrixRustSDKMocks
 class AutoUpdatingTimelineItemProviderMock: TimelineItemProvider {
     static var timelineListener: TimelineListener?
     
-    private let innerPaginationStatePublisher: PassthroughSubject<PaginationState, Never>
+    private let innerPaginationStatePublisher: PassthroughSubject<TimelinePaginationState, Never>
     
     init() {
         innerPaginationStatePublisher = .init()

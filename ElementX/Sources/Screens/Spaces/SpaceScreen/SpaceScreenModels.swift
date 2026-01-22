@@ -25,7 +25,7 @@ struct SpaceScreenViewState: BindableState {
     var permalink: URL?
     var roomProxy: JoinedRoomProxyProtocol?
     
-    var isPaginating = false
+    var paginationState: PaginationState = .idle
     var rooms: [SpaceServiceRoomProtocol]
     var selectedSpaceRoomID: String?
     var joiningRoomIDs: Set<String> = []
@@ -39,6 +39,10 @@ struct SpaceScreenViewState: BindableState {
     var editModeSelectedIDs: Set<String> = []
     
     var bindings = SpaceScreenViewStateBindings()
+    
+    var shouldShowEmptyState: Bool {
+        rooms.isEmpty && paginationState == .endReached && canEditChildren
+    }
     
     var visibleRooms: [SpaceServiceRoomProtocol] {
         if editMode == .inactive {

@@ -91,7 +91,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         XCTAssertEqual(timelineController.paginateBackwardsCallCount, 0)
         
         // When swiping to a "loading more" item and there are more media items to load.
-        timelineController.paginationState = .init(backward: .idle, forward: .timelineEndReached)
+        timelineController.paginationState = .init(backward: .idle, forward: .endReached)
         timelineController.backPaginationResponses.append(RoomTimelineItemFixtures.mediaChunk)
         let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: 1) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.loading(.paginatingBackwards)))

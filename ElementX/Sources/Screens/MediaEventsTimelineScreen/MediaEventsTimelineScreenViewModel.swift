@@ -123,7 +123,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             updateWithTimelineViewState(activeTimelineViewModel.context.viewState)
         case .oldestItemDidAppear:
             isOldestItemVisible = true
-            backPaginateIfNecessary(paginationStatus: activeTimelineViewModel.context.viewState.timelineState.paginationState.backward)
+            backPaginateIfNecessary(backPaginationState: activeTimelineViewModel.context.viewState.timelineState.paginationState.backward)
         case .oldestItemDidDisappear:
             isOldestItemVisible = false
         case .tappedItem(let item):
@@ -205,12 +205,12 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         state.groups = newGroups
         
         state.isBackPaginating = timelineViewState.timelineState.paginationState.backward == .paginating
-        state.shouldShowEmptyState = newGroups.isEmpty && timelineViewState.timelineState.paginationState.backward == .timelineEndReached
-        backPaginateIfNecessary(paginationStatus: timelineViewState.timelineState.paginationState.backward)
+        state.shouldShowEmptyState = newGroups.isEmpty && timelineViewState.timelineState.paginationState.backward == .endReached
+        backPaginateIfNecessary(backPaginationState: timelineViewState.timelineState.paginationState.backward)
     }
     
-    private func backPaginateIfNecessary(paginationStatus: PaginationStatus) {
-        if paginationStatus == .idle, isOldestItemVisible {
+    private func backPaginateIfNecessary(backPaginationState: PaginationState) {
+        if backPaginationState == .idle, isOldestItemVisible {
             activeTimelineViewModel.context.send(viewAction: .paginateBackwards)
         }
     }

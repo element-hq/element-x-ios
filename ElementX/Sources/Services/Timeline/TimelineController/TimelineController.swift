@@ -30,7 +30,7 @@ class TimelineController: TimelineControllerProtocol {
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
     
-    private(set) var paginationState: PaginationState = .initial {
+    private(set) var paginationState: TimelinePaginationState = .initial {
         didSet {
             callbacks.send(.paginationState(paginationState))
         }
@@ -65,7 +65,7 @@ class TimelineController: TimelineControllerProtocol {
         }
         
         Task {
-            paginationState = PaginationState(backward: .paginating, forward: .paginating)
+            paginationState = TimelinePaginationState(backward: .paginating, forward: .paginating)
             
             switch await focusOnEvent(initialFocussedEventID, timelineSize: 100) {
             case .success:
@@ -396,7 +396,7 @@ class TimelineController: TimelineControllerProtocol {
         isSwitchingTimelines = true
         
         // Inform the world that the initial items are loading from the store
-        paginationState = PaginationState(backward: .paginating, forward: .paginating)
+        paginationState = TimelinePaginationState(backward: .paginating, forward: .paginating)
         callbacks.send(.isLive(activeTimelineItemProvider.kind == .live))
         
         updateTimelineItemsCancellable = Task { [weak self, activeTimelineItemProvider] in
@@ -411,7 +411,7 @@ class TimelineController: TimelineControllerProtocol {
         }.asCancellable()
     }
     
-    private func updateTimelineItems(itemProxies: [TimelineItemProxy], paginationState: PaginationState) async {
+    private func updateTimelineItems(itemProxies: [TimelineItemProxy], paginationState: TimelinePaginationState) async {
         let isNewTimeline = isSwitchingTimelines
         isSwitchingTimelines = false
         
@@ -462,14 +462,14 @@ class TimelineController: TimelineControllerProtocol {
         switch paginationState.backward {
         case .paginating:
             newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(position: .start), at: 0)
-        case .idle, .timelineEndReached:
+        case .idle, .endReached:
             break
         }
         
         switch paginationState.forward {
         case .paginating:
             newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(position: .end), at: newTimelineItems.count)
-        case .idle, .timelineEndReached:
+        case .idle, .endReached:
             break
         }
         

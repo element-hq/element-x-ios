@@ -12,7 +12,7 @@ import SwiftUI
 
 enum TimelineControllerCallback {
     case updatedTimelineItems(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool)
-    case paginationState(PaginationState)
+    case paginationState(TimelinePaginationState)
     case isLive(Bool)
 }
 
@@ -49,7 +49,7 @@ protocol TimelineControllerProtocol {
     var timelineItems: [RoomTimelineItemProtocol] { get }
     
     /// The current pagination state, use only for setting up the intial state
-    var paginationState: PaginationState { get }
+    var paginationState: TimelinePaginationState { get }
     
     var callbacks: PassthroughSubject<TimelineControllerCallback, Never> { get }
     

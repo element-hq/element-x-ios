@@ -75,7 +75,7 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
                 case .updatedTimelineItems:
                     self.updatePollsList(filter: state.bindings.filter)
                 case .paginationState(let paginationState):
-                    let canBackPaginate = paginationState.backward != .timelineEndReached
+                    let canBackPaginate = paginationState.backward != .endReached
                     if self.state.canBackPaginate != canBackPaginate {
                         self.state.canBackPaginate = canBackPaginate
                     }

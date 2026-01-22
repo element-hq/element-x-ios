@@ -3159,6 +3159,8 @@ internal enum L10n {
   internal static var screenSpaceAnnouncementSubtitle: String { return L10n.tr("Localizable", "screen_space_announcement_subtitle") }
   /// Introducing Spaces
   internal static var screenSpaceAnnouncementTitle: String { return L10n.tr("Localizable", "screen_space_announcement_title") }
+  /// Add your first room
+  internal static var screenSpaceEmptyStateTitle: String { return L10n.tr("Localizable", "screen_space_empty_state_title") }
   /// Spaces you have created or joined.
   internal static var screenSpaceListDescription: String { return L10n.tr("Localizable", "screen_space_list_description") }
   /// %1$@ • %2$@

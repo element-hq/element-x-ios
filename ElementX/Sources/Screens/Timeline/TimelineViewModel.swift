@@ -614,7 +614,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 break
             }
             
-            if state.timelineState.paginationState.forward == .timelineEndReached {
+            if state.timelineState.paginationState.forward == .endReached {
                 focusLive()
             }
             

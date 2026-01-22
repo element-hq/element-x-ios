@@ -57,13 +57,16 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         spaceRoomListProxy.paginationStatePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] paginationState in
+                guard let self else { return }
+                
                 switch paginationState {
-                case .idle(let endReached):
-                    self?.state.isPaginating = false
-                    guard !endReached else { return }
+                case .idle(endReached: false):
+                    state.paginationState = .idle
                     Task { await spaceRoomListProxy.paginate() }
+                case .idle(endReached: true):
+                    state.paginationState = .endReached
                 case .loading:
-                    self?.state.isPaginating = true
+                    state.paginationState = .paginating
                 }
             }
             .store(in: &cancellables)

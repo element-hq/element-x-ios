@@ -13,15 +13,15 @@ import MatrixRustSDK
 final class TimelineProxy: TimelineProxyProtocol {
     private let timeline: Timeline
     
-    private var backPaginationStatusObservationToken: TaskHandle?
+    private var backPaginationStateObservationToken: TaskHandle?
     
     // The default values shouldn't matter here as they will be updated when calling subscribeToPagination
     // but empirically we randomly see the timeline start virtual item when we shouldn't.
     // We believe there's a race condition between the default values the status publisher
     // so we're going to default the backwards one to .idle. Worst case it's going to do
     // one extra back pagination.
-    private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
-    private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
+    private let backPaginationStateSubject = CurrentValueSubject<PaginationState, Never>(.idle)
+    private let forwardPaginationStateSubject = CurrentValueSubject<PaginationState, Never>(.endReached)
     
     private let kind: TimelineKind
    
@@ -31,7 +31,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     deinit {
-        backPaginationStatusObservationToken?.cancel()
+        backPaginationStateObservationToken?.cancel()
     }
     
     init(timeline: Timeline, kind: TimelineKind) {
@@ -45,9 +45,9 @@ final class TimelineProxy: TimelineProxyProtocol {
             return
         }
         
-        let paginationStatePublisher = backPaginationStatusSubject
-            .combineLatest(forwardPaginationStatusSubject)
-            .map { PaginationState(backward: $0.0, forward: $0.1) }
+        let paginationStatePublisher = backPaginationStateSubject
+            .combineLatest(forwardPaginationStateSubject)
+            .map { TimelinePaginationState(backward: $0.0, forward: $0.1) }
             .eraseToAnyPublisher()
         
         await subscribeToPagination()
@@ -131,8 +131,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     /// Rust subscription isn't allowed on focussed/detached timelines.
     private func focussedPaginate(_ direction: PaginationDirection, requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
         let subject = switch direction {
-        case .backwards: backPaginationStatusSubject
-        case .forwards: forwardPaginationStatusSubject
+        case .backwards: backPaginationStateSubject
+        case .forwards: forwardPaginationStateSubject
         }
         
         // This extra check is necessary as detached timelines don't support subscribing to pagination status.
@@ -150,7 +150,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             }
             MXLog.info("Finished paginating \(direction.rawValue)")
 
-            subject.send(timelineEndReached ? .timelineEndReached : .idle)
+            subject.send(timelineEndReached ? .endReached : .idle)
             return .success(())
         } catch {
             MXLog.error("Failed paginating \(direction.rawValue) with error: \(error)")
@@ -592,28 +592,28 @@ final class TimelineProxy: TimelineProxyProtocol {
                 
                 switch status {
                 case .idle(let hitStartOfTimeline):
-                    backPaginationStatusSubject.send(hitStartOfTimeline ? .timelineEndReached : .idle)
+                    backPaginationStateSubject.send(hitStartOfTimeline ? .endReached : .idle)
                 case .paginating:
-                    backPaginationStatusSubject.send(.paginating)
+                    backPaginationStateSubject.send(.paginating)
                 }
             }
             
             do {
-                backPaginationStatusObservationToken = try await timeline.subscribeToBackPaginationStatus(listener: backPaginationListener)
+                backPaginationStateObservationToken = try await timeline.subscribeToBackPaginationStatus(listener: backPaginationListener)
             } catch {
                 MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
-            forwardPaginationStatusSubject.send(.timelineEndReached)
+            forwardPaginationStateSubject.send(.endReached)
         case .detached, .thread:
             // Detached timelines don't support observation, set the initial state ourself.
-            backPaginationStatusSubject.send(.idle)
-            forwardPaginationStatusSubject.send(.idle)
+            backPaginationStateSubject.send(.idle)
+            forwardPaginationStateSubject.send(.idle)
         case .media(let presentation):
-            backPaginationStatusSubject.send(presentation == .pinnedEventsScreen ? .timelineEndReached : .idle)
-            forwardPaginationStatusSubject.send(presentation == .roomScreenDetached ? .idle : .timelineEndReached)
+            backPaginationStateSubject.send(presentation == .pinnedEventsScreen ? .endReached : .idle)
+            forwardPaginationStateSubject.send(presentation == .roomScreenDetached ? .idle : .endReached)
         case .pinned:
-            backPaginationStatusSubject.send(.timelineEndReached)
-            forwardPaginationStatusSubject.send(.timelineEndReached)
+            backPaginationStateSubject.send(.endReached)
+            forwardPaginationStateSubject.send(.endReached)
         }
     }
 }
