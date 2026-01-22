@@ -22,7 +22,11 @@ struct SpaceScreen: View {
                                     mediaProvider: context.mediaProvider)
                 }
                 
-                rooms
+                if context.viewState.shouldShowEmptyState {
+                    emptyState
+                } else {
+                    rooms
+                }
             }
         }
         .environment(\.editMode, .constant(context.viewState.editMode))
@@ -53,10 +57,30 @@ struct SpaceScreen: View {
             }
         }
         
-        if context.viewState.isPaginating {
+        if context.viewState.paginationState == .paginating {
             ProgressView()
                 .padding()
         }
+    }
+    
+    var emptyState: some View {
+        VStack(spacing: 24) {
+            TitleAndIcon(title: L10n.screenSpaceEmptyStateTitle,
+                         icon: \.room,
+                         iconStyle: .defaultSolid)
+                .padding(.horizontal, 24)
+            
+            VStack(spacing: 16) {
+                Button { context.send(viewAction: .addExistingRooms) } label: {
+                    Label(L10n.actionAddExistingRooms, icon: \.plus)
+                }
+                .buttonStyle(.compound(.primary))
+                
+                // @Velin92 Create Room button goes here.
+            }
+            .padding(.horizontal, 16)
+        }
+        .padding(.top, 40)
     }
     
     @ToolbarContentBuilder
@@ -150,6 +174,7 @@ struct SpaceScreen: View {
 struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let managingViewModel = makeViewModel(isManagingRooms: true)
+    static let newSpaceViewModel = makeViewModel(isNewSpace: true)
     
     static var previews: some View {
         NavigationStack {
@@ -160,9 +185,19 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
             SpaceScreen(context: managingViewModel.context)
         }
         .previewDisplayName("Managing")
+        
+        NavigationStack {
+            SpaceScreen(context: newSpaceViewModel.context)
+        }
+        .previewDisplayName("New Space")
+        .snapshotPreferences(expect: newSpaceViewModel.context.observe(\.viewState.shouldShowEmptyState))
     }
     
-    static func makeViewModel(isManagingRooms: Bool = false) -> SpaceScreenViewModel {
+    static func makeViewModel(isManagingRooms: Bool = false, isNewSpace: Bool = false) -> SpaceScreenViewModel {
+        let appSettings = AppSettings()
+        appSettings.spaceSettingsEnabled = true
+        appSettings.createSpaceEnabled = true
+        
         let spaceServiceRoom = SpaceServiceRoomMock(.init(id: "!eng-space:matrix.org",
                                                           name: "Engineering Team",
                                                           isSpace: true,
@@ -173,11 +208,11 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
                                                           canonicalAlias: "#engineering-team:element.io",
                                                           joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
         let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: spaceServiceRoom,
-                                                              initialSpaceRooms: .mockSpaceList))
+                                                              initialSpaceRooms: isNewSpace ? [] : .mockSpaceList))
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.roomForIdentifierClosure = { _ in
-            .joined(JoinedRoomProxyMock(.init()))
+            .joined(JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)))
         }
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
@@ -185,7 +220,7 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
                                              spaceServiceProxy: SpaceServiceProxyMock(.init()),
                                              selectedSpaceRoomPublisher: .init(nil),
                                              userSession: userSession,
-                                             appSettings: AppSettings(),
+                                             appSettings: appSettings,
                                              userIndicatorController: UserIndicatorControllerMock())
         
         if isManagingRooms {
