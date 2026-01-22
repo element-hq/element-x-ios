@@ -1378,15 +1378,15 @@ private extension CreateRoomAccessType {
     }
     
     var visibility: RoomVisibility {
-        isPrivate ? .private : .public
+        isVisibilityPrivate ? .private : .public
     }
     
     var preset: RoomPreset {
-        isPrivate ? .privateChat : .publicChat
+        isVisibilityPrivate ? .privateChat : .publicChat
     }
     
     var historyVisibilityOverride: RoomHistoryVisibility? {
-        isPrivate ? .invited : nil
+        isVisibilityPrivate ? .invited : nil
     }
     
     var joinRuleOverride: JoinRule? {

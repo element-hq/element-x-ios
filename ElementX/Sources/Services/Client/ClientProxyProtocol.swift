@@ -55,7 +55,7 @@ enum CreateRoomAccessType: Equatable {
     case askToJoin
     case `private`
     
-    var isPrivate: Bool {
+    var isVisibilityPrivate: Bool {
         switch self {
         case .private, .spaceMembers, .askToJoinWithSpaceMembers:
             true

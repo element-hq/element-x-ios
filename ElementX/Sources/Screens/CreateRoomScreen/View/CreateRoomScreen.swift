@@ -43,7 +43,7 @@ struct CreateRoomScreen: View {
                 selectSpaceSection
             }
             roomAccessSection
-            if !context.viewState.roomAccessType.isPrivate {
+            if !context.viewState.roomAccessType.isVisibilityPrivate {
                 roomAliasSection
             }
         }
