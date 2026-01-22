@@ -76,7 +76,12 @@ struct SpaceScreen: View {
                 }
                 .buttonStyle(.compound(.primary))
                 
-                // @Velin92 Create Room button goes here.
+                if context.viewState.canCreateRoom {
+                    Button(L10n.actionCreateRoom) {
+                        context.send(viewAction: .createChildRoom)
+                    }
+                    .buttonStyle(.compound(.secondary))
+                }
             }
             .padding(.horizontal, 16)
         }
@@ -123,7 +128,7 @@ struct SpaceScreen: View {
                         Section {
                             if context.viewState.canCreateRoom {
                                 Button { context.send(viewAction: .createChildRoom) } label: {
-                                    Label(L10n.actionCreateARoom, icon: \.plus)
+                                    Label(L10n.actionCreateRoom, icon: \.plus)
                                 }
                             }
                             Button { context.send(viewAction: .addExistingRooms) } label: {
@@ -195,7 +200,9 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
             SpaceScreen(context: newSpaceViewModel.context)
         }
         .previewDisplayName("New Space")
-        .snapshotPreferences(expect: newSpaceViewModel.context.observe(\.viewState.shouldShowEmptyState))
+        .snapshotPreferences(expect: newSpaceViewModel.context.observe(\.viewState).map {
+            $0.canCreateRoom && $0.canEditChildren
+        })
     }
     
     static func makeViewModel(isManagingRooms: Bool = false, isNewSpace: Bool = false) -> SpaceScreenViewModel {

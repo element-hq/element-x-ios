@@ -173,6 +173,7 @@ extension PreviewTests {
     }
 
     func testCreateRoomSpaceSelectionSheet() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in CreateRoomSpaceSelectionSheet_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }

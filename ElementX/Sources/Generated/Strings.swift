@@ -169,7 +169,7 @@ internal enum L10n {
   /// Create
   internal static var actionCreate: String { return L10n.tr("Localizable", "action_create") }
   /// Create room
-  internal static var actionCreateARoom: String { return L10n.tr("Localizable", "action_create_a_room") }
+  internal static var actionCreateRoom: String { return L10n.tr("Localizable", "action_create_room") }
   /// Create space
   internal static var actionCreateSpace: String { return L10n.tr("Localizable", "action_create_space") }
   /// Deactivate
@@ -640,6 +640,8 @@ internal enum L10n {
   internal static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
   /// Rich text editor
   internal static var commonRichTextEditor: String { return L10n.tr("Localizable", "common_rich_text_editor") }
+  /// Role
+  internal static var commonRole: String { return L10n.tr("Localizable", "common_role") }
   /// Room
   internal static var commonRoom: String { return L10n.tr("Localizable", "common_room") }
   /// Room name
@@ -3149,6 +3151,8 @@ internal enum L10n {
   internal static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
   /// Have you saved your recovery key?
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
+  /// Room
+  internal static var screenSpaceAddRoomAction: String { return L10n.tr("Localizable", "screen_space_add_room_action") }
   /// Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.
   internal static var screenSpaceAddRoomsRoomAccessDescription: String { return L10n.tr("Localizable", "screen_space_add_rooms_room_access_description") }
   /// View spaces you've created or joined

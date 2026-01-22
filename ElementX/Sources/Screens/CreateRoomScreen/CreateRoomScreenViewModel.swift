@@ -42,9 +42,9 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         var selectedSpace: SpaceServiceRoomProtocol?
         var canSelectSpace = false
         switch spaceSelectionMode {
-        case .list:
+        case .editableSpacesList:
             canSelectSpace = true
-        case .selected(let value):
+        case .preSelected(let value):
             selectedSpace = value
         case .none:
             break

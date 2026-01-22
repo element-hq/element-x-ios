@@ -98,7 +98,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-        
+    
     // MARK: - Private
     
     private func handleSpaceListUpdates(_ updates: [SpaceListUpdate]) {

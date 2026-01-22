@@ -141,14 +141,17 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
             case .startChat:
                 presentStartChatScreen()
             case .createSpace:
-                presentCreateRoomScreen(isSpace: true, isRoot: true)
+                presentCreateRoomScreen(isSpace: true, spaceSelectionMode: nil, isRoot: true)
             case .createRoomInSpace(let space):
-                presentCreateRoomScreen(isSpace: false, selectedSpace: space, isRoot: true)
+                presentCreateRoomScreen(isSpace: false, spaceSelectionMode: .preSelected(space), isRoot: true)
             }
         }
         
         stateMachine.addRoutes(event: .createRoom, transitions: [.startChat => .createRoom]) { [weak self] _ in
-            self?.presentCreateRoomScreen(isSpace: false, isRoot: false)
+            guard let self else { return }
+            presentCreateRoomScreen(isSpace: false,
+                                    spaceSelectionMode: flowParameters.appSettings.createSpaceEnabled ? .editableSpacesList : nil,
+                                    isRoot: false)
         }
         stateMachine.addRoutes(event: .dismissedCreateRoom, transitions: [.createRoom => .startChat]) { [weak self] _ in
             self?.createRoomScreenCoordinator = nil
@@ -204,15 +207,9 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
-    private func presentCreateRoomScreen(isSpace: Bool, selectedSpace: SpaceServiceRoomProtocol? = nil, isRoot: Bool) {
-        let spaceSelectionMode: CreateRoomScreenSpaceSelectionMode? = if let selectedSpace {
-            .selected(selectedSpace)
-        } else if !isSpace, flowParameters.appSettings.createSpaceEnabled {
-            .list
-        } else {
-            nil
-        }
-        
+    private func presentCreateRoomScreen(isSpace: Bool,
+                                         spaceSelectionMode: CreateRoomScreenSpaceSelectionMode?,
+                                         isRoot: Bool) {
         let createParameters = CreateRoomScreenCoordinatorParameters(isSpace: isSpace,
                                                                      spaceSelectionMode: spaceSelectionMode,
                                                                      shouldShowCancelButton: isRoot,
