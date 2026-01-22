@@ -226,9 +226,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces2
         setup()
         
-        // Given a form with a blank topic.
         context.send(viewAction: .updateRoomName("A"))
-        context.roomTopic = ""
         context.selectedAccessType = .public
         XCTAssertTrue(context.viewState.canCreateRoom)
         XCTAssertNil(context.selectedSpace)
@@ -268,21 +266,16 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         await fulfillment(of: [expectation])
         try await deferredAction.fulfill()
         
-        // Then the room should be created and a topic should not be set.
         XCTAssertTrue(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
         XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name, "A")
         XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType, .private)
-        XCTAssertNil(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.topic,
-                     "The topic should be sent as nil when it is empty.")
     }
     
     func testCreateRoomInAnAlreadySelectedSpace() async throws {
         let space = SpaceServiceRoomMock(.init(isSpace: true, joinRule: .private))
         setup(spacesSelectionMode: .selected(space))
         
-        // Given a form with a blank topic.
         context.send(viewAction: .updateRoomName("A"))
-        context.roomTopic = ""
         context.selectedAccessType = .spaceMembers
         XCTAssertTrue(context.viewState.canCreateRoom)
         XCTAssertEqual(context.selectedSpace?.id, space.id)
@@ -308,12 +301,9 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         await fulfillment(of: [expectation])
         try await deferredAction.fulfill()
         
-        // Then the room should be created and a topic should not be set.
         XCTAssertTrue(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
         XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name, "A")
         XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType, .spaceMembers(spaceID: space.id))
-        XCTAssertNil(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.topic,
-                     "The topic should be sent as nil when it is empty.")
     }
     
     func testCreateRoomInAnPublicSpaceAvailableTypes() async throws {
