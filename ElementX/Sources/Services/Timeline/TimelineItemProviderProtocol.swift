@@ -16,14 +16,14 @@ enum PaginationDirection: String {
 
 enum PaginationStatus {
     case idle
-    case timelineEndReached
+    case endReached
     case paginating
 }
 
 struct PaginationState: Equatable {
     /// An initial state that is used to prevent pagination whilst loading the timeline.
     /// Once the initial items are loaded the TimelineProxy will publish the correct value.
-    static var initial = PaginationState(backward: .timelineEndReached, forward: .timelineEndReached)
+    static var initial = PaginationState(backward: .endReached, forward: .endReached)
     let backward: PaginationStatus
     let forward: PaginationStatus
 }

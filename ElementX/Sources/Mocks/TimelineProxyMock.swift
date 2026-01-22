@@ -30,7 +30,7 @@ extension TimelineProxyMock {
             underlyingTimelineItemProvider = AutoUpdatingTimelineItemProviderMock()
         } else {
             let timelineItemProvider = TimelineItemProviderMock()
-            timelineItemProvider.paginationState = .init(backward: configuration.timelineStartReached ? .timelineEndReached : .idle, forward: .timelineEndReached)
+            timelineItemProvider.paginationState = .init(backward: configuration.timelineStartReached ? .endReached : .idle, forward: .endReached)
             timelineItemProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
             underlyingTimelineItemProvider = timelineItemProvider
         }

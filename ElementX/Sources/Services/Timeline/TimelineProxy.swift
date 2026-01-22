@@ -21,7 +21,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     // so we're going to default the backwards one to .idle. Worst case it's going to do
     // one extra back pagination.
     private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
-    private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
+    private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.endReached)
     
     private let kind: TimelineKind
    
@@ -150,7 +150,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             }
             MXLog.info("Finished paginating \(direction.rawValue)")
 
-            subject.send(timelineEndReached ? .timelineEndReached : .idle)
+            subject.send(timelineEndReached ? .endReached : .idle)
             return .success(())
         } catch {
             MXLog.error("Failed paginating \(direction.rawValue) with error: \(error)")
@@ -592,7 +592,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                 
                 switch status {
                 case .idle(let hitStartOfTimeline):
-                    backPaginationStatusSubject.send(hitStartOfTimeline ? .timelineEndReached : .idle)
+                    backPaginationStatusSubject.send(hitStartOfTimeline ? .endReached : .idle)
                 case .paginating:
                     backPaginationStatusSubject.send(.paginating)
                 }
@@ -603,17 +603,17 @@ final class TimelineProxy: TimelineProxyProtocol {
             } catch {
                 MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
-            forwardPaginationStatusSubject.send(.timelineEndReached)
+            forwardPaginationStatusSubject.send(.endReached)
         case .detached, .thread:
             // Detached timelines don't support observation, set the initial state ourself.
             backPaginationStatusSubject.send(.idle)
             forwardPaginationStatusSubject.send(.idle)
         case .media(let presentation):
-            backPaginationStatusSubject.send(presentation == .pinnedEventsScreen ? .timelineEndReached : .idle)
-            forwardPaginationStatusSubject.send(presentation == .roomScreenDetached ? .idle : .timelineEndReached)
+            backPaginationStatusSubject.send(presentation == .pinnedEventsScreen ? .endReached : .idle)
+            forwardPaginationStatusSubject.send(presentation == .roomScreenDetached ? .idle : .endReached)
         case .pinned:
-            backPaginationStatusSubject.send(.timelineEndReached)
-            forwardPaginationStatusSubject.send(.timelineEndReached)
+            backPaginationStatusSubject.send(.endReached)
+            forwardPaginationStatusSubject.send(.endReached)
         }
     }
 }

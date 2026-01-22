@@ -45,7 +45,7 @@ class MockTimelineController: TimelineControllerProtocol {
     
     static var emptyMediaGallery: MockTimelineController {
         let mock = MockTimelineController(timelineKind: .media(.mediaFilesScreen))
-        mock.paginationState = PaginationState(backward: .timelineEndReached, forward: .timelineEndReached)
+        mock.paginationState = PaginationState(backward: .endReached, forward: .endReached)
         return mock
     }
     
@@ -86,7 +86,7 @@ class MockTimelineController: TimelineControllerProtocol {
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
         paginateBackwardsCallCount += 1
         
-        paginationState = PaginationState(backward: .paginating, forward: .timelineEndReached)
+        paginationState = PaginationState(backward: .paginating, forward: .endReached)
         
         if client == nil {
             try? await simulateBackPagination()
@@ -331,8 +331,8 @@ class MockTimelineController: TimelineControllerProtocol {
     /// Prepends the next chunk of items to the `timelineItems` array.
     private func simulateBackPagination() async throws {
         defer {
-            paginationState = PaginationState(backward: backPaginationResponses.isEmpty ? .timelineEndReached : .idle,
-                                              forward: .timelineEndReached)
+            paginationState = PaginationState(backward: backPaginationResponses.isEmpty ? .endReached : .idle,
+                                              forward: .endReached)
         }
         
         guard !backPaginationResponses.isEmpty else { return }

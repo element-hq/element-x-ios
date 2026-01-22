@@ -125,9 +125,9 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         let arrayIndex = index - backwardPadding
         
         if index < firstPreviewItemIndex {
-            return paginationState.backward == .timelineEndReached ? TimelineMediaPreviewItem.Loading.timelineStart : .paginatingBackwards
+            return paginationState.backward == .endReached ? TimelineMediaPreviewItem.Loading.timelineStart : .paginatingBackwards
         } else if index > lastPreviewItemIndex {
-            return paginationState.forward == .timelineEndReached ? TimelineMediaPreviewItem.Loading.timelineEnd : .paginatingForwards
+            return paginationState.forward == .endReached ? TimelineMediaPreviewItem.Loading.timelineEnd : .paginatingForwards
         } else {
             return previewItems[arrayIndex]
         }

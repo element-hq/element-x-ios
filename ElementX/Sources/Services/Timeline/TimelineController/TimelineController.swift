@@ -462,14 +462,14 @@ class TimelineController: TimelineControllerProtocol {
         switch paginationState.backward {
         case .paginating:
             newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(position: .start), at: 0)
-        case .idle, .timelineEndReached:
+        case .idle, .endReached:
             break
         }
         
         switch paginationState.forward {
         case .paginating:
             newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(position: .end), at: newTimelineItems.count)
-        case .idle, .timelineEndReached:
+        case .idle, .endReached:
             break
         }
         

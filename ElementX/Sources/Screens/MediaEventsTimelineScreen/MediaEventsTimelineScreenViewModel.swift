@@ -205,7 +205,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         state.groups = newGroups
         
         state.isBackPaginating = timelineViewState.timelineState.paginationState.backward == .paginating
-        state.shouldShowEmptyState = newGroups.isEmpty && timelineViewState.timelineState.paginationState.backward == .timelineEndReached
+        state.shouldShowEmptyState = newGroups.isEmpty && timelineViewState.timelineState.paginationState.backward == .endReached
         backPaginateIfNecessary(paginationStatus: timelineViewState.timelineState.paginationState.backward)
     }
     
