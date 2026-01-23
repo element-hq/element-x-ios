@@ -97,6 +97,22 @@ struct FormattedBodyText: View {
                                 .padding(.vertical, 2)
                         }
                         .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                } else if component.isCodeBlock {
+                    ScrollView(.horizontal) {
+                        MessageText(attributedString: component.attributedString)
+                            .padding([.horizontal, .top], 4)
+                            .padding(.bottom, 8)
+                    }
+                    .background(.compound._bgCodeBlock)
+                    .scrollIndicatorsFlash(onAppear: true)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 4)
+                    .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                    .contextMenu {
+                        Button(L10n.actionCopy) {
+                            UIPasteboard.general.string = component.attributedString.string
+                        }
+                    }
                 } else {
                     MessageText(attributedString: component.attributedString)
                         .padding(.horizontal, 4)
