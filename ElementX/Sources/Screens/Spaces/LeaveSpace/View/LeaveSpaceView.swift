@@ -66,11 +66,11 @@ struct LeaveSpaceView: View {
                 Section {
                     ForEach(context.viewState.leaveHandle.rooms, id: \.spaceServiceRoom.id) { room in
                         LeaveSpaceRoomDetailsCell(room: room,
-                                                  hideSelection: context.viewState.leaveHandle.mode == .onlyAdminRooms,
+                                                  hideSelection: context.viewState.leaveHandle.mode == .roomsNeedNewOwner,
                                                   mediaProvider: context.mediaProvider) {
                             context.send(viewAction: .toggleRoom(roomID: room.spaceServiceRoom.id))
                         }
-                        .disabled(room.isLastAdmin)
+                        .disabled(!room.canLeave)
                     }
                 } header: {
                     if context.viewState.leaveHandle.mode == .manyRooms {
@@ -121,9 +121,9 @@ import MatrixRustSDKMocks
 
 struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
     static let manyViewModel = makeViewModel(mode: .manyRooms)
-    static let onlyAdminViewModel = makeViewModel(mode: .onlyAdminRooms)
+    static let onlyAdminViewModel = makeViewModel(mode: .roomsNeedNewOwner)
     static let noRoomsViewModel = makeViewModel(mode: .noRooms)
-    static let lastAdminViewModel = makeViewModel(mode: .lastSpaceAdmin)
+    static let lastAdminViewModel = makeViewModel(mode: .spaceNeedsNewOwner)
     
     static var previews: some View {
         LeaveSpaceView(context: manyViewModel.context)
@@ -148,9 +148,9 @@ struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(mode: LeaveSpaceHandleProxy.Mode) -> LeaveSpaceViewModel {
         let rooms: [LeaveSpaceRoom] = switch mode {
         case .manyRooms: .mockRooms
-        case .onlyAdminRooms: .mockAdminRooms
-        case .noRooms: .mockSingleSpace(spaceServiceRoom: spaceServiceRoom, isLastAdmin: false)
-        case .lastSpaceAdmin: .mockRoomsWithSpace(spaceServiceRoom: spaceServiceRoom, isLastAdmin: true)
+        case .roomsNeedNewOwner: .mockNeedNewOwnerRooms
+        case .noRooms: .mockSingleSpace(spaceServiceRoom: spaceServiceRoom, isLastOwner: false)
+        case .spaceNeedsNewOwner: .mockRoomsWithSpace(spaceServiceRoom: spaceServiceRoom, isLastOwner: true)
         }
         
         let leaveHandle = LeaveSpaceHandleProxy(spaceID: spaceServiceRoom.id,

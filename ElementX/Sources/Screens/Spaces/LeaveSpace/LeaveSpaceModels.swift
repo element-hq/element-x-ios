@@ -21,7 +21,7 @@ struct LeaveSpaceViewState: BindableState {
     
     var title: String {
         switch leaveHandle.mode {
-        case .lastSpaceAdmin: L10n.screenLeaveSpaceTitleLastAdmin(spaceName)
+        case .spaceNeedsNewOwner: L10n.screenLeaveSpaceTitleLastAdmin(spaceName)
         default: L10n.screenLeaveSpaceTitle(spaceName)
         }
     }
@@ -29,9 +29,9 @@ struct LeaveSpaceViewState: BindableState {
     var subtitle: String? {
         switch leaveHandle.mode {
         case .manyRooms: L10n.screenLeaveSpaceSubtitle
-        case .onlyAdminRooms: L10n.screenLeaveSpaceSubtitleOnlyLastAdmin
+        case .roomsNeedNewOwner: L10n.screenLeaveSpaceSubtitleOnlyLastAdmin
         case .noRooms: nil
-        case .lastSpaceAdmin: L10n.screenLeaveSpaceSubtitleLastAdmin
+        case .spaceNeedsNewOwner: L10n.screenLeaveSpaceSubtitleLastAdmin
         }
     }
     

@@ -13,12 +13,12 @@ final class LeaveSpaceHandleProxy {
     let id: String
     var rooms: [LeaveSpaceRoomDetails]
     
-    enum Mode { case manyRooms, onlyAdminRooms, noRooms, lastSpaceAdmin }
+    enum Mode { case manyRooms, roomsNeedNewOwner, noRooms, spaceNeedsNewOwner }
     let mode: Mode
     
     private let leaveHandle: LeaveSpaceHandleProtocol
     
-    var canLeave: Bool { mode != .lastSpaceAdmin }
+    var canLeave: Bool { mode != .spaceNeedsNewOwner }
     var selectedCount: Int { rooms.count { $0.isSelected } }
     
     init(spaceID: String, leaveHandle: LeaveSpaceHandleProtocol) {
@@ -36,16 +36,17 @@ final class LeaveSpaceHandleProxy {
                     return nil
                 }
                 return .init(spaceServiceRoom: SpaceServiceRoom(spaceRoom: room.spaceRoom),
-                             isLastAdmin: room.isLastAdmin,
-                             isSelected: !room.isLastAdmin)
+                             isLastOwner: room.isLastOwner,
+                             areCreatorsPrivileged: room.areCreatorsPrivileged,
+                             isSelected: !room.isLastOwner)
             }
         
-        mode = if space?.isLastAdmin == true {
-            .lastSpaceAdmin
+        mode = if let space, space.isLastOwner, space.spaceRoom.numJoinedMembers > 1 {
+            .spaceNeedsNewOwner
         } else if self.rooms.isEmpty {
             .noRooms
-        } else if self.rooms.count(where: { !$0.isLastAdmin }) == 0 {
-            .onlyAdminRooms
+        } else if self.rooms.count(where: { $0.canLeave }) == 0 {
+            .roomsNeedNewOwner
         } else {
             .manyRooms
         }
@@ -58,7 +59,7 @@ final class LeaveSpaceHandleProxy {
     }
     
     func selectAll() {
-        for room in rooms where !room.isLastAdmin {
+        for room in rooms where room.canLeave {
             room.isSelected = true
         }
     }
@@ -87,12 +88,14 @@ final class LeaveSpaceHandleProxy {
 
 @Observable class LeaveSpaceRoomDetails {
     let spaceServiceRoom: SpaceServiceRoomProtocol
-    let isLastAdmin: Bool
+    let canLeave: Bool
+    let areCreatorsPrivileged: Bool
     var isSelected: Bool
     
-    init(spaceServiceRoom: SpaceServiceRoomProtocol, isLastAdmin: Bool, isSelected: Bool) {
+    init(spaceServiceRoom: SpaceServiceRoomProtocol, isLastOwner: Bool, areCreatorsPrivileged: Bool, isSelected: Bool) {
         self.spaceServiceRoom = spaceServiceRoom
-        self.isLastAdmin = isLastAdmin
+        canLeave = !isLastOwner || spaceServiceRoom.joinedMembersCount == 1
         self.isSelected = isSelected
+        self.areCreatorsPrivileged = areCreatorsPrivileged
     }
 }
