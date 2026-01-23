@@ -152,6 +152,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         case .finishManagingChildren:
             withAnimation(.easeOut(duration: 0.25).disabledDuringTests()) {
                 state.editMode = .inactive
+                state.editModeRemovedIDs = []
             } completion: {
                 self.state.editModeSelectedIDs.removeAll()
             }
@@ -195,12 +196,19 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         
         MXLog.info("Removing \(state.editModeSelectedIDs.count) children from space \(spaceRoomListProxy.id)")
         
+        var removedIDs: [String] = [] // Using an intermediate array so the screen doesn't change until the operation finishes.
         for childID in state.editModeSelectedIDs {
             switch await spaceServiceProxy.removeChild(childID, from: spaceRoomListProxy.id) {
             case .success:
-                MXLog.info("Successfully removed \(childID) from \(spaceRoomListProxy.id)")
-            case .failure:
+                removedIDs.append(childID)
+            case .failure(let error):
+                MXLog.error("Failed removing room from space: \(error)")
                 showFailureIndicator()
+                
+                // Hide rooms that were successfully removed.
+                state.editModeSelectedIDs = state.editModeSelectedIDs.filter { !removedIDs.contains($0) }
+                state.editModeRemovedIDs.formUnion(removedIDs)
+                
                 return
             }
         }

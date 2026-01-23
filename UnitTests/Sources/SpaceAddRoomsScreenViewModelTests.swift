@@ -69,10 +69,10 @@ class SpaceAddRoomsScreenViewModelTests: XCTestCase {
         // When there's a failure half way through saving.
         let successfulIDs = context.viewState.roomsSection.rooms.map(\.id).prefix(2)
         spaceServiceProxy.addChildToClosure = { childID, _ in
-            if !successfulIDs.contains(childID) {
-                .failure(.sdkError(SpaceServiceProxyMockError.generic))
-            } else {
+            if successfulIDs.contains(childID) {
                 .success(())
+            } else {
+                .failure(.sdkError(SpaceServiceProxyMockError.generic))
             }
         }
         
