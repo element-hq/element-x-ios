@@ -89,7 +89,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
         case .initial, .spacesScreen:
             break
         case .createSpaceFlow:
-            startChatFlowCoordinator?.clearRoute(animated: animated)
+            navigationSplitCoordinator.setSheetCoordinator(nil)
             clearRoute(animated: animated)
         }
     }

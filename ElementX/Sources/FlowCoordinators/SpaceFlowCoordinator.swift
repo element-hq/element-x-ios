@@ -177,7 +177,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             rolesAndPermissionsFlowCoordinator?.clearRoute(animated: animated)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         case .createChildRoomFlow:
-            createChildRoomFlowCoordinator?.clearRoute(animated: animated)
+            navigationStackCoordinator.setSheetCoordinator(nil)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         }
     }
