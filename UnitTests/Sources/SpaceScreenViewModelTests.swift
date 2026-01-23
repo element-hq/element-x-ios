@@ -309,7 +309,7 @@ class SpaceScreenViewModelTests: XCTestCase {
     // MARK: - Helpers
     
     private func setupViewModel(initialSpaceRooms: [SpaceServiceRoom] = [], paginationResponses: [[SpaceServiceRoom]] = []) {
-        spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true)),
+        spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoom.mock(isSpace: true),
                                                           initialSpaceRooms: initialSpaceRooms,
                                                           paginationStateSubject: paginationStateSubject,
                                                           paginationResponses: paginationResponses))

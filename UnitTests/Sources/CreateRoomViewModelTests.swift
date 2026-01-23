@@ -272,7 +272,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     }
     
     func testCreateRoomInAnAlreadySelectedSpace() async throws {
-        let space = SpaceServiceRoomMock(.init(isSpace: true, joinRule: .private))
+        let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .private)
         setup(spacesSelectionMode: .preSelected(space))
         
         context.send(viewAction: .updateRoomName("A"))
@@ -307,7 +307,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     }
     
     func testCreateRoomInAnPublicSpaceAvailableTypes() async throws {
-        let space = SpaceServiceRoomMock(.init(isSpace: true, joinRule: .public))
+        let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .public)
         setup(spacesSelectionMode: .preSelected(space))
         
         // Given a form with a blank topic.
