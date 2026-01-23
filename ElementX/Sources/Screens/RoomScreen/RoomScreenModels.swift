@@ -84,13 +84,7 @@ struct RoomScreenViewState: BindableState {
     var historyVisibleDetails: RoomScreenFooterViewDetails?
     
     var footerDetails: RoomScreenFooterViewDetails? {
-        if let identityViolationDetails {
-            return identityViolationDetails
-        }
-        guard canSendMessage else {
-            return nil
-        }
-        return historyVisibleDetails
+        identityViolationDetails ?? historyVisibleDetails
     }
     
     var bindings = RoomScreenViewStateBindings()
