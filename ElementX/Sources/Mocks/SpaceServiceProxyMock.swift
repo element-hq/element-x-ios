@@ -11,6 +11,10 @@ import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
 
+enum SpaceServiceProxyMockError: Error {
+    case generic
+}
+
 extension SpaceServiceProxyMock {
     struct Configuration {
         var topLevelSpaces: [SpaceServiceRoomProtocol] = []

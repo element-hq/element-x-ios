@@ -237,6 +237,43 @@ class SpaceScreenViewModelTests: XCTestCase {
         XCTAssertTrue(spaceRoomListProxy.resetCalled, "The room list should be reset to pick up the changes.")
     }
     
+    func testManageRoomsRemovingChildrenWithFailure() async throws {
+        setupViewModel(initialSpaceRooms: mockSpaceRooms)
+        
+        context.send(viewAction: .manageChildren)
+        for room in context.viewState.visibleRooms {
+            context.send(viewAction: .spaceAction(.select(room)))
+        }
+        context.send(viewAction: .removeSelectedChildren)
+        
+        XCTAssertEqual(context.viewState.editMode, .transient, "Managing rooms should enable edit mode.")
+        XCTAssertEqual(context.viewState.visibleRooms.count, 3, "There should be 3 rooms to begin with.")
+        XCTAssertEqual(context.viewState.editModeSelectedIDs.count, 3, "All of the visible rooms should be selected.")
+        XCTAssertTrue(context.isPresentingRemoveChildrenConfirmation, "A confirmation prompt should be shown before removing children.")
+        
+        let successfulIDs = context.viewState.editModeSelectedIDs.prefix(1)
+        spaceServiceProxy.removeChildFromClosure = { childID, _ in
+            if successfulIDs.contains(childID) {
+                .success(())
+            } else {
+                .failure(.sdkError(SpaceServiceProxyMockError.generic))
+            }
+        }
+        
+        let deferred = deferFulfillment(context.observe(\.viewState.visibleRooms.count)) { $0 == 2 }
+        let deferredFailure = deferFailure(context.observe(\.viewState.editMode), timeout: 1) { $0 == .inactive }
+        context.send(viewAction: .confirmRemoveSelectedChildren)
+        try await deferred.fulfill()
+        try await deferredFailure.fulfill()
+        
+        XCTAssertEqual(context.viewState.editMode, .transient, "The screen should remain in edit mode.")
+        XCTAssertEqual(context.viewState.visibleRooms.count, 2, "The removed rooms should no longer be listed for selection.")
+        XCTAssertEqual(context.viewState.editModeSelectedIDs.count, 2, "The removed rooms should no longer be selected.")
+        
+        XCTAssertEqual(spaceServiceProxy.removeChildFromCallsCount, 2, "Each selected room should have been removed.")
+        XCTAssertFalse(spaceRoomListProxy.resetCalled, "The room list should be reset to pick up the changes.")
+    }
+    
     func testLeavingSpace() async throws {
         setupViewModel()
         XCTAssertNil(context.leaveSpaceViewModel)

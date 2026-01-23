@@ -39,6 +39,7 @@ struct SpaceScreenViewState: BindableState {
     
     var editMode: EditMode = .inactive
     var editModeSelectedIDs: Set<String> = []
+    var editModeRemovedIDs: Set<String> = []
     
     var bindings = SpaceScreenViewStateBindings()
     
@@ -50,7 +51,7 @@ struct SpaceScreenViewState: BindableState {
         if editMode == .inactive {
             rooms
         } else {
-            rooms.filter { !$0.isSpace }
+            rooms.filter { !$0.isSpace && !editModeRemovedIDs.contains($0.id) }
         }
     }
     

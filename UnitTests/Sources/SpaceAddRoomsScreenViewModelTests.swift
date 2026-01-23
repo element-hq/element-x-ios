@@ -14,6 +14,7 @@ import XCTest
 @MainActor
 class SpaceAddRoomsScreenViewModelTests: XCTestCase {
     var spaceRoomListProxy: SpaceRoomListProxyMock!
+    var spaceServiceProxy: SpaceServiceProxyMock!
     
     var viewModel: SpaceAddRoomsScreenViewModelProtocol!
     var context: SpaceAddRoomsScreenViewModelType.Context { viewModel.context }
@@ -44,7 +45,50 @@ class SpaceAddRoomsScreenViewModelTests: XCTestCase {
         
         try await deferredAction.fulfill()
         
+        XCTAssertTrue(spaceServiceProxy.addChildToCalled, "The room should have been added to the space.")
         XCTAssertTrue(spaceRoomListProxy.resetCalled, "The room list should be reset to pick up the changes.")
+    }
+    
+    func testFailureWithMultipleRoomsSelected() async throws {
+        // Given a view model with 4 selected rooms.
+        setupViewModel()
+        
+        var deferred = deferFulfillment(context.observe(\.viewState.roomsSection),
+                                        message: "There should be 4 search results.") { section in
+            section.type == .searchResults && section.rooms.count == 4
+        }
+        context.searchQuery = "f"
+        context.send(viewAction: .searchQueryChanged)
+        try await deferred.fulfill()
+        
+        for room in context.viewState.roomsSection.rooms {
+            context.send(viewAction: .toggleRoom(room))
+        }
+        XCTAssertEqual(context.viewState.selectedRooms.count, 4, "All of the rooms should be selected.")
+        
+        // When there's a failure half way through saving.
+        let successfulIDs = context.viewState.roomsSection.rooms.map(\.id).prefix(2)
+        spaceServiceProxy.addChildToClosure = { childID, _ in
+            if successfulIDs.contains(childID) {
+                .success(())
+            } else {
+                .failure(.sdkError(SpaceServiceProxyMockError.generic))
+            }
+        }
+        
+        deferred = deferFulfillment(context.observe(\.viewState.roomsSection),
+                                    message: "The search results should update.") { section in
+            section.type == .searchResults && section.rooms.count == 2
+        }
+        context.send(viewAction: .save)
+        try await deferred.fulfill()
+        
+        // Then the screen should be updated to only show the rooms that still need to be added.
+        XCTAssertEqual(spaceServiceProxy.addChildToCallsCount, 3, "The remaining calls to the service should stop after a failure.")
+        XCTAssertFalse(context.viewState.selectedRooms.contains(where: { successfulIDs.contains($0.id) }),
+                       "The added rooms should no longer show as selected.")
+        XCTAssertFalse(context.viewState.roomsSection.rooms.contains(where: { successfulIDs.contains($0.id) }),
+                       "The added rooms should no longer be listed for selection.")
     }
     
     func setupViewModel() {
@@ -53,6 +97,7 @@ class SpaceAddRoomsScreenViewModelTests: XCTestCase {
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentlyVisitedRoomsFilterReturnValue = .init(repeating: JoinedRoomProxyMock(.init()), count: 5)
+        spaceServiceProxy = clientProxy.underlyingSpaceService as? SpaceServiceProxyMock
         
         viewModel = SpaceAddRoomsScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
                                                  userSession: UserSessionMock(.init(clientProxy: clientProxy)),
