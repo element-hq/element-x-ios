@@ -12,6 +12,7 @@ struct AttributedStringBuilderComponent: Hashable, Identifiable {
     let id: String
     let attributedString: AttributedString
     let isBlockquote: Bool
+    let isCodeBlock: Bool
 }
 
 protocol AttributedStringBuilderProtocol {
