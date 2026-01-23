@@ -22,14 +22,14 @@ struct SpaceScreenCoordinatorParameters {
 
 enum SpaceScreenCoordinatorAction {
     case selectSpace(SpaceRoomListProxyProtocol)
-    case selectUnjoinedSpace(SpaceServiceRoomProtocol)
+    case selectUnjoinedSpace(SpaceServiceRoom)
     case selectRoom(roomID: String)
     case leftSpace
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
     case displaySpaceSettings(roomProxy: JoinedRoomProxyProtocol)
     case displayRolesAndPermissions(roomProxy: JoinedRoomProxyProtocol)
     case addExistingChildren
-    case displayCreateChildRoomFlow(space: SpaceServiceRoomProtocol)
+    case displayCreateChildRoomFlow(space: SpaceServiceRoom)
 }
 
 final class SpaceScreenCoordinator: CoordinatorProtocol {

@@ -14,12 +14,12 @@ struct SpaceRoomCell: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.editMode) private var editMode
     
-    let spaceServiceRoom: SpaceServiceRoomProtocol
+    let spaceServiceRoom: SpaceServiceRoom
     let isSelected: Bool
     var isJoining = false
     let mediaProvider: MediaProviderProtocol!
     
-    enum Action { case select(SpaceServiceRoomProtocol), join(SpaceServiceRoomProtocol) }
+    enum Action { case select(SpaceServiceRoom), join(SpaceServiceRoom) }
     let action: (Action) -> Void
     
     private let verticalInsets = 12.0
@@ -179,7 +179,7 @@ struct SpaceRoomCellButtonStyle: ButtonStyle {
 struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
     static let mediaProvider = MediaProviderMock(configuration: .init())
     
-    static let spaces = [SpaceServiceRoomProtocol].mockSpaceList
+    static let spaces = [SpaceServiceRoom].mockSpaceList
     
     static var previews: some View {
         ScrollView {
@@ -190,21 +190,21 @@ struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
                                   mediaProvider: mediaProvider) { _ in }
                 }
                 
-                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Space being joined", isSpace: true)),
+                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoom.mock(id: "Space being joined", isSpace: true),
                               isSelected: false,
                               isJoining: true,
                               mediaProvider: mediaProvider) { _ in }
-                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Room being joined", isSpace: false)),
+                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoom.mock(id: "Room being joined", isSpace: false),
                               isSelected: false,
                               isJoining: true,
                               mediaProvider: mediaProvider) { _ in }
                 
-                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Selected", isSpace: false, state: .joined)),
+                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoom.mock(id: "Selected", isSpace: false, state: .joined),
                               isSelected: true,
                               isJoining: false,
                               mediaProvider: mediaProvider) { _ in }
                     .environment(\.editMode, .constant(.active))
-                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoomMock(.init(id: "Unselected", isSpace: false, state: .joined)),
+                SpaceRoomCell(spaceServiceRoom: SpaceServiceRoom.mock(id: "Unselected", isSpace: false, state: .joined),
                               isSelected: false,
                               isJoining: false,
                               mediaProvider: mediaProvider) { _ in }

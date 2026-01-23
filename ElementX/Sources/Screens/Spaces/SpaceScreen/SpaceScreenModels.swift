@@ -10,24 +10,24 @@ import SwiftUI
 
 enum SpaceScreenViewModelAction {
     case selectSpace(SpaceRoomListProxyProtocol)
-    case selectUnjoinedSpace(SpaceServiceRoomProtocol)
+    case selectUnjoinedSpace(SpaceServiceRoom)
     case selectRoom(roomID: String)
     case leftSpace
     case presentRolesAndPermissions(roomProxy: JoinedRoomProxyProtocol)
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
     case displaySpaceSettings(roomProxy: JoinedRoomProxyProtocol)
     case addExistingChildren
-    case displayCreateChildRoomFlow(space: SpaceServiceRoomProtocol)
+    case displayCreateChildRoomFlow(space: SpaceServiceRoom)
 }
 
 struct SpaceScreenViewState: BindableState {
-    var space: SpaceServiceRoomProtocol
+    var space: SpaceServiceRoom
     
     var permalink: URL?
     var roomProxy: JoinedRoomProxyProtocol?
     
     var paginationState: PaginationState = .idle
-    var rooms: [SpaceServiceRoomProtocol]
+    var rooms: [SpaceServiceRoom]
     var selectedSpaceRoomID: String?
     var joiningRoomIDs: Set<String> = []
     
@@ -47,7 +47,7 @@ struct SpaceScreenViewState: BindableState {
         rooms.isEmpty && paginationState == .endReached && canEditChildren
     }
     
-    var visibleRooms: [SpaceServiceRoomProtocol] {
+    var visibleRooms: [SpaceServiceRoom] {
         if editMode == .inactive {
             rooms
         } else {

@@ -17,7 +17,7 @@ import MatrixRustSDKMocks
 class SpaceScreenViewModelTests: XCTestCase {
     var spaceRoomListProxy: SpaceRoomListProxyMock!
     var spaceServiceProxy: SpaceServiceProxyMock!
-    let mockSpaceRooms = [SpaceServiceRoomProtocol].mockSpaceList
+    let mockSpaceRooms = [SpaceServiceRoom].mockSpaceList
     var clientProxy: ClientProxyMock!
     var paginationStateSubject: CurrentValueSubject<SpaceRoomListPaginationState, Never> = .init(.idle(endReached: true))
     var rustLeaveHandle: LeaveSpaceHandleSDKMock!
@@ -308,7 +308,7 @@ class SpaceScreenViewModelTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func setupViewModel(initialSpaceRooms: [SpaceServiceRoomProtocol] = [], paginationResponses: [[SpaceServiceRoomProtocol]] = []) {
+    private func setupViewModel(initialSpaceRooms: [SpaceServiceRoom] = [], paginationResponses: [[SpaceServiceRoom]] = []) {
         spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true)),
                                                           initialSpaceRooms: initialSpaceRooms,
                                                           paginationStateSubject: paginationStateSubject,

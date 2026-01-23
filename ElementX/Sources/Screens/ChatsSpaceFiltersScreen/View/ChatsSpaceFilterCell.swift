@@ -89,7 +89,7 @@ struct ChatsSpaceFilterCell: View {
 struct ChatsSpaceFilterCell_Previews: PreviewProvider, TestablePreview {
     static let mediaProvider = MediaProviderMock(configuration: .init())
     
-    static let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces2
+    static let spaces = [SpaceServiceRoom].mockJoinedSpaces2
     
     static var previews: some View {
         VStack(spacing: 0) {

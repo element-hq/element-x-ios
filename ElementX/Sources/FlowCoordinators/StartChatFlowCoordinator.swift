@@ -25,7 +25,7 @@ enum StartChatFlowCoordinatorAction {
 enum StartChatFlowCoordinatorEntryPoint {
     case startChat
     case createSpace
-    case createRoomInSpace(SpaceServiceRoomProtocol)
+    case createRoomInSpace(SpaceServiceRoom)
 }
 
 class StartChatFlowCoordinator: FlowCoordinatorProtocol {
@@ -141,7 +141,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         }
         stateMachine.addRoutes(event: .createRoom(isSpace: false), transitions: [.initial => .createRoom]) { [weak self] context in
             guard context.fromState == .initial else { return } // Required check because the event is used in another route.
-            guard let space = context.userInfo as? SpaceServiceRoomProtocol else {
+            guard let space = context.userInfo as? SpaceServiceRoom else {
                 fatalError("This transition only supports creating a room in a pre-selected space.")
             }
             self?.presentCreateRoomScreen(isSpace: false, spaceSelectionMode: .preSelected(space), isRoot: true)

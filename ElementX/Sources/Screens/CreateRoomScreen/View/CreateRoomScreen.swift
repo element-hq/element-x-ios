@@ -378,21 +378,21 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         return viewModel
     }()
     
-    static let selectedSpaceViewModel = makeViewModel(selectionMode: .preSelected(SpaceServiceRoomMock(.init(name: "Awesome Space",
-                                                                                                             isSpace: true,
-                                                                                                             joinRule: .private))))
+    static let selectedSpaceViewModel = makeViewModel(selectionMode: .preSelected(SpaceServiceRoom.mock(name: "Awesome Space",
+                                                                                                        isSpace: true,
+                                                                                                        joinRule: .private)))
     
     static let selectedSpaceWithListViewModel = {
         let viewModel = makeViewModel()
-        viewModel.context.selectedSpace = [SpaceServiceRoomProtocol].mockJoinedSpaces2.first
+        viewModel.context.selectedSpace = [SpaceServiceRoom].mockJoinedSpaces2.first
         return viewModel
     }()
     
     static let selectedSpaceWithAskToJoinViewModel = {
         let viewModel = makeViewModel(isKnockingEnabled: true,
-                                      selectionMode: .preSelected(SpaceServiceRoomMock(.init(name: "Awesome Space",
-                                                                                             isSpace: true,
-                                                                                             joinRule: .private))))
+                                      selectionMode: .preSelected(SpaceServiceRoom.mock(name: "Awesome Space",
+                                                                                        isSpace: true,
+                                                                                        joinRule: .private)))
         viewModel.context.selectedAccessType = .askToJoinWithSpaceMembers
         return viewModel
     }()
@@ -469,7 +469,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         let clientProxy = ClientProxyMock(.init(userIDServerName: "example.org",
                                                 userID: "@userid:example.com"))
         clientProxy.isAliasAvailableReturnValue = .success(isAliasAvailable)
-        let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces2
+        let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         clientProxy.spaceService = SpaceServiceProxyMock(.init(editableSpaces: spaces))
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         

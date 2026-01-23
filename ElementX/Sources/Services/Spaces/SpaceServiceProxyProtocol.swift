@@ -15,11 +15,11 @@ enum SpaceServiceProxyError: Error {
 }
 
 struct SpaceServiceFilter: Identifiable, Equatable {
-    let room: SpaceServiceRoomProtocol
+    let room: SpaceServiceRoom
     let level: UInt
     let descendants: Set<String>
     
-    init(room: SpaceServiceRoomProtocol, level: UInt, descendants: Set<String>) {
+    init(room: SpaceServiceRoom, level: UInt, descendants: Set<String>) {
         self.room = room
         self.level = level
         self.descendants = descendants
@@ -43,17 +43,17 @@ struct SpaceServiceFilter: Identifiable, Equatable {
 
 // sourcery: AutoMockable
 protocol SpaceServiceProxyProtocol {
-    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> { get }
+    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoom], Never> { get }
     var spaceFilterPublisher: CurrentValuePublisher<[SpaceServiceFilter], Never> { get }
     
     func spaceRoomList(spaceID: String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>
     /// Returns a joined space given its identifier
-    func spaceForIdentifier(spaceID: String) async -> Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError>
+    func spaceForIdentifier(spaceID: String) async -> Result<SpaceServiceRoom?, SpaceServiceProxyError>
     func leaveSpace(spaceID: String) async -> Result<LeaveSpaceHandleProxy, SpaceServiceProxyError>
     /// Returns all the parent spaces of a child that user has joined.
-    func joinedParents(childID: String) async -> Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>
+    func joinedParents(childID: String) async -> Result<[SpaceServiceRoom], SpaceServiceProxyError>
     /// Returns all the joined spaces that can be edited by the user
-    func editableSpaces() async -> [SpaceServiceRoomProtocol]
+    func editableSpaces() async -> [SpaceServiceRoom]
     
     /// Adds a room (or space) as a child of another space.
     func addChild(_ childID: String, to spaceID: String) async -> Result<Void, SpaceServiceProxyError>

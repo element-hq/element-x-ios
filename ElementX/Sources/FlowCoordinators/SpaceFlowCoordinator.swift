@@ -18,7 +18,7 @@ enum SpaceFlowCoordinatorAction {
 
 enum SpaceFlowCoordinatorEntryPoint {
     case space(SpaceRoomListProxyProtocol)
-    case joinSpace(SpaceServiceRoomProtocol)
+    case joinSpace(SpaceServiceRoom)
     
     var spaceID: String {
         switch self {
@@ -301,7 +301,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             guard event == .startCreateChildRoomFlow, case .space = fromState else { return nil }
             return .createChildRoomFlow
         } handler: { [weak self] context in
-            guard let space = context.userInfo as? SpaceServiceRoomProtocol else { fatalError("The space is missing") }
+            guard let space = context.userInfo as? SpaceServiceRoom else { fatalError("The space is missing") }
             self?.startCreateChildFlow(space: space)
         }
         
@@ -561,7 +561,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         flowCoordinator.start()
     }
     
-    private func startCreateChildFlow(space: SpaceServiceRoomProtocol) {
+    private func startCreateChildFlow(space: SpaceServiceRoom) {
         let stackCoordinator = NavigationStackCoordinator()
         let flowCoordinator = StartChatFlowCoordinator(entryPoint: .createRoomInSpace(space),
                                                        userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.userSession.clientProxy),

@@ -39,7 +39,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
-        var selectedSpace: SpaceServiceRoomProtocol?
+        var selectedSpace: SpaceServiceRoom?
         var canSelectSpace = false
         switch spaceSelectionMode {
         case .editableSpacesList:

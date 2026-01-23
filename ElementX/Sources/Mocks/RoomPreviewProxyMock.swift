@@ -98,7 +98,7 @@ extension RoomPreviewProxyMock {
         underlyingOwnMembershipDetails = roomMembershipDetails
     }
     
-    convenience init(spaceServiceRoom: SpaceServiceRoomProtocol) {
+    convenience init(spaceServiceRoom: SpaceServiceRoom) {
         self.init(Configuration(roomID: spaceServiceRoom.id,
                                 canonicalAlias: spaceServiceRoom.canonicalAlias ?? "",
                                 name: spaceServiceRoom.name,

@@ -85,7 +85,7 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
     
     // MARK: - Private
     
-    private func selectSpace(_ spaceServiceRoom: SpaceServiceRoomProtocol) async {
+    private func selectSpace(_ spaceServiceRoom: SpaceServiceRoom) async {
         switch await spaceServiceProxy.spaceRoomList(spaceID: spaceServiceRoom.id) {
         case .success(let spaceRoomListProxy):
             actionsSubject.send(.selectSpace(spaceRoomListProxy))

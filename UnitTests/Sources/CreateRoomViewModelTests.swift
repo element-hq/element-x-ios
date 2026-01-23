@@ -223,7 +223,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     }
     
     func testCreateRoomInASelectedSpaceFromTheList() async throws {
-        let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces2
+        let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         setup()
         
         context.send(viewAction: .updateRoomName("A"))

@@ -210,15 +210,15 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
         appSettings.spaceSettingsEnabled = true
         appSettings.createSpaceEnabled = true
         
-        let spaceServiceRoom = SpaceServiceRoomMock(.init(id: "!eng-space:matrix.org",
-                                                          name: "Engineering Team",
-                                                          isSpace: true,
-                                                          childrenCount: 30,
-                                                          joinedMembersCount: 76,
-                                                          heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
-                                                          topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in.",
-                                                          canonicalAlias: "#engineering-team:element.io",
-                                                          joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
+        let spaceServiceRoom = SpaceServiceRoom.mock(id: "!eng-space:matrix.org",
+                                                     name: "Engineering Team",
+                                                     isSpace: true,
+                                                     childrenCount: 30,
+                                                     joinedMembersCount: 76,
+                                                     heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
+                                                     topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in.",
+                                                     canonicalAlias: "#engineering-team:element.io",
+                                                     joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")]))
         let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: spaceServiceRoom,
                                                               initialSpaceRooms: isNewSpace ? [] : .mockSpaceList))
         

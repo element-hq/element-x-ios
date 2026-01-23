@@ -200,7 +200,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                       spaceVisibility: nil)
     }
     
-    private func updateSpaceRoomDetails(spaceServiceRoom: SpaceServiceRoomProtocol, inviter: RoomInviterDetails?) async {
+    private func updateSpaceRoomDetails(spaceServiceRoom: SpaceServiceRoom, inviter: RoomInviterDetails?) async {
         state.roomDetails = JoinRoomScreenRoomDetails(name: spaceServiceRoom.name,
                                                       topic: spaceServiceRoom.topic,
                                                       canonicalAlias: spaceServiceRoom.canonicalAlias,

@@ -13,7 +13,7 @@ import XCTest
 
 @MainActor
 class SpacesScreenViewModelTests: XCTestCase {
-    var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoomProtocol], Never>!
+    var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoom], Never>!
     var spaceServiceProxy: SpaceServiceProxyMock!
     var appSettings: AppSettings!
     

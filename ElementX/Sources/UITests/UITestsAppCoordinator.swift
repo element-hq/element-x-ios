@@ -598,7 +598,7 @@ class MockScreen: Identifiable {
                                                     deviceID: "MOCKCLIENT",
                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
                                                     spaceServiceConfiguration: .init(topLevelSpaces: .mockSpaceList.filter(\.isSpace) + .mockSingleRoom),
-                                                    roomPreviews: [SpaceServiceRoomProtocol].mockSpaceList.map(RoomPreviewProxyMock.init),
+                                                    roomPreviews: [SpaceServiceRoom].mockSpaceList.map(RoomPreviewProxyMock.init),
                                                     defaultRoomMembers: .allMembersAsAdmin))
             clientProxy.recentlyVisitedRoomsFilterReturnValue = .mockRooms
             
