@@ -17,6 +17,9 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var suggestedRooms: [SpaceAddRoomsScreenRoom] = []
+    /// A place to track rooms that were sucessfully added to the space in order to filter them out from
+    /// the roomsSection when a failure occurs part way through the array.
+    private var addedRoomIDs: Set<String> = []
     
     private var actionsSubject: PassthroughSubject<SpaceAddRoomsScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<SpaceAddRoomsScreenViewModelAction, Never> {
@@ -89,15 +92,15 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
         }
         
         let existingRooms = spaceRoomListProxy.spaceRoomsPublisher.value
-        var rooms = [SpaceAddRoomsScreenRoom]()
         
-        for summary in roomSummaryProvider.roomListPublisher.value where !summary.isDirect && !existingRooms.contains(where: { $0.id == summary.id }) {
-            rooms.append(.init(summary: summary))
-        }
+        let rooms = roomSummaryProvider.roomListPublisher.value
+            .lazy
+            .filter { [addedRoomIDs] summary in
+                !summary.isDirect && !existingRooms.contains { $0.id == summary.id } && !addedRoomIDs.contains(summary.id)
+            }
+            .map(SpaceAddRoomsScreenRoom.init)
         
-        state.roomsSection = .init(type: .searchResults, rooms: rooms)
-        
-        // rooms crap
+        state.roomsSection = .init(type: .searchResults, rooms: Array(rooms))
     }
     
     /// The actual range values don't matter as long as they contain the lower
@@ -131,14 +134,25 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
         showSavingIndicator()
         defer { hideSavingIndicator() }
         
+        MXLog.info("Adding \(state.selectedRooms.count) rooms to space \(spaceRoomListProxy.id)")
+        
         for room in state.selectedRooms {
-            if case .failure(let error) = await spaceServiceProxy.addChild(room.id, to: spaceRoomListProxy.id) {
+            switch await spaceServiceProxy.addChild(room.id, to: spaceRoomListProxy.id) {
+            case .success:
+                addedRoomIDs.insert(room.id)
+            case .failure(let error):
                 MXLog.error("Failed adding room to space: \(error)")
                 showErrorIndicator()
-                updateRooms() // Hide any rooms that were already added.
+                
+                // Hide rooms that were successfully added.
+                state.selectedRooms.removeAll { addedRoomIDs.contains($0.id) }
+                updateRooms()
+                
                 return
             }
         }
+        
+        MXLog.info("\(state.selectedRooms.count) rooms added to space \(spaceRoomListProxy.id)")
         
         await spaceRoomListProxy.resetAndWaitForFullReload(timeout: .seconds(10))
         

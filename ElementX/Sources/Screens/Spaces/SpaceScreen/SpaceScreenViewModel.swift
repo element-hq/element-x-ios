@@ -193,6 +193,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         
         state.bindings.isPresentingRemoveChildrenConfirmation = false
         
+        MXLog.info("Removing \(state.editModeSelectedIDs.count) children from space \(spaceRoomListProxy.id)")
+        
         for childID in state.editModeSelectedIDs {
             switch await spaceServiceProxy.removeChild(childID, from: spaceRoomListProxy.id) {
             case .success:
@@ -202,6 +204,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                 return
             }
         }
+        
+        MXLog.info("\(state.editModeSelectedIDs.count) children removed from space \(spaceRoomListProxy.id)")
         
         await spaceRoomListProxy.resetAndWaitForFullReload(timeout: .seconds(10))
         
