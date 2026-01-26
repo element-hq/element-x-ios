@@ -28,17 +28,18 @@ extension AttributedString {
                 attributedString.removeSubrange(range)
             }
             
-            if isBlockquote {
-                components.append(AttributedStringBuilderComponent(id: String(attributedString.characters),
-                                                                   attributedString: attributedString,
-                                                                   isBlockquote: true,
-                                                                   isCodeBlock: false))
-            } else {
-                components.append(AttributedStringBuilderComponent(id: String(attributedString.characters),
-                                                                   attributedString: attributedString,
-                                                                   isBlockquote: false,
-                                                                   isCodeBlock: isCodeBlock))
+            let componentType: AttributedStringBuilderComponent.ComponentType = switch (isBlockquote, isCodeBlock) {
+            case (true, _):
+                .blockquote
+            case (false, true):
+                .codeBlock
+            case (false, false):
+                .plainText
             }
+                    
+            components.append(AttributedStringBuilderComponent(id: String(attributedString.characters),
+                                                               attributedString: attributedString,
+                                                               type: componentType))
         }
         
         return components

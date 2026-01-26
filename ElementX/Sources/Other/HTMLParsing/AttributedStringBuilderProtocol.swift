@@ -9,10 +9,15 @@
 import Foundation
 
 struct AttributedStringBuilderComponent: Hashable, Identifiable {
+    enum ComponentType {
+        case plainText
+        case blockquote
+        case codeBlock
+    }
+    
     let id: String
     let attributedString: AttributedString
-    let isBlockquote: Bool
-    let isCodeBlock: Bool
+    let type: ComponentType
 }
 
 protocol AttributedStringBuilderProtocol {

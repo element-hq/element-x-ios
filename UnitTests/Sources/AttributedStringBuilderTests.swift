@@ -356,7 +356,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertTrue(component.isBlockquote, "The reply quote should be a blockquote.")
+        XCTAssertTrue(component.type == .blockquote, "The reply quote should be a blockquote.")
     }
     
     func testMultipleGroupedBlockquotes() {

@@ -81,50 +81,53 @@ struct FormattedBodyText: View {
                 // Ignore if the string contains only the layout correction
                 if String(component.attributedString.characters) == layoutDirection.isolateLayoutUnicodeString {
                     EmptyView()
-                } else if component.isBlockquote {
-                    // The rendered blockquote with a greedy width. The custom layout prevents the
-                    // infinite width from increasing the overall width of the view.
-                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading, 12.0)
-                        .overlay(alignment: .leading) {
-                            // User an overlay here so that the rectangle's infinite height doesn't take priority
-                            Capsule()
-                                .frame(width: 2.0)
-                                .padding(.leading, 5.0)
-                                .foregroundColor(.compound.textSecondary)
-                                .padding(.vertical, 2)
-                        }
-                        .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
-                } else if component.isCodeBlock {
-                    ScrollView(.horizontal) {
-                        MessageText(attributedString: component.attributedString)
-                            .padding([.horizontal, .top], 4)
-                            .padding(.bottom, 8)
-                    }
-                    .background(.compound._bgCodeBlock)
-                    .scrollIndicatorsFlash(onAppear: true)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, 4)
-                    .layoutPriority(TimelineBubbleLayout.Priority.regularText)
-                    .contextMenu {
-                        Button(L10n.actionCopy) {
-                            UIPasteboard.general.string = component.attributedString.string
-                        }
-                    }
                 } else {
-                    MessageText(attributedString: component.attributedString)
-                        .padding(.horizontal, 4)
+                    switch component.type {
+                    case .blockquote:
+                        // The rendered blockquote with a greedy width. The custom layout prevents the
+                        // infinite width from increasing the overall width of the view.
+                        MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 12.0)
+                            .overlay(alignment: .leading) {
+                                // User an overlay here so that the rectangle's infinite height doesn't take priority
+                                Capsule()
+                                    .frame(width: 2.0)
+                                    .padding(.leading, 5.0)
+                                    .foregroundColor(.compound.textSecondary)
+                                    .padding(.vertical, 2)
+                            }
+                            .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                    case .codeBlock:
+                        ScrollView(.horizontal) {
+                            MessageText(attributedString: component.attributedString)
+                                .padding([.horizontal, .top], 4)
+                                .padding(.bottom, 8)
+                        }
+                        .background(.compound._bgCodeBlock)
+                        .scrollIndicatorsFlash(onAppear: true)
                         .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 4)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                        .contextMenu {
+                            Button(L10n.actionCopy) {
+                                UIPasteboard.general.string = component.attributedString.string
+                            }
+                        }
+                    case .plainText:
+                        MessageText(attributedString: component.attributedString)
+                            .padding(.horizontal, 4)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                    }
                 }
             }
             
             // Make a second iteration through the components adding fixed width blockquotes
             // which are used for layout calculations but won't be rendered.
             ForEach(attributedComponents) { component in
-                if component.isBlockquote {
+                if case .blockquote = component.type {
                     MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.leading, 12.0)
