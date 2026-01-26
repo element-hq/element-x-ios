@@ -349,14 +349,14 @@ class AttributedStringBuilderTests: XCTestCase {
         }
         
         let coalescedComponents = attributedString.formattedComponents
-        XCTAssertEqual(coalescedComponents.count, 1)
+        XCTAssertEqual(coalescedComponents.count, 3)
         
         guard let component = coalescedComponents.first else {
             XCTFail("Could not get the first component")
             return
         }
         
-        XCTAssertTrue(component.isBlockquote, "The reply quote should be a blockquote.")
+        XCTAssertTrue(component.type == .blockquote, "The reply quote should be a blockquote.")
     }
     
     func testMultipleGroupedBlockquotes() {

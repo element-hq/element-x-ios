@@ -15,8 +15,12 @@ extension AttributedString {
     }
     
     var formattedComponents: [AttributedStringBuilderComponent] {
-        runs[\.blockquote].map { value, range in
-            var attributedString = AttributedString(self[range])
+        var components = [AttributedStringBuilderComponent]()
+        
+        for run in runs[\.blockquote, \.codeBlock] {
+            let isBlockquote = run.0 != nil
+            let isCodeBlock = run.1 != nil
+            var attributedString = AttributedString(self[run.2])
             
             // Remove trailing new lines if any
             if attributedString.characters.last?.isNewline ?? false,
@@ -24,10 +28,21 @@ extension AttributedString {
                 attributedString.removeSubrange(range)
             }
             
-            let isBlockquote = value != nil
-            
-            return AttributedStringBuilderComponent(id: String(attributedString.characters), attributedString: attributedString, isBlockquote: isBlockquote)
+            let componentType: AttributedStringBuilderComponent.ComponentType = switch (isBlockquote, isCodeBlock) {
+            case (true, _):
+                .blockquote
+            case (false, true):
+                .codeBlock
+            case (false, false):
+                .plainText
+            }
+                    
+            components.append(AttributedStringBuilderComponent(id: String(attributedString.characters),
+                                                               attributedString: attributedString,
+                                                               type: componentType))
         }
+        
+        return components
     }
     
     /// Replaces the specified placeholder with a string that links to the specified URL.

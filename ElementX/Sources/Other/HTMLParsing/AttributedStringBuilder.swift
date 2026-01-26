@@ -204,7 +204,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 content.setFontPreservingSymbolicTraits(UIFont.monospacedSystemFont(ofSize: fontPointSize, weight: .regular))
                 
                 content.addAttribute(.CodeBlock, value: true, range: NSRange(location: 0, length: content.length))
-                content.addAttribute(.backgroundColor, value: UIColor.compound._bgCodeBlock as Any, range: NSRange(location: 0, length: content.length))
                 
                 // Don't allow identifiers or links in code blocks
                 content.removeAttribute(.MatrixRoomID, range: NSRange(location: 0, length: content.length))
