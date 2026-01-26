@@ -29,7 +29,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     }
     
     func testSetSingleJoinedSpaceMembersAccess() async throws {
-        let singleRoom = [SpaceServiceRoomProtocol].mockSingleRoom
+        let singleRoom = [SpaceServiceRoom].mockSingleRoom
         let space = singleRoom[0]
         setupViewModel(joinedParentSpaces: singleRoom, joinRule: .public)
         
@@ -60,7 +60,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     }
     
     func testSetSingleJoinedAskToJoinWithSpaceMembersAccess() async throws {
-        let singleRoom = [SpaceServiceRoomProtocol].mockSingleRoom
+        let singleRoom = [SpaceServiceRoom].mockSingleRoom
         let space = singleRoom[0]
         setupViewModel(joinedParentSpaces: singleRoom, joinRule: .public)
         
@@ -91,7 +91,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     }
     
     func testSingleUnknownSpaceMembersAccessCanBeReselected() async throws {
-        let singleRoom = [SpaceServiceRoomProtocol].mockSingleRoom
+        let singleRoom = [SpaceServiceRoom].mockSingleRoom
         let space = singleRoom[0]
         setupViewModel(joinedParentSpaces: [], joinRule: .restricted(rules: [.roomMembership(roomId: space.id)]))
         
@@ -122,7 +122,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     }
     
     func testMultipleKnownSpacesMembersSelection() async throws {
-        let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces2
+        let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         setupViewModel(joinedParentSpaces: spaces, joinRule: .public)
         
         let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 3 }
@@ -166,7 +166,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     }
     
     func testMultipleKnownAskToJoinSpacesMembersSelection() async throws {
-        let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces2
+        let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         setupViewModel(joinedParentSpaces: spaces, joinRule: .public)
         
         let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 3 }
@@ -210,7 +210,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     }
     
     func testMultipleSpacesMembersSelection() async throws {
-        let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces2
+        let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         setupViewModel(joinedParentSpaces: spaces,
                        joinRule: .restricted(rules: [.roomMembership(roomId: "unknownSpaceID")]))
         
@@ -256,8 +256,8 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     }
     
     func testMultipleSpacesMembersSelectionWithAnExistingNonParentButJoinedSpace() async throws {
-        let joinedParentSpaces = [SpaceServiceRoomProtocol].mockJoinedSpaces2
-        let singleRoom = [SpaceServiceRoomProtocol].mockSingleRoom
+        let joinedParentSpaces = [SpaceServiceRoom].mockJoinedSpaces2
+        let singleRoom = [SpaceServiceRoom].mockSingleRoom
         let space = singleRoom[0]
         let allSpaces = joinedParentSpaces + singleRoom
         setupViewModel(joinedParentSpaces: joinedParentSpaces,
@@ -319,7 +319,7 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     func testEmptySpaceMembersSelectionWithJoinedParentEdgeCase() async throws {
         // Edge case where there is one available joined parent but the room has a restricted join rule.
         // With no space ids in it
-        let singleRoom = [SpaceServiceRoomProtocol].mockSingleRoom
+        let singleRoom = [SpaceServiceRoom].mockSingleRoom
         setupViewModel(joinedParentSpaces: singleRoom,
                        joinRule: .restricted(rules: []))
         
@@ -424,8 +424,8 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func setupViewModel(joinedParentSpaces: [SpaceServiceRoomProtocol],
-                                topLevelSpaces: [SpaceServiceRoomProtocol] = [],
+    private func setupViewModel(joinedParentSpaces: [SpaceServiceRoom],
+                                topLevelSpaces: [SpaceServiceRoom] = [],
                                 joinRule: JoinRule) {
         let appSettings = AppSettings()
         appSettings.spaceSettingsEnabled = true

@@ -87,12 +87,12 @@ final class LeaveSpaceHandleProxy {
 }
 
 @Observable class LeaveSpaceRoomDetails {
-    let spaceServiceRoom: SpaceServiceRoomProtocol
+    let spaceServiceRoom: SpaceServiceRoom
     let canLeave: Bool
     let areCreatorsPrivileged: Bool
     var isSelected: Bool
     
-    init(spaceServiceRoom: SpaceServiceRoomProtocol, isLastOwner: Bool, areCreatorsPrivileged: Bool, isSelected: Bool) {
+    init(spaceServiceRoom: SpaceServiceRoom, isLastOwner: Bool, areCreatorsPrivileged: Bool, isSelected: Bool) {
         self.spaceServiceRoom = spaceServiceRoom
         canLeave = !isLastOwner || spaceServiceRoom.joinedMembersCount == 1
         self.isSelected = isSelected

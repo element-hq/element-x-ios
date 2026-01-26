@@ -32,7 +32,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     var canEditHistoryVisibility = false
     
     /// The union of joined parent spaces and the joined spaces in the current access type
-    var selectableJoinedSpaces: [SpaceServiceRoomProtocol] = []
+    var selectableJoinedSpaces: [SpaceServiceRoom] = []
     
     /// The count of the intersection between the set of joined parent spaces and the set of spaces in the current access type
     var selectableSpacesCount: Int {
@@ -118,7 +118,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     
     enum SpaceSelection {
         /// There is only one available parent space for selection and is joined by the user
-        case singleJoined(SpaceServiceRoomProtocol)
+        case singleJoined(SpaceServiceRoom)
         /// There is only one available space for selection and is unknown to the user
         case singleUnknown(id: String)
         /// Multiple spaces are available for selection

@@ -269,7 +269,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
         appSettings.spaceSettingsEnabled = true
-        let space = [SpaceServiceRoomProtocol].mockSingleRoom[0]
+        let space = [SpaceServiceRoom].mockSingleRoom[0]
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
                                                                                       canonicalAlias: "#room:matrix.org",
@@ -286,7 +286,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
         appSettings.spaceSettingsEnabled = true
-        let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces
+        let spaces = [SpaceServiceRoom].mockJoinedSpaces
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
                                                                                       canonicalAlias: "#room:matrix.org",
@@ -319,7 +319,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         let appSettings = AppSettings()
         appSettings.spaceSettingsEnabled = true
         appSettings.knockingEnabled = true
-        let space = [SpaceServiceRoomProtocol].mockSingleRoom[0]
+        let space = [SpaceServiceRoom].mockSingleRoom[0]
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
                                                                                       canonicalAlias: "#room:matrix.org",
@@ -337,7 +337,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         let appSettings = AppSettings()
         appSettings.spaceSettingsEnabled = true
         appSettings.knockingEnabled = true
-        let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces
+        let spaces = [SpaceServiceRoom].mockJoinedSpaces
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
                                                                                       canonicalAlias: "#room:matrix.org",

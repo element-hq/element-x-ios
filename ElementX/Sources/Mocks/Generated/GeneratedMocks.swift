@@ -16721,16 +16721,16 @@ class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
         set(value) { underlyingId = value }
     }
     var underlyingId: String!
-    var spaceServiceRoomPublisher: CurrentValuePublisher<SpaceServiceRoomProtocol, Never> {
+    var spaceServiceRoomPublisher: CurrentValuePublisher<SpaceServiceRoom, Never> {
         get { return underlyingSpaceServiceRoomPublisher }
         set(value) { underlyingSpaceServiceRoomPublisher = value }
     }
-    var underlyingSpaceServiceRoomPublisher: CurrentValuePublisher<SpaceServiceRoomProtocol, Never>!
-    var spaceRoomsPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> {
+    var underlyingSpaceServiceRoomPublisher: CurrentValuePublisher<SpaceServiceRoom, Never>!
+    var spaceRoomsPublisher: CurrentValuePublisher<[SpaceServiceRoom], Never> {
         get { return underlyingSpaceRoomsPublisher }
         set(value) { underlyingSpaceRoomsPublisher = value }
     }
-    var underlyingSpaceRoomsPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never>!
+    var underlyingSpaceRoomsPublisher: CurrentValuePublisher<[SpaceServiceRoom], Never>!
     var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> {
         get { return underlyingPaginationStatePublisher }
         set(value) { underlyingPaginationStatePublisher = value }
@@ -16809,11 +16809,11 @@ class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
     }
 }
 class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
-    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> {
+    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoom], Never> {
         get { return underlyingTopLevelSpacesPublisher }
         set(value) { underlyingTopLevelSpacesPublisher = value }
     }
-    var underlyingTopLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never>!
+    var underlyingTopLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoom], Never>!
     var spaceFilterPublisher: CurrentValuePublisher<[SpaceServiceFilter], Never> {
         get { return underlyingSpaceFilterPublisher }
         set(value) { underlyingSpaceFilterPublisher = value }
@@ -16922,13 +16922,13 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
     var spaceForIdentifierSpaceIDReceivedSpaceID: String?
     var spaceForIdentifierSpaceIDReceivedInvocations: [String] = []
 
-    var spaceForIdentifierSpaceIDUnderlyingReturnValue: Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError>!
-    var spaceForIdentifierSpaceIDReturnValue: Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError>! {
+    var spaceForIdentifierSpaceIDUnderlyingReturnValue: Result<SpaceServiceRoom?, SpaceServiceProxyError>!
+    var spaceForIdentifierSpaceIDReturnValue: Result<SpaceServiceRoom?, SpaceServiceProxyError>! {
         get {
             if Thread.isMainThread {
                 return spaceForIdentifierSpaceIDUnderlyingReturnValue
             } else {
-                var returnValue: Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError>? = nil
+                var returnValue: Result<SpaceServiceRoom?, SpaceServiceProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = spaceForIdentifierSpaceIDUnderlyingReturnValue
                 }
@@ -16946,9 +16946,9 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var spaceForIdentifierSpaceIDClosure: ((String) async -> Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError>)?
+    var spaceForIdentifierSpaceIDClosure: ((String) async -> Result<SpaceServiceRoom?, SpaceServiceProxyError>)?
 
-    func spaceForIdentifier(spaceID: String) async -> Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError> {
+    func spaceForIdentifier(spaceID: String) async -> Result<SpaceServiceRoom?, SpaceServiceProxyError> {
         spaceForIdentifierSpaceIDCallsCount += 1
         spaceForIdentifierSpaceIDReceivedSpaceID = spaceID
         DispatchQueue.main.async {
@@ -17062,13 +17062,13 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
     var joinedParentsChildIDReceivedChildID: String?
     var joinedParentsChildIDReceivedInvocations: [String] = []
 
-    var joinedParentsChildIDUnderlyingReturnValue: Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>!
-    var joinedParentsChildIDReturnValue: Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>! {
+    var joinedParentsChildIDUnderlyingReturnValue: Result<[SpaceServiceRoom], SpaceServiceProxyError>!
+    var joinedParentsChildIDReturnValue: Result<[SpaceServiceRoom], SpaceServiceProxyError>! {
         get {
             if Thread.isMainThread {
                 return joinedParentsChildIDUnderlyingReturnValue
             } else {
-                var returnValue: Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>? = nil
+                var returnValue: Result<[SpaceServiceRoom], SpaceServiceProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = joinedParentsChildIDUnderlyingReturnValue
                 }
@@ -17086,9 +17086,9 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var joinedParentsChildIDClosure: ((String) async -> Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>)?
+    var joinedParentsChildIDClosure: ((String) async -> Result<[SpaceServiceRoom], SpaceServiceProxyError>)?
 
-    func joinedParents(childID: String) async -> Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError> {
+    func joinedParents(childID: String) async -> Result<[SpaceServiceRoom], SpaceServiceProxyError> {
         joinedParentsChildIDCallsCount += 1
         joinedParentsChildIDReceivedChildID = childID
         DispatchQueue.main.async {
@@ -17130,13 +17130,13 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
         return editableSpacesCallsCount > 0
     }
 
-    var editableSpacesUnderlyingReturnValue: [SpaceServiceRoomProtocol]!
-    var editableSpacesReturnValue: [SpaceServiceRoomProtocol]! {
+    var editableSpacesUnderlyingReturnValue: [SpaceServiceRoom]!
+    var editableSpacesReturnValue: [SpaceServiceRoom]! {
         get {
             if Thread.isMainThread {
                 return editableSpacesUnderlyingReturnValue
             } else {
-                var returnValue: [SpaceServiceRoomProtocol]? = nil
+                var returnValue: [SpaceServiceRoom]? = nil
                 DispatchQueue.main.sync {
                     returnValue = editableSpacesUnderlyingReturnValue
                 }
@@ -17154,9 +17154,9 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var editableSpacesClosure: (() async -> [SpaceServiceRoomProtocol])?
+    var editableSpacesClosure: (() async -> [SpaceServiceRoom])?
 
-    func editableSpaces() async -> [SpaceServiceRoomProtocol] {
+    func editableSpaces() async -> [SpaceServiceRoom] {
         editableSpacesCallsCount += 1
         if let editableSpacesClosure = editableSpacesClosure {
             return await editableSpacesClosure()
@@ -17304,49 +17304,6 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             return removeChildFromReturnValue
         }
     }
-}
-class SpaceServiceRoomMock: SpaceServiceRoomProtocol, @unchecked Sendable {
-    var id: String {
-        get { return underlyingId }
-        set(value) { underlyingId = value }
-    }
-    var underlyingId: String!
-    var name: String {
-        get { return underlyingName }
-        set(value) { underlyingName = value }
-    }
-    var underlyingName: String!
-    var rawName: String?
-    var avatarURL: URL?
-    var isSpace: Bool {
-        get { return underlyingIsSpace }
-        set(value) { underlyingIsSpace = value }
-    }
-    var underlyingIsSpace: Bool!
-    var isDirect: Bool?
-    var childrenCount: Int {
-        get { return underlyingChildrenCount }
-        set(value) { underlyingChildrenCount = value }
-    }
-    var underlyingChildrenCount: Int!
-    var joinedMembersCount: Int {
-        get { return underlyingJoinedMembersCount }
-        set(value) { underlyingJoinedMembersCount = value }
-    }
-    var underlyingJoinedMembersCount: Int!
-    var heroes: [UserProfileProxy] = []
-    var topic: String?
-    var canonicalAlias: String?
-    var joinRule: JoinRule?
-    var worldReadable: Bool?
-    var guestCanJoin: Bool {
-        get { return underlyingGuestCanJoin }
-        set(value) { underlyingGuestCanJoin = value }
-    }
-    var underlyingGuestCanJoin: Bool!
-    var state: Membership?
-    var via: [String] = []
-
 }
 class StaticRoomSummaryProviderMock: StaticRoomSummaryProviderProtocol, @unchecked Sendable {
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {

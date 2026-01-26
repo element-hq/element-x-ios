@@ -17,10 +17,10 @@ enum SpaceServiceProxyMockError: Error {
 
 extension SpaceServiceProxyMock {
     struct Configuration {
-        var topLevelSpaces: [SpaceServiceRoomProtocol] = []
+        var topLevelSpaces: [SpaceServiceRoom] = []
         var spaceFilters: [SpaceServiceFilter] = []
-        var joinedParentSpaces: [SpaceServiceRoomProtocol] = []
-        var editableSpaces: [SpaceServiceRoomProtocol] = []
+        var joinedParentSpaces: [SpaceServiceRoom] = []
+        var editableSpaces: [SpaceServiceRoom] = []
         var spaceRoomLists: [String: SpaceRoomListProxyMock] = [:]
         var leaveSpaceRooms: [LeaveSpaceRoom] = []
     }
@@ -55,16 +55,16 @@ extension SpaceServiceProxyMock {
 
 extension SpaceServiceProxyMock.Configuration {
     static var populated: SpaceServiceProxyMock.Configuration {
-        let spaceFilters = [SpaceServiceRoomProtocol].mockJoinedSpaces.reduce(into: [SpaceServiceFilter]()) { partialResult, spaceRoom in
+        let spaceFilters = [SpaceServiceRoom].mockJoinedSpaces.reduce(into: [SpaceServiceFilter]()) { partialResult, spaceRoom in
             partialResult.append(SpaceServiceFilter(room: spaceRoom, level: 0, descendants: .init()))
             partialResult.append(SpaceServiceFilter(room: spaceRoom, level: 1, descendants: .init()))
         }
                 
-        let spaceRoomLists = [SpaceServiceRoomProtocol].mockJoinedSpaces.map {
+        let spaceRoomLists = [SpaceServiceRoom].mockJoinedSpaces.map {
             ($0.id, SpaceRoomListProxyMock(.init(spaceServiceRoom: $0, initialSpaceRooms: .mockSpaceList)))
         }
         
-        let subSpaceRoomLists = [SpaceServiceRoomProtocol].mockSpaceList.map {
+        let subSpaceRoomLists = [SpaceServiceRoom].mockSpaceList.map {
             ($0.id, SpaceRoomListProxyMock(.init(spaceServiceRoom: $0, initialSpaceRooms: .mockSingleRoom)))
         }
         

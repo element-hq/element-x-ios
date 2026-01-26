@@ -13,7 +13,7 @@ import XCTest
 
 @MainActor
 class SpacesScreenViewModelTests: XCTestCase {
-    var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoomProtocol], Never>!
+    var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoom], Never>!
     var spaceServiceProxy: SpaceServiceProxyMock!
     var appSettings: AppSettings!
     
@@ -47,7 +47,7 @@ class SpacesScreenViewModelTests: XCTestCase {
         
         deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.count == 1 }
         topLevelSpacesSubject.send([
-            SpaceServiceRoomMock(.init(isSpace: true))
+            SpaceServiceRoom.mock(isSpace: true)
         ])
         try await deferred.fulfill()
         XCTAssertEqual(context.viewState.topLevelSpaces.count, 1)
@@ -97,9 +97,9 @@ class SpacesScreenViewModelTests: XCTestCase {
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         topLevelSpacesSubject = .init([
-            SpaceServiceRoomMock(.init(id: "space1", isSpace: true)),
-            SpaceServiceRoomMock(.init(id: "space2", isSpace: true)),
-            SpaceServiceRoomMock(.init(id: "space3", isSpace: true))
+            SpaceServiceRoom.mock(id: "space1", isSpace: true),
+            SpaceServiceRoom.mock(id: "space2", isSpace: true),
+            SpaceServiceRoom.mock(id: "space3", isSpace: true)
         ])
         spaceServiceProxy = SpaceServiceProxyMock(.init())
         spaceServiceProxy.topLevelSpacesPublisher = topLevelSpacesSubject.asCurrentValuePublisher()

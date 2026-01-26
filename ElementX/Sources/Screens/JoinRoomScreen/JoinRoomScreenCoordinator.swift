@@ -18,7 +18,7 @@ struct JoinRoomScreenCoordinatorParameters {
 
 enum JoinRoomScreenSource {
     case generic(roomID: String, via: [String])
-    case space(SpaceServiceRoomProtocol)
+    case space(SpaceServiceRoom)
     
     func roomIDAndVia() -> (roomID: String, via: [String]) {
         switch self {

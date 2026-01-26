@@ -184,7 +184,7 @@ struct SpaceAddRoomsScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false) -> SpaceAddRoomsScreenViewModel {
-        let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true))))
+        let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoom.mock(isSpace: true)))
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentlyVisitedRoomsFilterReturnValue = .mockRooms

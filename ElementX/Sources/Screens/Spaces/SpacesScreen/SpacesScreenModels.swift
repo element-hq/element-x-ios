@@ -19,7 +19,7 @@ struct SpacesScreenViewState: BindableState {
     var userDisplayName: String?
     var userAvatarURL: URL?
     
-    var topLevelSpaces: [SpaceServiceRoomProtocol]
+    var topLevelSpaces: [SpaceServiceRoom]
     var selectedSpaceID: String?
     
     var isCreateSpaceEnabled: Bool

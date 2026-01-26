@@ -14,8 +14,8 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
     private let spaceService: SpaceServiceProtocol
     
     private var topLevelSpacesHandle: TaskHandle?
-    private let spacesSubject = CurrentValueSubject<[SpaceServiceRoomProtocol], Never>([])
-    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> {
+    private let spacesSubject = CurrentValueSubject<[SpaceServiceRoom], Never>([])
+    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoom], Never> {
         spacesSubject.asCurrentValuePublisher()
     }
     
@@ -50,7 +50,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
-    func spaceForIdentifier(spaceID: String) async -> Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError> {
+    func spaceForIdentifier(spaceID: String) async -> Result<SpaceServiceRoom?, SpaceServiceProxyError> {
         do {
             return try await .success(spaceService.getSpaceRoom(roomId: spaceID).map(SpaceServiceRoom.init))
         } catch {
@@ -68,7 +68,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
-    func joinedParents(childID: String) async -> Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError> {
+    func joinedParents(childID: String) async -> Result<[SpaceServiceRoom], SpaceServiceProxyError> {
         do {
             return try await .success(spaceService.joinedParentsOfChild(childId: childID).map(SpaceServiceRoom.init))
         } catch {
@@ -77,7 +77,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
-    func editableSpaces() async -> [SpaceServiceRoomProtocol] {
+    func editableSpaces() async -> [SpaceServiceRoom] {
         await spaceService.editableSpaces().map(SpaceServiceRoom.init)
     }
     

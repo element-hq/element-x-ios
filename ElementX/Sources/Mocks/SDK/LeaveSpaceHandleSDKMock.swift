@@ -23,11 +23,11 @@ extension LeaveSpaceHandleSDKMock {
 }
 
 extension [LeaveSpaceRoom] {
-    static func mockRoomsWithSpace(spaceServiceRoom: SpaceServiceRoomProtocol, isLastOwner: Bool) -> [LeaveSpaceRoom] {
+    static func mockRoomsWithSpace(spaceServiceRoom: SpaceServiceRoom, isLastOwner: Bool) -> [LeaveSpaceRoom] {
         mockRooms + mockSingleSpace(spaceServiceRoom: spaceServiceRoom, isLastOwner: isLastOwner)
     }
     
-    static func mockSingleSpace(spaceServiceRoom: SpaceServiceRoomProtocol, isLastOwner: Bool) -> [LeaveSpaceRoom] {
+    static func mockSingleSpace(spaceServiceRoom: SpaceServiceRoom, isLastOwner: Bool) -> [LeaveSpaceRoom] {
         [LeaveSpaceRoom(spaceRoom: SpaceRoom(id: spaceServiceRoom.id,
                                              name: spaceServiceRoom.name,
                                              avatarURL: spaceServiceRoom.avatarURL,
