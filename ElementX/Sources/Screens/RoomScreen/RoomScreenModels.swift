@@ -80,18 +80,7 @@ struct RoomScreenViewState: BindableState {
             (canAcceptKnocks || canDeclineKnocks || canBan)
     }
     
-    var identityViolationDetails: RoomScreenFooterViewDetails?
-    var historyVisibleDetails: RoomScreenFooterViewDetails?
-    
-    var footerDetails: RoomScreenFooterViewDetails? {
-        if let identityViolationDetails {
-            return identityViolationDetails
-        }
-        guard canSendMessage else {
-            return nil
-        }
-        return historyVisibleDetails
-    }
+    var footerDetails: RoomScreenFooterViewDetails?
     
     var bindings = RoomScreenViewStateBindings()
 }
@@ -104,13 +93,11 @@ struct RoomScreenViewStateBindings {
 enum RoomScreenFooterViewAction {
     case resolvePinViolation(userID: String)
     case resolveVerificationViolation(userID: String)
-    case dismissHistoryVisibleAlert
 }
 
 enum RoomScreenFooterViewDetails {
     case pinViolation(member: RoomMemberProxyProtocol, learnMoreURL: URL)
     case verificationViolation(member: RoomMemberProxyProtocol, learnMoreURL: URL)
-    case historyVisible(learnMoreURL: URL)
 }
 
 enum PinnedEventsBannerState: Equatable {

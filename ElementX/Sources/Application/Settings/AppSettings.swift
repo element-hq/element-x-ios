@@ -32,7 +32,6 @@ final class AppSettings {
         case seenInvites
         case hasSeenSpacesAnnouncement
         case hasSeenNewSoundBanner
-        case acknowledgedHistoryVisibleRooms
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
         case timelineStyle
@@ -178,10 +177,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hasSeenNewSoundBanner, defaultValue: true, storageType: .userDefaults(store))
     var hasSeenNewSoundBanner
     
-    /// The Set of room identifiers that the user has acknowledged have visible history.
-    @UserPreference(key: UserDefaultsKeys.acknowledgedHistoryVisibleRooms, defaultValue: [], storageType: .userDefaults(store))
-    var acknowledgedHistoryVisibleRooms: Set<String>
-    
     /// The initial set of account providers shown to the user in the authentication flow.
     ///
     /// Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
@@ -215,6 +210,7 @@ final class AppSettings {
     private(set) var identityPinningViolationDetailsURL: URL = "https://element.io/help#encryption18"
     /// A URL describing how history sharing works
     private(set) var historySharingDetailsURL: URL = "https://element.io/en/help#e2ee-history-sharing"
+
     /// Any domains that Element web may be hosted on - used for handling links.
     private(set) var elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
     /// The domain that account provisioning links will be hosted on - used for handling the links.
