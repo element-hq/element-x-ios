@@ -67,7 +67,7 @@
 "action_copy_link_to_message" = "Havolani xabaraga nusxalash";
 "action_copy_text" = "Matnni nusxalash";
 "action_create" = "Yaratmoq";
-"action_create_a_room" = "Xonani yaratish";
+"action_create_room" = "Xonani yaratish";
 "action_create_space" = "Create space";
 "action_deactivate" = "Faolsizlantirish";
 "action_deactivate_account" = "Hisobni faolsizlantirish";
@@ -85,6 +85,7 @@
 "action_enable" = "Yoqish";
 "action_end_poll" = "So‘rovnomani tugatish";
 "action_enter_pin" = "PIN kodni kiriting";
+"action_explore_public_spaces" = "Explore public spaces";
 "action_finish" = "Tugatish";
 "action_forgot_password" = "Parolni unutdingizmi?";
 "action_forward" = "Oldinga";
@@ -282,6 +283,7 @@
 "common_report_a_problem" = "Muammo haqida xabar bering";
 "common_report_submitted" = "Hisobot topshirildi";
 "common_rich_text_editor" = "Boy matn muharriri";
+"common_role" = "Role";
 "common_room" = "Xona";
 "common_room_name" = "Xona nomi";
 "common_room_name_placeholder" = "masalan, loyihangiz nomi";
@@ -541,14 +543,21 @@
 "screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_knocking_option_description" = "Xonaga qo‘shilishni istalgan kishi so‘rashi mumkin, lekin administrator yoki moderator so‘rovni qabul qilishi kerak";
 "screen_create_room_room_access_section_knocking_option_title" = "Qo‘shilishni so‘rang";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
+"screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Bu xonaga istalgan kishi qo‘shilishi mumkin";
 "screen_create_room_room_access_section_public_option_title" = "Har kim";
+"screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
+"screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "Ushbu xona ommaviy xonalar ro‘yxatida ko‘rinishi uchun sizga xona manzili kerak bo‘ladi.";
 "screen_create_room_room_address_section_title" = "Address";
 "screen_create_room_room_visibility_section_title" = "Xonaning ko‘rinishi";
+"screen_create_room_space_selection_no_space_description" = "(no space)";
+"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Siz bu foydalanuvchidan hech qanday xabar yoki xonaga taklif ko‘rmaysiz";
 "screen_decline_and_block_report_user_option_description" = "Bu xona haqida hisobingiz provayderiga xabar bering.";
@@ -719,6 +728,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Xavfsizlik va maxfiylik";
+"screen_space_add_room_action" = "Room";
+"screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "View members";
 "screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";

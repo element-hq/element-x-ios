@@ -157,9 +157,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d selected</string>
+			<string>%1$d vybraná</string>
+			<key>few</key>
+			<string>%1$d vybrané</string>
 			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d vybraných</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -533,9 +535,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
+			<string>Odstrániť %1$d miestnosť z priestoru %2$@</string>
+			<key>few</key>
+			<string>Odstrániť %1$d miestnosti z priestoru %2$@</string>
 			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>Odstrániť %1$d miestností z priestoru %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>

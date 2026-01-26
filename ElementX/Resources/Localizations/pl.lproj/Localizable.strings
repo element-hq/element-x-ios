@@ -67,7 +67,7 @@
 "action_copy_link_to_message" = "Kopiuj link do wiadomości";
 "action_copy_text" = "Kopiuj tekst";
 "action_create" = "Utwórz";
-"action_create_a_room" = "Utwórz pokój";
+"action_create_room" = "Utwórz pokój";
 "action_create_space" = "Create space";
 "action_deactivate" = "Dezaktywuj";
 "action_deactivate_account" = "Dezaktywuj konto";
@@ -85,6 +85,7 @@
 "action_enable" = "Włącz";
 "action_end_poll" = "Zakończ ankietę";
 "action_enter_pin" = "Wprowadź PIN";
+"action_explore_public_spaces" = "Explore public spaces";
 "action_finish" = "Zakończ";
 "action_forgot_password" = "Nie pamiętasz hasła?";
 "action_forward" = "Przekaż dalej";
@@ -282,6 +283,7 @@
 "common_report_a_problem" = "Zgłoś problem";
 "common_report_submitted" = "Zgłoszenie wysłane";
 "common_rich_text_editor" = "Bogaty edytor tekstu";
+"common_role" = "Role";
 "common_room" = "Pokój";
 "common_room_name" = "Nazwa pokoju";
 "common_room_name_placeholder" = "np. nazwa projektu";
@@ -541,14 +543,21 @@
 "screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_knocking_option_description" = "Każdy może poprosić o dołączenie do pokoju, ale administrator lub moderator będzie musiał zatwierdzić prośbę";
 "screen_create_room_room_access_section_knocking_option_title" = "Poproś o dołączenie";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
+"screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Każdy może dołączyć do tego pokoju";
 "screen_create_room_room_access_section_public_option_title" = "Wszyscy";
+"screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
+"screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "Aby ten pokój był widoczny w katalogu pomieszczeń publicznych, będziesz potrzebował adres pokoju.";
 "screen_create_room_room_address_section_title" = "Adres pokoju";
 "screen_create_room_room_visibility_section_title" = "Widoczność pomieszczenia";
+"screen_create_room_space_selection_no_space_description" = "(no space)";
+"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Nie zobaczysz żadnych wiadomości ani zaproszeń od tego użytkownika";
 "screen_decline_and_block_report_user_option_description" = "Zgłoś pokój dostawcy swojego konta.";
@@ -719,6 +728,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Widoczność pokoju";
 "screen_security_and_privacy_title" = "Bezpieczeństwo i prywatność";
+"screen_space_add_room_action" = "Room";
+"screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "View members";
 "screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";

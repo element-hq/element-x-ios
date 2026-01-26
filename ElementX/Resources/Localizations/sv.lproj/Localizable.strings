@@ -67,7 +67,7 @@
 "action_copy_link_to_message" = "Kopiera länk till meddelande";
 "action_copy_text" = "Kopiera text";
 "action_create" = "Skapa";
-"action_create_a_room" = "Skapa ett rum";
+"action_create_room" = "Skapa ett rum";
 "action_create_space" = "Create space";
 "action_deactivate" = "Inaktivera";
 "action_deactivate_account" = "Inaktivera konto";
@@ -85,6 +85,7 @@
 "action_enable" = "Aktivera";
 "action_end_poll" = "Avsluta omröstning";
 "action_enter_pin" = "Ange PIN-kod";
+"action_explore_public_spaces" = "Explore public spaces";
 "action_finish" = "Slutför";
 "action_forgot_password" = "Glömt lösenordet?";
 "action_forward" = "Vidarebefordra";
@@ -282,6 +283,7 @@
 "common_report_a_problem" = "Rapportera ett problem";
 "common_report_submitted" = "Rapport inskickad";
 "common_rich_text_editor" = "Riktextredigerare";
+"common_role" = "Role";
 "common_room" = "Rum";
 "common_room_name" = "Rumsnamn";
 "common_room_name_placeholder" = "t.ex. ditt projektnamn";
@@ -541,14 +543,21 @@
 "screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_knocking_option_description" = "Vem som helst kan be om att gå med i rummet men en administratör eller en moderator måste acceptera begäran";
 "screen_create_room_room_access_section_knocking_option_title" = "Be om att gå med";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
+"screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Vem som helst kan gå med i det här rummet";
 "screen_create_room_room_access_section_public_option_title" = "Vem som helst";
+"screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
+"screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "För att detta rum ska vara synligt i den allmänna rumskatalogen behöver du en rumsadress.";
 "screen_create_room_room_address_section_title" = "Rumsadress";
 "screen_create_room_room_visibility_section_title" = "Rumssynlighet";
+"screen_create_room_space_selection_no_space_description" = "(no space)";
+"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Du kommer inte att se några meddelanden eller rumsinbjudningar från den här användaren";
 "screen_decline_and_block_report_user_option_description" = "Rapportera det här rummet till din kontoleverantör.";
@@ -719,6 +728,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Säkerhet och sekretess";
+"screen_space_add_room_action" = "Room";
+"screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "View members";
 "screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";

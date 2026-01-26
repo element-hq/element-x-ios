@@ -67,7 +67,7 @@
 "action_copy_link_to_message" = "複製訊息連結";
 "action_copy_text" = "複製文字";
 "action_create" = "建立";
-"action_create_a_room" = "建立聊天室";
+"action_create_room" = "建立聊天室";
 "action_create_space" = "Create space";
 "action_deactivate" = "停用";
 "action_deactivate_account" = "停用帳號";
@@ -85,6 +85,7 @@
 "action_enable" = "啟用";
 "action_end_poll" = "結束投票";
 "action_enter_pin" = "輸入 PIN 碼";
+"action_explore_public_spaces" = "Explore public spaces";
 "action_finish" = "結束";
 "action_forgot_password" = "忘記密碼？";
 "action_forward" = "轉寄";
@@ -282,6 +283,7 @@
 "common_report_a_problem" = "回報問題";
 "common_report_submitted" = "已遞交報告";
 "common_rich_text_editor" = "格式化文字編輯器";
+"common_role" = "Role";
 "common_room" = "聊天室";
 "common_room_name" = "聊天室名稱";
 "common_room_name_placeholder" = "範例：您的計畫名稱";
@@ -541,14 +543,21 @@
 "screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_knocking_option_description" = "任何人都可以要求加入聊天室，但管理員或版主必須接受該請求";
 "screen_create_room_room_access_section_knocking_option_title" = "要求加入";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
+"screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "任何人都可以加入此聊天室";
 "screen_create_room_room_access_section_public_option_title" = "任何人";
+"screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
+"screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "為了讓此聊天室在公開聊天室目錄中可見，您需要聊天室地址。";
 "screen_create_room_room_address_section_title" = "聊天室地址";
 "screen_create_room_room_visibility_section_title" = "聊天室能見度";
+"screen_create_room_space_selection_no_space_description" = "(no space)";
+"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "您將不會看到來自此使用者的任何訊息或聊天室邀請";
 "screen_decline_and_block_report_user_option_description" = "向您的帳號提供者回報此聊天室。";
@@ -719,6 +728,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "能見度";
 "screen_security_and_privacy_title" = "安全與隱私";
+"screen_space_add_room_action" = "Room";
+"screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "檢視成員";
 "screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";

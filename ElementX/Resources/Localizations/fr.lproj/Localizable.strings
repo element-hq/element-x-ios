@@ -67,7 +67,7 @@
 "action_copy_link_to_message" = "Copier le lien vers le message";
 "action_copy_text" = "Copier le texte";
 "action_create" = "Créer";
-"action_create_a_room" = "Créer un salon";
+"action_create_room" = "Créer un salon";
 "action_create_space" = "Créer un espace";
 "action_deactivate" = "Désactiver";
 "action_deactivate_account" = "Désactiver le compte";
@@ -85,6 +85,7 @@
 "action_enable" = "Activer";
 "action_end_poll" = "Terminer le sondage";
 "action_enter_pin" = "Saisir le code PIN";
+"action_explore_public_spaces" = "Explorer les espaces publics";
 "action_finish" = "Terminer";
 "action_forgot_password" = "Mot de passe oublié ?";
 "action_forward" = "Transférer";
@@ -282,6 +283,7 @@
 "common_report_a_problem" = "Remonter un problème";
 "common_report_submitted" = "Rapport soumis";
 "common_rich_text_editor" = "Éditeur de texte enrichi";
+"common_role" = "Rôle";
 "common_room" = "Salon";
 "common_room_name" = "Nom du salon";
 "common_room_name_placeholder" = "par exemple, le nom de votre projet";
@@ -541,14 +543,21 @@
 "screen_create_room_public_option_short_description" = "Tout le monde peut joindre";
 "screen_create_room_room_access_section_knocking_option_description" = "Tout le monde peut demander à joindre, mais un administrateur ou un modérateur devra accepter la demande";
 "screen_create_room_room_access_section_knocking_option_title" = "Autoriser la demande à joindre";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Tout membre de %1$@ peut joindre, mais les autres doivent demander un accès.";
+"screen_create_room_room_access_section_knocking_restricted_option_title" = "Demander à joindre";
 "screen_create_room_room_access_section_private_option_description" = "Seules les personnes invitées peuvent joindre.";
 "screen_create_room_room_access_section_private_option_title" = "Privé";
 "screen_create_room_room_access_section_public_option_description" = "Tout le monde peut joindre";
 "screen_create_room_room_access_section_public_option_title" = "Tout le monde";
+"screen_create_room_room_access_section_restricted_option_description" = "Toute membre de %1$@ peut joindre le salon.";
+"screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Qui a accès";
 "screen_create_room_room_address_section_footer" = "Vous aurez besoin d'une adresse pour qu’il soit visible dans le répertoire public.";
 "screen_create_room_room_address_section_title" = "Adresse";
 "screen_create_room_room_visibility_section_title" = "Visibilité du salon";
+"screen_create_room_space_selection_no_space_description" = "(pas d'espace)";
+"screen_create_room_space_selection_no_space_title" = "Accueil";
+"screen_create_room_space_selection_sheet_title" = "Ajouter à l'espace";
 "screen_create_room_topic_placeholder" = "Ajouter une description…";
 "screen_decline_and_block_block_user_option_description" = "Vous ne verrez aucun messages ou invitation à un salon de la part de cet utilisateur";
 "screen_decline_and_block_report_user_option_description" = "Signalez ce salon à votre fournisseur de compte.";
@@ -684,7 +693,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "Afficher le résumé des réactions";
 "screen_roomlist_clear_filters" = "Supprimer les filtres";
 "screen_roomlist_tombstoned_room_description" = "Ce salon a été mis à niveau.";
-"screen_roomlist_your_spaces" = "Your spaces";
+"screen_roomlist_your_spaces" = "Vos espaces";
 "screen_security_and_privacy_add_room_address_action" = "Ajouter une adresse";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Toute personne se trouvant dans un espace autorisé peut participer, mais toutes les autres doivent demander l'accès.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Tout le monde doit demander un accès.";
@@ -719,6 +728,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Les adresses permettent de trouver et d'accéder aux salons et aux espaces. Elles facilitent également leur partage avec d'autres personnes.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilité";
 "screen_security_and_privacy_title" = "Sécurité & confidentialité";
+"screen_space_add_room_action" = "Salon";
+"screen_space_empty_state_title" = "Ajoutez votre premier salon";
 "screen_space_menu_action_members" = "Voir les membres";
 "screen_space_remove_rooms_confirmation_content" = "Supprimer un salon n'affectera pas ses paramètres d'accès. Pour modifier l'accès, aller dans les settings du salon puis \"Sécurité & confidentialité\".";
 "screen_space_remove_rooms_confirmation_title_ios" = "Supprimer les salons de %1$@?";

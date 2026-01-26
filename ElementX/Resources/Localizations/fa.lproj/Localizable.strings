@@ -67,7 +67,7 @@
 "action_copy_link_to_message" = "رونوشت از پیوند پیام";
 "action_copy_text" = "رونوشت از متن";
 "action_create" = "ایجاد";
-"action_create_a_room" = "ایجاد اتاق";
+"action_create_room" = "ایجاد اتاق";
 "action_create_space" = "Create space";
 "action_deactivate" = "غیرفعّال";
 "action_deactivate_account" = "غیرفعّال‌سازی حساب";
@@ -85,6 +85,7 @@
 "action_enable" = "به کار انداختن";
 "action_end_poll" = "پایان نظرسنجی";
 "action_enter_pin" = "ورود پین";
+"action_explore_public_spaces" = "Explore public spaces";
 "action_finish" = "پایان";
 "action_forgot_password" = "گذرواژه را فراموش کردید؟";
 "action_forward" = "پیشروی";
@@ -282,6 +283,7 @@
 "common_report_a_problem" = "گزارش مشکل";
 "common_report_submitted" = "گزارش ثبت شد";
 "common_rich_text_editor" = "ویرایشگر متن غنی";
+"common_role" = "Role";
 "common_room" = "اتاق";
 "common_room_name" = "نام اتاق";
 "common_room_name_placeholder" = "برای نمونه نام پروژه‌تان";
@@ -541,14 +543,21 @@
 "screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "درخواست دعوت";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
+"screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "هرکسی می‌تواند به این اتاق بپیوندد";
 "screen_create_room_room_access_section_public_option_title" = "هرکسی";
+"screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
+"screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
 "screen_create_room_room_address_section_title" = "نشانی اتاق";
 "screen_create_room_room_visibility_section_title" = "نمایانی اتاق";
+"screen_create_room_space_selection_no_space_description" = "(no space)";
+"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
 "screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
@@ -719,6 +728,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "نمایانی اتاق";
 "screen_security_and_privacy_title" = "امنیت و محرمانگی";
+"screen_space_add_room_action" = "Room";
+"screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "دیدن اعضا";
 "screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
