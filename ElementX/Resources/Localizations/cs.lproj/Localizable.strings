@@ -67,7 +67,7 @@
 "action_copy_link_to_message" = "Kopírovat odkaz na zprávu";
 "action_copy_text" = "Kopírovat text";
 "action_create" = "Vytvořit";
-"action_create_a_room" = "Vytvořit místnost";
+"action_create_room" = "Vytvořit místnost";
 "action_create_space" = "Create space";
 "action_deactivate" = "Deaktivovat";
 "action_deactivate_account" = "Deaktivovat účet";
@@ -85,6 +85,7 @@
 "action_enable" = "Povolit";
 "action_end_poll" = "Ukončit hlasování";
 "action_enter_pin" = "Zadejte PIN";
+"action_explore_public_spaces" = "Explore public spaces";
 "action_finish" = "Dokončit";
 "action_forgot_password" = "Zapomněli jste heslo?";
 "action_forward" = "Přeposlat";
@@ -282,6 +283,7 @@
 "common_report_a_problem" = "Nahlásit problém";
 "common_report_submitted" = "Zpráva odeslána";
 "common_rich_text_editor" = "Editor formátovaného textu";
+"common_role" = "Role";
 "common_room" = "Místnost";
 "common_room_name" = "Název místnosti";
 "common_room_name_placeholder" = "např. název vašeho projektu";
@@ -541,14 +543,21 @@
 "screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_knocking_option_description" = "Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout";
 "screen_create_room_room_access_section_knocking_option_title" = "Požádat o připojení";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
+"screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Do této místnosti může vstoupit kdokoli";
 "screen_create_room_room_access_section_public_option_title" = "Kdokoliv";
+"screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
+"screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "Aby byla tato místnost viditelná v adresáři veřejných místností, budete potřebovat adresu místnosti.";
 "screen_create_room_room_address_section_title" = "Adresa místnosti";
 "screen_create_room_room_visibility_section_title" = "Viditelnost místnosti";
+"screen_create_room_space_selection_no_space_description" = "(no space)";
+"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Od tohoto uživatele neuvidíte žádné zprávy ani pozvánky do místnosti";
 "screen_decline_and_block_report_user_option_description" = "Nahlaste tuto místnost svému poskytovateli účtu.";
@@ -719,6 +728,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresy slouží k vyhledávání a přístupu do místností a prostorů. Díky tomu je také můžete snadno sdílet s ostatními.";
 "screen_security_and_privacy_room_visibility_section_header" = "Viditelnost";
 "screen_security_and_privacy_title" = "Zabezpečení a soukromí";
+"screen_space_add_room_action" = "Room";
+"screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "Zobrazit členy";
 "screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";

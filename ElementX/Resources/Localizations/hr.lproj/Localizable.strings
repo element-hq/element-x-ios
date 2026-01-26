@@ -67,7 +67,7 @@
 "action_copy_link_to_message" = "Kopiraj poveznicu u poruku";
 "action_copy_text" = "Kopiraj tekst";
 "action_create" = "Stvori";
-"action_create_a_room" = "Stvori sobu";
+"action_create_room" = "Stvori sobu";
 "action_create_space" = "Create space";
 "action_deactivate" = "Deaktiviraj";
 "action_deactivate_account" = "Deaktiviraj račun";
@@ -85,6 +85,7 @@
 "action_enable" = "Omogući";
 "action_end_poll" = "Završi anketu";
 "action_enter_pin" = "Unesite PIN";
+"action_explore_public_spaces" = "Explore public spaces";
 "action_finish" = "Završi";
 "action_forgot_password" = "Zaboravili ste zaporku?";
 "action_forward" = "Proslijedi";
@@ -282,6 +283,7 @@
 "common_report_a_problem" = "Prijavi problem";
 "common_report_submitted" = "Prijava je podnesena";
 "common_rich_text_editor" = "Uređivač obogaćenog teksta";
+"common_role" = "Role";
 "common_room" = "Soba";
 "common_room_name" = "Naziv sobe";
 "common_room_name_placeholder" = "npr. naziv vašeg projekta";
@@ -541,14 +543,21 @@
 "screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_knocking_option_description" = "Svatko može zatražiti pridruživanje sobi, ali administrator ili moderator morat će prihvatiti zahtjev.";
 "screen_create_room_room_access_section_knocking_option_title" = "Zatraži pridruživanje";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
+"screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Svatko se može pridružiti ovoj sobi";
 "screen_create_room_room_access_section_public_option_title" = "Svatko";
+"screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
+"screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "Da bi ova soba bila vidljiva u javnom direktoriju soba, trebat će vam adresa sobe.";
 "screen_create_room_room_address_section_title" = "Adresa sobe";
 "screen_create_room_room_visibility_section_title" = "Vidljivost sobe";
+"screen_create_room_space_selection_no_space_description" = "(no space)";
+"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Nećete vidjeti nikakve poruke ili pozivnice za sobu od ovog korisnika";
 "screen_decline_and_block_report_user_option_description" = "Prijavite ovu sobu svom davatelju usluga računa.";
@@ -719,6 +728,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adrese služe za pronalaženje soba i prostora te pristup njima. Tako ih ujedno možete jednostavno dijeliti s drugima.";
 "screen_security_and_privacy_room_visibility_section_header" = "Vidljivost";
 "screen_security_and_privacy_title" = "Sigurnost i privatnost";
+"screen_space_add_room_action" = "Room";
+"screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "Prikaži članove";
 "screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";

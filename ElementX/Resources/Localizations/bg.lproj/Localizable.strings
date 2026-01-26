@@ -67,7 +67,7 @@
 "action_copy_link_to_message" = "Копиране на връзката към съобщението";
 "action_copy_text" = "Копиране на текста";
 "action_create" = "Създаване";
-"action_create_a_room" = "Създаване на стая";
+"action_create_room" = "Създаване на стая";
 "action_create_space" = "Create space";
 "action_deactivate" = "Деактивиране";
 "action_deactivate_account" = "Деактивиране на акаунта";
@@ -85,6 +85,7 @@
 "action_enable" = "Активиране";
 "action_end_poll" = "Приключване на анкетата";
 "action_enter_pin" = "Въведете PIN";
+"action_explore_public_spaces" = "Explore public spaces";
 "action_finish" = "Finish";
 "action_forgot_password" = "Забравена парола?";
 "action_forward" = "Препращане";
@@ -282,6 +283,7 @@
 "common_report_a_problem" = "Съобщаване за проблем";
 "common_report_submitted" = "Докладът е изпратен";
 "common_rich_text_editor" = "Редактор на богат текст";
+"common_role" = "Role";
 "common_room" = "Стая";
 "common_room_name" = "Име на стаята";
 "common_room_name_placeholder" = "напр. името на вашия проект";
@@ -541,14 +543,21 @@
 "screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Allow ask to join";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
+"screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Всеки може да се присъедини към тази стая";
 "screen_create_room_room_access_section_public_option_title" = "Всеки";
+"screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
+"screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
 "screen_create_room_room_address_section_footer" = "За да бъде тази стая видима в директорията на общодостъпните стаи, ще ви е необходим адрес на стаята.";
 "screen_create_room_room_address_section_title" = "Address";
 "screen_create_room_room_visibility_section_title" = "Видимост на стаята";
+"screen_create_room_space_selection_no_space_description" = "(no space)";
+"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
 "screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
@@ -719,6 +728,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Защита и поверителност";
+"screen_space_add_room_action" = "Room";
+"screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "Преглед на членовете";
 "screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
@@ -1334,7 +1345,7 @@
 "state_event_room_topic_changed_by_you" = "Вие променихте темата на: %1$@";
 "state_event_room_topic_removed" = "%1$@ премахна темата на стаята";
 "state_event_room_topic_removed_by_you" = "Вие премахнахте темата на стаята";
-"state_event_room_unban" = "%1$@ unbanned %2$@";
+"state_event_room_unban" = "%1$@ премахна забраната на %2$@";
 "state_event_room_unban_by_you" = "You unbanned %1$@";
 "state_event_room_unknown_membership_change" = "%1$@ направи неизвестна промяна в членството си";
 "test_language_identifier" = "bg";

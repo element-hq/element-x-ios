@@ -139,9 +139,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d selected</string>
+			<string>%1$d kiválasztva</string>
 			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d kiválasztva</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -331,9 +331,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Banned</string>
+			<string>%1$d kitiltva</string>
 			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d kitiltva</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -363,9 +363,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Invited</string>
+			<string>%1$d meghívott</string>
 			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d meghívott</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -475,9 +475,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
+			<string>%1$d szoba eltávolítása innen: %2$@</string>
 			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>%1$d szoba eltávolítása innen: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>

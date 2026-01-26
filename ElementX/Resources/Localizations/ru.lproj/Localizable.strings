@@ -67,7 +67,7 @@
 "action_copy_link_to_message" = "Скопировать ссылку в сообщение";
 "action_copy_text" = "Копировать текст";
 "action_create" = "Создать";
-"action_create_a_room" = "Создать комнату";
+"action_create_room" = "Создать комнату";
 "action_create_space" = "Создать пространство";
 "action_deactivate" = "Отключить";
 "action_deactivate_account" = "Отключить учётную запись";
@@ -85,6 +85,7 @@
 "action_enable" = "Включить";
 "action_end_poll" = "Завершить опрос";
 "action_enter_pin" = "Введите PIN-код";
+"action_explore_public_spaces" = "Explore public spaces";
 "action_finish" = "Завершить";
 "action_forgot_password" = "Забыли пароль?";
 "action_forward" = "Переслать";
@@ -282,6 +283,7 @@
 "common_report_a_problem" = "Сообщить о проблеме";
 "common_report_submitted" = "Отчет отправлен";
 "common_rich_text_editor" = "Редактор форматированного текста";
+"common_role" = "Role";
 "common_room" = "Комната";
 "common_room_name" = "Название комнаты";
 "common_room_name_placeholder" = "например, название вашего проекта";
@@ -541,14 +543,21 @@
 "screen_create_room_public_option_short_description" = "Присоединиться может любой.";
 "screen_create_room_room_access_section_knocking_option_description" = "Любой желающий может подать заявку на присоединение к комнате, но администратор или модератор должен будет принять запрос.";
 "screen_create_room_room_access_section_knocking_option_title" = "Разрешить запрос на присоединение";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
+"screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Присоединиться могут только приглашенные.";
 "screen_create_room_room_access_section_private_option_title" = "Частный";
 "screen_create_room_room_access_section_public_option_description" = "Присоединиться может любой желающий.";
 "screen_create_room_room_access_section_public_option_title" = "Публичный";
+"screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
+"screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Кто имеет доступ";
 "screen_create_room_room_address_section_footer" = "Вам понадобится адрес комнаты, чтобы сделать ее видимой в каталоге.";
 "screen_create_room_room_address_section_title" = "Адрес";
 "screen_create_room_room_visibility_section_title" = "Видимость комнаты";
+"screen_create_room_space_selection_no_space_description" = "(no space)";
+"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Добавить описание…";
 "screen_decline_and_block_block_user_option_description" = "Вы не увидите сообщений или приглашений в комнату от этого пользователя";
 "screen_decline_and_block_report_user_option_description" = "Сообщите об этой комнате своему поставщику учетной записи.";
@@ -719,6 +728,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Адреса позволяют находить и получать доступ к комнатам и пространствам. Это также гарантирует, что вы сможете легко поделиться ими с другими.";
 "screen_security_and_privacy_room_visibility_section_header" = "Видимость";
 "screen_security_and_privacy_title" = "Безопасность и конфиденциальность";
+"screen_space_add_room_action" = "Room";
+"screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "Просмотреть участников";
 "screen_space_remove_rooms_confirmation_content" = "Удаление комнаты не повлияет на доступ к ней. Чтобы изменить доступ, перейдите в раздел «Информация о комнате > Конфиденциальность и безопасность.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Удалить комнаты из %1$@?";
