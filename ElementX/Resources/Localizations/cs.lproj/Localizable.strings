@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Zapomněli jste klíč pro obnovení?";
 "confirm_recovery_key_banner_title" = "Vaše úložiště klíčů není synchronizováno";
 "crash_detection_dialog_content" = "%1$@ havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?";
+"crypto_event_authenticity_mismatched_sender" = "Odesílatel události se neshoduje s vlastníkem zařízení, které ji odeslalo.";
+"crypto_event_authenticity_not_guaranteed" = "Autenticitu této zašifrované zprávy nelze na tomto zařízení zaručit.";
+"crypto_event_authenticity_previously_verified" = "Zašifrováno dříve ověřeným uživatelem.";
+"crypto_event_authenticity_sent_in_clear" = "Není zašifrováno.";
+"crypto_event_authenticity_unknown_device" = "Šifrováno neznámým nebo smazaným zařízením.";
+"crypto_event_authenticity_unsigned_device" = "Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem.";
+"crypto_event_authenticity_unverified_identity" = "Šifrováno neověřeným uživatelem.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "Tato místnost byla nastavena tak, aby noví členové mohli číst historii. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Nebyla nalezena žádná kompatibilní aplikace, která by tuto akci zpracovala.";
 "error_some_messages_have_not_been_sent" = "Některé zprávy nebyly odeslány";
 "error_unknown" = "Omlouváme se, došlo k chybě";
-"event_shield_mismatched_sender" = "Odesílatel události se neshoduje s vlastníkem zařízení, které ji odeslalo.";
-"event_shield_reason_authenticity_not_guaranteed" = "Autenticitu této zašifrované zprávy nelze na tomto zařízení zaručit.";
-"event_shield_reason_previously_verified" = "Zašifrováno dříve ověřeným uživatelem.";
-"event_shield_reason_sent_in_clear" = "Není zašifrováno.";
-"event_shield_reason_unknown_device" = "Šifrováno neznámým nebo smazaným zařízením.";
-"event_shield_reason_unsigned_device" = "Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem.";
-"event_shield_reason_unverified_identity" = "Šifrováno neověřeným uživatelem.";
 "full_screen_intent_banner_message" = "Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen.";
 "full_screen_intent_banner_title" = "Vylepšete si zážitek z volání";
 "invite_friends_rich_title" = "🔐️ Připojte se ke mně na %1$@";

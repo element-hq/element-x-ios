@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Hai dimenticato la chiave di recupero?";
 "confirm_recovery_key_banner_title" = "L'archiviazione delle chiavi non è sincronizzata";
 "crash_detection_dialog_content" = "%1$@ si è chiuso inaspettatamente l'ultima volta che è stato usato. Vuoi condividere con noi un rapporto sull'arresto anomalo?";
+"crypto_event_authenticity_mismatched_sender" = "Il mittente dell'evento non corrisponde al proprietario del dispositivo che lo ha inviato.";
+"crypto_event_authenticity_not_guaranteed" = "L'autenticità di questo messaggio cifrato non può essere garantita su questo dispositivo.";
+"crypto_event_authenticity_previously_verified" = "Cifrato da un utente precedentemente verificato.";
+"crypto_event_authenticity_sent_in_clear" = "Non cifrato.";
+"crypto_event_authenticity_unknown_device" = "Cifrato da un dispositivo sconosciuto o eliminato.";
+"crypto_event_authenticity_unsigned_device" = "Cifrato da un dispositivo non verificato dal proprietario.";
+"crypto_event_authenticity_unverified_identity" = "Cifrato da un utente non verificato.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Non è stata trovata alcuna app compatibile per gestire questa azione.";
 "error_some_messages_have_not_been_sent" = "Alcuni messaggi non sono stati inviati";
 "error_unknown" = "Siamo spiacenti, si è verificato un errore";
-"event_shield_mismatched_sender" = "Il mittente dell'evento non corrisponde al proprietario del dispositivo che lo ha inviato.";
-"event_shield_reason_authenticity_not_guaranteed" = "L'autenticità di questo messaggio cifrato non può essere garantita su questo dispositivo.";
-"event_shield_reason_previously_verified" = "Cifrato da un utente precedentemente verificato.";
-"event_shield_reason_sent_in_clear" = "Non cifrato.";
-"event_shield_reason_unknown_device" = "Cifrato da un dispositivo sconosciuto o eliminato.";
-"event_shield_reason_unsigned_device" = "Cifrato da un dispositivo non verificato dal proprietario.";
-"event_shield_reason_unverified_identity" = "Cifrato da un utente non verificato.";
 "full_screen_intent_banner_message" = "Per non perdere mai una chiamata importante, modifica le impostazioni per consentire le notifiche a schermo intero quando il telefono è bloccato.";
 "full_screen_intent_banner_title" = "Migliora la tua esperienza di chiamata";
 "invite_friends_rich_title" = "🔐️ Unisciti a me su %1$@";

@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Zaboravili ste ključ za oporavak?";
 "confirm_recovery_key_banner_title" = "Vaša pohrana ključeva nije sinkronizirana";
 "crash_detection_dialog_content" = "%1$@ neočekivano je prestao s radom prilikom posljednjeg korištenja. Želite li s nama podijeliti izvješće o padu?";
+"crypto_event_authenticity_mismatched_sender" = "Pošiljatelj događaja ne podudara se s vlasnikom uređaja koji ga je poslao.";
+"crypto_event_authenticity_not_guaranteed" = "Autentičnost ove šifrirane poruke ne može se jamčiti na ovom uređaju";
+"crypto_event_authenticity_previously_verified" = "Šifrirao je prethodno provjereni korisnik.";
+"crypto_event_authenticity_sent_in_clear" = "Nije šifrirano.";
+"crypto_event_authenticity_unknown_device" = "Šifrirano nepoznatim ili izbrisanim uređajem.";
+"crypto_event_authenticity_unsigned_device" = "Šifrirano uređajem koji vlasnik nije potvrdio.";
+"crypto_event_authenticity_unverified_identity" = "Šifrirao neprovjereni korisnik.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "Ova je soba konfigurirana tako da novi članovi mogu čitati stare poruke. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Nije pronađena kompatibilna aplikacija za izvršavanje ove radnje.";
 "error_some_messages_have_not_been_sent" = "Neke poruke nisu poslane";
 "error_unknown" = "Žao nam je, došlo je do pogreške";
-"event_shield_mismatched_sender" = "Pošiljatelj događaja ne podudara se s vlasnikom uređaja koji ga je poslao.";
-"event_shield_reason_authenticity_not_guaranteed" = "Autentičnost ove šifrirane poruke ne može se jamčiti na ovom uređaju";
-"event_shield_reason_previously_verified" = "Šifrirao je prethodno provjereni korisnik.";
-"event_shield_reason_sent_in_clear" = "Nije šifrirano.";
-"event_shield_reason_unknown_device" = "Šifrirano nepoznatim ili izbrisanim uređajem.";
-"event_shield_reason_unsigned_device" = "Šifrirano uređajem koji vlasnik nije potvrdio.";
-"event_shield_reason_unverified_identity" = "Šifrirao neprovjereni korisnik.";
 "full_screen_intent_banner_message" = "Kako biste bili sigurni da nikada nećete propustiti važan poziv, promijenite postavke kako biste omogućili obavijesti preko cijelog zaslona kada je telefon zaključan.";
 "full_screen_intent_banner_title" = "Poboljšajte svoje iskustvo poziva";
 "invite_friends_rich_title" = "🔐️ Pridruži mi se u %1$@";

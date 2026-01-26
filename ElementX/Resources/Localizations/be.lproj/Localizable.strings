@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
 "confirm_recovery_key_banner_title" = "Ваша сховішча ключоў не сінхранізавана";
 "crash_detection_dialog_content" = "Пры апошнім выкарыстанні %1$@ адбыўся збой. Хочаце падзяліцца справаздачай аб збоі?";
+"crypto_event_authenticity_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
+"crypto_event_authenticity_not_guaranteed" = "Сапраўднасць гэтага зашыфраванага паведамлення не можа быць гарантаваная на гэтай прыладзе.";
+"crypto_event_authenticity_previously_verified" = "Зашыфравана раней правераным карыстальнікам.";
+"crypto_event_authenticity_sent_in_clear" = "Не зашыфраваны.";
+"crypto_event_authenticity_unknown_device" = "Зашыфравана невядомай ці выдаленай прыладай.";
+"crypto_event_authenticity_unsigned_device" = "Зашыфравана прыладай, не пацверджанай яе ўладальнікам.";
+"crypto_event_authenticity_unverified_identity" = "Зашыфравана неправераным карыстальнікам.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Не знойдзена сумяшчальная праграма для выканання гэтага дзеяння.";
 "error_some_messages_have_not_been_sent" = "Некаторыя паведамленні не былі адпраўлены";
 "error_unknown" = "Выбачце, адбылася памылка";
-"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
-"event_shield_reason_authenticity_not_guaranteed" = "Сапраўднасць гэтага зашыфраванага паведамлення не можа быць гарантаваная на гэтай прыладзе.";
-"event_shield_reason_previously_verified" = "Зашыфравана раней правераным карыстальнікам.";
-"event_shield_reason_sent_in_clear" = "Не зашыфраваны.";
-"event_shield_reason_unknown_device" = "Зашыфравана невядомай ці выдаленай прыладай.";
-"event_shield_reason_unsigned_device" = "Зашыфравана прыладай, не пацверджанай яе ўладальнікам.";
-"event_shield_reason_unverified_identity" = "Зашыфравана неправераным карыстальнікам.";
 "full_screen_intent_banner_message" = "Каб не прапусціць важны званок, зменіце налады, каб дазволіць поўнаэкранныя апавяшчэнні, калі тэлефон заблакіраваны.";
 "full_screen_intent_banner_title" = "Палепшыце якасць званкоў";
 "invite_friends_rich_title" = "🔐️ Далучайцеся да мяне %1$@";

@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Kas unustasid oma taastevõtme?";
 "confirm_recovery_key_banner_title" = "Sinu võtmehoidla pole sünkroonis";
 "crash_detection_dialog_content" = "%1$@ jooksis kokku viimati, kui seda kasutasid. Kas tahaksid selle kohta meile veateate saata?";
+"crypto_event_authenticity_mismatched_sender" = "Sündmuse saatja ja seadme omanik pole vastavuses.";
+"crypto_event_authenticity_not_guaranteed" = "Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud.";
+"crypto_event_authenticity_previously_verified" = "Krüptitud varem verifitseeritud kasutaja poolt";
+"crypto_event_authenticity_sent_in_clear" = "Pole krüptitud.";
+"crypto_event_authenticity_unknown_device" = "Krüptitud tundmatu või kustutatud seadme poolt.";
+"crypto_event_authenticity_unsigned_device" = "Krüptitud seadme poolt, mida tema omanik pole verifitseerinud.";
+"crypto_event_authenticity_unverified_identity" = "Krüptitud verifitseerimata kasutaja poolt.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "See jututuba on seadistatud sedaviisi, et ka uued liikmed saavad lugeda varasemat ajalugu. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Ei õnnestunud leida selle tegevuse jaoks vajalikku välist rakendust.";
 "error_some_messages_have_not_been_sent" = "Mõned sõnumid on saatmata";
 "error_unknown" = "Vabandust, ilmnes viga";
-"event_shield_mismatched_sender" = "Sündmuse saatja ja seadme omanik pole vastavuses.";
-"event_shield_reason_authenticity_not_guaranteed" = "Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud.";
-"event_shield_reason_previously_verified" = "Krüptitud varem verifitseeritud kasutaja poolt";
-"event_shield_reason_sent_in_clear" = "Pole krüptitud.";
-"event_shield_reason_unknown_device" = "Krüptitud tundmatu või kustutatud seadme poolt.";
-"event_shield_reason_unsigned_device" = "Krüptitud seadme poolt, mida tema omanik pole verifitseerinud.";
-"event_shield_reason_unverified_identity" = "Krüptitud verifitseerimata kasutaja poolt.";
 "full_screen_intent_banner_message" = "Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused.";
 "full_screen_intent_banner_title" = "Sinu tõhusad telefonikõned";
 "invite_friends_rich_title" = "🔐️ Liitu minuga rakenduses %1$@";

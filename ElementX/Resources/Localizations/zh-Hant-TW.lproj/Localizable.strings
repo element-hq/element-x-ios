@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "忘記了您的復原金鑰？";
 "confirm_recovery_key_banner_title" = "您的金鑰儲存空間並未同步";
 "crash_detection_dialog_content" = "%1$@ 上次使用時當機了。您想要與我們分享當機報告嗎？";
+"crypto_event_authenticity_mismatched_sender" = "事件的傳送者與傳送該事件的裝置擁有者不相符。";
+"crypto_event_authenticity_not_guaranteed" = "無法在此裝置上保證此加密訊息的真實性。";
+"crypto_event_authenticity_previously_verified" = "由先前驗證的使用者加密。";
+"crypto_event_authenticity_sent_in_clear" = "未加密。";
+"crypto_event_authenticity_unknown_device" = "由未知或已刪除的裝置加密。";
+"crypto_event_authenticity_unsigned_device" = "由未經其擁有者驗證的裝置加密。";
+"crypto_event_authenticity_unverified_identity" = "由未經驗證的使用者加密。";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "找不到相容的應用程式來執行此動作。";
 "error_some_messages_have_not_been_sent" = "有些訊息尚未傳送";
 "error_unknown" = "抱歉，發生錯誤";
-"event_shield_mismatched_sender" = "事件的傳送者與傳送該事件的裝置擁有者不相符。";
-"event_shield_reason_authenticity_not_guaranteed" = "無法在此裝置上保證此加密訊息的真實性。";
-"event_shield_reason_previously_verified" = "由先前驗證的使用者加密。";
-"event_shield_reason_sent_in_clear" = "未加密。";
-"event_shield_reason_unknown_device" = "由未知或已刪除的裝置加密。";
-"event_shield_reason_unsigned_device" = "由未經其擁有者驗證的裝置加密。";
-"event_shield_reason_unverified_identity" = "由未經驗證的使用者加密。";
 "full_screen_intent_banner_message" = "為確保您永遠不會錯過重要通話，請變更設定以允許在手機鎖定時允許全螢幕通知。";
 "full_screen_intent_banner_title" = "提升您的通話體驗";
 "invite_friends_rich_title" = "🔐️ 在 %1$@ 上加入我";

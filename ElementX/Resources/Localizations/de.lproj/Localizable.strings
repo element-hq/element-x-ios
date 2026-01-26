@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Hast du deinen Wiederherstellungsschlüssel vergessen?";
 "confirm_recovery_key_banner_title" = "Dein Schlüsselspeicher ist nicht synchronisiert";
 "crash_detection_dialog_content" = "%1$@ ist bei der letzten Nutzung abgestürzt. Möchtest du einen Absturzbericht mit uns teilen?";
+"crypto_event_authenticity_mismatched_sender" = "Der Absender des Ereignisses stimmt nicht mit dem Besitzer des Gerätes überein, das es gesendet hat.";
+"crypto_event_authenticity_not_guaranteed" = "Die Authentizität dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden.";
+"crypto_event_authenticity_previously_verified" = "Verschlüsselt von einem zuvor verifizierten Nutzer.";
+"crypto_event_authenticity_sent_in_clear" = "Unverschlüsselt.";
+"crypto_event_authenticity_unknown_device" = "Verschlüsselt von einem unbekannten oder gelöschten Gerät.";
+"crypto_event_authenticity_unsigned_device" = "Verschlüsselt durch ein Gerät, das nicht von seinem Besitzer verifiziert wurde.";
+"crypto_event_authenticity_unverified_identity" = "Verschlüsselt durch einen nicht verifizierten Nutzer.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) hat diese Nachricht geteilt, weil du nicht im Chat warst, als sie verschickt wurde.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "Diese Nachricht wurde von %1$@ weitergeleitet, da du zum Zeitpunkt des Versands kein Mitglied der Gruppe warst.";
 "crypto_history_visible" = "Diese Gruppe wurde so konfiguriert, dass neue Mitglieder den vergangenen Nachrichtenverlauf lesen können. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Für diese Aktion wurde keine kompatible App gefunden.";
 "error_some_messages_have_not_been_sent" = "Einige Nachrichten wurden nicht gesendet";
 "error_unknown" = "Entschuldigung, es ist ein Fehler aufgetreten";
-"event_shield_mismatched_sender" = "Der Absender des Ereignisses stimmt nicht mit dem Besitzer des Gerätes überein, das es gesendet hat.";
-"event_shield_reason_authenticity_not_guaranteed" = "Die Authentizität dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden.";
-"event_shield_reason_previously_verified" = "Verschlüsselt von einem zuvor verifizierten Nutzer.";
-"event_shield_reason_sent_in_clear" = "Unverschlüsselt.";
-"event_shield_reason_unknown_device" = "Verschlüsselt von einem unbekannten oder gelöschten Gerät.";
-"event_shield_reason_unsigned_device" = "Verschlüsselt durch ein Gerät, das nicht von seinem Besitzer verifiziert wurde.";
-"event_shield_reason_unverified_identity" = "Verschlüsselt durch einen nicht verifizierten Nutzer.";
 "full_screen_intent_banner_message" = "Damit du keinen wichtigen Anruf verpasst, ändere bitte deine Einstellungen so, dass du bei gesperrtem Telefon Benachrichtigungen im Vollbildmodus erhältst.";
 "full_screen_intent_banner_title" = "Verbessere dein Anruferlebnis";
 "invite_friends_rich_title" = "🔐️ Begleite mich auf %1$@";

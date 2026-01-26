@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Wedi anghofio'ch allwedd adfer?";
 "confirm_recovery_key_banner_title" = "Dyw eich allwedd storfa heb ei gydweddu";
 "crash_detection_dialog_content" = "Chwalodd %1$@ y tro diwethaf iddo gael ei ddefnyddio. Hoffech chi rannu adroddiad gwall gyda ni?";
+"crypto_event_authenticity_mismatched_sender" = "Nid yw anfonwr y digwyddiad yn cyfateb i berchennog y ddyfais a'i hanfonodd.";
+"crypto_event_authenticity_not_guaranteed" = "Nid oes modd gwarantu dilysrwydd y neges hon sydd wedi'i hamgryptio ar y ddyfais hon.";
+"crypto_event_authenticity_previously_verified" = "Wedi'i amgryptio gan ddefnyddiwr a wiriwyd gynt.";
+"crypto_event_authenticity_sent_in_clear" = "Heb ei amgryptio.";
+"crypto_event_authenticity_unknown_device" = "Wedi'i amgryptio gan ddyfais anhysbys neu wedi'i dileu.";
+"crypto_event_authenticity_unsigned_device" = "Wedi'i amgryptio gan ddyfais nad yw wedi'i wirio gan ei pherchennog.";
+"crypto_event_authenticity_unverified_identity" = "Wedi'i amgryptio gan ddefnyddiwr heb ei wirio.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Heb ganfod ap cydnaws i drin y weithred hon.";
 "error_some_messages_have_not_been_sent" = "Nid yw rhai negeseuon wedi'u hanfon";
 "error_unknown" = "Ymddiheuriadau, mae gwall wedi digwydd";
-"event_shield_mismatched_sender" = "Nid yw anfonwr y digwyddiad yn cyfateb i berchennog y ddyfais a'i hanfonodd.";
-"event_shield_reason_authenticity_not_guaranteed" = "Nid oes modd gwarantu dilysrwydd y neges hon sydd wedi'i hamgryptio ar y ddyfais hon.";
-"event_shield_reason_previously_verified" = "Wedi'i amgryptio gan ddefnyddiwr a wiriwyd gynt.";
-"event_shield_reason_sent_in_clear" = "Heb ei amgryptio.";
-"event_shield_reason_unknown_device" = "Wedi'i amgryptio gan ddyfais anhysbys neu wedi'i dileu.";
-"event_shield_reason_unsigned_device" = "Wedi'i amgryptio gan ddyfais nad yw wedi'i wirio gan ei pherchennog.";
-"event_shield_reason_unverified_identity" = "Wedi'i amgryptio gan ddefnyddiwr heb ei wirio.";
 "full_screen_intent_banner_message" = "Er mwyn sicrhau fyddwch chi ddim yn colli galwad bwysig, newidiwch eich gosodiadau i ganiatáu hysbysiadau sgrin lawn pan fydd eich ffôn wedi'i gloi.";
 "full_screen_intent_banner_title" = "Gwella profiad eich galwadau";
 "invite_friends_rich_title" = "🔐️ Ymunwch â mi ar %1$@";
