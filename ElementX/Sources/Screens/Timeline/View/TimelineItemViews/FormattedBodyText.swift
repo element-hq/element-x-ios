@@ -105,10 +105,11 @@ struct FormattedBodyText: View {
                                 .padding(.bottom, 8)
                         }
                         .background(.compound._bgCodeBlock)
+                        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
                         .scrollIndicatorsFlash(onAppear: true)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.horizontal, 4)
-                        .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                        .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                         .contextMenu {
                             Button(L10n.actionCopy) {
                                 UIPasteboard.general.string = component.attributedString.string
@@ -126,12 +127,25 @@ struct FormattedBodyText: View {
             // Make a second iteration through the components adding fixed width blockquotes
             // which are used for layout calculations but won't be rendered.
             ForEach(attributedComponents) { component in
-                if case .blockquote = component.type {
+                switch component.type {
+                case .blockquote:
                     MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.leading, 12.0)
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
                         .hidden()
+                case .codeBlock:
+                    // ScrollView contents
+                    MessageText(attributedString: component.attributedString)
+                        .padding([.horizontal, .top], 4)
+                        .padding(.bottom, 8)
+                        // ScrollView modifiers
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 4)
+                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                        .hidden()
+                case .plainText:
+                    EmptyView()
                 }
             }
         }

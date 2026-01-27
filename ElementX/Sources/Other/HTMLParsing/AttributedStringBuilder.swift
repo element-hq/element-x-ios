@@ -197,15 +197,23 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 content.addAttribute(.MatrixBlockquote, value: true, range: NSRange(location: 0, length: content.length))
                 
             case "code", "pre":
-                let preserveFormatting = preserveFormatting || tag == "pre"
+                let isCodeBlock = tag == "pre"
+                
+                let preserveFormatting = preserveFormatting || isCodeBlock
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 
                 let fontPointSize = fontPointSize * 0.9 // Intentionally shrink code blocks by 10%
                 content.setFontPreservingSymbolicTraits(UIFont.monospacedSystemFont(ofSize: fontPointSize, weight: .regular))
                 
-                content.addAttribute(.CodeBlock, value: true, range: NSRange(location: 0, length: content.length))
+                if isCodeBlock {
+                    content.addAttribute(.CodeBlock, value: true, range: NSRange(location: 0, length: content.length))
+                    // The scroll view provides the background colour for code blocks.
+                } else {
+                    // But we need it for inline code.
+                    content.addAttribute(.backgroundColor, value: UIColor.compound._bgCodeBlock as Any, range: NSRange(location: 0, length: content.length))
+                }
                 
-                // Don't allow identifiers or links in code blocks
+                // Don't allow identifiers or links in code.
                 content.removeAttribute(.MatrixRoomID, range: NSRange(location: 0, length: content.length))
                 content.removeAttribute(.MatrixRoomAlias, range: NSRange(location: 0, length: content.length))
                 content.removeAttribute(.MatrixUserID, range: NSRange(location: 0, length: content.length))
