@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Har du glemt din gendannelsesnøgle?";
 "confirm_recovery_key_banner_title" = "Dit nøglelager er ikke synkroniseret";
 "crash_detection_dialog_content" = "%1$@ crashede sidste gang den blev brugt. Vil du dele en ulykkesrapport med os?";
+"crypto_event_authenticity_mismatched_sender" = "Afsenderen af begivenheden matcher ikke ejeren af den enhed, der sendte den.";
+"crypto_event_authenticity_not_guaranteed" = "Ægtheden af denne krypterede besked kan ikke garanteres på denne enhed.";
+"crypto_event_authenticity_previously_verified" = "Krypteret af en tidligere verificeret bruger.";
+"crypto_event_authenticity_sent_in_clear" = "Ikke krypteret.";
+"crypto_event_authenticity_unknown_device" = "Krypteret af en ukendt eller slettet enhed.";
+"crypto_event_authenticity_unsigned_device" = "Krypteret af en enhed, der ikke er verificeret af sin ejer.";
+"crypto_event_authenticity_unverified_identity" = "Krypteret af en ikke-verificeret bruger.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@(%2$@ ) har delt denne besked siden du ikke var i rummet da den blev sendt.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ delte denne besked, siden du ikke var i rummet da den blev sendt.";
 "crypto_history_visible" = "Dette rum er konfigureret, så nye medlemmer kan læse historikken.%1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Der blev ikke fundet nogen kompatibel app til at håndtere denne handling.";
 "error_some_messages_have_not_been_sent" = "Nogle beskeder er ikke blevet sendt";
 "error_unknown" = "Beklager, der opstod en fejl";
-"event_shield_mismatched_sender" = "Afsenderen af begivenheden matcher ikke ejeren af den enhed, der sendte den.";
-"event_shield_reason_authenticity_not_guaranteed" = "Ægtheden af denne krypterede besked kan ikke garanteres på denne enhed.";
-"event_shield_reason_previously_verified" = "Krypteret af en tidligere verificeret bruger.";
-"event_shield_reason_sent_in_clear" = "Ikke krypteret.";
-"event_shield_reason_unknown_device" = "Krypteret af en ukendt eller slettet enhed.";
-"event_shield_reason_unsigned_device" = "Krypteret af en enhed, der ikke er verificeret af sin ejer.";
-"event_shield_reason_unverified_identity" = "Krypteret af en ikke-verificeret bruger.";
 "full_screen_intent_banner_message" = "For at sikre, at du aldrig går glip af et vigtigt opkald, skal du ændre dine indstillinger til at tillade underretninger i fuld skærm, når din telefon er låst.";
 "full_screen_intent_banner_title" = "Gør din opkaldsoplevelse bedre";
 "invite_friends_rich_title" = "🔐️ Kom med mig til %1$@";

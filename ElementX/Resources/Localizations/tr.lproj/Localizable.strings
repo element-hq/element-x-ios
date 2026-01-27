@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Kurtarma anahtarınızı mı unuttunuz?";
 "confirm_recovery_key_banner_title" = "Anahtar depolama alanınız senkronize değil";
 "crash_detection_dialog_content" = "%1$@ son kullanıldığında çöktü. Bizimle bir çökme raporu paylaşmak ister misiniz?";
+"crypto_event_authenticity_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
+"crypto_event_authenticity_not_guaranteed" = "Bu şifrelenmiş mesajın doğruluğu bu cihazda garanti edilemez.";
+"crypto_event_authenticity_previously_verified" = "Daha önce doğrulanmış bir kullanıcı tarafından şifrelenmiştir.";
+"crypto_event_authenticity_sent_in_clear" = "Şifrelenmemiş.";
+"crypto_event_authenticity_unknown_device" = "Bilinmeyen veya silinmiş bir cihaz tarafından şifrelenmiştir.";
+"crypto_event_authenticity_unsigned_device" = "Sahibi tarafından doğrulanmamış bir cihaz tarafından şifrelenmiştir.";
+"crypto_event_authenticity_unverified_identity" = "Doğrulanmamış bir kullanıcı tarafından şifrelenmiştir.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Bu eylemi gerçekleştirecek uyumlu bir uygulama bulunamadı.";
 "error_some_messages_have_not_been_sent" = "Bazı mesajlar gönderilmedi";
 "error_unknown" = "Üzgünüz, bir hata oluştu";
-"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
-"event_shield_reason_authenticity_not_guaranteed" = "Bu şifrelenmiş mesajın doğruluğu bu cihazda garanti edilemez.";
-"event_shield_reason_previously_verified" = "Daha önce doğrulanmış bir kullanıcı tarafından şifrelenmiştir.";
-"event_shield_reason_sent_in_clear" = "Şifrelenmemiş.";
-"event_shield_reason_unknown_device" = "Bilinmeyen veya silinmiş bir cihaz tarafından şifrelenmiştir.";
-"event_shield_reason_unsigned_device" = "Sahibi tarafından doğrulanmamış bir cihaz tarafından şifrelenmiştir.";
-"event_shield_reason_unverified_identity" = "Doğrulanmamış bir kullanıcı tarafından şifrelenmiştir.";
 "full_screen_intent_banner_message" = "Önemli bir aramayı asla kaçırmamak için, telefonunuz kilitliyken tam ekran bildirimlere izin vermek üzere ayarlarınızı değiştirin.";
 "full_screen_intent_banner_title" = "Arama deneyiminizi geliştirin";
 "invite_friends_rich_title" = "🔐️ Bana katılın %1$@";

@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Glömt din återställningsnyckel?";
 "confirm_recovery_key_banner_title" = "Din nyckellagring är inte synkroniserad";
 "crash_detection_dialog_content" = "%1$@ kraschade senast den användes. Vill du dela en kraschrapport med oss?";
+"crypto_event_authenticity_mismatched_sender" = "Avsändaren av händelsen matchar inte ägaren av den enhet som skickade den.";
+"crypto_event_authenticity_not_guaranteed" = "Detta krypterade meddelandes äkthet kan inte garanteras på den här enheten.";
+"crypto_event_authenticity_previously_verified" = "Krypterat av en tidigare verifierad användare.";
+"crypto_event_authenticity_sent_in_clear" = "Inte krypterad.";
+"crypto_event_authenticity_unknown_device" = "Krypterad av en okänd eller raderad enhet.";
+"crypto_event_authenticity_unsigned_device" = "Krypterad av en enhet som inte verifierats av ägaren.";
+"crypto_event_authenticity_unverified_identity" = "Krypterad av en overifierad användare.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Ingen kompatibel app hittades för att hantera den här åtgärden.";
 "error_some_messages_have_not_been_sent" = "Vissa meddelanden har inte skickats";
 "error_unknown" = "Tyvärr, ett fel uppstod";
-"event_shield_mismatched_sender" = "Avsändaren av händelsen matchar inte ägaren av den enhet som skickade den.";
-"event_shield_reason_authenticity_not_guaranteed" = "Detta krypterade meddelandes äkthet kan inte garanteras på den här enheten.";
-"event_shield_reason_previously_verified" = "Krypterat av en tidigare verifierad användare.";
-"event_shield_reason_sent_in_clear" = "Inte krypterad.";
-"event_shield_reason_unknown_device" = "Krypterad av en okänd eller raderad enhet.";
-"event_shield_reason_unsigned_device" = "Krypterad av en enhet som inte verifierats av ägaren.";
-"event_shield_reason_unverified_identity" = "Krypterad av en overifierad användare.";
 "full_screen_intent_banner_message" = "För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst.";
 "full_screen_intent_banner_title" = "Förbättra din samtalsupplevelse";
 "invite_friends_rich_title" = "🔐️ Häng med mig på %1$@";

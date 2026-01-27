@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Ați uitat cheia de recuperare?";
 "confirm_recovery_key_banner_title" = "Backup-ul nu este sincronizat";
 "crash_detection_dialog_content" = "%1$@ s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?";
+"crypto_event_authenticity_mismatched_sender" = "Expeditorul evenimentului nu corespunde proprietarului dispozitivului care l-a trimis.";
+"crypto_event_authenticity_not_guaranteed" = "Autenticitatea acestui mesaj criptat nu poate fi garantată pe acest dispozitiv.";
+"crypto_event_authenticity_previously_verified" = "Criptat de un utilizator verificat anterior.";
+"crypto_event_authenticity_sent_in_clear" = "Necriptat";
+"crypto_event_authenticity_unknown_device" = "Criptat de un dispozitiv necunoscut sau șters.";
+"crypto_event_authenticity_unsigned_device" = "Criptat de un dispozitiv care nu este verificat de proprietarul său.";
+"crypto_event_authenticity_unverified_identity" = "Criptat de un utilizator neverificat.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "Această cameră a fost configurată astfel încât noii membri să poată citi istoricul. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Nu a fost găsită nicio aplicație capabilă să gestioneze această acțiune.";
 "error_some_messages_have_not_been_sent" = "Unele mesaje nu au fost trimise";
 "error_unknown" = "Ne pare rău, a apărut o eroare";
-"event_shield_mismatched_sender" = "Expeditorul evenimentului nu corespunde proprietarului dispozitivului care l-a trimis.";
-"event_shield_reason_authenticity_not_guaranteed" = "Autenticitatea acestui mesaj criptat nu poate fi garantată pe acest dispozitiv.";
-"event_shield_reason_previously_verified" = "Criptat de un utilizator verificat anterior.";
-"event_shield_reason_sent_in_clear" = "Necriptat";
-"event_shield_reason_unknown_device" = "Criptat de un dispozitiv necunoscut sau șters.";
-"event_shield_reason_unsigned_device" = "Criptat de un dispozitiv care nu este verificat de proprietarul său.";
-"event_shield_reason_unverified_identity" = "Criptat de un utilizator neverificat.";
 "full_screen_intent_banner_message" = "Pentru a vă asigura că nu pierdeți niciodată un apel important, vă rugăm să modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat.";
 "full_screen_intent_banner_title" = "Îmbunătățiți-vă experiența in timpul unui apel";
 "invite_friends_rich_title" = "🔐️ Alăturați-vă mie în %1$@";

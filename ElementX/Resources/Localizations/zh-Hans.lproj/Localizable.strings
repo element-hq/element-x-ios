@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "忘记了恢复密钥？";
 "confirm_recovery_key_banner_title" = "你的密钥存储已不同步";
 "crash_detection_dialog_content" = "%1$@ 上次使用时崩溃了。想和我们分享崩溃报告吗？";
+"crypto_event_authenticity_mismatched_sender" = "事件发送者与发送设备的所有者不匹配。";
+"crypto_event_authenticity_not_guaranteed" = "此加密消息的真实性无法在此设备上保证。";
+"crypto_event_authenticity_previously_verified" = "由先前验证过的用户加密。";
+"crypto_event_authenticity_sent_in_clear" = "未加密。";
+"crypto_event_authenticity_unknown_device" = "由未知或已删除的设备加密。";
+"crypto_event_authenticity_unsigned_device" = "由未经其所有者验证的设备加密。";
+"crypto_event_authenticity_unverified_identity" = "由未经验证的用户加密。";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "找不到完成此项操作的合适应用。";
 "error_some_messages_have_not_been_sent" = "某些信息尚未发送";
 "error_unknown" = "抱歉，发生了错误";
-"event_shield_mismatched_sender" = "事件发送者与发送设备的所有者不匹配。";
-"event_shield_reason_authenticity_not_guaranteed" = "此加密消息的真实性无法在此设备上保证。";
-"event_shield_reason_previously_verified" = "由先前验证过的用户加密。";
-"event_shield_reason_sent_in_clear" = "未加密。";
-"event_shield_reason_unknown_device" = "由未知或已删除的设备加密。";
-"event_shield_reason_unsigned_device" = "由未经其所有者验证的设备加密。";
-"event_shield_reason_unverified_identity" = "由未经验证的用户加密。";
 "full_screen_intent_banner_message" = "为确保您不会错过重要来电，请更改设置以允许锁屏时的全屏通知。";
 "full_screen_intent_banner_title" = "提升通话体验";
 "invite_friends_rich_title" = "🔐️ 加入我 %1$@";

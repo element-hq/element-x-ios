@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Esqueceste-te da tua chave de recuperação?";
 "confirm_recovery_key_banner_title" = "O teu armazenamento de chaves não está sincronizado";
 "crash_detection_dialog_content" = "A %1$@ teve uma falha da última vez que foi utilizada. Gostarias de partilhar um relatório de acidente connosco?";
+"crypto_event_authenticity_mismatched_sender" = "O remetente deste evento não é o dono do dispositivo que o enviou.";
+"crypto_event_authenticity_not_guaranteed" = "A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo.";
+"crypto_event_authenticity_previously_verified" = "Criptografado por um usuário verificado anteriormente.";
+"crypto_event_authenticity_sent_in_clear" = "Não cifrado.";
+"crypto_event_authenticity_unknown_device" = "Cifragem com origem num dispositivo eliminado ou desconhecido.";
+"crypto_event_authenticity_unsigned_device" = "Cifragem com origem num dispositivo não verificado pelo seu dono.";
+"crypto_event_authenticity_unverified_identity" = "Cifragem com origem num utilizador não verificado.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Nenhuma aplicação encontrada capaz de continuar esta ação.";
 "error_some_messages_have_not_been_sent" = "Algumas mensagens não foram enviadas";
 "error_unknown" = "Pedimos desculpa, ocorreu um erro desconhecido";
-"event_shield_mismatched_sender" = "O remetente deste evento não é o dono do dispositivo que o enviou.";
-"event_shield_reason_authenticity_not_guaranteed" = "A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo.";
-"event_shield_reason_previously_verified" = "Criptografado por um usuário verificado anteriormente.";
-"event_shield_reason_sent_in_clear" = "Não cifrado.";
-"event_shield_reason_unknown_device" = "Cifragem com origem num dispositivo eliminado ou desconhecido.";
-"event_shield_reason_unsigned_device" = "Cifragem com origem num dispositivo não verificado pelo seu dono.";
-"event_shield_reason_unverified_identity" = "Cifragem com origem num utilizador não verificado.";
 "full_screen_intent_banner_message" = "Para garantir que nunca perdes uma chamada importante, altera as configurações para permitir notificações em ecrã inteiro quando o telemóvel está bloqueado.";
 "full_screen_intent_banner_title" = "Melhora a tua experiência de chamada";
 "invite_friends_rich_title" = "🔐️ Junta-te a mim na %1$@";

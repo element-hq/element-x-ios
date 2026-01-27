@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "복구 키를 잊으셨나요?";
 "confirm_recovery_key_banner_title" = "귀하의 키 저장소가 동기화되지 않았습니다";
 "crash_detection_dialog_content" = "%1$@이(가) 이전에 마지막으로 사용할 때 충돌했습니다. 충돌 보고서를 공유해주실 수 있나요?";
+"crypto_event_authenticity_mismatched_sender" = "이벤트의 발신자가 이벤트를 보낸 장치의 소유자와 일치하지 않습니다.";
+"crypto_event_authenticity_not_guaranteed" = "이 장치에서는 이 암호화된 메시지의 진위 여부를 보장할 수 없습니다.";
+"crypto_event_authenticity_previously_verified" = "이전에 검증된 사용자에 의해 암호화되었습니다.";
+"crypto_event_authenticity_sent_in_clear" = "암호화되지 않음.";
+"crypto_event_authenticity_unknown_device" = "알 수 없거나 삭제된 장치에 의해 암호화됩니다.";
+"crypto_event_authenticity_unsigned_device" = "소유자가 확인하지 않은 장치에 의해 암호화되었습니다.";
+"crypto_event_authenticity_unverified_identity" = "검증되지 않은 사용자에 의해 암호화되었습니다.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "이 동작을 수행할 수 있는 앱을 찾지 못했습니다.";
 "error_some_messages_have_not_been_sent" = "일부 메시지가 전송되지 않았습니다";
 "error_unknown" = "이런, 오류가 발생했어요";
-"event_shield_mismatched_sender" = "이벤트의 발신자가 이벤트를 보낸 장치의 소유자와 일치하지 않습니다.";
-"event_shield_reason_authenticity_not_guaranteed" = "이 장치에서는 이 암호화된 메시지의 진위 여부를 보장할 수 없습니다.";
-"event_shield_reason_previously_verified" = "이전에 검증된 사용자에 의해 암호화되었습니다.";
-"event_shield_reason_sent_in_clear" = "암호화되지 않음.";
-"event_shield_reason_unknown_device" = "알 수 없거나 삭제된 장치에 의해 암호화됩니다.";
-"event_shield_reason_unsigned_device" = "소유자가 확인하지 않은 장치에 의해 암호화되었습니다.";
-"event_shield_reason_unverified_identity" = "검증되지 않은 사용자에 의해 암호화되었습니다.";
 "full_screen_intent_banner_message" = "중요한 전화를 놓치지 않으려면 휴대폰이 잠겨 있을 때 전체 화면 알림을 허용하도록 설정을 변경하세요.";
 "full_screen_intent_banner_title" = "통화 경험을 향상시키세요";
 "invite_friends_rich_title" = "🔐️ %1$@에 참여하기";

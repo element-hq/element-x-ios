@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Zapomniałeś klucza przywracania?";
 "confirm_recovery_key_banner_title" = "Magazyn kluczy nie jest zsynchronizowany";
 "crash_detection_dialog_content" = "%1$@ uległ awarii podczas ostatniego użycia. Czy chcesz przesłać nam raport o awarii?";
+"crypto_event_authenticity_mismatched_sender" = "Nadawca zdarzenia nie pasuje do właściciela urządzenia, które je wysłał.";
+"crypto_event_authenticity_not_guaranteed" = "Autentyczność tej wiadomości szyfrowanej nie jest gwarantowana na tym urządzeniu.";
+"crypto_event_authenticity_previously_verified" = "Zaszyfrowane przez wcześniej zweryfikowanego użytkownika.";
+"crypto_event_authenticity_sent_in_clear" = "Nieszyfrowany.";
+"crypto_event_authenticity_unknown_device" = "Zaszyfrowana przez nieznane lub usunięte urządzenie.";
+"crypto_event_authenticity_unsigned_device" = "Zaszyfrowana przez urządzenie niezweryfikowane przez jego właściciela.";
+"crypto_event_authenticity_unverified_identity" = "Zaszyfrowana przez niezweryfikowanego użytkownika.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Nie znaleziono kompatybilnej aplikacji do obsługi tej akcji.";
 "error_some_messages_have_not_been_sent" = "Niektóre wiadomości nie zostały wysłane";
 "error_unknown" = "Przepraszamy, wystąpił błąd";
-"event_shield_mismatched_sender" = "Nadawca zdarzenia nie pasuje do właściciela urządzenia, które je wysłał.";
-"event_shield_reason_authenticity_not_guaranteed" = "Autentyczność tej wiadomości szyfrowanej nie jest gwarantowana na tym urządzeniu.";
-"event_shield_reason_previously_verified" = "Zaszyfrowane przez wcześniej zweryfikowanego użytkownika.";
-"event_shield_reason_sent_in_clear" = "Nieszyfrowany.";
-"event_shield_reason_unknown_device" = "Zaszyfrowana przez nieznane lub usunięte urządzenie.";
-"event_shield_reason_unsigned_device" = "Zaszyfrowana przez urządzenie niezweryfikowane przez jego właściciela.";
-"event_shield_reason_unverified_identity" = "Zaszyfrowana przez niezweryfikowanego użytkownika.";
 "full_screen_intent_banner_message" = "Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu.";
 "full_screen_intent_banner_title" = "Popraw jakość swoich rozmów";
 "invite_friends_rich_title" = "🔐️ Dołącz do mnie na %1$@";

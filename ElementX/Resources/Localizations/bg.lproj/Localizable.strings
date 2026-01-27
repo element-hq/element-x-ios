@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
 "confirm_recovery_key_banner_title" = "Хранилището ви за ключове не е синхронизирано";
 "crash_detection_dialog_content" = "%1$@ се срина при последното използване. Искате ли да споделите доклад за срива с нас?";
+"crypto_event_authenticity_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
+"crypto_event_authenticity_not_guaranteed" = "The authenticity of this encrypted message can't be guaranteed on this device.";
+"crypto_event_authenticity_previously_verified" = "Encrypted by a previously-verified user.";
+"crypto_event_authenticity_sent_in_clear" = "Без шифроване";
+"crypto_event_authenticity_unknown_device" = "Encrypted by an unknown or deleted device.";
+"crypto_event_authenticity_unsigned_device" = "Encrypted by a device not verified by its owner.";
+"crypto_event_authenticity_unverified_identity" = "Encrypted by an unverified user.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "Някои съобщения не са изпратени";
 "error_unknown" = "Съжаляваме, възникна грешка";
-"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
-"event_shield_reason_authenticity_not_guaranteed" = "The authenticity of this encrypted message can't be guaranteed on this device.";
-"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
-"event_shield_reason_sent_in_clear" = "Без шифроване";
-"event_shield_reason_unknown_device" = "Encrypted by an unknown or deleted device.";
-"event_shield_reason_unsigned_device" = "Encrypted by a device not verified by its owner.";
-"event_shield_reason_unverified_identity" = "Encrypted by an unverified user.";
 "full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
 "full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ Присъединете се към мен в %1$@";

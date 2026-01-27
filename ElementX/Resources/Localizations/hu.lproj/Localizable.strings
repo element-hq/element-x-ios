@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Elfelejtette a helyreállítási kulcsot?";
 "confirm_recovery_key_banner_title" = "A kulcstároló nincs szinkronizálva";
 "crash_detection_dialog_content" = "Az %1$@ összeomlott a legutóbbi használata óta. Megosztja velünk az összeomlás-jelentést?";
+"crypto_event_authenticity_mismatched_sender" = "Az esemény feladója nem egyezik az eseményt küldő eszköz tulajdonosával.";
+"crypto_event_authenticity_not_guaranteed" = "A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni.";
+"crypto_event_authenticity_previously_verified" = "Egy korábban ellenőrzött felhasználó által titkosítva.";
+"crypto_event_authenticity_sent_in_clear" = "Nincs titkosítva.";
+"crypto_event_authenticity_unknown_device" = "Ismeretlen vagy törölt eszköz által titkosítva.";
+"crypto_event_authenticity_unsigned_device" = "A tulajdonos által nem ellenőrzött eszköz által titkosítva.";
+"crypto_event_authenticity_unverified_identity" = "Nem ellenőrzött felhasználó által titkosítva.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték.";
 "crypto_history_visible" = "Az elküldött üzenetek megosztásra kerülnek a szobába meghívott új tagokkal.%1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Nem található kompatibilis alkalmazás a művelet kezeléséhez.";
 "error_some_messages_have_not_been_sent" = "Néhány üzenet nem került elküldésre";
 "error_unknown" = "Elnézést, hiba történt";
-"event_shield_mismatched_sender" = "Az esemény feladója nem egyezik az eseményt küldő eszköz tulajdonosával.";
-"event_shield_reason_authenticity_not_guaranteed" = "A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni.";
-"event_shield_reason_previously_verified" = "Egy korábban ellenőrzött felhasználó által titkosítva.";
-"event_shield_reason_sent_in_clear" = "Nincs titkosítva.";
-"event_shield_reason_unknown_device" = "Ismeretlen vagy törölt eszköz által titkosítva.";
-"event_shield_reason_unsigned_device" = "A tulajdonos által nem ellenőrzött eszköz által titkosítva.";
-"event_shield_reason_unverified_identity" = "Nem ellenőrzött felhasználó által titkosítva.";
 "full_screen_intent_banner_message" = "Hogy sose maradjon le egyetlen fontos hívásról sem, a beállításokban engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van.";
 "full_screen_intent_banner_title" = "Fokozza a hívásélményét";
 "invite_friends_rich_title" = "🔐️ Csatlakozz hozzám itt: %1$@";

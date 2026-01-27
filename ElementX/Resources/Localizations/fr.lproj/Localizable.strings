@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Clé de récupération oubliée ?";
 "confirm_recovery_key_banner_title" = "Le stockage de vos clés n'est pas synchronisé";
 "crash_detection_dialog_content" = "%1$@ s’est arrêté la dernière fois qu’il a été utilisé. Souhaitez-vous partager un rapport d’incident avec nous ?";
+"crypto_event_authenticity_mismatched_sender" = "L'expéditeur de ce message ne correspond pas au propriétaire de l'appareil qui l'a envoyé.";
+"crypto_event_authenticity_not_guaranteed" = "L'authenticité de ce message chiffré ne peut être garantie sur cet appareil.";
+"crypto_event_authenticity_previously_verified" = "Chiffré par un utilisateur précédemment vérifié.";
+"crypto_event_authenticity_sent_in_clear" = "Non chiffré.";
+"crypto_event_authenticity_unknown_device" = "Chiffré par un appareil inconnu ou supprimé.";
+"crypto_event_authenticity_unsigned_device" = "Chiffré par un appareil non vérifié par son propriétaire.";
+"crypto_event_authenticity_unverified_identity" = "Chiffré par un utilisateur non vérifié.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) a partagé ce message avec vous car vous n’étiez pas dans le salon lors de son envoi.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ a partagé ce message avec vous car vous n’étiez pas dans le salon lors de son envoi.";
 "crypto_history_visible" = "Ce salon a été configuré pour que les nouveaux membres puissent lire l'historique. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Aucune application compatible n’a été trouvée pour gérer cette action.";
 "error_some_messages_have_not_been_sent" = "Certains messages n’ont pas été envoyés";
 "error_unknown" = "Désolé, une erreur s’est produite";
-"event_shield_mismatched_sender" = "L'expéditeur de ce message ne correspond pas au propriétaire de l'appareil qui l'a envoyé.";
-"event_shield_reason_authenticity_not_guaranteed" = "L'authenticité de ce message chiffré ne peut être garantie sur cet appareil.";
-"event_shield_reason_previously_verified" = "Chiffré par un utilisateur précédemment vérifié.";
-"event_shield_reason_sent_in_clear" = "Non chiffré.";
-"event_shield_reason_unknown_device" = "Chiffré par un appareil inconnu ou supprimé.";
-"event_shield_reason_unsigned_device" = "Chiffré par un appareil non vérifié par son propriétaire.";
-"event_shield_reason_unverified_identity" = "Chiffré par un utilisateur non vérifié.";
 "full_screen_intent_banner_message" = "Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé.";
 "full_screen_intent_banner_title" = "Améliorez votre expérience d'appel";
 "invite_friends_rich_title" = "🔐️ Rejoignez-moi sur %1$@";

@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Unohditko palautusavaimesi?";
 "confirm_recovery_key_banner_title" = "Avainten säilytys ei ole synkronoitu";
 "crash_detection_dialog_content" = "%1$@ kaatui edellisellä käyttökerralla. Haluatko jakaa virheraportin kanssamme?";
+"crypto_event_authenticity_mismatched_sender" = "Tapahtuman lähettäjä ei vastaa sitä lähettäneen laitteen omistajaa.";
+"crypto_event_authenticity_not_guaranteed" = "Tämän salatun viestin aitoutta ei voida taata tällä laitteella.";
+"crypto_event_authenticity_previously_verified" = "Aiemmin vahvistetun käyttäjän salaama.";
+"crypto_event_authenticity_sent_in_clear" = "Ei salattu.";
+"crypto_event_authenticity_unknown_device" = "Tuntemattoman tai poistetun laitteen salaama.";
+"crypto_event_authenticity_unsigned_device" = "Salattu laitteella, jota sen omistaja ei ole vahvistanut.";
+"crypto_event_authenticity_unverified_identity" = "Vahvistamattoman käyttäjän salaama.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Yhteensopivaa sovellusta ei löytynyt käsittelemään tätä toimintoa.";
 "error_some_messages_have_not_been_sent" = "Joitakin viestejä ei ole lähetetty";
 "error_unknown" = "Anteeksi, tapahtui virhe";
-"event_shield_mismatched_sender" = "Tapahtuman lähettäjä ei vastaa sitä lähettäneen laitteen omistajaa.";
-"event_shield_reason_authenticity_not_guaranteed" = "Tämän salatun viestin aitoutta ei voida taata tällä laitteella.";
-"event_shield_reason_previously_verified" = "Aiemmin vahvistetun käyttäjän salaama.";
-"event_shield_reason_sent_in_clear" = "Ei salattu.";
-"event_shield_reason_unknown_device" = "Tuntemattoman tai poistetun laitteen salaama.";
-"event_shield_reason_unsigned_device" = "Salattu laitteella, jota sen omistaja ei ole vahvistanut.";
-"event_shield_reason_unverified_identity" = "Vahvistamattoman käyttäjän salaama.";
 "full_screen_intent_banner_message" = "Salli koko näytön ilmoitukset, kun laite on lukittu, jos et halua koskaan missata tärkeää puhelua.";
 "full_screen_intent_banner_title" = "Paranna puhelukokemustasi";
 "invite_friends_rich_title" = "🔐️ Liity seuraani %1$@ -sovelluksessa";

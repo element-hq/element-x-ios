@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Tiklash kalitini unutdingizmi?";
 "confirm_recovery_key_banner_title" = "Kalit saqlash joyi sinxronlashmagan";
 "crash_detection_dialog_content" = "%1$@oxirgi marta ishlatilganda qulab tushdi. Biz bilan nosozlik hisobotini baham ko'rmoqchimisiz?";
+"crypto_event_authenticity_mismatched_sender" = "Hodisani yuborgan shaxs uni yuborgan qurilmaning egasi bilan mos kelmaydi.";
+"crypto_event_authenticity_not_guaranteed" = "Bu qurilmada shifrlangan xabarning haqiqiyligini kafolatlash imkonsiz.";
+"crypto_event_authenticity_previously_verified" = "Avval tasdiqlangan foydalanuvchi tomonidan shifrlangan.";
+"crypto_event_authenticity_sent_in_clear" = "Shifrlanmagan";
+"crypto_event_authenticity_unknown_device" = "Nomaʼlum yoki oʻchirib tashlangan qurilma tomonidan shifrlangan.";
+"crypto_event_authenticity_unsigned_device" = "Egasi tasdiqlamagan qurilma tomonidan shifrlangan.";
+"crypto_event_authenticity_unverified_identity" = "Tasdiqlanmagan foydalanuvchi tomonidan shifrlangan.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Bu amalni bajarish uchun mos ilova topilmadi.";
 "error_some_messages_have_not_been_sent" = "Bazi xabarlar yuborilmagan";
 "error_unknown" = "Kechirasiz, xatolik yuz berdi";
-"event_shield_mismatched_sender" = "Hodisani yuborgan shaxs uni yuborgan qurilmaning egasi bilan mos kelmaydi.";
-"event_shield_reason_authenticity_not_guaranteed" = "Bu qurilmada shifrlangan xabarning haqiqiyligini kafolatlash imkonsiz.";
-"event_shield_reason_previously_verified" = "Avval tasdiqlangan foydalanuvchi tomonidan shifrlangan.";
-"event_shield_reason_sent_in_clear" = "Shifrlanmagan";
-"event_shield_reason_unknown_device" = "Nomaʼlum yoki oʻchirib tashlangan qurilma tomonidan shifrlangan.";
-"event_shield_reason_unsigned_device" = "Egasi tasdiqlamagan qurilma tomonidan shifrlangan.";
-"event_shield_reason_unverified_identity" = "Tasdiqlanmagan foydalanuvchi tomonidan shifrlangan.";
 "full_screen_intent_banner_message" = "Muhim qoʻngʻiroqlarni oʻtkazib yubormasligingiz uchun telefoningiz qulflangan holatida toʻliq ekranli bildirishnomalarni ko‘rsatishga ruxsat beradigan qilib sozlamalaringizni oʻzgartiring.";
 "full_screen_intent_banner_title" = "Qoʻngʻiroq tajribangizni yaxshilang";
 "invite_friends_rich_title" = "🔐️ Menga qo'shiling%1$@";

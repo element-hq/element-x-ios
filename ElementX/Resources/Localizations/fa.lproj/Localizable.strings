@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
 "confirm_recovery_key_banner_title" = "ذخیره‌ساز کلیدتان از هم‌گام بودن در آمده";
 "crash_detection_dialog_content" = "%1$@آخرین باری که استفاده شد، از کار افتاد. آیا مایلید گزارش خرابی را با ما به اشتراک بگذارید؟";
+"crypto_event_authenticity_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
+"crypto_event_authenticity_not_guaranteed" = "اعتبار این پیام رمز شده نمی‌تواند روی این افزاره تأیید شود.";
+"crypto_event_authenticity_previously_verified" = "رمز شده به دست کاربری از پیش تأیید شده.";
+"crypto_event_authenticity_sent_in_clear" = "رمز نشده.";
+"crypto_event_authenticity_unknown_device" = "رمز شده به دست افزاره‌ای ناشناخته یا حذف شده.";
+"crypto_event_authenticity_unsigned_device" = "رمز شده به دست افزاره‌ای که از سوی مالکش تأیید نشده.";
+"crypto_event_authenticity_unverified_identity" = "رمز شده به دست کاربری تأیید نشده.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "هیچ برنامه سازگاری برای انجام این عمل یافت نشد.";
 "error_some_messages_have_not_been_sent" = "برخی پیام‌ها ارسال نشده‌اند";
 "error_unknown" = "متأسفیم ، خطایی رخ داد";
-"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
-"event_shield_reason_authenticity_not_guaranteed" = "اعتبار این پیام رمز شده نمی‌تواند روی این افزاره تأیید شود.";
-"event_shield_reason_previously_verified" = "رمز شده به دست کاربری از پیش تأیید شده.";
-"event_shield_reason_sent_in_clear" = "رمز نشده.";
-"event_shield_reason_unknown_device" = "رمز شده به دست افزاره‌ای ناشناخته یا حذف شده.";
-"event_shield_reason_unsigned_device" = "رمز شده به دست افزاره‌ای که از سوی مالکش تأیید نشده.";
-"event_shield_reason_unverified_identity" = "رمز شده به دست کاربری تأیید نشده.";
 "full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
 "full_screen_intent_banner_title" = "بهبود تجریهٔ تماستان";
 "invite_friends_rich_title" = "🔐️ پییوستن به من روی %1$@";

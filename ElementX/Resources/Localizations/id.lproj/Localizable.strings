@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Lupa kunci pemulihan Anda?";
 "confirm_recovery_key_banner_title" = "Penyimpanan kunci Anda tidak sinkron";
 "crash_detection_dialog_content" = "%1$@ mengalami kemogokan saat terakhir kali digunakan. Apakah Anda ingin berbagi laporan kerusakan dengan kami?";
+"crypto_event_authenticity_mismatched_sender" = "Pengirim peristiwa tidak cocok dengan pemilik perangkat yang mengirimnya.";
+"crypto_event_authenticity_not_guaranteed" = "Keaslian pesan terenkripsi ini tidak dapat dijamin pada perangkat ini.";
+"crypto_event_authenticity_previously_verified" = "Dienkripsi oleh pengguna yang telah diverifikasi sebelumnya.";
+"crypto_event_authenticity_sent_in_clear" = "Tidak dienkripsi.";
+"crypto_event_authenticity_unknown_device" = "Dienkripsi oleh perangkat yang tidak dikenal atau dihapus.";
+"crypto_event_authenticity_unsigned_device" = "Dienkripsi oleh perangkat yang tidak diverifikasi oleh pemiliknya.";
+"crypto_event_authenticity_unverified_identity" = "Dienkripsi oleh pengguna yang tidak terverifikasi.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Tidak ada aplikasi yang kompatibel yang ditemukan untuk menangani tindakan ini.";
 "error_some_messages_have_not_been_sent" = "Beberapa pesan belum terkirim";
 "error_unknown" = "Maaf, terjadi kesalahan";
-"event_shield_mismatched_sender" = "Pengirim peristiwa tidak cocok dengan pemilik perangkat yang mengirimnya.";
-"event_shield_reason_authenticity_not_guaranteed" = "Keaslian pesan terenkripsi ini tidak dapat dijamin pada perangkat ini.";
-"event_shield_reason_previously_verified" = "Dienkripsi oleh pengguna yang telah diverifikasi sebelumnya.";
-"event_shield_reason_sent_in_clear" = "Tidak dienkripsi.";
-"event_shield_reason_unknown_device" = "Dienkripsi oleh perangkat yang tidak dikenal atau dihapus.";
-"event_shield_reason_unsigned_device" = "Dienkripsi oleh perangkat yang tidak diverifikasi oleh pemiliknya.";
-"event_shield_reason_unverified_identity" = "Dienkripsi oleh pengguna yang tidak terverifikasi.";
 "full_screen_intent_banner_message" = "Untuk memastikan Anda tidak melewatkan panggilan penting, silakan ubah pengaturan Anda untuk memperbolehkan notifikasi layar penuh ketika ponsel Anda terkunci.";
 "full_screen_intent_banner_title" = "Tingkatkan pengalaman panggilan Anda";
 "invite_friends_rich_title" = "🔐️ Bergabunglah dengan saya di %1$@";

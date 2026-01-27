@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
 "confirm_recovery_key_banner_title" = "آپ کا کلید کا ذخیرہ غیر ہم وقت ساز ہے۔";
 "crash_detection_dialog_content" = "%1$@آخری بار استعمال ہونے پر ٹکرا گیا۔ کیا آپ ہمارے ساتھ ٹکر کی گزارش (رپورٹ) کا اشتراک کرنا چاہیں گے؟";
+"crypto_event_authenticity_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
+"crypto_event_authenticity_not_guaranteed" = "اس آلہ پر اس مرموز کردہ پیغام کی صداقت کی ضمانت نہیں دی جا سکتی۔";
+"crypto_event_authenticity_previously_verified" = "پہلے سے تصدیق شدہ صارف کے ذریعہ خفیہ کردہ۔";
+"crypto_event_authenticity_sent_in_clear" = "مرموز کردہ نہیں۔";
+"crypto_event_authenticity_unknown_device" = "کسی نامعلوم یا حذف شدہ آلے کے ذریعے مرموز کردہ۔";
+"crypto_event_authenticity_unsigned_device" = "کسی ایسے آلے کے ذریعے مرموز کردہ جس کی توثیق اسکے مالک سے نہیں ہوئی۔";
+"crypto_event_authenticity_unverified_identity" = "ایک غیر توثیق شدہ صارف کے ذریعے مرموز کردہ۔";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "اس کارروائی کو سنبھالنے کے لیے کوئی مطابقت پذیر اطلاقیہ نہیں ملا۔";
 "error_some_messages_have_not_been_sent" = "کچھ پیغامات ارسال نہیں ہوئے";
 "error_unknown" = "معذرت، ایک خرابی واقع ہوگئی";
-"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
-"event_shield_reason_authenticity_not_guaranteed" = "اس آلہ پر اس مرموز کردہ پیغام کی صداقت کی ضمانت نہیں دی جا سکتی۔";
-"event_shield_reason_previously_verified" = "پہلے سے تصدیق شدہ صارف کے ذریعہ خفیہ کردہ۔";
-"event_shield_reason_sent_in_clear" = "مرموز کردہ نہیں۔";
-"event_shield_reason_unknown_device" = "کسی نامعلوم یا حذف شدہ آلے کے ذریعے مرموز کردہ۔";
-"event_shield_reason_unsigned_device" = "کسی ایسے آلے کے ذریعے مرموز کردہ جس کی توثیق اسکے مالک سے نہیں ہوئی۔";
-"event_shield_reason_unverified_identity" = "ایک غیر توثیق شدہ صارف کے ذریعے مرموز کردہ۔";
 "full_screen_intent_banner_message" = "اس بات کو یقینی بنانے کے لیے کہ آپ کبھی بھی اہم مکالمہ سے محروم نہ ہوں، براہ کرم اپنی ترتیبات تبدیل کریں تاکہ آپ کا ہاتف مقفل ہونے پر مکمل پردۂ نمائش اطلاعات کی اجازت دی جا سکے۔";
 "full_screen_intent_banner_title" = "اپنے مکالمتی تجربے کو احسن کریں";
 "invite_friends_rich_title" = "🔐️ %1$@ پر میرے ساتھ شامل ہوں";

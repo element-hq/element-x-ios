@@ -362,6 +362,13 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
 "confirm_recovery_key_banner_title" = "Je sleutelopslag is niet gesynchroniseerd";
 "crash_detection_dialog_content" = "%1$@ crashte de laatste keer dat het werd gebruikt. Wil je een crashrapport met ons delen?";
+"crypto_event_authenticity_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
+"crypto_event_authenticity_not_guaranteed" = "De echtheid van dit versleutelde bericht kan op dit apparaat niet worden gegarandeerd.";
+"crypto_event_authenticity_previously_verified" = "Versleuteld door een eerder geverifieerde gebruiker.";
+"crypto_event_authenticity_sent_in_clear" = "Niet versleuteld.";
+"crypto_event_authenticity_unknown_device" = "Versleuteld door een onbekend of verwijderd apparaat.";
+"crypto_event_authenticity_unsigned_device" = "Versleuteld door een apparaat dat niet is geverifieerd door de eigenaar.";
+"crypto_event_authenticity_unverified_identity" = "Versleuteld door een niet-geverifieerde gebruiker.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
@@ -419,13 +426,6 @@
 "error_no_compatible_app_found" = "Er is geen compatibele app gevonden om deze actie uit te voeren.";
 "error_some_messages_have_not_been_sent" = "Sommige berichten zijn niet verzonden";
 "error_unknown" = "Sorry, er is een fout opgetreden";
-"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
-"event_shield_reason_authenticity_not_guaranteed" = "De echtheid van dit versleutelde bericht kan op dit apparaat niet worden gegarandeerd.";
-"event_shield_reason_previously_verified" = "Versleuteld door een eerder geverifieerde gebruiker.";
-"event_shield_reason_sent_in_clear" = "Niet versleuteld.";
-"event_shield_reason_unknown_device" = "Versleuteld door een onbekend of verwijderd apparaat.";
-"event_shield_reason_unsigned_device" = "Versleuteld door een apparaat dat niet is geverifieerd door de eigenaar.";
-"event_shield_reason_unverified_identity" = "Versleuteld door een niet-geverifieerde gebruiker.";
 "full_screen_intent_banner_message" = "Pas je instellingen aan om meldingen op het volledige scherm toe te staan wanneer de telefoon is vergrendeld. Zo mis je nooit een belangrijk gesprek.";
 "full_screen_intent_banner_title" = "Verbeter je gesprekservaring";
 "invite_friends_rich_title" = "🔐️ Sluit je bij mij aan op %1$@";
