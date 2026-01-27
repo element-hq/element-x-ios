@@ -125,7 +125,6 @@ import SwiftUI
     /// - Parameters:
     ///   - coordinator: the coordinator to display
     ///   - animated: whether to animate the transition or not. Default is true
-
     ///   - dismissalCallback: called when the sheet has been dismissed, programatically or otherwise
     func setSheetCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         guard let coordinator else {
