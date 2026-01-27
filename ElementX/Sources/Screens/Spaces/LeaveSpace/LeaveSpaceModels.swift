@@ -11,6 +11,7 @@ enum LeaveSpaceViewAction {
     case selectAll
     case toggleRoom(roomID: String)
     case rolesAndPermissions
+    case transferOwnership
     case cancel
 }
 
@@ -44,5 +45,6 @@ struct LeaveSpaceViewState: BindableState {
 enum LeaveSpaceViewModelAction {
     case didLeaveSpace
     case presentRolesAndPermissions
+    case presentTransferOwnership
     case didCancel
 }

@@ -349,6 +349,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.addRooms)
                 case .displayCreateChildRoomFlow(let space):
                     stateMachine.tryEvent(.startCreateChildRoomFlow, userInfo: space)
+                case .displayTransferOwnership(roomProxy: let roomProxy):
+                    // TODO: Implement
+                    break
                 }
             }
             .store(in: &cancellables)

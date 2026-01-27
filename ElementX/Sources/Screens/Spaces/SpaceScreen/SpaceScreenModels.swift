@@ -14,6 +14,7 @@ enum SpaceScreenViewModelAction {
     case selectRoom(roomID: String)
     case leftSpace
     case presentRolesAndPermissions(roomProxy: JoinedRoomProxyProtocol)
+    case presentTransferOwnership(roomProxy: JoinedRoomProxyProtocol)
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
     case displaySpaceSettings(roomProxy: JoinedRoomProxyProtocol)
     case addExistingChildren

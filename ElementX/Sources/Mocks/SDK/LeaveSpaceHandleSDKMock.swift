@@ -23,11 +23,11 @@ extension LeaveSpaceHandleSDKMock {
 }
 
 extension [LeaveSpaceRoom] {
-    static func mockRoomsWithSpace(spaceServiceRoom: SpaceServiceRoom, isLastOwner: Bool) -> [LeaveSpaceRoom] {
-        mockRooms + mockSingleSpace(spaceServiceRoom: spaceServiceRoom, isLastOwner: isLastOwner)
+    static func mockRoomsWithSpace(spaceServiceRoom: SpaceServiceRoom, isLastOwner: Bool, areCreatorsPrivileged: Bool) -> [LeaveSpaceRoom] {
+        mockRooms + mockSingleSpace(spaceServiceRoom: spaceServiceRoom, isLastOwner: isLastOwner, areCreatorsPrivileged: areCreatorsPrivileged)
     }
     
-    static func mockSingleSpace(spaceServiceRoom: SpaceServiceRoom, isLastOwner: Bool) -> [LeaveSpaceRoom] {
+    static func mockSingleSpace(spaceServiceRoom: SpaceServiceRoom, isLastOwner: Bool, areCreatorsPrivileged: Bool) -> [LeaveSpaceRoom] {
         [LeaveSpaceRoom(spaceRoom: SpaceRoom(id: spaceServiceRoom.id,
                                              name: spaceServiceRoom.name,
                                              avatarURL: spaceServiceRoom.avatarURL,
@@ -35,7 +35,7 @@ extension [LeaveSpaceRoom] {
                                              memberCount: UInt64(spaceServiceRoom.joinedMembersCount),
                                              joinRule: spaceServiceRoom.joinRule),
                         isLastOwner: isLastOwner,
-                        areCreatorsPrivileged: false)]
+                        areCreatorsPrivileged: areCreatorsPrivileged)]
     }
     
     static var mockNeedNewOwnerRooms: [LeaveSpaceRoom] {
