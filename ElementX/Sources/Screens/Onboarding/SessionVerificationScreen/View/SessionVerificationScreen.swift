@@ -54,7 +54,6 @@ struct SessionVerificationScreen: View {
         }
     }
     
-    @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
             BigIcon(icon: context.viewState.headerIcon.keyPath,
@@ -109,7 +108,6 @@ struct SessionVerificationScreen: View {
         }
     }
     
-    @ViewBuilder
     private func emojisPanel(with emojis: [SessionVerificationEmoji]) -> some View {
         VStack(spacing: 32) {
             HStack(spacing: 16) {

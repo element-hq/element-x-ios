@@ -6,10 +6,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+@testable import ElementX
 import MatrixRustSDK
 import XCTest
-
-@testable import ElementX
 
 class RoomPermissionsTests: XCTestCase {
     func testFromRust() {

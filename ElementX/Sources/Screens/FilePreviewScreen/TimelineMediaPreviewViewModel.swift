@@ -236,5 +236,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                               title: L10n.screenMediaDetailsNoMoreMediaToShow))
     }
     
-    private var statusIndicatorID: String { "\(Self.self)-Status" }
+    private var statusIndicatorID: String {
+        "\(Self.self)-Status"
+    }
 }

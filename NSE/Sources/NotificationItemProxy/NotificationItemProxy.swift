@@ -98,27 +98,51 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
 
     let receiverID: String
 
-    var senderID: String { "" }
+    var senderID: String {
+        ""
+    }
 
-    var senderDisplayName: String? { nil }
+    var senderDisplayName: String? {
+        nil
+    }
     
-    var roomDisplayName: String { "" }
+    var roomDisplayName: String {
+        ""
+    }
 
-    var isNoisy: Bool { false }
+    var isNoisy: Bool {
+        false
+    }
 
-    var isRoomSpace: Bool { false }
+    var isRoomSpace: Bool {
+        false
+    }
     
-    var isRoomDirect: Bool { false }
+    var isRoomDirect: Bool {
+        false
+    }
     
-    var isRoomPrivate: Bool { false }
+    var isRoomPrivate: Bool {
+        false
+    }
 
-    var senderAvatarMediaSource: MediaSourceProxy? { nil }
+    var senderAvatarMediaSource: MediaSourceProxy? {
+        nil
+    }
 
-    var roomAvatarMediaSource: MediaSourceProxy? { nil }
+    var roomAvatarMediaSource: MediaSourceProxy? {
+        nil
+    }
 
-    var roomJoinedMembers: Int { 0 }
+    var roomJoinedMembers: Int {
+        0
+    }
     
-    var hasMention: Bool { false }
+    var hasMention: Bool {
+        false
+    }
     
-    var threadRootEventID: String? { nil }
+    var threadRootEventID: String? {
+        nil
+    }
 }

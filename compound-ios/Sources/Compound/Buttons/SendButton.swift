@@ -20,7 +20,9 @@ public struct SendButton: View {
         return colorScheme == .light ? .compound.iconOnSolidPrimary : .compound.iconPrimary
     }
     
-    private var gradient: Gradient { isEnabled ? .compound.action : .init(colors: [.clear]) }
+    private var gradient: Gradient {
+        isEnabled ? .compound.action : .init(colors: [.clear])
+    }
     
     /// Creates a send button that performs the provided action.
     public init(action: @escaping () -> Void) {

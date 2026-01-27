@@ -23,7 +23,10 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private let progressSubject = PassthroughSubject<Double, Never>()
     private var cancellables = Set<AnyCancellable>()
     
-    var isEnabled: Bool { rageshakeURL != .disabled }
+    var isEnabled: Bool {
+        rageshakeURL != .disabled
+    }
+
     var lastCrashEventID: String?
     
     init(rageshakeURLPublisher: CurrentValuePublisher<RageshakeConfiguration, Never>,

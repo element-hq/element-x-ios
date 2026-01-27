@@ -7,10 +7,9 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
 import MatrixRustSDKMocks
+import XCTest
 
 @MainActor
 final class QRCodeLoginScreenViewModelTests: XCTestCase {
@@ -24,7 +23,9 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
     private var appMediator: AppMediatorMock!
     
     private var viewModel: QRCodeLoginScreenViewModelProtocol!
-    private var context: QRCodeLoginScreenViewModelType.Context { viewModel.context }
+    private var context: QRCodeLoginScreenViewModelType.Context {
+        viewModel.context
+    }
     
     func testLoginInitialState() {
         setupViewModel(mode: .login)

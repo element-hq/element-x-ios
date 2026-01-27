@@ -9,9 +9,8 @@
 import Combine
 @testable import ElementX
 import MatrixRustSDK
-import XCTest
-
 import WysiwygComposer
+import XCTest
 
 @MainActor
 class ComposerToolbarViewModelTests: XCTestCase {
@@ -144,13 +143,13 @@ class ComposerToolbarViewModelTests: XCTestCase {
         XCTAssertEqual(wysiwygViewModel.content.html, "<a href=\"https://matrix.to/#/%23room-alias:matrix.org\">#room-alias:matrix.org</a> ")
     }
     
-    func testAllUsersSuggestion() {
+    func testAllUsersSuggestion() throws {
         let suggestion = SuggestionItem(suggestionType: .allUsers(.room(id: "", name: nil, avatarURL: nil)), range: .init(), rawSuggestionText: "")
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
         var string = "@room"
         // swiftlint:disable:next force_unwrapping
-        string.unicodeScalars.append(UnicodeScalar(String.nbsp)!)
+        try string.unicodeScalars.append(XCTUnwrap(UnicodeScalar(String.nbsp)))
         XCTAssertEqual(wysiwygViewModel.content.html, string)
     }
     
@@ -187,12 +186,10 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
     
     func testIntentionalMentions() async throws {
-        wysiwygViewModel.setHtmlContent(
-            """
-            <p>Hello @room \
-            and especially hello to <a href=\"https://matrix.to/#/@test:matrix.org\">Test</a></p>
-            """
-        )
+        wysiwygViewModel.setHtmlContent("""
+        <p>Hello @room \
+        and especially hello to <a href=\"https://matrix.to/#/@test:matrix.org\">Test</a></p>
+        """)
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {

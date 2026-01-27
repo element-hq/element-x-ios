@@ -21,7 +21,10 @@ class MockTimelineController: TimelineControllerProtocol {
     var roomProxy: JoinedRoomProxyProtocol?
     var timelineProxy: TimelineProxyProtocol?
     
-    var roomID: String { roomProxy?.id ?? "MockRoomIdentifier" }
+    var roomID: String {
+        roomProxy?.id ?? "MockRoomIdentifier"
+    }
+
     var timelineKind: TimelineKind
     
     let callbacks = PassthroughSubject<TimelineControllerCallback, Never>()

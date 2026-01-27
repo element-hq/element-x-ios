@@ -7,9 +7,8 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class CreateRoomScreenViewModelTests: XCTestCase {
@@ -306,7 +305,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType, .spaceMembers(spaceID: space.id))
     }
     
-    func testCreateRoomInAnPublicSpaceAvailableTypes() async throws {
+    func testCreateRoomInAnPublicSpaceAvailableTypes() {
         let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .public)
         setup(spacesSelectionMode: .preSelected(space))
         

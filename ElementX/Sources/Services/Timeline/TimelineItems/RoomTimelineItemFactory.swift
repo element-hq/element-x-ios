@@ -624,7 +624,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         return .init(body: messageContent.body, formattedBody: formattedBody, formattedBodyHTMLString: htmlBody)
     }
     
-    // This fixes the issue of the name not belonging to the first <p> defined paragraph
+    /// This fixes the issue of the name not belonging to the first <p> defined paragraph
     private func buildEmoteFormattedBodyFromHTML(html: String, name: String) -> AttributedString? {
         let htmlBodyPlaceholder = "{htmlBodyPlaceholder}"
         var finalString = AttributedString(L10n.commonEmote(name, htmlBodyPlaceholder))

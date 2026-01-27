@@ -16,8 +16,13 @@ import Combine
 class RemotePreference<T: Equatable> {
     private let defaultValue: T
     private let subject: CurrentValueSubject<T, Never>
-    var publisher: CurrentValuePublisher<T, Never> { subject.asCurrentValuePublisher() }
-    var isRemotelyConfigured: Bool { subject.value != defaultValue }
+    var publisher: CurrentValuePublisher<T, Never> {
+        subject.asCurrentValuePublisher()
+    }
+
+    var isRemotelyConfigured: Bool {
+        subject.value != defaultValue
+    }
     
     init(_ defaultValue: T) {
         self.defaultValue = defaultValue

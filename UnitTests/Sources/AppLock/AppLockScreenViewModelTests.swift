@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class AppLockScreenViewModelTests: XCTestCase {
@@ -17,7 +16,9 @@ class AppLockScreenViewModelTests: XCTestCase {
     var keychainController: KeychainControllerMock!
     var viewModel: AppLockScreenViewModelProtocol!
     
-    var context: AppLockScreenViewModelType.Context { viewModel.context }
+    var context: AppLockScreenViewModelType.Context {
+        viewModel.context
+    }
     
     override func setUp() {
         AppSettings.resetAllSettings()

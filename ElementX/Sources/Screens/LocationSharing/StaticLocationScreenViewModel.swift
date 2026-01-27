@@ -84,5 +84,7 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
                                                               iconName: "xmark"))
     }
     
-    private var statusIndicatorID: String { "\(Self.self)-Status" }
+    private var statusIndicatorID: String {
+        "\(Self.self)-Status"
+    }
 }

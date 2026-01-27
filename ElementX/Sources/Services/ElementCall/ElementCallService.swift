@@ -14,7 +14,7 @@ import MatrixRustSDK
 import PushKit
 import UIKit
 
-// Keep this class testable
+/// Keep this class testable
 struct TimeProvider {
     var clock: any Clock<Duration>
     var now: () -> Date

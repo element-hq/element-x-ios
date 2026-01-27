@@ -5,10 +5,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 import Combine
 @testable import ElementX
+import XCTest
 
 @MainActor
 class RoomMembersFlowCoordinatorTests: XCTestCase {

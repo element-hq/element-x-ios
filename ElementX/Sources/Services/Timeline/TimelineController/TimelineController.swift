@@ -250,8 +250,8 @@ class TimelineController: TimelineControllerProtocol {
         await activeTimeline.messageEventContent(for: timelineItemID)
     }
     
-    // Handle this parallel to the timeline items so we're not forced
-    // to bundle the Rust side objects within them
+    /// Handle this parallel to the timeline items so we're not forced
+    /// to bundle the Rust side objects within them
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {
         for timelineItemProxy in activeTimelineItemProvider.itemProxies {
             switch timelineItemProxy {
@@ -428,14 +428,12 @@ class TimelineController: TimelineControllerProtocol {
                 let isLastItem = index == collapsibleChunks.indices.last
                 
                 let items = collapsibleChunk.compactMap { itemProxy in
-                    let timelineItem = self.buildTimelineItem(for: itemProxy,
-                                                              isDM: isDM,
-                                                              hasPredecessor: hasPredecessor,
-                                                              roomDisplayName: displayName,
-                                                              timelineItemFactory: timelineItemFactory,
-                                                              activeTimeline: activeTimeline)
-                    
-                    return timelineItem
+                    self.buildTimelineItem(for: itemProxy,
+                                           isDM: isDM,
+                                           hasPredecessor: hasPredecessor,
+                                           roomDisplayName: displayName,
+                                           timelineItemFactory: timelineItemFactory,
+                                           activeTimeline: activeTimeline)
                 }
                 
                 if items.isEmpty {

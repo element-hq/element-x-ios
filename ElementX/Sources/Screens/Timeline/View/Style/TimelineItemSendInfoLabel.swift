@@ -96,7 +96,6 @@ private struct TimelineItemSendInfoLabel: View {
         }
     }
     
-    @ViewBuilder
     var content: some View {
         HStack(spacing: 4) {
             Text(sendInfo.localizedString)

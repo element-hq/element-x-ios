@@ -83,12 +83,10 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
     private static let loadingIndicatorIdentifier = "\(BugReportScreenCoordinator.self)-Loading"
     
     private func startLoading(label: String = L10n.commonLoading, progressPublisher: CurrentValuePublisher<Double, Never>) {
-        parameters.userIndicatorController?.submitIndicator(
-            UserIndicator(id: Self.loadingIndicatorIdentifier,
-                          type: .modal(progress: .published(progressPublisher), interactiveDismissDisabled: false, allowsInteraction: true),
-                          title: label,
-                          persistent: true)
-        )
+        parameters.userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                          type: .modal(progress: .published(progressPublisher), interactiveDismissDisabled: false, allowsInteraction: true),
+                                                                          title: label,
+                                                                          persistent: true))
     }
     
     private func stopLoading() {

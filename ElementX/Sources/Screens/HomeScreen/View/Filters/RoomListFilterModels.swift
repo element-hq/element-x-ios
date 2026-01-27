@@ -8,7 +8,6 @@
 
 import Combine
 import Foundation
-
 import MatrixRustSDK
 import OrderedCollections
 

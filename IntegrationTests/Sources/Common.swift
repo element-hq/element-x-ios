@@ -13,7 +13,9 @@ enum IntegrationTestsError: Error {
 }
 
 extension XCUIApplication {
-    private var doesNotExistPredicate: NSPredicate { NSPredicate(format: "exists == 0") }
+    private var doesNotExistPredicate: NSPredicate {
+        NSPredicate(format: "exists == 0")
+    }
     
     func login(currentTestCase: XCTestCase) throws {
         let getStartedButton = buttons[A11yIdentifiers.authenticationStartScreen.signIn]

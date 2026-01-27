@@ -6,13 +6,12 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 final class EmojiProviderTests: XCTestCase {
-    func testWhenEmojisLoadedCategoriesAreLoadedFromLoader() async throws {
+    func testWhenEmojisLoadedCategoriesAreLoadedFromLoader() async {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
         let category = EmojiCategory(id: "test", emojis: [item])
         
@@ -25,7 +24,7 @@ final class EmojiProviderTests: XCTestCase {
         XCTAssertEqual(emojiLoaderMock.categories, categories)
     }
 
-    func testWhenEmojisLoadedAndSearchStringEmptyAllCategoriesReturned() async throws {
+    func testWhenEmojisLoadedAndSearchStringEmptyAllCategoriesReturned() async {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
         let category = EmojiCategory(id: "test", emojis: [item])
         
@@ -38,7 +37,7 @@ final class EmojiProviderTests: XCTestCase {
         XCTAssertEqual(emojiLoaderMock.categories, categories)
     }
 
-    func testWhenEmojisLoadedSecondTimeCachedValuesAreUsed() async throws {
+    func testWhenEmojisLoadedSecondTimeCachedValuesAreUsed() async {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
         let item2 = EmojiItem(label: "test2", unicode: "test2", keywords: ["3", "4"], shortcodes: ["3", "4"])
         let categoriesForFirstLoad = [EmojiCategory(id: "test",
@@ -58,7 +57,7 @@ final class EmojiProviderTests: XCTestCase {
         XCTAssertEqual(categories, categoriesForFirstLoad)
     }
     
-    func testWhenEmojisSearchedCorrectNumberOfCategoriesReturned() async throws {
+    func testWhenEmojisSearchedCorrectNumberOfCategoriesReturned() async {
         let searchString = "smile"
         var categories = [EmojiCategory]()
         let item0WithSearchString = EmojiItem(label: "emoji0", unicode: "\(searchString)_123", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"])

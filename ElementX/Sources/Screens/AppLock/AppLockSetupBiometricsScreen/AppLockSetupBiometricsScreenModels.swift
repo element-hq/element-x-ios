@@ -17,9 +17,17 @@ struct AppLockSetupBiometricsScreenViewState: BindableState {
     /// The supported biometry type on this device.
     let biometryType: LABiometryType
     
-    var icon: SFSymbol { biometryType.systemSymbol }
-    var title: String { L10n.screenAppLockSetupBiometricUnlockAllowTitle(biometryType.localizedString) }
-    var subtitle: String { L10n.screenAppLockSetupBiometricUnlockSubtitle(biometryType.localizedString) }
+    var icon: SFSymbol {
+        biometryType.systemSymbol
+    }
+
+    var title: String {
+        L10n.screenAppLockSetupBiometricUnlockAllowTitle(biometryType.localizedString)
+    }
+
+    var subtitle: String {
+        L10n.screenAppLockSetupBiometricUnlockSubtitle(biometryType.localizedString)
+    }
 }
 
 enum AppLockSetupBiometricsScreenViewAction {

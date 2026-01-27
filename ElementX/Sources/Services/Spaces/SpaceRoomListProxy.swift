@@ -10,7 +10,9 @@ import Combine
 import MatrixRustSDK
 
 class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
-    var id: String { spaceServiceRoomPublisher.value.id }
+    var id: String {
+        spaceServiceRoomPublisher.value.id
+    }
     
     private let spaceRoomList: SpaceRoomListProtocol
     

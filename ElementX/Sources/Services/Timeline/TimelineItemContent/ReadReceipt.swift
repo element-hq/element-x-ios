@@ -14,5 +14,7 @@ struct ReadReceipt: Hashable {
 }
 
 extension ReadReceipt: Identifiable {
-    var id: String { userID }
+    var id: String {
+        userID
+    }
 }

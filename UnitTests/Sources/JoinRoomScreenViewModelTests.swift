@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class JoinRoomScreenViewModelTests: XCTestCase {
@@ -203,7 +202,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
 }
 
 extension JoinRoomScreenViewModelAction: @retroactive Equatable {
-    // A close enough approximation for tests.
+    /// A close enough approximation for tests.
     public static func == (lhs: JoinRoomScreenViewModelAction, rhs: JoinRoomScreenViewModelAction) -> Bool {
         switch (lhs, rhs) {
         case (.joined(.roomID(let lhsRoomID)), .joined(.roomID(let rhsRoomID))):

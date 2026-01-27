@@ -6,16 +6,17 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class AppLockSetupBiometricsScreenViewModelTests: XCTestCase {
     var appLockService: AppLockServiceMock!
     var viewModel: AppLockSetupBiometricsScreenViewModelProtocol!
     
-    var context: AppLockSetupBiometricsScreenViewModelType.Context { viewModel.context }
+    var context: AppLockSetupBiometricsScreenViewModelType.Context {
+        viewModel.context
+    }
     
     override func setUp() {
         AppSettings.resetAllSettings()

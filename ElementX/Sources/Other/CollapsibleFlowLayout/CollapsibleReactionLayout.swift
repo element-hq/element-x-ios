@@ -39,14 +39,12 @@ struct CollapsibleReactionLayout: Layout {
                                                                                     rows: collapsedRows,
                                                                                     collapseButton: subviewsByType.collapseButton,
                                                                                     addMoreButton: subviewsByType.addMoreButton)
-                let size = sizeThatFits(rows: collapsedRowsWithButtons)
-                return size
+                return sizeThatFits(rows: collapsedRowsWithButtons)
             } else {
                 // Show all subviews with the button at the end
                 var rowsWithButtons = calculateRows(proposal: proposal, subviews: Array(subviews))
                 ensureCollapseAndAddMoreButtonsAreOnTheSameRow(&rowsWithButtons)
-                let size = sizeThatFits(rows: rowsWithButtons)
-                return size
+                return sizeThatFits(rows: rowsWithButtons)
             }
         } else {
             // Otherwise we are just calculating the size of all items without the button

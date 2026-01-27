@@ -6,11 +6,10 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 import Combine
 @testable import ElementX
 import MatrixRustSDKMocks
+import XCTest
 
 @MainActor
 class RoomFlowCoordinatorTests: XCTestCase {

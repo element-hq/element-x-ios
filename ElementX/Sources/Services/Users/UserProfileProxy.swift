@@ -64,5 +64,7 @@ extension SearchUsersResultsProxy {
 }
 
 extension UserProfileProxy: Identifiable {
-    var id: String { userID }
+    var id: String {
+        userID
+    }
 }

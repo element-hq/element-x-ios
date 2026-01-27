@@ -96,7 +96,7 @@ extension XCTestCase {
                                                                                timeout: TimeInterval = 10,
                                                                                message: String? = nil) -> DeferredFulfillment<P.Output> {
         var expectedOrder = transitionValues
-        let deferred = deferFulfillment(publisher, timeout: timeout, message: message) { value in
+        return deferFulfillment(publisher, timeout: timeout, message: message) { value in
             let receivedValue = value[keyPath: keyPath]
             if let index = expectedOrder.firstIndex(where: { $0 == receivedValue }), index == 0 {
                 expectedOrder.remove(at: index)
@@ -104,8 +104,6 @@ extension XCTestCase {
             
             return expectedOrder.isEmpty
         }
-        
-        return deferred
     }
     
     /// XCTest utility that assists in subscribing to an async sequence and deferring the fulfilment and results until some other actions have been performed.
@@ -120,15 +118,13 @@ extension XCTestCase {
                                             timeout: TimeInterval = 10,
                                             message: String? = nil) -> DeferredFulfillment<Value> {
         var expectedOrder = transitionValues
-        let deferred = deferFulfillment(asyncSequence, timeout: timeout, message: message) { value in
+        return deferFulfillment(asyncSequence, timeout: timeout, message: message) { value in
             if let index = expectedOrder.firstIndex(where: { $0 == value }), index == 0 {
                 expectedOrder.remove(at: index)
             }
             
             return expectedOrder.isEmpty
         }
-        
-        return deferred
     }
     
     /// XCTest utility that assists in subscribing to a publisher and deferring the failure for a particular value until some other actions have been performed.

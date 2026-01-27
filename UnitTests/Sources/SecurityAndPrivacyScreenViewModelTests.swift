@@ -7,10 +7,9 @@
 //
 
 import Combine
+@testable import ElementX
 import MatrixRustSDK
 import XCTest
-
-@testable import ElementX
 
 @MainActor
 class SecurityAndPrivacyScreenViewModelTests: XCTestCase {

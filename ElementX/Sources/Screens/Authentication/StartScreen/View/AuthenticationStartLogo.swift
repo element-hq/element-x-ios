@@ -20,7 +20,9 @@ struct AuthenticationStartLogo: View {
     /// The shape that the logo is composed on top of.
     private let outerShape = RoundedRectangle(cornerRadius: 44)
     private let outerShapeShadowColor = Color(red: 0.11, green: 0.11, blue: 0.13)
-    private var isLight: Bool { colorScheme == .light }
+    private var isLight: Bool {
+        colorScheme == .light
+    }
     
     var body: some View {
         if hideBrandChrome {

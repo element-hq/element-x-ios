@@ -8,7 +8,7 @@
 
 import Foundation
 
-// In the future we might use this to do some customisation in what is plain text used to represent mentions.
+/// In the future we might use this to do some customisation in what is plain text used to represent mentions.
 struct PlainMentionBuilder: MentionBuilderProtocol {
     func handleEventOnRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, eventID: String, roomAlias: String) { }
     

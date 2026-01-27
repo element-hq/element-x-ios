@@ -8,7 +8,7 @@
 
 import Foundation
 
-/*
+/**
  Behavior mode of the current user's location, can be hidden, only shown and shown following the user
  */
 enum ShowUserLocationMode {

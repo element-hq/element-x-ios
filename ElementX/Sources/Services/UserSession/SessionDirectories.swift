@@ -12,8 +12,13 @@ struct SessionDirectories: Hashable, Codable {
     let dataDirectory: URL
     let cacheDirectory: URL
     
-    var dataPath: String { dataDirectory.path(percentEncoded: false) }
-    var cachePath: String { cacheDirectory.path(percentEncoded: false) }
+    var dataPath: String {
+        dataDirectory.path(percentEncoded: false)
+    }
+
+    var cachePath: String {
+        cacheDirectory.path(percentEncoded: false)
+    }
     
     // MARK: Data Management
     

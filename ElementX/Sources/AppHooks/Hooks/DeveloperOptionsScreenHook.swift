@@ -12,5 +12,7 @@ protocol DeveloperOptionsScreenHookProtocol {
 }
 
 struct DefaultDeveloperOptionsScreenHook: DeveloperOptionsScreenHookProtocol {
-    func generalSectionRows() -> AnyView? { nil }
+    func generalSectionRows() -> AnyView? {
+        nil
+    }
 }

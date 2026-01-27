@@ -57,7 +57,6 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
         .padding(.horizontal, 24)
     }
     
-    @ViewBuilder
     private var preview: some View {
         HStack(spacing: 12) {
             if let mediaSource = item.thumbnailMediaSource {

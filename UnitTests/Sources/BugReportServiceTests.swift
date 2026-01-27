@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-@testable import ElementX
-
 import Combine
+@testable import ElementX
 import Foundation
 import XCTest
 
@@ -51,7 +50,7 @@ class BugReportServiceTests: XCTestCase {
         XCTAssertFalse(reportURL.isEmpty)
     }
     
-    func testInitialStateWithRealService() throws {
+    func testInitialStateWithRealService() {
         let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.url("https://example.com/submit"))
         let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
@@ -63,7 +62,7 @@ class BugReportServiceTests: XCTestCase {
         XCTAssertFalse(service.crashedLastRun)
     }
     
-    func testInitialStateWithRealServiceAndDisabled() throws {
+    func testInitialStateWithRealServiceAndDisabled() {
         let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.disabled)
         let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
@@ -198,7 +197,6 @@ private extension URLSession {
     static var mock: URLSession {
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses = [MockURLProtocol.self] + (configuration.protocolClasses ?? [])
-        let result = URLSession(configuration: configuration)
-        return result
+        return URLSession(configuration: configuration)
     }
 }

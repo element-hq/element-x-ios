@@ -36,9 +36,7 @@ struct VoiceMessageRecordingButton: View {
             switch mode {
             case .idle:
                 CompoundIcon(\.micOn, size: .medium, relativeTo: .compound.headingLG)
-                    .foregroundColor(
-                        isEnabled ? .compound.iconSecondary : .compound.iconDisabled
-                    )
+                    .foregroundColor(isEnabled ? .compound.iconSecondary : .compound.iconDisabled)
                     .scaledPadding(10, relativeTo: .compound.headingLG)
             case .recording:
                 CompoundIcon(asset: Asset.Images.stopRecording, size: .medium, relativeTo: .compound.headingLG)

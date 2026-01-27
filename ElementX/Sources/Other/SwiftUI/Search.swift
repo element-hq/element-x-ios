@@ -53,7 +53,6 @@ private struct SearchControllerModifier: ViewModifier {
     /// is `false`, checking if this value is `false` is pretty much meaningless.
     @State private var isSearching = false
     
-    @ViewBuilder
     func body(content: Content) -> some View {
         let text: Text? = if let placeholder {
             Text(placeholder)
@@ -191,7 +190,9 @@ private struct SearchController: UIViewControllerRepresentable {
         }
         
         @available(*, unavailable)
-        required init?(coder: NSCoder) { fatalError() }
+        required init?(coder: NSCoder) {
+            fatalError()
+        }
         
         override func willMove(toParent parent: UIViewController?) {
             parent?.navigationItem.searchController = searchController

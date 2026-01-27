@@ -6,10 +6,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+@testable import ElementX
 import UniformTypeIdentifiers
 import XCTest
-
-@testable import ElementX
 
 final class MediaUploadingPreprocessorTests: XCTestCase {
     let maxUploadSize: UInt = 100 * 1024 * 1024

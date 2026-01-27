@@ -18,8 +18,14 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
 
-    private var isDirectOneToOneRoom: Bool { context.viewState.isDirectOneToOneRoom }
-    private var isFocussed: Bool { focussedEventID != nil && timelineItem.id.eventID == focussedEventID }
+    private var isDirectOneToOneRoom: Bool {
+        context.viewState.isDirectOneToOneRoom
+    }
+
+    private var isFocussed: Bool {
+        focussedEventID != nil && timelineItem.id.eventID == focussedEventID
+    }
+
     private var isPinned: Bool {
         guard context.viewState.timelineKind != .pinned,
               let eventID = timelineItem.id.eventID else {
@@ -179,7 +185,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                               color: timelineItem.bubbleBackgroundColor)
     }
     
-    @ViewBuilder
     var contentWithReply: some View {
         TimelineBubbleLayout(spacing: 8) {
             if !context.viewState.timelineKind.isThread, timelineItem.properties.isThreaded {

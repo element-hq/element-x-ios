@@ -782,12 +782,12 @@ private final class ComposerMentionReplacer: MentionReplacer {
         self.replacementForMentionClosure = replacementForMentionClosure
     }
     
-    // There is no internal Markdown to RTE switch implemented yet in the room so this one is never called
+    /// There is no internal Markdown to RTE switch implemented yet in the room so this one is never called
     func postProcessMarkdown(in attributedString: NSAttributedString) -> NSAttributedString {
         attributedString
     }
     
-    // There is no internal RTE to Markdown switch implemented yet in the room so this one is never called
+    /// There is no internal RTE to Markdown switch implemented yet in the room so this one is never called
     func restoreMarkdown(in attributedString: NSAttributedString) -> String {
         attributedString.string
     }

@@ -5,9 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class TemplateScreenViewModelTests: XCTestCase {
@@ -26,7 +25,7 @@ class TemplateScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.counter, 0)
     }
 
-    func testTextField() async throws {
+    func testTextField() {
         context.composerText = "123"
         context.send(viewAction: .textChanged)
         XCTAssertEqual(context.composerText, "123")

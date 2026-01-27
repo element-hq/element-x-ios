@@ -6,19 +6,29 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 class AppLockTimerTests: XCTestCase {
     var timer: AppLockTimer!
     
     let now = Date.now
     
-    var gracePeriod: TimeInterval { timer.gracePeriod }
-    var halfGracePeriod: TimeInterval { gracePeriod / 2 }
-    var gracePeriodX2: TimeInterval { gracePeriod * 2 }
-    var gracePeriodX10: TimeInterval { gracePeriod * 10 }
+    var gracePeriod: TimeInterval {
+        timer.gracePeriod
+    }
+
+    var halfGracePeriod: TimeInterval {
+        gracePeriod / 2
+    }
+
+    var gracePeriodX2: TimeInterval {
+        gracePeriod * 2
+    }
+
+    var gracePeriodX10: TimeInterval {
+        gracePeriod * 10
+    }
     
     override func tearDown() {
         timer = nil

@@ -38,7 +38,9 @@ public struct ListRowTrailingSection<Icon: View>: View {
     private var accessory: ListRowAccessory?
     
     @ScaledMetric private var iconSize = 24
-    private var hideAccessory: Bool { isWaiting && accessory?.kind == .unselected }
+    private var hideAccessory: Bool {
+        isWaiting && accessory?.kind == .unselected
+    }
     
     init(_ details: ListRowDetails<Icon>?, accessory: ListRowAccessory? = nil) {
         title = details?.title

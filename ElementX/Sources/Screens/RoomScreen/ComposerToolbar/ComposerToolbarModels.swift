@@ -172,11 +172,15 @@ enum FormatType {
 }
 
 extension FormatType: CaseIterable, Identifiable {
-    var id: Self { self }
+    var id: Self {
+        self
+    }
 }
 
 extension FormatItem: Identifiable {
-    var id: FormatType { type }
+    var id: FormatType {
+        type
+    }
 }
 
 extension FormatItem {

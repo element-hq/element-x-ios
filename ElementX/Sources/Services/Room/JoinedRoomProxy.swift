@@ -30,17 +30,19 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     private var subscribedForUpdates = false
     
-    // A room identifier is constant and lazy stops it from being fetched
-    // multiple times over FFI
+    /// A room identifier is constant and lazy stops it from being fetched
+    /// multiple times over FFI
     lazy var id: String = room.id()
     
-    var ownUserID: String { room.ownUserId() }
+    var ownUserID: String {
+        room.ownUserId()
+    }
     
-    // The predecessor is set on room creation and never changes, so we lazily store it.
+    /// The predecessor is set on room creation and never changes, so we lazily store it.
     lazy var predecessorRoom = room.predecessorRoom()
     
-    // The successor may change over time, so we access it dynamically.
-    // It's suggested to observe it through the `infoPublisher`
+    /// The successor may change over time, so we access it dynamically.
+    /// It's suggested to observe it through the `infoPublisher`
     var successorRoom: SuccessorRoom? {
         room.successorRoom()
     }

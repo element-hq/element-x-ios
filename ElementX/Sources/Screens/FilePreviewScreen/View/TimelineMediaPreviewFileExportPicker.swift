@@ -11,7 +11,9 @@ import SwiftUI
 struct TimelineMediaPreviewFileExportPicker: UIViewControllerRepresentable {
     struct File: Identifiable {
         let url: URL
-        var id: String { url.absoluteString }
+        var id: String {
+            url.absoluteString
+        }
     }
     
     let file: File

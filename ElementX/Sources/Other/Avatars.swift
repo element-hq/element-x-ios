@@ -13,7 +13,7 @@ enum Avatars {
     enum Size {
         case user(on: UserAvatarSizeOnScreen)
         case room(on: RoomAvatarSizeOnScreen)
-        //  custom
+        ///  custom
         case custom(CGFloat)
 
         /// Value in UIKit points

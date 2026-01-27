@@ -72,14 +72,12 @@ struct RoomScreen: View {
             .sentryTrace("\(Self.self)")
     }
     
-    @ViewBuilder
     private var pinnedItemsBanner: some View {
         PinnedItemsBannerView(state: context.viewState.pinnedEventsBannerState,
                               onMainButtonTap: { context.send(viewAction: .tappedPinnedEventsBanner) },
                               onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
     }
     
-    @ViewBuilder
     private var knockRequestsBanner: some View {
         KnockRequestsBannerView(requests: context.viewState.displayedKnockRequests,
                                 onDismiss: dismissKnockRequestsBanner,

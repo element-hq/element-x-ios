@@ -83,7 +83,7 @@ enum SessionVerificationState {
     case unverified
 }
 
-// The `Decodable` conformance is just for the purpose of migration
+/// The `Decodable` conformance is just for the purpose of migration
 enum TimelineMediaVisibility: Decodable {
     case always
     case privateOnly

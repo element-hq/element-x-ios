@@ -39,8 +39,7 @@ private struct WaveformInteractionModifier: ViewModifier {
                                 isDragging = true
                                 let progress = dragGesture.location.x / geometry.size.width
                                 onSeek(max(0, min(progress, 1.0)))
-                            }
-                        )
+                            })
                         .offset(x: -cursorInteractiveSize / 2, y: 0)
                 }
                 .gesture(SpatialTapGesture()

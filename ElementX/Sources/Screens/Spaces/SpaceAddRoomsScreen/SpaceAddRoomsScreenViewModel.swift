@@ -161,8 +161,13 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
     
     // MARK: User Indicators
     
-    private var savingIndicatorID: String { "\(Self.self)-Saving" }
-    private var failureIndicatorID: String { "\(Self.self)-Failure" }
+    private var savingIndicatorID: String {
+        "\(Self.self)-Saving"
+    }
+
+    private var failureIndicatorID: String {
+        "\(Self.self)-Failure"
+    }
     
     private func showSavingIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: savingIndicatorID,

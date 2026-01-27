@@ -37,12 +37,12 @@ struct MediaEventsTimelineScreen: View {
             }
     }
     
-    // The scale effects do the following:
-    // * flip the scrollView vertically to keep the items
-    // at the bottom and have pagination working properly
-    // * flip the grid vertically to counteract the scroll view
-    // but also horizontally to preserve the correct item order
-    // * flip the items on both axes have them render correctly
+    /// The scale effects do the following:
+    /// * flip the scrollView vertically to keep the items
+    /// at the bottom and have pagination working properly
+    /// * flip the grid vertically to counteract the scroll view
+    /// but also horizontally to preserve the correct item order
+    /// * flip the items on both axes have them render correctly
     @ViewBuilder
     private var mainContent: some View {
         if context.viewState.shouldShowEmptyState {
@@ -99,7 +99,6 @@ struct MediaEventsTimelineScreen: View {
         .scaleEffect(.init(width: -1, height: 1))
     }
     
-    @ViewBuilder
     private var filesContent: some View {
         LazyVStack(alignment: .center, spacing: 16) {
             ForEach(context.viewState.groups) { group in
@@ -174,7 +173,6 @@ struct MediaEventsTimelineScreen: View {
         }
     }
     
-    @ViewBuilder
     private var emptyState: some View {
         FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .gradient) {
             VStack(spacing: 16) {
@@ -260,7 +258,9 @@ struct MediaEventsTimelineScreen: View {
 }
 
 extension TimelineMediaPreviewViewModel: Identifiable {
-    var id: UUID { instanceID }
+    var id: UUID {
+        instanceID
+    }
 }
 
 // MARK: - Previews

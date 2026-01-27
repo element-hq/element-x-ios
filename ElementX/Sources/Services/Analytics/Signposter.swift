@@ -36,9 +36,9 @@ class Signposter {
     
     private var appStartupTransaction: Span?
     
-    // We have a manual start method because we need to configure the ServiceLocator *before* we configure
-    // Sentry but this class is created in the AnalyticsService and so spans and transactions are dropped
-    // until Sentry has been configured. Therefore doing this in the init doesn't work.
+    /// We have a manual start method because we need to configure the ServiceLocator *before* we configure
+    /// Sentry but this class is created in the AnalyticsService and so spans and transactions are dropped
+    /// until Sentry has been configured. Therefore doing this in the init doesn't work.
     func start() {
         appStartupTransaction = SentrySDK.startTransaction(name: Name.appStartup, operation: Name.appStarted)
     }

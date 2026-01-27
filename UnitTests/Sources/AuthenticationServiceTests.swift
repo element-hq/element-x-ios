@@ -6,10 +6,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
 import MatrixRustSDKMocks
+import XCTest
 
 class AuthenticationServiceTests: XCTestCase {
     var client: ClientSDKMock!

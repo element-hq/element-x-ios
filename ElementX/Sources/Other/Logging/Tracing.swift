@@ -26,7 +26,9 @@ enum Tracing {
     /// This basically only affects ``logFiles``, and doesn't inform the SDK to write
     /// the logs to a different directory, which should be done before setting this.
     static var logsDirectoryOverride: URL?
-    static var legacyLogsDirectory: URL { .appGroupContainerDirectory }
+    static var legacyLogsDirectory: URL {
+        .appGroupContainerDirectory
+    }
     
     static let fileExtension = "log"
     
@@ -60,7 +62,9 @@ enum Tracing {
     }
     
     /// A list of all log file URLs, sorted chronologically.
-    static var logFiles: [URL] { logFiles(in: logsDirectory) }
+    static var logFiles: [URL] {
+        logFiles(in: logsDirectory)
+    }
     
     /// Collect all of the logs in the given directory, sorting them chronologically.
     private static func logFiles(in directory: URL) -> [URL] {

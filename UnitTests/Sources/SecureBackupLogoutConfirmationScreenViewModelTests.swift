@@ -7,14 +7,15 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class SecureBackupLogoutConfirmationScreenViewModelTests: XCTestCase {
     var viewModel: SecureBackupLogoutConfirmationScreenViewModel!
-    var context: SecureBackupLogoutConfirmationScreenViewModel.Context { viewModel.context }
+    var context: SecureBackupLogoutConfirmationScreenViewModel.Context {
+        viewModel.context
+    }
     
     var secureBackupController: SecureBackupControllerMock!
     var reachabilitySubject: CurrentValueSubject<NetworkMonitorReachability, Never>!

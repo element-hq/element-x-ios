@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class ServerSelectionScreenViewModelTests: XCTestCase {
@@ -16,7 +15,9 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
     var service: AuthenticationServiceProtocol!
     
     var viewModel: ServerSelectionScreenViewModelProtocol!
-    var context: ServerSelectionScreenViewModelType.Context { viewModel.context }
+    var context: ServerSelectionScreenViewModelType.Context {
+        viewModel.context
+    }
     
     func testSelectForLogin() async throws {
         // Given a view model for login.

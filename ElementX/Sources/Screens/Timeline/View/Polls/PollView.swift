@@ -62,9 +62,10 @@ struct PollView: View {
 
     // MARK: - Private
     
-    private var senderString: String { poll.createdByAccountOwner ? L10n.commonYou : sender.disambiguatedDisplayName ?? sender.id }
+    private var senderString: String {
+        poll.createdByAccountOwner ? L10n.commonYou : sender.disambiguatedDisplayName ?? sender.id
+    }
     
-    @ViewBuilder
     private var accessibleQuestionView: some View {
         questionView
             .accessibilityRepresentation {

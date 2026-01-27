@@ -10,7 +10,9 @@ import SwiftUI
 
 extension ButtonStyle where Self == MenuSheetButtonStyle {
     /// A button style for buttons that are within a menu that is being presented as a sheet.
-    static var menuSheet: Self { MenuSheetButtonStyle() }
+    static var menuSheet: Self {
+        MenuSheetButtonStyle()
+    }
 }
 
 /// The style used for buttons that are part of a menu that's presented as

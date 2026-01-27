@@ -24,14 +24,17 @@ final class UserPreference<T: Codable> {
     }
     
     private let key: String
-    private var remoteKey: String { "\(Self.remotePrefix)\(key)" }
+    private var remoteKey: String {
+        "\(Self.remotePrefix)\(key)"
+    }
+
     private var keyedStorage: any KeyedStorage<T>
     private let defaultValue: T
     private let subject: PassthroughSubject<T, Never> = .init()
     private let mode: Mode
     
-    // This can be used to check if is still possible for the user to change the value or not
-    // Can only be accessed by using `_preferenceName.isLockedToRemote`
+    /// This can be used to check if is still possible for the user to change the value or not
+    /// Can only be accessed by using `_preferenceName.isLockedToRemote`
     var isLockedToRemote: Bool {
         mode == .remoteOverLocal && remoteValue != nil
     }
@@ -53,7 +56,7 @@ final class UserPreference<T: Codable> {
         self.mode = mode
     }
     
-    // The wrapped value is supposed to be the one updated by the user so it can only control the local value
+    /// The wrapped value is supposed to be the one updated by the user so it can only control the local value
     var wrappedValue: T {
         get {
             switch mode {
@@ -69,8 +72,8 @@ final class UserPreference<T: Codable> {
         }
     }
     
-    // This is supposed to be the value that is set by the remote settings
-    // So it can only be accessed by doing `AppSettings._preferenceName.remoteValue`
+    /// This is supposed to be the value that is set by the remote settings
+    /// So it can only be accessed by doing `AppSettings._preferenceName.remoteValue`
     var remoteValue: T? {
         get {
             keyedStorage[remoteKey]

@@ -31,7 +31,9 @@ struct LoginScreenViewState: BindableState {
     var bindings = LoginScreenBindings()
     
     /// The types of login supported by the homeserver.
-    var loginMode: LoginMode { homeserver.loginMode }
+    var loginMode: LoginMode {
+        homeserver.loginMode
+    }
     
     /// `true` if the username and password are ready to be submitted.
     var hasValidCredentials: Bool {

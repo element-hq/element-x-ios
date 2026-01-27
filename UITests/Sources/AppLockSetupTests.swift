@@ -26,7 +26,9 @@ class AppLockSetupUITests: XCTestCase {
         /// Not part of the flow, only to verify the stack is cleared.
         static let clearedStack = 99
         
-        static var isPhone: Bool { UIDevice.current.userInterfaceIdiom == .phone }
+        static var isPhone: Bool {
+            UIDevice.current.userInterfaceIdiom == .phone
+        }
     }
     
     func testCreateFlow() async throws {

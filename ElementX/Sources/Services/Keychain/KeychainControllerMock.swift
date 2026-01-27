@@ -10,6 +10,11 @@ import MatrixRustSDK
 
 /// Adds the missing methods for conformance to the protocol.
 extension KeychainControllerMock {
-    func retrieveSessionFromKeychain(userId: String) throws -> Session { fatalError("Not implemented") }
-    func saveSessionInKeychain(session: Session) { fatalError("Not implemented") }
+    func retrieveSessionFromKeychain(userId: String) throws -> Session {
+        fatalError("Not implemented")
+    }
+
+    func saveSessionInKeychain(session: Session) {
+        fatalError("Not implemented")
+    }
 }

@@ -76,7 +76,6 @@ struct HomeScreenRoomCell: View {
         }
     }
     
-    @ViewBuilder
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
@@ -93,7 +92,6 @@ struct HomeScreenRoomCell: View {
         }
     }
     
-    @ViewBuilder
     private var footer: some View {
         HStack(alignment: .firstTextBaseline, spacing: 0) {
             ZStack(alignment: .topLeading) {

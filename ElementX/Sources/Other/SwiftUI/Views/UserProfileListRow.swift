@@ -17,7 +17,9 @@ struct UserProfileListRow: View {
     
     let kind: ListRow<LoadableAvatarImage, EmptyView, EmptyView, Bool>.Kind<EmptyView, Bool>
     
-    var isUnknownProfile: Bool { !user.isVerified && membership == nil }
+    var isUnknownProfile: Bool {
+        !user.isVerified && membership == nil
+    }
     
     private var subtitle: String? {
         guard !isUnknownProfile else { return L10n.commonInviteUnknownProfile }

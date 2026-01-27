@@ -6,11 +6,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
-
-import XCTest
-
 @testable import ElementX
+import Foundation
+import XCTest
 
 @MainActor
 class UserIndicatorControllerTests: XCTestCase {

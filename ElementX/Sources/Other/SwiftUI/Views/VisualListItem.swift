@@ -58,12 +58,10 @@ private struct VisualListItemLabelStyle: LabelStyle {
 struct VisualListItem_Previews: PreviewProvider, TestablePreview {
     static let strings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsTermsURL)
 
-    @ViewBuilder
     static var testImage1: some View {
         Image(systemName: "circle")
     }
 
-    @ViewBuilder
     static var testImage2: some View {
         Image(systemName: "square")
     }

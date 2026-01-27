@@ -49,7 +49,6 @@ struct SwipeRightAction<Label: View>: ViewModifier {
             }
     }
     
-    @ViewBuilder
     private func mainContent(content: Content) -> some View {
         content
             .offset(x: xOffset, y: 0.0)
@@ -164,7 +163,9 @@ extension View {
 }
 
 struct SwipeRightAction_Previews: PreviewProvider, TestablePreview {
-    static var previews: some View { Preview() }
+    static var previews: some View {
+        Preview()
+    }
     
     struct Preview: View {
         @State private var isPresentingSheet = false
@@ -196,12 +197,14 @@ struct SwipeRightAction_Previews: PreviewProvider, TestablePreview {
     }
 }
 
-// Fixes the issue on iOS 18 where DragGesture conflicts with the scroll view
-// https://github.com/feedback-assistant/reports/issues/542#issuecomment-2581322968
+/// Fixes the issue on iOS 18 where DragGesture conflicts with the scroll view
+/// https://github.com/feedback-assistant/reports/issues/542#issuecomment-2581322968
 private struct PanGestureRepresentable: UIGestureRecognizerRepresentable {
     var handle: (UIPanGestureRecognizer) -> Void
     
-    func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator { .init() }
+    func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator {
+        .init()
+    }
     
     func makeUIGestureRecognizer(context: Context) -> UIPanGestureRecognizer {
         let gesture = UIPanGestureRecognizer()

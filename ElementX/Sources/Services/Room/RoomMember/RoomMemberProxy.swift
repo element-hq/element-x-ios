@@ -16,9 +16,13 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
         self.member = member
     }
     
-    var userID: String { member.userId }
+    var userID: String {
+        member.userId
+    }
     
-    var displayName: String? { member.displayName }
+    var displayName: String? {
+        member.displayName
+    }
     
     var disambiguatedDisplayName: String? {
         guard let displayName else {
@@ -28,13 +32,23 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
         return member.isNameAmbiguous ? "\(displayName) (\(userID))" : displayName
     }
     
-    var avatarURL: URL? { member.avatarUrl.flatMap(URL.init(string:)) }
+    var avatarURL: URL? {
+        member.avatarUrl.flatMap(URL.init(string:))
+    }
     
-    var membership: MembershipState { member.membership }
+    var membership: MembershipState {
+        member.membership
+    }
     
-    var membershipChangeReason: String? { member.membershipChangeReason }
+    var membershipChangeReason: String? {
+        member.membershipChangeReason
+    }
     
-    var isIgnored: Bool { member.isIgnored }
+    var isIgnored: Bool {
+        member.isIgnored
+    }
     
-    var powerLevel: RoomPowerLevel { .init(rustPowerLevel: member.powerLevel) }
+    var powerLevel: RoomPowerLevel {
+        .init(rustPowerLevel: member.powerLevel)
+    }
 }

@@ -13,8 +13,13 @@ enum UserIndicatorType: Equatable {
     case toast(progress: UserIndicator.Progress?)
     case modal(progress: UserIndicator.Progress?, interactiveDismissDisabled: Bool, allowsInteraction: Bool)
     
-    static var toast: Self { .toast(progress: .none) }
-    static var modal: Self { .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: false) }
+    static var toast: Self {
+        .toast(progress: .none)
+    }
+
+    static var modal: Self {
+        .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: false)
+    }
 }
 
 struct UserIndicator: Equatable, Identifiable {

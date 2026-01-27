@@ -9,9 +9,8 @@
 @preconcurrency import Combine
 import CryptoKit
 import Foundation
-import OrderedCollections
-
 import MatrixRustSDK
+import OrderedCollections
 
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol

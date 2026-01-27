@@ -36,8 +36,8 @@ struct KnockRequestsListScreenViewState: BindableState {
     var isKnockableRoom = true
     var handledEventIDs: Set<String> = []
     
-    // If all the permissions are denied or the join rule changes while we are in the view
-    // we want to stop displaying any request
+    /// If all the permissions are denied or the join rule changes while we are in the view
+    /// we want to stop displaying any request
     var shouldDisplayRequests: Bool {
         !displayedRequests.isEmpty && isKnockableRoom && (canAccept || canDecline || canBan)
     }

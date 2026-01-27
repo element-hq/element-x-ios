@@ -46,14 +46,14 @@ class AudioPlayerStateTests: XCTestCase {
         }
     }
     
-    func testAttach() async throws {
+    func testAttach() {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
         
         XCTAssert(audioPlayerState.isAttached)
         XCTAssertEqual(audioPlayerState.playbackState, .loading)
     }
     
-    func testDetach() async throws {
+    func testDetach() {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
         
         audioPlayerState.detachAudioPlayer()
@@ -103,13 +103,13 @@ class AudioPlayerStateTests: XCTestCase {
         XCTAssertEqual(audioPlayerState.playerButtonPlaybackState, .playing)
     }
     
-    func testReportError() async throws {
+    func testReportError() {
         XCTAssertEqual(audioPlayerState.playbackState, .stopped)
         audioPlayerState.reportError()
         XCTAssertEqual(audioPlayerState.playbackState, .error)
     }
     
-    func testUpdateProgress() async throws {
+    func testUpdateProgress() async {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
         // If we try to set a negative progress, the new progress must be 0.0

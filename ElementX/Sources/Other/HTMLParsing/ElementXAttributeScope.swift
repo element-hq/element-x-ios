@@ -89,7 +89,9 @@ extension AttributeScopes {
         let uiKit: UIKitAttributes
     }
     
-    var elementX: ElementXAttributes.Type { ElementXAttributes.self }
+    var elementX: ElementXAttributes.Type {
+        ElementXAttributes.self
+    }
 }
 
 // periphery: ignore - required to make NSAttributedString to AttributedString conversion even if not used directly

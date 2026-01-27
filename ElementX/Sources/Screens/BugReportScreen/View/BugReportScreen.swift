@@ -15,8 +15,13 @@ struct BugReportScreen: View {
     
     @Bindable var context: BugReportScreenViewModel.Context
     
-    var canSendLogFiles: Bool { context.viewState.canSendLogFiles }
-    var photosPickerTitle: String { context.viewState.screenshot == nil ? L10n.screenBugReportAttachScreenshot : L10n.screenBugReportEditScreenshot }
+    var canSendLogFiles: Bool {
+        context.viewState.canSendLogFiles
+    }
+
+    var photosPickerTitle: String {
+        context.viewState.screenshot == nil ? L10n.screenBugReportAttachScreenshot : L10n.screenBugReportEditScreenshot
+    }
     
     var body: some View {
         Form {
@@ -89,7 +94,6 @@ struct BugReportScreen: View {
         }
     }
 
-    @ViewBuilder
     private var attachScreenshotSection: some View {
         Section {
             ListRow(kind: .custom {

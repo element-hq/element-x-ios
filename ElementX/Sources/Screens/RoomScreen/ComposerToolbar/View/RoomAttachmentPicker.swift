@@ -23,9 +23,7 @@ struct RoomAttachmentPicker: View {
         } label: {
             CompoundIcon(asset: Asset.Images.composerAttachment, size: .custom(30), relativeTo: .compound.headingLG)
                 .scaledPadding(7, relativeTo: .compound.headingLG)
-                .foregroundColor(
-                    isEnabled ? .compound.iconPrimary : .compound.iconDisabled
-                )
+                .foregroundColor(isEnabled ? .compound.iconPrimary : .compound.iconDisabled)
         }
         .buttonStyle(RoomAttachmentPickerButtonStyle())
         .accessibilityLabel(L10n.actionAddToTimeline)

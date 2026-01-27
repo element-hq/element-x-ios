@@ -8,18 +8,20 @@
 
 import AsyncAlgorithms
 import Combine
+@testable import ElementX
 import MatrixRustSDK
 import SwiftUI
 import XCTest
-
-@testable import ElementX
 
 @MainActor
 class RoomDetailsScreenViewModelTests: XCTestCase {
     var viewModel: RoomDetailsScreenViewModel!
     var roomProxyMock: JoinedRoomProxyMock!
     var notificationSettingsProxyMock: NotificationSettingsProxyMock!
-    var context: RoomDetailsScreenViewModelType.Context { viewModel.context }
+    var context: RoomDetailsScreenViewModelType.Context {
+        viewModel.context
+    }
+
     var cancellables = Set<AnyCancellable>()
     
     override func setUp() {
@@ -75,7 +77,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.bindings.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertPrivateSubtitle)
     }
     
-    func testLeaveRoomTappedWithLessThanTwoMembers() async {
+    func testLeaveRoomTappedWithLessThanTwoMembers() {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,

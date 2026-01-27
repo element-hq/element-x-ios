@@ -13,7 +13,9 @@ struct VideoRoomTimelineView: View {
     @Environment(\.timelineContext) private var context
     let timelineItem: VideoRoomTimelineItem
     
-    private var hasMediaCaption: Bool { timelineItem.content.caption != nil }
+    private var hasMediaCaption: Bool {
+        timelineItem.content.caption != nil
+    }
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {

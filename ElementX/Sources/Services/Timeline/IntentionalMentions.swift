@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 import MatrixRustSDK
 import WysiwygComposer
 

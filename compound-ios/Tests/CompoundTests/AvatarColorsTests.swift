@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
-
 @testable import Compound
+import Foundation
 import SwiftUI
 import XCTest
 
@@ -17,7 +16,7 @@ final class DecorativeColorsTests: XCTestCase {
         let input: String
         private let webOutput: Int
         
-        // remember that web starts the index from 1 while we start from 0
+        /// remember that web starts the index from 1 while we start from 0
         var output: Int {
             webOutput - 1
         }

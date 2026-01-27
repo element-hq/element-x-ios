@@ -7,9 +7,8 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class PillContextTests: XCTestCase {
@@ -228,7 +227,7 @@ class PillContextTests: XCTestCase {
         XCTAssertEqual(context.viewState.displayText, "💬 > 1")
     }
     
-    func testEventOnRoomAliasMention() async throws {
+    func testEventOnRoomAliasMention() {
         let proxyMock = JoinedRoomProxyMock(.init())
         let mockController = MockTimelineController()
         mockController.roomProxy = proxyMock
@@ -254,7 +253,7 @@ class PillContextTests: XCTestCase {
         XCTAssertEqual(context.viewState.displayText, "💬 > #Foundation and Empire")
     }
     
-    func testEventOnRoomAliasMentionMissingRoom() async throws {
+    func testEventOnRoomAliasMentionMissingRoom() {
         let proxyMock = JoinedRoomProxyMock(.init())
         let mockController = MockTimelineController()
         mockController.roomProxy = proxyMock

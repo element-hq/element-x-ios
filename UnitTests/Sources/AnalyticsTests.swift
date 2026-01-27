@@ -210,11 +210,9 @@ class AnalyticsTests: XCTestCase {
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
         try client.start(analyticsConfiguration: XCTUnwrap(appSettings.analyticsConfiguration))
         
-        client.updateSuperProperties(
-            AnalyticsEvent.SuperProperties(appPlatform: .EXI,
-                                           cryptoSDK: .Rust,
-                                           cryptoSDKVersion: "000")
-        )
+        client.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI,
+                                                                    cryptoSDK: .Rust,
+                                                                    cryptoSDKVersion: "000"))
         
         // When sending an event (tests run under Debug configuration so this is sent to the development instance)
         client.screen(AnalyticsEvent.MobileScreen(durationMs: nil, screenName: .Home))
@@ -250,11 +248,9 @@ class AnalyticsTests: XCTestCase {
         XCTAssertEqual(capturedEvent?.properties?["cryptoSDKVersion"] as? String, "000")
         
         // Updating should keep the previously set properties
-        client.updateSuperProperties(
-            AnalyticsEvent.SuperProperties(appPlatform: .EXI,
-                                           cryptoSDK: .Rust,
-                                           cryptoSDKVersion: "001")
-        )
+        client.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI,
+                                                                    cryptoSDK: .Rust,
+                                                                    cryptoSDKVersion: "001"))
         
         client.capture(someEvent)
         let capturedEvent2 = posthogMock.capturePropertiesUserPropertiesReceivedArguments

@@ -12,7 +12,9 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
     private lazy var audioPlayer = AudioPlayer()
     private var audioPlayerStates: [String: AudioPlayerState] = [:]
     
-    var player: AudioPlayerProtocol { audioPlayer }
+    var player: AudioPlayerProtocol {
+        audioPlayer
+    }
     
     deinit {
         audioPlayerStates = [:]

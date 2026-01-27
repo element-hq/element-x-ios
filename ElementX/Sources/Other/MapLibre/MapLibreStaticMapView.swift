@@ -114,7 +114,9 @@ struct MapLibreStaticMapView_Previews: PreviewProvider, TestablePreview {
 }
 
 private struct MapTilerURLBuilderMock: MapTilerURLBuilderProtocol {
-    func interactiveMapURL(for style: MapTilerStyle) -> URL? { nil }
+    func interactiveMapURL(for style: MapTilerStyle) -> URL? {
+        nil
+    }
     
     func staticMapTileImageURL(for style: MapTilerStyle,
                                coordinates: CLLocationCoordinate2D,
