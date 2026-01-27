@@ -97,8 +97,10 @@ struct FormattedBodyText: View {
                                     .foregroundColor(.compound.textSecondary)
                                     .padding(.vertical, 2)
                             }
-                            .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                            .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
                     case .codeBlock:
+                        // The rendered codeblock with a greedy width (due to the scroll view). The custom
+                        // layout prevents the scroll view from increasing the overall width of the view.
                         ScrollView(.horizontal) {
                             MessageText(attributedString: component.attributedString)
                                 .padding([.horizontal, .top], 4)
@@ -109,7 +111,7 @@ struct FormattedBodyText: View {
                         .scrollIndicatorsFlash(onAppear: true)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.horizontal, 4)
-                        .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                        .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
                         .contextMenu {
                             Button(L10n.actionCopy) {
                                 UIPasteboard.general.string = component.attributedString.string
@@ -119,12 +121,12 @@ struct FormattedBodyText: View {
                         MessageText(attributedString: component.attributedString)
                             .padding(.horizontal, 4)
                             .fixedSize(horizontal: false, vertical: true)
-                            .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                            .layoutPriority(TimelineBubbleLayout.Priority.nonGreedyComponent)
                     }
                 }
             }
             
-            // Make a second iteration through the components adding fixed width blockquotes
+            // Make a second iteration through the components adding fixed width blockquotes/codeblocks
             // which are used for layout calculations but won't be rendered.
             ForEach(attributedComponents) { component in
                 switch component.type {
@@ -132,7 +134,7 @@ struct FormattedBodyText: View {
                     MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.leading, 12.0)
-                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
                         .hidden()
                 case .codeBlock:
                     // ScrollView contents
@@ -142,7 +144,7 @@ struct FormattedBodyText: View {
                         // ScrollView modifiers
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.horizontal, 4)
-                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
                         .hidden()
                 case .plainText:
                     EmptyView()
