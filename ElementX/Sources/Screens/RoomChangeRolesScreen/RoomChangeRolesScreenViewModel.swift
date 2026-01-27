@@ -185,11 +185,15 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
     }
     
     private func confirmDiscardChanges() {
-        state.bindings.alertInfo = AlertInfo(id: .discardChanges,
-                                             title: L10n.screenRoomChangeRoleUnsavedChangesTitle,
-                                             message: L10n.screenRoomChangeRoleUnsavedChangesDescription,
-                                             primaryButton: .init(title: L10n.actionSave) { Task { await self.save() } },
-                                             secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.complete) })
+        if state.hasChanges {
+            state.bindings.alertInfo = AlertInfo(id: .discardChanges,
+                                                 title: L10n.screenRoomChangeRoleUnsavedChangesTitle,
+                                                 message: L10n.screenRoomChangeRoleUnsavedChangesDescription,
+                                                 primaryButton: .init(title: L10n.actionSave) { Task { await self.save() } },
+                                                 secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.complete) })
+        } else {
+            actionsSubject.send(.complete)
+        }
     }
     
     // MARK: Loading indicator

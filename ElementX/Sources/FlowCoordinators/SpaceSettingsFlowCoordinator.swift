@@ -222,10 +222,11 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             case .leftRoom:
                 leftRoom = true
                 navigationStackCoordinator.pop()
-            case .presentRecipientDetails, .presentNotificationSettingsScreen, .transferOwnership,
+            case .transferOwnership:
+                presentTransferOwnershipScreen()
+            case .presentRecipientDetails, .presentNotificationSettingsScreen, .presentReportRoomScreen,
                  .presentInviteUsersScreen, .presentPollsHistory, .presentCall,
-                 .presentPinnedEventsTimeline, .presentMediaEventsTimeline, .presentKnockingRequestsListScreen,
-                 .presentReportRoomScreen:
+                 .presentPinnedEventsTimeline, .presentMediaEventsTimeline, .presentKnockingRequestsListScreen:
                 fatalError("Not handled in the space context")
             }
         }
@@ -324,6 +325,27 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setSheetCoordinator(navigationStack) { [weak self] in
             self?.stateMachine.tryEvent(.dismissedManageAuthorizedSpacesScreen)
         }
+    }
+    
+    private func presentTransferOwnershipScreen() {
+        let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: .owner,
+                                                                    roomProxy: roomProxy,
+                                                                    mediaProvider: flowParameters.userSession.mediaProvider,
+                                                                    userIndicatorController: flowParameters.userIndicatorController,
+                                                                    analytics: flowParameters.analytics)
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .complete:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator, animated: true)
     }
     
     // MARK: - Other flows

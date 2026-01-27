@@ -94,10 +94,8 @@ struct LeaveSpaceView: View {
             case .spaceNeedsNewOwner(let useTransferOwnershipFlow):
                 if context.viewState.canEditRolesAndPermissions {
                     if useTransferOwnershipFlow {
-                        Button(role: .destructive) {
+                        Button(L10n.leaveRoomAlertSelectNewOwnerAction, role: .destructive) {
                             context.send(viewAction: .transferOwnership)
-                        } label: {
-                            Label(L10n.actionGoToRolesAndPermissions, icon: \.settings)
                         }
                         .buttonStyle(.compound(.primary))
                     } else {

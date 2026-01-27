@@ -349,9 +349,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.addRooms)
                 case .displayCreateChildRoomFlow(let space):
                     stateMachine.tryEvent(.startCreateChildRoomFlow, userInfo: space)
-                case .displayTransferOwnership(roomProxy: let roomProxy):
-                    // TODO: Implement
-                    break
+                case .displayTransferOwnership(let roomProxy):
+                    presentTransferOwnershipScreen(roomProxy: roomProxy)
                 }
             }
             .store(in: &cancellables)
@@ -440,6 +439,27 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissedAddRooms)
         }
+    }
+    
+    private func presentTransferOwnershipScreen(roomProxy: JoinedRoomProxyProtocol) {
+        let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: .owner,
+                                                                    roomProxy: roomProxy,
+                                                                    mediaProvider: flowParameters.userSession.mediaProvider,
+                                                                    userIndicatorController: flowParameters.userIndicatorController,
+                                                                    analytics: flowParameters.analytics)
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .complete:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator)
     }
     
     // MARK: - Other flows
