@@ -105,6 +105,7 @@ struct SpaceScreen: View {
         ToolbarItem(placement: .principal) {
             RoomHeaderView(roomName: context.viewState.space.name,
                            roomAvatar: context.viewState.space.avatar,
+                           isRoomHistoryShared: false,
                            mediaProvider: context.mediaProvider) {
                 if context.viewState.isSpaceManagementEnabled,
                    let roomProxy = context.viewState.roomProxy {

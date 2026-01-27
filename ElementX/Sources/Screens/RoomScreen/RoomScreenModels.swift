@@ -80,6 +80,10 @@ struct RoomScreenViewState: BindableState {
             (canAcceptKnocks || canDeclineKnocks || canBan)
     }
     
+    /// Whether it is possible for the room history to be shared under MSC4268, i.e. the feature flag
+    /// is enabled, and the room history visibility is set to `shared` or `worldReadable`.
+    var isRoomHistoryShared: Bool
+    
     var footerDetails: RoomScreenFooterViewDetails?
     
     var bindings = RoomScreenViewStateBindings()

@@ -438,4 +438,46 @@ class RoomScreenViewModelTests: XCTestCase {
         }
         try await deferred.fulfill()
     }
+    
+    // MARK: - History Sharing
+    
+    func testRoomWithSharedHistoryDisplaysBadge() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        
+        let configuration = JoinedRoomProxyMockConfiguration()
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration: configuration, historyVisibility: .joined))
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+
+        // setup the room proxy actions publisher
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        self.viewModel = viewModel
+        
+        // the icon should not be displayed when the room history visibility is not `shared` or `worldReadable` ...
+        let deferredInvisible = deferFailure(viewModel.context.$viewState, timeout: 1) { viewState in
+            viewState.isRoomHistoryShared
+        }
+        try await deferredInvisible.fulfill()
+        
+        // ... but should be displayed when it is
+        infoSubject.send(RoomInfoProxyMock(configuration: configuration, historyVisibility: .shared))
+        let deferredVisible = deferFulfillment(viewModel.context.$viewState) { viewState in
+            viewState.isRoomHistoryShared
+        }
+        try await deferredVisible.fulfill()
+    }
+}
+
+extension RoomInfoProxyMock {
+    @MainActor convenience init(configuration: JoinedRoomProxyMockConfiguration, historyVisibility: RoomHistoryVisibility) {
+        self.init(configuration)
+        self.historyVisibility = historyVisibility
+    }
 }

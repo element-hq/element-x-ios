@@ -15,6 +15,7 @@ struct RoomHeaderView: View {
     var roomSubtitle: String?
     let roomAvatar: RoomAvatar
     var dmRecipientVerificationState: UserIdentityVerificationState?
+    var isRoomHistoryShared: Bool
     
     let mediaProvider: MediaProviderProtocol?
     
@@ -63,6 +64,11 @@ struct RoomHeaderView: View {
                 if let dmRecipientVerificationState {
                     VerificationBadge(verificationState: dmRecipientVerificationState, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
                 }
+                
+                if isRoomHistoryShared {
+                    CompoundIcon(\.history, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
+                        .foregroundStyle(.compound.iconInfoPrimary)
+                }
             }
         }
     }
@@ -106,19 +112,24 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
             makeHeader(avatarURL: .mockMXCAvatar,
                        roomSubtitle: "Subtitle",
                        verificationState: .verified)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified, isRoomHistoryShared: true)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verified, isRoomHistoryShared: true)
         }
         .previewLayout(.sizeThatFits)
     }
     
     static func makeHeader(avatarURL: URL?,
                            roomSubtitle: String? = nil,
-                           verificationState: UserIdentityVerificationState) -> some View {
+                           verificationState: UserIdentityVerificationState,
+                           isRoomHistoryShared: Bool = false) -> some View {
         RoomHeaderView(roomName: "Some Room name",
                        roomSubtitle: roomSubtitle,
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: avatarURL),
                        dmRecipientVerificationState: verificationState,
+                       isRoomHistoryShared: isRoomHistoryShared,
+                       
                        mediaProvider: MediaProviderMock(configuration: .init())) { }
             .padding()
     }

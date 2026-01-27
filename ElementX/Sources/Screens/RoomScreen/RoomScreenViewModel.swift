@@ -70,7 +70,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
-                                            hasSuccessor: roomProxy.infoPublisher.value.successor != nil)
+                                            hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
+                                            isRoomHistoryShared: appSettings.enableKeyShareOnInvite && (roomProxy.infoPublisher.value.historyVisibility == RoomHistoryVisibility.shared || roomProxy.infoPublisher.value.historyVisibility == RoomHistoryVisibility.worldReadable))
         super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)
         
@@ -342,6 +343,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canDeclineKnocks = powerLevels.canOwnUserKick()
             state.canBan = powerLevels.canOwnUserBan()
         }
+        
+        state.isRoomHistoryShared = appSettings.enableKeyShareOnInvite && (roomInfo.historyVisibility == RoomHistoryVisibility.shared || roomInfo.historyVisibility == RoomHistoryVisibility.worldReadable)
     }
     
     private func setupPinnedEventsTimelineItemProviderIfNeeded() {
