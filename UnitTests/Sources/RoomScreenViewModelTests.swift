@@ -460,15 +460,16 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
         self.viewModel = viewModel
         
-        // the icon should not be displayed when the room history visibility is not `shared` or `worldReadable` ...
-        let deferredInvisible = deferFailure(viewModel.context.$viewState, timeout: 1) { viewState in
+        let deferredInvisible = deferFailure(viewModel.context.$viewState, 
+                                             timeout: 1,
+                                             message: "The icon should be hidden when the room history visibility is not .shared or .worldReadable") { viewState in
             viewState.isRoomHistoryShared
         }
         try await deferredInvisible.fulfill()
         
-        // ... but should be displayed when it is
         infoSubject.send(RoomInfoProxyMock(configuration: configuration, historyVisibility: .shared))
-        let deferredVisible = deferFulfillment(viewModel.context.$viewState) { viewState in
+        let deferredVisible = deferFulfillment(viewModel.context.$viewState,
+                                               message: "The icon should be shown when the room history visibility is .shared") { viewState in
             viewState.isRoomHistoryShared
         }
         try await deferredVisible.fulfill()
