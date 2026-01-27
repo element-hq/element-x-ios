@@ -6,6 +6,21 @@
 
 import Foundation
 
+open class BackupSecretsSDKMock: MatrixRustSDK.BackupSecrets, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+}
 open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -7994,6 +8009,21 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 }
+open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+}
 open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -15155,6 +15185,81 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         try await leaveClosure?()
     }
 
+    //MARK: - listThreads
+
+    open var listThreadsOptsThrowableError: Error?
+    open var listThreadsOptsUnderlyingCallsCount = 0
+    open var listThreadsOptsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return listThreadsOptsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = listThreadsOptsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                listThreadsOptsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    listThreadsOptsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var listThreadsOptsCalled: Bool {
+        return listThreadsOptsCallsCount > 0
+    }
+    open var listThreadsOptsReceivedOpts: ListThreadsOptions?
+    open var listThreadsOptsReceivedInvocations: [ListThreadsOptions] = []
+
+    open var listThreadsOptsUnderlyingReturnValue: ThreadRoots!
+    open var listThreadsOptsReturnValue: ThreadRoots! {
+        get {
+            if Thread.isMainThread {
+                return listThreadsOptsUnderlyingReturnValue
+            } else {
+                var returnValue: ThreadRoots? = nil
+                DispatchQueue.main.sync {
+                    returnValue = listThreadsOptsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                listThreadsOptsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    listThreadsOptsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var listThreadsOptsClosure: ((ListThreadsOptions) async throws -> ThreadRoots)?
+
+    open override func listThreads(opts: ListThreadsOptions) async throws -> ThreadRoots {
+        if let error = listThreadsOptsThrowableError {
+            throw error
+        }
+        listThreadsOptsCallsCount += 1
+        listThreadsOptsReceivedOpts = opts
+        DispatchQueue.main.async {
+            self.listThreadsOptsReceivedInvocations.append(opts)
+        }
+        if let listThreadsOptsClosure = listThreadsOptsClosure {
+            return try await listThreadsOptsClosure(opts)
+        } else {
+            return listThreadsOptsReturnValue
+        }
+    }
+
     //MARK: - loadComposerDraft
 
     open var loadComposerDraftThreadRootThrowableError: Error?
@@ -21947,6 +22052,21 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
         }
     }
 }
+open class SecretsBundleSDKMock: MatrixRustSDK.SecretsBundle, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+}
 open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -22905,6 +23025,42 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
         } else {
             return paginationStateReturnValue
         }
+    }
+
+    //MARK: - reset
+
+    open var resetUnderlyingCallsCount = 0
+    open var resetCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    open var resetClosure: (() async -> Void)?
+
+    open override func reset() async {
+        resetCallsCount += 1
+        await resetClosure?()
     }
 
     //MARK: - rooms
@@ -25299,6 +25455,21 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
         }
     }
 }
+open class ThreadRootsSDKMock: MatrixRustSDK.ThreadRoots, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+}
 open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -27671,6 +27842,24 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
         } else {
             return timestampReturnValue
         }
+    }
+}
+open class TimelineEventFilterSDKMock: MatrixRustSDK.TimelineEventFilter, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+    static func reset()
+    {
     }
 }
 open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter, @unchecked Sendable {
