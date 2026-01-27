@@ -169,45 +169,53 @@ struct FormattedBodyText: View {
 
 struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        body(AttributedStringBuilder(cacheKey: "FormattedBodyText", mentionBuilder: MentionBuilder()))
+        htmlBuilderText(AttributedStringBuilder(cacheKey: "FormattedBodyText", mentionBuilder: MentionBuilder()))
+        
+        basicText
             .previewLayout(.sizeThatFits)
+            .previewDisplayName("basicText")
+    }
+    
+    static var basicText: some View {
+        VStack(alignment: .leading, spacing: 4.0) {
+            FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
+                .bubbleBackground()
+            
+            FormattedBodyText(text: "Some plain text that's not an attributed component.")
+                .bubbleBackground()
+            
+            FormattedBodyText(text: "❤️", boostFontSize: true)
+                .bubbleBackground()
+        }
+        .padding()
     }
     
     @ViewBuilder
-    static func body(_ attributedStringBuilder: AttributedStringBuilderProtocol) -> some View {
-        let htmlStrings = HTMLFixtures.allCases.map(\.rawValue)
+    static func htmlBuilderText(_ attributedStringBuilder: AttributedStringBuilderProtocol) -> some View {
+        let htmlFixtures = HTMLFixtures.allCases
         
-        ScrollView {
-            VStack(alignment: .leading, spacing: 4.0) {
-                ForEach(htmlStrings, id: \.self) { htmlString in
-                    HStack(alignment: .top, spacing: 0) {
-                        Text(htmlString)
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            .padding(4.0)
-                        
-                        Divider()
-                            .background(.black)
-                        
-                        if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
-                            FormattedBodyText(attributedString: attributedString)
-                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                .bubbleBackground()
-                                .padding(4.0)
-                        }
-                    }
-                    .border(.black)
+        ForEach(htmlFixtures, id: \.rawValue) { htmlFixture in
+            HStack(alignment: .top, spacing: 0) {
+                let htmlString = htmlFixture.rawValue
+                Text(htmlString)
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    .padding(4.0)
+                
+                Divider()
+                    .background(.black)
+                
+                if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
+                    FormattedBodyText(attributedString: attributedString)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        .bubbleBackground()
+                        .padding(4.0)
                 }
-                
-                FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
-                    .bubbleBackground()
-                
-                FormattedBodyText(text: "Some plain text that's not an attributed component.")
-                    .bubbleBackground()
-                
-                FormattedBodyText(text: "❤️", boostFontSize: true)
-                    .bubbleBackground()
             }
+            .fixedSize(horizontal: false, vertical: true)
+            .border(.black)
             .padding()
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("\(htmlFixture)")
         }
     }
 }
