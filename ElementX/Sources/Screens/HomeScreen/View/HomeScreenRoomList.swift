@@ -20,7 +20,6 @@ struct HomeScreenRoomList: View {
         }
     }
     
-    @ViewBuilder
     private var content: some View {
         ForEach(context.viewState.visibleRooms) { room in
             switch room.type {

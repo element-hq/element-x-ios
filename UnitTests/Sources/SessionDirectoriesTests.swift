@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 class SessionDirectoriesTests: XCTestCase {
     let fileManager = FileManager.default
@@ -93,9 +92,17 @@ class SessionDirectoriesTests: XCTestCase {
 }
 
 private extension SessionDirectories {
-    var mockStateStorePath: String { dataDirectory.appending(component: "matrix-sdk-state.sqlite3").path(percentEncoded: false) }
-    var mockCryptoStorePath: String { dataDirectory.appending(component: "matrix-sdk-crypto.sqlite3").path(percentEncoded: false) }
-    var mockEventCachePath: String { cacheDirectory.appending(component: "matrix-sdk-event-cache.sqlite3").path(percentEncoded: false) }
+    var mockStateStorePath: String {
+        dataDirectory.appending(component: "matrix-sdk-state.sqlite3").path(percentEncoded: false)
+    }
+
+    var mockCryptoStorePath: String {
+        dataDirectory.appending(component: "matrix-sdk-crypto.sqlite3").path(percentEncoded: false)
+    }
+
+    var mockEventCachePath: String {
+        cacheDirectory.appending(component: "matrix-sdk-event-cache.sqlite3").path(percentEncoded: false)
+    }
     
     func generateMockData() {
         generateMockDatabase(atPath: mockStateStorePath)

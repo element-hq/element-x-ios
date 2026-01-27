@@ -43,7 +43,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         app.buttons[A11yIdentifiers.loginScreen.continue].tap()
     }
     
-    func testLoginWithIncorrectPassword() async throws {
+    func testLoginWithIncorrectPassword() {
         // Given the authentication flow.
         let app = Application.launch(.authenticationFlow)
         
@@ -102,8 +102,8 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         try await app.assertScreenshot()
     }
     
-    // Disabled for now as the looping isn't 100% fool-proof and we have OIDC on the integration tests
-    // so this mock version doesn't really add anything to the tests as a whole.
+    /// Disabled for now as the looping isn't 100% fool-proof and we have OIDC on the integration tests
+    /// so this mock version doesn't really add anything to the tests as a whole.
     func disabled_testSelectingOIDCServer() {
         // Allow this test to run for longer to help with the loop whilst waiting to resolve the
         // webcredentials for the Web Authentication Session (see below).

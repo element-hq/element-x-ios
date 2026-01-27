@@ -197,5 +197,7 @@ extension NSItemProvider {
 }
 
 private extension NSString {
-    var hasPathExtension: Bool { !pathExtension.isEmpty }
+    var hasPathExtension: Bool {
+        !pathExtension.isEmpty
+    }
 }

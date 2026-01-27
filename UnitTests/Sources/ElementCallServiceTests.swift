@@ -6,10 +6,9 @@
 //
 
 import Clocks
+@testable import ElementX
 import PushKit
 import XCTest
-
-@testable import ElementX
 
 @MainActor
 class ElementCallServiceTests: XCTestCase {
@@ -74,7 +73,7 @@ class ElementCallServiceTests: XCTestCase {
         await fulfillment(of: [expectation2], timeout: 1)
     }
     
-    func testExpiredRingLifetimeIsIgnored() async {
+    func testExpiredRingLifetimeIsIgnored() {
         setupService()
    
         XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)

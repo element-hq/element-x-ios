@@ -6,11 +6,10 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+@testable import ElementX
 import MatrixRustSDK
 import MatrixRustSDKMocks
 import XCTest
-
-@testable import ElementX
 
 final class RoomSummaryProviderTests: XCTestCase {
     var appSettings: AppSettings!

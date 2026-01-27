@@ -6,16 +6,17 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class PollFormScreenViewModelTests: XCTestCase {
     let timelineProxy = TimelineProxyMock(.init())
     
     var viewModel: PollFormScreenViewModelProtocol!
-    var context: PollFormScreenViewModelType.Context { viewModel.context }
+    var context: PollFormScreenViewModelType.Context {
+        viewModel.context
+    }
 
     func testNewPollInitialState() async throws {
         setupViewModel()

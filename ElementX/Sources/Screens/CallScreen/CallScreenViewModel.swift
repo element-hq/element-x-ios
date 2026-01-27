@@ -225,7 +225,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
     }
     
-    // This should always match the web app value
+    /// This should always match the web app value
     private static let earpieceID = "earpiece-id"
     
     private func handleOutputDeviceSelected(deviceID: String) {

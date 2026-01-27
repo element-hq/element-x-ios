@@ -45,7 +45,6 @@ struct EncryptionResetPasswordScreen: View {
         .onAppear { textFieldFocus = true }
     }
     
-    @ViewBuilder
     private var passwordSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonPassword)

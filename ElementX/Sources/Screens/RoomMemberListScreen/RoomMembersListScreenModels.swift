@@ -41,7 +41,9 @@ struct RoomMembersListScreenViewState: BindableState {
     private var bannedMembers: [RoomMemberListScreenEntry]
     
     let joinedMembersCount: Int
-    var bannedMembersCount: Int { bannedMembers.count }
+    var bannedMembersCount: Int {
+        bannedMembers.count
+    }
     
     var canInviteUsers = false
     var canKickUsers = false

@@ -23,7 +23,7 @@ class MediaPlayerProviderTests: XCTestCase {
         mediaPlayerProvider = MediaPlayerProvider()
     }
     
-    func testPlayerStates() async throws {
+    func testPlayerStates() {
         let audioPlayerStateId = AudioPlayerStateIdentifier.timelineItemIdentifier(.randomEvent)
         // By default, there should be no player state
         XCTAssertNil(mediaPlayerProvider.playerState(for: audioPlayerStateId))
@@ -36,7 +36,7 @@ class MediaPlayerProviderTests: XCTestCase {
         XCTAssertNil(mediaPlayerProvider.playerState(for: audioPlayerStateId))
     }
     
-    func testDetachAllStates() async throws {
+    func testDetachAllStates() {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         
@@ -55,7 +55,7 @@ class MediaPlayerProviderTests: XCTestCase {
         }
     }
     
-    func testDetachAllStatesWithException() async throws {
+    func testDetachAllStatesWithException() {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         

@@ -62,21 +62,33 @@ struct RoomSummary {
     let isFavourite: Bool
     let isTombstoned: Bool
     
-    var hasUnreadMessages: Bool { unreadMessagesCount > 0 }
-    var hasUnreadMentions: Bool { unreadMentionsCount > 0 }
-    var hasUnreadNotifications: Bool { unreadNotificationsCount > 0 }
-    var isMuted: Bool { notificationMode == .mute }
+    var hasUnreadMessages: Bool {
+        unreadMessagesCount > 0
+    }
+
+    var hasUnreadMentions: Bool {
+        unreadMentionsCount > 0
+    }
+
+    var hasUnreadNotifications: Bool {
+        unreadNotificationsCount > 0
+    }
+
+    var isMuted: Bool {
+        notificationMode == .mute
+    }
 }
 
 extension RoomSummary: CustomStringConvertible {
-    var description: String { """
-    RoomSummary: - id: \(id) \
-    - isDirect: \(isDirect) \
-    - unreadMessagesCount: \(unreadMessagesCount) \
-    - unreadMentionsCount: \(unreadMentionsCount) \
-    - unreadNotificationsCount: \(unreadNotificationsCount) \
-    - notificationMode: \(notificationMode?.rawValue ?? "nil")
-    """
+    var description: String {
+        """
+        RoomSummary: - id: \(id) \
+        - isDirect: \(isDirect) \
+        - unreadMessagesCount: \(unreadMessagesCount) \
+        - unreadMentionsCount: \(unreadMentionsCount) \
+        - unreadNotificationsCount: \(unreadNotificationsCount) \
+        - notificationMode: \(notificationMode?.rawValue ?? "nil")
+        """
     }
     
     /// Used where summaries are shown in a list e.g. message forwarding,
@@ -135,7 +147,7 @@ extension RoomSummary {
         isTombstoned = false
     }
     
-    // This doesn't have to work properly for DM invites, the heroes are always empty
+    /// This doesn't have to work properly for DM invites, the heroes are always empty
     var avatar: RoomAvatar {
         guard !isTombstoned else {
             return .tombstoned

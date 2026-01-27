@@ -53,5 +53,7 @@ public class CompoundUIColors {
 
 private extension UITraitCollection {
     /// Whether or not the trait collection contains a `userInterfaceStyle` of `.light`.
-    var isLight: Bool { userInterfaceStyle == .light }
+    var isLight: Bool {
+        userInterfaceStyle == .light
+    }
 }

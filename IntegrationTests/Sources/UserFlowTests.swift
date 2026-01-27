@@ -30,7 +30,7 @@ class UserFlowTests: XCTestCase {
         app.logout()
     }
     
-    // Assumes app is on the home screen
+    /// Assumes app is on the home screen
     private func checkRoomFlows() {
         // Wait for the room list to paginate and correctly compute the room display names otherwise the test room
         // won't be found

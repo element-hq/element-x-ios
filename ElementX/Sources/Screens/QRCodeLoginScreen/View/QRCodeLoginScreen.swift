@@ -202,9 +202,7 @@ struct QRCodeLoginScreen: View {
             .frame(maxWidth: 312)
             .readFrame($qrFrame)
             .background(.compound.bgCanvasDefault)
-            .overlay(
-                QRScannerViewOverlay(length: qrFrame.height)
-            )
+            .overlay(QRScannerViewOverlay(length: qrFrame.height))
     }
     
     @ViewBuilder
@@ -324,7 +322,7 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     static let loginInstructionsStateViewModel = QRCodeLoginScreenViewModel.mock(state: .loginInstructions)
     static let linkInstructionsStateViewModel = QRCodeLoginScreenViewModel.mock(state: .linkDesktopInstructions)
     
-    // Scanning
+    /// Scanning
     static let scanningStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanning))
     
     static let connectingStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.connecting))
@@ -337,7 +335,7 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     
     static let deviceNotSignedInStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.deviceNotSignedIn)))
     
-    // Showing
+    /// Showing
     static let showingStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayQR(LinkNewDeviceServiceMock.mockQRCodeImage))
     
     // Displaying codes
@@ -348,7 +346,7 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     static let confirmCodeEnteredStateViewModel = QRCodeLoginScreenViewModel.mock(state: .confirmCode(.inputCode(CheckCodeSenderProxy(underlyingSender: CheckCodeSenderSDKMock()))), checkCodeInput: "12")
     static let confirmCodeInvalidStateViewModel = QRCodeLoginScreenViewModel.mock(state: .confirmCode(.invalidCode))
     
-    // Errors (no need to test them all QRCodeErrorView covers that).
+    /// Errors (no need to test them all QRCodeErrorView covers that).
     static let errorStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.declined))
     
     static var previews: some View {

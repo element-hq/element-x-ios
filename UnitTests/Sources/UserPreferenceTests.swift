@@ -16,7 +16,7 @@ final class UserPreferenceTests: XCTestCase {
         UserDefaults.testDefaults.removePersistentDomain(forName: .userDefaultsSuiteName)
     }
 
-    func testStorePlistValue() throws {
+    func testStorePlistValue() {
         let setPreference = {
             let value = TestPreferences()
             value.plist = "Hello"
@@ -31,7 +31,7 @@ final class UserPreferenceTests: XCTestCase {
         XCTAssertNil(UserDefaults.testDefaults.data(forKey: .key2), "Hello")
     }
     
-    func testStoreCodableValue() throws {
+    func testStoreCodableValue() {
         let storedType = CodableTestType(a: "some", b: [1, 2, 3])
         
         let setPreference = {
@@ -47,7 +47,7 @@ final class UserPreferenceTests: XCTestCase {
         XCTAssertNotNil(UserDefaults.testDefaults.data(forKey: .key3))
     }
     
-    func testStorePlistValueOnVolatileStorage() throws {
+    func testStorePlistValueOnVolatileStorage() {
         let setPreference = {
             let value = TestPreferences()
             value.volatileVar = "Hello"
@@ -60,7 +60,7 @@ final class UserPreferenceTests: XCTestCase {
         XCTAssertNil(value.volatileVar)
     }
     
-    func testStoreCodableValueOnVolatileStorage() throws {
+    func testStoreCodableValueOnVolatileStorage() {
         let storedType = CodableTestType(a: "some", b: [1, 2, 3])
         
         let setPreference = {
@@ -76,7 +76,7 @@ final class UserPreferenceTests: XCTestCase {
         XCTAssertNil(UserDefaults.testDefaults.data(forKey: .key4))
     }
     
-    func testStorePlistArray() throws {
+    func testStorePlistArray() {
         let setPreference = {
             let value = TestPreferences()
             value.plistArray = [1, 2, 3]
@@ -91,7 +91,7 @@ final class UserPreferenceTests: XCTestCase {
         XCTAssertNil(UserDefaults.testDefaults.data(forKey: .key5), "Hello")
     }
     
-    func testAssignNilToPlistType() throws {
+    func testAssignNilToPlistType() {
         let setPreference = {
             let value = TestPreferences()
             value.plist = "Hello"
@@ -106,7 +106,7 @@ final class UserPreferenceTests: XCTestCase {
         XCTAssertNil(UserDefaults.testDefaults.string(forKey: .key2))
     }
     
-    func testAssignNilToCodableType() throws {
+    func testAssignNilToCodableType() {
         let storedType = CodableTestType(a: "some", b: [1, 2, 3])
         
         let setPreference = {

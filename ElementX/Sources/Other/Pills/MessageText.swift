@@ -22,7 +22,7 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         super.addGestureRecognizer(gestureRecognizer)
     }
     
-    // This prevents the magnifying glass from showing up
+    /// This prevents the magnifying glass from showing up
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if otherGestureRecognizer is UILongPressGestureRecognizer {
             return false

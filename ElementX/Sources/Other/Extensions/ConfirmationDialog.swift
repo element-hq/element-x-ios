@@ -13,9 +13,9 @@ protocol ConfirmationDialogProtocol {
 }
 
 extension View {
-    func confirmationDialog<Item, Actions>(item: Binding<Item?>,
-                                           titleVisibility: Visibility = .automatic,
-                                           @ViewBuilder actions: (Item) -> Actions) -> some View where Item: ConfirmationDialogProtocol, Actions: View {
+    func confirmationDialog<Item: ConfirmationDialogProtocol, Actions: View>(item: Binding<Item?>,
+                                                                             titleVisibility: Visibility = .automatic,
+                                                                             @ViewBuilder actions: (Item) -> Actions) -> some View {
         let binding = Binding<Bool>(get: {
             item.wrappedValue != nil
         }, set: { newValue in
@@ -27,10 +27,10 @@ extension View {
     }
 
     // periphery: ignore - not used yet but might be useful
-    func confirmationDialog<Item, Actions, Message>(item: Binding<Item?>,
-                                                    titleVisibility: Visibility = .automatic,
-                                                    @ViewBuilder actions: (Item) -> Actions,
-                                                    @ViewBuilder message: (Item) -> Message) -> some View where Item: ConfirmationDialogProtocol, Actions: View, Message: View {
+    func confirmationDialog<Item: ConfirmationDialogProtocol, Actions: View, Message: View>(item: Binding<Item?>,
+                                                                                            titleVisibility: Visibility = .automatic,
+                                                                                            @ViewBuilder actions: (Item) -> Actions,
+                                                                                            @ViewBuilder message: (Item) -> Message) -> some View {
         let binding = Binding<Bool>(get: {
             item.wrappedValue != nil
         }, set: { newValue in

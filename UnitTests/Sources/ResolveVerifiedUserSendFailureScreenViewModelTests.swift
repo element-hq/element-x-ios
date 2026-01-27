@@ -6,15 +6,16 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
     let roomProxy = JoinedRoomProxyMock(.init())
     var viewModel: ResolveVerifiedUserSendFailureScreenViewModel!
-    var context: ResolveVerifiedUserSendFailureScreenViewModel.Context { viewModel.context }
+    var context: ResolveVerifiedUserSendFailureScreenViewModel.Context {
+        viewModel.context
+    }
     
     func testUnsignedDevice() async throws {
         // Given a failure where a single user has an unverified device

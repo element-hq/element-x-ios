@@ -52,7 +52,10 @@ public struct ListRowAccessory: View {
     let kind: Kind
     
     /// Negative padding added to prevent the accessory interfering with the row's padding.
-    private var verticalPaddingFix: CGFloat { -4 }
+    private var verticalPaddingFix: CGFloat {
+        -4
+    }
+
     /// Absolute bodge until we have the circle icon in Compound.
     @ScaledMetric private var circleOverlayInsets = 5
     

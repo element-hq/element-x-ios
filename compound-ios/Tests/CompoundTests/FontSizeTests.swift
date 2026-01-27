@@ -12,7 +12,7 @@ import XCTest
 
 final class FontSizeTests: XCTestCase {
     /// Test all system text styles to assert mapping between `Font` and `UIFont`.
-    func testTextStyle() throws {
+    func testTextStyle() {
         let caption2FontSize = FontSize.reflecting(.caption2)
         XCTAssertEqual(caption2FontSize?.value, 11)
         XCTAssertEqual(caption2FontSize?.style, .caption2)

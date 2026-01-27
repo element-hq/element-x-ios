@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class UserDiscoveryServiceTest: XCTestCase {
@@ -20,14 +19,14 @@ class UserDiscoveryServiceTest: XCTestCase {
         service = UserDiscoveryService(clientProxy: clientProxy)
     }
     
-    func testQueryShowingResults() async throws {
+    func testQueryShowingResults() async {
         clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [UserProfileProxy.mockAlice], limited: true))
         
         let results = await (try? search(query: "AAA").get()) ?? []
         assertSearchResults(results, toBe: 1)
     }
     
-    func testOwnerIsFiltered() async throws {
+    func testOwnerIsFiltered() async {
         clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [UserProfileProxy(userID: "@foo:matrix.org")], limited: true))
         
         let results = await (try? search(query: "AAA").get()) ?? []

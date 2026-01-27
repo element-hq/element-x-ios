@@ -29,7 +29,9 @@ private struct BloomModifier: ViewModifier {
     
     @State private var height = CGFloat.zero
     
-    private var endPointY: CGFloat { hasSearchBar ? 0.35 : 0.55 }
+    private var endPointY: CGFloat {
+        hasSearchBar ? 0.35 : 0.55
+    }
     
     func body(content: Content) -> some View {
         content
@@ -102,7 +104,9 @@ private struct OldBloomModifier: ViewModifier {
         return bloom
     }
     
-    private var endPointY: CGFloat { hasSearchBar ? 0.5 : 0.7 }
+    private var endPointY: CGFloat {
+        hasSearchBar ? 0.5 : 0.7
+    }
     
     private var bloomGradient: some View {
         LinearGradient(gradient: .compound.subtle,
@@ -117,9 +121,9 @@ private struct OldBloomModifier: ViewModifier {
         bloom.colorScheme == colorScheme && bloom.baseColor == .compound.gradientSubtleStop1
     }
     
-    // This is a class to avoid a "Modifying state during view update" warning when storing
-    // the result on the same run-loop - we want to avoid dispatching that to the next loop as
-    // that can result in further (unnecessary) renders being made.
+    /// This is a class to avoid a "Modifying state during view update" warning when storing
+    /// the result on the same run-loop - we want to avoid dispatching that to the next loop as
+    /// that can result in further (unnecessary) renders being made.
     class Bloom {
         var image: UIImage?
         var colorScheme: ColorScheme?

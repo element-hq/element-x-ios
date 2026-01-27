@@ -12,7 +12,6 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
     let timelineItem: RoomTimelineItemProtocol
     let action: () -> Void
     
-    @ViewBuilder
     func body(content: Content) -> some View {
         switch timelineItem {
         case is PollRoomTimelineItem:

@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import SwiftUI
-
 import Compound
+import SwiftUI
 
 struct ThreadDecorator: View {
     var body: some View {

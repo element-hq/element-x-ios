@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 import MatrixRustSDK
 
 protocol RoomTimelineItemFactoryProtocol {

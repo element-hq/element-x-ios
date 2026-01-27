@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 final class RoomListFiltersStateTests: XCTestCase {
     var appSettings: AppSettings!
@@ -108,7 +107,7 @@ final class RoomListFiltersStateTests: XCTestCase {
     
     // MARK: Low Priority feature flag
     
-    // Don't forget to add .lowPriority into the mix above when enabling the feature.
+    /// Don't forget to add .lowPriority into the mix above when enabling the feature.
     func testWithLowPriorityFeature() {
         enableLowPriorityFeature()
         XCTAssertFalse(state.isFiltering)

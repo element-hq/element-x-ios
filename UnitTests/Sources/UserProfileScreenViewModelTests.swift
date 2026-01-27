@@ -6,14 +6,15 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class UserProfileScreenViewModelTests: XCTestCase {
     var viewModel: UserProfileScreenViewModel!
-    var context: UserProfileScreenViewModelType.Context { viewModel.context }
+    var context: UserProfileScreenViewModelType.Context {
+        viewModel.context
+    }
 
     func testInitialState() async throws {
         let profile = UserProfileProxy(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: .mockMXCAvatar)

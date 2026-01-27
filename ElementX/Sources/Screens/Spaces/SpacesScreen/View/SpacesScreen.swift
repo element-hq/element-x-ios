@@ -158,11 +158,9 @@ struct SpacesScreen_Previews: PreviewProvider, TestablePreview {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.spaceService = SpaceServiceProxyMock(.init(topLevelSpaces: isEmpty ? [] : .mockJoinedSpaces))
         
-        let viewModel = SpacesScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                              selectedSpacePublisher: .init(nil),
-                                              appSettings: appSettings,
-                                              userIndicatorController: UserIndicatorControllerMock())
-        
-        return viewModel
+        return SpacesScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                     selectedSpacePublisher: .init(nil),
+                                     appSettings: appSettings,
+                                     userIndicatorController: UserIndicatorControllerMock())
     }
 }

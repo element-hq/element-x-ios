@@ -103,9 +103,9 @@ struct ServerConfirmationScreen: View {
     }
 }
 
-// This is such a hack. I hate it!
-// But… We're not in a List/Form, the compound picker doesn't
-// support icons and this screen's design might change so 🤷‍♂️.
+/// This is such a hack. I hate it!
+/// But… We're not in a List/Form, the compound picker doesn't
+/// support icons and this screen's design might change so 🤷‍♂️.
 private struct FakeInlinePicker: View {
     let items: [String]
     let icon: KeyPath<CompoundIcons, Image>

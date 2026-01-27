@@ -57,7 +57,7 @@ struct FormattedBodyText: View {
                   boostFontSize: boostFontSize)
     }
     
-    // These is needed to create the slightly off inlined timestamp effect
+    /// These is needed to create the slightly off inlined timestamp effect
     private var additionalWhitespacesSuffix: String {
         .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, layoutDirection: layoutDirection)
     }
@@ -68,7 +68,6 @@ struct FormattedBodyText: View {
             .accessibilityLabel(Text(attributedString))
     }
     
-    @ViewBuilder
     var mainContent: some View {
         layout
             .tint(.compound.textLinkExternal)

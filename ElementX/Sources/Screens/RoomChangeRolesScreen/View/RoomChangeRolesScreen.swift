@@ -12,7 +12,9 @@ import SwiftUI
 struct RoomChangeRolesScreen: View {
     @Bindable var context: RoomChangeRolesScreenViewModel.Context
     
-    var showTopSection: Bool { !context.viewState.membersWithRole.isEmpty }
+    var showTopSection: Bool {
+        !context.viewState.membersWithRole.isEmpty
+    }
     
     var body: some View {
         mainContent

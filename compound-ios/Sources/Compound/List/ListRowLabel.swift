@@ -79,7 +79,9 @@ public struct ListRowLabel<Icon: View>: View {
         return role == .destructive ? .compound.textCriticalPrimary : .compound.textPrimary
     }
 
-    var titleLineLimit: Int? { layout == .avatar ? 1 : lineLimit }
+    var titleLineLimit: Int? {
+        layout == .avatar ? 1 : lineLimit
+    }
     
     var statusColor: Color {
         isEnabled ? .compound.textSecondary : .compound.textDisabled

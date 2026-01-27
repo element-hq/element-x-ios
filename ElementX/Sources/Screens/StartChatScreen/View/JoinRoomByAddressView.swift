@@ -82,12 +82,11 @@ struct JoinRoomByAddressView_Previews: PreviewProvider, TestablePreview {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-        let viewModel = StartChatScreenViewModel(userSession: userSession,
-                                                 analytics: ServiceLocator.shared.analytics,
-                                                 userIndicatorController: UserIndicatorControllerMock(),
-                                                 userDiscoveryService: userDiscoveryService,
-                                                 appSettings: ServiceLocator.shared.settings)
-        return viewModel
+        return StartChatScreenViewModel(userSession: userSession,
+                                        analytics: ServiceLocator.shared.analytics,
+                                        userIndicatorController: UserIndicatorControllerMock(),
+                                        userDiscoveryService: userDiscoveryService,
+                                        appSettings: ServiceLocator.shared.settings)
     }()
     
     static var previews: some View {

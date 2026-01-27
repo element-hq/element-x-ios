@@ -103,7 +103,9 @@ class OIDCAuthenticationPresenter: NSObject {
 // MARK: ASWebAuthenticationPresentationContextProviding
 
 extension OIDCAuthenticationPresenter: ASWebAuthenticationPresentationContextProviding {
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor { presentationAnchor }
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        presentationAnchor
+    }
 }
 
 extension ASWebAuthenticationSession.Callback {

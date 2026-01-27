@@ -154,8 +154,13 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     
     // MARK: User Indicators
     
-    private var loadingIndicatorIdentifier: String { "\(Self.self)-Loading" }
-    private var statusIndicatorIdentifier: String { "\(Self.self)-Status" }
+    private var loadingIndicatorIdentifier: String {
+        "\(Self.self)-Loading"
+    }
+
+    private var statusIndicatorIdentifier: String {
+        "\(Self.self)-Status"
+    }
     
     private func showLoadingIndicator(allowsInteraction: Bool) {
         userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier,

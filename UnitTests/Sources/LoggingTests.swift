@@ -53,7 +53,7 @@ class LoggingTests: XCTestCase {
     
     /// This is meant to test the `Target.tests.configure(…)`, but at this stage the test is somewhat pointless
     /// as it is unlikely to have been called before `tearDown` has manually set the file prefix 😕.
-    func testTargetName() throws {
+    func testTargetName() {
         MXLog.info(UUID().uuidString)
         guard let logFile = Tracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
@@ -110,7 +110,7 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(heroName))
     }
         
-    func testTimelineContentIsRedacted() async throws {
+    func testTimelineContentIsRedacted() throws {
         try setupTest()
         
         // Given timeline items that contain text
@@ -274,7 +274,7 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(rustFileMessage.filename))
     }
     
-    func testLogFileSorting() async throws {
+    func testLogFileSorting() throws {
         try setupTest(redirectTracingFileWriter: false)
         
         // Given a collection of log files.

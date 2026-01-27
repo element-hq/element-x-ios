@@ -7,16 +7,17 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class StaticLocationScreenViewModelTests: XCTestCase {
     let timelineProxy = TimelineProxyMock(.init())
     
     var viewModel: StaticLocationScreenViewModelProtocol!
-    var context: StaticLocationScreenViewModel.Context { viewModel.context }
+    var context: StaticLocationScreenViewModel.Context {
+        viewModel.context
+    }
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -31,7 +32,7 @@ class StaticLocationScreenViewModelTests: XCTestCase {
         self.viewModel = viewModel
     }
     
-    func testUserDidPan() async throws {
+    func testUserDidPan() {
         XCTAssertTrue(context.viewState.isSharingUserLocation)
         XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
         context.send(viewAction: .userDidPan)
@@ -39,7 +40,7 @@ class StaticLocationScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.showsUserLocationMode, .show)
     }
     
-    func testCenterOnUser() async throws {
+    func testCenterOnUser() {
         XCTAssertTrue(context.viewState.isSharingUserLocation)
         context.showsUserLocationMode = .show
         XCTAssertFalse(context.viewState.isSharingUserLocation)
@@ -48,14 +49,14 @@ class StaticLocationScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
     }
     
-    func testCenterOnUserWithoutAuth() async throws {
+    func testCenterOnUserWithoutAuth() {
         context.showsUserLocationMode = .hide
         context.isLocationAuthorized = nil
         context.send(viewAction: .centerToUser)
         XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
     }
     
-    func testCenterOnUserWithDeniedAuth() async throws {
+    func testCenterOnUserWithDeniedAuth() {
         context.isLocationAuthorized = false
         context.showsUserLocationMode = .hide
         context.send(viewAction: .centerToUser)
@@ -63,7 +64,7 @@ class StaticLocationScreenViewModelTests: XCTestCase {
         XCTAssertNotNil(context.alertInfo)
     }
     
-    func testErrorMapping() async throws {
+    func testErrorMapping() {
         let mapError = AlertInfo(locationSharingViewError: .mapError(.failedLoadingMap))
         XCTAssertEqual(mapError.message, L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName))
         let locationError = AlertInfo(locationSharingViewError: .mapError(.failedLocatingUser))

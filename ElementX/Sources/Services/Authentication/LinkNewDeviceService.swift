@@ -216,10 +216,12 @@ class CheckCodeSenderProxy: Equatable {
         try await underlyingSender.send(code: code)
     }
     
-    // Bypassed for now whilst we wait for an SDK update (however its worth noting that
-    // things should still fail if the wrong code is provided, just not necessarily with
-    // the right error being shown). https://github.com/matrix-org/matrix-rust-sdk/pull/5957
-    func validate(checkCode: UInt8) -> Bool { true }
+    /// Bypassed for now whilst we wait for an SDK update (however its worth noting that
+    /// things should still fail if the wrong code is provided, just not necessarily with
+    /// the right error being shown). https://github.com/matrix-org/matrix-rust-sdk/pull/5957
+    func validate(checkCode: UInt8) -> Bool {
+        true
+    }
 }
 
 extension UIImage {

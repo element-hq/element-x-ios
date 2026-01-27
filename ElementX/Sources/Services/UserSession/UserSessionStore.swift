@@ -16,11 +16,18 @@ class UserSessionStore: UserSessionStoreProtocol {
     private let appHooks: AppHooks
     
     /// Whether or not there are sessions in the store.
-    var hasSessions: Bool { !keychainController.restorationTokens().isEmpty }
+    var hasSessions: Bool {
+        !keychainController.restorationTokens().isEmpty
+    }
+
     /// All the user IDs managed by the store.
-    var userIDs: [String] { keychainController.restorationTokens().map(\.userID) }
+    var userIDs: [String] {
+        keychainController.restorationTokens().map(\.userID)
+    }
     
-    var clientSessionDelegate: ClientSessionDelegate { keychainController }
+    var clientSessionDelegate: ClientSessionDelegate {
+        keychainController
+    }
     
     init(keychainController: KeychainControllerProtocol,
          appSettings: AppSettings,

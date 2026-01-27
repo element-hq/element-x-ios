@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-@testable import ElementX
-
 import Combine
+@testable import ElementX
 import Kingfisher
 import XCTest
 
@@ -68,7 +67,7 @@ final class MediaProviderTests: XCTestCase {
         XCTAssertNil(result)
     }
     
-    func test_whenImageFromSourceWithSourceNil_nilReturned() throws {
+    func test_whenImageFromSourceWithSourceNil_nilReturned() {
         let image = mediaProvider.imageFromSource(nil, size: Avatars.Size.room(on: .timeline).scaledSize)
         XCTAssertNil(image)
     }

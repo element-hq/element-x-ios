@@ -198,18 +198,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     func toPresentable() -> AnyView {
-        AnyView(
-            navigationRootCoordinator.toPresentable()
-                .environment(\.analyticsService, ServiceLocator.shared.analytics)
-                .onReceive(appSettings.$appAppearance) { [weak self] appAppearance in
-                    guard let self else { return }
+        AnyView(navigationRootCoordinator.toPresentable()
+            .environment(\.analyticsService, ServiceLocator.shared.analytics)
+            .onReceive(appSettings.$appAppearance) { [weak self] appAppearance in
+                guard let self else { return }
                     
-                    windowManager.windows.forEach { window in
-                        // Unfortunately .preferredColorScheme doesn't propagate properly throughout the app when changed
-                        window.overrideUserInterfaceStyle = appAppearance.interfaceStyle
-                    }
+                windowManager.windows.forEach { window in
+                    // Unfortunately .preferredColorScheme doesn't propagate properly throughout the app when changed
+                    window.overrideUserInterfaceStyle = appAppearance.interfaceStyle
                 }
-        )
+            })
     }
     
     func handlePotentialPhishingAttempt(url: URL, openURLAction: @escaping (URL) -> Void) -> Bool {
@@ -450,7 +448,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         userSessionMigrationsOldVersion = nil
     }
     
-    // This could be removed once the adoption of 25.06.x is widespread.
+    /// This could be removed once the adoption of 25.06.x is widespread.
     private func performSettingsToAccountDataMigration(userSession: UserSessionProtocol) {
         guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier) else {
             return
@@ -1200,12 +1198,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // This is important for the app to keep refreshing in the background
         scheduleBackgroundAppRefresh()
         
-        /// We have a lot of crashes stemming here which we previously believed are caused by stopSync not being async
-        /// on the client proxy side (see the comment on that method). We have now realised that will likely not fix anything but
-        /// we also noticed this does not crash on the main thread, even though the whole AppCoordinator is on the Main actor.
-        /// As such, we introduced a MainActor conformance on the expirationHandler but we are also assuming main actor
-        /// isolated in the `stopSync` method above.
-        /// https://sentry.tools.element.io/organizations/element/issues/4477794/
+        // We have a lot of crashes stemming here which we previously believed are caused by stopSync not being async
+        // on the client proxy side (see the comment on that method). We have now realised that will likely not fix anything but
+        // we also noticed this does not crash on the main thread, even though the whole AppCoordinator is on the Main actor.
+        // As such, we introduced a MainActor conformance on the expirationHandler but we are also assuming main actor
+        // isolated in the `stopSync` method above.
+        // https://sentry.tools.element.io/organizations/element/issues/4477794/
         task.expirationHandler = { @Sendable [weak self] in
             MXLog.info("Background app refresh task is about to expire.")
             

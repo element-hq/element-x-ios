@@ -7,9 +7,8 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 final class CompletionSuggestionServiceTests: XCTestCase {

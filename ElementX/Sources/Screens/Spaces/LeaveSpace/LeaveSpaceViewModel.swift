@@ -12,7 +12,10 @@ typealias LeaveSpaceViewModelType = StateStoreViewModelV2<LeaveSpaceViewState, L
 
 class LeaveSpaceViewModel: LeaveSpaceViewModelType {
     let actionsSubject = PassthroughSubject<LeaveSpaceViewModelAction, Never>()
-    var actions: AnyPublisher<LeaveSpaceViewModelAction, Never> { actionsSubject.eraseToAnyPublisher() }
+    var actions: AnyPublisher<LeaveSpaceViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let mediaProvider: MediaProviderProtocol
 
@@ -53,8 +56,13 @@ class LeaveSpaceViewModel: LeaveSpaceViewModelType {
         }
     }
     
-    private static var leavingIndicatorID: String { "\(Self.self)-Leaving" }
-    private static var failureIndicatorID: String { "\(Self.self)-Failure" }
+    private static var leavingIndicatorID: String {
+        "\(Self.self)-Leaving"
+    }
+
+    private static var failureIndicatorID: String {
+        "\(Self.self)-Failure"
+    }
     
     private func showLeavingIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.leavingIndicatorID,
@@ -75,5 +83,7 @@ class LeaveSpaceViewModel: LeaveSpaceViewModelType {
 }
 
 extension LeaveSpaceViewModel: Identifiable {
-    var id: String { state.leaveHandle.id }
+    var id: String {
+        state.leaveHandle.id
+    }
 }

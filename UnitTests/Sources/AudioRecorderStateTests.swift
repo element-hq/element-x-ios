@@ -36,12 +36,12 @@ class AudioRecorderStateTests: XCTestCase {
         audioRecorderMock = buildAudioRecorderMock()
     }
     
-    func testAttach() async throws {
+    func testAttach() {
         audioRecorderState.attachAudioRecorder(audioRecorderMock)
         XCTAssertEqual(audioRecorderState.recordingState, .stopped)
     }
     
-    func testDetach() async throws {
+    func testDetach() async {
         audioRecorderState.attachAudioRecorder(audioRecorderMock)
         audioRecorderMock.isRecording = true
         await audioRecorderState.detachAudioRecorder()
@@ -49,7 +49,7 @@ class AudioRecorderStateTests: XCTestCase {
         XCTAssertEqual(audioRecorderState.recordingState, .stopped)
     }
     
-    func testReportError() async throws {
+    func testReportError() {
         XCTAssertEqual(audioRecorderState.recordingState, .stopped)
         audioRecorderState.reportError()
         XCTAssertEqual(audioRecorderState.recordingState, .error)

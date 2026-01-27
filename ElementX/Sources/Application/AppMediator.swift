@@ -18,7 +18,7 @@ class AppMediator: AppMediatorProtocol {
         self.networkMonitor = networkMonitor
     }
         
-    // UIApplication.State won't update if we store this e.g. in the constructor
+    /// UIApplication.State won't update if we store this e.g. in the constructor
     private var application: UIApplication {
         UIApplication.shared
     }

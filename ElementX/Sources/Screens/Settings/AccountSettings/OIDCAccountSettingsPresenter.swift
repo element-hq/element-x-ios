@@ -60,5 +60,7 @@ class OIDCAccountSettingsPresenter: NSObject {
 // MARK: ASWebAuthenticationPresentationContextProviding
 
 extension OIDCAccountSettingsPresenter: ASWebAuthenticationPresentationContextProviding {
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor { presentationAnchor }
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        presentationAnchor
+    }
 }

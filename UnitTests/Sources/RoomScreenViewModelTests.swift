@@ -6,11 +6,10 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 @testable import ElementX
 import MatrixRustSDK
 import MatrixRustSDKMocks
-
-import Combine
 import XCTest
 
 @MainActor

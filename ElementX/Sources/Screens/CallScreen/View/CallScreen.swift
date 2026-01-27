@@ -197,8 +197,8 @@ private struct CallView: UIViewRepresentable {
             }
         }
         
-        // This function is called by the webview output routing button
-        // it allows to open the OS output selector using the hidden button.
+        /// This function is called by the webview output routing button
+        /// it allows to open the OS output selector using the hidden button.
         private func tapRoutePickerView() {
             guard let button = routePickerView.subviews.first(where: { $0 is UIButton }) as? UIButton else {
                 return

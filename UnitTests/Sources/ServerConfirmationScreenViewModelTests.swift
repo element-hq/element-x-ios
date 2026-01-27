@@ -6,10 +6,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+@testable import ElementX
 import MatrixRustSDKMocks
 import XCTest
-
-@testable import ElementX
 
 @MainActor
 class ServerConfirmationScreenViewModelTests: XCTestCase {
@@ -19,7 +18,9 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
     var appSettings: AppSettings!
     
     var viewModel: ServerConfirmationScreenViewModel!
-    var context: ServerConfirmationScreenViewModel.Context { viewModel.context }
+    var context: ServerConfirmationScreenViewModel.Context {
+        viewModel.context
+    }
     
     override func setUp() {
         AppSettings.resetAllSettings()

@@ -7,9 +7,8 @@
 //
 
 import Foundation
-import SwiftUI
-
 import OrderedCollections
+import SwiftUI
 
 struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     static let maxLinkPreviewsToRender = 2

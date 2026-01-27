@@ -55,7 +55,7 @@ final class GeoURITests: XCTestCase {
         XCTAssertEqual(uri.string, "geo:53,-8;u=35")
     }
 
-    func testFormattingExponentialNotation() throws {
+    func testFormattingExponentialNotation() {
         let uri = GeoURI(latitude: 1e2, longitude: -1e-2, uncertainty: 1e-4)
         XCTAssertEqual(uri.string, "geo:100,-0.01;u=0.0001")
     }

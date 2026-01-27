@@ -28,7 +28,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         /// The edit address screen
         case editAddress
         
-        // Other flows
+        /// Other flows
         /// The roles and permissions screen
         case rolesAndPermissionsFlow
         /// The members flow screen

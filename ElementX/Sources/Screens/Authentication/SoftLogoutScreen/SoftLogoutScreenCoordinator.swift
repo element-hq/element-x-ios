@@ -34,14 +34,17 @@ enum SoftLogoutScreenCoordinatorResult: CustomStringConvertible {
     }
 }
 
-// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
+/// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
 final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     private let parameters: SoftLogoutScreenCoordinatorParameters
     private var viewModel: SoftLogoutScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<SoftLogoutScreenCoordinatorResult, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    private var authenticationService: AuthenticationServiceProtocol { parameters.authenticationService }
+    private var authenticationService: AuthenticationServiceProtocol {
+        parameters.authenticationService
+    }
+
     private var oidcPresenter: OIDCAuthenticationPresenter?
     
     var actions: AnyPublisher<SoftLogoutScreenCoordinatorResult, Never> {

@@ -6,9 +6,8 @@
 // Please see LICENSE in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class EditRoomAddressScreenViewModelTests: XCTestCase {
@@ -66,7 +65,7 @@ class EditRoomAddressScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testCorrectMethodsCalledOnSaveWhenNoAliasExists() async throws {
+    func testCorrectMethodsCalledOnSaveWhenNoAliasExists() async {
         let clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org"))
         clientProxy.isAliasAvailableReturnValue = .success(true)
         let roomProxy = JoinedRoomProxyMock(.init(name: "Room Name"))
@@ -98,7 +97,7 @@ class EditRoomAddressScreenViewModelTests: XCTestCase {
         XCTAssertFalse(roomProxy.removeRoomAliasFromRoomDirectoryCalled)
     }
     
-    func testCorrectMethodsCalledOnSaveWhenAliasOnSameHomeserverExists() async throws {
+    func testCorrectMethodsCalledOnSaveWhenAliasOnSameHomeserverExists() async {
         let clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org"))
         clientProxy.isAliasAvailableReturnValue = .success(true)
         let roomProxy = JoinedRoomProxyMock(.init(name: "Room Name", canonicalAlias: "#old-room-name:matrix.org"))
@@ -135,7 +134,7 @@ class EditRoomAddressScreenViewModelTests: XCTestCase {
         await fulfillment(of: [publishingExpectation, updateAliasExpectation, removeAliasExpectation], timeout: 1.0)
     }
     
-    func testCorrectMethodsCalledOnSaveWhenAliasOnOtherHomeserverExists() async throws {
+    func testCorrectMethodsCalledOnSaveWhenAliasOnOtherHomeserverExists() async {
         let clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org"))
         clientProxy.isAliasAvailableReturnValue = .success(true)
         let roomProxy = JoinedRoomProxyMock(.init(name: "Room Name", canonicalAlias: "#old-room-name:element.io"))

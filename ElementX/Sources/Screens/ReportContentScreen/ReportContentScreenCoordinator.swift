@@ -77,12 +77,10 @@ final class ReportContentScreenCoordinator: CoordinatorProtocol {
     private static let loadingIndicatorIdentifier = "\(ReportContentScreenCoordinator.self)-Loading"
 
     private func startLoading() {
-        parameters.userIndicatorController.submitIndicator(
-            UserIndicator(id: Self.loadingIndicatorIdentifier,
-                          type: .modal,
-                          title: L10n.commonSending,
-                          persistent: true)
-        )
+        parameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                         type: .modal,
+                                                                         title: L10n.commonSending,
+                                                                         persistent: true))
     }
 
     private func stopLoading() {

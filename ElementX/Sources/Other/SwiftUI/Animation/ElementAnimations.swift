@@ -19,7 +19,7 @@ public extension Animation {
         return animation.disabledIfReduceMotionEnabled()
     }
 
-    // `noAnimation` if running tests, otherwise `self` if `UIAccessibility.isReduceMotionEnabled` is false
+    /// `noAnimation` if running tests, otherwise `self` if `UIAccessibility.isReduceMotionEnabled` is false
     func disabledDuringTests() -> Self {
         let animation: Animation = ProcessInfo.isRunningTests ? .noAnimation : self
         return animation.disabledIfReduceMotionEnabled()

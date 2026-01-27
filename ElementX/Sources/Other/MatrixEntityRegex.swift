@@ -8,7 +8,7 @@
 
 import Foundation
 
-// https://spec.matrix.org/latest/appendices/#identifier-grammar
+/// https://spec.matrix.org/latest/appendices/#identifier-grammar
 enum MatrixEntityRegex: String {
     case homeserver
     case userID

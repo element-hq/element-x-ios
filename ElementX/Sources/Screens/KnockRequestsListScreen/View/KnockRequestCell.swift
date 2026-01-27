@@ -80,7 +80,6 @@ struct KnockRequestCell: View {
         }
     }
     
-    @ViewBuilder
     private var actions: some View {
         VStack(spacing: 16) {
             if onDecline != nil || onAccept != nil {
@@ -174,7 +173,9 @@ private struct DisclosableText: View {
 }
 
 extension KnockRequestCellInfo: Identifiable {
-    var id: String { eventID }
+    var id: String {
+        eventID
+    }
 }
 
 struct KnockRequestCell_Previews: PreviewProvider, TestablePreview {

@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class BugReportScreenViewModelTests: XCTestCase {
@@ -32,7 +31,7 @@ class BugReportScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.sendingLogsEnabled)
     }
     
-    func testClearScreenshot() async throws {
+    func testClearScreenshot() {
         let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com"))
         let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
                                                  clientProxy: clientProxy,
@@ -45,7 +44,7 @@ class BugReportScreenViewModelTests: XCTestCase {
         XCTAssertNil(context.viewState.screenshot)
     }
     
-    func testAttachScreenshot() async throws {
+    func testAttachScreenshot() {
         let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com"))
         let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
                                                  clientProxy: clientProxy,

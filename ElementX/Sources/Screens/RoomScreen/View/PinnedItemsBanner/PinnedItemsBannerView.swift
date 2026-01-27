@@ -46,7 +46,6 @@ struct PinnedItemsBannerView: View {
         .accessibilityElement(children: .contain)
     }
     
-    @ViewBuilder
     private var viewAllButton: some View {
         Button { onViewAllButtonTap() } label: {
             Text(state.isLoading ? "" : L10n.screenRoomPinnedBannerViewAllButtonTitle)

@@ -15,11 +15,15 @@ import LocalAuthentication
 class LAContextMock: LAContext {
     var biometryTypeValue: LABiometryType!
     private var internalBiometryTypeValue: LABiometryType!
-    override var biometryType: LABiometryType { internalBiometryTypeValue }
+    override var biometryType: LABiometryType {
+        internalBiometryTypeValue
+    }
     
     var evaluatedPolicyDomainStateValue: Data?
     private var internalEvaluatedPolicyDomainStateValue: Data?
-    override var evaluatedPolicyDomainState: Data? { internalEvaluatedPolicyDomainStateValue }
+    override var evaluatedPolicyDomainState: Data? {
+        internalEvaluatedPolicyDomainStateValue
+    }
     
     override func canEvaluatePolicy(_ policy: LAPolicy, error: NSErrorPointer) -> Bool {
         let result = super.canEvaluatePolicy(policy, error: error)

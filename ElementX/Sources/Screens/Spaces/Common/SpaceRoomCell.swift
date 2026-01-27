@@ -25,8 +25,13 @@ struct SpaceRoomCell: View {
     private let verticalInsets = 12.0
     private let horizontalInsets = 16.0
     
-    private var isEditModeActive: Bool { editMode?.wrappedValue ?? .inactive != .inactive }
-    private var isHighlighted: Bool { isSelected && !isEditModeActive }
+    private var isEditModeActive: Bool {
+        editMode?.wrappedValue ?? .inactive != .inactive
+    }
+
+    private var isHighlighted: Bool {
+        isSelected && !isEditModeActive
+    }
     
     private var subtitle: String {
         if spaceServiceRoom.isSpace {

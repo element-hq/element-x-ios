@@ -70,28 +70,28 @@ class VoiceMessageRecorderTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testRecordingURL() async throws {
+    func testRecordingURL() {
         audioRecorder.audioFileURL = recordingURL
         XCTAssertEqual(voiceMessageRecorder.recordingURL, recordingURL)
     }
     
-    func testRecordingDuration() async throws {
+    func testRecordingDuration() {
         audioRecorder.currentTime = 10.3
         XCTAssertEqual(voiceMessageRecorder.recordingDuration, 10.3)
     }
     
-    func testStartRecording() async throws {
+    func testStartRecording() async {
         _ = await voiceMessageRecorder.startRecording()
         XCTAssert(audioRecorder.recordAudioFileURLCalled)
     }
     
-    func testStopRecording() async throws {
+    func testStopRecording() async {
         _ = await voiceMessageRecorder.stopRecording()
         // Internal audio recorder must have been stopped
         XCTAssert(audioRecorder.stopRecordingCalled)
     }
     
-    func testCancelRecording() async throws {
+    func testCancelRecording() async {
         await voiceMessageRecorder.cancelRecording()
         // Internal audio recorder must have been stopped
         XCTAssert(audioRecorder.stopRecordingCalled)
@@ -99,13 +99,13 @@ class VoiceMessageRecorderTests: XCTestCase {
         XCTAssert(audioRecorder.deleteRecordingCalled)
     }
 
-    func testDeleteRecording() async throws {
+    func testDeleteRecording() async {
         await voiceMessageRecorder.deleteRecording()
         // The recording audio file must have been deleted
         XCTAssert(audioRecorder.deleteRecordingCalled)
     }
 
-    func testStartPlaybackNoPreview() async throws {
+    func testStartPlaybackNoPreview() async {
         guard case .failure(.previewNotAvailable) = await voiceMessageRecorder.startPlayback() else {
             XCTFail("An error is expected")
             return
@@ -172,7 +172,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         XCTAssertEqual(audioPlayer.seekToReceivedProgress, 0.4)
     }
     
-    func testBuildRecordedWaveform() async throws {
+    func testBuildRecordedWaveform() async {
         // If there is no recording file, an error is expected
         audioRecorder.audioFileURL = nil
         guard case .failure(.missingRecordingFile) = await voiceMessageRecorder.buildRecordingWaveform() else {
@@ -192,7 +192,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         XCTAssert(!data.isEmpty)
     }
     
-    func testSendVoiceMessage_NoRecordingFile() async throws {
+    func testSendVoiceMessage_NoRecordingFile() async {
         let timelineController = MockTimelineController()
         
         // If there is no recording file, an error is expected
@@ -204,7 +204,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
     }
     
-    func testSendVoiceMessage_ConversionError() async throws {
+    func testSendVoiceMessage_ConversionError() async {
         audioRecorder.audioFileURL = recordingURL
         // If the converter returns an error
         audioConverter.convertToOpusOggSourceURLDestinationURLThrowableError = AudioConverterError.conversionFailed(nil)
@@ -217,7 +217,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
     }
     
-    func testSendVoiceMessage_InvalidFile() async throws {
+    func testSendVoiceMessage_InvalidFile() async {
         guard let audioFileURL = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
             XCTFail("Test audio file is missing")
             return
@@ -237,7 +237,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
     }
     
-    func testSendVoiceMessage_WaveformAnlyseFailed() async throws {
+    func testSendVoiceMessage_WaveformAnlyseFailed() async {
         guard let imageFileURL = Bundle(for: Self.self).url(forResource: "test_image", withExtension: "png") else {
             XCTFail("Test audio file is missing")
             return
@@ -258,7 +258,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
     }
     
-    func testSendVoiceMessage_SendError() async throws {
+    func testSendVoiceMessage_SendError() async {
         guard let audioFileURL = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
             XCTFail("Test audio file is missing")
             return
@@ -281,7 +281,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
     }
     
-    func testSendVoiceMessage() async throws {
+    func testSendVoiceMessage() async {
         guard let imageFileURL = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
             XCTFail("Test audio file is missing")
             return

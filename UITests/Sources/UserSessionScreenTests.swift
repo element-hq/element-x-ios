@@ -59,7 +59,7 @@ class UserSessionScreenTests: XCTestCase {
         try await app.assertScreenshot()
     }
 
-    func testElementCall() async throws {
+    func testElementCall() {
         let app = Application.launch(.userSessionScreen)
 
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()

@@ -8,12 +8,11 @@
 
 @testable import ElementX
 import MatrixRustSDK
-
 import XCTest
 
 @MainActor
 class TimelineItemFactoryTests: XCTestCase {
-    func testCallInvite() async {
+    func testCallInvite() {
         let ownUserID = "@alice:matrix.org"
         let senderUserID = "@bob:matrix.org"
 

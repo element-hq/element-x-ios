@@ -7,11 +7,10 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
 import MatrixRustSDK
 import MatrixRustSDKMocks
+import XCTest
 
 @MainActor
 class SpaceScreenViewModelTests: XCTestCase {
@@ -178,7 +177,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         try await deferredState.fulfill()
     }
     
-    func testManageRoomsWithoutRemoving() async throws {
+    func testManageRoomsWithoutRemoving() throws {
         setupViewModel(initialSpaceRooms: mockSpaceRooms)
         XCTAssertEqual(context.viewState.editMode, .inactive)
         XCTAssertTrue(context.viewState.editModeSelectedIDs.isEmpty)

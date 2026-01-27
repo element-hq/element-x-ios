@@ -56,7 +56,6 @@ struct JoinRoomScreen: View {
         }
     }
     
-    @ViewBuilder
     private var defaultView: some View {
         VStack(spacing: 16) {
             RoomAvatarImage(avatar: context.viewState.avatar ?? .room(id: "", name: nil, avatarURL: nil),
@@ -140,7 +139,6 @@ struct JoinRoomScreen: View {
         }
     }
     
-    @ViewBuilder
     private var knockedView: some View {
         VStack(spacing: 16) {
             BigIcon(icon: \.checkCircleSolid, style: .successSolid)
@@ -157,7 +155,6 @@ struct JoinRoomScreen: View {
         }
     }
         
-    @ViewBuilder
     private var knockMessage: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 0) {

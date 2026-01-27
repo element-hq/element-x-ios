@@ -31,7 +31,6 @@ extension View {
         }
     }
     
-    @ViewBuilder
     func mediaGalleryTimelineAspectRatio(imageInfo: ImageInfoProxy?) -> some View {
         aspectRatio(imageInfo?.aspectRatio, contentMode: .fill)
     }

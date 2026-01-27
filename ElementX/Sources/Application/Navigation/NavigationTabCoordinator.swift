@@ -57,8 +57,13 @@ import SwiftUI
         let module: NavigationModule
         let details: TabDetails
         
-        var id: ObjectIdentifier { module.id }
-        @MainActor var coordinator: CoordinatorProtocol? { module.coordinator }
+        var id: ObjectIdentifier {
+            module.id
+        }
+
+        @MainActor var coordinator: CoordinatorProtocol? {
+            module.coordinator
+        }
     }
     
     fileprivate var tabModules = [TabModule]() {

@@ -6,9 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-@testable import ElementX
-
 import Combine
+@testable import ElementX
 import MatrixRustSDK
 import QuickLook
 import SwiftUI
@@ -17,7 +16,10 @@ import XCTest
 @MainActor
 class TimelineMediaPreviewViewModelTests: XCTestCase {
     var viewModel: TimelineMediaPreviewViewModel!
-    var context: TimelineMediaPreviewViewModel.Context { viewModel.context }
+    var context: TimelineMediaPreviewViewModel.Context {
+        viewModel.context
+    }
+
     var mediaProvider: MediaProviderMock!
     var photoLibraryManager: PhotoLibraryManagerMock!
     var timelineController: MockTimelineController!

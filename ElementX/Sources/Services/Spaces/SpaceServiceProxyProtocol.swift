@@ -31,7 +31,7 @@ struct SpaceServiceFilter: Identifiable, Equatable {
         descendants = Set(filter.descendants)
     }
     
-    // Same rooms might appear on multiple levels
+    /// Same rooms might appear on multiple levels
     var id: String {
         room.id + "\(level)"
     }

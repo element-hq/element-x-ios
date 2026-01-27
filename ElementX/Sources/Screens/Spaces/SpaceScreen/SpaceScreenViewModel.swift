@@ -270,8 +270,13 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         
     // MARK: - Indicators
     
-    private static var removingIndicatorID: String { "\(Self.self)-Removing" }
-    private static var failureIndicatorID: String { "\(Self.self)-Failure" }
+    private static var removingIndicatorID: String {
+        "\(Self.self)-Removing"
+    }
+
+    private static var failureIndicatorID: String {
+        "\(Self.self)-Failure"
+    }
     
     private func showRemovingIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.removingIndicatorID,

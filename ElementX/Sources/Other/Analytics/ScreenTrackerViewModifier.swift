@@ -15,7 +15,6 @@ struct ScreenTrackerViewModifier: ViewModifier {
     
     let screen: AnalyticsEvent.MobileScreen.ScreenName
     
-    @ViewBuilder
     func body(content: Content) -> some View {
         content
             .onAppear {

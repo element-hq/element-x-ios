@@ -15,5 +15,7 @@ protocol RoomScreenHookProtocol {
 
 struct DefaultRoomScreenHook: RoomScreenHookProtocol {
     func configure(with userSession: UserSessionProtocol?) async { }
-    func update(_ viewState: RoomScreenViewState) -> RoomScreenViewState { viewState }
+    func update(_ viewState: RoomScreenViewState) -> RoomScreenViewState {
+        viewState
+    }
 }

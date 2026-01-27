@@ -31,8 +31,8 @@ struct LongPressWithFeedback: ViewModifier {
             })
     }
     
-    // The gesture's minimum duration doesn't actually invoke the perform block when elapsed (thus
-    // the implementation below) but it does cancel other system gestures e.g. swipe to reply
+    /// The gesture's minimum duration doesn't actually invoke the perform block when elapsed (thus
+    /// the implementation below) but it does cancel other system gestures e.g. swipe to reply
     private func handleLongPress(isPressing: Bool) {
         isLongPressing = isPressing
         
@@ -56,7 +56,6 @@ struct LongPressWithFeedback: ViewModifier {
         }
     }
     
-    @ViewBuilder
     private func mainContent(content: Content) -> some View {
         content
             .compositingGroup() // Apply the shadow to the view as a whole.
@@ -76,7 +75,9 @@ extension View {
 }
 
 struct LongPressWithFeedback_Previews: PreviewProvider, TestablePreview {
-    static var previews: some View { Preview() }
+    static var previews: some View {
+        Preview()
+    }
     
     struct Preview: View {
         private let viewModel = TimelineViewModel.mock
@@ -123,12 +124,14 @@ struct LongPressWithFeedback_Previews: PreviewProvider, TestablePreview {
     }
 }
 
-// Fixes the issue on iOS 18 where LongPress conflicts with the scroll view
-// https://github.com/feedback-assistant/reports/issues/542#issuecomment-2581322968
+/// Fixes the issue on iOS 18 where LongPress conflicts with the scroll view
+/// https://github.com/feedback-assistant/reports/issues/542#issuecomment-2581322968
 private struct LongPressGestureRepresentable: UIGestureRecognizerRepresentable {
     var handle: (UILongPressGestureRecognizer) -> Void
     
-    func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator { .init() }
+    func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator {
+        .init()
+    }
     
     func makeUIGestureRecognizer(context: Context) -> UILongPressGestureRecognizer {
         let gesture = UILongPressGestureRecognizer()

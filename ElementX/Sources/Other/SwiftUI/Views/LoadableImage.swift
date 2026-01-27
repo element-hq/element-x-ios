@@ -135,9 +135,7 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
         ZStack {
             switch (contentLoader.content, shouldRender) {
             case (.image(let image), true):
-                transformer(
-                    AnyView(Image(uiImage: image).resizable())
-                )
+                transformer(AnyView(Image(uiImage: image).resizable()))
             case (.gifData, true):
                 transformer(AnyView(KFAnimatedImage(source: .provider(self))))
             case (.none, _), (_, false):
@@ -170,7 +168,7 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
         }
     }
     
-    // Note: Returns `AnyView` as this is what `transformer` expects.
+    /// Note: Returns `AnyView` as this is what `transformer` expects.
     var blurHashView: AnyView? {
         if let blurhash,
            // Build a small blurhash image so that it's fast
@@ -387,7 +385,10 @@ struct LoadableImage_Previews: PreviewProvider, TestablePreview {
         }
     }
     
-    static func placeholder() -> some View { Color.compound._bgBubbleIncoming }
+    static func placeholder() -> some View {
+        Color.compound._bgBubbleIncoming
+    }
+
     static func transformer(_ view: AnyView) -> some View {
         view.overlay {
             Image(systemSymbol: .playCircleFill)

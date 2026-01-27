@@ -106,10 +106,10 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
             ])
         }
         
-        // Don't use viewWillAppear due to the following warning:
-        // Presenting view controller <QLPreviewController> from detached view controller <HostingController> is not supported,
-        // and may result in incorrect safe area insets and a corrupt root presentation. Make sure <HostingController> is in
-        // the view controller hierarchy before presenting from it. Will become a hard exception in a future release.
+        /// Don't use viewWillAppear due to the following warning:
+        /// Presenting view controller <QLPreviewController> from detached view controller <HostingController> is not supported,
+        /// and may result in incorrect safe area insets and a corrupt root presentation. Make sure <HostingController> is in
+        /// the view controller hierarchy before presenting from it. Will become a hard exception in a future release.
         override func viewDidAppear(_ animated: Bool) {
             super.viewDidAppear(animated)
             
@@ -153,7 +153,10 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
 class MediaPreviewItem: NSObject, QLPreviewItem {
     let file: MediaFileHandleProxy
     
-    var previewItemURL: URL? { file.url }
+    var previewItemURL: URL? {
+        file.url
+    }
+
     let previewItemTitle: String?
 
     init(file: MediaFileHandleProxy, title: String?) {

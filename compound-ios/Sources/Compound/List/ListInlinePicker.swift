@@ -33,7 +33,9 @@ struct ListInlinePicker<SelectedValue: Hashable>: View {
 // MARK: - Previews
 
 struct ListInlinePicker_Previews: PreviewProvider, TestablePreview {
-    static var previews: some View { Preview() }
+    static var previews: some View {
+        Preview()
+    }
     
     struct Preview: View {
         @State var selection = "Item 1"

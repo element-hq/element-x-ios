@@ -13,9 +13,9 @@ enum AudioPlayerError: Error {
     case genericError
 }
 
-// There used to be a MediaPlayerProtocol that AudioPlayerProtocol inherited from.
-// This should be called something else but we already have an AudioPlayerState,
-// AudioPlayerPlaybackState and InternalAudioPlayerState so who knows what to call this.
+/// There used to be a MediaPlayerProtocol that AudioPlayerProtocol inherited from.
+/// This should be called something else but we already have an AudioPlayerState,
+/// AudioPlayerPlaybackState and InternalAudioPlayerState so who knows what to call this.
 enum MediaPlayerState {
     case loading
     case playing

@@ -13,5 +13,7 @@ protocol BugReportHookProtocol {
 }
 
 struct DefaultBugReportHook: BugReportHookProtocol {
-    func update(_ bugReport: BugReport) -> BugReport { bugReport }
+    func update(_ bugReport: BugReport) -> BugReport {
+        bugReport
+    }
 }

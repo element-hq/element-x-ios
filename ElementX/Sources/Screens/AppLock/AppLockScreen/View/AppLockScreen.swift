@@ -78,7 +78,7 @@ struct AppLockScreen: View {
     /// The row of dots showing how many digits have been entered.
     var pinInputField: some View {
         HStack(spacing: 24) {
-            /// The size of each dot within the PIN input field.
+            // The size of each dot within the PIN input field.
             let pinDotSize: CGFloat = 14
             Circle()
                 .fill(context.viewState.numberOfDigitsEntered > 0 ? .compound.iconPrimary : .compound.bgSubtlePrimary)

@@ -114,8 +114,13 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     
     // MARK: - QLPreviewControllerDataSource
     
-    var firstPreviewItemIndex: Int { backwardPadding }
-    var lastPreviewItemIndex: Int { backwardPadding + previewItems.count - 1 }
+    var firstPreviewItemIndex: Int {
+        backwardPadding
+    }
+
+    var lastPreviewItemIndex: Int {
+        backwardPadding + previewItems.count - 1
+    }
     
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
         previewItems.count + backwardPadding + forwardPadding

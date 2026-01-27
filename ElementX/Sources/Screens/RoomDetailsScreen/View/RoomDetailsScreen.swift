@@ -74,7 +74,6 @@ struct RoomDetailsScreen: View {
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
     }
     
-    @ViewBuilder
     private var headerSectionShortcuts: some View {
         HStack(spacing: 8) {
             ForEach(context.viewState.shortcuts, id: \.self) { shortcut in

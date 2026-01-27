@@ -13,5 +13,7 @@ protocol ClientBuilderHookProtocol {
 }
 
 struct DefaultClientBuilderHook: ClientBuilderHookProtocol {
-    func configure(_ builder: ClientBuilder) -> ClientBuilder { builder }
+    func configure(_ builder: ClientBuilder) -> ClientBuilder {
+        builder
+    }
 }

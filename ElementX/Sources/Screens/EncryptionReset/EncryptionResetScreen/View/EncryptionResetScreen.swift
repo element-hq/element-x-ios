@@ -70,7 +70,6 @@ struct EncryptionResetScreen: View {
         .environment(\.backgroundStyle, AnyShapeStyle(.compound.bgSubtleSecondary))
     }
 
-    @ViewBuilder
     private func checkMarkItem(title: String, position: ListPosition, positive: Bool) -> some View {
         VisualListItem(title: title, position: position) {
             CompoundIcon(positive ? \.check : \.info)

@@ -21,7 +21,7 @@ struct CurrentValuePublisher<Output, Failure: Error>: Publisher {
         self.init(CurrentValueSubject(value))
     }
     
-    func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
+    func receive<S: Subscriber>(subscriber: S) where Failure == S.Failure, Output == S.Input {
         subject.receive(subscriber: subscriber)
     }
     

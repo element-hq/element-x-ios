@@ -50,7 +50,10 @@ struct AppLockSetupPINScreenViewState: BindableState {
     }
     
     /// Whether the subtitle is in a warning state or not.
-    var isSubtitleWarning: Bool { mode == .unlock && numberOfUnlockAttempts > 0 }
+    var isSubtitleWarning: Bool {
+        mode == .unlock && numberOfUnlockAttempts > 0
+    }
+
     var subtitle: String {
         guard mode == .unlock else { return L10n.screenAppLockSetupPinContext(InfoPlistReader.main.bundleDisplayName) }
         if !isSubtitleWarning {

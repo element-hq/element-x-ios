@@ -27,9 +27,15 @@ struct AppLockScreenViewState: BindableState {
     var bindings: AppLockScreenViewStateBindings
     
     /// The number of digits the user has entered so far.
-    var numberOfDigitsEntered: Int { bindings.pinCode.count }
+    var numberOfDigitsEntered: Int {
+        bindings.pinCode.count
+    }
+
     /// Whether the subtitle is in a warning state or not.
-    var isSubtitleWarning: Bool { numberOfPINAttempts > 0 }
+    var isSubtitleWarning: Bool {
+        numberOfPINAttempts > 0
+    }
+
     /// The string shown in the screen's subtitle.
     var subtitle: String {
         if !isSubtitleWarning {

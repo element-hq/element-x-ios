@@ -154,7 +154,7 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
 
 // MARK: - Initialisers
 
-// Normal row with a details icon
+/// Normal row with a details icon
 public extension ListRow where CustomContent == EmptyView {
     init(label: ListRowLabel<Icon>,
          details: ListRowDetails<DetailsIcon>? = nil,
@@ -173,7 +173,7 @@ public extension ListRow where CustomContent == EmptyView {
     }
 }
 
-// Normal row without a details icon.
+/// Normal row without a details icon.
 public extension ListRow where DetailsIcon == EmptyView, CustomContent == EmptyView {
     init(label: ListRowLabel<Icon>,
          details: ListRowDetails<DetailsIcon>? = nil,
@@ -192,7 +192,7 @@ public extension ListRow where DetailsIcon == EmptyView, CustomContent == EmptyV
     }
 }
 
-// Custom row without a label or details label.
+/// Custom row without a label or details label.
 public extension ListRow where Icon == EmptyView, DetailsIcon == EmptyView {
     init(kind: Kind<CustomContent, SelectionValue>) {
         label = ListRowLabel()
@@ -449,7 +449,7 @@ public struct ListRow_Previews: PreviewProvider, TestablePreview {
         }
     }
     
-    @ViewBuilder static var othersSection: some View {
+    static var othersSection: some View {
         Section {
             ListRow(kind: .custom {
                 Text("This is a custom row")

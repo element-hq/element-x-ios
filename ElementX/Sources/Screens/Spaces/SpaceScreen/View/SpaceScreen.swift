@@ -12,7 +12,9 @@ import SwiftUI
 struct SpaceScreen: View {
     @Bindable var context: SpaceScreenViewModel.Context
     
-    private var isEditModeActive: Bool { context.viewState.editMode != .inactive }
+    private var isEditModeActive: Bool {
+        context.viewState.editMode != .inactive
+    }
     
     var body: some View {
         ScrollView {

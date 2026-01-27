@@ -13,7 +13,9 @@ struct RoomPermissionsSetting: Identifiable {
     static let allValues: [(title: String, tag: RoomRole)] = [(title: L10n.screenRoomChangePermissionsAdministrators, tag: .administrator),
                                                               (title: L10n.screenRoomChangePermissionsModerators, tag: .moderator),
                                                               (title: L10n.screenRoomChangePermissionsEveryone, tag: .user)]
-    var id: KeyPath<RoomPermissions, Int64> { keyPath }
+    var id: KeyPath<RoomPermissions, Int64> {
+        keyPath
+    }
     
     /// The title of this setting.
     let title: String
@@ -68,16 +70,6 @@ struct RoomPermissionsSetting: Identifiable {
         } else {
             Self.allValues.filter { $0.tag <= ownPowerLevel.role }
         }
-    }
-    
-    init(title: String,
-         value: Int64,
-         ownPowerLevel: RoomPowerLevel,
-         keyPath: KeyPath<RoomPermissions, Int64>) {
-        self.ownPowerLevel = ownPowerLevel
-        self.title = title
-        self.value = value
-        self.keyPath = keyPath
     }
 }
 

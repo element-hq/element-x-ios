@@ -118,7 +118,9 @@ struct PreviewsWrapperView: View {
     private let name: String
     private let previews: [_Preview]
     private(set) var currentIndex = -1
-    var currentPreview: _Preview { previews[currentIndex] }
+    var currentPreview: _Preview {
+        previews[currentIndex]
+    }
     
     private(set) var isDone = false
     

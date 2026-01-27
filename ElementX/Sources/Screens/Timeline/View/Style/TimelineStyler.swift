@@ -49,7 +49,6 @@ struct TimelineStyler<Content: View>: View {
             .animation(.elementDefault, value: adjustedDeliveryStatus)
     }
     
-    @ViewBuilder
     var mainContent: some View {
         TimelineItemBubbledStylerView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, content: content)
     }
@@ -99,14 +98,13 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
 
     static let sentLast: TextRoomTimelineItem = {
         let id = viewModel.state.timelineState.uniqueIDs.last ?? .init(UUID().uuidString)
-        let result = TextRoomTimelineItem(id: .event(uniqueID: id, eventOrTransactionID: .eventID(UUID().uuidString)),
-                                          timestamp: .mock,
-                                          isOutgoing: true,
-                                          isEditable: false,
-                                          canBeRepliedTo: true,
-                                          sender: .test,
-                                          content: .init(body: "Test"))
-        return result
+        return TextRoomTimelineItem(id: .event(uniqueID: id, eventOrTransactionID: .eventID(UUID().uuidString)),
+                                    timestamp: .mock,
+                                    isOutgoing: true,
+                                    isEditable: false,
+                                    canBeRepliedTo: true,
+                                    sender: .test,
+                                    content: .init(body: "Test"))
     }()
 
     static let ltrString = TextRoomTimelineItem(id: .randomEvent,
