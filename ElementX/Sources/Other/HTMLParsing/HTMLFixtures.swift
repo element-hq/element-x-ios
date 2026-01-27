@@ -15,7 +15,7 @@ enum HTMLFixtures: String, CaseIterable {
     case textFormatting
     case groupedBlockQuotes
     case separatedBlockQuotes
-    case codeBlocks
+    case code
     case unorderedList
     case orderedList
     
@@ -74,9 +74,9 @@ enum HTMLFixtures: String, CaseIterable {
             <blockquote>Some other blockquote</blockquote>\
             Text after second blockquote
             """
-        case .codeBlocks:
+        case .code:
             """
-            <pre>A preformatted code block
+            <pre>A pre-formatted code block
             <code>struct ContentView: View {
                 var body: some View {
                     VStack {
@@ -88,11 +88,13 @@ enum HTMLFixtures: String, CaseIterable {
                     .padding()
                 }
             }</code></pre></br>
-            Followed by some plain code blocks</br>
-            <code>Hello, world!</code>
-            <code><b>Hello</b>, <i>world!</i></code>
-            <code><a href="https://www.matrix.org">This link should not be interpreted as such</a></code>
-            <code>And this https://www.matrix.org should be not highlighted</code>
+            Followed by some inline code</br>
+            <p>Plain text <code>code here</code> more text</p>
+            <p><code>Hello, world!</code></p>
+            <p><code><b>Hello</b>, <i>world!</i></code></p>
+            <p><code>&lt;b&gt;Hello&lt;/b&gt;, &lt;i&gt;world!&lt;/i&gt;</code></p>
+            <p><code><a href="https://www.matrix.org">This link should not be interpreted as such</a></code></p>
+            <p><code>And this https://www.matrix.org should be not highlighted</code></p>
             """
         case .unorderedList:
             """

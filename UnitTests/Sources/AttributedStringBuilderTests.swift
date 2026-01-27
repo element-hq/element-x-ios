@@ -32,7 +32,7 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testRenderHTMLStringWithPreCode() {
-        guard let attributedString = attributedStringBuilder.fromHTML(HTMLFixtures.codeBlocks.rawValue) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(HTMLFixtures.code.rawValue) else {
             XCTFail("Could not build the attributed string")
             return
         }
