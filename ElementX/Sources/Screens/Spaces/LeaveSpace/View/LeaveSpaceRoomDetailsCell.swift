@@ -20,8 +20,7 @@ struct LeaveSpaceRoomDetailsCell: View {
     
     private var subtitle: String? {
         guard !room.spaceServiceRoom.isSpace else { return nil }
-        let memberCount = L10n.commonMemberCount(room.spaceServiceRoom.joinedMembersCount)
-        return !room.canLeave ? L10n.screenLeaveSpaceLastAdminInfo(memberCount) : memberCount
+        return L10n.commonMemberCount(room.spaceServiceRoom.joinedMembersCount)
     }
     
     var visibilityIcon: KeyPath<CompoundIcons, Image>? {

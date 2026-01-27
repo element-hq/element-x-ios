@@ -304,6 +304,7 @@
 "common_server_url" = "Server URL";
 "common_settings" = "Settings";
 "common_share_space" = "Share space";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Shared location";
 "common_shared_space" = "Shared space";
 "common_signing_out" = "Signing out";
@@ -611,6 +612,7 @@
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
 "screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
 "screen_leave_space_title_last_admin" = "You are the only admin for %1$@";

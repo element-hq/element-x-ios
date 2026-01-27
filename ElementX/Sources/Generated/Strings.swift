@@ -690,6 +690,8 @@ internal enum L10n {
   internal static var commonSettings: String { return L10n.tr("Localizable", "common_settings") }
   /// Share space
   internal static var commonShareSpace: String { return L10n.tr("Localizable", "common_share_space") }
+  /// New members see history
+  internal static var commonSharedHistory: String { return L10n.tr("Localizable", "common_shared_history") }
   /// Shared location
   internal static var commonSharedLocation: String { return L10n.tr("Localizable", "common_shared_location") }
   /// Shared space
@@ -1940,6 +1942,10 @@ internal enum L10n {
   internal static var screenLeaveSpaceSubtitle: String { return L10n.tr("Localizable", "screen_leave_space_subtitle") }
   /// You need to assign another admin for this space before you can leave.
   internal static var screenLeaveSpaceSubtitleLastAdmin: String { return L10n.tr("Localizable", "screen_leave_space_subtitle_last_admin") }
+  /// You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.
+  internal static func screenLeaveSpaceSubtitleLastOwner(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_leave_space_subtitle_last_owner", String(describing: p1))
+  }
   /// You will not be removed from the following room(s) because you're the only administrator:
   internal static var screenLeaveSpaceSubtitleOnlyLastAdmin: String { return L10n.tr("Localizable", "screen_leave_space_subtitle_only_last_admin") }
   /// Leave %1$@?
