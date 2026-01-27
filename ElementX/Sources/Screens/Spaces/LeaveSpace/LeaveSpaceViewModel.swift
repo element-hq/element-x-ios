@@ -41,6 +41,8 @@ class LeaveSpaceViewModel: LeaveSpaceViewModelType {
             withTransaction(\.disablesAnimations, true) { // The button is adding an unwanted animation.
                 state.leaveHandle.toggleRoom(roomID: roomID)
             }
+        case .transferOwnership:
+            actionsSubject.send(.presentTransferOwnership)
         }
     }
     

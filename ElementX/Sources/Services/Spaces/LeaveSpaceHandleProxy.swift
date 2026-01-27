@@ -13,13 +13,24 @@ final class LeaveSpaceHandleProxy {
     let id: String
     var rooms: [LeaveSpaceRoomDetails]
     
-    enum Mode { case manyRooms, roomsNeedNewOwner, noRooms, spaceNeedsNewOwner }
+    enum Mode: Equatable {
+        case manyRooms
+        case roomsNeedNewOwner
+        case noRooms
+        case spaceNeedsNewOwner(useTransferOwnershipFlow: Bool)
+    }
+    
     let mode: Mode
     
     private let leaveHandle: LeaveSpaceHandleProtocol
     
     var canLeave: Bool {
-        mode != .spaceNeedsNewOwner
+        switch mode {
+        case .spaceNeedsNewOwner:
+            false
+        default:
+            true
+        }
     }
 
     var selectedCount: Int {
@@ -47,7 +58,7 @@ final class LeaveSpaceHandleProxy {
             }
         
         mode = if let space, space.isLastOwner, space.spaceRoom.numJoinedMembers > 1 {
-            .spaceNeedsNewOwner
+            .spaceNeedsNewOwner(useTransferOwnershipFlow: space.areCreatorsPrivileged)
         } else if self.rooms.isEmpty {
             .noRooms
         } else if self.rooms.count(where: { $0.canLeave }) == 0 {

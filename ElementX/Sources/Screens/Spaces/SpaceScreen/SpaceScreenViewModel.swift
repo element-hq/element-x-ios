@@ -261,6 +261,12 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             case .didLeaveSpace:
                 state.bindings.leaveSpaceViewModel = nil
                 actionsSubject.send(.leftSpace)
+            case .presentTransferOwnership:
+                guard let roomProxy = state.roomProxy else {
+                    fatalError("The space screen should always have a room proxy")
+                }
+                state.bindings.leaveSpaceViewModel = nil
+                actionsSubject.send(.presentTransferOwnership(roomProxy: roomProxy))
             }
         }
         .store(in: &cancellables)

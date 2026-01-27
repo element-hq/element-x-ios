@@ -93,15 +93,15 @@ struct RoomChangeRolesScreen: View {
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.actionSave) {
+            ToolbarButton(role: .save) {
                 context.send(viewAction: .save)
             }
             .disabled(!context.viewState.hasChanges)
         }
         
-        if context.viewState.hasChanges {
+        if context.viewState.mode == .owner {
             ToolbarItem(placement: .cancellationAction) {
-                Button(L10n.actionCancel) {
+                ToolbarButton(role: .cancel) {
                     context.send(viewAction: .cancel)
                 }
             }
