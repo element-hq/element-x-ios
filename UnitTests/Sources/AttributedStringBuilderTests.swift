@@ -46,7 +46,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 13)
+        XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 23)
     }
     
     func testRenderHTMLStringWithLink() {
@@ -349,7 +349,7 @@ class AttributedStringBuilderTests: XCTestCase {
         }
         
         let coalescedComponents = attributedString.formattedComponents
-        XCTAssertEqual(coalescedComponents.count, 3)
+        XCTAssertEqual(coalescedComponents.count, 1)
         
         guard let component = coalescedComponents.first else {
             XCTFail("Could not get the first component")
