@@ -168,7 +168,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             if case .room(roomID) = stateMachine.state.detailState {
                 roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             } else {
-                stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .transferOwnership))
+                stateMachine.processEvent(.presentTransferOwnershipScreen(roomID: roomID))
             }
         case .accountProvisioningLink, .settings, .chatBackupSettings, .call, .genericCallLink:
             break // These routes cannot be handled.
@@ -249,6 +249,11 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomList, .presentDeclineAndBlockScreen(let userID, let roomID), .declineAndBlockUserScreen):
                 presentDeclineAndBlockScreen(userID: userID, roomID: roomID)
             case (.declineAndBlockUserScreen, .dismissedDeclineAndBlockScreen, .roomList):
+                break
+                
+            case (.roomList, .presentTransferOwnershipScreen(let roomID), .transferOwnershipScreen):
+                Task { await self.presentTransferOwnershipScreen(roomID: roomID) }
+            case (.transferOwnershipScreen, .dismissedTransferOwnershipScreen, .roomList):
                 break
                 
             case (.roomList(let roomListSelectedRoomID), .showShareExtensionRoomList, .shareExtensionRoomList(let sharePayload)):
@@ -466,6 +471,34 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         stackCoordinator.setRootCoordinator(coordinator)
         navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.processEvent(.dismissedDeclineAndBlockScreen)
+        }
+    }
+    
+    private func presentTransferOwnershipScreen(roomID: String) async {
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            return
+        }
+        await roomProxy.subscribeForUpdates()
+        
+        let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: .owner,
+                                                                    roomProxy: roomProxy,
+                                                                    mediaProvider: userSession.mediaProvider,
+                                                                    userIndicatorController: flowParameters.userIndicatorController,
+                                                                    analytics: flowParameters.analytics)
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .complete:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedTransferOwnershipScreen)
         }
     }
     

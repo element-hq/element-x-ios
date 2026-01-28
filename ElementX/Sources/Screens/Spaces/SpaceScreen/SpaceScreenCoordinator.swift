@@ -79,7 +79,7 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.addExistingChildren)
             case .displayCreateChildRoomFlow(let space):
                 actionsSubject.send(.displayCreateChildRoomFlow(space: space))
-            case .presentTransferOwnership(roomProxy: let roomProxy):
+            case .presentTransferOwnership(let roomProxy):
                 actionsSubject.send(.displayTransferOwnership(roomProxy: roomProxy))
             }
         }

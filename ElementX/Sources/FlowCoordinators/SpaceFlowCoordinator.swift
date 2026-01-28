@@ -69,9 +69,11 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case createChildRoomFlow
         
         case leftSpace
+        
+        case transferOwnership
     }
     
-    enum Event: EventType {
+    enum Event: EventType, Equatable, Hashable {
         /// The flow is being started.
         case start
         /// The flow is being started for an unjoined space.
@@ -108,6 +110,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         
         case startCreateChildRoomFlow
         case stopCreateChildRoomFlow
+        
+        case presentTransferOwnership
+        case dismissedTransferOwnership
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -179,6 +184,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case .createChildRoomFlow:
             navigationStackCoordinator.setSheetCoordinator(nil)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
+        case .transferOwnership:
+            navigationStackCoordinator.setSheetCoordinator(nil)
+            clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         }
     }
     
@@ -205,6 +213,12 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             self?.presentSpaceAddRoomsScreen()
         }
         stateMachine.addRoutes(event: .dismissedAddRooms, transitions: [.addingRooms => .space])
+        
+        stateMachine.addRoutes(event: .presentTransferOwnership, transitions: [.space => .transferOwnership]) { [weak self] context in
+            guard let self, let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
+            self.presentTransferOwnershipScreen(roomProxy: roomProxy)
+        }
+        stateMachine.addRoutes(event: .dismissedTransferOwnership, transitions: [.transferOwnership => .space])
         
         stateMachine.addRouteMapping { event, fromState, userInfo in
             guard event == .startChildFlow else { return nil }
@@ -350,7 +364,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 case .displayCreateChildRoomFlow(let space):
                     stateMachine.tryEvent(.startCreateChildRoomFlow, userInfo: space)
                 case .displayTransferOwnership(let roomProxy):
-                    presentTransferOwnershipScreen(roomProxy: roomProxy)
+                    stateMachine.tryEvent(.presentTransferOwnership, userInfo: roomProxy)
                 }
             }
             .store(in: &cancellables)
@@ -450,16 +464,17 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
-            guard let self else { return }
             switch action {
             case .complete:
-                navigationStackCoordinator.setSheetCoordinator(nil)
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)
         
         stackCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(stackCoordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedTransferOwnership)
+        }
     }
     
     // MARK: - Other flows

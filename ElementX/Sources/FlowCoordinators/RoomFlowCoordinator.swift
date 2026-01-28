@@ -214,7 +214,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     await storeAndSubscribeToRoomProxy(roomProxy)
                 }
                 
-                presentTransferOwnershipScreen()
+                stateMachine.tryEvent(.presentTransferOwnershipScreen)
             }
         }
     }
@@ -274,7 +274,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         stackCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(stackCoordinator, animated: true)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedTransferOwnershipScreen)
+        }
     }
     
     private func handleRoomRoute(roomID: String, via: [String], presentationAction: PresentationAction? = nil, animated: Bool) async {
@@ -531,6 +533,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (_, .presentInviteUsersScreen, .inviteUsersScreen):
                 presentInviteUsersScreen()
+                
+            case (_, .presentTransferOwnershipScreen, .transferOwnershipScreen):
+                presentTransferOwnershipScreen()
                     
             default:
                 break
@@ -937,7 +942,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .presentReportRoomScreen:
                 stateMachine.tryEvent(.presentReportRoomScreen)
             case .transferOwnership:
-                presentTransferOwnershipScreen()
+                stateMachine.tryEvent(.presentTransferOwnershipScreen)
             }
         }
         .store(in: &cancellables)

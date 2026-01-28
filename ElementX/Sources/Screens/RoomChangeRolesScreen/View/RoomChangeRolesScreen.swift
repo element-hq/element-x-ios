@@ -99,7 +99,7 @@ struct RoomChangeRolesScreen: View {
             .disabled(!context.viewState.hasChanges)
         }
         
-        if context.viewState.mode == .owner {
+        if context.viewState.mode == .owner || context.viewState.hasChanges {
             ToolbarItem(placement: .cancellationAction) {
                 ToolbarButton(role: .cancel) {
                     context.send(viewAction: .cancel)

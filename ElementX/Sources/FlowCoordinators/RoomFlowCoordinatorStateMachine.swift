@@ -83,6 +83,7 @@ extension RoomFlowCoordinator {
         case manageAuthorizedSpacesScreen(previousState: State)
         case reportRoom(previousState: State)
         case declineAndBlockScreen
+        case transferOwnershipScreen(previousState: State)
         
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)
@@ -184,6 +185,9 @@ extension RoomFlowCoordinator {
         
         case presentDeclineAndBlockScreen(userID: String)
         case dismissDeclineAndBlockScreen
+        
+        case presentTransferOwnershipScreen
+        case dismissedTransferOwnershipScreen
         
         case startMembersFlow(entryPoint: RoomMembersFlowCoordinatorEntryPoint)
         case stopMembersFlow
@@ -391,6 +395,11 @@ extension RoomFlowCoordinator {
             case (_, .presentInviteUsersScreen):
                 return .inviteUsersScreen(previousState: fromState)
             case (.inviteUsersScreen(let previousState), .dismissInviteUsersScreen):
+                return previousState
+                
+            case (_, .presentTransferOwnershipScreen):
+                return .transferOwnershipScreen(previousState: fromState)
+            case (.transferOwnershipScreen(let previousState), .dismissedTransferOwnershipScreen):
                 return previousState
             
             default:

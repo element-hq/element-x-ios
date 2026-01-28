@@ -35,6 +35,8 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case membersFlow
         
         case manageAuthorizedSpacesScreen
+
+        case transferOwnership
     }
     
     enum Event: EventType {
@@ -60,6 +62,9 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         
         case presentManageAuthorizedSpacesScreen
         case dismissedManageAuthorizedSpacesScreen
+
+        case presentTransferOwnership
+        case dismissedTransferOwnership
     }
     
     private let roomProxy: JoinedRoomProxyProtocol
@@ -135,6 +140,11 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                 return .manageAuthorizedSpacesScreen
             case (.manageAuthorizedSpacesScreen, .dismissedManageAuthorizedSpacesScreen):
                 return .securityAndPrivacy
+
+            case (.spaceSettings, .presentTransferOwnership):
+                return .transferOwnership
+            case (.transferOwnership, .dismissedTransferOwnership):
+                return .spaceSettings
                 
             case (.spaceSettings, .startMembersListFlow):
                 return .membersFlow
@@ -181,7 +191,12 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                 presentManageAuthorizedSpacesScreen(selection: selection)
             case (.manageAuthorizedSpacesScreen, .dismissedManageAuthorizedSpacesScreen, .securityAndPrivacy):
                 break
-                
+
+            case (.spaceSettings, .presentTransferOwnership, .transferOwnership):
+                presentTransferOwnershipScreen()
+            case (.transferOwnership, .dismissedTransferOwnership, .spaceSettings):
+                break
+
             case (.spaceSettings, .startMembersListFlow, .membersFlow):
                 startMembersListFlow()
             case (.membersFlow, .stopMembersListFlow, .spaceSettings):
@@ -223,7 +238,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                 leftRoom = true
                 navigationStackCoordinator.pop()
             case .transferOwnership:
-                presentTransferOwnershipScreen()
+                stateMachine.tryEvent(.presentTransferOwnership)
             case .presentRecipientDetails, .presentNotificationSettingsScreen, .presentReportRoomScreen,
                  .presentInviteUsersScreen, .presentPollsHistory, .presentCall,
                  .presentPinnedEventsTimeline, .presentMediaEventsTimeline, .presentKnockingRequestsListScreen:
@@ -336,16 +351,17 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
-            guard let self else { return }
             switch action {
             case .complete:
-                navigationStackCoordinator.setSheetCoordinator(nil)
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)
         
         stackCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(stackCoordinator, animated: true)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedTransferOwnership)
+        }
     }
     
     // MARK: - Other flows
