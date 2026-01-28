@@ -3,13 +3,11 @@
 ### What's Changed
 
 ✨ Features
-* Space filters by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4977
 * Horizontally scrollable code blocks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5001
 
 🙌 Improvements
 * Improved Create Room snapshots by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4962
 * Use more Liquid Glass in the room/space screen toolbars by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4965
-* Remove "history may be shared banner" by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4999
 
 🐛 Bugfixes
 * Set a custom user agent on the Element Call web view by @subnix in https://github.com/element-hq/element-x-ios/pull/4973
@@ -30,12 +28,14 @@
 * Create space flow by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4957
 * Add the initial implementation for managing spaces. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4963
 * Display a badge for messages decrypted using shared keys. by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4937
+* Space filters by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4977
 * Add space management to the flows. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4978
 * Replace a debugging visibility check with the real condition. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4982
 * Add the empty state to SpaceScreen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4985
 * Create room with space selection by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4972
 * Create a room in a selected space by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4984
 * Make sure the selected/available rooms are updated when adding space children fails part way through. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4997
+* Remove "history may be shared banner" by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4999
 
 Others
 * Tidy up the naming of spaces a bit more. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4955
