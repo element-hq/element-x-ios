@@ -87,6 +87,12 @@ extension SDKListener: SendQueueRoomErrorListener where T == (String, ClientErro
     }
 }
 
+extension SDKListener: SendQueueRoomUpdateListener where T == (String, RoomSendQueueUpdate) {
+    func onUpdate(roomId: String, update: RoomSendQueueUpdate) {
+        onUpdateClosure((roomId, update))
+    }
+}
+
 // MARK: SecureBackupController
 
 extension SDKListener: BackupStateListener where T == BackupState {
