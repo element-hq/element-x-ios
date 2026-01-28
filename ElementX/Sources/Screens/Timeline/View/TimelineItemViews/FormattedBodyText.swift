@@ -63,14 +63,10 @@ struct FormattedBodyText: View {
     }
     
     var body: some View {
-        mainContent
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text(attributedString))
-    }
-    
-    var mainContent: some View {
         layout
             .tint(.compound.textLinkExternal)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(attributedString))
     }
     
     /// The attributed components laid out for the bubbles timeline style.
@@ -83,39 +79,16 @@ struct FormattedBodyText: View {
                 } else {
                     switch component.type {
                     case .blockquote:
-                        // The rendered blockquote with a greedy width. The custom layout prevents the
-                        // infinite width from increasing the overall width of the view.
-                        MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
-                            .fixedSize(horizontal: false, vertical: true)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, 12.0)
-                            .overlay(alignment: .leading) {
-                                // User an overlay here so that the rectangle's infinite height doesn't take priority
-                                Capsule()
-                                    .frame(width: 2.0)
-                                    .padding(.leading, 5.0)
-                                    .foregroundColor(.compound.textSecondary)
-                                    .padding(.vertical, 2)
-                            }
+                        BlockquoteView(attributedString: component.attributedString, mode: .rendering)
                             .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
                     case .codeBlock:
-                        // The rendered codeblock with a greedy width (due to the scroll view). The custom
-                        // layout prevents the scroll view from increasing the overall width of the view.
-                        ScrollView(.horizontal) {
-                            MessageText(attributedString: component.attributedString)
-                                .padding([.horizontal, .top], 4)
-                                .padding(.bottom, 8)
-                        }
-                        .background(.compound._bgCodeBlock)
-                        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
-                        .scrollIndicatorsFlash(onAppear: true)
-                        .padding(.horizontal, 4)
-                        .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
-                        .contextMenu {
-                            Button(L10n.actionCopy) {
-                                UIPasteboard.general.string = component.attributedString.string
+                        CodeBlockView(attributedString: component.attributedString, mode: .rendering)
+                            .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
+                            .contextMenu {
+                                Button(L10n.actionCopy) {
+                                    UIPasteboard.general.string = component.attributedString.string
+                                }
                             }
-                        }
                     case .plainText:
                         MessageText(attributedString: component.attributedString)
                             .padding(.horizontal, 4)
@@ -125,18 +98,16 @@ struct FormattedBodyText: View {
                 }
             }
             
-            // Make a second iteration through the components adding fixed width blockquotes/codeblocks
-            // which are used for layout calculations but won't be rendered.
+            // Make a second iteration through the components adding naturally sized versions of the
+            // block quotes and code blocks which are used for layout calculations but won't be rendered.
             ForEach(attributedComponents) { component in
                 switch component.type {
                 case .blockquote:
-                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.leading, 12.0)
+                    BlockquoteView(attributedString: component.attributedString, mode: .layout)
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
                         .hidden()
                 case .codeBlock:
-                    HiddenCodeBlockScrollView(attributedString: component.attributedString)
+                    CodeBlockView(attributedString: component.attributedString, mode: .layout)
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
                         .hidden()
                 case .plainText:
@@ -146,33 +117,68 @@ struct FormattedBodyText: View {
         }
     }
     
-    private var blockquoteAttributes: AttributeContainer {
-        // The paragraph style removes the block style paragraph that the parser adds by default
-        // Set directly in the constructor to avoid `Conformance to 'Sendable'` warnings
-        var container = AttributeContainer([.paragraphStyle: NSParagraphStyle.default])
-        // Sadly setting SwiftUI fonts do not work so we would need UIFont equivalents for compound, this one is bodyMD
-        container.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        container.foregroundColor = UIColor.compound.textSecondary
+    // MARK: - Component Views
+    
+    enum ViewMode { case layout, rendering }
+    
+    /// The view used to render a blockquote component. It can be configured in one of 2 modes:
+    /// - `.layout`: The view is given it's natural size to be used for layout calculations.
+    /// - `.rendering`: The view has a greedy width that, in combination with the custom layout,
+    /// will fill any available space, whilst remaining constrained by the layout's calculated width.
+    struct BlockquoteView: View {
+        let attributedString: AttributedString
+        let mode: ViewMode
         
-        return container
+        var body: some View {
+            MessageText(attributedString: attributedString.mergingAttributes(blockquoteAttributes))
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: mode == .rendering ? .infinity : nil, alignment: .leading)
+                .padding(.leading, 12.0)
+                .overlay(alignment: .leading) {
+                    // Use an overlay here so that the rectangle's infinite height doesn't take priority
+                    if mode == .rendering {
+                        Capsule()
+                            .frame(width: 2.0)
+                            .padding(.leading, 5.0)
+                            .foregroundColor(.compound.textSecondary)
+                            .padding(.vertical, 2)
+                    }
+                }
+        }
+        
+        private var blockquoteAttributes: AttributeContainer {
+            // The paragraph style removes the block style paragraph that the parser adds by default
+            // Set directly in the constructor to avoid `Conformance to 'Sendable'` warnings
+            var container = AttributeContainer([.paragraphStyle: NSParagraphStyle.default])
+            // Sadly setting SwiftUI fonts do not work so we would need UIFont equivalents for compound, this one is bodyMD
+            container.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            container.foregroundColor = UIColor.compound.textSecondary
+            
+            return container
+        }
     }
     
-    /// A self-sizing version of the code block component's view, necessary
-    /// because unlike quote bubbles, code blocks don't wrap when the space
-    /// is constrained.
-    private struct HiddenCodeBlockScrollView: View {
+    /// The view used to render a code block component. It can be configured in one of 2 modes:
+    /// - `.layout`: The view is given it's natural size to be used for layout calculations.
+    /// - `.rendering`: The view has a greedy width that, in combination with the custom layout,
+    /// will fill any available space, whilst remaining constrained by the layout's calculated width.
+    private struct CodeBlockView: View {
         let attributedString: AttributedString
+        let mode: ViewMode
         
-        @State private var maxSize: CGSize = .zero
+        @State private var maxWidth: CGFloat = .zero
         
         var body: some View {
             ScrollView(.horizontal) {
                 MessageText(attributedString: attributedString)
                     .padding([.horizontal, .top], 4)
                     .padding(.bottom, 8)
-                    .onGeometryChange(for: CGSize.self) { $0.size } action: { maxSize = $0 }
+                    .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { maxWidth = $0 }
             }
-            .frame(maxWidth: maxSize.width)
+            .frame(maxWidth: mode == .layout ? maxWidth : nil)
+            .background(.compound._bgCodeBlock)
+            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
+            .scrollIndicatorsFlash(onAppear: true)
             .padding(.horizontal, 4)
         }
     }
