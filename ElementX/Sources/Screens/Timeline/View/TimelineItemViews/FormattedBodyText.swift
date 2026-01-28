@@ -80,10 +80,10 @@ struct FormattedBodyText: View {
                     switch component.type {
                     case .blockquote:
                         BlockquoteView(attributedString: component.attributedString, mode: .rendering)
-                            .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
+                            .timelineBubbleLayoutPriority(.visibleGreedyComponent)
                     case .codeBlock:
                         CodeBlockView(attributedString: component.attributedString, mode: .rendering)
-                            .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
+                            .timelineBubbleLayoutPriority(.visibleGreedyComponent)
                             .contextMenu {
                                 Button(L10n.actionCopy) {
                                     UIPasteboard.general.string = component.attributedString.string
@@ -93,7 +93,7 @@ struct FormattedBodyText: View {
                         MessageText(attributedString: component.attributedString)
                             .padding(.horizontal, 4)
                             .fixedSize(horizontal: false, vertical: true)
-                            .layoutPriority(TimelineBubbleLayout.Priority.nonGreedyComponent)
+                            .timelineBubbleLayoutPriority(.nonGreedyComponent)
                     }
                 }
             }
@@ -104,11 +104,11 @@ struct FormattedBodyText: View {
                 switch component.type {
                 case .blockquote:
                     BlockquoteView(attributedString: component.attributedString, mode: .layout)
-                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
+                        .timelineBubbleLayoutPriority(.hiddenGreedyComponent)
                         .hidden()
                 case .codeBlock:
                     CodeBlockView(attributedString: component.attributedString, mode: .layout)
-                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
+                        .timelineBubbleLayoutPriority(.hiddenGreedyComponent)
                         .hidden()
                 case .plainText:
                     EmptyView()
