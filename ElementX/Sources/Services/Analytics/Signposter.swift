@@ -6,140 +6,106 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import OSLog
+import CryptoKit
 import Sentry
 
-/// A simple wrapper around OSSignposter for easy performance testing.
+/// A simple wrapper around Sentry for easy instrumentation
 class Signposter {
-    /// The underlying signposter.
-    private let signposter = OSSignposter(subsystem: subsystem, category: category)
-    /// A logger instance to capture any errors.
-    private let logger = Logger(subsystem: subsystem, category: category)
+    private var transactions = [TransactionName: any Sentry.Span]()
     
-    /// Signpost name constants.
-    enum Name {
-        static let login: StaticString = "Login"
-        static let firstSync: StaticString = "FirstSync"
-        static let firstRooms: StaticString = "FirstRooms"
-        static let roomFlow: StaticString = "RoomFlow"
+    private var globalTags = [TagName: String]()
+    
+    enum TransactionName: Hashable {
+        case cachedRoomList
+        case upToDateRoomList
+        case notificationToMessage
+        case openRoom
+        case sendMessage(uuid: String)
         
-        static let appStartup = "AppStartup"
-        static let appStarted = "AppStarted"
+        var id: String {
+            switch self {
+            case .cachedRoomList:
+                "Cached room list"
+            case .upToDateRoomList:
+                "Up-to-date room list"
+            case .notificationToMessage:
+                "Notification to message"
+            case .openRoom:
+                "Open a room"
+            case .sendMessage:
+                "Send a message"
+            }
+        }
+    }
+    
+    enum SpanName: String {
+        case timelineLoad = "Timeline load"
+    }
+    
+    struct Span {
+        fileprivate let innerSpan: Sentry.Span
         
-        static let homeserver = "homeserver"
+        func finish() {
+            innerSpan.finish()
+        }
     }
     
-    static let subsystem = "ElementX"
-    static let category = "PerformanceTests"
-    
-    // MARK: - App Startup
-    
-    private var appStartupTransaction: Span?
-    
-    /// We have a manual start method because we need to configure the ServiceLocator *before* we configure
-    /// Sentry but this class is created in the AnalyticsService and so spans and transactions are dropped
-    /// until Sentry has been configured. Therefore doing this in the init doesn't work.
-    func start() {
-        appStartupTransaction = SentrySDK.startTransaction(name: Name.appStartup, operation: Name.appStarted)
+    enum TagName: String {
+        case homeserver = "Homeserver"
     }
     
-    // MARK: - Login
+    // MARK: - Transactions
     
-    private var loginState: OSSignpostIntervalState?
-    private var loginTransaction: Span?
-    private var loginSpan: Span?
-    
-    func beginLogin() {
-        loginState = signposter.beginInterval(Name.login)
-        loginTransaction = SentrySDK.startTransaction(name: "\(Name.login)", operation: "\(Name.login)")
-        loginSpan = appStartupTransaction?.startChild(operation: "\(Name.login)", description: "\(Name.login)")
+    func startTransaction(_ transactionName: TransactionName, operation: String = "ux", tags: [TagName: String] = [:]) {
+        let span = SentrySDK.startTransaction(name: transactionName.id, operation: operation)
+        
+        tags
+            .merging(globalTags) { tagValue, _ in
+                tagValue
+            }
+            .forEach { (key: TagName, value: String) in
+                span.setTag(value: value, key: key.rawValue)
+            }
+        
+        transactions[transactionName] = span
     }
     
-    func endLogin() {
-        guard let loginState else {
-            logger.error("Missing login state.")
-            return
+    func finishTransaction(_ transactionName: TransactionName) {
+        transactions[transactionName]?.finish()
+        transactions[transactionName] = nil
+    }
+    
+    // MARK: - Spans
+    
+    func addSpan(_ spanName: SpanName, toTransaction transactionName: TransactionName) -> Span? {
+        guard let transaction = transactions[transactionName] else {
+            MXLog.error("Transaction not started or already finished")
+            return nil
         }
         
-        signposter.endInterval(Name.login, loginState)
-        loginTransaction?.finish()
-        loginSpan?.finish()
-        
-        self.loginState = nil
-        loginTransaction = nil
-        loginSpan = nil
+        return Span(innerSpan: transaction.startChild(operation: spanName.rawValue))
     }
     
-    // MARK: - FirstSync
+    // MARK: - Tags
     
-    private var firstSyncState: OSSignpostIntervalState?
-    private var firstSyncTransaction: Span?
-    private var firstSyncSpan: Span?
-    
-    func beginFirstSync(serverName: String) {
-        appStartupTransaction?.setTag(value: serverName, key: Name.homeserver)
-        
-        firstSyncState = signposter.beginInterval(Name.firstSync)
-        
-        firstSyncTransaction = SentrySDK.startTransaction(name: "\(Name.firstSync)", operation: "\(Name.firstSync)")
-        firstSyncTransaction?.setTag(value: serverName, key: Name.homeserver)
-        
-        firstSyncSpan = appStartupTransaction?.startChild(operation: "\(Name.firstSync)", description: "\(Name.firstSync)")
-    }
-    
-    func endFirstSync() {
-        guard let firstSyncState else { return }
-        
-        signposter.endInterval(Name.firstSync, firstSyncState)
-        firstSyncTransaction?.finish()
-        firstSyncSpan?.finish()
-        
-        self.firstSyncState = nil
-        firstSyncTransaction = nil
-        firstSyncSpan = nil
-    }
-    
-    // MARK: - FirstRooms
-    
-    private var firstRoomsState: OSSignpostIntervalState?
-    private var firstRoomsTransaction: Span?
-    private var firstRoomsSpan: Span?
-    
-    func beginFirstRooms() {
-        firstRoomsState = signposter.beginInterval(Name.firstRooms)
-        firstRoomsTransaction = SentrySDK.startTransaction(name: "\(Name.firstRooms)", operation: "\(Name.firstRooms)")
-        firstRoomsSpan = appStartupTransaction?.startChild(operation: "\(Name.firstRooms)", description: "\(Name.firstRooms)")
-    }
-    
-    func endFirstRooms() {
-        defer {
-            appStartupTransaction?.finish()
+    func addGlobalTag(_ tagName: TagName, value: String) {
+        let value = switch tagName {
+        case .homeserver:
+            sha512(value)
         }
         
-        guard let firstRoomsState else { return }
-        
-        signposter.endInterval(Name.firstRooms, firstRoomsState)
-        firstRoomsTransaction?.finish()
-        firstRoomsSpan?.finish()
-        
-        self.firstRoomsState = nil
-        firstRoomsTransaction = nil
-        firstRoomsSpan = nil
+        globalTags[tagName] = value
     }
     
-    // MARK: - Room Flow
-    
-    private var roomFlowState: OSSignpostIntervalState?
-    
-    func beginRoomFlow(_ name: String) {
-        roomFlowState = signposter.beginInterval(Name.roomFlow)
-        signposter.emitEvent("RoomName", "\(name, privacy: .auto(mask: .hash))")
+    func removeGlobalTag(_ tagName: TagName) {
+        globalTags[tagName] = nil
     }
     
-    func endRoomFlow() {
-        guard let roomFlowState else { return }
-        
-        signposter.endInterval(Name.roomFlow, roomFlowState)
-        self.roomFlowState = nil
+    // MARK: - Private
+    
+    func sha512(_ string: String) -> String {
+        let data = Data(string.utf8)
+        let hash = SHA512.hash(data: data)
+        return hash.map { String(format: "%02x", $0) }.joined()
     }
 }

@@ -76,6 +76,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         appMediator = AppMediator(windowManager: windowManager, networkMonitor: networkMonitor)
         
         let appSettings = appHooks.appSettingsHook.configure(AppSettings())
+        ServiceLocator.shared.register(appSettings: appSettings)
         
         targetConfiguration = Target.mainApp.configure(logLevel: appSettings.logLevel,
                                                        traceLogPacks: appSettings.traceLogPacks,
@@ -95,7 +96,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         self.appDelegate = appDelegate
         self.appSettings = appSettings
         self.appHooks = appHooks
+        
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
+        
+        ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
+        
+        let posthogAnalyticsClient = PostHogAnalyticsClient()
+        posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
+        let analyticsService = AnalyticsService(client: posthogAnalyticsClient, appSettings: appSettings)
+        ServiceLocator.shared.register(analytics: analyticsService)
         
         elementCallService = ElementCallService()
         
@@ -107,7 +116,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
         let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-        userSessionStore = UserSessionStore(keychainController: keychainController, appSettings: appSettings, appHooks: appHooks, networkMonitor: networkMonitor)
+        userSessionStore = UserSessionStore(keychainController: keychainController,
+                                            appSettings: appSettings,
+                                            analyticsService: analyticsService,
+                                            appHooks: appHooks,
+                                            networkMonitor: networkMonitor)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -123,11 +136,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                             sdkGitSHA: sdkGitSha(),
                                             maxUploadSize: appSettings.bugReportMaxUploadSize,
                                             appHooks: appHooks)
-        Self.setupServiceLocator(appSettings: appSettings, appHooks: appHooks)
+        
         Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings)
         
-        ServiceLocator.shared.analytics.signpost.start()
-        ServiceLocator.shared.analytics.startIfEnabled()
+        analyticsService.startIfEnabled()
         
         windowManager.delegate = self
         
@@ -356,6 +368,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         } else if appSettings.threadsEnabled, let threadRootEventID = content.threadRootEventID {
             handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID))
         } else if let eventID {
+            // Only track main timeline event deeplinking
+            ServiceLocator.shared.analytics.signpost.startTransaction(.notificationToMessage)
             handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []))
         } else {
             handleAppRoute(.room(roomID: roomID, via: []))
@@ -379,16 +393,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     // MARK: - Private
-    
-    private static func setupServiceLocator(appSettings: AppSettings, appHooks: AppHooks) {
-        ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
-        ServiceLocator.shared.register(appSettings: appSettings)
-        
-        let posthogAnalyticsClient = PostHogAnalyticsClient()
-        posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
-        ServiceLocator.shared.register(analytics: AnalyticsService(client: posthogAnalyticsClient,
-                                                                   appSettings: appSettings))
-    }
     
     /// Perform any required migrations for the app to function correctly.
     private func performMigrationsIfNecessary(from oldVersion: Version, to newVersion: Version) {
@@ -691,6 +695,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func setupUserSession(isNewLogin: Bool) {
         guard let userSession else {
             fatalError("User session not setup")
+        }
+        
+        if let serverName = userSession.clientProxy.userIDServerName {
+            ServiceLocator.shared.analytics.signpost.addGlobalTag(.homeserver, value: serverName)
+        }
+        
+        if !isNewLogin {
+            ServiceLocator.shared.analytics.signpost.startTransaction(.cachedRoomList)
         }
         
         let flowParameters = CommonFlowParameters(userSession: userSession,
@@ -1061,9 +1073,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func startSync() {
         guard let userSession else { return }
         
-        let serverName = String(userSession.clientProxy.userIDServerName ?? "Unknown")
-        
-        ServiceLocator.shared.analytics.signpost.beginFirstSync(serverName: serverName)
+        ServiceLocator.shared.analytics.signpost.startTransaction(.upToDateRoomList)
+    
         userSession.clientProxy.startSync()
         
         guard clientProxyObserver == nil else {
@@ -1072,6 +1083,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         clientProxyObserver = userSession.clientProxy
             .loadingStatePublisher
+            .dropFirst()
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
@@ -1084,7 +1096,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                         ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
                     }
                 case .notLoading:
-                    ServiceLocator.shared.analytics.signpost.endFirstSync()
+                    ServiceLocator.shared.analytics.signpost.finishTransaction(.upToDateRoomList)
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(toastIdentifier)
                 }
             }

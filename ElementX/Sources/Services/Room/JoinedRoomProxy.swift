@@ -15,6 +15,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let roomListService: RoomListServiceProtocol
     private let room: RoomProtocol
     private let appSettings: AppSettings
+    private let analyticsService: AnalyticsService
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
@@ -76,13 +77,16 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     init(roomListService: RoomListServiceProtocol,
          room: RoomProtocol,
-         appSettings: AppSettings) async throws {
+         appSettings: AppSettings,
+         analyticsService: AnalyticsService) async throws {
         self.roomListService = roomListService
         self.room = room
         self.appSettings = appSettings
+        self.analyticsService = analyticsService
         
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))
         
+        let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .openRoom)
         timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: appSettings.threadsEnabled),
                                                                                                          filter: .eventTypeFilter(filter: excludedEventsFilter),
                                                                                                          internalIdPrefix: nil,
@@ -90,6 +94,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                                          trackReadReceipts: .messageLikeEvents,
                                                                                                          reportUtds: true)),
                                            kind: .live)
+        openRoomSpan?.finish()
         
         Task {
             await updateMembers()
@@ -146,6 +151,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
+            let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .notificationToMessage)
             let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .event(eventId: eventID,
                                                                                                           numContextEvents: numberOfEvents,
                                                                                                           hideThreadedEvents: appSettings.threadsEnabled),
@@ -154,6 +160,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             dateDividerMode: .daily,
                                                                                             trackReadReceipts: .disabled,
                                                                                             reportUtds: true))
+            openRoomSpan?.finish()
             
             return .success(TimelineProxy(timeline: sdkTimeline, kind: .detached))
         } catch let error as FocusEventError {
