@@ -949,8 +949,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
         options.dsn = bugReportSentryURL.absoluteString
         
-        if AppSettings.isDevelopmentBuild {
-            options.environment = "development"
+        // Matches android, at least for now.
+        switch AppSettings.appBuildType {
+        case .debug:
+            options.environment = "DEBUG"
+        case .nightly:
+            options.environment = "NIGHTLY"
+        case .release:
+            options.environment = "RELEASE"
         }
         
         // Sentry swizzling shows up quite often as the heaviest stack trace when profiling
@@ -975,15 +981,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         // Uniform sample rate: 1.0 captures 100% of transactions
         // In Production you will probably want a smaller number such as 0.5 for 50%
-        if AppSettings.isDevelopmentBuild {
-            options.sampleRate = 1.0
-            options.tracesSampleRate = 1.0
-            options.configureProfiling = { $0.sessionSampleRate = 1.0 }
-        } else {
-            options.sampleRate = 0.5
-            options.tracesSampleRate = 0.5
-            options.configureProfiling = { $0.sessionSampleRate = 1.0 }
-        }
+        options.sampleRate = 1.0
+        options.tracesSampleRate = 1.0
+        options.configureProfiling = { $0.sessionSampleRate = 1.0 }
 
         // This callback is only executed once during the entire run of the program to avoid
         // multiple callbacks if there are multiple crash events to send (see method documentation)
