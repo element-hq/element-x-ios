@@ -66,7 +66,7 @@ struct LeaveSpaceView: View {
                 Section {
                     ForEach(context.viewState.leaveHandle.rooms, id: \.spaceServiceRoom.id) { room in
                         LeaveSpaceRoomDetailsCell(room: room,
-                                                  hideSelection: !context.viewState.leaveHandle.canLeave,
+                                                  hideSelection: !room.canLeave,
                                                   mediaProvider: context.mediaProvider) {
                             context.send(viewAction: .toggleRoom(roomID: room.spaceServiceRoom.id))
                         }

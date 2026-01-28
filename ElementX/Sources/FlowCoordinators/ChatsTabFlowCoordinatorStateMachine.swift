@@ -52,6 +52,8 @@ class ChatsTabFlowCoordinatorStateMachine {
         
         case declineAndBlockUserScreen(detailState: DetailState?)
         
+        case transferOwnershipScreen(detailState: DetailState?)
+        
         /// The state of the currently selected room
         var detailState: DetailState? {
             switch self {
@@ -65,6 +67,7 @@ class ChatsTabFlowCoordinatorStateMachine {
                  .logoutConfirmationScreen(let detailState),
                  .roomDirectorySearchScreen(let detailState),
                  .reportRoomScreen(let detailState),
+                 .transferOwnershipScreen(let detailState),
                  .declineAndBlockUserScreen(let detailState):
                 detailState
             }
@@ -134,6 +137,9 @@ class ChatsTabFlowCoordinatorStateMachine {
         
         case presentDeclineAndBlockScreen(userID: String, roomID: String)
         case dismissedDeclineAndBlockScreen
+        
+        case presentTransferOwnershipScreen(roomID: String)
+        case dismissedTransferOwnershipScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -206,6 +212,11 @@ class ChatsTabFlowCoordinatorStateMachine {
             case(.roomList(let detailState), .presentDeclineAndBlockScreen):
                 return .declineAndBlockUserScreen(detailState: detailState)
             case (.declineAndBlockUserScreen(let detailState), .dismissedDeclineAndBlockScreen):
+                return .roomList(detailState: detailState)
+                
+            case (.roomList(let detailState), .presentTransferOwnershipScreen):
+                return .transferOwnershipScreen(detailState: detailState)
+            case (.transferOwnershipScreen(let detailState), .dismissedTransferOwnershipScreen):
                 return .roomList(detailState: detailState)
                 
             default:
