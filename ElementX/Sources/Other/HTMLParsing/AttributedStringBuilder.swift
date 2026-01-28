@@ -211,7 +211,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                     // The scroll view provides the background colour for code blocks.
                 } else {
                     content.addAttribute(.InlineCode, value: true, range: NSRange(location: 0, length: content.length))
-                    // But inline code is (obviously) inline so we need the background colour here.
+                    // But inline code is (obviously) inline so it's much easier to set the background colour here.
                     content.addAttribute(.backgroundColor, value: UIColor.compound._bgCodeBlock as Any, range: NSRange(location: 0, length: content.length))
                 }
                 
