@@ -20,19 +20,39 @@ struct TimelineBubbleLayout: Layout {
     /// The spacing between the components in the bubble.
     let spacing: CGFloat
     
-    /// Layout priority for the bubble content. These priorities are used within
+    /// Layout size for the bubble content. These sizing types are used within
     /// `TimelineBubbleLayout` to create the layout we would like.
-    enum Priority: LayoutValueKey {
-        /// The priority of hidden quote bubbles/code blocks that are only used for layout calculations.
-        /// Any views given this priority should be made non-greedy for the calculations to work.
-        case hiddenGreedyComponent
-        /// The priority of visible quote bubbles/code blocks that are placed in the view with a full width.
-        /// Any views given this priority should remain in their normal greedy form.
-        case visibleGreedyComponent
-        /// The priority of regular text that is used for layout calculations and placed in the view.
-        case nonGreedyComponent
+    enum Size: LayoutValueKey, Equatable {
+        static let defaultValue: Size = .natural
         
-        static let defaultValue: Priority = .nonGreedyComponent
+        /// Full width mode used for greedy components like blockquotes and code blocks.
+        enum BubbleWidthMode {
+            /// The view has its natural size and will be used for layout calculations only.
+            case layout
+            /// The view has a greedy width and will fill the available space within the bubble.
+            case rendering
+        }
+        
+        /// The view will fill the available width, with different behaviour depending on the mode.
+        /// Views using the `.layout` mode should be hidden and are used only for width calculations.
+        /// Views using the `.rendering` mode should be visible and are placed to fill the bubble's calculated width.
+        case bubbleWidth(mode: BubbleWidthMode)
+        /// The view uses its natural size for both layout calculations and rendering.
+        case natural
+        
+        var shouldLayout: Bool {
+            switch self {
+            case .natural, .bubbleWidth(mode: .layout): true
+            default: false
+            }
+        }
+        
+        var shouldRender: Bool {
+            switch self {
+            case .natural, .bubbleWidth(mode: .rendering): true
+            default: false
+            }
+        }
     }
     
     func makeCache(subviews: Subviews) -> Cache {
@@ -48,7 +68,7 @@ struct TimelineBubbleLayout: Layout {
         guard !subviews.isEmpty else { return .zero }
         
         // Calculate the natural size using the regular text and non-greedy quote bubbles.
-        let layoutSubviews = subviews.filter { $0[Priority.self] != .visibleGreedyComponent }
+        let layoutSubviews = subviews.filter { $0[Size.self].shouldLayout }
 
         let subviewSizes = layoutSubviews.map { size(for: $0, subviews: subviews, proposedSize: proposal, cache: &cache) }
         
@@ -63,11 +83,11 @@ struct TimelineBubbleLayout: Layout {
         guard !subviews.isEmpty else { return }
         
         // Calculate the width using the regular text along with non-greedy versions of any greedy components.
-        let layoutSubviews = subviews.filter { $0[Priority.self] != .visibleGreedyComponent }
+        let layoutSubviews = subviews.filter { $0[Size.self].shouldLayout }
         let maxWidth = layoutSubviews.map { size(for: $0, subviews: subviews, proposedSize: proposal, cache: &cache).width }.reduce(0, max)
         
         // Place the regular text and greedy components using the calculated width.
-        let visibleSubviews = subviews.filter { $0[Priority.self] != .hiddenGreedyComponent }
+        let visibleSubviews = subviews.filter { $0[Size.self].shouldRender }
 
         let subviewSizes = visibleSubviews.map { size(for: $0, subviews: subviews, proposedSize: ProposedViewSize(width: maxWidth, height: proposal.height), cache: &cache) }
         
@@ -104,9 +124,8 @@ struct TimelineBubbleLayout: Layout {
 }
 
 extension View {
-    /// Sets the layout priority for this view within a `TimelineBubbleLayout`.
-    func timelineBubbleLayoutPriority(_ priority: TimelineBubbleLayout.Priority) -> some View {
-        layoutValue(key: TimelineBubbleLayout.Priority.self, value: priority)
+    /// Sets the layout size for this view when placed within a `TimelineBubbleLayout`.
+    func timelineBubbleLayoutSize(_ size: TimelineBubbleLayout.Size) -> some View {
+        layoutValue(key: TimelineBubbleLayout.Size.self, value: size)
     }
 }
-

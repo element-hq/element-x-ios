@@ -80,10 +80,10 @@ struct FormattedBodyText: View {
                     switch component.type {
                     case .blockquote:
                         BlockquoteView(attributedString: component.attributedString, mode: .rendering)
-                            .timelineBubbleLayoutPriority(.visibleGreedyComponent)
+                            .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
                     case .codeBlock:
                         CodeBlockView(attributedString: component.attributedString, mode: .rendering)
-                            .timelineBubbleLayoutPriority(.visibleGreedyComponent)
+                            .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
                             .contextMenu {
                                 Button(L10n.actionCopy) {
                                     UIPasteboard.general.string = component.attributedString.string
@@ -93,7 +93,7 @@ struct FormattedBodyText: View {
                         MessageText(attributedString: component.attributedString)
                             .padding(.horizontal, 4)
                             .fixedSize(horizontal: false, vertical: true)
-                            .timelineBubbleLayoutPriority(.nonGreedyComponent)
+                            .timelineBubbleLayoutSize(.natural)
                     }
                 }
             }
@@ -104,11 +104,11 @@ struct FormattedBodyText: View {
                 switch component.type {
                 case .blockquote:
                     BlockquoteView(attributedString: component.attributedString, mode: .layout)
-                        .timelineBubbleLayoutPriority(.hiddenGreedyComponent)
+                        .timelineBubbleLayoutSize(.bubbleWidth(mode: .layout))
                         .hidden()
                 case .codeBlock:
                     CodeBlockView(attributedString: component.attributedString, mode: .layout)
-                        .timelineBubbleLayoutPriority(.hiddenGreedyComponent)
+                        .timelineBubbleLayoutSize(.bubbleWidth(mode: .layout))
                         .hidden()
                 case .plainText:
                     EmptyView()
@@ -119,15 +119,13 @@ struct FormattedBodyText: View {
     
     // MARK: - Component Views
     
-    enum ViewMode { case layout, rendering }
-    
     /// The view used to render a blockquote component. It can be configured in one of 2 modes:
     /// - `.layout`: The view is given it's natural size to be used for layout calculations.
     /// - `.rendering`: The view has a greedy width that, in combination with the custom layout,
-    /// will fill any available space, whilst remaining constrained by the layout's calculated width.
+    /// will fill any available space, whilst remaining constrained by the bubble's calculated width.
     struct BlockquoteView: View {
         let attributedString: AttributedString
-        let mode: ViewMode
+        let mode: TimelineBubbleLayout.Size.BubbleWidthMode
         
         var body: some View {
             MessageText(attributedString: attributedString.mergingAttributes(blockquoteAttributes))
@@ -161,10 +159,10 @@ struct FormattedBodyText: View {
     /// The view used to render a code block component. It can be configured in one of 2 modes:
     /// - `.layout`: The view is given it's natural size to be used for layout calculations.
     /// - `.rendering`: The view has a greedy width that, in combination with the custom layout,
-    /// will fill any available space, whilst remaining constrained by the layout's calculated width.
+    /// will fill any available space, whilst remaining constrained by the bubble's calculated width.
     private struct CodeBlockView: View {
         let attributedString: AttributedString
-        let mode: ViewMode
+        let mode: TimelineBubbleLayout.Size.BubbleWidthMode
         
         @State private var maxWidth: CGFloat = .zero
         
