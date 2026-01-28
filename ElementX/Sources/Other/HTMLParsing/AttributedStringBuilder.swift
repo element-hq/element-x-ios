@@ -32,6 +32,7 @@ extension NSAttributedString.Key {
     static let MatrixEventOnRoomAlias: NSAttributedString.Key = .init(rawValue: EventOnRoomAliasAttribute.name)
     static let MatrixAllUsersMention: NSAttributedString.Key = .init(rawValue: AllUsersMentionAttribute.name)
     static let CodeBlock: NSAttributedString.Key = .init(rawValue: CodeBlockAttribute.name)
+    static let InlineCode: NSAttributedString.Key = .init(rawValue: InlineCodeAttribute.name)
 }
 
 struct AttributedStringBuilder: AttributedStringBuilderProtocol {
@@ -197,15 +198,24 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 content.addAttribute(.MatrixBlockquote, value: true, range: NSRange(location: 0, length: content.length))
                 
             case "code", "pre":
-                let preserveFormatting = preserveFormatting || tag == "pre"
+                let isCodeBlock = tag == "pre"
+                
+                let preserveFormatting = preserveFormatting || isCodeBlock
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 
                 let fontPointSize = fontPointSize * 0.9 // Intentionally shrink code blocks by 10%
                 content.setFontPreservingSymbolicTraits(UIFont.monospacedSystemFont(ofSize: fontPointSize, weight: .regular))
                 
-                content.addAttribute(.CodeBlock, value: true, range: NSRange(location: 0, length: content.length))
+                if isCodeBlock {
+                    content.addAttribute(.CodeBlock, value: true, range: NSRange(location: 0, length: content.length))
+                    // The scroll view provides the background colour for code blocks.
+                } else {
+                    content.addAttribute(.InlineCode, value: true, range: NSRange(location: 0, length: content.length))
+                    // But inline code is (obviously) inline so it's much easier to set the background colour here.
+                    content.addAttribute(.backgroundColor, value: UIColor.compound._bgCodeBlock as Any, range: NSRange(location: 0, length: content.length))
+                }
                 
-                // Don't allow identifiers or links in code blocks
+                // Don't allow identifiers or links in code.
                 content.removeAttribute(.MatrixRoomID, range: NSRange(location: 0, length: content.length))
                 content.removeAttribute(.MatrixRoomAlias, range: NSRange(location: 0, length: content.length))
                 content.removeAttribute(.MatrixUserID, range: NSRange(location: 0, length: content.length))
@@ -353,14 +363,15 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         // Sort the links by length so the longest one always takes priority
         matches.sorted { $0.range.length > $1.range.length }.forEach { [attributedString] match in
             // Don't highlight links within codeblocks
-            let isInCodeBlock = attributedString.attribute(.CodeBlock, at: match.range.location, effectiveRange: nil) != nil
-            if isInCodeBlock {
+            let isCode = attributedString.attribute(.CodeBlock, at: match.range.location, effectiveRange: nil) != nil
+                || attributedString.attribute(.InlineCode, at: match.range.location, effectiveRange: nil) != nil
+            if isCode {
                 return
             }
             
             var hasLink = false
             attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
-                if value != nil, !isInCodeBlock {
+                if value != nil, !isCode {
                     hasLink = true
                     stop.pointee = true
                 }
