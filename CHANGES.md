@@ -1,3 +1,67 @@
+## Changes in 26.02.0 (2026-01-28)
+
+### What's Changed
+
+✨ Features
+* Space filters by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4977
+* Horizontally scrollable code blocks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5001
+
+🙌 Improvements
+* Improved Create Room snapshots by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4962
+* Use more Liquid Glass in the room/space screen toolbars by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4965
+* Remove "history may be shared banner" by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4999
+
+🐛 Bugfixes
+* Set a custom user agent on the Element Call web view by @subnix in https://github.com/element-hq/element-x-ios/pull/4973
+* Tweak the RoomHeaderView to match Figma. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4975
+* Fix the setting button's layout and animation on liquid glass by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4976
+* Normalise HTML whitespaces using SwiftSoup's own text()/TextNode.normaliseWhitespace methods by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4980
+* Fix inline code being rendered as blocks. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5017
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4970
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5008
+
+🧱 Build
+* Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5012
+
+🚧 In development 🚧
+* Implement the `SpaceAddRoomsScreen`. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4951
+* Create space flow by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4957
+* Add the initial implementation for managing spaces. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4963
+* Display a badge for messages decrypted using shared keys. by @kaylendog in https://github.com/element-hq/element-x-ios/pull/4937
+* Add space management to the flows. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4978
+* Replace a debugging visibility check with the real condition. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4982
+* Add the empty state to SpaceScreen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4985
+* Create room with space selection by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4972
+* Create a room in a selected space by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4984
+* Make sure the selected/available rooms are updated when adding space children fails part way through. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4997
+
+Others
+* Tidy up the naming of spaces a bit more. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4955
+* Update fastlane (and all other gems). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4960
+* Update dependency element-hq/compound-design-tokens to v6.8.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4959
+* Disable PostHog's swizzling. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4964
+* Enable Swift 6 and default actor isolation on the Compound Inspector app. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4966
+* Update dependency fastlane to v2.231.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4967
+* Silence some warnings. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4969
+* Fake an actual title bar on macOS Tahoe. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4971
+* Update dependency fastlane to v2.231.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4979
+* Include the Members and Add Rooms screens in the spaces UI tests. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4981
+* Update peter-evans/create-pull-request action to v8.1.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4983
+* Update the enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4989
+* Update SDK to 26.01.23 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4998
+* Remove the protocol for SpaceServiceRoom given its a struct type. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5000
+* Upgrade SwiftFormat and apply new default rules by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5013
+* Update the crypto strings. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5009
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5015
+* Update dependency element-hq/compound-design-tokens to v6.9.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5011
+
+### New Contributors
+* @subnix made their first contribution in https://github.com/element-hq/element-x-ios/pull/4973
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.01.0...release/26.02.0
+
 ## Changes in 26.01.0 (2026-01-13)
 
 ### What's Changed
