@@ -109,7 +109,6 @@ struct FormattedBodyText: View {
                         .background(.compound._bgCodeBlock)
                         .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
                         .scrollIndicatorsFlash(onAppear: true)
-                        .fixedSize(horizontal: false, vertical: true)
                         .padding(.horizontal, 4)
                         .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
                         .contextMenu {
@@ -137,13 +136,7 @@ struct FormattedBodyText: View {
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
                         .hidden()
                 case .codeBlock:
-                    // ScrollView contents
-                    MessageText(attributedString: component.attributedString)
-                        .padding([.horizontal, .top], 4)
-                        .padding(.bottom, 8)
-                        // ScrollView modifiers
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.horizontal, 4)
+                    HiddenCodeBlockScrollView(attributedString: component.attributedString)
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
                         .hidden()
                 case .plainText:
@@ -163,17 +156,42 @@ struct FormattedBodyText: View {
         
         return container
     }
+    
+    /// A self-sizing version of the code block component's view, necessary
+    /// because unlike quote bubbles, code blocks don't wrap when the space
+    /// is constrained.
+    private struct HiddenCodeBlockScrollView: View {
+        let attributedString: AttributedString
+        
+        @State private var maxSize: CGSize = .zero
+        
+        var body: some View {
+            ScrollView(.horizontal) {
+                MessageText(attributedString: attributedString)
+                    .padding([.horizontal, .top], 4)
+                    .padding(.bottom, 8)
+                    .onGeometryChange(for: CGSize.self) { $0.size } action: { maxSize = $0 }
+            }
+            .frame(maxWidth: maxSize.width)
+            .padding(.horizontal, 4)
+        }
+    }
 }
 
 // MARK: - Previews
 
 struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
+    static let attributedStringBuilder = AttributedStringBuilder(cacheKey: "FormattedBodyText", mentionBuilder: MentionBuilder())
     static var previews: some View {
-        htmlBuilderText(AttributedStringBuilder(cacheKey: "FormattedBodyText", mentionBuilder: MentionBuilder()))
+        htmlFixtures
         
         basicText
             .previewLayout(.sizeThatFits)
             .previewDisplayName("basicText")
+        
+        singleColumnComponents
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("singleColumnComponents")
     }
     
     static var basicText: some View {
@@ -190,8 +208,25 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
         .padding()
     }
     
+    /// A preview to help ensure that none of the component types we support result
+    /// in a bubble's width becoming wider than the natural width of its contents.
     @ViewBuilder
-    static func htmlBuilderText(_ attributedStringBuilder: AttributedStringBuilderProtocol) -> some View {
+    static var singleColumnComponents: some View {
+        let html = """
+        <blockquote>A</blockquote>
+        <pre><code>B</code></pre>
+        <p>C</p>
+        """
+        
+        if let attributedString = attributedStringBuilder.fromHTML(html) {
+            FormattedBodyText(attributedString: attributedString)
+                .bubbleBackground()
+                .padding(4.0)
+        }
+    }
+    
+    @ViewBuilder
+    static var htmlFixtures: some View {
         let htmlFixtures = HTMLFixtures.allCases
         
         ForEach(htmlFixtures, id: \.rawValue) { htmlFixture in
