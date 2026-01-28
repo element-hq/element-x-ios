@@ -25,6 +25,12 @@ protocol CommonSettingsProtocol {
     var hideQuietNotificationAlerts: Bool { get }
 }
 
+enum AppBuildType {
+    case debug
+    case nightly
+    case release
+}
+
 /// Store Element specific app settings.
 final class AppSettings {
     private enum UserDefaultsKeys: String {
@@ -82,16 +88,19 @@ final class AppSettings {
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
     
-    /// Whether or not the app is a development build that isn't in production.
-    static var isDevelopmentBuild: Bool = {
+    static var appBuildType: AppBuildType {
         #if DEBUG
-        true
+        return .debug
         #else
-        let apps = ["io.element.elementx.nightly", "io.element.elementx.pr"]
-        return apps.contains(InfoPlistReader.main.baseBundleIdentifier)
+        switch InfoPlistReader.main.baseBundleIdentifier {
+        case "io.element.elementx.nightly":
+            return .nightly
+        default:
+            return .release
+        }
         #endif
-    }()
-        
+    }
+    
     static func resetAllSettings() {
         MXLog.warning("Resetting the AppSettings.")
         store.removePersistentDomain(forName: suiteName)
@@ -336,7 +345,7 @@ final class AppSettings {
     
     // MARK: - Room Screen
     
-    @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: appBuildType == .debug, storageType: .userDefaults(store))
     var viewSourceEnabled
     
     @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: true, storageType: .userDefaults(store))
@@ -424,7 +433,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.spaceFiltersEnabled, defaultValue: false, storageType: .userDefaults(store))
     var spaceFiltersEnabled
     
-    @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType == .debug, storageType: .userDefaults(store))
     var developerOptionsEnabled
 }
 
