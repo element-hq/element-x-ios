@@ -478,6 +478,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             return
         }
+        // The screen requires listening to the membership state changes
         await roomProxy.subscribeForUpdates()
         
         let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: .owner,

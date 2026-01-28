@@ -55,6 +55,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case space
         /// The user is adding rooms to the space.
         case addingRooms
+        /// The user is transferring their ownership of the space.
+        case transferOwnership
         /// A child (space) flow is in progress.
         case presentingChild(childSpaceID: String, previousState: State)
         /// A room flow is in progress
@@ -69,11 +71,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case createChildRoomFlow
         
         case leftSpace
-        
-        case transferOwnership
     }
     
-    enum Event: EventType, Equatable, Hashable {
+    enum Event: EventType {
         /// The flow is being started.
         case start
         /// The flow is being started for an unjoined space.
@@ -88,6 +88,11 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case addRooms
         /// The user finished adding rooms to this space.
         case dismissedAddRooms
+        
+        /// Allow the user to transfer their ownership of the space.
+        case presentTransferOwnership
+        /// The user finished transferring their ownership of the space.
+        case dismissedTransferOwnership
         
         /// Request the presentation of a child space flow.
         ///
@@ -110,9 +115,6 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         
         case startCreateChildRoomFlow
         case stopCreateChildRoomFlow
-        
-        case presentTransferOwnership
-        case dismissedTransferOwnership
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -166,6 +168,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case .addingRooms:
             navigationStackCoordinator.setSheetCoordinator(nil)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
+        case .transferOwnership:
+            navigationStackCoordinator.setSheetCoordinator(nil)
+            clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         case .presentingChild:
             childSpaceFlowCoordinator?.clearRoute(animated: animated)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
@@ -182,9 +187,6 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             rolesAndPermissionsFlowCoordinator?.clearRoute(animated: animated)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         case .createChildRoomFlow:
-            navigationStackCoordinator.setSheetCoordinator(nil)
-            clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
-        case .transferOwnership:
             navigationStackCoordinator.setSheetCoordinator(nil)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         }

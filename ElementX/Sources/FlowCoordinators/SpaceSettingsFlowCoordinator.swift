@@ -27,16 +27,16 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case securityAndPrivacy
         /// The edit address screen
         case editAddress
+        /// The manage authorized spaces screen
+        case manageAuthorizedSpacesScreen
+        /// The screen that allows a user to transfer their ownership of the space.
+        case transferOwnership
         
         /// Other flows
         /// The roles and permissions screen
         case rolesAndPermissionsFlow
         /// The members flow screen
         case membersFlow
-        
-        case manageAuthorizedSpacesScreen
-
-        case transferOwnership
     }
     
     enum Event: EventType {
@@ -53,18 +53,18 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case presentEditAddress
         case dismissedEditAddress
         
+        case presentManageAuthorizedSpacesScreen
+        case dismissedManageAuthorizedSpacesScreen
+
+        case presentTransferOwnership
+        case dismissedTransferOwnership
+        
         // Other flows
         case startMembersListFlow
         case stopMembersListFlow
         
         case startRolesAndPermissionsFlow
         case stopRolesAndPermissionsFlow
-        
-        case presentManageAuthorizedSpacesScreen
-        case dismissedManageAuthorizedSpacesScreen
-
-        case presentTransferOwnership
-        case dismissedTransferOwnership
     }
     
     private let roomProxy: JoinedRoomProxyProtocol
