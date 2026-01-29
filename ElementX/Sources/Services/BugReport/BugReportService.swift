@@ -228,6 +228,15 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     
     /// Zips a file creating chunks based on 10MB inputs.
     private func attachFile(at url: URL, to zippedFiles: inout Logs) throws {
+        // We check the compressed size to determine whether or not to attach the files.
+        // **However:** given our gzip library compresses in memory it is possible to OOM
+        // on files that will obviously be thrown away, so check the uncompressed size too.
+        let uncompressedSizeThreshold = maxUploadSize * 5
+        if try FileManager.default.sizeForItem(at: url) > maxUploadSize {
+            MXLog.error("Uncompressed logs too large, skipping attachment: \(url.lastPathComponent)")
+            return
+        }
+        
         let fileHandle = try FileHandle(forReadingFrom: url)
         
         while let data = try fileHandle.readToEnd() {
