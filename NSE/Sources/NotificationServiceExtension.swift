@@ -67,16 +67,28 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
     
     private func handle(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) async {
-        guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
-              let roomID = request.content.roomID,
-              let eventID = request.content.eventID,
-              let clientID = request.content.pusherNotificationClientIdentifier,
-              let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == clientID }) else {
-            // We cannot process this notification, it might be due to one of these:
-            // - Device rebooted and locked
-            // - Not a Matrix notification
-            // - User is not signed in
-            // - NotificationID could not be resolved
+        guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory) else {
+            MXLog.error("Device is locked after reboot, bailing out.")
+            return contentHandler(request.content)
+        }
+              
+        guard let roomID = request.content.roomID else {
+            MXLog.error("Invalid roomID, bailing out: \(request.content)")
+            return contentHandler(request.content)
+        }
+        
+        guard let eventID = request.content.eventID else {
+            MXLog.error("Invalid eventID, bailing out: \(request.content)")
+            return contentHandler(request.content)
+        }
+        
+        guard let clientID = request.content.pusherNotificationClientIdentifier else {
+            MXLog.error("Invalid eventID, bailing out: \(request.content)")
+            return contentHandler(request.content)
+        }
+        
+        guard let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == clientID }) else {
+            MXLog.error("Invalid credentials, bailing out: \(request.content)")
             return contentHandler(request.content)
         }
         

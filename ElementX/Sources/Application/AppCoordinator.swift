@@ -13,6 +13,7 @@ import Intents
 import MatrixRustSDK
 import Sentry
 import SwiftUI
+import UserNotifications
 import Version
 
 class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, SecureWindowManagerDelegate {
@@ -1206,6 +1207,23 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var backgroundRefreshSyncObserver: AnyCancellable?
     private func handleBackgroundAppRefresh(_ task: BGAppRefreshTask) {
         MXLog.info("Started background app refresh")
+        
+        Task {
+            let content = UNMutableNotificationContent()
+            content.title = "Hey, welcome back"
+            content.body = "I just started a background app refresh task"
+            content.sound = .default
+            
+            let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                                content: content,
+                                                trigger: nil)
+            
+            do {
+                try await UNUserNotificationCenter.current().add(request)
+            } catch {
+                MXLog.error("Failed showing backround refresh local notification")
+            }
+        }
         
         // This is important for the app to keep refreshing in the background
         scheduleBackgroundAppRefresh()

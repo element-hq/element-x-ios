@@ -8,6 +8,7 @@
 
 import Combine
 import SwiftUI
+import UserNotifications
 
 enum AppDelegateCallback {
     case registeredNotifications(deviceToken: Data)
@@ -29,16 +30,35 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         NSTextAttachment.registerViewProviderClass(PillAttachmentViewProvider.self, forFileType: InfoPlistReader.main.pillsUTType)
         return true
     }
-
+    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         callbacks.send(.registeredNotifications(deviceToken: deviceToken))
     }
-
+    
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         callbacks.send(.failedToRegisteredNotifications(error: error))
     }
-
+    
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         orientationLock
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) async -> UIBackgroundFetchResult {
+        let content = UNMutableNotificationContent()
+        content.title = "Hey, welcome back"
+        content.body = "This is a remote notification received through the AppDelegate, userInfo:\n \(userInfo)"
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                            content: content,
+                                            trigger: nil)
+        
+        do {
+            try await UNUserNotificationCenter.current().add(request)
+        } catch {
+            MXLog.error("Failed showing remote background local notification")
+        }
+        
+        return .newData
     }
 }
