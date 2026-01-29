@@ -67,11 +67,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.initialSelectedPinnedEventID = initialSelectedPinnedEventID
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
 
+        let historySharingIconState: RoomScreenHistorySharingIconState? = if appSettings.enableKeyShareOnInvite {
+            .init(roomInfo: roomProxy.infoPublisher.value)
+        } else {
+            nil
+        }
+        
         let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
                                             hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
-                                            isRoomHistoryShared: appSettings.enableKeyShareOnInvite && (roomProxy.infoPublisher.value.historyVisibility == .shared || roomProxy.infoPublisher.value.historyVisibility == .worldReadable))
+                                            historySharingIconState: historySharingIconState)
         super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)
         
@@ -344,7 +350,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canBan = powerLevels.canOwnUserBan()
         }
         
-        state.isRoomHistoryShared = appSettings.enableKeyShareOnInvite && (roomInfo.historyVisibility == .shared || roomInfo.historyVisibility == .worldReadable)
+        if appSettings.enableKeyShareOnInvite {
+            state.historySharingIconState = .init(roomInfo: roomInfo)
+        }
     }
     
     private func setupPinnedEventsTimelineItemProviderIfNeeded() {
