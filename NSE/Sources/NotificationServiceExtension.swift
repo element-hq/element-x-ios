@@ -48,20 +48,15 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
     
     override init() {
-        // If we can't write to the app group container then the target configuration below will fail.
-        // We could skip that but then we're unlikely to be able to create a session and we would be
-        // missing the lightweightTokioRuntime, so instead just kill the process and let the system
-        // deliver the notification with no modifications.
-        guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory) else {
-            // swiftlint:disable:next print_deprecation
-            print("Device is locked after reboot, delivering the unmodified notification.")
-            exit(0)
-        }
-        
         appHooks = AppHooks()
         appHooks.setUp()
         
-        if Self.targetConfiguration == nil {
+        // If the device is still locked then we can't write to the app group container and
+        // the target configuration will fail. We could call exit(0) here, however with the
+        // notification filtering entitlement that results in the notification being discarded
+        // so we need to wait for the delegate method to be called and bail out there instead.
+        if !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
+           Self.targetConfiguration == nil {
             Self.targetConfiguration = Target.nse.configure(logLevel: settings.logLevel,
                                                             traceLogPacks: settings.traceLogPacks,
                                                             sentryURL: nil,
@@ -77,6 +72,15 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
     
     private func handle(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) async {
+        // If we skipped configuring the target it means we can't write to the app group, so we're unlikely
+        // to be able to create a session (and even if we could, we would be missing the lightweightTokioRuntime),
+        // so instead lets deliver the default generic notification and avoid attempting to process the notification.
+        guard Self.targetConfiguration != nil else {
+            // swiftlint:disable:next print_deprecation (MXLog isn't configured)
+            print("Device is locked after reboot, delivering the unmodified notification.")
+            return contentHandler(request.content)
+        }
+        
         guard let roomID = request.content.roomID else {
             MXLog.error("Invalid roomID, bailing out: \(request.content)")
             return contentHandler(request.content)
