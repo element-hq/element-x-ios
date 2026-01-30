@@ -65,7 +65,7 @@ struct ThreadTimelineScreen: View {
                            roomSubtitle: context.viewState.roomTitle,
                            roomAvatar: context.viewState.roomAvatar,
                            dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
-                           historySharingIconState: context.viewState.historySharingIconState,
+                           roomHistorySharingState: context.viewState.roomHistorySharingState,
                            mediaProvider: context.mediaProvider) {
                 // There is no action but the iOS 26 designs have it looking like a button.
             }

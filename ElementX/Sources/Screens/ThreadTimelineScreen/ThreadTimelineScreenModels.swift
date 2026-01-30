@@ -17,7 +17,7 @@ struct ThreadTimelineScreenViewState: BindableState {
     var roomAvatar: RoomAvatar
     var canSendMessage = true
     var dmRecipientVerificationState: UserIdentityVerificationState?
-    var historySharingIconState: RoomScreenHistorySharingIconState?
+    var roomHistorySharingState: RoomHistorySharingState?
     
     var bindings = ThreadTimelineScreenViewStateBindings()
 }

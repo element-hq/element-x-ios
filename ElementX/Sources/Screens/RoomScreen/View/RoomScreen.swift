@@ -157,7 +157,7 @@ struct RoomScreen: View {
             RoomHeaderView(roomName: context.viewState.roomTitle,
                            roomAvatar: context.viewState.roomAvatar,
                            dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
-                           historySharingIconState: context.viewState.historySharingIconState,
+                           roomHistorySharingState: context.viewState.roomHistorySharingState,
                            mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .displayRoomDetails)
             }

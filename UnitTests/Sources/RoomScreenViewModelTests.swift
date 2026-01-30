@@ -463,7 +463,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let deferredInvisible = deferFailure(viewModel.context.$viewState,
                                              timeout: 1,
                                              message: "The icon should not be shown when the room history visibility is not .shared or .worldReadable") { viewState in
-            viewState.historySharingIconState == .shared || viewState.historySharingIconState == .worldReadable
+            viewState.roomHistorySharingState != nil
         }
         try await deferredInvisible.fulfill()
         
@@ -472,7 +472,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let deferredShared = deferFailure(viewModel.context.$viewState,
                                           timeout: 1,
                                           message: "The icon should not be shown when the room history visibility is .shared, since the flag isn't set") { viewState in
-            viewState.historySharingIconState == .shared || viewState.historySharingIconState == .worldReadable
+            viewState.roomHistorySharingState != nil
         }
         try await deferredShared.fulfill()
     }
@@ -499,7 +499,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let deferredInvisible = deferFailure(viewModel.context.$viewState,
                                              timeout: 1,
                                              message: "The icon should be hidden when the room history visibility is not .shared or .worldReadable") { viewState in
-            viewState.historySharingIconState == .shared || viewState.historySharingIconState == .worldReadable
+            viewState.roomHistorySharingState != nil
         }
         try await deferredInvisible.fulfill()
         
@@ -508,7 +508,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let deferredInvisibleUnencrypted = deferFailure(viewModel.context.$viewState,
                                                         timeout: 1,
                                                         message: "The icon should not be shown when the room is unencrypted") { viewState in
-            viewState.historySharingIconState == .shared || viewState.historySharingIconState == .worldReadable
+            viewState.roomHistorySharingState != nil
         }
         try await deferredInvisibleUnencrypted.fulfill()
         
@@ -516,7 +516,7 @@ class RoomScreenViewModelTests: XCTestCase {
         infoSubject.send(RoomInfoProxyMock(configuration))
         let deferredShared = deferFulfillment(viewModel.context.$viewState,
                                               message: "The icon should be shown when the room history visibility is .shared") { viewState in
-            viewState.historySharingIconState == .shared
+            viewState.roomHistorySharingState == .shared
         }
         try await deferredShared.fulfill()
         
@@ -524,7 +524,7 @@ class RoomScreenViewModelTests: XCTestCase {
         infoSubject.send(RoomInfoProxyMock(configuration))
         let deferredWorldReadable = deferFulfillment(viewModel.context.$viewState,
                                                      message: "The icon should be shown when the room history visibility is .worldReadable") { viewState in
-            viewState.historySharingIconState == .worldReadable
+            viewState.roomHistorySharingState == .worldReadable
         }
         try await deferredWorldReadable.fulfill()
     }

@@ -15,7 +15,7 @@ struct RoomHeaderView: View {
     var roomSubtitle: String?
     let roomAvatar: RoomAvatar
     var dmRecipientVerificationState: UserIdentityVerificationState?
-    var historySharingIconState: RoomScreenHistorySharingIconState?
+    var roomHistorySharingState: RoomHistorySharingState?
     
     let mediaProvider: MediaProviderProtocol?
     
@@ -65,15 +65,9 @@ struct RoomHeaderView: View {
                     VerificationBadge(verificationState: dmRecipientVerificationState, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
                 }
                 
-                if let historySharingIconState {
-                    switch historySharingIconState {
-                    case .shared:
-                        CompoundIcon(\.history, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
-                            .foregroundStyle(.compound.iconInfoPrimary)
-                    case .worldReadable:
-                        CompoundIcon(\.userProfileSolid, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
-                            .foregroundStyle(.compound.iconInfoPrimary)
-                    }
+                if let historySharingIcon {
+                    CompoundIcon(historySharingIcon, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
+                        .foregroundStyle(.compound.iconInfoPrimary)
                 }
             }
         }
@@ -84,6 +78,14 @@ struct RoomHeaderView: View {
                         avatarSize: .room(on: .timeline),
                         mediaProvider: mediaProvider)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
+    }
+    
+    private var historySharingIcon: KeyPath<CompoundIcons, Image>? {
+        switch roomHistorySharingState {
+        case .shared: \.history
+        case .worldReadable: \.userProfileSolid
+        case .none: nil
+        }
     }
 }
 
@@ -118,10 +120,10 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
             makeHeader(avatarURL: .mockMXCAvatar,
                        roomSubtitle: "Subtitle",
                        verificationState: .verified)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified, historySharingIconState: .shared)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified, historySharingIconState: .worldReadable)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verified, historySharingIconState: .shared)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verificationViolation, historySharingIconState: .worldReadable)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified, historySharingState: .shared)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified, historySharingState: .worldReadable)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verified, historySharingState: .shared)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verificationViolation, historySharingState: .worldReadable)
         }
         .previewLayout(.sizeThatFits)
     }
@@ -129,14 +131,14 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     static func makeHeader(avatarURL: URL?,
                            roomSubtitle: String? = nil,
                            verificationState: UserIdentityVerificationState,
-                           historySharingIconState: RoomScreenHistorySharingIconState? = nil) -> some View {
+                           historySharingState: RoomHistorySharingState? = nil) -> some View {
         RoomHeaderView(roomName: "Some Room name",
                        roomSubtitle: roomSubtitle,
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: avatarURL),
                        dmRecipientVerificationState: verificationState,
-                       historySharingIconState: historySharingIconState,
+                       roomHistorySharingState: historySharingState,
                        
                        mediaProvider: MediaProviderMock(configuration: .init())) { }
             .padding()

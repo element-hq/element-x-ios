@@ -34,29 +34,6 @@ enum RoomScreenViewAction {
     case displaySuccessorRoom
 }
 
-enum RoomScreenHistorySharingIconState: Equatable {
-    case shared
-    case worldReadable
-    
-    init?(roomInfo: RoomInfoProxyProtocol) {
-        self.init(isEncrypted: roomInfo.isEncrypted, historyVisibility: roomInfo.historyVisibility)
-    }
-    
-    init?(isEncrypted: Bool, historyVisibility: RoomHistoryVisibility) {
-        if !isEncrypted {
-            return nil
-        }
-        switch historyVisibility {
-        case .shared:
-            self = .shared
-        case .worldReadable:
-            self = .worldReadable
-        default:
-            return nil
-        }
-    }
-}
-
 struct RoomScreenViewState: BindableState {
     var roomTitle = ""
     var roomAvatar: RoomAvatar
@@ -104,10 +81,8 @@ struct RoomScreenViewState: BindableState {
             (canAcceptKnocks || canDeclineKnocks || canBan)
     }
     
-    /// Contains the state of the history sharing icon, displayed in the case that `enableKeyShareOnInvite`
-    /// is set, allowing for MSC4268 history sharing, and the current room history visibility is set to either
-    /// `.shared` or `worldReadable`.
-    var historySharingIconState: RoomScreenHistorySharingIconState?
+    /// If `enableKeyShareOnInvite` is set, determines the current history sharing state.
+    var roomHistorySharingState: RoomHistorySharingState?
     
     var footerDetails: RoomScreenFooterViewDetails?
     

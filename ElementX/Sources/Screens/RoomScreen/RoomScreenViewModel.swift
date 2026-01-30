@@ -67,8 +67,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.initialSelectedPinnedEventID = initialSelectedPinnedEventID
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
 
-        let historySharingIconState: RoomScreenHistorySharingIconState? = if appSettings.enableKeyShareOnInvite {
-            .init(roomInfo: roomProxy.infoPublisher.value)
+        let roomHistorySharingState: RoomHistorySharingState? = if appSettings.enableKeyShareOnInvite {
+            roomProxy.infoPublisher.value.historySharingState
         } else {
             nil
         }
@@ -77,7 +77,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
                                             hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
-                                            historySharingIconState: historySharingIconState)
+                                            roomHistorySharingState: roomHistorySharingState)
         super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)
         
@@ -350,8 +350,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canBan = powerLevels.canOwnUserBan()
         }
         
+        // This causes the UI to become inconsistent with the user's mental model if the user
+        // does not restart the app after disabling the feature flag. We can probably ignore
+        // such cases, since we explicitly ask for an app restart in the caption of the feature
+        // flag switch.
         if appSettings.enableKeyShareOnInvite {
-            state.historySharingIconState = .init(roomInfo: roomInfo)
+            state.roomHistorySharingState = roomInfo.historySharingState
         }
     }
     
