@@ -190,7 +190,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             if !context.viewState.timelineKind.isThread, timelineItem.properties.isThreaded {
                 ThreadDecorator()
                     .padding(.leading, 4)
-                    .layoutPriority(TimelineBubbleLayout.Priority.nonGreedyComponent)
+                    .timelineBubbleLayoutSize(.natural)
             }
             
             if let replyDetails = timelineItem.properties.replyDetails {
@@ -203,7 +203,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.compound.bgCanvasDefault)
                     .cornerRadius(8)
-                    .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
+                    .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
                     .onTapGesture {
                         if context.viewState.timelineKind != .pinned {
                             context.send(viewAction: .focusOnEventID(replyDetails.eventID))
@@ -214,12 +214,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(4.0)
-                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
+                    .timelineBubbleLayoutSize(.bubbleWidth(mode: .layout))
                     .hidden()
             }
             
             content()
-                .layoutPriority(TimelineBubbleLayout.Priority.nonGreedyComponent)
+                .timelineBubbleLayoutSize(.natural)
                 .cornerRadius(timelineItem.contentCornerRadius)
         }
     }
