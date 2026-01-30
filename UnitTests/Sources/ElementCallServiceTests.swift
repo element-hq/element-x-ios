@@ -29,31 +29,33 @@ class ElementCallServiceTests: XCTestCase {
     func testIncomingCall() async {
         setupService()
         
-        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCalled)
         
         let expectation = XCTestExpectation(description: "Call accepted")
         
         let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
         
-        service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP) {
+        Task {
+            await service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP)
             expectation.fulfill()
         }
         
         await fulfillment(of: [expectation], timeout: 1)
-        XCTAssertTrue(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        XCTAssertTrue(callProvider.reportNewIncomingCallWithUpdateCalled)
     }
     
     func disabled_testCallIsTimingOut() async {
         setupService()
         
-        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCalled)
         let expectation = XCTestExpectation(description: "Call accepted")
         
         let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
         
-        service.pushRegistry(pushRegistry,
-                             didReceiveIncomingPushWith: pushPayload,
-                             for: .voIP) {
+        Task {
+            await service.pushRegistry(pushRegistry,
+                                       didReceiveIncomingPushWith: pushPayload,
+                                       for: .voIP)
             expectation.fulfill()
         }
         
@@ -73,21 +75,20 @@ class ElementCallServiceTests: XCTestCase {
         await fulfillment(of: [expectation2], timeout: 1)
     }
     
-    func testExpiredRingLifetimeIsIgnored() {
+    func testExpiredRingLifetimeIsIgnored() async {
         setupService()
    
-        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCalled)
         
         let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
         
         currentDate = currentDate.addingTimeInterval(60)
         
-        service.pushRegistry(pushRegistry,
-                             didReceiveIncomingPushWith: pushPayload,
-                             for: .voIP) { }
-        sleep(20)
+        await service.pushRegistry(pushRegistry,
+                                   didReceiveIncomingPushWith: pushPayload,
+                                   for: .voIP)
         
-        XCTAssertTrue(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        XCTAssertTrue(!callProvider.reportNewIncomingCallWithUpdateCalled)
     }
     
     func disabled_testLifetimeIsCapped() async throws {
@@ -102,16 +103,14 @@ class ElementCallServiceTests: XCTestCase {
             }
         }
         
-        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCalled)
         
         let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 300)
         
-        service.pushRegistry(pushRegistry,
-                             didReceiveIncomingPushWith: pushPayload,
-                             for: .voIP) { }
+        await service.pushRegistry(pushRegistry,
+                                   didReceiveIncomingPushWith: pushPayload,
+                                   for: .voIP)
         
-        // Advance past the max timeout but below the 300
-        await testClock.advance(by: .seconds(100))
         await fulfillment(of: [expectation], timeout: 1)
     }
     

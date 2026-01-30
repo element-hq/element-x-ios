@@ -158,7 +158,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) { }
     
-    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
+    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) async {
         guard let roomID = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomID.rawValue] as? String else {
             MXLog.error("Something went wrong, missing room identifier for incoming voip call: \(payload)")
             return
@@ -199,26 +199,24 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // https://stackoverflow.com/a/41230020/730924
         update.remoteHandle = .init(type: .generic, value: roomID)
         
-        callProvider.reportNewIncomingCall(with: callID.callKitID, update: update) { [weak self] error in
-            if let error {
-                MXLog.error("Failed reporting new incoming call with error: \(error)")
+        do {
+            try await callProvider.reportNewIncomingCall(with: callID.callKitID, update: update)
+            
+            actionsSubject.send(.receivedIncomingCallRequest)
+            
+            endUnansweredCallTask = Task { [weak self] in
+                try? await self?.timeProvider.clock.sleep(for: ringDuration)
+                
+                guard let self, !Task.isCancelled else {
+                    return
+                }
+                
+                if let incomingCallID, incomingCallID.callKitID == callID.callKitID {
+                    callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .unanswered)
+                }
             }
-            
-            self?.actionsSubject.send(.receivedIncomingCallRequest)
-            
-            completion()
-        }
-        
-        endUnansweredCallTask = Task { [weak self] in
-            try? await self?.timeProvider.clock.sleep(for: ringDuration)
-            
-            guard let self, !Task.isCancelled else {
-                return
-            }
-            
-            if let incomingCallID, incomingCallID.callKitID == callID.callKitID {
-                callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .unanswered)
-            }
+        } catch {
+            MXLog.error("Failed reporting new incoming call with error: \(error)")
         }
     }
     
