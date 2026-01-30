@@ -27,6 +27,7 @@ struct JoinedRoomProxyMockConfiguration {
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var pinnedEventIDs: Set<String> = []
+    var historyVisibility: RoomHistoryVisibility = .shared
     
     var timelineStartReached = false
     
@@ -190,7 +191,7 @@ extension RoomInfoProxyMock {
         unreadMentionsCount = 0
         pinnedEventIDs = configuration.pinnedEventIDs
         joinRule = configuration.joinRule
-        historyVisibility = .shared
+        historyVisibility = configuration.historyVisibility
         
         powerLevels = RoomPowerLevelsProxyMock(configuration: configuration.powerLevelsConfiguration)
     }

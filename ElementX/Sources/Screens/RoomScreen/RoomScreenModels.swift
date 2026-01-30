@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 import OrderedCollections
 
 enum RoomScreenViewModelAction: Equatable {
@@ -79,6 +80,9 @@ struct RoomScreenViewState: BindableState {
             !displayedKnockRequests.isEmpty &&
             (canAcceptKnocks || canDeclineKnocks || canBan)
     }
+    
+    /// If `enableKeyShareOnInvite` is set, determines the current history sharing state.
+    var roomHistorySharingState: RoomHistorySharingState?
     
     var footerDetails: RoomScreenFooterViewDetails?
     

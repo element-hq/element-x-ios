@@ -438,4 +438,94 @@ class RoomScreenViewModelTests: XCTestCase {
         }
         try await deferred.fulfill()
     }
+    
+    // MARK: - History Sharing
+    
+    func testRoomWithSharedHistoryDoesNotDisplayBadgeIfFeatureFlagNotSet() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = false
+        
+        var configuration = JoinedRoomProxyMockConfiguration(historyVisibility: .joined)
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+        
+        // setup the room proxy actions publisher
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        self.viewModel = viewModel
+        
+        let deferredInvisible = deferFailure(viewModel.context.$viewState,
+                                             timeout: 1,
+                                             message: "The icon should not be shown when the room history visibility is not .shared or .worldReadable") { viewState in
+            viewState.roomHistorySharingState != nil
+        }
+        try await deferredInvisible.fulfill()
+        
+        configuration.historyVisibility = .shared
+        infoSubject.send(RoomInfoProxyMock(configuration))
+        let deferredShared = deferFailure(viewModel.context.$viewState,
+                                          timeout: 1,
+                                          message: "The icon should not be shown when the room history visibility is .shared, since the flag isn't set") { viewState in
+            viewState.roomHistorySharingState != nil
+        }
+        try await deferredShared.fulfill()
+    }
+    
+    func testRoomWithSharedHistoryDisplaysBadgeWhenFeatureFlagSet() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        
+        var configuration = JoinedRoomProxyMockConfiguration(isEncrypted: false, historyVisibility: .joined)
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+
+        // setup the room proxy actions publisher
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        self.viewModel = viewModel
+        
+        let deferredInvisible = deferFailure(viewModel.context.$viewState,
+                                             timeout: 1,
+                                             message: "The icon should be hidden when the room history visibility is not .shared or .worldReadable") { viewState in
+            viewState.roomHistorySharingState != nil
+        }
+        try await deferredInvisible.fulfill()
+        
+        configuration.historyVisibility = .shared
+        infoSubject.send(RoomInfoProxyMock(configuration))
+        let deferredInvisibleUnencrypted = deferFailure(viewModel.context.$viewState,
+                                                        timeout: 1,
+                                                        message: "The icon should not be shown when the room is unencrypted") { viewState in
+            viewState.roomHistorySharingState != nil
+        }
+        try await deferredInvisibleUnencrypted.fulfill()
+        
+        configuration.isEncrypted = true
+        infoSubject.send(RoomInfoProxyMock(configuration))
+        let deferredShared = deferFulfillment(viewModel.context.$viewState,
+                                              message: "The icon should be shown when the room history visibility is .shared") { viewState in
+            viewState.roomHistorySharingState == .shared
+        }
+        try await deferredShared.fulfill()
+        
+        configuration.historyVisibility = .worldReadable
+        infoSubject.send(RoomInfoProxyMock(configuration))
+        let deferredWorldReadable = deferFulfillment(viewModel.context.$viewState,
+                                                     message: "The icon should be shown when the room history visibility is .worldReadable") { viewState in
+            viewState.roomHistorySharingState == .worldReadable
+        }
+        try await deferredWorldReadable.fulfill()
+    }
 }

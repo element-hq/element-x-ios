@@ -67,10 +67,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.initialSelectedPinnedEventID = initialSelectedPinnedEventID
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
 
+        let roomHistorySharingState: RoomHistorySharingState? = if appSettings.enableKeyShareOnInvite {
+            roomProxy.infoPublisher.value.historySharingState
+        } else {
+            nil
+        }
+        
         let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
-                                            hasSuccessor: roomProxy.infoPublisher.value.successor != nil)
+                                            hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
+                                            roomHistorySharingState: roomHistorySharingState)
         super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)
         
@@ -341,6 +348,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canAcceptKnocks = powerLevels.canOwnUserInvite()
             state.canDeclineKnocks = powerLevels.canOwnUserKick()
             state.canBan = powerLevels.canOwnUserBan()
+        }
+        
+        // This causes the UI to become inconsistent with the user's mental model if the user
+        // does not restart the app after disabling the feature flag. We can probably ignore
+        // such cases, since we explicitly ask for an app restart in the caption of the feature
+        // flag switch.
+        if appSettings.enableKeyShareOnInvite {
+            state.roomHistorySharingState = roomInfo.historySharingState
         }
     }
     
