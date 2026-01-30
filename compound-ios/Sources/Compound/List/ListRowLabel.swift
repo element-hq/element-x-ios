@@ -68,7 +68,7 @@ public struct ListRowLabel<Icon: View>: View {
         case error
     }
     
-    var iconAlignment: VerticalAlignment = .center
+    var iconAlignment: VerticalAlignment = .top
     var hideIconBackground = false
     
     enum Layout { case `default`, centered, avatar }
@@ -98,14 +98,26 @@ public struct ListRowLabel<Icon: View>: View {
     
     var iconForegroundColor: Color {
         guard isEnabled else { return .compound.iconTertiaryAlpha }
-        if role == .destructive { return .compound.textCriticalPrimary }
-        return hideIconBackground ? .compound.iconPrimary : .compound.iconTertiaryAlpha
+        if role == .destructive { return .compound.iconCriticalPrimary }
+        if hideIconBackground {
+            return .compound.iconTertiaryAlpha
+        } else {
+            if #available(iOS 26, *) {
+                return .compound.iconSecondary
+            } else {
+                return .compound.iconPrimary
+            }
+        }
     }
     
     var iconBackgroundColor: Color {
         if hideIconBackground { return .clear }
-        guard isEnabled else { return .compound._bgSubtleSecondaryAlpha }
-        return role == .destructive ? .compound._bgCriticalSubtleAlpha : .compound._bgSubtleSecondaryAlpha
+        if #available(iOS 26, *) {
+            return .clear
+        } else {
+            guard isEnabled else { return .compound._bgSubtleSecondaryAlpha }
+            return role == .destructive ? .compound._bgCriticalSubtleAlpha : .compound._bgSubtleSecondaryAlpha
+        }
     }
     
     public var body: some View {
@@ -207,7 +219,7 @@ public struct ListRowLabel<Icon: View>: View {
                                  description: String? = nil,
                                  icon: Icon,
                                  role: ListRowLabel.Role? = nil,
-                                 iconAlignment: VerticalAlignment = .center) -> ListRowLabel {
+                                 iconAlignment: VerticalAlignment = .top) -> ListRowLabel {
         ListRowLabel(title: title,
                      description: description,
                      icon: icon,
@@ -219,7 +231,7 @@ public struct ListRowLabel<Icon: View>: View {
                                  description: String? = nil,
                                  icon: KeyPath<CompoundIcons, Image>,
                                  role: ListRowLabel.Role? = nil,
-                                 iconAlignment: VerticalAlignment = .center) -> ListRowLabel where Icon == CompoundIcon {
+                                 iconAlignment: VerticalAlignment = .top) -> ListRowLabel where Icon == CompoundIcon {
         .default(title: title,
                  description: description,
                  icon: CompoundIcon(icon),
@@ -231,7 +243,7 @@ public struct ListRowLabel<Icon: View>: View {
                                  description: String? = nil,
                                  systemIcon: SFSymbol,
                                  role: ListRowLabel.Role? = nil,
-                                 iconAlignment: VerticalAlignment = .center) -> ListRowLabel where Icon == Image {
+                                 iconAlignment: VerticalAlignment = .top) -> ListRowLabel where Icon == Image {
         .default(title: title,
                  description: description,
                  icon: Image(systemSymbol: systemIcon),
@@ -303,6 +315,7 @@ public struct ListRowLabel<Icon: View>: View {
                      description: description,
                      icon: icon,
                      role: role,
+                     iconAlignment: .center,
                      layout: .avatar)
     }
 }

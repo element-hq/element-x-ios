@@ -234,13 +234,13 @@ struct CreateRoomScreen: View {
                             context.showSpaceSelectionSheet = true
                         })
             } else {
-                ListRow(label: .default(title: L10n.screenCreateRoomSpaceSelectionNoSpaceTitle,
-                                        description: L10n.screenCreateRoomSpaceSelectionNoSpaceDescription,
-                                        icon: CompoundIcon(\.homeSolid, size: .small, relativeTo: .body)
-                                            .foregroundColor(.compound.iconPrimary)
-                                            .scaledFrame(size: 32)
-                                            .background(.compound.bgSubtleSecondary)
-                                            .clipAvatar(isSpace: true, size: 32)),
+                ListRow(label: .avatar(title: L10n.screenCreateRoomSpaceSelectionNoSpaceTitle,
+                                       description: L10n.screenCreateRoomSpaceSelectionNoSpaceDescription,
+                                       icon: CompoundIcon(\.homeSolid, size: .small, relativeTo: .body)
+                                           .foregroundColor(.compound.iconPrimary)
+                                           .scaledFrame(size: 32)
+                                           .background(.compound.bgSubtleSecondary)
+                                           .clipAvatar(isSpace: true, size: 32)),
                         kind: .navigationLink {
                             context.showSpaceSelectionSheet = true
                         })
@@ -326,8 +326,7 @@ private struct CreateRoomAccessRow: View {
     var body: some View {
         ListRow(label: .default(title: title,
                                 description: description,
-                                icon: icon,
-                                iconAlignment: .top),
+                                icon: icon),
                 kind: .selection(isSelected: isSelected,
                                  action: onSelection))
     }
