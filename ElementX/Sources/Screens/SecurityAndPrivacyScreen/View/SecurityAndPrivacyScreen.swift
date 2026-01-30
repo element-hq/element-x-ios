@@ -48,15 +48,13 @@ struct SecurityAndPrivacyScreen: View {
         Section {
             ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionTitle,
                                     description: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionDescription,
-                                    icon: \.public,
-                                    iconAlignment: .top),
+                                    icon: \.public),
                     kind: .selection(isSelected: context.desiredSettings.accessType == .anyone) { context.desiredSettings.accessType = .anyone })
             
             if context.viewState.isSpaceMembersOptionAvailable {
                 ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionTitle,
                                         description: context.viewState.spaceMembersDescription,
-                                        icon: \.space,
-                                        iconAlignment: .top),
+                                        icon: \.space),
                         kind: .selection(isSelected: context.desiredSettings.accessType.isSpaceMembers) {
                             context.send(viewAction: .selectedSpaceMembersAccess)
                         })
@@ -76,8 +74,7 @@ struct SecurityAndPrivacyScreen: View {
             
             ListRow(label: .default(title: L10n.screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle,
                                     description: L10n.screenSecurityAndPrivacyRoomAccessInviteOnlyOptionDescription,
-                                    icon: \.lock,
-                                    iconAlignment: .top),
+                                    icon: \.lock),
                     kind: .selection(isSelected: context.desiredSettings.accessType == .inviteOnly) { context.desiredSettings.accessType = .inviteOnly })
         } header: {
             Text(L10n.screenSecurityAndPrivacyRoomAccessSectionHeader)
@@ -97,8 +94,7 @@ struct SecurityAndPrivacyScreen: View {
     private var askToJoinOption: some View {
         ListRow(label: .default(title: L10n.screenSecurityAndPrivacyAskToJoinOptionTitle,
                                 description: L10n.screenSecurityAndPrivacyAskToJoinOptionDescription,
-                                icon: \.userAdd,
-                                iconAlignment: .top),
+                                icon: \.userAdd),
                 kind: .selection(isSelected: context.desiredSettings.accessType == .askToJoin) { context.desiredSettings.accessType = .askToJoin })
             .disabled(!context.viewState.isKnockingEnabled)
     }
@@ -106,8 +102,7 @@ struct SecurityAndPrivacyScreen: View {
     private var askToJoinWithSpaceMembersOption: some View {
         ListRow(label: .default(title: L10n.screenSecurityAndPrivacyAskToJoinOptionTitle,
                                 description: context.viewState.askToJoinWithSpaceMembersDescription,
-                                icon: \.userAdd,
-                                iconAlignment: .top),
+                                icon: \.userAdd),
                 kind: .selection(isSelected: context.desiredSettings.accessType.isAskToJoinWithSpaceMembers) { context.send(viewAction: .selectedAskToJoinWithSpaceMembersAccess) })
             .disabled(!context.viewState.isAskToJoinWithSpaceMembersOptionSelectable)
     }

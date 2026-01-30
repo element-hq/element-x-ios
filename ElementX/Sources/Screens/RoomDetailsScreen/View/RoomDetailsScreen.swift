@@ -262,8 +262,7 @@ struct RoomDetailsScreen: View {
             Section {
                 ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
                                         description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
-                                        icon: \.lock,
-                                        iconAlignment: .top),
+                                        icon: \.lock),
                         kind: .label)
                     .accessibilityAddTraits(.isHeader)
             } header: {
