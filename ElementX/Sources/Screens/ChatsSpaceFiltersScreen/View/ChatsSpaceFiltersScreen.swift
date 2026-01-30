@@ -15,13 +15,16 @@ struct ChatsSpaceFiltersScreen: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(context.viewState.filters) { filter in
+                    ForEach(context.viewState.visibleFilters) { filter in
                         ChatsSpaceFilterCell(filter: filter,
                                              mediaProvider: context.mediaProvider) { filter in
                             context.send(viewAction: .confirm(filter))
                         }
                     }
                 }
+                .searchable(text: $context.searchQuery, placement: .navigationBarDrawer)
+                .focusSearchIfHardwareKeyboardAvailable()
+                .compoundSearchField()
             }
             .toolbar { toolbar }
             .navigationTitle(L10n.screenRoomlistYourSpaces)

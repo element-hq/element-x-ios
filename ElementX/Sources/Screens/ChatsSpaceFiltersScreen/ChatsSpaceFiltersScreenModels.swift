@@ -15,9 +15,22 @@ enum ChatsSpaceFiltersScreenViewModelAction {
 struct ChatsSpaceFiltersScreenViewState: BindableState {
     var filters = [SpaceServiceFilter]()
     var bindings: ChatsSpaceFiltersScreenViewStateBindings
+    
+    var visibleFilters: [SpaceServiceFilter] {
+        if bindings.searchQuery.isEmpty {
+            return filters
+        }
+        
+        return filters.filter { filter in
+            filter.room.name.localizedStandardContains(bindings.searchQuery) ||
+                (filter.room.canonicalAlias ?? "").localizedStandardContains(bindings.searchQuery)
+        }
+    }
 }
 
-struct ChatsSpaceFiltersScreenViewStateBindings { }
+struct ChatsSpaceFiltersScreenViewStateBindings {
+    var searchQuery = ""
+}
 
 enum ChatsSpaceFiltersScreenViewAction: CustomStringConvertible {
     case confirm(SpaceServiceFilter)
