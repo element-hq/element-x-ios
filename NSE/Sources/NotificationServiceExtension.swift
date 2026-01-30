@@ -48,6 +48,16 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
     
     override init() {
+        // If we can't write to the app group container then the target configuration below will fail.
+        // We could skip that but then we're unlikely to be able to create a session and we would be
+        // missing the lightweightTokioRuntime, so instead just kill the process and let the system
+        // deliver the notification with no modifications.
+        guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory) else {
+            // swiftlint:disable:next print_deprecation
+            print("Device is locked after reboot, delivering the unmodified notification.")
+            exit(0)
+        }
+        
         appHooks = AppHooks()
         appHooks.setUp()
         
@@ -67,11 +77,6 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
     
     private func handle(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) async {
-        guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory) else {
-            MXLog.error("Device is locked after reboot, bailing out.")
-            return contentHandler(request.content)
-        }
-              
         guard let roomID = request.content.roomID else {
             MXLog.error("Invalid roomID, bailing out: \(request.content)")
             return contentHandler(request.content)
