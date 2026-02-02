@@ -304,6 +304,7 @@
 "common_server_url" = "Adres URL serwera";
 "common_settings" = "Ustawienia";
 "common_share_space" = "Udostępnij przestrzeń";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Udostępniona lokalizacja";
 "common_shared_space" = "Udostępniona przestrzeń";
 "common_signing_out" = "Wylogowywanie";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Wiadomość głosowa";
 "common_waiting" = "Oczekiwanie…";
 "common_waiting_for_decryption_key" = "Oczekiwanie na tę wiadomość";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Ty";
 "common.add_account" = "Dodaj konto";
 "common.add_another_account" = "Dodaj kolejne konto";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Wypróbuj nasze najnowsze pomysły w fazie rozwoju. Funkcje te nie są jeszcze sfinalizowane; mogą być niestabilne i ulec zmianie.";
 "screen_labs_header_title" = "Chcesz poeksperymentować?";
 "screen_labs_title" = "Laboratoria";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Administrator)";
 "screen_leave_space_subtitle" = "Wybierz pokoje, które chcesz opuścić, a których nie jesteś jedynym administratorem:";
 "screen_leave_space_subtitle_last_admin" = "Aby opuścić tę przestrzeń, musisz przypisać do niej innego administratora.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Nie zostaniesz usunięty z następujących pokoi, ponieważ jesteś ich jedynym administratorem:";
 "screen_leave_space_title" = "Opuścić %1$@?";
 "screen_leave_space_title_last_admin" = "Jesteś jedynym administratorem %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_title" = "Open %1$@ on a desktop computer to get the QR code";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "The numbers don’t match";

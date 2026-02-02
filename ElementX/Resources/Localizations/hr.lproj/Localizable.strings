@@ -304,6 +304,7 @@
 "common_server_url" = "URL poslužitelja";
 "common_settings" = "Postavke";
 "common_share_space" = "Podijeli prostor";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Podijeljena lokacija";
 "common_shared_space" = "Zajednički prostor";
 "common_signing_out" = "Odjava je u tijeku";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Glasovna poruka";
 "common_waiting" = "Čekanje...";
 "common_waiting_for_decryption_key" = "Čekam ovu poruku";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Vi";
 "common.add_account" = "Dodaj račun";
 "common.add_another_account" = "Dodaj još jedan račun";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Isprobajte naše najnovije ideje u razvoju. Ove značajke nisu finalizirane; mogu biti nestabilne i mijenjati se.";
 "screen_labs_header_title" = "Jeste li spremni za eksperimentiranje?";
 "screen_labs_title" = "Laboratoriji";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (administrator)";
 "screen_leave_space_subtitle" = "Odaberite sobe koje želite napustiti, a za koje niste jedini administrator:";
 "screen_leave_space_subtitle_last_admin" = "Morate dodijeliti drugog administratora za ovaj prostor prije nego što ga napustite.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Nećete biti uklonjeni iz sljedećih soba jer ste jedini administrator:";
 "screen_leave_space_title" = "Želite li napustiti %1$@?";
 "screen_leave_space_title_last_admin" = "Vi ste jedini administrator za %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Otvorite %1$@ na prijenosnom ili stolnom računalu";
 "screen_link_new_device_desktop_title" = "Otvorite %1$@ na stolnom računalu kako biste dobili QR kod";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Brojevi se ne podudaraju";

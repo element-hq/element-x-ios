@@ -304,6 +304,7 @@
 "common_server_url" = "Palvelimen osoite";
 "common_settings" = "Asetukset";
 "common_share_space" = "Jaa tila";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Jaettu sijainti";
 "common_shared_space" = "Jaettu tila";
 "common_signing_out" = "Kirjaudutaan ulos";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Ääniviesti";
 "common_waiting" = "Odotetaan…";
 "common_waiting_for_decryption_key" = "Odotetaan viestiä";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Sinä";
 "common.add_account" = "Lisää tili";
 "common.add_another_account" = "Lisää toinen tili";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Kokeile uusimpia kehitteillä olevia ideoitamme. Nämä ominaisuudet eivät ole vielä valmiita; ne voivat olla epävakaita ja muuttua.";
 "screen_labs_header_title" = "Kokeilunhaluinen olo?";
 "screen_labs_title" = "Labrat";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Ylläpitäjä)";
 "screen_leave_space_subtitle" = "Tämä poistaa sinut myös kaikista tämän tilan huoneista.";
 "screen_leave_space_subtitle_last_admin" = "Sinun on valittava tälle tilalle toinen ylläpitäjä ennen kuin voit poistua.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Sinua ei poisteta seuraavista huoneista, koska olet ainoa ylläpitäjä:";
 "screen_leave_space_title" = "Haluatko poistua tilasta %1$@?";
 "screen_leave_space_title_last_admin" = "Olet ainoa ylläpitäjä tilassa %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_title" = "Open %1$@ on a desktop computer to get the QR code";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "The numbers don’t match";

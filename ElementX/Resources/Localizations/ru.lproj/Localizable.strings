@@ -304,6 +304,7 @@
 "common_server_url" = "Адрес сервера";
 "common_settings" = "Настройки";
 "common_share_space" = "Поделиться пространством";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Поделился местоположением";
 "common_shared_space" = "Общее пространство";
 "common_signing_out" = "Выход…";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Голосовое сообщение";
 "common_waiting" = "Ожидание…";
 "common_waiting_for_decryption_key" = "Ожидание ключа расшифровки";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Вы";
 "common.add_account" = "Добавить аккаунт";
 "common.add_another_account" = "Добавить другой аккаунт";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Попробуйте наши последние идеи в разработке. Эти функции ещё не завершены, они могут быть нестабильны и могут измениться.";
 "screen_labs_header_title" = "Хотите попробовать?";
 "screen_labs_title" = "Лаборатория";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Администратор)";
 "screen_leave_space_subtitle" = "Выберите комнаты, которые вы хотите покинуть и в которых вы не являетесь единственным администратором:";
 "screen_leave_space_subtitle_last_admin" = "Прежде чем покинуть это пространство, вам необходимо назначить другого администратора.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Вы не будете удалены из следующих комнат, поскольку вы являетесь единственным администратором:";
 "screen_leave_space_title" = "Выйти из %1$@?";
 "screen_leave_space_title_last_admin" = "Вы единственный администратор для %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Откройте %1$@ на ноутбуке или компьютере";
 "screen_link_new_device_desktop_title" = "Открой %1$@ на компьютере, чтобы получить QR-код";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Цифры не совпадают";

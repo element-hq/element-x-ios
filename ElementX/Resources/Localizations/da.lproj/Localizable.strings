@@ -304,6 +304,7 @@
 "common_server_url" = "Server URL";
 "common_settings" = "Indstillinger";
 "common_share_space" = "Del gruppe";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Delt placering";
 "common_shared_space" = "Delt gruppe";
 "common_signing_out" = "Logger ud";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Talebesked";
 "common_waiting" = "Venter...";
 "common_waiting_for_decryption_key" = "Venter på denne besked";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Dig";
 "common.add_account" = "Tilføj en konto";
 "common.add_another_account" = "Tilføj en anden konto";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Prøv vores nyeste idéer under udvikling. Disse funktioner er ikke færdige; de ​​kan være ustabile og kan ændre sig.";
 "screen_labs_header_title" = "Er du i humør til at eksperimentere?";
 "screen_labs_title" = "Laboratorier";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Vælg de rum, du vil forlade, som du ikke er den eneste administrator for:";
 "screen_leave_space_subtitle_last_admin" = "Du skal tildele en anden administrator til denne gruppe, før du kan forlade den.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Du vil ikke blive fjernet fra følgende rum, fordi du er den eneste administrator:";
 "screen_leave_space_title" = "Forlad %1$@?";
 "screen_leave_space_title_last_admin" = "Du er den eneste administrator for %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Åbn %1$@ på en bærbar eller stationær computer";
 "screen_link_new_device_desktop_title" = "Åbn %1$@ på en stationær computer for at få QR-koden";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Tallene stemmer ikke overens";
