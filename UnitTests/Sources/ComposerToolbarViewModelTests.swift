@@ -148,7 +148,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
         var string = "@room"
-        // swiftlint:disable:next force_unwrapping
         try string.unicodeScalars.append(XCTUnwrap(UnicodeScalar(String.nbsp)))
         XCTAssertEqual(wysiwygViewModel.content.html, string)
     }

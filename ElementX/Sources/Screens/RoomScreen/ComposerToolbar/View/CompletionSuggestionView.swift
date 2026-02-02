@@ -86,13 +86,9 @@ struct CompletionSuggestionView: View {
 }
 
 private struct BackgroundView<Content: View>: View {
-    var content: () -> Content
+    @ViewBuilder var content: () -> Content
     
     private let shadowRadius: CGFloat = 20.0
-    
-    init(@ViewBuilder content: @escaping () -> Content) {
-        self.content = content
-    }
     
     var body: some View {
         content()
