@@ -2112,16 +2112,15 @@ class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
     }
     //MARK: - reportNewIncomingCall
 
-    var reportNewIncomingCallWithUpdateThrowableError: Error?
-    var reportNewIncomingCallWithUpdateUnderlyingCallsCount = 0
-    var reportNewIncomingCallWithUpdateCallsCount: Int {
+    var reportNewIncomingCallWithUpdateCompletionUnderlyingCallsCount = 0
+    var reportNewIncomingCallWithUpdateCompletionCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return reportNewIncomingCallWithUpdateUnderlyingCallsCount
+                return reportNewIncomingCallWithUpdateCompletionUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = reportNewIncomingCallWithUpdateUnderlyingCallsCount
+                    returnValue = reportNewIncomingCallWithUpdateCompletionUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2129,31 +2128,28 @@ class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                reportNewIncomingCallWithUpdateUnderlyingCallsCount = newValue
+                reportNewIncomingCallWithUpdateCompletionUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    reportNewIncomingCallWithUpdateUnderlyingCallsCount = newValue
+                    reportNewIncomingCallWithUpdateCompletionUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var reportNewIncomingCallWithUpdateCalled: Bool {
-        return reportNewIncomingCallWithUpdateCallsCount > 0
+    var reportNewIncomingCallWithUpdateCompletionCalled: Bool {
+        return reportNewIncomingCallWithUpdateCompletionCallsCount > 0
     }
-    var reportNewIncomingCallWithUpdateReceivedArguments: (UUID: UUID, update: CXCallUpdate)?
-    var reportNewIncomingCallWithUpdateReceivedInvocations: [(UUID: UUID, update: CXCallUpdate)] = []
-    var reportNewIncomingCallWithUpdateClosure: ((UUID, CXCallUpdate) async throws -> Void)?
+    var reportNewIncomingCallWithUpdateCompletionReceivedArguments: (uuid: UUID, update: CXCallUpdate, completion: (Error?) -> Void)?
+    var reportNewIncomingCallWithUpdateCompletionReceivedInvocations: [(uuid: UUID, update: CXCallUpdate, completion: (Error?) -> Void)] = []
+    var reportNewIncomingCallWithUpdateCompletionClosure: ((UUID, CXCallUpdate, @Sendable @escaping (Error?) -> Void) -> Void)?
 
-    func reportNewIncomingCall(with UUID: UUID, update: CXCallUpdate) async throws {
-        if let error = reportNewIncomingCallWithUpdateThrowableError {
-            throw error
-        }
-        reportNewIncomingCallWithUpdateCallsCount += 1
-        reportNewIncomingCallWithUpdateReceivedArguments = (UUID: UUID, update: update)
+    func reportNewIncomingCall(with uuid: UUID, update: CXCallUpdate, completion: @Sendable @escaping (Error?) -> Void) {
+        reportNewIncomingCallWithUpdateCompletionCallsCount += 1
+        reportNewIncomingCallWithUpdateCompletionReceivedArguments = (uuid: uuid, update: update, completion: completion)
         DispatchQueue.main.async {
-            self.reportNewIncomingCallWithUpdateReceivedInvocations.append((UUID: UUID, update: update))
+            self.reportNewIncomingCallWithUpdateCompletionReceivedInvocations.append((uuid: uuid, update: update, completion: completion))
         }
-        try await reportNewIncomingCallWithUpdateClosure?(UUID, update)
+        reportNewIncomingCallWithUpdateCompletionClosure?(uuid, update, completion)
     }
     //MARK: - reportCall
 

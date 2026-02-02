@@ -10,7 +10,8 @@ extension CXProviderMock {
     
     convenience init(_ configuration: Configuration) {
         self.init()
-        
-        reportNewIncomingCallWithUpdateClosure = { _, _ in }
+        reportNewIncomingCallWithUpdateCompletionClosure = { _, _, completion in
+            completion(nil)
+        }
     }
 }
