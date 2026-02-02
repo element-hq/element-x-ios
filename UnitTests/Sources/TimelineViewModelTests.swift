@@ -238,7 +238,6 @@ class TimelineViewModelTests: XCTestCase {
     
     // MARK: - Read Receipts
     
-    // swiftlint:disable force_unwrapping
     func testSendReadReceipt() async throws {
         // Given a room with only text items in the timeline
         let items = [TextRoomTimelineItem(eventID: "t1"),
@@ -284,7 +283,6 @@ class TimelineViewModelTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(100))
     }
     
-    // swiftlint:enable force_unwrapping
     // swiftlint:disable:next large_tuple
     private func readReceiptsConfiguration(with items: [RoomTimelineItemProtocol]) -> (TimelineViewModel,
                                                                                        JoinedRoomProxyMock,

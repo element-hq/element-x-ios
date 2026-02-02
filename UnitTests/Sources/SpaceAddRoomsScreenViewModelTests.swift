@@ -86,9 +86,9 @@ class SpaceAddRoomsScreenViewModelTests: XCTestCase {
         
         // Then the screen should be updated to only show the rooms that still need to be added.
         XCTAssertEqual(spaceServiceProxy.addChildToCallsCount, 3, "The remaining calls to the service should stop after a failure.")
-        XCTAssertFalse(context.viewState.selectedRooms.contains(where: { successfulIDs.contains($0.id) }),
+        XCTAssertFalse(context.viewState.selectedRooms.contains { successfulIDs.contains($0.id) },
                        "The added rooms should no longer show as selected.")
-        XCTAssertFalse(context.viewState.roomsSection.rooms.contains(where: { successfulIDs.contains($0.id) }),
+        XCTAssertFalse(context.viewState.roomsSection.rooms.contains { successfulIDs.contains($0.id) },
                        "The added rooms should no longer be listed for selection.")
     }
     

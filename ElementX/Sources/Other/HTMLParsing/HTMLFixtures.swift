@@ -99,7 +99,11 @@ enum HTMLFixtures: String, CaseIterable {
             """
         case .wideCodeBlock:
             """
-            <pre><code>CHHapticPattern.mm:487   +[CHHapticPattern patternForKey:error:]: Failed to read pattern library data: Error Domain=NSCocoaErrorDomain Code=260 "The file “hapticpatternlibrary.plist” couldn’t be opened because there is no such file." UserInfo={NSFilePath=/Library/Audio/Tunings/Generic/Haptics/Library/hapticpatternlibrary.plist, NSURL=file:///Library/Audio/Tunings/Generic/Haptics/Library/hapticpatternlibrary.plist, NSUnderlyingError=0x600000da69d0 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}</code></pre>
+            <pre><code>CHHapticPattern.mm:487   +[CHHapticPattern patternForKey:error:]: Failed to read pattern library data: Error Domain=NSCocoaErrorDomain Code=260 \
+            "The file “hapticpatternlibrary.plist” couldn’t be opened because there is no such file." \
+            UserInfo={NSFilePath=/Library/Audio/Tunings/Generic/Haptics/Library/hapticpatternlibrary.plist, \
+            NSURL=file:///Library/Audio/Tunings/Generic/Haptics/Library/hapticpatternlibrary.plist, \
+            NSUnderlyingError=0x600000da69d0 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}</code></pre>
             """
         case .unorderedList:
             """
