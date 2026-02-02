@@ -86,7 +86,6 @@
 		<string>fetch</string>
 		<string>processing</string>
 		<string>voip</string>
-		<string>remote-notification</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict>
