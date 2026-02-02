@@ -304,6 +304,7 @@
 "common_server_url" = "URL adresa servera";
 "common_settings" = "Nastavenia";
 "common_share_space" = "Zdieľať priestor";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Zdieľaná poloha";
 "common_shared_space" = "Zdieľaný priestor";
 "common_signing_out" = "Odhlasovanie";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Hlasová správa";
 "common_waiting" = "Čaká sa…";
 "common_waiting_for_decryption_key" = "Čaká sa na dešifrovací kľúč";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Vy";
 "common.add_account" = "Pridať účet";
 "common.add_another_account" = "Pridať ďalší účet";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Vyskúšajte naše najnovšie nápady vo vývoji. Tieto funkcie nie sú finalizované; môžu byť nestabilné a môžu sa zmeniť.";
 "screen_labs_header_title" = "Máte chuť experimentovať?";
 "screen_labs_title" = "Laboratóriá";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Správca)";
 "screen_leave_space_subtitle" = "Vyberte miestnosti, ktoré chcete opustiť a pre ktoré nie ste jediným správcom:";
 "screen_leave_space_subtitle_last_admin" = "Pred odchodom musíte pre tento priestor určiť iného správcu.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Z nasledujúcich miestností nebudete odstránený/á, pretože ste jediným správcom:";
 "screen_leave_space_title" = "Opustiť %1$@?";
 "screen_leave_space_title_last_admin" = "Ste jediným administrátorom pre %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Otvorte %1$@ na notebooku alebo stolnom počítači";
 "screen_link_new_device_desktop_title" = "Otvorte %1$@ na stolnom počítači, aby ste získali QR kód";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Čísla sa nezhodujú";

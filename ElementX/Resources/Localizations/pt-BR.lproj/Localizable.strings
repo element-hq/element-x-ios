@@ -304,6 +304,7 @@
 "common_server_url" = "URL do servidor";
 "common_settings" = "Configurações";
 "common_share_space" = "Compartilhar espaço";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Localização compartilhada";
 "common_shared_space" = "Espaço compartilhado";
 "common_signing_out" = "Saindo";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Mensagem de voz";
 "common_waiting" = "Aguardando…";
 "common_waiting_for_decryption_key" = "Aguardando por esta mensagem";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Você";
 "common.add_account" = "Adicionar uma conta";
 "common.add_another_account" = "Adicionar outra conta";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Teste as nossas mais novas ideias em desenvolvimento. Esses recursos não estão finalizados; podem estar instáveis, e podem mudar.";
 "screen_labs_header_title" = "Se sentindo experimental?";
 "screen_labs_title" = "Experimentos";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Administrador)";
 "screen_leave_space_subtitle" = "Selecione as salas que gostaria de sair nas quais você não é o único administrador:";
 "screen_leave_space_subtitle_last_admin" = "Você precisa atribuir outro administrador para este espaço antes de sair.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Você não será removido das seguintes salas porque você é o único administrador:";
 "screen_leave_space_title" = "Sair de %1$@?";
 "screen_leave_space_title_last_admin" = "Você é o único administrador de %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Abra o %1$@ em um computador";
 "screen_link_new_device_desktop_title" = "Abra o %1$@ em um computador para receber o código QR";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Os números não conferem";

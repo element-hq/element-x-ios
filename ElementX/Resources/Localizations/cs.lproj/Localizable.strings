@@ -304,6 +304,7 @@
 "common_server_url" = "URL serveru";
 "common_settings" = "Nastavení";
 "common_share_space" = "Sdílet prostor";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Sdílená poloha";
 "common_shared_space" = "Sdílený prostor";
 "common_signing_out" = "Odhlašování";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Hlasová zpráva";
 "common_waiting" = "Čekání...";
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Vy";
 "common.add_account" = "Přidat účet";
 "common.add_another_account" = "Přidat další účet";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Vyzkoušejte naše nejnovější nápady, které jsou ve vývoji. Tyto funkce nejsou finalizované; mohou být nestabilní a mohou se změnit.";
 "screen_labs_header_title" = "Máte chuť experimentovat?";
 "screen_labs_title" = "Experimentální funkce";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Správce)";
 "screen_leave_space_subtitle" = "Tím budete také odstraněni ze všech místností v tomto prostoru.";
 "screen_leave_space_subtitle_last_admin" = "Než budete moci odejít, musíte pro tento prostor přiřadit jiného správce.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Z následujících místností nebudete odstraněni, protože jste jediným administrátorem:";
 "screen_leave_space_title" = "Opustit %1$@?";
 "screen_leave_space_title_last_admin" = "Jste jediným administrátorem pro %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Otevřete %1$@ na notebooku nebo stolním počítači";
 "screen_link_new_device_desktop_title" = "Otevřete %1$@ na stolním počítači a získejte QR kód";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Čísla se neshodují";

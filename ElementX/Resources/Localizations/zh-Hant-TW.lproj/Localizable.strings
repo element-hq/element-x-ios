@@ -304,6 +304,7 @@
 "common_server_url" = "伺服器 URL";
 "common_settings" = "設定";
 "common_share_space" = "分享空間";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "位置分享";
 "common_shared_space" = "共享空間";
 "common_signing_out" = "正在登出";
@@ -350,6 +351,7 @@
 "common_voice_message" = "語音訊息";
 "common_waiting" = "等待中...";
 "common_waiting_for_decryption_key" = "等待此則訊息";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "您";
 "common.add_account" = "新增帳號";
 "common.add_another_account" = "新增其他帳號";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "試試我們正在開發中的最新構想。這些功能可能尚未完成，可能不夠穩定，也可能隨時變動。";
 "screen_labs_header_title" = "想不想來點新花樣？";
 "screen_labs_title" = "實驗室";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@（管理員）";
 "screen_leave_space_subtitle" = "這也會將您從此空間中的所有聊天室移除。";
 "screen_leave_space_subtitle_last_admin" = "您必須為此空間另外指定一位管理員後才能離開。";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "您不會被從以下聊天室移除，因為您是唯一的管理員：";
 "screen_leave_space_title" = "離開 %1$@？";
 "screen_leave_space_title_last_admin" = "您是 %1$@ 唯一的管理員";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_title" = "Open %1$@ on a desktop computer to get the QR code";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "The numbers don’t match";

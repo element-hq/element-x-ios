@@ -304,6 +304,7 @@
 "common_server_url" = "服务器 URL";
 "common_settings" = "设置";
 "common_share_space" = "共享空间";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "共享位置";
 "common_shared_space" = "共享空间";
 "common_signing_out" = "正在登出";
@@ -350,6 +351,7 @@
 "common_voice_message" = "语音消息";
 "common_waiting" = "等待...";
 "common_waiting_for_decryption_key" = "正在等待解密密钥";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "您";
 "common.add_account" = "添加账户";
 "common.add_another_account" = "添加另一个账户";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "尝试我们最新的开发理念。这些功能尚未最终确定，可能不稳定，也可能会发生变化。";
 "screen_labs_header_title" = "想尝试新功能？";
 "screen_labs_title" = "实验室";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (管理员)";
 "screen_leave_space_subtitle" = "选择您想要离开且您不是其唯一管理员的房间：";
 "screen_leave_space_subtitle_last_admin" = "您需要为该空间指定另一位管理员才能离开。";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "您不会从以下房间中被移除，因为您是唯一的管理员：";
 "screen_leave_space_title" = "离开%1$@？";
 "screen_leave_space_title_last_admin" = "您是 %1$@ 的唯一管理员";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_title" = "Open %1$@ on a desktop computer to get the QR code";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "The numbers don’t match";

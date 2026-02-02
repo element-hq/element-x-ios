@@ -792,6 +792,8 @@ internal enum L10n {
   internal static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
   /// Waiting for this message
   internal static var commonWaitingForDecryptionKey: String { return L10n.tr("Localizable", "common_waiting_for_decryption_key") }
+  /// Anyone can see history
+  internal static var commonWorldReadableHistory: String { return L10n.tr("Localizable", "common_world_readable_history") }
   /// You
   internal static var commonYou: String { return L10n.tr("Localizable", "common_you") }
   /// Confirm your recovery key to maintain access to your key storage and message history.
@@ -1930,6 +1932,8 @@ internal enum L10n {
   internal static var screenLabsHeaderTitle: String { return L10n.tr("Localizable", "screen_labs_header_title") }
   /// Labs
   internal static var screenLabsTitle: String { return L10n.tr("Localizable", "screen_labs_title") }
+  /// Choose owners
+  internal static var screenLeaveSpaceChooseOwnersAction: String { return L10n.tr("Localizable", "screen_leave_space_choose_owners_action") }
   /// %1$@ (Admin)
   internal static func screenLeaveSpaceLastAdminInfo(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_leave_space_last_admin_info", String(describing: p1))
@@ -1956,6 +1960,8 @@ internal enum L10n {
   internal static func screenLeaveSpaceTitleLastAdmin(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_leave_space_title_last_admin", String(describing: p1))
   }
+  /// Transfer ownership
+  internal static var screenLeaveSpaceTitleLastOwner: String { return L10n.tr("Localizable", "screen_leave_space_title_last_owner") }
   /// Scan the QR code
   internal static var screenLinkNewDeviceDesktopScanningTitle: String { return L10n.tr("Localizable", "screen_link_new_device_desktop_scanning_title") }
   /// Open %1$@ on a laptop or desktop computer

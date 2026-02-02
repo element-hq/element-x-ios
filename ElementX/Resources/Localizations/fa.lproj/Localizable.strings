@@ -304,6 +304,7 @@
 "common_server_url" = "نشانی کارساز";
 "common_settings" = "تنظیمات";
 "common_share_space" = "هم‌رسانی فضا";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "مکان هم‌رسانده";
 "common_shared_space" = "فضای اشتراکی";
 "common_signing_out" = "خارج شدن";
@@ -350,6 +351,7 @@
 "common_voice_message" = "پیام صوتی";
 "common_waiting" = "در انتظار…";
 "common_waiting_for_decryption_key" = "در انتظار این پیام";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "شما";
 "common.add_account" = "افزودن یک حساب";
 "common.add_another_account" = "افزودن حسابی دیگر";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
 "screen_labs_header_title" = "Feeling experimental?";
 "screen_labs_title" = "آزمایشگاه‌ها";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "‏%1$@ (مدیر)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
 "screen_leave_space_subtitle_last_admin" = "پیش از ترک باید مدیری دیگر به این فضا تخصیص دهید.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "از اتاق(های) زیر برداشته نخواهید شد؛ چرا که تنها مدیر هستید:";
 "screen_leave_space_title" = "ترک %1$@؟";
 "screen_leave_space_title_last_admin" = "تنها مدیر %1$@ هستید";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_title" = "Open %1$@ on a desktop computer to get the QR code";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "The numbers don’t match";

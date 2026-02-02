@@ -304,6 +304,7 @@
 "common_server_url" = "Adresa URL a serverului";
 "common_settings" = "Setări";
 "common_share_space" = "Partajați spațiul";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Locație partajată";
 "common_shared_space" = "Spațiu comun";
 "common_signing_out" = "Deconectare în curs";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Mesaj vocal";
 "common_waiting" = "Se aşteaptă…";
 "common_waiting_for_decryption_key" = "Mesaj în așteptare";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Dumneavoastră";
 "common.add_account" = "Adăugați un cont";
 "common.add_another_account" = "Adăugați un alt cont";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Încercați cele mai noi idei în curs de dezvoltare. Aceste funcții nu sunt finalizate; pot fi instabile și pot suferi modificări.";
 "screen_labs_header_title" = "Doriți experiențe noi?";
 "screen_labs_title" = "Laboratoare";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Selectați camerele pe care doriți să le părăsiți și în care nu sunteți singurul administrator:";
 "screen_leave_space_subtitle_last_admin" = "Trebuie să desemnați un alt administrator pentru acest spațiu înainte de a-l părăsi.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Nu veți părăsi următoarele camere deoarece sunteți singurul administrator:";
 "screen_leave_space_title" = "Părăsiți %1$@?";
 "screen_leave_space_title_last_admin" = "Sunteți singurul administrator pentru %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Deschide %1$@ pe un laptop sau un computer desktop";
 "screen_link_new_device_desktop_title" = "Deschide %1$@ pe un computer desktop pentru a obține codul QR";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Numerele nu se potrivesc";

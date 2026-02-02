@@ -221,7 +221,7 @@
 "common_face_id_ios" = "Face ID";
 "common_failed" = "Échec";
 "common_favourite" = "Favori";
-"common_favourited" = "Favorisé";
+"common_favourited" = "Ajouté aux favoris";
 "common_file" = "Fichier";
 "common_file_deleted" = "Fichier supprimé";
 "common_file_saved" = "Fichier enregistré";
@@ -304,6 +304,7 @@
 "common_server_url" = "URL du serveur";
 "common_settings" = "Paramètres";
 "common_share_space" = "Partager l'espace";
+"common_shared_history" = "Les nouveaux membres voient les anciens messages";
 "common_shared_location" = "Position partagée";
 "common_shared_space" = "Espace partagé";
 "common_signing_out" = "Déconnexion";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Message vocal";
 "common_waiting" = "En attente…";
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
+"common_world_readable_history" = "Tout le monde peut voir les anciens messages";
 "common_you" = "Vous";
 "common.add_account" = "Ajouter un compte";
 "common.add_another_account" = "Ajouter un autre compte";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Découvrez nos dernières idées en cours de développement. Ces fonctionnalités ne sont pas encore finalisées; elles peuvent être instables et évoluer.";
 "screen_labs_header_title" = "Envie d'expérimenter?";
 "screen_labs_title" = "Expérimental";
+"screen_leave_space_choose_owners_action" = "Choisir les propriétaires";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Sélectionnez les salons que vous souhaitez quitter et dont vous n'êtes pas le seul administrateur:";
 "screen_leave_space_subtitle_last_admin" = "Vous devez désigner un autre administrateur pour cet espace avant de pouvoir partir.";
+"screen_leave_space_subtitle_last_owner" = "Vous êtes le seul propriétaire de %1$@. Vous devez transférer la propriété de l'espace à quelqu'un d'autre avant de le quitter.";
 "screen_leave_space_subtitle_only_last_admin" = "Vous ne quitterez pas le ou les salons suivants car vous y êtes le seul administrateur:";
 "screen_leave_space_title" = "Quitter %1$@?";
 "screen_leave_space_title_last_admin" = "Vous êtes le seul administrateur de %1$@";
+"screen_leave_space_title_last_owner" = "Transfert de propriété";
 "screen_link_new_device_desktop_step1" = "Ouvrir %1$@ sur un ordinateur";
 "screen_link_new_device_desktop_title" = "Ouvrir %1$@ sur un ordinateur pour obtenir le code QR";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Les nombres ne correspondent pas";

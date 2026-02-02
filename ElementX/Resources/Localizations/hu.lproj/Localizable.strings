@@ -304,6 +304,7 @@
 "common_server_url" = "Kiszolgáló webcíme";
 "common_settings" = "Beállítások";
 "common_share_space" = "Tér megosztása";
+"common_shared_history" = "Az új tagok látják az előzményeket";
 "common_shared_location" = "Megosztott tartózkodási hely";
 "common_shared_space" = "Megosztott tér";
 "common_signing_out" = "Kijelentkezés";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Hangüzenet";
 "common_waiting" = "Várakozás…";
 "common_waiting_for_decryption_key" = "Várakozás a visszafejtési kulcsra";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Ön";
 "common.add_account" = "Fiók hozzáadása";
 "common.add_another_account" = "Másik fiók hozzáadása";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Próbálja ki legújabb fejlesztéseinket. Ezek a funkciók még nem véglegesek, instabilak lehetnek és változhatnak.";
 "screen_labs_header_title" = "Kísérletezni szeretne?";
 "screen_labs_title" = "Kísérletek";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Adminisztrátor)";
 "screen_leave_space_subtitle" = "Ez a tér összes szobájából is eltávolítja.";
 "screen_leave_space_subtitle_last_admin" = "Mielőtt elhagyhatná ezt a teret, ki kell jelölnie egy másik adminisztrátort.";
+"screen_leave_space_subtitle_last_owner" = "Ön a(z) %1$@ egyetlen tulajdonosa. Mielőtt távozik, át kell ruháznia a tulajdonjogot valaki másra.";
 "screen_leave_space_subtitle_only_last_admin" = "Nem lesz eltávolítva a következő szobá(k)ból, mert ön az egyetlen adminisztrátor:";
 "screen_leave_space_title" = "Kilép innen: %1$@?";
 "screen_leave_space_title_last_admin" = "Ön az egyetlen adminisztrátor itt: %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Nyissa meg az %1$@ alkalmazást egy laptopon vagy asztali számítógépen.";
 "screen_link_new_device_desktop_title" = "Nyissa meg az asztali %1$@ alkalmazást, hogy megkapja a QR-kódot";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "A számok nem egyeznek";

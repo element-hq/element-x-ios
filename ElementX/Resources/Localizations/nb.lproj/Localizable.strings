@@ -304,6 +304,7 @@
 "common_server_url" = "URL-adresse til server";
 "common_settings" = "Innstillinger";
 "common_share_space" = "Del område";
+"common_shared_history" = "New members see history";
 "common_shared_location" = "Delt posisjon";
 "common_shared_space" = "Delt område";
 "common_signing_out" = "Logger av";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Talemelding";
 "common_waiting" = "Venter...";
 "common_waiting_for_decryption_key" = "Venter på denne meldingen";
+"common_world_readable_history" = "Anyone can see history";
 "common_you" = "Du";
 "common.add_account" = "Legg til en konto";
 "common.add_another_account" = "Legg til en annen konto";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Prøv ut våre nyeste ideer under utvikling. Disse funksjonene er ikke ferdig utviklet; de kan være ustabile og kan endres.";
 "screen_labs_header_title" = "Lyst til å prøve noe nytt?";
 "screen_labs_title" = "Prøvefunksjoner";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Velg rommene du vil forlate, som du ikke er den eneste administratoren for:";
 "screen_leave_space_subtitle_last_admin" = "Du må tildele en annen administrator for dette området før du kan forlate det.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Du vil ikke bli fjernet fra følgende rom fordi du er den eneste administratoren:";
 "screen_leave_space_title" = "Forlat %1$@?";
 "screen_leave_space_title_last_admin" = "Du er den eneste administratoren for %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_title" = "Open %1$@ on a desktop computer to get the QR code";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "The numbers don’t match";

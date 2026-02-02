@@ -85,7 +85,7 @@
 "action_enable" = "Aktivieren";
 "action_end_poll" = "Umfrage beenden";
 "action_enter_pin" = "PIN eingeben";
-"action_explore_public_spaces" = "Explore public spaces";
+"action_explore_public_spaces" = "Erkunde öffentliche Spaces";
 "action_finish" = "Fertigstellen";
 "action_forgot_password" = "Passwort vergessen?";
 "action_forward" = "Weiterleiten";
@@ -283,7 +283,7 @@
 "common_report_a_problem" = "Ein Problem melden";
 "common_report_submitted" = "Bericht eingereicht";
 "common_rich_text_editor" = "Rich-Text-Editor";
-"common_role" = "Role";
+"common_role" = "Rolle";
 "common_room" = "Chat";
 "common_room_name" = "Chat-Name";
 "common_room_name_placeholder" = "z.B. Projektname";
@@ -304,6 +304,7 @@
 "common_server_url" = "Server-URL";
 "common_settings" = "Einstellungen";
 "common_share_space" = "Space teilen";
+"common_shared_history" = "Neue Mitglieder sehen den Nachrichtenverlauf";
 "common_shared_location" = "Geteilter Standort";
 "common_shared_space" = "Gemeinsamer Space";
 "common_signing_out" = "Abmelden";
@@ -350,6 +351,7 @@
 "common_voice_message" = "Sprachnachricht";
 "common_waiting" = "Warten…";
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
+"common_world_readable_history" = "Jeder kann den Nachrichtenverlauf sehen";
 "common_you" = "Du";
 "common.add_account" = "Konto hinzufügen";
 "common.add_another_account" = "Weiteres Konto hinzufügen";
@@ -608,12 +610,15 @@
 "screen_labs_header_description" = "Probier unsere neuesten Ideen in der Entwicklung aus. Diese Funktionen sind noch nicht fertiggestellt; sie können instabil sein und sich noch ändern.";
 "screen_labs_header_title" = "Entdeckungsfreudig?";
 "screen_labs_title" = "Labs";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Dadurch wirst du auch aus allen Chats in diesem Space entfernt.";
 "screen_leave_space_subtitle_last_admin" = "Du musst einen anderen Admin für diesen Space zuweisen, bevor du ihn verlassen kannst.";
+"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "Du wirst aus den folgenden Chats nicht entfernt, weil du der einzige Admin bist:";
 "screen_leave_space_title" = "%1$@ verlassen?";
 "screen_leave_space_title_last_admin" = "Du bist der einzige Administrator für %1$@";
+"screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_desktop_step1" = "Öffne %1$@ auf einem Laptop oder Desktop-Computer";
 "screen_link_new_device_desktop_title" = "Öffne %1$@ auf einem Desktop-Computer, um den QR-Code zu erhalten";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Die Zahlen stimmen nicht überein";
@@ -728,8 +733,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adressen ermöglichen es, Gruppen und Spaces zu finden und zu betreten. Dadurch wird auch sichergestellt, dass diese problemlos mit anderen geteilt werden können.";
 "screen_security_and_privacy_room_visibility_section_header" = "Sichtbarkeit";
 "screen_security_and_privacy_title" = "Sicherheit & Datenschutz";
-"screen_space_add_room_action" = "Room";
-"screen_space_empty_state_title" = "Add your first room";
+"screen_space_add_room_action" = "Chat";
+"screen_space_empty_state_title" = "Füge deinen ersten Chat hinzu";
 "screen_space_menu_action_members" = "Mitglieder anzeigen";
 "screen_space_remove_rooms_confirmation_content" = "Das Entfernen eines Chats hat keinen Einfluss auf die Beitrittsregeln. Um die Regeln zu ändern, gehe zu \"Raum Info\" und dann zu \"Datenschutz und Sicherheit\"";
 "screen_space_remove_rooms_confirmation_title_ios" = "Chats von %1$@ entfernen?";
