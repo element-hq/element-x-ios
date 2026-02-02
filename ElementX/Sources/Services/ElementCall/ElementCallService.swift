@@ -161,16 +161,19 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
         guard let roomID = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomID.rawValue] as? String else {
             MXLog.error("Something went wrong, missing room identifier for incoming voip call: \(payload)")
+            completion()
             return
         }
         
         guard let rtcNotificationID = payload.dictionaryPayload[ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue] as? String else {
             MXLog.error("Something went wrong, missing rtc notification event identifier for incoming voip call: \(payload)")
+            completion()
             return
         }
         
         guard ongoingCallID?.roomID != roomID else {
             MXLog.warning("Call already ongoing for room \(roomID), ignoring incoming push")
+            completion()
             return
         }
         
@@ -179,6 +182,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         guard let expirationDate = (payload.dictionaryPayload[ElementCallServiceNotificationKey.expirationDate.rawValue] as? Date) else {
             MXLog.error("Something went wrong, missing expiration timestamp for incoming voip call: \(payload)")
+            completion()
             return
         }
         
@@ -186,6 +190,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         guard nowDate < expirationDate else {
             MXLog.warning("Call expired for room \(roomID), ignoring incoming push")
+            completion()
             return
         }
         
