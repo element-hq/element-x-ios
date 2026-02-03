@@ -76,7 +76,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         // to be able to create a session (and even if we could, we would be missing the lightweightTokioRuntime),
         // so instead lets deliver the default generic notification and avoid attempting to process the notification.
         guard Self.targetConfiguration != nil else {
-            // swiftlint:disable:next print_deprecation (MXLog isn't configured)
+            // MXLog isn't configured
+            // swiftlint:disable:next print_deprecation
             print("Device is locked after reboot, delivering the unmodified notification.")
             return contentHandler(request.content)
         }

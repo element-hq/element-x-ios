@@ -232,7 +232,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         // **However:** given our gzip library compresses in memory it is possible to OOM
         // on files that will obviously be thrown away, so check the uncompressed size too.
         let uncompressedSizeThreshold = maxUploadSize * 5
-        if try FileManager.default.sizeForItem(at: url) > maxUploadSize {
+        if try FileManager.default.sizeForItem(at: url) > uncompressedSizeThreshold {
             MXLog.error("Uncompressed logs too large, skipping attachment: \(url.lastPathComponent)")
             return
         }
