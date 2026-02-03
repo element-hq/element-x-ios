@@ -67,6 +67,7 @@ struct BadgeLabel: View {
             .padding(.trailing, 12)
             .padding(.vertical, 4)
             .background(Capsule().fill(backgroundColor))
+            .lineLimit(1)
         }
     }
 }

@@ -147,7 +147,7 @@ extension RoomInfoProxyProtocol {
         case .worldReadable:
             .worldReadable
         default:
-            nil
+            .hidden
         }
     }
 }

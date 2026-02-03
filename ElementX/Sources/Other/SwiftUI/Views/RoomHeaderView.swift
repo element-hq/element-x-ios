@@ -84,7 +84,7 @@ struct RoomHeaderView: View {
         switch roomHistorySharingState {
         case .shared: \.history
         case .worldReadable: \.userProfileSolid
-        case .none: nil
+        default: nil
         }
     }
 }

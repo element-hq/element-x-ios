@@ -10,6 +10,12 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum UntranslatedL10n {
+  /// New members don't see history
+  internal static var cryptoHistorySharingRoomInfoHiddenBadgeContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_room_info_hidden_badge_content") }
+  /// New members see history
+  internal static var cryptoHistorySharingRoomInfoSharedBadgeContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_room_info_shared_badge_content") }
+  /// Anyone can see history
+  internal static var cryptoHistorySharingRoomInfoWorldReadableBadgeContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_room_info_world_readable_badge_content") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

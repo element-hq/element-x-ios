@@ -14,3 +14,9 @@
 "soft_logout_clear_data_submit" = "Clear all data";
 "soft_logout_clear_data_dialog_title" = "Clear data";
 "soft_logout_clear_data_dialog_content" = "Clear all data currently stored on this device?\nSign in again to access your account data and messages.";
+
+// MARK: - History sharing
+
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
