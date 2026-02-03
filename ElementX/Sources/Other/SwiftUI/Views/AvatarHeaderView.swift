@@ -243,6 +243,31 @@ struct AvatarHeaderView<Footer: View>: View {
 }
 
 struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
+    private static func makeHistorySharingPreview(state: RoomHistorySharingState) -> some View {
+        Form {
+            AvatarHeaderView(room: .init(id: "@test:matrix.org",
+                                         name: "Test Room",
+                                         avatar: .room(id: "@test:matrix.org",
+                                                       name: "Test Room",
+                                                       avatarURL: .mockMXCAvatar),
+                                         canonicalAlias: "#test:matrix.org",
+                                         isEncrypted: true,
+                                         isPublic: true,
+                                         isDirect: false,
+                                         historySharingState: state),
+                             avatarSize: .room(on: .details),
+                             mediaProvider: MediaProviderMock(configuration: .init())) {
+                HStack(spacing: 32) {
+                    ShareLink(item: "test") {
+                        CompoundIcon(\.shareIos)
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: "Test"))
+                }
+                .padding(.top, 32)
+            }
+        }
+    }
+    
     static var previews: some View {
         Form {
             AvatarHeaderView(room: .init(id: "@test:matrix.org",
@@ -253,7 +278,8 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                                          canonicalAlias: "#test:matrix.org",
                                          isEncrypted: true,
                                          isPublic: true,
-                                         isDirect: false),
+                                         isDirect: false,
+                                         historySharingState: nil),
                              avatarSize: .room(on: .details),
                              mediaProvider: MediaProviderMock(configuration: .init())) {
                 HStack(spacing: 32) {
@@ -299,5 +325,9 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
         .background(Color.compound.bgSubtleSecondaryLevel0)
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Members")
+        
+        makeHistorySharingPreview(state: .hidden).previewDisplayName("History Sharing - Hidden")
+        makeHistorySharingPreview(state: .shared).previewDisplayName("History Sharing - Shared")
+        makeHistorySharingPreview(state: .worldReadable).previewDisplayName("History Sharing - World Readable")
     }
 }

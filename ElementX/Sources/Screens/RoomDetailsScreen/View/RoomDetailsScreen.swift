@@ -7,6 +7,7 @@
 //
 
 import Compound
+import MatrixRustSDK
 import SwiftUI
 
 struct RoomDetailsScreen: View {
@@ -334,6 +335,9 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let dmRoomViewModel = makeDMViewModel(verificationState: .notVerified)
     static let dmRoomVerifiedViewModel = makeDMViewModel(verificationState: .verified)
     static let dmRoomVerificationViolationViewModel = makeDMViewModel(verificationState: .verificationViolation)
+    static let historySharingJoined = makeHistorySharingViewModel(historyVisibility: .joined)
+    static let historySharingShared = makeHistorySharingViewModel(historyVisibility: .shared)
+    static let historySharingWorldReadable = makeHistorySharingViewModel(historyVisibility: .worldReadable)
     
     static var previews: some View {
         RoomDetailsScreen(context: genericRoomViewModel.context)
@@ -355,6 +359,15 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         RoomDetailsScreen(context: dmRoomVerificationViolationViewModel.context)
             .snapshotPreferences(expect: dmRoomVerificationViolationViewModel.context.observe(\.viewState.accountOwner).map { $0 != nil })
             .previewDisplayName("DM Room Verification Violation")
+        
+        RoomDetailsScreen(context: historySharingJoined.context)
+            .previewDisplayName("History Sharing - Joined")
+        
+        RoomDetailsScreen(context: historySharingShared.context)
+            .previewDisplayName("History Sharing - Shared")
+        
+        RoomDetailsScreen(context: historySharingWorldReadable.context)
+            .previewDisplayName("History Sharing - World Readable")
     }
     
     private static func makeGenericRoomViewModel() -> RoomDetailsScreenViewModel {
@@ -429,6 +442,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     private static func makeDMViewModel(verificationState: UserIdentityVerificationState) -> RoomDetailsScreenViewModel {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = false
+        
         let members: [RoomMemberProxyMock] = [
             .mockMe,
             .mockDan
@@ -459,6 +474,34 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
+                     analyticsService: ServiceLocator.shared.analytics,
+                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                     notificationSettingsProxy: notificationSettingsProxy,
+                     attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                     appSettings: ServiceLocator.shared.settings)
+    }
+    
+    private static func makeHistorySharingViewModel(historyVisibility: RoomHistoryVisibility) -> RoomDetailsScreenViewModel {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        
+        let members: [RoomMemberProxyMock] = [
+            .mockMe,
+            .mockDan
+        ]
+        
+        let roomProxy = JoinedRoomProxyMock(.init(id: "dm_room_id",
+                                                  name: "Dan",
+                                                  topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                                  isDirect: true,
+                                                  isEncrypted: true,
+                                                  historyVisibility: historyVisibility,
+                                                  members: members,
+                                                  heroes: [.mockDan]))
+        
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
+        
+        return .init(roomProxy: roomProxy,
+                     userSession: UserSessionMock(.init()),
                      analyticsService: ServiceLocator.shared.analytics,
                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                      notificationSettingsProxy: notificationSettingsProxy,
