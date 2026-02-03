@@ -245,6 +245,16 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         stateMachine.addRouteMapping { event, fromState, _ in
+            guard case .startRoomFlow = event, case .roomFlow = fromState else {
+                return nil
+            }
+            
+            return fromState
+        } handler: { _ in
+            // Ignore tapping on multiple rooms at the same time
+        }
+        
+        stateMachine.addRouteMapping { event, fromState, _ in
             guard case .startRoomFlow = event, case .space = fromState else { return nil }
             return .roomFlow(previousState: fromState)
         } handler: { [weak self] context in
@@ -330,6 +340,14 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addErrorHandler { context in
             fatalError("Unexpected transition: \(context)")
+        }
+        
+        stateMachine.addAnyHandler(.any => .any) { context in
+            if let event = context.event {
+                MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(event)`")
+            } else {
+                MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
+            }
         }
     }
     
