@@ -212,6 +212,14 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                                                                                       userIndicatorController: flowParameters.userIndicatorController,
                                                                                       bugReportService: flowParameters.bugReportService,
                                                                                       userSession: userSession))
+                bugReportFlowCoordinator?.actionsPublisher.sink { [weak self] action in
+                    switch action {
+                    case .complete:
+                        self?.stateMachine.processEvent(.dismissedFeedbackScreen)
+                    }
+                }
+                .store(in: &cancellables)
+                
                 bugReportFlowCoordinator?.start()
             case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
                 break
