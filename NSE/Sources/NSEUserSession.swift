@@ -140,4 +140,9 @@ private final class ClientDelegateWrapper: ClientDelegate {
     func didRefreshTokens() {
         MXLog.info("Delegating session updates to the ClientSessionDelegate.")
     }
+    
+    func onBackgroundTaskErrorReport(taskName: String, error: MatrixRustSDK.BackgroundTaskFailureReason) {
+        MXLog.error("Received background task error: \(error)")
+        exit(0) // Not much we can do, best restart the NSE process
+    }
 }
