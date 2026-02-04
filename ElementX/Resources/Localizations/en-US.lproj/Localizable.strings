@@ -454,6 +454,7 @@
 "notification_mentioned_you_body" = "Mentioned you: %1$@";
 "notification_new_messages" = "New Messages";
 "notification_reaction_body" = "Reacted with %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Invited you to join the room";
 "notification_room_invite_body_with_sender" = "%1$@ invited you to join the room";
 "notification_sender_me" = "Me";

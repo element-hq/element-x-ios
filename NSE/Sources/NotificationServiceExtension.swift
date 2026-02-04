@@ -30,7 +30,11 @@ import UserNotifications
 // notification.
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
+    static let receivedWhileOfflineNotificationID = "io.element.elementx.receivedWhileOfflineNotification"
+    
     private static var targetConfiguration: Target.ConfigurationResult?
+    private static var hasHandledFirstNotificationSinceBoot = false
+    
     private let settings: CommonSettingsProtocol = AppSettings()
     private let appHooks: AppHooks
     
@@ -72,14 +76,28 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
     
     private func handle(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) async {
-        // If we skipped configuring the target it means we can't write to the app group, so we're unlikely
-        // to be able to create a session (and even if we could, we would be missing the lightweightTokioRuntime),
-        // so instead lets deliver the default generic notification and avoid attempting to process the notification.
+        // If we skipped configuring the target it means we can't write to the app group, so we're unlikely to
+        // be able to create a session (and even if we could, we would be missing the lightweightTokioRuntime).
+        // Additionally APNs servers only store the most recent notification when the device is powered off.
+        // So lets a) skip processing the notification and b) deliver a special "offline" notification as a workaround.
         guard Self.targetConfiguration != nil else {
             // MXLog isn't configured:
             // swiftlint:disable:next print_deprecation
-            print("Device is locked after reboot, delivering the unmodified notification.")
-            return contentHandler(request.content)
+            print("Device is locked after reboot.")
+            Self.hasHandledFirstNotificationSinceBoot = true
+            deliverReceivedWhileOfflineNotification(for: request)
+            return contentHandler(.init())
+        }
+        
+        // The APNs servers only store the most recent notification when delivery fails. So if this is the
+        // first notification since the device booted, instead of delivering the content, we deliver a
+        // special "offline" notification as a workaround to prompt the user to open the app.
+        guard !isFirstNotificationSinceBoot() else {
+            // Don't log until the app hooks have been run:
+            // swiftlint:disable:next print_deprecation
+            print("Device is unlocked and received the first notification since boot.")
+            deliverReceivedWhileOfflineNotification(for: request)
+            return contentHandler(.init())
         }
         
         guard let roomID = request.content.roomID else {
@@ -149,7 +167,67 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         notificationHandler?.handleTimeExpiration()
     }
     
-    // MARK: - Private
+    // MARK: - Boot handling
+    
+    private let bootTimeKey = "lastKnownBootTime"
+    
+    /// Whether this is the first notification since the system booted and so may actually represent
+    /// multiple notifications as the APNs server only queues a single push when deliveries fail.
+    func isFirstNotificationSinceBoot() -> Bool {
+        if Self.hasHandledFirstNotificationSinceBoot {
+            // If we've already handled the first notification in this process there's no need to continue.
+            return false
+        }
+        
+        defer { Self.hasHandledFirstNotificationSinceBoot = true }
+        
+        guard let currentBootTime = systemBootTime() else {
+            // There's not much we can do if the boot time is unknown, so we simply ignore this.
+            return false
+        }
+        
+        guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier),
+              let lastKnownBootTime = userDefaults.object(forKey: bootTimeKey) as? TimeInterval else {
+            // Assume a missing boot time indicates a fresh installation.
+            return false
+        }
+        
+        if abs(lastKnownBootTime - currentBootTime) < 1 {
+            return false
+        }
+        
+        // This is the first notification since boot, store the boot time.
+        userDefaults.set(currentBootTime, forKey: bootTimeKey)
+        return true
+    }
+    
+    func systemBootTime() -> TimeInterval? {
+        var bootTime = timeval()
+        var size = MemoryLayout<timeval>.size
+        var managementInformationBase: [Int32] = [CTL_KERN, KERN_BOOTTIME]
+        
+        guard sysctl(&managementInformationBase, 2, &bootTime, &size, nil, 0) == 0 else { return nil }
+        
+        return TimeInterval(bootTime.tv_sec) + TimeInterval(bootTime.tv_usec) / 1_000_000
+    }
+    
+    /// Delivers a generic notification informing the user that they have one or more new messages.
+    ///
+    /// This method is designed to be called multiple times before unlock as it simply replaces any
+    /// existing instance of the notification with a fresh copy (to ensure that the sound is still triggered).
+    private func deliverReceivedWhileOfflineNotification(for originalRequest: UNNotificationRequest) {
+        MXLog.info("Delivering the receivedWhileOfflineNotification.")
+        
+        let content = UNMutableNotificationContent()
+        content.body = L10n.notificationReceivedWhileOfflineIos
+        content.badge = originalRequest.content.unreadCount as NSNumber?
+        content.sound = .init(named: .init("message.caf"))
+        
+        let request = UNNotificationRequest(identifier: Self.receivedWhileOfflineNotificationID, content: content, trigger: nil)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    // MARK: - Logging
     
     private var tag: String {
         "[NSE][\(Unmanaged.passUnretained(self).toOpaque())][\(Unmanaged.passUnretained(Thread.current).toOpaque())][\(ProcessInfo.processInfo.processIdentifier)]"
