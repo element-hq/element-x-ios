@@ -76,29 +76,37 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         // to be able to create a session (and even if we could, we would be missing the lightweightTokioRuntime),
         // so instead lets deliver the default generic notification and avoid attempting to process the notification.
         guard Self.targetConfiguration != nil else {
-            // MXLog isn't configured
+            // MXLog isn't configured:
             // swiftlint:disable:next print_deprecation
             print("Device is locked after reboot, delivering the unmodified notification.")
             return contentHandler(request.content)
         }
         
         guard let roomID = request.content.roomID else {
-            MXLog.error("Invalid roomID, bailing out: \(request.content)")
+            // Don't log until the app hooks have been run:
+            // swiftlint:disable:next print_deprecation
+            print("Missing roomID, bailing out.")
             return contentHandler(request.content)
         }
         
         guard let eventID = request.content.eventID else {
-            MXLog.error("Invalid eventID, bailing out: \(request.content)")
+            // Don't log until the app hooks have been run:
+            // swiftlint:disable:next print_deprecation
+            print("Missing eventID, bailing out.")
             return contentHandler(request.content)
         }
         
         guard let clientID = request.content.pusherNotificationClientIdentifier else {
-            MXLog.error("Invalid eventID, bailing out: \(request.content)")
+            // Don't log until the app hooks have been run:
+            // swiftlint:disable:next print_deprecation
+            print("Missing clientID, bailing out.")
             return contentHandler(request.content)
         }
         
         guard let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == clientID }) else {
-            MXLog.error("Invalid credentials, bailing out: \(request.content)")
+            // Don't log until the app hooks have been run:
+            // swiftlint:disable:next print_deprecation
+            print("Credentials not found, bailing out.")
             return contentHandler(request.content)
         }
         
