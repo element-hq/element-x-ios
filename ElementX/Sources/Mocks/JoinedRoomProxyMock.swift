@@ -149,7 +149,7 @@ extension JoinedRoomProxyMock {
         isVisibleInRoomDirectoryReturnValue = .success(configuration.isVisibleInPublicDirectory)
         
         predecessorRoom = configuration.predecessor
-        
+
         let roomInfoProxyMock = RoomInfoProxyMock(configuration)
         roomInfoProxyMock.powerLevels = powerLevelsProxyMock
         
