@@ -99,6 +99,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                                           bugReportService: flowParameters.bugReportService,
                                                                                           userSession: flowParameters.userSession))
                     bugReportFlowCoordinator?.start()
+                case .reportProblem:
+                    presentReportProblemScreen()
                 case .about:
                     presentLegalInformationScreen()
                 case .blockedUsers:
@@ -225,7 +227,24 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentLegalInformationScreen() {
         navigationStackCoordinator.push(LegalInformationScreenCoordinator(appSettings: flowParameters.appSettings))
     }
-    
+
+    private func presentReportProblemScreen() {
+        let parameters = ReportProblemScreenCoordinatorParameters(userSession: flowParameters.userSession,
+                                                                  userIndicatorController: flowParameters.userIndicatorController)
+        let coordinator = ReportProblemScreenCoordinator(parameters: parameters)
+
+        coordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .dismiss:
+                    self?.navigationStackCoordinator.pop()
+                }
+            }
+            .store(in: &cancellables)
+
+        navigationStackCoordinator.push(coordinator)
+    }
+
     private func presentBlockedUsersScreen() {
         let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: flowParameters.appSettings.hideIgnoredUserProfiles,
                                                                           userSession: flowParameters.userSession,

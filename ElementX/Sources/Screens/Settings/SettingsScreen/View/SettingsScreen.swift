@@ -165,7 +165,13 @@ struct SettingsScreen: View {
                         context.send(viewAction: .about)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.about)
-            
+
+            ListRow(label: .default(title: L10n.commonReportAProblem,
+                                    icon: \.chatProblem),
+                    kind: .navigationLink {
+                        context.send(viewAction: .reportProblem)
+                    })
+
             if context.viewState.isBugReportServiceEnabled {
                 ListRow(label: .default(title: L10n.commonReportAProblem,
                                         icon: \.chatProblem),

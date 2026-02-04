@@ -1445,6 +1445,13 @@
 "screen_link_new_device_wrong_number_title" = "The numbers don’t match";
 "screen_pinned_timeline_screen_title_empty" = "Pinned messages";
 "screen_report_room_title" = "Report room";
+"screen_report_problem_description_label" = "Problem Description...";
+"screen_report_problem_description_placeholder" = "Describe what happened or what you're experiencing.";
+"screen_report_problem_diagnostic_info_header" = "Diagnostic Information";
+"screen_report_problem_no_description" = "No description provided";
+"screen_report_problem_report_text" = "Problem Description:\n%1$@\n\nDiagnostic Information:\n%2$@";
+"screen_report_problem_unknown" = "Unknown";
+"screen_report_problem_diagnostic_info" = "App Version: %1$@ %2$@\niOS Version: iOS %3$@\nDevice: %4$@\nLocale: %5$@\nTimezone: %6$@\nUser ID: %7$@\nDevice ID: %8$@";
 "screen_room_mentions_at_room_title" = "Everyone";
 "screen_room_single_knock_request_accept_button_title" = "Accept";
 "screen_room_single_knock_request_view_button_title" = "View";

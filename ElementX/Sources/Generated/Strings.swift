@@ -2398,6 +2398,34 @@ internal enum L10n {
   internal static var screenReportContentExplanation: String { return L10n.tr("Localizable", "screen_report_content_explanation") }
   /// Reason for reporting this content
   internal static var screenReportContentHint: String { return L10n.tr("Localizable", "screen_report_content_hint") }
+  /// Problem Description...
+  internal static var screenReportProblemDescriptionLabel: String { return L10n.tr("Localizable", "screen_report_problem_description_label") }
+  /// Describe what happened or what you're experiencing.
+  internal static var screenReportProblemDescriptionPlaceholder: String { return L10n.tr("Localizable", "screen_report_problem_description_placeholder") }
+  /// App Version: %1$@ %2$@
+  /// iOS Version: iOS %3$@
+  /// Device: %4$@
+  /// Locale: %5$@
+  /// Timezone: %6$@
+  /// User ID: %7$@
+  /// Device ID: %8$@
+  internal static func screenReportProblemDiagnosticInfo(_ p1: Any, _ p2: Any, _ p3: Any, _ p4: Any, _ p5: Any, _ p6: Any, _ p7: Any, _ p8: Any) -> String {
+    return L10n.tr("Localizable", "screen_report_problem_diagnostic_info", String(describing: p1), String(describing: p2), String(describing: p3), String(describing: p4), String(describing: p5), String(describing: p6), String(describing: p7), String(describing: p8))
+  }
+  /// Diagnostic Information
+  internal static var screenReportProblemDiagnosticInfoHeader: String { return L10n.tr("Localizable", "screen_report_problem_diagnostic_info_header") }
+  /// No description provided
+  internal static var screenReportProblemNoDescription: String { return L10n.tr("Localizable", "screen_report_problem_no_description") }
+  /// Problem Description:
+  /// %1$@
+  /// 
+  /// Diagnostic Information:
+  /// %2$@
+  internal static func screenReportProblemReportText(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_report_problem_report_text", String(describing: p1), String(describing: p2))
+  }
+  /// Unknown
+  internal static var screenReportProblemUnknown: String { return L10n.tr("Localizable", "screen_report_problem_unknown") }
   /// Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.
   internal static var screenReportRoomLeaveFailedAlertMessage: String { return L10n.tr("Localizable", "screen_report_room_leave_failed_alert_message") }
   /// Unable to Leave Room
