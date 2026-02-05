@@ -130,10 +130,10 @@ extension SpaceServiceRoom {
         case .restricted:
             joinRule = .restricted(rules: [])
         case .inviteRequired:
-            joinRule = .private
+            joinRule = .invite
         case .invited:
             state = .invited
-            joinRule = .private
+            joinRule = .invite
         case .knockable:
             joinRule = .knock
         case .knocked:
@@ -218,7 +218,7 @@ extension [SpaceServiceRoom] {
                                   childrenCount: 1,
                                   joinedMembersCount: 500,
                                   canonicalAlias: "#the-foundation:matrix.org",
-                                  joinRule: .private,
+                                  joinRule: .invite,
                                   state: .joined),
             SpaceServiceRoom.mock(id: "space2",
                                   name: "The Second Foundation",
