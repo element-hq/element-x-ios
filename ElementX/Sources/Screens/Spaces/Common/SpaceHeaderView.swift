@@ -141,7 +141,7 @@ struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
                                           "Interdum mauris ultrices tincidunt proin morbi erat aenean risus nibh.",
                                           "Diam amet sit fermentum vulputate faucibus."].joined(separator: " "),
                                   canonicalAlias: "#subspace:matrix.org",
-                                  joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")]))
+                                  joinRule: .knockRestricted(rules: [.roomMembership(roomID: "")]))
         ]
     }
 }

@@ -53,7 +53,7 @@ struct SpaceServiceRoom {
             .public
         case .restricted, .knockRestricted:
             .restricted
-        case .invite, .knock, .private, .custom:
+        case .invite, .knock, .custom:
             .private
         case .none:
             .none
@@ -77,7 +77,7 @@ extension SpaceServiceRoom {
         topic = spaceRoom.topic
         canonicalAlias = spaceRoom.canonicalAlias
         
-        joinRule = spaceRoom.joinRule
+        joinRule = spaceRoom.joinRule.map(JoinRule.init)
         worldReadable = spaceRoom.worldReadable
         guestCanJoin = spaceRoom.guestCanJoin
         state = spaceRoom.state

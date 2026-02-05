@@ -160,7 +160,7 @@ private extension SpaceRoom {
                   avatarUrl: avatarURL?.absoluteString,
                   roomType: isSpace ? .space : .room,
                   numJoinedMembers: memberCount,
-                  joinRule: joinRule,
+                  joinRule: joinRule?.rustValue,
                   worldReadable: true,
                   guestCanJoin: false,
                   isDirect: isDirect,

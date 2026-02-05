@@ -479,7 +479,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func updateJoinRule(_ rule: JoinRule) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.updateJoinRules(newRule: rule)
+            try await room.updateJoinRules(newRule: rule.rustValue)
             return .success(())
         } catch {
             MXLog.error("Failed updating join rule with error: \(error)")

@@ -80,7 +80,7 @@ extension RoomPreviewProxyMock {
                                                       roomType: configuration.roomType,
                                                       isHistoryWorldReadable: nil,
                                                       membership: configuration.membership,
-                                                      joinRule: configuration.joinRule,
+                                                      joinRule: configuration.joinRule.rustValue,
                                                       isDirect: configuration.isDirect,
                                                       heroes: nil))
         
