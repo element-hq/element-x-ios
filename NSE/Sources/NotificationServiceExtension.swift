@@ -84,18 +84,20 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             // MXLog isn't configured:
             // swiftlint:disable:next print_deprecation
             print("Device is locked after reboot.")
-            Self.hasHandledFirstNotificationSinceBoot = true
-            deliverReceivedWhileOfflineNotification(for: request)
-            return contentHandler(.init())
+            
+            if Self.hasHandledFirstNotificationSinceBoot {
+                return contentHandler(request.content)
+            } else {
+                Self.hasHandledFirstNotificationSinceBoot = true
+                deliverReceivedWhileOfflineNotification(for: request)
+                return contentHandler(.init())
+            }
         }
         
-        // The APNs servers only store the most recent notification when delivery fails. So if this is the
-        // first notification since the device booted, instead of delivering the content, we deliver a
-        // special "offline" notification as a workaround to prompt the user to open the app.
-        guard !isFirstNotificationSinceBoot() else {
+        guard !shouldDeliverReceivedWhileOfflineNotification() else {
             // Don't log until the app hooks have been run:
             // swiftlint:disable:next print_deprecation
-            print("Device is unlocked and received the first notification since boot.")
+            print("Device is unlocked but may have missed notifications while offline.")
             deliverReceivedWhileOfflineNotification(for: request)
             return contentHandler(.init())
         }
@@ -169,26 +171,30 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     
     // MARK: - Boot handling
     
-    private let bootTimeKey = "lastKnownBootTime"
-    
-    /// Whether this is the first notification since the system booted and so may actually represent
-    /// multiple notifications as the APNs server only queues a single push when deliveries fail.
-    func isFirstNotificationSinceBoot() -> Bool {
+    /// The APNs servers only store the most recent notification when delivery fails. So when the user first boots
+    /// their phone we need to use some approximations to decide whether or not the first notification may potentially
+    /// represent more than one message. When that appears possible we replace the notification's content with the special
+    /// "received while offline" notification as a more prominent prompt for to the user to open the app and check all their chats.
+    ///
+    /// Note that this only handles the first-boot case. When the SDK is able to compute the unread count, we should start to use the NSE,
+    /// remote-notifications (content-available) and background app refreshes to fetch and deliver our notifications as a more robust solution.
+    func shouldDeliverReceivedWhileOfflineNotification() -> Bool {
         if Self.hasHandledFirstNotificationSinceBoot {
             // If we've already handled the first notification in this process there's no need to continue.
             return false
         }
         
-        defer { Self.hasHandledFirstNotificationSinceBoot = true }
+        Self.hasHandledFirstNotificationSinceBoot = true
         
         guard let currentBootTime = systemBootTime() else {
-            // There's not much we can do if the boot time is unknown, so we simply ignore this.
+            // There's not much we can do if the boot time is unknown, so don't show the offline notification.
             return false
         }
         
-        guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier),
-              let lastKnownBootTime = userDefaults.object(forKey: bootTimeKey) as? TimeInterval else {
-            // Assume a missing boot time indicates a fresh installation.
+        guard let lastKnownBootTime = settings.lastNotificationBootTime else {
+            // Assume a missing boot time indicates a fresh installation…
+            // So store the current boot time but let the notification through.
+            settings.lastNotificationBootTime = currentBootTime
             return false
         }
         
@@ -197,7 +203,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
         
         // This is the first notification since boot, store the boot time.
-        userDefaults.set(currentBootTime, forKey: bootTimeKey)
+        settings.lastNotificationBootTime = currentBootTime
         return true
     }
     
@@ -213,10 +219,12 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     
     /// Delivers a generic notification informing the user that they have one or more new messages.
     ///
-    /// This method is designed to be called multiple times before unlock as it simply replaces any
-    /// existing instance of the notification with a fresh copy (to ensure that the sound is still triggered).
+    /// Note: it is safe to call this method multiple times as it simply replaces any existing instance of the notification
+    /// with a fresh copy, meaning it won't queue multiple copies but will still re-play the notification sound.
     private func deliverReceivedWhileOfflineNotification(for originalRequest: UNNotificationRequest) {
-        MXLog.info("Delivering the receivedWhileOfflineNotification.")
+        // Don't log until the app hooks have been run:
+        // swiftlint:disable:next print_deprecation
+        print("Delivering the 'received while offline' notification.")
         
         let content = UNMutableNotificationContent()
         content.body = L10n.notificationReceivedWhileOfflineIos
