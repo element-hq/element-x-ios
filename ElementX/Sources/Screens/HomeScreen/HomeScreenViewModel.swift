@@ -28,6 +28,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
+    // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,
@@ -92,6 +93,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 self.analyticsService.updateUserProperties(AnalyticsEvent.newVerificationStateUserProperty(verificationState: state.verificationState, recoveryState: state.recoveryState))
                 self.analyticsService.trackSessionSecurityState(state)
+            }
+            .store(in: &cancellables)
+        
+        userSession.clientProxy.spaceService.spaceFilterPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] filters in
+                guard let self else { return }
+                
+                state.shouldShowSpaceFilters = !filters.isEmpty
+                
+                if let selectedSpaceFilter = spaceFilterSubject.value,
+                   !filters.contains(selectedSpaceFilter) {
+                    // Clear the spaces filter if the space has been left.
+                    spaceFilterSubject.send(nil)
+                }
             }
             .store(in: &cancellables)
         
