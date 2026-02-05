@@ -33,7 +33,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     static let receivedWhileOfflineNotificationID = "io.element.elementx.receivedWhileOfflineNotification"
     
     private static var targetConfiguration: Target.ConfigurationResult?
+    
     private static var hasHandledFirstNotificationSinceBoot = false
+    private static let firstNotificationThreshold: TimeInterval = 15 * 60
     
     private let settings: CommonSettingsProtocol = AppSettings()
     private let appHooks: AppHooks
@@ -204,7 +206,17 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         
         // This is the first notification since boot, store the boot time.
         settings.lastNotificationBootTime = currentBootTime
-        return true
+        
+        // At this point it becomes a trade-off. Once the device has been powered on for a long enough amount
+        // of time it is a reasonable assumption that the device has now connected to a network and that any
+        // notification is actually new rather than having been sent whilst the device was powered off.
+        //
+        // Note: We could actually solve this by having Sygnal add a timestamp to the notification payload 🤔
+        if Date.now.timeIntervalSince(Date(timeIntervalSince1970: currentBootTime)) > Self.firstNotificationThreshold {
+            return false
+        } else {
+            return true
+        }
     }
     
     func systemBootTime() -> TimeInterval? {
