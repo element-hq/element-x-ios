@@ -200,6 +200,13 @@ extension PreviewTests {
         }
     }
 
+    func testDiagnosticsReportScreen() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in DiagnosticsReportScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testEditRoomAddressScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in EditRoomAddressScreen_Previews._allPreviews.enumerated() {

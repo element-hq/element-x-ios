@@ -115,6 +115,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "DeclineAndBlockScreen_Previews")
     }
 
+    func testDiagnosticsReportScreen() async throws {
+        try await performAccessibilityAudit(named: "DiagnosticsReportScreen_Previews")
+    }
+
     func testEditRoomAddressScreen() async throws {
         try await performAccessibilityAudit(named: "EditRoomAddressScreen_Previews")
     }
