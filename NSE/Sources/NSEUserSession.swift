@@ -142,7 +142,13 @@ private final class ClientDelegateWrapper: ClientDelegate {
     }
     
     func onBackgroundTaskErrorReport(taskName: String, error: MatrixRustSDK.BackgroundTaskFailureReason) {
-        MXLog.error("Received background task error: \(error)")
-        exit(0) // Not much we can do, best restart the NSE process
+        switch error {
+        case .panic(let message, let backtrace):
+            MXLog.error("Received background task panic: \(message ?? "Missing message")\nBacktrace:\n\(backtrace ?? "Missing backtrace")")
+        case .error(let error):
+            MXLog.error("Received background task error: \(error)")
+        case .earlyTermination:
+            MXLog.error("Received background task early termination")
+        }
     }
 }
