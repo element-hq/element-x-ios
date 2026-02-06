@@ -189,7 +189,9 @@ class SecureBackupController: SecureBackupControllerProtocol {
     // MARK: - Private
     
     private func updateBackupStateFromRemote(retry: Bool = true) {
-        remoteBackupStateTask = Task {
+        remoteBackupStateTask = Task { [weak self] in
+            guard let self else { return }
+            
             do {
                 MXLog.info("Checking if backup exists on the server")
                 let backupExists = try await self.encryption.backupExistsOnServer()
