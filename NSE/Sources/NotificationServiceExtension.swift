@@ -61,7 +61,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         // the target configuration will fail. We could call exit(0) here, however with the
         // notification filtering entitlement that results in the notification being discarded
         // so we need to wait for the delegate method to be called and bail out there instead.
-        if !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
+        if !BootDetectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
            Self.targetConfiguration == nil {
             Self.targetConfiguration = Target.nse.configure(logLevel: settings.logLevel,
                                                             traceLogPacks: settings.traceLogPacks,
@@ -80,7 +80,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     private func handle(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) async {
         // If we skipped configuring the target it means we can't write to the app group, so we're unlikely to
         // be able to create a session (and even if we could, we would be missing the lightweightTokioRuntime).
-        // Additionally APNs servers only store the most recent notification when the device is powered off.
+        // Additionally, APNs servers only store the most recent notification when the device is powered off.
         // So lets a) skip processing the notification and b) deliver a special "offline" notification as a workaround.
         guard Self.targetConfiguration != nil else {
             // MXLog isn't configured:
@@ -180,7 +180,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     ///
     /// Note that this only handles the first-boot case. When the SDK is able to compute the unread count, we should start to use the NSE,
     /// remote-notifications (content-available) and background app refreshes to fetch and deliver our notifications as a more robust solution.
-    func shouldDeliverReceivedWhileOfflineNotification() -> Bool {
+    private func shouldDeliverReceivedWhileOfflineNotification() -> Bool {
         if Self.hasHandledFirstNotificationSinceBoot {
             // If we've already handled the first notification in this process there's no need to continue.
             return false
@@ -188,7 +188,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         
         Self.hasHandledFirstNotificationSinceBoot = true
         
-        guard let currentBootTime = systemBootTime() else {
+        guard let currentBootTime = BootDetectionManager.systemBootTime() else {
             // There's not much we can do if the boot time is unknown, so don't show the offline notification.
             return false
         }
@@ -219,22 +219,12 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
     }
     
-    func systemBootTime() -> TimeInterval? {
-        var bootTime = timeval()
-        var size = MemoryLayout<timeval>.size
-        var managementInformationBase: [Int32] = [CTL_KERN, KERN_BOOTTIME]
-        
-        guard sysctl(&managementInformationBase, 2, &bootTime, &size, nil, 0) == 0 else { return nil }
-        
-        return TimeInterval(bootTime.tv_sec) + TimeInterval(bootTime.tv_usec) / 1_000_000
-    }
-    
     /// Delivers a generic notification informing the user that they have one or more new messages.
     ///
     /// Note: it is safe to call this method multiple times as it simply replaces any existing instance of the notification
     /// with a fresh copy, meaning it won't queue multiple copies but will still re-play the notification sound.
     private func deliverReceivedWhileOfflineNotification(for originalRequest: UNNotificationRequest) {
-        // Don't log until the app hooks have been run:
+        // This is intended to be called before the app hooks have been run, so don't log:
         // swiftlint:disable:next print_deprecation
         print("Delivering the 'received while offline' notification.")
         
