@@ -19,6 +19,7 @@ struct DiagnosticsReportScreen: View {
                     .foregroundStyle(.compound.textPrimary)
                     .frame(minHeight: 250)
                     .scrollContentBackground(.hidden)
+                    .accessibilityIdentifier(A11yIdentifiers.diagnosticsReportScreen.reportText)
             } header: {
                 Text(UntranslatedL10n.quickDiagnosticsReportHeader)
                     .compoundListSectionHeader()
@@ -30,12 +31,14 @@ struct DiagnosticsReportScreen: View {
                         kind: .button {
                             context.send(viewAction: .copyToClipboard)
                         })
+                        .accessibilityIdentifier(A11yIdentifiers.diagnosticsReportScreen.copy)
                 
                 ListRow(label: .default(title: L10n.actionShare,
                                         icon: \.shareIos),
                         kind: .button {
                             context.send(viewAction: .share)
                         })
+                        .accessibilityIdentifier(A11yIdentifiers.diagnosticsReportScreen.share)
             }
         }
         .compoundList()

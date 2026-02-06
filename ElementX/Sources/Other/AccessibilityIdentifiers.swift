@@ -49,6 +49,7 @@ enum A11yIdentifiers {
     static let spaceScreen = SpaceScreen()
     static let spaceAddRoomsScreen = SpaceAddRoomsScreen()
     static let linkNewDeviceScreen = LinkNewDeviceScreen()
+    static let diagnosticsReportScreen = DiagnosticsReportScreen()
     
     struct AlertInfo {
         let primaryButton = "alert_info-primary_button"
@@ -254,6 +255,7 @@ enum A11yIdentifiers {
         let advancedSettings = "settings_advanced-settings"
         let developerOptions = "settings_developer-options"
         let logout = "settings-logout"
+        let diagnosticsReport = "settings-diagnostics_report"
     }
     
     struct SoftLogoutScreen {
@@ -340,5 +342,11 @@ enum A11yIdentifiers {
         let cancel = "link_new_device_screen-cancel"
         let mobileDevice = "link_new_device_screen-mobile_device"
         let desktopComputer = "link_new_device_screen-desktop_computer"
+    }
+
+    struct DiagnosticsReportScreen {
+        let reportText = "diagnostics_report-report_text"
+        let copy = "diagnostics_report-copy"
+        let share = "diagnostics_report-share"
     }
 }
