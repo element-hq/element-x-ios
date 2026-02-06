@@ -39,7 +39,7 @@ struct DiagnosticsReportScreen: View {
             }
         }
         .compoundList()
-        .navigationTitle(UntranslatedL10n.quickDiagnosticsScreenTitle)
+        .navigationTitle(L10n.commonReportAProblem)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $context.isSharePresented) {
             AppActivityView(activityItems: [context.viewState.bindings.reportText])

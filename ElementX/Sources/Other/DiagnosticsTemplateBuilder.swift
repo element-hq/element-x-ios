@@ -30,13 +30,13 @@ enum DiagnosticsTemplateBuilder {
         #endif
         
         return UntranslatedL10n.quickDiagnosticsReportTemplate(UntranslatedL10n.quickDiagnosticsDescribeProblem,
-                                                              appVersion,
-                                                              buildNumber,
-                                                              iOSVersion,
-                                                              deviceModel,
-                                                              locale,
-                                                              timezone,
-                                                              userID,
-                                                              deviceID)
+                                                               appVersion,
+                                                               buildNumber,
+                                                               iOSVersion,
+                                                               deviceModel,
+                                                               locale,
+                                                               timezone,
+                                                               userID,
+                                                               deviceID)
     }
 }

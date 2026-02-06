@@ -10,6 +10,27 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum UntranslatedL10n {
+  /// Describe the problem:
+  internal static var quickDiagnosticsDescribeProblem: String { return UntranslatedL10n.tr("Untranslated", "quick_diagnostics_describe_problem") }
+  /// Not logged in
+  internal static var quickDiagnosticsNotLoggedIn: String { return UntranslatedL10n.tr("Untranslated", "quick_diagnostics_not_logged_in") }
+  /// Diagnostics Report
+  internal static var quickDiagnosticsReportHeader: String { return UntranslatedL10n.tr("Untranslated", "quick_diagnostics_report_header") }
+  /// %1$@
+  /// 
+  /// ---
+  /// - App: %2$@ (%3$@)
+  /// - iOS: %4$@
+  /// - Device: %5$@
+  /// - Locale: %6$@
+  /// - Timezone: %7$@
+  /// - User ID: %8$@
+  /// - Device ID: %9$@
+  internal static func quickDiagnosticsReportTemplate(_ p1: Any, _ p2: Any, _ p3: Any, _ p4: Any, _ p5: Any, _ p6: Any, _ p7: Any, _ p8: Any, _ p9: Any) -> String {
+    return UntranslatedL10n.tr("Untranslated", "quick_diagnostics_report_template", String(describing: p1), String(describing: p2), String(describing: p3), String(describing: p4), String(describing: p5), String(describing: p6), String(describing: p7), String(describing: p8), String(describing: p9))
+  }
+  /// Unknown
+  internal static var quickDiagnosticsUnknown: String { return UntranslatedL10n.tr("Untranslated", "quick_diagnostics_unknown") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

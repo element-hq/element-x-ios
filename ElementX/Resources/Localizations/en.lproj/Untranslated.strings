@@ -4,6 +4,13 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
+// MARK: - Quick Diagnostics
+"quick_diagnostics_report_header" = "Diagnostics Report";
+"quick_diagnostics_describe_problem" = "Describe the problem:";
+"quick_diagnostics_unknown" = "Unknown";
+"quick_diagnostics_not_logged_in" = "Not logged in";
+"quick_diagnostics_report_template" = "%1$@\n\n---\n- App: %2$@ (%3$@)\n- iOS: %4$@\n- Device: %5$@\n- Locale: %6$@\n- Timezone: %7$@\n- User ID: %8$@\n- Device ID: %9$@";
+
 // MARK: - Soft logout
 
 "soft_logout_signin_title" = "Sign in";
