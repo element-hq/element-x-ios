@@ -294,7 +294,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 
                 if let senderID {
                     let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
-                    attributedLastMessage = AttributedString(L10n.stateEventRoomInviteYou(sender.displayName ?? sender.id))
+                    let senderDisplayName = sender.displayName ?? sender.id
+                    let invitedYouString = eventStringBuilder.stateEventStringBuilder.buildInvitedYouString(senderDisplayName)
+                    attributedLastMessage = AttributedString(invitedYouString)
                 }
             case .none:
                 break

@@ -58,7 +58,7 @@ struct RoomStateEventStringBuilder {
             if senderIsYou {
                 return L10n.stateEventRoomInviteByYou(member)
             } else if memberIsYou {
-                return L10n.stateEventRoomInviteYou(senderDisplayName)
+                return buildInvitedYouString(senderDisplayName)
             } else {
                 return L10n.stateEventRoomInvite(senderDisplayName, member)
             }
@@ -86,6 +86,10 @@ struct RoomStateEventStringBuilder {
             MXLog.verbose("Filtering timeline item for membership change: \(change)")
             return nil
         }
+    }
+    
+    func buildInvitedYouString(_ senderDisplayName: String) -> String {
+        L10n.stateEventRoomInviteYou(senderDisplayName)
     }
     
     func buildProfileChangeString(displayName: String?, previousDisplayName: String?,
