@@ -1060,6 +1060,8 @@ internal enum L10n {
   internal static func notificationReactionBody(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_reaction_body", String(describing: p1))
   }
+  /// You received one or more notifications while offline.
+  internal static var notificationReceivedWhileOfflineIos: String { return L10n.tr("Localizable", "notification_received_while_offline_ios") }
   /// Mark as read
   internal static var notificationRoomActionMarkAsRead: String { return L10n.tr("Localizable", "notification_room_action_mark_as_read") }
   /// Quick reply

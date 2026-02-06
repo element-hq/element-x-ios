@@ -56,8 +56,14 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                 self?.enableNotifications(newValue)
             }
             .store(in: &cancellables)
-    }
         
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                self?.removeReceivedWhileOfflineNotification()
+            }
+            .store(in: &cancellables)
+    }
+    
     func requestAuthorization() {
         guard appSettings.enableNotifications, !userSession.isNil else { return }
         Task {
@@ -150,6 +156,10 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             .map(\.request.identifier)
         
         notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
+    }
+    
+    private func removeReceivedWhileOfflineNotification() {
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: [NotificationServiceExtension.receivedWhileOfflineNotificationID])
     }
 
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
