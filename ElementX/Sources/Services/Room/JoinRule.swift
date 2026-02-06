@@ -32,7 +32,7 @@ public enum JoinRule: Equatable, Hashable {
         case .public: .public
         case .invite: .invite
         case .knock: .knock
-        case .private: .invite // Assume .private is .invite – private shouldn't be in used (see MSC4413).
+        case .private: .invite // Assume .private is .invite – private shouldn't be used (see MSC4413).
         case .restricted(let rules): .restricted(rules: rules.map(AllowRule.init))
         case .knockRestricted(let rules): .knockRestricted(rules: rules.map(AllowRule.init))
         case .custom(let rawValue): .custom(rawValue: rawValue)
