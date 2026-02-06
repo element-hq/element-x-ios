@@ -122,6 +122,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.advancedSettings)
         case .labs:
             actionsSubject.send(.labs)
+        case .diagnosticsReport:
+            actionsSubject.send(.diagnosticsReport)
         case .enableDeveloperOptions:
             appSettings.developerOptionsEnabled.toggle()
         case .developerOptions:

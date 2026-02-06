@@ -101,6 +101,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     bugReportFlowCoordinator?.start()
                 case .about:
                     presentLegalInformationScreen()
+                case .diagnosticsReport:
+                    presentDiagnosticsReportScreen()
                 case .blockedUsers:
                     presentBlockedUsersScreen()
                 case .notifications:
@@ -224,6 +226,13 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentLegalInformationScreen() {
         navigationStackCoordinator.push(LegalInformationScreenCoordinator(appSettings: flowParameters.appSettings))
+    }
+    
+    private func presentDiagnosticsReportScreen() {
+        let coordinator = DiagnosticsReportScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
+                                                                               userIndicatorController: flowParameters.userIndicatorController))
+        coordinator.start()
+        navigationStackCoordinator.push(coordinator)
     }
     
     private func presentBlockedUsersScreen() {

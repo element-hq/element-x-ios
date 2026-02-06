@@ -175,6 +175,13 @@ struct SettingsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
             }
             
+            ListRow(label: .default(title: L10n.commonReportAProblem,
+                                    icon: \.listBulleted),
+                    kind: .navigationLink {
+                        context.send(viewAction: .diagnosticsReport)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.diagnosticsReport)
+            
             if context.viewState.showAnalyticsSettings {
                 ListRow(label: .default(title: L10n.commonAnalytics,
                                         icon: \.chart),
