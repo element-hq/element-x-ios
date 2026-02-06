@@ -559,7 +559,7 @@ class ClientProxy: ClientProxyProtocol {
                                                   invite: userIDs,
                                                   avatar: avatarURL?.absoluteString,
                                                   powerLevelContentOverride: powerLevelContentOverride,
-                                                  joinRuleOverride: accessType.joinRuleOverride,
+                                                  joinRuleOverride: accessType.joinRuleOverride?.rustValue,
                                                   historyVisibilityOverride: accessType.historyVisibilityOverride,
                                                   // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
                                                   canonicalAlias: aliasLocalPart,
@@ -1432,9 +1432,9 @@ private extension CreateRoomAccessType {
         case .askToJoin:
             .knock
         case .spaceMembers(let spaceID):
-            .restricted(rules: [.roomMembership(roomId: spaceID)])
+            .restricted(rules: [.roomMembership(roomID: spaceID)])
         case .askToJoinWithSpaceMembers(let spaceID):
-            .knockRestricted(rules: [.roomMembership(roomId: spaceID)])
+            .knockRestricted(rules: [.roomMembership(roomID: spaceID)])
         case .private, .public:
             nil
         }

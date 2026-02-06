@@ -53,7 +53,7 @@ struct SpaceServiceRoom {
             .public
         case .restricted, .knockRestricted:
             .restricted
-        case .invite, .knock, .private, .custom:
+        case .invite, .knock, .custom:
             .private
         case .none:
             .none
@@ -77,7 +77,7 @@ extension SpaceServiceRoom {
         topic = spaceRoom.topic
         canonicalAlias = spaceRoom.canonicalAlias
         
-        joinRule = spaceRoom.joinRule
+        joinRule = spaceRoom.joinRule.map(JoinRule.init)
         worldReadable = spaceRoom.worldReadable
         guestCanJoin = spaceRoom.guestCanJoin
         state = spaceRoom.state
@@ -130,10 +130,10 @@ extension SpaceServiceRoom {
         case .restricted:
             joinRule = .restricted(rules: [])
         case .inviteRequired:
-            joinRule = .private
+            joinRule = .invite
         case .invited:
             state = .invited
-            joinRule = .private
+            joinRule = .invite
         case .knockable:
             joinRule = .knock
         case .knocked:
@@ -218,7 +218,7 @@ extension [SpaceServiceRoom] {
                                   childrenCount: 1,
                                   joinedMembersCount: 500,
                                   canonicalAlias: "#the-foundation:matrix.org",
-                                  joinRule: .private,
+                                  joinRule: .invite,
                                   state: .joined),
             SpaceServiceRoom.mock(id: "space2",
                                   name: "The Second Foundation",

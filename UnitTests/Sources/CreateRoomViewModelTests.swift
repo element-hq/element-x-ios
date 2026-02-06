@@ -271,7 +271,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     }
     
     func testCreateRoomInAnAlreadySelectedSpace() async throws {
-        let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .private)
+        let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .invite)
         setup(spacesSelectionMode: .preSelected(space))
         
         context.send(viewAction: .updateRoomName("A"))

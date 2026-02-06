@@ -156,7 +156,7 @@ struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
                                                         joinedMembersCount: 76,
                                                         heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
                                                         topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in.",
-                                                        joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")]))
+                                                        joinRule: .knockRestricted(rules: [.roomMembership(roomID: "")]))
     
     static func makeViewModel(mode: LeaveSpaceHandleProxy.Mode) -> LeaveSpaceViewModel {
         let rooms: [LeaveSpaceRoom] = switch mode {

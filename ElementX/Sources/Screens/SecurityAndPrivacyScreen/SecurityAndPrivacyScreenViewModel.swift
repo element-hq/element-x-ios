@@ -350,9 +350,9 @@ private extension SecurityAndPrivacyRoomAccessType {
         case .anyone:
             .public
         case .spaceMembers(let spaceIDs):
-            .restricted(rules: spaceIDs.map { .roomMembership(roomId: $0) })
+            .restricted(rules: spaceIDs.map { .roomMembership(roomID: $0) })
         case .askToJoinWithSpaceMembers(let spaceIDs):
-            .knockRestricted(rules: spaceIDs.map { .roomMembership(roomId: $0) })
+            .knockRestricted(rules: spaceIDs.map { .roomMembership(roomID: $0) })
         }
     }
 }
