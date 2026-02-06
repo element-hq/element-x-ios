@@ -289,6 +289,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
                 attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: isOwn)
                 lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+            case .remoteInvite(let timestamp, let senderID, let profile):
+                lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+                
+                if let senderID {
+                    let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+                    let senderDisplayName = sender.displayName ?? sender.id
+                    let invitedYouString = eventStringBuilder.stateEventStringBuilder.buildInvitedYouString(senderDisplayName)
+                    attributedLastMessage = AttributedString(invitedYouString)
+                }
             case .none:
                 break
             }

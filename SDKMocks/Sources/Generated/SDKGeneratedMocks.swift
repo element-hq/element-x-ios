@@ -27862,24 +27862,6 @@ open class TimelineEventFilterSDKMock: MatrixRustSDK.TimelineEventFilter, @unche
     {
     }
 }
-open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-    static func reset()
-    {
-    }
-}
 open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())

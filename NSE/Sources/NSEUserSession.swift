@@ -140,4 +140,15 @@ private final class ClientDelegateWrapper: ClientDelegate {
     func didRefreshTokens() {
         MXLog.info("Delegating session updates to the ClientSessionDelegate.")
     }
+    
+    func onBackgroundTaskErrorReport(taskName: String, error: MatrixRustSDK.BackgroundTaskFailureReason) {
+        switch error {
+        case .panic(let message, let backtrace):
+            MXLog.error("Received background task panic: \(message ?? "Missing message")\nBacktrace:\n\(backtrace ?? "Missing backtrace")")
+        case .error(let error):
+            MXLog.error("Received background task error: \(error)")
+        case .earlyTermination:
+            MXLog.error("Received background task early termination")
+        }
+    }
 }
