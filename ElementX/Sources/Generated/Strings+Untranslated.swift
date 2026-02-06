@@ -10,6 +10,18 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum UntranslatedL10n {
+  /// Diagnostics
+  internal static var bugReportPreflightDiagnostics: String { return UntranslatedL10n.tr("Untranslated", "bug_report_preflight_diagnostics") }
+  /// Actual
+  internal static var bugReportPreflightFieldActual: String { return UntranslatedL10n.tr("Untranslated", "bug_report_preflight_field_actual") }
+  /// Expected
+  internal static var bugReportPreflightFieldExpected: String { return UntranslatedL10n.tr("Untranslated", "bug_report_preflight_field_expected") }
+  /// Steps
+  internal static var bugReportPreflightFieldSteps: String { return UntranslatedL10n.tr("Untranslated", "bug_report_preflight_field_steps") }
+  /// Summary
+  internal static var bugReportPreflightFieldSummary: String { return UntranslatedL10n.tr("Untranslated", "bug_report_preflight_field_summary") }
+  /// Bug Report
+  internal static var bugReportPreflightTitle: String { return UntranslatedL10n.tr("Untranslated", "bug_report_preflight_title") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

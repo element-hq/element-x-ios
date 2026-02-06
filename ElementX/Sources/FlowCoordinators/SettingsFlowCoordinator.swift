@@ -25,8 +25,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
     // periphery:ignore - retaining purpose
-    private var bugReportFlowCoordinator: BugReportFlowCoordinator?
-    // periphery:ignore - retaining purpose
     private var encryptionSettingsFlowCoordinator: EncryptionSettingsFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var linkNewDeviceFlowCoordinator: LinkNewDeviceFlowCoordinator?
@@ -94,11 +92,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .appLock:
                     presentAppLockSetupFlow()
                 case .bugReport:
-                    bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .push(navigationStackCoordinator),
-                                                                                          userIndicatorController: flowParameters.userIndicatorController,
-                                                                                          bugReportService: flowParameters.bugReportService,
-                                                                                          userSession: flowParameters.userSession))
-                    bugReportFlowCoordinator?.start()
+                    presentBugReportPreflight()
                 case .about:
                     presentLegalInformationScreen()
                 case .blockedUsers:
@@ -199,6 +193,13 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentAnalyticsScreen() {
         let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: flowParameters.appSettings,
                                                                                analytics: flowParameters.analytics))
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentBugReportPreflight() {
+        let coordinator = BugReportPreflightScreenCoordinator(parameters: .init(diagnosticsProvider: SystemDiagnosticsProvider(),
+                                                                                redactor: Redactor(),
+                                                                                reportBuilder: BugReportPreflightReportBuilder()))
         navigationStackCoordinator.push(coordinator)
     }
     

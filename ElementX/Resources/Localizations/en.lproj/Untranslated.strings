@@ -14,3 +14,12 @@
 "soft_logout_clear_data_submit" = "Clear all data";
 "soft_logout_clear_data_dialog_title" = "Clear data";
 "soft_logout_clear_data_dialog_content" = "Clear all data currently stored on this device?\nSign in again to access your account data and messages.";
+
+// MARK: - Bug Report Preflight
+
+"bug_report_preflight_title" = "Bug Report";
+"bug_report_preflight_diagnostics" = "Diagnostics";
+"bug_report_preflight_field_summary" = "Summary";
+"bug_report_preflight_field_steps" = "Steps";
+"bug_report_preflight_field_expected" = "Expected";
+"bug_report_preflight_field_actual" = "Actual";

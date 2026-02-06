@@ -109,6 +109,13 @@ extension PreviewTests {
         }
     }
 
+    func testBugReportPreflightScreen() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in BugReportPreflightScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testBugReportScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in BugReportScreen_Previews._allPreviews.enumerated() {
