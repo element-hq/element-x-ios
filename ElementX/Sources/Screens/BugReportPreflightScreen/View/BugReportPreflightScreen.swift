@@ -28,6 +28,10 @@ struct BugReportPreflightScreen: View {
         .compoundList()
         .navigationTitle(UntranslatedL10n.bugReportPreflightTitle)
         .navigationBarTitleDisplayMode(.inline)
+        .contentShape(.rect)
+        .onTapGesture {
+            endEditing()
+        }
         .onAppear {
             context.send(viewAction: .screenAppeared)
         }
@@ -98,6 +102,15 @@ struct BugReportPreflightScreen: View {
         AppActivityView(activityItems: [context.viewState.reportText])
             .edgesIgnoringSafeArea(.bottom)
             .presentationDetents([.medium, .large])
+    }
+
+    // MARK: - Private Methods
+
+    private func endEditing() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                        to: nil,
+                                        from: nil,
+                                        for: nil)
     }
 }
 
