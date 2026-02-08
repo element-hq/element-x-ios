@@ -99,6 +99,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                                           bugReportService: flowParameters.bugReportService,
                                                                                           userSession: flowParameters.userSession))
                     bugReportFlowCoordinator?.start()
+                case .bugReportPreflight:
+                    presentBugReportPreflightScreen()
                 case .about:
                     presentLegalInformationScreen()
                 case .blockedUsers:
@@ -199,6 +201,11 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentAnalyticsScreen() {
         let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: flowParameters.appSettings,
                                                                                analytics: flowParameters.analytics))
+        navigationStackCoordinator.push(coordinator)
+    }
+
+    private func presentBugReportPreflightScreen() {
+        let coordinator = BugReportPreflightScreenCoordinator(parameters: .init(diagnosticsProvider: SystemDiagnosticsProvider()))
         navigationStackCoordinator.push(coordinator)
     }
     

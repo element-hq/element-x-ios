@@ -108,6 +108,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.appLock)
         case .reportBug:
             actionsSubject.send(.reportBug)
+        case .bugReportPreflight:
+            actionsSubject.send(.bugReportPreflight)
         case .about:
             actionsSubject.send(.about)
         case .blockedUsers:

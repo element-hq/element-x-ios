@@ -17,6 +17,7 @@ enum SettingsScreenViewModelAction: Equatable {
     case analytics
     case appLock
     case reportBug
+    case bugReportPreflight
     case about
     case blockedUsers
     case secureBackup
@@ -65,6 +66,7 @@ enum SettingsScreenViewAction {
     case analytics
     case appLock
     case reportBug
+    case bugReportPreflight
     case about
     case blockedUsers
     case secureBackup

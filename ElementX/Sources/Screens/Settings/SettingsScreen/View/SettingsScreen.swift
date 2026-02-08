@@ -174,6 +174,12 @@ struct SettingsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
             }
+
+            ListRow(label: .default(title: "Bug Report Preflight",
+                                    icon: \.chatProblem),
+                    kind: .navigationLink {
+                        context.send(viewAction: .bugReportPreflight)
+                    })
             
             if context.viewState.showAnalyticsSettings {
                 ListRow(label: .default(title: L10n.commonAnalytics,
