@@ -93,4 +93,8 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
         AnyView(SpaceScreen(context: viewModel.context))
     }
+    
+    func reset() {
+        viewModel.reset()
+    }
 }

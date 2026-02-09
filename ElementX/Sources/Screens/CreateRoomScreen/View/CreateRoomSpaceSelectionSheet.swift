@@ -24,14 +24,7 @@ struct CreateRoomSpaceSelectionSheet: View {
         NavigationStack {
             List {
                 Section {
-                    ListRow(label: .avatar(title: L10n.screenCreateRoomSpaceSelectionNoSpaceTitle,
-                                           description: L10n.screenCreateRoomSpaceSelectionNoSpaceDescription,
-                                           icon: CompoundIcon(\.homeSolid, size: .small, relativeTo: .body)
-                                               .foregroundColor(.compound.iconPrimary)
-                                               .scaledFrame(size: 32)
-                                               .background(.compound.bgSubtleSecondary)
-                                               .scaledFrame(size: 32)
-                                               .clipAvatar(isSpace: true, size: 32)),
+                    ListRow(label: .plain(title: L10n.screenCreateRoomSpaceSelectionNoSpaceOption),
                             kind: .selection(isSelected: context.selectedSpace == nil) {
                                 context.selectedSpace = nil
                                 dismiss()
