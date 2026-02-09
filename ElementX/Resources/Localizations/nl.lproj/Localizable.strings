@@ -177,6 +177,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Over";
 "common_acceptable_use_policy" = "Beleid inzake redelijk gebruik";
+"common_add_account" = "Add an account";
+"common_add_another_account" = "Add another account";
 "common_adding_caption" = "Bijschrift toevoegen";
 "common_advanced_settings" = "Geavanceerde instellingen";
 "common_an_image" = "an image";
@@ -250,6 +252,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Geen resultaten";
 "common_no_room_name" = "Geen kamernaam";
+"common_no_space_name" = "No space name";
 "common_not_encrypted" = "Not encrypted";
 "common_offline" = "Offline";
 "common_open_source_licenses" = "Open-sourcelicenties";
@@ -268,8 +271,10 @@
 "common_poll_undisclosed_text" = "Resultaten worden getoond nadat de peiling is afgelopen";
 "common_preparing" = "Preparing…";
 "common_privacy_policy" = "Privacybeleid";
+"common_private" = "Private";
 "common_private_room" = "Privé kamer";
 "common_private_space" = "Private space";
+"common_public" = "Public";
 "common_public_room" = "Openbare kamer";
 "common_public_space" = "Public space";
 "common_reaction" = "Reactie";
@@ -294,6 +299,7 @@
 "common_search_results" = "Zoekresultaten";
 "common_security" = "Beveiliging";
 "common_seen_by" = "Gezien door";
+"common_select_account" = "Select an account";
 "common_send_to" = "Sturen naar";
 "common_sending" = "Verzenden…";
 "common_sending_failed" = "Verzenden mislukt";
@@ -311,6 +317,7 @@
 "common_something_went_wrong" = "Er is iets misgegaan";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_space" = "Space";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "Chat starten…";
 "common_sticker" = "Sticker";
@@ -353,10 +360,6 @@
 "common_waiting_for_decryption_key" = "Wachten op dit bericht";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Jij";
-"common.add_account" = "Add an account";
-"common.add_another_account" = "Add another account";
-"common.no_space_name" = "No space name";
-"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Bevestig je herstelsleutel om toegang te houden tot je sleutelopslag en berichtengeschiedenis.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Versleuteld door een niet-geverifieerde gebruiker.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@'s identiteit lijkt te zijn gewijzigd. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@'s %2$@ identiteit lijkt te zijn gewijzigd. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Heeft je genoemd: %1$@";
 "notification_new_messages" = "Nieuwe berichten";
 "notification_reaction_body" = "Reageerde met %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Nodigde je uit om tot de kamer toe te treden";
 "notification_room_invite_body_with_sender" = "%1$@ nodigde je uit om tot de kamer toe te treden";
 "notification_sender_me" = "Mij";
@@ -548,9 +555,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
-"screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Iedereen kan toetreden tot deze kamer";
-"screen_create_room_room_access_section_public_option_title" = "Iedereen";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
@@ -558,7 +563,8 @@
 "screen_create_room_room_address_section_title" = "Address";
 "screen_create_room_room_visibility_section_title" = "Room visibility";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
@@ -610,7 +616,6 @@
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
 "screen_labs_header_title" = "Feeling experimental?";
 "screen_labs_title" = "Labs";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
 "screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
@@ -717,7 +722,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Access";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorised spaces can join.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Spaces are not currently supported";
 "screen_security_and_privacy_room_address_section_header" = "Address";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Allow for this room to be found by searching %1$@ public room directory";
@@ -874,9 +878,7 @@
 "screen_create_room_action_create_room" = "Nieuwe kamer";
 "screen_create_room_error_creating_room" = "Er is een fout opgetreden bij het aanmaken van de kamer";
 "screen_create_room_private_option_description" = "Alleen uitgenodigde personen hebben toegang tot deze kamer. Alle berichten zijn end-to-end versleuteld.";
-"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Iedereen kan deze kamer vinden.\nJe kunt dit op elk gewenst moment wijzigen in de kamerinstellingen.";
-"screen_create_room_public_option_title" = "Openbare kamer";
 "screen_create_room_topic_label" = "Onderwerp (optioneel)";
 "screen_deactivate_account_confirmation_dialog_content" = "Bevestig dat je je account wilt sluiten. Deze actie kan niet ongedaan worden gemaakt.";
 "screen_deactivate_account_delete_all_messages" = "Verwijder al mijn berichten";
@@ -1423,6 +1425,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Ze kunnen opnieuw tot de kamer toetreden als ze worden uitgenodigd.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Ontbannen";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "%1$@ ontbannen";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Gebruiker blokkeren";
 "screen_decline_and_block_report_user_reason_placeholder" = "Describe the reason to report…";
 "screen_decline_and_block_title" = "Weigeren en blokkeren";
@@ -1430,6 +1434,7 @@
 "screen_home_tab_spaces" = "Spaces";
 "screen_join_room_decline_and_block_button_title" = "Weigeren en blokkeren";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_link_new_device_desktop_scanning_title" = "Scan de QR-code";
 "screen_link_new_device_desktop_step3" = "Scan de QR-code met dit apparaat";
 "screen_link_new_device_desktop_submit" = "Klaar om te scannen";
@@ -1454,6 +1459,7 @@
 "screen_roomlist_knock_event_sent_description" = "Verzoek om toe te treden verzonden";
 "screen_security_and_privacy_encryption_section_header" = "Encryption";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "Rollen en rechten";
@@ -1473,6 +1479,8 @@
 "screen_create_account_title" = "Account aanmaken";
 "screen_create_poll_cancel_confirmation_content_ios" = "Je wijzigingen worden niet opgeslagen";
 "screen_create_room_add_people_title" = "Mensen uitnodigen";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Account sluiten";
 "screen_dm_details_block_alert_action" = "Blokkeren";
 "screen_dm_details_block_alert_description" = "Geblokkeerde gebruikers kunnen je geen berichten sturen en al hun berichten worden verborgen. Je kunt ze op elk moment deblokkeren.";

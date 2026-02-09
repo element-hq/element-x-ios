@@ -177,6 +177,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Az Element Call nem támogatja a Bluetooth hangeszközök használatát ebben az Android-verzióban. Válasszon másik hangeszközt.";
 "common_about" = "Névjegy";
 "common_acceptable_use_policy" = "Elfogadható használatra vonatkozó szabályzat";
+"common_add_account" = "Fiók hozzáadása";
+"common_add_another_account" = "Másik fiók hozzáadása";
 "common_adding_caption" = "Felirat hozzáadása";
 "common_advanced_settings" = "Speciális beállítások";
 "common_an_image" = "egy kép";
@@ -250,6 +252,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Nincs találat";
 "common_no_room_name" = "Nincs szobanév";
+"common_no_space_name" = "Nincs térnév";
 "common_not_encrypted" = "Nincs titkosítva";
 "common_offline" = "Kapcsolat nélkül";
 "common_open_source_licenses" = "Nyílt forráskódú licencek";
@@ -268,8 +271,10 @@
 "common_poll_undisclosed_text" = "Az eredmények a szavazás befejezése után jelennek meg";
 "common_preparing" = "Előkészítés…";
 "common_privacy_policy" = "Adatvédelmi nyilatkozat";
+"common_private" = "Private";
 "common_private_room" = "Privát szoba";
 "common_private_space" = "Privát tér";
+"common_public" = "Public";
 "common_public_room" = "Nyilvános szoba";
 "common_public_space" = "Nyilvános tér";
 "common_reaction" = "Reakció";
@@ -294,6 +299,7 @@
 "common_search_results" = "Keresési találatok";
 "common_security" = "Biztonság";
 "common_seen_by" = "Látta";
+"common_select_account" = "Fiók kiválasztása";
 "common_send_to" = "Címzett";
 "common_sending" = "Küldés…";
 "common_sending_failed" = "A küldés sikertelen";
@@ -311,6 +317,7 @@
 "common_something_went_wrong" = "Valamilyen hiba történt";
 "common_something_went_wrong_message" = "Problémába ütköztünk. Próbálja újra.";
 "common_space" = "Tér";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "Miről szól ez a tér?";
 "common_starting_chat" = "Csevegés megkezdése…";
 "common_sticker" = "Matrica";
@@ -353,10 +360,6 @@
 "common_waiting_for_decryption_key" = "Várakozás a visszafejtési kulcsra";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Ön";
-"common.add_account" = "Fiók hozzáadása";
-"common.add_another_account" = "Másik fiók hozzáadása";
-"common.no_space_name" = "Nincs térnév";
-"common.select_account" = "Fiók kiválasztása";
 "common_unable_to_decrypt_insecure_device" = "Nem biztonságos eszközről küldve";
 "common_unable_to_decrypt_verification_violation" = "A feladó ellenőrzött személyazonossága megváltozott";
 "confirm_recovery_key_banner_message" = "Erősítse meg a helyreállítási kulcsát, hogy továbbra is hozzáférjen a kulcstárolójához és az üzenetelőzményekhez.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Nem ellenőrzött felhasználó által titkosítva.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Az elküldött üzenetek megosztásra kerülnek a szobába meghívott új tagokkal.%1$@";
 "crypto_identity_change_pin_violation" = "%1$@ személyazonossága megváltozott. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@ (%2$@) személyazonossága megváltozott. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Megemlítette Önt: %1$@";
 "notification_new_messages" = "Új üzenetek";
 "notification_reaction_body" = "Ezzel reagált: %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Meghívta, hogy csatlakozzon a szobához";
 "notification_room_invite_body_with_sender" = "%1$@ meghívta, hogy csatlakozzon a szobához";
 "notification_sender_me" = "Én";
@@ -548,9 +555,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Bárki csatlakozhat innen: %1$@, de mindenki másnak hozzáférést kell kérnie.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Csatlakozás kérése";
 "screen_create_room_room_access_section_private_option_description" = "Csak a meghívottak léphetnek be.";
-"screen_create_room_room_access_section_private_option_title" = "Privát";
 "screen_create_room_room_access_section_public_option_description" = "Bárki csatlakozhat.";
-"screen_create_room_room_access_section_public_option_title" = "Nyilvános";
 "screen_create_room_room_access_section_restricted_option_description" = "Bárki csatlakozhat innen: %1$@.";
 "screen_create_room_room_access_section_restricted_option_title" = "Szokásos";
 "screen_create_room_room_access_section_title" = "Hozzáférésre jogosultak";
@@ -558,6 +563,7 @@
 "screen_create_room_room_address_section_title" = "Cím";
 "screen_create_room_room_visibility_section_title" = "Szoba láthatósága";
 "screen_create_room_space_selection_no_space_description" = "(nincs tér)";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
 "screen_create_room_space_selection_no_space_title" = "Kezdőlap";
 "screen_create_room_space_selection_sheet_title" = "Hozzáadás a térhez";
 "screen_create_room_topic_placeholder" = "Leírás hozzáadása…";
@@ -610,7 +616,6 @@
 "screen_labs_header_description" = "Próbálja ki legújabb fejlesztéseinket. Ezek a funkciók még nem véglegesek, instabilak lehetnek és változhatnak.";
 "screen_labs_header_title" = "Kísérletezni szeretne?";
 "screen_labs_title" = "Kísérletek";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Adminisztrátor)";
 "screen_leave_space_subtitle" = "Ez a tér összes szobájából is eltávolítja.";
 "screen_leave_space_subtitle_last_admin" = "Mielőtt elhagyhatná ezt a teret, ki kell jelölnie egy másik adminisztrátort.";
@@ -717,7 +722,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Hozzáférés";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Bárki csatlakozhat, az engedélyezett terekből.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Bárki csatlakozhatnak innen: %1$@.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "A tér tagjai";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "A terek jelenleg nem támogatottak";
 "screen_security_and_privacy_room_address_section_header" = "Cím";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "A szoba megtalálhatóvá tétele a(z) %1$@ nyilvános szobakatalógusában való kereséssel.";
@@ -874,9 +878,7 @@
 "screen_create_room_action_create_room" = "Új szoba";
 "screen_create_room_error_creating_room" = "Hiba történt a szoba létrehozásakor";
 "screen_create_room_private_option_description" = "Csak a meghívottak léphetnek be.";
-"screen_create_room_private_option_title" = "Privát";
 "screen_create_room_public_option_description" = "Bárki megtalálhatja ezt a szobát.\nEzt bármikor módosíthatja a szobabeállításokban.";
-"screen_create_room_public_option_title" = "Nyilvános szoba";
 "screen_create_room_topic_label" = "Téma (nem kötelező)";
 "screen_deactivate_account_confirmation_dialog_content" = "Erősítse meg, hogy deaktiválja a fiókját. Ez a művelet nem vonható vissza.";
 "screen_deactivate_account_delete_all_messages" = "Összes saját üzenet törlése";
@@ -1423,6 +1425,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Ehhez a szobához is csatlakozhat, ha meghívják.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Tiltás feloldása";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "%1$@ tiltásának feloldása";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Felhasználó letiltása";
 "screen_decline_and_block_report_user_reason_placeholder" = "Írja le az okot…";
 "screen_decline_and_block_title" = "Elutasítás és letiltás";
@@ -1430,6 +1434,7 @@
 "screen_home_tab_spaces" = "Terek";
 "screen_join_room_decline_and_block_button_title" = "Elutasítás és letiltás";
 "screen_knock_requests_list_title" = "Csatlakozási kérelem";
+"screen_leave_space_choose_owners_action" = "Tulajdonosok kiválasztása";
 "screen_link_new_device_desktop_scanning_title" = "Olvassa be a QR-kódot";
 "screen_link_new_device_desktop_step3" = "Olvassa be a QR-kódot ezzel az eszközzel";
 "screen_link_new_device_desktop_submit" = "Készen áll a beolvasásra";
@@ -1454,6 +1459,7 @@
 "screen_roomlist_knock_event_sent_description" = "Csatlakozási kérés elküldve";
 "screen_security_and_privacy_encryption_section_header" = "Titkosítás";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Terek kezelése";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban.";
 "screen_space_settings_leave_space" = "Tér elhagyása";
 "screen_space_settings_roles_and_permissions" = "Szerepkörök és jogosultságok";
@@ -1473,6 +1479,8 @@
 "screen_create_account_title" = "Fiók létrehozása";
 "screen_create_poll_cancel_confirmation_content_ios" = "A módosításai nem lesznek mentve";
 "screen_create_room_add_people_title" = "Ismerősök meghívása";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Fiók deaktiválása";
 "screen_dm_details_block_alert_action" = "Letiltás";
 "screen_dm_details_block_alert_description" = "A letiltott felhasználók nem fognak tudni üzeneteket küldeni, és az összes üzenetük rejtve lesz. Bármikor feloldhatja a letiltásukat.";
