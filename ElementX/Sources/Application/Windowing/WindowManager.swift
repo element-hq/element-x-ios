@@ -120,19 +120,35 @@ class WindowManager: SecureWindowManagerProtocol {
 
 private class PassthroughWindow: UIWindow {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        guard let hitView = super.hitTest(point, with: event) else {
+        if #available(iOS 26, *) {
+            // Passthrough UIWindow using SwiftUI in iOS 26
+            // https://stackoverflow.com/a/79835964/730924
+            guard let rootView = rootViewController?.view else {
+                return nil
+            }
+            
+            // Special handling for glass buttons
+            // ".glass has a layer name of "@1" and and .glassProminent has a layer name of "@2""
+            guard let name = rootView.layer.hitTest(point)?.name, !name.starts(with: "@") else {
+                return rootView
+            }
+            
             return nil
+        } else {
+            guard let hitView = super.hitTest(point, with: event) else {
+                return nil
+            }
+            
+            guard let rootViewController else {
+                return nil
+            }
+            
+            guard hitView != self else {
+                return nil
+            }
+            
+            // If the returned view is the `UIHostingController`'s view, ignore.
+            return rootViewController.view == hitView ? nil : hitView
         }
-        
-        guard let rootViewController else {
-            return nil
-        }
-        
-        guard hitView != self else {
-            return nil
-        }
-        
-        // If the returned view is the `UIHostingController`'s view, ignore.
-        return rootViewController.view == hitView ? nil : hitView
     }
 }
