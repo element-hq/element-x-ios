@@ -15,5 +15,5 @@ protocol SpaceScreenViewModelProtocol {
     
     func stop()
     
-    func reset()
+    func resetRoomList()
 }
