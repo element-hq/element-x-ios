@@ -177,6 +177,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ushbu Android versiyasida Bluetooth audio qurilmalaridan foydalanishni qoʻllab-quvvatlamaydi. Iltimos, boshqa audio qurilmani tanlang.";
 "common_about" = "Haqida";
 "common_acceptable_use_policy" = "Qabul qilinadigan foydalanish siyosati";
+"common_add_account" = "Hisob qo‘shish";
+"common_add_another_account" = "Boshqa hisob qo‘shish";
 "common_adding_caption" = "Sarlavha qoʻshish";
 "common_advanced_settings" = "Kengaytirilgan sozlamalar";
 "common_an_image" = "rasm";
@@ -250,6 +252,7 @@
 "common_name_and_id" = "%1$@(%2$@ )";
 "common_no_results" = "Natijalar yoʻq";
 "common_no_room_name" = "Xona nomi yoʻq";
+"common_no_space_name" = "No space name";
 "common_not_encrypted" = "Shifrlanmagan";
 "common_offline" = "Oflayn";
 "common_open_source_licenses" = "Ochiq kodli litsenziyalar";
@@ -268,8 +271,10 @@
 "common_poll_undisclosed_text" = "Natijalar soʻrovnoma tugagandan soʻng koʻrsatiladi";
 "common_preparing" = "Tayyorlanmoqda…";
 "common_privacy_policy" = "Maxfiylik siyosati";
+"common_private" = "Private";
 "common_private_room" = "Shaxsiy xona";
 "common_private_space" = "Shaxsiy guruh";
+"common_public" = "Public";
 "common_public_room" = "Jamoat xonasi";
 "common_public_space" = "Jamoat guruhi";
 "common_reaction" = "Reaktsiya";
@@ -294,6 +299,7 @@
 "common_search_results" = "Qidiruv natijalari";
 "common_security" = "Xavfsizlik";
 "common_seen_by" = "Tomonidan koʻrilgan";
+"common_select_account" = "Hisobni tanlang";
 "common_send_to" = "Yubirish";
 "common_sending" = "Yuborilmoqda…";
 "common_sending_failed" = "Yuborilmadi";
@@ -311,6 +317,7 @@
 "common_something_went_wrong" = "Nimadir xato ketdi";
 "common_something_went_wrong_message" = "Muammoga duch keldik. Iltimos, qayta urinib koʻring.";
 "common_space" = "Bo‘shliq";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "Chat boshlanmoqda…";
 "common_sticker" = "Stiker";
@@ -353,10 +360,6 @@
 "common_waiting_for_decryption_key" = "Ushbu xabarni kutilmoqda";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Siz";
-"common.add_account" = "Hisob qo‘shish";
-"common.add_another_account" = "Boshqa hisob qo‘shish";
-"common.no_space_name" = "No space name";
-"common.select_account" = "Hisobni tanlang";
 "common_unable_to_decrypt_insecure_device" = "Xavfsiz boʻlmagan qurilmadan yuborilgan";
 "common_unable_to_decrypt_verification_violation" = "Yuboruvchining tasdiqlangan shaxsi qayta tiklandi";
 "confirm_recovery_key_banner_message" = "Kalit saqlash joyingiz va xabarlar tarixingizga kirishni saqlab qolish uchun tiklash kalitingizni tasdiqlang.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Tasdiqlanmagan foydalanuvchi tomonidan shifrlangan.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@ning shaxsi qayta tiklandi.%2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@ʼning %2$@ shaxsiy ma’lumotlari qayta tiklandi.%3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "%1$@ sizni eslatib oʻtdi";
 "notification_new_messages" = "Yangi xabarlar";
 "notification_reaction_body" = "%1$@bilan munosabat bildiring";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Sizni xonaga kirishga taklif qildi";
 "notification_room_invite_body_with_sender" = "%1$@ sizni xonaga kirishga taklif qildi";
 "notification_sender_me" = "Men";
@@ -548,9 +555,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
-"screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Bu xonaga istalgan kishi qo‘shilishi mumkin";
-"screen_create_room_room_access_section_public_option_title" = "Har kim";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
@@ -558,7 +563,8 @@
 "screen_create_room_room_address_section_title" = "Address";
 "screen_create_room_room_visibility_section_title" = "Xonaning ko‘rinishi";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Siz bu foydalanuvchidan hech qanday xabar yoki xonaga taklif ko‘rmaysiz";
@@ -610,7 +616,6 @@
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
 "screen_labs_header_title" = "Feeling experimental?";
 "screen_labs_title" = "Labs";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
 "screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
@@ -717,7 +722,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Xonaga kirish huquqi";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorised spaces can join.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Maydon a’zolari";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Hozirda maydonlar qo‘llab-quvvatlanmaydi";
 "screen_security_and_privacy_room_address_section_header" = "Address";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Bu xonani %1$@ umumiy xonalar ro‘yxatidan qidirib topish imkoniyatini berish";
@@ -874,9 +878,7 @@
 "screen_create_room_action_create_room" = "Yangi xona";
 "screen_create_room_error_creating_room" = "Xonani yaratishda xatolik yuz berdi";
 "screen_create_room_private_option_description" = "Faqat taklif etilgan shaxslargina bu xonaga kira oladi. Barcha xabarlar boshdan-oxirigacha shifrlanadi.";
-"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Bu xonani har kim topishi mumkin.\nBuni xona sozlamalaridan istalgan vaqtda oʻzgartirishingiz mumkin.";
-"screen_create_room_public_option_title" = "Jamoat xonasi (har kim)";
 "screen_create_room_topic_label" = "Mavzu (ixtiyoriy)";
 "screen_deactivate_account_confirmation_dialog_content" = "Iltimos, hisobingizni o‘chirishni xohlayotganingizni tasdiqlang. Bu amalni qaytarib bo‘lmaydi.";
 "screen_deactivate_account_delete_all_messages" = "Barcha xabarlarimni o‘chirib tashlang";
@@ -1423,6 +1425,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Agar taklif qilinsa, ular bu xonaga qayta qo‘shilishlari mumkin.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Taqiqni bekor qilish";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Taqiqni bekor qilish %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Foydalanuvchini bloklash";
 "screen_decline_and_block_report_user_reason_placeholder" = "Xabar berish sababini tushuntiring...";
 "screen_decline_and_block_title" = "Rad etish va bloklash";
@@ -1430,6 +1434,7 @@
 "screen_home_tab_spaces" = "Bo‘shliqlar";
 "screen_join_room_decline_and_block_button_title" = "Rad etish va bloklash";
 "screen_knock_requests_list_title" = "Qo‘shilish uchun so‘rovlar";
+"screen_leave_space_choose_owners_action" = "Egalarni tanlang";
 "screen_link_new_device_desktop_scanning_title" = "QR kodni skanerlash";
 "screen_link_new_device_desktop_step3" = "Bu qurilma bilan QR kodni skanerlang";
 "screen_link_new_device_desktop_submit" = "Skanerlashga tayyor";
@@ -1454,6 +1459,7 @@
 "screen_roomlist_knock_event_sent_description" = "Qo‘shilish so‘rovi yuborildi";
 "screen_security_and_privacy_encryption_section_header" = "Shifrlash";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Katalogda ko‘rinadigan qilish uchun xona manzili kerak bo‘ladi.";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "Rollar va ruxsatlar";
@@ -1473,6 +1479,8 @@
 "screen_create_account_title" = "Hisob yaratish";
 "screen_create_poll_cancel_confirmation_content_ios" = "Oʻzgarishlaringiz saqlanmaydi";
 "screen_create_room_add_people_title" = "Odamlarni taklif qiling";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Hisobni faolsizlantirish";
 "screen_dm_details_block_alert_action" = "Bloklash";
 "screen_dm_details_block_alert_description" = "Bloklangan foydalanuvchilar sizga xabar yubora olmaydi va ularning barcha xabarlari yashiriladi. Ularni istalgan vaqtda blokdan chiqarishingiz mumkin.";
