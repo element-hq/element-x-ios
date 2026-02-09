@@ -41,17 +41,21 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         
         var selectedSpace: SpaceServiceRoom?
         var canSelectSpace = false
+        var selectedAccessType = CreateRoomScreenAccessType.private
         switch spaceSelectionMode {
         case .editableSpacesList:
             canSelectSpace = true
         case .preSelected(let value):
             selectedSpace = value
+            if value.joinRule != .public {
+                selectedAccessType = .spaceMembers
+            }
         case .none:
             break
         }
         
         let bindings = CreateRoomScreenViewStateBindings(roomTopic: "",
-                                                         selectedAccessType: .private,
+                                                         selectedAccessType: selectedAccessType,
                                                          selectedSpace: selectedSpace)
 
         super.init(initialViewState: CreateRoomScreenViewState(isSpace: isSpace,

@@ -39,6 +39,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     private let selectedSpaceRoomSubject: CurrentValueSubject<String?, Never> = .init(nil)
     
+    private var spaceScreenCoordinator: SpaceScreenCoordinator?
     private var childSpaceFlowCoordinator: SpaceFlowCoordinator?
     private var roomFlowCoordinator: RoomFlowCoordinator?
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
@@ -361,6 +362,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                                                           appSettings: flowParameters.appSettings,
                                                           userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpaceScreenCoordinator(parameters: parameters)
+        spaceScreenCoordinator = coordinator
         coordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
@@ -645,8 +647,10 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             switch flowCoordinatorResult {
             case .room(let id):
                 stateMachine.tryEvent(.startRoomFlow(roomID: id))
+                spaceScreenCoordinator?.reset()
             case .space(let spaceRoomListProxy):
                 stateMachine.tryEvent(.startChildFlow, userInfo: spaceRoomListProxy)
+                spaceScreenCoordinator?.reset()
             case .cancelled, .none:
                 break
             }
