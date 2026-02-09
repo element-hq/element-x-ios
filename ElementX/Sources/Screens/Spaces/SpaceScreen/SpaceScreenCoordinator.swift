@@ -94,7 +94,7 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
         AnyView(SpaceScreen(context: viewModel.context))
     }
     
-    func reset() {
-        viewModel.reset()
+    func resetRoomList() {
+        viewModel.resetRoomList()
     }
 }

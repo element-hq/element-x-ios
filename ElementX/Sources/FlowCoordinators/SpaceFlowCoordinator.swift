@@ -647,10 +647,10 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             switch flowCoordinatorResult {
             case .room(let id):
                 stateMachine.tryEvent(.startRoomFlow(roomID: id))
-                spaceScreenCoordinator?.reset()
+                spaceScreenCoordinator?.resetRoomList()
             case .space(let spaceRoomListProxy):
                 stateMachine.tryEvent(.startChildFlow, userInfo: spaceRoomListProxy)
-                spaceScreenCoordinator?.reset()
+                spaceScreenCoordinator?.resetRoomList()
             case .cancelled, .none:
                 break
             }
