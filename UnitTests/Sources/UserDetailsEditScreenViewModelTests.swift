@@ -49,8 +49,7 @@ class UserDetailsEditScreenViewModelTests: XCTestCase {
     func testSave() async throws {
         setupViewModel()
         
-        // Saving shouldn't dismiss this screen (or trigger any other action).
-        let deferred = deferFailure(viewModel.actions, timeout: 1) { _ in true }
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         
         context.name = "name"
         context.send(viewAction: .save)
