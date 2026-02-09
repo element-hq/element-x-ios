@@ -356,7 +356,10 @@
 "common.add_account" = "Adicionar uma conta";
 "common.add_another_account" = "Adicionar outra conta";
 "common.no_space_name" = "Sem nome de espaço";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Selecionar uma conta";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "Enviado de um dispositivo inseguro";
 "common_unable_to_decrypt_verification_violation" = "A identidade verificada do remetente foi redefinida";
 "confirm_recovery_key_banner_message" = "Confirme sua chave de recuperação para manter o acesso ao seu armazenamento de chaves e histórico de mensagens.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Criptografado por um usuário não verificado.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) compartilhou esta mensagem já que você não estava na sala quando foi enviada.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ compartilhou esta mensagem já que você não estava na sala quando foi enviada.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Esta sala foi configurada para que membros novos possam ler o histórico. %1$@";
 "crypto_identity_change_pin_violation" = "A identidade de %1$@ foi redefinida. %2$@";
 "crypto_identity_change_pin_violation_new" = "A identidade de %1$@ %2$@ foi redefinida. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Mencionou você: %1$@";
 "notification_new_messages" = "Novas mensagens";
 "notification_reaction_body" = "Reagiu com %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Convidou você para entrar na sala";
 "notification_room_invite_body_with_sender" = "%1$@ te convidou para entrar na sala";
 "notification_sender_me" = "Eu";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mensagem não enviada porque a identidade verificada de %1$@ foi redefinida.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "A mensagem não foi enviada porque %1$@ não verificou todos os dispositivos.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mensagem não enviada porque você não verificou um ou mais dos seus dispositivos.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "Endereço do servidor-casa";
 "screen_account_provider_form_notice" = "Digite um termo de pesquisa ou o endereço de um domínio.";
 "screen_account_provider_form_subtitle" = "Procure uma empresa, comunidade ou servidor privado.";

@@ -356,7 +356,10 @@
 "common.add_account" = "Adăugați un cont";
 "common.add_another_account" = "Adăugați un alt cont";
 "common.no_space_name" = "Fără nume de spațiu";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Selectați un cont";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "Trimis de pe un dispozitiv nesigur";
 "common_unable_to_decrypt_verification_violation" = "Identitatea verificată a expeditorului a fost resetată";
 "confirm_recovery_key_banner_message" = "Backup-ul pentru chat nu este sincronizat. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Criptat de un utilizator neverificat.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Această cameră a fost configurată astfel încât noii membri să poată citi istoricul. %1$@";
 "crypto_identity_change_pin_violation" = "Identitatea lui %1$@ a fost resetată. %2$@";
 "crypto_identity_change_pin_violation_new" = "Identitatea %2$@ a lui %1$@ a fost resetată. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "%1$@ v-a menționat";
 "notification_new_messages" = "Mesaje noi";
 "notification_reaction_body" = "A reacționat cu %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "V-a invitat să vă alăturați camerei";
 "notification_room_invite_body_with_sender" = "%1$@ v-a invitat să vă alăturați camerei";
 "notification_sender_me" = "Eu";
@@ -558,7 +565,7 @@
 "screen_create_room_room_address_section_title" = "Adresa camerei";
 "screen_create_room_room_visibility_section_title" = "Vizibilitatea camerei";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Nu veți vedea niciun mesaj sau invitație de la acest utilizator.";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mesajul nu a fost trimis deoarece identitatea verificată a lui %1$@ s-a schimbat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mesajul nu a fost trimis deoarece %1$@ nu a verificat toate dispozitivele.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mesajul nu a fost trimis deoarece nu ați verificat unul sau mai multe dispozitive.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "Adresa Homeserver-ului";
 "screen_account_provider_form_notice" = "Introduceţi un termen de căutare sau o adresă de domeniu.";
 "screen_account_provider_form_subtitle" = "Căutați o companie, o comunitate sau un server privat.";

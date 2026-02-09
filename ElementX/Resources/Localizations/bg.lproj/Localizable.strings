@@ -356,7 +356,10 @@
 "common.add_account" = "Добавяне на акаунт";
 "common.add_another_account" = "Добавяне на друг акаунт";
 "common.no_space_name" = "Няма име на пространство";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Избиране на акаунт";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Потвърдете ключа си за възстановяване, за да запазите достъп до хранилището за ключове и историята на съобщенията си.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Encrypted by an unverified user.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@'s identity was reset. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity was reset. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Ви спомена: %1$@";
 "notification_new_messages" = "Нови съобщения";
 "notification_reaction_body" = "Реагира с %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Ви покани да се присъедините към стаята";
 "notification_room_invite_body_with_sender" = "%1$@ invited you to join the room";
 "notification_sender_me" = "Аз";
@@ -558,7 +565,7 @@
 "screen_create_room_room_address_section_title" = "Address";
 "screen_create_room_room_visibility_section_title" = "Видимост на стаята";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "Адрес на сървъра";
 "screen_account_provider_form_notice" = "Въведете термин за търсене или адрес на домейн.";
 "screen_account_provider_form_subtitle" = "Потърсете компания, общност или частен сървър.";

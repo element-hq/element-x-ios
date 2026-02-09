@@ -356,7 +356,10 @@
 "common.add_account" = "Adicionar conta";
 "common.add_another_account" = "Adicionar outra conta";
 "common.no_space_name" = "Espaço sem nome";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Selecionar conta";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "Enviado de um dispositivo inseguro";
 "common_unable_to_decrypt_verification_violation" = "A identidade verificada do remetente foi reposta";
 "confirm_recovery_key_banner_message" = "Confirma a tua chave de recuperação para manteres o acesso ao teu armazenamento de chaves e ao histórico de mensagens.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Cifragem com origem num utilizador não verificado.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "A identidade de %1$@ foi reposta. %2$@";
 "crypto_identity_change_pin_violation_new" = "A identidade de %1$@ (%2$@) foi reposta. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Mencionou-te: %1$@";
 "notification_new_messages" = "Mensagens novas";
 "notification_reaction_body" = "Reagiu com %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Convidou-te a entrar na sala";
 "notification_room_invite_body_with_sender" = "%1$@ convidou-te a entrares na sala";
 "notification_sender_me" = "Eu";
@@ -558,7 +565,7 @@
 "screen_create_room_room_address_section_title" = "Endereço";
 "screen_create_room_room_visibility_section_title" = "Visibilidade da sala";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Não vais ver quaisquer mensagens ou convites para sala deste utilizador";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mensagem não enviada porque a identidade verificada de %1$@ foi reposta.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mensagem não enviada porque %1$@ não verificou todos os dispositivos.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mensagem não enviada porque não verificou um ou mais dos seus dispositivos.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "Endereço do servidor";
 "screen_account_provider_form_notice" = "Insira um termo para pesquisa ou um endereço.";
 "screen_account_provider_form_subtitle" = "Pesquisar por uma empresa, comunidade ou servidor privado.";

@@ -356,7 +356,10 @@
 "common.add_account" = "Add an account";
 "common.add_another_account" = "Add another account";
 "common.no_space_name" = "No space name";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Select an account";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "Dikirim dari perangkat yang tidak aman";
 "common_unable_to_decrypt_verification_violation" = "Identitas terverifikasi pengirim diatur ulang";
 "confirm_recovery_key_banner_message" = "Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Dienkripsi oleh pengguna yang tidak terverifikasi.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "Identitas %1$@ telah diatur ulang. %2$@";
 "crypto_identity_change_pin_violation_new" = "Identitas %2$@ %1$@ telah diatur ulang. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Menyebutkan Anda: %1$@";
 "notification_new_messages" = "Pesan Baru";
 "notification_reaction_body" = "Menghapus dengan %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Mengundang Anda untuk bergabung ke ruangan";
 "notification_room_invite_body_with_sender" = "%1$@ mengundang Anda untuk bergabung dengan ruangan";
 "notification_sender_me" = "Saya";
@@ -558,7 +565,7 @@
 "screen_create_room_room_address_section_title" = "Alamat ruangan";
 "screen_create_room_room_visibility_section_title" = "Keterlihatan ruangan";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Anda tidak akan melihat pesan atau undangan ruangan dari pengguna ini";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Pesan tidak terkirim karena identitas terverifikasi %1$@ telah diatur ulang.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Pesan tidak terkirim karena %1$@ belum memverifikasi semua perangkat.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Pesan tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "Alamat homeserver";
 "screen_account_provider_form_notice" = "Masukkan istilah pencarian atau alamat domain.";
 "screen_account_provider_form_subtitle" = "Cari perusahaan, komunitas, atau server pribadi.";

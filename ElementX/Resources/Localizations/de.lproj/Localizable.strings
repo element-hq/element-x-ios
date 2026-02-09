@@ -356,7 +356,10 @@
 "common.add_account" = "Konto hinzufügen";
 "common.add_another_account" = "Weiteres Konto hinzufügen";
 "common.no_space_name" = "Kein Space Name";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Konto auswählen";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "Von einem ungesicherten Gerät gesendet";
 "common_unable_to_decrypt_verification_violation" = "Die verifizierte Identität des Senders hat sich geändert";
 "confirm_recovery_key_banner_message" = "Bestätige deinen Wiederherstellungsschlüssel, um weiterhin auf deinen Schlüsselspeicher und den Nachrichtenverlauf zugreifen zu können.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Verschlüsselt durch einen nicht verifizierten Nutzer.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) hat diese Nachricht geteilt, weil du nicht im Chat warst, als sie verschickt wurde.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "Diese Nachricht wurde von %1$@ weitergeleitet, da du zum Zeitpunkt des Versands kein Mitglied der Gruppe warst.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Diese Gruppe wurde so konfiguriert, dass neue Mitglieder den vergangenen Nachrichtenverlauf lesen können. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@'s Identität has sich geändert. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@'s %2$@ Identität hat sich geändert. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Hat Dich erwähnt: %1$@";
 "notification_new_messages" = "Neue Nachrichten";
 "notification_reaction_body" = "Reagiert mit %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Du wurdest eingeladen, den Chat zu betreten";
 "notification_room_invite_body_with_sender" = "%1$@ hat dich eingeladen, dem Chat beizutreten";
 "notification_sender_me" = "Ich";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$@ geändert hat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil %1$@ nicht alle Geräte verifiziert hat.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil du eines oder mehrere deiner Geräte nicht verifiziert hast.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "Homeserver-Adresse";
 "screen_account_provider_form_notice" = "Gib einen Suchbegriff oder eine Domainadresse ein.";
 "screen_account_provider_form_subtitle" = "Suche nach einem Unternehmen, einer Community oder einem privaten Server.";

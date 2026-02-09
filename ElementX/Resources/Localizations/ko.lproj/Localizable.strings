@@ -356,7 +356,10 @@
 "common.add_account" = "Add an account";
 "common.add_another_account" = "Add another account";
 "common.no_space_name" = "No space name";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Select an account";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "보안되지 않은 장치에서 전송됨";
 "common_unable_to_decrypt_verification_violation" = "발신자의 검증된 신원이 재설정되었습니다.";
 "confirm_recovery_key_banner_message" = "키 저장소 및 메시지 기록에 대한 액세스를 유지하려면 복구 키를 확인하세요.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "검증되지 않은 사용자에 의해 암호화되었습니다.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@ 의 신원이 재설정되었습니다. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@의 %2$@ 신원이 재설정되었습니다. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "당신을 언급했습니다: %1$@";
 "notification_new_messages" = "새 메시지";
 "notification_reaction_body" = "%1$@로 반응함";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "방에 초대받음";
 "notification_room_invite_body_with_sender" = "%1$@ 가 당신을 이 방에 초대했습니다";
 "notification_sender_me" = "나";
@@ -558,7 +565,7 @@
 "screen_create_room_room_address_section_title" = "Address";
 "screen_create_room_room_visibility_section_title" = "방 표시 여부";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "이 사용자로부터 메시지나 방 초대장이 표시되지 않습니다.";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "%1$@의 인증된 신원이 재설정되어 메시지가 전송되지 않았습니다.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "%1$@ 이 모든 장치를 확인하지 않았기 때문에 메시지가 전송되지 않았습니다.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "하나 이상의 기기를 확인하지 않았기 때문에 메시지가 전송되지 않았습니다.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "홈서버 주소";
 "screen_account_provider_form_notice" = "검색어 또는 도메인 주소를 입력하세요.";
 "screen_account_provider_form_subtitle" = "회사, 커뮤니티, 또는 개인 서버를 검색하세요.";

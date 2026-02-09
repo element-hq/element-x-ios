@@ -356,7 +356,10 @@
 "common.add_account" = "Ajouter un compte";
 "common.add_another_account" = "Ajouter un autre compte";
 "common.no_space_name" = "Espace sans nom";
+"common.private" = "Privé";
+"common.public" = "Public";
 "common.select_account" = "Choisir un compte";
+"common.space_members" = "Membres de l’espace";
 "common_unable_to_decrypt_insecure_device" = "Envoyé depuis un appareil non sécurisé";
 "common_unable_to_decrypt_verification_violation" = "L'identité vérifiée de l'expéditeur a été réinitialisée";
 "confirm_recovery_key_banner_message" = "Confirmez votre clé de récupération pour conserver l’accès à votre stockage de clés et à l’historique des messages.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Chiffré par un utilisateur non vérifié.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) a partagé ce message avec vous car vous n’étiez pas dans le salon lors de son envoi.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ a partagé ce message avec vous car vous n’étiez pas dans le salon lors de son envoi.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "Les nouveaux membres ne voient pas l'historique.";
+"crypto_history_sharing_room_info_shared_badge_content" = "Les nouveaux membres voient l'historique";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Tout le monde voit l'historique";
 "crypto_history_visible" = "Ce salon a été configuré pour que les nouveaux membres puissent lire l'historique. %1$@";
 "crypto_identity_change_pin_violation" = "L'identité de %1$@ a été réinitialisée. %2$@";
 "crypto_identity_change_pin_violation_new" = "L'identité de %1$@ %2$@ a été réinitialisée. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Mentionné(e) : %1$@";
 "notification_new_messages" = "Nouveaux messages";
 "notification_reaction_body" = "A réagi avec %1$@";
+"notification_received_while_offline_ios" = "Vous avez reçu une ou plusieurs notifications alors que vous étiez hors ligne.";
 "notification_room_invite_body" = "Vous a invité(e) à rejoindre le salon";
 "notification_room_invite_body_with_sender" = "%1$@ vous a invité à rejoindre le salon";
 "notification_sender_me" = "Moi";
@@ -550,7 +557,7 @@
 "screen_create_room_room_access_section_private_option_description" = "Seules les personnes invitées peuvent joindre.";
 "screen_create_room_room_access_section_private_option_title" = "Privé";
 "screen_create_room_room_access_section_public_option_description" = "Tout le monde peut joindre";
-"screen_create_room_room_access_section_public_option_title" = "Tout le monde";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_create_room_room_access_section_restricted_option_description" = "Toute membre de %1$@ peut joindre le salon.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Qui a accès";
@@ -558,7 +565,7 @@
 "screen_create_room_room_address_section_title" = "Adresse";
 "screen_create_room_room_visibility_section_title" = "Visibilité du salon";
 "screen_create_room_space_selection_no_space_description" = "(pas d'espace)";
-"screen_create_room_space_selection_no_space_title" = "Accueil";
+"screen_create_room_space_selection_no_space_title" = "Aucun espace sélectionné";
 "screen_create_room_space_selection_sheet_title" = "Ajouter à l'espace";
 "screen_create_room_topic_placeholder" = "Ajouter une description…";
 "screen_decline_and_block_block_user_option_description" = "Vous ne verrez aucun messages ou invitation à un salon de la part de cet utilisateur";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Le message n'a pas été envoyé car l'identité vérifiée de %1$@ a été réinitialisée.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Le message n'a pas été envoyé car %1$@ n'a pas vérifié tous ses appareils.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message non envoyé car vous n'avez pas vérifié tous vos appareils.";
+"screen.create_room.space_selection_no_space_option" = "Ne pas ajouter à un espace";
 "screen_account_provider_form_hint" = "Adresse du serveur d’accueil";
 "screen_account_provider_form_notice" = "Entrez un terme de recherche ou une adresse de domaine.";
 "screen_account_provider_form_subtitle" = "Recherchez une entreprise, une communauté ou un serveur privé.";

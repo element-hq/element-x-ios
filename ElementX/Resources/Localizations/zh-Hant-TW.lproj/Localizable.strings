@@ -356,7 +356,10 @@
 "common.add_account" = "新增帳號";
 "common.add_another_account" = "新增其他帳號";
 "common.no_space_name" = "沒有空間名稱";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "選取帳號";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "從不安全的裝置傳送";
 "common_unable_to_decrypt_verification_violation" = "傳送者的驗證身份已重設";
 "confirm_recovery_key_banner_message" = "確認您的復原金鑰以維持對金鑰儲存空間與訊息歷史紀錄的存取權。";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "由未經驗證的使用者加密。";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@ 的身份似乎已重設。%2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@ 的 %2$@ 身份似乎已重設。%3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "提及您：%1$@";
 "notification_new_messages" = "新訊息";
 "notification_reaction_body" = "回應 %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "邀請您加入聊天室";
 "notification_room_invite_body_with_sender" = "%1$@ 邀請您加入聊天室";
 "notification_sender_me" = "我";
@@ -558,7 +565,7 @@
 "screen_create_room_room_address_section_title" = "聊天室地址";
 "screen_create_room_room_visibility_section_title" = "聊天室能見度";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "您將不會看到來自此使用者的任何訊息或聊天室邀請";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "因為 %1$@ 的驗證身份已重設，因此未傳送訊息。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "訊息未傳送，因為 %1$@ 尚未驗證所有裝置。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "因為您尚未驗證一個或多個裝置，因此未傳送訊息";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "家伺服器位址";
 "screen_account_provider_form_notice" = "輸入關鍵字或網域名稱。";
 "screen_account_provider_form_subtitle" = "搜尋公司、社群、私有伺服器。";

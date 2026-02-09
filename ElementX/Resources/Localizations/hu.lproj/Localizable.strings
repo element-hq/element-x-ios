@@ -356,7 +356,10 @@
 "common.add_account" = "Fiók hozzáadása";
 "common.add_another_account" = "Másik fiók hozzáadása";
 "common.no_space_name" = "Nincs térnév";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Fiók kiválasztása";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "Nem biztonságos eszközről küldve";
 "common_unable_to_decrypt_verification_violation" = "A feladó ellenőrzött személyazonossága megváltozott";
 "confirm_recovery_key_banner_message" = "Erősítse meg a helyreállítási kulcsát, hogy továbbra is hozzáférjen a kulcstárolójához és az üzenetelőzményekhez.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Nem ellenőrzött felhasználó által titkosítva.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Az elküldött üzenetek megosztásra kerülnek a szobába meghívott új tagokkal.%1$@";
 "crypto_identity_change_pin_violation" = "%1$@ személyazonossága megváltozott. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@ (%2$@) személyazonossága megváltozott. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Megemlítette Önt: %1$@";
 "notification_new_messages" = "Új üzenetek";
 "notification_reaction_body" = "Ezzel reagált: %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Meghívta, hogy csatlakozzon a szobához";
 "notification_room_invite_body_with_sender" = "%1$@ meghívta, hogy csatlakozzon a szobához";
 "notification_sender_me" = "Én";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Az üzenet nem lett elküldve, mert %1$@ ellenőrzött személyazonossága megváltozott.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Az üzenet nem lett elküldve, mert %1$@ nem ellenőrizte az összes eszközét.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "Matrix-kiszolgáló webcíme";
 "screen_account_provider_form_notice" = "Adjon meg egy keresési kifejezést vagy egy tartománycímet.";
 "screen_account_provider_form_subtitle" = "Keresés egy cégre, közösségre vagy privát kiszolgálóra.";

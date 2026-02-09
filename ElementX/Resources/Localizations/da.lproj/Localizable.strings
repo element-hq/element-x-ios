@@ -356,7 +356,10 @@
 "common.add_account" = "Tilføj en konto";
 "common.add_another_account" = "Tilføj en anden konto";
 "common.no_space_name" = "Intet gruppenavn";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Vælg en konto";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "Sendt fra en usikker enhed";
 "common_unable_to_decrypt_verification_violation" = "Afsenderens verificerede identitet blev nulstillet";
 "confirm_recovery_key_banner_message" = "Bekræft din gendannelsesnøgle for at bevare adgangen til nøglelager og meddelelseshistorik.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Krypteret af en ikke-verificeret bruger.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@(%2$@ ) har delt denne besked siden du ikke var i rummet da den blev sendt.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ delte denne besked, siden du ikke var i rummet da den blev sendt.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Dette rum er konfigureret, så nye medlemmer kan læse historikken.%1$@";
 "crypto_identity_change_pin_violation" = "%1$@s identitet blev nulstillet. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@s %2$@ identitet blev nulstillet. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Nævnte dig: %1$@";
 "notification_new_messages" = "Nye beskeder";
 "notification_reaction_body" = "Reagerede med%1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Inviterede dig til at deltage i rummet";
 "notification_room_invite_body_with_sender" = "%1$@ inviterede dig til at deltage i rummet";
 "notification_sender_me" = "Mig";
@@ -558,7 +565,7 @@
 "screen_create_room_room_address_section_title" = "Adresse";
 "screen_create_room_room_visibility_section_title" = "Rummets synlighed";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Tilføj beskrivelse…";
 "screen_decline_and_block_block_user_option_description" = "Du vil ikke se nogen beskeder eller rum-invitationer fra denne bruger";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Beskeden blev ikke sendt fordi %1$@ s bekræftede identitet blev nulstillet.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meddelelsen er ikke sendt, fordi %1$@ ikke har bekræftet alle enheder.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Beskeden er ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "Hjemmeserverens adresse";
 "screen_account_provider_form_notice" = "Indtast et søgeudtryk eller en domæneadresse.";
 "screen_account_provider_form_subtitle" = "Søg efter en virksomhed, et fællesskab eller en privat server.";

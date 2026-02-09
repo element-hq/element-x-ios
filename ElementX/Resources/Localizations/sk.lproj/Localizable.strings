@@ -356,7 +356,10 @@
 "common.add_account" = "Pridať účet";
 "common.add_another_account" = "Pridať ďalší účet";
 "common.no_space_name" = "Žiadny názov priestoru";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Vyberte účet";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "Odoslané z nezabezpečeného zariadenia";
 "common_unable_to_decrypt_verification_violation" = "Overená totožnosť odosielateľa bola obnovená";
 "confirm_recovery_key_banner_message" = "Potvrďte svoj kľúč na obnovenie, aby ste zachovali prístup k úložisku kľúčov a histórii správ.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Šifrované neovereným používateľom.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@ ) zdieľal túto správu v čase, keď ste neboli v miestnosti, keď bola odoslaná.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@  zdieľal túto správu v čase, keď ste neboli v miestnosti, keď bola odoslaná.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Táto miestnosť bola nakonfigurovaná tak, aby si noví členovia mohli prečítať históriu. %1$@";
 "crypto_identity_change_pin_violation" = "Totožnosť používateľa %1$@ sa obnovila.%2$@";
 "crypto_identity_change_pin_violation_new" = "Totožnosť používateľa %1$@ %2$@ bola obnovená. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Spomenul/a vás: %1$@";
 "notification_new_messages" = "Nové správy";
 "notification_reaction_body" = "Reagoval/a s %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Vás pozval do miestnosti";
 "notification_room_invite_body_with_sender" = "%1$@ vás pozval/a, aby ste sa pripojili k miestnosti";
 "notification_sender_me" = "Ja";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$@.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Správa nebola odoslaná, pretože %1$@ neoveril/a všetky zariadenia.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Správa nebola odoslaná, pretože ste neoverili jedno alebo viac svojich zariadení.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "Adresa domovského servera";
 "screen_account_provider_form_notice" = "Zadajte hľadaný výraz alebo adresu domény.";
 "screen_account_provider_form_subtitle" = "Vyhľadať spoločnosť, komunitu alebo súkromný server.";

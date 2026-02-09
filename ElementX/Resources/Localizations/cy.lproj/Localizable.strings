@@ -356,7 +356,10 @@
 "common.add_account" = "Ychwanegu cyfrif";
 "common.add_another_account" = "Ychwanegu cyfrif arall";
 "common.no_space_name" = "Dim enw gofod";
+"common.private" = "Private";
+"common.public" = "Public";
 "common.select_account" = "Dewis cyfrif";
+"common.space_members" = "Space members";
 "common_unable_to_decrypt_insecure_device" = "Wedi'i anfon o ddyfais anniogel";
 "common_unable_to_decrypt_verification_violation" = "Cafodd hunaniaeth yr anfonwr ei hailosod";
 "confirm_recovery_key_banner_message" = "Cadarnhewch eich allwedd adfer i gynnal mynediad i'ch storfa allweddi a'ch hanes negeseuon.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Wedi'i amgryptio gan ddefnyddiwr heb ei wirio.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "Cafodd hunaniaeth %1$@ ei ailosod. %2$@";
 "crypto_identity_change_pin_violation_new" = "Cafodd hunaniaeth %2$@ %1$@ ei ailosod. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Wedi eich crybwyll: %1$@";
 "notification_new_messages" = "Negeseuon Newydd";
 "notification_reaction_body" = "Wedi ymateb gyda %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Wedi'ch gwahodd i ymuno â'r ystafell";
 "notification_room_invite_body_with_sender" = "Mae %1$@ wedi eich gwahodd i ymuno â'r ystafell";
 "notification_sender_me" = "Fi";
@@ -558,7 +565,7 @@
 "screen_create_room_room_address_section_title" = "Cyfeiriad yr ystafell";
 "screen_create_room_room_visibility_section_title" = "Gwelededd yr ystafell";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Fyddwch chi ddim yn gweld unrhyw negeseuon neu wahoddiadau ystafell gan y defnyddiwr hwn";
@@ -761,6 +768,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Heb anfon y neges oherwydd bod hunaniaeth wedi 'i ddilysu %1$@ wedi'i ailosod.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Heb anfon y neges oherwydd nid yw %1$@ wedi gwirio pob dyfais.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Heb anfon y neges oherwydd nad ydych wedi gwirio un neu fwy o'ch dyfeisiau.";
+"screen.create_room.space_selection_no_space_option" = "Do not add to a space";
 "screen_account_provider_form_hint" = "Cyfeiriad y gweinydd cartref";
 "screen_account_provider_form_notice" = "Rhowch derm chwilio neu gyfeiriad parth.";
 "screen_account_provider_form_subtitle" = "Chwiliwch am gwmni, gweinyddwr cymunedol neu weinydd preifat.";

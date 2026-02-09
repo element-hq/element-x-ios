@@ -830,6 +830,12 @@ internal enum L10n {
   internal static func cryptoEventKeyForwardedUnknownProfileDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_event_key_forwarded_unknown_profile_dialog_content", String(describing: p1))
   }
+  /// New members don't see history
+  internal static var cryptoHistorySharingRoomInfoHiddenBadgeContent: String { return L10n.tr("Localizable", "crypto_history_sharing_room_info_hidden_badge_content") }
+  /// New members see history
+  internal static var cryptoHistorySharingRoomInfoSharedBadgeContent: String { return L10n.tr("Localizable", "crypto_history_sharing_room_info_shared_badge_content") }
+  /// Anyone can see history
+  internal static var cryptoHistorySharingRoomInfoWorldReadableBadgeContent: String { return L10n.tr("Localizable", "crypto_history_sharing_room_info_world_readable_badge_content") }
   /// This room has been configured so that new members can read history. %1$@
   internal static func cryptoHistoryVisible(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_history_visible", String(describing: p1))
@@ -1646,7 +1652,7 @@ internal enum L10n {
   internal static var screenCreateRoomRoomVisibilitySectionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_visibility_section_title") }
   /// (no space)
   internal static var screenCreateRoomSpaceSelectionNoSpaceDescription: String { return L10n.tr("Localizable", "screen_create_room_space_selection_no_space_description") }
-  /// Home
+  /// No space selected
   internal static var screenCreateRoomSpaceSelectionNoSpaceTitle: String { return L10n.tr("Localizable", "screen_create_room_space_selection_no_space_title") }
   /// Add to space
   internal static var screenCreateRoomSpaceSelectionSheetTitle: String { return L10n.tr("Localizable", "screen_create_room_space_selection_sheet_title") }
@@ -3672,14 +3678,27 @@ internal enum L10n {
     internal static var addAnotherAccount: String { return L10n.tr("Localizable", "common.add_another_account") }
     /// No space name
     internal static var noSpaceName: String { return L10n.tr("Localizable", "common.no_space_name") }
+    /// Private
+    internal static var `private`: String { return L10n.tr("Localizable", "common.private") }
+    /// Public
+    internal static var `public`: String { return L10n.tr("Localizable", "common.public") }
     /// Select an account
     internal static var selectAccount: String { return L10n.tr("Localizable", "common.select_account") }
+    /// Space members
+    internal static var spaceMembers: String { return L10n.tr("Localizable", "common.space_members") }
   }
 
   internal enum Error {
     /// You're already logged in on this device as %1$@.
     internal static func accountAlreadyLoggedIn(_ p1: Any) -> String {
       return L10n.tr("Localizable", "error.account_already_logged_in", String(describing: p1))
+    }
+  }
+
+  internal enum Screen {
+    internal enum CreateRoom {
+      /// Do not add to a space
+      internal static var spaceSelectionNoSpaceOption: String { return L10n.tr("Localizable", "screen.create_room.space_selection_no_space_option") }
     }
   }
 }
