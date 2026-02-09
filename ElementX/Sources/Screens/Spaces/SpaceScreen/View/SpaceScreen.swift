@@ -138,8 +138,10 @@ struct SpaceScreen: View {
                             }
                             .accessibilityIdentifier(A11yIdentifiers.spaceScreen.addExistingRooms)
                             
-                            Button { context.send(viewAction: .manageChildren) } label: {
-                                Label(L10n.actionManageRooms, icon: \.edit)
+                            if context.viewState.rooms.count > 0 {
+                                Button { context.send(viewAction: .manageChildren) } label: {
+                                    Label(L10n.actionManageRooms, icon: \.edit)
+                                }
                             }
                         }
                     }
