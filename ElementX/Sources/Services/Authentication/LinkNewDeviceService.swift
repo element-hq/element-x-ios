@@ -195,7 +195,9 @@ private extension QRCodeLoginError {
             .connectionInsecure
         case .UnsupportedProtocol:
             .linkingNotSupported
-        case .Unknown, .NotFound, .MissingSecretsBackup, .DeviceIdAlreadyInUse, .UnableToCreateDevice:
+        case .NotFound: // The most likely cause of a .NotFound is that the rendezvous session expired on the server side
+            .expired
+        case .Unknown, .MissingSecretsBackup, .DeviceIdAlreadyInUse, .UnableToCreateDevice:
             .unknown
         }
     }
