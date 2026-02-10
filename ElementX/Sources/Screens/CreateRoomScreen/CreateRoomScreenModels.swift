@@ -10,6 +10,7 @@ import SwiftUI
 
 enum CreateRoomScreenErrorType: Error {
     case failedCreatingRoom
+    case failedProcessingMedia
     case failedUploadingMedia
     case fileTooLarge
     case mediaFileError

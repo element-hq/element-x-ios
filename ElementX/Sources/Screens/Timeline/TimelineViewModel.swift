@@ -579,7 +579,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
         shouldShowInviteAlert
             .sink { [weak self] _ in
-                self?.showInviteAlert()
+                self?.displayAlert(.inviteAgain)
             }
             .store(in: &cancellables)
     }
@@ -865,19 +865,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
     // MARK: - Direct chats logics
 
-    private func showInviteAlert() {
-        userIndicatorController.alertInfo = .init(id: .init(),
-                                                  title: L10n.screenRoomInviteAgainAlertTitle,
-                                                  message: L10n.screenRoomInviteAgainAlertMessage,
-                                                  primaryButton: .init(title: L10n.actionInvite) { [weak self] in self?.inviteOtherDMUserBack() },
-                                                  secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
-    }
-
     private let inviteLoadingIndicatorID = UUID().uuidString
 
     private func inviteOtherDMUserBack() {
         guard roomProxy.infoPublisher.value.isUserAloneInDirectRoom else {
-            userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
+            displayAlert(.unknown)
             return
         }
 
@@ -892,7 +884,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 members.count == 2,
                 let otherPerson = members.first(where: { $0.userID != roomProxy.ownUserID && $0.membership == .leave })
             else {
-                userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
+                displayAlert(.unknown)
                 return
             }
 
@@ -900,9 +892,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             case .success:
                 break
             case .failure:
-                userIndicatorController.alertInfo = .init(id: .init(),
-                                                          title: L10n.commonUnableToInviteTitle,
-                                                          message: L10n.commonUnableToInviteMessage)
+                displayAlert(.unableToInvite)
             }
         }
     }
@@ -1021,6 +1011,18 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                  guard let self else { return }
                                                  appMediator.open(appSettings.historySharingDetailsURL)
                                              })
+        case .inviteAgain:
+            state.bindings.alertInfo = .init(id: .inviteAgain,
+                                             title: L10n.screenRoomInviteAgainAlertTitle,
+                                             message: L10n.screenRoomInviteAgainAlertMessage,
+                                             primaryButton: .init(title: L10n.actionInvite) { [weak self] in self?.inviteOtherDMUserBack() },
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+        case .unableToInvite:
+            state.bindings.alertInfo = .init(id: .unableToInvite,
+                                             title: L10n.commonUnableToInviteTitle,
+                                             message: L10n.commonUnableToInviteMessage)
+        case .unknown:
+            state.bindings.alertInfo = .init(id: .unknown, title: L10n.commonError)
         }
     }
     

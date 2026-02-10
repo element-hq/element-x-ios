@@ -67,6 +67,7 @@ struct RoomScreen: View {
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
+            .alert(item: $context.alertInfo)
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .track(screen: .Room)
             .sentryTrace("\(Self.self)")

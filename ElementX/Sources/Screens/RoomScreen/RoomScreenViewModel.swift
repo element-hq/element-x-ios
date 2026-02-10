@@ -286,7 +286,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         showLoadingIndicator()
         
         if case .failure = await clientProxy.pinUserIdentity(userID) {
-            userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
+            state.bindings.alertInfo = .init(id: .unknown, title: L10n.commonError)
         }
     }
     
@@ -298,7 +298,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         showLoadingIndicator()
 
         if case .failure = await clientProxy.withdrawUserIdentityVerification(userID) {
-            userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
+            state.bindings.alertInfo = .init(id: .unknown, title: L10n.commonError)
         }
     }
     
