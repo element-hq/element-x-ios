@@ -76,14 +76,15 @@ struct SpaceHeaderView: View {
             CompoundIcon(spaceDetailsVisibilityIcon, size: .small, relativeTo: .compound.bodyLG)
                 .foregroundStyle(.compound.iconTertiary)
         }
+        .labelStyle(.custom(spacing: 4))
     }
     
     private var spaceDetailsVisibilityTitle: String {
         switch spaceServiceRoom.visibility {
-        case .public: L10n.commonPublicSpace
-        case .private: L10n.commonPrivateSpace
-        case .restricted: L10n.commonSharedSpace
-        case .none: L10n.commonPrivateSpace
+        case .public: L10n.commonPublic
+        case .private: L10n.commonPrivate
+        case .restricted: L10n.commonSpaceMembers
+        case .none: L10n.commonPrivate
         }
     }
     
