@@ -7,7 +7,6 @@
 //
 
 import Compound
-import MatrixRustSDK
 import SwiftUI
 
 struct RoomDetailsScreen: View {
@@ -328,6 +327,8 @@ struct RoomDetailsScreen: View {
 }
 
 // MARK: - Previews
+
+import MatrixRustSDK
 
 struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let genericWorldReadableRoomViewModel = makeGenericRoomViewModel(historyVisibility: .worldReadable)

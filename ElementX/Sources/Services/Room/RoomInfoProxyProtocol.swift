@@ -142,12 +142,14 @@ extension RoomInfoProxyProtocol {
             return nil
         }
         return switch historyVisibility {
+        case .joined, .invited:
+            .hidden
         case .shared:
             .shared
         case .worldReadable:
             .worldReadable
-        default:
-            .hidden
+        case .custom:
+            nil
         }
     }
 }
