@@ -116,7 +116,7 @@ struct RoomAvatarImage: View {
             LoadableAvatarImage(url: avatarURL,
                                 name: name,
                                 contentID: id,
-                                isSpace: true,
+                                shape: .roundedRect,
                                 avatarSize: avatarSize,
                                 mediaProvider: mediaProvider,
                                 onTap: onAvatarTap)
