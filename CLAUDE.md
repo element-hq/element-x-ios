@@ -9,16 +9,32 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 
 ## Current Phase
 
-**Pre-development / Planning.** No code has been written yet. We are in the customer negotiation and decision-gathering stage.
+**Phase 1: Project Setup — partially complete.** Fork created, build environment configured, first build succeeded, codebase audit complete, git branching structure established.
 
-**Next action:** Conduct initial meeting with customer using `customer_questionnaire_init_stage.md`, then send `customer_pre_dev_briefing_ru.md`.
+**What's done:**
+- Fork created and pushed to `smurzaliev/custom-element-messenger-ios`
+- Build environment: Xcode 26.2, XcodeGen 2.44.1, git-lfs, `gh` CLI v2.86.0
+- First build succeeded on iPhone 17 Pro simulator (Xcode 26.2)
+- Full codebase audit (5 parallel agents): identity, branding, config, localization, strings
+- Change map compiled → `documentation/change_map.md`
+- Git structure: `main` (releases) + `develop` (active, default) + `upstream` (element-hq)
+- Tag `checkpoint/unmodified-build` at commit `7c96ebfca` (last upstream commit before fork changes)
+- Claude Code slash commands for git workflows in `.claude/commands/`
 
-### Blockers (must be resolved before development starts)
+**What's blocked (all require customer decisions):**
+- Step 5: Bundle identity changes (needs App Name, Bundle ID, Team ID — D-001)
+- Steps 6–14: Branding, config, OIDC, push, calls, testing, App Store
+- See `decisions_tracker.md` for all 12 tracked decisions (D-001 through D-012)
+
+**Next action:** Conduct initial meeting with customer using `customer_questionnaire_init_stage.md`, then send `customer_pre_dev_briefing_ru.md`. Resolve blockers before proceeding to Step 5.
+
+### Blockers (must be resolved before rebranding work starts)
 
 1. **AGPL v3 licensing** — Element X is AGPL v3, which conflicts with App Store ToS. Commercial license from Element (New Vector Ltd) required. NOT YET INITIATED.
 2. **APNs vs FCM** — TOR says FCM, project uses APNs natively. Customer must confirm APNs. NOT YET DECIDED.
-3. **iOS version** — TOR says iOS 16+, project requires iOS 17+. Customer must accept. NOT YET DECIDED.
+3. **iOS version** — TOR says iOS 16+, project requires iOS 18.5+ (develop branch). Customer must accept. NOT YET DECIDED.
 4. **Calls infrastructure** — TOR says Jitsi, project uses Element Call (LiveKit). Customer must clarify. NOT YET DECIDED.
+5. **App identity** — App name, bundle ID, team ID, app group needed before any code changes. NOT YET DECIDED (D-001).
 
 > See `decisions_tracker.md` for all 12 tracked decisions with statuses (D-001 through D-012).
 
@@ -34,6 +50,7 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | 2 | `tor.md` | Customer's Technical Requirements Document — what they asked for (Russian) |
 | 3 | `preliminary_assessment.md` | Our technical analysis — what's actually true, effort estimates, risks (English) |
 | 4 | `decisions_tracker.md` | All 12 open decisions with statuses — **UPDATE THIS after changes** (Russian) |
+| 5 | `change_map.md` | Complete rebranding change map — every file/setting to modify, organized by category (English) |
 
 ### Development Guides
 
@@ -70,7 +87,7 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | Design system | Compound (Element's cross-platform semantic design tokens) |
 | LOC | ~68,000 across ~907 Swift files |
 | License | AGPL v3 (**legally problematic for App Store**) |
-| iOS minimum | 17.0 (release tags) / 18.5 (develop branch) |
+| iOS minimum | 18.5 (develop branch, forked from) |
 | Push | APNs directly (no Firebase SDK) |
 | Calls | Element Call (MatrixRTC + LiveKit, not Jitsi) |
 | Auth | OIDC (redirect URI hardcoded to element.io — must change) |
@@ -139,9 +156,11 @@ NSE/SupportingFiles/target.yml   → NSE bundle ID, entitlements
 
 ### Git
 
-- Branching: `main` (releases) + `develop` (active work) + `upstream/main` (tracks Element X)
+- Branching: `main` (releases, at `checkpoint/unmodified-build`) + `develop` (active work, default on GitHub) + `upstream` remote (tracks element-hq/element-x-ios)
+- Tag `checkpoint/unmodified-build` at `7c96ebfca` — last upstream commit before any fork changes
 - 10 named checkpoints during init phase (see `ios_proj_init.md` Step 15)
-- Commit format: `[phase] Brief description`
+- Commit format: Match existing upstream style (imperative, concise)
+- Slash commands available: `/git-commit`, `/git-push`, `/commit-push-pr`
 
 ### Claude-Specific
 
@@ -164,8 +183,8 @@ NSE/SupportingFiles/target.yml   → NSE bundle ID, entitlements
 
 When updating this file, change "Current Phase" and check off completed phases:
 
-- [ ] **Phase 0: Planning** — Customer decisions, licensing initiated
-- [ ] **Phase 1: Project Setup** — Fork, build env, first build (Days 1–5)
+- [x] **Phase 0: Planning** — Documentation created, codebase analyzed, decisions tracked
+- [~] **Phase 1: Project Setup** — Fork created, build env configured, first build succeeded, audit complete. Steps 5–14 blocked by customer decisions.
 - [ ] **Phase 2: Licensing** — Running in parallel, checkpoints at Days 5/11/20/27
 - [ ] **Phase 3: Branding** — Icon, colors, strings, localization (Days 6–8)
 - [ ] **Phase 4: Server Config + OIDC** — Homeserver, auth, `.well-known` (Days 8–11)
@@ -178,4 +197,16 @@ When updating this file, change "Current Phase" and check off completed phases:
 
 ---
 
-*Last updated: 2026-02-08. Update this file whenever the project phase changes or a blocker is resolved.*
+## Build Environment
+
+| Tool | Version | Notes |
+|------|---------|-------|
+| Xcode | 26.2 | `/Applications/Xcode.app` |
+| XcodeGen | 2.44.1 | Generates `.xcodeproj` from YAML |
+| git-lfs | installed | Required by project |
+| gh CLI | 2.86.0 | GitHub CLI for auth and repo management |
+| Simulator | iPhone 17 Pro | First build verified here |
+
+---
+
+*Last updated: 2026-02-09. Update this file whenever the project phase changes or a blocker is resolved.*
