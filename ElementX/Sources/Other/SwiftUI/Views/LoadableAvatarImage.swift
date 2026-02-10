@@ -9,10 +9,15 @@
 import SwiftUI
 
 struct LoadableAvatarImage: View {
+    enum Shape {
+        case circle
+        case roundedRect
+    }
+    
     private let url: URL?
     private let name: String?
     private let contentID: String
-    private let isSpace: Bool
+    private let shape: Shape
     private let avatarSize: Avatars.Size
     private let mediaProvider: MediaProviderProtocol?
     private let onTap: ((URL) -> Void)?
@@ -22,14 +27,14 @@ struct LoadableAvatarImage: View {
     init(url: URL?,
          name: String?,
          contentID: String,
-         isSpace: Bool = false,
+         shape: LoadableAvatarImage.Shape = .circle,
          avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol?,
          onTap: ((URL) -> Void)? = nil) {
         self.url = url
         self.name = name
         self.contentID = contentID
-        self.isSpace = isSpace
+        self.shape = shape
         self.avatarSize = avatarSize
         self.mediaProvider = mediaProvider
         self.onTap = onTap
@@ -54,7 +59,7 @@ struct LoadableAvatarImage: View {
         avatar
             .frame(width: frameSize, height: frameSize)
             .background(Color.compound.bgCanvasDefault)
-            .clipAvatar(isSpace: isSpace, scaledSize: _frameSize)
+            .avatarShape(shape, scaledSize: _frameSize)
             .environment(\.shouldAutomaticallyLoadImages, true) // We always load avatars.
     }
     
@@ -77,35 +82,38 @@ struct LoadableAvatarImage: View {
 }
 
 extension View {
-    func clipAvatar(isSpace: Bool, size: CGFloat) -> some View {
-        modifier(ClipAvatarModifier(isSpace: isSpace, size: size))
+    func avatarShape(_ shape: LoadableAvatarImage.Shape, size: CGFloat) -> some View {
+        modifier(AvatarShapeModifier(shape: shape, size: size))
     }
     
-    func clipAvatar(isSpace: Bool, scaledSize: ScaledMetric<CGFloat>) -> some View {
-        modifier(ClipAvatarModifier(isSpace: isSpace, scaledSize: scaledSize))
+    func avatarShape(_ shape: LoadableAvatarImage.Shape, scaledSize: ScaledMetric<CGFloat>) -> some View {
+        modifier(AvatarShapeModifier(shape: shape, scaledSize: scaledSize))
     }
 }
 
-struct ClipAvatarModifier: ViewModifier {
-    private let isSpace: Bool
+private struct AvatarShapeModifier: ViewModifier {
+    private let shape: LoadableAvatarImage.Shape
     @ScaledMetric private var scaledSize: CGFloat
     
-    init(isSpace: Bool, size: CGFloat) {
-        self.isSpace = isSpace
+    init(shape: LoadableAvatarImage.Shape, size: CGFloat) {
+        self.shape = shape
         _scaledSize = ScaledMetric(wrappedValue: size)
     }
     
-    init(isSpace: Bool, scaledSize: ScaledMetric<CGFloat>) {
-        self.isSpace = isSpace
+    init(shape: LoadableAvatarImage.Shape, scaledSize: ScaledMetric<CGFloat>) {
+        self.shape = shape
         _scaledSize = scaledSize
     }
     
     func body(content: Content) -> some View {
-        content
-            .clipShape(avatarShape)
-    }
-    
-    private var avatarShape: some Shape {
-        isSpace ? AnyShape(RoundedRectangle(cornerRadius: scaledSize / 4)) : AnyShape(Circle())
+        switch shape {
+        case .circle:
+            content.clipShape(Circle())
+        case .roundedRect:
+            let shape = RoundedRectangle(cornerRadius: scaledSize / 4)
+            content
+                .clipShape(shape)
+                .overlay(shape.stroke(.compound.iconQuaternaryAlpha, lineWidth: 1))
+        }
     }
 }
