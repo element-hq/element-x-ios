@@ -67,10 +67,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var linkPreviewsEnabled: Bool { get set }
     
     var linkNewDeviceEnabled: Bool { get set }
-    
-    var spaceSettingsEnabled: Bool { get set }
-    var createSpaceEnabled: Bool { get set }
-    var spaceFiltersEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
