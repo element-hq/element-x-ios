@@ -157,15 +157,15 @@ struct AvatarHeaderView<Footer: View>: View {
                                icon: \.verified,
                                style: .accent)
                 case .historySharingState(.hidden):
-                    BadgeLabel(title: UntranslatedL10n.cryptoHistorySharingRoomInfoHiddenBadgeContent,
+                    BadgeLabel(title: L10n.cryptoHistorySharingRoomInfoHiddenBadgeContent,
                                icon: \.visibilityOff,
                                style: .info)
                 case .historySharingState(.shared):
-                    BadgeLabel(title: UntranslatedL10n.cryptoHistorySharingRoomInfoSharedBadgeContent,
+                    BadgeLabel(title: L10n.cryptoHistorySharingRoomInfoSharedBadgeContent,
                                icon: \.history,
                                style: .info)
                 case .historySharingState(.worldReadable):
-                    BadgeLabel(title: UntranslatedL10n.cryptoHistorySharingRoomInfoWorldReadableBadgeContent,
+                    BadgeLabel(title: L10n.cryptoHistorySharingRoomInfoWorldReadableBadgeContent,
                                icon: \.userProfileSolid,
                                style: .info)
                 }
