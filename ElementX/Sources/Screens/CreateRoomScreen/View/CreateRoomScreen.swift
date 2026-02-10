@@ -337,10 +337,10 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         return viewModel
     }()
     
-    static let spaceViewModel = makeViewModel(isSpace: true, selectionMode: nil)
+    static let spaceViewModel = makeViewModel(isSpace: true, selectionMode: .none)
     
     static let spaceWithAvatarViewModel = {
-        let viewModel = makeViewModel(isSpace: true, selectionMode: nil)
+        let viewModel = makeViewModel(isSpace: true, selectionMode: .none)
         viewModel.updateAvatar(fileURL: Bundle.main.url(forResource: "preview_avatar_room", withExtension: "jpg") ?? .picturesDirectory)
         return viewModel
     }()
@@ -371,9 +371,10 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         return viewModel
     }()
     
-    static let selectedSpaceViewModel = makeViewModel(selectionMode: .preSelected(SpaceServiceRoom.mock(name: "Awesome Space",
-                                                                                                        isSpace: true,
-                                                                                                        joinRule: .invite)))
+    static let selectedSpaceViewModel = makeViewModel(selectionMode: .editableSpacesList(preSelectedSpace: SpaceServiceRoom.mock(id: "awesome-space-id",
+                                                                                                                                 name: "Awesome Space",
+                                                                                                                                 isSpace: true,
+                                                                                                                                 joinRule: .invite)))
     
     static let selectedSpaceWithListViewModel = {
         let viewModel = makeViewModel()
@@ -383,9 +384,10 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     
     static let selectedSpaceWithAskToJoinViewModel = {
         let viewModel = makeViewModel(isKnockingEnabled: true,
-                                      selectionMode: .preSelected(SpaceServiceRoom.mock(name: "Awesome Space",
-                                                                                        isSpace: true,
-                                                                                        joinRule: .invite)))
+                                      selectionMode: .editableSpacesList(preSelectedSpace: SpaceServiceRoom.mock(id: "awesome-space-id",
+                                                                                                                 name: "Awesome Space",
+                                                                                                                 isSpace: true,
+                                                                                                                 joinRule: .invite)))
         viewModel.context.selectedAccessType = .askToJoinWithSpaceMembers
         return viewModel
     }()
@@ -453,7 +455,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     
     private static func makeViewModel(isKnockingEnabled: Bool = false,
                                       isSpace: Bool = false,
-                                      selectionMode: CreateRoomScreenSpaceSelectionMode? = .editableSpacesList,
+                                      selectionMode: CreateRoomScreenSpaceSelectionMode = .editableSpacesList(preSelectedSpace: nil),
                                       isAliasAvailable: Bool = true) -> CreateRoomScreenViewModel {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()

@@ -143,6 +143,6 @@ enum CreateRoomScreenAccessType {
 }
 
 enum CreateRoomScreenSpaceSelectionMode {
-    case editableSpacesList
-    case preSelected(SpaceServiceRoom)
+    case editableSpacesList(preSelectedSpace: SpaceServiceRoom?)
+    case none
 }

@@ -28,7 +28,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     }
     
     init(isSpace: Bool,
-         spaceSelectionMode: CreateRoomScreenSpaceSelectionMode?,
+         spaceSelectionMode: CreateRoomScreenSpaceSelectionMode,
          shouldShowCancelButton: Bool,
          userSession: UserSessionProtocol,
          analytics: AnalyticsService,
@@ -40,18 +40,19 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         self.userIndicatorController = userIndicatorController
         
         var selectedSpace: SpaceServiceRoom?
-        var canSelectSpace = false
+        let canSelectSpace: Bool
         var selectedAccessType = CreateRoomScreenAccessType.private
         switch spaceSelectionMode {
-        case .editableSpacesList:
+        case .editableSpacesList(let preSelectedSpace):
             canSelectSpace = true
-        case .preSelected(let value):
-            selectedSpace = value
-            if value.joinRule != .public {
-                selectedAccessType = .spaceMembers
+            if let preSelectedSpace {
+                selectedSpace = preSelectedSpace
+                if preSelectedSpace.joinRule != .public {
+                    selectedAccessType = .spaceMembers
+                }
             }
         case .none:
-            break
+            canSelectSpace = false
         }
         
         let bindings = CreateRoomScreenViewStateBindings(roomTopic: "",
