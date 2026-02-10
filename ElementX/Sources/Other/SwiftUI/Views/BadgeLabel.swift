@@ -67,7 +67,6 @@ struct BadgeLabel: View {
             .padding(.trailing, 12)
             .padding(.vertical, 4)
             .background(Capsule().fill(backgroundColor))
-            .lineLimit(1)
         }
     }
 }
@@ -82,6 +81,9 @@ struct BadgeLabel_Previews: PreviewProvider, TestablePreview {
                        icon: \.lockSolid,
                        style: .info)
             BadgeLabel(title: "1234",
+                       icon: \.userProfile,
+                       style: .default)
+            BadgeLabel(title: "Very long text that potentially will wrap around in constrained environments, maybe into two or three lines, depending on the exact length of the text",
                        icon: \.userProfile,
                        style: .default)
         }
