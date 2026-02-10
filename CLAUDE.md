@@ -1,5 +1,61 @@
 # Project Context — Element X iOS Branded Fork
 
+## Skill Override — IMPORTANT
+
+**This is an iOS/Swift/SwiftUI project. IGNORE all Flutter/Dart global skills.**
+
+The following global skills are NOT applicable to this project and must be completely disregarded:
+- Flutter skills (tdd-workflow, unit-testing, widget-testing, bloc-testing, bloc-architecture, clean-architecture, repository-pattern, error-handling, mocking-patterns, feature-structure, dependency-injection, and all other Flutter-specific skills)
+- Flutter agents (flutter-senior-engineer)
+- Flutter commands (flutter-test, flutter-lint, generate-bloc, generate-feature, generate-model, build-runner)
+- All Flutter architecture patterns (BLoC, Riverpod, GetIt, Freezed, Dart-specific patterns)
+
+**Project-specific local skills (in `.claude/skills/`):**
+- `xcodegen-workflow` — XcodeGen YAML configuration and project generation
+- `ios-branding` — App icon, colors, strings, display name changes
+- `ios-signing-provisioning` — Code signing, entitlements, certificates
+- `plist-configuration` — Info.plist and entitlements configuration
+
+**Axiom plugin skills (use for all general iOS/Swift development):**
+- `axiom:axiom-swiftui-architecture` — Architecture patterns, separating logic from views (replaces `swift-project-structure`)
+- `axiom:axiom-app-composition` — App entry points, authentication flows, scene management
+- `axiom:axiom-ios-build` — Build failures, test crashes, Xcode issues (replaces `ios-build-errors`)
+- `axiom:axiom-xcode-debugging` — BUILD FAILED, test crashes, simulator hangs
+- `axiom:axiom-build-debugging` — Dependency conflicts, SPM resolution failures (replaces `spm-management`)
+- `axiom:axiom-localization` — String Catalogs, type-safe strings, internationalization (replaces `ios-localization`)
+- `axiom:axiom-swift-concurrency` — async/await, actors, Sendable, data races (replaces `swift-concurrency`)
+- `axiom:axiom-ios-concurrency` — Async code, actors, threads, concurrency diagnostics
+- `axiom:axiom-swiftui-layout` — Adaptive layouts, screen sizes, iPad multitasking (replaces `swiftui-patterns`)
+- `axiom:axiom-swiftui-performance` — UI performance, scrolling, animations
+- `axiom:axiom-swiftui-nav` — Navigation patterns, NavigationStack, deep links
+- `axiom:axiom-ios-testing` — Unit tests, flaky tests, test performance
+- `axiom:axiom-swift-testing` — Swift Testing framework adoption
+- `axiom:axiom-memory-debugging` — Memory warnings, retain cycles, leaks
+- `axiom:axiom-privacy-ux` — Privacy manifests, permissions, App Tracking Transparency
+- `axiom:axiom-apple-docs` — Apple framework APIs, Swift compiler questions
+- `axiom:axiom-codable` — Codable protocol, JSON encoding/decoding
+- `axiom:axiom-ios-networking` — Network connections, API calls, debugging
+- `axiom:axiom-accessibility-diag` — VoiceOver, Dynamic Type, color contrast
+- Use `axiom:ask` to route any iOS/Swift question to the right Axiom skill automatically
+
+**Project-local agents (in `.claude/agents/`):**
+- `ios-senior-engineer` — Expert iOS/Swift/SwiftUI development
+- `git-manager` — Git operations, upstream sync, checkpoint management
+- `planning-agent` — Project planning, task breakdown, progress tracking
+
+**Project-local commands (in `.claude/commands/`):**
+- `/xcodegen-generate` — Regenerate .xcodeproj from YAML
+- `/ios-build` — Build for simulator
+- `/ios-test` — Run unit tests
+- `/git-commit` — Stage and commit with proper message
+- `/git-push` — Push to origin
+- `/commit-push-pr` — Full commit + push + PR workflow
+- `/upstream-sync` — Fetch and review upstream changes
+- `/create-checkpoint` — Create milestone checkpoint tag
+- `/audit-branding` — Scan for remaining brand references
+
+---
+
 ## What This Is
 
 A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to be published on Apple App Store under a customer's brand. The project is: rebrand + reconfigure + publish. No new features.
