@@ -137,20 +137,20 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
             self?.presentStartChatScreen()
         }
         stateMachine.addRoutes(event: .createRoom(isSpace: true), transitions: [.initial => .createRoom]) { [weak self] _ in
-            self?.presentCreateRoomScreen(isSpace: true, spaceSelectionMode: nil, isRoot: true)
+            self?.presentCreateRoomScreen(isSpace: true, spaceSelectionMode: .none, isRoot: true)
         }
         stateMachine.addRoutes(event: .createRoom(isSpace: false), transitions: [.initial => .createRoom]) { [weak self] context in
             guard context.fromState == .initial else { return } // Required check because the event is used in another route.
             guard let space = context.userInfo as? SpaceServiceRoom else {
                 fatalError("This transition only supports creating a room in a pre-selected space.")
             }
-            self?.presentCreateRoomScreen(isSpace: false, spaceSelectionMode: .preSelected(space), isRoot: true)
+            self?.presentCreateRoomScreen(isSpace: false, spaceSelectionMode: .editableSpacesList(preSelectedSpace: space), isRoot: true)
         }
         
         stateMachine.addRoutes(event: .createRoom(isSpace: false), transitions: [.startChat => .createRoom]) { [weak self] context in
             guard let self, context.fromState == .startChat else { return } // Required check because the event is used in another route.
             presentCreateRoomScreen(isSpace: false,
-                                    spaceSelectionMode: flowParameters.appSettings.createSpaceEnabled ? .editableSpacesList : nil,
+                                    spaceSelectionMode: flowParameters.appSettings.createSpaceEnabled ? .editableSpacesList(preSelectedSpace: nil) : .none,
                                     isRoot: false)
         }
         stateMachine.addRoutes(event: .dismissedCreateRoom, transitions: [.createRoom => .startChat]) { [weak self] _ in
@@ -208,7 +208,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentCreateRoomScreen(isSpace: Bool,
-                                         spaceSelectionMode: CreateRoomScreenSpaceSelectionMode?,
+                                         spaceSelectionMode: CreateRoomScreenSpaceSelectionMode,
                                          isRoot: Bool) {
         let createParameters = CreateRoomScreenCoordinatorParameters(isSpace: isSpace,
                                                                      spaceSelectionMode: spaceSelectionMode,

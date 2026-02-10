@@ -80,7 +80,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
         ServiceLocator.shared.settings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: true,
-                                                  spaceSelectionMode: nil,
+                                                  spaceSelectionMode: .none,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
@@ -272,14 +272,14 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     func testCreateRoomInAnAlreadySelectedSpace() async throws {
         let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .invite)
-        setup(spacesSelectionMode: .preSelected(space))
+        setup(spacesSelectionMode: .editableSpacesList(preSelectedSpace: space))
         
         context.send(viewAction: .updateRoomName("A"))
         context.selectedAccessType = .spaceMembers
         XCTAssertTrue(context.viewState.canCreateRoom)
         XCTAssertEqual(context.selectedSpace?.id, space.id)
         XCTAssertEqual(context.viewState.availableAccessTypes, [.spaceMembers, .askToJoinWithSpaceMembers, .private])
-        XCTAssertFalse(context.viewState.canSelectSpace)
+        XCTAssertTrue(context.viewState.canSelectSpace)
         
         // When creating the room.
         clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
@@ -307,7 +307,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     func testCreateRoomInAnPublicSpaceAvailableTypes() {
         let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .public)
-        setup(spacesSelectionMode: .preSelected(space))
+        setup(spacesSelectionMode: .editableSpacesList(preSelectedSpace: space))
         
         // Given a form with a blank topic.
         context.send(viewAction: .updateRoomName("A"))
@@ -316,10 +316,10 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.canCreateRoom)
         XCTAssertEqual(context.selectedSpace?.id, space.id)
         XCTAssertEqual(context.viewState.availableAccessTypes, [.public, .askToJoin, .private])
-        XCTAssertFalse(context.viewState.canSelectSpace)
+        XCTAssertTrue(context.viewState.canSelectSpace)
     }
     
-    private func setup(isSpace: Bool = false, spacesSelectionMode: CreateRoomScreenSpaceSelectionMode = .editableSpacesList) {
+    private func setup(isSpace: Bool = false, spacesSelectionMode: CreateRoomScreenSpaceSelectionMode = .editableSpacesList(preSelectedSpace: nil)) {
         spaceService = SpaceServiceProxyMock(.init(editableSpaces: .mockJoinedSpaces2,
                                                    spaceRoomLists: ["1": .init()]))
         clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org",
