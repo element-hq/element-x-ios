@@ -218,7 +218,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             case .live: .live(hideThreadedEvents: false)
             case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, threadMode: .automatic(hideThreadedEvents: false))
             case .thread(let eventID): .thread(rootEventId: eventID)
-            case .pinned: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 10)
+            case .pinned: .pinnedEvents
             }
             
             let rustMessageTypes: [MatrixRustSDK.RoomMessageEventMessageType] = allowedMessageTypes.map {
@@ -261,7 +261,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                 }
                 
                 do {
-                    let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 10),
+                    let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .pinnedEvents,
                                                                                                     filter: .all,
                                                                                                     internalIdPrefix: nil,
                                                                                                     dateDividerMode: .daily,
