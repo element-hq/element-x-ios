@@ -43,7 +43,8 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentLinkNewDeviceScreen() {
-        let coordinator = LinkNewDeviceScreenCoordinator(parameters: .init(clientProxy: flowParameters.userSession.clientProxy))
+        let coordinator = LinkNewDeviceScreenCoordinator(parameters: .init(clientProxy: flowParameters.userSession.clientProxy,
+                                                                           orientationManager: flowParameters.appMediator.windowManager))
         coordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
