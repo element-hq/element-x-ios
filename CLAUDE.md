@@ -76,13 +76,18 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 - Git structure: `main` (releases) + `develop` (active, default) + `upstream` (element-hq)
 - Tag `checkpoint/unmodified-build` at commit `7c96ebfca` (last upstream commit before fork changes)
 - Claude Code slash commands for git workflows in `.claude/commands/`
+- Build re-verified on 2026-02-10 — still succeeds on iPhone 17 Pro (Xcode 26.2, iOS 26.2 simulator), only pre-existing upstream warnings
+- Customer outreach documents reviewed and finalized (2026-02-10):
+  - `customer_questionnaire_init_stage.md` — all 12 decisions D-001–D-012 mapped to questions, Apple Developer account (D-007) added to final checklist
+  - `customer_pre_dev_briefing_ru.md` — Apple Developer account added to Priority 1 actions and Week 0 deliverables
+- Cross-check complete: every decision has a clear path to resolution via the questionnaire
 
 **What's blocked (all require customer decisions):**
 - Step 5: Bundle identity changes (needs App Name, Bundle ID, Team ID — D-001)
 - Steps 6–14: Branding, config, OIDC, push, calls, testing, App Store
 - See `decisions_tracker.md` for all 12 tracked decisions (D-001 through D-012)
 
-**Next action:** Conduct initial meeting with customer using `customer_questionnaire_init_stage.md`, then send `customer_pre_dev_briefing_ru.md`. Resolve blockers before proceeding to Step 5.
+**Next action:** Send `customer_pre_dev_briefing_ru.md` to customer, then conduct initial meeting using `customer_questionnaire_init_stage.md`. Resolve blockers before proceeding to Step 5.
 
 ### Blockers (must be resolved before rebranding work starts)
 
@@ -265,4 +270,14 @@ When updating this file, change "Current Phase" and check off completed phases:
 
 ---
 
-*Last updated: 2026-02-09. Update this file whenever the project phase changes or a blocker is resolved.*
+## Progress Log
+
+| Date | What was done |
+|------|---------------|
+| 2026-02-08 | Phase 0 complete: all documentation created, codebase audited, 12 decisions tracked |
+| 2026-02-09 | Phase 1 partial: fork, build env, first build, change map, git structure, slash commands, Phases 7-10 continuation plan |
+| 2026-02-10 | Build re-verified (still passes). Customer outreach docs reviewed and finalized — D-007 (Apple Developer account) gap fixed in both briefing and questionnaire. All 12 decisions cross-checked against questionnaire coverage. Ready for customer engagement. |
+
+---
+
+*Last updated: 2026-02-10. Update this file whenever the project phase changes or a blocker is resolved.*
