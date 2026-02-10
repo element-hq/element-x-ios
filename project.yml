@@ -149,6 +149,9 @@ packages:
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.18.7
+  SwiftFlow:
+    url: https://github.com/tevelee/SwiftUI-Flow.git
+    minorVersion: 3.1.1
   SwiftSoup:
     url: https://github.com/scinfu/SwiftSoup.git
     minorVersion: 2.11.2
