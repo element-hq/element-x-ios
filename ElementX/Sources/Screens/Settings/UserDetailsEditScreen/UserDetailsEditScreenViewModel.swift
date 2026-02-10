@@ -92,7 +92,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             
             guard case let .success(maxUploadSize) = await clientProxy.maxMediaUploadSize else {
                 MXLog.error("Failed to get max upload size")
-                userIndicatorController.alertInfo = .init(id: .init())
+                state.bindings.alertInfo = .init(id: .unknown)
                 return
             }
             let mediaResult = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize)
@@ -101,7 +101,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             case .success(.image):
                 state.localMedia = try? mediaResult.get()
             case .failure, .success:
-                userIndicatorController.alertInfo = .init(id: .init())
+                state.bindings.alertInfo = .init(id: .failedProcessingMedia)
             }
         }
     }
@@ -149,9 +149,9 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             
             actionsSubject.send(.dismiss)
         } catch {
-            userIndicatorController.alertInfo = .init(id: .init(),
-                                                      title: L10n.screenEditProfileErrorTitle,
-                                                      message: L10n.screenEditProfileError)
+            state.bindings.alertInfo = .init(id: .saveError,
+                                             title: L10n.screenEditProfileErrorTitle,
+                                             message: L10n.screenEditProfileError)
         }
     }
 }

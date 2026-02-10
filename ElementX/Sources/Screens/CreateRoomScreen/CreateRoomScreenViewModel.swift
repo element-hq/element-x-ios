@@ -116,7 +116,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
             do {
                 guard case let .success(maxUploadSize) = await userSession.clientProxy.maxMediaUploadSize else {
                     MXLog.error("Failed to get max upload size")
-                    userIndicatorController.alertInfo = AlertInfo(id: .init())
+                    state.bindings.alertInfo = .init(id: .unknown)
                     return
                 }
                 let mediaInfo = try await mediaUploadingPreprocessor.processMedia(at: fileURL, maxUploadSize: maxUploadSize).get()
@@ -128,7 +128,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                     break
                 }
             } catch {
-                userIndicatorController.alertInfo = AlertInfo(id: .init())
+                state.bindings.alertInfo = .init(id: .failedProcessingMedia)
             }
             hideLoadingIndicator()
         }

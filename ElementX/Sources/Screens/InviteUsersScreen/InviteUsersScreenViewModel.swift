@@ -105,9 +105,9 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                 return
             }
             
-            userIndicatorController.alertInfo = .init(id: .init(),
-                                                      title: L10n.commonUnableToInviteTitle,
-                                                      message: L10n.commonUnableToInviteMessage)
+            state.bindings.alertInfo = .init(id: .unknown,
+                                             title: L10n.commonUnableToInviteTitle,
+                                             message: L10n.commonUnableToInviteMessage)
         }
     }
     

@@ -32,8 +32,6 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
         }
     }
     
-    @Published var alertInfo: AlertInfo<UUID>?
-    
     var window: UIWindow? {
         didSet {
             let hostingController = UIHostingController(rootView: UserIndicatorPresenter(userIndicatorController: self).statusBarHidden(ProcessInfo.isRunningUITests))
