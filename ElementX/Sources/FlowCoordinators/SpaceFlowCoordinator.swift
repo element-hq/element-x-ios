@@ -197,158 +197,141 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     private func configureStateMachine() {
-        stateMachine.addRoutes(event: .start, transitions: [.initial => .space]) { [weak self] _ in
-            self?.presentSpace()
-        }
-        
-        stateMachine.addRoutes(event: .startUnjoined, transitions: [.initial => .joinSpace]) { [weak self] _ in
-            self?.presentJoinSpaceScreen()
-        }
-        
-        stateMachine.addRoutes(event: .joinedSpace, transitions: [.joinSpace => .space]) { [weak self] _ in
-            self?.presentSpaceAfterJoining()
-        }
-        stateMachine.addRoutes(event: .leftSpace, transitions: [.space => .leftSpace]) { [weak self] _ in
-            self?.clearRoute(animated: true)
-        }
-        
-        stateMachine.addRoutes(event: .addRooms, transitions: [.space => .addingRooms]) { [weak self] _ in
-            self?.presentSpaceAddRoomsScreen()
-        }
+        stateMachine.addRoutes(event: .start, transitions: [.initial => .space])
+        stateMachine.addRoutes(event: .startUnjoined, transitions: [.initial => .joinSpace])
+        stateMachine.addRoutes(event: .joinedSpace, transitions: [.joinSpace => .space])
+        stateMachine.addRoutes(event: .leftSpace, transitions: [.space => .leftSpace])
+        stateMachine.addRoutes(event: .addRooms, transitions: [.space => .addingRooms])
         stateMachine.addRoutes(event: .dismissedAddRooms, transitions: [.addingRooms => .space])
-        
-        stateMachine.addRoutes(event: .presentTransferOwnership, transitions: [.space => .transferOwnership]) { [weak self] context in
-            guard let self, let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
-            self.presentTransferOwnershipScreen(roomProxy: roomProxy)
-        }
+        stateMachine.addRoutes(event: .presentTransferOwnership, transitions: [.space => .transferOwnership])
         stateMachine.addRoutes(event: .dismissedTransferOwnership, transitions: [.transferOwnership => .space])
         
         stateMachine.addRouteMapping { event, fromState, userInfo in
-            guard event == .startChildFlow else { return nil }
-            guard let childEntryPoint = userInfo as? SpaceFlowCoordinatorEntryPoint else { fatalError("An entry point must be provided.") }
-            return switch fromState {
-            case .space: .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: fromState)
-            case .roomFlow(let previousState): .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: previousState)
-            default: nil
-            }
-        } handler: { [weak self] context in
-            guard let self, let entryPoint = context.userInfo as? SpaceFlowCoordinatorEntryPoint else { return }
-            startChildFlow(with: entryPoint)
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .stopChildFlow, case .presentingChild(_, let previousState) = fromState else { return nil }
-            return previousState
-        } handler: { [weak self] _ in
-            guard let self else { return }
-            childSpaceFlowCoordinator = nil
-            selectedSpaceRoomSubject.send(nil)
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard case .startRoomFlow = event, case .roomFlow = fromState else {
+            switch (fromState, event) {
+            case (.space, .startChildFlow):
+                guard let childEntryPoint = userInfo as? SpaceFlowCoordinatorEntryPoint else { fatalError("An entry point must be provided.") }
+                return .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: fromState)
+            case (.roomFlow(let previousState), .startChildFlow):
+                guard let childEntryPoint = userInfo as? SpaceFlowCoordinatorEntryPoint else { fatalError("An entry point must be provided.") }
+                return .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: previousState)
+            case (.presentingChild(_, let previousState), .stopChildFlow):
+                return previousState
+            
+            case (.space, .startRoomFlow):
+                return .roomFlow(previousState: fromState)
+            case (.roomFlow, .startRoomFlow):
+                return fromState // Ignore tapping on multiple rooms at the same time
+            case (.roomFlow(let previousState), .stopRoomFlow):
+                return previousState
+            
+            case (.space, .startMembersFlow):
+                return .membersFlow
+            case (.membersFlow, .stopMembersFlow):
+                return .space
+            
+            case (.space, .startSettingsFlow):
+                return .settingsFlow
+            case (.settingsFlow, .stopSettingsFlow):
+                return .space
+            
+            case (.space, .startRolesAndPermissionsFlow):
+                return .rolesAndPermissionsFlow
+            case (.rolesAndPermissionsFlow, .stopRolesAndPermissionsFlow):
+                return .space
+            
+            case (.space, .startCreateChildRoomFlow):
+                return .createChildRoomFlow
+            case (.createChildRoomFlow, .stopCreateChildRoomFlow):
+                return .space
+            
+            default:
                 return nil
+            }
+        }
+        
+        stateMachine.addAnyHandler(.any => .any) { [weak self] context in
+            guard let self else { return }
+            
+            switch (context.fromState, context.event, context.toState) {
+            case (.initial, .start, .space):
+                presentSpace()
+            
+            case (.initial, .startUnjoined, .joinSpace):
+                presentJoinSpaceScreen()
+            
+            case (.joinSpace, .joinedSpace, .space):
+                presentSpaceAfterJoining()
+            
+            case (.space, .leftSpace, .leftSpace):
+                clearRoute(animated: true)
+            
+            case (.space, .addRooms, .addingRooms):
+                presentSpaceAddRoomsScreen()
+            case (.addingRooms, .dismissedAddRooms, .space):
+                break
+            
+            case (.space, .presentTransferOwnership, .transferOwnership):
+                guard let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
+                presentTransferOwnershipScreen(roomProxy: roomProxy)
+            case (.transferOwnership, .dismissedTransferOwnership, .space):
+                break
+            
+            case (.space, .startChildFlow, .presentingChild),
+                 (.roomFlow, .startChildFlow, .presentingChild):
+                guard let entryPoint = context.userInfo as? SpaceFlowCoordinatorEntryPoint else { return }
+                startChildFlow(with: entryPoint)
+            case (.presentingChild, .stopChildFlow, _):
+                childSpaceFlowCoordinator = nil
+                selectedSpaceRoomSubject.send(nil)
+            
+            case (.space, .startRoomFlow(let roomID), .roomFlow):
+                startRoomFlow(roomID: roomID)
+            case (.roomFlow, .startRoomFlow, .roomFlow):
+                break // Ignore tapping on multiple rooms at the same time
+            case (.roomFlow, .stopRoomFlow, _):
+                roomFlowCoordinator = nil
+                selectedSpaceRoomSubject.send(nil)
+            
+            case (.space, .startMembersFlow, .membersFlow):
+                guard let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else {
+                    fatalError("The room proxy must always be provided")
+                }
+                startMembersFlow(roomProxy: roomProxy)
+            case (.membersFlow, .stopMembersFlow, .space):
+                membersFlowCoordinator = nil
+            
+            case (.space, .startSettingsFlow, .settingsFlow):
+                guard let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
+                startSettingsFlow(roomProxy: roomProxy)
+            case (.settingsFlow, .stopSettingsFlow, .space):
+                settingsFlowCoordinator = nil
+            
+            case (.space, .startRolesAndPermissionsFlow, .rolesAndPermissionsFlow):
+                guard let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
+                startRolesAndPermissionsFlow(roomProxy: roomProxy)
+            case (.rolesAndPermissionsFlow, .stopRolesAndPermissionsFlow, .space):
+                rolesAndPermissionsFlowCoordinator = nil
+            
+            case (.space, .startCreateChildRoomFlow, .createChildRoomFlow):
+                guard let space = context.userInfo as? SpaceServiceRoom else { fatalError("The space is missing") }
+                startCreateChildFlow(space: space)
+            case (.createChildRoomFlow, .stopCreateChildRoomFlow, .space):
+                createChildRoomFlowCoordinator = nil
+            
+            default:
+                break
             }
             
-            return fromState
-        } handler: { _ in
-            // Ignore tapping on multiple rooms at the same time
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard case .startRoomFlow = event, case .space = fromState else { return nil }
-            return .roomFlow(previousState: fromState)
-        } handler: { [weak self] context in
-            guard let self, case let .startRoomFlow(roomID) = context.event else { return }
-            startRoomFlow(roomID: roomID)
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .stopRoomFlow, case let .roomFlow(previousState) = fromState else { return nil }
-            return previousState
-        } handler: { [weak self] _ in
-            guard let self else { return }
-            roomFlowCoordinator = nil
-            selectedSpaceRoomSubject.send(nil)
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard case .startMembersFlow = event, case .space = fromState else {
-                return nil
-            }
-            return .membersFlow
-        } handler: { [weak self] context in
-            guard let self, let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else {
-                fatalError("The room proxy must always be provided")
-            }
-            startMembersFlow(roomProxy: roomProxy)
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .stopMembersFlow, case .membersFlow = fromState else { return nil }
-            return .space
-        } handler: { [weak self] _ in
-            guard let self else { return }
-            membersFlowCoordinator = nil
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .startSettingsFlow, case .space = fromState else { return nil }
-            return .settingsFlow
-        } handler: { [weak self] context in
-            guard let self, let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
-            startSettingsFlow(roomProxy: roomProxy)
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .stopSettingsFlow, case .settingsFlow = fromState else { return nil }
-            return .space
-        } handler: { [weak self] _ in
-            guard let self else { return }
-            settingsFlowCoordinator = nil
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .startRolesAndPermissionsFlow, case .space = fromState else { return nil }
-            return .rolesAndPermissionsFlow
-        } handler: { [weak self] context in
-            guard let self, let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
-            startRolesAndPermissionsFlow(roomProxy: roomProxy)
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .stopRolesAndPermissionsFlow, case .rolesAndPermissionsFlow = fromState else { return nil }
-            return .space
-        } handler: { [weak self] _ in
-            guard let self else { return }
-            rolesAndPermissionsFlowCoordinator = nil
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .startCreateChildRoomFlow, case .space = fromState else { return nil }
-            return .createChildRoomFlow
-        } handler: { [weak self] context in
-            guard let space = context.userInfo as? SpaceServiceRoom else { fatalError("The space is missing") }
-            self?.startCreateChildFlow(space: space)
-        }
-        
-        stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .stopCreateChildRoomFlow, case .createChildRoomFlow = fromState else { return nil }
-            return .space
-        } handler: { [weak self] _ in
-            self?.createChildRoomFlowCoordinator = nil
-        }
-        
-        stateMachine.addErrorHandler { context in
-            fatalError("Unexpected transition: \(context)")
-        }
-        
-        stateMachine.addAnyHandler(.any => .any) { context in
+            // Log transitions
             if let event = context.event {
                 MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(event)`")
             } else {
                 MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
             }
+        }
+        
+        stateMachine.addErrorHandler { context in
+            fatalError("Unexpected transition: \(context)")
         }
     }
     
