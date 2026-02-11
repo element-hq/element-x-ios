@@ -12259,6 +12259,76 @@ class NotificationManagerMock: NotificationManagerProtocol, @unchecked Sendable 
             return registerWithReturnValue
         }
     }
+    //MARK: - registerWithFCMToken
+
+    var registerWithFCMTokenUnderlyingCallsCount = 0
+    var registerWithFCMTokenCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return registerWithFCMTokenUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = registerWithFCMTokenUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                registerWithFCMTokenUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    registerWithFCMTokenUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var registerWithFCMTokenCalled: Bool {
+        return registerWithFCMTokenCallsCount > 0
+    }
+    var registerWithFCMTokenReceivedFcmToken: String?
+    var registerWithFCMTokenReceivedInvocations: [String] = []
+
+    var registerWithFCMTokenUnderlyingReturnValue: Bool!
+    var registerWithFCMTokenReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return registerWithFCMTokenUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = registerWithFCMTokenUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                registerWithFCMTokenUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    registerWithFCMTokenUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var registerWithFCMTokenClosure: ((String) async -> Bool)?
+
+    func registerWithFCMToken(_ fcmToken: String) async -> Bool {
+        registerWithFCMTokenCallsCount += 1
+        registerWithFCMTokenReceivedFcmToken = fcmToken
+        DispatchQueue.main.async {
+            self.registerWithFCMTokenReceivedInvocations.append(fcmToken)
+        }
+        if let registerWithFCMTokenClosure = registerWithFCMTokenClosure {
+            return await registerWithFCMTokenClosure(fcmToken)
+        } else {
+            return registerWithFCMTokenReturnValue
+        }
+    }
     //MARK: - registrationFailed
 
     var registrationFailedWithUnderlyingCallsCount = 0
@@ -21247,4 +21317,87 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
         lockOrientationClosure?(orientation)
     }
 }
+class FirebaseNotificationServiceMock: FirebaseNotificationServiceProtocol, @unchecked Sendable {
+    //MARK: - configure
+
+    var configureOnTokenUpdateUnderlyingCallsCount = 0
+    var configureOnTokenUpdateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return configureOnTokenUpdateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = configureOnTokenUpdateUnderlyingCallsCount
+                }
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                configureOnTokenUpdateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    configureOnTokenUpdateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var configureOnTokenUpdateCalled: Bool {
+        return configureOnTokenUpdateCallsCount > 0
+    }
+    var configureOnTokenUpdateReceivedOnTokenUpdate: ((String) -> Void)?
+    var configureOnTokenUpdateReceivedInvocations: [((String) -> Void)] = []
+    var configureOnTokenUpdateClosure: ((@escaping (String) -> Void) -> Void)?
+
+    func configure(onTokenUpdate: @escaping (String) -> Void) {
+        configureOnTokenUpdateCallsCount += 1
+        configureOnTokenUpdateReceivedOnTokenUpdate = onTokenUpdate
+        DispatchQueue.main.async {
+            self.configureOnTokenUpdateReceivedInvocations.append(onTokenUpdate)
+        }
+        configureOnTokenUpdateClosure?(onTokenUpdate)
+    }
+
+    //MARK: - currentToken
+
+    var currentTokenUnderlyingCallsCount = 0
+    var currentTokenCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return currentTokenUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = currentTokenUnderlyingCallsCount
+                }
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                currentTokenUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    currentTokenUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var currentTokenCalled: Bool {
+        return currentTokenCallsCount > 0
+    }
+    var currentTokenReturnValue: String?
+    var currentTokenClosure: (() async -> String?)?
+
+    func currentToken() async -> String? {
+        currentTokenCallsCount += 1
+        if let currentTokenClosure = currentTokenClosure {
+            return await currentTokenClosure()
+        } else {
+            return currentTokenReturnValue
+        }
+    }
+}
+
 // swiftlint:enable all

@@ -88,6 +88,13 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         return await setPusher(with: deviceToken, clientProxy: userSession.clientProxy)
     }
 
+    func registerWithFCMToken(_ fcmToken: String) async -> Bool {
+        guard let userSession else {
+            return false
+        }
+        return await setPusherWithFCMToken(fcmToken, clientProxy: userSession.clientProxy)
+    }
+
     func setUserSession(_ userSession: UserSessionProtocol?) {
         self.userSession = userSession
         
@@ -183,6 +190,33 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             return true
         } catch {
             MXLog.error("Set pusher failed: \(error)")
+            return false
+        }
+    }
+
+    /// Registers a pusher using an FCM registration token as the pushkey.
+    /// The payload structure is identical to APNs — Sygnal handles the FCM-to-APNs wrapping.
+    private func setPusherWithFCMToken(_ fcmToken: String, clientProxy: ClientProxyProtocol) async -> Bool {
+        do {
+            let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
+                                                          alert: APSAlert(locKey: "Notification",
+                                                                          locArgs: [])),
+                                             pusherNotificationClientIdentifier: clientProxy.pusherNotificationClientIdentifier)
+
+            let configuration = try await PusherConfiguration(identifiers: .init(pushkey: fcmToken,
+                                                                                 appId: appSettings.pusherAppID),
+                                                              kind: .http(data: .init(url: appSettings.pushGatewayNotifyEndpoint.absoluteString,
+                                                                                      format: .eventIdOnly,
+                                                                                      defaultPayload: defaultPayload.toJsonString())),
+                                                              appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
+                                                              deviceDisplayName: UIDevice.current.name,
+                                                              profileTag: pusherProfileTag(),
+                                                              lang: Bundle.app.preferredLocalizations.first ?? "en")
+            try await clientProxy.setPusher(with: configuration)
+            MXLog.info("Set FCM pusher succeeded")
+            return true
+        } catch {
+            MXLog.error("Set FCM pusher failed: \(error)")
             return false
         }
     }

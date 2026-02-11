@@ -7,6 +7,7 @@
 //
 
 import Combine
+import FirebaseMessaging
 import SwiftUI
 
 enum AppDelegateCallback {

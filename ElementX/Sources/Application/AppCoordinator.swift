@@ -9,6 +9,7 @@
 import AnalyticsEvents
 import BackgroundTasks
 import Combine
+import FirebaseMessaging
 import Intents
 import MatrixRustSDK
 import Sentry
@@ -57,6 +58,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     let windowManager: SecureWindowManagerProtocol
     let notificationManager: NotificationManagerProtocol
+    private let firebaseService: FirebaseNotificationServiceProtocol
 
     private let appRouteURLParser: AppRouteURLParser
     
@@ -64,7 +66,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     @Consumable private var storedInlineReply: (roomID: String, message: String)?
     @Consumable private var storedRoomsToAwait: Set<String>?
 
-    init(appDelegate: AppDelegate) {
+    init(appDelegate: AppDelegate, firebaseService: FirebaseNotificationServiceProtocol = FirebaseNotificationService()) {
+        self.firebaseService = firebaseService
         let appHooks = AppHooks()
         appHooks.setUp()
         
@@ -861,14 +864,29 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func configureNotificationManager() {
         notificationManager.setUserSession(userSession)
 
+        if appSettings.pushProvider == .firebase {
+            // Initialize Firebase and register pusher when FCM token arrives or refreshes
+            firebaseService.configure { [weak self] fcmToken in
+                Task { await self?.notificationManager.registerWithFCMToken(fcmToken) }
+            }
+        }
+
         appDelegateObserver = appDelegate.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
+                guard let self else { return }
                 switch callback {
                 case .registeredNotifications(let deviceToken):
-                    Task { await self?.notificationManager.register(with: deviceToken) }
+                    if appSettings.pushProvider == .apns {
+                        // APNs-only: register pusher with the raw APNs device token
+                        Task { await self.notificationManager.register(with: deviceToken) }
+                    } else {
+                        // Firebase: pass the APNs token to Firebase SDK so it can
+                        // associate it with the FCM registration token
+                        Messaging.messaging().apnsToken = deviceToken
+                    }
                 case .failedToRegisteredNotifications(let error):
-                    self?.notificationManager.registrationFailed(with: error)
+                    self.notificationManager.registrationFailed(with: error)
                 }
             }
     }

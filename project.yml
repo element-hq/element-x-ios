@@ -11,7 +11,7 @@ options:
   groupSortPosition: bottom
   createIntermediateGroups: true
   deploymentTarget:
-    iOS: '17.6'
+    iOS: '18.0'
   groupOrdering:
   - order:
     - ElementX
@@ -96,6 +96,11 @@ packages:
     exactVersion: 2.41.0
     # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
   
+  # Firebase
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk.git
+    minorVersion: 11.8.0
+
   # External dependencies
   Algorithms:
     url: https://github.com/apple/swift-algorithms
