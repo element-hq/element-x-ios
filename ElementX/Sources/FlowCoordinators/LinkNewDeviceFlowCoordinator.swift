@@ -75,11 +75,13 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .signInManually, .signedIn:
                     fatalError("QR linking shouldn't send sign-in actions.")
-                case .dismiss:
-                    navigationStackCoordinator.pop()
+                case .startOver:
+                    navigationStackCoordinator.pop() // Pops back to the LinkNewDeviceScreen.
                 case .requestOIDCAuthorisation(let url, let continuation):
                     actionsSubject.send(.requestOIDCAuthorisation(url, continuation))
                 case .linkedDevice:
+                    actionsSubject.send(.dismiss)
+                case .cancel:
                     actionsSubject.send(.dismiss)
                 }
             }

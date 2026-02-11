@@ -12,7 +12,7 @@ struct QRCodeErrorView: View {
     let errorState: QRCodeLoginState.ErrorState
     let canSignInManually: Bool
     
-    enum Action { case openSettings, startOver, signInManually, dismiss }
+    enum Action { case openSettings, startOver, signInManually, cancel }
     let action: (Action) -> Void
     
     var title: String {
@@ -117,26 +117,30 @@ struct QRCodeErrorView: View {
                      iconStyle: iconStyle)
     }
     
-    @ViewBuilder
     private var buttons: some View {
-        switch errorState {
-        case .noCameraPermission:
-            Button(L10n.screenQrCodeLoginNoCameraPermissionButton) {
-                action(.openSettings)
-            }
-            .buttonStyle(.compound(.primary))
-        case .connectionNotSecure, .unknown, .expired, .declined, .deviceNotSupported:
-            Button(L10n.screenQrCodeLoginStartOverButton) {
-                action(.startOver)
-            }
-            .buttonStyle(.compound(.primary))
-        case .cancelled:
-            Button(L10n.actionTryAgain) {
-                action(.startOver)
-            }
-            .buttonStyle(.compound(.primary))
-        case .linkingNotSupported:
-            VStack(spacing: 16) {
+        VStack(spacing: 16) {
+            switch errorState {
+            case .noCameraPermission:
+                Button(L10n.screenQrCodeLoginNoCameraPermissionButton) {
+                    action(.openSettings)
+                }
+                .buttonStyle(.compound(.primary))
+                
+                Button(L10n.actionCancel) {
+                    action(.cancel)
+                }
+                .buttonStyle(.compound(.secondary))
+            case .connectionNotSecure, .unknown, .expired, .declined, .deviceNotSupported, .cancelled:
+                Button(L10n.actionTryAgain) {
+                    action(.startOver)
+                }
+                .buttonStyle(.compound(.primary))
+                
+                Button(L10n.actionCancel) {
+                    action(.cancel)
+                }
+                .buttonStyle(.compound(.secondary))
+            case .linkingNotSupported:
                 if canSignInManually {
                     Button(L10n.screenOnboardingSignInManually) {
                         action(.signInManually)
@@ -144,16 +148,16 @@ struct QRCodeErrorView: View {
                     .buttonStyle(.compound(.primary))
                 }
                 
-                Button(L10n.actionCancel) {
-                    action(.dismiss)
+                Button(L10n.actionDismiss) {
+                    action(.cancel)
                 }
-                .buttonStyle(.compound(.tertiary))
+                .buttonStyle(.compound(canSignInManually ? .secondary : .primary))
+            case .deviceAlreadySignedIn:
+                Button(L10n.actionContinue) {
+                    action(.cancel)
+                }
+                .buttonStyle(.compound(.primary))
             }
-        case .deviceAlreadySignedIn:
-            Button(L10n.actionContinue) {
-                action(.dismiss)
-            }
-            .buttonStyle(.compound(.primary))
         }
     }
 }
