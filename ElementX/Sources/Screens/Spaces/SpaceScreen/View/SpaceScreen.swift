@@ -165,6 +165,7 @@ struct SpaceScreen: View {
                             Button { context.send(viewAction: .spaceSettings(roomProxy: roomProxy)) } label: {
                                 Label(L10n.commonSettings, icon: \.settings)
                             }
+                            .accessibilityIdentifier(A11yIdentifiers.spaceScreen.settings)
                         }
                     }
                     

@@ -48,6 +48,7 @@ enum A11yIdentifiers {
     static let spacesScreen = SpacesScreen()
     static let spaceScreen = SpaceScreen()
     static let spaceAddRoomsScreen = SpaceAddRoomsScreen()
+    static let spaceSettingsScreen = SpaceSettingsScreen()
     static let linkNewDeviceScreen = LinkNewDeviceScreen()
     
     struct AlertInfo {
@@ -330,10 +331,15 @@ enum A11yIdentifiers {
         let moreMenu = "space_screen-more_menu"
         let addExistingRooms = "space_screen-add_existing_rooms"
         let viewMembers = "space_screen-view_members"
+        let settings = "space_screen-settings"
     }
     
     struct SpaceAddRoomsScreen {
         let cancel = "space_add_rooms_screen-cancel"
+    }
+    
+    struct SpaceSettingsScreen {
+        let editBaseInfo = "space_settings_screen-edit_space_info"
     }
     
     struct LinkNewDeviceScreen {
