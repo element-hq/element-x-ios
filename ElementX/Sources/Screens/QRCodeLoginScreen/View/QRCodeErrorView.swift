@@ -31,7 +31,7 @@ struct QRCodeErrorView: View {
             L10n.screenQrCodeLoginErrorExpiredTitle
         case .linkingNotSupported:
             L10n.screenQrCodeLoginErrorLinkingNotSuportedTitle
-        case .deviceNotSupported:
+        case .slidingSyncNotAvailable:
             L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedTitle(InfoPlistReader.main.bundleDisplayName)
         case .deviceAlreadySignedIn:
             L10n.screenQrCodeLoginErrorDeviceAlreadySignedInTitle
@@ -56,7 +56,7 @@ struct QRCodeErrorView: View {
             L10n.screenQrCodeLoginErrorExpiredSubtitle
         case .linkingNotSupported:
             L10n.screenQrCodeLoginErrorLinkingNotSuportedSubtitle(InfoPlistReader.main.bundleDisplayName)
-        case .deviceNotSupported:
+        case .slidingSyncNotAvailable:
             L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedSubtitle(InfoPlistReader.main.bundleDisplayName)
         case .deviceAlreadySignedIn:
             L10n.screenQrCodeLoginErrorDeviceAlreadySignedInSubtitle
@@ -134,7 +134,7 @@ struct QRCodeErrorView: View {
                     action(.cancel)
                 }
                 .buttonStyle(.compound(.secondary))
-            case .connectionNotSecure, .unknown, .expired, .declined, .deviceNotSupported, .cancelled:
+            case .connectionNotSecure, .unknown, .expired, .declined, .slidingSyncNotAvailable, .cancelled:
                 Button(L10n.actionTryAgain) {
                     action(.startOver)
                 }
@@ -196,7 +196,7 @@ private extension QRCodeLoginState.ErrorState {
         case .cancelled: "Cancelled"
         case .declined: "Declined"
         case .expired: "Expired"
-        case .deviceNotSupported: "Device not supported"
+        case .slidingSyncNotAvailable: "Sliding sync not available"
         case .deviceAlreadySignedIn: "Device already signed in"
         case .unknown: "Unknown error"
         }

@@ -299,8 +299,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             state.state = .error(.linkingNotSupported)
         case .expired:
             state.state = .error(.expired)
-        case .deviceNotSupported:
-            state.state = .error(.deviceNotSupported)
+        case .slidingSyncNotAvailable:
+            state.state = .error(.slidingSyncNotAvailable)
         case .deviceAlreadySignedIn:
             state.state = .error(.deviceAlreadySignedIn)
         case .unknown:

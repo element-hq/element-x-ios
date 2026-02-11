@@ -115,14 +115,17 @@ enum QRCodeLoginState: Equatable {
     case error(ErrorState)
     
     enum ErrorState: Equatable, CaseIterable {
+        /// The account provider doesn't support the use of QR codes.
         case notSupported
         case noCameraPermission
         case connectionNotSecure
         case cancelled
         case declined
         case expired
+        /// The other device does not support linking Element X by QR code.
         case linkingNotSupported
-        case deviceNotSupported
+        /// Login cannot be continued due to a lack of Sliding Sync.
+        case slidingSyncNotAvailable
         /// Expected a QR code for a new device, however the processed code belongs to a device that is already signed in.
         case deviceAlreadySignedIn
         case unknown
