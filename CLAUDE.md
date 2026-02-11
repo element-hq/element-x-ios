@@ -86,6 +86,9 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 - Rebranding automation scripts created (2026-02-11): `scripts/rebrand.sh` (712 lines, handles all text substitutions) and `scripts/rebrand_strings.sh` (560 lines, handles 37-locale string replacement). Both dry-run tested. Estimated rebranding time reduced from 4-8 hours to 1-2 hours.
 - Additional audits completed (2026-02-11): Element Call infrastructure (MatrixRTC + LiveKit, 8 hardcoded refs, disabling options), privacy manifest compliance (B+ grade, 2 gaps identified), upstream sync report (18 new commits, SDK v26.02.10, 3-4 file conflicts)
 - Fixed bash 3.2 compatibility bug in `rebrand_strings.sh` — replaced `declare -A` associative arrays with bash 3.2-compatible variables (macOS default shell)
+- Privacy manifest gaps fixed (2026-02-11): Added `NSPrivacyAccessedAPICategoryNetworkInformation` to Main App and NSE manifests, created ShareExtension `PrivacyInfo.xcprivacy` (was missing entirely). All 3 targets now have privacy manifests.
+- Upstream sync completed (2026-02-11): Merged 18 upstream commits into `develop`. MatrixRustSDK v26.02.03 → v26.02.10, crash fixes (server confirmation, iOS 26 PassthroughWindow, QR/Link sign-in), Spaces feature. Only 1 auto-generated file conflict (pbxproj). Backup tag: `backup/pre-upstream-sync-20260211`.
+- Build verified (2026-02-11): `xcodegen generate` + full build on iPhone 17 Pro simulator after upstream merge. BUILD SUCCEEDED.
 
 **What's blocked (all require customer decisions):**
 - Step 5: Bundle identity changes (needs App Name, Bundle ID, Team ID — D-001)
@@ -159,7 +162,7 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | Language | Swift 100%, SwiftUI |
 | Architecture | Coordinator-based MVVM |
 | Build system | XcodeGen (`project.yml`, `app.yml`, `target.yml`) + SPM |
-| Core SDK | Matrix Rust SDK (Swift bindings via SPM, **opaque — cannot modify**) |
+| Core SDK | Matrix Rust SDK v26.02.10 (Swift bindings via SPM, **opaque — cannot modify**) |
 | Design system | Compound (Element's cross-platform semantic design tokens) |
 | LOC | ~68,000 across ~907 Swift files |
 | License | AGPL v3 (**legally problematic for App Store**) |
@@ -167,9 +170,9 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | Push | APNs directly + Firebase SDK (FCM infrastructure added + unit-tested, pending customer config). See `documentation/firebase_integration.md` |
 | Calls | Element Call (MatrixRTC + LiveKit, not Jitsi). See `documentation/element_call_audit.md` |
 | Auth | OIDC (redirect URI hardcoded to element.io — must change). See `documentation/oidc_audit.md` |
-| Privacy | B+ compliance; 2 gaps to fix before submission. See `documentation/privacy_manifest_audit.md` |
+| Privacy | All 3 targets have privacy manifests; NetworkInformation API declared. See `documentation/privacy_manifest_audit.md` |
 | Rebranding | 97 hardcoded identifiers mapped, 2 automation scripts ready. See `documentation/pre_rebranding_preparations.md` |
-| Upstream | 18 commits behind (Feb 11), SDK v26.02.10 available, sync recommended. See `documentation/upstream_sync_report.md` |
+| Upstream | Synced to upstream `main` (Feb 11). SDK v26.02.10, crash fixes merged. See `documentation/upstream_sync_report.md` |
 
 ## Key Files to Modify (When Development Starts)
 
@@ -301,7 +304,8 @@ When updating this file, change "Current Phase" and check off completed phases:
 | 2026-02-11 | Firebase FCM unit tests: extracted `FirebaseNotificationServiceProtocol` for testability, injected into `AppCoordinator` via constructor, added `FirebaseNotificationServiceMock`. 14 new tests (5 NotificationManager FCM, 5 Firebase integration flow, 4 PushProvider), all passing. Documented in `documentation/firebase_integration.md`. |
 | 2026-02-11 | Pre-rebranding research and tooling. 5 audit docs (OIDC, branding/Compound, NSE, ShareExtension, hardcoded identifiers — 97 total across 35+ files). 2 automation scripts: `scripts/rebrand.sh` (712 lines, all text substitutions with dry-run/validation/backup) and `scripts/rebrand_strings.sh` (560 lines, 37-locale string replacement + review report). Merged via PR #2. |
 | 2026-02-11 | Additional audits: Element Call infrastructure (MatrixRTC+LiveKit, 8 refs, disabling options), privacy manifest compliance (B+, 2 gaps), upstream sync (18 commits, SDK v26.02.10). Fixed bash 3.2 bug in rebrand_strings.sh. Both scripts dry-run tested successfully. Total: 8 audit docs, 3,100+ lines of documentation and tooling. |
+| 2026-02-11 | Privacy manifest gaps fixed: added NetworkInformation API to Main App + NSE, created ShareExtension PrivacyInfo.xcprivacy. Upstream sync completed: merged 18 commits (SDK v26.02.10, crash fixes, Spaces). Build verified after merge — BUILD SUCCEEDED on iPhone 17 Pro simulator. |
 
 ---
 
-*Last updated: 2026-02-11 (Element Call, privacy, upstream audits + script fixes). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-11 (privacy fixes, upstream sync, build verified). Update this file whenever the project phase changes or a blocker is resolved.*
