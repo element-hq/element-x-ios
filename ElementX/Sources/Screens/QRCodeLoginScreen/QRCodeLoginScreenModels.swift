@@ -115,6 +115,7 @@ enum QRCodeLoginState: Equatable {
     case error(ErrorState)
     
     enum ErrorState: Equatable, CaseIterable {
+        case notSupported
         case noCameraPermission
         case connectionNotSecure
         case cancelled

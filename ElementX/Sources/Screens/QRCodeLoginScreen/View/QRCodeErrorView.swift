@@ -17,6 +17,8 @@ struct QRCodeErrorView: View {
     
     var title: String {
         switch errorState {
+        case .notSupported:
+            L10n.screenLinkNewDeviceErrorNotSupportedTitle
         case .noCameraPermission:
             L10n.screenQrCodeLoginNoCameraPermissionStateTitle
         case .connectionNotSecure:
@@ -40,6 +42,8 @@ struct QRCodeErrorView: View {
     
     var subtitle: String {
         switch errorState {
+        case .notSupported:
+            L10n.screenLinkNewDeviceErrorNotSupportedSubtitle
         case .noCameraPermission:
             L10n.screenQrCodeLoginNoCameraPermissionStateDescription(InfoPlistReader.main.productionAppName)
         case .connectionNotSecure:
@@ -140,7 +144,7 @@ struct QRCodeErrorView: View {
                     action(.cancel)
                 }
                 .buttonStyle(.compound(.secondary))
-            case .linkingNotSupported:
+            case .notSupported, .linkingNotSupported:
                 if canSignInManually {
                     Button(L10n.screenOnboardingSignInManually) {
                         action(.signInManually)
@@ -185,6 +189,7 @@ struct QRCodeErrorView_Previews: PreviewProvider, TestablePreview {
 private extension QRCodeLoginState.ErrorState {
     var previewDisplayName: String {
         switch self {
+        case .notSupported: "Not supported"
         case .noCameraPermission: "No Camera Permission"
         case .connectionNotSecure: "Connection not secure"
         case .linkingNotSupported: "Linking unsupported"

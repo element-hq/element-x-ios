@@ -14,7 +14,12 @@ enum LinkNewDeviceScreenViewModelAction {
 }
 
 struct LinkNewDeviceScreenViewState: BindableState {
-    enum Mode: Equatable { case loading, readyToLink(isGeneratingCode: Bool), notSupported }
+    enum Mode: Equatable {
+        case loading
+        case readyToLink(isGeneratingCode: Bool)
+        case error(QRCodeLoginState.ErrorState)
+    }
+    
     var mode: Mode = .loading
     
     let showLinkDesktopComputerButton: Bool
@@ -23,5 +28,6 @@ struct LinkNewDeviceScreenViewState: BindableState {
 enum LinkNewDeviceScreenViewAction {
     case linkMobileDevice
     case linkDesktopComputer
+    case errorAction(QRCodeErrorView.Action)
     case dismiss
 }
