@@ -51,20 +51,6 @@ struct DeveloperOptionsScreen: View {
                     .generalSectionRows()
             }
             
-            Section("Spaces") {
-                Toggle(isOn: $context.spaceFiltersEnabled) {
-                    Text("Space filters")
-                }
-                
-                Toggle(isOn: $context.spaceSettingsEnabled) {
-                    Text("Space settings")
-                }
-                
-                Toggle(isOn: $context.createSpaceEnabled) {
-                    Text("Create space")
-                }
-            }
-            
             Section("Room List") {
                 Toggle(isOn: $context.publicSearchEnabled) {
                     Text("Public search")

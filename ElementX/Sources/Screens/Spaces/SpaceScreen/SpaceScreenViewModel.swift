@@ -170,6 +170,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         state.joiningRoomIDs.removeAll()
     }
     
+    func resetRoomList() {
+        Task { await spaceRoomListProxy.resetAndWaitForFullReload(timeout: .seconds(10)) }
+    }
+    
     // MARK: - Private
     
     private func createChildRoom() async {

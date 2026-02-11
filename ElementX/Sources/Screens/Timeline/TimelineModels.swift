@@ -199,6 +199,9 @@ enum TimelineAlertInfoType: Hashable {
     case sendingFailed
     case encryptionAuthenticity(String)
     case encryptionForwarder(String)
+    case inviteAgain
+    case unableToInvite
+    case unknown
 }
 
 struct RoomMemberState {

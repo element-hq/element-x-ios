@@ -177,6 +177,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call nie obsługuje korzystania z urządzeń audio Bluetooth w tej wersji Androida. Wybierz inne urządzenie audio.";
 "common_about" = "O programie";
 "common_acceptable_use_policy" = "Polityka użytkowania";
+"common_add_account" = "Dodaj konto";
+"common_add_another_account" = "Dodaj kolejne konto";
 "common_adding_caption" = "Dodawanie opisu";
 "common_advanced_settings" = "Ustawienia zaawansowane";
 "common_an_image" = "obraz";
@@ -250,6 +252,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Brak wyników";
 "common_no_room_name" = "Brak nazwy pokoju";
+"common_no_space_name" = "Brak nazwy przestrzeni";
 "common_not_encrypted" = "Nieszyfrowane";
 "common_offline" = "Offline";
 "common_open_source_licenses" = "Licencje open-source";
@@ -268,8 +271,10 @@
 "common_poll_undisclosed_text" = "Wyniki zostaną wyświetlone po zakończeniu ankiety";
 "common_preparing" = "Przygotowuję…";
 "common_privacy_policy" = "Polityka prywatności";
+"common_private" = "Private";
 "common_private_room" = "Pokój prywatny";
 "common_private_space" = "Prywatna przestrzeń";
+"common_public" = "Public";
 "common_public_room" = "Pokój publiczny";
 "common_public_space" = "Przestrzeń publiczna";
 "common_reaction" = "Reakcja";
@@ -294,6 +299,7 @@
 "common_search_results" = "Wyniki wyszukiwania";
 "common_security" = "Bezpieczeństwo";
 "common_seen_by" = "Wyświetlone przez";
+"common_select_account" = "Wybierz konto";
 "common_send_to" = "Wyślij do";
 "common_sending" = "Wysyłanie…";
 "common_sending_failed" = "Błąd wysyłania";
@@ -311,6 +317,7 @@
 "common_something_went_wrong" = "Coś poszło nie tak";
 "common_something_went_wrong_message" = "Napotkaliśmy problem. Spróbuj ponownie.";
 "common_space" = "Przestrzeń";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "Rozpoczynanie czatu…";
 "common_sticker" = "Naklejka";
@@ -353,10 +360,6 @@
 "common_waiting_for_decryption_key" = "Oczekiwanie na tę wiadomość";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Ty";
-"common.add_account" = "Dodaj konto";
-"common.add_another_account" = "Dodaj kolejne konto";
-"common.no_space_name" = "Brak nazwy przestrzeni";
-"common.select_account" = "Wybierz konto";
 "common_unable_to_decrypt_insecure_device" = "Wysłane z niebezpiecznego urządzenia";
 "common_unable_to_decrypt_verification_violation" = "Zweryfikowana tożsamość nadawcy została zresetowana";
 "confirm_recovery_key_banner_message" = "Potwierdź klucz przywracania, aby zachować dostęp do magazynu kluczy i historii wiadomości.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Zaszyfrowana przez niezweryfikowanego użytkownika.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "Tożsamość %1$@ została zresetowana. %2$@";
 "crypto_identity_change_pin_violation_new" = "Tożsamość %1$@ %2$@ została zresetowana. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Wspomniano o Tobie: %1$@";
 "notification_new_messages" = "Nowe wiadomości";
 "notification_reaction_body" = "Zareagował z %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Zaprosił Cię do dołączenia do pokoju";
 "notification_room_invite_body_with_sender" = "%1$@ zaprosił Cię do pokoju";
 "notification_sender_me" = "Ja";
@@ -548,9 +555,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
-"screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Każdy może dołączyć do tego pokoju";
-"screen_create_room_room_access_section_public_option_title" = "Wszyscy";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
@@ -558,7 +563,8 @@
 "screen_create_room_room_address_section_title" = "Adres pokoju";
 "screen_create_room_room_visibility_section_title" = "Widoczność pomieszczenia";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Nie zobaczysz żadnych wiadomości ani zaproszeń od tego użytkownika";
@@ -610,7 +616,6 @@
 "screen_labs_header_description" = "Wypróbuj nasze najnowsze pomysły w fazie rozwoju. Funkcje te nie są jeszcze sfinalizowane; mogą być niestabilne i ulec zmianie.";
 "screen_labs_header_title" = "Chcesz poeksperymentować?";
 "screen_labs_title" = "Laboratoria";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Administrator)";
 "screen_leave_space_subtitle" = "Wybierz pokoje, które chcesz opuścić, a których nie jesteś jedynym administratorem:";
 "screen_leave_space_subtitle_last_admin" = "Aby opuścić tę przestrzeń, musisz przypisać do niej innego administratora.";
@@ -717,7 +722,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Dostęp do pokoju";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorised spaces can join.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Członkowie przestrzeni";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Przestrzenie nie są obecnie wspierane";
 "screen_security_and_privacy_room_address_section_header" = "Adres pokoju";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Zezwól na znalezienie tego pokoju wyszukując %1$@ w katalogu pokoi publicznych";
@@ -874,9 +878,7 @@
 "screen_create_room_action_create_room" = "Nowy pokój";
 "screen_create_room_error_creating_room" = "Wystąpił błąd w trakcie tworzenia pokoju";
 "screen_create_room_private_option_description" = "Tylko zaproszone osoby mogą dołączyć do tego pokoju. Wszystkie wiadomości są szyfrowane end-to-end.";
-"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Każdy może znaleźć ten pokój.\nMożesz to zmienić w ustawieniach pokoju.";
-"screen_create_room_public_option_title" = "Pokój publiczny";
 "screen_create_room_topic_label" = "Temat (opcjonalnie)";
 "screen_deactivate_account_confirmation_dialog_content" = "Potwierdź dezaktywacje konta. Tej akcji nie można cofnąć.";
 "screen_deactivate_account_delete_all_messages" = "Usuń wszystkie moje wiadomości";
@@ -1423,6 +1425,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Będą mogli ponownie dołączyć do tego pokoju, jeśli zostaną zaproszeni.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Odbanuj";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Odbanowanie %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Zablokuj użytkownika";
 "screen_decline_and_block_report_user_reason_placeholder" = "Opisz powód...";
 "screen_decline_and_block_title" = "Odrzuć i zablokuj";
@@ -1430,6 +1434,7 @@
 "screen_home_tab_spaces" = "Przestrzenie";
 "screen_join_room_decline_and_block_button_title" = "Odrzuć i zablokuj";
 "screen_knock_requests_list_title" = "Prośby o dołączenie";
+"screen_leave_space_choose_owners_action" = "Wybierz właścicieli";
 "screen_link_new_device_desktop_scanning_title" = "Skanuj kod QR";
 "screen_link_new_device_desktop_step3" = "Zeskanuj kod QR za pomocą tego urządzenia";
 "screen_link_new_device_desktop_submit" = "Gotowy do skanowania";
@@ -1454,6 +1459,7 @@
 "screen_roomlist_knock_event_sent_description" = "Wysłano prośbę o dołączenie";
 "screen_security_and_privacy_encryption_section_header" = "Szyfrowanie";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Aby pokój był widoczny w katalogu, potrzebny jest adres pokoju.";
 "screen_space_settings_leave_space" = "Opuść przestrzeń";
 "screen_space_settings_roles_and_permissions" = "Role i uprawnienia";
@@ -1473,6 +1479,8 @@
 "screen_create_account_title" = "Utwórz konto";
 "screen_create_poll_cancel_confirmation_content_ios" = "Zmiany nie zostaną zapisane";
 "screen_create_room_add_people_title" = "Zaproś znajomych";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Dezaktywuj konto";
 "screen_dm_details_block_alert_action" = "Zablokuj";
 "screen_dm_details_block_alert_description" = "Zablokowani użytkownicy nie będą mogli wysyłać Ci wiadomości, a wszystkie ich wiadomości zostaną ukryte. Możesz odblokować ich w dowolnym momencie.";

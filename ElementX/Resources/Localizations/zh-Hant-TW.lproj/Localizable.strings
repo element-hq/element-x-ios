@@ -177,6 +177,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call 不支援在此 Android 版本中使用藍牙音訊裝置。請選取其他音訊裝置。";
 "common_about" = "關於";
 "common_acceptable_use_policy" = "可接受使用政策";
+"common_add_account" = "新增帳號";
+"common_add_another_account" = "新增其他帳號";
 "common_adding_caption" = "新增標題";
 "common_advanced_settings" = "進階設定";
 "common_an_image" = "影像";
@@ -250,6 +252,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "查無結果";
 "common_no_room_name" = "無聊天室名稱";
+"common_no_space_name" = "沒有空間名稱";
 "common_not_encrypted" = "未加密";
 "common_offline" = "離線";
 "common_open_source_licenses" = "開放原始碼授權條款";
@@ -268,8 +271,10 @@
 "common_poll_undisclosed_text" = "結果將在投票結束後公佈";
 "common_preparing" = "正在準備……";
 "common_privacy_policy" = "隱私權政策";
+"common_private" = "Private";
 "common_private_room" = "私密聊天室";
 "common_private_space" = "私人空間";
+"common_public" = "Public";
 "common_public_room" = "公開的聊天室";
 "common_public_space" = "公開空間";
 "common_reaction" = "回應";
@@ -294,6 +299,7 @@
 "common_search_results" = "搜尋結果";
 "common_security" = "安全性";
 "common_seen_by" = "已讀";
+"common_select_account" = "選取帳號";
 "common_send_to" = "傳送給";
 "common_sending" = "傳送中...";
 "common_sending_failed" = "傳送失敗";
@@ -311,6 +317,7 @@
 "common_something_went_wrong" = "有錯誤發生";
 "common_something_went_wrong_message" = "我們了遇到了問題。請再試一次。";
 "common_space" = "空間";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "開始聊天...";
 "common_sticker" = "貼圖";
@@ -353,10 +360,6 @@
 "common_waiting_for_decryption_key" = "等待此則訊息";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "您";
-"common.add_account" = "新增帳號";
-"common.add_another_account" = "新增其他帳號";
-"common.no_space_name" = "沒有空間名稱";
-"common.select_account" = "選取帳號";
 "common_unable_to_decrypt_insecure_device" = "從不安全的裝置傳送";
 "common_unable_to_decrypt_verification_violation" = "傳送者的驗證身份已重設";
 "confirm_recovery_key_banner_message" = "確認您的復原金鑰以維持對金鑰儲存空間與訊息歷史紀錄的存取權。";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "由未經驗證的使用者加密。";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@ 的身份似乎已重設。%2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@ 的 %2$@ 身份似乎已重設。%3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "提及您：%1$@";
 "notification_new_messages" = "新訊息";
 "notification_reaction_body" = "回應 %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "邀請您加入聊天室";
 "notification_room_invite_body_with_sender" = "%1$@ 邀請您加入聊天室";
 "notification_sender_me" = "我";
@@ -548,9 +555,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
-"screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "任何人都可以加入此聊天室";
-"screen_create_room_room_access_section_public_option_title" = "任何人";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
@@ -558,7 +563,8 @@
 "screen_create_room_room_address_section_title" = "聊天室地址";
 "screen_create_room_room_visibility_section_title" = "聊天室能見度";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "您將不會看到來自此使用者的任何訊息或聊天室邀請";
@@ -610,7 +616,6 @@
 "screen_labs_header_description" = "試試我們正在開發中的最新構想。這些功能可能尚未完成，可能不夠穩定，也可能隨時變動。";
 "screen_labs_header_title" = "想不想來點新花樣？";
 "screen_labs_title" = "實驗室";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@（管理員）";
 "screen_leave_space_subtitle" = "這也會將您從此空間中的所有聊天室移除。";
 "screen_leave_space_subtitle_last_admin" = "您必須為此空間另外指定一位管理員後才能離開。";
@@ -717,7 +722,6 @@
 "screen_security_and_privacy_room_access_section_header" = "存取權";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorised spaces can join.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "空間成員";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "目前不支援空間";
 "screen_security_and_privacy_room_address_section_header" = "地址";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "允許透過搜尋 %1$@ 公開聊天室目錄找到此聊天室";
@@ -874,9 +878,7 @@
 "screen_create_room_action_create_room" = "建立聊天室";
 "screen_create_room_error_creating_room" = "建立聊天室時發生錯誤";
 "screen_create_room_private_option_description" = "僅被邀請的人才能存取此聊天室。所有訊息均會端到端加密。";
-"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "任何人都可以找到此聊天室。\n您隨時都可以在聊天室設定中變更此設定。";
-"screen_create_room_public_option_title" = "公開聊天室";
 "screen_create_room_topic_label" = "主題（非必填）";
 "screen_deactivate_account_confirmation_dialog_content" = "請確認您想要停用您的帳號。此動作無法還原。";
 "screen_deactivate_account_delete_all_messages" = "刪除我所有的訊息";
@@ -1423,6 +1425,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "如果收到邀請，他們能再次加入聊天室。";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "解除黑名單";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "正在解除黑名單 %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "封鎖使用者";
 "screen_decline_and_block_report_user_reason_placeholder" = "說明回報的原因……";
 "screen_decline_and_block_title" = "拒絕並封鎖";
@@ -1430,6 +1434,7 @@
 "screen_home_tab_spaces" = "空間";
 "screen_join_room_decline_and_block_button_title" = "拒絕並封鎖";
 "screen_knock_requests_list_title" = "請求加入";
+"screen_leave_space_choose_owners_action" = "選擇擁有者";
 "screen_link_new_device_desktop_scanning_title" = "掃描 QR code";
 "screen_link_new_device_desktop_step3" = "使用此裝置掃描 QR code";
 "screen_link_new_device_desktop_submit" = "準備掃描";
@@ -1454,6 +1459,7 @@
 "screen_roomlist_knock_event_sent_description" = "已傳送加入請求";
 "screen_security_and_privacy_encryption_section_header" = "加密";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "您需要地址才能在公開目錄中顯示。";
 "screen_space_settings_leave_space" = "離開空間";
 "screen_space_settings_roles_and_permissions" = "角色與權限";
@@ -1473,6 +1479,8 @@
 "screen_create_account_title" = "建立帳號";
 "screen_create_poll_cancel_confirmation_content_ios" = "您的變更不會儲存";
 "screen_create_room_add_people_title" = "邀請夥伴";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "停用帳號";
 "screen_dm_details_block_alert_action" = "封鎖";
 "screen_dm_details_block_alert_description" = "被封鎖的使用者無法傳訊息給您，他們的訊息會被隱藏。您可以在任何時候解除封鎖。";

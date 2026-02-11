@@ -177,6 +177,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ne podržava korištenje Bluetooth audiouređaja u ovoj inačici Androida. Odaberite drugi audiouređaj.";
 "common_about" = "O aplikaciji";
 "common_acceptable_use_policy" = "Pravilnik o prihvatljivoj upotrebi";
+"common_add_account" = "Dodaj račun";
+"common_add_another_account" = "Dodaj još jedan račun";
 "common_adding_caption" = "Dodavanje opisa";
 "common_advanced_settings" = "Napredne postavke";
 "common_an_image" = "slika";
@@ -250,6 +252,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Nema rezultata";
 "common_no_room_name" = "Nema naziva sobe";
+"common_no_space_name" = "Nema naziva prostora";
 "common_not_encrypted" = "Nije šifrirano";
 "common_offline" = "Izvan mreže";
 "common_open_source_licenses" = "Licencije otvorenog koda";
@@ -268,8 +271,10 @@
 "common_poll_undisclosed_text" = "Rezultati će se objaviti nakon što završi anketa";
 "common_preparing" = "Priprema…";
 "common_privacy_policy" = "Pravilnik o zaštiti privatnosti";
+"common_private" = "Private";
 "common_private_room" = "Privatna soba";
 "common_private_space" = "Privatni prostor";
+"common_public" = "Public";
 "common_public_room" = "Javna soba";
 "common_public_space" = "Javni prostor";
 "common_reaction" = "Reakcija";
@@ -294,6 +299,7 @@
 "common_search_results" = "Rezultati pretraživanja";
 "common_security" = "Sigurnost";
 "common_seen_by" = "Vidio/la";
+"common_select_account" = "Odaberi račun";
 "common_send_to" = "Pošalji";
 "common_sending" = "Slanje…";
 "common_sending_failed" = "Slanje nije uspjelo";
@@ -311,6 +317,7 @@
 "common_something_went_wrong" = "Nešto je pošlo po zlu";
 "common_something_went_wrong_message" = "Naišli smo na problem. Pokušajte ponovno.";
 "common_space" = "Prostor";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "O čemu se radi u ovom prostoru?";
 "common_starting_chat" = "Započinjanje razgovora...";
 "common_sticker" = "Naljepnica";
@@ -353,10 +360,6 @@
 "common_waiting_for_decryption_key" = "Čekam ovu poruku";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Vi";
-"common.add_account" = "Dodaj račun";
-"common.add_another_account" = "Dodaj još jedan račun";
-"common.no_space_name" = "Nema naziva prostora";
-"common.select_account" = "Odaberi račun";
 "common_unable_to_decrypt_insecure_device" = "Poslano s nesigurnog uređaja";
 "common_unable_to_decrypt_verification_violation" = "Pošiljateljev potvrđeni identitet je poništen";
 "confirm_recovery_key_banner_message" = "Potvrdite svoj ključ za oporavak kako biste zadržali pristup pohrani ključeva i povijesti poruka.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Šifrirao neprovjereni korisnik.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Ova je soba konfigurirana tako da novi članovi mogu čitati stare poruke. %1$@";
 "crypto_identity_change_pin_violation" = "Identitet korisnika %1$@ je poništen. %2$@";
 "crypto_identity_change_pin_violation_new" = "Identitet korisnika %1$@ %2$@ je poništen. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Korisnik vas je spomenuo: %1$@";
 "notification_new_messages" = "Nove poruke";
 "notification_reaction_body" = "Reagirao/la je s %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Pozvao/la te je da se pridružiš sobi";
 "notification_room_invite_body_with_sender" = "%1$@ pozvao/la te da se pridružiš sobi";
 "notification_sender_me" = "Ja";
@@ -548,9 +555,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
-"screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Svatko se može pridružiti ovoj sobi";
-"screen_create_room_room_access_section_public_option_title" = "Svatko";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
@@ -558,7 +563,8 @@
 "screen_create_room_room_address_section_title" = "Adresa sobe";
 "screen_create_room_room_visibility_section_title" = "Vidljivost sobe";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Nećete vidjeti nikakve poruke ili pozivnice za sobu od ovog korisnika";
@@ -610,7 +616,6 @@
 "screen_labs_header_description" = "Isprobajte naše najnovije ideje u razvoju. Ove značajke nisu finalizirane; mogu biti nestabilne i mijenjati se.";
 "screen_labs_header_title" = "Jeste li spremni za eksperimentiranje?";
 "screen_labs_title" = "Laboratoriji";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (administrator)";
 "screen_leave_space_subtitle" = "Odaberite sobe koje želite napustiti, a za koje niste jedini administrator:";
 "screen_leave_space_subtitle_last_admin" = "Morate dodijeliti drugog administratora za ovaj prostor prije nego što ga napustite.";
@@ -717,7 +722,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Pristup";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Svatko tko se nalazi u ovlaštenim prostorima može se pridružiti.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Svatko u %1$@ može se pridružiti.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Članovi prostora";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Prostori trenutačno nisu podržani";
 "screen_security_and_privacy_room_address_section_header" = "Adresa";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Omogući pronalazak ove sobe pretraživanjem %1$@ javnog direktorija soba";
@@ -874,9 +878,7 @@
 "screen_create_room_action_create_room" = "Nova soba";
 "screen_create_room_error_creating_room" = "Došlo je do pogreške prilikom stvaranja sobe";
 "screen_create_room_private_option_description" = "Samo pozvane osobe mogu pristupiti ovoj sobi. Sve su poruke sveobuhvatno šifrirane.";
-"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Svatko može pronaći ovu sobu.\nTo možete u svakom trenutku promijeniti u postavkama sobe.";
-"screen_create_room_public_option_title" = "Public";
 "screen_create_room_topic_label" = "Tema (neobavezno)";
 "screen_deactivate_account_confirmation_dialog_content" = "Potvrdite da želite deaktivirati svoj račun. Ova se radnja ne može poništiti.";
 "screen_deactivate_account_delete_all_messages" = "Izbriši sve moje poruke";
@@ -1423,6 +1425,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Moći će se ponovno pridružiti ovoj sobi ako budu pozvani.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Poništi zabranu";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Uklanja se zabrana korisniku %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Blokiraj korisnika";
 "screen_decline_and_block_report_user_reason_placeholder" = "Navedite razlog prijave…";
 "screen_decline_and_block_title" = "Odbij i blokiraj";
@@ -1430,6 +1434,7 @@
 "screen_home_tab_spaces" = "Prostori";
 "screen_join_room_decline_and_block_button_title" = "Odbij i blokiraj";
 "screen_knock_requests_list_title" = "Zahtjevi za pridruživanje";
+"screen_leave_space_choose_owners_action" = "Odaberi vlasnike";
 "screen_link_new_device_desktop_scanning_title" = "Skeniraj QR kod";
 "screen_link_new_device_desktop_step3" = "Skenirajte QR kod ovim uređajem";
 "screen_link_new_device_desktop_submit" = "Spremno za skeniranje";
@@ -1454,6 +1459,7 @@
 "screen_roomlist_knock_event_sent_description" = "Zahtjev za pridruživanje je poslan";
 "screen_security_and_privacy_encryption_section_header" = "Šifriranje";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Upravljaj prostorima";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Trebat će vam adresa kako bi bila vidljiva u javnom direktoriju.";
 "screen_space_settings_leave_space" = "Napusti prostor";
 "screen_space_settings_roles_and_permissions" = "Uloge i dopuštenja";
@@ -1473,6 +1479,8 @@
 "screen_create_account_title" = "Izradi račun";
 "screen_create_poll_cancel_confirmation_content_ios" = "Vaše promjene neće se spremiti";
 "screen_create_room_add_people_title" = "Pozovi osobe";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Deaktiviraj račun";
 "screen_dm_details_block_alert_action" = "Blokiraj";
 "screen_dm_details_block_alert_description" = "Blokirani korisnici neće vam moći slati poruke i sve njihove poruke bit će skrivene. Možete ih odblokirati u bilo kojem trenutku.";

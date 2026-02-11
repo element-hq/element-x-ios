@@ -61,27 +61,36 @@ struct ChatsSpaceFilterCell: View {
     }
     
     private var content: some View {
-        HStack(spacing: 16) {
+        ZStack {
+            // Hidden text to maintain consistent height.
+            placeholderContent.hidden()
+            
             VStack(alignment: .leading, spacing: 2) {
                 Text(filter.room.name)
                     .font(.compound.bodyLG)
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
                 
-                ZStack {
-                    // Hidden text to maintain consistent height.
-                    Text("")
-                        .hidden()
-                    
-                    if let alias = filter.room.canonicalAlias {
-                        Text(alias)
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.compound.textSecondary)
-                            .lineLimit(1)
-                    }
+                if let alias = filter.room.canonicalAlias {
+                    Text(alias)
+                        .font(.compound.bodyMD)
+                        .foregroundColor(.compound.textSecondary)
+                        .lineLimit(1)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var placeholderContent: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(filter.room.name)
+                .font(.compound.bodyLG)
+                .lineLimit(1)
+            
+            Text(" ")
+                .font(.compound.bodyMD)
+                .lineLimit(1)
         }
     }
 }

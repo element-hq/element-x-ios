@@ -15,7 +15,6 @@ protocol UserIndicatorControllerProtocol: CoordinatorProtocol {
     func retractAllIndicators()
     
     var window: UIWindow? { get set }
-    var alertInfo: AlertInfo<UUID>? { get set }
 }
 
 extension UserIndicatorControllerProtocol {

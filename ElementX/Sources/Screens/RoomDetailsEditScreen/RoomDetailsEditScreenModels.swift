@@ -69,7 +69,10 @@ struct RoomDetailsEditScreenViewStateBindings {
 }
 
 enum RoomDetailsEditScreenAlertType {
+    case failedProcessingMedia
     case unsavedChanges
+    case saveError
+    case unknown
 }
 
 enum RoomDetailsEditScreenViewAction {

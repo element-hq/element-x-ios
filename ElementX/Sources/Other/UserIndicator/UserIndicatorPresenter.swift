@@ -28,6 +28,5 @@ struct UserIndicatorPresenter: View {
                 }
             }
         }
-        .alert(item: $userIndicatorController.alertInfo)
     }
 }

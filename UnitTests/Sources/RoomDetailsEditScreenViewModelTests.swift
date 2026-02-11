@@ -137,7 +137,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         viewModel.didSelectMediaUrl(url: .picturesDirectory)
         try? await Task.sleep(for: .milliseconds(100))
-        XCTAssertNotNil(userIndicatorController.alertInfo)
+        XCTAssertNotNil(context.alertInfo)
     }
     
     func testDeleteAvatar() {

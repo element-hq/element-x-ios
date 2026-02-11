@@ -52,7 +52,10 @@ struct UserDetailsEditScreenViewStateBindings {
 }
 
 enum UserDetailsEditScreenAlertType {
+    case failedProcessingMedia
     case unsavedChanges
+    case saveError
+    case unknown
 }
 
 enum UserDetailsEditScreenViewAction {

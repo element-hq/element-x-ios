@@ -177,6 +177,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "درباره";
 "common_acceptable_use_policy" = "سیاست استفادهٔ پذیرفتنی";
+"common_add_account" = "افزودن یک حساب";
+"common_add_another_account" = "افزودن حسابی دیگر";
 "common_adding_caption" = "افزودن عنوان";
 "common_advanced_settings" = "تنظیمات پیش‌رفته";
 "common_an_image" = "an image";
@@ -250,6 +252,7 @@
 "common_name_and_id" = "%1$@ ‏(%2$@)";
 "common_no_results" = "بدون نتیجه";
 "common_no_room_name" = "بدون نام اتاق";
+"common_no_space_name" = "بدون نام فضا";
 "common_not_encrypted" = "رمزنگاری نشده";
 "common_offline" = "برون‌خط";
 "common_open_source_licenses" = "پروانه‌های نرم‌افزاری آزاد";
@@ -268,8 +271,10 @@
 "common_poll_undisclosed_text" = "نتیجه‌ها پس از پایان نظرسنجی نشان داده خواهند شد";
 "common_preparing" = "آماده سازی…";
 "common_privacy_policy" = "سیاست محرمانگی";
+"common_private" = "Private";
 "common_private_room" = "اتاق خصوصی";
 "common_private_space" = "فضای خصوصی";
+"common_public" = "Public";
 "common_public_room" = "اتاق عمومی";
 "common_public_space" = "فضای عمومی";
 "common_reaction" = "واکنش";
@@ -294,6 +299,7 @@
 "common_search_results" = "نتایج جست‌وجو";
 "common_security" = "امنیت";
 "common_seen_by" = "دیده شده به دست";
+"common_select_account" = "گزینش حساب";
 "common_send_to" = "فرستادن به";
 "common_sending" = "فرستادن…";
 "common_sending_failed" = "فرستادن شکست خورد";
@@ -311,6 +317,7 @@
 "common_something_went_wrong" = "چیزی اشتباه پیش رفت";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_space" = "فاصله";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "آغازیدن گپ…";
 "common_sticker" = "عکس برگردان";
@@ -353,10 +360,6 @@
 "common_waiting_for_decryption_key" = "در انتظار این پیام";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "شما";
-"common.add_account" = "افزودن یک حساب";
-"common.add_another_account" = "افزودن حسابی دیگر";
-"common.no_space_name" = "بدون نام فضا";
-"common.select_account" = "گزینش حساب";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "کلید بازیابی خود را تأیید کنید تا دسترسی به حافظه کلیدها و تاریخچه پیام‌هایتان حفظ شود .";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "رمز شده به دست کاربری تأیید نشده.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "هویت %1$@ بازنشانی شد. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity was reset. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "به شما اشاره کرد: %1$@";
 "notification_new_messages" = "پیام جدید";
 "notification_reaction_body" = "با %1$@ واکنش داد";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "دعوت کرد به اتاق بپیوندید";
 "notification_room_invite_body_with_sender" = "%1$@ دعوت کرد به اتاق بپیوندید";
 "notification_sender_me" = "خودم";
@@ -548,9 +555,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
-"screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "هرکسی می‌تواند به این اتاق بپیوندد";
-"screen_create_room_room_access_section_public_option_title" = "هرکسی";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
@@ -558,7 +563,8 @@
 "screen_create_room_room_address_section_title" = "نشانی اتاق";
 "screen_create_room_room_visibility_section_title" = "نمایانی اتاق";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
@@ -610,7 +616,6 @@
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
 "screen_labs_header_title" = "Feeling experimental?";
 "screen_labs_title" = "آزمایشگاه‌ها";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "‏%1$@ (مدیر)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
 "screen_leave_space_subtitle_last_admin" = "پیش از ترک باید مدیری دیگر به این فضا تخصیص دهید.";
@@ -717,7 +722,6 @@
 "screen_security_and_privacy_room_access_section_header" = "دسترسی اتاق";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorised spaces can join.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "اعضای فضا";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "در حال حاضر فضاها پشتیبانی نمی‌شوند";
 "screen_security_and_privacy_room_address_section_header" = "نشانی اتاق";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Allow for this room to be found by searching %1$@ public room directory";
@@ -874,9 +878,7 @@
 "screen_create_room_action_create_room" = "اتاق جدید";
 "screen_create_room_error_creating_room" = "هنگام ایجاد اتاق خطایی رخ داد";
 "screen_create_room_private_option_description" = "تنها افراد دعوت شده می‌توانند به این اتاق دسترسی داشته باشند. همهٔ پیام‌ها رمزنگاری سرتاسری شده‌اند.";
-"screen_create_room_private_option_title" = "اتاق خصوصی";
 "screen_create_room_public_option_description" = "هرکسی می‌تواند اتاق را بیابد.\nمی‌توانید بعداً در تظیمات اتاق عوضش کنید.";
-"screen_create_room_public_option_title" = "اتاق عمومی (هرکسی)";
 "screen_create_room_topic_label" = "موضوع (اختیاری)";
 "screen_deactivate_account_confirmation_dialog_content" = "Please confirm that you want to deactivate your account. This action cannot be undone.";
 "screen_deactivate_account_delete_all_messages" = "حذف همهٔ پیام‌هایم";
@@ -1423,6 +1425,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "در صورت دعوت می‌تواند دوباره به اتاق بپیوندد.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "رفع انسداد";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "رفع تحریم %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "انسداد کاربر";
 "screen_decline_and_block_report_user_reason_placeholder" = "شرح دلیل گزارش…";
 "screen_decline_and_block_title" = "رد و انسداد";
@@ -1430,6 +1434,7 @@
 "screen_home_tab_spaces" = "فضاها";
 "screen_join_room_decline_and_block_button_title" = "رد و انسداد";
 "screen_knock_requests_list_title" = "درخواست‌های پیوستن";
+"screen_leave_space_choose_owners_action" = "گزینش مالکان";
 "screen_link_new_device_desktop_scanning_title" = "پویش کد پاس";
 "screen_link_new_device_desktop_step3" = "پویش کد پاس با این افزاره";
 "screen_link_new_device_desktop_submit" = "آمادهٔ پویش";
@@ -1454,6 +1459,7 @@
 "screen_roomlist_knock_event_sent_description" = "درخواست پیوستن فرستاده شد";
 "screen_security_and_privacy_encryption_section_header" = "رمزنگاری";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
 "screen_space_settings_leave_space" = "ترک فضا";
 "screen_space_settings_roles_and_permissions" = "نقش‌ها و اجازه‌ها";
@@ -1473,6 +1479,8 @@
 "screen_create_account_title" = "ایجاد حساب";
 "screen_create_poll_cancel_confirmation_content_ios" = "تغییراتتان ذخیره نمی‌شوند";
 "screen_create_room_add_people_title" = "دعوت افراد";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "غیرفعّال‌سازی حساب";
 "screen_dm_details_block_alert_action" = "بلوک";
 "screen_dm_details_block_alert_description" = "کاربران مسدود شده نمی‌توانند برای شما پیام ارسال کنند و تمام پیام‌های آنها پنهان خواهد شد. می‌توانید هر زمان که بخواهید آنها را از حالت مسدود خارج کنید.";

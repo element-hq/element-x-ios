@@ -33,33 +33,21 @@ struct SpaceRoomCell: View {
         isSelected && !isEditModeActive
     }
     
-    private var subtitle: String {
-        if spaceServiceRoom.isSpace {
-            switch spaceServiceRoom.visibility {
-            case .public: L10n.commonPublicSpace
-            case .private: L10n.commonPrivateSpace
-            case .restricted: L10n.commonSharedSpace
-            case .none: L10n.commonPrivateSpace
-            }
-        } else {
-            L10n.commonMemberCount(spaceServiceRoom.joinedMembersCount)
+    private var visibilityTitle: String {
+        switch spaceServiceRoom.visibility {
+        case .public: L10n.commonPublic
+        case .private: L10n.commonPrivate
+        case .restricted: L10n.commonSpaceMembers
+        case .none: L10n.commonPrivate
         }
     }
     
-    var visibilityIcon: KeyPath<CompoundIcons, Image>? {
+    var visibilityIcon: KeyPath<CompoundIcons, Image> {
         switch spaceServiceRoom.visibility {
         case .public: \.public
         case .private: \.lockSolid
-        case .restricted: nil
+        case .restricted: \.spaceSolid
         case .none: \.lockSolid
-        }
-    }
-    
-    private var details: String {
-        if spaceServiceRoom.isSpace {
-            L10n.commonMemberCount(spaceServiceRoom.joinedMembersCount)
-        } else {
-            spaceServiceRoom.topic ?? " " // Use a single space to reserve a consistent amount of space.
         }
     }
     
@@ -121,9 +109,9 @@ struct SpaceRoomCell: View {
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
                 
-                subtitleLabel
+                visibilityLabel
                 
-                Text(details)
+                Text(L10n.commonMemberCount(spaceServiceRoom.joinedMembersCount))
                     .font(.compound.bodyMD)
                     .foregroundColor(.compound.textSecondary)
                     .lineLimit(1)
@@ -134,19 +122,17 @@ struct SpaceRoomCell: View {
         }
     }
     
-    private var subtitleLabel: some View {
+    private var visibilityLabel: some View {
         Label {
-            Text(subtitle)
+            Text(visibilityTitle)
                 .font(.compound.bodyMD)
                 .foregroundStyle(.compound.textSecondary)
                 .lineLimit(1)
         } icon: {
-            if let visibilityIcon {
-                CompoundIcon(visibilityIcon,
-                             size: .xSmall,
-                             relativeTo: .compound.bodyMD)
-                    .foregroundStyle(.compound.iconTertiary)
-            }
+            CompoundIcon(visibilityIcon,
+                         size: .xSmall,
+                         relativeTo: .compound.bodyMD)
+                .foregroundStyle(.compound.iconTertiary)
         }
         .labelStyle(.custom(spacing: 4))
     }

@@ -331,9 +331,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Banned</string>
+			<string>%1$d utestengt</string>
 			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d utestengt</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -363,9 +363,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Invited</string>
+			<string>%1$d invitert</string>
 			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d invitert</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>

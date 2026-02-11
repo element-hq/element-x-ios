@@ -14,7 +14,7 @@ struct OverridableAvatarImage: View {
     let url: URL?
     let name: String?
     let contentID: String
-    let isSpace: Bool
+    let shape: LoadableAvatarImage.Shape
     let avatarSize: Avatars.Size
     let mediaProvider: MediaProviderProtocol?
     
@@ -28,12 +28,12 @@ struct OverridableAvatarImage: View {
                 ProgressView()
             }
             .scaledFrame(size: avatarSize.value)
-            .clipAvatar(isSpace: isSpace, size: avatarSize.value)
+            .avatarShape(shape, size: avatarSize.value)
         } else {
             LoadableAvatarImage(url: url,
                                 name: name,
                                 contentID: contentID,
-                                isSpace: isSpace,
+                                shape: shape,
                                 avatarSize: avatarSize,
                                 mediaProvider: mediaProvider)
         }

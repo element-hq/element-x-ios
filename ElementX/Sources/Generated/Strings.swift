@@ -396,6 +396,10 @@ internal enum L10n {
   internal static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// Acceptable use policy
   internal static var commonAcceptableUsePolicy: String { return L10n.tr("Localizable", "common_acceptable_use_policy") }
+  /// Add an account
+  internal static var commonAddAccount: String { return L10n.tr("Localizable", "common_add_account") }
+  /// Add another account
+  internal static var commonAddAnotherAccount: String { return L10n.tr("Localizable", "common_add_another_account") }
   /// Adding caption
   internal static var commonAddingCaption: String { return L10n.tr("Localizable", "common_adding_caption") }
   /// Advanced settings
@@ -560,6 +564,8 @@ internal enum L10n {
   internal static var commonNoResults: String { return L10n.tr("Localizable", "common_no_results") }
   /// No room name
   internal static var commonNoRoomName: String { return L10n.tr("Localizable", "common_no_room_name") }
+  /// No space name
+  internal static var commonNoSpaceName: String { return L10n.tr("Localizable", "common_no_space_name") }
   /// Not encrypted
   internal static var commonNotEncrypted: String { return L10n.tr("Localizable", "common_not_encrypted") }
   /// Offline
@@ -604,10 +610,14 @@ internal enum L10n {
   internal static var commonPreparing: String { return L10n.tr("Localizable", "common_preparing") }
   /// Privacy policy
   internal static var commonPrivacyPolicy: String { return L10n.tr("Localizable", "common_privacy_policy") }
+  /// Private
+  internal static var commonPrivate: String { return L10n.tr("Localizable", "common_private") }
   /// Private room
   internal static var commonPrivateRoom: String { return L10n.tr("Localizable", "common_private_room") }
   /// Private space
   internal static var commonPrivateSpace: String { return L10n.tr("Localizable", "common_private_space") }
+  /// Public
+  internal static var commonPublic: String { return L10n.tr("Localizable", "common_public") }
   /// Public room
   internal static var commonPublicRoom: String { return L10n.tr("Localizable", "common_public_room") }
   /// Public space
@@ -666,6 +676,8 @@ internal enum L10n {
   internal static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Seen by
   internal static var commonSeenBy: String { return L10n.tr("Localizable", "common_seen_by") }
+  /// Select an account
+  internal static var commonSelectAccount: String { return L10n.tr("Localizable", "common_select_account") }
   /// Plural format key: "%#@COUNT@"
   internal static func commonSelectedCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_selected_count", p1)
@@ -704,6 +716,8 @@ internal enum L10n {
   internal static var commonSomethingWentWrongMessage: String { return L10n.tr("Localizable", "common_something_went_wrong_message") }
   /// Space
   internal static var commonSpace: String { return L10n.tr("Localizable", "common_space") }
+  /// Space members
+  internal static var commonSpaceMembers: String { return L10n.tr("Localizable", "common_space_members") }
   /// What is this space about?
   internal static var commonSpaceTopicPlaceholder: String { return L10n.tr("Localizable", "common_space_topic_placeholder") }
   /// Plural format key: "%#@COUNT@"
@@ -830,6 +844,12 @@ internal enum L10n {
   internal static func cryptoEventKeyForwardedUnknownProfileDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_event_key_forwarded_unknown_profile_dialog_content", String(describing: p1))
   }
+  /// New members don't see history
+  internal static var cryptoHistorySharingRoomInfoHiddenBadgeContent: String { return L10n.tr("Localizable", "crypto_history_sharing_room_info_hidden_badge_content") }
+  /// New members see history
+  internal static var cryptoHistorySharingRoomInfoSharedBadgeContent: String { return L10n.tr("Localizable", "crypto_history_sharing_room_info_shared_badge_content") }
+  /// Anyone can see history
+  internal static var cryptoHistorySharingRoomInfoWorldReadableBadgeContent: String { return L10n.tr("Localizable", "crypto_history_sharing_room_info_world_readable_badge_content") }
   /// This room has been configured so that new members can read history. %1$@
   internal static func cryptoHistoryVisible(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_history_visible", String(describing: p1))
@@ -1646,7 +1666,9 @@ internal enum L10n {
   internal static var screenCreateRoomRoomVisibilitySectionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_visibility_section_title") }
   /// (no space)
   internal static var screenCreateRoomSpaceSelectionNoSpaceDescription: String { return L10n.tr("Localizable", "screen_create_room_space_selection_no_space_description") }
-  /// Home
+  /// Do not add to a space
+  internal static var screenCreateRoomSpaceSelectionNoSpaceOption: String { return L10n.tr("Localizable", "screen_create_room_space_selection_no_space_option") }
+  /// No space selected
   internal static var screenCreateRoomSpaceSelectionNoSpaceTitle: String { return L10n.tr("Localizable", "screen_create_room_space_selection_no_space_title") }
   /// Add to space
   internal static var screenCreateRoomSpaceSelectionSheetTitle: String { return L10n.tr("Localizable", "screen_create_room_space_selection_sheet_title") }
@@ -3663,17 +3685,6 @@ internal enum L10n {
     internal static var userAvatar: String { return L10n.tr("Localizable", "a11y.user_avatar") }
     /// Your avatar
     internal static var yourAvatar: String { return L10n.tr("Localizable", "a11y.your_avatar") }
-  }
-
-  internal enum Common {
-    /// Add an account
-    internal static var addAccount: String { return L10n.tr("Localizable", "common.add_account") }
-    /// Add another account
-    internal static var addAnotherAccount: String { return L10n.tr("Localizable", "common.add_another_account") }
-    /// No space name
-    internal static var noSpaceName: String { return L10n.tr("Localizable", "common.no_space_name") }
-    /// Select an account
-    internal static var selectAccount: String { return L10n.tr("Localizable", "common.select_account") }
   }
 
   internal enum Error {

@@ -177,6 +177,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call unterstützt in dieser Android-Version keine Bluetooth Geräte. Bitte wähle ein anderes Audiogerät.";
 "common_about" = "Über";
 "common_acceptable_use_policy" = "Nutzungsrichtlinie";
+"common_add_account" = "Konto hinzufügen";
+"common_add_another_account" = "Weiteres Konto hinzufügen";
 "common_adding_caption" = "Hinzufügen einer Bildunterschrift";
 "common_advanced_settings" = "Erweiterte Einstellungen";
 "common_an_image" = "ein Bild";
@@ -250,6 +252,7 @@
 "common_name_and_id" = "%1$@(%2$@)";
 "common_no_results" = "Keine Ergebnisse";
 "common_no_room_name" = "Kein Chat-Name";
+"common_no_space_name" = "Kein Space Name";
 "common_not_encrypted" = "Nicht verschlüsselt";
 "common_offline" = "Offline";
 "common_open_source_licenses" = "Open-Source-Lizenzen";
@@ -268,8 +271,10 @@
 "common_poll_undisclosed_text" = "Ergebnisse werden nach Ende der Umfrage angezeigt";
 "common_preparing" = "Vorbereitung läuft ...";
 "common_privacy_policy" = "Datenschutz­erklärung";
+"common_private" = "Private";
 "common_private_room" = "Privater Chat";
 "common_private_space" = "Privater Space";
+"common_public" = "Public";
 "common_public_room" = "Öffentlicher Chat";
 "common_public_space" = "Öffentlicher Space";
 "common_reaction" = "Reaktion";
@@ -294,6 +299,7 @@
 "common_search_results" = "Suchergebnisse";
 "common_security" = "Sicherheit";
 "common_seen_by" = "Gesehen von";
+"common_select_account" = "Konto auswählen";
 "common_send_to" = "Senden an";
 "common_sending" = "Wird gesendet...";
 "common_sending_failed" = "Senden fehlgeschlagen";
@@ -311,6 +317,7 @@
 "common_something_went_wrong" = "Es ist ein Fehler aufgetreten.";
 "common_something_went_wrong_message" = "Wir haben ein Problem festgestellt. Bitte versuch es erneut.";
 "common_space" = "Space";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "Worum geht es hier?";
 "common_starting_chat" = "Chat wird gestartet...";
 "common_sticker" = "Sticker";
@@ -353,10 +360,6 @@
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
 "common_world_readable_history" = "Jeder kann den Nachrichtenverlauf sehen";
 "common_you" = "Du";
-"common.add_account" = "Konto hinzufügen";
-"common.add_another_account" = "Weiteres Konto hinzufügen";
-"common.no_space_name" = "Kein Space Name";
-"common.select_account" = "Konto auswählen";
 "common_unable_to_decrypt_insecure_device" = "Von einem ungesicherten Gerät gesendet";
 "common_unable_to_decrypt_verification_violation" = "Die verifizierte Identität des Senders hat sich geändert";
 "confirm_recovery_key_banner_message" = "Bestätige deinen Wiederherstellungsschlüssel, um weiterhin auf deinen Schlüsselspeicher und den Nachrichtenverlauf zugreifen zu können.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Verschlüsselt durch einen nicht verifizierten Nutzer.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) hat diese Nachricht geteilt, weil du nicht im Chat warst, als sie verschickt wurde.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "Diese Nachricht wurde von %1$@ weitergeleitet, da du zum Zeitpunkt des Versands kein Mitglied der Gruppe warst.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Diese Gruppe wurde so konfiguriert, dass neue Mitglieder den vergangenen Nachrichtenverlauf lesen können. %1$@";
 "crypto_identity_change_pin_violation" = "%1$@'s Identität has sich geändert. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@'s %2$@ Identität hat sich geändert. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Hat Dich erwähnt: %1$@";
 "notification_new_messages" = "Neue Nachrichten";
 "notification_reaction_body" = "Reagiert mit %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Du wurdest eingeladen, den Chat zu betreten";
 "notification_room_invite_body_with_sender" = "%1$@ hat dich eingeladen, dem Chat beizutreten";
 "notification_sender_me" = "Ich";
@@ -548,9 +555,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Jeder in %1$@ kann beitreten, aber alle anderen müssen den Beitritt anfragen.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Beitritt anfragen";
 "screen_create_room_room_access_section_private_option_description" = "Nur eingeladene Personen können beitreten.";
-"screen_create_room_room_access_section_private_option_title" = "Privat";
 "screen_create_room_room_access_section_public_option_description" = "Jeder darf diesem Chat beitreten.";
-"screen_create_room_room_access_section_public_option_title" = "Jeder";
 "screen_create_room_room_access_section_restricted_option_description" = "Jeder in %1$@ kann beitreten.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Wer hat Zugang";
@@ -558,6 +563,7 @@
 "screen_create_room_room_address_section_title" = "Adresse";
 "screen_create_room_room_visibility_section_title" = " Sichtbarkeit des Chats";
 "screen_create_room_space_selection_no_space_description" = "(kein Space)";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
 "screen_create_room_space_selection_no_space_title" = "Home";
 "screen_create_room_space_selection_sheet_title" = "Space hinzufügen";
 "screen_create_room_topic_placeholder" = "Beschreibung hinzufügen…";
@@ -610,7 +616,6 @@
 "screen_labs_header_description" = "Probier unsere neuesten Ideen in der Entwicklung aus. Diese Funktionen sind noch nicht fertiggestellt; sie können instabil sein und sich noch ändern.";
 "screen_labs_header_title" = "Entdeckungsfreudig?";
 "screen_labs_title" = "Labs";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Dadurch wirst du auch aus allen Chats in diesem Space entfernt.";
 "screen_leave_space_subtitle_last_admin" = "Du musst einen anderen Admin für diesen Space zuweisen, bevor du ihn verlassen kannst.";
@@ -717,7 +722,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Zugang";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Jeder in autorisierten Spaces kann beitreten.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Jeder in %1$@ kann beitreten.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Spacemitglieder";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Spaces werden zur Zeit nicht unterstützt.";
 "screen_security_and_privacy_room_address_section_header" = "Adresse";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Erlaube das Auffinden dieses Chats durch Suche im öffentlichen Verzeichnis von %1$@";
@@ -874,9 +878,7 @@
 "screen_create_room_action_create_room" = "Neuer Chat";
 "screen_create_room_error_creating_room" = "Beim Erstellen des Chats ist ein Fehler aufgetreten";
 "screen_create_room_private_option_description" = "Nur eingeladene Personen haben Zutritt zu diesem Chat.";
-"screen_create_room_private_option_title" = "Privat";
 "screen_create_room_public_option_description" = "Jeder kann diesen Chat finden.\nDu kannst dies jederzeit in den Einstellungen des Chats ändern.";
-"screen_create_room_public_option_title" = "Öffentlicher Chatroom";
 "screen_create_room_topic_label" = "Thema (optional)";
 "screen_deactivate_account_confirmation_dialog_content" = "Bitte bestätige, dass du dein Konto deaktivieren möchtest. Dies kann nicht rückgängig gemacht werden.";
 "screen_deactivate_account_delete_all_messages" = "Lösche alle meine Nachrichten";
@@ -1423,6 +1425,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Die Nutzer können dem Chat wieder beitreten, wenn sie eingeladen werden.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Sperre aufheben";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "%1$@ wird entsperrt.";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Nutzer blockieren";
 "screen_decline_and_block_report_user_reason_placeholder" = "Beschreibe den Grund für die Meldung…";
 "screen_decline_and_block_title" = "Ablehnen und blockieren";
@@ -1430,6 +1434,7 @@
 "screen_home_tab_spaces" = "Spaces";
 "screen_join_room_decline_and_block_button_title" = "Ablehnen und blockieren";
 "screen_knock_requests_list_title" = "Beitrittsanfragen";
+"screen_leave_space_choose_owners_action" = "Wähle Eigentümer";
 "screen_link_new_device_desktop_scanning_title" = "QR-Code scannen";
 "screen_link_new_device_desktop_step3" = "Scanne den QR-Code mit diesem Gerät";
 "screen_link_new_device_desktop_submit" = "Bereit zum Scannen";
@@ -1454,6 +1459,7 @@
 "screen_roomlist_knock_event_sent_description" = "Beitrittsanfrage geschickt";
 "screen_security_and_privacy_encryption_section_header" = "Verschlüsselung";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Spaces verwalten";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Du benötigst eine Chat-Adresse, um den Chat im öffentlichen Verzeichnis sichtbar zu machen.";
 "screen_space_settings_leave_space" = "Space verlassen";
 "screen_space_settings_roles_and_permissions" = "Rollen und Berechtigungen";
@@ -1473,6 +1479,8 @@
 "screen_create_account_title" = "Konto erstellen";
 "screen_create_poll_cancel_confirmation_content_ios" = "Deine Änderungen werden nicht gespeichert";
 "screen_create_room_add_people_title" = "Nutzer einladen";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Nutzerkonto deaktivieren";
 "screen_dm_details_block_alert_action" = "Blockieren";
 "screen_dm_details_block_alert_description" = "Blockierte Nutzer können Ihnen keine Nachrichten senden und alle ihre Nachrichten werden ausgeblendet. Die Blockierung kann jederzeit aufgehoben werden.";

@@ -177,6 +177,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "O Element Call não tem suporte a dispositivos de áudio Bluetooth nesta versão do Android. Por favor, selecione um dispositivo de áudio diferente.";
 "common_about" = "Sobre";
 "common_acceptable_use_policy" = "Política de uso aceitável";
+"common_add_account" = "Adicionar uma conta";
+"common_add_another_account" = "Adicionar outra conta";
 "common_adding_caption" = "Adicionando legenda";
 "common_advanced_settings" = "Configurações avançadas";
 "common_an_image" = "uma imagem";
@@ -250,6 +252,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Não há resultados";
 "common_no_room_name" = "Não há um nome para a sala";
+"common_no_space_name" = "Sem nome de espaço";
 "common_not_encrypted" = "Sem criptografia";
 "common_offline" = "Off-line";
 "common_open_source_licenses" = "Licenças de código aberto";
@@ -268,8 +271,10 @@
 "common_poll_undisclosed_text" = "Os resultados serão exibidos após o término da enquete";
 "common_preparing" = "Preparando…";
 "common_privacy_policy" = "Política de privacidade";
+"common_private" = "Private";
 "common_private_room" = "Sala privada";
 "common_private_space" = "Espaço privado";
+"common_public" = "Public";
 "common_public_room" = "Sala pública";
 "common_public_space" = "Espaço público";
 "common_reaction" = "Reação";
@@ -294,6 +299,7 @@
 "common_search_results" = "Resultados da pesquisa";
 "common_security" = "Segurança";
 "common_seen_by" = "Visto por";
+"common_select_account" = "Selecionar uma conta";
 "common_send_to" = "Enviar para";
 "common_sending" = "Enviando...";
 "common_sending_failed" = "Envio falhou";
@@ -311,6 +317,7 @@
 "common_something_went_wrong" = "Algo deu errado";
 "common_something_went_wrong_message" = "Encontramos um problema. Tente novamente.";
 "common_space" = "Espaço";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "Sobre o que é esse espaço?";
 "common_starting_chat" = "Iniciando a conversa...";
 "common_sticker" = "Figurinha";
@@ -353,10 +360,6 @@
 "common_waiting_for_decryption_key" = "Aguardando por esta mensagem";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Você";
-"common.add_account" = "Adicionar uma conta";
-"common.add_another_account" = "Adicionar outra conta";
-"common.no_space_name" = "Sem nome de espaço";
-"common.select_account" = "Selecionar uma conta";
 "common_unable_to_decrypt_insecure_device" = "Enviado de um dispositivo inseguro";
 "common_unable_to_decrypt_verification_violation" = "A identidade verificada do remetente foi redefinida";
 "confirm_recovery_key_banner_message" = "Confirme sua chave de recuperação para manter o acesso ao seu armazenamento de chaves e histórico de mensagens.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Criptografado por um usuário não verificado.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) compartilhou esta mensagem já que você não estava na sala quando foi enviada.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ compartilhou esta mensagem já que você não estava na sala quando foi enviada.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Esta sala foi configurada para que membros novos possam ler o histórico. %1$@";
 "crypto_identity_change_pin_violation" = "A identidade de %1$@ foi redefinida. %2$@";
 "crypto_identity_change_pin_violation_new" = "A identidade de %1$@ %2$@ foi redefinida. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "Mencionou você: %1$@";
 "notification_new_messages" = "Novas mensagens";
 "notification_reaction_body" = "Reagiu com %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Convidou você para entrar na sala";
 "notification_room_invite_body_with_sender" = "%1$@ te convidou para entrar na sala";
 "notification_sender_me" = "Eu";
@@ -548,9 +555,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Qualquer um em %1$@ pode entrar, mas todos os outros devem pedir acesso.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Pedir para entrar";
 "screen_create_room_room_access_section_private_option_description" = "Apenas pessoas convidadas podem entrar.";
-"screen_create_room_room_access_section_private_option_title" = "Privada";
 "screen_create_room_room_access_section_public_option_description" = "Qualquer um pode entrar.";
-"screen_create_room_room_access_section_public_option_title" = "Qualquer pessoa";
 "screen_create_room_room_access_section_restricted_option_description" = "Qualquer um em %1$@ pode participar.";
 "screen_create_room_room_access_section_restricted_option_title" = "Normal";
 "screen_create_room_room_access_section_title" = "Quem tem acesso";
@@ -558,6 +563,7 @@
 "screen_create_room_room_address_section_title" = "Endereço";
 "screen_create_room_room_visibility_section_title" = "Visibilidade da sala";
 "screen_create_room_space_selection_no_space_description" = "(sem espaço)";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
 "screen_create_room_space_selection_no_space_title" = "Início";
 "screen_create_room_space_selection_sheet_title" = "Adicionar ao espaço";
 "screen_create_room_topic_placeholder" = "Adicione a descrição…";
@@ -610,7 +616,6 @@
 "screen_labs_header_description" = "Teste as nossas mais novas ideias em desenvolvimento. Esses recursos não estão finalizados; podem estar instáveis, e podem mudar.";
 "screen_labs_header_title" = "Se sentindo experimental?";
 "screen_labs_title" = "Experimentos";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Administrador)";
 "screen_leave_space_subtitle" = "Selecione as salas que gostaria de sair nas quais você não é o único administrador:";
 "screen_leave_space_subtitle_last_admin" = "Você precisa atribuir outro administrador para este espaço antes de sair.";
@@ -717,7 +722,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Acesso";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Qualquer um em espaços autorizados podem entrar.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Qualquer pessoa em %1$@ pode participar.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Membros do espaço";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "No momento, não há suporte aos espaços";
 "screen_security_and_privacy_room_address_section_header" = "Endereço publicado";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Permitir que esta sala seja encontrada pesquisando diretório de salas públicas de %1$@";
@@ -874,9 +878,7 @@
 "screen_create_room_action_create_room" = "Nova sala";
 "screen_create_room_error_creating_room" = "Ocorreu um erro ao criar a sala";
 "screen_create_room_private_option_description" = "Apenas pessoas convidadas podem entrar.";
-"screen_create_room_private_option_title" = "Privada";
 "screen_create_room_public_option_description" = "Qualquer um pode encontrar esta sala.\nVocê pode mudar isso a qualquer momento nas configurações da sala.";
-"screen_create_room_public_option_title" = "Publica";
 "screen_create_room_topic_label" = "Tópico (opcional)";
 "screen_deactivate_account_confirmation_dialog_content" = "Confirme que você deseja desativar sua conta. Essa ação não pode ser desfeita.";
 "screen_deactivate_account_delete_all_messages" = "Apagar todas as minhas mensagens";
@@ -1423,6 +1425,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Esta pessoa poderá entrar nesta sala novamente se for convidada.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Desbanir";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Desbanindo %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Bloquear usuário";
 "screen_decline_and_block_report_user_reason_placeholder" = "Descreva o motivo para denunciar...";
 "screen_decline_and_block_title" = "Recusar e bloquear";
@@ -1430,6 +1434,7 @@
 "screen_home_tab_spaces" = "Espaços";
 "screen_join_room_decline_and_block_button_title" = "Recusar e bloquear";
 "screen_knock_requests_list_title" = "Pedidos de entrada";
+"screen_leave_space_choose_owners_action" = "Escolher proprietários";
 "screen_link_new_device_desktop_scanning_title" = "Leia o código QR";
 "screen_link_new_device_desktop_step3" = "Leia o código QR com este dispositivo";
 "screen_link_new_device_desktop_submit" = "Pronto para ler";
@@ -1454,6 +1459,7 @@
 "screen_roomlist_knock_event_sent_description" = "Pedido de entrada enviado";
 "screen_security_and_privacy_encryption_section_header" = "Criptografia";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Gerenciar espaços";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Você precisará de um endereço para torná-la visível no diretório.";
 "screen_space_settings_leave_space" = "Sair do espaço";
 "screen_space_settings_roles_and_permissions" = "Cargos e permissões";
@@ -1473,6 +1479,8 @@
 "screen_create_account_title" = "Criar conta";
 "screen_create_poll_cancel_confirmation_content_ios" = "Suas alterações não serão salvas";
 "screen_create_room_add_people_title" = "Convidar pessoas";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Desativar conta";
 "screen_dm_details_block_alert_action" = "Bloquear";
 "screen_dm_details_block_alert_description" = "Usuários bloqueados não poderão enviar mensagens para você e todas as mensagens deles serão ocultadas. Você pode desbloqueá-los a qualquer momento.";

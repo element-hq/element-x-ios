@@ -67,6 +67,9 @@ import SwiftUI
         overlayModule?.coordinator
     }
     
+    /// The lowest-level `AlertInfo`, directly available to the root of the app.
+    var alertInfo: AlertInfo<UUID>?
+    
     /// Sets or replaces the presented coordinator
     /// - Parameter coordinator: the coordinator to display
     func setRootCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
@@ -159,6 +162,7 @@ private struct NavigationRootCoordinatorView: View {
         ZStack {
             rootCoordinator.rootModule?.coordinator?.toPresentable()
         }
+        .alert(item: $rootCoordinator.alertInfo)
         .animation(.elementDefault, value: rootCoordinator.rootModule)
         .sheet(item: $rootCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()

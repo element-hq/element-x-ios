@@ -60,7 +60,7 @@ struct RoomDetailsEditScreen: View {
                                    url: context.viewState.avatarURL,
                                    name: context.viewState.initialName,
                                    contentID: context.viewState.roomID,
-                                   isSpace: context.viewState.isSpace,
+                                   shape: context.viewState.isSpace ? .roundedRect : .circle,
                                    avatarSize: .user(on: .memberDetails),
                                    mediaProvider: context.mediaProvider)
                 .accessibilityLabel(L10n.a11yEditAvatar)

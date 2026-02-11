@@ -177,6 +177,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call nu permite utilizarea dispozitivelor audio Bluetooth în această versiune Android. Vă rugăm să selectați un alt dispozitiv audio.";
 "common_about" = "Despre";
 "common_acceptable_use_policy" = "Politică de utilizare rezonabilă";
+"common_add_account" = "Adăugați un cont";
+"common_add_another_account" = "Adăugați un alt cont";
 "common_adding_caption" = "Adăugare descriere";
 "common_advanced_settings" = "Setări avansate";
 "common_an_image" = "o imagine";
@@ -250,6 +252,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Niciun rezultat";
 "common_no_room_name" = "Fără nume de cameră";
+"common_no_space_name" = "Fără nume de spațiu";
 "common_not_encrypted" = "Necriptat";
 "common_offline" = "Deconectat";
 "common_open_source_licenses" = "Licențe open source";
@@ -268,8 +271,10 @@
 "common_poll_undisclosed_text" = "Rezultatele vor fi afișate după încheierea sondajului";
 "common_preparing" = "Se pregăteşte…";
 "common_privacy_policy" = "Politica de confidențialitate";
+"common_private" = "Private";
 "common_private_room" = "Cameră privată";
 "common_private_space" = "Spațiu privat";
+"common_public" = "Public";
 "common_public_room" = "Cameră publică";
 "common_public_space" = "Spațiu public";
 "common_reaction" = "Reacţie";
@@ -294,6 +299,7 @@
 "common_search_results" = "Rezultatele căutării";
 "common_security" = "Securitate";
 "common_seen_by" = "Văzut de";
+"common_select_account" = "Selectați un cont";
 "common_send_to" = "Trimiteți către";
 "common_sending" = "Se trimite…";
 "common_sending_failed" = "Trimiterea a eșuat";
@@ -311,6 +317,7 @@
 "common_something_went_wrong" = "Ceva nu a mers bine";
 "common_something_went_wrong_message" = "Am întâmpinat o problemă. Vă rugăm să încercați din nou.";
 "common_space" = "Spațiu";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "Despre ce este vorba în acest spațiu?";
 "common_starting_chat" = "Se începe conversația…";
 "common_sticker" = "Autocolant";
@@ -353,10 +360,6 @@
 "common_waiting_for_decryption_key" = "Mesaj în așteptare";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Dumneavoastră";
-"common.add_account" = "Adăugați un cont";
-"common.add_another_account" = "Adăugați un alt cont";
-"common.no_space_name" = "Fără nume de spațiu";
-"common.select_account" = "Selectați un cont";
 "common_unable_to_decrypt_insecure_device" = "Trimis de pe un dispozitiv nesigur";
 "common_unable_to_decrypt_verification_violation" = "Identitatea verificată a expeditorului a fost resetată";
 "confirm_recovery_key_banner_message" = "Backup-ul pentru chat nu este sincronizat. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup.";
@@ -373,6 +376,9 @@
 "crypto_event_authenticity_unverified_identity" = "Criptat de un utilizator neverificat.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Această cameră a fost configurată astfel încât noii membri să poată citi istoricul. %1$@";
 "crypto_identity_change_pin_violation" = "Identitatea lui %1$@ a fost resetată. %2$@";
 "crypto_identity_change_pin_violation_new" = "Identitatea %2$@ a lui %1$@ a fost resetată. %3$@";
@@ -454,6 +460,7 @@
 "notification_mentioned_you_body" = "%1$@ v-a menționat";
 "notification_new_messages" = "Mesaje noi";
 "notification_reaction_body" = "A reacționat cu %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "V-a invitat să vă alăturați camerei";
 "notification_room_invite_body_with_sender" = "%1$@ v-a invitat să vă alăturați camerei";
 "notification_sender_me" = "Eu";
@@ -548,9 +555,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
-"screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Oricine se poate alătura acestei camere";
-"screen_create_room_room_access_section_public_option_title" = "Oricine";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
@@ -558,7 +563,8 @@
 "screen_create_room_room_address_section_title" = "Adresa camerei";
 "screen_create_room_room_visibility_section_title" = "Vizibilitatea camerei";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Nu veți vedea niciun mesaj sau invitație de la acest utilizator.";
@@ -610,7 +616,6 @@
 "screen_labs_header_description" = "Încercați cele mai noi idei în curs de dezvoltare. Aceste funcții nu sunt finalizate; pot fi instabile și pot suferi modificări.";
 "screen_labs_header_title" = "Doriți experiențe noi?";
 "screen_labs_title" = "Laboratoare";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Selectați camerele pe care doriți să le părăsiți și în care nu sunteți singurul administrator:";
 "screen_leave_space_subtitle_last_admin" = "Trebuie să desemnați un alt administrator pentru acest spațiu înainte de a-l părăsi.";
@@ -717,7 +722,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Acces";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Oricine se află într-un spațiu autorizat poate participa.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Oricine din %1$@ se poate alătura.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Membrii spațiului";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Spațiile nu sunt momentan suportate.";
 "screen_security_and_privacy_room_address_section_header" = "Adresă";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Permiteți găsirea acestei camere prin căutarea în directorul de camere publice al %1$@";
@@ -874,9 +878,7 @@
 "screen_create_room_action_create_room" = "Cameră nouă";
 "screen_create_room_error_creating_room" = "A apărut o eroare la crearea camerei";
 "screen_create_room_private_option_description" = "Doar persoanele invitate pot accesa această cameră. Toate mesajele sunt criptate end-to-end.";
-"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Oricine poate găsi această cameră.\nPuteți modifica acest lucru oricând în setări.";
-"screen_create_room_public_option_title" = "Cameră publică";
 "screen_create_room_topic_label" = "Subiect (opțional)";
 "screen_deactivate_account_confirmation_dialog_content" = "Vă rugăm să confirmați că doriți să vă dezactivați contul. Această acțiune nu poate fi anulată.";
 "screen_deactivate_account_delete_all_messages" = "Ștergeți toate mesajele mele";
@@ -1423,6 +1425,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Se vor putea alătura din nou acestei săli dacă sunt invitați.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Anulare excludere";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Se anulează interzicerea lui %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Blocați utilizatorul";
 "screen_decline_and_block_report_user_reason_placeholder" = "Descrieți motivul raportării…";
 "screen_decline_and_block_title" = "Refuzați și blocați";
@@ -1430,6 +1434,7 @@
 "screen_home_tab_spaces" = "Spații";
 "screen_join_room_decline_and_block_button_title" = "Refuzați și blocați";
 "screen_knock_requests_list_title" = "Cereri de alăturare";
+"screen_leave_space_choose_owners_action" = "Alegeți proprietari";
 "screen_link_new_device_desktop_scanning_title" = "Scanați codul QR";
 "screen_link_new_device_desktop_step3" = "Scanați codul QR cu acest dispozitiv";
 "screen_link_new_device_desktop_submit" = "Gata de scanare";
@@ -1454,6 +1459,7 @@
 "screen_roomlist_knock_event_sent_description" = "Cererea de alăturare a fost trimisă";
 "screen_security_and_privacy_encryption_section_header" = "Criptare";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Gestionați spațiile";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Veți avea nevoie de o adresă pentru a o face vizibilă în directorul public.";
 "screen_space_settings_leave_space" = "Părăsiți spațiul";
 "screen_space_settings_roles_and_permissions" = "Roluri și permisiuni";
@@ -1473,6 +1479,8 @@
 "screen_create_account_title" = "Creați un cont";
 "screen_create_poll_cancel_confirmation_content_ios" = "Modificările dumneavoastră nu vor fi salvate";
 "screen_create_room_add_people_title" = "Invitați prieteni";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Dezactivați contul";
 "screen_dm_details_block_alert_action" = "Blocați";
 "screen_dm_details_block_alert_description" = "Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând.";

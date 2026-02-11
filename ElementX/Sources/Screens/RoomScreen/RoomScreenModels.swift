@@ -92,6 +92,11 @@ struct RoomScreenViewState: BindableState {
 struct RoomScreenViewStateBindings {
     /// The view model used to present a QuickLook media preview.
     var mediaPreviewViewModel: TimelineMediaPreviewViewModel?
+    var alertInfo: AlertInfo<RoomScreenAlertType>?
+}
+
+enum RoomScreenAlertType {
+    case unknown
 }
 
 enum RoomScreenFooterViewAction {

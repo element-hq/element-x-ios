@@ -136,9 +136,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         case .rooms(let roomIDs, let filters):
             var rustFilters = filters.map(\.rustFilter) + baseFilter
             
-            if !roomIDs.isEmpty {
-                rustFilters.append(.identifiers(identifiers: Array(roomIDs)))
-            }
+            rustFilters.append(.identifiers(identifiers: Array(roomIDs)))
             
             if !filters.contains(.lowPriority), appSettings.lowPriorityFilterEnabled {
                 rustFilters.append(.nonLowPriority)

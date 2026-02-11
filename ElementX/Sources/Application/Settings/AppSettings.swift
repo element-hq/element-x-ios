@@ -76,9 +76,9 @@ final class AppSettings {
         case linkPreviewsEnabled
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
-        case spaceFiltersEnabled
         
         // Spaces
+        case spaceFiltersEnabled
         case spaceSettingsEnabled
         case createSpaceEnabled
         
@@ -404,11 +404,14 @@ final class AppSettings {
     // MARK: - Feature Flags
     
     /// Spaces
-    @UserPreference(key: UserDefaultsKeys.spaceSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.spaceSettingsEnabled, defaultValue: true, storageType: .volatile)
     var spaceSettingsEnabled
     
-    @UserPreference(key: UserDefaultsKeys.createSpaceEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.createSpaceEnabled, defaultValue: true, storageType: .volatile)
     var createSpaceEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.spaceFiltersEnabled, defaultValue: true, storageType: .volatile)
+    var spaceFiltersEnabled
     
     /// Others
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
@@ -442,9 +445,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.linkNewDeviceEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkNewDeviceEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.spaceFiltersEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var spaceFiltersEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType == .debug, storageType: .userDefaults(store))
     var developerOptionsEnabled
