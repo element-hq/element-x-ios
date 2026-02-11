@@ -130,13 +130,20 @@ fi
 # When OLD_APP_NAME is "Element X", we also replace these locale-specific variants.
 # For custom OLD_APP_NAME values, only the exact string is replaced.
 
-declare -A LOCALE_BRAND_VARIANTS
+# bash 3.2 compatible (no associative arrays — macOS default shell)
+LOCALE_BRAND_VARIANT_KEYS=""
 if [[ "$OLD_APP_NAME" == "Element X" ]]; then
-    LOCALE_BRAND_VARIANTS=(
-        ["cy"]="Elfen X"
-        ["ur"]="ایلیمنٹ ش (X)"
-    )
+    LOCALE_BRAND_VARIANT_cy="Elfen X"
+    LOCALE_BRAND_VARIANT_ur="ایلیمنٹ ش (X)"
+    LOCALE_BRAND_VARIANT_KEYS="cy ur"
 fi
+
+# Helper: get locale brand variant value (safe with set -u)
+get_locale_variant() {
+    local locale="$1"
+    local varname="LOCALE_BRAND_VARIANT_${locale}"
+    eval echo "\${${varname}:-}"
+}
 
 # ============================================================================
 # Counters and tracking
@@ -289,8 +296,8 @@ for locale_dir in "$LOCALIZATIONS_DIR"/*.lproj; do
     fi
 
     # Try locale-specific brand variant if defined (e.g., Welsh "Elfen X", Urdu transliteration)
-    if [[ -n "${LOCALE_BRAND_VARIANTS[$locale_name]+x}" ]]; then
-        local_variant="${LOCALE_BRAND_VARIANTS[$locale_name]}"
+    local_variant="$(get_locale_variant "$locale_name")"
+    if [[ -n "$local_variant" ]]; then
         if replace_in_strings_file "$infoplist_file" "$local_variant" "$APP_NAME" "$locale_name"; then
             locale_had_changes=true
             log_report "  [$locale_name] Replaced locale variant '$local_variant' -> '$APP_NAME'"
@@ -467,8 +474,8 @@ log_report "  Some locales translate 'Element X' into their own script."
 log_report "  These require locale-specific handling:"
 log_report ""
 
-for locale in "${!LOCALE_BRAND_VARIANTS[@]}"; do
-    variant="${LOCALE_BRAND_VARIANTS[$locale]}"
+for locale in $LOCALE_BRAND_VARIANT_KEYS; do
+    variant="$(get_locale_variant "$locale")"
     variant_localizable="$LOCALIZATIONS_DIR/${locale}.lproj/Localizable.strings"
     if [[ -f "$variant_localizable" ]]; then
         variant_matches=$(grep -c -F -- "$variant" "$variant_localizable" 2>/dev/null || echo "0")

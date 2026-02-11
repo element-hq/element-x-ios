@@ -8,7 +8,7 @@ This document summarizes all preparatory research and tooling completed before r
 
 ## Research Audits Completed
 
-Five audit documents were produced through systematic codebase exploration:
+Eight audit documents were produced through systematic codebase exploration:
 
 ### 1. OIDC Authentication Flow (`oidc_audit.md`)
 
@@ -66,6 +66,37 @@ Key categories of manual changes:
 - 1 Element Call client ID
 - 1 Element Pro App Store URL
 - Analytics endpoints (PostHog, Sentry)
+
+### 6. Element Call Infrastructure (`element_call_audit.md`)
+
+Audited the complete Element Call (MatrixRTC + LiveKit) integration:
+- **Not Jitsi** — customer's TOR mentions Jitsi, but project uses Element Call
+- **8 hardcoded references** across target.yml, AppSettings.swift, AppRoutes.swift, CallScreen.swift
+- **Embedded Element Call web app** bundled via SPM — works out-of-box with configured homeserver
+- **Can be disabled** via server configuration (no code changes) or via code changes (~2–3 hours)
+- Customer needs LiveKit server if proceeding with calls
+- **Decision D-011 needed** — Jitsi vs Element Call
+
+### 7. Privacy Manifest Compliance (`privacy_manifest_audit.md`)
+
+Audited App Store privacy requirements:
+- **Overall grade: B+ (88%)**
+- **2 privacy manifests exist** (Main App + NSE), **1 missing** (ShareExtension — GAP)
+- **4 Required Reason APIs** correctly declared (UserDefaults, FileTimestamp, DiskSpace, SystemBootTime)
+- **1 API missing** — Network Information (`NWPathMonitor` usage not declared)
+- **11 data types** declared with correct linked/tracking flags
+- **Analytics/Sentry/Rageshake** all have placeholder values — customer must configure
+- **NSPrivacyTracking = false** — no third-party tracking
+
+### 8. Upstream Sync Report (`upstream_sync_report.md`)
+
+Checked upstream Element X iOS for new commits since fork:
+- **18 new commits** on upstream `main` (Feb 9–10, 2026)
+- **SDK update:** MatrixRustSDK v26.02.03 → v26.02.10
+- **3 bug fixes:** server confirmation crashes, iOS 26 PassthroughWindow, QR/Link sign-in
+- **~10 Spaces feature commits** (new feature, not infrastructure)
+- **3–4 file conflicts** with our fork (AppCoordinator, AppSettings, GeneratedMocks, project.yml)
+- **Sync recommended** but not urgent — estimated 15–30 min conflict resolution
 
 ---
 
@@ -161,11 +192,14 @@ Estimated rebranding time with scripts: **1-2 hours** (vs 4-8 hours manual).
 | `documentation/nse_audit.md` | Research doc | 291 lines |
 | `documentation/share_extension_audit.md` | Research doc | 234 lines |
 | `documentation/hardcoded_identifiers_inventory.md` | Research doc | 219 lines |
+| `documentation/element_call_audit.md` | Research doc | ~200 lines |
+| `documentation/privacy_manifest_audit.md` | Research doc | ~200 lines |
+| `documentation/upstream_sync_report.md` | Research doc | ~150 lines |
 | `documentation/pre_rebranding_preparations.md` | Summary doc | This file |
 | `scripts/rebrand.sh` | Automation | 712 lines |
-| `scripts/rebrand_strings.sh` | Automation | 556 lines |
+| `scripts/rebrand_strings.sh` | Automation | 560 lines |
 
-**Total: 2,575+ lines of documentation and tooling.**
+**Total: 3,100+ lines of documentation and tooling.**
 
 ---
 
