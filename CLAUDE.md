@@ -305,6 +305,7 @@ When updating this file, change "Current Phase" and check off completed phases:
 | 2026-02-11 | Pre-rebranding research and tooling. 5 audit docs (OIDC, branding/Compound, NSE, ShareExtension, hardcoded identifiers — 97 total across 35+ files). 2 automation scripts: `scripts/rebrand.sh` (712 lines, all text substitutions with dry-run/validation/backup) and `scripts/rebrand_strings.sh` (560 lines, 37-locale string replacement + review report). Merged via PR #2. |
 | 2026-02-11 | Additional audits: Element Call infrastructure (MatrixRTC+LiveKit, 8 refs, disabling options), privacy manifest compliance (B+, 2 gaps), upstream sync (18 commits, SDK v26.02.10). Fixed bash 3.2 bug in rebrand_strings.sh. Both scripts dry-run tested successfully. Total: 8 audit docs, 3,100+ lines of documentation and tooling. |
 | 2026-02-11 | Privacy manifest gaps fixed: added NetworkInformation API to Main App + NSE, created ShareExtension PrivacyInfo.xcprivacy. Upstream sync completed: merged 18 commits (SDK v26.02.10, crash fixes, Spaces). Build verified after merge — BUILD SUCCEEDED on iPhone 17 Pro simulator. |
+| 2026-02-11 | Regenerated xcodeproj after all Firebase FCM, privacy manifest, and upstream sync changes. All 14 FCM unit tests re-verified passing (32 total across 3 test suites). Pushed to origin/develop. |
 
 ---
 
