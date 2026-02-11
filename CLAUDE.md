@@ -82,6 +82,8 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
   - `customer_pre_dev_briefing_ru.md` — Apple Developer account added to Priority 1 actions and Week 0 deliverables
 - Cross-check complete: every decision has a clear path to resolution via the questionnaire
 - Firebase FCM unit tests added (2026-02-11): 14 tests across 3 test files, all passing. Protocol extraction (`FirebaseNotificationServiceProtocol`) enables mock injection into `AppCoordinator`. Full details in `documentation/firebase_integration.md`
+- Pre-rebranding audits complete (2026-02-11): 5 audit documents covering OIDC flow, Compound design system, NSE, ShareExtension, and 97 hardcoded identifiers across 35+ files. See `documentation/pre_rebranding_preparations.md` for summary.
+- Rebranding automation scripts created (2026-02-11): `scripts/rebrand.sh` (712 lines, handles all text substitutions) and `scripts/rebrand_strings.sh` (556 lines, handles 37-locale string replacement). Estimated rebranding time reduced from 4-8 hours to 1-2 hours.
 
 **What's blocked (all require customer decisions):**
 - Step 5: Bundle identity changes (needs App Name, Bundle ID, Team ID — D-001)
@@ -122,6 +124,12 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | `implementation_plan.md` | Day-by-day schedule: 30 working days + 10 buffer (English) |
 | `implementation_plan_ru.md` | Same schedule in Russian |
 | `firebase_integration.md` | Firebase FCM integration: architecture, push provider selection, testability changes, all 14 unit tests documented, configuration requirements for customer |
+| `pre_rebranding_preparations.md` | **Summary of all pre-rebranding research and tooling.** Links to 5 audit docs, describes 2 automation scripts, documents rebranding workflow |
+| `oidc_audit.md` | OIDC redirect URI flow, all 14 element.io URLs, associated domains, authentication architecture |
+| `branding_audit.md` | Compound design tokens, color assets, app icons, launch screen, 37 locales, ~86 files to modify |
+| `nse_audit.md` | NSE target: 1 hardcoded string, everything else auto-derives from app.yml |
+| `share_extension_audit.md` | ShareExtension: zero hardcoded brand references, all runtime via InfoPlistReader |
+| `hardcoded_identifiers_inventory.md` | Complete inventory: 97 identifiers across 35+ files (28 auto, 52 manual, 17 test) |
 
 ### Customer-Facing Documents
 
@@ -153,7 +161,8 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | iOS minimum | 18.0 (deployment target, raised from 17.6 due to iOS 18 API dependencies) |
 | Push | APNs directly + Firebase SDK (FCM infrastructure added + unit-tested, pending customer config). See `documentation/firebase_integration.md` |
 | Calls | Element Call (MatrixRTC + LiveKit, not Jitsi) |
-| Auth | OIDC (redirect URI hardcoded to element.io — must change) |
+| Auth | OIDC (redirect URI hardcoded to element.io — must change). See `documentation/oidc_audit.md` |
+| Rebranding | 97 hardcoded identifiers mapped, 2 automation scripts ready. See `documentation/pre_rebranding_preparations.md` |
 
 ## Key Files to Modify (When Development Starts)
 
@@ -283,7 +292,8 @@ When updating this file, change "Current Phase" and check off completed phases:
 | 2026-02-10 | Build re-verified (still passes). Customer outreach docs reviewed and finalized — D-007 (Apple Developer account) gap fixed in both briefing and questionnaire. All 12 decisions cross-checked against questionnaire coverage. Ready for customer engagement. |
 | 2026-02-10 | Firebase FCM integration implemented on `feature/firebase-fcm-integration` branch. Firebase SDK (v11.8.x) added via SPM, FirebaseNotificationService created, conditional APNs/FCM push provider in AppCoordinator, PushProvider setting (defaults to .firebase), placeholder GoogleService-Info.plist. Deployment target corrected from 17.6 to 18.0 (codebase requires iOS 18 APIs). Build verified on iPhone 17 Pro simulator. |
 | 2026-02-11 | Firebase FCM unit tests: extracted `FirebaseNotificationServiceProtocol` for testability, injected into `AppCoordinator` via constructor, added `FirebaseNotificationServiceMock`. 14 new tests (5 NotificationManager FCM, 5 Firebase integration flow, 4 PushProvider), all passing. Documented in `documentation/firebase_integration.md`. |
+| 2026-02-11 | Pre-rebranding research and tooling. 5 audit docs (OIDC, branding/Compound, NSE, ShareExtension, hardcoded identifiers — 97 total across 35+ files). 2 automation scripts: `scripts/rebrand.sh` (712 lines, all text substitutions with dry-run/validation/backup) and `scripts/rebrand_strings.sh` (556 lines, 37-locale string replacement + review report). Merged via PR #2. |
 
 ---
 
-*Last updated: 2026-02-11 (Firebase FCM unit tests). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-11 (pre-rebranding audits and automation). Update this file whenever the project phase changes or a blocker is resolved.*
