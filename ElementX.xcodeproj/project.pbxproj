@@ -785,7 +785,6 @@
 		87E8C31FCF9276F15CB0B408 /* ThreadTimelineScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C1C19A4BE46EDE1411ECCE /* ThreadTimelineScreenViewModelProtocol.swift */; };
 		8810A2A30A68252EBB54EE05 /* HomeScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BC7CA1BC1041E93077BBA1 /* HomeScreenModels.swift */; };
 		88272A714D81BC507F76A1EE /* RageshakeConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC598338E7CF41107293AB5 /* RageshakeConfiguration.swift */; };
-		88356DE7F2AD243AB10C7B7A /* Signposter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A0EB49BF5BCEA37EDF7A3 /* Signposter.swift */; };
 		887AC93C523AEFB640EA5EC8 /* TextBasedRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E33FD32BBC44D703C7AE4F9 /* TextBasedRoomTimelineItem.swift */; };
 		88887E40301FF0543ED5B59F /* AppAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD22AEFFA20065494ED2333 /* AppAppearance.swift */; };
 		88A3FBBC3D67996863DB9CAF /* TargetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D829FD8958376614504B18 /* TargetConfiguration.swift */; };
@@ -8900,7 +8899,6 @@
 				1702981A8085BE4FB0EC001B /* Application.swift in Sources */,
 				388D39ED9FE1122EA6D76BF2 /* Common.swift in Sources */,
 				A439B456D0761D6541745CC3 /* NSRegularExpresion.swift in Sources */,
-				88356DE7F2AD243AB10C7B7A /* Signposter.swift in Sources */,
 				32B7891D937377A59606EDFC /* UserFlowTests.swift in Sources */,
 				B444F9C184A377C1B481F07F /* XCUIElement.swift in Sources */,
 			);
