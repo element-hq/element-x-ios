@@ -251,6 +251,9 @@ targets:
     - package: SwiftSoup
     - package: DSWaveformImage
       product: DSWaveformImageViews
+    - package: Firebase
+      products:
+        - FirebaseMessaging
 
     sources:
     - path: ../Sources

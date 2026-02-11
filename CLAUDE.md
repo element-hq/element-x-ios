@@ -92,8 +92,8 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 ### Blockers (must be resolved before rebranding work starts)
 
 1. **AGPL v3 licensing** — Element X is AGPL v3, which conflicts with App Store ToS. Commercial license from Element (New Vector Ltd) required. NOT YET INITIATED.
-2. **APNs vs FCM** — TOR says FCM, project uses APNs natively. Customer must confirm APNs. NOT YET DECIDED.
-3. **iOS version** — TOR says iOS 16+, project requires iOS 18.5+ (develop branch). Customer must accept. NOT YET DECIDED.
+2. **APNs vs FCM** — FCM infrastructure added (Firebase SDK, conditional push provider, placeholder config). Customer must provide real GoogleService-Info.plist values and configure Sygnal for FCM. Push provider defaults to FCM per TOR. NOT YET TESTED END-TO-END.
+3. **iOS version** — TOR says iOS 16+, project requires iOS 18.0+ (deployment target). Customer must accept. NOT YET DECIDED.
 4. **Calls infrastructure** — TOR says Jitsi, project uses Element Call (LiveKit). Customer must clarify. NOT YET DECIDED.
 5. **App identity** — App name, bundle ID, team ID, app group needed before any code changes. NOT YET DECIDED (D-001).
 
@@ -148,8 +148,8 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | Design system | Compound (Element's cross-platform semantic design tokens) |
 | LOC | ~68,000 across ~907 Swift files |
 | License | AGPL v3 (**legally problematic for App Store**) |
-| iOS minimum | 18.5 (develop branch, forked from) |
-| Push | APNs directly (no Firebase SDK) |
+| iOS minimum | 18.0 (deployment target, raised from 17.6 due to iOS 18 API dependencies) |
+| Push | APNs directly + Firebase SDK (FCM infrastructure added, pending customer config) |
 | Calls | Element Call (MatrixRTC + LiveKit, not Jitsi) |
 | Auth | OIDC (redirect URI hardcoded to element.io — must change) |
 
@@ -164,6 +164,7 @@ InfoPlist.strings (37+ locales)  → CFBundleDisplayName
 Compound design tokens           → Accent color, theme
 OIDC configuration               → Client ID, redirect URI
 NSE/SupportingFiles/target.yml   → NSE bundle ID, entitlements
+GoogleService-Info.plist         → Firebase project config (placeholder — needs customer values)
 ```
 
 > Full details and step-by-step instructions in `ios_proj_init.md`.
@@ -172,9 +173,9 @@ NSE/SupportingFiles/target.yml   → NSE bundle ID, entitlements
 
 | TOR Says | Reality | Impact |
 |----------|---------|--------|
-| FCM (Firebase) | APNs directly, no Firebase SDK | Use APNs — saves 10–16h |
+| FCM (Firebase) | FCM infrastructure added (Firebase SDK + conditional APNs/FCM) | Customer provides GoogleService-Info.plist; Sygnal must be FCM-configured |
 | Jitsi | Element Call (MatrixRTC + LiveKit) | Customer needs LiveKit, not Jitsi |
-| iOS 16+ | iOS 17+ minimum | Customer must accept |
+| iOS 16+ | iOS 18.0 minimum | Customer must accept |
 | Scalar integration manager | Not in Element X | Not applicable |
 | OIDC not mentioned | OIDC hardcoded to element.io | Must reconfigure |
 
@@ -266,6 +267,7 @@ When updating this file, change "Current Phase" and check off completed phases:
 | XcodeGen | 2.44.1 | Generates `.xcodeproj` from YAML |
 | git-lfs | installed | Required by project |
 | gh CLI | 2.86.0 | GitHub CLI for auth and repo management |
+| Firebase SDK | 11.8.x | FirebaseMessaging via SPM |
 | Simulator | iPhone 17 Pro | First build verified here |
 
 ---
@@ -277,7 +279,8 @@ When updating this file, change "Current Phase" and check off completed phases:
 | 2026-02-08 | Phase 0 complete: all documentation created, codebase audited, 12 decisions tracked |
 | 2026-02-09 | Phase 1 partial: fork, build env, first build, change map, git structure, slash commands, Phases 7-10 continuation plan |
 | 2026-02-10 | Build re-verified (still passes). Customer outreach docs reviewed and finalized — D-007 (Apple Developer account) gap fixed in both briefing and questionnaire. All 12 decisions cross-checked against questionnaire coverage. Ready for customer engagement. |
+| 2026-02-10 | Firebase FCM integration implemented on `feature/firebase-fcm-integration` branch. Firebase SDK (v11.8.x) added via SPM, FirebaseNotificationService created, conditional APNs/FCM push provider in AppCoordinator, PushProvider setting (defaults to .firebase), placeholder GoogleService-Info.plist. Deployment target corrected from 17.6 to 18.0 (codebase requires iOS 18 APIs). Build verified on iPhone 17 Pro simulator. |
 
 ---
 
-*Last updated: 2026-02-10. Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-10 (Firebase FCM integration). Update this file whenever the project phase changes or a blocker is resolved.*

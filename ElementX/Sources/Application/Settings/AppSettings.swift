@@ -50,6 +50,7 @@ final class AppSettings {
         
         case frequentlyUsedSystemEmojis
         
+        case pushProvider
         case enableNotifications
         case enableInAppNotifications
         case pusherProfileTag
@@ -267,7 +268,12 @@ final class AppSettings {
     let showCreateAccountButton = true
     
     // MARK: - Notifications
-    
+
+    /// The push notification provider to use for delivering remote notifications.
+    /// `.firebase` routes through FCM (requires GoogleService-Info.plist), `.apns` uses APNs directly.
+    @UserPreference(key: UserDefaultsKeys.pushProvider, defaultValue: PushProvider.firebase, storageType: .userDefaults(store))
+    var pushProvider: PushProvider
+
     var pusherAppID: String {
         #if DEBUG
         InfoPlistReader.main.baseBundleIdentifier + ".ios.dev"
