@@ -225,6 +225,63 @@ final class NotificationManagerTests: XCTestCase {
         await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
         XCTAssertTrue(notificationTappedDelegateCalled)
     }
+
+    // MARK: - FCM Token Registration
+
+    func test_whenRegisteredWithFCMToken_pusherIsCalled() async {
+        _ = await notificationManager.registerWithFCMToken("test-fcm-token")
+        XCTAssertTrue(clientProxy.setPusherWithCalled)
+    }
+
+    func test_whenRegisteredWithFCMTokenSuccess_returnsTrue() async {
+        let success = await notificationManager.registerWithFCMToken("test-fcm-token")
+        XCTAssertTrue(success)
+    }
+
+    func test_whenRegisteredWithFCMTokenAndPusherThrows_returnsFalse() async {
+        enum TestError: Error {
+            case someError
+        }
+
+        clientProxy.setPusherWithThrowableError = TestError.someError
+        let success = await notificationManager.registerWithFCMToken("test-fcm-token")
+        XCTAssertFalse(success)
+    }
+
+    func test_whenRegisteredWithFCMToken_pusherHasCorrectValues() async throws {
+        let fcmToken = "test-fcm-registration-token-1234"
+        _ = await notificationManager.registerWithFCMToken(fcmToken)
+
+        guard let configuration = clientProxy.setPusherWithReceivedInvocations.first else {
+            XCTFail("Invalid pusher configuration sent")
+            return
+        }
+
+        // FCM pushkey is the raw token string, NOT base64-encoded
+        XCTAssertEqual(configuration.identifiers.pushkey, fcmToken)
+        XCTAssertEqual(configuration.identifiers.appId, appSettings.pusherAppID)
+        XCTAssertEqual(configuration.appDisplayName, "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
+        XCTAssertEqual(configuration.deviceDisplayName, UIDevice.current.name)
+        XCTAssertNotNil(configuration.profileTag)
+        XCTAssertEqual(configuration.lang, Bundle.app.preferredLocalizations.first)
+        guard case let .http(data) = configuration.kind else {
+            XCTFail("Http kind expected")
+            return
+        }
+        XCTAssertEqual(data.url, appSettings.pushGatewayNotifyEndpoint.absoluteString)
+        XCTAssertEqual(data.format, .eventIdOnly)
+        let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
+                                                      alert: APSAlert(locKey: "Notification",
+                                                                      locArgs: [])),
+                                         pusherNotificationClientIdentifier: nil)
+        XCTAssertEqual(data.defaultPayload, try defaultPayload.toJsonString())
+    }
+
+    func test_whenRegisteredWithFCMTokenWithoutSession_returnsFalse() async {
+        notificationManager.setUserSession(nil)
+        let success = await notificationManager.registerWithFCMToken("test-fcm-token")
+        XCTAssertFalse(success)
+    }
 }
 
 extension NotificationManagerTests: @MainActor NotificationManagerDelegate {

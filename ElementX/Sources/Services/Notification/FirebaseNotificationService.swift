@@ -15,7 +15,7 @@ import Foundation
 /// 1. Initializes the Firebase SDK (`FirebaseApp.configure()`)
 /// 2. Receives FCM registration token updates via `MessagingDelegate`
 /// 3. Exposes the current FCM token for pusher registration
-final class FirebaseNotificationService: NSObject, MessagingDelegate {
+final class FirebaseNotificationService: NSObject, MessagingDelegate, FirebaseNotificationServiceProtocol {
     private var onTokenUpdate: ((String) -> Void)?
 
     /// Configures Firebase and starts listening for FCM token updates.

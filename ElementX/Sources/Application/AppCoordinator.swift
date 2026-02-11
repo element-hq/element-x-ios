@@ -58,7 +58,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     let windowManager: SecureWindowManagerProtocol
     let notificationManager: NotificationManagerProtocol
-    private let firebaseService = FirebaseNotificationService()
+    private let firebaseService: FirebaseNotificationServiceProtocol
 
     private let appRouteURLParser: AppRouteURLParser
     
@@ -66,7 +66,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     @Consumable private var storedInlineReply: (roomID: String, message: String)?
     @Consumable private var storedRoomsToAwait: Set<String>?
 
-    init(appDelegate: AppDelegate) {
+    init(appDelegate: AppDelegate, firebaseService: FirebaseNotificationServiceProtocol = FirebaseNotificationService()) {
+        self.firebaseService = firebaseService
         let appHooks = AppHooks()
         appHooks.setUp()
         
