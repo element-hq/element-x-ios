@@ -135,7 +135,7 @@ struct HomeScreen: View {
                 if selected {
                     content
                         .backportButtonStyleGlassProminent()
-                        .tint(.compound.bgAccentRest)
+                        .tint(.compound.bgActionPrimaryRest)
                 } else {
                     content
                 }
