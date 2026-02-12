@@ -252,6 +252,7 @@ struct CreateRoomScreen: View {
                 ToolbarButton(role: .cancel) {
                     context.send(viewAction: .dismiss)
                 }
+                .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.cancel)
             }
         }
         
