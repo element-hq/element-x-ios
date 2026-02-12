@@ -197,17 +197,28 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     // swiftlint:disable:next function_body_length
     private func configureStateMachine() {
-        stateMachine.addRoutes(event: .start, transitions: [.initial => .space])
-        stateMachine.addRoutes(event: .startUnjoined, transitions: [.initial => .joinSpace])
-        stateMachine.addRoutes(event: .joinedSpace, transitions: [.joinSpace => .space])
-        stateMachine.addRoutes(event: .leftSpace, transitions: [.space => .leftSpace])
-        stateMachine.addRoutes(event: .addRooms, transitions: [.space => .addingRooms])
-        stateMachine.addRoutes(event: .dismissedAddRooms, transitions: [.addingRooms => .space])
-        stateMachine.addRoutes(event: .presentTransferOwnership, transitions: [.space => .transferOwnership])
-        stateMachine.addRoutes(event: .dismissedTransferOwnership, transitions: [.transferOwnership => .space])
-        
         stateMachine.addRouteMapping { event, fromState, userInfo in
             switch (fromState, event) {
+            case (.initial, .start):
+                return .space
+            case (.initial, .startUnjoined):
+                return .joinSpace
+            
+            case (.joinSpace, .joinedSpace):
+                return .space
+            case (.space, .leftSpace):
+                return .leftSpace
+            
+            case (.space, .addRooms):
+                return .addingRooms
+            case (.addingRooms, .dismissedAddRooms):
+                return .space
+            
+            case (.space, .presentTransferOwnership):
+                return .transferOwnership
+            case (.transferOwnership, .dismissedTransferOwnership):
+                return .space
+            
             case (.space, .startChildFlow):
                 guard let childEntryPoint = userInfo as? SpaceFlowCoordinatorEntryPoint else { fatalError("An entry point must be provided.") }
                 return .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: fromState)
@@ -255,13 +266,11 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .space):
                 presentSpace()
-            
             case (.initial, .startUnjoined, .joinSpace):
                 presentJoinSpaceScreen()
             
             case (.joinSpace, .joinedSpace, .space):
                 presentSpaceAfterJoining()
-            
             case (.space, .leftSpace, .leftSpace):
                 clearRoute(animated: true)
             
