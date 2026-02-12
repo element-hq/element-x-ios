@@ -98,7 +98,7 @@ lane :accessibility_tests do |options|
   
   run_tests(
     scheme: "AccessibilityTests",
-    device: "iPhone 16 (18.5)", # The tests are randomly crashing on iOS 26
+    device: "iPhone 17 (#{simulator_version})",
     ensure_devices_found: true,
     prelaunch_simulator: false,
     result_bundle: true,
