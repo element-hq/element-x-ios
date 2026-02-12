@@ -12,7 +12,12 @@ struct ElementNavigationStack<Content: View>: View {
     
     var body: some View {
         if ProcessInfo.isRunningAccessibilityTests {
-            content
+            // Wrap in VStack to safely apply .id() since applying .id() directly to NavigationStack crashes on iOS 26
+            VStack(spacing: 0) {
+                NavigationStack {
+                    content
+                }
+            }
         } else {
             NavigationStack {
                 content
