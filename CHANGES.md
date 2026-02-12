@@ -1,3 +1,24 @@
+## Changes in 26.02.2 (2026-02-12)
+
+### What's Changed
+
+🙌 Improvements
+* Update the active Space Filter Button in the Chats header to be Primary instead of Accent by @americanrefugee in https://github.com/element-hq/element-x-ios/pull/5091
+
+🧱 Build
+* Remove the Signposter from the integration tests target, fix build. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5096
+
+🚧 In development 🚧
+* Add history sharing badges to room details by @kaylendog in https://github.com/element-hq/element-x-ios/pull/5043
+
+Others
+* Update dependency fastlane to v2.232.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5089
+
+### New Contributors
+* @americanrefugee made their first contribution in https://github.com/element-hq/element-x-ios/pull/5091
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.02.1...release/26.02.2
+
 ## Changes in 26.02.1 (2026-02-10)
 
 ### What's Changed
