@@ -15,6 +15,7 @@ import Version
 
 struct NotificationContentBuilder {
     let messageEventStringBuilder: RoomMessageEventStringBuilder
+    let notificationSoundName: UNNotificationSoundName
     let userSession: NSEUserSessionProtocol
     
     /// Process the given notification item proxy
@@ -48,7 +49,7 @@ struct NotificationContentBuilder {
         notificationContent.threadIdentifier = threadIdentifier.replacingOccurrences(of: "@", with: "")
         
         MXLog.info("isNoisy: \(notificationItem.isNoisy)")
-        notificationContent.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
+        notificationContent.sound = notificationItem.isNoisy ? .init(named: notificationSoundName) : nil
         
         switch notificationItem.event {
         case .none:

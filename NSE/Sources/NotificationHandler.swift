@@ -37,6 +37,7 @@ class NotificationHandler {
                                                                destination: .notification)
         
         notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: eventStringBuilder,
+                                                                notificationSoundName: settings.notificationSoundName.publisher.value,
                                                                 userSession: userSession)
     }
     
