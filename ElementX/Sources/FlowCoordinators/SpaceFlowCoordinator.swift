@@ -195,7 +195,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Private
     
-    // swiftlint:disable:next function_body_length cyclomatic_complexity
+    // swiftlint:disable:next function_body_length
     private func configureStateMachine() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .space])
         stateMachine.addRoutes(event: .startUnjoined, transitions: [.initial => .joinSpace])
