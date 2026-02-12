@@ -140,6 +140,7 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | `privacy_manifest_audit.md` | Privacy compliance B+: 2 manifests exist, 2 gaps (ShareExt manifest + NetworkInfo API), all analytics opt-in |
 | `upstream_sync_report.md` | 18 upstream commits since fork, SDK v26.02.10, 3 bug fixes, 3-4 file conflicts, sync recommendation |
 | `app_store_prep_templates.md` | App Store submission templates: export compliance/encryption, privacy nutrition labels, App Review notes, age rating, Guideline 4.3 differentiation strategy. All customer-specific values marked `[PLACEHOLDER]`. |
+| **`overall_implementation_progress.md`** | **Living progress tracker.** TOR fulfillment map, hours invested vs remaining, critical path, decision impact analysis, timeline projections (3 scenarios), risk register (12 items), codebase metrics. **UPDATE THIS after each milestone.** |
 
 ### Customer-Facing Documents
 
