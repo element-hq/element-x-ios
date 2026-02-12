@@ -280,6 +280,72 @@ When updating this file, change "Current Phase" and check off completed phases:
 
 ---
 
+## Progress Analysis (as of 2026-02-11)
+
+### ios_proj_init.md — 15-Step Technical Plan
+
+| Step | Description | Status | Notes |
+|------|-------------|--------|-------|
+| 1 | Fork & Clone Repository | **DONE** | Fork at `smurzaliev/custom-element-messenger-ios`, upstream remote configured |
+| 2 | Build Environment Setup | **DONE** | Xcode 26.2, XcodeGen 2.44.1, SPM resolved, git-lfs |
+| 3 | First Successful Build | **DONE** | Build verified on iPhone 17 Pro simulator (re-verified Feb 11 after upstream merge) |
+| 4 | Codebase Mapping & Audit | **DONE** | 8 audit docs, 97 hardcoded identifiers mapped across 35+ files, change map created |
+| 5 | Apple Developer Provisioning | **BLOCKED** | Requires D-007 (Apple Developer account), D-001 (app identity) |
+| 6 | Identity Changes (Bundle ID, Team, App Group) | **BLOCKED** | Requires D-001 (app name, bundle ID from customer) |
+| 7 | Branding — App Icon & Colors | **BLOCKED** | Requires D-008 (design assets from customer) |
+| 8 | Branding — Strings, Launch Screen & Element Removal | **BLOCKED** | Requires D-008; automation scripts ready |
+| 9 | Localization | **BLOCKED** | Requires app name; `rebrand_strings.sh` ready for 37 locales |
+| 10 | Configuration (AppSettings, Analytics, Feature Flags) | **BLOCKED** | Requires D-005 (server URLs from customer) |
+| 11 | OIDC & Associated Domains | **BLOCKED** | Requires D-006 (OIDC registration from customer) |
+| 12 | Push Notification Plumbing | **PARTIAL** | FCM code + 14 unit tests complete. Blocked on real GoogleService-Info.plist (D-002) |
+| 13 | Calls Configuration | **BLOCKED** | Requires D-004 (LiveKit/Element Call decision) |
+| 14 | Full Build Verification & Audit | **NOT STARTED** | Final step after all changes |
+| 15 | Git Checkpoints & Branching Strategy | **DONE** | `main` + `develop` + `upstream` structure, checkpoint/unmodified-build tagged |
+
+**Result:** 4 of 15 steps complete, 1 partial, 10 blocked on customer decisions.
+
+### implementation_plan.md — 30-Day Schedule
+
+| Days | Planned | Status |
+|------|---------|--------|
+| 1–3 | Fork, build, codebase study | **DONE** |
+| 4–5 | Provisioning + bundle ID build | **BLOCKED** (D-001, D-007) |
+| 6–8 | Branding (icon, colors, strings, analytics) | **BLOCKED** (D-008) |
+| 9–10 | OIDC configuration & testing | **BLOCKED** (D-005, D-006) |
+| 11–15 | Server integration + push testing | **PARTIALLY READY** (FCM code done) |
+| 16–17 | Element Call configuration | **BLOCKED** (D-004) |
+| 18–30 | Testing, App Store prep, submission, docs | **NOT STARTED** |
+
+### Work Done Beyond Original Schedule
+
+| Category | Deliverable | Est. Hours |
+|----------|-------------|------------|
+| Firebase FCM | Full implementation + 14 unit tests + protocol extraction + documentation | ~8h |
+| Pre-Rebranding Audits (5) | OIDC flow, Compound tokens, NSE, ShareExtension, 97 hardcoded identifiers | ~6h |
+| Automation Scripts (2) | `rebrand.sh` (712 lines) + `rebrand_strings.sh` (560 lines), dry-run tested | ~6h |
+| Additional Audits (3) | Element Call, privacy manifests, upstream sync report | ~4h |
+| Privacy Manifest Fixes | NetworkInfo API added, ShareExtension manifest created | ~1h |
+| Upstream Sync | Merged 18 upstream commits, SDK v26.02.10 | ~2h |
+| Customer Documents (2) | Pre-dev briefing + questionnaire, both updated for FCM/iOS 18 | ~3h |
+| Documentation | 8 audit docs, firebase integration guide, pre-rebranding summary | ~4h |
+
+### Summary Metrics
+
+| Metric | Value |
+|--------|-------|
+| Plan completion | ~27% (Steps 1–4 of 15 + partial Step 12) |
+| Schedule position | Day 3 of 30 (actual tasks complete) |
+| Hours invested | ~40–45h of ~120h core budget |
+| Decisions resolved | 0 of 12 (2 in progress: D-002, D-003) |
+| Critical blockers | 4 (D-001 licensing, D-004 calls, D-005 servers, D-007 Apple account) |
+| Rebranding time saved | Automation scripts reduce estimated Steps 7–9 from ~3 days to ~1 day |
+
+### Assessment
+
+The project is **maximally prepared within what's possible without customer input**. All pre-customer work is done: codebase fully audited, FCM implemented and tested, rebranding automation ready, upstream synced, privacy manifests fixed. Everything from Step 5 onward is gated on customer decisions — particularly D-001 (app identity/licensing) and D-005 (server access). No further development work can proceed until the customer meeting happens.
+
+---
+
 ## Build Environment
 
 | Tool | Version | Notes |
@@ -306,7 +372,9 @@ When updating this file, change "Current Phase" and check off completed phases:
 | 2026-02-11 | Additional audits: Element Call infrastructure (MatrixRTC+LiveKit, 8 refs, disabling options), privacy manifest compliance (B+, 2 gaps), upstream sync (18 commits, SDK v26.02.10). Fixed bash 3.2 bug in rebrand_strings.sh. Both scripts dry-run tested successfully. Total: 8 audit docs, 3,100+ lines of documentation and tooling. |
 | 2026-02-11 | Privacy manifest gaps fixed: added NetworkInformation API to Main App + NSE, created ShareExtension PrivacyInfo.xcprivacy. Upstream sync completed: merged 18 commits (SDK v26.02.10, crash fixes, Spaces). Build verified after merge — BUILD SUCCEEDED on iPhone 17 Pro simulator. |
 | 2026-02-11 | Regenerated xcodeproj after all Firebase FCM, privacy manifest, and upstream sync changes. All 14 FCM unit tests re-verified passing (32 total across 3 test suites). Pushed to origin/develop. |
+| 2026-02-11 | Updated customer-facing documents: briefing and questionnaire reflect FCM-implemented status and iOS 18.0 requirement. Updated decisions tracker: D-002 status to "in progress" (FCM done, awaiting config), D-003 status to "in progress" (iOS 18.0 only option). All pushed to origin/develop. |
+| 2026-02-11 | Progress analysis completed: 4 of 15 init steps done, 1 partial (push), 10 blocked on customer. ~40–45h invested. Project maximally prepared — no further dev work possible until customer meeting. |
 
 ---
 
-*Last updated: 2026-02-11 (privacy fixes, upstream sync, build verified). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-11 (progress analysis added). Update this file whenever the project phase changes or a blocker is resolved.*
