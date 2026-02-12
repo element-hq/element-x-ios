@@ -139,11 +139,11 @@ struct SpacesScreen_Previews: PreviewProvider, TestablePreview {
     static let emptyViewModel = makeViewModel(isEmpty: true)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SpacesScreen(context: viewModel.context)
         }
         
-        NavigationStack {
+        ElementNavigationStack {
             SpacesScreen(context: emptyViewModel.context)
         }
         .previewDisplayName("Empty")

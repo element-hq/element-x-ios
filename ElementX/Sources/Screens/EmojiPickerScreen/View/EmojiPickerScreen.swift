@@ -20,7 +20,7 @@ struct EmojiPickerScreen: View {
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
     var body: some View {
-        NavigationStack {
+        ElementNavigationStack {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumWidth))], spacing: 16) {
                     ForEach(context.viewState.categories) { category in

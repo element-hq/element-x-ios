@@ -71,7 +71,7 @@ struct ToolbarButton: View {
 
 struct ToolbarButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             Color.clear
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {

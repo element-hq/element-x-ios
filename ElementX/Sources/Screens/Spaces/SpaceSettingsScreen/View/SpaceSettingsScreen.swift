@@ -146,12 +146,12 @@ struct SpaceSettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                           appSettings: ServiceLocator.shared.settings)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SpaceSettingsScreen(context: ownerViewModel.context)
         }
         .previewDisplayName("Owner")
         
-        NavigationStack {
+        ElementNavigationStack {
             SpaceSettingsScreen(context: userViewModel.context)
         }
         .previewDisplayName("User")

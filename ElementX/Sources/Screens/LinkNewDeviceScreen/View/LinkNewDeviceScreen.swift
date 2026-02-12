@@ -110,24 +110,24 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
     static let unknownErrorViewModel = makeViewModel(mode: .error(.unknown))
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             LinkNewDeviceScreen(context: viewModel.context)
         }
         .previewDisplayName("Ready")
         .snapshotPreferences(expect: viewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(isGeneratingCode: false) })
         
-        NavigationStack {
+        ElementNavigationStack {
             LinkNewDeviceScreen(context: generatingViewModel.context)
         }
         .previewDisplayName("Generating")
         .snapshotPreferences(expect: generatingViewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(isGeneratingCode: true) })
         
-        NavigationStack {
+        ElementNavigationStack {
             LinkNewDeviceScreen(context: loadingViewModel.context)
         }
         .previewDisplayName("Loading")
         
-        NavigationStack {
+        ElementNavigationStack {
             LinkNewDeviceScreen(context: unsupportedViewModel.context)
         }
         .previewDisplayName("Unsupported")

@@ -140,19 +140,19 @@ struct ServerConfirmationScreen_Previews: PreviewProvider, TestablePreview {
     static let pickerViewModel = makeViewModel(mode: .picker(["dept1.company.com", "dept2.company.com", "dept3.company.com"]), flow: .login)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             ServerConfirmationScreen(context: loginViewModel.context)
                 .toolbar(.visible, for: .navigationBar)
         }
         .previewDisplayName("Login")
         
-        NavigationStack {
+        ElementNavigationStack {
             ServerConfirmationScreen(context: registerViewModel.context)
                 .toolbar(.visible, for: .navigationBar)
         }
         .previewDisplayName("Register")
         
-        NavigationStack {
+        ElementNavigationStack {
             ServerConfirmationScreen(context: pickerViewModel.context)
                 .toolbar(.visible, for: .navigationBar)
         }

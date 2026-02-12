@@ -21,7 +21,7 @@ struct CreateRoomSpaceSelectionSheet: View {
     }
     
     var body: some View {
-        NavigationStack {
+        ElementNavigationStack {
             List {
                 Section {
                     ListRow(label: .plain(title: L10n.screenCreateRoomSpaceSelectionNoSpaceOption),

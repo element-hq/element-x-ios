@@ -65,7 +65,7 @@ struct ReportRoomScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = ReportRoomScreenViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                                      userIndicatorController: UserIndicatorControllerMock())
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             ReportRoomScreen(context: viewModel.context)
         }
     }

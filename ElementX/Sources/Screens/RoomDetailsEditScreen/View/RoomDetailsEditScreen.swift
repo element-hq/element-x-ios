@@ -175,12 +175,12 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             RoomDetailsEditScreen(context: readOnlyViewModel.context)
         }
         .previewDisplayName("Read only")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomDetailsEditScreen(context: editableViewModel.context)
         }
         .snapshotPreferences(expect: editableViewModel.context.$viewState.map { state in

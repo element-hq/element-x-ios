@@ -171,14 +171,14 @@ struct QRCodeErrorView: View {
 struct QRCodeErrorView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ForEach(QRCodeLoginState.ErrorState.allCases, id: \.self) { errorState in
-            NavigationStack {
+            ElementNavigationStack {
                 QRCodeErrorView(errorState: errorState, canSignInManually: true) { _ in }
                     .toolbar(.visible, for: .navigationBar)
             }
             .previewDisplayName(errorState.previewDisplayName)
         }
         
-        NavigationStack {
+        ElementNavigationStack {
             QRCodeErrorView(errorState: .linkingNotSupported, canSignInManually: false) { _ in }
                 .toolbar(.visible, for: .navigationBar)
         }

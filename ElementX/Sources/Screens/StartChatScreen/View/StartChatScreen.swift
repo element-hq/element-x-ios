@@ -168,7 +168,7 @@ struct StartChatScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             StartChatScreen(context: viewModel.context)
         }
     }

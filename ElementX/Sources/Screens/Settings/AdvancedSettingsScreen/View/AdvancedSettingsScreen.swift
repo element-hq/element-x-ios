@@ -107,7 +107,7 @@ struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                            clientProxy: ClientProxyMock(.init()),
                                                            userIndicatorController: UserIndicatorControllerMock())
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             AdvancedSettingsScreen(context: viewModel.context)
         }
     }

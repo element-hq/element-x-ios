@@ -151,13 +151,13 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
     static let selectedViewModel = makeViewModel(hasSelection: true)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             InviteUsersScreen(context: viewModel.context)
         }
         .previewDisplayName("Suggestions")
         .snapshotPreferences(expect: viewModel.context.$viewState.map { !$0.usersSection.users.isEmpty })
         
-        NavigationStack {
+        ElementNavigationStack {
             InviteUsersScreen(context: searchingViewModel.context)
         }
         .previewDisplayName("Searching")
@@ -165,7 +165,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
             $0.usersSection.type == .searchResult && !$0.usersSection.users.isEmpty
         })
         
-        NavigationStack {
+        ElementNavigationStack {
             InviteUsersScreen(context: selectedViewModel.context)
         }
         .previewDisplayName("Selected")

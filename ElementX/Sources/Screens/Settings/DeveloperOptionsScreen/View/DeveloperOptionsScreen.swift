@@ -215,7 +215,7 @@ struct DeveloperOptionsScreen_Previews: PreviewProvider {
                                                            appHooks: AppHooks(),
                                                            clientProxy: ClientProxyMock(.init()))
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             DeveloperOptionsScreen(context: viewModel.context)
         }
     }

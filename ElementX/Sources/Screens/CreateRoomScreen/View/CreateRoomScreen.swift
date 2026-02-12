@@ -394,61 +394,61 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
 
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: viewModel.context)
         }
         .previewDisplayName("Create Room")
         
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: avatarViewModel.context)
         }
         .previewDisplayName("Create Room with avatar")
         .snapshotPreferences(expect: avatarViewModel.context.$viewState.map { $0.avatarImage != nil })
         
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: spaceViewModel.context)
         }
         .previewDisplayName("Create Space")
         
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: spaceWithAvatarViewModel.context)
         }
         .previewDisplayName("Create Space with avatar")
         .snapshotPreferences(expect: spaceWithAvatarViewModel.context.$viewState.map { $0.avatarImage != nil })
         
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: publicRoomViewModel.context)
         }
         .previewDisplayName("Create Public Room")
         
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: askToJoinViewModel.context)
         }
         .previewDisplayName("Create Knockable Room")
         
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: publicRoomInvalidAliasViewModel.context)
         }
         .snapshotPreferences(expect: publicRoomInvalidAliasViewModel.context.$viewState.map { !$0.aliasErrors.isEmpty })
         .previewDisplayName("Create Public Room, invalid alias")
         
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: publicRoomExistingAliasViewModel.context)
         }
         .snapshotPreferences(expect: publicRoomExistingAliasViewModel.context.$viewState.map { !$0.aliasErrors.isEmpty })
         .previewDisplayName("Create Public Room, existing alias")
         
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: selectedSpaceViewModel.context)
         }
         .previewDisplayName("Create Room with already selected Space")
         
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: selectedSpaceWithListViewModel.context)
         }
         .previewDisplayName("Create Room with a selected Space from the list")
         
-        NavigationStack {
+        ElementNavigationStack {
             CreateRoomScreen(context: selectedSpaceWithAskToJoinViewModel.context)
         }
         .previewDisplayName("Create Knockable Room with already selected Space")
