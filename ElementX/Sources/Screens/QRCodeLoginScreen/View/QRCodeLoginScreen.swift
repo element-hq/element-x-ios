@@ -219,6 +219,7 @@ struct QRCodeLoginScreen: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 200, height: 200)
+                        .accessibilityLabel(L10n.a11yQrCode)
                     
                     SFNumberedListView(items: context.viewState.instructions.linkMobileItems)
                 }

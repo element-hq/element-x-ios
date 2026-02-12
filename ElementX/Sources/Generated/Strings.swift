@@ -14,6 +14,8 @@ internal enum L10n {
   internal static func a11yAddReaction(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_add_reaction", String(describing: p1))
   }
+  /// Address
+  internal static var a11yAddress: String { return L10n.tr("Localizable", "a11y_address") }
   /// Avatar
   internal static var a11yAvatar: String { return L10n.tr("Localizable", "a11y_avatar") }
   /// Minimise message text field
@@ -74,6 +76,8 @@ internal enum L10n {
   internal static var a11yPollsWillRemoveSelection: String { return L10n.tr("Localizable", "a11y_polls_will_remove_selection") }
   /// This is the winning answer
   internal static var a11yPollsWinningAnswer: String { return L10n.tr("Localizable", "a11y_polls_winning_answer") }
+  /// QR Code
+  internal static var a11yQrCode: String { return L10n.tr("Localizable", "a11y_qr_code") }
   /// React with %1$@
   internal static func a11yReactWith(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_react_with", String(describing: p1))
@@ -1048,6 +1052,10 @@ internal enum L10n {
   }
   /// You have new messages.
   internal static var notificationFallbackContent: String { return L10n.tr("Localizable", "notification_fallback_content") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func notificationFallbackNContent(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "notification_fallback_n_content", p1)
+  }
   /// 📹 Incoming call
   internal static var notificationIncomingCall: String { return L10n.tr("Localizable", "notification_incoming_call") }
   /// ** Failed to send - please open room
