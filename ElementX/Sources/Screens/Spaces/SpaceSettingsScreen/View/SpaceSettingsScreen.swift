@@ -30,6 +30,7 @@ struct SpaceSettingsScreen: View {
     private var editSection: some View {
         Section {
             ListRow(kind: .custom { editRow })
+                .accessibilityIdentifier(A11yIdentifiers.spaceSettingsScreen.editBaseInfo)
         }
     }
     

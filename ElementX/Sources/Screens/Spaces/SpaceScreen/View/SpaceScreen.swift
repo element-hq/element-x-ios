@@ -132,7 +132,9 @@ struct SpaceScreen: View {
                                 Button { context.send(viewAction: .createChildRoom) } label: {
                                     Label(L10n.actionCreateRoom, icon: \.plus)
                                 }
+                                .accessibilityIdentifier(A11yIdentifiers.spaceScreen.createRoom)
                             }
+                            
                             Button { context.send(viewAction: .addExistingRooms) } label: {
                                 Label(L10n.actionAddExistingRooms, icon: \.room)
                             }
@@ -165,6 +167,7 @@ struct SpaceScreen: View {
                             Button { context.send(viewAction: .spaceSettings(roomProxy: roomProxy)) } label: {
                                 Label(L10n.commonSettings, icon: \.settings)
                             }
+                            .accessibilityIdentifier(A11yIdentifiers.spaceScreen.settings)
                         }
                     }
                     

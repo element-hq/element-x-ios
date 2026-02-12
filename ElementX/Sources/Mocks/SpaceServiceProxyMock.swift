@@ -22,6 +22,7 @@ extension SpaceServiceProxyMock {
         var joinedParentSpaces: [SpaceServiceRoom] = []
         var editableSpaces: [SpaceServiceRoom] = []
         var spaceRoomLists: [String: SpaceRoomListProxyMock] = [:]
+        var spaceRooms: [SpaceServiceRoom] = []
         var leaveSpaceRooms: [LeaveSpaceRoom] = []
     }
     
@@ -46,7 +47,8 @@ extension SpaceServiceProxyMock {
                                            leaveHandle: LeaveSpaceHandleSDKMock(.init(rooms: configuration.leaveSpaceRooms))))
         }
         spaceForIdentifierSpaceIDClosure = { spaceID in
-            .success(configuration.topLevelSpaces.first { $0.id == spaceID })
+            let space = configuration.topLevelSpaces.first { $0.id == spaceID } ?? configuration.spaceRooms.first { $0.id == spaceID }
+            return .success(space)
         }
         addChildToReturnValue = .success(())
         removeChildFromReturnValue = .success(())
@@ -70,6 +72,7 @@ extension SpaceServiceProxyMock.Configuration {
         
         return .init(topLevelSpaces: .mockJoinedSpaces,
                      spaceFilters: spaceFilters,
-                     spaceRoomLists: .init(uniqueKeysWithValues: spaceRoomLists + subSpaceRoomLists))
+                     spaceRoomLists: .init(uniqueKeysWithValues: spaceRoomLists + subSpaceRoomLists),
+                     spaceRooms: .mockSpaceList)
     }
 }
