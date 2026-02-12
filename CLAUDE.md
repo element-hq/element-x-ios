@@ -89,6 +89,7 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 - Privacy manifest gaps fixed (2026-02-11): Added `NSPrivacyAccessedAPICategoryNetworkInformation` to Main App and NSE manifests, created ShareExtension `PrivacyInfo.xcprivacy` (was missing entirely). All 3 targets now have privacy manifests.
 - Upstream sync completed (2026-02-11): Merged 18 upstream commits into `develop`. MatrixRustSDK v26.02.03 → v26.02.10, crash fixes (server confirmation, iOS 26 PassthroughWindow, QR/Link sign-in), Spaces feature. Only 1 auto-generated file conflict (pbxproj). Backup tag: `backup/pre-upstream-sync-20260211`.
 - Build verified (2026-02-11): `xcodegen generate` + full build on iPhone 17 Pro simulator after upstream merge. BUILD SUCCEEDED.
+- App Store preparation templates created (2026-02-12): `documentation/app_store_prep_templates.md` — 5 sections covering export compliance (encryption/ECCN), privacy nutrition labels (mapped from all 11 PrivacyInfo.xcprivacy data types), App Review notes with Guideline 4.3 risk mitigation, age rating questionnaire, and differentiation strategy with rejection response template. 74 `[PLACEHOLDER]` markers for customer-specific values.
 
 **What's blocked (all require customer decisions):**
 - Step 5: Bundle identity changes (needs App Name, Bundle ID, Team ID — D-001)
@@ -138,6 +139,7 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | `element_call_audit.md` | Element Call (MatrixRTC + LiveKit): 8 hardcoded refs, URL scheme, associated domains, disabling options |
 | `privacy_manifest_audit.md` | Privacy compliance B+: 2 manifests exist, 2 gaps (ShareExt manifest + NetworkInfo API), all analytics opt-in |
 | `upstream_sync_report.md` | 18 upstream commits since fork, SDK v26.02.10, 3 bug fixes, 3-4 file conflicts, sync recommendation |
+| `app_store_prep_templates.md` | App Store submission templates: export compliance/encryption, privacy nutrition labels, App Review notes, age rating, Guideline 4.3 differentiation strategy. All customer-specific values marked `[PLACEHOLDER]`. |
 
 ### Customer-Facing Documents
 
@@ -328,6 +330,7 @@ When updating this file, change "Current Phase" and check off completed phases:
 | Upstream Sync | Merged 18 upstream commits, SDK v26.02.10 | ~2h |
 | Customer Documents (2) | Pre-dev briefing + questionnaire, both updated for FCM/iOS 18 | ~3h |
 | Documentation | 8 audit docs, firebase integration guide, pre-rebranding summary | ~4h |
+| App Store Prep Templates | Export compliance, privacy labels, review notes, age rating, 4.3 differentiation | ~3h |
 
 ### Summary Metrics
 
@@ -335,7 +338,7 @@ When updating this file, change "Current Phase" and check off completed phases:
 |--------|-------|
 | Plan completion | ~27% (Steps 1–4 of 15 + partial Step 12) |
 | Schedule position | Day 3 of 30 (actual tasks complete) |
-| Hours invested | ~40–45h of ~120h core budget |
+| Hours invested | ~43–48h of ~120h core budget |
 | Decisions resolved | 0 of 12 (2 in progress: D-002, D-003) |
 | Critical blockers | 4 (D-001 licensing, D-004 calls, D-005 servers, D-007 Apple account) |
 | Rebranding time saved | Automation scripts reduce estimated Steps 7–9 from ~3 days to ~1 day |
@@ -374,7 +377,8 @@ The project is **maximally prepared within what's possible without customer inpu
 | 2026-02-11 | Regenerated xcodeproj after all Firebase FCM, privacy manifest, and upstream sync changes. All 14 FCM unit tests re-verified passing (32 total across 3 test suites). Pushed to origin/develop. |
 | 2026-02-11 | Updated customer-facing documents: briefing and questionnaire reflect FCM-implemented status and iOS 18.0 requirement. Updated decisions tracker: D-002 status to "in progress" (FCM done, awaiting config), D-003 status to "in progress" (iOS 18.0 only option). All pushed to origin/develop. |
 | 2026-02-11 | Progress analysis completed: 4 of 15 init steps done, 1 partial (push), 10 blocked on customer. ~40–45h invested. Project maximally prepared — no further dev work possible until customer meeting. |
+| 2026-02-12 | App Store preparation templates: `documentation/app_store_prep_templates.md` — export compliance (identified ITSAppUsesNonExemptEncryption must change to true), privacy nutrition labels (all 11 data types mapped), App Review notes (Guideline 4.3 risk strategy), age rating (recommends 12+), differentiation strategy with rejection response template. |
 
 ---
 
-*Last updated: 2026-02-11 (progress analysis added). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-12 (App Store prep templates added). Update this file whenever the project phase changes or a blocker is resolved.*
