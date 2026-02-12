@@ -116,7 +116,7 @@ struct QRCodeLoginScreen: View {
                 }
             } bottomContent: {
                 Button(L10n.actionCancel) {
-                    context.send(viewAction: .dismiss)
+                    context.send(viewAction: .cancel)
                 }
                 .buttonStyle(.compound(.secondary))
             }
@@ -281,7 +281,7 @@ struct QRCodeLoginScreen: View {
         ToolbarItem(placement: .cancellationAction) {
             if context.viewState.shouldDisplayCancelButton {
                 Button(L10n.actionCancel) {
-                    context.send(viewAction: .dismiss)
+                    context.send(viewAction: .cancel)
                 }
             }
         }

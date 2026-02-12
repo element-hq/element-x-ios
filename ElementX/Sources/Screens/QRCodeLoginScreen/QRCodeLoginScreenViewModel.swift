@@ -49,8 +49,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     
     override func process(viewAction: QRCodeLoginScreenViewAction) {
         switch viewAction {
-        case .dismiss, .errorAction(.dismiss):
-            actionsSubject.send(.dismiss)
+        case .cancel, .errorAction(.cancel):
+            actionsSubject.send(.cancel)
         case .startScan:
             Task { await startScanIfPossible() }
         case .sendCheckCode:
@@ -58,9 +58,12 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         case .errorAction(.startOver):
             switch state.mode {
             case .login:
-                Task { await startScanIfPossible() }
+                // Login restarts the flow on this screen.
+                state.bindings.qrResult = nil
+                state.state = .loginInstructions
             case .linkDesktop, .linkMobile:
-                actionsSubject.send(.dismiss)
+                // Linking a new device starts on the previous screen.
+                actionsSubject.send(.startOver)
             }
         case .errorAction(.openSettings):
             appMediator.openAppSettings()
@@ -267,8 +270,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 case .success:
                     break // The state will be updated by the status publisher.
                 case .failure(.userCancellation):
-                    MXLog.info("User cancelled the WAS, dismissing.")
-                    actionsSubject.send(.dismiss)
+                    MXLog.info("User cancelled the WAS, the flow must be restarted.")
+                    actionsSubject.send(.startOver)
                 case .failure:
                     handleError(.unknown)
                 }
@@ -296,8 +299,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             state.state = .error(.linkingNotSupported)
         case .expired:
             state.state = .error(.expired)
-        case .deviceNotSupported:
-            state.state = .error(.deviceNotSupported)
+        case .slidingSyncNotAvailable:
+            state.state = .error(.slidingSyncNotAvailable)
         case .deviceAlreadySignedIn:
             state.state = .error(.deviceAlreadySignedIn)
         case .unknown:
