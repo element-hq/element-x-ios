@@ -134,7 +134,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         bugReportService = BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
                                             applicationID: appSettings.bugReportApplicationID,
                                             sdkGitSHA: sdkGitSha(),
-                                            maxUploadSize: appSettings.bugReportMaxUploadSize,
                                             appHooks: appHooks)
         
         Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings)

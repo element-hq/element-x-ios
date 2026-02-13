@@ -19,8 +19,9 @@ class LoggingTests: XCTestCase {
         Tracing.logsDirectoryOverride = nil
         try reloadTracingFileWriter(configuration: .init(path: URL.appGroupLogsDirectory.path(percentEncoded: false),
                                                          filePrefix: "console-tests",
-                                                         fileSuffix: "log",
-                                                         maxFiles: 100))
+                                                         fileSuffix: ".log",
+                                                         maxTotalSizeBytes: 1000,
+                                                         maxAgeSeconds: 1000))
     }
     
     func testFileLogging() throws {
@@ -343,8 +344,9 @@ class LoggingTests: XCTestCase {
         if redirectTracingFileWriter {
             try reloadTracingFileWriter(configuration: .init(path: testDirectory.path(percentEncoded: false),
                                                              filePrefix: "console",
-                                                             fileSuffix: "log",
-                                                             maxFiles: 100))
+                                                             fileSuffix: ".log",
+                                                             maxTotalSizeBytes: 1000,
+                                                             maxAgeSeconds: 1000))
         }
     }
 }
