@@ -8,12 +8,13 @@
 
 import Combine
 @testable import Compound
-@preconcurrency @testable import SnapshotTesting
+@testable import SnapshotTesting
 import SwiftUI
-import XCTest
+import Testing
 
 @MainActor
-class PreviewTests: XCTestCase {
+@Suite(.serialized)
+struct PreviewTests {
     private struct SnapshotDevice {
         let name: String
         let device: String
@@ -28,17 +29,13 @@ class PreviewTests: XCTestCase {
                                                      .init(name: "iPad", device: "iPad")]
     private var recordMode: SnapshotTestingConfiguration.Record = .missing
 
-    override func setUp() async throws {
-        try await super.setUp()
-        
-        await MainActor.run {
-            if ProcessInfo().environment["RECORD_FAILURES"].map(Bool.init) == true {
-                recordMode = .failed
-            }
-
-            checkEnvironments()
-            UIView.setAnimationsEnabled(false)
+    init() {
+        if ProcessInfo().environment["RECORD_FAILURES"].map(Bool.init) == true {
+            recordMode = .failed
         }
+
+        checkEnvironments()
+        UIView.setAnimationsEnabled(false)
     }
     
     /// Check environments to avoid problems with snapshots on different devices or OS.
@@ -72,8 +69,15 @@ class PreviewTests: XCTestCase {
         let imageRenderer = ImageRenderer(content: preferenceReadingView)
         _ = imageRenderer.uiImage
         
-        var sanitizedSuiteName = String(testName.suffix(testName.count - "test".count).dropLast(2))
-        sanitizedSuiteName = sanitizedSuiteName.prefix(1).lowercased() + sanitizedSuiteName.dropFirst()
+        var sanitizedSuiteName = testName
+        // Handle both old XCTest style (testFoo()) and new Swift Testing style (foo())
+        if sanitizedSuiteName.hasPrefix("test") {
+            sanitizedSuiteName = String(sanitizedSuiteName.suffix(sanitizedSuiteName.count - "test".count).dropLast(2))
+            sanitizedSuiteName = sanitizedSuiteName.prefix(1).lowercased() + sanitizedSuiteName.dropFirst()
+        } else {
+            // Remove trailing () if present
+            sanitizedSuiteName = String(sanitizedSuiteName.dropLast(2))
+        }
         
         for snapshotDevice in snapshotDevices {
             guard var device = PreviewDevice(rawValue: snapshotDevice.device).snapshotDevice() else {
@@ -102,7 +106,7 @@ class PreviewTests: XCTestCase {
                                              testName: sanitizedSuiteName,
                                              traits: traits,
                                              preferences: preferences) {
-                XCTFail(failure)
+                Issue.record(Comment(rawValue: failure))
             }
         }
     }
@@ -141,14 +145,6 @@ class PreviewTests: XCTestCase {
                            named: name,
                            testName: testName)
         }
-    }
-    
-    private func wait(for duration: TimeInterval) {
-        let expectation = XCTestExpectation(description: "Wait")
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            expectation.fulfill()
-        }
-        _ = XCTWaiter.wait(for: [expectation], timeout: duration + 1)
     }
 }
 

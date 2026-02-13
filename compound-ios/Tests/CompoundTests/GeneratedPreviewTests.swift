@@ -4,116 +4,134 @@
 // swiftlint:disable all
 // swiftformat:disable all
 
-import XCTest
+import Testing
 @testable import Compound
 
 extension PreviewTests {
 
     // MARK: - PreviewProvider
 
-    func testBigIcon() async throws {
+    @Test("BigIcon")
+    func bigIcon() async throws {
         for (index, preview) in BigIcon_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testCompoundButtonStyle() async throws {
+    @Test("CompoundButtonStyle")
+    func compoundButtonStyle() async throws {
         for (index, preview) in CompoundButtonStyle_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testCompoundIcon() async throws {
+    @Test("CompoundIcon")
+    func compoundIcon() async throws {
         for (index, preview) in CompoundIcon_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testCompoundToggleStyle() async throws {
+    @Test("CompoundToggleStyle")
+    func compoundToggleStyle() async throws {
         for (index, preview) in CompoundToggleStyle_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testListInlinePicker() async throws {
+    @Test("ListInlinePicker")
+    func listInlinePicker() async throws {
         for (index, preview) in ListInlinePicker_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testListRowAccessory() async throws {
+    @Test("ListRowAccessory")
+    func listRowAccessory() async throws {
         for (index, preview) in ListRowAccessory_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testListRowButtonStyle() async throws {
+    @Test("ListRowButtonStyle")
+    func listRowButtonStyle() async throws {
         for (index, preview) in ListRowButtonStyle_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testListRowLabel() async throws {
+    @Test("ListRowLabel")
+    func listRowLabel() async throws {
         for (index, preview) in ListRowLabel_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testListRowLoadingSelection() async throws {
+    @Test("ListRowLoadingSelection")
+    func listRowLoadingSelection() async throws {
         for (index, preview) in ListRowLoadingSelection_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testListRowTrailingSection() async throws {
+    @Test("ListRowTrailingSection")
+    func listRowTrailingSection() async throws {
         for (index, preview) in ListRowTrailingSection_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testListRow() async throws {
+    @Test("ListRow")
+    func listRow() async throws {
         for (index, preview) in ListRow_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testListTextStyles() async throws {
+    @Test("ListTextStyles")
+    func listTextStyles() async throws {
         for (index, preview) in ListTextStyles_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testScaledFrameModifier() async throws {
+    @Test("ScaledFrameModifier")
+    func scaledFrameModifier() async throws {
         for (index, preview) in ScaledFrameModifier_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testScaledOffsetModifier() async throws {
+    @Test("ScaledOffsetModifier")
+    func scaledOffsetModifier() async throws {
         for (index, preview) in ScaledOffsetModifier_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testScaledPaddingModifier() async throws {
+    @Test("ScaledPaddingModifier")
+    func scaledPaddingModifier() async throws {
         for (index, preview) in ScaledPaddingModifier_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSearchStyle() async throws {
+    @Test("SearchStyle")
+    func searchStyle() async throws {
         for (index, preview) in SearchStyle_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSendButton() async throws {
+    @Test("SendButton")
+    func sendButton() async throws {
         for (index, preview) in SendButton_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTitleAndIcon() async throws {
+    @Test("TitleAndIcon")
+    func titleAndIcon() async throws {
         for (index, preview) in TitleAndIcon_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
