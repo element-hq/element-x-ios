@@ -62,5 +62,3 @@ private extension UITraitCollection {
         userInterfaceStyle == .light
     }
 }
-
-extension CompoundUIColorTokens: @unchecked @retroactive Sendable { }
