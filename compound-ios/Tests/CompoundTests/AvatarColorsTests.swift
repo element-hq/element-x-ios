@@ -11,6 +11,7 @@ import Foundation
 import SwiftUI
 import XCTest
 
+@MainActor
 final class DecorativeColorsTests: XCTestCase {
     struct TestCase {
         let input: String

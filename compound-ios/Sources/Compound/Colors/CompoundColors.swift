@@ -25,7 +25,7 @@ public extension ShapeStyle where Self == Color {
 /// This struct contains only the colour tokens in a more usable form.
 @Observable
 @dynamicMemberLookup
-public class CompoundColors {
+public class CompoundColors: Sendable {
     /// The base colour tokens that form the palette of available colours.
     ///
     /// Normally these shouldn't be necessary, however in practice we may need
@@ -42,7 +42,7 @@ public class CompoundColors {
     
     /// Customise the colour at the specified key path with the supplied colour.
     /// Supplying `nil` as the colour will remove any existing customisation.
-    @MainActor public func override(_ keyPath: KeyPath<CompoundColorTokens, Color>, with color: Color?) {
+    public func override(_ keyPath: KeyPath<CompoundColorTokens, Color>, with color: Color?) {
         overrides[keyPath] = color
     }
     

@@ -18,7 +18,7 @@ public extension UIColor {
 /// This struct contains only the colour tokens in a more usable form.
 @Observable
 @dynamicMemberLookup
-public class CompoundUIColors {
+public final nonisolated class CompoundUIColors: @unchecked Sendable {
     /// The base colour tokens that form the palette of available colours.
     ///
     /// Normally these shouldn't be necessary, however in practice we may need
@@ -35,7 +35,7 @@ public class CompoundUIColors {
     
     /// Customise the colour at the specified key path with the supplied colour.
     /// Supplying `nil` as the colour will remove any existing customisation.
-    @MainActor public func override(_ keyPath: KeyPath<CompoundUIColorTokens, UIColor>, with color: UIColor?) {
+    public func override(_ keyPath: KeyPath<CompoundUIColorTokens, UIColor>, with color: UIColor?) {
         overrides[keyPath] = color
     }
     
@@ -57,3 +57,5 @@ private extension UITraitCollection {
         userInterfaceStyle == .light
     }
 }
+
+extension CompoundUIColorTokens: @unchecked @retroactive Sendable { }

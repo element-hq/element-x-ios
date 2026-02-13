@@ -10,11 +10,11 @@ import SwiftUI
 
 extension View {
     func progressMask(progress: CGFloat,
-                      trackColor: Color = .compound.iconSecondary,
-                      backgroundTrackColor: Color = .compound.iconQuaternary) -> some View {
+                      trackColor: @autoclosure @MainActor () -> Color = .compound.iconSecondary,
+                      backgroundTrackColor: @autoclosure @MainActor () -> Color = .compound.iconQuaternary) -> some View {
         modifier(ProgressMaskModifier(progress: progress,
-                                      trackColor: trackColor,
-                                      backgroundTrackColor: backgroundTrackColor))
+                                      trackColor: trackColor(),
+                                      backgroundTrackColor: backgroundTrackColor()))
     }
 }
 

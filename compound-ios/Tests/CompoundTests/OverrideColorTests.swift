@@ -10,29 +10,32 @@
 import Foundation
 import XCTest
 
-@MainActor
-class OverrideColorTests: XCTestCase {
-    func testSwiftUI() {
-        let colors = CompoundColors()
-        let tokens = CompoundColorTokens()
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
-        
-        colors.override(\.textPrimary, with: .pink)
-        XCTAssertEqual(colors.textPrimary, .pink)
-        
-        colors.override(\.textPrimary, with: nil)
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+final class OverrideColorTests: XCTestCase {
+    func testSwiftUI() async {
+        await MainActor.run {
+            let colors = CompoundColors()
+            let tokens = CompoundColorTokens()
+            XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+            
+            colors.override(\.textPrimary, with: .pink)
+            XCTAssertEqual(colors.textPrimary, .pink)
+            
+            colors.override(\.textPrimary, with: nil)
+            XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+        }
     }
     
-    func testUIKit() {
-        let colors = CompoundUIColors()
-        let tokens = CompoundUIColorTokens()
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
-        
-        colors.override(\.textPrimary, with: .systemPink)
-        XCTAssertEqual(colors.textPrimary, .systemPink)
-        
-        colors.override(\.textPrimary, with: nil)
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+    func testUIKit() async {
+        await MainActor.run {
+            let colors = CompoundUIColors()
+            let tokens = CompoundUIColorTokens()
+            XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+            
+            colors.override(\.textPrimary, with: .systemPink)
+            XCTAssertEqual(colors.textPrimary, .systemPink)
+            
+            colors.override(\.textPrimary, with: nil)
+            XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+        }
     }
 }
