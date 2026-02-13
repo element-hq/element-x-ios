@@ -133,7 +133,7 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Unsupported")
         .snapshotPreferences(expect: unsupportedViewModel.context.observe(\.viewState.mode).map { $0 == .error(.notSupported) })
         
-        NavigationStack {
+        ElementNavigationStack {
             LinkNewDeviceScreen(context: unknownErrorViewModel.context)
         }
         .previewDisplayName("Unknown error")
