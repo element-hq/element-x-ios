@@ -11,10 +11,9 @@ import Foundation
 import XCTest
 
 final class OverrideColorTests: XCTestCase {
-    /// For some very weird reason we need this to be async, `@MainActoe` won't work
-    /// or it will crash.
-    /// The other solution would be to make CompoundColors nonisolated
-    /// But we don't really need that
+    /// For some very weird reason we need this to be async, `@MainActor` is not enough
+    /// it will compile but when running it will crash at the end of the run due to some deinit problems.
+    /// The other solution would be to make CompoundColors nonisolated but we don't really need that.
     func testSwiftUI() async {
         await MainActor.run {
             let colors = CompoundColors()
