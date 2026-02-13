@@ -8,36 +8,35 @@
 
 @testable import Compound
 import Foundation
-import XCTest
+import Testing
 
-final class OverrideColorTests: XCTestCase {
-    func testSwiftUI() async {
-        // For some very weird reason we need this to be async, `@MainActor` is not enough
-        // it will compile but when running it will crash at the end of the run due to some deinit problems.
-        // The other solution would be to make CompoundColors nonisolated but we don't really need that.
-        await MainActor.run {
-            let colors = CompoundColors()
-            let tokens = CompoundColorTokens()
-            XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
-            
-            colors.override(\.textPrimary, with: .pink)
-            XCTAssertEqual(colors.textPrimary, .pink)
-            
-            colors.override(\.textPrimary, with: nil)
-            XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
-        }
+@Suite
+struct OverrideColorTests {
+    @Test("SwiftUI color override")
+    @MainActor
+    func swiftUI() {
+        let colors = CompoundColors()
+        let tokens = CompoundColorTokens()
+        #expect(colors.textPrimary == tokens.textPrimary)
+        
+        colors.override(\.textPrimary, with: .pink)
+        #expect(colors.textPrimary == .pink)
+        
+        colors.override(\.textPrimary, with: nil)
+        #expect(colors.textPrimary == tokens.textPrimary)
     }
     
     /// UIColors are nonisolated, so this is fine.
-    func testUIKit() {
+    @Test("UIKit color override")
+    func uiKit() {
         let colors = CompoundUIColors()
         let tokens = CompoundUIColorTokens()
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+        #expect(colors.textPrimary == tokens.textPrimary)
         
         colors.override(\.textPrimary, with: .systemPink)
-        XCTAssertEqual(colors.textPrimary, .systemPink)
+        #expect(colors.textPrimary == .systemPink)
         
         colors.override(\.textPrimary, with: nil)
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+        #expect(colors.textPrimary == tokens.textPrimary)
     }
 }
