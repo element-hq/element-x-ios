@@ -246,28 +246,28 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
     static let unknownViewModel = viewModel(recoveryState: .unknown)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupRecoveryKeyScreen(context: notSetUpViewModel.context)
         }
         .previewDisplayName("Not set up")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupRecoveryKeyScreen(context: generatingViewModel.context)
         }
         .previewDisplayName("Generating")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupRecoveryKeyScreen(context: setupViewModel.context)
         }
         .snapshotPreferences(expect: setupViewModel.context.observe(\.viewState.recoveryKey).map { $0 != nil })
         .previewDisplayName("Set up")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupRecoveryKeyScreen(context: incompleteViewModel.context)
         }
         .previewDisplayName("Incomplete")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupRecoveryKeyScreen(context: unknownViewModel.context)
         }
         .previewDisplayName("Unknown")

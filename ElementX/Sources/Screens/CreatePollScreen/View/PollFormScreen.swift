@@ -213,12 +213,12 @@ struct PollFormScreen_Previews: PreviewProvider, TestablePreview {
                            createdByAccountOwner: true)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             PollFormScreen(context: viewModel.context)
         }
         .previewDisplayName("New")
         
-        NavigationStack {
+        ElementNavigationStack {
             PollFormScreen(context: editViewModel.context)
         }
         .previewDisplayName("Edit")

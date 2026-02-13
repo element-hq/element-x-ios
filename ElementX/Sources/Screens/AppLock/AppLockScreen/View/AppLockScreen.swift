@@ -116,7 +116,7 @@ struct AppLockScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = AppLockScreenViewModel(appLockService: AppLockServiceMock.mock())
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             AppLockScreen(context: viewModel.context)
         }
     }

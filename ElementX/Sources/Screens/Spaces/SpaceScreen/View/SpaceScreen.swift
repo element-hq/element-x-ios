@@ -194,16 +194,16 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
     static let newSpaceViewModel = makeViewModel(isNewSpace: true)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SpaceScreen(context: viewModel.context)
         }
         
-        NavigationStack {
+        ElementNavigationStack {
             SpaceScreen(context: managingViewModel.context)
         }
         .previewDisplayName("Managing")
         
-        NavigationStack {
+        ElementNavigationStack {
             SpaceScreen(context: newSpaceViewModel.context)
         }
         .previewDisplayName("New Space")

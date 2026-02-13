@@ -112,7 +112,7 @@ struct ManageAuthorizedSpacesScreen_Previews: PreviewProvider, TestablePreview {
                                                                  mediaProvider: MediaProviderMock(configuration: .init()))
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             ManageAuthorizedSpacesScreen(context: viewModel.context)
         }
     }

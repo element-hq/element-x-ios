@@ -365,6 +365,7 @@ private struct NavigationSplitCoordinatorView: View {
     
     /// The NavigationStack that will be used in compact layouts
     var navigationStack: some View {
+        // swiftlint:disable:next prefer_element_navigation_stack
         NavigationStack(path: $navigationSplitCoordinator.compactLayoutStackModules) {
             navigationSplitCoordinator.compactLayoutRootModule?.coordinator?.toPresentable()
                 .id(navigationSplitCoordinator.compactLayoutRootModule?.id) // Is a nil ID ok?
@@ -691,6 +692,7 @@ private struct NavigationStackCoordinatorView: View {
     @Bindable var navigationStackCoordinator: NavigationStackCoordinator
     
     var body: some View {
+        // swiftlint:disable:next prefer_element_navigation_stack
         NavigationStack(path: $navigationStackCoordinator.stackModules) {
             navigationStackCoordinator.rootModule?.coordinator?.toPresentable()
                 .id(navigationStackCoordinator.rootModule?.id) // Is a nil ID ok?

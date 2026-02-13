@@ -55,7 +55,7 @@ struct JoinCallButton: View {
 
 struct JoinCallButton_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             Color.clear
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {

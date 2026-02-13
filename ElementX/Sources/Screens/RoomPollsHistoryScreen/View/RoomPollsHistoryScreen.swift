@@ -145,12 +145,12 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
     }()
 
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             RoomPollsHistoryScreen(context: viewModelEmpty.context)
         }
         .previewDisplayName("No polls")
 
-        NavigationStack {
+        ElementNavigationStack {
             RoomPollsHistoryScreen(context: viewModel.context)
         }
         .previewDisplayName("polls")

@@ -117,31 +117,31 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
     static let offlineViewModel = makeViewModel(mode: .offline)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupLogoutConfirmationScreen(context: viewModel.context)
         }
         .previewDisplayName("Confirmation")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupLogoutConfirmationScreen(context: waitingViewModel.context)
         }
         .previewDisplayName("Waiting")
         .snapshotPreferences(expect: waitingViewModel.context.observe(\.viewState.mode).map { $0 == .waitingToStart(hasStalled: false) })
         
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupLogoutConfirmationScreen(context: ongoingViewModel.context)
         }
         .previewDisplayName("Ongoing")
         .snapshotPreferences(expect: ongoingViewModel.context.observe(\.viewState.mode).map { $0 == .backupOngoing(progress: 0.5) })
         
         // Uses the same view model as Waiting but with a different expectation.
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupLogoutConfirmationScreen(context: waitingViewModel.context)
         }
         .previewDisplayName("Stalled")
         .snapshotPreferences(expect: waitingViewModel.context.observe(\.viewState.mode).map { $0 == .waitingToStart(hasStalled: true) })
         
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupLogoutConfirmationScreen(context: offlineViewModel.context)
         }
         .previewDisplayName("Offline")

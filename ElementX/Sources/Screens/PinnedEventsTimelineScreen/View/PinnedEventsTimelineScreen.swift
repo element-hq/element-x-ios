@@ -88,7 +88,7 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     }()
         
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             PinnedEventsTimelineScreen(context: viewModel.context, timelineContext: emptyTimelineViewModel.context)
         }
         .previewDisplayName("Empty")

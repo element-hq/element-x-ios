@@ -485,7 +485,7 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
         let previewDisplayName = customPreviewName ?? previewDisplayName
         let previewDisplayNameSuffix = isSpace ? " Space" : ""
         if mode == .forbidden {
-            NavigationStack {
+            ElementNavigationStack {
                 JoinRoomScreen(context: viewModel.context)
             }
             .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
@@ -496,7 +496,7 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
             }
             .previewDisplayName(previewDisplayName + previewDisplayNameSuffix)
         } else {
-            NavigationStack {
+            ElementNavigationStack {
                 JoinRoomScreen(context: viewModel.context)
             }
             .snapshotPreferences(expect: viewModel.context.$viewState.map { state in

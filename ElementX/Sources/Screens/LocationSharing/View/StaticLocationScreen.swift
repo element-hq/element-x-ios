@@ -176,17 +176,17 @@ struct StaticLocationScreenViewer_Previews: PreviewProvider, TestablePreview {
                                                                     userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             StaticLocationScreen(context: pickerViewModel.context)
         }
         .previewDisplayName("Picker")
 
-        NavigationStack {
+        ElementNavigationStack {
             StaticLocationScreen(context: viewModel.context)
         }
         .previewDisplayName("View Only")
 
-        NavigationStack {
+        ElementNavigationStack {
             StaticLocationScreen(context: descriptionViewModel.context)
         }
         .previewDisplayName("View Only (with description)")

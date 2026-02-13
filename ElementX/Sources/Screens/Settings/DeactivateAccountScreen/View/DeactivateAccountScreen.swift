@@ -96,7 +96,7 @@ struct DeactivateAccountScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = DeactivateAccountScreenViewModel(clientProxy: ClientProxyMock(.init()),
                                                             userIndicatorController: UserIndicatorControllerMock())
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             DeactivateAccountScreen(context: viewModel.context)
         }
     }

@@ -1,5 +1,6 @@
 "Notification" = "Notification";
 "a11y_add_reaction" = "Add reaction: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Delete";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Ended poll";
 "a11y_polls_will_remove_selection" = "Will remove previous selection";
 "a11y_polls_winning_answer" = "This is the winning answer";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "React with %1$@";
 "a11y_react_with_other_emojis" = "React with other emojis";
 "a11y_read_receipts_multiple" = "Read by %1$@ and %2$@";
