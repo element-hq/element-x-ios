@@ -313,8 +313,6 @@ final class AppSettings {
     let bugReportSentryRustURL: URL? = Secrets.sentryRustDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server
     private(set) var bugReportApplicationID = "element-x-ios"
-    /// The maximum size of the upload request. Default value is just below CloudFlare's max request size.
-    let bugReportMaxUploadSize = 50 * 1024 * 1024
     
     // MARK: - Analytics
     
