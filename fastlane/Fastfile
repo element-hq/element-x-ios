@@ -167,7 +167,7 @@ lane :upload_dsyms_to_sentry do |options|
   UI.user_error!("Invalid DSYM path.") unless !dsym_path.to_s.empty?
 
   begin
-    sentry_upload_dif(
+    sentry_debug_files_upload(
       auth_token: auth_token,
       org_slug: 'element',
       project_slug: 'element-x-ios',
