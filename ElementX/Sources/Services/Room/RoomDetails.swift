@@ -16,4 +16,5 @@ struct RoomDetails {
     let isEncrypted: Bool
     let isPublic: Bool
     let isDirect: Bool
+    var historySharingState: RoomHistorySharingState?
 }

@@ -10,6 +10,7 @@ import SwiftUI
 
 enum CreateRoomScreenErrorType: Error {
     case failedCreatingRoom
+    case failedProcessingMedia
     case failedUploadingMedia
     case fileTooLarge
     case mediaFileError
@@ -143,6 +144,6 @@ enum CreateRoomScreenAccessType {
 }
 
 enum CreateRoomScreenSpaceSelectionMode {
-    case editableSpacesList
-    case preSelected(SpaceServiceRoom)
+    case editableSpacesList(preSelectedSpace: SpaceServiceRoom?)
+    case none
 }

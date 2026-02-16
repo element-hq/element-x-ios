@@ -1,5 +1,6 @@
 "Notification" = "Ilmoitus";
 "a11y_add_reaction" = "Lisää reaktio: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Pienennä viestin tekstikenttä";
 "a11y_delete" = "Poista";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Päättynyt kysely";
 "a11y_polls_will_remove_selection" = "Poistaa edellisen valinnan";
 "a11y_polls_winning_answer" = "Tämä on voittava vastaus";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Lisää reaktio: %1$@";
 "a11y_react_with_other_emojis" = "Reagoi muilla emojeilla";
 "a11y_read_receipts_multiple" = "%1$@ ja %2$@ on lukenut viestin";
@@ -177,6 +179,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ei tue Bluetooth-äänilaitteiden käyttöä tässä Android-versiossa. Valitse toinen äänilaite.";
 "common_about" = "Tietoa";
 "common_acceptable_use_policy" = "Hyväksyttävän käytön käytäntö";
+"common_add_account" = "Lisää tili";
+"common_add_another_account" = "Lisää toinen tili";
 "common_adding_caption" = "Lisätään kuvatekstiä";
 "common_advanced_settings" = "Edistyneet asetukset";
 "common_an_image" = "kuva";
@@ -250,6 +254,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Ei tuloksia";
 "common_no_room_name" = "Nimetön huone";
+"common_no_space_name" = "Nimetön tila";
 "common_not_encrypted" = "Ei salattu";
 "common_offline" = "Ei yhteyttä";
 "common_open_source_licenses" = "Avoimen lähdekoodin lisenssit";
@@ -268,8 +273,10 @@
 "common_poll_undisclosed_text" = "Tulokset näkyvät kyselyn päätyttyä";
 "common_preparing" = "Valmistellaan…";
 "common_privacy_policy" = "Tietosuojakäytäntö";
+"common_private" = "Private";
 "common_private_room" = "Yksityinen huone";
 "common_private_space" = "Yksityinen tila";
+"common_public" = "Public";
 "common_public_room" = "Julkinen huone";
 "common_public_space" = "Julkinen tila";
 "common_reaction" = "Reaktio";
@@ -294,6 +301,7 @@
 "common_search_results" = "Hakutulokset";
 "common_security" = "Turvallisuus";
 "common_seen_by" = "Nähneet henkilöt";
+"common_select_account" = "Valitse tili";
 "common_send_to" = "Jaa";
 "common_sending" = "Lähetetään…";
 "common_sending_failed" = "Lähetys epäonnistui";
@@ -311,6 +319,7 @@
 "common_something_went_wrong" = "Jokin meni pieleen";
 "common_something_went_wrong_message" = "Kohtasimme ongelman. Yritä uudelleen.";
 "common_space" = "Tila";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "Aloitetaan keskustelua...";
 "common_sticker" = "Tarra";
@@ -353,10 +362,6 @@
 "common_waiting_for_decryption_key" = "Odotetaan viestiä";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Sinä";
-"common.add_account" = "Lisää tili";
-"common.add_another_account" = "Lisää toinen tili";
-"common.no_space_name" = "Nimetön tila";
-"common.select_account" = "Valitse tili";
 "common_unable_to_decrypt_insecure_device" = "Lähetetty suojaamattomasta laitteesta";
 "common_unable_to_decrypt_verification_violation" = "Lähettäjän vahvistettu identiteetti nollattiin";
 "confirm_recovery_key_banner_message" = "Vahvista palautusavaimesi, jotta pääset edelleen käyttämään avainten säilytystä ja viestihistoriaa.";
@@ -373,6 +378,9 @@
 "crypto_event_authenticity_unverified_identity" = "Vahvistamattoman käyttäjän salaama.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "Käyttäjän %1$@ identiteetti nollattiin. %2$@";
 "crypto_identity_change_pin_violation_new" = "Käyttäjän %1$@ %2$@ identiteetti nollattiin. %3$@";
@@ -454,6 +462,7 @@
 "notification_mentioned_you_body" = "Mainitsi sinut: %1$@";
 "notification_new_messages" = "Uusia viestejä";
 "notification_reaction_body" = "Reaktio: %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Kutsui sinut liittymään huoneeseen";
 "notification_room_invite_body_with_sender" = "%1$@ kutsui sinut liittymään huoneeseen";
 "notification_sender_me" = "Minä";
@@ -548,9 +557,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
-"screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Kuka tahansa voi liittyä tähän huoneeseen";
-"screen_create_room_room_access_section_public_option_title" = "Kuka tahansa";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
@@ -558,7 +565,8 @@
 "screen_create_room_room_address_section_title" = "Huoneen osoite";
 "screen_create_room_room_visibility_section_title" = "Huoneen näkyvyys";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Et tule näkemään viestejä tai kutsuja tältä käyttäjältä";
@@ -610,7 +618,6 @@
 "screen_labs_header_description" = "Kokeile uusimpia kehitteillä olevia ideoitamme. Nämä ominaisuudet eivät ole vielä valmiita; ne voivat olla epävakaita ja muuttua.";
 "screen_labs_header_title" = "Kokeilunhaluinen olo?";
 "screen_labs_title" = "Labrat";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Ylläpitäjä)";
 "screen_leave_space_subtitle" = "Tämä poistaa sinut myös kaikista tämän tilan huoneista.";
 "screen_leave_space_subtitle_last_admin" = "Sinun on valittava tälle tilalle toinen ylläpitäjä ennen kuin voit poistua.";
@@ -717,7 +724,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Pääsy";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorised spaces can join.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Tilan jäsenet";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Tiloja ei tällä hetkellä tueta";
 "screen_security_and_privacy_room_address_section_header" = "Osoite";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Salli tämän huoneen löytäminen hakemalla %1$@ -palvelimen julkisesta huonehakemistosta.";
@@ -874,9 +880,7 @@
 "screen_create_room_action_create_room" = "Uusi huone";
 "screen_create_room_error_creating_room" = "Huoneen luomisessa tapahtui virhe";
 "screen_create_room_private_option_description" = "Vain kutsutut henkilöt pääsevät tähän huoneeseen. Kaikki viestit ovat päästä päähän salattuja.";
-"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Kuka tahansa voi löytää tämän huoneen.\nVoit muuttaa tämän milloin tahansa huoneen asetuksista.";
-"screen_create_room_public_option_title" = "Julkinen huone";
 "screen_create_room_topic_label" = "Aihe (valinnainen)";
 "screen_deactivate_account_confirmation_dialog_content" = "Vahvista, että haluat deaktivoida tilisi. Tätä ei voi perua.";
 "screen_deactivate_account_delete_all_messages" = "Poista kaikki viestini";
@@ -1423,6 +1427,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "He voivat liittyä tähän huoneeseen uudelleen, jos heidät kutsutaan.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Poista porttikielto";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Poistetaan käyttäjän %1$@ porttikieltoa";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Estä käyttäjä";
 "screen_decline_and_block_report_user_reason_placeholder" = "Kuvaile syytä...";
 "screen_decline_and_block_title" = "Hylkää ja estä";
@@ -1430,6 +1436,7 @@
 "screen_home_tab_spaces" = "Tilat";
 "screen_join_room_decline_and_block_button_title" = "Hylkää ja estä";
 "screen_knock_requests_list_title" = "Liittymispyynnöt";
+"screen_leave_space_choose_owners_action" = "Valitse omistajat";
 "screen_link_new_device_desktop_scanning_title" = "Skannaa QR-koodi";
 "screen_link_new_device_desktop_step3" = "Skannaa QR-koodi tällä laitteella";
 "screen_link_new_device_desktop_submit" = "Valmis skannaamaan";
@@ -1454,6 +1461,7 @@
 "screen_roomlist_knock_event_sent_description" = "Liittymispyyntö lähetetty";
 "screen_security_and_privacy_encryption_section_header" = "Salaus";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Tarvitset osoitteen, jotta se näkyy julkisessa hakemistossa.";
 "screen_space_settings_leave_space" = "Poistu tilasta";
 "screen_space_settings_roles_and_permissions" = "Roolit ja oikeudet";
@@ -1473,6 +1481,8 @@
 "screen_create_account_title" = "Luo tili";
 "screen_create_poll_cancel_confirmation_content_ios" = "Muutoksiasi ei tallenneta";
 "screen_create_room_add_people_title" = "Kutsu henkilöitä";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Deaktivoi tili";
 "screen_dm_details_block_alert_action" = "Estä";
 "screen_dm_details_block_alert_description" = "Estetyt käyttäjät eivät voi lähettää sinulle viestejä ja kaikki heidän viestit piilotetaan. Voit poistaa eston milloin tahansa.";

@@ -28,7 +28,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     }
     
     init(isSpace: Bool,
-         spaceSelectionMode: CreateRoomScreenSpaceSelectionMode?,
+         spaceSelectionMode: CreateRoomScreenSpaceSelectionMode,
          shouldShowCancelButton: Bool,
          userSession: UserSessionProtocol,
          analytics: AnalyticsService,
@@ -40,18 +40,23 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         self.userIndicatorController = userIndicatorController
         
         var selectedSpace: SpaceServiceRoom?
-        var canSelectSpace = false
+        let canSelectSpace: Bool
+        var selectedAccessType = CreateRoomScreenAccessType.private
         switch spaceSelectionMode {
-        case .editableSpacesList:
+        case .editableSpacesList(let preSelectedSpace):
             canSelectSpace = true
-        case .preSelected(let value):
-            selectedSpace = value
+            if let preSelectedSpace {
+                selectedSpace = preSelectedSpace
+                if preSelectedSpace.joinRule != .public {
+                    selectedAccessType = .spaceMembers
+                }
+            }
         case .none:
-            break
+            canSelectSpace = false
         }
         
         let bindings = CreateRoomScreenViewStateBindings(roomTopic: "",
-                                                         selectedAccessType: .private,
+                                                         selectedAccessType: selectedAccessType,
                                                          selectedSpace: selectedSpace)
 
         super.init(initialViewState: CreateRoomScreenViewState(isSpace: isSpace,
@@ -111,7 +116,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
             do {
                 guard case let .success(maxUploadSize) = await userSession.clientProxy.maxMediaUploadSize else {
                     MXLog.error("Failed to get max upload size")
-                    userIndicatorController.alertInfo = AlertInfo(id: .init())
+                    state.bindings.alertInfo = .init(id: .unknown)
                     return
                 }
                 let mediaInfo = try await mediaUploadingPreprocessor.processMedia(at: fileURL, maxUploadSize: maxUploadSize).get()
@@ -123,7 +128,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                     break
                 }
             } catch {
-                userIndicatorController.alertInfo = AlertInfo(id: .init())
+                state.bindings.alertInfo = .init(id: .failedProcessingMedia)
             }
             hideLoadingIndicator()
         }

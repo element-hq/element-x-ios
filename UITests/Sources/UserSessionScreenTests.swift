@@ -29,6 +29,8 @@ class UserSessionScreenTests: XCTestCase {
         static let spaceJoinRoomScreen = 9
         static let spaceAddRoomsScreen = 10
         static let spaceMembersListScreen = 11
+        static let spaceSettingsScreen = 12
+        static let createSpaceRoomScreen = 13
     }
     
     func testUserSessionFlows() async throws {
@@ -97,6 +99,15 @@ class UserSessionScreenTests: XCTestCase {
         try await app.assertScreenshot(step: Step.subspaceScreen)
         
         app.buttons[A11yIdentifiers.spaceScreen.moreMenu].tap()
+        app.buttons[A11yIdentifiers.spaceScreen.createRoom].tap()
+        XCTAssertTrue(app.buttons[A11yIdentifiers.createRoomScreen.cancel].waitForExistence(timeout: 5.0))
+        try await Task.sleep(for: .seconds(1))
+        try await app.assertScreenshot(step: Step.createSpaceRoomScreen)
+        
+        app.buttons[A11yIdentifiers.createRoomScreen.cancel].tap()
+        XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
+        
+        app.buttons[A11yIdentifiers.spaceScreen.moreMenu].tap()
         app.buttons[A11yIdentifiers.spaceScreen.addExistingRooms].tap()
         XCTAssert(app.buttons[A11yIdentifiers.spaceAddRoomsScreen.cancel].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
@@ -110,6 +121,15 @@ class UserSessionScreenTests: XCTestCase {
         XCTAssert(app.buttons[A11yIdentifiers.roomMembersListScreen.invite].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.spaceMembersListScreen)
+        
+        app.navigationBars.buttons[joinedSubspaceName].firstMatch.tap(.center)
+        XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
+        
+        app.buttons[A11yIdentifiers.spaceScreen.moreMenu].tap()
+        app.buttons[A11yIdentifiers.spaceScreen.settings].tap()
+        XCTAssert(app.buttons[A11yIdentifiers.spaceSettingsScreen.editBaseInfo].waitForExistence(timeout: 5.0))
+        try await Task.sleep(for: .seconds(1))
+        try await app.assertScreenshot(step: Step.spaceSettingsScreen)
         
         app.navigationBars.buttons[joinedSubspaceName].firstMatch.tap(.center)
         XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))

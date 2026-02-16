@@ -33,6 +33,7 @@ struct EditRoomAddressListRow: View {
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textPrimary)
                     .padding(.horizontal, 8)
+                    .accessibilityLabel(L10n.a11yAddress)
                     .accessibilityHint(L10n.a11yEditRoomAddressHint(fullAddress))
                 Text(":\(serverName)")
                     .font(.compound.bodyLG)

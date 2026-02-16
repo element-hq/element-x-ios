@@ -59,7 +59,7 @@ class OIDCAuthenticationPresenter: NSObject {
             let errorDescription = error.map(String.init(describing:)) ?? "Unknown error"
             MXLog.error("Missing callback URL from the web authentication session: \(errorDescription)")
             
-            userIndicatorController.alertInfo = AlertInfo(id: UUID())
+            showFailureIndicator()
             await authenticationService.abortOIDCLogin(data: oidcData)
             return .failure(.oidcError(.unknown))
         }
@@ -76,7 +76,7 @@ class OIDCAuthenticationPresenter: NSObject {
             return .failure(.oidcError(.userCancellation))
         case .failure(let error):
             MXLog.error("Error occurred: \(error)")
-            userIndicatorController.alertInfo = AlertInfo(id: UUID())
+            showFailureIndicator()
             return .failure(error)
         }
     }
@@ -85,10 +85,16 @@ class OIDCAuthenticationPresenter: NSObject {
         activeSession?.cancel()
     }
     
-    private static let loadingIndicatorID = "\(OIDCAuthenticationPresenter.self)-Loading"
+    private var loadingIndicatorID: String {
+        "\(Self.self)-Loading"
+    }
+
+    private var failureIndicatorID: String {
+        "\(Self.self)-Failure"
+    }
     
     private func startLoading(delay: Duration? = nil) {
-        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorID,
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorID,
                                                               type: .modal,
                                                               title: L10n.commonLoading,
                                                               persistent: true),
@@ -96,7 +102,14 @@ class OIDCAuthenticationPresenter: NSObject {
     }
     
     private func stopLoading() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
+        userIndicatorController.retractIndicatorWithId(loadingIndicatorID)
+    }
+    
+    private func showFailureIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: failureIndicatorID,
+                                                              type: .toast,
+                                                              title: L10n.errorUnknown,
+                                                              iconName: "xmark"))
     }
 }
 

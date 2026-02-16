@@ -746,4 +746,53 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
     }
+    
+    // MARK: - History Sharing
+    
+    func testHistorySharingPillDoesNotAppearIfFeatureFlagNotSet() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = false
+        
+        let configuration = JoinedRoomProxyMockConfiguration(historyVisibility: .shared)
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                               userSession: UserSessionMock(.init()),
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
+        
+        let deferredInvisible = deferFailure(context.observe(\.viewState),
+                                             timeout: 1,
+                                             message: "The pill should not be shown as the feature flag is not set") { state in
+            state.details.historySharingState != nil
+        }
+        try await deferredInvisible.fulfill()
+    }
+    
+    func testHistorySharingPillDisplayedIfHistoryVisibilityShared() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        
+        let configuration = JoinedRoomProxyMockConfiguration(historyVisibility: .shared)
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                               userSession: UserSessionMock(.init()),
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
+        
+        let deferredShared = deferFulfillment(context.observe(\.viewState),
+                                              message: "The pill should be shown for rooms with shared history visibility") { state in
+            state.details.historySharingState == .shared
+        }
+        try await deferredShared.fulfill()
+    }
 }

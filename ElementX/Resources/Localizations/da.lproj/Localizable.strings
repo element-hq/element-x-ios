@@ -1,5 +1,6 @@
 "Notification" = "Meddelelse";
 "a11y_add_reaction" = "Tilføj reaktion: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Minimér tekstfeltet for beskeder";
 "a11y_delete" = "Slet";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Afsluttet afstemning";
 "a11y_polls_will_remove_selection" = "Fjerner tidligere valg";
 "a11y_polls_winning_answer" = "Dette er det vindende svar";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Reager med%1$@";
 "a11y_react_with_other_emojis" = "Reager med andre emojis";
 "a11y_read_receipts_multiple" = "Læs af %1$@ og %2$@";
@@ -177,6 +179,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call understøtter desværre ikke brug af Bluetooth-lydenheder i denne Android-version. Vælg venligst en anden lydenhed.";
 "common_about" = "Om";
 "common_acceptable_use_policy" = "Politik for acceptabel brug";
+"common_add_account" = "Tilføj en konto";
+"common_add_another_account" = "Tilføj en anden konto";
 "common_adding_caption" = "Tilføjelse af billedtekst";
 "common_advanced_settings" = "Avancerede indstillinger";
 "common_an_image" = "et billede";
@@ -250,6 +254,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Ingen resultater";
 "common_no_room_name" = "Intet rumnavn";
+"common_no_space_name" = "Intet gruppenavn";
 "common_not_encrypted" = "Ikke krypteret";
 "common_offline" = "Offline";
 "common_open_source_licenses" = "Open Source-licenser";
@@ -268,8 +273,10 @@
 "common_poll_undisclosed_text" = "Resultaterne vil blive vist, når afstemningen er afsluttet";
 "common_preparing" = "Forbereder…";
 "common_privacy_policy" = "Privatlivspolitik";
+"common_private" = "Private";
 "common_private_room" = "Privat rum";
 "common_private_space" = "Privat gruppe";
+"common_public" = "Public";
 "common_public_room" = "Offentligt rum";
 "common_public_space" = "Offentlig gruppe";
 "common_reaction" = "Reaktion";
@@ -294,6 +301,7 @@
 "common_search_results" = "Søgeresultater";
 "common_security" = "Sikkerhed";
 "common_seen_by" = "Set af";
+"common_select_account" = "Vælg en konto";
 "common_send_to" = "Send til";
 "common_sending" = "Sender...";
 "common_sending_failed" = "Afsendelse mislykkedes";
@@ -311,6 +319,7 @@
 "common_something_went_wrong" = "Noget gik galt";
 "common_something_went_wrong_message" = "Vi stødte på et problem. Prøv venligst igen.";
 "common_space" = "Gruppe";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "Hvad handler denne gruppe om?";
 "common_starting_chat" = "Starter samtale...";
 "common_sticker" = "Klistermærke";
@@ -353,10 +362,6 @@
 "common_waiting_for_decryption_key" = "Venter på denne besked";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Dig";
-"common.add_account" = "Tilføj en konto";
-"common.add_another_account" = "Tilføj en anden konto";
-"common.no_space_name" = "Intet gruppenavn";
-"common.select_account" = "Vælg en konto";
 "common_unable_to_decrypt_insecure_device" = "Sendt fra en usikker enhed";
 "common_unable_to_decrypt_verification_violation" = "Afsenderens verificerede identitet blev nulstillet";
 "confirm_recovery_key_banner_message" = "Bekræft din gendannelsesnøgle for at bevare adgangen til nøglelager og meddelelseshistorik.";
@@ -373,6 +378,9 @@
 "crypto_event_authenticity_unverified_identity" = "Krypteret af en ikke-verificeret bruger.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@(%2$@ ) har delt denne besked siden du ikke var i rummet da den blev sendt.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ delte denne besked, siden du ikke var i rummet da den blev sendt.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Dette rum er konfigureret, så nye medlemmer kan læse historikken.%1$@";
 "crypto_identity_change_pin_violation" = "%1$@s identitet blev nulstillet. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@s %2$@ identitet blev nulstillet. %3$@";
@@ -454,6 +462,7 @@
 "notification_mentioned_you_body" = "Nævnte dig: %1$@";
 "notification_new_messages" = "Nye beskeder";
 "notification_reaction_body" = "Reagerede med%1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Inviterede dig til at deltage i rummet";
 "notification_room_invite_body_with_sender" = "%1$@ inviterede dig til at deltage i rummet";
 "notification_sender_me" = "Mig";
@@ -548,9 +557,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Enhver i %1$@ kan deltage, men alle andre skal anmode om adgang.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Anmod om at deltage";
 "screen_create_room_room_access_section_private_option_description" = "Kun inviterede brugere kan deltage.";
-"screen_create_room_room_access_section_private_option_title" = "Privat";
 "screen_create_room_room_access_section_public_option_description" = "Alle kan deltage i dette rum";
-"screen_create_room_room_access_section_public_option_title" = "Offentlig";
 "screen_create_room_room_access_section_restricted_option_description" = "Alle i %1$@ kan deltage.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Hvem har adgang";
@@ -558,7 +565,8 @@
 "screen_create_room_room_address_section_title" = "Adresse";
 "screen_create_room_room_visibility_section_title" = "Rummets synlighed";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Tilføj beskrivelse…";
 "screen_decline_and_block_block_user_option_description" = "Du vil ikke se nogen beskeder eller rum-invitationer fra denne bruger";
@@ -610,7 +618,6 @@
 "screen_labs_header_description" = "Prøv vores nyeste idéer under udvikling. Disse funktioner er ikke færdige; de ​​kan være ustabile og kan ændre sig.";
 "screen_labs_header_title" = "Er du i humør til at eksperimentere?";
 "screen_labs_title" = "Laboratorier";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Vælg de rum, du vil forlade, som du ikke er den eneste administrator for:";
 "screen_leave_space_subtitle_last_admin" = "Du skal tildele en anden administrator til denne gruppe, før du kan forlade den.";
@@ -717,7 +724,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Adgang";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Alle i autoriserede grupper kan deltage.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Alle i %1$@ kan deltage.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Medlemmer af gruppen";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Grupper understøttes ikke i øjeblikket";
 "screen_security_and_privacy_room_address_section_header" = "Adresse";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Tillad, at dette rum kan findes ved at søge i %1$@ fortegnelse over offentlige rum";
@@ -874,9 +880,7 @@
 "screen_create_room_action_create_room" = "Nyt rum";
 "screen_create_room_error_creating_room" = "Der opstod en fejl ved oprettelsen af rummet";
 "screen_create_room_private_option_description" = "Kun inviterede personer kan deltage.";
-"screen_create_room_private_option_title" = "Privat";
 "screen_create_room_public_option_description" = "Alle kan finde dette rum.\nDu kan ændre dette når som helst i rummets indstillinger.";
-"screen_create_room_public_option_title" = "Offentlig";
 "screen_create_room_topic_label" = "Emne (valgfrit)";
 "screen_deactivate_account_confirmation_dialog_content" = "Bekræft venligst, at du vil deaktivere din konto. Denne handling kan ikke fortrydes.";
 "screen_deactivate_account_delete_all_messages" = "Slet alle mine beskeder";
@@ -1423,6 +1427,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "De vil være i stand til at deltage i dette rum igen, hvis de inviteres.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Fjern spærring af";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Ophæver spærring af %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Bloker bruger";
 "screen_decline_and_block_report_user_reason_placeholder" = "Beskriv årsagen til anmeldelsen…";
 "screen_decline_and_block_title" = "Afvis og blokér";
@@ -1430,6 +1436,7 @@
 "screen_home_tab_spaces" = "Grupper";
 "screen_join_room_decline_and_block_button_title" = "Afvis og blokér";
 "screen_knock_requests_list_title" = "Anmodninger om at deltage";
+"screen_leave_space_choose_owners_action" = "Vælg ejere";
 "screen_link_new_device_desktop_scanning_title" = "Scan QR-koden";
 "screen_link_new_device_desktop_step3" = "Scan QR-koden med denne enhed";
 "screen_link_new_device_desktop_submit" = "Klar til at scanne";
@@ -1454,6 +1461,7 @@
 "screen_roomlist_knock_event_sent_description" = "Anmodning om at deltage sendt";
 "screen_security_and_privacy_encryption_section_header" = "Kryptering";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Administrer grupper";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Du skal bruge en adresse for at gøre det synligt i det offentlige register.";
 "screen_space_settings_leave_space" = "Forlad gruppe";
 "screen_space_settings_roles_and_permissions" = "Roller og tilladelser";
@@ -1473,6 +1481,8 @@
 "screen_create_account_title" = "Opret konto";
 "screen_create_poll_cancel_confirmation_content_ios" = "Dine ændringer vil ikke blive gemt";
 "screen_create_room_add_people_title" = "Invitér andre";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Deaktiver konto";
 "screen_dm_details_block_alert_action" = "Bloker";
 "screen_dm_details_block_alert_description" = "Blokerede brugere vil ikke være i stand til at sende dig beskeder, og alle deres beskeder vil blive skjult. Du kan fjerne blokeringen af dem når som helst.";

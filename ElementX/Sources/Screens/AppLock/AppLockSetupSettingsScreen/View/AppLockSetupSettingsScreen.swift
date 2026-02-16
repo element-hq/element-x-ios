@@ -51,17 +51,17 @@ struct AppLockSetupSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let biometricsUnavailableViewModel = AppLockSetupSettingsScreenViewModel(appLockService: AppLockServiceMock.mock(biometryType: .none))
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             AppLockSetupSettingsScreen(context: faceIDViewModel.context)
         }
         .previewDisplayName("Face ID")
         
-        NavigationStack {
+        ElementNavigationStack {
             AppLockSetupSettingsScreen(context: touchIDViewModel.context)
         }
         .previewDisplayName("Touch ID (Mandatory)")
         
-        NavigationStack {
+        ElementNavigationStack {
             AppLockSetupSettingsScreen(context: biometricsUnavailableViewModel.context)
         }
         .previewDisplayName("PIN only")

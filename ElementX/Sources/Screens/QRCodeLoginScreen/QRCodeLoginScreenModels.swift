@@ -9,19 +9,26 @@
 import SwiftUI
 
 enum QRCodeLoginScreenViewModelAction: CustomStringConvertible {
-    case dismiss
+    /// Restart the flow.
+    ///
+    /// This action should only be sent when linking a new device. When logging in it
+    /// is handled internally within the screen.
+    case startOver
     case signInManually
     case signedIn(userSession: UserSessionProtocol)
     case requestOIDCAuthorisation(URL, OIDCAccountSettingsPresenter.Continuation)
     case linkedDevice
+    /// Cancel the flow (dismiss the modal).
+    case cancel
     
     var description: String {
         switch self {
-        case .dismiss: "dismiss"
+        case .startOver: "startOver"
         case .signInManually: "signInManually"
         case .signedIn: "signedIn"
         case .requestOIDCAuthorisation: "requestOIDCAuthorisation"
         case .linkedDevice: "linkedDevice"
+        case .cancel: "cancel"
         }
     }
 }
@@ -49,13 +56,13 @@ struct QRCodeLoginScreenViewState: BindableState {
         switch mode {
         case .login:
             switch state {
-            case .loginInstructions, .scan, .error(.noCameraPermission): true
+            case .loginInstructions, .scan: true
             case .error: false
             case .linkDesktopInstructions, .displayCode, .displayQR, .confirmCode: false // Unreachable states.
             }
         case .linkDesktop, .linkMobile:
             switch state {
-            case .displayCode, .confirmCode, .scan, .error(.noCameraPermission): true
+            case .displayCode, .confirmCode, .scan: true
             case .linkDesktopInstructions, .displayQR, .error: false
             case .loginInstructions: false // Unreachable state.
             }
@@ -81,7 +88,8 @@ struct QRCodeLoginScreenViewStateBindings {
 }
 
 enum QRCodeLoginScreenViewAction {
-    case dismiss
+    /// Cancel the entire flow (dismiss the modal).
+    case cancel
     case startScan
     case sendCheckCode
     case errorAction(QRCodeErrorView.Action)
@@ -107,13 +115,17 @@ enum QRCodeLoginState: Equatable {
     case error(ErrorState)
     
     enum ErrorState: Equatable, CaseIterable {
+        /// The account provider doesn't support the use of QR codes.
+        case notSupported
         case noCameraPermission
         case connectionNotSecure
         case cancelled
         case declined
         case expired
+        /// The other device does not support linking Element X by QR code.
         case linkingNotSupported
-        case deviceNotSupported
+        /// Login cannot be continued due to a lack of Sliding Sync.
+        case slidingSyncNotAvailable
         /// Expected a QR code for a new device, however the processed code belongs to a device that is already signed in.
         case deviceAlreadySignedIn
         case unknown

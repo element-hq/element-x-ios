@@ -164,7 +164,7 @@ struct SpaceAddRoomsScreen_Previews: PreviewProvider, TestablePreview {
     static let selectedViewModel = makeViewModel(searchQuery: "Foundation", hasSelection: true)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SpaceAddRoomsScreen(context: viewModel.context)
         }
         .previewDisplayName("Suggested")
@@ -172,12 +172,12 @@ struct SpaceAddRoomsScreen_Previews: PreviewProvider, TestablePreview {
             $0.type == .suggestions && !$0.rooms.isEmpty
         })
         
-        NavigationStack {
+        ElementNavigationStack {
             SpaceAddRoomsScreen(context: searchingViewModel.context)
         }
         .previewDisplayName("Searching")
         
-        NavigationStack {
+        ElementNavigationStack {
             SpaceAddRoomsScreen(context: selectedViewModel.context)
         }
         .previewDisplayName("Selected")

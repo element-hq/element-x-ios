@@ -73,7 +73,7 @@ struct ReportContentScreen_Previews: PreviewProvider, TestablePreview {
                                                         clientProxy: ClientProxyMock(.init()))
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             ReportContentScreen(context: viewModel.context)
         }
     }

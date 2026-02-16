@@ -1,5 +1,6 @@
 "Notification" = "Notifikasi";
 "a11y_add_reaction" = "Tambahkan reaksi: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Hapus";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Jajak pendapat berakhir";
 "a11y_polls_will_remove_selection" = "Will remove previous selection";
 "a11y_polls_winning_answer" = "Ini adalah jawaban yang menang";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Bereaksi dengan %1$@";
 "a11y_react_with_other_emojis" = "Reaksi dengan emoji lain";
 "a11y_read_receipts_multiple" = "Dibaca oleh %1$@ dan %2$@";
@@ -177,6 +179,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call tidak mendukung penggunaan perangkat audio Bluetooth di versi Android ini. Silakan pilih perangkat audio yang berbeda.";
 "common_about" = "Tentang";
 "common_acceptable_use_policy" = "Kebijakan penggunaan wajar";
+"common_add_account" = "Add an account";
+"common_add_another_account" = "Add another account";
 "common_adding_caption" = "Menambahkan keterangan";
 "common_advanced_settings" = "Pengaturan tingkat lanjut";
 "common_an_image" = "sebuah gambar";
@@ -250,6 +254,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Tidak ada hasil";
 "common_no_room_name" = "Tidak ada nama ruangan";
+"common_no_space_name" = "No space name";
 "common_not_encrypted" = "Tidak terenkripsi";
 "common_offline" = "Luring";
 "common_open_source_licenses" = "Lisensi sumber terbuka";
@@ -268,8 +273,10 @@
 "common_poll_undisclosed_text" = "Hasil akan terlihat setelah jajak pendapat berakhir.";
 "common_preparing" = "Preparing…";
 "common_privacy_policy" = "Kebijakan privasi";
+"common_private" = "Private";
 "common_private_room" = "Ruangan pribadi";
 "common_private_space" = "Private space";
+"common_public" = "Public";
 "common_public_room" = "Ruangan publik";
 "common_public_space" = "Public space";
 "common_reaction" = "Reaksi";
@@ -294,6 +301,7 @@
 "common_search_results" = "Hasil pencarian";
 "common_security" = "Keamanan";
 "common_seen_by" = "Dilihat oleh";
+"common_select_account" = "Select an account";
 "common_send_to" = "Kirim ke";
 "common_sending" = "Mengirim…";
 "common_sending_failed" = "Pengiriman gagal";
@@ -311,6 +319,7 @@
 "common_something_went_wrong" = "Ada yang salah";
 "common_something_went_wrong_message" = "Kami mengalami masalah. Silakan coba lagi.";
 "common_space" = "Space";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "Memulai obrolan...";
 "common_sticker" = "Stiker";
@@ -353,10 +362,6 @@
 "common_waiting_for_decryption_key" = "Menunggu pesan ini";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Anda";
-"common.add_account" = "Add an account";
-"common.add_another_account" = "Add another account";
-"common.no_space_name" = "No space name";
-"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Dikirim dari perangkat yang tidak aman";
 "common_unable_to_decrypt_verification_violation" = "Identitas terverifikasi pengirim diatur ulang";
 "confirm_recovery_key_banner_message" = "Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda.";
@@ -373,6 +378,9 @@
 "crypto_event_authenticity_unverified_identity" = "Dienkripsi oleh pengguna yang tidak terverifikasi.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "Identitas %1$@ telah diatur ulang. %2$@";
 "crypto_identity_change_pin_violation_new" = "Identitas %2$@ %1$@ telah diatur ulang. %3$@";
@@ -454,6 +462,7 @@
 "notification_mentioned_you_body" = "Menyebutkan Anda: %1$@";
 "notification_new_messages" = "Pesan Baru";
 "notification_reaction_body" = "Menghapus dengan %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Mengundang Anda untuk bergabung ke ruangan";
 "notification_room_invite_body_with_sender" = "%1$@ mengundang Anda untuk bergabung dengan ruangan";
 "notification_sender_me" = "Saya";
@@ -548,9 +557,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
-"screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Siapa pun dapat bergabung dengan ruangan ini";
-"screen_create_room_room_access_section_public_option_title" = "Siapa pun";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
@@ -558,7 +565,8 @@
 "screen_create_room_room_address_section_title" = "Alamat ruangan";
 "screen_create_room_room_visibility_section_title" = "Keterlihatan ruangan";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Anda tidak akan melihat pesan atau undangan ruangan dari pengguna ini";
@@ -610,7 +618,6 @@
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
 "screen_labs_header_title" = "Feeling experimental?";
 "screen_labs_title" = "Labs";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
 "screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
@@ -717,7 +724,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Akses ruangan";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorised spaces can join.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Anggota space";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Space saat ini tidak didukung";
 "screen_security_and_privacy_room_address_section_header" = "Address";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Izinkan ruangan ini ditemukan dengan mencari direktori ruangan %1$@ publik";
@@ -874,9 +880,7 @@
 "screen_create_room_action_create_room" = "Ruangan baru";
 "screen_create_room_error_creating_room" = "Terjadi kesalahan saat membuat ruangan";
 "screen_create_room_private_option_description" = "Hanya orang-orang yang diundang dapat mengakses ruangan ini. Semua pesan terenkripsi secara ujung ke ujung.";
-"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Siapa pun dapat mencari ruangan ini.\nAnda dapat mengubah ini kapan pun dalam pengaturan ruangan.";
-"screen_create_room_public_option_title" = "Ruangan publik";
 "screen_create_room_topic_label" = "Topik (opsional)";
 "screen_deactivate_account_confirmation_dialog_content" = "Harap konfirmasi bahwa Anda ingin menonaktifkan akun Anda. Tindakan ini tidak dapat diurungkan.";
 "screen_deactivate_account_delete_all_messages" = "Hapus semua pesan saya";
@@ -1423,6 +1427,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Pengguna dapat bergabung ke ruangan ini lagi jika diundang.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Batalkan pencekalan";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Membatalkan cekalan %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Blokir pengguna";
 "screen_decline_and_block_report_user_reason_placeholder" = "Jelaskan alasan untuk melaporkan...";
 "screen_decline_and_block_title" = "Tolak dan blokir";
@@ -1430,6 +1436,7 @@
 "screen_home_tab_spaces" = "Spaces";
 "screen_join_room_decline_and_block_button_title" = "Tolak dan blokir";
 "screen_knock_requests_list_title" = "Permintaan untuk bergabung";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_link_new_device_desktop_scanning_title" = "Pindai kode QR";
 "screen_link_new_device_desktop_step3" = "Pindai kode QR dengan perangkat ini";
 "screen_link_new_device_desktop_submit" = "Siap untuk memindai";
@@ -1454,6 +1461,7 @@
 "screen_roomlist_knock_event_sent_description" = "Permintaan untuk bergabung dikirim";
 "screen_security_and_privacy_encryption_section_header" = "Enkripsi";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Anda akan memerlukan alamat ruangan untuk membuatnya terlihat dalam direktori.";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "Peran dan perizinan";
@@ -1473,6 +1481,8 @@
 "screen_create_account_title" = "Buat akun";
 "screen_create_poll_cancel_confirmation_content_ios" = "Perubahan Anda tidak akan disimpan";
 "screen_create_room_add_people_title" = "Undang orang-orang";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Nonaktifkan akun";
 "screen_dm_details_block_alert_action" = "Blokir";
 "screen_dm_details_block_alert_description" = "Pengguna yang diblokir tidak akan dapat mengirim Anda pesan dan semua pesan mereka akan disembunyikan. Anda dapat membuka blokirnya kapan saja.";

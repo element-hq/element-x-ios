@@ -1,5 +1,6 @@
 "Notification" = "Γνωστοποίηση";
 "a11y_add_reaction" = "Προσθήκη αντίδρασης: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Εικόνα Προφίλ";
 "a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Διαγραφή";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Ολοκληρωμένη δημοσκόπηση";
 "a11y_polls_will_remove_selection" = "Will remove previous selection";
 "a11y_polls_winning_answer" = "Αυτή είναι η νικητήρια απάντηση";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Αντέδρασε με %1$@";
 "a11y_react_with_other_emojis" = "Αντέδρασε με άλλα emoji";
 "a11y_read_receipts_multiple" = "Διαβάστηκε από%1$@ και %2$@";
@@ -177,6 +179,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Το Element Call δεν υποστηρίζει τη χρήση συσκευών ήχου Bluetooth σε αυτήν την έκδοση Android. Επέλεξε μια διαφορετική συσκευή ήχου.";
 "common_about" = "Σχετικά";
 "common_acceptable_use_policy" = "Πολιτική αποδεκτής χρήσης";
+"common_add_account" = "Add an account";
+"common_add_another_account" = "Add another account";
 "common_adding_caption" = "Η λεζάντα προστίθεται";
 "common_advanced_settings" = "Ρυθμίσεις για προχωρημένους";
 "common_an_image" = "μια εικόνα";
@@ -250,6 +254,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Κανένα αποτέλεσμα";
 "common_no_room_name" = "Δεν υπάρχει όνομα αίθουσας";
+"common_no_space_name" = "No space name";
 "common_not_encrypted" = "Χωρίς κρυπτογράφηση";
 "common_offline" = "Εκτός σύνδεσης";
 "common_open_source_licenses" = "Άδειες ανοιχτού κώδικα";
@@ -268,8 +273,10 @@
 "common_poll_undisclosed_text" = "Τα αποτελέσματα θα εμφανιστούν μετά τη λήξη της ψηφοφορίας";
 "common_preparing" = "Preparing…";
 "common_privacy_policy" = "Πολιτική απορρήτου";
+"common_private" = "Private";
 "common_private_room" = "Ιδιωτική αίθουσα";
 "common_private_space" = "Private space";
+"common_public" = "Public";
 "common_public_room" = "Δημόσια αίθουσα";
 "common_public_space" = "Public space";
 "common_reaction" = "Αντίδραση";
@@ -294,6 +301,7 @@
 "common_search_results" = "Αποτελέσματα αναζήτησης";
 "common_security" = "Ασφάλεια";
 "common_seen_by" = "Προβλήθηκε από";
+"common_select_account" = "Select an account";
 "common_send_to" = "Αποστολή σε";
 "common_sending" = "Αποστολή...";
 "common_sending_failed" = "Αποτυχία αποστολής";
@@ -311,6 +319,7 @@
 "common_something_went_wrong" = "Κάτι πήγε στραβά";
 "common_something_went_wrong_message" = "Αντιμετωπίσαμε ένα πρόβλημα. Παρακαλώ προσπαθήστε ξανά.";
 "common_space" = "Space";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "What is this space about?";
 "common_starting_chat" = "Έναρξη συνομιλίας...";
 "common_sticker" = "Αυτοκόλλητο";
@@ -353,10 +362,6 @@
 "common_waiting_for_decryption_key" = "Αναμονή για αυτό το μήνυμα";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Εσύ";
-"common.add_account" = "Add an account";
-"common.add_another_account" = "Add another account";
-"common.no_space_name" = "No space name";
-"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Στάλθηκε από μια μη ασφαλής συσκευή";
 "common_unable_to_decrypt_verification_violation" = "Η επαληθευμένη ταυτότητα του αποστολέα έχει επαναφερθεί";
 "confirm_recovery_key_banner_message" = "Επιβεβαίωσε το κλειδί ανάκτησης για να διατηρήσεις την πρόσβαση στο χώρο αποθήκευσης κλειδιών και στο ιστορικό μηνυμάτων.";
@@ -373,6 +378,9 @@
 "crypto_event_authenticity_unverified_identity" = "Κρυπτογραφημένο από μη επαληθευμένο χρήστη.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
 "crypto_identity_change_pin_violation" = "Η ταυτότητα του χρήστη %1$@ επαναφέρθηκε. %2$@";
 "crypto_identity_change_pin_violation_new" = "Η ταυτότητα του %1$@ %2$@ επαναφέρθηκε. %3$@";
@@ -454,6 +462,7 @@
 "notification_mentioned_you_body" = "Σέ ανέφερε: %1$@";
 "notification_new_messages" = "Νέα Μηνύματα";
 "notification_reaction_body" = "Αντέδρασε με %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Σας προσκάλεσε να ενταχθείτε στην αίθουσα";
 "notification_room_invite_body_with_sender" = "%1$@ σας προσκάλεσε να συμμετάσχετε στην αίθουσα";
 "notification_sender_me" = "Εγώ";
@@ -548,9 +557,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
-"screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_create_room_room_access_section_public_option_description" = "Οποιοσδήποτε μπορεί να συμμετάσχει σε αυτή την αίθουσα";
-"screen_create_room_room_access_section_public_option_title" = "Οποιοσδήποτε";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
 "screen_create_room_room_access_section_title" = "Who has access";
@@ -558,7 +565,8 @@
 "screen_create_room_room_address_section_title" = "Διεύθυνση δωματίου";
 "screen_create_room_room_visibility_section_title" = "Ορατότητα αίθουσας";
 "screen_create_room_space_selection_no_space_description" = "(no space)";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_title" = "No space selected";
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_placeholder" = "Add description…";
 "screen_decline_and_block_block_user_option_description" = "Δεν θα βλέπετε μηνύματα ή προσκλήσεις αίθουσας από αυτόν τον χρήστη";
@@ -610,7 +618,6 @@
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
 "screen_labs_header_title" = "Feeling experimental?";
 "screen_labs_title" = "Labs";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
 "screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
@@ -717,7 +724,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Πρόσβαση στην αίθουσα";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Anyone in authorised spaces can join.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Anyone in %1$@ can join.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Μέλη χώρου";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Οι χώροι δεν υποστηρίζονται προς το παρόν";
 "screen_security_and_privacy_room_address_section_header" = "Address";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Επιστρέψτε την εύρεση αυτής της αίθουσας με αναζήτηση στον κατάλογο %1$@ δημοσίων αιθουσών";
@@ -874,9 +880,7 @@
 "screen_create_room_action_create_room" = "Νέα αίθουσα";
 "screen_create_room_error_creating_room" = "Προέκυψε σφάλμα κατά τη δημιουργία της αίθουσας";
 "screen_create_room_private_option_description" = "Μόνο τα άτομα που έχουν προσκληθεί μπορούν να έχουν πρόσβαση σε αυτή την αίθουσα. Όλα τα μηνύματα είναι κρυπτογραφημένα από άκρο σε άκρο.";
-"screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Ο καθένας μπορεί να βρει αυτή την αίθουσα.\nΑυτό μπορείτε να το αλλάξετε ανά πάσα στιγμή στις ρυθμίσεις της αίθουσας.";
-"screen_create_room_public_option_title" = "Δημόσιο δωμάτιο";
 "screen_create_room_topic_label" = "Θέμα (προαιρετικό)";
 "screen_deactivate_account_confirmation_dialog_content" = "Παρακαλώ επιβεβαίωσε ότι θες να απενεργοποιήσεις τον λογαριασμό σου. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
 "screen_deactivate_account_delete_all_messages" = "Διαγραφή όλων των μηνυμάτων μου";
@@ -1423,6 +1427,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Θα μπορούν να συμμετάσχουν ξανά σε αυτή την αίθουσα, εάν προσκληθούν.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Αναίρεση αποκλεισμού";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Άρση αποκλεισμού %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Αποκλεισμός χρήστη";
 "screen_decline_and_block_report_user_reason_placeholder" = "Περιγράψτε τον λόγο αναφοράς...";
 "screen_decline_and_block_title" = "Απόρριψη και αποκλεισμός";
@@ -1430,6 +1436,7 @@
 "screen_home_tab_spaces" = "Spaces";
 "screen_join_room_decline_and_block_button_title" = "Απόρριψη και αποκλεισμός";
 "screen_knock_requests_list_title" = "Αιτήματα συμμετοχής";
+"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_link_new_device_desktop_scanning_title" = "Σάρωση κωδικού QR";
 "screen_link_new_device_desktop_step3" = "Σάρωσε τον κωδικό QR με αυτήν τη συσκευή";
 "screen_link_new_device_desktop_submit" = "Έτοιμο για σάρωση";
@@ -1454,6 +1461,7 @@
 "screen_roomlist_knock_event_sent_description" = "Το αίτημα συμμετοχής στάλθηκε";
 "screen_security_and_privacy_encryption_section_header" = "Κρυπτογράφηση";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Θα χρειαστείτε μια διεύθυνση αίθουσας για να την κάνετε ορατή στον κατάλογο.";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "Ρόλοι και δικαιώματα";
@@ -1473,6 +1481,8 @@
 "screen_create_account_title" = "Δημιουργία λογαριασμού";
 "screen_create_poll_cancel_confirmation_content_ios" = "Οι αλλαγές σου δεν θα αποθηκευτούν";
 "screen_create_room_add_people_title" = "Πρόσκληση ατόμων";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Απενεργοποίηση λογαριασμού";
 "screen_dm_details_block_alert_action" = "Αποκλεισμός";
 "screen_dm_details_block_alert_description" = "Οι αποκλεισμένοι χρήστες δεν θα μπορούν να σου στέλνουν μηνύματα και όλα τα μηνύματά τους θα είναι κρυμμένα. Μπορείς να τα ξεμπλοκάρεις ανά πάσα στιγμή.";

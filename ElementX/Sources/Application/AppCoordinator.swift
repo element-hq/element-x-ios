@@ -134,7 +134,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         bugReportService = BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
                                             applicationID: appSettings.bugReportApplicationID,
                                             sdkGitSHA: sdkGitSha(),
-                                            maxUploadSize: appSettings.bugReportMaxUploadSize,
                                             appHooks: appHooks)
         
         Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings)
@@ -226,12 +225,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         guard let confirmationParameters = url.confirmationParameters else {
             return false
         }
-        ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                        title: L10n.dialogConfirmLinkTitle,
-                                                                        message: L10n.dialogConfirmLinkMessage(confirmationParameters.displayString,
-                                                                                                               confirmationParameters.internalURL.absoluteString),
-                                                                        primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                                        secondaryButton: .init(title: L10n.actionContinue) { openURLAction(confirmationParameters.internalURL) })
+        navigationRootCoordinator.alertInfo = .init(id: .init(),
+                                                    title: L10n.dialogConfirmLinkTitle,
+                                                    message: L10n.dialogConfirmLinkMessage(confirmationParameters.displayString,
+                                                                                           confirmationParameters.internalURL.absoluteString),
+                                                    primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                    secondaryButton: .init(title: L10n.actionContinue) { openURLAction(confirmationParameters.internalURL) })
         return true
     }
 

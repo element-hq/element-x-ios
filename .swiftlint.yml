@@ -4,7 +4,7 @@ disabled_rules:
   - redundant_discardable_let
   - identifier_name
 
-opt_in_rules:  
+opt_in_rules:
   - force_unwrapping
   - private_action
   - explicit_init
@@ -88,3 +88,11 @@ custom_rules:
     match_kinds: identifier
     message: "MXLog should be used instead of os_log()"
     severity: error
+
+  prefer_element_navigation_stack:
+    regex: "\\b(NavigationStack)\\b"
+    match_kinds: identifier
+    message: "Use ElementNavigationStack instead of NavigationStack"
+    severity: error
+    included: "ElementX/Sources/.*\\.swift"
+    excluded: "ElementNavigationStack.swift"

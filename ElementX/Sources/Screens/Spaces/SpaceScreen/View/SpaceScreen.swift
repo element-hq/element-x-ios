@@ -132,14 +132,18 @@ struct SpaceScreen: View {
                                 Button { context.send(viewAction: .createChildRoom) } label: {
                                     Label(L10n.actionCreateRoom, icon: \.plus)
                                 }
+                                .accessibilityIdentifier(A11yIdentifiers.spaceScreen.createRoom)
                             }
+                            
                             Button { context.send(viewAction: .addExistingRooms) } label: {
                                 Label(L10n.actionAddExistingRooms, icon: \.room)
                             }
                             .accessibilityIdentifier(A11yIdentifiers.spaceScreen.addExistingRooms)
                             
-                            Button { context.send(viewAction: .manageChildren) } label: {
-                                Label(L10n.actionManageRooms, icon: \.edit)
+                            if context.viewState.rooms.count > 0 {
+                                Button { context.send(viewAction: .manageChildren) } label: {
+                                    Label(L10n.actionManageRooms, icon: \.edit)
+                                }
                             }
                         }
                     }
@@ -163,6 +167,7 @@ struct SpaceScreen: View {
                             Button { context.send(viewAction: .spaceSettings(roomProxy: roomProxy)) } label: {
                                 Label(L10n.commonSettings, icon: \.settings)
                             }
+                            .accessibilityIdentifier(A11yIdentifiers.spaceScreen.settings)
                         }
                     }
                     
@@ -189,16 +194,16 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
     static let newSpaceViewModel = makeViewModel(isNewSpace: true)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SpaceScreen(context: viewModel.context)
         }
         
-        NavigationStack {
+        ElementNavigationStack {
             SpaceScreen(context: managingViewModel.context)
         }
         .previewDisplayName("Managing")
         
-        NavigationStack {
+        ElementNavigationStack {
             SpaceScreen(context: newSpaceViewModel.context)
         }
         .previewDisplayName("New Space")

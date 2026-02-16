@@ -135,7 +135,7 @@ struct HomeScreen: View {
                 if selected {
                     content
                         .backportButtonStyleGlassProminent()
-                        .tint(.compound.bgAccentRest)
+                        .tint(.compound.bgActionPrimaryRest)
                 } else {
                     content
                 }
@@ -171,7 +171,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
     static let loadedViewModel = viewModel(.rooms)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             HomeScreen(context: loadingViewModel.context)
         }
         .snapshotPreferences(expect: loadedViewModel.context.$viewState.map { state in
@@ -179,7 +179,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Loading")
         
-        NavigationStack {
+        ElementNavigationStack {
             HomeScreen(context: emptyViewModel.context)
         }
         .snapshotPreferences(expect: emptyViewModel.context.$viewState.map { state in
@@ -187,7 +187,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Empty")
         
-        NavigationStack {
+        ElementNavigationStack {
             HomeScreen(context: loadedViewModel.context)
         }
         .snapshotPreferences(expect: loadedViewModel.context.$viewState.map { state in

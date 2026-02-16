@@ -102,7 +102,7 @@ struct MessageForwardingScreen_Previews: PreviewProvider, TestablePreview {
                                                          roomSummaryProvider: summaryProvider,
                                                          userIndicatorController: UserIndicatorControllerMock())
         
-        NavigationStack {
+        ElementNavigationStack {
             MessageForwardingScreen(context: viewModel.context)
         }
     }

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct CreateRoomScreenCoordinatorParameters {
     let isSpace: Bool
-    let spaceSelectionMode: CreateRoomScreenSpaceSelectionMode?
+    let spaceSelectionMode: CreateRoomScreenSpaceSelectionMode
     let shouldShowCancelButton: Bool
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol

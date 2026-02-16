@@ -14,4 +14,6 @@ protocol SpaceScreenViewModelProtocol {
     var context: SpaceScreenViewModelType.Context { get }
     
     func stop()
+    
+    func resetRoomList()
 }

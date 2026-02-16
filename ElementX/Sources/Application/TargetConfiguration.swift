@@ -25,10 +25,12 @@ enum Target: String {
         }
     }
     
-    var logFilePrefix: String? {
+    var logFilePrefix: String {
         switch self {
-        case .mainApp: nil
-        default: rawValue
+        case .mainApp:
+            "console"
+        default:
+            rawValue
         }
     }
     

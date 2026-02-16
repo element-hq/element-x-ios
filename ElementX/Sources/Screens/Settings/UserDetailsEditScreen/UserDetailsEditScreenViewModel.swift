@@ -92,7 +92,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             
             guard case let .success(maxUploadSize) = await clientProxy.maxMediaUploadSize else {
                 MXLog.error("Failed to get max upload size")
-                userIndicatorController.alertInfo = .init(id: .init())
+                state.bindings.alertInfo = .init(id: .unknown)
                 return
             }
             let mediaResult = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize)
@@ -101,7 +101,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             case .success(.image):
                 state.localMedia = try? mediaResult.get()
             case .failure, .success:
-                userIndicatorController.alertInfo = .init(id: .init())
+                state.bindings.alertInfo = .init(id: .failedProcessingMedia)
             }
         }
     }
@@ -112,11 +112,11 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         state.bindings.alertInfo = .init(id: .unsavedChanges,
                                          title: L10n.dialogUnsavedChangesTitle,
                                          message: L10n.dialogUnsavedChangesDescription,
-                                         primaryButton: .init(title: L10n.actionSave) { Task { await self.saveUserDetails(shouldDismiss: true) } },
+                                         primaryButton: .init(title: L10n.actionSave) { Task { await self.saveUserDetails() } },
                                          secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.dismiss) })
     }
     
-    private func saveUserDetails(shouldDismiss: Bool = false) async {
+    private func saveUserDetails() async {
         let userIndicatorID = UUID().uuidString
         defer {
             userIndicatorController.retractIndicatorWithId(userIndicatorID)
@@ -147,13 +147,11 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
                 try await group.waitForAll()
             }
             
-            if shouldDismiss {
-                actionsSubject.send(.dismiss)
-            }
+            actionsSubject.send(.dismiss)
         } catch {
-            userIndicatorController.alertInfo = .init(id: .init(),
-                                                      title: L10n.screenEditProfileErrorTitle,
-                                                      message: L10n.screenEditProfileError)
+            state.bindings.alertInfo = .init(id: .saveError,
+                                             title: L10n.screenEditProfileErrorTitle,
+                                             message: L10n.screenEditProfileError)
         }
     }
 }

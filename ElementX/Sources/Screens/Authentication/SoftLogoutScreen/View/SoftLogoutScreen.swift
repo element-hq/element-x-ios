@@ -169,7 +169,7 @@ struct SoftLogoutScreen_Previews: PreviewProvider, TestablePreview {
     }
 
     static func screen(for viewModel: SoftLogoutScreenViewModel) -> some View {
-        NavigationStack {
+        ElementNavigationStack {
             SoftLogoutScreen(context: viewModel.context)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

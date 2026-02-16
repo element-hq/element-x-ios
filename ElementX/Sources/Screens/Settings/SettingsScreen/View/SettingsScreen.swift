@@ -267,13 +267,13 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let bugReportDisabledViewModel = makeViewModel(isBugReportServiceEnabled: false)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SettingsScreen(context: viewModel.context)
         }
         .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil })
         .previewDisplayName("Default")
         
-        NavigationStack {
+        ElementNavigationStack {
             SettingsScreen(context: bugReportDisabledViewModel.context)
         }
         .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil })

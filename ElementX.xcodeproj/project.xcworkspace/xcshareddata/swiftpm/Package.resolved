@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "a31fcfe93d38f37ce59695648d176c2f676edb62",
-        "version" : "26.2.3"
+        "revision" : "113131fa5f779a22319b61525c3126ba63045fa0",
+        "version" : "26.2.13"
       }
     },
     {
@@ -322,6 +322,15 @@
       "state" : {
         "revision" : "887e75b96da6be36a062e1b0ef832c32a803348b",
         "version" : "6.0.1"
+      }
+    },
+    {
+      "identity" : "swiftui-flow",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tevelee/SwiftUI-Flow.git",
+      "state" : {
+        "revision" : "d227f999b2894ab737ef5786d9b14d02d3e5362e",
+        "version" : "3.1.1"
       }
     },
     {

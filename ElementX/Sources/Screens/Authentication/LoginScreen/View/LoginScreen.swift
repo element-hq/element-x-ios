@@ -135,19 +135,19 @@ struct LoginScreen_Previews: PreviewProvider, TestablePreview {
     static let unconfiguredViewModel = makeViewModel(homeserverAddress: "somethingtofailconfiguration")
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             LoginScreen(context: viewModel.context)
         }
         .snapshotPreferences(expect: viewModel.context.observe(\.viewState.homeserver.loginMode).map { $0 == .password })
         .previewDisplayName("Initial State")
         
-        NavigationStack {
+        ElementNavigationStack {
             LoginScreen(context: credentialsViewModel.context)
         }
         .snapshotPreferences(expect: credentialsViewModel.context.observe(\.viewState.homeserver.loginMode).map { $0 == .password })
         .previewDisplayName("Credentials Entered")
         
-        NavigationStack {
+        ElementNavigationStack {
             LoginScreen(context: unconfiguredViewModel.context)
         }
         .previewDisplayName("Unsupported")

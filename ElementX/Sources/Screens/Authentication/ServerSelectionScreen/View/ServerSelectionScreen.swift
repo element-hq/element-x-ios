@@ -97,15 +97,15 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
     static let invalidViewModel = makeViewModel(for: "thisisbad")
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             ServerSelectionScreen(context: matrixViewModel.context)
         }
         
-        NavigationStack {
+        ElementNavigationStack {
             ServerSelectionScreen(context: emptyViewModel.context)
         }
         
-        NavigationStack {
+        ElementNavigationStack {
             ServerSelectionScreen(context: invalidViewModel.context)
         }
         .snapshotPreferences(expect: invalidViewModel.context.observe(\.viewState.hasValidationError))

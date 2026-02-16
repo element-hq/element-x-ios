@@ -82,11 +82,11 @@ struct DeclineAndBlockScreen_Previews: PreviewProvider, TestablePreview {
                                                           userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             DeclineAndBlockScreen(context: viewModel.context)
         }
         .previewDisplayName("Default")
-        NavigationStack {
+        ElementNavigationStack {
             DeclineAndBlockScreen(context: viewModel.context)
                 .onAppear {
                     viewModel.context.shouldReport = true

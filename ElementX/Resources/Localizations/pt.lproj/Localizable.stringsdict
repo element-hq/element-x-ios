@@ -194,6 +194,22 @@
 			<string>%d notificações</string>
 		</dict>
 	</dict>
+	<key>notification_fallback_n_content</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>You have %d new message.</string>
+			<key>other</key>
+			<string>You have %d new messages.</string>
+		</dict>
+	</dict>
 	<key>notification_invitations</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>

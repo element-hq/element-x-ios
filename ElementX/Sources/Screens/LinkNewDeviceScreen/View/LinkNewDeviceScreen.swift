@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Compound
 import SwiftUI
 
@@ -12,16 +13,24 @@ struct LinkNewDeviceScreen: View {
     @Bindable var context: LinkNewDeviceScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
-            mainContent
-        } bottomContent: {
-            buttons
+        switch context.viewState.mode {
+        case .error(let errorState):
+            QRCodeErrorView(errorState: errorState, canSignInManually: false) { action in
+                context.send(viewAction: .errorAction(action))
+            }
+            .backgroundStyle(.compound.bgCanvasDefault)
+        default:
+            FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
+                mainContent
+            } bottomContent: {
+                buttons
+            }
+            .background()
+            .backgroundStyle(.compound.bgSubtleSecondary)
+            .navigationTitle(L10n.commonLinkNewDevice)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { toolbar }
         }
-        .background()
-        .backgroundStyle(.compound.bgSubtleSecondary)
-        .navigationTitle(L10n.commonLinkNewDevice)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar { toolbar }
     }
     
     @ViewBuilder
@@ -31,11 +40,8 @@ struct LinkNewDeviceScreen: View {
             TitleAndIcon(title: L10n.screenLinkNewDeviceRootTitle,
                          icon: \.computer,
                          iconStyle: .default)
-        case .notSupported:
-            TitleAndIcon(title: L10n.screenLinkNewDeviceErrorNotSupportedTitle,
-                         subtitle: L10n.screenLinkNewDeviceErrorNotSupportedSubtitle,
-                         icon: \.errorSolid,
-                         iconStyle: .alertSolid)
+        case .error:
+            EmptyView() // Not reachable.
         }
     }
     
@@ -79,11 +85,8 @@ struct LinkNewDeviceScreen: View {
                 }
             }
             .disabled(isGeneratingCode)
-        case .notSupported:
-            Button(L10n.actionDismiss) {
-                context.send(viewAction: .dismiss)
-            }
-            .buttonStyle(.compound(.primary))
+        case .error:
+            EmptyView() // Not reachable.
         }
     }
     
@@ -103,31 +106,38 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(mode: .readyToLink(isGeneratingCode: false))
     static let generatingViewModel = makeViewModel(mode: .readyToLink(isGeneratingCode: true))
     static let loadingViewModel = makeViewModel(mode: .loading)
-    static let unsupportedViewModel = makeViewModel(mode: .notSupported)
+    static let unsupportedViewModel = makeViewModel(mode: .error(.notSupported))
+    static let unknownErrorViewModel = makeViewModel(mode: .error(.unknown))
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             LinkNewDeviceScreen(context: viewModel.context)
         }
         .previewDisplayName("Ready")
         .snapshotPreferences(expect: viewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(isGeneratingCode: false) })
         
-        NavigationStack {
+        ElementNavigationStack {
             LinkNewDeviceScreen(context: generatingViewModel.context)
         }
         .previewDisplayName("Generating")
         .snapshotPreferences(expect: generatingViewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(isGeneratingCode: true) })
         
-        NavigationStack {
+        ElementNavigationStack {
             LinkNewDeviceScreen(context: loadingViewModel.context)
         }
         .previewDisplayName("Loading")
         
-        NavigationStack {
+        ElementNavigationStack {
             LinkNewDeviceScreen(context: unsupportedViewModel.context)
         }
         .previewDisplayName("Unsupported")
-        .snapshotPreferences(expect: unsupportedViewModel.context.observe(\.viewState.mode).map { $0 == .notSupported })
+        .snapshotPreferences(expect: unsupportedViewModel.context.observe(\.viewState.mode).map { $0 == .error(.notSupported) })
+        
+        ElementNavigationStack {
+            LinkNewDeviceScreen(context: unknownErrorViewModel.context)
+        }
+        .previewDisplayName("Unknown error")
+        .snapshotPreferences(expect: unknownErrorViewModel.context.observe(\.viewState.mode).map { $0 == .error(.unknown) })
     }
     
     static func makeViewModel(mode: LinkNewDeviceScreenViewState.Mode) -> LinkNewDeviceScreenViewModel {
@@ -137,12 +147,15 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
             case .loading:
                 try? await Task.sleep(for: .seconds(20))
                 return false
-            case .readyToLink:
-                return true
-            case .notSupported:
+            case .error(.notSupported):
                 return false
+            case .readyToLink, .error:
+                return true
             }
         }
+        
+        let linkMobileProgressSubject = CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError>(.starting)
+        clientProxy.linkNewDeviceServiceReturnValue = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: linkMobileProgressSubject.asCurrentValuePublisher()))
         
         let viewModel = LinkNewDeviceScreenViewModel(clientProxy: clientProxy)
         
@@ -150,6 +163,9 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
             try? await Task.sleep(for: .milliseconds(100))
             if case .readyToLink(isGeneratingCode: true) = mode {
                 viewModel.context.send(viewAction: .linkMobileDevice)
+            } else if case .error = mode {
+                viewModel.context.send(viewAction: .linkMobileDevice)
+                linkMobileProgressSubject.send(completion: .failure(.unknown))
             }
         }
         

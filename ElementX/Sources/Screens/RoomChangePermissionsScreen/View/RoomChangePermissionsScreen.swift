@@ -70,17 +70,17 @@ struct RoomChangePermissionsScreen_Previews: PreviewProvider, TestablePreview {
     static let spaceViewModel = makeViewModel(isSpace: true)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             RoomChangePermissionsScreen(context: roomViewModel.context)
         }
         .previewDisplayName("Room")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomChangePermissionsScreen(context: roomAsUserViewModel.context)
         }
         .previewDisplayName("Room as User")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomChangePermissionsScreen(context: spaceViewModel.context)
         }
         .previewDisplayName("Space")

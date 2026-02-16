@@ -1,5 +1,6 @@
 "Notification" = "Oznámenie";
 "a11y_add_reaction" = "Pridať reakciu: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Obrázok";
 "a11y_collapse_message_text_field" = "Minimalizovať textové pole správy";
 "a11y_delete" = "Vymazať";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Ukončená anketa";
 "a11y_polls_will_remove_selection" = "Odstráni predchádzajúci výber";
 "a11y_polls_winning_answer" = "Toto je víťazná odpoveď";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Reagovať s %1$@";
 "a11y_react_with_other_emojis" = "Reagovať s inými emotikonmi";
 "a11y_read_receipts_multiple" = "Prečítal/a %1$@ a %2$@";
@@ -177,6 +179,8 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call nepodporuje používanie zvukových zariadení Bluetooth v tejto verzii systému Android. Vyberte iné zvukové zariadenie.";
 "common_about" = "O aplikácii";
 "common_acceptable_use_policy" = "Zásady prijateľného používania";
+"common_add_account" = "Pridať účet";
+"common_add_another_account" = "Pridať ďalší účet";
 "common_adding_caption" = "Pridáva sa titulok";
 "common_advanced_settings" = "Pokročilé nastavenia";
 "common_an_image" = "obrázok";
@@ -250,6 +254,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Žiadne výsledky";
 "common_no_room_name" = "Žiadny názov miestnosti";
+"common_no_space_name" = "Žiadny názov priestoru";
 "common_not_encrypted" = "Nešifrované";
 "common_offline" = "Offline";
 "common_open_source_licenses" = "Licencie s otvoreným zdrojom";
@@ -268,8 +273,10 @@
 "common_poll_undisclosed_text" = "Výsledky sa zobrazia po ukončení ankety";
 "common_preparing" = "Pripravuje sa…";
 "common_privacy_policy" = "Zásady ochrany osobných údajov";
+"common_private" = "Private";
 "common_private_room" = "Súkromná miestnosť";
 "common_private_space" = "Súkromný priestor";
+"common_public" = "Public";
 "common_public_room" = "Verejná miestnosť";
 "common_public_space" = "Verejný priestor";
 "common_reaction" = "Reakcia";
@@ -294,6 +301,7 @@
 "common_search_results" = "Výsledky hľadania";
 "common_security" = "Bezpečnosť";
 "common_seen_by" = "Videné";
+"common_select_account" = "Vyberte účet";
 "common_send_to" = "Odoslať";
 "common_sending" = "Odosiela sa…";
 "common_sending_failed" = "Odoslanie zlyhalo";
@@ -311,6 +319,7 @@
 "common_something_went_wrong" = "Niečo sa pokazilo";
 "common_something_went_wrong_message" = "Vyskytol sa problém. Skúste to prosím znova.";
 "common_space" = "Priestor";
+"common_space_members" = "Space members";
 "common_space_topic_placeholder" = "O čom je tento priestor?";
 "common_starting_chat" = "Spustenie konverzácie...";
 "common_sticker" = "Nálepka";
@@ -353,10 +362,6 @@
 "common_waiting_for_decryption_key" = "Čaká sa na dešifrovací kľúč";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Vy";
-"common.add_account" = "Pridať účet";
-"common.add_another_account" = "Pridať ďalší účet";
-"common.no_space_name" = "Žiadny názov priestoru";
-"common.select_account" = "Vyberte účet";
 "common_unable_to_decrypt_insecure_device" = "Odoslané z nezabezpečeného zariadenia";
 "common_unable_to_decrypt_verification_violation" = "Overená totožnosť odosielateľa bola obnovená";
 "confirm_recovery_key_banner_message" = "Potvrďte svoj kľúč na obnovenie, aby ste zachovali prístup k úložisku kľúčov a histórii správ.";
@@ -372,7 +377,10 @@
 "crypto_event_authenticity_unsigned_device" = "Šifrované zariadením, ktoré nie je overené jeho majiteľom.";
 "crypto_event_authenticity_unverified_identity" = "Šifrované neovereným používateľom.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@ ) zdieľal túto správu v čase, keď ste neboli v miestnosti, keď bola odoslaná.";
-"crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@  zdieľal túto správu v čase, keď ste neboli v miestnosti, keď bola odoslaná.";
+"crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ zdieľal túto správu v čase, keď ste neboli v miestnosti, keď bola odoslaná.";
+"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
+"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "Táto miestnosť bola nakonfigurovaná tak, aby si noví členovia mohli prečítať históriu. %1$@";
 "crypto_identity_change_pin_violation" = "Totožnosť používateľa %1$@ sa obnovila.%2$@";
 "crypto_identity_change_pin_violation_new" = "Totožnosť používateľa %1$@ %2$@ bola obnovená. %3$@";
@@ -454,6 +462,7 @@
 "notification_mentioned_you_body" = "Spomenul/a vás: %1$@";
 "notification_new_messages" = "Nové správy";
 "notification_reaction_body" = "Reagoval/a s %1$@";
+"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_invite_body" = "Vás pozval do miestnosti";
 "notification_room_invite_body_with_sender" = "%1$@ vás pozval/a, aby ste sa pripojili k miestnosti";
 "notification_sender_me" = "Ja";
@@ -548,9 +557,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "Ktokoľvek v %1$@ sa môžu pripojiť, ale všetci ostatní musia požiadať o prístup.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Požiadať o pripojenie";
 "screen_create_room_room_access_section_private_option_description" = "Pripojiť sa môžu iba pozvaní ľudia.";
-"screen_create_room_room_access_section_private_option_title" = "Súkromná";
 "screen_create_room_room_access_section_public_option_description" = "Pripojiť sa môže ktokoľvek.";
-"screen_create_room_room_access_section_public_option_title" = "Ktokoľvek";
 "screen_create_room_room_access_section_restricted_option_description" = "Ktokoľvek v %1$@ sa môže pripojiť.";
 "screen_create_room_room_access_section_restricted_option_title" = "Štandardná";
 "screen_create_room_room_access_section_title" = "Kto má prístup";
@@ -558,6 +565,7 @@
 "screen_create_room_room_address_section_title" = "Adresa";
 "screen_create_room_room_visibility_section_title" = "Viditeľnosť miestnosti";
 "screen_create_room_space_selection_no_space_description" = "(žiadny priestor)";
+"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
 "screen_create_room_space_selection_no_space_title" = "Domov";
 "screen_create_room_space_selection_sheet_title" = "Pridať do priestoru";
 "screen_create_room_topic_placeholder" = "Pridať popis…";
@@ -610,7 +618,6 @@
 "screen_labs_header_description" = "Vyskúšajte naše najnovšie nápady vo vývoji. Tieto funkcie nie sú finalizované; môžu byť nestabilné a môžu sa zmeniť.";
 "screen_labs_header_title" = "Máte chuť experimentovať?";
 "screen_labs_title" = "Laboratóriá";
-"screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Správca)";
 "screen_leave_space_subtitle" = "Vyberte miestnosti, ktoré chcete opustiť a pre ktoré nie ste jediným správcom:";
 "screen_leave_space_subtitle_last_admin" = "Pred odchodom musíte pre tento priestor určiť iného správcu.";
@@ -717,7 +724,6 @@
 "screen_security_and_privacy_room_access_section_header" = "Prístup";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "Ktokoľvek v povolených priestoroch sa môže pripojiť.";
 "screen_security_and_privacy_room_access_space_members_option_single_parent_description" = "Ktokoľvek v %1$@ sa môže pripojiť.";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Členovia priestoru";
 "screen_security_and_privacy_room_access_space_members_option_unavailable_description" = "Priestory momentálne nie sú podporované";
 "screen_security_and_privacy_room_address_section_header" = "Adresa";
 "screen_security_and_privacy_room_directory_visibility_section_footer" = "Umožniť vyhľadanie tejto miestnosti v adresári verejných miestností %1$@";
@@ -874,9 +880,7 @@
 "screen_create_room_action_create_room" = "Nová miestnosť";
 "screen_create_room_error_creating_room" = "Pri vytváraní miestnosti došlo k chybe";
 "screen_create_room_private_option_description" = "Pripojiť sa môžu iba pozvaní ľudia.";
-"screen_create_room_private_option_title" = "Súkromná";
 "screen_create_room_public_option_description" = "Túto miestnosť môže nájsť ktokoľvek.\nMôžete to kedykoľvek zmeniť v nastaveniach miestnosti.";
-"screen_create_room_public_option_title" = "Verejná miestnosť";
 "screen_create_room_topic_label" = "Téma (voliteľné)";
 "screen_deactivate_account_confirmation_dialog_content" = "Prosím potvrďte, že chcete deaktivovať svoj účet. Túto akciu nie je možné vrátiť späť.";
 "screen_deactivate_account_delete_all_messages" = "Vymazať všetky moje správy";
@@ -1423,6 +1427,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "V prípade pozvania sa budú môcť znova pripojiť k tejto miestnosti.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Zrušiť zákaz";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Zrušenie zákazu %1$@";
+"screen_create_room_room_access_section_private_option_title" = "Private";
+"screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_decline_and_block_block_user_option_title" = "Zablokovať používateľa";
 "screen_decline_and_block_report_user_reason_placeholder" = "Popíšte dôvod...";
 "screen_decline_and_block_title" = "Odmietnuť a zablokovať";
@@ -1430,6 +1436,7 @@
 "screen_home_tab_spaces" = "Priestory";
 "screen_join_room_decline_and_block_button_title" = "Odmietnuť a zablokovať";
 "screen_knock_requests_list_title" = "Žiadosti o vstup";
+"screen_leave_space_choose_owners_action" = "Vybrať vlastníkov";
 "screen_link_new_device_desktop_scanning_title" = "Naskenovať QR kód";
 "screen_link_new_device_desktop_step3" = "Naskenujte QR kód pomocou tohto zariadenia";
 "screen_link_new_device_desktop_submit" = "Pripravené na skenovanie";
@@ -1454,6 +1461,7 @@
 "screen_roomlist_knock_event_sent_description" = "Žiadosť o pripojenie bola odoslaná";
 "screen_security_and_privacy_encryption_section_header" = "Šifrovanie";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Spravovať priestory";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
 "screen_security_and_privacy_room_address_section_footer" = "Budete potrebovať adresu, aby sa zobrazovala vo verejnom adresári.";
 "screen_space_settings_leave_space" = "Opustiť priestor";
 "screen_space_settings_roles_and_permissions" = "Roly a povolenia";
@@ -1473,6 +1481,8 @@
 "screen_create_account_title" = "Vytvoriť účet";
 "screen_create_poll_cancel_confirmation_content_ios" = "Vaše zmeny nebudú uložené";
 "screen_create_room_add_people_title" = "Pozvať ľudí";
+"screen_create_room_private_option_title" = "Private";
+"screen_create_room_public_option_title" = "Public";
 "screen_deactivate_account_title" = "Deaktivovať účet";
 "screen_dm_details_block_alert_action" = "Zablokovať";
 "screen_dm_details_block_alert_description" = "Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať.";
