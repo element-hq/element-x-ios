@@ -1,5 +1,6 @@
 "Notification" = "Bildirishnoma";
 "a11y_add_reaction" = "Reaksiya qoʻyish: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Xabar matni maydonini kichraytirish";
 "a11y_delete" = "Oʻchirish";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "So‘rovnoma yakunlandi";
 "a11y_polls_will_remove_selection" = "Oldingi tanlov olib tashlanadi";
 "a11y_polls_winning_answer" = "Bu g'alaba qozongan javob";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "%1$@ bilan munosabat bildiring";
 "a11y_react_with_other_emojis" = "Boshqa hisbelgilar bilan munosabat bildiring";
 "a11y_read_receipts_multiple" = "%1$@ va %2$@ bilan oʻqish";

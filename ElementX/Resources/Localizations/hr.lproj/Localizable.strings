@@ -1,5 +1,6 @@
 "Notification" = "Obavijest";
 "a11y_add_reaction" = "Dodaj reakciju: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Minimiziraj tekstno polje poruke";
 "a11y_delete" = "Izbriši";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Završena anketa";
 "a11y_polls_will_remove_selection" = "Uklonit će prethodni odabir";
 "a11y_polls_winning_answer" = "Ovo je pobjednički odgovor";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Reagiraj s %1$@";
 "a11y_react_with_other_emojis" = "Reagiraj s drugim emotikonima";
 "a11y_read_receipts_multiple" = "Pročitali %1$@ i %2$@";

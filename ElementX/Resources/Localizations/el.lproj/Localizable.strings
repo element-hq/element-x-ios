@@ -1,5 +1,6 @@
 "Notification" = "Γνωστοποίηση";
 "a11y_add_reaction" = "Προσθήκη αντίδρασης: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Εικόνα Προφίλ";
 "a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Διαγραφή";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Ολοκληρωμένη δημοσκόπηση";
 "a11y_polls_will_remove_selection" = "Will remove previous selection";
 "a11y_polls_winning_answer" = "Αυτή είναι η νικητήρια απάντηση";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Αντέδρασε με %1$@";
 "a11y_react_with_other_emojis" = "Αντέδρασε με άλλα emoji";
 "a11y_read_receipts_multiple" = "Διαβάστηκε από%1$@ και %2$@";

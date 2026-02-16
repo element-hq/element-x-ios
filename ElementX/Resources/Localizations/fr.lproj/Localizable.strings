@@ -1,5 +1,6 @@
 "Notification" = "Notification";
 "a11y_add_reaction" = "Ajouter une réaction: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Réduire la taille du composeur";
 "a11y_delete" = "Supprimer";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Sondage terminé";
 "a11y_polls_will_remove_selection" = "Supprimera la sélection précédente";
 "a11y_polls_winning_answer" = "C'est la réponse gagnante";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Réagir avec %1$@";
 "a11y_react_with_other_emojis" = "Réagir avec d’autres émojis";
 "a11y_read_receipts_multiple" = "Lu par %1$@ et %2$@";
@@ -449,7 +451,7 @@
 "notification_thread_in_room" = "Discussion dans %1$@";
 "notification_channel_call" = "Appel";
 "notification_channel_listening_for_events" = "À l’écoute des événements";
-"notification_channel_noisy" = "Notifications bruyantes";
+"notification_channel_noisy" = "Notifications sonores";
 "notification_channel_ringing_calls" = "Appels entrants";
 "notification_channel_silent" = "Notifications silencieuses";
 "notification_fallback_content" = "Vous avez de nouveau(x) message(s).";

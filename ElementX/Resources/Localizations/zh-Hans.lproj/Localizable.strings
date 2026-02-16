@@ -1,5 +1,6 @@
 "Notification" = "通知";
 "a11y_add_reaction" = "添加表情符号：%1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "头像";
 "a11y_collapse_message_text_field" = "最小化消息文本框";
 "a11y_delete" = "删除";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "投票已结束";
 "a11y_polls_will_remove_selection" = "将移除之前的选择";
 "a11y_polls_winning_answer" = "这是获胜的答案";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "使用 %1$@ 回应";
 "a11y_react_with_other_emojis" = "使用其他表情符号回应";
 "a11y_read_receipts_multiple" = "%1$@ 和 %2$@ 已读";

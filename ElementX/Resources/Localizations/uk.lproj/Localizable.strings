@@ -1,5 +1,6 @@
 "Notification" = "Сповіщення";
 "a11y_add_reaction" = "Додати реакцію: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Аватар";
 "a11y_collapse_message_text_field" = "Згорнути поле тексту повідомлення";
 "a11y_delete" = "Видалити";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Опитування завершено";
 "a11y_polls_will_remove_selection" = "Попередній вибір буде прибрано";
 "a11y_polls_winning_answer" = "Ця відповідь перемогла";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Реагувати з%1$@";
 "a11y_react_with_other_emojis" = "Відреагувати іншими смайликами";
 "a11y_read_receipts_multiple" = "Прочитано %1$@ та %2$@";

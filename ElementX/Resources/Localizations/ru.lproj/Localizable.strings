@@ -1,5 +1,6 @@
 "Notification" = "Уведомление";
 "a11y_add_reaction" = "Добавить реакцию: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Аватар";
 "a11y_collapse_message_text_field" = "Свернуть поле текста сообщения";
 "a11y_delete" = "Удалить";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Завершённый опрос";
 "a11y_polls_will_remove_selection" = "Удалить предыдущий ответ";
 "a11y_polls_winning_answer" = "Это лучший ответ";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Реагировать вместе с %1$@";
 "a11y_react_with_other_emojis" = "Реакция с помощью эмодзи";
 "a11y_read_receipts_multiple" = "Прочитано %1$@ и %2$@";

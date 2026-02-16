@@ -1,5 +1,6 @@
 "Notification" = "Ilmoitus";
 "a11y_add_reaction" = "Lisää reaktio: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Pienennä viestin tekstikenttä";
 "a11y_delete" = "Poista";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Päättynyt kysely";
 "a11y_polls_will_remove_selection" = "Poistaa edellisen valinnan";
 "a11y_polls_winning_answer" = "Tämä on voittava vastaus";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Lisää reaktio: %1$@";
 "a11y_react_with_other_emojis" = "Reagoi muilla emojeilla";
 "a11y_read_receipts_multiple" = "%1$@ ja %2$@ on lukenut viestin";

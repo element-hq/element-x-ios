@@ -1,5 +1,6 @@
 "Notification" = "Notifica";
 "a11y_add_reaction" = "Aggiungi reazione: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Riduci al minimo il campo di testo del messaggio";
 "a11y_delete" = "Elimina";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Sondaggio terminato";
 "a11y_polls_will_remove_selection" = "Rimuoverà la selezione precedente";
 "a11y_polls_winning_answer" = "Questa è la risposta vincente";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Reagisci con %1$@";
 "a11y_react_with_other_emojis" = "Reagisci con altri emoji";
 "a11y_read_receipts_multiple" = "Visualizzato da %1$@ e %2$@";

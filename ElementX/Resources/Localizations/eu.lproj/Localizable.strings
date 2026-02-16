@@ -1,5 +1,6 @@
 "Notification" = "Jakinarazpena";
 "a11y_add_reaction" = "Add reaction: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Abatarra";
 "a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Ezabatu";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Amaitutako inkesta";
 "a11y_polls_will_remove_selection" = "Aurreko hautaketa kenduko du";
 "a11y_polls_winning_answer" = "Erantzun hau gailendu da";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Erreakzionatu %1$@(e)kin";
 "a11y_react_with_other_emojis" = "Erreakzionatu beste emoji batzuekin";
 "a11y_read_receipts_multiple" = "%1$@(e)k eta %2$@(e)k irakurri dute";
