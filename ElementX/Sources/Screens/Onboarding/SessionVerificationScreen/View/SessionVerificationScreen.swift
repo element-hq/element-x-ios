@@ -188,6 +188,7 @@ struct SessionVerificationScreen: View {
             } icon: {
                 if context.viewState.isWaiting {
                     ProgressView()
+                        .tint(.compound.iconOnSolidPrimary)
                 }
             }
         }
