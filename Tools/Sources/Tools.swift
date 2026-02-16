@@ -13,5 +13,6 @@ struct Tools: AsyncParsableCommand {
                                                                   GenerateSAS.self,
                                                                   AppIconBanner.self,
                                                                   UnusedStrings.self,
-                                                                  BumpCalendarVersion.self])
+                                                                  BumpCalendarVersion.self,
+                                                                  CI.self])
 }

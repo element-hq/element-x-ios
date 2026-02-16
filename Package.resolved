@@ -1,5 +1,5 @@
 {
-  "originHash" : "9ad9b7de4b8539442c6bbc918a26130ff2c685c4a9d5596bdaf021e33cd45c6c",
+  "originHash" : "fc2ae6a8775163a401e1311d9487f4ce4bc54b56ba92ced0b4f63a712082a077",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -16,6 +16,24 @@
       "location" : "https://github.com/element-hq/swift-command-line-tools.git",
       "state" : {
         "revision" : "e5eaab1558ef664e6cd80493f64259381670fb3a"
+      }
+    },
+    {
+      "identity" : "swift-subprocess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-subprocess",
+      "state" : {
+        "revision" : "ba5888ad7758cbcbe7abebac37860b1652af2d9c",
+        "version" : "0.3.0"
+      }
+    },
+    {
+      "identity" : "swift-system",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-system",
+      "state" : {
+        "revision" : "7c6ad0fc39d0763e0b699210e4124afd5041c5df",
+        "version" : "1.6.4"
       }
     },
     {
