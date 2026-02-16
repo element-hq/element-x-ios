@@ -9,10 +9,10 @@
 @testable import Compound
 import Foundation
 import SwiftUI
-import XCTest
+import Testing
 
-@MainActor
-final class DecorativeColorsTests: XCTestCase {
+@Suite
+struct DecorativeColorsTests {
     struct TestCase {
         let input: String
         private let webOutput: Int
@@ -28,7 +28,8 @@ final class DecorativeColorsTests: XCTestCase {
         }
     }
     
-    func testAvatarColorHash() {
+    @Test("Avatar color hash matches web implementation")
+    func avatarColorHash() {
         // Match the tests with the web ones for consistency between the two platforms
         // https://github.com/element-hq/compound-web/blob/4608dc807c9c904874eac67ff22be3213f4a261d/src/components/Avatar/Avatar.test.tsx#L62
         let testCases: [TestCase] = [
@@ -41,7 +42,7 @@ final class DecorativeColorsTests: XCTestCase {
         ]
         
         for testCase in testCases {
-            XCTAssertEqual(Color.compound.decorativeColor(for: testCase.input), Color.compound.decorativeColors[testCase.output])
+            #expect(Color.compound.decorativeColor(for: testCase.input) == Color.compound.decorativeColors[testCase.output])
         }
     }
 }

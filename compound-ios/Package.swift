@@ -35,6 +35,9 @@ let package = Package(
             ],
             exclude: [
                 "__Snapshots__"
+            ],
+            swiftSettings: [
+                .defaultIsolation(MainActor.self)
             ]
         )
     ]
