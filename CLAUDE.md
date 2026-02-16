@@ -1,58 +1,41 @@
 # Project Context — Element X iOS Branded Fork
 
-## Skill Override — IMPORTANT
+## Project Type
 
-**This is an iOS/Swift/SwiftUI project. IGNORE all Flutter/Dart global skills.**
+**This is an iOS/Swift/SwiftUI project.** Ignore all Flutter/Dart skills, agents, and commands.
 
-The following global skills are NOT applicable to this project and must be completely disregarded:
-- Flutter skills (tdd-workflow, unit-testing, widget-testing, bloc-testing, bloc-architecture, clean-architecture, repository-pattern, error-handling, mocking-patterns, feature-structure, dependency-injection, and all other Flutter-specific skills)
-- Flutter agents (flutter-senior-engineer)
-- Flutter commands (flutter-test, flutter-lint, generate-bloc, generate-feature, generate-model, build-runner)
-- All Flutter architecture patterns (BLoC, Riverpod, GetIt, Freezed, Dart-specific patterns)
+### Slash Commands (in `.claude/commands/`)
 
-**Project-specific local skills (in `.claude/skills/`):**
-- `xcodegen-workflow` — XcodeGen YAML configuration and project generation
-- `ios-branding` — App icon, colors, strings, display name changes
-- `ios-signing-provisioning` — Code signing, entitlements, certificates
-- `plist-configuration` — Info.plist and entitlements configuration
+**Git workflows:**
+- `/git-commit` — Stage changes and commit with a good message
+- `/git-push` — Push current branch to origin
+- `/commit-push-pr` — Commit, push, and open a PR in one step
 
-**Axiom plugin skills (use for all general iOS/Swift development):**
-- `axiom:axiom-swiftui-architecture` — Architecture patterns, separating logic from views (replaces `swift-project-structure`)
-- `axiom:axiom-app-composition` — App entry points, authentication flows, scene management
-- `axiom:axiom-ios-build` — Build failures, test crashes, Xcode issues (replaces `ios-build-errors`)
-- `axiom:axiom-xcode-debugging` — BUILD FAILED, test crashes, simulator hangs
-- `axiom:axiom-build-debugging` — Dependency conflicts, SPM resolution failures (replaces `spm-management`)
-- `axiom:axiom-localization` — String Catalogs, type-safe strings, internationalization (replaces `ios-localization`)
-- `axiom:axiom-swift-concurrency` — async/await, actors, Sendable, data races (replaces `swift-concurrency`)
-- `axiom:axiom-ios-concurrency` — Async code, actors, threads, concurrency diagnostics
-- `axiom:axiom-swiftui-layout` — Adaptive layouts, screen sizes, iPad multitasking (replaces `swiftui-patterns`)
-- `axiom:axiom-swiftui-performance` — UI performance, scrolling, animations
-- `axiom:axiom-swiftui-nav` — Navigation patterns, NavigationStack, deep links
-- `axiom:axiom-ios-testing` — Unit tests, flaky tests, test performance
-- `axiom:axiom-swift-testing` — Swift Testing framework adoption
-- `axiom:axiom-memory-debugging` — Memory warnings, retain cycles, leaks
-- `axiom:axiom-privacy-ux` — Privacy manifests, permissions, App Tracking Transparency
-- `axiom:axiom-apple-docs` — Apple framework APIs, Swift compiler questions
-- `axiom:axiom-codable` — Codable protocol, JSON encoding/decoding
-- `axiom:axiom-ios-networking` — Network connections, API calls, debugging
-- `axiom:axiom-accessibility-diag` — VoiceOver, Dynamic Type, color contrast
-- Use `axiom:ask` to route any iOS/Swift question to the right Axiom skill automatically
+**Project workflows:**
+- `/xcodegen-build` — Regenerate xcodeproj from YAML + build for iPhone 17 Pro simulator
+- `/upstream-sync` — Fetch upstream Element X changes, analyze conflicts, guide merge
+- `/audit-branding` — Search for remaining Element brand references, categorize by priority
+- `/create-checkpoint [name]` — Create annotated `checkpoint/*` tag (planned names from ios_proj_init.md)
+- `/rebrand-execute` — Run rebrand scripts with safety gates (requires D-001 resolved)
+- `/decision-status` — English summary of all 12 decisions from the tracker
 
-**Project-local agents (in `.claude/agents/`):**
-- `ios-senior-engineer` — Expert iOS/Swift/SwiftUI development
-- `git-manager` — Git operations, upstream sync, checkpoint management
-- `planning-agent` — Project planning, task breakdown, progress tracking
+### Axiom Plugin Skills (relevant to this project)
 
-**Project-local commands (in `.claude/commands/`):**
-- `/xcodegen-generate` — Regenerate .xcodeproj from YAML
-- `/ios-build` — Build for simulator
-- `/ios-test` — Run unit tests
-- `/git-commit` — Stage and commit with proper message
-- `/git-push` — Push to origin
-- `/commit-push-pr` — Full commit + push + PR workflow
-- `/upstream-sync` — Fetch and review upstream changes
-- `/create-checkpoint` — Create milestone checkpoint tag
-- `/audit-branding` — Scan for remaining brand references
+Use `axiom:ask` to auto-route any iOS/Swift question. Key skills for this rebrand project:
+
+| Skill | When to use |
+|-------|------------|
+| `axiom:axiom-ios-build` | Build failures, Xcode issues |
+| `axiom:axiom-xcode-debugging` | BUILD FAILED, simulator hangs |
+| `axiom:axiom-build-debugging` | SPM resolution failures, dependency conflicts |
+| `axiom:axiom-localization` | String Catalogs, internationalization (37 locales) |
+| `axiom:axiom-privacy-ux` | Privacy manifests, App Store compliance |
+| `axiom:axiom-apple-docs` | Apple framework API references |
+| `axiom:axiom-ios-testing` | Unit test issues |
+| `axiom:axiom-app-composition` | App entry point / auth flow changes |
+| `axiom:axiom-ios-networking` | Push notification debugging |
+| `axiom:axiom-codable` | JSON config / encoding issues |
+| `axiom:axiom-swift-concurrency` | async/await, actors, Sendable issues |
 
 ---
 
@@ -246,7 +229,7 @@ GoogleService-Info.plist         → Firebase project config (placeholder — ne
 - Tag `checkpoint/unmodified-build` at `7c96ebfca` — last upstream commit before any fork changes
 - 10 named checkpoints during init phase (see `ios_proj_init.md` Step 15)
 - Commit format: Match existing upstream style (imperative, concise)
-- Slash commands available: `/git-commit`, `/git-push`, `/commit-push-pr`
+- Available slash commands: `/git-commit`, `/git-push`, `/commit-push-pr`
 
 ### Claude-Specific
 
@@ -379,7 +362,8 @@ The project is **maximally prepared within what's possible without customer inpu
 | 2026-02-11 | Updated customer-facing documents: briefing and questionnaire reflect FCM-implemented status and iOS 18.0 requirement. Updated decisions tracker: D-002 status to "in progress" (FCM done, awaiting config), D-003 status to "in progress" (iOS 18.0 only option). All pushed to origin/develop. |
 | 2026-02-11 | Progress analysis completed: 4 of 15 init steps done, 1 partial (push), 10 blocked on customer. ~40–45h invested. Project maximally prepared — no further dev work possible until customer meeting. |
 | 2026-02-12 | App Store preparation templates: `documentation/app_store_prep_templates.md` — export compliance (identified ITSAppUsesNonExemptEncryption must change to true), privacy nutrition labels (all 11 data types mapped), App Review notes (Guideline 4.3 risk strategy), age rating (recommends 12+), differentiation strategy with rejection response template. |
+| 2026-02-16 | Created 6 project-specific Claude Code commands: `/xcodegen-build`, `/upstream-sync`, `/audit-branding`, `/create-checkpoint`, `/rebrand-execute`, `/decision-status`. Updated `.claude/settings.local.json` with 6 missing permission patterns (git status/diff/log/merge, rebrand scripts). Build re-verified — BUILD SUCCEEDED on iPhone 17 Pro simulator. |
 
 ---
 
-*Last updated: 2026-02-12 (App Store prep templates added). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-16 (6 project-specific slash commands added). Update this file whenever the project phase changes or a blocker is resolved.*
