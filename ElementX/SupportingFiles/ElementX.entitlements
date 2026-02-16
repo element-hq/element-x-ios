@@ -23,12 +23,14 @@
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>$(APP_GROUP_IDENTIFIER)</string>
+		<string>group.im.vector</string>
 	</array>
 	<key>com.apple.security.network.client</key>
 	<true/>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
+		<string>$(AppIdentifierPrefix)$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
+		<string>$(AppIdentifierPrefix)im.vector.app.keychain.shared</string>
 	</array>
 </dict>
 </plist>

@@ -13,6 +13,7 @@ import MatrixRustSDK
 import Sentry
 import SwiftUI
 import Version
+import KeychainAccess
 
 class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, SecureWindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
@@ -182,6 +183,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 }
             }
             .store(in: &cancellables)
+        
+        checkOldAppDatabase()
     }
     
     func start() {
@@ -380,6 +383,23 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     // MARK: - Private
+    
+    private func checkOldAppDatabase() {
+        let keychain = Keychain(service: "im.vector.app.encryption-manager-service", accessGroup: "7J4U792NQT.im.vector.app.keychain.shared")
+        let storePasshphrase = try? keychain.getData("cryptoSDKStoreKey")
+        guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.im.vector") else {
+            return
+        }
+        let test = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
+        MXLog.info("WIP TEST: \(test ?? [])")
+        let testMatrixKit = test?.first(where: { $0.lastPathComponent == "MatrixKit" })
+        MXLog.info("WIP TEST: \(testMatrixKit ?? "")")
+        guard let testMatrixKit else {
+            return
+        }
+        let test2 = try? FileManager.default.contentsOfDirectory(at: testMatrixKit, includingPropertiesForKeys: nil)
+        MXLog.info("WIP TEST: \(test2)")
+    }
     
     private static func setupServiceLocator(appSettings: AppSettings, appHooks: AppHooks) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
