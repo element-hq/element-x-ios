@@ -109,6 +109,7 @@ enum RoomScreenFooterViewDetails {
     case verificationViolation(member: RoomMemberProxyProtocol, learnMoreURL: URL)
 }
 
+@MainActor
 enum PinnedEventsBannerState: Equatable {
     case loading(numbersOfEvents: Int)
     case loaded(state: PinnedEventsState)
@@ -213,6 +214,7 @@ enum PinnedEventsBannerState: Equatable {
     }
 }
 
+@MainActor
 struct PinnedEventsState: Equatable {
     var pinnedEventContents: OrderedDictionary<String, AttributedString> = [:] {
         didSet {

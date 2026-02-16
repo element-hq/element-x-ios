@@ -10,6 +10,7 @@
 import SwiftUI
 import XCTest
 
+@MainActor
 final class FontSizeTests: XCTestCase {
     /// Test all system text styles to assert mapping between `Font` and `UIFont`.
     func testTextStyle() {
@@ -103,3 +104,4 @@ final class FontSizeTests: XCTestCase {
         XCTAssertEqual(styledCustomFootnote15FontSize?.style, .footnote)
     }
 }
+ 

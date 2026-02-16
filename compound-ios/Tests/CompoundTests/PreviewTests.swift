@@ -8,7 +8,7 @@
 
 import Combine
 @testable import Compound
-@testable import SnapshotTesting
+@preconcurrency @testable import SnapshotTesting
 import SwiftUI
 import XCTest
 
@@ -28,15 +28,17 @@ class PreviewTests: XCTestCase {
                                                      .init(name: "iPad", device: "iPad")]
     private var recordMode: SnapshotTestingConfiguration.Record = .missing
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         
-        if ProcessInfo().environment["RECORD_FAILURES"].map(Bool.init) == true {
-            recordMode = .failed
-        }
+        await MainActor.run {
+            if ProcessInfo().environment["RECORD_FAILURES"].map(Bool.init) == true {
+                recordMode = .failed
+            }
 
-        checkEnvironments()
-        UIView.setAnimationsEnabled(false)
+            checkEnvironments()
+            UIView.setAnimationsEnabled(false)
+        }
     }
     
     /// Check environments to avoid problems with snapshots on different devices or OS.
@@ -183,6 +185,7 @@ private extension PreviewDevice {
 }
 
 private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
+    @MainActor
     static func prefireImage(drawHierarchyInKeyWindow: Bool = false,
                              preferences: SnapshotPreferences,
                              layout: SwiftUISnapshotLayout = .sizeThatFits,
@@ -204,7 +207,7 @@ private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
         }
 
         return SimplySnapshotting<UIImage>(pathExtension: "png", diffing: .prefireImage(preferences: preferences, scale: traits.displayScale))
-            .asyncPullback { view in
+            .asyncPullback { @MainActor view in
                 var config = config
 
                 let controller: UIViewController

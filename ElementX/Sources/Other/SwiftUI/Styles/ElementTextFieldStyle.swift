@@ -10,6 +10,7 @@ import Compound
 import SwiftUI
 import SwiftUIIntrospect
 
+@MainActor
 extension TextFieldStyle where Self == ElementTextFieldStyle {
     static func element(labelText: String? = nil,
                         footerText: String? = nil,
@@ -34,6 +35,7 @@ extension TextFieldStyle where Self == ElementTextFieldStyle {
 }
 
 /// The text field style used in authentication screens.
+@MainActor
 struct ElementTextFieldStyle: @MainActor TextFieldStyle {
     enum State {
         case success

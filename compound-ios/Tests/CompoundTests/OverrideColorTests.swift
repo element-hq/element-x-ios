@@ -10,20 +10,25 @@
 import Foundation
 import XCTest
 
-@MainActor
-class OverrideColorTests: XCTestCase {
-    func testSwiftUI() {
-        let colors = CompoundColors()
-        let tokens = CompoundColorTokens()
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
-        
-        colors.override(\.textPrimary, with: .pink)
-        XCTAssertEqual(colors.textPrimary, .pink)
-        
-        colors.override(\.textPrimary, with: nil)
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+final class OverrideColorTests: XCTestCase {
+    func testSwiftUI() async {
+        // For some very weird reason we need this to be async, `@MainActor` is not enough
+        // it will compile but when running it will crash at the end of the run due to some deinit problems.
+        // The other solution would be to make CompoundColors nonisolated but we don't really need that.
+        await MainActor.run {
+            let colors = CompoundColors()
+            let tokens = CompoundColorTokens()
+            XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+            
+            colors.override(\.textPrimary, with: .pink)
+            XCTAssertEqual(colors.textPrimary, .pink)
+            
+            colors.override(\.textPrimary, with: nil)
+            XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+        }
     }
     
+    /// UIColors are nonisolated, so this is fine.
     func testUIKit() {
         let colors = CompoundUIColors()
         let tokens = CompoundUIColorTokens()

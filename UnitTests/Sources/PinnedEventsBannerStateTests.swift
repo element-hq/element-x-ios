@@ -9,6 +9,7 @@
 @testable import ElementX
 import XCTest
 
+@MainActor
 class PinnedEventsBannerStateTests: XCTestCase {
     func testEmpty() {
         var state = PinnedEventsBannerState.loading(numbersOfEvents: 0)

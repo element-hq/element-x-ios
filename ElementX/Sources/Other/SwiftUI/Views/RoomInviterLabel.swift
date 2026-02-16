@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 struct RoomInviterDetails: Equatable {
     let id: String
     let displayName: String?
