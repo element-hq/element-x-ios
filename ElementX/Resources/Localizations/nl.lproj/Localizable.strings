@@ -1,5 +1,6 @@
 "Notification" = "Melding";
 "a11y_add_reaction" = "Reactie toevoegen: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Afbeelding";
 "a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Verwijderen";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Beeïndigde peiling";
 "a11y_polls_will_remove_selection" = "Verwijdert de vorige selectie";
 "a11y_polls_winning_answer" = "This is the winning answer";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Reageer met %1$@";
 "a11y_react_with_other_emojis" = "Reageer met andere emoji's";
 "a11y_read_receipts_multiple" = "Gelezen door %1$@ en %2$@";

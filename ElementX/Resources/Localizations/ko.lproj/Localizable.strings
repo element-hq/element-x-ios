@@ -1,5 +1,6 @@
 "Notification" = "알림";
 "a11y_add_reaction" = "반응 추가: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "아바타";
 "a11y_collapse_message_text_field" = "메시지 텍스트 필드 최소화";
 "a11y_delete" = "삭제";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "종료된 투표";
 "a11y_polls_will_remove_selection" = "이전 선택 항목을 제거합니다";
 "a11y_polls_winning_answer" = "이것이 승리의 답입니다";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "%1$@에 반응하세요";
 "a11y_react_with_other_emojis" = "다른 이모지로 반응하세요";
 "a11y_read_receipts_multiple" = "읽은 사람 %1$@ 그리고 %2$@";

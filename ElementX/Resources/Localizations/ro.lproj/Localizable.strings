@@ -1,5 +1,6 @@
 "Notification" = "Notificare";
 "a11y_add_reaction" = "Adăugați o reacție: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Imagine de profil";
 "a11y_collapse_message_text_field" = "Micșorați câmpul mesajului";
 "a11y_delete" = "Ștergere";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Sondaj încheiat";
 "a11y_polls_will_remove_selection" = "Va șterge selecția anterioară";
 "a11y_polls_winning_answer" = "Acesta este votul câștigător";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Reacționați cu %1$@";
 "a11y_react_with_other_emojis" = "Reacționați cu alte emoji-uri";
 "a11y_read_receipts_multiple" = "Citit de %1$@ și %2$@";

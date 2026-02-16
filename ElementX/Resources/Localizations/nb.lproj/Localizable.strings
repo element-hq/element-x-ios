@@ -1,5 +1,6 @@
 "Notification" = "Varsel";
 "a11y_add_reaction" = "Legg til reaksjon: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Profilbilde";
 "a11y_collapse_message_text_field" = "Minimer meldingstekstfeltet";
 "a11y_delete" = "Slett";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Avsluttet avstemning";
 "a11y_polls_will_remove_selection" = "Vil fjerne forrige valg";
 "a11y_polls_winning_answer" = "Dette er vinnersvaret";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Reager med %1$@";
 "a11y_react_with_other_emojis" = "Reager med andre emojier";
 "a11y_read_receipts_multiple" = "Lest av %1$@ og %2$@";

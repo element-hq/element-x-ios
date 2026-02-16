@@ -1,5 +1,6 @@
 "Notification" = "Mitteilung";
 "a11y_add_reaction" = "Reaktion hinzufügen: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Nachrichtentextfeld minimieren";
 "a11y_delete" = "Löschen";
@@ -22,6 +23,7 @@
 "a11y_poll_end" = "Umfrage beendet";
 "a11y_polls_will_remove_selection" = "Entfernt die vorherige Auswahl";
 "a11y_polls_winning_answer" = "Das ist die meistgewählte Antwort";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "Reagiere mit %1$@";
 "a11y_react_with_other_emojis" = "Mit anderen Emojis reagieren";
 "a11y_read_receipts_multiple" = "Gelesen von %1$@ und %2$@";
