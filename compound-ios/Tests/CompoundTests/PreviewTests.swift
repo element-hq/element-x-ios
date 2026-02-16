@@ -12,7 +12,6 @@ import Combine
 import SwiftUI
 import Testing
 
-@MainActor
 @Suite(.serialized)
 struct PreviewTests {
     private struct SnapshotDevice {

@@ -13,7 +13,6 @@ import Testing
 @Suite
 struct OverrideColorTests {
     @Test("SwiftUI color override")
-    @MainActor
     func swiftUI() {
         let colors = CompoundColors()
         let tokens = CompoundColorTokens()

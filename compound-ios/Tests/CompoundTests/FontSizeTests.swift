@@ -14,7 +14,6 @@ import Testing
 @Suite
 struct FontSizeTests {
     /// Test all system text styles to assert mapping between `Font` and `UIFont`.
-    @Test("Text style font sizes")
     func textStyle() {
         let caption2FontSize = FontSize.reflecting(.caption2)
         #expect(caption2FontSize?.value == 11)

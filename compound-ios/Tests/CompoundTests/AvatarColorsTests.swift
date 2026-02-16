@@ -11,7 +11,6 @@ import Foundation
 import SwiftUI
 import Testing
 
-@MainActor
 @Suite
 struct DecorativeColorsTests {
     struct TestCase {
