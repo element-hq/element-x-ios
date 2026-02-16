@@ -183,10 +183,12 @@ struct SessionVerificationScreen: View {
                 context.send(viewAction: .acceptVerificationRequest)
             }
         } label: {
-            if context.viewState.isWaiting {
-                Label(L10n.actionStartVerification, icon: \.spinner)
-            } else {
+            Label {
                 Text(L10n.actionStartVerification)
+            } icon: {
+                if context.viewState.isWaiting {
+                    ProgressView()
+                }
             }
         }
         .buttonStyle(.compound(.primary))
