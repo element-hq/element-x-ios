@@ -25,7 +25,6 @@ struct OverrideColorTests {
         #expect(colors.textPrimary == tokens.textPrimary)
     }
     
-    /// UIColors are nonisolated, so this is fine.
     @Test("UIKit color override")
     func uiKit() {
         let colors = CompoundUIColors()
