@@ -68,15 +68,7 @@ struct PreviewTests {
         let imageRenderer = ImageRenderer(content: preferenceReadingView)
         _ = imageRenderer.uiImage
         
-        var sanitizedSuiteName = testName
-        // Handle both old XCTest style (testFoo()) and new Swift Testing style (foo())
-        if sanitizedSuiteName.hasPrefix("test") {
-            sanitizedSuiteName = String(sanitizedSuiteName.suffix(sanitizedSuiteName.count - "test".count).dropLast(2))
-            sanitizedSuiteName = sanitizedSuiteName.prefix(1).lowercased() + sanitizedSuiteName.dropFirst()
-        } else {
-            // Remove trailing () if present
-            sanitizedSuiteName = String(sanitizedSuiteName.dropLast(2))
-        }
+        let sanitizedSuiteName = String(testName.dropLast(2))
         
         for snapshotDevice in snapshotDevices {
             guard var device = PreviewDevice(rawValue: snapshotDevice.device).snapshotDevice() else {
