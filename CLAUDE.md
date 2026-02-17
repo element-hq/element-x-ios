@@ -84,6 +84,8 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 - Associated domains cleaned (2026-02-17): Removed 7 Element-specific applinks. Kept `applinks:matrix.to` + `webcredentials:*.element.io` (OIDC).
 - Element-specific cleanup (2026-02-17): BugReportService sentry URL removed, Secrets.swift verified safe (`.localhost` placeholders).
 - Login verified (2026-02-17): Full OIDC login flow tested on simulator after all changes — working.
+- String rebranding (2026-02-17): 30 string replacements across en, en-US, ru (Localizable.strings + InfoPlist.strings). "Element" → "UCMeet", "Element Call" → "UCMeet Call", "Element X" → "UCMeet".
+- Swift source cleanup (2026-02-17): 10 Element-specific references cleaned in 8 production Swift files (preview mocks, comments, dead code). 16 `io.element.elementx` dispatch queue labels remain — blocked on Bundle ID (D-001), will be batch-updated via `rebrand.sh`.
 
 **What's blocked (require customer input):**
 - Step 5: Bundle identity changes (needs Bundle ID — customer must choose, e.g. `org.ucmeet.chat`)
@@ -297,8 +299,8 @@ When updating this file, change "Current Phase" and check off completed phases:
 | 5 | Apple Developer Provisioning | **BLOCKED** | Requires D-007 (Apple Developer account), D-001 (app identity) |
 | 6 | Identity Changes (Bundle ID, Team, App Group) | **BLOCKED** | Requires D-001 (app name, bundle ID from customer) |
 | 7 | Branding — App Icon & Colors | **BLOCKED** | Requires D-008 (design assets from customer) |
-| 8 | Branding — Strings, Launch Screen & Element Removal | **BLOCKED** | Requires D-008; automation scripts ready |
-| 9 | Localization | **DONE** | Trimmed 37 → 3 locales (en, en-US, ru). App name strings still need D-008. |
+| 8 | Branding — Strings, Launch Screen & Element Removal | **MOSTLY DONE** | 30 string values rebranded (en, en-US, ru), 10 Swift refs cleaned. 16 dispatch queue labels blocked on D-001. Final app name needs D-008. |
+| 9 | Localization | **DONE** | Trimmed 37 → 3 locales (en, en-US, ru). All "Element" strings replaced with "UCMeet". |
 | 10 | Configuration (AppSettings, Analytics, Feature Flags) | **MOSTLY DONE** | Server URLs configured, analytics disabled, legal URLs set. Push gateway needs Sygnal URL. |
 | 11 | OIDC & Associated Domains | **MOSTLY DONE** | OIDC login working, associated domains cleaned. Full migration to ucmeet.info needs AASA file. |
 | 12 | Push Notification Plumbing | **PARTIAL** | FCM code + 14 unit tests complete. Blocked on real GoogleService-Info.plist (D-002) |
@@ -338,16 +340,16 @@ When updating this file, change "Current Phase" and check off completed phases:
 
 | Metric | Value |
 |--------|-------|
-| Plan completion | ~60% (7 done + 3 mostly done + 1 partial of 15 steps) |
-| Schedule position | Day 10 of 30 (actual tasks complete) |
-| Hours invested | ~53–58h of ~120h core budget |
+| Plan completion | ~67% (7 done + 4 mostly done + 1 partial of 15 steps) |
+| Schedule position | Day 11 of 30 (actual tasks complete) |
+| Hours invested | ~56–61h of ~120h core budget |
 | Decisions resolved | 5 of 12 (4 in progress: D-001, D-002, D-007, D-008) |
 | Critical blockers | 3 (D-001 Bundle ID, D-007 Apple account, D-008 design assets) |
-| Rebranding time saved | Automation scripts reduce estimated Steps 7–9 from ~3 days to ~1 day |
+| Element brand refs remaining | 16 dispatch queue labels (blocked on D-001) + OIDC URLs (intentional) |
 
 ### Assessment
 
-The project is **maximally prepared within what's possible without customer input**. All pre-customer work is done: codebase fully audited, FCM implemented and tested, rebranding automation ready, upstream synced, privacy manifests fixed. Everything from Step 5 onward is gated on customer decisions — particularly D-001 (app identity/licensing) and D-005 (server access). No further development work can proceed until the customer meeting happens.
+The project is **nearly feature-complete for what's possible without Bundle ID**. Server configured, OIDC login working, calls configured, all user-facing strings rebranded, 34 unused locales removed, associated domains cleaned. The remaining work is: Bundle ID-dependent changes (16 queue labels, provisioning), final design assets, push E2E testing, and App Store submission.
 
 ---
 
@@ -384,7 +386,8 @@ The project is **maximally prepared within what's possible without customer inpu
 | 2026-02-17 | **Major unblock: customer responded.** 5 decisions resolved (D-003 iOS 18+, D-004 UCMeet Call, D-005 server infra, D-006 MAS/OIDC, D-011 contact). Server connectivity verified: login test passed against `matrix.ucmeet.org` (Synapse 1.144.0, Sliding Sync, MAS, LiveKit all confirmed). AppSettings.swift updated: account provider → `matrix.ucmeet.org`, all legal URLs → `ucmeet.info/policy-152`, Element Call PostHog/Sentry analytics disabled. App icon replaced with processed UCMeet Icon_1 (1024x1024, no alpha). Decisions tracker fully updated. New TOR (`TZ Matrix.docx`) analyzed — identical to original, no new info. Build verified — BUILD SUCCEEDED on iPhone 17 Pro simulator. |
 | 2026-02-17 | **OIDC login working on simulator.** Fixed 3 issues blocking login: (1) OIDC redirect URL domain mismatch — MAS requires all URIs (client, redirect, logo, tos, policy) on same host; solved by using element.io for all OIDC registration metadata while keeping ucmeet.info for app UI links. (2) ASWebAuthenticationSession associated domains — HTTPS callback requires webcredentials + AASA file; ucmeet.info has no AASA, so element.io used (already in entitlements as `webcredentials:*.element.io`). (3) Firebase crash on placeholder GoogleService-Info.plist — added API key validation guard to skip Firebase init when credentials are placeholders. Successfully logged in as `test_user` on iPhone 17 Pro simulator. |
 | 2026-02-17 | **Parallel UCMeet configuration batch.** (1) Calls: URL scheme `io.element.call` → `org.ucmeet.call`, `knownHosts` cleared (embedded bundle), InfoPlistReader updated, LiveKit confirmed in `.well-known`. (2) Localization: 37 → 3 locales (en, en-US, ru), 34 folders deleted (~117 files). (3) Associated domains: removed 7 Element-specific applinks, kept `matrix.to` + `webcredentials:*.element.io`. (4) Element cleanup: BugReportService sentry URL removed, Secrets.swift verified safe. Build + login verified on simulator. |
+| 2026-02-17 | **String rebranding + Swift source cleanup.** 30 string replacements across 5 locale files (en, en-US, ru): "Element" → "UCMeet", "Element Call" → "UCMeet Call", "Element X" → "UCMeet". 10 Element-specific references cleaned in 8 Swift files (preview mocks, comments, dead code paths). 16 `io.element.elementx` dispatch queue labels identified as blocked on D-001. OIDC element.io URLs left as-is (technical requirement). Build verified. |
 
 ---
 
-*Last updated: 2026-02-17 (calls, localization, domains, Element cleanup). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-17 (string rebranding + Swift source cleanup). Update this file whenever the project phase changes or a blocker is resolved.*

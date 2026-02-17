@@ -21,7 +21,7 @@
 | TOR Section | Requirement | Status | Notes |
 |-------------|-------------|--------|-------|
 | **3.1** Source code adaptation | Bundle ID, identifiers, build scheme, libraries | **MOSTLY DONE** | Server config applied, Element refs cleaned, associated domains updated. Bundle ID still needs D-001. |
-| **3.2** Branding | Icon, name, colors | **PARTIAL** (D-008) | Temporary UCMeet icon applied. Final assets (name, accent color, icon re-export) promised via email. |
+| **3.2** Branding | Icon, name, colors | **MOSTLY DONE** (D-008) | Temp icon applied, all user-facing strings rebranded. Final assets (name, accent color, icon re-export) promised via email. |
 | **3.3** FCM push integration | Firebase SDK, Sygnal, APNs key, testing | **70% DONE** | Code + 14 tests complete. Awaiting real GoogleService-Info.plist (D-002). |
 | **3.4** Server configuration | Homeserver URL, identity server, .well-known, Scalar, Jitsi | **DONE** | `matrix.ucmeet.org` configured, `.well-known` verified, legal URLs → ucmeet.info. Scalar N/A. |
 | **3.5** Calls support | 1:1 + group calls | **DONE** | URL scheme → `org.ucmeet.call`, LiveKit confirmed in `.well-known`, embedded Element Call bundle. |
@@ -80,14 +80,15 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | Claude Code commands | ~1h | 6 project-specific slash commands |
 | Server config + OIDC login | ~4h | AppSettings configured, OIDC login working, Firebase crash fix |
 | Calls + localization + cleanup | ~3h | URL scheme, knownHosts, 34 locales removed, domains cleaned |
-| **Total invested** | **~53-56h** | |
+| String rebranding + Swift cleanup | ~3h | 30 string replacements (en, en-US, ru), 10 Swift source refs cleaned |
+| **Total invested** | **~56-59h** | |
 
 ### Remaining Work Estimate (by phase)
 
 | Phase | Original Est. | Work Done | Remaining | Savings From |
 |-------|--------------|-----------|-----------|-------------|
 | Licensing (parallel) | 4-8h | ~1h | 3-7h | Mostly waiting, not labor |
-| Branding | 8-14h | ~7h | **1-3h** | Scripts ready, temp icon applied, awaiting final assets |
+| Branding | 8-14h | ~10h | **0.5-1h** | Strings rebranded, temp icon applied. Only final icon/color swap when assets arrive. |
 | Server Config + OIDC | 10-16h | ~7h | **1-2h** | Server configured, OIDC working. Only AASA migration left. |
 | Push Notifications | 9-12h | ~8h | **4-5h** | FCM code complete, needs real config |
 | Calls | 6-10h | ~5h | **0-1h** | ✅ Configuration complete, LiveKit confirmed |
@@ -105,13 +106,13 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 |--------|-------|
 | Original estimate (with AI) | 60-95h, expected ~80h |
 | Original estimate (without AI) | 85-132h, expected ~120h |
-| Hours invested so far | ~53-56h |
-| Hours remaining (estimated) | 34-60h, expected ~42h |
-| **Projected total** | **~95-100h** |
+| Hours invested so far | ~56-59h |
+| Hours remaining (estimated) | 31-57h, expected ~39h |
+| **Projected total** | **~93-98h** |
 | Budget position | Within AI-assisted range (60-95h), on track |
-| Budget consumed | ~55% of hours, ~60% of $2,200 fixed price |
+| Budget consumed | ~58% of hours, ~63% of $2,200 fixed price |
 
-> Budget tracking improved significantly since Feb 12 — customer engagement unlocked rapid progress on server config, OIDC, calls, and localization. Remaining work is mostly testing + App Store submission (both require Bundle ID / Apple account).
+> Project is tracking well within budget. String rebranding and source cleanup further reduced remaining work. Main cost centers left: testing (~10-16h) and App Store submission (~8-14h).
 
 ---
 
@@ -284,6 +285,8 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 | Localization locales | 3 (en, en-US, ru) — trimmed from 37 |
 | Localization files | ~13 (was ~130 before trim) |
 | Associated domains | 2 (matrix.to + webcredentials:*.element.io) — trimmed from 9 |
+| Remaining `element.io` in production Swift | ~10 (OIDC URLs intentional, Compound library previews) |
+| Remaining `io.element.elementx` identifiers | 16 dispatch queue labels (blocked on D-001 Bundle ID) |
 | Git tags (fork-specific) | 2 (`checkpoint/unmodified-build`, `backup/pre-upstream-sync-20260211`) |
 
 ---
@@ -315,7 +318,7 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 | Date | Analysis Summary |
 |------|-----------------|
 | 2026-02-12 | Initial progress analysis. 4/15 init steps done, 1 partial. ~45-48h invested (~37% budget). 0/12 decisions resolved. Project maximally prepared for customer engagement. Estimated ~55h remaining active work. Timeline: 7-10 weeks total (best/expected). |
-| 2026-02-17 | Major progress after customer response. 7/15 init steps done, 3 mostly done, 1 partial. ~53-56h invested (~55% budget). 5/12 decisions resolved. Server configured, OIDC login verified, calls configured, 34 locales removed, associated domains cleaned. Estimated ~42h remaining. Timeline: 6-8 weeks total (best/expected). Critical path: Bundle ID + Apple Developer account. |
+| 2026-02-17 | Major progress after customer response. 7/15 init steps done, 4 mostly done, 1 partial. ~56-59h invested (~58% budget). 5/12 decisions resolved. Server configured, OIDC login verified, calls configured, 34 locales removed, associated domains cleaned, 30 strings rebranded, 10 Swift refs cleaned. Estimated ~39h remaining. Timeline: 6-8 weeks total (best/expected). Critical path: Bundle ID + Apple Developer account. |
 
 ---
 
