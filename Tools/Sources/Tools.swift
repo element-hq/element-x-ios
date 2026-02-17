@@ -1,5 +1,8 @@
 import ArgumentParser
 import Foundation
+import Logging
+
+let logger = Logger(label: "🚀")
 
 @main
 struct Tools: AsyncParsableCommand {

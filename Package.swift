@@ -16,7 +16,8 @@ let package = Package(
         .package(url: "https://github.com/element-hq/swift-command-line-tools.git", revision: "e5eaab1558ef664e6cd80493f64259381670fb3a"),
         // .package(path: "../../../swift-command-line-tools"),
         .package(url: "https://github.com/swiftlang/swift-subprocess", .upToNextMinor(from: "0.3.0")),
-        .package(url: "https://github.com/jpsim/Yams", .upToNextMinor(from: "6.2.1"))
+        .package(url: "https://github.com/jpsim/Yams", .upToNextMinor(from: "6.2.1")),
+        .package(url: "https://github.com/apple/swift-log", .upToNextMinor(from: "1.10.1"))
     ],
     targets: [
         .executableTarget(name: "Tools",
@@ -24,7 +25,8 @@ let package = Package(
                             .product(name: "ArgumentParser", package: "swift-argument-parser"),
                             .product(name: "CommandLineTools", package: "swift-command-line-tools"),
                             .product(name: "Subprocess", package: "swift-subprocess"),
-                            .product(name: "Yams", package: "Yams")
+                            .product(name: "Yams", package: "Yams"),
+                            .product(name: "Logging", package: "swift-log")
                           ],
                           path: "Tools/Sources")
     ]

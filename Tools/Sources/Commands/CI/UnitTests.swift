@@ -19,7 +19,7 @@ struct UnitTests: AsyncParsableCommand {
         
         // Run unit tests
         do {
-            CI.log("\n🧪 Running unit tests…\n")
+            logger.info("\n🧪 Running unit tests…\n")
             try await RunTests.parse([
                 "--scheme", "UnitTests",
                 "--device", device,
@@ -27,12 +27,12 @@ struct UnitTests: AsyncParsableCommand {
             ]).run()
         } catch {
             failures.append("Unit tests failed: \(error)")
-            CI.log("\n❌ Unit tests failed. \(error)\n")
+            logger.error("\n❌ Unit tests failed. \(error)\n")
         }
         
         // Run preview tests on a smaller device
         do {
-            CI.log("\n🧪 Running preview tests…")
+            logger.info("\n🧪 Running preview tests…")
             try await RunTests.parse([
                 "--scheme", "PreviewTests",
                 "--device", "iPhone SE (3rd generation)",
@@ -43,7 +43,7 @@ struct UnitTests: AsyncParsableCommand {
             ]).run()
         } catch {
             failures.append("Preview tests failed: \(error)")
-            CI.log("\n❌ Preview tests failed.\n")
+            logger.error("\n❌ Preview tests failed.\n")
         }
 
         // Zip results (best-effort, useful for CI artifact uploads)
@@ -59,10 +59,10 @@ struct UnitTests: AsyncParsableCommand {
         await CI.collectTestResults(resultBundle: "PreviewTests.xcresult", outputName: "preview-junit.xml")
         
         if !failures.isEmpty {
-            CI.log("\n❌ \(failures.count) test suite(s) failed.\n")
+            logger.error("\n❌ \(failures.count) test suite(s) failed.\n")
             throw ExitCode.failure
         }
         
-        CI.log("\n✅ All unit test suites passed.\n")
+        logger.info("\n✅ All unit test suites passed.\n")
     }
 }
