@@ -86,11 +86,15 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 - Login verified (2026-02-17): Full OIDC login flow tested on simulator after all changes — working.
 - String rebranding (2026-02-17): 30 string replacements across en, en-US, ru (Localizable.strings + InfoPlist.strings). "Element" → "UCMeet", "Element Call" → "UCMeet Call", "Element X" → "UCMeet".
 - Swift source cleanup (2026-02-17): 10 Element-specific references cleaned in 8 production Swift files (preview mocks, comments, dead code). 16 `io.element.elementx` dispatch queue labels remain — blocked on Bundle ID (D-001), will be batch-updated via `rebrand.sh`.
+- Unit test fixes (2026-02-17): 16 test assertions updated across 5 test files to match rebrand. All 33 affected tests passing. 39 pre-existing failures unrelated to rebrand.
+- App display name (2026-02-17): `APP_DISPLAY_NAME` → "UCMeet", `PRODUCTION_APP_NAME` → "UCMeet" in `app.yml`. Propagates to main app, NSE, ShareExtension. Verified on simulator — iOS Settings back button shows "< UCMeet".
+- Branding audit (2026-02-17): Full codebase audit confirmed zero remaining user-visible Element branding. All remaining refs are blocked on D-001 (Bundle ID) or intentional (OIDC).
+- NSE/ShareExtension audit (2026-02-17): Extension targets clean — no hardcoded Element strings, all use `$(APP_DISPLAY_NAME)` variables.
 
 **What's blocked (require customer input):**
 - Step 5: Bundle identity changes (needs Bundle ID — customer must choose, e.g. `org.ucmeet.chat`)
 - Step 6: Identity changes (needs Bundle ID + Apple Developer account decision — D-007)
-- Steps 7-9: Final branding (design assets promised via email — D-008)
+- Steps 7-9: Final branding (accent color, final icon re-export — D-008)
 - Push E2E testing (needs Sygnal URL from customer + Firebase project creation)
 - OIDC client registration (needs Bundle ID first, then customer registers in MAS)
 
@@ -340,16 +344,17 @@ When updating this file, change "Current Phase" and check off completed phases:
 
 | Metric | Value |
 |--------|-------|
-| Plan completion | ~67% (7 done + 4 mostly done + 1 partial of 15 steps) |
-| Schedule position | Day 11 of 30 (actual tasks complete) |
-| Hours invested | ~56–61h of ~120h core budget |
+| Plan completion | ~73% (8 done + 3 mostly done + 1 partial of 15 steps) |
+| Schedule position | Day 12 of 30 (actual tasks complete) |
+| Hours invested | ~58–62h of ~120h core budget |
 | Decisions resolved | 5 of 12 (4 in progress: D-001, D-002, D-007, D-008) |
 | Critical blockers | 3 (D-001 Bundle ID, D-007 Apple account, D-008 design assets) |
 | Element brand refs remaining | 16 dispatch queue labels (blocked on D-001) + OIDC URLs (intentional) |
+| User-visible Element branding | **0** — fully rebranded to UCMeet |
 
 ### Assessment
 
-The project is **nearly feature-complete for what's possible without Bundle ID**. Server configured, OIDC login working, calls configured, all user-facing strings rebranded, 34 unused locales removed, associated domains cleaned. The remaining work is: Bundle ID-dependent changes (16 queue labels, provisioning), final design assets, push E2E testing, and App Store submission.
+The project is **nearly feature-complete for what's possible without Bundle ID**. Server configured, OIDC login working, calls configured, all user-facing strings rebranded, app display name "UCMeet" everywhere, 34 unused locales removed, associated domains cleaned, unit tests fixed. **Zero user-visible Element branding remains.** The remaining work is: Bundle ID-dependent changes (16 queue labels, provisioning), final design assets (accent color, icon re-export), push E2E testing, and App Store submission.
 
 ---
 
@@ -388,7 +393,8 @@ The project is **nearly feature-complete for what's possible without Bundle ID**
 | 2026-02-17 | **Parallel UCMeet configuration batch.** (1) Calls: URL scheme `io.element.call` → `org.ucmeet.call`, `knownHosts` cleared (embedded bundle), InfoPlistReader updated, LiveKit confirmed in `.well-known`. (2) Localization: 37 → 3 locales (en, en-US, ru), 34 folders deleted (~117 files). (3) Associated domains: removed 7 Element-specific applinks, kept `matrix.to` + `webcredentials:*.element.io`. (4) Element cleanup: BugReportService sentry URL removed, Secrets.swift verified safe. Build + login verified on simulator. |
 | 2026-02-17 | **String rebranding + Swift source cleanup.** 30 string replacements across 5 locale files (en, en-US, ru): "Element" → "UCMeet", "Element Call" → "UCMeet Call", "Element X" → "UCMeet". 10 Element-specific references cleaned in 8 Swift files (preview mocks, comments, dead code paths). 16 `io.element.elementx` dispatch queue labels identified as blocked on D-001. OIDC element.io URLs left as-is (technical requirement). Build verified. |
 | 2026-02-17 | **Unit test fixes for rebrand.** 962 tests run, 16 failures caused by rebrand changes fixed across 5 test files: AppRouteURLParserTests (5 — knownHosts, URL scheme, web hosts), ServerConfirmationScreenViewModelTests (7 — accountProviders default, mock serverAddress), ServerConfirmationScreenViewStateTests (1 — element.io message removed), LocalizationTests (2 — Italian→Russian locale+plurals), AuthenticationServiceTests (1 — default homeserver address). All 33 affected tests passing. 39 pre-existing failures unrelated to rebrand. |
+| 2026-02-17 | **App display name + branding audit.** Changed `APP_DISPLAY_NAME` → "UCMeet" and `PRODUCTION_APP_NAME` → "UCMeet" in `app.yml`. Propagates to main app, NSE, ShareExtension via XcodeGen variables. Verified on simulator: iOS Settings back button shows "< UCMeet". Full branding audit confirmed **zero user-visible Element branding remains**. NSE/ShareExtension audit: clean, no hardcoded Element strings. |
 
 ---
 
-*Last updated: 2026-02-17 (unit test fixes for rebrand). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-17 (app display name + branding audit). Update this file whenever the project phase changes or a blocker is resolved.*
