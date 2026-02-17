@@ -33,12 +33,17 @@ struct VoiceMessageRoomTimelineContent: View {
         VoiceMessageRoomPlaybackView(playerState: playerState,
                                      onPlayPause: onPlaybackPlayPause,
                                      onSeek: { onPlaybackSeek($0) },
-                                     onScrubbing: { onPlaybackScrubbing($0) })
+                                     onScrubbing: { onPlaybackScrubbing($0) },
+                                     onPlaybackSpeedChange: onPlaybackSpeedChange)
             .fixedSize(horizontal: false, vertical: true)
     }
-    
+
     private func onPlaybackPlayPause() {
         context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
+    }
+
+    private func onPlaybackSpeedChange() {
+        context?.send(viewAction: .handleAudioPlayerAction(.changePlaybackSpeed(itemID: timelineItem.id)))
     }
     
     private func onPlaybackSeek(_ progress: Double) {

@@ -411,6 +411,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "PlaceholderScreen_Previews")
     }
 
+    func testPlaybackSpeedButton() async throws {
+        try await performAccessibilityAudit(named: "PlaybackSpeedButton_Previews")
+    }
+
     func testPollFormScreen() async throws {
         try await performAccessibilityAudit(named: "PollFormScreen_Previews")
     }

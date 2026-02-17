@@ -60,6 +60,10 @@ internal enum L10n {
   internal static func a11yPausedVoiceMessage(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "a11y_paused_voice_message", String(describing: p1), String(describing: p2))
   }
+  /// Playback speed %1$@
+  internal static func a11yPlaybackSpeed(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "a11y_playback_speed", String(describing: p1))
+  }
   /// PIN field
   internal static var a11yPinField: String { return L10n.tr("Localizable", "a11y_pin_field") }
   /// Play

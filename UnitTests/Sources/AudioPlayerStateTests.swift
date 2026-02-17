@@ -30,6 +30,7 @@ class AudioPlayerStateTests: XCTestCase {
         audioPlayerMock.state = .stopped
         audioPlayerMock.currentTime = 0.0
         audioPlayerMock.duration = 0.0
+        audioPlayerMock.playbackSpeed = 1.0
         audioPlayerMock.seekToClosure = { [audioPlayerSeekCallsSubject] progress in
             audioPlayerSeekCallsSubject?.send(progress)
         }
@@ -269,6 +270,31 @@ class AudioPlayerStateTests: XCTestCase {
         XCTAssertFalse(audioPlayerState.showProgressIndicator)
     }
     
+    func testSetPlaybackSpeed() {
+        audioPlayerState.attachAudioPlayer(audioPlayerMock)
+
+        XCTAssertEqual(audioPlayerState.playbackSpeed, 1.0)
+
+        audioPlayerState.setPlaybackSpeed(1.5)
+        XCTAssertEqual(audioPlayerState.playbackSpeed, 1.5)
+        XCTAssertEqual(audioPlayerMock.setPlaybackSpeedReceivedSpeed, 1.5)
+
+        audioPlayerState.setPlaybackSpeed(2.0)
+        XCTAssertEqual(audioPlayerState.playbackSpeed, 2.0)
+        XCTAssertEqual(audioPlayerMock.setPlaybackSpeedReceivedSpeed, 2.0)
+
+        audioPlayerState.setPlaybackSpeed(0.5)
+        XCTAssertEqual(audioPlayerState.playbackSpeed, 0.5)
+        XCTAssertEqual(audioPlayerMock.setPlaybackSpeedReceivedSpeed, 0.5)
+    }
+
+    func testSetPlaybackSpeedWithoutPlayer() {
+        XCTAssertEqual(audioPlayerState.playbackSpeed, 1.0)
+
+        audioPlayerState.setPlaybackSpeed(2.0)
+        XCTAssertEqual(audioPlayerState.playbackSpeed, 2.0)
+    }
+
     func testAudioPlayerActionsDidFailed() async throws {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 

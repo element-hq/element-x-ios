@@ -370,6 +370,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await timelineInteractionHandler.playPauseAudio(for: itemID) }
         case .seek(let itemID, let progress):
             Task { await timelineInteractionHandler.seekAudio(for: itemID, progress: progress) }
+        case .changePlaybackSpeed(let itemID):
+            timelineInteractionHandler.changePlaybackSpeed(for: itemID)
         }
     }
     

@@ -18,6 +18,7 @@
 "a11y_page_n" = "Page %1$d";
 "a11y_pause" = "Pause";
 "a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
+"a11y_playback_speed" = "Playback speed %1$@";
 "a11y_pin_field" = "PIN field";
 "a11y_play" = "Play";
 "a11y_poll_end" = "Ended poll";
