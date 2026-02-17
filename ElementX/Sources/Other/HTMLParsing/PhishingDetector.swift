@@ -51,7 +51,7 @@ enum PhishingDetector {
             // Then we compare the external URL with the internal one
             // To avoid false positives like [Matrix.org](https://matrix.org) we sanitize and lowercase
             // And trim invalid characters that might hide phishing attemps
-            // Like emoji whitespaces and other invalid symbols e.g click here [👉️ https://element.io](https://matrix.org)
+            // Like emoji whitespaces and other invalid symbols e.g click here [👉️ https://example.com](https://matrix.org)
             let trimmedDisplayString = disambiguatedDisplayString.asSanitizedLink.lowercased().trimmingCharacters(in: .urlAllowedCharacters.inverted)
             if trimmedDisplayString != internalURL.absoluteString.asSanitizedLink.lowercased().removingPercentEncoding {
                 return true

@@ -127,7 +127,7 @@ extension String {
         
         // Don't include punctuation characters at the end of links but keep
         // closing brackets as per https://github.com/element-hq/element-x-ios/issues/4946
-        // e.g `https://element.io/blog:` which is a valid link but the wrong place
+        // e.g `https://example.com/blog:` which is a valid link but the wrong place
         while !link.isEmpty,
               link.rangeOfCharacter(from: .punctuationWithoutClosingBracketCharacters, options: .backwards)?.upperBound == link.endIndex {
             link = String(link.dropLast())

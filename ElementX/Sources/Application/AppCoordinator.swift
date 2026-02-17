@@ -1168,7 +1168,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             
             // We're intentionally strongly retaining self here to an EXC_BAD_ACCESS
             // `backgroundTask` will be eventually released in `endActiveBackgroundTask`
-            // https://sentry.tools.element.io/organizations/element/issues/4477794/events/9cfd04e4d045440f87498809cf718de5/
+            // Upstream reference: sentry.tools.element.io issue 4477794 (EXC_BAD_ACCESS on background task expiry)
             self.stopSync(isBackgroundTask: true) {
                 self.endActiveBackgroundTask()
             }
@@ -1233,7 +1233,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // we also noticed this does not crash on the main thread, even though the whole AppCoordinator is on the Main actor.
         // As such, we introduced a MainActor conformance on the expirationHandler but we are also assuming main actor
         // isolated in the `stopSync` method above.
-        // https://sentry.tools.element.io/organizations/element/issues/4477794/
+        // Upstream reference: sentry.tools.element.io issue 4477794 (background app refresh crash)
         task.expirationHandler = { @Sendable [weak self] in
             MXLog.info("Background app refresh task is about to expire.")
             

@@ -103,7 +103,7 @@ struct AppRouteURLParser {
 /// Represents a type that can parse a `URL` into an `AppRoute`.
 ///
 /// The following Universal Links are missing parsers.
-/// - mobile.element.io
+/// - (upstream: mobile.element.io — not applicable for UCMeet)
 protocol URLParser {
     func route(from url: URL) -> AppRoute?
 }

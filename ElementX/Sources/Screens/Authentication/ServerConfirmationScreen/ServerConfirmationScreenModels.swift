@@ -53,12 +53,11 @@ struct ServerConfirmationScreenViewState: BindableState {
     var message: String? {
         guard case let .confirmation(homeserverAddress) = mode else { return nil }
 
+        // UCMeet: removed element.io special-case message — users will not connect to element.io
         return switch authenticationFlow {
         case .login:
             if homeserverAddress == "matrix.org" {
                 L10n.screenServerConfirmationMessageLoginMatrixDotOrg
-            } else if homeserverAddress == "element.io" {
-                L10n.screenServerConfirmationMessageLoginElementDotIo
             } else {
                 ""
             }
