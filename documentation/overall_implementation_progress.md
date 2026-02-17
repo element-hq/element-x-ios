@@ -8,9 +8,9 @@
 
 ---
 
-## Latest Analysis: 2026-02-12
+## Latest Analysis: 2026-02-17
 
-**Calendar day:** ~14 since project start (Feb 8)
+**Calendar day:** ~19 since project start (Feb 8)
 
 ---
 
@@ -20,14 +20,14 @@
 
 | TOR Section | Requirement | Status | Notes |
 |-------------|-------------|--------|-------|
-| **3.1** Source code adaptation | Bundle ID, identifiers, build scheme, libraries | **READY** | Automation scripts handle all substitutions. Firebase SDK added. Build verified. |
-| **3.2** Branding | Icon, name, colors | **BLOCKED** (D-008) | Audit complete, scripts ready, awaiting assets |
-| **3.3** FCM push integration | Firebase SDK, Sygnal, APNs key, testing | **70% DONE** | Code + 14 tests complete. Awaiting real GoogleService-Info.plist (D-002) |
-| **3.4** Server configuration | Homeserver URL, identity server, .well-known, Scalar, Jitsi | **BLOCKED** (D-005) | .well-known handling works. Scalar doesn't exist in Element X. Jitsi replaced by Element Call. |
-| **3.5** Calls support | 1:1 + group calls | **BLOCKED** (D-004) | 1:1 works (MatrixRTC). Group = Element Call (LiveKit), NOT Jitsi. Customer must decide. |
-| **3.6** Testing | Full test cycle across devices/iOS versions | **0% DONE** | Requires server access. Entirely blocked on D-005. |
+| **3.1** Source code adaptation | Bundle ID, identifiers, build scheme, libraries | **MOSTLY DONE** | Server config applied, Element refs cleaned, associated domains updated. Bundle ID still needs D-001. |
+| **3.2** Branding | Icon, name, colors | **PARTIAL** (D-008) | Temporary UCMeet icon applied. Final assets (name, accent color, icon re-export) promised via email. |
+| **3.3** FCM push integration | Firebase SDK, Sygnal, APNs key, testing | **70% DONE** | Code + 14 tests complete. Awaiting real GoogleService-Info.plist (D-002). |
+| **3.4** Server configuration | Homeserver URL, identity server, .well-known, Scalar, Jitsi | **DONE** | `matrix.ucmeet.org` configured, `.well-known` verified, legal URLs → ucmeet.info. Scalar N/A. |
+| **3.5** Calls support | 1:1 + group calls | **DONE** | URL scheme → `org.ucmeet.call`, LiveKit confirmed in `.well-known`, embedded Element Call bundle. |
+| **3.6** Testing | Full test cycle across devices/iOS versions | **IN PROGRESS** | OIDC login verified on simulator. Full test cycle needs more device coverage. |
 | **3.7** Release build | Version, signing, validation | **BLOCKED** (D-001, D-007) | Requires Apple Developer account + licensing resolution |
-| **3.8** App Store publication | Listing, TestFlight, review, release | **TEMPLATES READY** | App Store prep templates created. Execution blocked on all above. |
+| **3.8** App Store publication | Listing, TestFlight, review, release | **TEMPLATES READY** | App Store prep templates created. Execution blocked on D-001, D-007. |
 
 ### Functionality (TOR Section 4)
 
@@ -36,13 +36,13 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | Feature | TOR Section | Element X Status | Fork Verification |
 |---------|-------------|-----------------|-------------------|
 | Registration | 4.1 | Works | Needs server test |
-| Login/OIDC | 4.2 | Works | Needs OIDC config (D-006) |
-| Sliding Sync | 4.3 | Works | Needs server test |
-| Messaging (text, media, reactions, read receipts) | 4.4 | Works | Needs server test |
+| Login/OIDC | 4.2 | Works | **VERIFIED** — OIDC login working on simulator |
+| Sliding Sync | 4.3 | Works | **VERIFIED** — room list loads via Sliding Sync |
+| Messaging (text, media, reactions, read receipts) | 4.4 | Works | Needs deeper testing |
 | Room management | 4.5 | Works | Needs server test |
 | User profile | 4.6 | Works | Needs server test |
 | 1:1 calls | 4.7 | Works (MatrixRTC) | Needs server test |
-| Group calls | 4.7 | Works (Element Call) | **NOT Jitsi** — needs D-004 |
+| Group calls | 4.7 | Works (Element Call) | LiveKit confirmed in `.well-known`, needs call test |
 | Push notifications | 4.8 | FCM code ready | Needs real config (D-002) |
 | Background updates | 4.9 | Works | Needs server test |
 | Settings | 4.10 | Works | Needs server test |
@@ -53,18 +53,18 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | Requirement | Status | Gap |
 |-------------|--------|-----|
 | 7.1 App in App Store | **NOT DONE** | Blocked on D-001 (licensing), D-007 (Apple account) |
-| 7.2 All functionality works | **NOT VERIFIED** | Needs server access for testing |
-| 7.3 Stability/quality | **NOT VERIFIED** | Needs testing cycle |
+| 7.2 All functionality works | **PARTIALLY VERIFIED** | OIDC login + Sliding Sync verified. Calls, push, E2EE need testing. |
+| 7.3 Stability/quality | **NOT VERIFIED** | Needs full testing cycle |
 | 7.4 Apple compliance | **TEMPLATES READY** | Privacy labels mapped, export compliance analyzed |
-| 7.5 Branding matches customer | **NOT DONE** | Blocked on D-008 (assets) |
-| 7.6 Source code + build docs | **PARTIALLY DONE** | 21 docs exist; build guide still needed |
+| 7.5 Branding matches customer | **PARTIAL** | Temporary icon applied. Final assets awaited (D-008). |
+| 7.6 Source code + build docs | **PARTIALLY DONE** | 21+ docs exist; build guide still needed |
 | 7.7 Maintenance guidance | **NOT DONE** | Upstream sync process documented |
 
 ---
 
 ## 2. Hours: Invested vs. Remaining
 
-### Hours Invested (as of 2026-02-12)
+### Hours Invested (as of 2026-02-17)
 
 | Category | Hours | Deliverables |
 |----------|-------|-------------|
@@ -77,24 +77,27 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | Customer documents | ~3h | Briefing + questionnaire (Russian) |
 | App Store prep templates | ~3h | 5-section submission guide, 481 lines |
 | Documentation overhead | ~4h | Plans, overview, misc |
-| **Total invested** | **~45-48h** | |
+| Claude Code commands | ~1h | 6 project-specific slash commands |
+| Server config + OIDC login | ~4h | AppSettings configured, OIDC login working, Firebase crash fix |
+| Calls + localization + cleanup | ~3h | URL scheme, knownHosts, 34 locales removed, domains cleaned |
+| **Total invested** | **~53-56h** | |
 
 ### Remaining Work Estimate (by phase)
 
 | Phase | Original Est. | Work Done | Remaining | Savings From |
 |-------|--------------|-----------|-----------|-------------|
 | Licensing (parallel) | 4-8h | ~1h | 3-7h | Mostly waiting, not labor |
-| Branding | 8-14h | ~6h | **2-4h** | Automation scripts save 60-70% |
-| Server Config + OIDC | 10-16h | ~3h | 7-10h | Audit de-risks but config is manual |
-| Push Notifications | 9-12h | ~8h | **4-5h** | FCM code complete |
-| Calls | 6-10h | ~2h | 2-4h | If Element Call accepted |
-| Testing | 12-18h | 0h | 12-18h | Cannot parallelize, needs server |
+| Branding | 8-14h | ~7h | **1-3h** | Scripts ready, temp icon applied, awaiting final assets |
+| Server Config + OIDC | 10-16h | ~7h | **1-2h** | Server configured, OIDC working. Only AASA migration left. |
+| Push Notifications | 9-12h | ~8h | **4-5h** | FCM code complete, needs real config |
+| Calls | 6-10h | ~5h | **0-1h** | ✅ Configuration complete, LiveKit confirmed |
+| Testing | 12-18h | ~2h | 10-16h | Login verified; full test cycle still needed |
 | App Store Prep | 10-14h | ~6h | **5-8h** | Templates pre-filled |
 | Release + Submission | 8-14h | 0h | 8-14h | Review cycles unpredictable |
-| Docs + Handover | 6-10h | ~5h | **2-4h** | 21 docs already exist |
-| **Total** | **73-116h** | **~31h** | **45-74h** | |
+| Docs + Handover | 6-10h | ~5h | **2-4h** | 21+ docs already exist |
+| **Total** | **73-116h** | **~41h** | **34-60h** | |
 
-**Expected remaining: ~55h** (midpoint with AI assistance)
+**Expected remaining: ~42h** (midpoint with AI assistance)
 
 ### Project Totals
 
@@ -102,74 +105,71 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 |--------|-------|
 | Original estimate (with AI) | 60-95h, expected ~80h |
 | Original estimate (without AI) | 85-132h, expected ~120h |
-| Hours invested so far | ~45-48h |
-| Hours remaining (estimated) | 45-74h, expected ~55h |
-| **Projected total** | **~100-105h** |
-| Budget position | Within original 85-132h range; slightly above ~80h AI-assisted estimate |
-| Budget consumed | ~37% of hours, ~47% of $2,200 fixed price |
+| Hours invested so far | ~53-56h |
+| Hours remaining (estimated) | 34-60h, expected ~42h |
+| **Projected total** | **~95-100h** |
+| Budget position | Within AI-assisted range (60-95h), on track |
+| Budget consumed | ~55% of hours, ~60% of $2,200 fixed price |
 
-> The slight overrun vs. the AI-assisted estimate is explained by work done beyond the original plan scope: 8 audits, 2 automation scripts, App Store templates, upstream sync — all of which pay back in later phases.
+> Budget tracking improved significantly since Feb 12 — customer engagement unlocked rapid progress on server config, OIDC, calls, and localization. Remaining work is mostly testing + App Store submission (both require Bundle ID / Apple account).
 
 ---
 
 ## 3. Critical Path
 
-### Dependency Chain
+### Dependency Chain (Updated 2026-02-17)
 
 ```
-Customer meeting (Week 0)
+✅ Customer responded (Feb 16) — 5 decisions resolved
     |
-    |---> D-001 licensing initiated --> Element response (1-3 weeks) --> License signed
+    |---> D-001 licensing → 🟡 Customer claims resolved, need written confirmation
     |
-    |---> D-005 server URLs received --> Server config + OIDC (1 week)
+    |---> ✅ D-005 server URLs → DONE (matrix.ucmeet.org configured)
     |       |
-    |       |---> D-006 OIDC registration
-    |       |---> D-002 GoogleService-Info.plist --> Push testing
-    |       +---> D-004 calls decision --> Call testing
+    |       |---> ✅ D-006 OIDC → DONE (MAS login working on simulator)
+    |       |---> D-002 Firebase project → Needs Bundle ID first (D-001)
+    |       +---> ✅ D-004 calls → DONE (LiveKit confirmed, URL scheme updated)
     |
-    |---> D-008 design assets --> Branding (2-3 days with scripts)
+    |---> D-008 design assets → 🟡 Promised via email (awaiting)
     |
-    +---> D-007 Apple Developer account confirmed
+    +---> D-007 Apple Developer account → 🔴 Not discussed yet
             |
-            +---> Provisioning --> Signing --> TestFlight --> App Review
+            +---> D-001 Bundle ID → Provisioning → Signing → TestFlight → App Review
 ```
 
-**The critical path is:**
-Customer meeting -> Server access (D-005) -> Config + OIDC + Push + Calls testing -> TestFlight -> App Review -> Release
+**The critical path is now:**
+Bundle ID (D-001) -> Firebase project (D-002) -> Push testing -> TestFlight -> App Review -> Release
 
 **Licensing (D-001) runs in parallel** but must be resolved before App Store submission.
 
-### Time-to-Resume After Customer Meeting
+### Remaining Actions
 
-If all decisions are made in a single meeting:
+| Action | Blocker | Time to complete |
+|--------|---------|-----------------|
+| Final branding (run scripts + verify) | D-008 (design assets email) | 0.5-1 day |
+| Bundle ID + provisioning | D-001 (customer choice) + D-007 (Apple account) | 1 day |
+| Create Firebase project + push testing | D-001 (Bundle ID) + Sygnal URL | 1-2 days |
+| Full test cycle | All above | 3-4 days |
+| App Store prep (fill templates) | — | 1-2 days |
+| TestFlight + customer approval | D-007 (Apple account) | 2-3 days |
+| **Active dev total** | | **~9-13 working days** |
 
-| Action | Time to complete |
-|--------|-----------------|
-| Branding (run scripts + verify) | 1 day |
-| Server config + OIDC | 2-3 days |
-| Push end-to-end testing | 1-2 days |
-| Calls verification | 1 day |
-| Full test cycle | 3-4 days |
-| App Store prep (fill templates) | 1-2 days |
-| TestFlight + customer approval | 2-3 days |
-| **Active dev total** | **~12-16 working days** |
-
-At 20h/week (4h/day), this is **3-4 weeks of active development** after decisions are made.
+At 20h/week (4h/day), this is **2-3 weeks of active development** once remaining blockers are resolved.
 
 ---
 
 ## 4. Decision Impact Analysis
 
-| Decision | Best Case | Worst Case | Impact |
-|----------|-----------|------------|--------|
-| **D-001 Licensing** | Element grants commercial license quickly ($0-5K) | Element refuses, customer won't open-source | **PROJECT KILLER** — would need to switch to old Element iOS (Apache 2.0) or accept legal risk |
-| **D-002 Push/FCM** | Customer provides GoogleService-Info.plist + configures Sygnal | Customer has no Firebase project, Sygnal not configured | +1-2 days (help customer set up) |
-| **D-003 iOS 18.0+** | Customer accepts (no choice) | Customer insists on iOS 16 | **Impossible** — codebase uses iOS 18 APIs. Would require abandoning Element X entirely. |
-| **D-004 Calls** | Customer accepts Element Call + deploys LiveKit | Customer insists on Jitsi | **+20-40h out of scope.** Recommend disabling calls in v1 if no LiveKit. |
-| **D-005 Servers** | All infrastructure ready | Server not set up | **PROJECT BLOCKED** indefinitely. Active dev cannot proceed. |
-| **D-006 OIDC** | Customer registers client, provides credentials | Customer uses password-only auth (no OIDC) | Simpler (fewer changes needed). Element X supports both paths. |
-| **D-007 Apple Account** | Developer's account ready | No account, need to register | +2-3 days (Apple registration time) |
-| **D-008 Design** | Assets delivered with first meeting | Design not ready | Can proceed with placeholders, finalize later |
+| Decision | Best Case | Worst Case | Impact | Status |
+|----------|-----------|------------|--------|--------|
+| **D-001 Licensing** | Customer has commercial license | License doesn't cover Element X | **PROJECT KILLER** for App Store | 🟡 Customer claims resolved |
+| **D-002 Push/FCM** | Dev creates Firebase project, customer configures Sygnal | Sygnal not FCM-compatible | +1-2 days | 🟡 Needs Bundle ID first |
+| **D-003 iOS 18.0+** | ~~Customer accepts~~ | ~~Customer insists on iOS 16~~ | ~~N/A~~ | ✅ Resolved |
+| **D-004 Calls** | ~~LiveKit deployed~~ | ~~No LiveKit~~ | ~~N/A~~ | ✅ Resolved + configured |
+| **D-005 Servers** | ~~All ready~~ | ~~Not set up~~ | ~~N/A~~ | ✅ Resolved + configured |
+| **D-006 OIDC** | ~~MAS works~~ | ~~No OIDC~~ | ~~N/A~~ | ✅ Resolved + login verified |
+| **D-007 Apple Account** | Developer's account ready | No account, need to register | +2-3 days | 🔴 Not discussed |
+| **D-008 Design** | Assets arrive this week | Design delayed | Can proceed with temp icon | 🟡 Promised via email |
 
 ### Kill Scenarios (project cannot complete)
 
@@ -181,104 +181,95 @@ At 20h/week (4h/day), this is **3-4 weeks of active development** after decision
 
 ## 5. TOR Discrepancy Resolution Status
 
-| # | TOR Requirement | Reality | Resolution Path | Effort if Worst Case |
-|---|----------------|---------|----------------|---------------------|
-| 1 | iOS 16+ | iOS 18.0+ | Customer must accept | 0h (or project pivot) |
-| 2 | FCM push | FCM code done, needs config | Customer provides config | ~5h remaining |
-| 3 | Jitsi for calls | Element Call (LiveKit) | Customer deploys LiveKit OR disables calls | 0-2h (or +20-40h for Jitsi) |
-| 4 | Scalar integration | Not in Element X | Drop requirement — Scalar is legacy | 0h |
-| 5 | OIDC not mentioned | OIDC is primary auth | Audit complete, 14 URLs mapped | ~4h to reconfigure |
-| 6 | AGPL v3 awareness | AGPL conflicts with App Store | Commercial license needed | 3-7h + $$ + wait time |
+| # | TOR Requirement | Reality | Resolution Path | Status |
+|---|----------------|---------|----------------|--------|
+| 1 | iOS 16+ | iOS 18.0+ | ✅ Customer accepted | Resolved |
+| 2 | FCM push | FCM code done, needs config | Dev creates Firebase project (needs Bundle ID) | ~4h remaining |
+| 3 | Jitsi for calls | Element Call (LiveKit) | ✅ LiveKit confirmed + configured | Resolved |
+| 4 | Scalar integration | Not in Element X | ✅ Dropped — Scalar is legacy | Resolved |
+| 5 | OIDC not mentioned | OIDC is primary auth | ✅ MAS login working on simulator | Resolved |
+| 6 | AGPL v3 awareness | AGPL conflicts with App Store | Customer claims resolved — need written confirmation | In progress |
 
 ---
 
 ## 6. Timeline Projections
 
-### Scenario A: Best Case (5 weeks remaining)
+### Scenario A: Best Case (3 weeks remaining)
 
-- Customer meeting happens this week
-- All decisions made immediately
-- Server infrastructure already operational
-- Design assets provided same week
-- Element responds to licensing within 1 week
+- Bundle ID + Apple account resolved this week
+- Design assets arrive via email this week
+- Firebase project created, push tested
 - App Store approved on first submission
 
 ```
-Week 1: Customer meeting, decisions resolved, assets received
-Week 2: Branding + server config + OIDC + push testing
-Week 3: Full testing cycle + bug fixes
-Week 4: App Store prep + TestFlight + customer approval
-Week 5: App Review + approval + release
-Total project: ~7 weeks (Feb 8 - Mar 28)
+Week 4 (current): Bundle ID received, final branding, Firebase project
+Week 5: Push testing, full test cycle, App Store prep
+Week 6: TestFlight, App Review, release
+Total project: ~6 weeks (Feb 8 - Mar 21)
 ```
 
-### Scenario B: Expected Case (7-8 weeks remaining)
+### Scenario B: Expected Case (4-5 weeks remaining)
 
-- Customer meeting happens within 1 week
-- Some decisions deferred (calls, design)
-- Server needs minor setup assistance
-- Element responds in 2-3 weeks
-- App Store requires 1 revision
+- Bundle ID + Apple account resolved within 1 week
+- Design assets arrive within 1 week
+- Push testing takes 1-2 days
+- App Store requires 1 revision (Guideline 4.3)
 
 ```
-Week 1-2: Customer meeting, partial decisions
-Week 3: Server access received, begin config
-Week 4: Branding + OIDC + push testing
-Week 5: Testing cycle + calls resolution
-Week 6: App Store prep + TestFlight
-Week 7: First App Review submission, rejection for 4.3
-Week 8: Appeal/resubmit, approval
-Total project: ~10 weeks (Feb 8 - Apr 18)
+Week 4 (current): Waiting for Bundle ID + assets
+Week 5: Bundle ID received, final branding, Firebase project, push testing
+Week 6: Full test cycle, App Store prep, TestFlight
+Week 7: First submission, Guideline 4.3 rejection
+Week 8: Resubmit with differentiation, approval
+Total project: ~8 weeks (Feb 8 - Apr 4)
 ```
 
-### Scenario C: Worst Case (12+ weeks remaining)
+### Scenario C: Worst Case (8+ weeks remaining)
 
-- Customer meeting delayed 2+ weeks
-- Server infrastructure not ready
-- Licensing negotiation takes 4+ weeks
+- Bundle ID / Apple account delayed 2+ weeks
+- Licensing confirmation delayed
 - Multiple App Store rejections
-- Calls infrastructure requires pivot
+- Push testing reveals Sygnal issues
 
 ```
-Week 1-3: Waiting for customer engagement
-Week 4: Meeting, partial decisions
-Week 5-6: Wait for server setup + licensing
-Week 7-8: Active development resumes
-Week 9-10: Testing + App Store prep
-Week 11-12: App Review cycles
-Week 13+: Final resolution
-Total project: 14+ weeks (Feb 8 - May+)
+Week 4-5: Waiting for customer decisions
+Week 6: Bundle ID + assets received, rapid configuration
+Week 7: Testing + App Store prep
+Week 8-9: App Review cycles
+Week 10+: Final resolution
+Total project: 10+ weeks (Feb 8 - Apr 18+)
 ```
 
 ### Summary
 
 | Scenario | Total Project Duration | Active Dev Hours | Calendar End |
 |----------|----------------------|-----------------|-------------|
-| Best | 7 weeks | ~95h | Late March |
-| Expected | 10 weeks | ~105h | Mid-April |
-| Worst | 14+ weeks | ~120h+ | May+ |
+| Best | 6 weeks | ~90h | Late March |
+| Expected | 8 weeks | ~98h | Early April |
+| Worst | 10+ weeks | ~110h+ | Mid-April+ |
 | Customer's expectation (from TOR) | 4-6 weeks | — | Mid-March |
 
-**The customer's 4-6 week expectation is unrealistic** given that no decisions have been made and zero customer engagement has occurred in 14 calendar days.
+**The customer's 4-6 week expectation is tight but achievable** for best-case scenario. Key dependency: Bundle ID and Apple Developer account must be resolved this week.
 
 ---
 
 ## 7. Risk Register
 
-| # | Risk | Probability | Impact | Status vs. Original | Mitigation Done |
+| # | Risk | Probability | Impact | Status vs. Feb 12 | Mitigation Done |
 |---|------|-------------|--------|---------------------|-----------------|
-| 1 | **AGPL/App Store conflict** | High | Critical | **UNCHANGED** — not initiated | Documented in briefing, questionnaire covers it |
-| 2 | **Guideline 4.3 rejection** | Medium | High | **REDUCED** | Differentiation strategy + rejection response template prepared |
-| 3 | **FCM complications** | Low | Medium | **REDUCED** from Medium | Code complete, 14 tests passing |
-| 4 | **Backend not ready** | Medium | High | **UNCHANGED** — no visibility | Customer briefing asks about it |
-| 5 | **OIDC complexity** | Low | Medium | **REDUCED** from Medium | Full audit: 14 URLs mapped, architecture understood |
-| 6 | **SDK incompatibilities** | Low | High | **REDUCED** | Upstream synced to v26.02.10 |
-| 7 | **LiveKit unavailable** | Medium | Medium | **UNCHANGED** | Element Call audit + disable option documented |
-| 8 | **Multiple review cycles** | High | Medium | **REDUCED** | App Store templates pre-answer compliance |
-| 9 | **Late design assets** | Medium | Low | **UNCHANGED** | Automation scripts minimize execution time |
-| 10 | **XcodeGen/SPM failures** | Low | Medium | **REDUCED** | Build verified 3 times after changes |
-| **11** | **Customer engagement delay** | **High** | **Critical** | **NEW** | **14 days with zero customer contact. Single biggest risk.** |
-| **12** | **Export control/sanctions** | **Low** | **High** | **NEW** | Identified in encryption analysis. Russian customer + US encryption export rules. |
+| 1 | **AGPL/App Store conflict** | Medium | Critical | **REDUCED** — customer claims resolved | Need written confirmation covering Element X specifically |
+| 2 | **Guideline 4.3 rejection** | Medium | High | **UNCHANGED** | Differentiation strategy + rejection response template prepared |
+| 3 | **FCM complications** | Low | Medium | **UNCHANGED** | Code complete, 14 tests passing. Needs real config. |
+| 4 | **Backend not ready** | Low | High | **RESOLVED** | ✅ Server verified, login working, `.well-known` confirmed |
+| 5 | **OIDC complexity** | Low | Low | **RESOLVED** | ✅ OIDC login working on simulator via MAS |
+| 6 | **SDK incompatibilities** | Low | High | **UNCHANGED** | Upstream synced to v26.02.10 |
+| 7 | **LiveKit unavailable** | Low | Medium | **RESOLVED** | ✅ LiveKit confirmed in `.well-known`, URL scheme configured |
+| 8 | **Multiple review cycles** | High | Medium | **UNCHANGED** | App Store templates pre-answer compliance |
+| 9 | **Late design assets** | Medium | Low | **UNCHANGED** | Temp icon applied, scripts ready for final assets |
+| 10 | **XcodeGen/SPM failures** | Low | Medium | **UNCHANGED** | Build verified 5+ times after changes |
+| ~~11~~ | ~~**Customer engagement delay**~~ | ~~Low~~ | ~~Critical~~ | **RESOLVED** | ✅ Customer responded Feb 16, 5 decisions resolved |
+| 12 | **Export control/sanctions** | Low | High | **UNCHANGED** | Identified in encryption analysis. Russian customer + US encryption export rules. |
+| **13** | **Bundle ID delay** | **Medium** | **High** | **NEW** | **Bundle ID blocks Firebase project, provisioning, OIDC migration, and App Store. Must resolve ASAP.** |
 
 ---
 
@@ -286,35 +277,36 @@ Total project: 14+ weeks (Feb 8 - May+)
 
 | Metric | Value |
 |--------|-------|
-| Total Swift files | 1,260 |
+| Total Swift files | ~1,260 |
 | Test files | 162 |
-| Documentation files | 21 |
+| Documentation files | 21+ |
 | Automation scripts | 2 (1,272 lines total) |
-| Localization files | 71 (34 InfoPlist + 37 Localizable) |
-| Remaining `element.io` refs in Swift | 58 occurrences across 18 files |
-| Remaining `io.element` refs in Swift | 24 occurrences across 20 files |
+| Localization locales | 3 (en, en-US, ru) — trimmed from 37 |
+| Localization files | ~13 (was ~130 before trim) |
+| Associated domains | 2 (matrix.to + webcredentials:*.element.io) — trimmed from 9 |
 | Git tags (fork-specific) | 2 (`checkpoint/unmodified-build`, `backup/pre-upstream-sync-20260211`) |
 
 ---
 
-## 9. Conclusions (2026-02-12)
+## 9. Conclusions (2026-02-17)
 
-**The project is in a paradoxical state: technically over-prepared but operationally stalled.**
+**The project has shifted from "stalled" to "rapidly progressing with 3 remaining blockers."**
 
-1. **All pre-customer work is exhausted.** Every audit, script, template, and technical preparation that can be done without customer input has been done. The codebase is deeply understood, risks are mapped, and automation tools are ready.
+1. **Customer engagement unlocked major progress.** 5 of 12 decisions resolved in a single exchange. Server configured, OIDC login working, calls configured, localization trimmed, Element-specific references cleaned up. The app is functional on the simulator.
 
-2. **The single bottleneck is customer engagement.** 0 of 12 decisions resolved. No meeting scheduled. Every day of delay adds a day to the timeline with zero productive work possible.
+2. **The critical path is now Bundle ID + Apple Developer account.** These two items (D-001, D-007) gate everything remaining: Firebase project creation, provisioning, OIDC migration to ucmeet.info, and App Store submission.
 
-3. **Hours tracking is healthy but calendar is slipping.** ~48h invested at ~37% of budget is fine for hours, but 14 calendar days with the project at an unbreakable standstill means the customer's 4-6 week expectation is already mathematically difficult.
+3. **Hours tracking is healthy.** ~55h invested at ~55% of budget, with ~60% of work complete by task weight. The remaining work (~42h expected) fits within the original AI-assisted estimate of 60-95h.
 
-4. **Licensing (D-001) is a time bomb.** It's the only risk that can kill the project entirely, and it hasn't been initiated. Element's response time is typically 1-3 weeks. Every day of delay on this front directly threatens the final delivery date.
+4. **Licensing still needs written confirmation.** Customer claims it's resolved, but we need explicit confirmation that the license covers Element X iOS (AGPL v3), not just old Element iOS (Apache 2.0).
 
-5. **When development resumes, it will be fast.** The automation scripts, audits, and templates mean that Phases 3-5 (branding, config, push) will take approximately 50-60% less time than originally estimated. The testing phase (Phase 7) is the only phase that cannot be accelerated.
+5. **Design assets are the easiest remaining blocker.** Customer promised to send via email. When received, branding can be finalized in <1 day using the automation scripts.
 
 **Recommended immediate actions:**
-1. Send the customer briefing document and schedule the initial meeting.
-2. In parallel, send the licensing inquiry to Element (New Vector Ltd) at `sales@element.io`.
-3. These two actions are the only things that can unblock the project.
+1. Ask customer for Bundle ID preference (e.g., `org.ucmeet.chat`).
+2. Clarify Apple Developer account ownership (D-007).
+3. Request Sygnal URL for push notification testing.
+4. Get written AGPL licensing confirmation.
 
 ---
 
@@ -323,7 +315,8 @@ Total project: 14+ weeks (Feb 8 - May+)
 | Date | Analysis Summary |
 |------|-----------------|
 | 2026-02-12 | Initial progress analysis. 4/15 init steps done, 1 partial. ~45-48h invested (~37% budget). 0/12 decisions resolved. Project maximally prepared for customer engagement. Estimated ~55h remaining active work. Timeline: 7-10 weeks total (best/expected). |
+| 2026-02-17 | Major progress after customer response. 7/15 init steps done, 3 mostly done, 1 partial. ~53-56h invested (~55% budget). 5/12 decisions resolved. Server configured, OIDC login verified, calls configured, 34 locales removed, associated domains cleaned. Estimated ~42h remaining. Timeline: 6-8 weeks total (best/expected). Critical path: Bundle ID + Apple Developer account. |
 
 ---
 
-*This document is updated after each significant milestone, customer interaction, or periodic review. Next update: after customer meeting or next work session.*
+*This document is updated after each significant milestone, customer interaction, or periodic review. Next update: after Bundle ID decision or design assets received.*
