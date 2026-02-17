@@ -123,12 +123,16 @@ FCM реализован полностью согласно ТЗ. Код нап
 | **Дата создания** | 2026-02-08 |
 | **Дата последнего обновления** | 2026-02-17 |
 
-**Решение:** Заказчик предоставляет **UCMeet Call** — замена Element Call. URL: `https://call.ucmeet.org`. Изменения в коде: заменить URL Element Call на UCMeet Call.
+**Решение:** Заказчик предоставляет **UCMeet Call** — замена Element Call. Звонки используют встроенный Element Call bundle (SPM-пакет `element-call-swift` v0.16.3) через MatrixRTC + LiveKit SFU.
 
-**Что нужно сделать:**
-- Найти все ссылки на Element Call URL в коде
-- Заменить на `https://call.ucmeet.org`
-- Протестировать звонки через UCMeet Call
+**Что сделано (17.02.2026):**
+- ✅ URL scheme `io.element.call` → `org.ucmeet.call` в `target.yml`
+- ✅ `CFBundleURLName: "Element Call"` → `"UCMeet Call"` в `target.yml`
+- ✅ `InfoPlistReader.swift` обновлён для нового имени схемы
+- ✅ `knownHosts` в `AppRoutes.swift` очищен (звонки через встроенный bundle, не через hosted instance)
+- ✅ Associated domains: `applinks:call.element.io` и `applinks:call.element.dev` удалены
+- ✅ LiveKit подтверждён в `.well-known/matrix/client` — `livekit_service_url: https://matrix.ucmeet.org/livekit-jwt-service`
+- ✅ Сборка и логин проверены на симуляторе
 
 ---
 
@@ -157,7 +161,8 @@ FCM реализован полностью согласно ТЗ. Код нап
 | OIDC-провайдер | MAS (Matrix Authentication Service) | 🟢 Получен |
 | Sygnal Push Gateway | Есть, данные предоставят | 🟡 Ожидаем URL |
 | Element Call / UCMeet Call | `https://call.ucmeet.org` | 🟢 Получен |
-| TURN/STUN серверы | Не уточнено | 🟡 Уточнить |
+| LiveKit SFU | `https://matrix.ucmeet.org/livekit-jwt-service` (из `.well-known`) | 🟢 Подтверждён |
+| TURN/STUN серверы | Через LiveKit SFU (не требует отдельной настройки) | 🟢 Решено |
 | `.well-known/matrix/client` | Настроен | 🟢 Подтверждён |
 | Тестовые аккаунты | 2 аккаунта предоставлены | 🟢 Получены |
 
@@ -264,7 +269,7 @@ FCM реализован полностью согласно ТЗ. Код нап
 | URL политики конфиденциальности | `https://www.ucmeet.info/policy-152` (RU), `https://www.ucmeet.info/en/policy-152` (EN) | 🟢 |
 | URL страницы поддержки | ⬜ не уточнено | 🔴 |
 | Описание приложения | ⬜ не уточнено | 🔴 |
-| Локализация приложения | Русский + Английский (автоопределение) | 🟢 |
+| Локализация приложения | Русский + Английский (34 неиспользуемых локали удалены, осталось en, en-US, ru) | 🟢 |
 
 ---
 
@@ -367,6 +372,10 @@ FCM реализован полностью согласно ТЗ. Код нап
 | | D-008 → 🟡 В процессе: материалы подготовлены, обещали прислать на email. |
 | | D-009 → 🟡 В процессе: политика конфиденциальности получена, локализация определена (RU+EN). |
 | | D-012 → 🟡 В процессе: каналы связи определены (Matrix + Telegram). |
+| 2026-02-17 | D-004: конфигурация звонков полностью выполнена — URL scheme, knownHosts, associated domains обновлены, LiveKit подтверждён в `.well-known`. |
+| | D-005: LiveKit SFU подтверждён (`matrix.ucmeet.org/livekit-jwt-service`), TURN/STUN через LiveKit — отдельная настройка не нужна. |
+| | D-009: локализация сокращена с 37 до 3 локалей (en, en-US, ru), ~117 файлов удалено. |
+| | Associated domains: удалены 7 Element-специфичных applinks, оставлены `matrix.to` и `webcredentials:*.element.io`. |
 
 ---
 
