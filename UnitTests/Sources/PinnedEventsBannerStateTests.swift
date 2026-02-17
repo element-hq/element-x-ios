@@ -7,119 +7,126 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class PinnedEventsBannerStateTests: XCTestCase {
-    func testEmpty() {
+@Suite
+struct PinnedEventsBannerStateTests {
+    @Test
+    func empty() {
         var state = PinnedEventsBannerState.loading(numbersOfEvents: 0)
-        XCTAssertTrue(state.isEmpty)
+        #expect(state.isEmpty)
         
         state = .loaded(state: .init())
-        XCTAssertTrue(state.isEmpty)
+        #expect(state.isEmpty)
     }
     
-    func testLoading() {
+    @Test
+    func loading() {
         let originalState = PinnedEventsBannerState.loading(numbersOfEvents: 5)
         
         var state = originalState
         // This should not affect the state when loading
         state.previousPin()
-        XCTAssertEqual(state, originalState)
+        #expect(state == originalState)
         
-        XCTAssertTrue(state.isLoading)
-        XCTAssertFalse(state.isEmpty)
-        XCTAssertNil(state.selectedPinnedEventID)
-        XCTAssertEqual(state.displayedMessage.string, L10n.screenRoomPinnedBannerLoadingDescription)
-        XCTAssertEqual(state.selectedPinnedIndex, 4)
-        XCTAssertEqual(state.count, 5)
-        XCTAssertEqual(state.bannerIndicatorDescription.string, L10n.screenRoomPinnedBannerIndicatorDescription(L10n.screenRoomPinnedBannerIndicator(5, 5)))
+        #expect(state.isLoading)
+        #expect(!state.isEmpty)
+        #expect(state.selectedPinnedEventID == nil)
+        #expect(state.displayedMessage.string == L10n.screenRoomPinnedBannerLoadingDescription)
+        #expect(state.selectedPinnedIndex == 4)
+        #expect(state.count == 5)
+        #expect(state.bannerIndicatorDescription.string == L10n.screenRoomPinnedBannerIndicatorDescription(L10n.screenRoomPinnedBannerIndicator(5, 5)))
     }
     
-    func testLoadingToLoaded() {
+    @Test
+    func loadingToLoaded() {
         var state = PinnedEventsBannerState.loading(numbersOfEvents: 2)
-        XCTAssertTrue(state.isLoading)
+        #expect(state.isLoading)
         state.setPinnedEventContents(["1": "test1", "2": "test2"])
-        XCTAssertEqual(state, .loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2"], selectedPinnedEventID: "2")))
-        XCTAssertFalse(state.isLoading)
+        #expect(state == .loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2"], selectedPinnedEventID: "2")))
+        #expect(!state.isLoading)
     }
     
-    func testLoaded() {
+    @Test
+    func loaded() {
         let state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2"], selectedPinnedEventID: "2"))
-        XCTAssertFalse(state.isLoading)
-        XCTAssertFalse(state.isEmpty)
-        XCTAssertEqual(state.selectedPinnedEventID, "2")
-        XCTAssertEqual(state.displayedMessage.string, "test2")
-        XCTAssertEqual(state.selectedPinnedIndex, 1)
-        XCTAssertEqual(state.count, 2)
-        XCTAssertEqual(state.bannerIndicatorDescription.string, L10n.screenRoomPinnedBannerIndicatorDescription(L10n.screenRoomPinnedBannerIndicator(2, 2)))
+        #expect(!state.isLoading)
+        #expect(!state.isEmpty)
+        #expect(state.selectedPinnedEventID == "2")
+        #expect(state.displayedMessage.string == "test2")
+        #expect(state.selectedPinnedIndex == 1)
+        #expect(state.count == 2)
+        #expect(state.bannerIndicatorDescription.string == L10n.screenRoomPinnedBannerIndicatorDescription(L10n.screenRoomPinnedBannerIndicator(2, 2)))
     }
     
-    func testPreviousPin() {
+    @Test
+    func previousPin() {
         var state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2", "3": "test3"], selectedPinnedEventID: "1"))
-        XCTAssertEqual(state.selectedPinnedEventID, "1")
-        XCTAssertEqual(state.selectedPinnedIndex, 0)
-        XCTAssertEqual(state.displayedMessage.string, "test1")
+        #expect(state.selectedPinnedEventID == "1")
+        #expect(state.selectedPinnedIndex == 0)
+        #expect(state.displayedMessage.string == "test1")
         
         state.previousPin()
-        XCTAssertEqual(state.selectedPinnedEventID, "3")
-        XCTAssertEqual(state.selectedPinnedIndex, 2)
-        XCTAssertEqual(state.displayedMessage.string, "test3")
+        #expect(state.selectedPinnedEventID == "3")
+        #expect(state.selectedPinnedIndex == 2)
+        #expect(state.displayedMessage.string == "test3")
         
         state.previousPin()
-        XCTAssertEqual(state.selectedPinnedEventID, "2")
-        XCTAssertEqual(state.selectedPinnedIndex, 1)
-        XCTAssertEqual(state.displayedMessage.string, "test2")
+        #expect(state.selectedPinnedEventID == "2")
+        #expect(state.selectedPinnedIndex == 1)
+        #expect(state.displayedMessage.string == "test2")
     }
     
-    func testSetContent() {
+    @Test
+    func setContent() {
         var state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2", "3": "test3", "4": "test4"], selectedPinnedEventID: "2"))
-        XCTAssertEqual(state.selectedPinnedEventID, "2")
-        XCTAssertEqual(state.selectedPinnedIndex, 1)
-        XCTAssertEqual(state.displayedMessage.string, "test2")
-        XCTAssertEqual(state.count, 4)
-        XCTAssertFalse(state.isEmpty)
+        #expect(state.selectedPinnedEventID == "2")
+        #expect(state.selectedPinnedIndex == 1)
+        #expect(state.displayedMessage.string == "test2")
+        #expect(state.count == 4)
+        #expect(!state.isEmpty)
         
         // let's remove the selected item
         state.setPinnedEventContents(["1": "test1", "3": "test3", "4": "test4"])
         // new selected item is the new latest
-        XCTAssertEqual(state.selectedPinnedEventID, "4")
-        XCTAssertEqual(state.selectedPinnedIndex, 2)
-        XCTAssertEqual(state.displayedMessage.string, "test4")
-        XCTAssertEqual(state.count, 3)
-        XCTAssertFalse(state.isEmpty)
+        #expect(state.selectedPinnedEventID == "4")
+        #expect(state.selectedPinnedIndex == 2)
+        #expect(state.displayedMessage.string == "test4")
+        #expect(state.count == 3)
+        #expect(!state.isEmpty)
         
         // let's add a new item at the top
         state.setPinnedEventContents(["0": "test0", "1": "test1", "3": "test3", "4": "test4"])
         // selected item doesn't change
-        XCTAssertEqual(state.selectedPinnedEventID, "4")
+        #expect(state.selectedPinnedEventID == "4")
         // but the index is updated
-        XCTAssertEqual(state.selectedPinnedIndex, 3)
-        XCTAssertEqual(state.displayedMessage.string, "test4")
-        XCTAssertEqual(state.count, 4)
-        XCTAssertFalse(state.isEmpty)
+        #expect(state.selectedPinnedIndex == 3)
+        #expect(state.displayedMessage.string == "test4")
+        #expect(state.count == 4)
+        #expect(!state.isEmpty)
         
         // let's add a new item at the bottom
         state.setPinnedEventContents(["0": "test0", "1": "test1", "3": "test3", "4": "test4", "5": "test5"])
         // selected item doesn't change
-        XCTAssertEqual(state.selectedPinnedEventID, "4")
+        #expect(state.selectedPinnedEventID == "4")
         // and index stays the same
-        XCTAssertEqual(state.selectedPinnedIndex, 3)
-        XCTAssertEqual(state.displayedMessage.string, "test4")
-        XCTAssertEqual(state.count, 5)
-        XCTAssertFalse(state.isEmpty)
+        #expect(state.selectedPinnedIndex == 3)
+        #expect(state.displayedMessage.string == "test4")
+        #expect(state.count == 5)
+        #expect(!state.isEmpty)
         
         // set to tempty
         state.setPinnedEventContents([:])
-        XCTAssertTrue(state.isEmpty)
-        XCTAssertNil(state.selectedPinnedEventID)
+        #expect(state.isEmpty)
+        #expect(state.selectedPinnedEventID == nil)
         
         // set to one item
         state.setPinnedEventContents(["6": "test6", "7": "test7"])
-        XCTAssertEqual(state.selectedPinnedEventID, "7")
-        XCTAssertEqual(state.selectedPinnedIndex, 1)
-        XCTAssertEqual(state.displayedMessage.string, "test7")
-        XCTAssertEqual(state.count, 2)
-        XCTAssertFalse(state.isEmpty)
+        #expect(state.selectedPinnedEventID == "7")
+        #expect(state.selectedPinnedIndex == 1)
+        #expect(state.displayedMessage.string == "test7")
+        #expect(state.count == 2)
+        #expect(!state.isEmpty)
     }
 }

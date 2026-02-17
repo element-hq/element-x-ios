@@ -8,28 +8,30 @@
 
 @testable import ElementX
 import Foundation
-import XCTest
+import Testing
 
-class ArrayTests: XCTestCase {
-    func testGrouping() {
-        XCTAssertEqual([].groupBy { $0 == 0 }, [])
+@Suite
+struct ArrayTests {
+    @Test
+    func grouping() {
+        #expect([].groupBy { $0 == 0 } == [])
         
-        XCTAssertEqual([0].groupBy { $0 == 0 }, [[0]])
+        #expect([0].groupBy { $0 == 0 } == [[0]])
         
-        XCTAssertEqual([1].groupBy { $0 == 0 }, [[1]])
+        #expect([1].groupBy { $0 == 0 } == [[1]])
         
-        XCTAssertEqual([0, 0, 0].groupBy { $0 == 0 }, [[0, 0, 0]])
+        #expect([0, 0, 0].groupBy { $0 == 0 } == [[0, 0, 0]])
         
-        XCTAssertEqual([1, 1, 1].groupBy { $0 == 0 }, [[1], [1], [1]])
+        #expect([1, 1, 1].groupBy { $0 == 0 } == [[1], [1], [1]])
         
-        XCTAssertEqual([1, 0, 0, 1].groupBy { $0 == 0 }, [[1], [0, 0], [1]])
+        #expect([1, 0, 0, 1].groupBy { $0 == 0 } == [[1], [0, 0], [1]])
         
-        XCTAssertEqual([0, 0, 1, 0].groupBy { $0 == 0 }, [[0, 0], [1], [0]])
+        #expect([0, 0, 1, 0].groupBy { $0 == 0 } == [[0, 0], [1], [0]])
         
-        XCTAssertEqual([0, 0, 0, 1, 2, 3, 0].groupBy { $0 == 0 }, [[0, 0, 0], [1], [2], [3], [0]])
+        #expect([0, 0, 0, 1, 2, 3, 0].groupBy { $0 == 0 } == [[0, 0, 0], [1], [2], [3], [0]])
         
-        XCTAssertEqual([0, 0, 0, 1, 2, 3, 0, 0].groupBy { $0 == 0 }, [[0, 0, 0], [1], [2], [3], [0, 0]])
+        #expect([0, 0, 0, 1, 2, 3, 0, 0].groupBy { $0 == 0 } == [[0, 0, 0], [1], [2], [3], [0, 0]])
         
-        XCTAssertEqual([0, 0, 0, 1, 0, 2, 3, 0, 0].groupBy { $0 == 0 }, [[0, 0, 0], [1], [0], [2], [3], [0, 0]])
+        #expect([0, 0, 0, 1, 0, 2, 3, 0, 0].groupBy { $0 == 0 } == [[0, 0, 0], [1], [0], [2], [3], [0, 0]])
     }
 }

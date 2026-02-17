@@ -7,10 +7,12 @@
 //
 
 @testable import ElementX
-import XCTest
+import Foundation
+import Testing
 
 @MainActor
-class DeactivateAccountScreenViewModelTests: XCTestCase {
+@Suite
+struct DeactivateAccountScreenViewModelTests {
     var clientProxy: ClientProxyMock!
     var viewModel: DeactivateAccountScreenViewModelProtocol!
     
@@ -18,39 +20,41 @@ class DeactivateAccountScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    override func setUpWithError() throws {
+    init() {
         clientProxy = ClientProxyMock(.init())
         viewModel = DeactivateAccountScreenViewModel(clientProxy: clientProxy, userIndicatorController: UserIndicatorControllerMock())
     }
     
-    func testDeactivate() async throws {
+    @Test
+    mutating func deactivate() async throws {
         try await validateDeactivate(erasingData: false)
     }
     
-    func testDeactivateAndErase() async throws {
+    @Test
+    mutating func deactivateAndErase() async throws {
         try await validateDeactivate(erasingData: true)
     }
     
-    func validateDeactivate(erasingData shouldErase: Bool) async throws {
+    mutating func validateDeactivate(erasingData shouldErase: Bool) async throws {
         let enteredPassword = UUID().uuidString
         
-        clientProxy.deactivateAccountPasswordEraseDataClosure = { [weak self] password, eraseData in
-            guard let self else { return .failure(.sdkError(ClientProxyMockError.generic)) }
+        clientProxy.deactivateAccountPasswordEraseDataClosure = { [clientProxy] password, eraseData in
+            guard let clientProxy else { return .failure(.sdkError(ClientProxyMockError.generic)) }
             
             if clientProxy.deactivateAccountPasswordEraseDataCallsCount == 1 {
                 if password != nil {
-                    XCTFail("The password shouldn't be sent first time round.")
+                    Issue.record("The password shouldn't be sent first time round.")
                 }
                 if eraseData != shouldErase {
-                    XCTFail("The erase parameter is unexpected.")
+                    Issue.record("The erase parameter is unexpected.")
                 }
                 return .failure(.sdkError(ClientProxyMockError.generic))
             } else {
                 if password != enteredPassword {
-                    XCTFail("The password should match the user's input on the second call.")
+                    Issue.record("The password should match the user's input on the second call.")
                 }
                 if eraseData != shouldErase {
-                    XCTFail("The erase parameter is unexpected.")
+                    Issue.record("The erase parameter is unexpected.")
                 }
                 return .success(())
             }
@@ -59,14 +63,14 @@ class DeactivateAccountScreenViewModelTests: XCTestCase {
         context.eraseData = shouldErase
         context.password = enteredPassword
         
-        XCTAssertNil(context.alertInfo)
+        #expect(context.alertInfo == nil)
         
         let deferredState = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
         context.send(viewAction: .deactivate)
         try await deferredState.fulfill()
         
         guard let confirmationAction = context.alertInfo?.primaryButton.action else {
-            XCTFail("Couldn't find the confirmation action.")
+            Issue.record("Couldn't find the confirmation action.")
             return
         }
         
@@ -74,8 +78,8 @@ class DeactivateAccountScreenViewModelTests: XCTestCase {
         confirmationAction()
         try await deferredAction.fulfill()
         
-        XCTAssertEqual(clientProxy.deactivateAccountPasswordEraseDataCallsCount, 2)
-        XCTAssertEqual(clientProxy.deactivateAccountPasswordEraseDataReceivedArguments?.password, enteredPassword)
-        XCTAssertEqual(clientProxy.deactivateAccountPasswordEraseDataReceivedArguments?.eraseData, shouldErase)
+        #expect(clientProxy.deactivateAccountPasswordEraseDataCallsCount == 2)
+        #expect(clientProxy.deactivateAccountPasswordEraseDataReceivedArguments?.password == enteredPassword)
+        #expect(clientProxy.deactivateAccountPasswordEraseDataReceivedArguments?.eraseData == shouldErase)
     }
 }

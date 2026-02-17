@@ -7,11 +7,14 @@
 //
 
 @testable import ElementX
+import Foundation
 import MatrixRustSDK
-import XCTest
+import Testing
 
-class RestorationTokenTests: XCTestCase {
-    func testDecodeTokenWithSlidingSyncProxy() throws {
+@Suite
+struct RestorationTokenTests {
+    @Test
+    func decodeTokenWithSlidingSyncProxy() throws {
         // Given an encoded restoration token that contains a session with a sliding sync proxy.
         let originalToken = RestorationTokenV4(session: SessionV1(accessToken: "1234",
                                                                   refreshToken: "5678",
@@ -26,18 +29,14 @@ class RestorationTokenTests: XCTestCase {
         let data = try JSONEncoder().encode(originalToken)
         
         // When decoding the data to the current restoration token format.
-        XCTAssertThrowsError(try JSONDecoder().decode(RestorationToken.self, from: data)) { error in
-            // Then an error should be thrown as it is no longer supported.
-            switch error {
-            case RestorationTokenError.slidingSyncProxyNotSupported:
-                break
-            default:
-                XCTFail("Unexpected error thrown: \(error)")
-            }
+        // Then an error should be thrown as it is no longer supported.
+        #expect(throws: RestorationTokenError.slidingSyncProxyNotSupported) {
+            try JSONDecoder().decode(RestorationToken.self, from: data)
         }
     }
     
-    func testDecodeFromTokenV4() throws {
+    @Test
+    func decodeFromTokenV4() throws {
         // Given an encoded restoration token in the 4th format that contains a stored session directory.
         let sessionDirectoryName = UUID().uuidString
         let originalToken = RestorationTokenV4(session: SessionV1(accessToken: "1234",
@@ -57,16 +56,17 @@ class RestorationTokenTests: XCTestCase {
         
         // Then the output should be a valid token with the expected store directories.
         assertEqual(session: decodedToken.session, originalSession: originalToken.session)
-        XCTAssertEqual(decodedToken.passphrase, originalToken.passphrase, "The passphrase should not be changed.")
-        XCTAssertEqual(decodedToken.pusherNotificationClientIdentifier, originalToken.pusherNotificationClientIdentifier,
-                       "The push notification client identifier should not be changed.")
-        XCTAssertEqual(decodedToken.sessionDirectories.dataDirectory, originalToken.sessionDirectory,
-                       "The session directory should not be changed.")
-        XCTAssertEqual(decodedToken.sessionDirectories.cacheDirectory, .sessionCachesBaseDirectory.appending(component: sessionDirectoryName),
-                       "The cache directory should be derived from the session directory but in the caches directory.")
+        #expect(decodedToken.passphrase == originalToken.passphrase, "The passphrase should not be changed.")
+        #expect(decodedToken.pusherNotificationClientIdentifier == originalToken.pusherNotificationClientIdentifier,
+                "The push notification client identifier should not be changed.")
+        #expect(decodedToken.sessionDirectories.dataDirectory == originalToken.sessionDirectory,
+                "The session directory should not be changed.")
+        #expect(decodedToken.sessionDirectories.cacheDirectory == .sessionCachesBaseDirectory.appending(component: sessionDirectoryName),
+                "The cache directory should be derived from the session directory but in the caches directory.")
     }
     
-    func testDecodeFromTokenV5() throws {
+    @Test
+    func decodeFromTokenV5() throws {
         // Given an encoded restoration token in the 5th format that contains separate directories for session data and caches.
         let sessionDirectoryName = UUID().uuidString
         let originalToken = RestorationTokenV5(session: SessionV1(accessToken: "1234",
@@ -87,16 +87,17 @@ class RestorationTokenTests: XCTestCase {
         
         // Then the output should be a valid token.
         assertEqual(session: decodedToken.session, originalSession: originalToken.session)
-        XCTAssertEqual(decodedToken.passphrase, originalToken.passphrase, "The passphrase should not be changed.")
-        XCTAssertEqual(decodedToken.pusherNotificationClientIdentifier, originalToken.pusherNotificationClientIdentifier,
-                       "The push notification client identifier should not be changed.")
-        XCTAssertEqual(decodedToken.sessionDirectories.dataDirectory, originalToken.sessionDirectory,
-                       "The session directory should not be changed.")
-        XCTAssertEqual(decodedToken.sessionDirectories.cacheDirectory, originalToken.cacheDirectory,
-                       "The cache directory should not be changed.")
+        #expect(decodedToken.passphrase == originalToken.passphrase, "The passphrase should not be changed.")
+        #expect(decodedToken.pusherNotificationClientIdentifier == originalToken.pusherNotificationClientIdentifier,
+                "The push notification client identifier should not be changed.")
+        #expect(decodedToken.sessionDirectories.dataDirectory == originalToken.sessionDirectory,
+                "The session directory should not be changed.")
+        #expect(decodedToken.sessionDirectories.cacheDirectory == originalToken.cacheDirectory,
+                "The cache directory should not be changed.")
     }
     
-    func testDecodeFromCurrentToken() throws {
+    @Test
+    func decodeFromCurrentToken() throws {
         // Given an encoded restoration token in the current format.
         let originalToken = RestorationToken(session: Session(accessToken: "1234",
                                                               refreshToken: "5678",
@@ -114,16 +115,16 @@ class RestorationTokenTests: XCTestCase {
         let decodedToken = try JSONDecoder().decode(RestorationToken.self, from: data)
         
         // Then the output should be a valid token.
-        XCTAssertEqual(decodedToken, originalToken, "The token should remain identical.")
+        #expect(decodedToken == originalToken, "The token should remain identical.")
     }
     
     func assertEqual(session: Session, originalSession: SessionV1) {
-        XCTAssertEqual(session.accessToken, originalSession.accessToken, "The access token should not be changed.")
-        XCTAssertEqual(session.refreshToken, originalSession.refreshToken, "The refresh token should not be changed.")
-        XCTAssertEqual(session.userId, originalSession.userId, "The user ID should not be changed.")
-        XCTAssertEqual(session.deviceId, originalSession.deviceId, "The device ID should not be changed.")
-        XCTAssertEqual(session.homeserverUrl, originalSession.homeserverUrl, "The homeserver URL should not be changed.")
-        XCTAssertEqual(session.oidcData, originalSession.oidcData, "The OIDC data should not be changed.")
+        #expect(session.accessToken == originalSession.accessToken, "The access token should not be changed.")
+        #expect(session.refreshToken == originalSession.refreshToken, "The refresh token should not be changed.")
+        #expect(session.userId == originalSession.userId, "The user ID should not be changed.")
+        #expect(session.deviceId == originalSession.deviceId, "The device ID should not be changed.")
+        #expect(session.homeserverUrl == originalSession.homeserverUrl, "The homeserver URL should not be changed.")
+        #expect(session.oidcData == originalSession.oidcData, "The OIDC data should not be changed.")
     }
 }
 

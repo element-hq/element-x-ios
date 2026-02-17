@@ -8,92 +8,94 @@
 
 import Combine
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class UserDetailsEditScreenViewModelTests: XCTestCase {
-    var viewModel: UserDetailsEditScreenViewModel!
+@Suite
+struct UserDetailsEditScreenViewModelTests {
+    private var viewModel: UserDetailsEditScreenViewModel!
+    private var userIndicatorController: UserIndicatorControllerMock!
     
-    var userIndicatorController: UserIndicatorControllerMock!
-    
-    var context: UserDetailsEditScreenViewModelType.Context {
+    private var context: UserDetailsEditScreenViewModelType.Context {
         viewModel.context
     }
     
-    func testCannotSaveOnLanding() {
-        setupViewModel()
-        XCTAssertFalse(context.viewState.canSave)
-    }
-    
-    func testNameDidChange() {
-        setupViewModel()
-        context.name = "name"
-        XCTAssertTrue(context.viewState.nameDidChange)
-        XCTAssertTrue(context.viewState.canSave)
-    }
-    
-    func testEmptyNameCannotBeSaved() {
-        setupViewModel()
-        context.name = ""
-        XCTAssertFalse(context.viewState.canSave)
-    }
-    
-    func testAvatarPickerShowsSheet() {
-        setupViewModel()
-        context.name = "name"
-        XCTAssertFalse(context.showMediaSheet)
-        context.send(viewAction: .presentMediaSource)
-        XCTAssertTrue(context.showMediaSheet)
-    }
-    
-    func testSave() async throws {
-        setupViewModel()
-        
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
-        
-        context.name = "name"
-        context.send(viewAction: .save)
-        
-        try await deferred.fulfill()
-    }
-    
-    func testCancelWithChangesAndDiscard() async throws {
-        setupViewModel()
-        context.name = "name"
-        XCTAssertTrue(context.viewState.canSave)
-        XCTAssertNil(context.alertInfo)
-        
-        context.send(viewAction: .cancel)
-        
-        XCTAssertNotNil(context.alertInfo)
-        
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
-        context.alertInfo?.secondaryButton?.action?() // Discard
-        try await deferred.fulfill()
-    }
-    
-    func testCancelWithChangesAndSave() async throws {
-        setupViewModel()
-        context.name = "name"
-        XCTAssertTrue(context.viewState.canSave)
-        XCTAssertNil(context.alertInfo)
-        
-        context.send(viewAction: .cancel)
-        
-        XCTAssertNotNil(context.alertInfo)
-        
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
-        context.alertInfo?.primaryButton.action?() // Save
-        try await deferred.fulfill()
-    }
-    
-    // MARK: - Private
-    
-    private func setupViewModel() {
+    init() {
         userIndicatorController = UserIndicatorControllerMock.default
-        
         viewModel = .init(userSession: UserSessionMock(.init()),
                           mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                           userIndicatorController: userIndicatorController)
+    }
+    
+    @Test
+    func cannotSaveOnLanding() {
+        #expect(!context.viewState.canSave)
+    }
+    
+    @Test
+    func nameDidChange() {
+        var testSetup = self
+        testSetup.context.name = "name"
+        #expect(testSetup.context.viewState.nameDidChange)
+        #expect(testSetup.context.viewState.canSave)
+    }
+    
+    @Test
+    func emptyNameCannotBeSaved() {
+        var testSetup = self
+        testSetup.context.name = ""
+        #expect(!testSetup.context.viewState.canSave)
+    }
+    
+    @Test
+    func avatarPickerShowsSheet() {
+        var testSetup = self
+        testSetup.context.name = "name"
+        #expect(!testSetup.context.showMediaSheet)
+        testSetup.context.send(viewAction: .presentMediaSource)
+        #expect(testSetup.context.showMediaSheet)
+    }
+    
+    @Test
+    func save() async throws {
+        var testSetup = self
+        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .dismiss }
+        
+        testSetup.context.name = "name"
+        testSetup.context.send(viewAction: .save)
+        
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func cancelWithChangesAndDiscard() async throws {
+        var testSetup = self
+        testSetup.context.name = "name"
+        #expect(testSetup.context.viewState.canSave)
+        #expect(testSetup.context.alertInfo == nil)
+        
+        testSetup.context.send(viewAction: .cancel)
+        
+        #expect(testSetup.context.alertInfo != nil)
+        
+        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .dismiss }
+        testSetup.context.alertInfo?.secondaryButton?.action?() // Discard
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func cancelWithChangesAndSave() async throws {
+        var testSetup = self
+        testSetup.context.name = "name"
+        #expect(testSetup.context.viewState.canSave)
+        #expect(testSetup.context.alertInfo == nil)
+        
+        testSetup.context.send(viewAction: .cancel)
+        
+        #expect(testSetup.context.alertInfo != nil)
+        
+        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .dismiss }
+        testSetup.context.alertInfo?.primaryButton.action?() // Save
+        try await deferred.fulfill()
     }
 }

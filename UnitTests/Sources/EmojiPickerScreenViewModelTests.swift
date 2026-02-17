@@ -7,10 +7,11 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-final class EmojiPickerScreenViewModelTests: XCTestCase {
+@Suite
+struct EmojiPickerScreenViewModelTests {
     var timelineProxy: TimelineProxyMock!
     
     var viewModel: EmojiPickerScreenViewModel!
@@ -18,25 +19,26 @@ final class EmojiPickerScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    func testToggleReaction() async throws {
+    @Test
+    mutating func toggleReaction() async throws {
         setupViewModel()
         let reaction = "👋"
         
-        let expectation = XCTestExpectation(description: "Toggle reaction")
+        var toggleReactionCalled = false
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         timelineProxy.toggleReactionToClosure = { toggledReaction, _ in
-            XCTAssertEqual(toggledReaction, reaction)
-            expectation.fulfill()
+            #expect(toggledReaction == reaction)
+            toggleReactionCalled = true
             return .success(())
         }
         context.send(viewAction: .emojiTapped(emoji: .init(id: "wave", value: reaction)))
-        await fulfillment(of: [expectation], timeout: 1)
         try await deferred.fulfill()
+        #expect(toggleReactionCalled)
     }
     
     // MARK: - Helpers
     
-    private func setupViewModel(selectedEmojis: Set<String> = []) {
+    private mutating func setupViewModel(selectedEmojis: Set<String> = []) {
         timelineProxy = TimelineProxyMock(.init())
         
         viewModel = EmojiPickerScreenViewModel(itemID: .randomEvent,

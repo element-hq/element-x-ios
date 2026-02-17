@@ -9,10 +9,11 @@
 import Combine
 @testable import ElementX
 import Foundation
-import XCTest
+import Testing
 
 @MainActor
-class AudioRecorderStateTests: XCTestCase {
+@Suite
+struct AudioRecorderStateTests {
     private var audioRecorderState: AudioRecorderState!
     private var audioRecorderMock: AudioRecorderMock!
     
@@ -30,32 +31,36 @@ class AudioRecorderStateTests: XCTestCase {
         return audioRecorderMock
     }
     
-    override func setUp() async throws {
+    init() async {
         audioRecorderActionsSubject = .init()
         audioRecorderState = AudioRecorderState()
         audioRecorderMock = buildAudioRecorderMock()
     }
     
-    func testAttach() {
+    @Test
+    func attach() {
         audioRecorderState.attachAudioRecorder(audioRecorderMock)
-        XCTAssertEqual(audioRecorderState.recordingState, .stopped)
+        #expect(audioRecorderState.recordingState == .stopped)
     }
     
-    func testDetach() async {
+    @Test
+    mutating func detach() async {
         audioRecorderState.attachAudioRecorder(audioRecorderMock)
         audioRecorderMock.isRecording = true
         await audioRecorderState.detachAudioRecorder()
-        XCTAssert(audioRecorderMock.stopRecordingCalled)
-        XCTAssertEqual(audioRecorderState.recordingState, .stopped)
+        #expect(audioRecorderMock.stopRecordingCalled)
+        #expect(audioRecorderState.recordingState == .stopped)
     }
     
-    func testReportError() {
-        XCTAssertEqual(audioRecorderState.recordingState, .stopped)
+    @Test
+    mutating func reportError() {
+        #expect(audioRecorderState.recordingState == .stopped)
         audioRecorderState.reportError()
-        XCTAssertEqual(audioRecorderState.recordingState, .error)
+        #expect(audioRecorderState.recordingState == .error)
     }
     
-    func testHandlingAudioRecorderActionDidStartRecording() async throws {
+    @Test
+    func handlingAudioRecorderActionDidStartRecording() async throws {
         audioRecorderState.attachAudioRecorder(audioRecorderMock)
 
         let deferred = deferFulfillment(audioRecorderState.$recordingState) { action in
@@ -69,10 +74,11 @@ class AudioRecorderStateTests: XCTestCase {
         
         audioRecorderActionsSubject.send(.didStartRecording)
         try await deferred.fulfill()
-        XCTAssertEqual(audioRecorderState.recordingState, .recording)
+        #expect(audioRecorderState.recordingState == .recording)
     }
 
-    func testHandlingAudioPlayerActionDidStopRecording() async throws {
+    @Test
+    func handlingAudioPlayerActionDidStopRecording() async throws {
         audioRecorderState.attachAudioRecorder(audioRecorderMock)
 
         let deferred = deferFulfillment(audioRecorderState.$recordingState) { action in
@@ -88,6 +94,6 @@ class AudioRecorderStateTests: XCTestCase {
         try await deferred.fulfill()
         
         // The state is expected to be .readyToPlay
-        XCTAssertEqual(audioRecorderState.recordingState, .stopped)
+        #expect(audioRecorderState.recordingState == .stopped)
     }
 }

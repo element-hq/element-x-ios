@@ -7,7 +7,8 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class RoomDirectorySearchScreenScreenViewModelTests: XCTestCase { }
+@Suite
+struct RoomDirectorySearchScreenScreenViewModelTests { }

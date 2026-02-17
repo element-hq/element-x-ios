@@ -7,96 +7,106 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class ReportRoomScreenViewModelTests: XCTestCase {
-    var viewModel: ReportRoomScreenViewModelProtocol!
-    var roomProxy: JoinedRoomProxyMock!
+@Suite
+struct ReportRoomScreenViewModelTests {
+    private var viewModel: ReportRoomScreenViewModelProtocol
+    private var roomProxy: JoinedRoomProxyMock
     
-    var context: ReportRoomScreenViewModelType.Context {
+    private var context: ReportRoomScreenViewModelType.Context {
         viewModel.context
     }
     
-    override func setUp() {
+    init() {
         roomProxy = JoinedRoomProxyMock(.init())
         viewModel = ReportRoomScreenViewModel(roomProxy: roomProxy, userIndicatorController: UserIndicatorControllerMock())
     }
     
-    func testInitialState() {
-        XCTAssertTrue(context.viewState.bindings.reason.isEmpty)
-        XCTAssertFalse(context.viewState.bindings.shouldLeaveRoom)
+    @Test
+    func initialState() {
+        let testSetup = self
+        #expect(testSetup.context.viewState.bindings.reason.isEmpty)
+        #expect(!testSetup.context.viewState.bindings.shouldLeaveRoom)
     }
     
-    func testReportSuccess() async throws {
+    @Test
+    func reportSuccess() async {
+        var testSetup = self
         let reason = "Spam"
-        let expectation = XCTestExpectation(description: "Report success")
-        roomProxy.reportRoomReasonClosure = { reasonArgument in
-            defer { expectation.fulfill() }
-            XCTAssertEqual(reasonArgument, reason)
-            return .success(())
+        
+        await confirmation { confirmation in
+            testSetup.roomProxy.reportRoomReasonClosure = { reasonArgument in
+                #expect(reasonArgument == reason)
+                confirmation()
+                return .success(())
+            }
+            
+            let deferred = deferFulfillment(testSetup.viewModel.actionsPublisher) { action in
+                action == .dismiss(shouldLeaveRoom: false)
+            }
+            
+            testSetup.context.reason = reason
+            testSetup.context.send(viewAction: .report)
+            
+            try? await deferred.fulfill()
         }
-        
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
-            action == .dismiss(shouldLeaveRoom: false)
-        }
-        
-        context.reason = reason
-        context.send(viewAction: .report)
-        
-        try await deferred.fulfill()
-        await fulfillment(of: [expectation])
     }
     
-    func testReportAndLeaveSuccess() async throws {
+    @Test
+    func reportAndLeaveSuccess() async {
+        var testSetup = self
         let reason = "Spam"
-        let reportExpectation = XCTestExpectation(description: "Report success")
-        roomProxy.reportRoomReasonClosure = { reasonArgument in
-            defer { reportExpectation.fulfill() }
-            XCTAssertEqual(reasonArgument, reason)
-            return .success(())
+        
+        await confirmation(expectedCount: 2) { confirmation in
+            testSetup.roomProxy.reportRoomReasonClosure = { reasonArgument in
+                #expect(reasonArgument == reason)
+                confirmation()
+                return .success(())
+            }
+            
+            testSetup.roomProxy.leaveRoomClosure = {
+                confirmation()
+                return .success(())
+            }
+            
+            let deferred = deferFulfillment(testSetup.viewModel.actionsPublisher) { action in
+                action == .dismiss(shouldLeaveRoom: true)
+            }
+            
+            testSetup.context.reason = reason
+            testSetup.context.shouldLeaveRoom = true
+            testSetup.context.send(viewAction: .report)
+            
+            try? await deferred.fulfill()
         }
-        
-        let leaveExpectation = XCTestExpectation(description: "Leave success")
-        roomProxy.leaveRoomClosure = {
-            defer { leaveExpectation.fulfill() }
-            return .success(())
-        }
-        
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
-            action == .dismiss(shouldLeaveRoom: true)
-        }
-        
-        context.reason = reason
-        context.shouldLeaveRoom = true
-        context.send(viewAction: .report)
-        
-        await fulfillment(of: [reportExpectation, leaveExpectation])
-        try await deferred.fulfill()
     }
     
-    func testReportSuccessLeaveFails() async throws {
+    @Test
+    func reportSuccessLeaveFails() async {
+        var testSetup = self
         let reason = "Spam"
-        let reportExpectation = XCTestExpectation(description: "Report success")
-        roomProxy.reportRoomReasonClosure = { reasonArgument in
-            defer { reportExpectation.fulfill() }
-            XCTAssertEqual(reasonArgument, reason)
-            return .success(())
+        
+        await confirmation(expectedCount: 2) { confirmation in
+            testSetup.roomProxy.reportRoomReasonClosure = { reasonArgument in
+                #expect(reasonArgument == reason)
+                confirmation()
+                return .success(())
+            }
+            
+            testSetup.roomProxy.leaveRoomClosure = {
+                confirmation()
+                return .failure(.eventNotFound)
+            }
+            
+            let deferred = deferFulfillment(testSetup.context.observe(\.viewState.bindings.alert)) { $0 != nil }
+            
+            testSetup.context.reason = reason
+            testSetup.context.shouldLeaveRoom = true
+            testSetup.context.send(viewAction: .report)
+            
+            try? await deferred.fulfill()
         }
-        
-        let leaveExpectation = XCTestExpectation(description: "Leave fails")
-        roomProxy.leaveRoomClosure = {
-            defer { leaveExpectation.fulfill() }
-            return .failure(.eventNotFound)
-        }
-        
-        let deferred = deferFulfillment(context.observe(\.viewState.bindings.alert)) { $0 != nil }
-        
-        context.reason = reason
-        context.shouldLeaveRoom = true
-        context.send(viewAction: .report)
-        
-        await fulfillment(of: [reportExpectation, leaveExpectation])
-        try await deferred.fulfill()
     }
 }

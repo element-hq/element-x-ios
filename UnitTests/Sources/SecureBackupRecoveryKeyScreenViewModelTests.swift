@@ -7,7 +7,8 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class SecureBackupRecoveryKeyScreenViewModelTests: XCTestCase { }
+@Suite
+struct SecureBackupRecoveryKeyScreenViewModelTests { }

@@ -8,21 +8,19 @@
 
 import Combine
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class StaticLocationScreenViewModelTests: XCTestCase {
-    let timelineProxy = TimelineProxyMock(.init())
+@Suite
+struct StaticLocationScreenViewModelTests {
+    private let timelineProxy = TimelineProxyMock(.init())
+    private var viewModel: StaticLocationScreenViewModelProtocol
     
-    var viewModel: StaticLocationScreenViewModelProtocol!
-    var context: StaticLocationScreenViewModel.Context {
+    private var context: StaticLocationScreenViewModel.Context {
         viewModel.context
     }
     
-    private var cancellables = Set<AnyCancellable>()
-    
-    override func setUpWithError() throws {
-        cancellables.removeAll()
+    init() {
         let viewModel = StaticLocationScreenViewModel(interactionMode: .picker,
                                                       mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
                                                       timelineController: MockTimelineController(timelineProxy: timelineProxy),
@@ -32,81 +30,98 @@ class StaticLocationScreenViewModelTests: XCTestCase {
         self.viewModel = viewModel
     }
     
-    func testUserDidPan() {
-        XCTAssertTrue(context.viewState.isSharingUserLocation)
-        XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
-        context.send(viewAction: .userDidPan)
-        XCTAssertFalse(context.viewState.isSharingUserLocation)
-        XCTAssertEqual(context.showsUserLocationMode, .show)
+    @Test
+    func userDidPan() {
+        var testSetup = self
+        #expect(testSetup.context.viewState.isSharingUserLocation)
+        #expect(testSetup.context.showsUserLocationMode == .showAndFollow)
+        testSetup.context.send(viewAction: .userDidPan)
+        #expect(!testSetup.context.viewState.isSharingUserLocation)
+        #expect(testSetup.context.showsUserLocationMode == .show)
     }
     
-    func testCenterOnUser() {
-        XCTAssertTrue(context.viewState.isSharingUserLocation)
-        context.showsUserLocationMode = .show
-        XCTAssertFalse(context.viewState.isSharingUserLocation)
-        context.send(viewAction: .centerToUser)
-        XCTAssertTrue(context.viewState.isSharingUserLocation)
-        XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
+    @Test
+    func centerOnUser() {
+        var testSetup = self
+        #expect(testSetup.context.viewState.isSharingUserLocation)
+        testSetup.context.showsUserLocationMode = .show
+        #expect(!testSetup.context.viewState.isSharingUserLocation)
+        testSetup.context.send(viewAction: .centerToUser)
+        #expect(testSetup.context.viewState.isSharingUserLocation)
+        #expect(testSetup.context.showsUserLocationMode == .showAndFollow)
     }
     
-    func testCenterOnUserWithoutAuth() {
-        context.showsUserLocationMode = .hide
-        context.isLocationAuthorized = nil
-        context.send(viewAction: .centerToUser)
-        XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
+    @Test
+    func centerOnUserWithoutAuth() {
+        var testSetup = self
+        testSetup.context.showsUserLocationMode = .hide
+        testSetup.context.isLocationAuthorized = nil
+        testSetup.context.send(viewAction: .centerToUser)
+        #expect(testSetup.context.showsUserLocationMode == .showAndFollow)
     }
     
-    func testCenterOnUserWithDeniedAuth() {
-        context.isLocationAuthorized = false
-        context.showsUserLocationMode = .hide
-        context.send(viewAction: .centerToUser)
-        XCTAssertNotEqual(context.showsUserLocationMode, .showAndFollow)
-        XCTAssertNotNil(context.alertInfo)
+    @Test
+    func centerOnUserWithDeniedAuth() {
+        var testSetup = self
+        testSetup.context.isLocationAuthorized = false
+        testSetup.context.showsUserLocationMode = .hide
+        testSetup.context.send(viewAction: .centerToUser)
+        #expect(testSetup.context.showsUserLocationMode != .showAndFollow)
+        #expect(testSetup.context.alertInfo != nil)
     }
     
-    func testErrorMapping() {
+    @Test
+    func errorMapping() {
         let mapError = AlertInfo(locationSharingViewError: .mapError(.failedLoadingMap))
-        XCTAssertEqual(mapError.message, L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName))
+        #expect(mapError.message == L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName))
         let locationError = AlertInfo(locationSharingViewError: .mapError(.failedLocatingUser))
-        XCTAssertEqual(locationError.message, L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName))
+        #expect(locationError.message == L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName))
         let authorizationError = AlertInfo(locationSharingViewError: .missingAuthorization)
-        XCTAssertEqual(authorizationError.message, L10n.dialogPermissionLocationDescriptionIos)
+        #expect(authorizationError.message == L10n.dialogPermissionLocationDescriptionIos)
     }
 
-    func testSendUserLocation() async throws {
-        context.mapCenterLocation = .init(latitude: 0, longitude: 0)
-        context.geolocationUncertainty = 10
+    @Test
+    func sendUserLocation() async throws {
+        var testSetup = self
+        testSetup.context.mapCenterLocation = .init(latitude: 0, longitude: 0)
+        testSetup.context.geolocationUncertainty = 10
         
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
-        let expectation = XCTestExpectation(description: "sendLocation")
-        timelineProxy.sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = { _, geoURI, _, _, assetType in
-            XCTAssertEqual(geoURI.uncertainty, 10)
-            XCTAssertEqual(assetType, .sender)
-            expectation.fulfill()
-            return .success(())
+        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .close }
+        
+        await confirmation { confirmation in
+            testSetup.timelineProxy.sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = { _, geoURI, _, _, assetType in
+                #expect(geoURI.uncertainty == 10)
+                #expect(assetType == .sender)
+                confirmation()
+                return .success(())
+            }
+            
+            testSetup.context.send(viewAction: .selectLocation)
         }
         
-        context.send(viewAction: .selectLocation)
-        await fulfillment(of: [expectation], timeout: 1)
         try await deferred.fulfill()
     }
 
-    func testSendPickedLocation() async throws {
-        context.mapCenterLocation = .init(latitude: 0, longitude: 0)
-        context.isLocationAuthorized = nil
-        context.geolocationUncertainty = 10
+    @Test
+    func sendPickedLocation() async throws {
+        var testSetup = self
+        testSetup.context.mapCenterLocation = .init(latitude: 0, longitude: 0)
+        testSetup.context.isLocationAuthorized = nil
+        testSetup.context.geolocationUncertainty = 10
 
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
-        let expectation = XCTestExpectation(description: "sendLocation")
-        timelineProxy.sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = { _, geoURI, _, _, assetType in
-            XCTAssertEqual(geoURI.uncertainty, nil)
-            XCTAssertEqual(assetType, .pin)
-            expectation.fulfill()
-            return .success(())
+        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .close }
+        
+        await confirmation { confirmation in
+            testSetup.timelineProxy.sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = { _, geoURI, _, _, assetType in
+                #expect(geoURI.uncertainty == nil)
+                #expect(assetType == .pin)
+                confirmation()
+                return .success(())
+            }
+            
+            testSetup.context.send(viewAction: .selectLocation)
         }
         
-        context.send(viewAction: .selectLocation)
-        await fulfillment(of: [expectation], timeout: 1)
         try await deferred.fulfill()
     }
 }

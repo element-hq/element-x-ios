@@ -7,76 +7,83 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class RoomRolesAndPermissionsScreenViewModelTests: XCTestCase {
-    var viewModel: RoomRolesAndPermissionsScreenViewModelProtocol!
-    var roomProxy: JoinedRoomProxyMock!
-    
-    var context: RoomRolesAndPermissionsScreenViewModelType.Context {
-        viewModel.context
+@Suite
+struct RoomRolesAndPermissionsScreenViewModelTests {
+    @MainActor
+    private struct TestSetup {
+        var viewModel: RoomRolesAndPermissionsScreenViewModelProtocol
+        var roomProxy: JoinedRoomProxyMock
+        
+        var context: RoomRolesAndPermissionsScreenViewModelType.Context {
+            viewModel.context
+        }
+        
+        init(members: [RoomMemberProxyMock]) {
+            roomProxy = JoinedRoomProxyMock(.init(members: members))
+            viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
+                                                               userIndicatorController: UserIndicatorControllerMock(),
+                                                               analytics: ServiceLocator.shared.analytics)
+        }
     }
 
-    func testEmptyCounters() {
-        setupViewModel(members: .allMembers)
-        XCTAssertEqual(context.viewState.administratorCount, 0)
-        XCTAssertEqual(context.viewState.moderatorCount, 0)
+    @Test
+    func emptyCounters() {
+        let testSetup = TestSetup(members: .allMembers)
+        #expect(testSetup.context.viewState.administratorCount == 0)
+        #expect(testSetup.context.viewState.moderatorCount == 0)
     }
 
-    func testFilledCounters() {
-        setupViewModel(members: .allMembersAsAdmin)
-        XCTAssertEqual(context.viewState.administratorCount, 2)
-        XCTAssertEqual(context.viewState.moderatorCount, 1)
+    @Test
+    func filledCounters() {
+        let testSetup = TestSetup(members: .allMembersAsAdmin)
+        #expect(testSetup.context.viewState.administratorCount == 2)
+        #expect(testSetup.context.viewState.moderatorCount == 1)
     }
     
-    func testResetPermissions() async throws {
-        setupViewModel(members: .allMembersAsAdmin)
+    @Test
+    func resetPermissions() async throws {
+        var testSetup = TestSetup(members: .allMembersAsAdmin)
         
-        context.send(viewAction: .reset)
-        XCTAssertNotNil(context.alertInfo)
+        testSetup.context.send(viewAction: .reset)
+        #expect(testSetup.context.alertInfo != nil)
         
-        context.alertInfo?.primaryButton.action?()
+        testSetup.context.alertInfo?.primaryButton.action?()
         
         try await Task.sleep(for: .milliseconds(100))
         
-        XCTAssertTrue(roomProxy.resetPowerLevelsCalled)
+        #expect(testSetup.roomProxy.resetPowerLevelsCalled)
     }
     
-    func testDemoteToModerator() async throws {
-        setupViewModel(members: .allMembersAsAdmin)
+    @Test
+    func demoteToModerator() async throws {
+        var testSetup = TestSetup(members: .allMembersAsAdmin)
         
-        context.send(viewAction: .editOwnUserRole)
-        XCTAssertNotNil(context.alertInfo)
+        testSetup.context.send(viewAction: .editOwnUserRole)
+        #expect(testSetup.context.alertInfo != nil)
         
-        context.alertInfo?.verticalButtons?.first { $0.title.localizedStandardContains("moderator") }?.action?()
+        testSetup.context.alertInfo?.verticalButtons?.first { $0.title.localizedStandardContains("moderator") }?.action?()
         
         try await Task.sleep(for: .milliseconds(100))
         
-        XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
-        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel,
-                       RoomRole.moderator.powerLevelValue)
+        #expect(testSetup.roomProxy.updatePowerLevelsForUsersCalled)
+        #expect(testSetup.roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel == RoomRole.moderator.powerLevelValue)
     }
     
-    func testDemoteToMember() async throws {
-        setupViewModel(members: .allMembersAsAdmin)
+    @Test
+    func demoteToMember() async throws {
+        var testSetup = TestSetup(members: .allMembersAsAdmin)
         
-        context.send(viewAction: .editOwnUserRole)
-        XCTAssertNotNil(context.alertInfo)
+        testSetup.context.send(viewAction: .editOwnUserRole)
+        #expect(testSetup.context.alertInfo != nil)
         
-        context.alertInfo?.verticalButtons?.first { $0.title.localizedStandardContains("member") }?.action?()
+        testSetup.context.alertInfo?.verticalButtons?.first { $0.title.localizedStandardContains("member") }?.action?()
         
         try await Task.sleep(for: .milliseconds(100))
         
-        XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
-        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel,
-                       RoomRole.user.powerLevelValue)
-    }
-    
-    private func setupViewModel(members: [RoomMemberProxyMock]) {
-        roomProxy = JoinedRoomProxyMock(.init(members: members))
-        viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
-                                                           userIndicatorController: UserIndicatorControllerMock(),
-                                                           analytics: ServiceLocator.shared.analytics)
+        #expect(testSetup.roomProxy.updatePowerLevelsForUsersCalled)
+        #expect(testSetup.roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel == RoomRole.user.powerLevelValue)
     }
 }

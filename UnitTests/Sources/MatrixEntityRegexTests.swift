@@ -8,65 +8,71 @@
 
 @testable import ElementX
 import Foundation
-import XCTest
+import Testing
 
-class MatrixEntityRegexTests: XCTestCase {
-    func testHomeserver() {
-        XCTAssertTrue(MatrixEntityRegex.isMatrixHomeserver("matrix.org"))
-        XCTAssertTrue(MatrixEntityRegex.isMatrixHomeserver("MATRIX.ORG"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixHomeserver("matrix?.org"))
+@Suite
+struct MatrixEntityRegexTests {
+    @Test
+    func homeserver() {
+        #expect(MatrixEntityRegex.isMatrixHomeserver("matrix.org"))
+        #expect(MatrixEntityRegex.isMatrixHomeserver("MATRIX.ORG"))
+        #expect(!MatrixEntityRegex.isMatrixHomeserver("matrix?.org"))
     }
 
-    func testUserID() {
-        XCTAssertTrue(MatrixEntityRegex.isMatrixUserIdentifier("@username:example.com"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixUserIdentifier("username:example.com"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixUserIdentifier("@username.example.com"))
+    @Test
+    func userID() {
+        #expect(MatrixEntityRegex.isMatrixUserIdentifier("@username:example.com"))
+        #expect(!MatrixEntityRegex.isMatrixUserIdentifier("username:example.com"))
+        #expect(!MatrixEntityRegex.isMatrixUserIdentifier("@username.example.com"))
     }
     
-    func testRoomAlias() {
-        XCTAssertTrue(MatrixEntityRegex.isMatrixRoomAlias("#element-ios:matrix.org"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixRoomAlias("element-ios:matrix.org"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixRoomAlias("#element-ios.matrix.org"))
+    @Test
+    func roomAlias() {
+        #expect(MatrixEntityRegex.isMatrixRoomAlias("#element-ios:matrix.org"))
+        #expect(!MatrixEntityRegex.isMatrixRoomAlias("element-ios:matrix.org"))
+        #expect(!MatrixEntityRegex.isMatrixRoomAlias("#element-ios.matrix.org"))
     }
     
-    func testMatrixURI() {
+    @Test
+    func matrixURI() {
         // Users
-        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:u/alice:example.org"))
-        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:u/alice:example.org?action=chat"))
+        #expect(MatrixEntityRegex.isMatrixURI("matrix:u/alice:example.org"))
+        #expect(MatrixEntityRegex.isMatrixURI("matrix:u/alice:example.org?action=chat"))
         
         // Room ID
-        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/somewhere:example.org"))
-        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/my-room:example.com?via=elsewhere.ca"))
-        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/123_room:chat.myserver.net?via=elsewhere.ca&via=other.org"))
+        #expect(MatrixEntityRegex.isMatrixURI("matrix:roomid/somewhere:example.org"))
+        #expect(MatrixEntityRegex.isMatrixURI("matrix:roomid/my-room:example.com?via=elsewhere.ca"))
+        #expect(MatrixEntityRegex.isMatrixURI("matrix:roomid/123_room:chat.myserver.net?via=elsewhere.ca&via=other.org"))
         
         // Room Alias
-        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:r/general:matrix.org"))
-        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:r/123_room:chat.myserver.net"))
+        #expect(MatrixEntityRegex.isMatrixURI("matrix:r/general:matrix.org"))
+        #expect(MatrixEntityRegex.isMatrixURI("matrix:r/123_room:chat.myserver.net"))
         
         // Event
-        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/somewhere:example.org/e/event"))
-        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/my-room:example.com/e/message?via=elsewhere.ca"))
-        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/123_room:chat.myserver.net/e/1234?via=elsewhere.ca&via=other.org"))
+        #expect(MatrixEntityRegex.isMatrixURI("matrix:roomid/somewhere:example.org/e/event"))
+        #expect(MatrixEntityRegex.isMatrixURI("matrix:roomid/my-room:example.com/e/message?via=elsewhere.ca"))
+        #expect(MatrixEntityRegex.isMatrixURI("matrix:roomid/123_room:chat.myserver.net/e/1234?via=elsewhere.ca&via=other.org"))
         
         // Inline
         let string = "Hello matrix:u/alice:example.org how are you?"
-        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("Hello matrix:u/alice:example.org how are you?"))
-        XCTAssertEqual(MatrixEntityRegex.uriRegex.matches(in: string).count, 1)
+        #expect(!MatrixEntityRegex.isMatrixURI("Hello matrix:u/alice:example.org how are you?"))
+        #expect(MatrixEntityRegex.uriRegex.matches(in: string).count == 1)
         
         // Invalid
-        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("matrix://@alice:example.org"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("matrix://!somewhere:example.org"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("matrix://#general:matrix.org"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("matrix:event/somewhere:example.org/e/event"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("matrix:e/somewhere:example.org/e/event"))
+        #expect(!MatrixEntityRegex.isMatrixURI("matrix://@alice:example.org"))
+        #expect(!MatrixEntityRegex.isMatrixURI("matrix://!somewhere:example.org"))
+        #expect(!MatrixEntityRegex.isMatrixURI("matrix://#general:matrix.org"))
+        #expect(!MatrixEntityRegex.isMatrixURI("matrix:event/somewhere:example.org/e/event"))
+        #expect(!MatrixEntityRegex.isMatrixURI("matrix:e/somewhere:example.org/e/event"))
     }
     
-    func testAllUsers() {
-        XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("@room"))
-        XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("a@rooma"))
-        XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("a @room a"))
-        XCTAssertFalse(MatrixEntityRegex.containsMatrixAllUsers("a @roaom a"))
-        XCTAssertFalse(MatrixEntityRegex.containsMatrixAllUsers("@roaom"))
-        XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("@room\n"))
+    @Test
+    func allUsers() {
+        #expect(MatrixEntityRegex.containsMatrixAllUsers("@room"))
+        #expect(MatrixEntityRegex.containsMatrixAllUsers("a@rooma"))
+        #expect(MatrixEntityRegex.containsMatrixAllUsers("a @room a"))
+        #expect(!MatrixEntityRegex.containsMatrixAllUsers("a @roaom a"))
+        #expect(!MatrixEntityRegex.containsMatrixAllUsers("@roaom"))
+        #expect(MatrixEntityRegex.containsMatrixAllUsers("@room\n"))
     }
 }

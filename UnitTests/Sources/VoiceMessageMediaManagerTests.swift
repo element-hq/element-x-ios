@@ -9,18 +9,19 @@
 import Combine
 @testable import ElementX
 import Foundation
-import XCTest
+import Testing
 
 @MainActor
-class VoiceMessageMediaManagerTests: XCTestCase {
-    private var voiceMessageMediaManager: VoiceMessageMediaManager!
-    private var voiceMessageCache: VoiceMessageCacheMock!
-    private var mediaProvider: MediaProviderMock!
+@Suite
+struct VoiceMessageMediaManagerTests {
+    private var voiceMessageMediaManager: VoiceMessageMediaManager
+    private var voiceMessageCache: VoiceMessageCacheMock
+    private var mediaProvider: MediaProviderMock
     
     private let someURL = URL.mockMXCAudio
     private let audioOGGMimeType = "audio/ogg"
     
-    override func setUp() async throws {
+    init() {
         voiceMessageCache = VoiceMessageCacheMock()
         mediaProvider = MediaProviderMock(configuration: .init())
         mediaProvider.loadFileFromSourceFilenameClosure = nil
@@ -29,103 +30,114 @@ class VoiceMessageMediaManagerTests: XCTestCase {
                                                             voiceMessageCache: voiceMessageCache)
     }
     
-    func testLoadVoiceMessageFromSourceUnsupportedMedia() async throws {
+    @Test
+    func loadVoiceMessageFromSourceUnsupportedMedia() async throws {
         // Only "audio/ogg" file are supported
         let unsupportedMediaSource = try MediaSourceProxy(url: someURL, mimeType: "audio/wav")
         do {
             _ = try await voiceMessageMediaManager.loadVoiceMessageFromSource(unsupportedMediaSource, body: nil)
-            XCTFail("A `VoiceMessageMediaManagerError.unsupportedMimeTye` error is expected")
+            Issue.record("A `VoiceMessageMediaManagerError.unsupportedMimeTye` error is expected")
         } catch {
             switch error as? VoiceMessageMediaManagerError {
             case .unsupportedMimeTye:
                 break
             default:
-                XCTFail("A `VoiceMessageMediaManagerError.unsupportedMimeTye` error is expected")
+                Issue.record("A `VoiceMessageMediaManagerError.unsupportedMimeTye` error is expected")
             }
         }
     }
     
-    func testLoadVoiceMessageFromSourceMimeTypeWithParameters() async throws {
+    @Test
+    func loadVoiceMessageFromSourceMimeTypeWithParameters() async throws {
+        var testSetup = self
         // URL representing the file loaded by the media provider
         let loadedFile = URL("/some/url/loaded_file.ogg")
         // URL representing the final cached file
         let cachedConvertedFileURL = URL("/some/url/cached_converted_file.m4a")
         
-        voiceMessageCache.fileURLForReturnValue = nil
-        let mediaSource = try MediaSourceProxy(url: someURL, mimeType: "audio/ogg; codecs=opus")
-        mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
-        voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
+        testSetup.voiceMessageCache.fileURLForReturnValue = nil
+        let mediaSource = try MediaSourceProxy(url: testSetup.someURL, mimeType: "audio/ogg; codecs=opus")
+        testSetup.mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
+        testSetup.voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
         
-        voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
-                                                            voiceMessageCache: voiceMessageCache,
-                                                            audioConverter: AudioConverterMock())
+        testSetup.voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: testSetup.mediaProvider,
+                                                                      voiceMessageCache: testSetup.voiceMessageCache,
+                                                                      audioConverter: AudioConverterMock())
         
         do {
-            _ = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
+            _ = try await testSetup.voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
         } catch {
-            XCTFail("An unexpected error has occured: \(error)")
+            Issue.record("An unexpected error has occured: \(error)")
         }
     }
     
-    func testLoadVoiceMessageFromSourceAlreadyCached() async throws {
+    @Test
+    func loadVoiceMessageFromSourceAlreadyCached() async throws {
+        var testSetup = self
         // Check if the file is already present in cache
-        voiceMessageCache.fileURLForReturnValue = URL("/converted_file/url")
-        let mediaSource = try MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
-        let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
-        XCTAssertEqual(url, URL("/converted_file/url"))
+        testSetup.voiceMessageCache.fileURLForReturnValue = URL("/converted_file/url")
+        let mediaSource = try MediaSourceProxy(url: testSetup.someURL, mimeType: testSetup.audioOGGMimeType)
+        let url = try await testSetup.voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
+        #expect(url == URL("/converted_file/url"))
         // The file must have be search in the cache
-        XCTAssertTrue(voiceMessageCache.fileURLForCalled)
-        XCTAssertEqual(voiceMessageCache.fileURLForReceivedMediaSource, mediaSource)
+        #expect(testSetup.voiceMessageCache.fileURLForCalled)
+        #expect(testSetup.voiceMessageCache.fileURLForReceivedMediaSource == mediaSource)
         // The file must not have been cached again
-        XCTAssertFalse(voiceMessageCache.cacheMediaSourceUsingMoveCalled)
+        #expect(!testSetup.voiceMessageCache.cacheMediaSourceUsingMoveCalled)
     }
     
-    func testLoadVoiceMessageFromSourceMediaProviderError() async throws {
+    @Test
+    func loadVoiceMessageFromSourceMediaProviderError() async throws {
+        var testSetup = self
         // An error must be reported if the file cannot be retrieved
         do {
-            voiceMessageCache.fileURLForReturnValue = nil
-            let mediaSource = try MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
-            _ = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
-            XCTFail("A `MediaProviderError.failedRetrievingFile` error is expected")
+            testSetup.voiceMessageCache.fileURLForReturnValue = nil
+            let mediaSource = try MediaSourceProxy(url: testSetup.someURL, mimeType: testSetup.audioOGGMimeType)
+            _ = try await testSetup.voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
+            Issue.record("A `MediaProviderError.failedRetrievingFile` error is expected")
         } catch {
             switch error as? MediaProviderError {
             case .failedRetrievingFile:
                 break
             default:
-                XCTFail("A `MediaProviderError.failedRetrievingFile` error is expected")
+                Issue.record("A `MediaProviderError.failedRetrievingFile` error is expected")
             }
         }
     }
     
-    func testLoadVoiceMessageFromSourceSingleCall() async throws {
+    @Test
+    func loadVoiceMessageFromSourceSingleCall() async throws {
+        var testSetup = self
         // URL representing the file loaded by the media provider
         let loadedFile = URL("/some/url/loaded_file")
         // URL representing the final cached file
         let cachedConvertedFileURL = URL("/some/url/cached_converted_file")
 
         // Check if the file is not already present in cache
-        voiceMessageCache.fileURLForReturnValue = nil
-        let mediaSource = try MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
-        mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
+        testSetup.voiceMessageCache.fileURLForReturnValue = nil
+        let mediaSource = try MediaSourceProxy(url: testSetup.someURL, mimeType: testSetup.audioOGGMimeType)
+        testSetup.mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
         let audioConverter = AudioConverterMock()
-        voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
-        voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
-                                                            voiceMessageCache: voiceMessageCache,
-                                                            audioConverter: audioConverter)
-        let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
+        testSetup.voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
+        testSetup.voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: testSetup.mediaProvider,
+                                                                      voiceMessageCache: testSetup.voiceMessageCache,
+                                                                      audioConverter: audioConverter)
+        let url = try await testSetup.voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
         
         // The file must have been converted
-        XCTAssertTrue(audioConverter.convertToMPEG4AACSourceURLDestinationURLCalled)
+        #expect(audioConverter.convertToMPEG4AACSourceURLDestinationURLCalled)
         // The converted file must have been cached
-        XCTAssert(voiceMessageCache.cacheMediaSourceUsingMoveCalled)
-        XCTAssertEqual(voiceMessageCache.cacheMediaSourceUsingMoveReceivedArguments?.mediaSource, mediaSource)
-        XCTAssertEqual(voiceMessageCache.cacheMediaSourceUsingMoveReceivedArguments?.fileURL.pathExtension, "m4a")
-        XCTAssertTrue(voiceMessageCache.cacheMediaSourceUsingMoveReceivedArguments?.move ?? false)
+        #expect(testSetup.voiceMessageCache.cacheMediaSourceUsingMoveCalled)
+        #expect(testSetup.voiceMessageCache.cacheMediaSourceUsingMoveReceivedArguments?.mediaSource == mediaSource)
+        #expect(testSetup.voiceMessageCache.cacheMediaSourceUsingMoveReceivedArguments?.fileURL.pathExtension == "m4a")
+        #expect(testSetup.voiceMessageCache.cacheMediaSourceUsingMoveReceivedArguments?.move ?? false)
         // The returned URL must point to the cached converted file
-        XCTAssertEqual(url, cachedConvertedFileURL)
+        #expect(url == cachedConvertedFileURL)
     }
      
-    func testLoadVoiceMessageFromSourceMultipleCalls() async throws {
+    @Test
+    func loadVoiceMessageFromSourceMultipleCalls() async throws {
+        var testSetup = self
         // URL representing the file loaded by the media provider
         let loadedFile = URL("/some/url/loaded_file")
         // URL representing the final cached file
@@ -133,31 +145,31 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         
         // Multiple calls
         var cachedURL: URL?
-        voiceMessageCache.fileURLForClosure = { _ in
+        testSetup.voiceMessageCache.fileURLForClosure = { _ in
             cachedURL
         }
-        voiceMessageCache.cacheMediaSourceUsingMoveClosure = { _, _, _ in
+        testSetup.voiceMessageCache.cacheMediaSourceUsingMoveClosure = { _, _, _ in
             cachedURL = cachedConvertedFileURL
             return .success(cachedConvertedFileURL)
         }
         
         let audioConverter = AudioConverterMock()
-        mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
+        testSetup.mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
 
-        voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
-                                                            voiceMessageCache: voiceMessageCache,
-                                                            audioConverter: audioConverter)
+        testSetup.voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: testSetup.mediaProvider,
+                                                                      voiceMessageCache: testSetup.voiceMessageCache,
+                                                                      audioConverter: audioConverter)
         
-        let mediaSource = try MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
+        let mediaSource = try MediaSourceProxy(url: testSetup.someURL, mimeType: testSetup.audioOGGMimeType)
         for _ in 0..<10 {
-            let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
-            XCTAssertEqual(url, cachedConvertedFileURL)
+            let url = try await testSetup.voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
+            #expect(url == cachedConvertedFileURL)
         }
      
         // The file must have been converted only once
-        XCTAssertEqual(audioConverter.convertToMPEG4AACSourceURLDestinationURLCallsCount, 1)
+        #expect(audioConverter.convertToMPEG4AACSourceURLDestinationURLCallsCount == 1)
 
         // The converted file must have been cached only once
-        XCTAssertEqual(voiceMessageCache.cacheMediaSourceUsingMoveCallsCount, 1)
+        #expect(testSetup.voiceMessageCache.cacheMediaSourceUsingMoveCallsCount == 1)
     }
 }

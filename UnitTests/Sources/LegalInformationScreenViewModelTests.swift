@@ -7,7 +7,8 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class LegalInformationScreenViewModelTests: XCTestCase { }
+@Suite
+struct LegalInformationScreenViewModelTests { }

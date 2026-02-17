@@ -8,11 +8,13 @@
 
 @testable import ElementX
 import MatrixRustSDK
-import XCTest
+import Testing
 
 @MainActor
-class TimelineItemFactoryTests: XCTestCase {
-    func testCallInvite() {
+@Suite
+struct TimelineItemFactoryTests {
+    @Test
+    func callInvite() {
         let ownUserID = "@alice:matrix.org"
         let senderUserID = "@bob:matrix.org"
 
@@ -27,16 +29,16 @@ class TimelineItemFactoryTests: XCTestCase {
         let item = factory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false)
         
         guard let item = item as? CallInviteRoomTimelineItem else {
-            XCTFail("Incorrect item type")
+            Issue.record("Incorrect item type")
             return
         }
         
-        XCTAssertEqual(item.isReactable, false)
-        XCTAssertEqual(item.canBeRepliedTo, false)
-        XCTAssertEqual(item.isEditable, false)
-        XCTAssertEqual(item.sender, TimelineItemSender(id: senderUserID))
-        XCTAssertEqual(item.properties.isEdited, false)
-        XCTAssertEqual(item.properties.reactions, [])
-        XCTAssertEqual(item.properties.deliveryStatus, nil)
+        #expect(item.isReactable == false)
+        #expect(item.canBeRepliedTo == false)
+        #expect(item.isEditable == false)
+        #expect(item.sender == TimelineItemSender(id: senderUserID))
+        #expect(item.properties.isEdited == false)
+        #expect(item.properties.reactions == [])
+        #expect(item.properties.deliveryStatus == nil)
     }
 }

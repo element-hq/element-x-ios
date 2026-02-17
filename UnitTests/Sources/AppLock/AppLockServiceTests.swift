@@ -7,15 +7,16 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class AppLockServiceTests: XCTestCase {
-    var keychainController: KeychainController!
-    var appSettings: AppSettings!
-    var service: AppLockService!
+@Suite(.serialized)
+struct AppLockServiceTests {
+    private var keychainController: KeychainController
+    private var appSettings: AppSettings
+    private var service: AppLockService
     
-    override func setUp() {
+    init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         
@@ -24,10 +25,6 @@ class AppLockServiceTests: XCTestCase {
         
         service = AppLockService(keychainController: keychainController, appSettings: appSettings)
         service.disable()
-    }
-    
-    override func tearDown() {
-        AppSettings.resetAllSettings()
     }
     
     // MARK: - PIN Code

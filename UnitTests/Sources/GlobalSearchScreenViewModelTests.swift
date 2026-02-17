@@ -8,48 +8,44 @@
 
 import Combine
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class GlobalSearchScreenViewModelTests: XCTestCase {
+@Suite
+struct GlobalSearchScreenViewModelTests {
     var viewModel: GlobalSearchScreenViewModelProtocol!
     var context: GlobalSearchScreenViewModelType.Context!
-    var cancellables = Set<AnyCancellable>()
     
-    override func setUpWithError() throws {
-        cancellables.removeAll()
+    init() {
         viewModel = GlobalSearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                 mediaProvider: MediaProviderMock(configuration: .init()))
         context = viewModel.context
     }
             
-    func testSearching() async throws {
-        let defered = deferFulfillment(context.$viewState) { state in
+    @Test
+    mutating func searching() async throws {
+        let deferred = deferFulfillment(context.$viewState) { state in
             state.rooms.count == 1
         }
         
         context.searchQuery = "Second"
             
-        try await defered.fulfill()
+        try await deferred.fulfill()
     }
     
-    func testRoomSelection() {
-        let expectation = expectation(description: "Wait for confirmation")
-        
-        viewModel.actions
-            .sink { action in
-                switch action {
-                case .select(let roomID):
-                    XCTAssertEqual(roomID, "2")
-                    expectation.fulfill()
-                default:
-                    break
-                }
+    @Test
+    func roomSelection() async throws {
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .select(let roomID):
+                return roomID == "2"
+            default:
+                return false
             }
-            .store(in: &cancellables)
+        }
         
         context.send(viewAction: .select(roomID: "2"))
         
-        waitForExpectations(timeout: 5.0)
+        try await deferred.fulfill()
     }
 }

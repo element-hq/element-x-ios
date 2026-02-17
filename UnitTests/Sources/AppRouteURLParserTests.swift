@@ -7,117 +7,94 @@
 //
 
 @testable import ElementX
-import XCTest
+import Foundation
+import Testing
 
-class AppRouteURLParserTests: XCTestCase {
-    var appSettings: AppSettings!
-    var appRouteURLParser: AppRouteURLParser!
+@Suite
+struct AppRouteURLParserTests {
+    var appSettings: AppSettings
+    var appRouteURLParser: AppRouteURLParser
     
-    override func setUp() {
+    init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
     }
     
-    func testElementCallRoutes() {
-        guard let url = URL(string: "https://call.element.io/test") else {
-            XCTFail("URL invalid")
-            return
-        }
+    @Test
+    func elementCallRoutes() throws {
+        let url = try #require(URL(string: "https://call.element.io/test"))
         
-        XCTAssertEqual(appRouteURLParser.route(from: url), AppRoute.genericCallLink(url: url))
+        #expect(appRouteURLParser.route(from: url) == AppRoute.genericCallLink(url: url))
         
-        guard let customSchemeURL = URL(string: "io.element.call:/?url=https%3A%2F%2Fcall.element.io%2Ftest") else {
-            XCTFail("URL invalid")
-            return
-        }
+        let customSchemeURL = try #require(URL(string: "io.element.call:/?url=https%3A%2F%2Fcall.element.io%2Ftest"))
         
-        XCTAssertEqual(appRouteURLParser.route(from: customSchemeURL), AppRoute.genericCallLink(url: url))
+        #expect(appRouteURLParser.route(from: customSchemeURL) == AppRoute.genericCallLink(url: url))
     }
     
-    func testCustomDomainUniversalLinkCallRoutes() {
-        guard let url = URL(string: "https://somecustomdomain.element.io/test") else {
-            XCTFail("URL invalid")
-            return
-        }
+    @Test
+    func customDomainUniversalLinkCallRoutes() throws {
+        let url = try #require(URL(string: "https://somecustomdomain.element.io/test"))
         
-        XCTAssertEqual(appRouteURLParser.route(from: url), nil)
+        #expect(appRouteURLParser.route(from: url) == nil)
     }
     
-    func testCustomSchemeLinkCallRoutes() {
+    @Test
+    func customSchemeLinkCallRoutes() throws {
         let urlString = "https://somecustomdomain.element.io/test?param=123"
-        guard let url = URL(string: urlString) else {
-            XCTFail("URL invalid")
-            return
-        }
+        let url = try #require(URL(string: urlString))
         
-        guard let encodedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
-            XCTFail("Could not encode URL string")
-            return
-        }
+        let encodedURLString = try #require(urlString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed))
         
-        guard let customSchemeURL = URL(string: "io.element.call:/?url=\(encodedURLString)") else {
-            XCTFail("URL invalid")
-            return
-        }
+        let customSchemeURL = try #require(URL(string: "io.element.call:/?url=\(encodedURLString)"))
         
-        XCTAssertEqual(appRouteURLParser.route(from: customSchemeURL), AppRoute.genericCallLink(url: url))
+        #expect(appRouteURLParser.route(from: customSchemeURL) == AppRoute.genericCallLink(url: url))
     }
     
-    func testHttpCustomSchemeLinkCallRoutes() {
-        guard let customSchemeURL = URL(string: "io.element.call:/?url=http%3A%2F%2Fcall.element.io%2Ftest") else {
-            XCTFail("URL invalid")
-            return
-        }
+    @Test
+    func httpCustomSchemeLinkCallRoutes() throws {
+        let customSchemeURL = try #require(URL(string: "io.element.call:/?url=http%3A%2F%2Fcall.element.io%2Ftest"))
         
-        XCTAssertEqual(appRouteURLParser.route(from: customSchemeURL), nil)
+        #expect(appRouteURLParser.route(from: customSchemeURL) == nil)
     }
     
-    func testMatrixUserURL() {
+    @Test
+    func matrixUserURL() throws {
         let userID = "@test:matrix.org"
-        guard let url = URL(string: "https://matrix.to/#/\(userID)") else {
-            XCTFail("Invalid url")
-            return
-        }
+        let url = try #require(URL(string: "https://matrix.to/#/\(userID)"))
         
         let route = appRouteURLParser.route(from: url)
         
-        XCTAssertEqual(route, .userProfile(userID: userID))
+        #expect(route == .userProfile(userID: userID))
     }
     
-    func testMatrixRoomIdentifierURL() {
+    @Test
+    func matrixRoomIdentifierURL() throws {
         let id = "!abcdefghijklmnopqrstuvwxyz1234567890:matrix.org"
-        guard let url = URL(string: "https://matrix.to/#/\(id)") else {
-            XCTFail("Invalid url")
-            return
-        }
+        let url = try #require(URL(string: "https://matrix.to/#/\(id)"))
         
         let route = appRouteURLParser.route(from: url)
         
-        XCTAssertEqual(route, .room(roomID: id, via: []))
+        #expect(route == .room(roomID: id, via: []))
     }
     
-    func testWebRoomIDURL() {
+    @Test
+    func webRoomIDURL() throws {
         let id = "!abcdefghijklmnopqrstuvwxyz1234567890:matrix.org"
-        guard let url = URL(string: "https://app.element.io/#/room/\(id)") else {
-            XCTFail("URL invalid")
-            return
-        }
+        let url = try #require(URL(string: "https://app.element.io/#/room/\(id)"))
         
         let route = appRouteURLParser.route(from: url)
         
-        XCTAssertEqual(route, .room(roomID: id, via: []))
+        #expect(route == .room(roomID: id, via: []))
     }
     
-    func testWebUserIDURL() {
+    @Test
+    func webUserIDURL() throws {
         let id = "@alice:matrix.org"
-        guard let url = URL(string: "https://develop.element.io/#/user/\(id)") else {
-            XCTFail("URL invalid")
-            return
-        }
+        let url = try #require(URL(string: "https://develop.element.io/#/user/\(id)"))
         
         let route = appRouteURLParser.route(from: url)
         
-        XCTAssertEqual(route, .userProfile(userID: id))
+        #expect(route == .userProfile(userID: id))
     }
 }
