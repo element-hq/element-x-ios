@@ -25,7 +25,7 @@
 | **3.3** FCM push integration | Firebase SDK, Sygnal, APNs key, testing | **70% DONE** | Code + 14 tests complete. Awaiting real GoogleService-Info.plist (D-002). |
 | **3.4** Server configuration | Homeserver URL, identity server, .well-known, Scalar, Jitsi | **DONE** | `matrix.ucmeet.org` configured, `.well-known` verified, legal URLs → ucmeet.info. Scalar N/A. |
 | **3.5** Calls support | 1:1 + group calls | **DONE** | URL scheme → `org.ucmeet.call`, LiveKit confirmed in `.well-known`, embedded Element Call bundle. |
-| **3.6** Testing | Full test cycle across devices/iOS versions | **IN PROGRESS** | OIDC login verified on simulator. Full test cycle needs more device coverage. |
+| **3.6** Testing | Full test cycle across devices/iOS versions | **IN PROGRESS** | OIDC login verified on simulator. 16 rebrand-affected unit tests fixed and passing. Full test cycle needs more device coverage. |
 | **3.7** Release build | Version, signing, validation | **BLOCKED** (D-001, D-007) | Requires Apple Developer account + licensing resolution |
 | **3.8** App Store publication | Listing, TestFlight, review, release | **TEMPLATES READY** | App Store prep templates created. Execution blocked on D-001, D-007. |
 
@@ -81,7 +81,8 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | Server config + OIDC login | ~4h | AppSettings configured, OIDC login working, Firebase crash fix |
 | Calls + localization + cleanup | ~3h | URL scheme, knownHosts, 34 locales removed, domains cleaned |
 | String rebranding + Swift cleanup | ~3h | 30 string replacements (en, en-US, ru), 10 Swift source refs cleaned |
-| **Total invested** | **~56-59h** | |
+| Unit test fixes | ~1h | 16 test assertions updated across 5 test files to match rebrand |
+| **Total invested** | **~57-60h** | |
 
 ### Remaining Work Estimate (by phase)
 
@@ -106,11 +107,11 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 |--------|-------|
 | Original estimate (with AI) | 60-95h, expected ~80h |
 | Original estimate (without AI) | 85-132h, expected ~120h |
-| Hours invested so far | ~56-59h |
+| Hours invested so far | ~57-60h |
 | Hours remaining (estimated) | 31-57h, expected ~39h |
-| **Projected total** | **~93-98h** |
+| **Projected total** | **~94-99h** |
 | Budget position | Within AI-assisted range (60-95h), on track |
-| Budget consumed | ~58% of hours, ~63% of $2,200 fixed price |
+| Budget consumed | ~59% of hours, ~64% of $2,200 fixed price |
 
 > Project is tracking well within budget. String rebranding and source cleanup further reduced remaining work. Main cost centers left: testing (~10-16h) and App Store submission (~8-14h).
 
@@ -319,6 +320,7 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 |------|-----------------|
 | 2026-02-12 | Initial progress analysis. 4/15 init steps done, 1 partial. ~45-48h invested (~37% budget). 0/12 decisions resolved. Project maximally prepared for customer engagement. Estimated ~55h remaining active work. Timeline: 7-10 weeks total (best/expected). |
 | 2026-02-17 | Major progress after customer response. 7/15 init steps done, 4 mostly done, 1 partial. ~56-59h invested (~58% budget). 5/12 decisions resolved. Server configured, OIDC login verified, calls configured, 34 locales removed, associated domains cleaned, 30 strings rebranded, 10 Swift refs cleaned. Estimated ~39h remaining. Timeline: 6-8 weeks total (best/expected). Critical path: Bundle ID + Apple Developer account. |
+| 2026-02-17 | Unit test fixes for rebrand. 962 tests run, 16 failures caused by our changes fixed across 5 test files (AppRouteURLParserTests, ServerConfirmationScreenViewModelTests, ServerConfirmationScreenViewStateTests, LocalizationTests, AuthenticationServiceTests). All 33 affected tests now passing. ~57-60h invested (~59% budget). |
 
 ---
 

@@ -18,7 +18,7 @@ class ServerConfirmationScreenViewStateTests: XCTestCase {
         
         let elementDotIoLogin = ServerConfirmationScreenViewState(mode: .confirmation("element.io"),
                                                                   authenticationFlow: .login)
-        XCTAssertEqual(elementDotIoLogin.message, L10n.screenServerConfirmationMessageLoginElementDotIo, "element.io should have a custom message.")
+        XCTAssertEqual(elementDotIoLogin.message, "", "element.io should not have a custom message in UCMeet.")
         
         let otherLogin = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockOIDC.address),
                                                            authenticationFlow: .login)

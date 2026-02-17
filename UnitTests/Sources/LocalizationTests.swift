@@ -22,10 +22,10 @@ class LocalizationTests: XCTestCase {
 
         XCTAssertEqual(L10n.testLanguageIdentifier, "en")
 
-        // set app language to Italian
-        Bundle.overrideLocalizations = ["it"]
+        // set app language to Russian
+        Bundle.overrideLocalizations = ["ru"]
 
-        XCTAssertEqual(L10n.testLanguageIdentifier, "it")
+        XCTAssertEqual(L10n.testLanguageIdentifier, "ru")
     }
 
     /// Test fallback language for a language not supported at all
@@ -38,10 +38,10 @@ class LocalizationTests: XCTestCase {
 
     /// Test fallback language for a language supported but poorly translated
     func testFallbackOnNotTranslatedKey() {
-        //  set app language to something Element supports but use a key that is not translated (we have a key that should never be translated)
-        Bundle.overrideLocalizations = ["it"]
+        //  set app language to a supported locale and use a key that is not translated (we have a key that should never be translated)
+        Bundle.overrideLocalizations = ["ru"]
 
-        XCTAssertEqual(L10n.testLanguageIdentifier, "it")
+        XCTAssertEqual(L10n.testLanguageIdentifier, "ru")
         XCTAssertEqual(L10n.testUntranslatedDefaultLanguageIdentifier, "en")
     }
 
@@ -53,11 +53,11 @@ class LocalizationTests: XCTestCase {
         XCTAssertEqual(L10n.commonMemberCount(1), "1 Member")
         XCTAssertEqual(L10n.commonMemberCount(2), "2 Members")
 
-        //  set app language to Italian
-        Bundle.overrideLocalizations = ["it"]
+        //  set app language to Russian
+        Bundle.overrideLocalizations = ["ru"]
 
-        XCTAssertEqual(L10n.commonMemberCount(1), "1 Membro")
-        XCTAssertEqual(L10n.commonMemberCount(2), "2 Membri")
+        XCTAssertEqual(L10n.commonMemberCount(1), "1 участник")
+        XCTAssertEqual(L10n.commonMemberCount(2), "2 участников")
     }
 
     /// Test plurals fallback language for a language not supported at all

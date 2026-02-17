@@ -81,7 +81,7 @@ class AuthenticationServiceTests: XCTestCase {
         }
         
         XCTAssertEqual(service.flow, .login)
-        XCTAssertEqual(service.homeserver.value, .init(address: "matrix.org", loginMode: .unknown))
+        XCTAssertEqual(service.homeserver.value, .init(address: "matrix.ucmeet.org", loginMode: .unknown))
     }
     
     // MARK: - Helpers
