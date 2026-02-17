@@ -8,12 +8,12 @@
 import CommonCrypto
 import Foundation
 
-enum MXAESError: Error {
-    case cannotInitializeCryptor
-    case decryptionFailed(CCCryptorStatus)
-}
-
-enum MXAES {
+enum ClassicAppAES {
+    enum Error: Swift.Error {
+        case cannotInitializeCryptor
+        case decryptionFailed(CCCryptorStatus)
+    }
+    
     /// Decrypt data using AES-256 in CTR mode.
     /// - Parameters:
     ///   - data: The data to decrypt
@@ -45,7 +45,7 @@ enum MXAES {
         
         guard status == kCCSuccess, let cryptor else {
             MXLog.error("Failed to create cryptor: \(status)")
-            throw MXAESError.cannotInitializeCryptor
+            throw Error.cannotInitializeCryptor
         }
         
         // Get the output buffer size
@@ -70,7 +70,7 @@ enum MXAES {
         
         guard status == kCCSuccess else {
             MXLog.error("Decryption failed: \(status)")
-            throw MXAESError.decryptionFailed(status)
+            throw Error.decryptionFailed(status)
         }
         
         return buffer

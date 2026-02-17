@@ -37,6 +37,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         canReportProblem = isBugReportServiceEnabled
         
         let isQRCodeScanningSupported = !ProcessInfo.processInfo.isiOSAppOnMac
+        let classicAppAccountProvider = authenticationService.classicAppAccount?.serverName
         
         let initialViewState = if !appSettings.allowOtherAccountProviders {
             // We don't show the create account button when custom providers are disallowed.
@@ -44,18 +45,21 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             AuthenticationStartScreenViewState(serverName: appSettings.accountProviders.count == 1 ? appSettings.accountProviders[0] : nil,
                                                showCreateAccountButton: false,
                                                showQRCodeLoginButton: isQRCodeScanningSupported,
+                                               showClassicAppLoginButton: classicAppAccountProvider.map { appSettings.accountProviders.contains($0) } ?? false,
                                                hideBrandChrome: appSettings.hideBrandChrome)
         } else if let provisioningParameters {
             // We only show the "Sign in to …" button when using a provisioning link.
             AuthenticationStartScreenViewState(serverName: provisioningParameters.accountProvider,
                                                showCreateAccountButton: false,
                                                showQRCodeLoginButton: false,
+                                               showClassicAppLoginButton: false,
                                                hideBrandChrome: appSettings.hideBrandChrome)
         } else {
             // The default configuration.
             AuthenticationStartScreenViewState(serverName: nil,
                                                showCreateAccountButton: appSettings.showCreateAccountButton,
                                                showQRCodeLoginButton: isQRCodeScanningSupported,
+                                               showClassicAppLoginButton: classicAppAccountProvider != nil,
                                                hideBrandChrome: appSettings.hideBrandChrome)
         }
         
@@ -67,6 +71,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .updateWindow(let window):
             guard state.window != window else { return }
             state.window = window
+        case .loginWithClassic:
+            Task { await login(withClassic: true) }
         case .loginWithQR:
             actionsSubject.send(.loginWithQR)
         case .login:
@@ -82,8 +88,11 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     
     // MARK: - Private
     
-    private func login() async {
-        if let serverName = state.serverName {
+    private func login(withClassic: Bool = false) async {
+        if withClassic {
+            guard let classicAppAccount = authenticationService.classicAppAccount else { fatalError("Invalid action without a classic account.") }
+            await configureAccountProvider(classicAppAccount.serverName, loginHint: "mxid:\(classicAppAccount.userID)", verifyWithClassic: true)
+        } else if let serverName = state.serverName {
             await configureAccountProvider(serverName, loginHint: provisioningParameters?.loginHint)
         } else {
             actionsSubject.send(.login) // No need to configure anything here, continue the flow.

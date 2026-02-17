@@ -37,6 +37,7 @@ struct AuthenticationStartScreenViewState: BindableState {
     let serverName: String?
     let showCreateAccountButton: Bool
     let showQRCodeLoginButton: Bool
+    let showClassicAppLoginButton: Bool
     
     let hideBrandChrome: Bool
     
@@ -65,6 +66,7 @@ enum AuthenticationStartScreenViewAction {
     /// Updates the window used as the OIDC presentation anchor.
     case updateWindow(UIWindow)
     
+    case loginWithClassic
     case loginWithQR
     case login
     case register

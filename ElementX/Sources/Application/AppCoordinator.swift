@@ -188,8 +188,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 }
             }
             .store(in: &cancellables)
-        
-        checkOldAppDatabase()
     }
     
     func start() {
@@ -394,17 +392,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     // MARK: - Private
-    
-    private func checkOldAppDatabase() {
-        guard let classicAppBundleIdentifier = InfoPlistReader.main.classicAppBundleIdentifier,
-              let classicAppAccessGroup = InfoPlistReader.main.classicAppGroupIdentifier else {
-            return
-        }
-        
-        let migrationManager = AppMigrationManager(classicAppBundleIdentifier: classicAppBundleIdentifier,
-                                                   classicAppAccessGroup: classicAppAccessGroup)
-        try? migrationManager.test()
-    }
     
     /// Perform any required migrations for the app to function correctly.
     private func performMigrationsIfNecessary(from oldVersion: Version, to newVersion: Version) {
@@ -618,8 +605,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func startAuthentication() {
         let encryptionKeyProvider = EncryptionKeyProvider()
+        let appMigrationManager = makeAppMigrationManager()
         let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
                                                           encryptionKeyProvider: encryptionKeyProvider,
+                                                          appMigrationManager: appMigrationManager,
                                                           appSettings: appSettings,
                                                           appHooks: appHooks)
         
@@ -639,6 +628,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
            let storedAppRoute = storedAppRoute.take() {
             coordinator.handleAppRoute(storedAppRoute, animated: false)
         }
+    }
+    
+    private func makeAppMigrationManager() -> AppMigrationManagerProtocol? {
+        guard let classicAppBundleIdentifier = InfoPlistReader.main.classicAppBundleIdentifier,
+              let classicAppAccessGroup = InfoPlistReader.main.classicAppGroupIdentifier else {
+            MXLog.info("Classic App IDs not set, migration disabled.")
+            return nil
+        }
+            
+        return AppMigrationManager(classicAppBundleIdentifier: classicAppBundleIdentifier,
+                                   classicAppAccessGroup: classicAppAccessGroup)
     }
     
     private func runPostSessionSetupTasks() async {
@@ -673,6 +673,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             
             let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
                                                               encryptionKeyProvider: EncryptionKeyProvider(),
+                                                              appMigrationManager: nil,
                                                               appSettings: appSettings,
                                                               appHooks: appHooks)
             _ = await authenticationService.configure(for: userSession.clientProxy.homeserver, flow: .login)

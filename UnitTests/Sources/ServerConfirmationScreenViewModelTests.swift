@@ -360,6 +360,7 @@ final class ServerConfirmationScreenViewModelTests {
         clientFactory = AuthenticationClientFactoryMock(configuration: configuration)
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
+                                        appMigrationManager: nil,
                                         clientFactory: clientFactory,
                                         appSettings: appSettings,
                                         appHooks: AppHooks())

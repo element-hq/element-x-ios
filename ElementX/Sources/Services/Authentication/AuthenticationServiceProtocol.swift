@@ -57,6 +57,11 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     
     /// Resets the current configuration requiring `configure(for:flow:)` to be called again.
     func reset()
+    
+    // MARK: - Classic App
+    
+    /// Account details discovered from the Classic app that can be optionally used to automatically verify after authentication.
+    var classicAppAccount: ClassicAppAccount? { get }
 }
 
 // MARK: - OIDC

@@ -9,7 +9,9 @@ import Foundation
 import KeychainAccess
 import MatrixRustSDK
 
-protocol AppMigrationManagerProtocol { }
+protocol AppMigrationManagerProtocol {
+    func loadClassicAppAccounts() throws -> [ClassicAppAccount]
+}
 
 final class AppMigrationManager: AppMigrationManagerProtocol {
     private enum KeychainKeys: String {
@@ -28,29 +30,34 @@ final class AppMigrationManager: AppMigrationManagerProtocol {
                             accessGroup: "7J4U792NQT.\(classicAppBundleIdentifier).keychain.shared")
     }
     
-    func test() throws {
+    func loadClassicAppAccounts() throws -> [ClassicAppAccount] {
         guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: classicAppAccessGroup) else {
-            return
+            MXLog.error("The Classic App's app group identifier isn't valid: \(classicAppAccessGroup)")
+            return []
+        }
+        
+        guard let accountIV = try keychain.getData(KeychainKeys.accountIV.rawValue),
+              let accountAESKey = try keychain.getData(KeychainKeys.accountAESKey.rawValue) else {
+            MXLog.error("The Classic App's account keys aren't available in the keychain.")
+            return []
         }
         
         let storePassphrase = try keychain.getData(KeychainKeys.cryptoSDKStoreKey.rawValue)
-        let accountIV = try keychain.getData(KeychainKeys.accountIV.rawValue)
-        let accountAES = try keychain.getData(KeychainKeys.accountAESKey.rawValue)
         
-        if let accountIV, let accountAES {
-            let accountManager = AccountManager(cacheFolder: url, iv: accountIV, aesKey: accountAES)
-            accountManager.loadAccounts()
-            MXLog.dev("Loaded accounts: \(accountManager.mxAccounts.compactMap(\.mxCredentials.userId).formatted(.list(type: .and)))")
-            MXLog.dev("Active accounts: \(accountManager.activeAccounts.compactMap(\.mxCredentials.userId).formatted(.list(type: .and)))")
-            
-            for account in accountManager.activeAccounts {
-                let storeDirectory = accountManager.storePath(for: account.mxCredentials)
-                let contents = try? FileManager.default.contentsOfDirectory(at: storeDirectory, includingPropertiesForKeys: nil)
-                MXLog.dev("Store contents for \(account.mxCredentials.userId ?? "unknown"): \(String(describing: contents))")
-                let cryptoStoreDirectory = accountManager.cryptoStoreURL(for: account.mxCredentials)
-                let cryptoContents = try? FileManager.default.contentsOfDirectory(at: cryptoStoreDirectory, includingPropertiesForKeys: nil)
-                MXLog.dev("Crypto store contents for \(account.mxCredentials.userId ?? "unknown"): \(String(describing: cryptoContents))")
-            }
+        let accountManager = ClassicAppAccountManager(cacheFolder: url, iv: accountIV, aesKey: accountAESKey)
+        accountManager.loadAccounts()
+        MXLog.dev("Loaded accounts: \(accountManager.accounts.compactMap(\.credentials.userID).formatted(.list(type: .and)))")
+        MXLog.dev("Active accounts: \(accountManager.activeAccounts.compactMap(\.userID).formatted(.list(type: .and)))")
+        
+        for account in accountManager.activeAccounts {
+            let storeDirectory = accountManager.storePath(for: account.userID)
+            let contents = try? FileManager.default.contentsOfDirectory(at: storeDirectory, includingPropertiesForKeys: nil)
+            MXLog.dev("Store contents for \(account.userID): \(String(describing: contents))")
+            let cryptoStoreDirectory = accountManager.cryptoStoreURL(for: account.userID)
+            let cryptoContents = try? FileManager.default.contentsOfDirectory(at: cryptoStoreDirectory, includingPropertiesForKeys: nil)
+            MXLog.dev("Crypto store contents for \(account.userID): \(String(describing: cryptoContents))")
         }
+        
+        return accountManager.activeAccounts
     }
 }

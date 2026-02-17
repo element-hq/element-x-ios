@@ -15,8 +15,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private var sessionDirectories: SessionDirectories
     private let passphrase: String
     
-    private let clientFactory: AuthenticationClientFactoryProtocol
     private let userSessionStore: UserSessionStoreProtocol
+    private let appMigrationManager: AppMigrationManagerProtocol?
+    private let clientFactory: AuthenticationClientFactoryProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
     
@@ -27,17 +28,29 @@ class AuthenticationService: AuthenticationServiceProtocol {
 
     private(set) var flow: AuthenticationFlow
     
+    let classicAppAccount: ClassicAppAccount?
+    
     init(userSessionStore: UserSessionStoreProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
+         appMigrationManager: AppMigrationManagerProtocol?,
          clientFactory: AuthenticationClientFactoryProtocol = AuthenticationClientFactory(),
          appSettings: AppSettings,
          appHooks: AppHooks) {
         sessionDirectories = .init()
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
-        self.clientFactory = clientFactory
+        
         self.userSessionStore = userSessionStore
+        self.appMigrationManager = appMigrationManager
+        self.clientFactory = clientFactory
         self.appSettings = appSettings
         self.appHooks = appHooks
+        
+        do {
+            classicAppAccount = try appMigrationManager?.loadClassicAppAccounts().first
+        } catch {
+            MXLog.error("Failed loading accounts from the Classic app: \(error)")
+            classicAppAccount = nil
+        }
         
         // When updating these, don't forget to update the reset method too.
         homeserverSubject = .init(LoginHomeserver(address: appSettings.accountProviders[0], loginMode: .unknown))
@@ -277,6 +290,7 @@ extension AuthenticationService {
     static var mock: AuthenticationService {
         AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
+                              appMigrationManager: nil,
                               clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
                               appSettings: ServiceLocator.shared.settings,
                               appHooks: AppHooks())

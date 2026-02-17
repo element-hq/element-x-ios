@@ -4,6 +4,10 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
+// MARK: - Authentication
+
+"screen_onboarding_sign_in_with_classic" = "Sign in with Element Classic";
+
 // MARK: - Soft logout
 
 "soft_logout_signin_title" = "Sign in";
