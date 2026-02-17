@@ -9,7 +9,7 @@ import Foundation
 
 /// The `MXCredentials` struct contains credentials to communicate with the Matrix
 /// Client-Server API.
-struct MXCredentials {
+struct ClassicAppCredentials {
     /// The homeserver url (ex: "https://matrix.org").
     var homeServer: String?
     
@@ -51,7 +51,7 @@ struct MXCredentials {
 }
 
 /// `MXThirdPartyIdentifier` represents the response to /account/3pid GET request.
-class MXThirdPartyIdentifier: NSObject, NSCoding {
+class ClassicAppThirdPartyIdentifier: NSObject, NSCoding {
     /// The medium of the third party identifier.
     var medium: String
     
@@ -92,7 +92,7 @@ class MXThirdPartyIdentifier: NSObject, NSCoding {
 }
 
 /// `MXDevice` represents a device of the current user.
-class MXDevice: NSObject, NSCoding {
+class ClassicAppDevice: NSObject, NSCoding {
     /// A unique identifier of the device.
     var deviceId: String
     
@@ -137,9 +137,9 @@ class MXDevice: NSObject, NSCoding {
     }
 }
 
-class MXKAccountData: NSObject, NSCoding {
+class ClassicAppAccount: NSObject, NSCoding {
     /// The account's credentials: homeserver, access token, user id.
-    private(set) var mxCredentials: MXCredentials
+    private(set) var mxCredentials: ClassicAppCredentials
     
     /// The identity server URL.
     var identityServerURL: String
@@ -154,11 +154,11 @@ class MXKAccountData: NSObject, NSCoding {
     
     /// The 3PIDs linked to this account.
     /// [self load3PIDs] must be called to update the property.
-    private(set) var threePIDs: [MXThirdPartyIdentifier]?
+    private(set) var threePIDs: [ClassicAppThirdPartyIdentifier]?
     
     /// The account user's device.
     /// [self loadDeviceInformation] must be called to update the property.
-    private(set) var device: MXDevice?
+    private(set) var device: ClassicAppDevice?
     
     /// Transient information storage.
     private(set) var others = NSMutableDictionary()
@@ -207,9 +207,9 @@ class MXKAccountData: NSObject, NSCoding {
         let identityServerURL = coder.decodeObject(forKey: "identityserverurl") as? String
         let identityServerAccessToken = coder.decodeObject(forKey: "identityserveraccesstoken") as? String
         
-        mxCredentials = MXCredentials(homeServer: homeServerURL,
-                                      userId: userId,
-                                      accessToken: accessToken)
+        mxCredentials = ClassicAppCredentials(homeServer: homeServerURL,
+                                              userId: userId,
+                                              accessToken: accessToken)
         
         mxCredentials.accessTokenExpiresAt = UInt64(coder.decodeInt64(forKey: "accessTokenExpiresAt"))
         mxCredentials.refreshToken = coder.decodeObject(forKey: "refreshToken") as? String
@@ -222,11 +222,11 @@ class MXKAccountData: NSObject, NSCoding {
         
         super.init()
         
-        if let threePIDs = coder.decodeObject(forKey: "threePIDs") as? [MXThirdPartyIdentifier] {
+        if let threePIDs = coder.decodeObject(forKey: "threePIDs") as? [ClassicAppThirdPartyIdentifier] {
             self.threePIDs = threePIDs
         }
         
-        if let device = coder.decodeObject(forKey: "device") as? MXDevice {
+        if let device = coder.decodeObject(forKey: "device") as? ClassicAppDevice {
             self.device = device
         }
         

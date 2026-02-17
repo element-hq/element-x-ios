@@ -38,24 +38,36 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         
         let isQRCodeScanningSupported = !ProcessInfo.processInfo.isiOSAppOnMac
         
+        #warning("Expose a serverName method for this from the SDK?")
+        let classicAppUserID = authenticationService.classicAppActiveUserID
+        let classicAppAccountProvider: String? = if let classicAppUserIDComponents = classicAppUserID?.components(separatedBy: ":"),
+                                                    classicAppUserIDComponents.count > 1 {
+            classicAppUserIDComponents[1] // Directly use [1] as .last may be the port number.
+        } else {
+            nil
+        }
+        
         let initialViewState = if !appSettings.allowOtherAccountProviders {
             // We don't show the create account button when custom providers are disallowed.
             // The assumption here being that if you're running a custom app, your users will already be created.
             AuthenticationStartScreenViewState(serverName: appSettings.accountProviders.count == 1 ? appSettings.accountProviders[0] : nil,
                                                showCreateAccountButton: false,
                                                showQRCodeLoginButton: isQRCodeScanningSupported,
+                                               showClassicAppLoginButton: classicAppAccountProvider.map { appSettings.accountProviders.contains($0) } ?? false,
                                                hideBrandChrome: appSettings.hideBrandChrome)
         } else if let provisioningParameters {
             // We only show the "Sign in to …" button when using a provisioning link.
             AuthenticationStartScreenViewState(serverName: provisioningParameters.accountProvider,
                                                showCreateAccountButton: false,
                                                showQRCodeLoginButton: false,
+                                               showClassicAppLoginButton: false,
                                                hideBrandChrome: appSettings.hideBrandChrome)
         } else {
             // The default configuration.
             AuthenticationStartScreenViewState(serverName: nil,
                                                showCreateAccountButton: appSettings.showCreateAccountButton,
                                                showQRCodeLoginButton: isQRCodeScanningSupported,
+                                               showClassicAppLoginButton: classicAppUserID != nil,
                                                hideBrandChrome: appSettings.hideBrandChrome)
         }
         

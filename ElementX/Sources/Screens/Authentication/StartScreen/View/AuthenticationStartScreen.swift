@@ -93,6 +93,13 @@ struct AuthenticationStartScreen: View {
     /// The main action buttons.
     var buttons: some View {
         VStack(spacing: 16) {
+            if context.viewState.showClassicAppLoginButton {
+                Button { context.send(viewAction: .loginWithQR) } label: {
+                    Text(UntranslatedL10n.screenOnboardingSignInWithClassic)
+                }
+                .buttonStyle(.compound(.primary))
+            }
+            
             if context.viewState.showQRCodeLoginButton {
                 Button { context.send(viewAction: .loginWithQR) } label: {
                     Label(L10n.screenOnboardingSignInWithQrCode, icon: \.qrCode)

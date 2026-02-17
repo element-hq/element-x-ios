@@ -177,6 +177,7 @@ class LoginScreenViewModelTests: XCTestCase {
         clientFactory = AuthenticationClientFactoryMock(configuration: .init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
+                                        appMigrationManager: nil,
                                         clientFactory: clientFactory,
                                         appSettings: ServiceLocator.shared.settings,
                                         appHooks: AppHooks())

@@ -38,7 +38,7 @@ enum AuthenticationServiceError: Error, Equatable {
     case failedUsingWebCredentials
 }
 
-protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
+protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol, ClassicAppLoginServiceProtocol {
     /// The currently configured homeserver.
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { get }
     /// The type of flow the service is currently configured with.
@@ -165,4 +165,15 @@ extension QRLoginProgress: Equatable, CustomStringConvertible {
         case .signedIn: "signedIn"
         }
     }
+}
+
+// MARK: - Login with Classic App
+
+// sourcery: AutoMockable
+protocol ClassicAppLoginServiceProtocol {
+    /// The first user ID from any active accounts discovered in the Classic app.
+    var classicAppActiveUserID: String? { get }
+    
+    /// Login using ``classicAppActiveUserID``, automatically verifying against the Classic app.
+    func loginWithClassicApp() -> Result<UserSessionProtocol, AuthenticationServiceError>
 }

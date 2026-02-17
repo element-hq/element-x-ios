@@ -37,6 +37,7 @@ struct AuthenticationStartScreenViewState: BindableState {
     let serverName: String?
     let showCreateAccountButton: Bool
     let showQRCodeLoginButton: Bool
+    let showClassicAppLoginButton: Bool
     
     let hideBrandChrome: Bool
     

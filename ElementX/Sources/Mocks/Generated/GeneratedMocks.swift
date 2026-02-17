@@ -2193,6 +2193,74 @@ class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
         reportCallWithEndedAtReasonClosure?(uuid, endedAt, reason)
     }
 }
+class ClassicAppLoginServiceMock: ClassicAppLoginServiceProtocol, @unchecked Sendable {
+    var classicAppActiveUserID: String?
+
+    //MARK: - loginWithClassicApp
+
+    var loginWithClassicAppUnderlyingCallsCount = 0
+    var loginWithClassicAppCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loginWithClassicAppUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginWithClassicAppUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginWithClassicAppUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginWithClassicAppUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loginWithClassicAppCalled: Bool {
+        return loginWithClassicAppCallsCount > 0
+    }
+
+    var loginWithClassicAppUnderlyingReturnValue: Result<UserSessionProtocol, AuthenticationServiceError>!
+    var loginWithClassicAppReturnValue: Result<UserSessionProtocol, AuthenticationServiceError>! {
+        get {
+            if Thread.isMainThread {
+                return loginWithClassicAppUnderlyingReturnValue
+            } else {
+                var returnValue: Result<UserSessionProtocol, AuthenticationServiceError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginWithClassicAppUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginWithClassicAppUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginWithClassicAppUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loginWithClassicAppClosure: (() -> Result<UserSessionProtocol, AuthenticationServiceError>)?
+
+    func loginWithClassicApp() -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        loginWithClassicAppCallsCount += 1
+        if let loginWithClassicAppClosure = loginWithClassicAppClosure {
+            return loginWithClassicAppClosure()
+        } else {
+            return loginWithClassicAppReturnValue
+        }
+    }
+}
 class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> {
         get { return underlyingActionsPublisher }

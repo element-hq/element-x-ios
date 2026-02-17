@@ -7,7 +7,8 @@
 
 import Foundation
 
-class AccountManager {
+class ClassicAppAccountManager {
+    static let matrixKitFolder = "MatrixKit"
     static let kMXKAccountsKey = "accountsV2"
     static let kMXFileStoreFolder = "MXFileStore"
     static let cryptoStoreFolder = "MXCryptoStore"
@@ -16,9 +17,9 @@ class AccountManager {
     let iv: Data
     let aesKey: Data
     
-    var mxAccounts: [MXKAccountData] = []
+    var mxAccounts: [ClassicAppAccount] = []
     
-    var activeAccounts: [MXKAccountData] {
+    var activeAccounts: [ClassicAppAccount] {
         mxAccounts.filter { !$0.isDisabled && !$0.isSoftLogout }
     }
     
@@ -30,7 +31,7 @@ class AccountManager {
     
     /// Return the path of the file containing stored MXAccounts array
     func accountFile() -> URL {
-        cacheFolder.appending(component: "MatrixKit").appending(component: Self.kMXKAccountsKey)
+        cacheFolder.appending(component: Self.matrixKitFolder).appending(component: Self.kMXKAccountsKey)
     }
     
     func loadAccounts() {
@@ -43,13 +44,13 @@ class AccountManager {
                 let fileContent = try Data(contentsOf: accountFile, options: [.alwaysMapped, .uncached])
                 
                 // Decrypt data if encryption method is provided
-                let unciphered = try MXAES.decrypt(fileContent, aesKey: aesKey, iv: iv)
+                let unciphered = try ClassicAppAES.decrypt(fileContent, aesKey: aesKey, iv: iv)
                 let decoder = NSKeyedUnarchiver(forReadingWith: unciphered)
-                decoder.setClass(MXKAccountData.self, forClassName: "MXKAccount")
-                decoder.setClass(MXThirdPartyIdentifier.self, forClassName: "MXThirdPartyIdentifier")
-                decoder.setClass(MXDevice.self, forClassName: "MXDevice")
+                decoder.setClass(ClassicAppAccount.self, forClassName: "MXKAccount")
+                decoder.setClass(ClassicAppThirdPartyIdentifier.self, forClassName: "MXThirdPartyIdentifier")
+                decoder.setClass(ClassicAppDevice.self, forClassName: "MXDevice")
                 
-                guard let accounts = decoder.decodeObject(forKey: "mxAccounts") as? [MXKAccountData] else {
+                guard let accounts = decoder.decodeObject(forKey: "mxAccounts") as? [ClassicAppAccount] else {
                     MXLog.error("Failed to decode accounts.")
                     return
                 }
@@ -67,14 +68,14 @@ class AccountManager {
         }
     }
     
-    func storePath(for credentials: MXCredentials) -> URL {
+    func storePath(for credentials: ClassicAppCredentials) -> URL {
         #warning("Nullability")
         guard let userID = credentials.userId else { fatalError() }
         return cacheFolder.appending(component: Self.kMXFileStoreFolder).appending(component: userID)
     }
     
     /// From `MXCryptoMachineStore`
-    func cryptoStoreURL(for credentials: MXCredentials) -> URL {
+    func cryptoStoreURL(for credentials: ClassicAppCredentials) -> URL {
         #warning("Nullability")
         guard let userID = credentials.userId else { fatalError() }
         return cacheFolder.appending(component: Self.cryptoStoreFolder).appending(component: userID)

@@ -15,8 +15,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private var sessionDirectories: SessionDirectories
     private let passphrase: String
     
-    private let clientFactory: AuthenticationClientFactoryProtocol
     private let userSessionStore: UserSessionStoreProtocol
+    private let appMigrationManager: AppMigrationManagerProtocol?
+    private let clientFactory: AuthenticationClientFactoryProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
     
@@ -27,17 +28,28 @@ class AuthenticationService: AuthenticationServiceProtocol {
 
     private(set) var flow: AuthenticationFlow
     
+    private(set) var classicAppActiveUserID: String?
+    
     init(userSessionStore: UserSessionStoreProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
+         appMigrationManager: AppMigrationManagerProtocol?,
          clientFactory: AuthenticationClientFactoryProtocol = AuthenticationClientFactory(),
          appSettings: AppSettings,
          appHooks: AppHooks) {
         sessionDirectories = .init()
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
-        self.clientFactory = clientFactory
+        
         self.userSessionStore = userSessionStore
+        self.appMigrationManager = appMigrationManager
+        self.clientFactory = clientFactory
         self.appSettings = appSettings
         self.appHooks = appHooks
+        
+        do {
+            classicAppActiveUserID = try appMigrationManager?.loadClassicAppAccounts().first.flatMap(\.mxCredentials.userId)
+        } catch {
+            MXLog.error("Failed loading accounts from the Classic app: \(error)")
+        }
         
         // When updating these, don't forget to update the reset method too.
         homeserverSubject = .init(LoginHomeserver(address: appSettings.accountProviders[0], loginMode: .unknown))
@@ -209,6 +221,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
         return progressSubject.asCurrentValuePublisher()
     }
     
+    func loginWithClassicApp() -> Result<any UserSessionProtocol, AuthenticationServiceError> {
+        MXLog.error("Not supported")
+        return .failure(.loginNotSupported)
+    }
+    
     func reset() {
         homeserverSubject.send(LoginHomeserver(address: appSettings.accountProviders[0], loginMode: .unknown))
         flow = .login
@@ -277,6 +294,7 @@ extension AuthenticationService {
     static var mock: AuthenticationService {
         AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
+                              appMigrationManager: nil,
                               clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
                               appSettings: ServiceLocator.shared.settings,
                               appHooks: AppHooks())

@@ -145,6 +145,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         clientFactory = AuthenticationClientFactoryMock(configuration: configuration)
         authenticationService = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                                       encryptionKeyProvider: EncryptionKeyProvider(),
+                                                      appMigrationManager: nil,
                                                       clientFactory: clientFactory,
                                                       appSettings: appSettings,
                                                       appHooks: AppHooks())
