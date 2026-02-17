@@ -255,13 +255,19 @@ final class AppSettings {
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
     /// The redirect URL used for OIDC. This no longer uses universal links so we don't need the bundle ID to avoid conflicts between Element X, Nightly and PR builds.
     private(set) var oidcRedirectURL: URL = "https://element.io/oidc/login"
-    
+
+    // UCMeet: MAS requires ALL URIs (client, redirect, logo, tos, policy) on the same host.
+    // We use element.io for OIDC registration metadata since:
+    // 1. element.io is already in the app's associated domains (webcredentials:*.element.io)
+    // 2. ASWebAuthenticationSession requires AASA file on the redirect host (ucmeet.info has none)
+    // 3. These are technical OIDC client metadata, not user-facing URLs
+    // TODO: UCMeet — when customer adds AASA file to www.ucmeet.info, switch all to ucmeet.info
     private(set) lazy var oidcConfiguration = OIDCConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
                                                                 redirectURI: oidcRedirectURL,
-                                                                clientURI: websiteURL,
-                                                                logoURI: logoURL,
-                                                                tosURI: acceptableUseURL,
-                                                                policyURI: privacyURL,
+                                                                clientURI: URL(string: "https://element.io")!,
+                                                                logoURI: URL(string: "https://element.io/favicon.png")!,
+                                                                tosURI: URL(string: "https://element.io/acceptable-use-policy-terms")!,
+                                                                policyURI: URL(string: "https://element.io/privacy")!,
                                                                 staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
     
     /// Whether or not the Create Account button is shown on the start screen.

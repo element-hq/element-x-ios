@@ -22,6 +22,16 @@ final class FirebaseNotificationService: NSObject, MessagingDelegate, FirebaseNo
     /// - Parameter onTokenUpdate: Called whenever the FCM registration token is created or refreshed.
     func configure(onTokenUpdate: @escaping (String) -> Void) {
         self.onTokenUpdate = onTokenUpdate
+
+        // Skip Firebase initialization if GoogleService-Info.plist has placeholder values.
+        // This prevents a crash when the customer hasn't provided real Firebase credentials yet.
+        guard let options = FirebaseOptions.defaultOptions(),
+              options.apiKey?.hasPrefix("A") == true,
+              options.apiKey?.count == 39 else {
+            MXLog.warning("Firebase not configured: GoogleService-Info.plist contains placeholder values. Push notifications disabled.")
+            return
+        }
+
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
     }
