@@ -7,11 +7,13 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
+import UIKit
 
-@MainActor
-final class EmojiProviderTests: XCTestCase {
-    func testWhenEmojisLoadedCategoriesAreLoadedFromLoader() async {
+@Suite
+struct EmojiProviderTests {
+    @Test @MainActor
+    func emojisLoadedCategoriesAreLoadedFromLoader() async {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
         let category = EmojiCategory(id: "test", emojis: [item])
         
@@ -21,10 +23,11 @@ final class EmojiProviderTests: XCTestCase {
         let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: ServiceLocator.shared.settings)
         
         let categories = await emojiProvider.categories()
-        XCTAssertEqual(emojiLoaderMock.categories, categories)
+        #expect(emojiLoaderMock.categories == categories)
     }
 
-    func testWhenEmojisLoadedAndSearchStringEmptyAllCategoriesReturned() async {
+    @Test @MainActor
+    func emojisLoadedAndSearchStringEmptyAllCategoriesReturned() async {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
         let category = EmojiCategory(id: "test", emojis: [item])
         
@@ -34,10 +37,11 @@ final class EmojiProviderTests: XCTestCase {
         let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: ServiceLocator.shared.settings)
         
         let categories = await emojiProvider.categories(searchString: "")
-        XCTAssertEqual(emojiLoaderMock.categories, categories)
+        #expect(emojiLoaderMock.categories == categories)
     }
 
-    func testWhenEmojisLoadedSecondTimeCachedValuesAreUsed() async {
+    @Test @MainActor
+    func emojisLoadedSecondTimeCachedValuesAreUsed() async {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
         let item2 = EmojiItem(label: "test2", unicode: "test2", keywords: ["3", "4"], shortcodes: ["3", "4"])
         let categoriesForFirstLoad = [EmojiCategory(id: "test",
@@ -54,10 +58,11 @@ final class EmojiProviderTests: XCTestCase {
         emojiLoaderMock.categories = categoriesForSecondLoad
         
         let categories = await emojiProvider.categories()
-        XCTAssertEqual(categories, categoriesForFirstLoad)
+        #expect(categories == categoriesForFirstLoad)
     }
     
-    func testWhenEmojisSearchedCorrectNumberOfCategoriesReturned() async {
+    @Test @MainActor
+    func emojisSearchedCorrectNumberOfCategoriesReturned() async {
         let searchString = "smile"
         var categories = [EmojiCategory]()
         let item0WithSearchString = EmojiItem(label: "emoji0", unicode: "\(searchString)_123", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"])
@@ -82,8 +87,8 @@ final class EmojiProviderTests: XCTestCase {
         
         _ = await emojiProvider.categories()
         let result = await emojiProvider.categories(searchString: searchString)
-        XCTAssertEqual(result.count, 2)
-        XCTAssertEqual(result.first?.emojis.count, 4)
+        #expect(result.count == 2)
+        #expect(result.first?.emojis.count == 4)
     }
 }
 

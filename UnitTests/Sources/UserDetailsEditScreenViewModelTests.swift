@@ -8,47 +8,53 @@
 
 import Combine
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class UserDetailsEditScreenViewModelTests: XCTestCase {
-    var viewModel: UserDetailsEditScreenViewModel!
+@Suite
+struct UserDetailsEditScreenViewModelTests {
+    private var viewModel: UserDetailsEditScreenViewModel!
+    private var userIndicatorController: UserIndicatorControllerMock!
     
-    var userIndicatorController: UserIndicatorControllerMock!
-    
-    var context: UserDetailsEditScreenViewModelType.Context {
+    private var context: UserDetailsEditScreenViewModelType.Context {
         viewModel.context
     }
     
-    func testCannotSaveOnLanding() {
-        setupViewModel()
-        XCTAssertFalse(context.viewState.canSave)
+    init() {
+        userIndicatorController = UserIndicatorControllerMock.default
+        viewModel = .init(userSession: UserSessionMock(.init()),
+                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                          userIndicatorController: userIndicatorController)
     }
     
-    func testNameDidChange() {
-        setupViewModel()
+    @Test
+    func cannotSaveOnLanding() {
+        #expect(!context.viewState.canSave)
+    }
+    
+    @Test
+    func nameDidChange() {
         context.name = "name"
-        XCTAssertTrue(context.viewState.nameDidChange)
-        XCTAssertTrue(context.viewState.canSave)
+        #expect(context.viewState.nameDidChange)
+        #expect(context.viewState.canSave)
     }
     
-    func testEmptyNameCannotBeSaved() {
-        setupViewModel()
+    @Test
+    func emptyNameCannotBeSaved() {
         context.name = ""
-        XCTAssertFalse(context.viewState.canSave)
+        #expect(!context.viewState.canSave)
     }
     
-    func testAvatarPickerShowsSheet() {
-        setupViewModel()
+    @Test
+    func avatarPickerShowsSheet() {
         context.name = "name"
-        XCTAssertFalse(context.showMediaSheet)
+        #expect(!context.showMediaSheet)
         context.send(viewAction: .presentMediaSource)
-        XCTAssertTrue(context.showMediaSheet)
+        #expect(context.showMediaSheet)
     }
     
-    func testSave() async throws {
-        setupViewModel()
-        
+    @Test
+    func save() async throws {
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         
         context.name = "name"
@@ -57,43 +63,33 @@ class UserDetailsEditScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testCancelWithChangesAndDiscard() async throws {
-        setupViewModel()
+    @Test
+    func cancelWithChangesAndDiscard() async throws {
         context.name = "name"
-        XCTAssertTrue(context.viewState.canSave)
-        XCTAssertNil(context.alertInfo)
+        #expect(context.viewState.canSave)
+        #expect(context.alertInfo == nil)
         
         context.send(viewAction: .cancel)
         
-        XCTAssertNotNil(context.alertInfo)
+        #expect(context.alertInfo != nil)
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         context.alertInfo?.secondaryButton?.action?() // Discard
         try await deferred.fulfill()
     }
     
-    func testCancelWithChangesAndSave() async throws {
-        setupViewModel()
+    @Test
+    func cancelWithChangesAndSave() async throws {
         context.name = "name"
-        XCTAssertTrue(context.viewState.canSave)
-        XCTAssertNil(context.alertInfo)
+        #expect(context.viewState.canSave)
+        #expect(context.alertInfo == nil)
         
         context.send(viewAction: .cancel)
         
-        XCTAssertNotNil(context.alertInfo)
+        #expect(context.alertInfo != nil)
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         context.alertInfo?.primaryButton.action?() // Save
         try await deferred.fulfill()
-    }
-    
-    // MARK: - Private
-    
-    private func setupViewModel() {
-        userIndicatorController = UserIndicatorControllerMock.default
-        
-        viewModel = .init(userSession: UserSessionMock(.init()),
-                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                          userIndicatorController: userIndicatorController)
     }
 }

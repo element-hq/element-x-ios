@@ -7,35 +7,38 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class ServerConfirmationScreenViewStateTests: XCTestCase {
-    func testLoginMessageString() {
+@Suite
+struct ServerConfirmationScreenViewStateTests {
+    @Test
+    func loginMessageString() {
         let matrixDotOrgLogin = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockMatrixDotOrg.address),
                                                                   authenticationFlow: .login)
-        XCTAssertEqual(matrixDotOrgLogin.message, L10n.screenServerConfirmationMessageLoginMatrixDotOrg, "matrix.org should have a custom message.")
+        #expect(matrixDotOrgLogin.message == L10n.screenServerConfirmationMessageLoginMatrixDotOrg, "matrix.org should have a custom message.")
         
         let elementDotIoLogin = ServerConfirmationScreenViewState(mode: .confirmation("element.io"),
                                                                   authenticationFlow: .login)
-        XCTAssertEqual(elementDotIoLogin.message, L10n.screenServerConfirmationMessageLoginElementDotIo, "element.io should have a custom message.")
+        #expect(elementDotIoLogin.message == L10n.screenServerConfirmationMessageLoginElementDotIo, "element.io should have a custom message.")
         
         let otherLogin = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockOIDC.address),
                                                            authenticationFlow: .login)
-        XCTAssertEqual(otherLogin.message, "", "Other servers should not show a message.")
+        #expect(otherLogin.message == "", "Other servers should not show a message.")
         
         let pickerLogin = ServerConfirmationScreenViewState(mode: .picker(["element.io", "matrix.org"]),
                                                             authenticationFlow: .login)
-        XCTAssertNil(pickerLogin.message, "The picker mode should not show a message.")
+        #expect(pickerLogin.message == nil, "The picker mode should not show a message.")
     }
     
-    func testRegisterMessageString() {
+    @Test
+    func registerMessageString() {
         let matrixDotOrgRegister = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockMatrixDotOrg.address),
                                                                      authenticationFlow: .register)
-        XCTAssertEqual(matrixDotOrgRegister.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
+        #expect(matrixDotOrgRegister.message == L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
         
         let oidcRegister = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockOIDC.address),
                                                              authenticationFlow: .register)
-        XCTAssertEqual(oidcRegister.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
+        #expect(oidcRegister.message == L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
     }
 }

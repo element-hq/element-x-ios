@@ -9,13 +9,14 @@
 import Combine
 @testable import ElementX
 import Foundation
-import XCTest
+import Testing
 
-class BugReportServiceTests: XCTestCase {
+@Suite(.serialized)
+struct BugReportServiceTests {
     var appSettings: AppSettings!
     var bugReportService: BugReportServiceProtocol!
-
-    override func setUpWithError() throws {
+    
+    init() throws {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         appSettings.bugReportRageshakeURL.reset()
@@ -25,16 +26,14 @@ class BugReportServiceTests: XCTestCase {
         bugReportServiceMock.submitBugReportProgressListenerReturnValue = .success(SubmitBugReportResponse(reportURL: "https://www.example.com/123"))
         bugReportService = bugReportServiceMock
     }
-    
-    override func tearDown() {
-        appSettings.bugReportRageshakeURL.reset()
+
+    @Test
+    func initialStateWithMockService() {
+        #expect(!bugReportService.crashedLastRun)
     }
 
-    func testInitialStateWithMockService() {
-        XCTAssertFalse(bugReportService.crashedLastRun)
-    }
-
-    func testSubmitBugReportWithMockService() async throws {
+    @Test
+    func submitBugReportWithMockService() async throws {
         let bugReport = BugReport(userID: "@mock:client.com",
                                   deviceID: nil,
                                   ed25519: nil,
@@ -46,33 +45,36 @@ class BugReportServiceTests: XCTestCase {
                                   files: [])
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)
         let response = try await bugReportService.submitBugReport(bugReport, progressListener: progressSubject).get()
-        let reportURL = try XCTUnwrap(response.reportURL)
-        XCTAssertFalse(reportURL.isEmpty)
+        let reportURL = try #require(response.reportURL)
+        #expect(!reportURL.isEmpty)
     }
     
-    func testInitialStateWithRealService() {
+    @Test
+    func initialStateWithRealService() {
         let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.url("https://example.com/submit"))
         let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        session: .mock,
                                        appHooks: AppHooks())
-        XCTAssertTrue(service.isEnabled)
-        XCTAssertFalse(service.crashedLastRun)
+        #expect(service.isEnabled)
+        #expect(!service.crashedLastRun)
     }
     
-    func testInitialStateWithRealServiceAndDisabled() {
+    @Test
+    func initialStateWithRealServiceAndDisabled() {
         let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.disabled)
         let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        session: .mock,
                                        appHooks: AppHooks())
-        XCTAssertFalse(service.isEnabled)
-        XCTAssertFalse(service.crashedLastRun)
+        #expect(!service.isEnabled)
+        #expect(!service.crashedLastRun)
     }
     
-    @MainActor func testSubmitBugReportWithRealService() async throws {
+    @Test @MainActor
+    func submitBugReportWithRealService() async throws {
         let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.url("https://example.com/submit"))
         let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
@@ -92,12 +94,13 @@ class BugReportServiceTests: XCTestCase {
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)
         let response = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
         
-        XCTAssertEqual(response.reportURL, "https://example.com/123")
+        #expect(response.reportURL == "https://example.com/123")
     }
     
-    @MainActor func testConfigurations() async throws {
+    @Test @MainActor
+    mutating func configurations() async throws {
         guard case let .url(initialURL) = appSettings.bugReportRageshakeURL.publisher.value else {
-            XCTFail("Unexpected initial configuration.")
+            Issue.record("Unexpected initial configuration.")
             return
         }
         
@@ -106,13 +109,13 @@ class BugReportServiceTests: XCTestCase {
                                        sdkGitSHA: "1234",
                                        session: .mock,
                                        appHooks: AppHooks())
-        XCTAssertTrue(service.isEnabled)
+        #expect(service.isEnabled)
         
         appSettings.bugReportRageshakeURL.applyRemoteValue(.disabled)
-        XCTAssertFalse(service.isEnabled)
+        #expect(!service.isEnabled)
         
         appSettings.bugReportRageshakeURL.applyRemoteValue(.url("https://bugs.server.net/submit"))
-        XCTAssertTrue(service.isEnabled)
+        #expect(service.isEnabled)
 
         let bugReport = BugReport(userID: "@mock:client.com",
                                   deviceID: nil,
@@ -126,14 +129,14 @@ class BugReportServiceTests: XCTestCase {
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)
         let customConfigurationResponse = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
         
-        XCTAssertEqual(customConfigurationResponse.reportURL, "https://bugs.server.net/123")
+        #expect(customConfigurationResponse.reportURL == "https://bugs.server.net/123")
         
         appSettings.bugReportRageshakeURL.reset()
-        XCTAssertTrue(service.isEnabled)
+        #expect(service.isEnabled)
         
         let defaultConfigurationResponse = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
         
-        XCTAssertEqual(defaultConfigurationResponse.reportURL, initialURL.absoluteString.replacingOccurrences(of: "submit", with: "123"))
+        #expect(defaultConfigurationResponse.reportURL == initialURL.absoluteString.replacingOccurrences(of: "submit", with: "123"))
     }
 }
 

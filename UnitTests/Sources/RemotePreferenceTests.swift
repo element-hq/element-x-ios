@@ -7,42 +7,45 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
-class RemotePreferenceTests: XCTestCase {
-    func testOverrideAndReset() {
+@Suite
+struct RemotePreferenceTests {
+    @Test
+    func overrideAndReset() {
         let preference = RemotePreference(0)
-        XCTAssertEqual(preference.publisher.value, 0)
-        XCTAssertFalse(preference.isRemotelyConfigured)
+        #expect(preference.publisher.value == 0)
+        #expect(!preference.isRemotelyConfigured)
         
         preference.applyRemoteValue(1)
-        XCTAssertEqual(preference.publisher.value, 1)
-        XCTAssertTrue(preference.isRemotelyConfigured)
+        #expect(preference.publisher.value == 1)
+        #expect(preference.isRemotelyConfigured)
         
         preference.applyRemoteValue(2)
-        XCTAssertEqual(preference.publisher.value, 2)
-        XCTAssertTrue(preference.isRemotelyConfigured)
+        #expect(preference.publisher.value == 2)
+        #expect(preference.isRemotelyConfigured)
         
         preference.reset()
-        XCTAssertEqual(preference.publisher.value, 0)
-        XCTAssertFalse(preference.isRemotelyConfigured)
+        #expect(preference.publisher.value == 0)
+        #expect(!preference.isRemotelyConfigured)
     }
     
-    func testOptionalOverride() {
+    @Test
+    func optionalOverride() {
         let preference: RemotePreference<String?> = .init("Hello")
-        XCTAssertEqual(preference.publisher.value, "Hello")
-        XCTAssertFalse(preference.isRemotelyConfigured)
+        #expect(preference.publisher.value == "Hello")
+        #expect(!preference.isRemotelyConfigured)
         
         preference.applyRemoteValue("World")
-        XCTAssertEqual(preference.publisher.value, "World")
-        XCTAssertTrue(preference.isRemotelyConfigured)
+        #expect(preference.publisher.value == "World")
+        #expect(preference.isRemotelyConfigured)
         
         preference.applyRemoteValue(nil)
-        XCTAssertEqual(preference.publisher.value, nil)
-        XCTAssertTrue(preference.isRemotelyConfigured)
+        #expect(preference.publisher.value == nil)
+        #expect(preference.isRemotelyConfigured)
         
         preference.reset()
-        XCTAssertEqual(preference.publisher.value, "Hello")
-        XCTAssertFalse(preference.isRemotelyConfigured)
+        #expect(preference.publisher.value == "Hello")
+        #expect(!preference.isRemotelyConfigured)
     }
 }

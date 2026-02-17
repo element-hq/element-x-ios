@@ -7,10 +7,11 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class LoginScreenViewModelTests: XCTestCase {
+@Suite(.serialized)
+struct LoginScreenViewModelTests {
     var viewModel: LoginScreenViewModelProtocol!
     var context: LoginScreenViewModelType.Context {
         viewModel.context
@@ -19,73 +20,78 @@ class LoginScreenViewModelTests: XCTestCase {
     var clientFactory: AuthenticationClientFactoryMock!
     var service: AuthenticationServiceProtocol!
     
-    func testBasicServer() async {
+    @Test
+    mutating func basicServer() async {
         // Given the view model configured for a basic server example.com that only supports password authentication.
         await setupViewModel()
         
         // Then the view state should be updated with the homeserver and show the login form.
-        XCTAssertEqual(context.viewState.homeserver, .mockBasicServer, "The homeserver data should should match the new homeserver.")
-        XCTAssertEqual(context.viewState.loginMode, .password, "The login form should be shown.")
+        #expect(context.viewState.homeserver == .mockBasicServer, "The homeserver data should should match the new homeserver.")
+        #expect(context.viewState.loginMode == .password, "The login form should be shown.")
     }
     
-    func testUsernameWithEmptyPassword() async {
+    @Test
+    mutating func usernameWithEmptyPassword() async {
         // Given a form with an empty username and password.
         await setupViewModel()
-        XCTAssertTrue(context.password.isEmpty, "The initial value for the password should be empty.")
-        XCTAssertTrue(context.username.isEmpty, "The initial value for the username should be empty.")
-        XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be invalid.")
-        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
+        #expect(context.password.isEmpty, "The initial value for the password should be empty.")
+        #expect(context.username.isEmpty, "The initial value for the username should be empty.")
+        #expect(!context.viewState.hasValidCredentials, "The credentials should be invalid.")
+        #expect(!context.viewState.canSubmit, "The form should be blocked for submission.")
         
         // When entering a username without a password.
         context.username = "bob"
         context.password = ""
         
         // Then the credentials should be considered invalid.
-        XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be invalid.")
-        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
+        #expect(!context.viewState.hasValidCredentials, "The credentials should be invalid.")
+        #expect(!context.viewState.canSubmit, "The form should be blocked for submission.")
     }
     
-    func testEmptyUsernameWithPassword() async {
+    @Test
+    mutating func emptyUsernameWithPassword() async {
         // Given a form with an empty username and password.
         await setupViewModel()
-        XCTAssertTrue(context.password.isEmpty, "The initial value for the password should be empty.")
-        XCTAssertTrue(context.username.isEmpty, "The initial value for the username should be empty.")
-        XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be invalid.")
-        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
+        #expect(context.password.isEmpty, "The initial value for the password should be empty.")
+        #expect(context.username.isEmpty, "The initial value for the username should be empty.")
+        #expect(!context.viewState.hasValidCredentials, "The credentials should be invalid.")
+        #expect(!context.viewState.canSubmit, "The form should be blocked for submission.")
         
         // When entering a password without a username.
         context.username = ""
         context.password = "12345678"
         
         // Then the credentials should be considered invalid.
-        XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be invalid.")
-        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
+        #expect(!context.viewState.hasValidCredentials, "The credentials should be invalid.")
+        #expect(!context.viewState.canSubmit, "The form should be blocked for submission.")
     }
     
-    func testValidCredentials() async {
+    @Test
+    mutating func validCredentials() async {
         // Given a form with an empty username and password.
         await setupViewModel()
-        XCTAssertTrue(context.password.isEmpty, "The initial value for the password should be empty.")
-        XCTAssertTrue(context.username.isEmpty, "The initial value for the username should be empty.")
-        XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be invalid.")
-        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
+        #expect(context.password.isEmpty, "The initial value for the password should be empty.")
+        #expect(context.username.isEmpty, "The initial value for the username should be empty.")
+        #expect(!context.viewState.hasValidCredentials, "The credentials should be invalid.")
+        #expect(!context.viewState.canSubmit, "The form should be blocked for submission.")
         
         // When entering a username and an 8-character password.
         context.username = "bob"
         context.password = "12345678"
         
         // Then the credentials should be considered valid.
-        XCTAssertTrue(context.viewState.hasValidCredentials, "The credentials should be valid when the username and password are valid.")
-        XCTAssertTrue(context.viewState.canSubmit, "The form should be ready to submit.")
+        #expect(context.viewState.hasValidCredentials, "The credentials should be valid when the username and password are valid.")
+        #expect(context.viewState.canSubmit, "The form should be ready to submit.")
     }
     
-    func testLoadingServerWithoutPassword() async throws {
+    @Test
+    mutating func loadingServerWithoutPassword() async throws {
         // Given a form with valid credentials.
         await setupViewModel()
         context.username = "@bob:example.com"
-        XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be not be valid without a password.")
-        XCTAssertFalse(context.viewState.isLoading, "The view shouldn't start in a loading state.")
-        XCTAssertFalse(context.viewState.canSubmit, "The form should not be submittable.")
+        #expect(!context.viewState.hasValidCredentials, "The credentials should be not be valid without a password.")
+        #expect(!context.viewState.isLoading, "The view shouldn't start in a loading state.")
+        #expect(!context.viewState.canSubmit, "The form should not be submittable.")
         
         // When updating the view model whilst loading a homeserver.
         let deferred = deferFulfillment(context.observe(\.viewState.isLoading), transitionValues: [true, false])
@@ -93,18 +99,19 @@ class LoginScreenViewModelTests: XCTestCase {
         
         // Then the view state should represent the loading but never allow submitting to occur.
         try await deferred.fulfill()
-        XCTAssertFalse(context.viewState.isLoading, "The view should be back in a loaded state.")
-        XCTAssertFalse(context.viewState.canSubmit, "The form should still not be submittable.")
+        #expect(!context.viewState.isLoading, "The view should be back in a loaded state.")
+        #expect(!context.viewState.canSubmit, "The form should still not be submittable.")
     }
     
-    func testLoadingServerWithPasswordEntered() async throws {
+    @Test
+    mutating func loadingServerWithPasswordEntered() async throws {
         // Given a form with valid credentials.
         await setupViewModel()
         context.username = "@bob:example.com"
         context.password = "12345678"
-        XCTAssertTrue(context.viewState.hasValidCredentials, "The credentials should be valid.")
-        XCTAssertFalse(context.viewState.isLoading, "The view shouldn't start in a loading state.")
-        XCTAssertTrue(context.viewState.canSubmit, "The form should be ready to submit.")
+        #expect(context.viewState.hasValidCredentials, "The credentials should be valid.")
+        #expect(!context.viewState.isLoading, "The view shouldn't start in a loading state.")
+        #expect(context.viewState.canSubmit, "The form should be ready to submit.")
         
         // When updating the view model whilst loading a homeserver.
         let deferred = deferFulfillment(context.observe(\.viewState.canSubmit), transitionValues: [false, true])
@@ -112,11 +119,12 @@ class LoginScreenViewModelTests: XCTestCase {
         
         // Then the view should be blocked from submitting while loading and then become unblocked again.
         try await deferred.fulfill()
-        XCTAssertFalse(context.viewState.isLoading, "The view should be back in a loaded state.")
-        XCTAssertTrue(context.viewState.canSubmit, "The form should be ready to submit.")
+        #expect(!context.viewState.isLoading, "The view should be back in a loaded state.")
+        #expect(context.viewState.canSubmit, "The form should be ready to submit.")
     }
 
-    func testOIDCServer() async throws {
+    @Test
+    mutating func oidcServer() async throws {
         // Given the screen configured for matrix.org
         await setupViewModel()
         
@@ -127,13 +135,14 @@ class LoginScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
 
         // Then the view state should be updated with the homeserver and show the OIDC button.
-        XCTAssertTrue(context.viewState.loginMode.supportsOIDCFlow, "The OIDC button should be shown.")
+        #expect(context.viewState.loginMode.supportsOIDCFlow, "The OIDC button should be shown.")
     }
     
-    func testUnsupportedServer() async throws {
+    @Test
+    mutating func unsupportedServer() async throws {
         // Given the screen configured for matrix.org
         await setupViewModel()
-        XCTAssertNil(context.alertInfo, "There shouldn't be an alert when the screen loads.")
+        #expect(context.alertInfo == nil, "There shouldn't be an alert when the screen loads.")
         
         // When entering a username for an unsupported homeserver.
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
@@ -142,13 +151,14 @@ class LoginScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
 
         // Then the view state should be updated to show an alert.
-        XCTAssertEqual(context.alertInfo?.id, .unknown, "An alert should be shown to the user.")
+        #expect(context.alertInfo?.id == .unknown, "An alert should be shown to the user.")
     }
     
-    func testElementProRequired() async throws {
+    @Test
+    mutating func elementProRequired() async throws {
         // Given the screen configured for matrix.org
         await setupViewModel()
-        XCTAssertNil(context.alertInfo, "There shouldn't be an alert when the screen loads.")
+        #expect(context.alertInfo == nil, "There shouldn't be an alert when the screen loads.")
         
         // When entering a username for an unsupported homeserver.
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
@@ -157,23 +167,24 @@ class LoginScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
 
         // Then the view state should be updated to show an alert.
-        XCTAssertEqual(context.alertInfo?.id, .elementProAlert, "An alert should be shown to the user.")
+        #expect(context.alertInfo?.id == .elementProAlert, "An alert should be shown to the user.")
     }
     
-    func testLoginHint() async {
+    @Test
+    mutating func loginHint() async {
         await setupViewModel(loginHint: "")
-        XCTAssertEqual(context.username, "")
+        #expect(context.username == "")
         
         await setupViewModel(loginHint: "alice")
-        XCTAssertEqual(context.username, "alice")
+        #expect(context.username == "alice")
         
         await setupViewModel(loginHint: "mxid:@alice:example.com")
-        XCTAssertEqual(context.username, "@alice:example.com")
+        #expect(context.username == "@alice:example.com")
     }
     
     // MARK: - Helpers
     
-    private func setupViewModel(homeserverAddress: String = "example.com", loginHint: String? = nil) async {
+    private mutating func setupViewModel(homeserverAddress: String = "example.com", loginHint: String? = nil) async {
         clientFactory = AuthenticationClientFactoryMock(configuration: .init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
@@ -182,7 +193,7 @@ class LoginScreenViewModelTests: XCTestCase {
                                         appHooks: AppHooks())
         
         guard case .success = await service.configure(for: homeserverAddress, flow: .login) else {
-            XCTFail("A valid server should be configured for the test.")
+            Issue.record("A valid server should be configured for the test.")
             return
         }
         

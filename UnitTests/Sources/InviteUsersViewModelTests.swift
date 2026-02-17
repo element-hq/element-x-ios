@@ -8,10 +8,11 @@
 
 import Combine
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class InviteUsersScreenViewModelTests: XCTestCase {
+@Suite
+struct InviteUsersScreenViewModelTests {
     var viewModel: InviteUsersScreenViewModelProtocol!
     var userDiscoveryService: UserDiscoveryServiceMock!
         
@@ -19,44 +20,48 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    func testSelectUser() {
+    @Test
+    mutating func selectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
         setupViewModel(roomProxy: roomProxy, isSkippable: true)
         
-        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        #expect(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
-        XCTAssertTrue(context.viewState.selectedUsers.count == 1)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfileProxy.mockAlice.userID)
+        #expect(context.viewState.selectedUsers.count == 1)
+        #expect(context.viewState.selectedUsers.first?.userID == UserProfileProxy.mockAlice.userID)
     }
     
-    func testReselectUser() {
+    @Test
+    mutating func reselectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
         setupViewModel(roomProxy: roomProxy, isSkippable: true)
         
-        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        #expect(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
-        XCTAssertEqual(context.viewState.selectedUsers.count, 1)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfileProxy.mockAlice.userID)
+        #expect(context.viewState.selectedUsers.count == 1)
+        #expect(context.viewState.selectedUsers.first?.userID == UserProfileProxy.mockAlice.userID)
         context.send(viewAction: .toggleUser(.mockAlice))
-        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        #expect(context.viewState.selectedUsers.isEmpty)
     }
     
-    func testDeselectUser() {
+    @Test
+    mutating func deselectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
         setupViewModel(roomProxy: roomProxy, isSkippable: true)
         
-        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        #expect(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
-        XCTAssertEqual(context.viewState.selectedUsers.count, 1)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfileProxy.mockAlice.userID)
+        #expect(context.viewState.selectedUsers.count == 1)
+        #expect(context.viewState.selectedUsers.first?.userID == UserProfileProxy.mockAlice.userID)
         context.send(viewAction: .toggleUser(.mockAlice))
-        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        #expect(context.viewState.selectedUsers.isEmpty)
     }
      
-    func testInviteButton() async throws {
+    @Test
+    mutating func inviteButton() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
         let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: mockedMembers))
         roomProxy.inviteUserIDReturnValue = .success(())
@@ -80,10 +85,10 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         context.send(viewAction: .proceed)
         
         try await deferredAction.fulfill()
-        XCTAssertEqual(roomProxy.inviteUserIDReceivedInvocations, [RoomMemberProxyMock.mockAlice.userID])
+        #expect(roomProxy.inviteUserIDReceivedInvocations == [RoomMemberProxyMock.mockAlice.userID])
     }
     
-    private func setupViewModel(roomProxy: JoinedRoomProxyProtocol, isSkippable: Bool) {
+    private mutating func setupViewModel(roomProxy: JoinedRoomProxyProtocol, isSkippable: Bool) {
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init()),

@@ -8,10 +8,12 @@
 
 @testable import ElementX
 import MatrixRustSDK
-import XCTest
+import Testing
 
-class RoomPermissionsTests: XCTestCase {
-    func testFromRust() {
+@Suite
+struct RoomPermissionsTests {
+    @Test
+    func fromRust() {
         // Given a set of power level changes with various values.
         let powerLevels = RoomPowerLevelsValues(ban: 100,
                                                 invite: 100,
@@ -29,16 +31,16 @@ class RoomPermissionsTests: XCTestCase {
         let permissions = RoomPermissions(powerLevels: powerLevels)
         
         // Then the permissions should be created with values mapped to the correct role.
-        XCTAssertEqual(permissions.ban, RoomRole.administrator.powerLevelValue)
-        XCTAssertEqual(permissions.invite, RoomRole.administrator.powerLevelValue)
-        XCTAssertEqual(permissions.kick, RoomRole.administrator.powerLevelValue)
-        XCTAssertEqual(permissions.redact, RoomRole.moderator.powerLevelValue)
-        XCTAssertEqual(permissions.eventsDefault, RoomRole.moderator.powerLevelValue)
-        XCTAssertEqual(permissions.stateDefault, RoomRole.moderator.powerLevelValue)
-        XCTAssertEqual(permissions.usersDefault, RoomRole.user.powerLevelValue)
-        XCTAssertEqual(permissions.roomName, RoomRole.user.powerLevelValue)
-        XCTAssertEqual(permissions.roomAvatar, RoomRole.user.powerLevelValue)
-        XCTAssertEqual(permissions.roomTopic, RoomRole.user.powerLevelValue)
-        XCTAssertEqual(permissions.spaceChild, RoomRole.administrator.powerLevelValue)
+        #expect(permissions.ban == RoomRole.administrator.powerLevelValue)
+        #expect(permissions.invite == RoomRole.administrator.powerLevelValue)
+        #expect(permissions.kick == RoomRole.administrator.powerLevelValue)
+        #expect(permissions.redact == RoomRole.moderator.powerLevelValue)
+        #expect(permissions.eventsDefault == RoomRole.moderator.powerLevelValue)
+        #expect(permissions.stateDefault == RoomRole.moderator.powerLevelValue)
+        #expect(permissions.usersDefault == RoomRole.user.powerLevelValue)
+        #expect(permissions.roomName == RoomRole.user.powerLevelValue)
+        #expect(permissions.roomAvatar == RoomRole.user.powerLevelValue)
+        #expect(permissions.roomTopic == RoomRole.user.powerLevelValue)
+        #expect(permissions.spaceChild == RoomRole.administrator.powerLevelValue)
     }
 }

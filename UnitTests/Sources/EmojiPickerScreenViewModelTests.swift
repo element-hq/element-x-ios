@@ -7,10 +7,11 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-final class EmojiPickerScreenViewModelTests: XCTestCase {
+@Suite
+struct EmojiPickerScreenViewModelTests {
     var timelineProxy: TimelineProxyMock!
     
     var viewModel: EmojiPickerScreenViewModel!
@@ -18,25 +19,38 @@ final class EmojiPickerScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    func testToggleReaction() async throws {
+    @Test
+    mutating func toggleReaction() async throws {
         setupViewModel()
         let reaction = "👋"
         
-        let expectation = XCTestExpectation(description: "Toggle reaction")
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
-        timelineProxy.toggleReactionToClosure = { toggledReaction, _ in
-            XCTAssertEqual(toggledReaction, reaction)
-            expectation.fulfill()
-            return .success(())
+        try await confirmation { confirmation in
+            var toggleReactionCalled = false
+            timelineProxy.toggleReactionToClosure = { toggledReaction, _ in
+                defer {
+                    confirmation()
+                    toggleReactionCalled = true
+                }
+                #expect(toggledReaction == reaction)
+                return .success(())
+            }
+                
+            context.send(viewAction: .emojiTapped(emoji: .init(id: "wave", value: reaction)))
+            
+            try await deferred.fulfill()
+            
+            // Since the reaction is called asynchronously after dismissing the picker
+            // We need to actively wait for the function to be called before fulfilling the test.
+            while !toggleReactionCalled {
+                await Task.yield()
+            }
         }
-        context.send(viewAction: .emojiTapped(emoji: .init(id: "wave", value: reaction)))
-        await fulfillment(of: [expectation], timeout: 1)
-        try await deferred.fulfill()
     }
     
     // MARK: - Helpers
     
-    private func setupViewModel(selectedEmojis: Set<String> = []) {
+    private mutating func setupViewModel(selectedEmojis: Set<String> = []) {
         timelineProxy = TimelineProxyMock(.init())
         
         viewModel = EmojiPickerScreenViewModel(itemID: .randomEvent,

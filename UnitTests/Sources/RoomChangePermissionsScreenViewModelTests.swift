@@ -7,124 +7,126 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class RoomChangePermissionsScreenViewModelTests: XCTestCase {
-    var roomProxy: JoinedRoomProxyMock!
-    var viewModel: RoomChangePermissionsScreenViewModelProtocol!
-    
-    var context: RoomChangePermissionsScreenViewModelType.Context {
-        viewModel.context
+@Suite
+struct RoomChangePermissionsScreenViewModelTests {
+    @MainActor
+    private struct TestSetup {
+        var roomProxy: JoinedRoomProxyMock
+        var viewModel: RoomChangePermissionsScreenViewModelProtocol
+        
+        var context: RoomChangePermissionsScreenViewModelType.Context {
+            viewModel.context
+        }
+        
+        init(isSpace: Bool, ownPowerLevel: RoomPowerLevel = RoomRole.creator.powerLevel) {
+            roomProxy = JoinedRoomProxyMock(.init(isSpace: isSpace))
+            viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: .init(powerLevels: .mock),
+                                                             ownPowerLevel: ownPowerLevel,
+                                                             roomProxy: roomProxy,
+                                                             userIndicatorController: UserIndicatorControllerMock(),
+                                                             analytics: ServiceLocator.shared.analytics)
+        }
     }
 
-    func testChangeSetting() {
-        setUp(isSpace: false)
+    @Test
+    func changeSetting() throws {
+        let testSetup = TestSetup(isSpace: false)
         // Given a screen with no changes.
-        guard let index = context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
-            XCTFail("There should be a setting for the room avatar.")
-            return
-        }
-        XCTAssertEqual(context.settings[.roomDetails]?[index].roleValue, .moderator)
-        XCTAssertFalse(context.viewState.hasChanges)
+        let index = try #require(testSetup.context.settings[.roomDetails]?.firstIndex { $0.keyPath == \.roomAvatar },
+                                 "There should be a setting for the room avatar.")
+        #expect(testSetup.context.settings[.roomDetails]?[index].roleValue == .moderator)
+        #expect(!testSetup.context.viewState.hasChanges)
         
         // When updating a setting.
         let setting = RoomPermissionsSetting(title: "",
                                              value: RoomRole.user.powerLevelValue,
                                              ownPowerLevel: RoomRole.creator.powerLevel,
                                              keyPath: \.roomAvatar)
-        XCTAssertFalse(setting.isDisabled)
-        XCTAssertEqual(setting.availableValues.map(\.tag), RoomPermissionsSetting.allValues.map(\.tag))
-        context.settings[.roomDetails]?[index] = setting
+        #expect(!setting.isDisabled)
+        #expect(setting.availableValues.map(\.tag) == RoomPermissionsSetting.allValues.map(\.tag))
+        testSetup.context.settings[.roomDetails]?[index] = setting
         
         // Then the setting should update and the changes should be flagged.
-        XCTAssertEqual(context.settings[.roomDetails]?[index].roleValue, .user)
-        XCTAssertTrue(context.viewState.hasChanges)
+        #expect(testSetup.context.settings[.roomDetails]?[index].roleValue == .user)
+        #expect(testSetup.context.viewState.hasChanges)
     }
     
-    func testSettingsCantBeChanged() {
-        setUp(isSpace: false, ownPowerLevel: .value(25))
+    @Test
+    func settingsCantBeChanged() throws {
+        let testSetup = TestSetup(isSpace: false, ownPowerLevel: .value(25))
         // Given a screen with no changes.
-        guard let index = context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
-            XCTFail("There should be a setting for the room avatar.")
-            return
-        }
-        XCTAssertEqual(context.settings[.roomDetails]?[index].roleValue, .moderator)
-        XCTAssertEqual(context.settings[.roomDetails]?[index].isDisabled, true)
-        XCTAssertEqual(context.settings[.roomDetails]?[index].availableValues.count, 1)
-        XCTAssertFalse(context.viewState.hasChanges)
+        var index = try #require(testSetup.context.settings[.roomDetails]?.firstIndex { $0.keyPath == \.roomAvatar },
+                                 "There should be a setting for the room avatar.")
+        #expect(testSetup.context.settings[.roomDetails]?[index].roleValue == .moderator)
+        #expect(testSetup.context.settings[.roomDetails]?[index].isDisabled == true)
+        #expect(testSetup.context.settings[.roomDetails]?[index].availableValues.count == 1)
+        #expect(!testSetup.context.viewState.hasChanges)
         
-        guard let index = context.settings[.messagesAndContent]?.firstIndex(where: { $0.keyPath == \.eventsDefault }) else {
-            XCTFail("There should be a setting for the events.")
-            return
-        }
-        XCTAssertEqual(context.settings[.messagesAndContent]?[index].roleValue, .user)
-        XCTAssertEqual(context.settings[.messagesAndContent]?[index].isDisabled, false)
-        XCTAssertEqual(context.settings[.messagesAndContent]?[index].availableValues.count, 1)
+        index = try #require(testSetup.context.settings[.messagesAndContent]?.firstIndex { $0.keyPath == \.eventsDefault },
+                             "There should be a setting for the events.")
+        #expect(testSetup.context.settings[.messagesAndContent]?[index].roleValue == .user)
+        #expect(testSetup.context.settings[.messagesAndContent]?[index].isDisabled == false)
+        #expect(testSetup.context.settings[.messagesAndContent]?[index].availableValues.count == 1)
     }
     
-    func testSave() async throws {
-        setUp(isSpace: false)
+    @Test
+    func save() async throws {
+        let testSetup = TestSetup(isSpace: false)
         // Given a screen with changes.
-        guard let index = context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
-            XCTFail("There should be a setting for the room avatar.")
-            return
-        }
-        context.settings[.roomDetails]?[index] = RoomPermissionsSetting(title: "",
-                                                                        value: RoomRole.user.powerLevelValue,
-                                                                        ownPowerLevel: RoomRole.creator.powerLevel,
-                                                                        keyPath: \.roomAvatar)
-        XCTAssertEqual(context.settings[.roomDetails]?[index].roleValue, .user)
-        XCTAssertEqual(context.settings[.roomDetails]?[index].isDisabled, false)
-        XCTAssertEqual(context.settings[.roomDetails]?[index].availableValues.map(\.tag), RoomPermissionsSetting.allValues.map(\.tag))
-        XCTAssertTrue(context.viewState.hasChanges)
-        XCTAssertEqual(context.settings.count, 3)
+        let index = try #require(testSetup.context.settings[.roomDetails]?.firstIndex { $0.keyPath == \.roomAvatar },
+                                 "There should be a setting for the room avatar.")
+        testSetup.context.settings[.roomDetails]?[index] = RoomPermissionsSetting(title: "",
+                                                                                  value: RoomRole.user.powerLevelValue,
+                                                                                  ownPowerLevel: RoomRole.creator.powerLevel,
+                                                                                  keyPath: \.roomAvatar)
+        #expect(testSetup.context.settings[.roomDetails]?[index].roleValue == .user)
+        #expect(testSetup.context.settings[.roomDetails]?[index].isDisabled == false)
+        #expect(testSetup.context.settings[.roomDetails]?[index].availableValues.map(\.tag) == RoomPermissionsSetting.allValues.map(\.tag))
+        #expect(testSetup.context.viewState.hasChanges)
+        #expect(testSetup.context.settings.count == 3)
         
         // When saving changes.
-        context.send(viewAction: .save)
+        testSetup.context.send(viewAction: .save)
         // Nothing to await right now,
         try await Task.sleep(for: .milliseconds(100))
         
         // Then the changes should be applied.
-        XCTAssertTrue(roomProxy.applyPowerLevelChangesCalled)
-        XCTAssertEqual(roomProxy.applyPowerLevelChangesReceivedChanges, .init(roomAvatar: 0),
-                       "Only the avatar setting should be applied. No other settings were changed so they should be nil to remain left alone.")
+        #expect(testSetup.roomProxy.applyPowerLevelChangesCalled)
+        #expect(testSetup.roomProxy.applyPowerLevelChangesReceivedChanges == .init(roomAvatar: 0),
+                "Only the avatar setting should be applied. No other settings were changed so they should be nil to remain left alone.")
     }
     
-    func testSaveNoChanges() {
-        setUp(isSpace: false)
+    @Test
+    func saveNoChanges() {
+        let testSetup = TestSetup(isSpace: false)
         // Given a screen with no changes.
-        XCTAssertFalse(context.viewState.hasChanges)
+        #expect(!testSetup.context.viewState.hasChanges)
         
         // When saving changes.
-        context.send(viewAction: .save)
+        testSetup.context.send(viewAction: .save)
         
         // Then nothing should happen.
-        XCTAssertFalse(roomProxy.applyPowerLevelChangesCalled)
+        #expect(!testSetup.roomProxy.applyPowerLevelChangesCalled)
     }
     
-    func testDefaultStateRoom() {
-        setUp(isSpace: false)
-        XCTAssertNotNil(context.settings[.roomDetails])
-        XCTAssertNotNil(context.settings[.memberModeration])
-        XCTAssertNotNil(context.settings[.messagesAndContent])
-        XCTAssertNil(context.settings[.manageSpace])
+    @Test
+    func defaultStateRoom() {
+        let testSetup = TestSetup(isSpace: false)
+        #expect(testSetup.context.settings[.roomDetails] != nil)
+        #expect(testSetup.context.settings[.memberModeration] != nil)
+        #expect(testSetup.context.settings[.messagesAndContent] != nil)
+        #expect(testSetup.context.settings[.manageSpace] == nil)
     }
     
-    func testDefaultStateSpace() {
-        setUp(isSpace: true)
-        XCTAssertNotNil(context.settings[.roomDetails])
-        XCTAssertNotNil(context.settings[.memberModeration])
-        XCTAssertNil(context.settings[.messagesAndContent])
-        XCTAssertNotNil(context.settings[.manageSpace])
-    }
-    
-    private func setUp(isSpace: Bool, ownPowerLevel: RoomPowerLevel = RoomRole.creator.powerLevel) {
-        roomProxy = JoinedRoomProxyMock(.init(isSpace: isSpace))
-        viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: .init(powerLevels: .mock),
-                                                         ownPowerLevel: ownPowerLevel,
-                                                         roomProxy: roomProxy,
-                                                         userIndicatorController: UserIndicatorControllerMock(),
-                                                         analytics: ServiceLocator.shared.analytics)
+    @Test
+    func defaultStateSpace() {
+        let testSetup = TestSetup(isSpace: true)
+        #expect(testSetup.context.settings[.roomDetails] != nil)
+        #expect(testSetup.context.settings[.memberModeration] != nil)
+        #expect(testSetup.context.settings[.messagesAndContent] == nil)
+        #expect(testSetup.context.settings[.manageSpace] != nil)
     }
 }

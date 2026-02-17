@@ -8,39 +8,48 @@
 
 import Combine
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class RoomMembersListScreenViewModelTests: XCTestCase {
-    var viewModel: RoomMembersListScreenViewModel!
-    var roomProxy: JoinedRoomProxyMock!
-    
-    var context: RoomMembersListScreenViewModel.Context {
-        viewModel.context
-    }
-    
-    override func tearDown() {
-        viewModel = nil
-        roomProxy = nil
-    }
-    
-    func testJoinedMembers() async throws {
-        setup(with: [.mockAlice, .mockBob])
+@Suite
+struct RoomMembersListScreenViewModelTests {
+    @MainActor
+    private struct TestSetup {
+        var viewModel: RoomMembersListScreenViewModel
+        var roomProxy: JoinedRoomProxyMock
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        var context: RoomMembersListScreenViewModel.Context {
+            viewModel.context
+        }
+        
+        init(with members: [RoomMemberProxyMock]) {
+            roomProxy = JoinedRoomProxyMock(.init(name: "test", members: members))
+            viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
+                                                       roomProxy: roomProxy,
+                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                       analytics: ServiceLocator.shared.analytics)
+        }
+    }
+    
+    @Test
+    func joinedMembers() async throws {
+        let testSetup = TestSetup(with: [.mockAlice, .mockBob])
+        
+        let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleJoinedMembers.count == 2
         }
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(viewModel.state.joinedMembersCount, 2)
-        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 2)
+        #expect(testSetup.viewModel.state.joinedMembersCount == 2)
+        #expect(testSetup.viewModel.state.visibleJoinedMembers.count == 2)
     }
     
-    func testSortingMembers() async throws {
-        setup(with: [.mockModerator, .mockDan, .mockAlice, .mockAdmin])
+    @Test
+    func sortingMembers() async throws {
+        let testSetup = TestSetup(with: [.mockModerator, .mockDan, .mockAlice, .mockAdmin])
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleJoinedMembers.count == 4
         }
         
@@ -57,231 +66,244 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
                   verificationState: .notVerified)
         ]
         
-        XCTAssertEqual(viewModel.state.visibleJoinedMembers, sortedMembers)
+        #expect(testSetup.viewModel.state.visibleJoinedMembers == sortedMembers)
     }
     
-    func testSearch() async throws {
-        setup(with: [.mockAlice, .mockBob])
+    @Test
+    func search() async throws {
+        let testSetup = TestSetup(with: [.mockAlice, .mockBob])
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleJoinedMembers.count == 1
         }
         
-        context.searchQuery = "alice"
+        testSetup.context.searchQuery = "alice"
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(viewModel.state.joinedMembersCount, 2)
-        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 1)
+        #expect(testSetup.viewModel.state.joinedMembersCount == 2)
+        #expect(testSetup.viewModel.state.visibleJoinedMembers.count == 1)
     }
     
-    func testEmptySearch() async throws {
-        setup(with: [.mockAlice, .mockBob])
-        context.searchQuery = "WWW"
+    @Test
+    func emptySearch() async throws {
+        let testSetup = TestSetup(with: [.mockAlice, .mockBob])
+        testSetup.context.searchQuery = "WWW"
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.joinedMembersCount == 2
         }
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(viewModel.state.joinedMembersCount, 2)
-        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 0)
+        #expect(testSetup.viewModel.state.joinedMembersCount == 2)
+        #expect(testSetup.viewModel.state.visibleJoinedMembers.count == 0)
     }
     
-    func testJoinedAndInvitedMembers() async throws {
-        setup(with: [.mockInvited, .mockBob])
+    @Test
+    func joinedAndInvitedMembers() async throws {
+        let testSetup = TestSetup(with: [.mockInvited, .mockBob])
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleInvitedMembers.count == 1
         }
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(viewModel.state.joinedMembersCount, 1)
-        XCTAssertEqual(viewModel.state.visibleInvitedMembers.count, 1)
-        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 1)
+        #expect(testSetup.viewModel.state.joinedMembersCount == 1)
+        #expect(testSetup.viewModel.state.visibleInvitedMembers.count == 1)
+        #expect(testSetup.viewModel.state.visibleJoinedMembers.count == 1)
     }
     
-    func testInvitedMembers() async throws {
-        setup(with: [.mockInvited])
+    @Test
+    func invitedMembers() async throws {
+        let testSetup = TestSetup(with: [.mockInvited])
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleInvitedMembers.count == 1
         }
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(viewModel.state.joinedMembersCount, 0)
-        XCTAssertEqual(viewModel.state.visibleInvitedMembers.count, 1)
-        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 0)
+        #expect(testSetup.viewModel.state.joinedMembersCount == 0)
+        #expect(testSetup.viewModel.state.visibleInvitedMembers.count == 1)
+        #expect(testSetup.viewModel.state.visibleJoinedMembers.count == 0)
     }
     
-    func testSearchInvitedMembers() async throws {
-        setup(with: [.mockInvited])
+    @Test
+    func searchInvitedMembers() async throws {
+        let testSetup = TestSetup(with: [.mockInvited])
         
-        context.searchQuery = "invited"
+        testSetup.context.searchQuery = "invited"
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleInvitedMembers.count == 1
         }
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(viewModel.state.joinedMembersCount, 0)
-        XCTAssertEqual(viewModel.state.visibleInvitedMembers.count, 1)
-        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 0)
+        #expect(testSetup.viewModel.state.joinedMembersCount == 0)
+        #expect(testSetup.viewModel.state.visibleInvitedMembers.count == 1)
+        #expect(testSetup.viewModel.state.visibleJoinedMembers.count == 0)
     }
     
-    func testSelectUserAsUser() async throws {
+    @Test
+    func selectUserAsUser() async throws {
         // Given the room list viewed as a regular user.
-        setup(with: .allMembers)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
+        let testSetup = TestSetup(with: .allMembers)
+        var deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
         try await deferred.fulfill()
         
         // When tapping on another user in the list.
-        deferred = deferFulfillment(context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
-        guard let user = viewModel.state.visibleJoinedMembers.first(where: { $0.member.role == .user && $0.member.id != RoomMemberProxyMock.mockMe.userID })?.member else {
-            XCTFail("Expected to find a regular user.")
+        deferred = deferFulfillment(testSetup.context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
+        guard let user = testSetup.viewModel.state.visibleJoinedMembers.first(where: { $0.member.role == .user && $0.member.id != RoomMemberProxyMock.mockMe.userID })?.member else {
+            Issue.record("Expected to find a regular user.")
             return
         }
-        context.send(viewAction: .selectMember(user))
+        testSetup.context.send(viewAction: .selectMember(user))
         
         // Then the member's details should be shown.
         try await deferred.fulfill()
-        XCTAssertNotNil(context.manageMemeberViewModel)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, user.id)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, false)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, false)
+        #expect(testSetup.context.manageMemeberViewModel != nil)
+        #expect(testSetup.context.manageMemeberViewModel?.state.memberDetails.id == user.id)
+        #expect(testSetup.context.manageMemeberViewModel?.state.permissions.canKick == false)
+        #expect(testSetup.context.manageMemeberViewModel?.state.permissions.canBan == false)
     }
     
-    func testSelectUserAsAdmin() async throws {
+    @Test
+    func selectUserAsAdmin() async throws {
         // Given the room list viewed as an admin.
-        setup(with: .allMembersAsAdmin)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
+        let testSetup = TestSetup(with: .allMembersAsAdmin)
+        var deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
-        XCTAssertNil(context.manageMemeberViewModel)
-
+        #expect(testSetup.context.manageMemeberViewModel == nil)
+        
         // When tapping on a user in the list.
-        deferred = deferFulfillment(context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
-        guard let user = viewModel.state.visibleJoinedMembers.first(where: { $0.member.role == .user && $0.member.id != RoomMemberProxyMock.mockMe.userID })?.member else {
-            XCTFail("Expected to find a regular user.")
+        deferred = deferFulfillment(testSetup.context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
+        guard let user = testSetup.viewModel.state.visibleJoinedMembers.first(where: { $0.member.role == .user && $0.member.id != RoomMemberProxyMock.mockMe.userID })?.member else {
+            Issue.record("Expected to find a regular user.")
             return
         }
-        context.send(viewAction: .selectMember(user))
+        testSetup.context.send(viewAction: .selectMember(user))
         try await deferred.fulfill()
         
         // Then member management should be shown for that user.
-        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, user.id)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, false)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isBanUnbanDisabled, false)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isMemberBanned, false)
+        #expect(testSetup.context.manageMemeberViewModel?.state.memberDetails.id == user.id)
+        #expect(testSetup.context.manageMemeberViewModel?.state.permissions.canKick == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.permissions.canBan == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isKickDisabled == false)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isBanUnbanDisabled == false)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isMemberBanned == false)
     }
     
-    func testSelectModeratorAsAdmin() async throws {
+    @Test
+    func selectModeratorAsAdmin() async throws {
         // Given the room list viewed as an admin.
-        setup(with: .allMembersAsAdmin)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
+        let testSetup = TestSetup(with: .allMembersAsAdmin)
+        var deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
-        XCTAssertNil(context.manageMemeberViewModel)
+        #expect(testSetup.context.manageMemeberViewModel == nil)
         
         // When tapping on a moderator in the list.
-        deferred = deferFulfillment(context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
-        guard let moderator = viewModel.state.visibleJoinedMembers.first(where: { $0.member.role == .moderator })?.member else {
-            XCTFail("Expected to find a moderator.")
+        deferred = deferFulfillment(testSetup.context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
+        guard let moderator = testSetup.viewModel.state.visibleJoinedMembers.first(where: { $0.member.role == .moderator })?.member else {
+            Issue.record("Expected to find a moderator.")
             return
         }
-        context.send(viewAction: .selectMember(moderator))
+        testSetup.context.send(viewAction: .selectMember(moderator))
         try await deferred.fulfill()
         
         // Then member management should be shown for the moderator.
-        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, moderator.id)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isMemberBanned, false)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, false)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isBanUnbanDisabled, false)
+        #expect(testSetup.context.manageMemeberViewModel?.state.memberDetails.id == moderator.id)
+        #expect(testSetup.context.manageMemeberViewModel?.state.permissions.canKick == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.permissions.canBan == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isMemberBanned == false)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isKickDisabled == false)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isBanUnbanDisabled == false)
     }
     
-    func testSelectAdminAsAdmin() async throws {
+    @Test
+    func selectAdminAsAdmin() async throws {
         // Given the room list viewed as an admin.
-        setup(with: .allMembersAsAdmin)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
+        let testSetup = TestSetup(with: .allMembersAsAdmin)
+        var deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
         
         // When tapping on another administrator in the list.
-        deferred = deferFulfillment(context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
-        guard let admin = viewModel.state.visibleJoinedMembers.first(where: { $0.member.role.isAdminOrHigher && $0.member.id != RoomMemberProxyMock.mockMe.userID })?.member else {
-            XCTFail("Expected to find another admin.")
+        deferred = deferFulfillment(testSetup.context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
+        guard let admin = testSetup.viewModel.state.visibleJoinedMembers.first(where: { $0.member.role.isAdminOrHigher && $0.member.id != RoomMemberProxyMock.mockMe.userID })?.member else {
+            Issue.record("Expected to find another admin.")
             return
         }
-        context.send(viewAction: .selectMember(admin))
+        testSetup.context.send(viewAction: .selectMember(admin))
         
         // Then the administrator's details should be shown.
         try await deferred.fulfill()
-        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, admin.id)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isBanUnbanDisabled, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isMemberBanned, false)
+        #expect(testSetup.context.manageMemeberViewModel?.state.memberDetails.id == admin.id)
+        #expect(testSetup.context.manageMemeberViewModel?.state.permissions.canKick == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.permissions.canBan == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isKickDisabled == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isBanUnbanDisabled == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isMemberBanned == false)
     }
     
-    func testSelectOwnMemberAsAdmin() async throws {
+    @Test
+    func selectOwnMemberAsAdmin() async throws {
         // Given the room list viewed as an admin.
-        setup(with: .allMembersAsAdmin)
-        let deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
+        let testSetup = TestSetup(with: .allMembersAsAdmin)
+        let deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
         try await deferred.fulfill()
         
         // When tapping on yourself in the list.
-        let memberDetailsAction = deferFulfillment(viewModel.actions) { $0.isSelectMember }
-        guard let ownMember = viewModel.state.visibleJoinedMembers.first(where: { $0.member.id == RoomMemberProxyMock.mockMe.userID })?.member else {
-            XCTFail("Expected to find own user admin.")
+        let memberDetailsAction = deferFulfillment(testSetup.viewModel.actions) { $0.isSelectMember }
+        guard let ownMember = testSetup.viewModel.state.visibleJoinedMembers.first(where: { $0.member.id == RoomMemberProxyMock.mockMe.userID })?.member else {
+            Issue.record("Expected to find own user admin.")
             return
         }
-        context.send(viewAction: .selectMember(ownMember))
+        testSetup.context.send(viewAction: .selectMember(ownMember))
         
         // Then your member's details should be shown.
         try await memberDetailsAction.fulfill()
-        XCTAssertNil(context.manageMemeberViewModel)
+        #expect(testSetup.context.manageMemeberViewModel == nil)
     }
     
-    func testSelectBannedMember() async throws {
+    @Test
+    func selectBannedMember() async throws {
         // Given the room list viewed as an admin.
-        setup(with: .allMembersAsAdmin + RoomMemberProxyMock.mockBanned)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
+        let testSetup = TestSetup(with: .allMembersAsAdmin + RoomMemberProxyMock.mockBanned)
+        var deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
-        XCTAssertNil(context.alertInfo)
+        #expect(testSetup.context.alertInfo == nil)
         
         // When tapping on a banned member in the list.
-        deferred = deferFulfillment(context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
-        guard let bannedMember = viewModel.state.visibleBannedMembers.first?.member else {
-            XCTFail("Expected to find a banned user.")
+        deferred = deferFulfillment(testSetup.context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
+        guard let bannedMember = testSetup.viewModel.state.visibleBannedMembers.first?.member else {
+            Issue.record("Expected to find a banned user.")
             return
         }
-        context.send(viewAction: .selectMember(bannedMember))
+        testSetup.context.send(viewAction: .selectMember(bannedMember))
         
         // Then an alert should be shown to unban the user.
         try await deferred.fulfill()
-        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, bannedMember.id)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isBanUnbanDisabled, false)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.isMemberBanned, true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.memberDetails.id == bannedMember.id)
+        #expect(testSetup.context.manageMemeberViewModel?.state.permissions.canKick == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.permissions.canBan == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isKickDisabled == true)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isBanUnbanDisabled == false)
+        #expect(testSetup.context.manageMemeberViewModel?.state.isMemberBanned == true)
     }
     
-    func testSwitchesToMembersModeWhenThereAreNoBannedMembers() async throws {
+    @Test
+    func switchesToMembersModeWhenThereAreNoBannedMembers() async throws {
         // Given the room list viewed as an admin.
-        roomProxy = JoinedRoomProxyMock(.init(name: "test"))
+        let roomProxy = JoinedRoomProxyMock(.init(name: "test"))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([RoomMemberProxyMock].allMembersAsAdmin + RoomMemberProxyMock.mockBanned)
         roomProxy.membersPublisher = subject.asCurrentValuePublisher()
-        viewModel = .init(userSession: UserSessionMock(.init()),
-                          roomProxy: roomProxy,
-                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                          analytics: ServiceLocator.shared.analytics)
+        let viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
+                                                       roomProxy: roomProxy,
+                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                       analytics: ServiceLocator.shared.analytics)
+        let context = viewModel.context
         
         var deferred = deferFulfillment(context.$viewState) { $0.visibleBannedMembers.count == 4 && $0.bindings.mode == .banned }
         context.mode = .banned
@@ -290,13 +312,5 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         deferred = deferFulfillment(context.$viewState) { $0.visibleBannedMembers.count == 0 && $0.bindings.mode == .members }
         subject.value = [RoomMemberProxyMock].allMembersAsAdmin
         try await deferred.fulfill()
-    }
-    
-    private func setup(with members: [RoomMemberProxyMock]) {
-        roomProxy = JoinedRoomProxyMock(.init(name: "test", members: members))
-        viewModel = .init(userSession: UserSessionMock(.init()),
-                          roomProxy: roomProxy,
-                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                          analytics: ServiceLocator.shared.analytics)
     }
 }

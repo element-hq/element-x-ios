@@ -7,18 +7,19 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class AppLockSetupBiometricsScreenViewModelTests: XCTestCase {
-    var appLockService: AppLockServiceMock!
-    var viewModel: AppLockSetupBiometricsScreenViewModelProtocol!
+@Suite(.serialized)
+final class AppLockSetupBiometricsScreenViewModelTests {
+    var appLockService: AppLockServiceMock
+    var viewModel: AppLockSetupBiometricsScreenViewModelProtocol
     
     var context: AppLockSetupBiometricsScreenViewModelType.Context {
         viewModel.context
     }
     
-    override func setUp() {
+    init() {
         AppSettings.resetAllSettings()
         
         appLockService = AppLockServiceMock()
@@ -28,27 +29,29 @@ class AppLockSetupBiometricsScreenViewModelTests: XCTestCase {
         viewModel = AppLockSetupBiometricsScreenViewModel(appLockService: appLockService)
     }
     
-    override func tearDown() {
+    deinit {
         AppSettings.resetAllSettings()
     }
 
-    func testAllow() async throws {
+    @Test
+    func allow() async throws {
         // When allowing Touch/Face ID.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .continue }
         context.send(viewAction: .allow)
         try await deferred.fulfill()
         
         // Then the service should now have biometric unlock enabled.
-        XCTAssertEqual(appLockService.enableBiometricUnlockCallsCount, 1)
+        #expect(appLockService.enableBiometricUnlockCallsCount == 1)
     }
 
-    func testSkip() async throws {
+    @Test
+    func skip() async throws {
         // When skipping biometrics.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .continue }
         context.send(viewAction: .skip)
         try await deferred.fulfill()
         
         // Then the service should now have biometric unlock enabled.
-        XCTAssertEqual(appLockService.enableBiometricUnlockCallsCount, 0)
+        #expect(appLockService.enableBiometricUnlockCallsCount == 0)
     }
 }

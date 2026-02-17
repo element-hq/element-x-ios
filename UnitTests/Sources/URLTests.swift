@@ -7,37 +7,37 @@
 //
 
 @testable import ElementX
-import XCTest
+import Foundation
+import Testing
 
-class URLTests: XCTestCase {
-    func testURLDirectoryName() {
+@Suite
+struct URLTests {
+    @Test
+    func urlDirectoryName() throws {
         let url: URL = "https://matrix.example.com/foo/bar/"
         let directoryName = url.asDirectoryName()
-        XCTAssertEqual(directoryName, "matrix.example.com-foo-bar")
-        createDirectory(with: directoryName)
+        #expect(directoryName == "matrix.example.com-foo-bar")
+        try createDirectory(with: directoryName)
     }
     
-    func testComplexURLDirectoryName() {
+    @Test
+    func complexURLDirectoryName() throws {
         let url: URL = "https://us%3Aer:pa%40%3Ass@[2001:db8:85a3::8a2e:370:7334]:8443/..//folder/./fi%20le(1).html;p=1;q=2"
         let directoryName = url.asDirectoryName()
-        XCTAssertEqual(directoryName, "us%3Aer-pa%40%3Ass@[2001-db8-85a3--8a2e-370-7334]-8443-..--folder-.-fi%20le(1).html;p=1;q=2")
-        createDirectory(with: directoryName)
+        #expect(directoryName == "us%3Aer-pa%40%3Ass@[2001-db8-85a3--8a2e-370-7334]-8443-..--folder-.-fi%20le(1).html;p=1;q=2")
+        try createDirectory(with: directoryName)
     }
     
     // MARK: - Helpers
     
-    func createDirectory(with directoryName: String) {
+    func createDirectory(with directoryName: String) throws {
         let url = URL.temporaryDirectory.appending(path: directoryName)
         try? FileManager.default.removeItem(at: url)
         
-        do {
-            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-        } catch {
-            XCTFail("Invalid file path: \(error.localizedDescription)")
-        }
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         
         guard FileManager.default.directoryExists(at: url) else {
-            XCTFail("Invalid file path")
+            Issue.record("Invalid file path")
             return
         }
     }

@@ -7,50 +7,50 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class UserProfileScreenViewModelTests: XCTestCase {
-    var viewModel: UserProfileScreenViewModel!
-    var context: UserProfileScreenViewModelType.Context {
-        viewModel.context
-    }
-
-    func testInitialState() async throws {
+@Suite
+struct UserProfileScreenViewModelTests {
+    @Test
+    func initialState() async throws {
         let profile = UserProfileProxy(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: .mockMXCAvatar)
         let clientProxy = ClientProxyMock(.init())
         clientProxy.profileForReturnValue = .success(profile)
         
-        viewModel = UserProfileScreenViewModel(userID: profile.userID,
-                                               isPresentedModally: false,
-                                               userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               analytics: ServiceLocator.shared.analytics)
+        let viewModel = UserProfileScreenViewModel(userID: profile.userID,
+                                                   isPresentedModally: false,
+                                                   userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                   analytics: ServiceLocator.shared.analytics)
+        let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }
         try await waitForMemberToLoad.fulfill()
         
-        XCTAssertFalse(context.viewState.isOwnUser)
-        XCTAssertEqual(context.viewState.userProfile, profile)
-        XCTAssertNotNil(context.viewState.permalink)
+        #expect(!context.viewState.isOwnUser)
+        #expect(context.viewState.userProfile == profile)
+        #expect(context.viewState.permalink != nil)
     }
     
-    func testInitialStateAccountOwner() async throws {
+    @Test
+    func initialStateAccountOwner() async throws {
         let profile = UserProfileProxy(userID: RoomMemberProxyMock.mockMe.userID, displayName: "Me", avatarURL: .mockMXCAvatar)
         let clientProxy = ClientProxyMock(.init())
         clientProxy.profileForReturnValue = .success(profile)
         
-        viewModel = UserProfileScreenViewModel(userID: profile.userID,
-                                               isPresentedModally: false,
-                                               userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               analytics: ServiceLocator.shared.analytics)
+        let viewModel = UserProfileScreenViewModel(userID: profile.userID,
+                                                   isPresentedModally: false,
+                                                   userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                   analytics: ServiceLocator.shared.analytics)
+        let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }
         try await waitForMemberToLoad.fulfill()
         
-        XCTAssertTrue(context.viewState.isOwnUser)
-        XCTAssertEqual(context.viewState.userProfile, profile)
-        XCTAssertNotNil(context.viewState.permalink)
+        #expect(context.viewState.isOwnUser)
+        #expect(context.viewState.userProfile == profile)
+        #expect(context.viewState.permalink != nil)
     }
 }

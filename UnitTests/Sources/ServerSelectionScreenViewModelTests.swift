@@ -7,151 +7,159 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class ServerSelectionScreenViewModelTests: XCTestCase {
-    var clientFactory: AuthenticationClientFactoryMock!
-    var service: AuthenticationServiceProtocol!
-    
-    var viewModel: ServerSelectionScreenViewModelProtocol!
-    var context: ServerSelectionScreenViewModelType.Context {
-        viewModel.context
+@Suite
+struct ServerSelectionScreenViewModelTests {
+    @MainActor
+    private struct TestSetup {
+        var clientFactory: AuthenticationClientFactoryMock
+        var service: AuthenticationServiceProtocol
+        var viewModel: ServerSelectionScreenViewModelProtocol
+        
+        var context: ServerSelectionScreenViewModelType.Context {
+            viewModel.context
+        }
+        
+        init(authenticationFlow: AuthenticationFlow) {
+            clientFactory = AuthenticationClientFactoryMock(configuration: .init())
+            service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
+                                            encryptionKeyProvider: EncryptionKeyProvider(),
+                                            clientFactory: clientFactory,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks())
+            
+            viewModel = ServerSelectionScreenViewModel(authenticationService: service,
+                                                       authenticationFlow: authenticationFlow,
+                                                       appSettings: ServiceLocator.shared.settings,
+                                                       userIndicatorController: UserIndicatorControllerMock())
+        }
     }
     
-    func testSelectForLogin() async throws {
+    @Test
+    func selectForLogin() async throws {
         // Given a view model for login.
-        setupViewModel(authenticationFlow: .login)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
+        let testSetup = TestSetup(authenticationFlow: .login)
+        #expect(testSetup.service.homeserver.value.loginMode == .unknown)
+        #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
         // When selecting matrix.org.
-        context.homeserverAddress = "matrix.org"
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .updated }
-        context.send(viewAction: .confirm)
+        testSetup.context.homeserverAddress = "matrix.org"
+        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .updated }
+        testSetup.context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then selection should succeed.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(service.homeserver.value, .mockMatrixDotOrg)
+        #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(testSetup.service.homeserver.value == .mockMatrixDotOrg)
     }
     
-    func testLoginNotSupportedAlert() async throws {
+    @Test
+    func loginNotSupportedAlert() async throws {
         // Given a view model for login.
-        setupViewModel(authenticationFlow: .login)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertNil(context.alertInfo)
+        let testSetup = TestSetup(authenticationFlow: .login)
+        #expect(testSetup.service.homeserver.value.loginMode == .unknown)
+        #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(testSetup.context.alertInfo == nil)
         
         // When selecting a server that doesn't support login.
-        context.homeserverAddress = "server.net"
-        let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
-        context.send(viewAction: .confirm)
+        testSetup.context.homeserverAddress = "server.net"
+        let deferred = deferFulfillment(testSetup.context.observe(\.alertInfo)) { $0 != nil }
+        testSetup.context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then selection should fail with an alert about not supporting registration.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(context.alertInfo?.id, .loginAlert)
+        #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(testSetup.context.alertInfo?.id == .loginAlert)
     }
     
-    func testSelectForRegistration() async throws {
+    @Test
+    func selectForRegistration() async throws {
         // Given a view model for registration.
-        setupViewModel(authenticationFlow: .register)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
+        let testSetup = TestSetup(authenticationFlow: .register)
+        #expect(testSetup.service.homeserver.value.loginMode == .unknown)
+        #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
         // When selecting matrix.org.
-        context.homeserverAddress = "matrix.org"
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .updated }
-        context.send(viewAction: .confirm)
+        testSetup.context.homeserverAddress = "matrix.org"
+        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .updated }
+        testSetup.context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then selection should succeed.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(service.homeserver.value, .mockMatrixDotOrg)
+        #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(testSetup.service.homeserver.value == .mockMatrixDotOrg)
     }
     
-    func testRegistrationNotSupportedAlert() async throws {
+    @Test
+    func registrationNotSupportedAlert() async throws {
         // Given a view model for registration.
-        setupViewModel(authenticationFlow: .register)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertNil(context.alertInfo)
+        let testSetup = TestSetup(authenticationFlow: .register)
+        #expect(testSetup.service.homeserver.value.loginMode == .unknown)
+        #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(testSetup.context.alertInfo == nil)
         
         // When selecting a server that doesn't support registration.
-        context.homeserverAddress = "example.com"
-        let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
-        context.send(viewAction: .confirm)
+        testSetup.context.homeserverAddress = "example.com"
+        let deferred = deferFulfillment(testSetup.context.observe(\.alertInfo)) { $0 != nil }
+        testSetup.context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then selection should fail with an alert about not supporting registration.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(context.alertInfo?.id, .registrationAlert)
+        #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(testSetup.context.alertInfo?.id == .registrationAlert)
     }
     
-    func testElementProRequiredAlert() async throws {
+    @Test
+    func elementProRequiredAlert() async throws {
         // Given a view model for login.
-        setupViewModel(authenticationFlow: .login)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertNil(context.alertInfo)
+        let testSetup = TestSetup(authenticationFlow: .login)
+        #expect(testSetup.service.homeserver.value.loginMode == .unknown)
+        #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(testSetup.context.alertInfo == nil)
         
         // When selecting a server that requires Element Pro
-        context.homeserverAddress = "secure.gov"
-        let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
-        context.send(viewAction: .confirm)
+        testSetup.context.homeserverAddress = "secure.gov"
+        let deferred = deferFulfillment(testSetup.context.observe(\.alertInfo)) { $0 != nil }
+        testSetup.context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then selection should fail with an alert telling the user to download Element Pro.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(context.alertInfo?.id, .elementProAlert)
+        #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(testSetup.context.alertInfo?.id == .elementProAlert)
     }
     
-    func testInvalidServer() async throws {
+    @Test
+    func invalidServer() async throws {
         // Given a new instance of the view model.
-        setupViewModel(authenticationFlow: .login)
-        XCTAssertFalse(context.viewState.isShowingFooterError, "There should not be an error message for a new view model.")
-        XCTAssertNil(context.viewState.footerErrorMessage, "There should not be an error message for a new view model.")
-        XCTAssertEqual(String(context.viewState.footerMessage), L10n.screenChangeServerFormNotice,
-                       "The standard footer message should be shown.")
+        let testSetup = TestSetup(authenticationFlow: .login)
+        #expect(!testSetup.context.viewState.isShowingFooterError, "There should not be an error message for a new view model.")
+        #expect(testSetup.context.viewState.footerErrorMessage == nil, "There should not be an error message for a new view model.")
+        #expect(String(testSetup.context.viewState.footerMessage) == L10n.screenChangeServerFormNotice,
+                "The standard footer message should be shown.")
         
         // When attempting to discover an invalid server
-        var deferred = deferFulfillment(context.observe(\.viewState.isShowingFooterError)) { $0 }
-        context.homeserverAddress = "idontexist"
-        context.send(viewAction: .confirm)
+        var deferred = deferFulfillment(testSetup.context.observe(\.viewState.isShowingFooterError)) { $0 }
+        testSetup.context.homeserverAddress = "idontexist"
+        testSetup.context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then the footer should now be showing an error.
-        XCTAssertTrue(context.viewState.isShowingFooterError, "The error message should be stored.")
-        XCTAssertNotNil(context.viewState.footerErrorMessage, "The error message should be stored.")
-        XCTAssertNotEqual(String(context.viewState.footerMessage), L10n.screenChangeServerFormNotice,
-                          "The error message should be shown.")
+        #expect(testSetup.context.viewState.isShowingFooterError, "The error message should be stored.")
+        #expect(testSetup.context.viewState.footerErrorMessage != nil, "The error message should be stored.")
+        #expect(String(testSetup.context.viewState.footerMessage) != L10n.screenChangeServerFormNotice,
+                "The error message should be shown.")
         
         // And when clearing the error.
-        deferred = deferFulfillment(context.observe(\.viewState.isShowingFooterError)) { !$0 }
-        context.homeserverAddress = ""
-        context.send(viewAction: .clearFooterError)
+        deferred = deferFulfillment(testSetup.context.observe(\.viewState.isShowingFooterError)) { !$0 }
+        testSetup.context.homeserverAddress = ""
+        testSetup.context.send(viewAction: .clearFooterError)
         try await deferred.fulfill()
         
         // Then the error message should now be removed.
-        XCTAssertNil(context.viewState.footerErrorMessage, "The error message should have been cleared.")
-        XCTAssertEqual(String(context.viewState.footerMessage), L10n.screenChangeServerFormNotice,
-                       "The standard footer message should be shown again.")
-    }
-    
-    // MARK: - Helpers
-    
-    private func setupViewModel(authenticationFlow: AuthenticationFlow) {
-        clientFactory = AuthenticationClientFactoryMock(configuration: .init())
-        service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
-                                        encryptionKeyProvider: EncryptionKeyProvider(),
-                                        clientFactory: clientFactory,
-                                        appSettings: ServiceLocator.shared.settings,
-                                        appHooks: AppHooks())
-        
-        viewModel = ServerSelectionScreenViewModel(authenticationService: service,
-                                                   authenticationFlow: authenticationFlow,
-                                                   appSettings: ServiceLocator.shared.settings,
-                                                   userIndicatorController: UserIndicatorControllerMock())
+        #expect(testSetup.context.viewState.footerErrorMessage == nil, "The error message should have been cleared.")
+        #expect(String(testSetup.context.viewState.footerMessage) == L10n.screenChangeServerFormNotice,
+                "The standard footer message should be shown again.")
     }
 }
