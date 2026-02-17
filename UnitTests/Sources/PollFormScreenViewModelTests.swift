@@ -36,7 +36,7 @@ struct PollFormScreenViewModelTests {
     @Test
     func newPollInitialState() async throws {
         #expect(context.options.count == 2)
-        #expect(context.options.allSatisfy(\.text.isEmpty))
+        #expect(try context.options.allSatisfy(\.text.isEmpty))
         #expect(context.question.isEmpty)
         #expect(context.viewState.isSubmitButtonDisabled)
         #expect(!context.viewState.bindings.isUndisclosed)
@@ -107,16 +107,15 @@ struct PollFormScreenViewModelTests {
 
     @Test
     func newPollSubmit() async throws {
-        var testSetup = self
-        testSetup.context.question = "foo"
-        testSetup.context.options[0].text = "bla1"
-        testSetup.context.options[1].text = "bla2"
-        #expect(!testSetup.context.viewState.isSubmitButtonDisabled)
+        context.question = "foo"
+        context.options[0].text = "bla1"
+        context.options[1].text = "bla2"
+        #expect(!context.viewState.isSubmitButtonDisabled)
 
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .close }
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
-        await confirmation { confirmation in
-            testSetup.timelineProxy.createPollQuestionAnswersPollKindClosure = { question, options, kind in
+        try await confirmation { confirmation in
+            timelineProxy.createPollQuestionAnswersPollKindClosure = { question, options, kind in
                 #expect(question == "foo")
                 #expect(options.count == 2)
                 #expect(options[0] == "bla1")
@@ -125,10 +124,10 @@ struct PollFormScreenViewModelTests {
                 confirmation()
                 return .success(())
             }
-            testSetup.context.send(viewAction: .submit)
+            context.send(viewAction: .submit)
+            
+            try await deferred.fulfill()
         }
-        
-        try await deferred.fulfill()
     }
 
     @Test
@@ -142,7 +141,7 @@ struct PollFormScreenViewModelTests {
 
         let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
-        await confirmation { confirmation in
+        try await confirmation { confirmation in
             timelineProxy.editPollOriginalQuestionAnswersPollKindClosure = { eventID, question, options, kind in
                 #expect(eventID == "foo")
                 #expect(question == "What is your favorite country?")
@@ -156,9 +155,9 @@ struct PollFormScreenViewModelTests {
                 return .success(())
             }
             context.send(viewAction: .submit)
+            
+            try await deferred.fulfill()
         }
-        
-        try await deferred.fulfill()
     }
     
     @Test
@@ -178,15 +177,15 @@ struct PollFormScreenViewModelTests {
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
-        await confirmation { confirmation in
+        try await confirmation { confirmation in
             timelineProxy.redactReasonClosure = { eventID, _ in
                 #expect(eventID == .eventID("foo"))
                 confirmation()
                 return .success(())
             }
             context.alertInfo?.secondaryButton?.action?()
+            
+            try await deferred.fulfill()
         }
-        
-        try await deferred.fulfill()
     }
 }

@@ -184,7 +184,7 @@ struct QRCodeLoginScreenViewModelTests {
         try await deferredAction.fulfill()
         
         let currentState = testSetup.context.viewState.state
-        let deferredFailure = deferFailure(testSetup.context.$viewState, timeout: 1) { $0.state != currentState }
+        let deferredFailure = deferFailure(testSetup.context.$viewState, timeout: .seconds(1)) { $0.state != currentState }
         testSetup.linkDesktopProgressSubject.send(.syncingSecrets)
         try await deferredFailure.fulfill()
         
@@ -228,7 +228,7 @@ struct QRCodeLoginScreenViewModelTests {
         try await deferredAction.fulfill()
         
         let currentState = testSetup.context.viewState.state
-        let deferredFailure = deferFailure(testSetup.context.$viewState, timeout: 1) { $0.state != currentState }
+        let deferredFailure = deferFailure(testSetup.context.$viewState, timeout: .seconds(1)) { $0.state != currentState }
         testSetup.linkMobileProgressSubject.send(.done)
         try await deferredFailure.fulfill()
     }

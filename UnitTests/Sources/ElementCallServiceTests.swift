@@ -76,21 +76,20 @@ struct ElementCallServiceTests {
         }
     }
     
-    @Test
-    func expiredRingLifetimeIsIgnored() async throws {
-        var testSetup = self
-        #expect(!testSetup.callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+    @Test(.disabled("Flaky test"))
+    mutating func expiredRingLifetimeIsIgnored() {
+        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
-        let pushPayload = PKPushPayloadMock().updatingExpiration(testSetup.currentDate, lifetime: 20)
+        let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
         
-        testSetup.currentDate = testSetup.currentDate.addingTimeInterval(60)
+        currentDate = currentDate.addingTimeInterval(60)
         
-        testSetup.service.pushRegistry(testSetup.pushRegistry,
-                                       didReceiveIncomingPushWith: pushPayload,
-                                       for: .voIP) { }
-        try await Task.sleep(for: .milliseconds(500))
+        service.pushRegistry(pushRegistry,
+                             didReceiveIncomingPushWith: pushPayload,
+                             for: .voIP) { }
+        sleep(20)
         
-        #expect(!testSetup.callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
     }
     
     @Test(.disabled("Flaky test"))

@@ -7,39 +7,45 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class AppLockSetupSettingsScreenViewModelTests: XCTestCase {
-    var appLockService: AppLockServiceProtocol!
-    var keychainController: KeychainControllerMock!
-    var viewModel: AppLockSetupSettingsScreenViewModelProtocol!
-    
-    var context: AppLockSetupSettingsScreenViewModelType.Context {
-        viewModel.context
-    }
-    
-    override func setUpWithError() throws {
-        keychainController = KeychainControllerMock()
-        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
+@Suite
+struct AppLockSetupSettingsScreenViewModelTests {
+    @MainActor
+    private struct TestSetup {
+        var appLockService: AppLockServiceProtocol
+        var keychainController: KeychainControllerMock
+        var viewModel: AppLockSetupSettingsScreenViewModelProtocol
         
-        viewModel = AppLockSetupSettingsScreenViewModel(appLockService: AppLockServiceMock.mock())
+        var context: AppLockSetupSettingsScreenViewModelType.Context {
+            viewModel.context
+        }
+        
+        init() {
+            keychainController = KeychainControllerMock()
+            appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
+            viewModel = AppLockSetupSettingsScreenViewModel(appLockService: AppLockServiceMock.mock())
+        }
     }
 
-    func testDisablingShowsAlert() {
+    @Test
+    func disablingShowsAlert() {
+        var testSetup = TestSetup()
+        
         // Given a fresh screen with the PIN code enabled.
         let pinCode = "2023"
-        keychainController.pinCodeReturnValue = pinCode
-        keychainController.containsPINCodeReturnValue = true
+        testSetup.keychainController.pinCodeReturnValue = pinCode
+        testSetup.keychainController.containsPINCodeReturnValue = true
         
-        XCTAssertNil(context.alertInfo)
-        XCTAssertTrue(appLockService.isEnabled)
+        #expect(testSetup.context.alertInfo == nil)
+        #expect(testSetup.appLockService.isEnabled)
         
         // When disabling the PIN code lock.
-        context.send(viewAction: .disable)
+        testSetup.context.send(viewAction: .disable)
         
         // Then an alert should be shown before disabling it.
-        XCTAssertNotNil(context.alertInfo)
-        XCTAssertTrue(appLockService.isEnabled)
+        #expect(testSetup.context.alertInfo != nil)
+        #expect(testSetup.appLockService.isEnabled)
     }
 }

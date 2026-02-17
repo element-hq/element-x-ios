@@ -60,7 +60,7 @@ struct SpacesScreenViewModelTests {
     
     @Test
     func topLevelSpacesSubscription() async throws {
-        var testSetup = TestSetup()
+        let testSetup = TestSetup()
         defer { AppSettings.resetAllSettings() }
         
         var deferred = deferFulfillment(testSetup.context.observe(\.viewState.topLevelSpaces)) { $0.count == 0 }
@@ -78,7 +78,7 @@ struct SpacesScreenViewModelTests {
     
     @Test
     func selectingSpace() async throws {
-        var testSetup = TestSetup()
+        let testSetup = TestSetup()
         defer { AppSettings.resetAllSettings() }
         
         let selectedSpace = testSetup.topLevelSpacesSubject.value[0]
@@ -96,7 +96,7 @@ struct SpacesScreenViewModelTests {
     
     @Test
     func featureAnnouncement() async throws {
-        var testSetup = TestSetup()
+        let testSetup = TestSetup()
         defer { AppSettings.resetAllSettings() }
         #expect(!testSetup.appSettings.hasSeenSpacesAnnouncement)
         #expect(!testSetup.context.isPresentingFeatureAnnouncement)
@@ -111,7 +111,7 @@ struct SpacesScreenViewModelTests {
         
         testSetup.context.isPresentingFeatureAnnouncement = false
         
-        let deferredFailure = deferFailure(testSetup.context.observe(\.isPresentingFeatureAnnouncement), timeout: 1) { $0 == true }
+        let deferredFailure = deferFailure(testSetup.context.observe(\.isPresentingFeatureAnnouncement), timeout: .seconds(1)) { $0 == true }
         testSetup.viewModel.context.send(viewAction: .screenAppeared)
         try await deferredFailure.fulfill()
         #expect(!testSetup.context.isPresentingFeatureAnnouncement)

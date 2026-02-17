@@ -82,46 +82,44 @@ struct StaticLocationScreenViewModelTests {
 
     @Test
     func sendUserLocation() async throws {
-        var testSetup = self
-        testSetup.context.mapCenterLocation = .init(latitude: 0, longitude: 0)
-        testSetup.context.geolocationUncertainty = 10
+        context.mapCenterLocation = .init(latitude: 0, longitude: 0)
+        context.geolocationUncertainty = 10
         
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .close }
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
-        await confirmation { confirmation in
-            testSetup.timelineProxy.sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = { _, geoURI, _, _, assetType in
+        try await confirmation { confirmation in
+            timelineProxy.sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = { _, geoURI, _, _, assetType in
                 #expect(geoURI.uncertainty == 10)
                 #expect(assetType == .sender)
                 confirmation()
                 return .success(())
             }
             
-            testSetup.context.send(viewAction: .selectLocation)
+            context.send(viewAction: .selectLocation)
+            
+            try await deferred.fulfill()
         }
-        
-        try await deferred.fulfill()
     }
 
     @Test
     func sendPickedLocation() async throws {
-        var testSetup = self
-        testSetup.context.mapCenterLocation = .init(latitude: 0, longitude: 0)
-        testSetup.context.isLocationAuthorized = nil
-        testSetup.context.geolocationUncertainty = 10
+        context.mapCenterLocation = .init(latitude: 0, longitude: 0)
+        context.isLocationAuthorized = nil
+        context.geolocationUncertainty = 10
 
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .close }
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
-        await confirmation { confirmation in
-            testSetup.timelineProxy.sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = { _, geoURI, _, _, assetType in
+        try await confirmation { confirmation in
+            timelineProxy.sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = { _, geoURI, _, _, assetType in
                 #expect(geoURI.uncertainty == nil)
                 #expect(assetType == .pin)
                 confirmation()
                 return .success(())
             }
             
-            testSetup.context.send(viewAction: .selectLocation)
+            context.send(viewAction: .selectLocation)
+            
+            try await deferred.fulfill()
         }
-        
-        try await deferred.fulfill()
     }
 }

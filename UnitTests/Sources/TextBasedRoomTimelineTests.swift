@@ -7,6 +7,7 @@
 //
 
 @testable import ElementX
+import Foundation
 import Testing
 
 @Suite

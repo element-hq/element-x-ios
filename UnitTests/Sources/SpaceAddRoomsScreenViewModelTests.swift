@@ -29,7 +29,7 @@ struct SpaceAddRoomsScreenViewModelTests {
             
             let clientProxy = ClientProxyMock(.init())
             clientProxy.recentlyVisitedRoomsFilterReturnValue = .init(repeating: JoinedRoomProxyMock(.init()), count: 5)
-            spaceServiceProxy = clientProxy.underlyingSpaceService as! SpaceServiceProxyMock
+            spaceServiceProxy = clientProxy.underlyingSpaceService as? SpaceServiceProxyMock ?? SpaceServiceProxyMock(.init())
             
             viewModel = SpaceAddRoomsScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
                                                      userSession: UserSessionMock(.init(clientProxy: clientProxy)),
@@ -42,24 +42,19 @@ struct SpaceAddRoomsScreenViewModelTests {
     func addingChildRoom() async throws {
         var testSetup = TestSetup()
         
-        var deferred = deferFulfillment(testSetup.context.observe(\.viewState.roomsSection),
-                                        message: "The screen should start with some suggestions.") { section in
+        var deferred = deferFulfillment(testSetup.context.observe(\.viewState.roomsSection)) { section in
             section.type == .suggestions && !section.rooms.isEmpty
         }
         try await deferred.fulfill()
         
-        deferred = deferFulfillment(testSetup.context.observe(\.viewState.roomsSection),
-                                    message: "The screen should show search results when there's a query.") { section in
+        deferred = deferFulfillment(testSetup.context.observe(\.viewState.roomsSection)) { section in
             section.type == .searchResults && !section.rooms.isEmpty
         }
         testSetup.context.searchQuery = "Foundation"
         testSetup.context.send(viewAction: .searchQueryChanged)
         try await deferred.fulfill()
         
-        guard let room = testSetup.context.viewState.roomsSection.rooms.first else {
-            Issue.record("Expected a room in the section")
-            return
-        }
+        let room = try #require(testSetup.context.viewState.roomsSection.rooms.first, "Expected a room in the section")
         testSetup.context.send(viewAction: .toggleRoom(room))
         #expect(testSetup.context.viewState.selectedRooms.contains(room), "The selected room should be shown.")
         
@@ -77,8 +72,7 @@ struct SpaceAddRoomsScreenViewModelTests {
         // Given a view model with 4 selected rooms.
         var testSetup = TestSetup()
         
-        var deferred = deferFulfillment(testSetup.context.observe(\.viewState.roomsSection),
-                                        message: "There should be 4 search results.") { section in
+        var deferred = deferFulfillment(testSetup.context.observe(\.viewState.roomsSection)) { section in
             section.type == .searchResults && section.rooms.count == 4
         }
         testSetup.context.searchQuery = "f"
@@ -100,8 +94,7 @@ struct SpaceAddRoomsScreenViewModelTests {
             }
         }
         
-        deferred = deferFulfillment(testSetup.context.observe(\.viewState.roomsSection),
-                                    message: "The search results should update.") { section in
+        deferred = deferFulfillment(testSetup.context.observe(\.viewState.roomsSection)) { section in
             section.type == .searchResults && section.rooms.count == 2
         }
         testSetup.context.send(viewAction: .save)

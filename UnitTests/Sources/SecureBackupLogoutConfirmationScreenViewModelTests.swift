@@ -37,54 +37,54 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     }
     
     @Test
-    func ongoingState() async {
-        var testSetup = self
-        #expect(testSetup.context.viewState.mode == .saveRecoveryKey)
+    func ongoingState() async throws {
+        #expect(context.viewState.mode == .saveRecoveryKey)
         
-        await confirmation { confirmation in
-            testSetup.secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { stateSubject in
+        try await confirmation { confirmation in
+            secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { stateSubject in
                 try? await Task.sleep(for: .seconds(4))
                 stateSubject.send(.uploading(uploadedKeyCount: 50, totalKeyCount: 100))
                 confirmation()
                 return .success(())
             }
             
-            let deferredWaiting = deferFulfillment(testSetup.context.observe(\.viewState.mode)) { $0 == .waitingToStart(hasStalled: false) }
-            testSetup.context.send(viewAction: .logout)
-            try? await deferredWaiting.fulfill()
+            let deferredWaiting = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .waitingToStart(hasStalled: false) }
+            context.send(viewAction: .logout)
+            _ = try await deferredWaiting.fulfill()
             
             // Wait for the 2-second timeout.
-            let deferredHasStalled = deferFulfillment(testSetup.context.observe(\.viewState.mode)) { $0 == .waitingToStart(hasStalled: true) }
-            try? await deferredHasStalled.fulfill()
+            let deferredHasStalled = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .waitingToStart(hasStalled: true) }
+            _ = try await deferredHasStalled.fulfill()
+            
+            try await deferFulfillment(context.observe(\.viewState.mode)) { $0 == .backupOngoing(progress: 0.5) }.fulfill()
         }
-        
-        #expect(testSetup.context.viewState.mode == .backupOngoing(progress: 0.5))
     }
     
     @Test
     func offlineState() async throws {
-        var testSetup = self
-        #expect(testSetup.context.viewState.mode == .saveRecoveryKey)
+        #expect(context.viewState.mode == .saveRecoveryKey)
         
-        await confirmation { confirmation in
-            testSetup.secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { stateSubject in
+        try await confirmation { confirmation in
+            secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { stateSubject in
                 try? await Task.sleep(for: .seconds(4))
                 stateSubject.send(.uploading(uploadedKeyCount: 50, totalKeyCount: 100))
                 confirmation()
                 return .success(())
             }
             
-            let deferredWaiting = deferFulfillment(testSetup.context.observe(\.viewState.mode)) { $0 == .waitingToStart(hasStalled: false) }
-            testSetup.context.send(viewAction: .logout)
-            try? await deferredWaiting.fulfill()
+            let deferredWaiting = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .waitingToStart(hasStalled: false) }
+            context.send(viewAction: .logout)
+            try await deferredWaiting.fulfill()
             
             // Wait for the 2-second timeout.
-            let deferredHasStalled = deferFulfillment(testSetup.context.observe(\.viewState.mode)) { $0 == .waitingToStart(hasStalled: true) }
-            try? await deferredHasStalled.fulfill()
+            let deferredHasStalled = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .waitingToStart(hasStalled: true) }
+            try await deferredHasStalled.fulfill()
+            
+            try await deferFulfillment(context.observe(\.viewState.mode)) { $0 == .backupOngoing(progress: 0.5) }.fulfill()
         }
         
-        let deferred = deferFulfillment(testSetup.context.observe(\.viewState.mode)) { $0 == .offline }
-        testSetup.reachabilitySubject.send(.unreachable)
+        let deferred = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .offline }
+        reachabilitySubject.send(.unreachable)
         try await deferred.fulfill()
     }
 }

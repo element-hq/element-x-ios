@@ -8,6 +8,7 @@
 
 import Combine
 @testable import ElementX
+import Foundation
 import Testing
 
 @MainActor
