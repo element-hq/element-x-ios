@@ -10,7 +10,6 @@ import AnalyticsEvents
 import BackgroundTasks
 import Combine
 import Intents
-import KeychainAccess
 import MatrixRustSDK
 import Sentry
 import SwiftUI
@@ -397,20 +396,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     // MARK: - Private
     
     private func checkOldAppDatabase() {
-        let keychain = Keychain(service: "im.vector.app.encryption-manager-service", accessGroup: "7J4U792NQT.im.vector.app.keychain.shared")
-        let storePasshphrase = try? keychain.getData("cryptoSDKStoreKey")
-        guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.im.vector") else {
+        guard let classicAppBundleIdentifier = InfoPlistReader.main.classicAppBundleIdentifier,
+              let classicAppAccessGroup = InfoPlistReader.main.classicAppGroupIdentifier else {
             return
         }
-        let test = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
-        MXLog.info("WIP TEST: \(test ?? [])")
-        let testMatrixKit = test?.first(where: { $0.lastPathComponent == "MatrixKit" })
-        MXLog.info("WIP TEST: \(testMatrixKit ?? "")")
-        guard let testMatrixKit else {
-            return
-        }
-        let test2 = try? FileManager.default.contentsOfDirectory(at: testMatrixKit, includingPropertiesForKeys: nil)
-        MXLog.info("WIP TEST: \(test2)")
+        
+        let migrationManager = AppMigrationManager(classicAppBundleIdentifier: classicAppBundleIdentifier,
+                                                   classicAppAccessGroup: classicAppAccessGroup)
+        try? migrationManager.test()
     }
     
     /// Perform any required migrations for the app to function correctly.

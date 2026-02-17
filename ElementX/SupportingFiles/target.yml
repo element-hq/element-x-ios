@@ -75,9 +75,10 @@ targets:
         ]
         appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
         baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
-        classicAppBundleIdentifier: $(CLASSIC_APP_BUNDLE_IDENTIFIER)
+        developmentTeam: $(DEVELOPMENT_TEAM) # Only necessary for the classic app migration, it is inlined everywhere else.
         keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
-        classicAppKeychainAccessGroupIdentifier: $(CLASSIC_APP_KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
+        classicAppGroupIdentifier: $(CLASSIC_APP_GROUP_IDENTIFIER)
+        classicAppBundleIdentifier: $(CLASSIC_APP_BUNDLE_IDENTIFIER)
         productionAppName: $(PRODUCTION_APP_NAME)
         ITSAppUsesNonExemptEncryption: false
         NSUserActivityTypes: [
