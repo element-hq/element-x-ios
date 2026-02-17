@@ -56,9 +56,9 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | 7.2 All functionality works | **PARTIALLY VERIFIED** | OIDC login + Sliding Sync verified. Calls, push, E2EE need testing. |
 | 7.3 Stability/quality | **NOT VERIFIED** | Needs full testing cycle |
 | 7.4 Apple compliance | **TEMPLATES READY** | Privacy labels mapped, export compliance analyzed |
-| 7.5 Branding matches customer | **PARTIAL** | Temporary icon applied. Final assets awaited (D-008). |
-| 7.6 Source code + build docs | **PARTIALLY DONE** | 21+ docs exist; build guide still needed |
-| 7.7 Maintenance guidance | **NOT DONE** | Upstream sync process documented |
+| 7.5 Branding matches customer | **MOSTLY DONE** | Display name "UCMeet", temp icon applied, zero Element branding visible. Final icon/color awaited (D-008). |
+| 7.6 Source code + build docs | **DONE** | 22+ docs + build & handover guide (`build_and_handover_guide.md`) |
+| 7.7 Maintenance guidance | **DONE** | Upstream sync documented in handover guide, `/upstream-sync` command available |
 
 ---
 
@@ -83,7 +83,8 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | String rebranding + Swift cleanup | ~3h | 30 string replacements (en, en-US, ru), 10 Swift source refs cleaned |
 | Unit test fixes | ~1h | 16 test assertions updated across 5 test files to match rebrand |
 | App display name + branding audit | ~1h | APP_DISPLAY_NAME → UCMeet, full branding audit, NSE/ShareExtension audit |
-| **Total invested** | **~58-61h** | |
+| Launch screen + checkpoint + handover guide | ~2h | Launch screen verified, checkpoint/branding-complete tag, 10-section build guide |
+| **Total invested** | **~60-63h** | |
 
 ### Remaining Work Estimate (by phase)
 
@@ -108,11 +109,11 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 |--------|-------|
 | Original estimate (with AI) | 60-95h, expected ~80h |
 | Original estimate (without AI) | 85-132h, expected ~120h |
-| Hours invested so far | ~58-61h |
-| Hours remaining (estimated) | 30-56h, expected ~38h |
+| Hours invested so far | ~60-63h |
+| Hours remaining (estimated) | 28-54h, expected ~36h |
 | **Projected total** | **~94-99h** |
 | Budget position | Within AI-assisted range (60-95h), on track |
-| Budget consumed | ~60% of hours, ~65% of $2,200 fixed price |
+| Budget consumed | ~62% of hours, ~67% of $2,200 fixed price |
 
 > Project is tracking well within budget. String rebranding and source cleanup further reduced remaining work. Main cost centers left: testing (~10-16h) and App Store submission (~8-14h).
 
@@ -323,6 +324,7 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 | 2026-02-17 | Major progress after customer response. 7/15 init steps done, 4 mostly done, 1 partial. ~56-59h invested (~58% budget). 5/12 decisions resolved. Server configured, OIDC login verified, calls configured, 34 locales removed, associated domains cleaned, 30 strings rebranded, 10 Swift refs cleaned. Estimated ~39h remaining. Timeline: 6-8 weeks total (best/expected). Critical path: Bundle ID + Apple Developer account. |
 | 2026-02-17 | Unit test fixes for rebrand. 962 tests run, 16 failures caused by our changes fixed across 5 test files (AppRouteURLParserTests, ServerConfirmationScreenViewModelTests, ServerConfirmationScreenViewStateTests, LocalizationTests, AuthenticationServiceTests). All 33 affected tests now passing. ~57-60h invested (~59% budget). |
 | 2026-02-17 | App display name + branding audit. Changed APP_DISPLAY_NAME/PRODUCTION_APP_NAME → "UCMeet" in app.yml (propagates to main app, NSE, ShareExtension). Verified on simulator: iOS Settings shows "< UCMeet". Full branding audit: **zero user-visible Element branding remains**. NSE/ShareExtension audit: clean. ~58-61h invested (~60% budget). |
+| 2026-02-17 | Launch screen verified clean (plain background). Checkpoint tag `checkpoint/branding-complete` created. Build & handover guide written (10 sections). TOR 7.6 (source + docs) and 7.7 (maintenance) now DONE. ~60-63h invested (~62% budget). |
 
 ---
 

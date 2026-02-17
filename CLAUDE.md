@@ -90,6 +90,9 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 - App display name (2026-02-17): `APP_DISPLAY_NAME` → "UCMeet", `PRODUCTION_APP_NAME` → "UCMeet" in `app.yml`. Propagates to main app, NSE, ShareExtension. Verified on simulator — iOS Settings back button shows "< UCMeet".
 - Branding audit (2026-02-17): Full codebase audit confirmed zero remaining user-visible Element branding. All remaining refs are blocked on D-001 (Bundle ID) or intentional (OIDC).
 - NSE/ShareExtension audit (2026-02-17): Extension targets clean — no hardcoded Element strings, all use `$(APP_DISPLAY_NAME)` variables.
+- Launch screen check (2026-02-17): Plain background color only — no text, no logo, no Element branding.
+- Checkpoint tag `checkpoint/branding-complete` created at `caf1d6872`.
+- Build & handover guide (2026-02-17): `documentation/build_and_handover_guide.md` — prerequisites, build steps, config reference, Bundle ID migration instructions, upstream sync, App Store submission, file inventory.
 
 **What's blocked (require customer input):**
 - Step 5: Bundle identity changes (needs Bundle ID — customer must choose, e.g. `org.ucmeet.chat`)
@@ -143,6 +146,7 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | `nse_audit.md` | NSE target: 1 hardcoded string, everything else auto-derives from app.yml |
 | `share_extension_audit.md` | ShareExtension: zero hardcoded brand references, all runtime via InfoPlistReader |
 | `hardcoded_identifiers_inventory.md` | Complete inventory: 97 identifiers across 35+ files (28 auto, 52 manual, 17 test) |
+| `build_and_handover_guide.md` | **Build & handover guide for customer/maintainer.** Prerequisites, build steps, config reference, Bundle ID migration, upstream sync, App Store submission, file inventory. |
 | `element_call_audit.md` | Element Call (MatrixRTC + LiveKit): 8 hardcoded refs, URL scheme, associated domains, disabling options |
 | `privacy_manifest_audit.md` | Privacy compliance B+: 2 manifests exist, 2 gaps (ShareExt manifest + NetworkInfo API), all analytics opt-in |
 | `upstream_sync_report.md` | 18 upstream commits since fork, SDK v26.02.10, 3 bug fixes, 3-4 file conflicts, sync recommendation |
@@ -394,7 +398,8 @@ The project is **nearly feature-complete for what's possible without Bundle ID**
 | 2026-02-17 | **String rebranding + Swift source cleanup.** 30 string replacements across 5 locale files (en, en-US, ru): "Element" → "UCMeet", "Element Call" → "UCMeet Call", "Element X" → "UCMeet". 10 Element-specific references cleaned in 8 Swift files (preview mocks, comments, dead code paths). 16 `io.element.elementx` dispatch queue labels identified as blocked on D-001. OIDC element.io URLs left as-is (technical requirement). Build verified. |
 | 2026-02-17 | **Unit test fixes for rebrand.** 962 tests run, 16 failures caused by rebrand changes fixed across 5 test files: AppRouteURLParserTests (5 — knownHosts, URL scheme, web hosts), ServerConfirmationScreenViewModelTests (7 — accountProviders default, mock serverAddress), ServerConfirmationScreenViewStateTests (1 — element.io message removed), LocalizationTests (2 — Italian→Russian locale+plurals), AuthenticationServiceTests (1 — default homeserver address). All 33 affected tests passing. 39 pre-existing failures unrelated to rebrand. |
 | 2026-02-17 | **App display name + branding audit.** Changed `APP_DISPLAY_NAME` → "UCMeet" and `PRODUCTION_APP_NAME` → "UCMeet" in `app.yml`. Propagates to main app, NSE, ShareExtension via XcodeGen variables. Verified on simulator: iOS Settings back button shows "< UCMeet". Full branding audit confirmed **zero user-visible Element branding remains**. NSE/ShareExtension audit: clean, no hardcoded Element strings. |
+| 2026-02-17 | **Launch screen + checkpoint + handover guide.** Launch screen verified clean (plain background, no branding). Tag `checkpoint/branding-complete` created and pushed. Build & handover guide written: `documentation/build_and_handover_guide.md` — 10 sections covering prerequisites, build steps, config reference, Bundle ID migration, upstream sync, App Store submission, file inventory. |
 
 ---
 
-*Last updated: 2026-02-17 (app display name + branding audit). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-17 (launch screen + checkpoint + handover guide). Update this file whenever the project phase changes or a blocker is resolved.*
