@@ -1,6 +1,6 @@
 settings:
-  APP_DISPLAY_NAME: Element X
-  PRODUCTION_APP_NAME: Element
+  APP_DISPLAY_NAME: UCMeet
+  PRODUCTION_APP_NAME: UCMeet
   APP_GROUP_IDENTIFIER: group.io.element
   BASE_BUNDLE_IDENTIFIER: io.element.elementx
   ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "colors/accent-color"
