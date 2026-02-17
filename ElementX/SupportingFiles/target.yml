@@ -53,9 +53,9 @@ targets:
         CFBundleURLTypes: [
           {
             CFBundleTypeRole: Editor,
-            CFBundleURLName: "Element Call",
+            CFBundleURLName: "UCMeet Call",
             CFBundleURLSchemes: [
-              io.element.call
+              org.ucmeet.call
             ]
           },
           {
@@ -112,16 +112,8 @@ targets:
       properties:
         aps-environment: development
         com.apple.developer.associated-domains:
-        - applinks:element.io
-        - applinks:app.element.io
-        - applinks:staging.element.io
-        - applinks:develop.element.io
-        - applinks:mobile.element.io
-        - applinks:call.element.io
-        - applinks:call.element.dev
         - applinks:matrix.to
-        # - applinks:localhost?mode=developer # developer mode only works with https (but self-signed is fine).
-        - webcredentials:*.element.io
+        - webcredentials:*.element.io # Required for OIDC ASWebAuthenticationSession until AASA on ucmeet.info
         com.apple.developer.usernotifications.communication: true
         com.apple.security.app-sandbox: true
         com.apple.security.application-groups:

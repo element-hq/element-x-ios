@@ -95,7 +95,7 @@ struct InfoPlistReader {
     }
     
     var elementCallScheme: String {
-        customSchemeForName("Element Call")
+        customSchemeForName("UCMeet Call")
     }
     
     // MARK: - Mention Pills

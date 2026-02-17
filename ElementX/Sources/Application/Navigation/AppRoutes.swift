@@ -135,7 +135,7 @@ private struct AppGroupURLParser: URLParser {
 
 /// The parser for Element Call links. This always returns a `.genericCallLink`.
 private struct ElementCallURLParser: URLParser {
-    private let knownHosts = ["call.element.io"]
+    private let knownHosts: [String] = [] // UCMeet: calls use embedded Element Call bundle, no hosted instance
     private let customSchemeURLQueryParameterName = "url"
     
     func route(from url: URL) -> AppRoute? {

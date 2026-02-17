@@ -79,6 +79,11 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 - AppSettings.swift updated: account provider → `matrix.ucmeet.org`, legal URLs → ucmeet.info, Element Call analytics disabled
 - App icon replaced: UCMeet Icon_1 processed (1024x1024, no alpha), temporary pending final re-export from customer
 - Build verified (2026-02-17): `xcodegen generate` + full build on iPhone 17 Pro simulator after all changes. BUILD SUCCEEDED.
+- Calls configuration (2026-02-17): URL scheme `io.element.call` → `org.ucmeet.call`, knownHosts cleared (embedded Element Call bundle), InfoPlistReader updated. LiveKit confirmed in `.well-known` at `matrix.ucmeet.org/livekit-jwt-service`.
+- Localization trimmed (2026-02-17): 37 → 3 locales (en, en-US, ru). 34 locale folders deleted (~117 files). XcodeGen auto-updated `knownRegions`.
+- Associated domains cleaned (2026-02-17): Removed 7 Element-specific applinks. Kept `applinks:matrix.to` + `webcredentials:*.element.io` (OIDC).
+- Element-specific cleanup (2026-02-17): BugReportService sentry URL removed, Secrets.swift verified safe (`.localhost` placeholders).
+- Login verified (2026-02-17): Full OIDC login flow tested on simulator after all changes — working.
 
 **What's blocked (require customer input):**
 - Step 5: Bundle identity changes (needs Bundle ID — customer must choose, e.g. `org.ucmeet.chat`)
@@ -293,15 +298,15 @@ When updating this file, change "Current Phase" and check off completed phases:
 | 6 | Identity Changes (Bundle ID, Team, App Group) | **BLOCKED** | Requires D-001 (app name, bundle ID from customer) |
 | 7 | Branding — App Icon & Colors | **BLOCKED** | Requires D-008 (design assets from customer) |
 | 8 | Branding — Strings, Launch Screen & Element Removal | **BLOCKED** | Requires D-008; automation scripts ready |
-| 9 | Localization | **BLOCKED** | Requires app name; `rebrand_strings.sh` ready for 37 locales |
-| 10 | Configuration (AppSettings, Analytics, Feature Flags) | **BLOCKED** | Requires D-005 (server URLs from customer) |
-| 11 | OIDC & Associated Domains | **BLOCKED** | Requires D-006 (OIDC registration from customer) |
+| 9 | Localization | **DONE** | Trimmed 37 → 3 locales (en, en-US, ru). App name strings still need D-008. |
+| 10 | Configuration (AppSettings, Analytics, Feature Flags) | **MOSTLY DONE** | Server URLs configured, analytics disabled, legal URLs set. Push gateway needs Sygnal URL. |
+| 11 | OIDC & Associated Domains | **MOSTLY DONE** | OIDC login working, associated domains cleaned. Full migration to ucmeet.info needs AASA file. |
 | 12 | Push Notification Plumbing | **PARTIAL** | FCM code + 14 unit tests complete. Blocked on real GoogleService-Info.plist (D-002) |
-| 13 | Calls Configuration | **BLOCKED** | Requires D-004 (LiveKit/Element Call decision) |
+| 13 | Calls Configuration | **DONE** | URL scheme → `org.ucmeet.call`, knownHosts cleared, LiveKit confirmed in `.well-known` |
 | 14 | Full Build Verification & Audit | **NOT STARTED** | Final step after all changes |
 | 15 | Git Checkpoints & Branching Strategy | **DONE** | `main` + `develop` + `upstream` structure, checkpoint/unmodified-build tagged |
 
-**Result:** 4 of 15 steps complete, 1 partial, 10 blocked on customer decisions.
+**Result:** 7 of 15 steps complete, 3 mostly done, 1 partial, 4 blocked on customer decisions.
 
 ### implementation_plan.md — 30-Day Schedule
 
@@ -310,9 +315,9 @@ When updating this file, change "Current Phase" and check off completed phases:
 | 1–3 | Fork, build, codebase study | **DONE** |
 | 4–5 | Provisioning + bundle ID build | **BLOCKED** (D-001, D-007) |
 | 6–8 | Branding (icon, colors, strings, analytics) | **BLOCKED** (D-008) |
-| 9–10 | OIDC configuration & testing | **BLOCKED** (D-005, D-006) |
-| 11–15 | Server integration + push testing | **PARTIALLY READY** (FCM code done) |
-| 16–17 | Element Call configuration | **BLOCKED** (D-004) |
+| 9–10 | OIDC configuration & testing | **DONE** (OIDC login working, associated domains cleaned) |
+| 11–15 | Server integration + push testing | **PARTIALLY READY** (FCM code done, server configured, push blocked on Sygnal URL) |
+| 16–17 | Element Call configuration | **DONE** (URL scheme, knownHosts, LiveKit confirmed) |
 | 18–30 | Testing, App Store prep, submission, docs | **NOT STARTED** |
 
 ### Work Done Beyond Original Schedule
@@ -333,11 +338,11 @@ When updating this file, change "Current Phase" and check off completed phases:
 
 | Metric | Value |
 |--------|-------|
-| Plan completion | ~27% (Steps 1–4 of 15 + partial Step 12) |
-| Schedule position | Day 3 of 30 (actual tasks complete) |
-| Hours invested | ~43–48h of ~120h core budget |
-| Decisions resolved | 0 of 12 (2 in progress: D-002, D-003) |
-| Critical blockers | 4 (D-001 licensing, D-004 calls, D-005 servers, D-007 Apple account) |
+| Plan completion | ~60% (7 done + 3 mostly done + 1 partial of 15 steps) |
+| Schedule position | Day 10 of 30 (actual tasks complete) |
+| Hours invested | ~53–58h of ~120h core budget |
+| Decisions resolved | 5 of 12 (4 in progress: D-001, D-002, D-007, D-008) |
+| Critical blockers | 3 (D-001 Bundle ID, D-007 Apple account, D-008 design assets) |
 | Rebranding time saved | Automation scripts reduce estimated Steps 7–9 from ~3 days to ~1 day |
 
 ### Assessment
@@ -378,7 +383,8 @@ The project is **maximally prepared within what's possible without customer inpu
 | 2026-02-16 | Created 6 project-specific Claude Code commands: `/xcodegen-build`, `/upstream-sync`, `/audit-branding`, `/create-checkpoint`, `/rebrand-execute`, `/decision-status`. Updated `.claude/settings.local.json` with 6 missing permission patterns (git status/diff/log/merge, rebrand scripts). Build re-verified — BUILD SUCCEEDED on iPhone 17 Pro simulator. |
 | 2026-02-17 | **Major unblock: customer responded.** 5 decisions resolved (D-003 iOS 18+, D-004 UCMeet Call, D-005 server infra, D-006 MAS/OIDC, D-011 contact). Server connectivity verified: login test passed against `matrix.ucmeet.org` (Synapse 1.144.0, Sliding Sync, MAS, LiveKit all confirmed). AppSettings.swift updated: account provider → `matrix.ucmeet.org`, all legal URLs → `ucmeet.info/policy-152`, Element Call PostHog/Sentry analytics disabled. App icon replaced with processed UCMeet Icon_1 (1024x1024, no alpha). Decisions tracker fully updated. New TOR (`TZ Matrix.docx`) analyzed — identical to original, no new info. Build verified — BUILD SUCCEEDED on iPhone 17 Pro simulator. |
 | 2026-02-17 | **OIDC login working on simulator.** Fixed 3 issues blocking login: (1) OIDC redirect URL domain mismatch — MAS requires all URIs (client, redirect, logo, tos, policy) on same host; solved by using element.io for all OIDC registration metadata while keeping ucmeet.info for app UI links. (2) ASWebAuthenticationSession associated domains — HTTPS callback requires webcredentials + AASA file; ucmeet.info has no AASA, so element.io used (already in entitlements as `webcredentials:*.element.io`). (3) Firebase crash on placeholder GoogleService-Info.plist — added API key validation guard to skip Firebase init when credentials are placeholders. Successfully logged in as `test_user` on iPhone 17 Pro simulator. |
+| 2026-02-17 | **Parallel UCMeet configuration batch.** (1) Calls: URL scheme `io.element.call` → `org.ucmeet.call`, `knownHosts` cleared (embedded bundle), InfoPlistReader updated, LiveKit confirmed in `.well-known`. (2) Localization: 37 → 3 locales (en, en-US, ru), 34 folders deleted (~117 files). (3) Associated domains: removed 7 Element-specific applinks, kept `matrix.to` + `webcredentials:*.element.io`. (4) Element cleanup: BugReportService sentry URL removed, Secrets.swift verified safe. Build + login verified on simulator. |
 
 ---
 
-*Last updated: 2026-02-17 (OIDC login working on simulator). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-17 (calls, localization, domains, Element cleanup). Update this file whenever the project phase changes or a blocker is resolved.*
