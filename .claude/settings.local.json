@@ -44,7 +44,17 @@
       "Bash(git log:*)",
       "Bash(git merge:*)",
       "Bash(./scripts/rebrand.sh:*)",
-      "Bash(./scripts/rebrand_strings.sh:*)"
+      "Bash(./scripts/rebrand_strings.sh:*)",
+      "WebFetch(domain:matrix.ucmeet.org)",
+      "WebFetch(domain:call.ucmeet.org)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(sips -g all:*)",
+      "Bash(/tmp/process_icon.swift:*)",
+      "Bash(swiftc:*)",
+      "Bash(/tmp/process_icon:*)",
+      "Bash(textutil:*)"
     ]
   }
 }

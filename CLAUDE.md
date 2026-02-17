@@ -74,22 +74,35 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 - Build verified (2026-02-11): `xcodegen generate` + full build on iPhone 17 Pro simulator after upstream merge. BUILD SUCCEEDED.
 - App Store preparation templates created (2026-02-12): `documentation/app_store_prep_templates.md` — 5 sections covering export compliance (encryption/ECCN), privacy nutrition labels (mapped from all 11 PrivacyInfo.xcprivacy data types), App Review notes with Guideline 4.3 risk mitigation, age rating questionnaire, and differentiation strategy with rejection response template. 74 `[PLACEHOLDER]` markers for customer-specific values.
 
-**What's blocked (all require customer decisions):**
-- Step 5: Bundle identity changes (needs App Name, Bundle ID, Team ID — D-001)
-- Steps 6–14: Branding, config, OIDC, push, calls, testing, App Store
-- See `decisions_tracker.md` for all 12 tracked decisions (D-001 through D-012)
+- Customer responded (2026-02-16): 5 decisions resolved, server access + test accounts provided
+- Server connectivity verified (2026-02-17): login test passed, `.well-known` confirmed (Sliding Sync, MAS, LiveKit)
+- AppSettings.swift updated: account provider → `matrix.ucmeet.org`, legal URLs → ucmeet.info, Element Call analytics disabled
+- App icon replaced: UCMeet Icon_1 processed (1024x1024, no alpha), temporary pending final re-export from customer
+- Build verified (2026-02-17): `xcodegen generate` + full build on iPhone 17 Pro simulator after all changes. BUILD SUCCEEDED.
 
-**Next action:** Send `customer_pre_dev_briefing_ru.md` to customer, then conduct initial meeting using `customer_questionnaire_init_stage.md`. Resolve blockers before proceeding to Step 5.
+**What's blocked (require customer input):**
+- Step 5: Bundle identity changes (needs Bundle ID — customer must choose, e.g. `org.ucmeet.chat`)
+- Step 6: Identity changes (needs Bundle ID + Apple Developer account decision — D-007)
+- Steps 7-9: Final branding (design assets promised via email — D-008)
+- Push E2E testing (needs Sygnal URL from customer + Firebase project creation)
+- OIDC client registration (needs Bundle ID first, then customer registers in MAS)
 
-### Blockers (must be resolved before rebranding work starts)
+**Next actions:**
+1. Ask customer for: Bundle ID preference, Sygnal URL, Apple Developer account decision
+2. Wait for design assets email (app name, icon re-export, accent color)
+3. Create Firebase project once Bundle ID is decided
+4. Confirm AGPL license covers Element X specifically
 
-1. **AGPL v3 licensing** — Element X is AGPL v3, which conflicts with App Store ToS. Commercial license from Element (New Vector Ltd) required. NOT YET INITIATED.
-2. **APNs vs FCM** — FCM infrastructure added (Firebase SDK, conditional push provider, placeholder config) and unit-tested (14 tests, all passing). Customer must provide real GoogleService-Info.plist values and configure Sygnal for FCM. Push provider defaults to FCM per TOR. NOT YET TESTED END-TO-END.
-3. **iOS version** — TOR says iOS 16+, project requires iOS 18.0+ (deployment target). Customer must accept. NOT YET DECIDED.
-4. **Calls infrastructure** — TOR says Jitsi, project uses Element Call (LiveKit). Customer must clarify. NOT YET DECIDED.
-5. **App identity** — App name, bundle ID, team ID, app group needed before any code changes. NOT YET DECIDED (D-001).
+### Blockers (remaining)
 
-> See `decisions_tracker.md` for all 12 tracked decisions with statuses (D-001 through D-012).
+1. **Bundle ID** — Customer must choose (e.g., `org.ucmeet.chat`). Blocks Steps 5-6, OIDC, push, background tasks.
+2. **AGPL v3 licensing** — Customer says handled; need written confirmation it covers Element X (not just old Element iOS). Blocks App Store publication only.
+3. **Sygnal URL** — Customer has Sygnal but hasn't provided the URL yet. Blocks push E2E testing.
+4. **Apple Developer account** — Whose account? Customer's or developer's? Blocks provisioning + App Store.
+5. **Design assets** — Promised via email (app name, accent color, final icon). Blocks final branding.
+6. **Firebase project** — Developer creates it; needs Bundle ID first. Blocks push E2E testing.
+
+> See `decisions_tracker.md` for all 12 tracked decisions: 5 resolved, 4 in progress, 3 open.
 
 ---
 
@@ -363,7 +376,8 @@ The project is **maximally prepared within what's possible without customer inpu
 | 2026-02-11 | Progress analysis completed: 4 of 15 init steps done, 1 partial (push), 10 blocked on customer. ~40–45h invested. Project maximally prepared — no further dev work possible until customer meeting. |
 | 2026-02-12 | App Store preparation templates: `documentation/app_store_prep_templates.md` — export compliance (identified ITSAppUsesNonExemptEncryption must change to true), privacy nutrition labels (all 11 data types mapped), App Review notes (Guideline 4.3 risk strategy), age rating (recommends 12+), differentiation strategy with rejection response template. |
 | 2026-02-16 | Created 6 project-specific Claude Code commands: `/xcodegen-build`, `/upstream-sync`, `/audit-branding`, `/create-checkpoint`, `/rebrand-execute`, `/decision-status`. Updated `.claude/settings.local.json` with 6 missing permission patterns (git status/diff/log/merge, rebrand scripts). Build re-verified — BUILD SUCCEEDED on iPhone 17 Pro simulator. |
+| 2026-02-17 | **Major unblock: customer responded.** 5 decisions resolved (D-003 iOS 18+, D-004 UCMeet Call, D-005 server infra, D-006 MAS/OIDC, D-011 contact). Server connectivity verified: login test passed against `matrix.ucmeet.org` (Synapse 1.144.0, Sliding Sync, MAS, LiveKit all confirmed). AppSettings.swift updated: account provider → `matrix.ucmeet.org`, all legal URLs → `ucmeet.info/policy-152`, Element Call PostHog/Sentry analytics disabled. App icon replaced with processed UCMeet Icon_1 (1024x1024, no alpha). Decisions tracker fully updated. New TOR (`TZ Matrix.docx`) analyzed — identical to original, no new info. Build verified — BUILD SUCCEEDED on iPhone 17 Pro simulator. |
 
 ---
 
-*Last updated: 2026-02-16 (6 project-specific slash commands added). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-17 (customer unblock, server verified, AppSettings + icon updated). Update this file whenever the project phase changes or a blocker is resolved.*
