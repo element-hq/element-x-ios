@@ -191,12 +191,16 @@ extension LinkNewDeviceService.LinkDesktopProgress: CustomStringConvertible {
 private extension QRCodeLoginError {
     init(rustError: HumanQrGrantLoginError) {
         self = switch rustError {
-        case .InvalidCheckCode:
+        case .InvalidCheckCode, .ConnectionInsecure:
             .connectionInsecure
         case .UnsupportedProtocol:
             .linkingNotSupported
-        case .NotFound: // The most likely cause of a .NotFound is that the rendezvous session expired on the server side
+        case .Expired, .NotFound: // The most likely cause of a .NotFound is that the rendezvous session expired on the server side
             .expired
+        case .Cancelled:
+            .cancelled
+        case .OtherDeviceAlreadySignedIn:
+            .deviceAlreadySignedIn
         case .Unknown, .MissingSecretsBackup, .DeviceIdAlreadyInUse, .UnableToCreateDevice:
             .unknown
         }
