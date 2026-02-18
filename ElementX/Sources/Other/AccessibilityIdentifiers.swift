@@ -235,7 +235,6 @@ enum A11yIdentifiers {
         let acceptVerificationRequest = "session_verification-accept_verification_request"
         let ignoreVerificationRequest = "session_verification-ignore_verification_request"
         let requestVerification = "session_verification-request_verification"
-        let startSasVerification = "session_verification-start_sas_verification"
         let acceptChallenge = "session_verification-accept_challenge"
         let declineChallenge = "session_verification-decline_challenge"
         let emojiWrapper = "session_verification-emojis"

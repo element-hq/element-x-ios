@@ -19,6 +19,7 @@ extension SessionVerificationControllerProxyMock {
 
     static func configureMock(actions: PassthroughSubject<SessionVerificationControllerProxyAction, Never> = .init(),
                               isVerified: Bool = false,
+                              otherDeviceStartsSasVerification: Bool = false,
                               requestDelay: Duration = .seconds(1)) -> SessionVerificationControllerProxyMock {
         let mock = SessionVerificationControllerProxyMock()
         mock.underlyingActions = actions
@@ -29,6 +30,13 @@ extension SessionVerificationControllerProxyMock {
             Task.detached {
                 try await Task.sleep(for: requestDelay)
                 mock.actions.send(.acceptedVerificationRequest)
+                
+                if otherDeviceStartsSasVerification {
+                    try await Task.sleep(for: requestDelay)
+                    mock.actions.send(.startedSasVerification)
+                    try await Task.sleep(for: requestDelay)
+                    mock.actions.send(.receivedVerificationData(emojis))
+                }
             }
 
             return .success(())
@@ -65,7 +73,7 @@ extension SessionVerificationControllerProxyMock {
 
             return .success(())
         }
-
+        
         mock.cancelVerificationClosure = { [unowned mock] in
             Task.detached {
                 try await Task.sleep(for: requestDelay)
