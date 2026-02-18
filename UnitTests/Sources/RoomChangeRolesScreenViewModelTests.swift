@@ -20,21 +20,20 @@ struct RoomChangeRolesScreenViewModelTests {
         var context: RoomChangeRolesScreenViewModelType.Context {
             viewModel.context
         }
-    }
-    
-    private func makeTestSetup(mode: RoomRole) -> TestSetup {
-        let roomProxy = JoinedRoomProxyMock(.init(members: .allMembersAsAdmin))
-        let viewModel = RoomChangeRolesScreenViewModel(mode: mode,
+        
+        init(mode: RoomRole) {
+            roomProxy = JoinedRoomProxyMock(.init(members: .allMembersAsAdmin))
+            viewModel = RoomChangeRolesScreenViewModel(mode: mode,
                                                        roomProxy: roomProxy,
                                                        mediaProvider: MediaProviderMock(configuration: .init()),
                                                        userIndicatorController: UserIndicatorControllerMock(),
                                                        analytics: ServiceLocator.shared.analytics)
-        return TestSetup(viewModel: viewModel, roomProxy: roomProxy)
+        }
     }
-
+    
     @Test
     func initialStateAdministrators() {
-        let testSetup = makeTestSetup(mode: .administrator)
+        let testSetup = TestSetup(mode: .administrator)
         #expect(testSetup.context.viewState.membersToPromote == [])
         #expect(testSetup.context.viewState.membersToDemote == [])
         #expect(testSetup.context.viewState.administrators == testSetup.context.viewState.visibleAdministrators)
@@ -45,10 +44,10 @@ struct RoomChangeRolesScreenViewModelTests {
         #expect(!testSetup.context.viewState.hasChanges)
         #expect(!testSetup.context.viewState.isSearching)
     }
-
+    
     @Test
     func initialStateModerators() {
-        let testSetup = makeTestSetup(mode: .moderator)
+        let testSetup = TestSetup(mode: .moderator)
         #expect(testSetup.context.viewState.membersToPromote == [])
         #expect(testSetup.context.viewState.membersToDemote == [])
         #expect(testSetup.context.viewState.administrators == testSetup.context.viewState.visibleAdministrators)
@@ -61,12 +60,10 @@ struct RoomChangeRolesScreenViewModelTests {
     }
     
     @Test
-    func toggleUserOn() {
-        var testSetup = makeTestSetup(mode: .moderator)
-        guard let firstUser = testSetup.context.viewState.users.first(where: { !testSetup.context.viewState.isMemberSelected($0) }) else {
-            Issue.record("There should be a regular user available to promote.")
-            return
-        }
+    func toggleUserOn() throws {
+        let testSetup = TestSetup(mode: .moderator)
+        let firstUser = try #require(testSetup.context.viewState.users.first { !testSetup.context.viewState.isMemberSelected($0) },
+                                     "There should be a regular user available to promote.")
         
         testSetup.context.send(viewAction: .toggleMember(firstUser))
         
@@ -78,12 +75,10 @@ struct RoomChangeRolesScreenViewModelTests {
     }
     
     @Test
-    func toggleUserOff() {
-        var testSetup = makeTestSetup(mode: .moderator)
-        guard let firstUser = testSetup.context.viewState.users.first(where: { !testSetup.context.viewState.isMemberSelected($0) }) else {
-            Issue.record("There should be a regular user available to promote.")
-            return
-        }
+    func toggleUserOff() throws {
+        let testSetup = TestSetup(mode: .moderator)
+        let firstUser = try #require(testSetup.context.viewState.users.first { !testSetup.context.viewState.isMemberSelected($0) },
+                                     "There should be a regular user available to promote.")
         
         // First toggle on
         testSetup.context.send(viewAction: .toggleMember(firstUser))
@@ -99,12 +94,10 @@ struct RoomChangeRolesScreenViewModelTests {
     }
     
     @Test
-    func demoteToggledUser() {
-        var testSetup = makeTestSetup(mode: .moderator)
-        guard let firstUser = testSetup.context.viewState.users.first(where: { !testSetup.context.viewState.isMemberSelected($0) }) else {
-            Issue.record("There should be a regular user available to promote.")
-            return
-        }
+    func demoteToggledUser() throws {
+        let testSetup = TestSetup(mode: .moderator)
+        let firstUser = try #require(testSetup.context.viewState.users.first { !testSetup.context.viewState.isMemberSelected($0) },
+                                     "There should be a regular user available to promote.")
         
         // First toggle on
         testSetup.context.send(viewAction: .toggleMember(firstUser))
@@ -120,12 +113,10 @@ struct RoomChangeRolesScreenViewModelTests {
     }
     
     @Test
-    func toggleModeratorOff() {
-        var testSetup = makeTestSetup(mode: .moderator)
-        guard let existingModerator = testSetup.context.viewState.membersWithRole.first(where: { $0.role == .moderator }) else {
-            Issue.record("There should be a member with the role before we begin.")
-            return
-        }
+    func toggleModeratorOff() throws {
+        let testSetup = TestSetup(mode: .moderator)
+        let existingModerator = try #require(testSetup.context.viewState.membersWithRole.first { $0.role == .moderator },
+                                             "There should be a member with the role before we begin.")
         
         testSetup.context.send(viewAction: .toggleMember(existingModerator))
         
@@ -137,12 +128,10 @@ struct RoomChangeRolesScreenViewModelTests {
     }
     
     @Test
-    func toggleModeratorOn() {
-        var testSetup = makeTestSetup(mode: .moderator)
-        guard let existingModerator = testSetup.context.viewState.membersWithRole.first(where: { $0.role == .moderator }) else {
-            Issue.record("There should be a member with the role before we begin.")
-            return
-        }
+    func toggleModeratorOn() throws {
+        let testSetup = TestSetup(mode: .moderator)
+        let existingModerator = try #require(testSetup.context.viewState.membersWithRole.first { $0.role == .moderator },
+                                             "There should be a member with the role before we begin.")
         
         // First toggle off
         testSetup.context.send(viewAction: .toggleMember(existingModerator))
@@ -158,12 +147,10 @@ struct RoomChangeRolesScreenViewModelTests {
     }
     
     @Test
-    func demoteModerator() {
-        var testSetup = makeTestSetup(mode: .moderator)
-        guard let existingModerator = testSetup.context.viewState.membersWithRole.first(where: { $0.role == .moderator }) else {
-            Issue.record("There should be a member with the role before we begin.")
-            return
-        }
+    func demoteModerator() throws {
+        let testSetup = TestSetup(mode: .moderator)
+        let existingModerator = try #require(testSetup.context.viewState.membersWithRole.first { $0.role == .moderator },
+                                             "There should be a member with the role before we begin.")
         
         testSetup.context.send(viewAction: .demoteMember(existingModerator))
         
@@ -177,13 +164,12 @@ struct RoomChangeRolesScreenViewModelTests {
     @Test
     func saveModeratorChanges() async throws {
         // Given the change roles view model for moderators.
-        var testSetup = makeTestSetup(mode: .moderator)
+        let testSetup = TestSetup(mode: .moderator)
         
-        guard let firstUser = testSetup.context.viewState.users.first(where: { !testSetup.context.viewState.isMemberSelected($0) }),
-              let existingModerator = testSetup.context.viewState.membersWithRole.first(where: { $0.role == .moderator }) else {
-            Issue.record("There should be a regular user and a moderator to begin with.")
-            return
-        }
+        let firstUser = try #require(testSetup.context.viewState.users.first { !testSetup.context.viewState.isMemberSelected($0) },
+                                     "There should be a regular user to begin with.")
+        let existingModerator = try #require(testSetup.context.viewState.membersWithRole.first { $0.role == .moderator },
+                                             "There should be a moderator to begin with.")
         
         // When promoting a regular user and demoting a moderator.
         testSetup.context.send(viewAction: .toggleMember(firstUser))
@@ -202,13 +188,11 @@ struct RoomChangeRolesScreenViewModelTests {
     @Test
     func savePromotedAdministrator() async throws {
         // Given the change roles view model for administrators.
-        var testSetup = makeTestSetup(mode: .administrator)
+        let testSetup = TestSetup(mode: .administrator)
         #expect(testSetup.context.alertInfo == nil)
         
-        guard let firstUser = testSetup.context.viewState.users.first(where: { !testSetup.context.viewState.isMemberSelected($0) }) else {
-            Issue.record("There should be a regular user to begin with.")
-            return
-        }
+        let firstUser = try #require(testSetup.context.viewState.users.first { !testSetup.context.viewState.isMemberSelected($0) },
+                                     "There should be a regular user to begin with.")
         
         // When saving changes to promote a user to an administrator.
         testSetup.context.send(viewAction: .toggleMember(firstUser))

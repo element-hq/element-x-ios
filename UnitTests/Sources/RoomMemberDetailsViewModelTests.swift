@@ -30,6 +30,7 @@ struct RoomMemberDetailsViewModelTests {
                 .success(roomMemberProxyMock)
             }
             
+            // swiftlint:disable:next force_unwrapping
             let userSession = clientProxy != nil ? UserSessionMock(.init(clientProxy: clientProxy!)) : UserSessionMock(.init())
             viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                          roomProxy: roomProxyMock,
@@ -53,7 +54,7 @@ struct RoomMemberDetailsViewModelTests {
 
     @Test
     func ignoreSuccess() async throws {
-        var testSetup = TestSetup(roomMemberProxyMock: .mockAlice)
+        let testSetup = TestSetup(roomMemberProxyMock: .mockAlice)
         
         let waitForMemberToLoad = deferFulfillment(testSetup.context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
@@ -85,7 +86,7 @@ struct RoomMemberDetailsViewModelTests {
     func ignoreFailure() async throws {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.ignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        var testSetup = TestSetup(roomMemberProxyMock: .mockAlice, clientProxy: clientProxy)
+        let testSetup = TestSetup(roomMemberProxyMock: .mockAlice, clientProxy: clientProxy)
         
         let waitForMemberToLoad = deferFulfillment(testSetup.context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
@@ -115,7 +116,7 @@ struct RoomMemberDetailsViewModelTests {
 
     @Test
     func unignoreSuccess() async throws {
-        var testSetup = TestSetup(roomMemberProxyMock: .mockIgnored)
+        let testSetup = TestSetup(roomMemberProxyMock: .mockIgnored)
         
         let waitForMemberToLoad = deferFulfillment(testSetup.context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
@@ -146,7 +147,7 @@ struct RoomMemberDetailsViewModelTests {
     func unignoreFailure() async throws {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.unignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        var testSetup = TestSetup(roomMemberProxyMock: .mockIgnored, clientProxy: clientProxy)
+        let testSetup = TestSetup(roomMemberProxyMock: .mockIgnored, clientProxy: clientProxy)
         
         let waitForMemberToLoad = deferFulfillment(testSetup.context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()

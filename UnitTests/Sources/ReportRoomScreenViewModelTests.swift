@@ -26,87 +26,83 @@ struct ReportRoomScreenViewModelTests {
     
     @Test
     func initialState() {
-        let testSetup = self
-        #expect(testSetup.context.viewState.bindings.reason.isEmpty)
-        #expect(!testSetup.context.viewState.bindings.shouldLeaveRoom)
+        #expect(context.viewState.bindings.reason.isEmpty)
+        #expect(!context.viewState.bindings.shouldLeaveRoom)
     }
     
     @Test
-    func reportSuccess() async {
-        var testSetup = self
+    func reportSuccess() async throws {
         let reason = "Spam"
         
-        await confirmation { confirmation in
-            testSetup.roomProxy.reportRoomReasonClosure = { reasonArgument in
+        try await confirmation { confirmation in
+            roomProxy.reportRoomReasonClosure = { reasonArgument in
                 #expect(reasonArgument == reason)
                 confirmation()
                 return .success(())
             }
             
-            let deferred = deferFulfillment(testSetup.viewModel.actionsPublisher) { action in
+            let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
                 action == .dismiss(shouldLeaveRoom: false)
             }
             
-            testSetup.context.reason = reason
-            testSetup.context.send(viewAction: .report)
+            context.reason = reason
+            context.send(viewAction: .report)
             
-            try? await deferred.fulfill()
+            try await deferred.fulfill()
         }
     }
     
     @Test
-    func reportAndLeaveSuccess() async {
-        var testSetup = self
+    func reportAndLeaveSuccess() async throws {
         let reason = "Spam"
         
-        await confirmation(expectedCount: 2) { confirmation in
-            testSetup.roomProxy.reportRoomReasonClosure = { reasonArgument in
+        try await confirmation(expectedCount: 2) { confirmation in
+            roomProxy.reportRoomReasonClosure = { reasonArgument in
                 #expect(reasonArgument == reason)
                 confirmation()
                 return .success(())
             }
             
-            testSetup.roomProxy.leaveRoomClosure = {
+            roomProxy.leaveRoomClosure = {
                 confirmation()
                 return .success(())
             }
             
-            let deferred = deferFulfillment(testSetup.viewModel.actionsPublisher) { action in
+            let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
                 action == .dismiss(shouldLeaveRoom: true)
             }
             
-            testSetup.context.reason = reason
-            testSetup.context.shouldLeaveRoom = true
-            testSetup.context.send(viewAction: .report)
+            context.reason = reason
+            context.shouldLeaveRoom = true
+            context.send(viewAction: .report)
             
-            try? await deferred.fulfill()
+            try await deferred.fulfill()
         }
     }
     
     @Test
-    func reportSuccessLeaveFails() async {
-        var testSetup = self
+    func reportSuccessLeaveFails() async throws {
         let reason = "Spam"
         
-        await confirmation(expectedCount: 2) { confirmation in
-            testSetup.roomProxy.reportRoomReasonClosure = { reasonArgument in
+        try await confirmation(expectedCount: 2) { confirmation in
+            roomProxy.reportRoomReasonClosure = { reasonArgument in
                 #expect(reasonArgument == reason)
                 confirmation()
                 return .success(())
             }
             
-            testSetup.roomProxy.leaveRoomClosure = {
+            roomProxy.leaveRoomClosure = {
                 confirmation()
                 return .failure(.eventNotFound)
             }
             
-            let deferred = deferFulfillment(testSetup.context.observe(\.viewState.bindings.alert)) { $0 != nil }
+            let deferred = deferFulfillment(context.observe(\.viewState.bindings.alert)) { $0 != nil }
             
-            testSetup.context.reason = reason
-            testSetup.context.shouldLeaveRoom = true
-            testSetup.context.send(viewAction: .report)
+            context.reason = reason
+            context.shouldLeaveRoom = true
+            context.send(viewAction: .report)
             
-            try? await deferred.fulfill()
+            try await deferred.fulfill()
         }
     }
 }

@@ -72,7 +72,6 @@ struct VoiceMessageMediaManagerTests {
     
     @Test
     func loadVoiceMessageFromSourceAlreadyCached() async throws {
-        var testSetup = self
         // Check if the file is already present in cache
         voiceMessageCache.fileURLForReturnValue = URL("/converted_file/url")
         let mediaSource = try MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)

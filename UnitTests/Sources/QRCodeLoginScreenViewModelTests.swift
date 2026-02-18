@@ -120,7 +120,7 @@ struct QRCodeLoginScreenViewModelTests {
     
     @Test
     func login() async throws {
-        var testSetup = TestSetup(mode: .login)
+        let testSetup = TestSetup(mode: .login)
         #expect(testSetup.context.viewState.state == .loginInstructions)
         
         var deferred = deferFulfillment(testSetup.context.$viewState) { state in

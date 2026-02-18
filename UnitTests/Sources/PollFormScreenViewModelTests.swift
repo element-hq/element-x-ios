@@ -36,7 +36,8 @@ struct PollFormScreenViewModelTests {
     @Test
     func newPollInitialState() async throws {
         #expect(context.options.count == 2)
-        #expect(try context.options.allSatisfy(\.text.isEmpty))
+        let isEmpty = context.options.allSatisfy(\.text.isEmpty)
+        #expect(isEmpty)
         #expect(context.question.isEmpty)
         #expect(context.viewState.isSubmitButtonDisabled)
         #expect(!context.viewState.bindings.isUndisclosed)

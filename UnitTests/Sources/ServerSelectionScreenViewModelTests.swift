@@ -40,7 +40,7 @@ struct ServerSelectionScreenViewModelTests {
     @Test
     func selectForLogin() async throws {
         // Given a view model for login.
-        var testSetup = TestSetup(authenticationFlow: .login)
+        let testSetup = TestSetup(authenticationFlow: .login)
         #expect(testSetup.service.homeserver.value.loginMode == .unknown)
         #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
@@ -58,7 +58,7 @@ struct ServerSelectionScreenViewModelTests {
     @Test
     func loginNotSupportedAlert() async throws {
         // Given a view model for login.
-        var testSetup = TestSetup(authenticationFlow: .login)
+        let testSetup = TestSetup(authenticationFlow: .login)
         #expect(testSetup.service.homeserver.value.loginMode == .unknown)
         #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(testSetup.context.alertInfo == nil)
@@ -77,7 +77,7 @@ struct ServerSelectionScreenViewModelTests {
     @Test
     func selectForRegistration() async throws {
         // Given a view model for registration.
-        var testSetup = TestSetup(authenticationFlow: .register)
+        let testSetup = TestSetup(authenticationFlow: .register)
         #expect(testSetup.service.homeserver.value.loginMode == .unknown)
         #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
@@ -95,7 +95,7 @@ struct ServerSelectionScreenViewModelTests {
     @Test
     func registrationNotSupportedAlert() async throws {
         // Given a view model for registration.
-        var testSetup = TestSetup(authenticationFlow: .register)
+        let testSetup = TestSetup(authenticationFlow: .register)
         #expect(testSetup.service.homeserver.value.loginMode == .unknown)
         #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(testSetup.context.alertInfo == nil)
@@ -114,7 +114,7 @@ struct ServerSelectionScreenViewModelTests {
     @Test
     func elementProRequiredAlert() async throws {
         // Given a view model for login.
-        var testSetup = TestSetup(authenticationFlow: .login)
+        let testSetup = TestSetup(authenticationFlow: .login)
         #expect(testSetup.service.homeserver.value.loginMode == .unknown)
         #expect(testSetup.clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(testSetup.context.alertInfo == nil)
@@ -133,7 +133,7 @@ struct ServerSelectionScreenViewModelTests {
     @Test
     func invalidServer() async throws {
         // Given a new instance of the view model.
-        var testSetup = TestSetup(authenticationFlow: .login)
+        let testSetup = TestSetup(authenticationFlow: .login)
         #expect(!testSetup.context.viewState.isShowingFooterError, "There should not be an error message for a new view model.")
         #expect(testSetup.context.viewState.footerErrorMessage == nil, "There should not be an error message for a new view model.")
         #expect(String(testSetup.context.viewState.footerMessage) == L10n.screenChangeServerFormNotice,

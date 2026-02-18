@@ -67,7 +67,7 @@ struct RoomMembersFlowCoordinatorTests {
         
     @Test
     func clearRoute() async throws {
-        var testSetup = try await TestSetup(entryPoint: .roomMembersList)
+        let testSetup = try await TestSetup(entryPoint: .roomMembersList)
         #expect(testSetup.navigationStackCoordinator.stackCoordinators.last is RoomMembersListScreenCoordinator)
         
         var membersFlowStateExpectation = deferFulfillment(testSetup.stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMemberDetails(userID: "test", previousState: .roomMembersList) }

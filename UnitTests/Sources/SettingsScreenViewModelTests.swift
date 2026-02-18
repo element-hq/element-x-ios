@@ -26,25 +26,22 @@ struct SettingsScreenViewModelTests {
 
     @Test
     func logout() async throws {
-        var testSetup = self
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .logout }
-        testSetup.context.send(viewAction: .logout)
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .logout }
+        context.send(viewAction: .logout)
         try await deferred.fulfill()
     }
 
     @Test
     func reportBug() async throws {
-        var testSetup = self
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .reportBug }
-        testSetup.context.send(viewAction: .reportBug)
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .reportBug }
+        context.send(viewAction: .reportBug)
         try await deferred.fulfill()
     }
     
     @Test
     func analytics() async throws {
-        var testSetup = self
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .analytics }
-        testSetup.context.send(viewAction: .analytics)
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .analytics }
+        context.send(viewAction: .analytics)
         try await deferred.fulfill()
     }
 }

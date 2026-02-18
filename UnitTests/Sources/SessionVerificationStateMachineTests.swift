@@ -20,98 +20,95 @@ struct SessionVerificationStateMachineTests {
     
     @Test
     func acceptChallenge() {
-        var testSetup = self
-        #expect(testSetup.stateMachine.state == .initial)
+        #expect(stateMachine.state == .initial)
         
-        testSetup.stateMachine.processEvent(.requestVerification)
-        #expect(testSetup.stateMachine.state == .requestingVerification)
+        stateMachine.processEvent(.requestVerification)
+        #expect(stateMachine.state == .requestingVerification)
         
-        testSetup.stateMachine.processEvent(.didAcceptVerificationRequest)
-        #expect(testSetup.stateMachine.state == .verificationRequestAccepted)
+        stateMachine.processEvent(.didAcceptVerificationRequest)
+        #expect(stateMachine.state == .verificationRequestAccepted)
         
-        testSetup.stateMachine.processEvent(.didStartSasVerification)
-        #expect(testSetup.stateMachine.state == .sasVerificationStarted)
+        stateMachine.processEvent(.didStartSasVerification)
+        #expect(stateMachine.state == .sasVerificationStarted)
         
-        testSetup.stateMachine.processEvent(.didReceiveChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
-        #expect(testSetup.stateMachine.state == .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+        stateMachine.processEvent(.didReceiveChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+        #expect(stateMachine.state == .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
         
-        testSetup.stateMachine.processEvent(.acceptChallenge)
-        #expect(testSetup.stateMachine.state == .acceptingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+        stateMachine.processEvent(.acceptChallenge)
+        #expect(stateMachine.state == .acceptingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
         
-        testSetup.stateMachine.processEvent(.didAcceptChallenge)
-        #expect(testSetup.stateMachine.state == .verified)
+        stateMachine.processEvent(.didAcceptChallenge)
+        #expect(stateMachine.state == .verified)
     }
     
     @Test
     func declineChallenge() {
-        var testSetup = self
-        #expect(testSetup.stateMachine.state == .initial)
+        #expect(stateMachine.state == .initial)
         
-        testSetup.stateMachine.processEvent(.requestVerification)
-        #expect(testSetup.stateMachine.state == .requestingVerification)
+        stateMachine.processEvent(.requestVerification)
+        #expect(stateMachine.state == .requestingVerification)
         
-        testSetup.stateMachine.processEvent(.didAcceptVerificationRequest)
-        #expect(testSetup.stateMachine.state == .verificationRequestAccepted)
+        stateMachine.processEvent(.didAcceptVerificationRequest)
+        #expect(stateMachine.state == .verificationRequestAccepted)
         
-        testSetup.stateMachine.processEvent(.didStartSasVerification)
-        #expect(testSetup.stateMachine.state == .sasVerificationStarted)
+        stateMachine.processEvent(.didStartSasVerification)
+        #expect(stateMachine.state == .sasVerificationStarted)
         
-        testSetup.stateMachine.processEvent(.didReceiveChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
-        #expect(testSetup.stateMachine.state == .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+        stateMachine.processEvent(.didReceiveChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+        #expect(stateMachine.state == .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
         
-        testSetup.stateMachine.processEvent(.declineChallenge)
-        #expect(testSetup.stateMachine.state == .decliningChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+        stateMachine.processEvent(.declineChallenge)
+        #expect(stateMachine.state == .decliningChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
         
-        testSetup.stateMachine.processEvent(.didCancel)
-        #expect(testSetup.stateMachine.state == .cancelled)
+        stateMachine.processEvent(.didCancel)
+        #expect(stateMachine.state == .cancelled)
         
-        testSetup.stateMachine.processEvent(.restart)
-        #expect(testSetup.stateMachine.state == .initial)
+        stateMachine.processEvent(.restart)
+        #expect(stateMachine.state == .initial)
     }
     
     @Test
     func cancellation() {
-        var testSetup = self
-        #expect(testSetup.stateMachine.state == .initial)
+        #expect(stateMachine.state == .initial)
         
-        testSetup.stateMachine.processEvent(.requestVerification)
-        #expect(testSetup.stateMachine.state == .requestingVerification)
+        stateMachine.processEvent(.requestVerification)
+        #expect(stateMachine.state == .requestingVerification)
         
-        testSetup.stateMachine.processEvent(.cancel)
-        #expect(testSetup.stateMachine.state == .cancelling)
+        stateMachine.processEvent(.cancel)
+        #expect(stateMachine.state == .cancelling)
         
-        testSetup.stateMachine.processEvent(.didCancel)
-        #expect(testSetup.stateMachine.state == .cancelled)
+        stateMachine.processEvent(.didCancel)
+        #expect(stateMachine.state == .cancelled)
         
         // This duplication is intentional
-        testSetup.stateMachine.processEvent(.didCancel)
-        #expect(testSetup.stateMachine.state == .cancelled)
+        stateMachine.processEvent(.didCancel)
+        #expect(stateMachine.state == .cancelled)
         
-        testSetup.stateMachine.processEvent(.restart)
-        #expect(testSetup.stateMachine.state == .initial)
+        stateMachine.processEvent(.restart)
+        #expect(stateMachine.state == .initial)
         
-        testSetup.stateMachine.processEvent(.requestVerification)
-        #expect(testSetup.stateMachine.state == .requestingVerification)
+        stateMachine.processEvent(.requestVerification)
+        #expect(stateMachine.state == .requestingVerification)
         
-        testSetup.stateMachine.processEvent(.didAcceptVerificationRequest)
-        #expect(testSetup.stateMachine.state == .verificationRequestAccepted)
+        stateMachine.processEvent(.didAcceptVerificationRequest)
+        #expect(stateMachine.state == .verificationRequestAccepted)
         
-        testSetup.stateMachine.processEvent(.didStartSasVerification)
-        #expect(testSetup.stateMachine.state == .sasVerificationStarted)
+        stateMachine.processEvent(.didStartSasVerification)
+        #expect(stateMachine.state == .sasVerificationStarted)
         
-        testSetup.stateMachine.processEvent(.didReceiveChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
-        #expect(testSetup.stateMachine.state == .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+        stateMachine.processEvent(.didReceiveChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+        #expect(stateMachine.state == .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
         
-        testSetup.stateMachine.processEvent(.cancel)
-        #expect(testSetup.stateMachine.state == .cancelling)
+        stateMachine.processEvent(.cancel)
+        #expect(stateMachine.state == .cancelling)
         
-        testSetup.stateMachine.processEvent(.didCancel)
-        #expect(testSetup.stateMachine.state == .cancelled)
+        stateMachine.processEvent(.didCancel)
+        #expect(stateMachine.state == .cancelled)
         
-        testSetup.stateMachine.processEvent(.restart)
-        #expect(testSetup.stateMachine.state == .initial)
+        stateMachine.processEvent(.restart)
+        #expect(stateMachine.state == .initial)
         
-        testSetup.stateMachine.processEvent(.restart)
-        #expect(testSetup.stateMachine.state == .initial)
+        stateMachine.processEvent(.restart)
+        #expect(stateMachine.state == .initial)
     }
 }

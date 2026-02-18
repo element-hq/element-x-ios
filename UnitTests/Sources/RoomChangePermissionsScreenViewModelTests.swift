@@ -33,7 +33,7 @@ struct RoomChangePermissionsScreenViewModelTests {
 
     @Test
     func changeSetting() {
-        var testSetup = TestSetup(isSpace: false)
+        let testSetup = TestSetup(isSpace: false)
         // Given a screen with no changes.
         guard let index = testSetup.context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
             Issue.record("There should be a setting for the room avatar.")
@@ -80,7 +80,7 @@ struct RoomChangePermissionsScreenViewModelTests {
     
     @Test
     func save() async throws {
-        var testSetup = TestSetup(isSpace: false)
+        let testSetup = TestSetup(isSpace: false)
         // Given a screen with changes.
         guard let index = testSetup.context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
             Issue.record("There should be a setting for the room avatar.")
@@ -109,7 +109,7 @@ struct RoomChangePermissionsScreenViewModelTests {
     
     @Test
     func saveNoChanges() {
-        var testSetup = TestSetup(isSpace: false)
+        let testSetup = TestSetup(isSpace: false)
         // Given a screen with no changes.
         #expect(!testSetup.context.viewState.hasChanges)
         
