@@ -14,28 +14,28 @@ struct RunTests: AsyncParsableCommand {
                                                       swift run tools run-tests --scheme PreviewTests --create-simulator-name "iPhone SE (3rd generation)" \
                                                         --create-simulator-type com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation
                                                     """)
-
+    
     @Option(help: "The Xcode scheme to test.")
     var scheme: String
-
+    
     @Option(help: "The simulator device name to run tests on (e.g. 'iPhone 17').")
     var device = "iPhone 17"
-
+    
     @Option(help: "The iOS version to use for the simulator runtime (e.g. '26.1').")
     var osVersion = "26.1"
-
+    
     @Option(help: "Number of times to retry failed tests. Only the failing tests are re-run, not the entire suite.")
     var retries = 3
-
+    
     @Option(help: "When set, create a simulator with this name if one doesn't already exist.")
     var createSimulatorName: String?
-
+    
     @Option(help: "The simulator device type identifier for creating a new simulator (e.g. 'com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation').")
     var createSimulatorType: String?
-
+    
     @Option(help: "Only run a specific test (format: 'ClassName/testName').")
     var testName: String?
-
+    
     private var isCI: Bool {
         ProcessInfo.processInfo.environment["CI"] != nil
     }
@@ -47,11 +47,11 @@ struct RunTests: AsyncParsableCommand {
     private var formatter: String {
         "xcbeautify -q --disable-logging --is-ci --renderer github-actions"
     }
-
+    
     private var simulatorRuntime: String {
         "com.apple.CoreSimulator.SimRuntime.iOS-\(osVersion.replacingOccurrences(of: ".", with: "-"))"
     }
-
+    
     func run() async throws {
         if let createName = createSimulatorName {
             guard let createType = createSimulatorType else {
@@ -65,18 +65,18 @@ struct RunTests: AsyncParsableCommand {
         if FileManager.default.fileExists(atPath: resultBundleURL.path) {
             try? FileManager.default.removeItem(at: resultBundleURL)
         }
-
+        
         // Ensure the output directory exists
         let outputDirectory = resultBundleURL.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
-
+        
         try await executeXcodeBuild()
         
         try await shutdownSimulator()
-
+        
         logger.info("\n✅ Tests passed.\n")
     }
-
+    
     // MARK: - Simulator Management
     
     private func createSimulatorIfNecessary(name: String, type: String) async throws {
@@ -93,7 +93,7 @@ struct RunTests: AsyncParsableCommand {
         let hasExisting = simulators.components(separatedBy: "\n").contains { line in
             line.contains("\(name) (")
         }
-
+        
         if hasExisting {
             logger.info("Simulator '\(name)' already exists.")
         } else {
@@ -120,16 +120,15 @@ struct RunTests: AsyncParsableCommand {
     }
     
     // MARK: - Test Running
-
+    
     private func executeXcodeBuild() async throws {
         var command = "set -o pipefail && xcodebuild test"
         command += " -scheme \(scheme)"
         command += " -sdk iphonesimulator"
-        command +=
-            " -destination 'platform=iOS Simulator,name=\(device),OS=\(osVersion),arch=arm64'"
+        command += " -destination 'platform=iOS Simulator,name=\(device),OS=\(osVersion),arch=arm64'"
         command += " -resultBundlePath \(resultBundlePath)"
         command += " -skipPackagePluginValidation"
-
+        
         // Use xcodebuild's native retry support to re-run only failing tests
         // instead of re-running the entire suite. retries=0 means no retries (single run).
         if retries > 0 {
@@ -137,7 +136,7 @@ struct RunTests: AsyncParsableCommand {
             command += " -retry-tests-on-failure"
             command += " -test-iterations \(retries + 1)"
         }
-
+        
         if let testName {
             command += " -only-testing:\(scheme)/\(testName)"
         }

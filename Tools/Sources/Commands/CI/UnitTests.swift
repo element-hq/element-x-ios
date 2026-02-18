@@ -5,13 +5,13 @@ import Foundation
 struct UnitTests: AsyncParsableCommand {
     static let configuration = CommandConfiguration(commandName: "unit-tests",
                                                     abstract: "Runs the unit test CI workflow: lint, unit tests, preview tests, and result collection.")
-
+    
     @Option(help: "Device name for unit tests.")
     var device = "iPhone 17"
-
+    
     @Option(help: "iOS version for the simulator.")
     var osVersion = "26.1"
-
+    
     func run() async throws {
         try await CI.lint()
         
@@ -44,7 +44,7 @@ struct UnitTests: AsyncParsableCommand {
             failures.append("Preview tests failed: \(error)")
             logger.error("\n❌ Preview tests failed.\n")
         }
-
+        
         // Zip results (best-effort, useful for CI artifact uploads)
         await CI.zipResults(bundles: ["UnitTests.xcresult", "PreviewTests.xcresult"],
                             outputName: "UnitTests.zip")
