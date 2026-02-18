@@ -21,7 +21,7 @@ struct PlaybackSpeedButton: View {
                 .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(L10n.a11yPlaybackSpeed(speedLabel))
+        .accessibilityLabel(UntranslatedL10n.a11yPlaybackSpeed(speedLabel))
     }
 
     private var speedLabel: String {

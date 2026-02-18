@@ -4,6 +4,9 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
+// MARK: - Voice message playback speed
+"a11y_playback_speed" = "Playback speed %1$@";
+
 // MARK: - Soft logout
 
 "soft_logout_signin_title" = "Sign in";
