@@ -132,7 +132,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
 
     func setPlaybackSpeed(_ speed: Float) {
         playbackSpeed = speed
-        if internalAudioPlayer?.rate != 0 {
+        if state == .playing {
             internalAudioPlayer?.rate = speed
         }
     }

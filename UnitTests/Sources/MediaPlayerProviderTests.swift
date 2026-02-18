@@ -40,7 +40,7 @@ class MediaPlayerProviderTests: XCTestCase {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         audioPlayer.playbackSpeed = 1.0
-
+        
         let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent), title: "", duration: 0), count: 10)
         for audioPlayerState in audioPlayerStates {
             mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
@@ -48,14 +48,14 @@ class MediaPlayerProviderTests: XCTestCase {
             let isAttached = audioPlayerState.isAttached
             XCTAssertTrue(isAttached)
         }
-
+        
         mediaPlayerProvider.detachAllStates(except: nil)
         for audioPlayerState in audioPlayerStates {
             let isAttached = audioPlayerState.isAttached
             XCTAssertFalse(isAttached)
         }
     }
-
+    
     func testDetachAllStatesWithException() {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
