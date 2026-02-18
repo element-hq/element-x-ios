@@ -100,10 +100,7 @@ struct KnockRequestsListScreenViewModelTests {
         context.send(viewAction: .declineRequest(eventID: "2"))
         try await deferred.fulfill()
         
-        guard let declineAlertInfo = context.alertInfo else {
-            Issue.record("Can't be nil")
-            return
-        }
+        let declineAlertInfo = try #require(context.alertInfo)
         deferred = deferFulfillment(context.$viewState) { state in
             state.shouldDisplayRequests &&
                 state.handledEventIDs == ["1", "2"] &&
@@ -120,10 +117,7 @@ struct KnockRequestsListScreenViewModelTests {
         context.send(viewAction: .ban(eventID: "3"))
         try await deferred.fulfill()
         
-        guard let banAlertInfo = context.alertInfo else {
-            Issue.record("Can't be nil")
-            return
-        }
+        let banAlertInfo = try #require(context.alertInfo)
         deferred = deferFulfillment(context.$viewState) { state in
             state.shouldDisplayRequests &&
                 state.handledEventIDs == ["1", "2", "3"] &&
@@ -167,10 +161,7 @@ struct KnockRequestsListScreenViewModelTests {
         context.send(viewAction: .acceptAllRequests)
         try await deferred.fulfill()
         
-        guard let alertInfo = context.alertInfo else {
-            Issue.record("Can't be nil")
-            return
-        }
+        let alertInfo = try #require(context.alertInfo)
         
         deferred = deferFulfillment(context.$viewState) { state in
             !state.shouldDisplayRequests &&

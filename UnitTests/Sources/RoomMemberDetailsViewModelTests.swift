@@ -70,10 +70,8 @@ struct RoomMemberDetailsViewModelTests {
         
         try await deferred.fulfill()
         
-        guard let memberDetails = testSetup.context.viewState.memberDetails else {
-            Issue.record("Member details should be loaded at this point")
-            return
-        }
+        let memberDetails = try #require(testSetup.context.viewState.memberDetails,
+                                         "Member details should be loaded at this point")
         
         #expect(memberDetails.isIgnored)
         #expect(!testSetup.context.viewState.isProcessingIgnoreRequest)
@@ -102,10 +100,8 @@ struct RoomMemberDetailsViewModelTests {
         
         try await deferred.fulfill()
         
-        guard let memberDetails = testSetup.context.viewState.memberDetails else {
-            Issue.record("Member details should be loaded at this point")
-            return
-        }
+        let memberDetails = try #require(testSetup.context.viewState.memberDetails,
+                                         "Member details should be loaded at this point")
         
         #expect(!memberDetails.isIgnored)
         #expect(testSetup.context.alertInfo != nil)
@@ -132,10 +128,8 @@ struct RoomMemberDetailsViewModelTests {
         
         try await deferred.fulfill()
         
-        guard let memberDetails = testSetup.context.viewState.memberDetails else {
-            Issue.record("Member details should be loaded at this point")
-            return
-        }
+        let memberDetails = try #require(testSetup.context.viewState.memberDetails,
+                                         "Member details should be loaded at this point")
         
         #expect(!memberDetails.isIgnored)
         
@@ -163,10 +157,8 @@ struct RoomMemberDetailsViewModelTests {
         
         try await deferred.fulfill()
         
-        guard let memberDetails = testSetup.context.viewState.memberDetails else {
-            Issue.record("Member details should be loaded at this point")
-            return
-        }
+        let memberDetails = try #require(testSetup.context.viewState.memberDetails,
+                                         "Member details should be loaded at this point")
         
         #expect(memberDetails.isIgnored)
         #expect(testSetup.context.alertInfo != nil)

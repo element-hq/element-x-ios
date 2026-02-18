@@ -42,20 +42,12 @@ struct DeactivateAccountScreenViewModelTests {
             guard let clientProxy else { return .failure(.sdkError(ClientProxyMockError.generic)) }
             
             if clientProxy.deactivateAccountPasswordEraseDataCallsCount == 1 {
-                if password != nil {
-                    Issue.record("The password shouldn't be sent first time round.")
-                }
-                if eraseData != shouldErase {
-                    Issue.record("The erase parameter is unexpected.")
-                }
+                #expect(password == nil, "The password shouldn't be sent first time round.")
+                #expect(eraseData == shouldErase, "The erase parameter is unexpected.")
                 return .failure(.sdkError(ClientProxyMockError.generic))
             } else {
-                if password != enteredPassword {
-                    Issue.record("The password should match the user's input on the second call.")
-                }
-                if eraseData != shouldErase {
-                    Issue.record("The erase parameter is unexpected.")
-                }
+                #expect(password == enteredPassword, "The password should match the user's input on the second call.")
+                #expect(eraseData == shouldErase, "The erase parameter is unexpected.")
                 return .success(())
             }
         }
@@ -69,10 +61,8 @@ struct DeactivateAccountScreenViewModelTests {
         context.send(viewAction: .deactivate)
         try await deferredState.fulfill()
         
-        guard let confirmationAction = context.alertInfo?.primaryButton.action else {
-            Issue.record("Couldn't find the confirmation action.")
-            return
-        }
+        let confirmationAction = try #require(context.alertInfo?.primaryButton.action,
+                                              "Couldn't find the confirmation action.")
         
         let deferredAction = deferFulfillment(viewModel.actionsPublisher) { $0 == .accountDeactivated }
         confirmationAction()

@@ -67,7 +67,7 @@ struct ResolveVerifiedUserSendFailureScreenViewModelTests {
         while remainingUserIDs.count > 1 {
             // Verify that the strings are being updated.
             if assertStrings {
-                verifyDisplayName(context: context, from: remainingUserIDs)
+                try verifyDisplayName(context: context, from: remainingUserIDs)
             }
             
             // When resolving the first failure.
@@ -82,7 +82,7 @@ struct ResolveVerifiedUserSendFailureScreenViewModelTests {
         
         // Verify the final string.
         if assertStrings {
-            verifyDisplayName(context: context, from: remainingUserIDs)
+            try verifyDisplayName(context: context, from: remainingUserIDs)
         }
         
         // When resolving the final failure.
@@ -93,16 +93,10 @@ struct ResolveVerifiedUserSendFailureScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    private func verifyDisplayName(context: ResolveVerifiedUserSendFailureScreenViewModel.Context, from remainingUserIDs: [String]) {
-        guard let userID = remainingUserIDs.first else {
-            Issue.record("There should be a user ID to check.")
-            return
-        }
-        
-        guard let displayName = roomProxy.membersPublisher.value.first(where: { $0.userID == userID })?.displayName else {
-            Issue.record("There should be a matching mock user")
-            return
-        }
+    private func verifyDisplayName(context: ResolveVerifiedUserSendFailureScreenViewModel.Context, from remainingUserIDs: [String]) throws {
+        let userID = try #require(remainingUserIDs.first, "There should be a user ID to check.")
+        let displayName = try #require(roomProxy.membersPublisher.value.first { $0.userID == userID }?.displayName,
+                                       "There should be a matching mock user")
         
         #expect(context.viewState.title.contains(displayName))
         #expect(context.viewState.subtitle.contains(displayName))

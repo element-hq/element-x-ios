@@ -14,7 +14,7 @@ import Testing
 @Suite
 struct TimelineItemFactoryTests {
     @Test
-    func callInvite() {
+    func callInvite() throws {
         let ownUserID = "@alice:matrix.org"
         let senderUserID = "@bob:matrix.org"
 
@@ -25,13 +25,9 @@ struct TimelineItemFactoryTests {
         let eventTimelineItem = EventTimelineItem.mockCallInvite(sender: senderUserID)
         
         let eventTimelineItemProxy = EventTimelineItemProxy(item: eventTimelineItem, uniqueID: .init("0"))
-        
-        let item = factory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false)
-        
-        guard let item = item as? CallInviteRoomTimelineItem else {
-            Issue.record("Incorrect item type")
-            return
-        }
+                
+        let item = try #require(factory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false) as? CallInviteRoomTimelineItem,
+                                "Incorrect item type")
         
         #expect(item.isReactable == false)
         #expect(item.canBeRepliedTo == false)

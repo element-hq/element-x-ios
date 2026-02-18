@@ -32,13 +32,11 @@ struct RoomChangePermissionsScreenViewModelTests {
     }
 
     @Test
-    func changeSetting() {
+    func changeSetting() throws {
         let testSetup = TestSetup(isSpace: false)
         // Given a screen with no changes.
-        guard let index = testSetup.context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
-            Issue.record("There should be a setting for the room avatar.")
-            return
-        }
+        let index = try #require(testSetup.context.settings[.roomDetails]?.firstIndex { $0.keyPath == \.roomAvatar },
+                                 "There should be a setting for the room avatar.")
         #expect(testSetup.context.settings[.roomDetails]?[index].roleValue == .moderator)
         #expect(!testSetup.context.viewState.hasChanges)
         
@@ -57,22 +55,18 @@ struct RoomChangePermissionsScreenViewModelTests {
     }
     
     @Test
-    func settingsCantBeChanged() {
+    func settingsCantBeChanged() throws {
         let testSetup = TestSetup(isSpace: false, ownPowerLevel: .value(25))
         // Given a screen with no changes.
-        guard let index = testSetup.context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
-            Issue.record("There should be a setting for the room avatar.")
-            return
-        }
+        var index = try #require(testSetup.context.settings[.roomDetails]?.firstIndex { $0.keyPath == \.roomAvatar },
+                                 "There should be a setting for the room avatar.")
         #expect(testSetup.context.settings[.roomDetails]?[index].roleValue == .moderator)
         #expect(testSetup.context.settings[.roomDetails]?[index].isDisabled == true)
         #expect(testSetup.context.settings[.roomDetails]?[index].availableValues.count == 1)
         #expect(!testSetup.context.viewState.hasChanges)
         
-        guard let index = testSetup.context.settings[.messagesAndContent]?.firstIndex(where: { $0.keyPath == \.eventsDefault }) else {
-            Issue.record("There should be a setting for the events.")
-            return
-        }
+        index = try #require(testSetup.context.settings[.messagesAndContent]?.firstIndex { $0.keyPath == \.eventsDefault },
+                             "There should be a setting for the events.")
         #expect(testSetup.context.settings[.messagesAndContent]?[index].roleValue == .user)
         #expect(testSetup.context.settings[.messagesAndContent]?[index].isDisabled == false)
         #expect(testSetup.context.settings[.messagesAndContent]?[index].availableValues.count == 1)
@@ -82,10 +76,8 @@ struct RoomChangePermissionsScreenViewModelTests {
     func save() async throws {
         let testSetup = TestSetup(isSpace: false)
         // Given a screen with changes.
-        guard let index = testSetup.context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
-            Issue.record("There should be a setting for the room avatar.")
-            return
-        }
+        let index = try #require(testSetup.context.settings[.roomDetails]?.firstIndex { $0.keyPath == \.roomAvatar },
+                                 "There should be a setting for the room avatar.")
         testSetup.context.settings[.roomDetails]?[index] = RoomPermissionsSetting(title: "",
                                                                                   value: RoomRole.user.powerLevelValue,
                                                                                   ownPowerLevel: RoomRole.creator.powerLevel,
