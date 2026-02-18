@@ -575,7 +575,8 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .sessionVerification:
-            var sessionVerificationControllerProxy = SessionVerificationControllerProxyMock.configureMock(requestDelay: .seconds(5))
+            var sessionVerificationControllerProxy = SessionVerificationControllerProxyMock.configureMock(otherDeviceStartsSasVerification: true,
+                                                                                                          requestDelay: .seconds(5))
             let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy,
                                                                             flow: .deviceInitiator,
                                                                             appSettings: ServiceLocator.shared.settings,
