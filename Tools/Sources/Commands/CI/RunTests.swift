@@ -1,7 +1,6 @@
 import ArgumentParser
 import CommandLineTools
 import Foundation
-import Subprocess
 
 struct RunTests: AsyncParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Runs xcodebuild tests with simulator management, retries, and formatting.",
@@ -25,15 +24,13 @@ struct RunTests: AsyncParsableCommand {
     @Option(help: "The iOS version to use for the simulator runtime (e.g. '26.1').")
     var osVersion = "26.1"
 
-    @Option(help:
-        "Number of times to retry failed tests. Only the failing tests are re-run, not the entire suite.")
+    @Option(help: "Number of times to retry failed tests. Only the failing tests are re-run, not the entire suite.")
     var retries = 3
 
     @Option(help: "When set, create a simulator with this name if one doesn't already exist.")
     var createSimulatorName: String?
 
-    @Option(help:
-        "The simulator device type identifier for creating a new simulator (e.g. 'com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation').")
+    @Option(help: "The simulator device type identifier for creating a new simulator (e.g. 'com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation').")
     var createSimulatorType: String?
 
     @Option(help: "Only run a specific test (format: 'ClassName/testName').")
@@ -117,7 +114,7 @@ struct RunTests: AsyncParsableCommand {
         print("Shutting down simulator '\(device)'…")
         
         let command = "xcrun simctl shutdown '\(device)' 2>/dev/null || true"
-        _ = try await CI.run(.path("/bin/zsh"), ["-cu", command])
+        try await CI.run(.path("/bin/zsh"), ["-cu", command])
         
         print("Simulator shut down.")
     }
@@ -147,6 +144,6 @@ struct RunTests: AsyncParsableCommand {
 
         command += " | \(formatter)"
 
-        _ = try await CI.run(.path("/bin/zsh"), ["-cu", command])
+        try await CI.run(.path("/bin/zsh"), ["-cu", command])
     }
 }

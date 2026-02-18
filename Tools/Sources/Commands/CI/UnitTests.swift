@@ -38,8 +38,7 @@ struct UnitTests: AsyncParsableCommand {
                 "--device", "iPhone SE (3rd generation)",
                 "--os-version", osVersion,
                 "--create-simulator-name", "iPhone SE (3rd generation)",
-                "--create-simulator-type",
-                "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
+                "--create-simulator-type", "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
             ]).run()
         } catch {
             failures.append("Preview tests failed: \(error)")

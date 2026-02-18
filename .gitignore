@@ -29,8 +29,6 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
-# Test output
-test_output
 towncrier.toml.tmp
 version_changes.md
 
@@ -43,6 +41,9 @@ build
 
 ## Editors
 .nova
+
+## Project specific
+test_output
 
 # Only commit Pkl packages (there may be other caches in here).
 Secrets/vendor/*

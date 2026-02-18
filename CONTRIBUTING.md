@@ -85,9 +85,11 @@ Please do **not** manually edit the `Localizable.strings`, `Localizable.stringsd
 
 ### Continuous Integration
 
-Element X uses a suite of Swift command line tools for running actions on the CI and tries to keep the configuration confined to either [Tools/Sources](Tools/Sources) or [xcodegen](project.yml). 
+Element X uses a combination of Swift command line tools and Fastlane for running actions on the CI and tries to keep the configuration confined to either [Tools/Sources](Tools/Sources) or the [FastFile](fastlane/Fastfile) alongside the project's [xcodegen](project.yml) configuration. 
 
-Please run `swift run tools --help` to see available options.
+Please run `swift run tools ci --help` and `bundle exec fastlane` to see available options.
+
+Note: We are in the process of converting our Fastlane lanes to Swift and so long-term are intending to remove Fastlane from the project all together.
 
 ### Network debugging proxy
 

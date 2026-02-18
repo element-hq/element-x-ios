@@ -11,8 +11,6 @@ struct CI: ParsableCommand {
     
     static let testOutputDirectory = "test_output"
     
-    // MARK: - Logging
-        
     // MARK: - Linting
     
     /// Runs SwiftFormat in lint mode against the current directory.
@@ -20,7 +18,7 @@ struct CI: ParsableCommand {
         logger.info("\n🔍 Running SwiftFormat lint…\n")
         
         do {
-            _ = try await run(.name("swiftformat"), ["--lint", "."])
+            try await run(.name("swiftformat"), ["--lint", "."])
         } catch {
             logger.error("\n❌ SwiftFormat failed.\n")
             throw error
@@ -28,7 +26,7 @@ struct CI: ParsableCommand {
         logger.info("\n✅ SwiftFormat passed.\n")
     }
     
-    // MARK: - Coverage & Test Result Collection
+    // MARK: - Test Results
     
     /// Collects coverage from an xcresult bundle using xcresultparser (cobertura format).
     /// Failures are non-fatal — the output file simply won't be created.
@@ -43,7 +41,7 @@ struct CI: ParsableCommand {
         }
         
         do {
-            _ = try await run(.path("/bin/zsh"), ["-cu", "xcresultparser -q -o cobertura -t \(target) -p \(projectPath) \(resultBundlePath) > \(outputPath)"])
+            try await run(.path("/bin/zsh"), ["-cu", "xcresultparser -q -o cobertura -t \(target) -p \(projectPath) \(resultBundlePath) > \(outputPath)"])
             logger.info("\n📊 Coverage report: \(outputPath)\n")
         } catch {
             logger.error("\n❌ Failed to collect coverage for \(resultBundle): \(error.localizedDescription)\n")
@@ -63,21 +61,19 @@ struct CI: ParsableCommand {
         }
         
         do {
-            _ = try await run(.path("/bin/zsh"), ["-cu", "xcresultparser -q -o junit -p \(projectPath) \(resultBundlePath) > \(outputPath)"])
+            try await run(.path("/bin/zsh"), ["-cu", "xcresultparser -q -o junit -p \(projectPath) \(resultBundlePath) > \(outputPath)"])
             logger.info("📋 Test results: \(outputPath)")
         } catch {
             logger.error("\n❌ Failed to collect test results for \(resultBundle): \(error.localizedDescription)\n")
         }
     }
     
-    // MARK: - Result Zipping
-    
     /// Zips xcresult bundles in the test output directory for faster artifact uploads.
     static func zipResults(bundles: [String], outputName: String) async {
         let bundleArgs = bundles.joined(separator: " ")
         do {
             logger.info("\n📦 Zipping test results…")
-            _ = try await run(.path("/bin/zsh"), ["-cu", "cd \(testOutputDirectory) && zip -rq \(outputName) \(bundleArgs)"])
+            try await run(.path("/bin/zsh"), ["-cu", "cd \(testOutputDirectory) && zip -rq \(outputName) \(bundleArgs)"])
             logger.info("📦 Zipped: \(testOutputDirectory)/\(outputName)\n")
         } catch {
             logger.error("\n❌ Failed to zip results: \(error.localizedDescription)\n")
