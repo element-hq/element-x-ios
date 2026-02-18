@@ -325,6 +325,7 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 | 2026-02-17 | Unit test fixes for rebrand. 962 tests run, 16 failures caused by our changes fixed across 5 test files (AppRouteURLParserTests, ServerConfirmationScreenViewModelTests, ServerConfirmationScreenViewStateTests, LocalizationTests, AuthenticationServiceTests). All 33 affected tests now passing. ~57-60h invested (~59% budget). |
 | 2026-02-17 | App display name + branding audit. Changed APP_DISPLAY_NAME/PRODUCTION_APP_NAME → "UCMeet" in app.yml (propagates to main app, NSE, ShareExtension). Verified on simulator: iOS Settings shows "< UCMeet". Full branding audit: **zero user-visible Element branding remains**. NSE/ShareExtension audit: clean. ~58-61h invested (~60% budget). |
 | 2026-02-17 | Launch screen verified clean (plain background). Checkpoint tag `checkpoint/branding-complete` created. Build & handover guide written (10 sections). TOR 7.6 (source + docs) and 7.7 (maintenance) now DONE. ~60-63h invested (~62% budget). |
+| 2026-02-18 | Platform restriction + push notification hardening. Disabled Mac/Vision Pro "Designed for iPad" compatibility. Push gateway URL → `matrix.ucmeet.org`. NSE notification ID → dynamic bundle identifier. ~61-64h invested (~63% budget). |
 
 ---
 

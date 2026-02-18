@@ -309,9 +309,9 @@ When updating this file, change "Current Phase" and check off completed phases:
 | 7 | Branding — App Icon & Colors | **BLOCKED** | Requires D-008 (design assets from customer) |
 | 8 | Branding — Strings, Launch Screen & Element Removal | **MOSTLY DONE** | 30 string values rebranded (en, en-US, ru), 10 Swift refs cleaned. 16 dispatch queue labels blocked on D-001. Final app name needs D-008. |
 | 9 | Localization | **DONE** | Trimmed 37 → 3 locales (en, en-US, ru). All "Element" strings replaced with "UCMeet". |
-| 10 | Configuration (AppSettings, Analytics, Feature Flags) | **MOSTLY DONE** | Server URLs configured, analytics disabled, legal URLs set. Push gateway needs Sygnal URL. |
+| 10 | Configuration (AppSettings, Analytics, Feature Flags) | **MOSTLY DONE** | Server URLs configured, analytics disabled, legal URLs set. Push gateway → `matrix.ucmeet.org`. Sygnal URL may need adjustment. |
 | 11 | OIDC & Associated Domains | **MOSTLY DONE** | OIDC login working, associated domains cleaned. Full migration to ucmeet.info needs AASA file. |
-| 12 | Push Notification Plumbing | **PARTIAL** | FCM code + 14 unit tests complete. Blocked on real GoogleService-Info.plist (D-002) |
+| 12 | Push Notification Plumbing | **PARTIAL** | FCM code + 14 unit tests complete. Push gateway → `matrix.ucmeet.org`. NSE notification ID uses dynamic bundle ID. Blocked on real GoogleService-Info.plist (D-002). |
 | 13 | Calls Configuration | **DONE** | URL scheme → `org.ucmeet.call`, knownHosts cleared, LiveKit confirmed in `.well-known` |
 | 14 | Full Build Verification & Audit | **NOT STARTED** | Final step after all changes |
 | 15 | Git Checkpoints & Branching Strategy | **DONE** | `main` + `develop` + `upstream` structure, checkpoint/unmodified-build tagged |
@@ -399,7 +399,8 @@ The project is **nearly feature-complete for what's possible without Bundle ID**
 | 2026-02-17 | **Unit test fixes for rebrand.** 962 tests run, 16 failures caused by rebrand changes fixed across 5 test files: AppRouteURLParserTests (5 — knownHosts, URL scheme, web hosts), ServerConfirmationScreenViewModelTests (7 — accountProviders default, mock serverAddress), ServerConfirmationScreenViewStateTests (1 — element.io message removed), LocalizationTests (2 — Italian→Russian locale+plurals), AuthenticationServiceTests (1 — default homeserver address). All 33 affected tests passing. 39 pre-existing failures unrelated to rebrand. |
 | 2026-02-17 | **App display name + branding audit.** Changed `APP_DISPLAY_NAME` → "UCMeet" and `PRODUCTION_APP_NAME` → "UCMeet" in `app.yml`. Propagates to main app, NSE, ShareExtension via XcodeGen variables. Verified on simulator: iOS Settings back button shows "< UCMeet". Full branding audit confirmed **zero user-visible Element branding remains**. NSE/ShareExtension audit: clean, no hardcoded Element strings. |
 | 2026-02-17 | **Launch screen + checkpoint + handover guide.** Launch screen verified clean (plain background, no branding). Tag `checkpoint/branding-complete` created and pushed. Build & handover guide written: `documentation/build_and_handover_guide.md` — 10 sections covering prerequisites, build steps, config reference, Bundle ID migration, upstream sync, App Store submission, file inventory. |
+| 2026-02-18 | **Platform restriction + push notification hardening.** (1) Disabled Mac/Vision Pro "Designed for iPad" compatibility via `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD` and `SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD` in project.yml. (2) Push gateway URL changed from `https://matrix.org` (Element's Sygnal) to `https://matrix.ucmeet.org` (customer's server). (3) NSE "Received While Offline" notification ID changed from hardcoded `io.element.elementx` to dynamic `InfoPlistReader.main.baseBundleIdentifier` — automatically adapts to Bundle ID changes. Build verified. |
 
 ---
 
-*Last updated: 2026-02-17 (launch screen + checkpoint + handover guide). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-02-18 (platform restriction + push notification hardening). Update this file whenever the project phase changes or a blocker is resolved.*

@@ -163,10 +163,14 @@ Before FCM works end-to-end, the customer must provide:
 
 1. **`GoogleService-Info.plist`** — Real Firebase project configuration (currently placeholder values)
 2. **Sygnal push gateway** — Must be configured for FCM (not APNs) with the Firebase server key
-3. **Push gateway URL** — Must match `appSettings.pushGatewayNotifyEndpoint`
+3. **Push gateway URL** — Currently set to `https://matrix.ucmeet.org` in `AppSettings.swift`. If Sygnal runs on a different host, update `pushGatewayBaseURL`.
 4. **Pusher app ID** — Must match `appSettings.pusherAppID` and the Sygnal configuration
 
 See `decisions_tracker.md` (D-004, D-005) for tracking these customer decisions.
+
+### NSE Notification ID
+
+The NSE "Received While Offline" notification identifier now uses `InfoPlistReader.main.baseBundleIdentifier` dynamically, so it will automatically adapt when the Bundle ID changes (D-001). Both the NSE and the main app's `NotificationManager` reference the same constant.
 
 ---
 
@@ -190,4 +194,4 @@ xcodebuild test -project ElementX.xcodeproj -scheme UnitTests \
 
 ---
 
-*Last updated: 2026-02-11*
+*Last updated: 2026-02-18*
