@@ -101,7 +101,7 @@ struct QRCodeLoginScreenViewModelTests {
     
     @Test
     func requestCameraPermission() async throws {
-        var testSetup = TestSetup(mode: .login)
+        let testSetup = TestSetup(mode: .login)
         testSetup.appMediator.requestAuthorizationIfNeededReturnValue = false
         #expect(testSetup.context.viewState.state == .loginInstructions)
         
@@ -160,7 +160,7 @@ struct QRCodeLoginScreenViewModelTests {
     
     @Test
     func linkDesktopComputer() async throws {
-        var testSetup = TestSetup(mode: .linkDesktop)
+        let testSetup = TestSetup(mode: .linkDesktop)
         #expect(testSetup.context.viewState.state == .linkDesktopInstructions)
         
         var deferred = deferFulfillment(testSetup.context.$viewState) { $0.state == .scan(.scanning) }
@@ -198,7 +198,7 @@ struct QRCodeLoginScreenViewModelTests {
     
     @Test
     func linkMobileDevice() async throws {
-        var testSetup = TestSetup(mode: .linkMobile)
+        let testSetup = TestSetup(mode: .linkMobile)
         #expect(testSetup.context.viewState.state.isDisplayQR)
         
         let checkCodeSender = CheckCodeSenderSDKMock()

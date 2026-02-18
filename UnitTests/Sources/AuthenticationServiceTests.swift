@@ -12,8 +12,8 @@ import MatrixRustSDKMocks
 import Testing
 
 @Suite
+@MainActor
 struct AuthenticationServiceTests {
-    @MainActor
     private struct TestSetup {
         var client: ClientSDKMock!
         var userSessionStore: UserSessionStoreMock!
@@ -37,9 +37,8 @@ struct AuthenticationServiceTests {
     }
     
     @Test
-    @MainActor
     func passwordLogin() async {
-        var testSetup = TestSetup(serverAddress: "example.com")
+        let testSetup = TestSetup(serverAddress: "example.com")
         
         switch await testSetup.service.configure(for: "example.com", flow: .login) {
         case .success:
@@ -63,9 +62,8 @@ struct AuthenticationServiceTests {
     }
     
     @Test
-    @MainActor
     func configureLoginWithOIDC() async {
-        var testSetup = TestSetup()
+        let testSetup = TestSetup()
         
         switch await testSetup.service.configure(for: "matrix.org", flow: .login) {
         case .success:
@@ -79,9 +77,8 @@ struct AuthenticationServiceTests {
     }
     
     @Test
-    @MainActor
     func configureRegisterWithOIDC() async {
-        var testSetup = TestSetup()
+        let testSetup = TestSetup()
         
         switch await testSetup.service.configure(for: "matrix.org", flow: .register) {
         case .success:
@@ -98,7 +95,7 @@ struct AuthenticationServiceTests {
     @MainActor
     func configureRegisterNoSupport() async {
         let homeserverAddress = "example.com"
-        var testSetup = TestSetup(serverAddress: homeserverAddress)
+        let testSetup = TestSetup(serverAddress: homeserverAddress)
         
         switch await testSetup.service.configure(for: homeserverAddress, flow: .register) {
         case .success:

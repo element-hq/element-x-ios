@@ -97,7 +97,7 @@ struct AppLockTimerTests {
     
     @Test
     func timerRepeatingWithinGracePeriod() {
-        var timer = setupTimer(unlocked: true, backgroundedAt: now)
+        let timer = setupTimer(unlocked: true, backgroundedAt: now)
         
         var nextCheck = now + halfGracePeriod(for: timer)
         #expect(!timer.computeLockState(didBecomeActiveAt: nextCheck),
@@ -126,7 +126,7 @@ struct AppLockTimerTests {
     
     @Test
     func timerWithLongForeground() {
-        var timer = setupTimer(unlocked: true)
+        let timer = setupTimer(unlocked: true)
         
         let backgroundDate = now + gracePeriodX10(for: timer)
         timer.applicationDidEnterBackground(date: backgroundDate)
@@ -137,7 +137,7 @@ struct AppLockTimerTests {
     
     @Test
     func changingTimeLocksApp() {
-        var timer = setupTimer(unlocked: true, backgroundedAt: now)
+        let timer = setupTimer(unlocked: true, backgroundedAt: now)
         #expect(timer.computeLockState(didBecomeActiveAt: now - 1),
                 "The the device's clock is changed to before the app was backgrounded, the device should remain locked.")
     }
@@ -145,7 +145,7 @@ struct AppLockTimerTests {
     @Test
     func noGracePeriod() {
         // Given a timer with no grace period that is in the background.
-        var timer = setupTimer(gracePeriod: 0, unlocked: true)
+        let timer = setupTimer(gracePeriod: 0, unlocked: true)
         let backgroundDate = now + 1
         timer.applicationDidEnterBackground(date: backgroundDate)
         
@@ -156,7 +156,7 @@ struct AppLockTimerTests {
     @Test
     func resignActive() {
         // Given a timer with no grace period.
-        var timer = setupTimer(gracePeriod: 0, unlocked: true)
+        let timer = setupTimer(gracePeriod: 0, unlocked: true)
         
         // When entering the background.
         timer.applicationDidEnterBackground(date: now)
@@ -181,7 +181,7 @@ struct AppLockTimerTests {
     // MARK: - Helpers
     
     private func setupTimer(gracePeriod: TimeInterval = 180, unlocked: Bool, backgroundedAt backgroundedDate: Date? = nil) -> AppLockTimer {
-        var timer = AppLockTimer(gracePeriod: gracePeriod)
+        let timer = AppLockTimer(gracePeriod: gracePeriod)
         if unlocked {
             timer.registerUnlock()
         }

@@ -13,7 +13,7 @@ import Testing
 @Suite(.serialized)
 struct AppLockSetupPINScreenViewModelTests {
     @MainActor
-    private struct TestSetup {
+    private final class TestSetup {
         var appLockService: AppLockService
         var keychainController: KeychainControllerMock
         var viewModel: AppLockSetupPINScreenViewModelProtocol
@@ -28,12 +28,15 @@ struct AppLockSetupPINScreenViewModelTests {
             appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
             viewModel = AppLockSetupPINScreenViewModel(initialMode: mode, isMandatory: false, appLockService: appLockService)
         }
+        
+        deinit {
+            AppSettings.resetAllSettings()
+        }
     }
 
     @Test
     func createPIN() async throws {
         let testSetup = TestSetup(mode: .create)
-        defer { AppSettings.resetAllSettings() }
         
         // Given the screen in create mode.
         #expect(testSetup.context.viewState.mode == .create, "The mode should start as creation.")
@@ -57,7 +60,6 @@ struct AppLockSetupPINScreenViewModelTests {
     @Test
     func createWeakPIN() async throws {
         let testSetup = TestSetup(mode: .create)
-        defer { AppSettings.resetAllSettings() }
         
         // Given the screen in create mode.
         #expect(testSetup.context.viewState.mode == .create, "The mode should start as creation.")
@@ -76,7 +78,6 @@ struct AppLockSetupPINScreenViewModelTests {
     @Test
     func createPINMismatch() async throws {
         let testSetup = TestSetup(mode: .create)
-        defer { AppSettings.resetAllSettings() }
         
         // Given the confirm mode after entering a new PIN.
         #expect(testSetup.context.viewState.mode == .create, "The mode should start as creation.")
@@ -118,7 +119,6 @@ struct AppLockSetupPINScreenViewModelTests {
     @Test
     func unlock() async throws {
         let testSetup = TestSetup(mode: .unlock)
-        defer { AppSettings.resetAllSettings() }
         
         // Given the screen in unlock mode.
         let pinCode = "2023"
@@ -137,7 +137,6 @@ struct AppLockSetupPINScreenViewModelTests {
     @Test
     func forgotPIN() async throws {
         let testSetup = TestSetup(mode: .unlock)
-        defer { AppSettings.resetAllSettings() }
         
         // Given the screen in unlock mode.
         #expect(testSetup.context.alertInfo == nil, "There shouldn't be an alert to begin with.")
@@ -162,7 +161,6 @@ struct AppLockSetupPINScreenViewModelTests {
     @Test
     func unlockFailed() async throws {
         let testSetup = TestSetup(mode: .unlock)
-        defer { AppSettings.resetAllSettings() }
         
         // Given the screen in unlock mode.
         testSetup.keychainController.pinCodeReturnValue = "2023"

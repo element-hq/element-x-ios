@@ -26,109 +26,100 @@ struct UserDiscoveryServiceTest {
     
     @Test
     func queryShowingResults() async {
-        var testSetup = self
-        testSetup.clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [UserProfileProxy.mockAlice], limited: true))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [UserProfileProxy.mockAlice], limited: true))
         
-        let results = await (try? testSetup.search(query: "AAA").get()) ?? []
-        testSetup.assertSearchResults(results, toBe: 1)
+        let results = await (try? search(query: "AAA").get()) ?? []
+        assertSearchResults(results, toBe: 1)
     }
     
     @Test
     func ownerIsFiltered() async {
-        var testSetup = self
-        testSetup.clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [UserProfileProxy(userID: "@foo:matrix.org")], limited: true))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [UserProfileProxy(userID: "@foo:matrix.org")], limited: true))
         
-        let results = await (try? testSetup.search(query: "AAA").get()) ?? []
-        testSetup.assertSearchResults(results, toBe: 0)
+        let results = await (try? search(query: "AAA").get()) ?? []
+        assertSearchResults(results, toBe: 0)
     }
     
     @Test
     func getProfileIsNotCalled() async {
-        var testSetup = self
-        testSetup.clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: testSetup.searchResults, limited: true))
-        testSetup.clientProxy.profileForReturnValue = .success(.init(userID: "@alice:matrix.org"))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: searchResults, limited: true))
+        clientProxy.profileForReturnValue = .success(.init(userID: "@alice:matrix.org"))
         
-        let results = await (try? testSetup.search(query: "AAA").get()) ?? []
-        testSetup.assertSearchResults(results, toBe: 3)
-        #expect(!testSetup.clientProxy.profileForCalled)
+        let results = await (try? search(query: "AAA").get()) ?? []
+        assertSearchResults(results, toBe: 3)
+        #expect(!clientProxy.profileForCalled)
     }
 
     @Test
     func getProfileIsNotCalledForAccountOwnerID() async {
-        var testSetup = self
-        testSetup.clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: testSetup.searchResults, limited: true))
-        testSetup.clientProxy.profileForReturnValue = .success(.init(userID: "@alice:matrix.org"))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: searchResults, limited: true))
+        clientProxy.profileForReturnValue = .success(.init(userID: "@alice:matrix.org"))
         
-        let results = await (try? testSetup.search(query: "foo:matrix.org").get()) ?? []
-        testSetup.assertSearchResults(results, toBe: 3)
-        #expect(!testSetup.clientProxy.profileForCalled)
+        let results = await (try? search(query: "foo:matrix.org").get()) ?? []
+        assertSearchResults(results, toBe: 3)
+        #expect(!clientProxy.profileForCalled)
     }
     
     @Test
     func localResultShows() async {
-        var testSetup = self
-        testSetup.clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: testSetup.searchResults, limited: true))
-        testSetup.clientProxy.profileForReturnValue = .success(.init(userID: "@some:matrix.org"))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: searchResults, limited: true))
+        clientProxy.profileForReturnValue = .success(.init(userID: "@some:matrix.org"))
         
-        let results = await (try? testSetup.search(query: "@a:b.com").get()) ?? []
+        let results = await (try? search(query: "@a:b.com").get()) ?? []
         
-        testSetup.assertSearchResults(results, toBe: 4)
-        #expect(testSetup.clientProxy.profileForCalled)
+        assertSearchResults(results, toBe: 4)
+        #expect(clientProxy.profileForCalled)
     }
     
     @Test
     func localResultShowsOnSearchError() async {
-        var testSetup = self
-        testSetup.clientProxy.searchUsersSearchTermLimitReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        testSetup.clientProxy.profileForReturnValue = .success(.init(userID: "@some:matrix.org"))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        clientProxy.profileForReturnValue = .success(.init(userID: "@some:matrix.org"))
         
-        let results = await (try? testSetup.search(query: "@a:b.com").get()) ?? []
+        let results = await (try? search(query: "@a:b.com").get()) ?? []
         
-        testSetup.assertSearchResults(results, toBe: 1)
-        #expect(testSetup.clientProxy.profileForCalled)
+        assertSearchResults(results, toBe: 1)
+        #expect(clientProxy.profileForCalled)
     }
     
     @Test
     func searchErrorTriggers() async {
-        var testSetup = self
-        testSetup.clientProxy.searchUsersSearchTermLimitReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        testSetup.clientProxy.profileForReturnValue = .success(.init(userID: "@some:matrix.org"))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        clientProxy.profileForReturnValue = .success(.init(userID: "@some:matrix.org"))
         
-        switch await testSetup.search(query: "some query") {
+        switch await search(query: "some query") {
         case .success:
             Issue.record("Search users must fail")
         case .failure(let error):
             #expect(error == UserDiscoveryErrorType.failedSearchingUsers)
         }
         
-        #expect(!testSetup.clientProxy.profileForCalled)
+        #expect(!clientProxy.profileForCalled)
     }
     
     @Test
     func localResultWithDuplicates() async {
-        var testSetup = self
-        testSetup.clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: testSetup.searchResults, limited: true))
-        testSetup.clientProxy.profileForReturnValue = .success(.init(userID: "@bob:matrix.org"))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: searchResults, limited: true))
+        clientProxy.profileForReturnValue = .success(.init(userID: "@bob:matrix.org"))
         
-        let results = await (try? testSetup.search(query: "@a:b.com").get()) ?? []
+        let results = await (try? search(query: "@a:b.com").get()) ?? []
         
-        testSetup.assertSearchResults(results, toBe: 3)
+        assertSearchResults(results, toBe: 3)
         let firstUserID = results.first?.userID
         #expect(firstUserID == "@bob:matrix.org")
-        #expect(testSetup.clientProxy.profileForCalled)
+        #expect(clientProxy.profileForCalled)
     }
     
     @Test
     func searchResultsShowWhenGetProfileFails() async {
-        var testSetup = self
-        testSetup.clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: testSetup.searchResults, limited: true))
-        testSetup.clientProxy.profileForReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: searchResults, limited: true))
+        clientProxy.profileForReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         
-        let results = await (try? testSetup.search(query: "@a:b.com").get()) ?? []
+        let results = await (try? search(query: "@a:b.com").get()) ?? []
         
         let firstUserID = results.first?.userID
         #expect(firstUserID == "@a:b.com")
-        #expect(testSetup.clientProxy.profileForCalled)
+        #expect(clientProxy.profileForCalled)
     }
     
     // MARK: - Private

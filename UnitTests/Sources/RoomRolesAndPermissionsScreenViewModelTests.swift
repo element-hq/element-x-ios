@@ -45,7 +45,7 @@ struct RoomRolesAndPermissionsScreenViewModelTests {
     
     @Test
     func resetPermissions() async throws {
-        var testSetup = TestSetup(members: .allMembersAsAdmin)
+        let testSetup = TestSetup(members: .allMembersAsAdmin)
         
         testSetup.context.send(viewAction: .reset)
         #expect(testSetup.context.alertInfo != nil)
@@ -59,7 +59,7 @@ struct RoomRolesAndPermissionsScreenViewModelTests {
     
     @Test
     func demoteToModerator() async throws {
-        var testSetup = TestSetup(members: .allMembersAsAdmin)
+        let testSetup = TestSetup(members: .allMembersAsAdmin)
         
         testSetup.context.send(viewAction: .editOwnUserRole)
         #expect(testSetup.context.alertInfo != nil)
@@ -74,7 +74,7 @@ struct RoomRolesAndPermissionsScreenViewModelTests {
     
     @Test
     func demoteToMember() async throws {
-        var testSetup = TestSetup(members: .allMembersAsAdmin)
+        let testSetup = TestSetup(members: .allMembersAsAdmin)
         
         testSetup.context.send(viewAction: .editOwnUserRole)
         #expect(testSetup.context.alertInfo != nil)

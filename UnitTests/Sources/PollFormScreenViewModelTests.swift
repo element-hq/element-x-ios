@@ -70,12 +70,11 @@ struct PollFormScreenViewModelTests {
     
     @Test
     func newPollInvalidEmptyOption() {
-        var testSetup = self
-        testSetup.context.question = "foo"
-        testSetup.context.options[0].text = "bla"
-        testSetup.context.options[1].text = "bla"
-        testSetup.context.send(viewAction: .addOption)
-        #expect(testSetup.context.viewState.isSubmitButtonDisabled)
+        context.question = "foo"
+        context.options[0].text = "bla"
+        context.options[1].text = "bla"
+        context.send(viewAction: .addOption)
+        #expect(context.viewState.isSubmitButtonDisabled)
     }
     
     @Test
@@ -178,14 +177,24 @@ struct PollFormScreenViewModelTests {
         let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
         try await confirmation { confirmation in
+            var redactReasonCalled = false
             timelineProxy.redactReasonClosure = { eventID, _ in
+                defer {
+                    confirmation()
+                    redactReasonCalled = true
+                }
                 #expect(eventID == .eventID("foo"))
-                confirmation()
                 return .success(())
             }
             context.alertInfo?.secondaryButton?.action?()
             
             try await deferred.fulfill()
+            
+            // Since the redactReasonClosure is called asynchronously after closing the alert
+            // We need to actively wait for the redactReasonClosure to be called before fulfilling the test.
+            while !redactReasonCalled {
+                await Task.yield()
+            }
         }
     }
 }

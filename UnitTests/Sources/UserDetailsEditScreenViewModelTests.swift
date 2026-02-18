@@ -34,68 +34,62 @@ struct UserDetailsEditScreenViewModelTests {
     
     @Test
     func nameDidChange() {
-        var testSetup = self
-        testSetup.context.name = "name"
-        #expect(testSetup.context.viewState.nameDidChange)
-        #expect(testSetup.context.viewState.canSave)
+        context.name = "name"
+        #expect(context.viewState.nameDidChange)
+        #expect(context.viewState.canSave)
     }
     
     @Test
     func emptyNameCannotBeSaved() {
-        var testSetup = self
-        testSetup.context.name = ""
-        #expect(!testSetup.context.viewState.canSave)
+        context.name = ""
+        #expect(!context.viewState.canSave)
     }
     
     @Test
     func avatarPickerShowsSheet() {
-        var testSetup = self
-        testSetup.context.name = "name"
-        #expect(!testSetup.context.showMediaSheet)
-        testSetup.context.send(viewAction: .presentMediaSource)
-        #expect(testSetup.context.showMediaSheet)
+        context.name = "name"
+        #expect(!context.showMediaSheet)
+        context.send(viewAction: .presentMediaSource)
+        #expect(context.showMediaSheet)
     }
     
     @Test
     func save() async throws {
-        var testSetup = self
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .dismiss }
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         
-        testSetup.context.name = "name"
-        testSetup.context.send(viewAction: .save)
+        context.name = "name"
+        context.send(viewAction: .save)
         
         try await deferred.fulfill()
     }
     
     @Test
     func cancelWithChangesAndDiscard() async throws {
-        var testSetup = self
-        testSetup.context.name = "name"
-        #expect(testSetup.context.viewState.canSave)
-        #expect(testSetup.context.alertInfo == nil)
+        context.name = "name"
+        #expect(context.viewState.canSave)
+        #expect(context.alertInfo == nil)
         
-        testSetup.context.send(viewAction: .cancel)
+        context.send(viewAction: .cancel)
         
-        #expect(testSetup.context.alertInfo != nil)
+        #expect(context.alertInfo != nil)
         
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .dismiss }
-        testSetup.context.alertInfo?.secondaryButton?.action?() // Discard
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
+        context.alertInfo?.secondaryButton?.action?() // Discard
         try await deferred.fulfill()
     }
     
     @Test
     func cancelWithChangesAndSave() async throws {
-        var testSetup = self
-        testSetup.context.name = "name"
-        #expect(testSetup.context.viewState.canSave)
-        #expect(testSetup.context.alertInfo == nil)
+        context.name = "name"
+        #expect(context.viewState.canSave)
+        #expect(context.alertInfo == nil)
         
-        testSetup.context.send(viewAction: .cancel)
+        context.send(viewAction: .cancel)
         
-        #expect(testSetup.context.alertInfo != nil)
+        #expect(context.alertInfo != nil)
         
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .dismiss }
-        testSetup.context.alertInfo?.primaryButton.action?() // Save
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
+        context.alertInfo?.primaryButton.action?() // Save
         try await deferred.fulfill()
     }
 }

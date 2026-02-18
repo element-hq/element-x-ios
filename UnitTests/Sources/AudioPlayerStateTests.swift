@@ -118,36 +118,28 @@ struct AudioPlayerStateTests {
     @Test
     mutating func updateProgress() async {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
-
-        // If we try to set a negative progress, the new progress must be 0.0
-        do {
-            await audioPlayerState.updateState(progress: -5.0)
-            #expect(audioPlayerState.progress == 0.0)
-            #expect(audioPlayerMock.seekToReceivedProgress == 0.0)
-        }
-
-        // If we try to set a progress > 1.0, the new progress must be 1.0
-        do {
-            await audioPlayerState.updateState(progress: 1.5)
-            #expect(audioPlayerState.progress == 1.0)
-            #expect(audioPlayerMock.seekToReceivedProgress == 1.0)
-        }
         
-        do {
-            audioPlayerMock.state = .stopped
-            await audioPlayerState.updateState(progress: 0.4)
-            #expect(audioPlayerState.progress == 0.4)
-            #expect(audioPlayerMock.seekToReceivedProgress == 0.4)
-            #expect(!audioPlayerState.isPublishingProgress)
-        }
-
-        do {
-            audioPlayerMock.state = .playing
-            await audioPlayerState.updateState(progress: 0.4)
-            #expect(audioPlayerState.progress == 0.4)
-            #expect(audioPlayerMock.seekToReceivedProgress == 0.4)
-            #expect(audioPlayerState.isPublishingProgress)
-        }
+        // If we try to set a negative progress, the new progress must be 0.0
+        await audioPlayerState.updateState(progress: -5.0)
+        #expect(audioPlayerState.progress == 0.0)
+        #expect(audioPlayerMock.seekToReceivedProgress == 0.0)
+        
+        // If we try to set a progress > 1.0, the new progress must be 1.0
+        await audioPlayerState.updateState(progress: 1.5)
+        #expect(audioPlayerState.progress == 1.0)
+        #expect(audioPlayerMock.seekToReceivedProgress == 1.0)
+        
+        audioPlayerMock.state = .stopped
+        await audioPlayerState.updateState(progress: 0.4)
+        #expect(audioPlayerState.progress == 0.4)
+        #expect(audioPlayerMock.seekToReceivedProgress == 0.4)
+        #expect(!audioPlayerState.isPublishingProgress)
+        
+        audioPlayerMock.state = .playing
+        await audioPlayerState.updateState(progress: 0.4)
+        #expect(audioPlayerState.progress == 0.4)
+        #expect(audioPlayerMock.seekToReceivedProgress == 0.4)
+        #expect(audioPlayerState.isPublishingProgress)
     }
 
     @Test

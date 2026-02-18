@@ -12,78 +12,71 @@ import Testing
 
 @MainActor
 @Suite(.serialized)
-struct SpacesScreenViewModelTests {
-    @MainActor
-    private struct TestSetup {
-        var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoom], Never>
-        var spaceServiceProxy: SpaceServiceProxyMock
-        var appSettings: AppSettings
-        var viewModel: SpacesScreenViewModelProtocol
-        
-        var context: SpacesScreenViewModelType.Context {
-            viewModel.context
-        }
-        
-        init() {
-            AppSettings.resetAllSettings()
-            appSettings = AppSettings()
-            
-            let clientProxy = ClientProxyMock(.init())
-            let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-            
-            topLevelSpacesSubject = .init([
-                SpaceServiceRoom.mock(id: "space1", isSpace: true),
-                SpaceServiceRoom.mock(id: "space2", isSpace: true),
-                SpaceServiceRoom.mock(id: "space3", isSpace: true)
-            ])
-            spaceServiceProxy = SpaceServiceProxyMock(.init())
-            spaceServiceProxy.topLevelSpacesPublisher = topLevelSpacesSubject.asCurrentValuePublisher()
-            spaceServiceProxy.spaceRoomListSpaceIDClosure = { [topLevelSpacesSubject] spaceID in
-                guard let spaceServiceRoom = topLevelSpacesSubject.value.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
-                return .success(SpaceRoomListProxyMock(.init(spaceServiceRoom: spaceServiceRoom)))
-            }
-            clientProxy.spaceService = spaceServiceProxy
-            
-            viewModel = SpacesScreenViewModel(userSession: userSession,
-                                              selectedSpacePublisher: .init(nil),
-                                              appSettings: ServiceLocator.shared.settings,
-                                              userIndicatorController: UserIndicatorControllerMock())
-        }
+final class SpacesScreenViewModelTests {
+    var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoom], Never>
+    var spaceServiceProxy: SpaceServiceProxyMock
+    var appSettings: AppSettings
+    var viewModel: SpacesScreenViewModelProtocol
+    
+    var context: SpacesScreenViewModelType.Context {
+        viewModel.context
     }
-
+    
+    init() {
+        AppSettings.resetAllSettings()
+        appSettings = AppSettings()
+        
+        let clientProxy = ClientProxyMock(.init())
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        
+        topLevelSpacesSubject = .init([
+            SpaceServiceRoom.mock(id: "space1", isSpace: true),
+            SpaceServiceRoom.mock(id: "space2", isSpace: true),
+            SpaceServiceRoom.mock(id: "space3", isSpace: true)
+        ])
+        spaceServiceProxy = SpaceServiceProxyMock(.init())
+        spaceServiceProxy.topLevelSpacesPublisher = topLevelSpacesSubject.asCurrentValuePublisher()
+        spaceServiceProxy.spaceRoomListSpaceIDClosure = { [topLevelSpacesSubject] spaceID in
+            guard let spaceServiceRoom = topLevelSpacesSubject.value.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
+            return .success(SpaceRoomListProxyMock(.init(spaceServiceRoom: spaceServiceRoom)))
+        }
+        clientProxy.spaceService = spaceServiceProxy
+        
+        viewModel = SpacesScreenViewModel(userSession: userSession,
+                                          selectedSpacePublisher: .init(nil),
+                                          appSettings: ServiceLocator.shared.settings,
+                                          userIndicatorController: UserIndicatorControllerMock())
+    }
+    
+    deinit {
+        AppSettings.resetAllSettings()
+    }
+    
     @Test
     func initialState() {
-        let testSetup = TestSetup()
-        defer { AppSettings.resetAllSettings() }
-        #expect(testSetup.context.viewState.topLevelSpaces.count == 3)
+        #expect(context.viewState.topLevelSpaces.count == 3)
     }
     
     @Test
     func topLevelSpacesSubscription() async throws {
-        let testSetup = TestSetup()
-        defer { AppSettings.resetAllSettings() }
-        
-        var deferred = deferFulfillment(testSetup.context.observe(\.viewState.topLevelSpaces)) { $0.count == 0 }
-        testSetup.topLevelSpacesSubject.send([])
+        var deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.count == 0 }
+        topLevelSpacesSubject.send([])
         try await deferred.fulfill()
-        #expect(testSetup.context.viewState.topLevelSpaces.count == 0)
+        #expect(context.viewState.topLevelSpaces.count == 0)
         
-        deferred = deferFulfillment(testSetup.context.observe(\.viewState.topLevelSpaces)) { $0.count == 1 }
-        testSetup.topLevelSpacesSubject.send([
+        deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.count == 1 }
+        topLevelSpacesSubject.send([
             SpaceServiceRoom.mock(isSpace: true)
         ])
         try await deferred.fulfill()
-        #expect(testSetup.context.viewState.topLevelSpaces.count == 1)
+        #expect(context.viewState.topLevelSpaces.count == 1)
     }
     
     @Test
     func selectingSpace() async throws {
-        let testSetup = TestSetup()
-        defer { AppSettings.resetAllSettings() }
-        
-        let selectedSpace = testSetup.topLevelSpacesSubject.value[0]
-        let deferred = deferFulfillment(testSetup.viewModel.actionsPublisher) { _ in true }
-        testSetup.viewModel.context.send(viewAction: .spaceAction(.select(selectedSpace)))
+        let selectedSpace = topLevelSpacesSubject.value[0]
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
+        viewModel.context.send(viewAction: .spaceAction(.select(selectedSpace)))
         let action = try await deferred.fulfill()
         
         switch action {
@@ -96,24 +89,22 @@ struct SpacesScreenViewModelTests {
     
     @Test
     func featureAnnouncement() async throws {
-        let testSetup = TestSetup()
-        defer { AppSettings.resetAllSettings() }
-        #expect(!testSetup.appSettings.hasSeenSpacesAnnouncement)
-        #expect(!testSetup.context.isPresentingFeatureAnnouncement)
+        #expect(!appSettings.hasSeenSpacesAnnouncement)
+        #expect(!context.isPresentingFeatureAnnouncement)
         
-        let deferred = deferFulfillment(testSetup.context.observe(\.isPresentingFeatureAnnouncement)) { $0 == true }
-        testSetup.viewModel.context.send(viewAction: .screenAppeared)
+        let deferred = deferFulfillment(context.observe(\.isPresentingFeatureAnnouncement)) { $0 == true }
+        viewModel.context.send(viewAction: .screenAppeared)
         try await deferred.fulfill()
-        #expect(testSetup.context.isPresentingFeatureAnnouncement)
+        #expect(context.isPresentingFeatureAnnouncement)
         
-        testSetup.viewModel.context.send(viewAction: .featureAnnouncementAppeared)
-        #expect(testSetup.appSettings.hasSeenSpacesAnnouncement)
+        viewModel.context.send(viewAction: .featureAnnouncementAppeared)
+        #expect(appSettings.hasSeenSpacesAnnouncement)
         
-        testSetup.context.isPresentingFeatureAnnouncement = false
+        context.isPresentingFeatureAnnouncement = false
         
-        let deferredFailure = deferFailure(testSetup.context.observe(\.isPresentingFeatureAnnouncement), timeout: .seconds(1)) { $0 == true }
-        testSetup.viewModel.context.send(viewAction: .screenAppeared)
+        let deferredFailure = deferFailure(context.observe(\.isPresentingFeatureAnnouncement), timeout: .seconds(1)) { $0 == true }
+        viewModel.context.send(viewAction: .screenAppeared)
         try await deferredFailure.fulfill()
-        #expect(!testSetup.context.isPresentingFeatureAnnouncement)
+        #expect(!context.isPresentingFeatureAnnouncement)
     }
 }

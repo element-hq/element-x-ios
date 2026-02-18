@@ -18,7 +18,7 @@ struct RoomSummaryProviderTests {
                                                                    .deduplicateVersions]
     
     @MainActor
-    private struct TestSetup {
+    private final class TestSetup {
         var appSettings: AppSettings
         var roomList: RoomListSDKMock
         var dynamicEntriesController: RoomListDynamicEntriesControllerSDKMock
@@ -52,13 +52,16 @@ struct RoomSummaryProviderTests {
             roomList.loadingStateListenerReturnValue = .some(.init(state: .notLoaded, stateStream: .init(noHandle: .init())))
             roomSummaryProvider.setRoomList(roomList)
         }
+        
+        deinit {
+            AppSettings.resetAllSettings()
+        }
     }
     
     @Test @MainActor
     func defaultRustFilters() async {
         // Given a new room provider.
-        var testSetup = TestSetup()
-        defer { AppSettings.resetAllSettings() }
+        let testSetup = TestSetup()
         await Task.yield()
         
         // Then it should have the default Rust filters enabled.
@@ -77,8 +80,7 @@ struct RoomSummaryProviderTests {
     @Test @MainActor
     func lowPriorityRustFilters() async {
         // Given a new room provider with the low priority filter enabled.
-        var testSetup = TestSetup(isLowPriorityFilterEnabled: true)
-        defer { AppSettings.resetAllSettings() }
+        let testSetup = TestSetup(isLowPriorityFilterEnabled: true)
         await Task.yield()
         
         // Then the default Rust filters should include the non-low priority filter,
@@ -105,8 +107,7 @@ struct RoomSummaryProviderTests {
     
     @Test @MainActor
     func roomIdentifierFilters() async {
-        var testSetup = TestSetup()
-        defer { AppSettings.resetAllSettings() }
+        let testSetup = TestSetup()
         await Task.yield()
         
         // Then it should have the default Rust filters enabled.

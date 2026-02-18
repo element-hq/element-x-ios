@@ -11,52 +11,47 @@ import Testing
 
 @MainActor
 @Suite(.serialized)
-struct AppLockSetupBiometricsScreenViewModelTests {
-    @MainActor
-    private struct TestSetup {
-        var appLockService: AppLockServiceMock
-        var viewModel: AppLockSetupBiometricsScreenViewModelProtocol
+final class AppLockSetupBiometricsScreenViewModelTests {
+    var appLockService: AppLockServiceMock
+    var viewModel: AppLockSetupBiometricsScreenViewModelProtocol
+    
+    var context: AppLockSetupBiometricsScreenViewModelType.Context {
+        viewModel.context
+    }
+    
+    init() {
+        AppSettings.resetAllSettings()
         
-        var context: AppLockSetupBiometricsScreenViewModelType.Context {
-            viewModel.context
-        }
-        
-        init() {
-            AppSettings.resetAllSettings()
-            
-            appLockService = AppLockServiceMock()
-            appLockService.underlyingIsEnabled = true
-            appLockService.underlyingBiometryType = .touchID
-            appLockService.enableBiometricUnlockReturnValue = .success(())
-            viewModel = AppLockSetupBiometricsScreenViewModel(appLockService: appLockService)
-        }
+        appLockService = AppLockServiceMock()
+        appLockService.underlyingIsEnabled = true
+        appLockService.underlyingBiometryType = .touchID
+        appLockService.enableBiometricUnlockReturnValue = .success(())
+        viewModel = AppLockSetupBiometricsScreenViewModel(appLockService: appLockService)
+    }
+    
+    deinit {
+        AppSettings.resetAllSettings()
     }
 
     @Test
     func allow() async throws {
-        var testSetup = TestSetup()
-        defer { AppSettings.resetAllSettings() }
-        
         // When allowing Touch/Face ID.
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .continue }
-        testSetup.context.send(viewAction: .allow)
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .continue }
+        context.send(viewAction: .allow)
         try await deferred.fulfill()
         
         // Then the service should now have biometric unlock enabled.
-        #expect(testSetup.appLockService.enableBiometricUnlockCallsCount == 1)
+        #expect(appLockService.enableBiometricUnlockCallsCount == 1)
     }
 
     @Test
     func skip() async throws {
-        var testSetup = TestSetup()
-        defer { AppSettings.resetAllSettings() }
-        
         // When skipping biometrics.
-        let deferred = deferFulfillment(testSetup.viewModel.actions) { $0 == .continue }
-        testSetup.context.send(viewAction: .skip)
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .continue }
+        context.send(viewAction: .skip)
         try await deferred.fulfill()
         
         // Then the service should now have biometric unlock enabled.
-        #expect(testSetup.appLockService.enableBiometricUnlockCallsCount == 0)
+        #expect(appLockService.enableBiometricUnlockCallsCount == 0)
     }
 }

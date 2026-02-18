@@ -12,58 +12,62 @@ import Testing
 
 @MainActor
 @Suite
-struct ElementCallServiceTests {
-    private var callProvider: CXProviderMock
-    private var currentDate: Date
-    private var testClock: TestClock<Duration>
-    private var pushRegistry: PKPushRegistry
-    private var service: ElementCallService
+final class ElementCallServiceTests {
+    private var callProvider: CXProviderMock!
+    private var currentDate: Date!
+    private var testClock: TestClock<Duration>!
+    private var pushRegistry: PKPushRegistry!
+    private var service: ElementCallService!
     
     init() {
         pushRegistry = PKPushRegistry(queue: nil)
         callProvider = CXProviderMock(.init())
         currentDate = Date()
         testClock = TestClock()
-        var date = currentDate
         let dateProvider: () -> Date = {
-            date
+            self.currentDate
         }
         service = ElementCallService(callProvider: callProvider, timeProvider: TimeProvider(clock: testClock, now: dateProvider))
     }
     
-    @Test
-    func incomingCall() async {
-        var testSetup = self
-        #expect(!testSetup.callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
-        
-        await confirmation { confirmation in
-            let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(testSetup.currentDate, lifetime: 30)
-            
-            testSetup.service.pushRegistry(testSetup.pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP) {
-                confirmation()
-            }
-        }
-        
-        #expect(testSetup.callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+    deinit {
+        callProvider = nil
+        currentDate = nil
+        testClock = nil
+        pushRegistry = nil
     }
     
-    @Test(.disabled("Flaky test"))
-    func callIsTimingOut() async {
-        var testSetup = self
-        #expect(!testSetup.callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+    @Test
+    func incomingCall() async {
+        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
         await confirmation { confirmation in
-            let pushPayload = PKPushPayloadMock().updatingExpiration(testSetup.currentDate, lifetime: 20)
+            let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
             
-            testSetup.service.pushRegistry(testSetup.pushRegistry,
-                                           didReceiveIncomingPushWith: pushPayload,
-                                           for: .voIP) {
+            service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP) {
+                confirmation()
+            }
+        }
+        
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+    }
+    
+    @Test
+    func callIsTimingOut() async {
+        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        
+        await confirmation { confirmation in
+            let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
+            
+            service.pushRegistry(pushRegistry,
+                                 didReceiveIncomingPushWith: pushPayload,
+                                 for: .voIP) {
                 confirmation()
             }
         }
         
         await confirmation { confirmation in
-            testSetup.callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
+            callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
                 if reason == .unanswered {
                     confirmation()
                 } else {
@@ -72,12 +76,12 @@ struct ElementCallServiceTests {
             }
             
             // advance past the timeout
-            await testSetup.testClock.advance(by: .seconds(30))
+            await testClock.advance(by: .seconds(30))
         }
     }
     
-    @Test(.disabled("Flaky test"))
-    mutating func expiredRingLifetimeIsIgnored() {
+    @Test
+    func expiredRingLifetimeIsIgnored() {
         #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
         let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
@@ -92,12 +96,10 @@ struct ElementCallServiceTests {
         #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
     }
     
-    @Test(.disabled("Flaky test"))
+    @Test
     func lifetimeIsCapped() async {
-        var testSetup = self
-        
         await confirmation { confirmation in
-            testSetup.callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
+            callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
                 if reason == .unanswered {
                     confirmation()
                 } else {
@@ -105,16 +107,16 @@ struct ElementCallServiceTests {
                 }
             }
             
-            #expect(!testSetup.callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+            #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
             
-            let pushPayload = PKPushPayloadMock().updatingExpiration(testSetup.currentDate, lifetime: 300)
+            let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 300)
             
-            testSetup.service.pushRegistry(testSetup.pushRegistry,
-                                           didReceiveIncomingPushWith: pushPayload,
-                                           for: .voIP) { }
+            service.pushRegistry(pushRegistry,
+                                 didReceiveIncomingPushWith: pushPayload,
+                                 for: .voIP) { }
             
             // Advance past the max timeout but below the 300
-            await testSetup.testClock.advance(by: .seconds(100))
+            await testClock.advance(by: .seconds(100))
         }
     }
 }

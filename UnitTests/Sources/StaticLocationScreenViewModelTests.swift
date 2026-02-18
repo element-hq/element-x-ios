@@ -32,42 +32,38 @@ struct StaticLocationScreenViewModelTests {
     
     @Test
     func userDidPan() {
-        var testSetup = self
-        #expect(testSetup.context.viewState.isSharingUserLocation)
-        #expect(testSetup.context.showsUserLocationMode == .showAndFollow)
-        testSetup.context.send(viewAction: .userDidPan)
-        #expect(!testSetup.context.viewState.isSharingUserLocation)
-        #expect(testSetup.context.showsUserLocationMode == .show)
+        #expect(context.viewState.isSharingUserLocation)
+        #expect(context.showsUserLocationMode == .showAndFollow)
+        context.send(viewAction: .userDidPan)
+        #expect(!context.viewState.isSharingUserLocation)
+        #expect(context.showsUserLocationMode == .show)
     }
     
     @Test
     func centerOnUser() {
-        var testSetup = self
-        #expect(testSetup.context.viewState.isSharingUserLocation)
-        testSetup.context.showsUserLocationMode = .show
-        #expect(!testSetup.context.viewState.isSharingUserLocation)
-        testSetup.context.send(viewAction: .centerToUser)
-        #expect(testSetup.context.viewState.isSharingUserLocation)
-        #expect(testSetup.context.showsUserLocationMode == .showAndFollow)
+        #expect(context.viewState.isSharingUserLocation)
+        context.showsUserLocationMode = .show
+        #expect(!context.viewState.isSharingUserLocation)
+        context.send(viewAction: .centerToUser)
+        #expect(context.viewState.isSharingUserLocation)
+        #expect(context.showsUserLocationMode == .showAndFollow)
     }
     
     @Test
     func centerOnUserWithoutAuth() {
-        var testSetup = self
-        testSetup.context.showsUserLocationMode = .hide
-        testSetup.context.isLocationAuthorized = nil
-        testSetup.context.send(viewAction: .centerToUser)
-        #expect(testSetup.context.showsUserLocationMode == .showAndFollow)
+        context.showsUserLocationMode = .hide
+        context.isLocationAuthorized = nil
+        context.send(viewAction: .centerToUser)
+        #expect(context.showsUserLocationMode == .showAndFollow)
     }
     
     @Test
     func centerOnUserWithDeniedAuth() {
-        var testSetup = self
-        testSetup.context.isLocationAuthorized = false
-        testSetup.context.showsUserLocationMode = .hide
-        testSetup.context.send(viewAction: .centerToUser)
-        #expect(testSetup.context.showsUserLocationMode != .showAndFollow)
-        #expect(testSetup.context.alertInfo != nil)
+        context.isLocationAuthorized = false
+        context.showsUserLocationMode = .hide
+        context.send(viewAction: .centerToUser)
+        #expect(context.showsUserLocationMode != .showAndFollow)
+        #expect(context.alertInfo != nil)
     }
     
     @Test

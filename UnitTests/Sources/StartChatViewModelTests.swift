@@ -33,60 +33,56 @@ struct StartChatScreenViewModelTests {
     }
     
     @Test
-    func queryShowingNoResults() async {
-        var testSetup = self
-        await testSetup.search(query: "A")
-        #expect(testSetup.context.viewState.usersSection.type == .suggestions)
+    mutating func queryShowingNoResults() async {
+        await search(query: "A")
+        #expect(context.viewState.usersSection.type == .suggestions)
         
-        await testSetup.search(query: "AA")
-        #expect(testSetup.context.viewState.usersSection.type == .suggestions)
-        #expect(!testSetup.userDiscoveryService.searchProfilesWithCalled)
+        await search(query: "AA")
+        #expect(context.viewState.usersSection.type == .suggestions)
+        #expect(!userDiscoveryService.searchProfilesWithCalled)
         
-        await testSetup.search(query: "AAA")
-        testSetup.assertSearchResults(toBe: 0)
+        await search(query: "AAA")
+        assertSearchResults(toBe: 0)
         
-        #expect(testSetup.userDiscoveryService.searchProfilesWithCalled)
+        #expect(userDiscoveryService.searchProfilesWithCalled)
     }
     
     @Test
     func joinRoomByAddress() async throws {
-        var testSetup = self
-        testSetup.clientProxy.resolveRoomAliasReturnValue = .success(.init(roomId: "id", servers: []))
+        clientProxy.resolveRoomAliasReturnValue = .success(.init(roomId: "id", servers: []))
         
-        let deferredViewState = deferFulfillment(testSetup.viewModel.context.$viewState) { viewState in
+        let deferredViewState = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.joinByAddressState == .addressFound(address: "#room:example.com", roomID: "id")
         }
-        testSetup.viewModel.context.roomAddress = "#room:example.com"
+        viewModel.context.roomAddress = "#room:example.com"
         try await deferredViewState.fulfill()
         
-        let deferredAction = deferFulfillment(testSetup.viewModel.actions) { action in
+        let deferredAction = deferFulfillment(viewModel.actions) { action in
             action == .showRoom(roomID: "id")
         }
-        testSetup.context.send(viewAction: .joinRoomByAddress)
+        context.send(viewAction: .joinRoomByAddress)
         try await deferredAction.fulfill()
     }
     
     @Test
     func joinRoomByAddressFailsBecauseInvalid() async throws {
-        var testSetup = self
-        let deferred = deferFulfillment(testSetup.viewModel.context.$viewState) { viewState in
+        let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.joinByAddressState == .invalidAddress
         }
-        testSetup.viewModel.context.roomAddress = ":"
-        testSetup.context.send(viewAction: .joinRoomByAddress)
+        viewModel.context.roomAddress = ":"
+        context.send(viewAction: .joinRoomByAddress)
         try await deferred.fulfill()
     }
     
     @Test
     func joinRoomByAddressFailsBecauseNotFound() async throws {
-        var testSetup = self
-        testSetup.clientProxy.resolveRoomAliasReturnValue = .failure(.failedResolvingRoomAlias)
+        clientProxy.resolveRoomAliasReturnValue = .failure(.failedResolvingRoomAlias)
         
-        let deferred = deferFulfillment(testSetup.viewModel.context.$viewState) { viewState in
+        let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.joinByAddressState == .addressNotFound
         }
-        testSetup.viewModel.context.roomAddress = "#room:example.com"
-        testSetup.context.send(viewAction: .joinRoomByAddress)
+        viewModel.context.roomAddress = "#room:example.com"
+        context.send(viewAction: .joinRoomByAddress)
         try await deferred.fulfill()
     }
     

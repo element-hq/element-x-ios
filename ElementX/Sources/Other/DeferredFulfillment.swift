@@ -49,7 +49,7 @@ func deferFulfillment<P: Publisher>(_ publisher: P,
         let startTime = ContinuousClock.now
         
         while !hasFulfilled {
-            try await Task.sleep(for: .milliseconds(10))
+            await Task.yield()
             if ContinuousClock.now - startTime >= timeout {
                 break
             }
@@ -89,7 +89,7 @@ func deferFulfillment<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
         let startTime = ContinuousClock.now
         
         while !hasFulfilled {
-            try await Task.sleep(for: .milliseconds(10))
+            await Task.yield()
             if ContinuousClock.now - startTime >= timeout {
                 break
             }
@@ -166,7 +166,7 @@ func deferFailure<P: Publisher>(_ publisher: P,
         let startTime = ContinuousClock.now
         
         while !hasFulfilled {
-            try await Task.sleep(for: .milliseconds(10))
+            await Task.yield()
             if ContinuousClock.now - startTime >= timeout {
                 break
             }
@@ -204,7 +204,7 @@ func deferFailure<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
         let startTime = ContinuousClock.now
         
         while !hasFulfilled {
-            try await Task.sleep(for: .milliseconds(10))
+            await Task.yield()
             if ContinuousClock.now - startTime >= timeout {
                 break
             }

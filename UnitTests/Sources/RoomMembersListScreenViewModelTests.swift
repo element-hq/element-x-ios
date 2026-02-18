@@ -21,20 +21,19 @@ struct RoomMembersListScreenViewModelTests {
         var context: RoomMembersListScreenViewModel.Context {
             viewModel.context
         }
-    }
-    
-    private func makeTestSetup(with members: [RoomMemberProxyMock]) -> TestSetup {
-        let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: members))
-        let viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
+        
+        init(with members: [RoomMemberProxyMock]) {
+            roomProxy = JoinedRoomProxyMock(.init(name: "test", members: members))
+            viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
                                                        roomProxy: roomProxy,
                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                        analytics: ServiceLocator.shared.analytics)
-        return TestSetup(viewModel: viewModel, roomProxy: roomProxy)
+        }
     }
     
     @Test
     func joinedMembers() async throws {
-        var testSetup = makeTestSetup(with: [.mockAlice, .mockBob])
+        let testSetup = TestSetup(with: [.mockAlice, .mockBob])
         
         let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleJoinedMembers.count == 2
@@ -48,7 +47,7 @@ struct RoomMembersListScreenViewModelTests {
     
     @Test
     func sortingMembers() async throws {
-        var testSetup = makeTestSetup(with: [.mockModerator, .mockDan, .mockAlice, .mockAdmin])
+        let testSetup = TestSetup(with: [.mockModerator, .mockDan, .mockAlice, .mockAdmin])
         
         let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleJoinedMembers.count == 4
@@ -72,7 +71,7 @@ struct RoomMembersListScreenViewModelTests {
     
     @Test
     func search() async throws {
-        var testSetup = makeTestSetup(with: [.mockAlice, .mockBob])
+        let testSetup = TestSetup(with: [.mockAlice, .mockBob])
         
         let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleJoinedMembers.count == 1
@@ -88,7 +87,7 @@ struct RoomMembersListScreenViewModelTests {
     
     @Test
     func emptySearch() async throws {
-        var testSetup = makeTestSetup(with: [.mockAlice, .mockBob])
+        let testSetup = TestSetup(with: [.mockAlice, .mockBob])
         testSetup.context.searchQuery = "WWW"
         
         let deferred = deferFulfillment(testSetup.context.$viewState) { state in
@@ -103,7 +102,7 @@ struct RoomMembersListScreenViewModelTests {
     
     @Test
     func joinedAndInvitedMembers() async throws {
-        var testSetup = makeTestSetup(with: [.mockInvited, .mockBob])
+        let testSetup = TestSetup(with: [.mockInvited, .mockBob])
         
         let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleInvitedMembers.count == 1
@@ -118,7 +117,7 @@ struct RoomMembersListScreenViewModelTests {
     
     @Test
     func invitedMembers() async throws {
-        var testSetup = makeTestSetup(with: [.mockInvited])
+        let testSetup = TestSetup(with: [.mockInvited])
         
         let deferred = deferFulfillment(testSetup.context.$viewState) { state in
             state.visibleInvitedMembers.count == 1
@@ -133,7 +132,7 @@ struct RoomMembersListScreenViewModelTests {
     
     @Test
     func searchInvitedMembers() async throws {
-        var testSetup = makeTestSetup(with: [.mockInvited])
+        let testSetup = TestSetup(with: [.mockInvited])
         
         testSetup.context.searchQuery = "invited"
         
@@ -151,7 +150,7 @@ struct RoomMembersListScreenViewModelTests {
     @Test
     func selectUserAsUser() async throws {
         // Given the room list viewed as a regular user.
-        var testSetup = makeTestSetup(with: .allMembers)
+        let testSetup = TestSetup(with: .allMembers)
         var deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
         try await deferred.fulfill()
         
@@ -174,11 +173,11 @@ struct RoomMembersListScreenViewModelTests {
     @Test
     func selectUserAsAdmin() async throws {
         // Given the room list viewed as an admin.
-        var testSetup = makeTestSetup(with: .allMembersAsAdmin)
+        let testSetup = TestSetup(with: .allMembersAsAdmin)
         var deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
         #expect(testSetup.context.manageMemeberViewModel == nil)
-
+        
         // When tapping on a user in the list.
         deferred = deferFulfillment(testSetup.context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
         guard let user = testSetup.viewModel.state.visibleJoinedMembers.first(where: { $0.member.role == .user && $0.member.id != RoomMemberProxyMock.mockMe.userID })?.member else {
@@ -200,7 +199,7 @@ struct RoomMembersListScreenViewModelTests {
     @Test
     func selectModeratorAsAdmin() async throws {
         // Given the room list viewed as an admin.
-        var testSetup = makeTestSetup(with: .allMembersAsAdmin)
+        let testSetup = TestSetup(with: .allMembersAsAdmin)
         var deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
         #expect(testSetup.context.manageMemeberViewModel == nil)
@@ -226,7 +225,7 @@ struct RoomMembersListScreenViewModelTests {
     @Test
     func selectAdminAsAdmin() async throws {
         // Given the room list viewed as an admin.
-        var testSetup = makeTestSetup(with: .allMembersAsAdmin)
+        let testSetup = TestSetup(with: .allMembersAsAdmin)
         var deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
         
@@ -251,7 +250,7 @@ struct RoomMembersListScreenViewModelTests {
     @Test
     func selectOwnMemberAsAdmin() async throws {
         // Given the room list viewed as an admin.
-        var testSetup = makeTestSetup(with: .allMembersAsAdmin)
+        let testSetup = TestSetup(with: .allMembersAsAdmin)
         let deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
         try await deferred.fulfill()
         
@@ -271,7 +270,7 @@ struct RoomMembersListScreenViewModelTests {
     @Test
     func selectBannedMember() async throws {
         // Given the room list viewed as an admin.
-        var testSetup = makeTestSetup(with: .allMembersAsAdmin + RoomMemberProxyMock.mockBanned)
+        let testSetup = TestSetup(with: .allMembersAsAdmin + RoomMemberProxyMock.mockBanned)
         var deferred = deferFulfillment(testSetup.context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
         #expect(testSetup.context.alertInfo == nil)
