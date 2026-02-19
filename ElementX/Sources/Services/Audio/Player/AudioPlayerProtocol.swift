@@ -41,9 +41,9 @@ protocol AudioPlayerProtocol: AnyObject {
     var playbackURL: URL? { get }
     var state: MediaPlayerState { get }
     var playbackSpeed: Float { get }
-
+    
     var actions: AnyPublisher<AudioPlayerAction, Never> { get }
-
+    
     func load(sourceURL: URL, playbackURL: URL, autoplay: Bool)
     func reset()
     func play()

@@ -275,29 +275,23 @@ struct AudioPlayerStateTests {
         #expect(!audioPlayerState.showProgressIndicator)
     }
     
-    func testSetPlaybackSpeed() {
+    @Test
+    func setPlaybackSpeed() {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
-        XCTAssertEqual(audioPlayerState.playbackSpeed, 1.0)
+        #expect(audioPlayerState.playbackSpeed == .default)
 
-        audioPlayerState.setPlaybackSpeed(1.5)
-        XCTAssertEqual(audioPlayerState.playbackSpeed, 1.5)
-        XCTAssertEqual(audioPlayerMock.setPlaybackSpeedReceivedSpeed, 1.5)
+        audioPlayerState.setPlaybackSpeed(.fast)
+        #expect(audioPlayerState.playbackSpeed == .fast)
+        #expect(audioPlayerMock.setPlaybackSpeedReceivedSpeed == 1.5)
 
-        audioPlayerState.setPlaybackSpeed(2.0)
-        XCTAssertEqual(audioPlayerState.playbackSpeed, 2.0)
-        XCTAssertEqual(audioPlayerMock.setPlaybackSpeedReceivedSpeed, 2.0)
+        audioPlayerState.setPlaybackSpeed(.fastest)
+        #expect(audioPlayerState.playbackSpeed == .fastest)
+        #expect(audioPlayerMock.setPlaybackSpeedReceivedSpeed == 2.0)
 
-        audioPlayerState.setPlaybackSpeed(0.5)
-        XCTAssertEqual(audioPlayerState.playbackSpeed, 0.5)
-        XCTAssertEqual(audioPlayerMock.setPlaybackSpeedReceivedSpeed, 0.5)
-    }
-
-    func testSetPlaybackSpeedWithoutPlayer() {
-        XCTAssertEqual(audioPlayerState.playbackSpeed, 1.0)
-
-        audioPlayerState.setPlaybackSpeed(2.0)
-        XCTAssertEqual(audioPlayerState.playbackSpeed, 2.0)
+        audioPlayerState.setPlaybackSpeed(.slow)
+        #expect(audioPlayerState.playbackSpeed == .slow)
+        #expect(audioPlayerMock.setPlaybackSpeedReceivedSpeed == 0.5)
     }
 
     @Test
