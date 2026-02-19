@@ -19,6 +19,7 @@ struct VoiceMessageRoomPlaybackView: View {
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
     let onScrubbing: (Bool) -> Void
+    let playbackSpeed: Float
     let onPlaybackSpeedChange: () -> Void
 
     var body: some View {
@@ -27,7 +28,7 @@ struct VoiceMessageRoomPlaybackView: View {
                                size: .medium,
                                action: onPlayPause)
             VStack(spacing: 2) {
-                PlaybackSpeedButton(speed: playerState.playbackSpeed, onTap: onPlaybackSpeedChange)
+                PlaybackSpeedButton(speed: playbackSpeed, onTap: onPlaybackSpeedChange)
                 Text(timeLabelContent)
                     .lineLimit(1)
                     .font(.compound.bodyXSSemibold)
@@ -134,6 +135,7 @@ struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
                                      onPlayPause: { },
                                      onSeek: { value in Task { await playerState.updateState(progress: value) } },
                                      onScrubbing: { _ in },
+                                     playbackSpeed: playerState.playbackSpeed,
                                      onPlaybackSpeedChange: { })
             .fixedSize(horizontal: false, vertical: true)
     }

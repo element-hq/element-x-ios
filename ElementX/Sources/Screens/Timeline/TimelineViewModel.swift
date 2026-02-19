@@ -102,6 +102,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        areThreadsEnabled: appSettings.threadsEnabled,
                                                        linkPreviewsEnabled: appSettings.linkPreviewsEnabled,
+                                                       voiceMessagePlaybackSpeed: appSettings.voiceMessagePlaybackSpeed.rawValue,
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
@@ -541,6 +542,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         appSettings.$threadsEnabled
             .weakAssign(to: \.state.areThreadsEnabled, on: self)
+            .store(in: &cancellables)
+
+        appSettings.$voiceMessagePlaybackSpeed
+            .map(\.rawValue)
+            .weakAssign(to: \.state.voiceMessagePlaybackSpeed, on: self)
             .store(in: &cancellables)
         
         userSession.clientProxy.timelineMediaVisibilityPublisher
