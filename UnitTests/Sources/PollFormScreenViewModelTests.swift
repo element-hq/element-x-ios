@@ -18,24 +18,12 @@ struct PollFormScreenViewModelTests {
     private var context: PollFormScreenViewModelType.Context {
         viewModel.context
     }
-    
-    init() {
-        viewModel = PollFormScreenViewModel(mode: .new,
-                                            timelineController: MockTimelineController(timelineProxy: timelineProxy),
-                                            analytics: ServiceLocator.shared.analytics,
-                                            userIndicatorController: UserIndicatorControllerMock())
-    }
-    
-    private func makeViewModel(mode: PollFormMode = .new) -> PollFormScreenViewModelProtocol {
-        PollFormScreenViewModel(mode: mode,
-                                timelineController: MockTimelineController(timelineProxy: timelineProxy),
-                                analytics: ServiceLocator.shared.analytics,
-                                userIndicatorController: UserIndicatorControllerMock())
-    }
 
     @Test
-    func newPollInitialState() async throws {
+    mutating func newPollInitialState() async throws {
+        setupViewModel()
         #expect(context.options.count == 2)
+        // This due to a bug in Swift testing that raises an error when allSatisfy is used in an #expect
         let isEmpty = context.options.allSatisfy(\.text.isEmpty)
         #expect(isEmpty)
         #expect(context.question.isEmpty)
@@ -51,9 +39,8 @@ struct PollFormScreenViewModelTests {
     }
     
     @Test
-    func editPollInitialState() async throws {
-        let viewModel = makeViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
-        let context = viewModel.context
+    mutating func editPollInitialState() async throws {
+        setupViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
         
         #expect(context.options.count == 3)
         #expect(context.options.allSatisfy { !$0.text.isEmpty })
@@ -70,7 +57,8 @@ struct PollFormScreenViewModelTests {
     }
     
     @Test
-    func newPollInvalidEmptyOption() {
+    mutating func newPollInvalidEmptyOption() {
+        setupViewModel()
         context.question = "foo"
         context.options[0].text = "bla"
         context.options[1].text = "bla"
@@ -79,9 +67,8 @@ struct PollFormScreenViewModelTests {
     }
     
     @Test
-    func editPollInvalidEmptyOption() {
-        let viewModel = makeViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
-        let context = viewModel.context
+    mutating func editPollInvalidEmptyOption() {
+        setupViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
         
         context.send(viewAction: .addOption)
         #expect(context.viewState.isSubmitButtonDisabled)
@@ -92,9 +79,8 @@ struct PollFormScreenViewModelTests {
     }
     
     @Test
-    func editPollSubmitButtonState() {
-        let viewModel = makeViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
-        let context = viewModel.context
+    mutating func editPollSubmitButtonState() {
+        setupViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
         
         #expect(context.viewState.isSubmitButtonDisabled)
         context.options[0].text = "foo"
@@ -106,7 +92,8 @@ struct PollFormScreenViewModelTests {
     }
 
     @Test
-    func newPollSubmit() async throws {
+    mutating func newPollSubmit() async throws {
+        setupViewModel()
         context.question = "foo"
         context.options[0].text = "bla1"
         context.options[1].text = "bla2"
@@ -131,9 +118,8 @@ struct PollFormScreenViewModelTests {
     }
 
     @Test
-    func editPollSubmit() async throws {
-        let viewModel = makeViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
-        let context = viewModel.context
+    mutating func editPollSubmit() async throws {
+        setupViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
         
         context.question = "What is your favorite country?"
         context.options.append(.init(text: "France 🇫🇷"))
@@ -161,9 +147,8 @@ struct PollFormScreenViewModelTests {
     }
     
     @Test
-    func deletePoll() async throws {
-        let viewModel = makeViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
-        let context = viewModel.context
+    mutating func deletePoll() async throws {
+        setupViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
         
         context.question = "What is your favorite country?"
         context.options.append(.init(text: "France 🇫🇷"))
@@ -197,5 +182,14 @@ struct PollFormScreenViewModelTests {
                 await Task.yield()
             }
         }
+    }
+    
+    // MARK: - Helpers
+    
+    private mutating func setupViewModel(mode: PollFormMode = .new) {
+        viewModel = PollFormScreenViewModel(mode: mode,
+                                            timelineController: MockTimelineController(timelineProxy: timelineProxy),
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: UserIndicatorControllerMock())
     }
 }

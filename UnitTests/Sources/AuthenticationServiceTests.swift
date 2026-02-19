@@ -14,98 +14,98 @@ import Testing
 @Suite
 @MainActor
 struct AuthenticationServiceTests {
-    private struct TestSetup {
-        var client: ClientSDKMock!
-        var userSessionStore: UserSessionStoreMock!
-        var encryptionKeyProvider: MockEncryptionKeyProvider!
-        var service: AuthenticationService!
-        
-        init(serverAddress: String = "matrix.org") {
-            let configuration: AuthenticationClientFactoryMock.Configuration = .init()
-            let clientFactory = AuthenticationClientFactoryMock(configuration: configuration)
-            
-            client = configuration.homeserverClients[serverAddress]
-            userSessionStore = UserSessionStoreMock(configuration: .init())
-            encryptionKeyProvider = MockEncryptionKeyProvider()
-            
-            service = AuthenticationService(userSessionStore: userSessionStore,
-                                            encryptionKeyProvider: encryptionKeyProvider,
-                                            clientFactory: clientFactory,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            appHooks: AppHooks())
-        }
-    }
+    var client: ClientSDKMock!
+    var userSessionStore: UserSessionStoreMock!
+    var encryptionKeyProvider: MockEncryptionKeyProvider!
+    var service: AuthenticationService!
     
     @Test
-    func passwordLogin() async {
-        let testSetup = TestSetup(serverAddress: "example.com")
+    mutating func passwordLogin() async {
+        setup(serverAddress: "example.com")
         
-        switch await testSetup.service.configure(for: "example.com", flow: .login) {
+        switch await service.configure(for: "example.com", flow: .login) {
         case .success:
             break
         case .failure(let error):
             Issue.record("Unexpected failure: \(error)")
         }
         
-        #expect(testSetup.service.flow == .login)
-        #expect(testSetup.service.homeserver.value == .mockBasicServer)
+        #expect(service.flow == .login)
+        #expect(service.homeserver.value == .mockBasicServer)
         
-        switch await testSetup.service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil) {
+        switch await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil) {
         case .success:
-            #expect(testSetup.client.loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount == 1)
-            #expect(testSetup.userSessionStore.userSessionForSessionDirectoriesPassphraseCallsCount == 1)
-            #expect(testSetup.userSessionStore.userSessionForSessionDirectoriesPassphraseReceivedArguments?.passphrase ==
-                testSetup.encryptionKeyProvider.generateKey().base64EncodedString())
+            #expect(client.loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount == 1)
+            #expect(userSessionStore.userSessionForSessionDirectoriesPassphraseCallsCount == 1)
+            #expect(userSessionStore.userSessionForSessionDirectoriesPassphraseReceivedArguments?.passphrase ==
+                encryptionKeyProvider.generateKey().base64EncodedString())
         case .failure(let error):
             Issue.record("Unexpected failure: \(error)")
         }
     }
     
     @Test
-    func configureLoginWithOIDC() async {
-        let testSetup = TestSetup()
+    mutating func configureLoginWithOIDC() async {
+        setup()
         
-        switch await testSetup.service.configure(for: "matrix.org", flow: .login) {
+        switch await service.configure(for: "matrix.org", flow: .login) {
         case .success:
             break
         case .failure(let error):
             Issue.record("Unexpected failure: \(error)")
         }
         
-        #expect(testSetup.service.flow == .login)
-        #expect(testSetup.service.homeserver.value == .mockMatrixDotOrg)
+        #expect(service.flow == .login)
+        #expect(service.homeserver.value == .mockMatrixDotOrg)
     }
     
     @Test
-    func configureRegisterWithOIDC() async {
-        let testSetup = TestSetup()
+    mutating func configureRegisterWithOIDC() async {
+        setup()
         
-        switch await testSetup.service.configure(for: "matrix.org", flow: .register) {
+        switch await service.configure(for: "matrix.org", flow: .register) {
         case .success:
             break
         case .failure(let error):
             Issue.record("Unexpected failure: \(error)")
         }
         
-        #expect(testSetup.service.flow == .register)
-        #expect(testSetup.service.homeserver.value == .mockMatrixDotOrg)
+        #expect(service.flow == .register)
+        #expect(service.homeserver.value == .mockMatrixDotOrg)
     }
     
     @Test
     @MainActor
-    func configureRegisterNoSupport() async {
+    mutating func configureRegisterNoSupport() async {
         let homeserverAddress = "example.com"
-        let testSetup = TestSetup(serverAddress: homeserverAddress)
+        setup(serverAddress: homeserverAddress)
         
-        switch await testSetup.service.configure(for: homeserverAddress, flow: .register) {
+        switch await service.configure(for: homeserverAddress, flow: .register) {
         case .success:
             Issue.record("Configuration should have failed")
         case .failure(let error):
             #expect(error == .registrationNotSupported)
         }
         
-        #expect(testSetup.service.flow == .login)
-        #expect(testSetup.service.homeserver.value == .init(address: "matrix.org", loginMode: .unknown))
+        #expect(service.flow == .login)
+        #expect(service.homeserver.value == .init(address: "matrix.org", loginMode: .unknown))
+    }
+    
+    // MARK: - Helpers
+
+    private mutating func setup(serverAddress: String = "matrix.org") {
+        let configuration: AuthenticationClientFactoryMock.Configuration = .init()
+        let clientFactory = AuthenticationClientFactoryMock(configuration: configuration)
+        
+        client = configuration.homeserverClients[serverAddress]
+        userSessionStore = UserSessionStoreMock(configuration: .init())
+        encryptionKeyProvider = MockEncryptionKeyProvider()
+        
+        service = AuthenticationService(userSessionStore: userSessionStore,
+                                        encryptionKeyProvider: encryptionKeyProvider,
+                                        clientFactory: clientFactory,
+                                        appSettings: ServiceLocator.shared.settings,
+                                        appHooks: AppHooks())
     }
 }
 

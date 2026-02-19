@@ -10,9 +10,9 @@
 import Foundation
 import Testing
 
-@Suite(.serialized)
-struct LocalizationTests {
-    init() {
+@Suite
+final class LocalizationTests {
+    deinit {
         Bundle.overrideLocalizations = nil
     }
 

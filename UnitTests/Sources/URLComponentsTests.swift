@@ -29,8 +29,6 @@ struct URLComponentsTests {
     func removeFragmentQueryItem() throws {
         let url = try #require(URL(string: "https://test.matrix.org#random/data?first=1&second=2"))
         var components = try #require(URLComponents(url: url, resolvingAgainstBaseURL: true))
-                
-        #expect(components.fragmentQueryItems != nil)
         var fragmentQueryItems = try #require(components.fragmentQueryItems)
         
         fragmentQueryItems.removeAll { $0.name == "first" }
@@ -44,8 +42,6 @@ struct URLComponentsTests {
     func appendFragmentQueryItem() throws {
         let url = try #require(URL(string: "https://test.matrix.org#/random/data?first=1&second=2"))
         var components = try #require(URLComponents(url: url, resolvingAgainstBaseURL: true))
-                
-        #expect(components.fragmentQueryItems != nil)
         var fragmentQueryItems = try #require(components.fragmentQueryItems)
         
         fragmentQueryItems.insert(.init(name: "mr in between", value: "hello"), at: 1)
@@ -59,8 +55,6 @@ struct URLComponentsTests {
     func changeFragmentQueryItemValue() throws {
         let url = try #require(URL(string: "https://test.matrix.org#/random/data?first=1&second=2"))
         var components = try #require(URLComponents(url: url, resolvingAgainstBaseURL: true))
-        
-        #expect(components.fragmentQueryItems != nil)
         var fragmentQueryItems = try #require(components.fragmentQueryItems)
         
         fragmentQueryItems[0].value = "last"

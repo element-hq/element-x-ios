@@ -38,7 +38,7 @@ struct DeactivateAccountScreenViewModelTests {
     mutating func validateDeactivate(erasingData shouldErase: Bool) async throws {
         let enteredPassword = UUID().uuidString
         
-        clientProxy.deactivateAccountPasswordEraseDataClosure = { [clientProxy] password, eraseData in
+        clientProxy.deactivateAccountPasswordEraseDataClosure = { [weak clientProxy] password, eraseData in
             guard let clientProxy else { return .failure(.sdkError(ClientProxyMockError.generic)) }
             
             if clientProxy.deactivateAccountPasswordEraseDataCallsCount == 1 {

@@ -78,6 +78,9 @@ struct ReportRoomScreenViewModelTests {
             
             try await deferred.fulfill()
         }
+        
+        #expect(roomProxy.reportRoomReasonCalled)
+        #expect(roomProxy.leaveRoomCalled)
     }
     
     @Test
@@ -104,5 +107,8 @@ struct ReportRoomScreenViewModelTests {
             
             try await deferred.fulfill()
         }
+        
+        #expect(roomProxy.reportRoomReasonCalled)
+        #expect(roomProxy.leaveRoomCalled)
     }
 }

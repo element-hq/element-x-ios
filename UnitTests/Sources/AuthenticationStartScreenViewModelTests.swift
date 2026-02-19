@@ -12,7 +12,7 @@ import Testing
 import UIKit
 
 @MainActor
-@Suite(.serialized)
+@Suite
 struct AuthenticationStartScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var client: ClientSDKMock!

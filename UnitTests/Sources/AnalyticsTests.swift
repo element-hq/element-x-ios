@@ -11,8 +11,8 @@ import AnalyticsEvents
 import PostHog
 import Testing
 
-@Suite(.serialized)
-struct AnalyticsTests {
+@Suite
+final class AnalyticsTests {
     private var appSettings: AppSettings
     private var analyticsClient: AnalyticsClientMock
     private var posthogMock: PHGPostHogMock
@@ -28,6 +28,10 @@ struct AnalyticsTests {
         
         posthogMock = PHGPostHogMock()
         posthogMock.configureMockBehavior()
+    }
+    
+    deinit {
+        AppSettings.resetAllSettings()
     }
     
     @Test

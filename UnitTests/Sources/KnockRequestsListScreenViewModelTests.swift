@@ -10,7 +10,7 @@
 import Testing
 
 @MainActor
-@Suite(.serialized)
+@Suite
 struct KnockRequestsListScreenViewModelTests {
     init() {
         AppSettings.resetAllSettings()

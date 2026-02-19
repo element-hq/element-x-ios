@@ -12,7 +12,7 @@ import Foundation
 import Testing
 
 @MainActor
-@Suite(.serialized)
+@Suite
 struct UserSessionFlowCoordinatorTests {
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator!
     private var rootCoordinator: NavigationRootCoordinator!

@@ -55,7 +55,7 @@ struct DeferredFulfillmentTests {
         #expect(observable.counter == newValue)
     }
     
-    @Test(.timeLimit(.minutes(2)))
+    @Test
     func observableMultipleUpdates() async throws {
         // Given a deferred fulfilment for an expected value.
         let finalValue = 500
