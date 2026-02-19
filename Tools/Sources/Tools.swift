@@ -1,5 +1,8 @@
 import ArgumentParser
 import Foundation
+import Logging
+
+let logger = Logger(label: "🚀")
 
 @main
 struct Tools: AsyncParsableCommand {
@@ -13,5 +16,6 @@ struct Tools: AsyncParsableCommand {
                                                                   GenerateSAS.self,
                                                                   AppIconBanner.self,
                                                                   UnusedStrings.self,
-                                                                  BumpCalendarVersion.self])
+                                                                  BumpCalendarVersion.self,
+                                                                  CI.self])
 }

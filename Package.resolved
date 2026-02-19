@@ -1,5 +1,5 @@
 {
-  "originHash" : "9ad9b7de4b8539442c6bbc918a26130ff2c685c4a9d5596bdaf021e33cd45c6c",
+  "originHash" : "de3b5dfdd30df13c55deff097064bd887e3cc34e6259ed01bd9d29091b158262",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -16,6 +16,33 @@
       "location" : "https://github.com/element-hq/swift-command-line-tools.git",
       "state" : {
         "revision" : "e5eaab1558ef664e6cd80493f64259381670fb3a"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log",
+      "state" : {
+        "revision" : "bbd81b6725ae874c69e9b8c8804d462356b55523",
+        "version" : "1.10.1"
+      }
+    },
+    {
+      "identity" : "swift-subprocess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-subprocess",
+      "state" : {
+        "revision" : "ba5888ad7758cbcbe7abebac37860b1652af2d9c",
+        "version" : "0.3.0"
+      }
+    },
+    {
+      "identity" : "swift-system",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-system",
+      "state" : {
+        "revision" : "7c6ad0fc39d0763e0b699210e4124afd5041c5df",
+        "version" : "1.6.4"
       }
     },
     {
