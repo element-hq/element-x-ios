@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlaybackSpeedButton: View {
-    let speed: VoiceMessagePlaybackSpeed
+    let speed: AudioPlaybackSpeed
     let onTap: () -> Void
 
     var body: some View {
@@ -35,7 +35,7 @@ struct PlaybackSpeedButton: View {
 struct PlaybackSpeedButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HStack(spacing: 8) {
-            ForEach(VoiceMessagePlaybackSpeed.allCases, id: \.self) { speed in
+            ForEach(AudioPlaybackSpeed.allCases, id: \.self) { speed in
                 PlaybackSpeedButton(speed: speed) { }
             }
         }

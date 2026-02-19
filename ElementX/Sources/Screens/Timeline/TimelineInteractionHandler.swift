@@ -419,15 +419,7 @@ class TimelineInteractionHandler {
     // MARK: Audio Playback
 
     func changePlaybackSpeed(for itemID: TimelineItemIdentifier) {
-        let availableSpeeds = VoiceMessagePlaybackSpeed.allCases
-        guard let currentIndex = availableSpeeds.firstIndex(of: appSettings.voiceMessagePlaybackSpeed) else {
-            appSettings.voiceMessagePlaybackSpeed = .default
-            audioPlayerState(for: itemID)?.setPlaybackSpeed(VoiceMessagePlaybackSpeed.default)
-            return
-        }
-
-        let nextIndex = (currentIndex + 1) % availableSpeeds.count
-        let nextSpeed = availableSpeeds[nextIndex]
+        let nextSpeed = appSettings.voiceMessagePlaybackSpeed.next
         appSettings.voiceMessagePlaybackSpeed = nextSpeed
         audioPlayerState(for: itemID)?.setPlaybackSpeed(nextSpeed)
     }
