@@ -37,12 +37,14 @@ struct SpaceAddRoomsScreenViewModelTests {
     
     @Test
     func addingChildRoom() async throws {
-        var deferred = deferFulfillment(context.observe(\.viewState.roomsSection)) { section in
+        var deferred = deferFulfillment(context.observe(\.viewState.roomsSection),
+                                        message: "The screen should start with some suggestions.") { section in
             section.type == .suggestions && !section.rooms.isEmpty
         }
         try await deferred.fulfill()
         
-        deferred = deferFulfillment(context.observe(\.viewState.roomsSection)) { section in
+        deferred = deferFulfillment(context.observe(\.viewState.roomsSection),
+                                    message: "The screen should show search results when there's a query.") { section in
             section.type == .searchResults && !section.rooms.isEmpty
         }
         context.searchQuery = "Foundation"
@@ -65,7 +67,8 @@ struct SpaceAddRoomsScreenViewModelTests {
     @Test
     func failureWithMultipleRoomsSelected() async throws {
         // Given a view model with 4 selected rooms.
-        var deferred = deferFulfillment(context.observe(\.viewState.roomsSection)) { section in
+        var deferred = deferFulfillment(context.observe(\.viewState.roomsSection),
+                                        message: "There should be 4 search results.") { section in
             section.type == .searchResults && section.rooms.count == 4
         }
         context.searchQuery = "f"
@@ -87,7 +90,8 @@ struct SpaceAddRoomsScreenViewModelTests {
             }
         }
         
-        deferred = deferFulfillment(context.observe(\.viewState.roomsSection)) { section in
+        deferred = deferFulfillment(context.observe(\.viewState.roomsSection),
+                                    message: "The search results should update.") { section in
             section.type == .searchResults && section.rooms.count == 2
         }
         context.send(viewAction: .save)

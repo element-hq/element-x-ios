@@ -54,7 +54,8 @@ struct UserIndicatorControllerTests {
         
         #expect(indicatorController.activeIndicator?.id == "Third")
         
-        let fulfillment = deferFulfillment(indicatorController.$activeIndicator) { indicator in
+        let fulfillment = deferFulfillment(indicatorController.$activeIndicator,
+                                           message: "Waiting for last indicator to be dismissed") { indicator in
             indicator?.id == "Second"
         }
         
@@ -75,7 +76,8 @@ struct UserIndicatorControllerTests {
         
         #expect(indicatorController.indicatorQueue.count == 3)
         
-        var fulfillment = deferFulfillment(indicatorController.$activeIndicator) { indicator in
+        var fulfillment = deferFulfillment(indicatorController.$activeIndicator,
+                                           message: "Waiting for minimum display duration to pass") { indicator in
             indicator?.id == "First"
         }
         
@@ -86,7 +88,8 @@ struct UserIndicatorControllerTests {
         #expect(indicatorController.indicatorQueue.count == 1)
         #expect(indicatorController.activeIndicator?.id == "First")
         
-        fulfillment = deferFulfillment(indicatorController.$activeIndicator) { indicator in
+        fulfillment = deferFulfillment(indicatorController.$activeIndicator,
+                                       message: "Waiting for last indicator to be dismissed") { indicator in
             indicator == nil
         }
         

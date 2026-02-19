@@ -171,14 +171,15 @@ struct NavigationTabCoordinatorTests {
     mutating func overlayDismissalCallbackWhenChangingMode() async throws {
         let overlayCoordinator = SomeTestCoordinator()
         
-        var callbackCalled = false
-        navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator) {
-            callbackCalled = true
+        try await confirmation("Callback should not be called when just changing mode",
+                               expectedCount: 0) { confirmation in
+            navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator) {
+                confirmation()
+            }
+            
+            navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+            try await Task.sleep(for: .seconds(1))
         }
-        
-        navigationTabCoordinator.setOverlayPresentationMode(.minimized)
-        try await Task.sleep(for: .seconds(0.1))
-        #expect(!callbackCalled, "Callback should not be called when just changing mode")
     }
     
     // MARK: - Private

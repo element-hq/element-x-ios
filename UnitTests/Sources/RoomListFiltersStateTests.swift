@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@Suite(.serialized)
-struct RoomListFiltersStateTests {
+@Suite
+final class RoomListFiltersStateTests {
     var appSettings: AppSettings
     var state: RoomListFiltersState
     let allCasesWithoutLowPriority = RoomListFilter.allCases.filter { $0 != .lowPriority }
@@ -21,6 +21,10 @@ struct RoomListFiltersStateTests {
         state = RoomListFiltersState(appSettings: appSettings)
     }
     
+    deinit {
+        AppSettings.resetAllSettings()
+    }
+    
     @Test
     func initialState() {
         #expect(!state.isFiltering)
@@ -29,7 +33,7 @@ struct RoomListFiltersStateTests {
     }
     
     @Test
-    mutating func setAndUnsetFilters() {
+    func setAndUnsetFilters() {
         state.activateFilter(.unreads)
         #expect(state.isFiltering)
         #expect(state.activeFilters == [.unreads])
@@ -41,7 +45,7 @@ struct RoomListFiltersStateTests {
     }
     
     @Test
-    mutating func mutuallyExclusiveFilters() {
+    func mutuallyExclusiveFilters() {
         state.activateFilter(.people)
         #expect(state.isFiltering)
         #expect(state.activeFilters == [.people])
@@ -64,7 +68,7 @@ struct RoomListFiltersStateTests {
     }
     
     @Test
-    mutating func clearFilters() {
+    func clearFilters() {
         state.activateFilter(.people)
         #expect(state.activeFilters == [.people])
         #expect(state.availableFilters == [.unreads, .favourites])
@@ -84,7 +88,7 @@ struct RoomListFiltersStateTests {
     }
     
     @Test
-    mutating func order() {
+    func order() {
         state.activateFilter(.favourites)
         #expect(state.activeFilters == [.favourites])
         #expect(state.availableFilters == [.unreads, .people, .rooms])
@@ -110,7 +114,7 @@ struct RoomListFiltersStateTests {
     
     /// Don't forget to add .lowPriority into the mix above when enabling the feature.
     @Test
-    mutating func withLowPriorityFeature() {
+    func withLowPriorityFeature() {
         enableLowPriorityFeature()
         #expect(!state.isFiltering)
         #expect(state.activeFilters == [])
@@ -123,7 +127,7 @@ struct RoomListFiltersStateTests {
     
     // MARK: - Helpers
     
-    private mutating func enableLowPriorityFeature() {
+    private func enableLowPriorityFeature() {
         appSettings.lowPriorityFilterEnabled = true
         state = RoomListFiltersState(appSettings: appSettings)
     }

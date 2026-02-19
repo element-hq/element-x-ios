@@ -13,122 +13,123 @@ import Testing
 @Suite
 struct AppLockTimerTests {
     private let now = Date.now
+    private var timer: AppLockTimer!
     
-    private func gracePeriod(for timer: AppLockTimer) -> TimeInterval {
+    var gracePeriod: TimeInterval {
         timer.gracePeriod
     }
     
-    private func halfGracePeriod(for timer: AppLockTimer) -> TimeInterval {
+    var halfGracePeriod: TimeInterval {
         timer.gracePeriod / 2
     }
     
-    private func gracePeriodX2(for timer: AppLockTimer) -> TimeInterval {
+    var gracePeriodX2: TimeInterval {
         timer.gracePeriod * 2
     }
     
-    private func gracePeriodX10(for timer: AppLockTimer) -> TimeInterval {
+    var gracePeriodX10: TimeInterval {
         timer.gracePeriod * 10
     }
     
     @Test
-    func timerLockedOnStartup() {
-        var timer = setupTimer(unlocked: false)
+    mutating func timerLockedOnStartup() {
+        setupTimer(unlocked: false)
         #expect(timer.computeLockState(didBecomeActiveAt: now),
                 "The app should be locked on a fresh launch.")
         
-        timer = setupTimer(unlocked: false)
+        setupTimer(unlocked: false)
         #expect(timer.computeLockState(didBecomeActiveAt: now + 1),
                 "The app should be locked after a fresh launch.")
         
-        timer = setupTimer(unlocked: false)
-        #expect(timer.computeLockState(didBecomeActiveAt: now + halfGracePeriod(for: timer)),
+        setupTimer(unlocked: false)
+        #expect(timer.computeLockState(didBecomeActiveAt: now + halfGracePeriod),
                 "The app should be locked after a fresh launch.")
         
-        timer = setupTimer(unlocked: false)
-        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriod(for: timer)),
+        setupTimer(unlocked: false)
+        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriod),
                 "The app should be locked after a fresh launch.")
         
-        timer = setupTimer(unlocked: false)
-        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriodX10(for: timer)),
+        setupTimer(unlocked: false)
+        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriodX10),
                 "The app should be locked after a fresh launch.")
     }
     
     @Test
-    func timerBeforeFirstUnlock() {
-        var timer = setupTimer(unlocked: false, backgroundedAt: now)
+    mutating func timerBeforeFirstUnlock() {
+        setupTimer(unlocked: false, backgroundedAt: now)
         #expect(timer.computeLockState(didBecomeActiveAt: now),
                 "The app should always remain locked after backgrounding when locked.")
         
-        timer = setupTimer(unlocked: false, backgroundedAt: now)
+        setupTimer(unlocked: false, backgroundedAt: now)
         #expect(timer.computeLockState(didBecomeActiveAt: now + 1),
                 "The app should always remain locked after backgrounding when locked.")
         
-        timer = setupTimer(unlocked: false, backgroundedAt: now)
-        #expect(timer.computeLockState(didBecomeActiveAt: now + halfGracePeriod(for: timer)),
+        setupTimer(unlocked: false, backgroundedAt: now)
+        #expect(timer.computeLockState(didBecomeActiveAt: now + halfGracePeriod),
                 "The app should always remain locked after backgrounding when locked.")
         
-        timer = setupTimer(unlocked: false, backgroundedAt: now)
-        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriod(for: timer)),
+        setupTimer(unlocked: false, backgroundedAt: now)
+        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriod),
                 "The app should always remain locked after backgrounding when locked.")
         
-        timer = setupTimer(unlocked: false, backgroundedAt: now)
-        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriodX10(for: timer)),
+        setupTimer(unlocked: false, backgroundedAt: now)
+        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriodX10),
                 "The app should always remain locked after backgrounding when locked.")
     }
     
     @Test
-    func timerWhenUnlocked() {
-        var timer = setupTimer(unlocked: true, backgroundedAt: now)
+    mutating func timerWhenUnlocked() {
+        setupTimer(unlocked: true, backgroundedAt: now)
         #expect(!timer.computeLockState(didBecomeActiveAt: now + 1),
                 "The app should remain unlocked when it was unlocked and backgrounded for less then the grace period.")
         
-        timer = setupTimer(unlocked: true, backgroundedAt: now)
-        #expect(!timer.computeLockState(didBecomeActiveAt: now + halfGracePeriod(for: timer)),
+        setupTimer(unlocked: true, backgroundedAt: now)
+        #expect(!timer.computeLockState(didBecomeActiveAt: now + halfGracePeriod),
                 "The app should remain unlocked when it was unlocked and backgrounded for less then the grace period.")
         
-        timer = setupTimer(unlocked: true, backgroundedAt: now)
-        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriod(for: timer)),
+        setupTimer(unlocked: true, backgroundedAt: now)
+        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriod),
                 "The app should become locked when it was unlocked and backgrounded for more than the grace period.")
         
-        timer = setupTimer(unlocked: true, backgroundedAt: now)
-        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriodX10(for: timer)),
+        setupTimer(unlocked: true, backgroundedAt: now)
+        #expect(timer.computeLockState(didBecomeActiveAt: now + gracePeriodX10),
                 "The app should become locked when it was unlocked and backgrounded for more than the grace period.")
     }
     
     @Test
-    func timerRepeatingWithinGracePeriod() {
-        let timer = setupTimer(unlocked: true, backgroundedAt: now)
+    mutating func timerRepeatingWithinGracePeriod() {
+        setupTimer(unlocked: true, backgroundedAt: now)
         
-        var nextCheck = now + halfGracePeriod(for: timer)
+        var nextCheck = now + halfGracePeriod
         #expect(!timer.computeLockState(didBecomeActiveAt: nextCheck),
                 "The app should remain unlocked when it was unlocked and backgrounded for less then the grace period.")
         timer.applicationDidEnterBackground(date: nextCheck)
         
-        nextCheck = now + gracePeriod(for: timer)
+        nextCheck = now + gracePeriod
         #expect(!timer.computeLockState(didBecomeActiveAt: nextCheck),
                 "The app should remain unlocked when repeating the backgrounded and foreground within the grace period.")
         timer.applicationDidEnterBackground(date: nextCheck)
         
-        nextCheck = now + gracePeriod(for: timer) + halfGracePeriod(for: timer)
+        nextCheck = now + gracePeriod + halfGracePeriod
         #expect(!timer.computeLockState(didBecomeActiveAt: nextCheck),
                 "The app should remain unlocked when repeating the backgrounded and foreground within the grace period.")
         timer.applicationDidEnterBackground(date: nextCheck)
         
-        nextCheck = now + gracePeriodX2(for: timer)
+        nextCheck = now + gracePeriodX2
         #expect(!timer.computeLockState(didBecomeActiveAt: nextCheck),
                 "The app should remain unlocked when repeating the backgrounded and foreground within the grace period.")
         timer.applicationDidEnterBackground(date: nextCheck)
         
-        nextCheck = now + gracePeriodX10(for: timer)
+        nextCheck = now + gracePeriodX10
         #expect(timer.computeLockState(didBecomeActiveAt: nextCheck),
                 "The app should become locked however when finally staying backgrounded for longer than the grace period.")
     }
     
     @Test
-    func timerWithLongForeground() {
-        let timer = setupTimer(unlocked: true)
+    mutating func timerWithLongForeground() {
+        setupTimer(unlocked: true)
         
-        let backgroundDate = now + gracePeriodX10(for: timer)
+        let backgroundDate = now + gracePeriodX10
         timer.applicationDidEnterBackground(date: backgroundDate)
         
         #expect(!timer.computeLockState(didBecomeActiveAt: backgroundDate + 1),
@@ -136,16 +137,16 @@ struct AppLockTimerTests {
     }
     
     @Test
-    func changingTimeLocksApp() {
-        let timer = setupTimer(unlocked: true, backgroundedAt: now)
+    mutating func changingTimeLocksApp() {
+        setupTimer(unlocked: true, backgroundedAt: now)
         #expect(timer.computeLockState(didBecomeActiveAt: now - 1),
                 "The the device's clock is changed to before the app was backgrounded, the device should remain locked.")
     }
     
     @Test
-    func noGracePeriod() {
+    mutating func noGracePeriod() {
         // Given a timer with no grace period that is in the background.
-        let timer = setupTimer(gracePeriod: 0, unlocked: true)
+        setupTimer(gracePeriod: 0, unlocked: true)
         let backgroundDate = now + 1
         timer.applicationDidEnterBackground(date: backgroundDate)
         
@@ -154,9 +155,9 @@ struct AppLockTimerTests {
     }
     
     @Test
-    func resignActive() {
+    mutating func resignActive() {
         // Given a timer with no grace period.
-        let timer = setupTimer(gracePeriod: 0, unlocked: true)
+        setupTimer(gracePeriod: 0, unlocked: true)
         
         // When entering the background.
         timer.applicationDidEnterBackground(date: now)
@@ -180,7 +181,7 @@ struct AppLockTimerTests {
     
     // MARK: - Helpers
     
-    private func setupTimer(gracePeriod: TimeInterval = 180, unlocked: Bool, backgroundedAt backgroundedDate: Date? = nil) -> AppLockTimer {
+    private mutating func setupTimer(gracePeriod: TimeInterval = 180, unlocked: Bool, backgroundedAt backgroundedDate: Date? = nil) {
         let timer = AppLockTimer(gracePeriod: gracePeriod)
         if unlocked {
             timer.registerUnlock()
@@ -188,6 +189,6 @@ struct AppLockTimerTests {
         if let backgroundedDate {
             timer.applicationDidEnterBackground(date: backgroundedDate)
         }
-        return timer
+        self.timer = timer
     }
 }

@@ -11,7 +11,7 @@ import Combine
 import Testing
 
 @MainActor
-@Suite(.serialized)
+@Suite
 final class SpacesScreenViewModelTests {
     var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoom], Never>
     var spaceServiceProxy: SpaceServiceProxyMock

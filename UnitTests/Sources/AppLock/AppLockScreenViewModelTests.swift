@@ -10,7 +10,7 @@
 import Testing
 
 @MainActor
-@Suite(.serialized)
+@Suite
 final class AppLockScreenViewModelTests {
     var appSettings: AppSettings
     var appLockService: AppLockService

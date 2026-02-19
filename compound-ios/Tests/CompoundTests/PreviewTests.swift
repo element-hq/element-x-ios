@@ -12,7 +12,7 @@ import Combine
 import SwiftUI
 import Testing
 
-@Suite(.serialized)
+@Suite
 struct PreviewTests {
     private struct SnapshotDevice {
         let name: String

@@ -10,7 +10,7 @@
 import Testing
 
 @MainActor
-@Suite(.serialized)
+@Suite
 struct LoginScreenViewModelTests {
     var viewModel: LoginScreenViewModelProtocol!
     var context: LoginScreenViewModelType.Context {

@@ -11,19 +11,23 @@ import Foundation
 @testable import MatrixRustSDK
 import Testing
 
-@Suite(.serialized)
-struct LoggingTests {
+@Suite
+final class LoggingTests {
     private enum Constants {
         static let genericFailure = "Test failed"
     }
     
-    init() async throws {
+    deinit {
         Tracing.logsDirectoryOverride = nil
-        try reloadTracingFileWriter(configuration: .init(path: URL.appGroupLogsDirectory.path(percentEncoded: false),
-                                                         filePrefix: "console-tests",
-                                                         fileSuffix: ".log",
-                                                         maxTotalSizeBytes: 1000,
-                                                         maxAgeSeconds: 1000))
+        do {
+            try reloadTracingFileWriter(configuration: .init(path: URL.appGroupLogsDirectory.path(percentEncoded: false),
+                                                             filePrefix: "console-tests",
+                                                             fileSuffix: ".log",
+                                                             maxTotalSizeBytes: 1000,
+                                                             maxAgeSeconds: 1000))
+        } catch {
+            Issue.record(error)
+        }
     }
     
     @Test
@@ -51,7 +55,7 @@ struct LoggingTests {
     }
     
     /// This is meant to test the `Target.tests.configure(…)`, but at this stage the test is somewhat pointless
-    /// as it is unlikely to have been called before the init has manually set the file prefix 😕.
+    /// as it is unlikely to have been called before `tearDown` has manually set the file prefix 😕.
     @Test
     func targetName() throws {
         MXLog.info(UUID().uuidString)

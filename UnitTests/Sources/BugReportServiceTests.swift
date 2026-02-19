@@ -11,8 +11,8 @@ import Combine
 import Foundation
 import Testing
 
-@Suite(.serialized)
-struct BugReportServiceTests {
+@Suite
+final class BugReportServiceTests {
     var appSettings: AppSettings!
     var bugReportService: BugReportServiceProtocol!
     
@@ -25,6 +25,10 @@ struct BugReportServiceTests {
         bugReportServiceMock.underlyingCrashedLastRun = false
         bugReportServiceMock.submitBugReportProgressListenerReturnValue = .success(SubmitBugReportResponse(reportURL: "https://www.example.com/123"))
         bugReportService = bugReportServiceMock
+    }
+    
+    deinit {
+        appSettings.bugReportRageshakeURL.reset()
     }
 
     @Test
@@ -97,8 +101,9 @@ struct BugReportServiceTests {
         #expect(response.reportURL == "https://example.com/123")
     }
     
-    @Test @MainActor
-    mutating func configurations() async throws {
+    @Test
+    @MainActor
+    func configurations() async throws {
         guard case let .url(initialURL) = appSettings.bugReportRageshakeURL.publisher.value else {
             Issue.record("Unexpected initial configuration.")
             return

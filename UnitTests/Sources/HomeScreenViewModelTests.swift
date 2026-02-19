@@ -12,7 +12,7 @@ import Testing
 
 @MainActor
 @Suite
-struct HomeScreenViewModelTests {
+final class HomeScreenViewModelTests {
     var viewModel: HomeScreenViewModelProtocol!
     var context: HomeScreenViewModelType.Context! {
         viewModel.context
@@ -31,8 +31,12 @@ struct HomeScreenViewModelTests {
         ServiceLocator.shared.register(appSettings: appSettings)
     }
     
+    deinit {
+        AppSettings.resetAllSettings()
+    }
+    
     @Test
-    mutating func selectRoom() async {
+    func selectRoom() async {
         setupViewModel()
         
         let mockRoomID = "mock_room_id"
@@ -58,7 +62,7 @@ struct HomeScreenViewModelTests {
     }
 
     @Test
-    mutating func tapUserAvatar() async {
+    func tapUserAvatar() async {
         setupViewModel()
         
         var correctResult = false
@@ -80,7 +84,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func leaveRoomAlert() async throws {
+    func leaveRoomAlert() async throws {
         setupViewModel()
         
         let mockRoomID = "1"
@@ -99,7 +103,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func leaveRoomError() async throws {
+    func leaveRoomError() async throws {
         setupViewModel()
         
         let mockRoomID = "1"
@@ -120,7 +124,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func leaveRoomSuccess() async throws {
+    func leaveRoomSuccess() async throws {
         setupViewModel()
         
         let mockRoomID = "1"
@@ -143,7 +147,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func showRoomDetails() async {
+    func showRoomDetails() async {
         setupViewModel()
         
         let mockRoomID = "1"
@@ -165,7 +169,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func filters() async throws {
+    func filters() async throws {
         setupViewModel()
         
         context.filtersState.activateFilter(.people)
@@ -175,7 +179,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func search() async throws {
+    func search() async throws {
         setupViewModel()
         
         context.isSearchFieldFocused = true
@@ -186,7 +190,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func filtersEmptyState() async throws {
+    func filtersEmptyState() async throws {
         setupViewModel()
         
         context.filtersState.activateFilter(.people)
@@ -198,7 +202,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func setUpRecoveryBannerState() async throws {
+    func setUpRecoveryBannerState() async throws {
         // Given a view model without a visible security banner.
         let securityStateStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .unknown))
         setupViewModel(securityStatePublisher: securityStateStateSubject.asCurrentValuePublisher())
@@ -222,7 +226,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func dismissSetUpRecoveryBannerState() async throws {
+    func dismissSetUpRecoveryBannerState() async throws {
         // Given a view model with the setup recovery banner shown.
         let securityStateStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .unknown))
         setupViewModel(securityStatePublisher: securityStateStateSubject.asCurrentValuePublisher())
@@ -244,7 +248,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func outOfSyncRecoveryBannerState() async throws {
+    func outOfSyncRecoveryBannerState() async throws {
         // Given a view model without a visible security banner.
         let securityStateStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .unknown))
         setupViewModel(securityStatePublisher: securityStateStateSubject.asCurrentValuePublisher())
@@ -268,7 +272,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func inviteUnreadBadge() async throws {
+    func inviteUnreadBadge() async throws {
         setupViewModel(invites: .rooms)
         var invites = context.viewState.rooms.invites
         #expect(invites.count == 2)
@@ -292,7 +296,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func acceptInvite() async throws {
+    func acceptInvite() async throws {
         setupViewModel(invites: .rooms)
         
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
@@ -308,7 +312,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func acceptSpaceInvite() async throws {
+    func acceptSpaceInvite() async throws {
         setupViewModel(invites: .spaces)
         
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
@@ -326,7 +330,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func declineInvite() async throws {
+    func declineInvite() async throws {
         setupViewModel(invites: .rooms)
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
         appSettings.seenInvites = Set(invitedRoomIDs)
@@ -358,7 +362,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func declineAndBlockInvite() async throws {
+    func declineAndBlockInvite() async throws {
         setupViewModel(invites: .rooms)
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
         appSettings.seenInvites = Set(invitedRoomIDs)
@@ -374,7 +378,7 @@ struct HomeScreenViewModelTests {
     }
     
     @Test
-    mutating func newSoundBanner() {
+    func newSoundBanner() {
         appSettings.hasSeenNewSoundBanner = false
         
         setupViewModel()
@@ -391,7 +395,7 @@ struct HomeScreenViewModelTests {
     
     enum InviteType { case rooms, spaces }
     
-    private mutating func setupViewModel(securityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>? = nil, invites: InviteType? = nil) {
+    private func setupViewModel(securityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>? = nil, invites: InviteType? = nil) {
         cancellables.removeAll()
         
         var rooms: [RoomSummary] = .mockRooms

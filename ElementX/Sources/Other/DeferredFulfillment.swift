@@ -17,6 +17,24 @@ struct DeferredFulfillment<T> {
     }
 }
 
+struct DeferredFulfillmentError: Error {
+    enum Kind {
+        case noOutput
+        case unexpectedFulfillment
+    }
+    
+    let kind: Kind
+    let message: String?
+    
+    static func noOutput(message: String?) -> Self {
+        .init(kind: .noOutput, message: message)
+    }
+    
+    static func unexpectedFulfillment(message: String?) -> Self {
+        .init(kind: .unexpectedFulfillment, message: message)
+    }
+}
+
 /// Utility that assists in subscribing to a publisher and deferring the fulfilment and results until some other actions have been performed.
 /// - Parameters:
 ///   - publisher: The publisher to wait on.
@@ -25,6 +43,7 @@ struct DeferredFulfillment<T> {
 /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
 func deferFulfillment<P: Publisher>(_ publisher: P,
                                     timeout: Duration = .seconds(10),
+                                    message: String? = nil,
                                     until condition: @escaping (P.Output) -> Bool) -> DeferredFulfillment<P.Output> {
     var result: Result<P.Output, Error>?
     var hasFulfilled = false
@@ -58,7 +77,7 @@ func deferFulfillment<P: Publisher>(_ publisher: P,
         cancellable.cancel()
         
         guard let unwrappedResult = result else {
-            throw DeferredFulfillmentError.noOutput
+            throw DeferredFulfillmentError.noOutput(message: message)
         }
         return try unwrappedResult.get()
     }
@@ -72,6 +91,7 @@ func deferFulfillment<P: Publisher>(_ publisher: P,
 /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the sequence.
 func deferFulfillment<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
                              timeout: Duration = .seconds(10),
+                             message: String? = nil,
                              until condition: @escaping (Value) -> Bool) -> DeferredFulfillment<Value> {
     var result: Result<Value, Error>?
     var hasFulfilled = false
@@ -98,7 +118,7 @@ func deferFulfillment<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
         task.cancel()
         
         guard let unwrappedResult = result else {
-            throw DeferredFulfillmentError.noOutput
+            throw DeferredFulfillmentError.noOutput(message: message)
         }
         return try unwrappedResult.get()
     }
@@ -153,6 +173,7 @@ func deferFulfillment<Value: Equatable>(_ asyncSequence: any AsyncSequence<Value
 /// - Returns: The deferred fulfilment to be executed after some actions. The publisher's result is not returned from this fulfilment.
 func deferFailure<P: Publisher>(_ publisher: P,
                                 timeout: Duration,
+                                message: String? = nil,
                                 until condition: @escaping (P.Output) -> Bool) -> DeferredFulfillment<Void> where P.Failure == Never {
     var hasFulfilled = false
     let cancellable = publisher
@@ -176,7 +197,7 @@ func deferFailure<P: Publisher>(_ publisher: P,
         
         // For deferFailure, if hasFulfilled is true, it means the condition was met (which is a failure)
         if hasFulfilled {
-            throw DeferredFulfillmentError.unexpectedFulfillment
+            throw DeferredFulfillmentError.unexpectedFulfillment(message: message)
         }
     }
 }
@@ -189,6 +210,7 @@ func deferFailure<P: Publisher>(_ publisher: P,
 /// - Returns: The deferred fulfilment to be executed after some actions. The sequence's result is not returned from this fulfilment.
 func deferFailure<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
                          timeout: Duration,
+                         message: String? = nil,
                          until condition: @escaping (Value) -> Bool) -> DeferredFulfillment<Void> {
     var hasFulfilled = false
     
@@ -214,12 +236,7 @@ func deferFailure<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
         
         // For deferFailure, if hasFulfilled is true, it means the condition was met (which is a failure)
         if hasFulfilled {
-            throw DeferredFulfillmentError.unexpectedFulfillment
+            throw DeferredFulfillmentError.unexpectedFulfillment(message: message)
         }
     }
-}
-
-enum DeferredFulfillmentError: Error {
-    case noOutput
-    case unexpectedFulfillment
 }

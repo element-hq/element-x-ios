@@ -10,8 +10,8 @@
 import Testing
 
 @MainActor
-@Suite(.serialized)
-struct AnalyticsSettingsScreenViewModelTests {
+@Suite
+final class AnalyticsSettingsScreenViewModelTests {
     private var appSettings: AppSettings!
     private var viewModel: AnalyticsSettingsScreenViewModelProtocol!
     private var context: AnalyticsSettingsScreenViewModelType.Context!
@@ -28,6 +28,10 @@ struct AnalyticsSettingsScreenViewModelTests {
                                                      analytics: ServiceLocator.shared.analytics)
         context = viewModel.context
     }
+    
+    deinit {
+        AppSettings.resetAllSettings()
+    }
 
     @Test
     func initialState() {
@@ -35,14 +39,14 @@ struct AnalyticsSettingsScreenViewModelTests {
     }
 
     @Test
-    mutating func optIn() {
+    func optIn() {
         appSettings.analyticsConsentState = .optedOut
         context.send(viewAction: .toggleAnalytics)
         #expect(context.enableAnalytics)
     }
     
     @Test
-    mutating func optOut() {
+    func optOut() {
         appSettings.analyticsConsentState = .optedIn
         context.send(viewAction: .toggleAnalytics)
         #expect(!context.enableAnalytics)

@@ -11,7 +11,7 @@ import Foundation
 import Testing
 
 @MainActor
-@Suite(.serialized)
+@Suite
 final class AppLockServiceTests {
     private var keychainController: KeychainController
     private var appSettings: AppSettings
