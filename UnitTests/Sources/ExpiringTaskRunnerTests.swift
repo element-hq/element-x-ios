@@ -47,7 +47,7 @@ struct ExpiringTaskRunnerTests {
             try? await Task.sleep(for: .milliseconds(300))
             return true
         }
-
+        
         do {
             _ = try await runner.run(timeout: .milliseconds(100))
         } catch {

@@ -60,7 +60,7 @@ final class HomeScreenViewModelTests {
         #expect(correctResult)
         #expect(mockRoomID == selectedRoomID)
     }
-
+    
     @Test
     func tapUserAvatar() async {
         setupViewModel()
@@ -111,7 +111,7 @@ final class HomeScreenViewModelTests {
         room.leaveRoomClosure = { .failure(.sdkError(ClientProxyMockError.generic)) }
         
         clientProxy.roomForIdentifierClosure = { _ in .joined(room) }
-
+        
         let deferred = deferFulfillment(context.$viewState) { value in
             value.bindings.alertInfo != nil
         }
@@ -119,7 +119,7 @@ final class HomeScreenViewModelTests {
         context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomID))
         
         try await deferred.fulfill()
-                
+        
         #expect(context.alertInfo != nil)
     }
     

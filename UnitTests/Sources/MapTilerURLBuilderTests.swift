@@ -25,7 +25,7 @@ struct MapTilerURLBuilderTests {
                                         lightStyleID: Self.lightStyleID,
                                         darkStyleID: Self.darkStyleID)
     }
-
+    
     @Test
     func staticMapBuilder() {
         let url = builder.staticMapTileImageURL(for: .light,
@@ -33,11 +33,11 @@ struct MapTilerURLBuilderTests {
                                                 zoomLevel: 5,
                                                 size: .init(width: 300, height: 200),
                                                 attribution: .hidden)
-
+        
         let expectedURL: URL = "http://www.foo.com/9bc819c8-e627-474a-a348-ec144fe3d810/static/2.000000,1.000000,5.000000/300x200@2x.png?key=some_key&attribution=false"
         #expect(url == expectedURL)
     }
-
+    
     @Test
     func staticMapBuilderWithAttribution() {
         let url = builder.staticMapTileImageURL(for: .dark,
@@ -45,11 +45,11 @@ struct MapTilerURLBuilderTests {
                                                 zoomLevel: 5,
                                                 size: .init(width: 300, height: 200),
                                                 attribution: .topLeft)
-
+        
         let expectedURL: URL = "http://www.foo.com/dea61faf-292b-4774-9660-58fcef89a7f3/static/2.000000,1.000000,5.000000/300x200@2x.png?key=some_key&attribution=topleft"
         #expect(url == expectedURL)
     }
-
+    
     @Test
     func dynamicMapBuilder() {
         let url = builder.interactiveMapURL(for: .dark)

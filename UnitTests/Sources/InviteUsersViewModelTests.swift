@@ -15,7 +15,7 @@ import Testing
 struct InviteUsersScreenViewModelTests {
     var viewModel: InviteUsersScreenViewModelProtocol!
     var userDiscoveryService: UserDiscoveryServiceMock!
-        
+    
     var context: InviteUsersScreenViewModel.Context {
         viewModel.context
     }
@@ -59,7 +59,7 @@ struct InviteUsersScreenViewModelTests {
         context.send(viewAction: .toggleUser(.mockAlice))
         #expect(context.viewState.selectedUsers.isEmpty)
     }
-     
+    
     @Test
     mutating func inviteButton() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]

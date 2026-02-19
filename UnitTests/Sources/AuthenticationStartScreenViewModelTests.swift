@@ -13,7 +13,7 @@ import UIKit
 
 @MainActor
 @Suite
-struct AuthenticationStartScreenViewModelTests {
+final class AuthenticationStartScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var client: ClientSDKMock!
     var appSettings: AppSettings!
@@ -31,8 +31,12 @@ struct AuthenticationStartScreenViewModelTests {
         // ServiceLocator, the providers override that we apply will break other tests in the suite.
     }
     
+    deinit {
+        AppSettings.resetAllSettings()
+    }
+    
     @Test
-    mutating func initialState() async throws {
+    func initialState() async throws {
         // Given a view model that has no provisioning parameters.
         setupViewModel()
         #expect(authenticationService.homeserver.value.loginMode == .unknown)
@@ -59,7 +63,7 @@ struct AuthenticationStartScreenViewModelTests {
     }
     
     @Test
-    mutating func provisionedOIDCState() async throws {
+    func provisionedOIDCState() async throws {
         // Given a view model that has been provisioned with a server that supports OIDC.
         setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"))
         #expect(authenticationService.homeserver.value.loginMode == .unknown)
@@ -79,7 +83,7 @@ struct AuthenticationStartScreenViewModelTests {
     }
     
     @Test
-    mutating func provisionedPasswordState() async throws {
+    func provisionedPasswordState() async throws {
         // Given a view model that has been provisioned with a server that does not support OIDC.
         setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"), supportsOIDC: false)
         #expect(authenticationService.homeserver.value.loginMode == .unknown)
@@ -97,7 +101,7 @@ struct AuthenticationStartScreenViewModelTests {
     }
     
     @Test
-    mutating func singleProviderOIDCState() async throws {
+    func singleProviderOIDCState() async throws {
         // Given a view model that for an app that only allows the use of a single provider that supports OIDC.
         setAllowedAccountProviders(["company.com"])
         setupViewModel()
@@ -118,7 +122,7 @@ struct AuthenticationStartScreenViewModelTests {
     }
     
     @Test
-    mutating func singleProviderPasswordState() async throws {
+    func singleProviderPasswordState() async throws {
         // Given a view model that for an app that only allows the use of a single provider that does not support OIDC.
         setAllowedAccountProviders(["company.com"])
         setupViewModel(supportsOIDC: false)
@@ -138,7 +142,7 @@ struct AuthenticationStartScreenViewModelTests {
     
     // MARK: - Helpers
     
-    private mutating func setupViewModel(provisioningParameters: AccountProvisioningParameters? = nil, supportsOIDC: Bool = true) {
+    private func setupViewModel(provisioningParameters: AccountProvisioningParameters? = nil, supportsOIDC: Bool = true) {
         // Manually create a configuration as the default homeserver address setting is immutable.
         client = ClientSDKMock(configuration: .init(oidcLoginURL: supportsOIDC ? "https://account.company.com/authorize" : nil,
                                                     supportsOIDCCreatePrompt: false,
@@ -162,7 +166,7 @@ struct AuthenticationStartScreenViewModelTests {
         viewModel.context.send(viewAction: .updateWindow(UIWindow()))
     }
     
-    private mutating func setAllowedAccountProviders(_ providers: [String]) {
+    private func setAllowedAccountProviders(_ providers: [String]) {
         appSettings.override(accountProviders: providers,
                              allowOtherAccountProviders: false,
                              hideBrandChrome: false,

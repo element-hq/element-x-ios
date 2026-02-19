@@ -109,7 +109,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(optimizedVideoInfo.height, 720)
         XCTAssertEqual(optimizedVideoInfo.duration ?? 0, 30, accuracy: 100)
     }
-
+    
     func testPortraitMp4VideoProcessing() async {
         // Allow an increased execution time as we encode the video twice now.
         executionTimeAllowance = 180

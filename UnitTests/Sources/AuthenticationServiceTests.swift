@@ -92,7 +92,7 @@ struct AuthenticationServiceTests {
     }
     
     // MARK: - Helpers
-
+    
     private mutating func setup(serverAddress: String = "matrix.org") {
         let configuration: AuthenticationClientFactoryMock.Configuration = .init()
         let clientFactory = AuthenticationClientFactoryMock(configuration: configuration)

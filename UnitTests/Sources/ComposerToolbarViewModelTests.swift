@@ -19,7 +19,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     private var viewModel: ComposerToolbarViewModel!
     private var completionSuggestionServiceMock: CompletionSuggestionServiceMock!
     private var draftServiceMock: ComposerDraftServiceMock!
-
+    
     override func setUp() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
@@ -30,14 +30,14 @@ class ComposerToolbarViewModelTests: XCTestCase {
     override func tearDown() {
         AppSettings.resetAllSettings()
     }
-
+    
     func testComposerFocus() {
         viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventID("mock"), type: .default)))
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
         viewModel.process(timelineAction: .removeFocus)
         XCTAssertFalse(viewModel.state.bindings.composerFocused)
     }
-
+    
     func testComposerMode() {
         let mode: ComposerMode = .edit(originalEventOrTransactionID: .eventID("mock"), type: .default)
         viewModel.process(timelineAction: .setMode(mode: mode))
@@ -45,7 +45,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.process(timelineAction: .clear)
         XCTAssertEqual(viewModel.state.composerMode, .default)
     }
-
+    
     func testComposerModeIsPublished() {
         let mode: ComposerMode = .edit(originalEventOrTransactionID: .eventID("mock"), type: .default)
         let expectation = expectation(description: "Composer mode is published")
@@ -59,22 +59,22 @@ class ComposerToolbarViewModelTests: XCTestCase {
                 XCTAssertEqual(composerMode, mode)
                 expectation.fulfill()
             }
-
+        
         viewModel.process(timelineAction: .setMode(mode: mode))
-
+        
         wait(for: [expectation], timeout: 2.0)
         cancellable.cancel()
     }
-
+    
     func testHandleKeyCommand() {
         XCTAssertTrue(viewModel.context.viewState.keyCommands.count == 1)
     }
-
+    
     func testComposerFocusAfterEnablingRTE() {
         viewModel.process(viewAction: .enableTextFormatting)
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
     }
-
+    
     func testRTEEnabledAfterSendingMessage() {
         viewModel.process(viewAction: .enableTextFormatting)
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
@@ -82,7 +82,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.process(viewAction: .sendMessage)
         XCTAssertTrue(viewModel.state.bindings.composerFormattingEnabled)
     }
-
+    
     func testAlertIsShownAfterLinkAction() {
         XCTAssertNil(viewModel.state.bindings.alertInfo)
         viewModel.process(viewAction: .enableTextFormatting)
@@ -139,7 +139,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
         // The display name can be used for HTML injection in the rich text editor and it's useless anyway as the clients don't use it when resolving display names
-
+        
         XCTAssertEqual(wysiwygViewModel.content.html, "<a href=\"https://matrix.to/#/%23room-alias:matrix.org\">#room-alias:matrix.org</a> ")
     }
     
@@ -345,7 +345,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                                                               waveform: .data(waveformData),
                                                                               isUploading: false)))
         viewModel.saveDraft()
-
+        
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(draftServiceMock.saveDraftCalled)
         XCTAssertEqual(draftServiceMock.clearDraftCallsCount, 1)
@@ -588,7 +588,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.composerFormattingEnabled = false
         let text = "Hello @room"
         viewModel.process(timelineAction: .setText(plainText: text, htmlText: nil))
-
+        
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
             case let .sendMessage(plainText, _, _, intentionalMentions):
@@ -673,7 +673,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         roomProxyMock.getMemberUserIDClosure = { _ in
             .success(roomMemberProxyMock)
         }
-    
+        
         let mockSubject = CurrentValueSubject<[IdentityStatusChange], Never>([])
         roomProxyMock.underlyingIdentityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
         
@@ -712,7 +712,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                 return .failure(.sdkError(ClientProxyMockError.generic))
             }
         }
-    
+        
         // There are 2 violations, ensure that resolving the first one is not enough
         let mockSubject = CurrentValueSubject<[IdentityStatusChange], Never>([
             IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation),

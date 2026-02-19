@@ -35,7 +35,7 @@ struct EmojiPickerScreenViewModelTests {
                 #expect(toggledReaction == reaction)
                 return .success(())
             }
-                
+            
             context.send(viewAction: .emojiTapped(emoji: .init(id: "wave", value: reaction)))
             
             try await deferred.fulfill()

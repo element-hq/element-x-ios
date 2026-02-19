@@ -76,7 +76,7 @@ class EditRoomAddressScreenViewModelTests: XCTestCase {
         
         XCTAssertNil(roomProxy.infoPublisher.value.canonicalAlias)
         XCTAssertEqual(viewModel.context.viewState.bindings.desiredAliasLocalPart, "room-name")
-
+        
         let publishingExpectation = expectation(description: "Wait for publishing")
         roomProxy.publishRoomAliasInRoomDirectoryClosure = { roomAlias in
             defer { publishingExpectation.fulfill() }
@@ -107,7 +107,7 @@ class EditRoomAddressScreenViewModelTests: XCTestCase {
                                                    userIndicatorController: UserIndicatorControllerMock())
         
         context.desiredAliasLocalPart = "room-name"
-
+        
         let publishingExpectation = expectation(description: "Wait for publishing")
         roomProxy.publishRoomAliasInRoomDirectoryClosure = { roomAlias in
             defer { publishingExpectation.fulfill() }
@@ -144,7 +144,7 @@ class EditRoomAddressScreenViewModelTests: XCTestCase {
                                                    userIndicatorController: UserIndicatorControllerMock())
         
         context.desiredAliasLocalPart = "room-name"
-
+        
         let publishingExpectation = expectation(description: "Wait for publishing")
         roomProxy.publishRoomAliasInRoomDirectoryClosure = { roomAlias in
             defer { publishingExpectation.fulfill() }
