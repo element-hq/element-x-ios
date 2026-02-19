@@ -19,18 +19,23 @@ struct VoiceMessageRoomPlaybackView: View {
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
     let onScrubbing: (Bool) -> Void
-    
+    let playbackSpeed: Float
+    let onPlaybackSpeedChange: () -> Void
+
     var body: some View {
         HStack(spacing: 8) {
             VoiceMessageButton(state: .init(playerState.playerButtonPlaybackState),
                                size: .medium,
                                action: onPlayPause)
-            Text(timeLabelContent)
-                .lineLimit(1)
-                .font(.compound.bodySMSemibold)
-                .foregroundColor(.compound.textSecondary)
-                .monospacedDigit()
-                .fixedSize(horizontal: true, vertical: true)
+            VStack(spacing: 2) {
+                PlaybackSpeedButton(speed: playbackSpeed, onTap: onPlaybackSpeedChange)
+                Text(timeLabelContent)
+                    .lineLimit(1)
+                    .font(.compound.bodyXSSemibold)
+                    .foregroundColor(.compound.textSecondary)
+                    .monospacedDigit()
+                    .fixedSize(horizontal: true, vertical: true)
+            }
 
             waveformView
                 .waveformInteraction(isDragging: $isDragging,
@@ -129,7 +134,9 @@ struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
         VoiceMessageRoomPlaybackView(playerState: playerState,
                                      onPlayPause: { },
                                      onSeek: { value in Task { await playerState.updateState(progress: value) } },
-                                     onScrubbing: { _ in })
+                                     onScrubbing: { _ in },
+                                     playbackSpeed: playerState.playbackSpeed,
+                                     onPlaybackSpeedChange: { })
             .fixedSize(horizontal: false, vertical: true)
     }
 }

@@ -110,6 +110,7 @@ enum TestablePreviewsDictionary {
         "PinnedItemsIndicatorView_Previews" : PinnedItemsIndicatorView_Previews.self,
         "PlaceholderAvatarImage_Previews" : PlaceholderAvatarImage_Previews.self,
         "PlaceholderScreen_Previews" : PlaceholderScreen_Previews.self,
+        "PlaybackSpeedButton_Previews" : PlaybackSpeedButton_Previews.self,
         "PollFormScreen_Previews" : PollFormScreen_Previews.self,
         "PollOptionView_Previews" : PollOptionView_Previews.self,
         "PollRoomTimelineView_Previews" : PollRoomTimelineView_Previews.self,

@@ -718,6 +718,13 @@ extension PreviewTests {
         }
     }
 
+    func testPlaybackSpeedButton() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in PlaybackSpeedButton_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testPollFormScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PollFormScreen_Previews._allPreviews.enumerated() {

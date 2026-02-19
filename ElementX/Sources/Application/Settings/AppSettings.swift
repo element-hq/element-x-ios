@@ -82,6 +82,8 @@ final class AppSettings {
         case spaceSettingsEnabled
         case createSpaceEnabled
         
+        case voiceMessagePlaybackSpeed
+
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
         case hideQuietNotificationAlerts
@@ -359,7 +361,10 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: true, storageType: .userDefaults(store))
     var optimizeMediaUploads
-    
+
+    @UserPreference(key: UserDefaultsKeys.voiceMessagePlaybackSpeed, defaultValue: VoiceMessagePlaybackSpeed.default, storageType: .userDefaults(store))
+    var voiceMessagePlaybackSpeed: VoiceMessagePlaybackSpeed
+
     /// Whether or not to show a warning on the media caption composer so the user knows
     /// that captions might not be visible to users who are using other Matrix clients.
     let shouldShowMediaCaptionWarning = true
@@ -447,3 +452,10 @@ final class AppSettings {
 }
 
 extension AppSettings: CommonSettingsProtocol { }
+
+enum VoiceMessagePlaybackSpeed: Float, CaseIterable, Codable {
+    case `default` = 1.0
+    case fast = 1.5
+    case fastest = 2.0
+    case slow = 0.5
+}
