@@ -64,12 +64,9 @@ struct RoomChangeRolesScreenViewModelTests {
     
     @Test
     mutating func toggleUserOff() throws {
-        setup(mode: .moderator)
-        let firstUser = try #require(context.viewState.users.first { !context.viewState.isMemberSelected($0) },
+        try toggleUserOn()
+        let firstUser = try #require(context.viewState.membersToPromote.first,
                                      "There should be a regular user available to promote.")
-        
-        // First toggle on
-        context.send(viewAction: .toggleMember(firstUser))
         
         // Then toggle off
         context.send(viewAction: .toggleMember(firstUser))
@@ -83,12 +80,9 @@ struct RoomChangeRolesScreenViewModelTests {
     
     @Test
     mutating func demoteToggledUser() throws {
-        setup(mode: .moderator)
-        let firstUser = try #require(context.viewState.users.first { !context.viewState.isMemberSelected($0) },
+        try toggleUserOn()
+        let firstUser = try #require(context.viewState.membersToPromote.first,
                                      "There should be a regular user available to promote.")
-        
-        // First toggle on
-        context.send(viewAction: .toggleMember(firstUser))
         
         // Then demote
         context.send(viewAction: .demoteMember(firstUser))
@@ -102,7 +96,7 @@ struct RoomChangeRolesScreenViewModelTests {
     
     @Test
     mutating func toggleModeratorOff() throws {
-        setup(mode: .moderator)
+        initialStateModerators()
         let existingModerator = try #require(context.viewState.membersWithRole.first { $0.role == .moderator },
                                              "There should be a member with the role before we begin.")
         
@@ -117,26 +111,23 @@ struct RoomChangeRolesScreenViewModelTests {
     
     @Test
     mutating func toggleModeratorOn() throws {
-        setup(mode: .moderator)
-        let existingModerator = try #require(context.viewState.membersWithRole.first { $0.role == .moderator },
-                                             "There should be a member with the role before we begin.")
-        
-        // First toggle off
-        context.send(viewAction: .toggleMember(existingModerator))
+        try toggleModeratorOff()
+        let demotedMember = try #require(context.viewState.membersToDemote.first,
+                                         "There should be a member with the role before we begin.")
         
         // Then toggle back on
-        context.send(viewAction: .toggleMember(existingModerator))
+        context.send(viewAction: .toggleMember(demotedMember))
         
         #expect(context.viewState.membersToPromote == [])
         #expect(context.viewState.membersToDemote == [])
         #expect(context.viewState.membersWithRole.count == 3)
-        #expect(context.viewState.membersWithRole.contains(existingModerator))
+        #expect(context.viewState.membersWithRole.contains(demotedMember))
         #expect(!context.viewState.hasChanges)
     }
     
     @Test
     mutating func demoteModerator() throws {
-        setup(mode: .moderator)
+        initialStateModerators()
         let existingModerator = try #require(context.viewState.membersWithRole.first { $0.role == .moderator },
                                              "There should be a member with the role before we begin.")
         
