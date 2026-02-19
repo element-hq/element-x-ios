@@ -37,12 +37,12 @@ class AudioPlayerState: ObservableObject, Identifiable {
     /// updates are delayed by a fixed amount of time
     @Published private(set) var playerButtonPlaybackState: AudioPlayerPlaybackState
     @Published private(set) var playbackSpeed: VoiceMessagePlaybackSpeed
-
+    
     private weak var audioPlayer: AudioPlayerProtocol?
     private var audioPlayerSubscription: AnyCancellable?
     private var playbackStateSubscription: AnyCancellable?
     private var displayLink: CADisplayLink?
-
+    
     /// The file url that the last player attached to this object has loaded.
     /// The file url persists even if the AudioPlayer will be detached later.
     private(set) var fileURL: URL?
@@ -58,7 +58,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
     var isPublishingProgress: Bool {
         displayLink != nil
     }
-
+    
     init(id: AudioPlayerStateIdentifier, title: String,
          duration: Double,
          waveform: EstimatedWaveform? = nil,
@@ -119,7 +119,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
     func reportError() {
         playbackState = .error
     }
-
+    
     func setPlaybackSpeed(_ speed: VoiceMessagePlaybackSpeed) {
         playbackSpeed = speed
         audioPlayer?.setPlaybackSpeed(speed.rawValue)
