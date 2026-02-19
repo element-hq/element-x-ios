@@ -13,12 +13,18 @@ struct PlaybackSpeedButton: View {
 
     var body: some View {
         Button(action: onTap) {
-            Text(speedLabel)
-                .font(.compound.bodyXSSemibold)
-                .foregroundColor(.compound.iconSecondary)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 2)
-                .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
+            ZStack {
+                Text("0.0x")
+                    .font(.compound.bodyXSSemibold)
+                    .hidden()
+
+                Text(speedLabel)
+                    .font(.compound.bodyXSSemibold)
+                    .foregroundColor(.compound.iconSecondary)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 2)
+            .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(UntranslatedL10n.a11yPlaybackSpeed(speedLabel))
