@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Foundation
 import SwiftUI
 
@@ -23,7 +24,7 @@ struct VoiceMessageRoomTimelineView: View {
 }
 
 struct VoiceMessageRoomTimelineContent: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
+    @Environment(\.timelineContext) private var context
     @State private var resumePlaybackAfterScrubbing = false
     
     let timelineItem: VoiceMessageRoomTimelineItem
@@ -34,32 +35,31 @@ struct VoiceMessageRoomTimelineContent: View {
                                      onPlayPause: onPlaybackPlayPause,
                                      onSeek: { onPlaybackSeek($0) },
                                      onScrubbing: { onPlaybackScrubbing($0) },
-                                     playbackSpeed: context.viewState.voiceMessagePlaybackSpeed,
                                      onPlaybackSpeedChange: onPlaybackSpeedChange)
             .fixedSize(horizontal: false, vertical: true)
     }
 
     private func onPlaybackPlayPause() {
-        context.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
+        context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
     }
 
     private func onPlaybackSpeedChange() {
-        context.send(viewAction: .handleAudioPlayerAction(.changePlaybackSpeed(itemID: timelineItem.id)))
+        context?.send(viewAction: .handleAudioPlayerAction(.changePlaybackSpeed(itemID: timelineItem.id)))
     }
     
     private func onPlaybackSeek(_ progress: Double) {
-        context.send(viewAction: .handleAudioPlayerAction(.seek(itemID: timelineItem.id, progress: progress)))
+        context?.send(viewAction: .handleAudioPlayerAction(.seek(itemID: timelineItem.id, progress: progress)))
     }
     
     private func onPlaybackScrubbing(_ dragging: Bool) {
         if dragging {
             if playerState.playbackState == .playing {
                 resumePlaybackAfterScrubbing = true
-                context.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
+                context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
             }
         } else {
             if resumePlaybackAfterScrubbing {
-                context.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
+                context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
                 resumePlaybackAfterScrubbing = false
             }
         }

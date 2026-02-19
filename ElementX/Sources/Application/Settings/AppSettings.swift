@@ -458,4 +458,17 @@ enum VoiceMessagePlaybackSpeed: Float, CaseIterable, Codable {
     case fast = 1.5
     case fastest = 2.0
     case slow = 0.5
+    
+    var label: String {
+        switch self {
+        case .default, .fastest:
+            rawValue.formatted(.number.precision(.fractionLength(0))) + "×"
+        case .fast, .slow:
+            rawValue.formatted(.number.precision(.fractionLength(1))) + "×"
+        }
+    }
+    
+    var placeholder: String {
+        0.0.formatted(.number.precision(.fractionLength(1))) + "×"
+    }
 }

@@ -115,7 +115,6 @@ struct TimelineViewState: BindableState {
     var isViewSourceEnabled: Bool
     var areThreadsEnabled: Bool
     var linkPreviewsEnabled: Bool
-    var voiceMessagePlaybackSpeed = VoiceMessagePlaybackSpeed.default.rawValue
     
     let hasPredecessor: Bool
         
