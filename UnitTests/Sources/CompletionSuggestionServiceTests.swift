@@ -68,7 +68,7 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
         let service = CompletionSuggestionService(roomProxy: roomProxyMock,
                                                   roomListPublisher: roomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
-                
+        
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == []
         }
@@ -99,7 +99,7 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
         let service = CompletionSuggestionService(roomProxy: roomProxyMock,
                                                   roomListPublisher: roomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
-                
+        
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == []
         }

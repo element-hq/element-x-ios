@@ -9,14 +9,15 @@
 import AnalyticsEvents
 @testable import ElementX
 import PostHog
-import XCTest
+import Testing
 
-class AnalyticsTests: XCTestCase {
-    private var appSettings: AppSettings!
-    private var analyticsClient: AnalyticsClientMock!
-    private var posthogMock: PHGPostHogMock!
+@Suite
+final class AnalyticsTests {
+    private var appSettings: AppSettings
+    private var analyticsClient: AnalyticsClientMock
+    private var posthogMock: PHGPostHogMock
     
-    override func setUp() {
+    init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         
@@ -29,20 +30,22 @@ class AnalyticsTests: XCTestCase {
         posthogMock.configureMockBehavior()
     }
     
-    override func tearDown() {
+    deinit {
         AppSettings.resetAllSettings()
     }
     
-    func testAnalyticsPromptNewUser() {
+    @Test
+    func analyticsPromptNewUser() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When the user is prompted for analytics.
         let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
         
         // Then the prompt should be shown.
-        XCTAssertTrue(showPrompt, "A prompt should be shown for a new user.")
+        #expect(showPrompt, "A prompt should be shown for a new user.")
     }
     
-    func testAnalyticsPromptUserDeclinedPostHog() {
+    @Test
+    func analyticsPromptUserDeclinedPostHog() {
         // Given an existing install of the app where the user previously declined PostHog
         appSettings.analyticsConsentState = .optedOut
         
@@ -50,10 +53,11 @@ class AnalyticsTests: XCTestCase {
         let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
         
         // Then no prompt should be shown.
-        XCTAssertFalse(showPrompt, "A prompt should not be shown any more.")
+        #expect(!showPrompt, "A prompt should not be shown any more.")
     }
     
-    func testAnalyticsPromptUserAcceptedPostHog() {
+    @Test
+    func analyticsPromptUserAcceptedPostHog() {
         // Given an existing install of the app where the user previously accepted PostHog
         appSettings.analyticsConsentState = .optedIn
         
@@ -61,61 +65,67 @@ class AnalyticsTests: XCTestCase {
         let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
         
         // Then no prompt should be shown.
-        XCTAssertFalse(showPrompt, "A prompt should not be shown any more.")
+        #expect(!showPrompt, "A prompt should not be shown any more.")
     }
     
-    func testAnalyticsPromptNotDisplayed() {
+    @Test
+    func analyticsPromptNotDisplayed() {
         // Given a fresh install of the app Analytics should be disabled
-        XCTAssertEqual(appSettings.analyticsConsentState, .unknown)
-        XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
-        XCTAssertFalse(analyticsClient.startAnalyticsConfigurationCalled)
+        #expect(appSettings.analyticsConsentState == .unknown)
+        #expect(!ServiceLocator.shared.analytics.isEnabled)
+        #expect(!analyticsClient.startAnalyticsConfigurationCalled)
     }
     
-    func testAnalyticsOptOut() {
+    @Test
+    func analyticsOptOut() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When analytics is opt-out
         ServiceLocator.shared.analytics.optOut()
         // Then analytics should be disabled
-        XCTAssertEqual(appSettings.analyticsConsentState, .optedOut)
-        XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
-        XCTAssertFalse(analyticsClient.isRunning)
+        #expect(appSettings.analyticsConsentState == .optedOut)
+        #expect(!ServiceLocator.shared.analytics.isEnabled)
+        #expect(!analyticsClient.isRunning)
         // Analytics client should have been stopped
-        XCTAssertTrue(analyticsClient.stopCalled)
+        #expect(analyticsClient.stopCalled)
     }
     
-    func testAnalyticsOptIn() {
+    @Test
+    func analyticsOptIn() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When analytics is opt-in
         ServiceLocator.shared.analytics.optIn()
         // The analytics should be enabled
-        XCTAssertEqual(appSettings.analyticsConsentState, .optedIn)
-        XCTAssertTrue(ServiceLocator.shared.analytics.isEnabled)
+        #expect(appSettings.analyticsConsentState == .optedIn)
+        #expect(ServiceLocator.shared.analytics.isEnabled)
         // Analytics client should have been started
-        XCTAssertTrue(analyticsClient.startAnalyticsConfigurationCalled)
+        #expect(analyticsClient.startAnalyticsConfigurationCalled)
     }
     
-    func testAnalyticsStartIfNotEnabled() {
+    @Test
+    func analyticsStartIfNotEnabled() {
         // Given an existing install of the app where the user previously declined the tracking
         appSettings.analyticsConsentState = .optedOut
         // Analytics should not start
-        XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
+        #expect(!ServiceLocator.shared.analytics.isEnabled)
         ServiceLocator.shared.analytics.startIfEnabled()
-        XCTAssertFalse(analyticsClient.startAnalyticsConfigurationCalled)
+        #expect(!analyticsClient.startAnalyticsConfigurationCalled)
     }
     
-    func testAnalyticsStartIfEnabled() {
+    @Test
+    func analyticsStartIfEnabled() {
         // Given an existing install of the app where the user previously accepted the tracking
         appSettings.analyticsConsentState = .optedIn
         // Analytics should start
-        XCTAssertTrue(ServiceLocator.shared.analytics.isEnabled)
+        #expect(ServiceLocator.shared.analytics.isEnabled)
         ServiceLocator.shared.analytics.startIfEnabled()
-        XCTAssertTrue(analyticsClient.startAnalyticsConfigurationCalled)
+        #expect(analyticsClient.startAnalyticsConfigurationCalled)
     }
     
-    func testAddingUserProperties() {
+    @Test
+    func addingUserProperties() {
         // Given a client with no user properties set
         let client = PostHogAnalyticsClient()
-        XCTAssertNil(client.pendingUserProperties, "No user properties should have been set yet.")
+        #expect(client.pendingUserProperties == nil, "No user properties should have been set yet.")
         
         // When updating the user properties
         client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil,
@@ -124,25 +134,26 @@ class AnalyticsTests: XCTestCase {
                                                                   numSpaces: 5, recoveryState: .Disabled, verificationState: .Verified))
         
         // Then the properties should be cached
-        XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
-        XCTAssertEqual(client.pendingUserProperties?.ftueUseCaseSelection, .PersonalMessaging, "The use case selection should match.")
-        XCTAssertEqual(client.pendingUserProperties?.numFavouriteRooms, 4, "The number of favorite rooms should match.")
-        XCTAssertEqual(client.pendingUserProperties?.numSpaces, 5, "The number of spaces should match.")
-        XCTAssertEqual(client.pendingUserProperties?.verificationState, AnalyticsEvent.UserProperties.VerificationState.Verified, "The verification state should match.")
-        XCTAssertEqual(client.pendingUserProperties?.recoveryState, AnalyticsEvent.UserProperties.RecoveryState.Disabled, "The recovery state should match.")
+        #expect(client.pendingUserProperties != nil, "The user properties should be cached.")
+        #expect(client.pendingUserProperties?.ftueUseCaseSelection == .PersonalMessaging, "The use case selection should match.")
+        #expect(client.pendingUserProperties?.numFavouriteRooms == 4, "The number of favorite rooms should match.")
+        #expect(client.pendingUserProperties?.numSpaces == 5, "The number of spaces should match.")
+        #expect(client.pendingUserProperties?.verificationState == AnalyticsEvent.UserProperties.VerificationState.Verified, "The verification state should match.")
+        #expect(client.pendingUserProperties?.recoveryState == AnalyticsEvent.UserProperties.RecoveryState.Disabled, "The recovery state should match.")
     }
     
-    func testMergingUserProperties() {
+    @Test
+    func mergingUserProperties() {
         // Given a client with a cached use case user properties
         let client = PostHogAnalyticsClient()
         client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: .PersonalMessaging,
                                                                   numFavouriteRooms: nil,
                                                                   numSpaces: nil, recoveryState: nil, verificationState: nil))
         
-        XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
-        XCTAssertEqual(client.pendingUserProperties?.ftueUseCaseSelection, .PersonalMessaging, "The use case selection should match.")
-        XCTAssertNil(client.pendingUserProperties?.numFavouriteRooms, "The number of favorite rooms should not be set.")
-        XCTAssertNil(client.pendingUserProperties?.numSpaces, "The number of spaces should not be set.")
+        #expect(client.pendingUserProperties != nil, "The user properties should be cached.")
+        #expect(client.pendingUserProperties?.ftueUseCaseSelection == .PersonalMessaging, "The use case selection should match.")
+        #expect(client.pendingUserProperties?.numFavouriteRooms == nil, "The number of favorite rooms should not be set.")
+        #expect(client.pendingUserProperties?.numSpaces == nil, "The number of spaces should not be set.")
         
         // When updating the number of spaced
         client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: nil,
@@ -150,24 +161,25 @@ class AnalyticsTests: XCTestCase {
                                                                   numSpaces: 5, recoveryState: nil, verificationState: nil))
         
         // Then the new properties should be updated and the existing properties should remain unchanged
-        XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
-        XCTAssertEqual(client.pendingUserProperties?.ftueUseCaseSelection, .PersonalMessaging, "The use case selection shouldn't have changed.")
-        XCTAssertEqual(client.pendingUserProperties?.numFavouriteRooms, 4, "The number of favorite rooms should have been updated.")
-        XCTAssertEqual(client.pendingUserProperties?.numSpaces, 5, "The number of spaces should have been updated.")
+        #expect(client.pendingUserProperties != nil, "The user properties should be cached.")
+        #expect(client.pendingUserProperties?.ftueUseCaseSelection == .PersonalMessaging, "The use case selection shouldn't have changed.")
+        #expect(client.pendingUserProperties?.numFavouriteRooms == 4, "The number of favorite rooms should have been updated.")
+        #expect(client.pendingUserProperties?.numSpaces == 5, "The number of spaces should have been updated.")
     }
     
-    func testSendingUserProperties() throws {
+    @Test
+    func sendingUserProperties() throws {
         // Given a client with user properties set
         
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
-        try client.start(analyticsConfiguration: XCTUnwrap(appSettings.analyticsConfiguration))
+        try client.start(analyticsConfiguration: #require(appSettings.analyticsConfiguration))
         
         client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: .PersonalMessaging,
                                                                   numFavouriteRooms: nil,
                                                                   numSpaces: nil, recoveryState: nil, verificationState: nil))
         
-        XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
-        XCTAssertEqual(client.pendingUserProperties?.ftueUseCaseSelection, .PersonalMessaging, "The use case selection should match.")
+        #expect(client.pendingUserProperties != nil, "The user properties should be cached.")
+        #expect(client.pendingUserProperties?.ftueUseCaseSelection == .PersonalMessaging, "The use case selection should match.")
         
         // When sending an event (tests run under Debug configuration so this is sent to the development instance)
         let someEvent = AnalyticsEvent.Error(context: nil,
@@ -186,29 +198,31 @@ class AnalyticsTests: XCTestCase {
         let capturedEvent = posthogMock.capturePropertiesUserPropertiesReceivedArguments
         
         // The user properties should have been added
-        XCTAssertEqual(capturedEvent?.userProperties?["ftueUseCaseSelection"] as? String, AnalyticsEvent.UserProperties.FtueUseCaseSelection.PersonalMessaging.rawValue)
+        #expect(capturedEvent?.userProperties?["ftueUseCaseSelection"] as? String == AnalyticsEvent.UserProperties.FtueUseCaseSelection.PersonalMessaging.rawValue)
         
         // Then the properties should be cleared
-        XCTAssertNil(client.pendingUserProperties, "The user properties should be cleared.")
+        #expect(client.pendingUserProperties == nil, "The user properties should be cleared.")
     }
     
-    func testResetConsentState() {
+    @Test
+    func resetConsentState() {
         // Given an existing install of the app where the user previously accpeted the tracking
         appSettings.analyticsConsentState = .optedIn
-        XCTAssertFalse(ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt)
+        #expect(!ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt)
         
         // When forgetting analytics consents
         ServiceLocator.shared.analytics.resetConsentState()
         
         // Then the analytics prompt should be presented again
-        XCTAssertEqual(appSettings.analyticsConsentState, .unknown)
-        XCTAssertTrue(ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt)
+        #expect(appSettings.analyticsConsentState == .unknown)
+        #expect(ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt)
     }
     
-    func testSendingAndUpdatingSuperProperties() throws {
+    @Test
+    func sendingAndUpdatingSuperProperties() throws {
         // Given a client with user properties set
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
-        try client.start(analyticsConfiguration: XCTUnwrap(appSettings.analyticsConfiguration))
+        try client.start(analyticsConfiguration: #require(appSettings.analyticsConfiguration))
         
         client.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI,
                                                                     cryptoSDK: .Rust,
@@ -219,12 +233,12 @@ class AnalyticsTests: XCTestCase {
         
         let screenEvent = posthogMock.screenPropertiesReceivedArguments
         
-        XCTAssertEqual(screenEvent?.screenTitle, AnalyticsEvent.MobileScreen.ScreenName.Home.rawValue)
+        #expect(screenEvent?.screenTitle == AnalyticsEvent.MobileScreen.ScreenName.Home.rawValue)
         
         // All the super properties should have been added
-        XCTAssertEqual(screenEvent?.properties?["cryptoSDK"] as? String, AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
-        XCTAssertEqual(screenEvent?.properties?["appPlatform"] as? String, "EXI")
-        XCTAssertEqual(screenEvent?.properties?["cryptoSDKVersion"] as? String, "000")
+        #expect(screenEvent?.properties?["cryptoSDK"] as? String == AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
+        #expect(screenEvent?.properties?["appPlatform"] as? String == "EXI")
+        #expect(screenEvent?.properties?["cryptoSDKVersion"] as? String == "000")
         
         // It should be the same for any event
         let someEvent = AnalyticsEvent.Error(context: nil,
@@ -243,9 +257,9 @@ class AnalyticsTests: XCTestCase {
         let capturedEvent = posthogMock.capturePropertiesUserPropertiesReceivedArguments
         
         // All the super properties should have been added
-        XCTAssertEqual(capturedEvent?.properties?["cryptoSDK"] as? String, AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
-        XCTAssertEqual(capturedEvent?.properties?["appPlatform"] as? String, "EXI")
-        XCTAssertEqual(capturedEvent?.properties?["cryptoSDKVersion"] as? String, "000")
+        #expect(capturedEvent?.properties?["cryptoSDK"] as? String == AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
+        #expect(capturedEvent?.properties?["appPlatform"] as? String == "EXI")
+        #expect(capturedEvent?.properties?["cryptoSDKVersion"] as? String == "000")
         
         // Updating should keep the previously set properties
         client.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI,
@@ -256,20 +270,21 @@ class AnalyticsTests: XCTestCase {
         let capturedEvent2 = posthogMock.capturePropertiesUserPropertiesReceivedArguments
         
         // All the super properties should have been added, with the one udpated
-        XCTAssertEqual(capturedEvent2?.properties?["cryptoSDK"] as? String, AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
-        XCTAssertEqual(capturedEvent2?.properties?["appPlatform"] as? String, "EXI")
-        XCTAssertEqual(capturedEvent2?.properties?["cryptoSDKVersion"] as? String, "001")
+        #expect(capturedEvent2?.properties?["cryptoSDK"] as? String == AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
+        #expect(capturedEvent2?.properties?["appPlatform"] as? String == "EXI")
+        #expect(capturedEvent2?.properties?["cryptoSDKVersion"] as? String == "001")
     }
     
-    func testShouldNotReportIfNotStarted() throws {
+    @Test
+    func shouldNotReportIfNotStarted() throws {
         // Given a client with user properties set
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
-    
+        
         // No call to start
         
         client.screen(AnalyticsEvent.MobileScreen(durationMs: nil, screenName: .Home))
         
-        XCTAssertEqual(posthogMock.screenPropertiesCalled, false)
+        #expect(posthogMock.screenPropertiesCalled == false)
         
         // It should be the same for any event
         let someEvent = AnalyticsEvent.Error(context: nil,
@@ -285,13 +300,13 @@ class AnalyticsTests: XCTestCase {
                                              wasVisibleToUser: nil)
         client.capture(someEvent)
         
-        XCTAssertEqual(posthogMock.capturePropertiesUserPropertiesCalled, false)
+        #expect(posthogMock.capturePropertiesUserPropertiesCalled == false)
         
         // start now
-        try client.start(analyticsConfiguration: XCTUnwrap(appSettings.analyticsConfiguration))
-        XCTAssertEqual(posthogMock.optInCalled, true)
+        try client.start(analyticsConfiguration: #require(appSettings.analyticsConfiguration))
+        #expect(posthogMock.optInCalled == true)
         
         client.capture(someEvent)
-        XCTAssertEqual(posthogMock.capturePropertiesUserPropertiesCalled, true)
+        #expect(posthogMock.capturePropertiesUserPropertiesCalled == true)
     }
 }

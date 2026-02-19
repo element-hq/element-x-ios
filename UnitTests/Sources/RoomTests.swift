@@ -9,27 +9,29 @@
 @testable import ElementX
 import MatrixRustSDK
 import MatrixRustSDKMocks
-import XCTest
+import Testing
 
-class RoomTests: XCTestCase {
-    func testCallIntent() async {
+@Suite
+struct RoomTests {
+    @Test
+    func callIntent() async {
         let room = RoomSDKMock()
         room.hasActiveRoomCallReturnValue = false
         room.isDirectReturnValue = false
         
         var callIntent = await room.joinCallIntent
-        XCTAssertEqual(callIntent, .startCall)
+        #expect(callIntent == .startCall)
         
         room.isDirectReturnValue = true
         callIntent = await room.joinCallIntent
-        XCTAssertEqual(callIntent, .startCallDm)
+        #expect(callIntent == .startCallDm)
         
         room.hasActiveRoomCallReturnValue = true
         callIntent = await room.joinCallIntent
-        XCTAssertEqual(callIntent, .joinExistingDm)
+        #expect(callIntent == .joinExistingDm)
         
         room.isDirectReturnValue = false
         callIntent = await room.joinCallIntent
-        XCTAssertEqual(callIntent, .joinExisting)
+        #expect(callIntent == .joinExisting)
     }
 }

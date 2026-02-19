@@ -8,10 +8,12 @@
 
 @testable import ElementX
 import MatrixRustSDKMocks
-import XCTest
+import Testing
+import UIKit
 
 @MainActor
-class AuthenticationStartScreenViewModelTests: XCTestCase {
+@Suite
+final class AuthenticationStartScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var client: ClientSDKMock!
     var appSettings: AppSettings!
@@ -22,22 +24,23 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    override func setUp() {
+    init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         // These app settings are kept local to the tests on purpose as if they are registered in the
         // ServiceLocator, the providers override that we apply will break other tests in the suite.
     }
     
-    override func tearDown() {
+    deinit {
         AppSettings.resetAllSettings()
     }
     
-    func testInitialState() async throws {
+    @Test
+    func initialState() async throws {
         // Given a view model that has no provisioning parameters.
         setupViewModel()
-        XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(authenticationService.homeserver.value.loginMode == .unknown)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When tapping any of the buttons on the screen
         let actions: [(AuthenticationStartScreenViewAction, AuthenticationStartScreenViewModelAction)] = [
@@ -53,17 +56,18 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
             try await deferred.fulfill()
             
             // Then the authentication service should not be used yet.
-            XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-            XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
-            XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
+            #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+            #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+            #expect(authenticationService.homeserver.value.loginMode == .unknown)
         }
     }
     
-    func testProvisionedOIDCState() async throws {
+    @Test
+    func provisionedOIDCState() async throws {
         // Given a view model that has been provisioned with a server that supports OIDC.
         setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"))
-        XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(authenticationService.homeserver.value.loginMode == .unknown)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When tapping the login button the authentication service should be used and the screen
         // should request to continue the flow without any server selection needed.
@@ -71,18 +75,19 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         context.send(viewAction: .login)
         try await deferred.fulfill()
         
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt, .consent)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.loginHint, "user@company.com")
-        XCTAssertEqual(authenticationService.homeserver.value.loginMode, .oidc(supportsCreatePrompt: false))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.loginHint == "user@company.com")
+        #expect(authenticationService.homeserver.value.loginMode == .oidc(supportsCreatePrompt: false))
     }
     
-    func testProvisionedPasswordState() async throws {
+    @Test
+    func provisionedPasswordState() async throws {
         // Given a view model that has been provisioned with a server that does not support OIDC.
         setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"), supportsOIDC: false)
-        XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(authenticationService.homeserver.value.loginMode == .unknown)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When tapping the login button the authentication service should be used and the screen
         // should request to continue the flow without any server selection needed.
@@ -91,16 +96,17 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then a call to configure service should be made.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(authenticationService.homeserver.value.loginMode, .password)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(authenticationService.homeserver.value.loginMode == .password)
     }
     
-    func testSingleProviderOIDCState() async throws {
+    @Test
+    func singleProviderOIDCState() async throws {
         // Given a view model that for an app that only allows the use of a single provider that supports OIDC.
         setAllowedAccountProviders(["company.com"])
         setupViewModel()
-        XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(authenticationService.homeserver.value.loginMode == .unknown)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When tapping the login button the authentication service should be used and the screen
         // should request to continue the flow without any server selection needed.
@@ -108,19 +114,20 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         context.send(viewAction: .login)
         try await deferred.fulfill()
         
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt, .consent)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.loginHint, nil)
-        XCTAssertEqual(authenticationService.homeserver.value.loginMode, .oidc(supportsCreatePrompt: false))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.loginHint == nil)
+        #expect(authenticationService.homeserver.value.loginMode == .oidc(supportsCreatePrompt: false))
     }
     
-    func testSingleProviderPasswordState() async throws {
+    @Test
+    func singleProviderPasswordState() async throws {
         // Given a view model that for an app that only allows the use of a single provider that does not support OIDC.
         setAllowedAccountProviders(["company.com"])
         setupViewModel(supportsOIDC: false)
-        XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(authenticationService.homeserver.value.loginMode == .unknown)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When tapping the login button the authentication service should be used and the screen
         // should request to continue the flow without any server selection needed.
@@ -129,8 +136,8 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then a call to configure service should be made.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(authenticationService.homeserver.value.loginMode, .password)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(authenticationService.homeserver.value.loginMode == .password)
     }
     
     // MARK: - Helpers

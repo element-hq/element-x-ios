@@ -8,75 +8,81 @@
 import Clocks
 @testable import ElementX
 import PushKit
-import XCTest
+import Testing
 
 @MainActor
-class ElementCallServiceTests: XCTestCase {
-    var callProvider: CXProviderMock!
-    var currentDate: Date!
-    var testClock: TestClock<Duration>!
-    var pushRegistry: PKPushRegistry!
+@Suite
+final class ElementCallServiceTests {
+    private var callProvider: CXProviderMock!
+    private var currentDate: Date!
+    private var testClock: TestClock<Duration>!
+    private var pushRegistry: PKPushRegistry!
+    private var service: ElementCallService!
     
-    var service: ElementCallService!
+    init() {
+        pushRegistry = PKPushRegistry(queue: nil)
+        callProvider = CXProviderMock(.init())
+        currentDate = Date()
+        testClock = TestClock()
+        let dateProvider: () -> Date = {
+            self.currentDate
+        }
+        service = ElementCallService(callProvider: callProvider, timeProvider: TimeProvider(clock: testClock, now: dateProvider))
+    }
     
-    override func tearDown() {
+    deinit {
         callProvider = nil
         currentDate = nil
         testClock = nil
         pushRegistry = nil
     }
     
-    func testIncomingCall() async {
-        setupService()
+    @Test
+    func incomingCall() async {
+        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
-        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
-        
-        let expectation = XCTestExpectation(description: "Call accepted")
-        
-        let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
-        
-        service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP) {
-            expectation.fulfill()
-        }
-        
-        await fulfillment(of: [expectation], timeout: 1)
-        XCTAssertTrue(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
-    }
-    
-    func disabled_testCallIsTimingOut() async {
-        setupService()
-        
-        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
-        let expectation = XCTestExpectation(description: "Call accepted")
-        
-        let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
-        
-        service.pushRegistry(pushRegistry,
-                             didReceiveIncomingPushWith: pushPayload,
-                             for: .voIP) {
-            expectation.fulfill()
-        }
-        
-        let expectation2 = XCTestExpectation(description: "Call ended unanswered")
-        callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
-            if reason == .unanswered {
-                expectation2.fulfill()
-            } else {
-                XCTFail("Call should have ended as unanswered")
+        await confirmation { confirmation in
+            let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
+            
+            service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP) {
+                confirmation()
             }
         }
         
-        await fulfillment(of: [expectation], timeout: 1)
-        
-        // advance past the timeout
-        await testClock.advance(by: .seconds(30))
-        await fulfillment(of: [expectation2], timeout: 1)
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
     }
     
-    func testExpiredRingLifetimeIsIgnored() {
-        setupService()
-   
-        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+    @Test
+    func callIsTimingOut() async {
+        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        
+        await confirmation { confirmation in
+            let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
+            
+            service.pushRegistry(pushRegistry,
+                                 didReceiveIncomingPushWith: pushPayload,
+                                 for: .voIP) {
+                confirmation()
+            }
+        }
+        
+        await confirmation { confirmation in
+            callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
+                if reason == .unanswered {
+                    confirmation()
+                } else {
+                    Issue.record("Call should have ended as unanswered")
+                }
+            }
+            
+            // advance past the timeout
+            await testClock.advance(by: .seconds(30))
+        }
+    }
+    
+    @Test
+    func expiredRingLifetimeIsIgnored() {
+        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
         let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
         
@@ -87,45 +93,31 @@ class ElementCallServiceTests: XCTestCase {
                              for: .voIP) { }
         sleep(20)
         
-        XCTAssertTrue(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
     }
     
-    func disabled_testLifetimeIsCapped() async throws {
-        setupService()
-        
-        let expectation = expectation(description: "Call has ended unanswered")
-        callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
-            if reason == .unanswered {
-                expectation.fulfill()
-            } else {
-                XCTFail("Call should have ended as unanswered")
+    @Test
+    func lifetimeIsCapped() async {
+        await confirmation { confirmation in
+            callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
+                if reason == .unanswered {
+                    confirmation()
+                } else {
+                    Issue.record("Call should have ended as unanswered")
+                }
             }
+            
+            #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+            
+            let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 300)
+            
+            service.pushRegistry(pushRegistry,
+                                 didReceiveIncomingPushWith: pushPayload,
+                                 for: .voIP) { }
+            
+            // Advance past the max timeout but below the 300
+            await testClock.advance(by: .seconds(100))
         }
-        
-        XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
-        
-        let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 300)
-        
-        service.pushRegistry(pushRegistry,
-                             didReceiveIncomingPushWith: pushPayload,
-                             for: .voIP) { }
-        
-        // Advance past the max timeout but below the 300
-        await testClock.advance(by: .seconds(100))
-        await fulfillment(of: [expectation], timeout: 1)
-    }
-    
-    // MARK: - Helpers
-    
-    private func setupService() {
-        pushRegistry = PKPushRegistry(queue: nil)
-        callProvider = CXProviderMock(.init())
-        currentDate = Date()
-        testClock = TestClock()
-        let dateProvider: () -> Date = {
-            self.currentDate
-        }
-        service = ElementCallService(callProvider: callProvider, timeProvider: TimeProvider(clock: testClock, now: dateProvider))
     }
 }
 

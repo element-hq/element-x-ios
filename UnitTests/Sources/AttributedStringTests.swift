@@ -7,31 +7,30 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
-class AttributedStringTests: XCTestCase {
-    func testReplacingFontWithPresentationIntent() {
+@Suite
+struct AttributedStringTests {
+    @Test
+    func replacingFontWithPresentationIntent() throws {
         // Given a string parsed from HTML that contains specific fixed size fonts.
         let boldString = "Bold"
-        guard let originalString = AttributedStringBuilder(mentionBuilder: MentionBuilder())
-            .fromHTML("Normal <b>\(boldString)</b> Normal.") else {
-            XCTFail("The attributed string should be built from the HTML.")
-            return
-        }
+        let originalString = try #require(AttributedStringBuilder(mentionBuilder: MentionBuilder())
+            .fromHTML("Normal <b>\(boldString)</b> Normal."))
         
         // When replacing the font with a presentation intent.
         let string = originalString.replacingFontWithPresentationIntent()
         
         // Then the font should be removed with an inline presentation intent applied to the bold text.
         for run in string.runs {
-            XCTAssertNil(run.uiKit.font, "The UIFont should have been removed.")
-            XCTAssertNil(run.font, "No font should be in the run at all.")
+            #expect(run.uiKit.font == nil, "The UIFont should have been removed.")
+            #expect(run.font == nil, "No font should be in the run at all.")
             
             let substring = string[run.range]
             if String(substring.characters) == boldString {
-                XCTAssertEqual(run.inlinePresentationIntent, .stronglyEmphasized, "The bold string should be bold.")
+                #expect(run.inlinePresentationIntent == .stronglyEmphasized, "The bold string should be bold.")
             } else {
-                XCTAssertNil(run.presentationIntent, "The rest should be plain.")
+                #expect(run.presentationIntent == nil, "The rest should be plain.")
             }
         }
     }

@@ -9,102 +9,96 @@
 @testable import ElementX
 import MatrixRustSDK
 import MatrixRustSDKMocks
-import XCTest
+import Testing
 
-final class RoomSummaryProviderTests: XCTestCase {
+@Suite
+@MainActor
+final class RoomSummaryProviderTests {
+    private let baseFilters: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
+                                                                                  .all(filters: [.space, .invite])]),
+                                                                   .deduplicateVersions]
+
     var appSettings: AppSettings!
     var roomList: RoomListSDKMock!
     var dynamicEntriesController: RoomListDynamicEntriesControllerSDKMock!
-    
-    let baseFilters: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
-                                                                          .all(filters: [.space, .invite])]),
-                                                           .deduplicateVersions]
-    
     var roomSummaryProvider: RoomSummaryProvider!
-    
-    override func setUp() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
-    }
-    
-    override func tearDown() {
+
+    deinit {
         AppSettings.resetAllSettings()
     }
-    
-    func testDefaultRustFilters() async {
+
+    @Test
+    func defaultRustFilters() async {
         // Given a new room provider.
-        setupProvider()
+        setup()
         await Task.yield()
-        
+
         // Then it should have the default Rust filters enabled.
-        XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 1)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
-                       .all(filters: baseFilters))
-        
+        #expect(dynamicEntriesController.setFilterKindCallsCount == 1)
+        #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: baseFilters))
+
         // When setting one our user filters.
         roomSummaryProvider.setFilter(.all(filters: [.favourites]))
         await Task.yield()
-        
+
         // Then that filter should be added to the default Rust filters.
-        XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 2)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
-                       .all(filters: [.all(filters: [.favourite, .joined])] + baseFilters))
+        #expect(dynamicEntriesController.setFilterKindCallsCount == 2)
+        #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: [.all(filters: [.favourite, .joined])] + baseFilters))
     }
-    
-    func testLowPriorityRustFilters() async {
+
+    @Test
+    func lowPriorityRustFilters() async {
         // Given a new room provider with the low priority filter enabled.
-        setupProvider(isLowPriorityFilterEnabled: true)
+        setup(isLowPriorityFilterEnabled: true)
         await Task.yield()
-        
+
         // Then the default Rust filters should include the non-low priority filter,
         // so that low priority rooms are hidden from the top of the room list.
-        XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 1)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
-                       .all(filters: baseFilters + [.nonLowPriority]))
-        
+        #expect(dynamicEntriesController.setFilterKindCallsCount == 1)
+        #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: baseFilters + [.nonLowPriority]))
+
         // When setting the low priority filter.
         roomSummaryProvider.setFilter(.all(filters: [.lowPriority]))
         await Task.yield()
-        
+
         // Then the non-low priority filter should be replaced with the low priority filter.
-        XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 2)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
-                       .all(filters: [.all(filters: [.lowPriority, .joined])] + baseFilters))
-        
+        #expect(dynamicEntriesController.setFilterKindCallsCount == 2)
+        #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: [.all(filters: [.lowPriority, .joined])] + baseFilters))
+
         // When setting another one of our filters.
         roomSummaryProvider.setFilter(.all(filters: [.rooms]))
         await Task.yield()
-        
+
         // Then the filter should be combined with the non-low priority filter.
-        XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 3)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
-                       .all(filters: [.all(filters: [.category(expect: .group), .joined])] + baseFilters + [.nonLowPriority]))
+        #expect(dynamicEntriesController.setFilterKindCallsCount == 3)
+        #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: [.all(filters: [.category(expect: .group), .joined])] + baseFilters + [.nonLowPriority]))
     }
-    
-    func testRoomIdentifierFilters() async {
-        setupProvider()
+
+    @Test
+    func roomIdentifierFilters() async {
+        setup()
         await Task.yield()
-        
+
         // Then it should have the default Rust filters enabled.
-        XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 1)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
-                       .all(filters: baseFilters))
-        
+        #expect(dynamicEntriesController.setFilterKindCallsCount == 1)
+        #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: baseFilters))
+
         // When setting one our user filters.
         roomSummaryProvider.setFilter(.rooms(roomsIDs: ["SomeRoom"], filters: [.favourites]))
         await Task.yield()
-        
+
         // Then that filter should be added to the default Rust filters.
-        XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 2)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
-                       .all(filters: [.all(filters: [.favourite, .joined])] + baseFilters + [.identifiers(identifiers: ["SomeRoom"])]))
+        #expect(dynamicEntriesController.setFilterKindCallsCount == 2)
+        #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: [.all(filters: [.favourite, .joined])] + baseFilters + [.identifiers(identifiers: ["SomeRoom"])]))
     }
     
     // MARK: - Helpers
     
-    private func setupProvider(isLowPriorityFilterEnabled: Bool = false) {
+    private func setup(isLowPriorityFilterEnabled: Bool = false) {
+        AppSettings.resetAllSettings()
+        appSettings = AppSettings()
         appSettings.lowPriorityFilterEnabled = isLowPriorityFilterEnabled
-        
+
         let stateEventStringBuilder = RoomStateEventStringBuilder(userID: "@me:matrix.org")
         let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
         let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: stateEventStringBuilder,
@@ -112,13 +106,13 @@ final class RoomSummaryProviderTests: XCTestCase {
                                                                                                                  destination: .roomList),
                                                         shouldDisambiguateDisplayNames: true,
                                                         shouldPrefixSenderName: true)
-        
+
         roomSummaryProvider = RoomSummaryProvider(roomListService: RoomListServiceSDKMock(),
                                                   eventStringBuilder: eventStringBuilder,
                                                   name: "Test",
                                                   notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                   appSettings: appSettings)
-        
+
         dynamicEntriesController = RoomListDynamicEntriesControllerSDKMock()
         dynamicEntriesController.setFilterKindReturnValue = true
         let dynamicAdaptersResult = RoomListEntriesWithDynamicAdaptersResultSDKMock()

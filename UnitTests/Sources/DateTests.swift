@@ -7,55 +7,61 @@
 //
 
 @testable import ElementX
-import XCTest
+import Foundation
+import Testing
 
-// swiftlint:disable force_unwrapping
-
-class DateTests: XCTestCase {
+@Suite
+struct DateTests {
     let calendar = Calendar.current
-    let startOfToday = Calendar.current.startOfDay(for: .now)
-    let startOfYesterday = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: -1, to: .now)!)
-    
-    func testMinimalDateFormatting() throws {
-        let today = try XCTUnwrap(calendar.date(byAdding: DateComponents(hour: 9, minute: 30), to: startOfToday))
-        XCTAssertEqual(today.formattedMinimal(), today.formatted(date: .omitted, time: .shortened))
-        
-        let yesterday = try XCTUnwrap(calendar.date(byAdding: .hour, value: 1, to: startOfYesterday))
-        XCTAssertEqual(yesterday.formattedMinimal(), yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence)))
-        
-        let nearYesterday = try XCTUnwrap(calendar.date(byAdding: DateComponents(hour: -10), to: today))
-        XCTAssertEqual(nearYesterday.formattedMinimal(), yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence)))
-        
-        let threeDaysAgo = try XCTUnwrap(calendar.date(byAdding: .day, value: -3, to: startOfToday))
-        XCTAssertEqual(threeDaysAgo.formattedMinimal(), threeDaysAgo.formatted(.dateTime.weekday(.wide)))
-        
-        let sometimeInTheLastYear = try XCTUnwrap(calendar.date(byAdding: .month, value: -10, to: startOfToday))
-        XCTAssertEqual(sometimeInTheLastYear.formattedMinimal(), sometimeInTheLastYear.formatted(.dateTime.day().month()))
-        
-        let theMillennium = try XCTUnwrap(calendar.date(from: DateComponents(year: 2000, month: 1, day: 1)))
-        XCTAssertEqual(theMillennium.formattedMinimal(), theMillennium.formatted(.dateTime.year().day().month()))
+    var startOfToday: Date {
+        Calendar.current.startOfDay(for: .now)
     }
     
-    func testDateSeparatorFormatting() throws {
-        let today = try XCTUnwrap(calendar.date(byAdding: DateComponents(hour: 9, minute: 30), to: startOfToday))
-        XCTAssertEqual(today.formattedDateSeparator(), "Today")
+    var startOfYesterday: Date {
+        // swiftlint: disable:next force_unwrapping
+        Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: -1, to: .now)!)
+    }
+    
+    @Test
+    func minimalDateFormatting() throws {
+        let today = try #require(calendar.date(byAdding: DateComponents(hour: 9, minute: 30), to: startOfToday))
+        #expect(today.formattedMinimal() == today.formatted(date: .omitted, time: .shortened))
         
-        let yesterday = try XCTUnwrap(calendar.date(byAdding: .hour, value: 1, to: startOfYesterday))
-        XCTAssertEqual(yesterday.formattedDateSeparator(), "Yesterday")
+        let yesterday = try #require(calendar.date(byAdding: .hour, value: 1, to: startOfYesterday))
+        #expect(yesterday.formattedMinimal() == yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence)))
         
-        let nearYesterday = try XCTUnwrap(calendar.date(byAdding: DateComponents(hour: -10), to: today))
-        XCTAssertEqual(nearYesterday.formattedDateSeparator(), yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence)))
+        let nearYesterday = try #require(calendar.date(byAdding: DateComponents(hour: -10), to: today))
+        #expect(nearYesterday.formattedMinimal() == yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence)))
         
-        let threeDaysAgo = try XCTUnwrap(calendar.date(byAdding: .day, value: -3, to: startOfToday))
-        XCTAssertEqual(threeDaysAgo.formattedDateSeparator(), threeDaysAgo.formatted(.dateTime.weekday(.wide)))
+        let threeDaysAgo = try #require(calendar.date(byAdding: .day, value: -3, to: startOfToday))
+        #expect(threeDaysAgo.formattedMinimal() == threeDaysAgo.formatted(.dateTime.weekday(.wide)))
+        
+        let sometimeInTheLastYear = try #require(calendar.date(byAdding: .month, value: -10, to: startOfToday))
+        #expect(sometimeInTheLastYear.formattedMinimal() == sometimeInTheLastYear.formatted(.dateTime.day().month()))
+        
+        let theMillennium = try #require(calendar.date(from: DateComponents(year: 2000, month: 1, day: 1)))
+        #expect(theMillennium.formattedMinimal() == theMillennium.formatted(.dateTime.year().day().month()))
+    }
+    
+    @Test
+    func dateSeparatorFormatting() throws {
+        let today = try #require(calendar.date(byAdding: DateComponents(hour: 9, minute: 30), to: startOfToday))
+        #expect(today.formattedDateSeparator() == "Today")
+        
+        let yesterday = try #require(calendar.date(byAdding: .hour, value: 1, to: startOfYesterday))
+        #expect(yesterday.formattedDateSeparator() == "Yesterday")
+        
+        let nearYesterday = try #require(calendar.date(byAdding: DateComponents(hour: -10), to: today))
+        #expect(nearYesterday.formattedDateSeparator() == yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence)))
+        
+        let threeDaysAgo = try #require(calendar.date(byAdding: .day, value: -3, to: startOfToday))
+        #expect(threeDaysAgo.formattedDateSeparator() == threeDaysAgo.formatted(.dateTime.weekday(.wide)))
         
         // This test will fail during the first 6 days of the year.
-        let startOfTheYear = try XCTUnwrap(calendar.dateInterval(of: .year, for: startOfToday)?.start)
-        XCTAssertEqual(startOfTheYear.formattedDateSeparator(), startOfTheYear.formatted(.dateTime.weekday(.wide).day().month(.wide)))
+        let startOfTheYear = try #require(calendar.dateInterval(of: .year, for: startOfToday)?.start)
+        #expect(startOfTheYear.formattedDateSeparator() == startOfTheYear.formatted(.dateTime.weekday(.wide).day().month(.wide)))
         
-        let theMillennium = try XCTUnwrap(calendar.date(from: DateComponents(year: 2000, month: 1, day: 1)))
-        XCTAssertEqual(theMillennium.formattedDateSeparator(), theMillennium.formatted(.dateTime.weekday(.wide).day().month(.wide).year()))
+        let theMillennium = try #require(calendar.date(from: DateComponents(year: 2000, month: 1, day: 1)))
+        #expect(theMillennium.formattedDateSeparator() == theMillennium.formatted(.dateTime.weekday(.wide).day().month(.wide).year()))
     }
 }
-
-// swiftlint:enable force_unwrapping

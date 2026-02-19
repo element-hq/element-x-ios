@@ -7,72 +7,79 @@
 //
 
 @testable import ElementX
-import XCTest
+import Foundation
+import Testing
 
-class LocalizationTests: XCTestCase {
-    override func tearDown() {
-        super.tearDown()
+@Suite
+final class LocalizationTests {
+    deinit {
         Bundle.overrideLocalizations = nil
     }
-
+    
     /// Test ElementL10n considers app language changes
-    func testAppLanguage() {
+    @Test
+    func appLanguage() {
         // set app language to English
         Bundle.overrideLocalizations = ["en"]
-
-        XCTAssertEqual(L10n.testLanguageIdentifier, "en")
-
+        
+        #expect(L10n.testLanguageIdentifier == "en")
+        
         // set app language to Italian
         Bundle.overrideLocalizations = ["it"]
-
-        XCTAssertEqual(L10n.testLanguageIdentifier, "it")
+        
+        #expect(L10n.testLanguageIdentifier == "it")
     }
-
+    
     /// Test fallback language for a language not supported at all
-    func testFallbackOnNotSupportedLanguage() {
+    @Test
+    func fallbackOnNotSupportedLanguage() {
         //  set app language to something Element don't support at all (chose non existing identifier)
         Bundle.overrideLocalizations = ["xx"]
-
-        XCTAssertEqual(L10n.testLanguageIdentifier, "en")
+        
+        #expect(L10n.testLanguageIdentifier == "en")
     }
-
+    
     /// Test fallback language for a language supported but poorly translated
-    func testFallbackOnNotTranslatedKey() {
+    @Test
+    func fallbackOnNotTranslatedKey() {
         //  set app language to something Element supports but use a key that is not translated (we have a key that should never be translated)
         Bundle.overrideLocalizations = ["it"]
-
-        XCTAssertEqual(L10n.testLanguageIdentifier, "it")
-        XCTAssertEqual(L10n.testUntranslatedDefaultLanguageIdentifier, "en")
+        
+        #expect(L10n.testLanguageIdentifier == "it")
+        #expect(L10n.testUntranslatedDefaultLanguageIdentifier == "en")
     }
-
+    
     /// Test plurals that ElementL10n considers app language changes
-    func testPlurals() {
+    @Test
+    func plurals() {
         //  set app language to English
         Bundle.overrideLocalizations = ["en"]
-
-        XCTAssertEqual(L10n.commonMemberCount(1), "1 Member")
-        XCTAssertEqual(L10n.commonMemberCount(2), "2 Members")
-
+        
+        #expect(L10n.commonMemberCount(1) == "1 Member")
+        #expect(L10n.commonMemberCount(2) == "2 Members")
+        
         //  set app language to Italian
         Bundle.overrideLocalizations = ["it"]
-
-        XCTAssertEqual(L10n.commonMemberCount(1), "1 Membro")
-        XCTAssertEqual(L10n.commonMemberCount(2), "2 Membri")
+        
+        #expect(L10n.commonMemberCount(1) == "1 Membro")
+        #expect(L10n.commonMemberCount(2) == "2 Membri")
     }
-
+    
     /// Test plurals fallback language for a language not supported at all
-    func testPluralsFallbackOnNotSupportedLanguage() {
+    @Test
+    func pluralsFallbackOnNotSupportedLanguage() {
         //  set app language to something Element don't support at all ("invalid identifier")
         Bundle.overrideLocalizations = ["xx"]
-
-        XCTAssertEqual(L10n.commonMemberCount(1), "1 Member")
-        XCTAssertEqual(L10n.commonMemberCount(2), "2 Members")
+        
+        #expect(L10n.commonMemberCount(1) == "1 Member")
+        #expect(L10n.commonMemberCount(2) == "2 Members")
     }
-
+    
     /// Test untranslated strings
-    func testUntranslated() {
-        XCTAssertEqual(UntranslatedL10n.untranslated, "Untranslated")
-        XCTAssertEqual(UntranslatedL10n.untranslatedPlural(1), "One untranslated item")
-        XCTAssertEqual(UntranslatedL10n.untranslatedPlural(5), "5 untranslated items")
+    @Test
+    func untranslated() {
+        #expect(UntranslatedL10n.untranslated == "Untranslated")
+        #expect(UntranslatedL10n.untranslatedPlural(1) == "One untranslated item")
+        #expect(UntranslatedL10n.untranslatedPlural(5) == "5 untranslated items")
     }
 }

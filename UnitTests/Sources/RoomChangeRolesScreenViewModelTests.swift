@@ -7,149 +7,148 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class RoomChangeRolesScreenViewModelTests: XCTestCase {
+@Suite
+struct RoomChangeRolesScreenViewModelTests {
     var viewModel: RoomChangeRolesScreenViewModelProtocol!
     var roomProxy: JoinedRoomProxyMock!
     
     var context: RoomChangeRolesScreenViewModelType.Context {
         viewModel.context
     }
-
-    func testInitialStateAdministrators() {
-        setupViewModel(mode: .administrator)
-        XCTAssertEqual(context.viewState.membersToPromote, [])
-        XCTAssertEqual(context.viewState.membersToDemote, [])
-        XCTAssertEqual(context.viewState.administrators, context.viewState.visibleAdministrators)
-        XCTAssertEqual(context.viewState.moderators, context.viewState.visibleModerators)
-        XCTAssertEqual(context.viewState.users, context.viewState.visibleUsers)
-        XCTAssertEqual(context.viewState.membersWithRole.count, 2)
-        XCTAssertEqual(context.viewState.membersWithRole.first?.id, RoomMemberProxyMock.mockAdmin.userID)
-        XCTAssertFalse(context.viewState.hasChanges)
-        XCTAssertFalse(context.viewState.isSearching)
-    }
-
-    func testInitialStateModerators() {
-        setupViewModel(mode: .moderator)
-        XCTAssertEqual(context.viewState.membersToPromote, [])
-        XCTAssertEqual(context.viewState.membersToDemote, [])
-        XCTAssertEqual(context.viewState.administrators, context.viewState.visibleAdministrators)
-        XCTAssertEqual(context.viewState.moderators, context.viewState.visibleModerators)
-        XCTAssertEqual(context.viewState.users, context.viewState.visibleUsers)
-        XCTAssertEqual(context.viewState.membersWithRole.count, 3)
-        XCTAssertNotNil(context.viewState.membersWithRole.first { $0.id == RoomMemberProxyMock.mockModerator.userID })
-        XCTAssertFalse(context.viewState.hasChanges)
-        XCTAssertFalse(context.viewState.isSearching)
+    
+    @Test
+    mutating func initialStateAdministrators() {
+        setup(mode: .administrator)
+        #expect(context.viewState.membersToPromote == [])
+        #expect(context.viewState.membersToDemote == [])
+        #expect(context.viewState.administrators == context.viewState.visibleAdministrators)
+        #expect(context.viewState.moderators == context.viewState.visibleModerators)
+        #expect(context.viewState.users == context.viewState.visibleUsers)
+        #expect(context.viewState.membersWithRole.count == 2)
+        #expect(context.viewState.membersWithRole.first?.id == RoomMemberProxyMock.mockAdmin.userID)
+        #expect(!context.viewState.hasChanges)
+        #expect(!context.viewState.isSearching)
     }
     
-    func testToggleUserOn() {
-        testInitialStateModerators()
-        guard let firstUser = context.viewState.users.first(where: { !context.viewState.isMemberSelected($0) }) else {
-            XCTFail("There should be a regular user available to promote.")
-            return
-        }
+    @Test
+    mutating func initialStateModerators() {
+        setup(mode: .moderator)
+        #expect(context.viewState.membersToPromote == [])
+        #expect(context.viewState.membersToDemote == [])
+        #expect(context.viewState.administrators == context.viewState.visibleAdministrators)
+        #expect(context.viewState.moderators == context.viewState.visibleModerators)
+        #expect(context.viewState.users == context.viewState.visibleUsers)
+        #expect(context.viewState.membersWithRole.count == 3)
+        #expect(context.viewState.membersWithRole.first { $0.id == RoomMemberProxyMock.mockModerator.userID } != nil)
+        #expect(!context.viewState.hasChanges)
+        #expect(!context.viewState.isSearching)
+    }
+    
+    @Test
+    mutating func toggleUserOn() throws {
+        setup(mode: .moderator)
+        let firstUser = try #require(context.viewState.users.first { !context.viewState.isMemberSelected($0) },
+                                     "There should be a regular user available to promote.")
         
         context.send(viewAction: .toggleMember(firstUser))
         
-        XCTAssertEqual(context.viewState.membersToPromote, [firstUser])
-        XCTAssertEqual(context.viewState.membersToDemote, [])
-        XCTAssertEqual(context.viewState.membersWithRole.count, 4)
-        XCTAssertTrue(context.viewState.membersWithRole.contains(firstUser))
-        XCTAssertTrue(context.viewState.hasChanges)
+        #expect(context.viewState.membersToPromote == [firstUser])
+        #expect(context.viewState.membersToDemote == [])
+        #expect(context.viewState.membersWithRole.count == 4)
+        #expect(context.viewState.membersWithRole.contains(firstUser))
+        #expect(context.viewState.hasChanges)
     }
     
-    func testToggleUserOff() {
-        testToggleUserOn()
-        guard let firstUser = context.viewState.membersToPromote.first else {
-            XCTFail("There should be a promoted member before we begin.")
-            return
-        }
+    @Test
+    mutating func toggleUserOff() throws {
+        try toggleUserOn()
+        let firstUser = try #require(context.viewState.membersToPromote.first,
+                                     "There should be a regular user available to promote.")
         
+        // Then toggle off
         context.send(viewAction: .toggleMember(firstUser))
         
-        XCTAssertEqual(context.viewState.membersToPromote, [])
-        XCTAssertEqual(context.viewState.membersToDemote, [])
-        XCTAssertEqual(context.viewState.membersWithRole.count, 3)
-        XCTAssertFalse(context.viewState.membersWithRole.contains(firstUser))
-        XCTAssertFalse(context.viewState.hasChanges)
+        #expect(context.viewState.membersToPromote == [])
+        #expect(context.viewState.membersToDemote == [])
+        #expect(context.viewState.membersWithRole.count == 3)
+        #expect(!context.viewState.membersWithRole.contains(firstUser))
+        #expect(!context.viewState.hasChanges)
     }
     
-    func testDemoteToggledUser() {
-        testToggleUserOn()
-        guard let firstUser = context.viewState.membersToPromote.first else {
-            XCTFail("There should be a promoted member before we begin.")
-            return
-        }
+    @Test
+    mutating func demoteToggledUser() throws {
+        try toggleUserOn()
+        let firstUser = try #require(context.viewState.membersToPromote.first,
+                                     "There should be a regular user available to promote.")
         
+        // Then demote
         context.send(viewAction: .demoteMember(firstUser))
         
-        XCTAssertEqual(context.viewState.membersToPromote, [])
-        XCTAssertEqual(context.viewState.membersToDemote, [])
-        XCTAssertEqual(context.viewState.membersWithRole.count, 3)
-        XCTAssertFalse(context.viewState.membersWithRole.contains(firstUser))
-        XCTAssertFalse(context.viewState.hasChanges)
+        #expect(context.viewState.membersToPromote == [])
+        #expect(context.viewState.membersToDemote == [])
+        #expect(context.viewState.membersWithRole.count == 3)
+        #expect(!context.viewState.membersWithRole.contains(firstUser))
+        #expect(!context.viewState.hasChanges)
     }
     
-    func testToggleModeratorOff() {
-        testInitialStateModerators()
-        guard let existingModerator = context.viewState.membersWithRole.first(where: { $0.role == .moderator }) else {
-            XCTFail("There should be a member with the role before we begin.")
-            return
-        }
+    @Test
+    mutating func toggleModeratorOff() throws {
+        initialStateModerators()
+        let existingModerator = try #require(context.viewState.membersWithRole.first { $0.role == .moderator },
+                                             "There should be a member with the role before we begin.")
         
         context.send(viewAction: .toggleMember(existingModerator))
         
-        XCTAssertEqual(context.viewState.membersToPromote, [])
-        XCTAssertEqual(context.viewState.membersToDemote, [existingModerator])
-        XCTAssertEqual(context.viewState.membersWithRole.count, 2)
-        XCTAssertFalse(context.viewState.membersWithRole.contains(existingModerator))
-        XCTAssertTrue(context.viewState.hasChanges)
+        #expect(context.viewState.membersToPromote == [])
+        #expect(context.viewState.membersToDemote == [existingModerator])
+        #expect(context.viewState.membersWithRole.count == 2)
+        #expect(!context.viewState.membersWithRole.contains(existingModerator))
+        #expect(context.viewState.hasChanges)
     }
     
-    func testToggleModeratorOn() {
-        testToggleModeratorOff()
+    @Test
+    mutating func toggleModeratorOn() throws {
+        try toggleModeratorOff()
+        let demotedMember = try #require(context.viewState.membersToDemote.first,
+                                         "There should be a member with the role before we begin.")
         
-        guard let demotedMember = context.viewState.membersToDemote.first else {
-            XCTFail("There should be a member selected to demote before we begin.")
-            return
-        }
-        
+        // Then toggle back on
         context.send(viewAction: .toggleMember(demotedMember))
         
-        XCTAssertEqual(context.viewState.membersToPromote, [])
-        XCTAssertEqual(context.viewState.membersToDemote, [])
-        XCTAssertEqual(context.viewState.membersWithRole.count, 3)
-        XCTAssertTrue(context.viewState.membersWithRole.contains(demotedMember))
-        XCTAssertFalse(context.viewState.hasChanges)
+        #expect(context.viewState.membersToPromote == [])
+        #expect(context.viewState.membersToDemote == [])
+        #expect(context.viewState.membersWithRole.count == 3)
+        #expect(context.viewState.membersWithRole.contains(demotedMember))
+        #expect(!context.viewState.hasChanges)
     }
     
-    func testDemoteModerator() {
-        testInitialStateModerators()
-        guard let existingModerator = context.viewState.membersWithRole.first(where: { $0.role == .moderator }) else {
-            XCTFail("There should be a member with the role before we begin.")
-            return
-        }
+    @Test
+    mutating func demoteModerator() throws {
+        initialStateModerators()
+        let existingModerator = try #require(context.viewState.membersWithRole.first { $0.role == .moderator },
+                                             "There should be a member with the role before we begin.")
         
         context.send(viewAction: .demoteMember(existingModerator))
         
-        XCTAssertEqual(context.viewState.membersToPromote, [])
-        XCTAssertEqual(context.viewState.membersToDemote, [existingModerator])
-        XCTAssertEqual(context.viewState.membersWithRole.count, 2)
-        XCTAssertFalse(context.viewState.membersWithRole.contains(existingModerator))
-        XCTAssertTrue(context.viewState.hasChanges)
+        #expect(context.viewState.membersToPromote == [])
+        #expect(context.viewState.membersToDemote == [existingModerator])
+        #expect(context.viewState.membersWithRole.count == 2)
+        #expect(!context.viewState.membersWithRole.contains(existingModerator))
+        #expect(context.viewState.hasChanges)
     }
     
-    func testSaveModeratorChanges() async throws {
+    @Test
+    mutating func saveModeratorChanges() async throws {
         // Given the change roles view model for moderators.
-        setupViewModel(mode: .moderator)
+        setup(mode: .moderator)
         
-        guard let firstUser = context.viewState.users.first(where: { !context.viewState.isMemberSelected($0) }),
-              let existingModerator = context.viewState.membersWithRole.first(where: { $0.role == .moderator }) else {
-            XCTFail("There should be a regular user and a moderator to begin with.")
-            return
-        }
+        let firstUser = try #require(context.viewState.users.first { !context.viewState.isMemberSelected($0) },
+                                     "There should be a regular user to begin with.")
+        let existingModerator = try #require(context.viewState.membersWithRole.first { $0.role == .moderator },
+                                             "There should be a moderator to begin with.")
         
         // When promoting a regular user and demoting a moderator.
         context.send(viewAction: .toggleMember(firstUser))
@@ -159,40 +158,41 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(100))
         
         // Then no warning should be shown, and the call to update the users should be made straight away.
-        XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
-        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.count, 2)
-        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == existingModerator.id && $0.powerLevel == 0 }, true)
-        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == firstUser.id && $0.powerLevel == 50 }, true)
+        #expect(roomProxy.updatePowerLevelsForUsersCalled)
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.count == 2)
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == existingModerator.id && $0.powerLevel == 0 } == true)
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == firstUser.id && $0.powerLevel == 50 } == true)
     }
     
-    func testSavePromotedAdministrator() async throws {
+    @Test
+    mutating func savePromotedAdministrator() async throws {
         // Given the change roles view model for administrators.
-        setupViewModel(mode: .administrator)
-        XCTAssertNil(context.alertInfo)
+        setup(mode: .administrator)
+        #expect(context.alertInfo == nil)
         
-        guard let firstUser = context.viewState.users.first(where: { !context.viewState.isMemberSelected($0) }) else {
-            XCTFail("There should be a regular user to begin with.")
-            return
-        }
+        let firstUser = try #require(context.viewState.users.first { !context.viewState.isMemberSelected($0) },
+                                     "There should be a regular user to begin with.")
         
         // When saving changes to promote a user to an administrator.
         context.send(viewAction: .toggleMember(firstUser))
         context.send(viewAction: .save)
         
         // Then an alert should be shown to warn the action cannot be undone.
-        XCTAssertNotNil(context.alertInfo)
+        #expect(context.alertInfo != nil)
         
         // When confirming the prompt
         context.alertInfo?.primaryButton.action?()
         try await Task.sleep(for: .milliseconds(100))
         
         // Then the user should be made into an administrator.
-        XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
-        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.count, 1)
-        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == firstUser.id && $0.powerLevel == 100 }, true)
+        #expect(roomProxy.updatePowerLevelsForUsersCalled)
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.count == 1)
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == firstUser.id && $0.powerLevel == 100 } == true)
     }
     
-    private func setupViewModel(mode: RoomRole) {
+    // MARK: - Helpers
+    
+    private mutating func setup(mode: RoomRole) {
         roomProxy = JoinedRoomProxyMock(.init(members: .allMembersAsAdmin))
         viewModel = RoomChangeRolesScreenViewModel(mode: mode,
                                                    roomProxy: roomProxy,

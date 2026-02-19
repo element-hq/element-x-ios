@@ -8,90 +8,24 @@
 
 import Combine
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class SpacesScreenViewModelTests: XCTestCase {
-    var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoom], Never>!
-    var spaceServiceProxy: SpaceServiceProxyMock!
-    var appSettings: AppSettings!
-    
-    var viewModel: SpacesScreenViewModelProtocol!
+@Suite
+final class SpacesScreenViewModelTests {
+    var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoom], Never>
+    var spaceServiceProxy: SpaceServiceProxyMock
+    var appSettings: AppSettings
+    var viewModel: SpacesScreenViewModelProtocol
     
     var context: SpacesScreenViewModelType.Context {
         viewModel.context
     }
     
-    override func setUp() {
+    init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-    }
-    
-    override func tearDown() {
-        AppSettings.resetAllSettings()
-    }
-
-    func testInitialState() {
-        setupViewModel()
-        XCTAssertEqual(context.viewState.topLevelSpaces.count, 3)
-    }
-    
-    func testTopLevelSpacesSubscription() async throws {
-        setupViewModel()
         
-        var deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.count == 0 }
-        topLevelSpacesSubject.send([])
-        try await deferred.fulfill()
-        XCTAssertEqual(context.viewState.topLevelSpaces.count, 0)
-        
-        deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.count == 1 }
-        topLevelSpacesSubject.send([
-            SpaceServiceRoom.mock(isSpace: true)
-        ])
-        try await deferred.fulfill()
-        XCTAssertEqual(context.viewState.topLevelSpaces.count, 1)
-    }
-    
-    func testSelectingSpace() async throws {
-        setupViewModel()
-        
-        let selectedSpace = topLevelSpacesSubject.value[0]
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
-        viewModel.context.send(viewAction: .spaceAction(.select(selectedSpace)))
-        let action = try await deferred.fulfill()
-        
-        switch action {
-        case .selectSpace(let spaceRoomListProxy) where spaceRoomListProxy.id == selectedSpace.id:
-            break
-        default:
-            XCTFail("The action should select the space.")
-        }
-    }
-    
-    func testFeatureAnnouncement() async throws {
-        setupViewModel()
-        XCTAssertFalse(appSettings.hasSeenSpacesAnnouncement)
-        XCTAssertFalse(context.isPresentingFeatureAnnouncement)
-        
-        let deferred = deferFulfillment(context.observe(\.isPresentingFeatureAnnouncement)) { $0 == true }
-        viewModel.context.send(viewAction: .screenAppeared)
-        try await deferred.fulfill()
-        XCTAssertTrue(context.isPresentingFeatureAnnouncement)
-        
-        viewModel.context.send(viewAction: .featureAnnouncementAppeared)
-        XCTAssertTrue(appSettings.hasSeenSpacesAnnouncement)
-        
-        context.isPresentingFeatureAnnouncement = false
-        
-        let deferredFailure = deferFailure(context.observe(\.isPresentingFeatureAnnouncement), timeout: 1) { $0 == true }
-        viewModel.context.send(viewAction: .screenAppeared)
-        try await deferredFailure.fulfill()
-        XCTAssertFalse(context.isPresentingFeatureAnnouncement)
-    }
-    
-    // MARK: - Helpers
-    
-    private func setupViewModel() {
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
@@ -103,7 +37,7 @@ class SpacesScreenViewModelTests: XCTestCase {
         spaceServiceProxy = SpaceServiceProxyMock(.init())
         spaceServiceProxy.topLevelSpacesPublisher = topLevelSpacesSubject.asCurrentValuePublisher()
         spaceServiceProxy.spaceRoomListSpaceIDClosure = { [topLevelSpacesSubject] spaceID in
-            guard let spaceServiceRoom = topLevelSpacesSubject?.value.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
+            guard let spaceServiceRoom = topLevelSpacesSubject.value.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
             return .success(SpaceRoomListProxyMock(.init(spaceServiceRoom: spaceServiceRoom)))
         }
         clientProxy.spaceService = spaceServiceProxy
@@ -112,5 +46,65 @@ class SpacesScreenViewModelTests: XCTestCase {
                                           selectedSpacePublisher: .init(nil),
                                           appSettings: ServiceLocator.shared.settings,
                                           userIndicatorController: UserIndicatorControllerMock())
+    }
+    
+    deinit {
+        AppSettings.resetAllSettings()
+    }
+    
+    @Test
+    func initialState() {
+        #expect(context.viewState.topLevelSpaces.count == 3)
+    }
+    
+    @Test
+    func topLevelSpacesSubscription() async throws {
+        var deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.count == 0 }
+        topLevelSpacesSubject.send([])
+        try await deferred.fulfill()
+        #expect(context.viewState.topLevelSpaces.count == 0)
+        
+        deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.count == 1 }
+        topLevelSpacesSubject.send([
+            SpaceServiceRoom.mock(isSpace: true)
+        ])
+        try await deferred.fulfill()
+        #expect(context.viewState.topLevelSpaces.count == 1)
+    }
+    
+    @Test
+    func selectingSpace() async throws {
+        let selectedSpace = topLevelSpacesSubject.value[0]
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
+        viewModel.context.send(viewAction: .spaceAction(.select(selectedSpace)))
+        let action = try await deferred.fulfill()
+        
+        switch action {
+        case .selectSpace(let spaceRoomListProxy) where spaceRoomListProxy.id == selectedSpace.id:
+            break
+        default:
+            Issue.record("The action should select the space.")
+        }
+    }
+    
+    @Test
+    func featureAnnouncement() async throws {
+        #expect(!appSettings.hasSeenSpacesAnnouncement)
+        #expect(!context.isPresentingFeatureAnnouncement)
+        
+        let deferred = deferFulfillment(context.observe(\.isPresentingFeatureAnnouncement)) { $0 == true }
+        viewModel.context.send(viewAction: .screenAppeared)
+        try await deferred.fulfill()
+        #expect(context.isPresentingFeatureAnnouncement)
+        
+        viewModel.context.send(viewAction: .featureAnnouncementAppeared)
+        #expect(appSettings.hasSeenSpacesAnnouncement)
+        
+        context.isPresentingFeatureAnnouncement = false
+        
+        let deferredFailure = deferFailure(context.observe(\.isPresentingFeatureAnnouncement), timeout: .seconds(1)) { $0 == true }
+        viewModel.context.send(viewAction: .screenAppeared)
+        try await deferredFailure.fulfill()
+        #expect(!context.isPresentingFeatureAnnouncement)
     }
 }

@@ -8,20 +8,18 @@
 
 import Combine
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class MessageForwardingScreenViewModelTests: XCTestCase {
+@Suite
+struct MessageForwardingScreenViewModelTests {
     let forwardingItem = MessageForwardingItem(id: .event(uniqueID: .init("t1"), eventOrTransactionID: .eventID("t1")),
                                                roomID: "1",
                                                content: .init(noHandle: .init()))
     var viewModel: MessageForwardingScreenViewModelProtocol!
     var context: MessageForwardingScreenViewModelType.Context!
-    var cancellables = Set<AnyCancellable>()
     
-    override func setUpWithError() throws {
-        cancellables.removeAll()
-        
+    init() {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.roomForIdentifierClosure = { .joined(JoinedRoomProxyMock(.init(id: $0))) }
         
@@ -32,45 +30,44 @@ class MessageForwardingScreenViewModelTests: XCTestCase {
         context = viewModel.context
     }
     
-    func testInitialState() {
-        XCTAssertNil(context.viewState.rooms.first { $0.id == forwardingItem.roomID }, "The source room ID shouldn't be shown")
+    @Test
+    func initialState() {
+        #expect(context.viewState.rooms.first { $0.id == forwardingItem.roomID } == nil, "The source room ID shouldn't be shown")
     }
     
-    func testRoomSelection() {
+    @Test
+    mutating func roomSelection() {
         context.send(viewAction: .selectRoom(roomID: "2"))
-        XCTAssertEqual(context.viewState.selectedRoomID, "2")
+        #expect(context.viewState.selectedRoomID == "2")
     }
     
-    func testSearching() async throws {
-        let defered = deferFulfillment(context.$viewState) { state in
+    @Test
+    mutating func searching() async throws {
+        let deferred = deferFulfillment(context.$viewState) { state in
             state.rooms.count == 1
         }
         
         context.searchQuery = "Second"
-            
-        try await defered.fulfill()
+        
+        try await deferred.fulfill()
     }
     
-    func testForwarding() {
+    @Test
+    mutating func forwarding() async throws {
         context.send(viewAction: .selectRoom(roomID: "2"))
-        XCTAssertEqual(context.viewState.selectedRoomID, "2")
+        #expect(context.viewState.selectedRoomID == "2")
         
-        let expectation = expectation(description: "Wait for confirmation")
-        
-        viewModel.actions
-            .sink { action in
-                switch action {
-                case .sent(let roomID):
-                    XCTAssertEqual(roomID, "2")
-                    expectation.fulfill()
-                default:
-                    break
-                }
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .sent(let roomID):
+                return roomID == "2"
+            default:
+                return false
             }
-            .store(in: &cancellables)
+        }
         
         context.send(viewAction: .send)
         
-        waitForExpectations(timeout: 5.0)
+        try await deferred.fulfill()
     }
 }

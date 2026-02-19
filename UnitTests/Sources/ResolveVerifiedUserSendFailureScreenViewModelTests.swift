@@ -7,47 +7,48 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
-    let roomProxy = JoinedRoomProxyMock(.init())
-    var viewModel: ResolveVerifiedUserSendFailureScreenViewModel!
-    var context: ResolveVerifiedUserSendFailureScreenViewModel.Context {
-        viewModel.context
-    }
+@Suite
+struct ResolveVerifiedUserSendFailureScreenViewModelTests {
+    private let roomProxy = JoinedRoomProxyMock(.init())
     
-    func testUnsignedDevice() async throws {
+    @Test
+    func unsignedDevice() async throws {
         // Given a failure where a single user has an unverified device
         let userID = "@alice:matrix.org"
-        viewModel = makeViewModel(with: .hasUnsignedDevice(devices: [userID: ["DEVICE1"]]))
+        let viewModel = makeViewModel(with: .hasUnsignedDevice(devices: [userID: ["DEVICE1"]]))
         
-        try await verifyResolving(userIDs: [userID])
+        try await verifyResolving(viewModel: viewModel, userIDs: [userID])
     }
     
-    func testMultipleUnsignedDevices() async throws {
+    @Test
+    func multipleUnsignedDevices() async throws {
         // Given a failure where a multiple users have unverified devices.
         let userIDs = ["@alice:matrix.org", "@bob:matrix.org", "@charlie:matrix.org"]
         let devices = Dictionary(uniqueKeysWithValues: userIDs.map { ($0, ["DEVICE1, DEVICE2"]) })
-        viewModel = makeViewModel(with: .hasUnsignedDevice(devices: devices))
+        let viewModel = makeViewModel(with: .hasUnsignedDevice(devices: devices))
         
-        try await verifyResolving(userIDs: userIDs, assertStrings: false)
+        try await verifyResolving(viewModel: viewModel, userIDs: userIDs, assertStrings: false)
     }
     
-    func testChangedIdentity() async throws {
+    @Test
+    func changedIdentity() async throws {
         // Given a failure where a single user's identity has changed.
         let userID = "@alice:matrix.org"
-        viewModel = makeViewModel(with: .changedIdentity(users: [userID]))
+        let viewModel = makeViewModel(with: .changedIdentity(users: [userID]))
         
-        try await verifyResolving(userIDs: [userID])
+        try await verifyResolving(viewModel: viewModel, userIDs: [userID])
     }
     
-    func testMultipleChangedIdentities() async throws {
+    @Test
+    func multipleChangedIdentities() async throws {
         // Given a failure where a multiple users have unverified devices.
         let userIDs = ["@alice:matrix.org", "@bob:matrix.org", "@charlie:matrix.org"]
-        viewModel = makeViewModel(with: .changedIdentity(users: userIDs))
+        let viewModel = makeViewModel(with: .changedIdentity(users: userIDs))
         
-        try await verifyResolving(userIDs: userIDs)
+        try await verifyResolving(viewModel: viewModel, userIDs: userIDs)
     }
     
     // MARK: Helpers
@@ -59,17 +60,18 @@ class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
                                                       userIndicatorController: UserIndicatorControllerMock())
     }
     
-    private func verifyResolving(userIDs: [String], assertStrings: Bool = true) async throws {
+    private func verifyResolving(viewModel: ResolveVerifiedUserSendFailureScreenViewModel, userIDs: [String], assertStrings: Bool = true) async throws {
         var remainingUserIDs = userIDs
+        let context = viewModel.context
         
         while remainingUserIDs.count > 1 {
             // Verify that the strings are being updated.
             if assertStrings {
-                verifyDisplayName(from: remainingUserIDs)
+                try verifyDisplayName(context: context, from: remainingUserIDs)
             }
             
             // When resolving the first failure.
-            let deferredFailure = deferFailure(viewModel.actionsPublisher, timeout: 1) { $0 == .dismiss }
+            let deferredFailure = deferFailure(viewModel.actionsPublisher, timeout: .seconds(1)) { $0 == .dismiss }
             context.send(viewAction: .resolveAndResend)
             
             // Then the sheet should remain open for the next failure.
@@ -80,7 +82,7 @@ class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
         
         // Verify the final string.
         if assertStrings {
-            verifyDisplayName(from: remainingUserIDs)
+            try verifyDisplayName(context: context, from: remainingUserIDs)
         }
         
         // When resolving the final failure.
@@ -91,18 +93,12 @@ class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    private func verifyDisplayName(from remainingUserIDs: [String]) {
-        guard let userID = remainingUserIDs.first else {
-            XCTFail("There should be a user ID to check.")
-            return
-        }
+    private func verifyDisplayName(context: ResolveVerifiedUserSendFailureScreenViewModel.Context, from remainingUserIDs: [String]) throws {
+        let userID = try #require(remainingUserIDs.first, "There should be a user ID to check.")
+        let displayName = try #require(roomProxy.membersPublisher.value.first { $0.userID == userID }?.displayName,
+                                       "There should be a matching mock user")
         
-        guard let displayName = roomProxy.membersPublisher.value.first(where: { $0.userID == userID })?.displayName else {
-            XCTFail("There should be a matching mock user")
-            return
-        }
-        
-        XCTAssertTrue(context.viewState.title.contains(displayName))
-        XCTAssertTrue(context.viewState.subtitle.contains(displayName))
+        #expect(context.viewState.title.contains(displayName))
+        #expect(context.viewState.subtitle.contains(displayName))
     }
 }

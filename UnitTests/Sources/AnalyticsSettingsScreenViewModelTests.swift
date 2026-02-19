@@ -7,23 +7,16 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class AnalyticsSettingsScreenViewModelTests: XCTestCase {
+@Suite
+final class AnalyticsSettingsScreenViewModelTests {
     private var appSettings: AppSettings!
     private var viewModel: AnalyticsSettingsScreenViewModelProtocol!
     private var context: AnalyticsSettingsScreenViewModelType.Context!
     
-    override func setUp() {
-        AppSettings.resetAllSettings()
-    }
-    
-    override func tearDown() {
-        AppSettings.resetAllSettings()
-    }
-    
-    @MainActor override func setUpWithError() throws {
+    init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         let analyticsClient = AnalyticsClientMock()
@@ -35,20 +28,27 @@ class AnalyticsSettingsScreenViewModelTests: XCTestCase {
                                                      analytics: ServiceLocator.shared.analytics)
         context = viewModel.context
     }
-
-    func testInitialState() {
-        XCTAssertFalse(context.enableAnalytics)
+    
+    deinit {
+        AppSettings.resetAllSettings()
     }
 
-    func testOptIn() {
+    @Test
+    func initialState() {
+        #expect(!context.enableAnalytics)
+    }
+
+    @Test
+    func optIn() {
         appSettings.analyticsConsentState = .optedOut
         context.send(viewAction: .toggleAnalytics)
-        XCTAssertTrue(context.enableAnalytics)
+        #expect(context.enableAnalytics)
     }
     
-    func testOptOut() {
+    @Test
+    func optOut() {
         appSettings.analyticsConsentState = .optedIn
         context.send(viewAction: .toggleAnalytics)
-        XCTAssertFalse(context.enableAnalytics)
+        #expect(!context.enableAnalytics)
     }
 }

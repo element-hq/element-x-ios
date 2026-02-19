@@ -7,10 +7,11 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class RoomMemberDetailsViewModelTests: XCTestCase {
+@Suite
+struct RoomMemberDetailsViewModelTests {
     var viewModel: RoomMemberDetailsScreenViewModelProtocol!
     var roomProxyMock: JoinedRoomProxyMock!
     var roomMemberProxyMock: RoomMemberProxyMock!
@@ -18,202 +19,154 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         viewModel.context
     }
 
-    override func setUp() async throws {
-        roomProxyMock = JoinedRoomProxyMock(.init(name: ""))
-        
-        roomProxyMock.getMemberUserIDClosure = { _ in
-            .success(self.roomMemberProxyMock)
-        }
-    }
-
-    func testInitialState() async throws {
-        roomMemberProxyMock = RoomMemberProxyMock.mockAlice
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     userSession: UserSessionMock(.init()),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                     analytics: ServiceLocator.shared.analytics)
+    @Test
+    mutating func initialState() async throws {
+        setup(roomMemberProxyMock: .mockAlice)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
-
-        XCTAssertEqual(context.viewState.memberDetails, RoomMemberDetails(withProxy: roomMemberProxyMock))
-        XCTAssertNil(context.ignoreUserAlert)
-        XCTAssertNil(context.alertInfo)
+        
+        #expect(context.viewState.memberDetails == RoomMemberDetails(withProxy: roomMemberProxyMock))
+        #expect(context.ignoreUserAlert == nil)
+        #expect(context.alertInfo == nil)
     }
 
-    func testIgnoreSuccess() async throws {
-        roomMemberProxyMock = RoomMemberProxyMock.mockAlice
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     userSession: UserSessionMock(.init()),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                     analytics: ServiceLocator.shared.analytics)
+    @Test
+    mutating func ignoreSuccess() async throws {
+        setup(roomMemberProxyMock: .mockAlice)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
-
+        
         context.send(viewAction: .showIgnoreAlert)
-        XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
-
+        #expect(context.ignoreUserAlert == .init(action: .ignore))
         context.send(viewAction: .ignoreConfirmed)
-        
         let deferred = deferFulfillment(context.$viewState) { state in
             state.memberDetails?.isIgnored == true
         }
-        
         try await deferred.fulfill()
         
-        guard let memberDetails = context.viewState.memberDetails else {
-            XCTFail("Member details should be loaded at this point")
-            return
-        }
-        
-        XCTAssertTrue(memberDetails.isIgnored)
-        
-        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
-        
+        let memberDetails = try #require(context.viewState.memberDetails,
+                                         "Member details should be loaded at this point")
+        #expect(memberDetails.isIgnored)
+        #expect(!context.viewState.isProcessingIgnoreRequest)
         try await Task.sleep(for: .milliseconds(100))
-        XCTAssertTrue(roomProxyMock.updateMembersCalled)
+        #expect(roomProxyMock.updateMembersCalled)
     }
 
-    func testIgnoreFailure() async throws {
-        roomMemberProxyMock = RoomMemberProxyMock.mockAlice
+    @Test
+    mutating func ignoreFailure() async throws {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.ignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                     analytics: ServiceLocator.shared.analytics)
+        setup(roomMemberProxyMock: .mockAlice, clientProxy: clientProxy)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
         
         context.send(viewAction: .showIgnoreAlert)
-        XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
-        
+        #expect(context.ignoreUserAlert == .init(action: .ignore))
         context.send(viewAction: .ignoreConfirmed)
-
         let deferred = deferFulfillment(context.$viewState) { state in
             state.bindings.alertInfo != nil
         }
-        
         try await deferred.fulfill()
         
-        guard let memberDetails = context.viewState.memberDetails else {
-            XCTFail("Member details should be loaded at this point")
-            return
-        }
-        
-        XCTAssertFalse(memberDetails.isIgnored)
-        
-        XCTAssertNotNil(context.alertInfo)
+        let memberDetails = try #require(context.viewState.memberDetails,
+                                         "Member details should be loaded at this point")
+        #expect(!memberDetails.isIgnored)
+        #expect(context.alertInfo != nil)
         
         try await Task.sleep(for: .milliseconds(100))
-        XCTAssertFalse(roomProxyMock.updateMembersCalled)
+        #expect(!roomProxyMock.updateMembersCalled)
     }
 
-    func testUnignoreSuccess() async throws {
-        roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
-        
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     userSession: UserSessionMock(.init()),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                     analytics: ServiceLocator.shared.analytics)
+    @Test
+    mutating func unignoreSuccess() async throws {
+        setup(roomMemberProxyMock: .mockIgnored)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
-
+        
         context.send(viewAction: .showUnignoreAlert)
-        XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
-        
+        #expect(context.ignoreUserAlert == .init(action: .unignore))
         context.send(viewAction: .unignoreConfirmed)
-        
         let deferred = deferFulfillment(context.$viewState) { state in
             state.memberDetails?.isIgnored == false
         }
-        
         try await deferred.fulfill()
         
-        guard let memberDetails = context.viewState.memberDetails else {
-            XCTFail("Member details should be loaded at this point")
-            return
-        }
-        
-        XCTAssertFalse(memberDetails.isIgnored)
+        let memberDetails = try #require(context.viewState.memberDetails,
+                                         "Member details should be loaded at this point")
+        #expect(!memberDetails.isIgnored)
         
         try await Task.sleep(for: .milliseconds(100))
-        XCTAssertTrue(roomProxyMock.updateMembersCalled)
+        #expect(roomProxyMock.updateMembersCalled)
     }
 
-    func testUnignoreFailure() async throws {
-        roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
+    @Test
+    mutating func unignoreFailure() async throws {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.unignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                     analytics: ServiceLocator.shared.analytics)
+        setup(roomMemberProxyMock: .mockIgnored, clientProxy: clientProxy)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
-
+        
         context.send(viewAction: .showUnignoreAlert)
-        XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
-        
+        #expect(context.ignoreUserAlert == .init(action: .unignore))
         context.send(viewAction: .unignoreConfirmed)
-        
         let deferred = deferFulfillment(context.$viewState) { state in
             state.bindings.alertInfo != nil
         }
-        
         try await deferred.fulfill()
         
-        guard let memberDetails = context.viewState.memberDetails else {
-            XCTFail("Member details should be loaded at this point")
-            return
-        }
-        
-        XCTAssertTrue(memberDetails.isIgnored)
-        
-        XCTAssertNotNil(context.alertInfo)
+        let memberDetails = try #require(context.viewState.memberDetails,
+                                         "Member details should be loaded at this point")
+        #expect(memberDetails.isIgnored)
+        #expect(context.alertInfo != nil)
         
         try await Task.sleep(for: .milliseconds(100))
-        XCTAssertFalse(roomProxyMock.updateMembersCalled)
+        #expect(!roomProxyMock.updateMembersCalled)
     }
 
-    func testInitialStateAccountOwner() async throws {
-        roomMemberProxyMock = RoomMemberProxyMock.mockMe
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     userSession: UserSessionMock(.init()),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                     analytics: ServiceLocator.shared.analytics)
+    @Test
+    mutating func initialStateAccountOwner() async throws {
+        setup(roomMemberProxyMock: .mockMe)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
-
-        XCTAssertEqual(context.viewState.memberDetails, RoomMemberDetails(withProxy: roomMemberProxyMock))
-        XCTAssertNil(context.ignoreUserAlert)
-        XCTAssertNil(context.alertInfo)
+        
+        #expect(context.viewState.memberDetails == RoomMemberDetails(withProxy: roomMemberProxyMock))
+        #expect(context.ignoreUserAlert == nil)
+        #expect(context.alertInfo == nil)
     }
 
-    func testInitialStateIgnoredUser() async throws {
-        roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     userSession: UserSessionMock(.init()),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                     analytics: ServiceLocator.shared.analytics)
+    @Test
+    mutating func initialStateIgnoredUser() async throws {
+        setup(roomMemberProxyMock: .mockIgnored)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
+        
+        #expect(context.viewState.memberDetails == RoomMemberDetails(withProxy: roomMemberProxyMock))
+        #expect(context.ignoreUserAlert == nil)
+        #expect(context.alertInfo == nil)
+    }
 
-        XCTAssertEqual(context.viewState.memberDetails, RoomMemberDetails(withProxy: roomMemberProxyMock))
-        XCTAssertNil(context.ignoreUserAlert)
-        XCTAssertNil(context.alertInfo)
+    // MARK: - Helpers
+
+    private mutating func setup(roomMemberProxyMock: RoomMemberProxyMock, clientProxy: ClientProxyMock? = nil) {
+        self.roomMemberProxyMock = roomMemberProxyMock
+        roomProxyMock = JoinedRoomProxyMock(.init(name: ""))
+        roomProxyMock.getMemberUserIDClosure = { _ in
+            .success(roomMemberProxyMock)
+        }
+        // swiftlint:disable:next force_unwrapping
+        let userSession = clientProxy != nil ? UserSessionMock(.init(clientProxy: clientProxy!)) : UserSessionMock(.init())
+        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
+                                                     roomProxy: roomProxyMock,
+                                                     userSession: userSession,
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     analytics: ServiceLocator.shared.analytics)
     }
 }

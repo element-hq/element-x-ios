@@ -7,22 +7,24 @@
 
 import Combine
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class RoomMembersFlowCoordinatorTests: XCTestCase {
+@Suite
+struct RoomMembersFlowCoordinatorTests {
     var membersFlowCoordinator: RoomMembersFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!
     var stateMachineFactory: PublishedStateMachineFactory!
-        
-    func testClearRoute() async throws {
-        try await setUp(entryPoint: .roomMembersList)
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomMembersListScreenCoordinator)
+    
+    @Test
+    mutating func clearRoute() async throws {
+        try await setup(entryPoint: .roomMembersList)
+        #expect(navigationStackCoordinator.stackCoordinators.last is RoomMembersListScreenCoordinator)
         
         var membersFlowStateExpectation = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMemberDetails(userID: "test", previousState: .roomMembersList) }
         membersFlowCoordinator.handleAppRoute(.roomMemberDetails(userID: "test"), animated: false)
         try await membersFlowStateExpectation.fulfill()
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
         
         membersFlowStateExpectation = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMembersList }
         let membersFlowActionExpectation = deferFulfillment(membersFlowCoordinator.actions) { action in
@@ -36,10 +38,12 @@ class RoomMembersFlowCoordinatorTests: XCTestCase {
         membersFlowCoordinator.clearRoute(animated: false)
         try await membersFlowStateExpectation.fulfill()
         try await membersFlowActionExpectation.fulfill()
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is BlankFormCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.last is BlankFormCoordinator)
     }
     
-    private func setUp(entryPoint: RoomMembersFlowCoordinatorEntryPoint) async throws {
+    // MARK: - Helpers
+    
+    private mutating func setup(entryPoint: RoomMembersFlowCoordinatorEntryPoint) async throws {
         stateMachineFactory = .init()
         navigationStackCoordinator = NavigationStackCoordinator()
         navigationStackCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: false))
@@ -47,7 +51,7 @@ class RoomMembersFlowCoordinatorTests: XCTestCase {
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.directRoomForUserIDReturnValue = .success(nil)
-                
+        
         let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),

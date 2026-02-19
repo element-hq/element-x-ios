@@ -227,19 +227,19 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
     private var audioURL: URL {
         assertResourceURL(filename: "test_audio.mp3")
     }
-
+    
     private var fileURL: URL {
         assertResourceURL(filename: "test_pdf.pdf")
     }
-
+    
     private var imageURL: URL {
         assertResourceURL(filename: "test_animated_image.gif")
     }
-
+    
     private var videoURL: URL {
         assertResourceURL(filename: "landscape_test_video.mov")
     }
-
+    
     private var badImageURL = URL(filePath: "/home/user/this_file_doesn't_exist.jpg")
     
     private func assertResourceURL(filename: String) -> URL {

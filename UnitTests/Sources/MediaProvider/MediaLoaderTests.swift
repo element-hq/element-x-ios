@@ -7,44 +7,40 @@
 //
 
 @testable import ElementX
+import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
-import XCTest
+import Testing
 
-final class MediaLoaderTests: XCTestCase {
-    func testMediaRequestCoalescing() async throws {
+@Suite
+struct MediaLoaderTests {
+    @Test
+    func mediaRequestCoalescing() async throws {
         let mediaLoadingClient = ClientSDKMock()
         mediaLoadingClient.getMediaContentMediaSourceReturnValue = Data()
         let mediaLoader = MediaLoader(client: mediaLoadingClient)
         
         let mediaSource = try MediaSourceProxy(url: .mockMXCFile, mimeType: nil)
         
-        do {
-            for _ in 1...10 {
-                _ = try await mediaLoader.loadMediaContentForSource(mediaSource)
-            }
-            
-            XCTAssertEqual(mediaLoadingClient.getMediaContentMediaSourceCallsCount, 10)
-        } catch {
-            fatalError()
+        for _ in 1...10 {
+            _ = try await mediaLoader.loadMediaContentForSource(mediaSource)
         }
+        
+        #expect(mediaLoadingClient.getMediaContentMediaSourceCallsCount == 10)
     }
     
-    func testMediaThumbnailRequestCoalescing() async throws {
+    @Test
+    func mediaThumbnailRequestCoalescing() async throws {
         let mediaLoadingClient = ClientSDKMock()
         mediaLoadingClient.getMediaThumbnailMediaSourceWidthHeightReturnValue = Data()
         let mediaLoader = MediaLoader(client: mediaLoadingClient)
         
         let mediaSource = try MediaSourceProxy(url: .mockMXCImage, mimeType: nil)
         
-        do {
-            for _ in 1...10 {
-                _ = try await mediaLoader.loadMediaThumbnailForSource(mediaSource, width: 100, height: 100)
-            }
-            
-            XCTAssertEqual(mediaLoadingClient.getMediaThumbnailMediaSourceWidthHeightCallsCount, 10)
-        } catch {
-            fatalError()
+        for _ in 1...10 {
+            _ = try await mediaLoader.loadMediaThumbnailForSource(mediaSource, width: 100, height: 100)
         }
+        
+        #expect(mediaLoadingClient.getMediaThumbnailMediaSourceWidthHeightCallsCount == 10)
     }
 }

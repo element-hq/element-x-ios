@@ -38,7 +38,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         clientProxy = nil
         AppSettings.resetAllSettings()
     }
-
+    
     func testInteraction() async throws {
         XCTAssertTrue(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
         

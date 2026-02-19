@@ -7,10 +7,11 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class AppLockSetupPINScreenViewModelTests: XCTestCase {
+@Suite
+final class AppLockSetupPINScreenViewModelTests {
     var appLockService: AppLockService!
     var keychainController: KeychainControllerMock!
     var viewModel: AppLockSetupPINScreenViewModelProtocol!
@@ -19,42 +20,40 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    override func setUp() {
-        AppSettings.resetAllSettings()
-        keychainController = KeychainControllerMock()
-        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
-    }
-    
-    override func tearDown() {
+    deinit {
         AppSettings.resetAllSettings()
     }
 
-    func testCreatePIN() async throws {
+    @Test
+    func createPIN() async throws {
+        setup(mode: .create)
+        
         // Given the screen in create mode.
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: .create, isMandatory: false, appLockService: appLockService)
-        XCTAssertEqual(context.viewState.mode, .create, "The mode should start as creation.")
+        #expect(context.viewState.mode == .create, "The mode should start as creation.")
         
         // When entering an new PIN.
-        let createDeferred = deferFulfillment(context.$viewState, message: "A valid PIN needs confirming.") { $0.mode == .confirm }
+        let createDeferred = deferFulfillment(context.$viewState) { $0.mode == .confirm }
         context.pinCode = "2023"
         try await createDeferred.fulfill()
         
         // Then the screen should transition to the confirm mode.
-        XCTAssertEqual(context.viewState.mode, .confirm, "The mode should transition to confirmation.")
+        #expect(context.viewState.mode == .confirm, "The mode should transition to confirmation.")
         
         // When re-entering that PIN.
-        let confirmDeferred = deferFulfillment(viewModel.actions, message: "The screen should be finished.") { $0 == .complete }
+        let confirmDeferred = deferFulfillment(viewModel.actions) { $0 == .complete }
         context.pinCode = "2023"
         
         // Then the screen should signal it is complete.
         try await confirmDeferred.fulfill()
     }
     
-    func testCreateWeakPIN() async throws {
+    @Test
+    func createWeakPIN() async throws {
+        setup(mode: .create)
+        
         // Given the screen in create mode.
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: .create, isMandatory: false, appLockService: appLockService)
-        XCTAssertEqual(context.viewState.mode, .create, "The mode should start as creation.")
-        XCTAssertNil(context.alertInfo, "There shouldn't be an alert to begin with.")
+        #expect(context.viewState.mode == .create, "The mode should start as creation.")
+        #expect(context.alertInfo == nil, "There shouldn't be an alert to begin with.")
         
         // When entering a weak PIN on the blocklist.
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
@@ -62,22 +61,24 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the PIN should be rejected and the user alerted.
-        XCTAssertEqual(context.alertInfo?.id, .weakPIN, "The weak PIN should be rejected.")
-        XCTAssertEqual(context.viewState.mode, .create, "The mode shouldn't transition after an invalid PIN code.")
+        #expect(context.alertInfo?.id == .weakPIN, "The weak PIN should be rejected.")
+        #expect(context.viewState.mode == .create, "The mode shouldn't transition after an invalid PIN code.")
     }
     
-    func testCreatePINMismatch() async throws {
-        // Given the confirm mode after entering a new PIN.
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: .create, isMandatory: false, appLockService: appLockService)
-        XCTAssertEqual(context.viewState.mode, .create, "The mode should start as creation.")
-        XCTAssertNil(context.alertInfo, "There shouldn't be an alert to begin with.")
+    @Test
+    func createPINMismatch() async throws {
+        setup(mode: .create)
         
-        let createDeferred = deferFulfillment(context.$viewState, message: "A valid PIN needs confirming.") { $0.mode == .confirm }
+        // Given the confirm mode after entering a new PIN.
+        #expect(context.viewState.mode == .create, "The mode should start as creation.")
+        #expect(context.alertInfo == nil, "There shouldn't be an alert to begin with.")
+        
+        let createDeferred = deferFulfillment(context.$viewState) { $0.mode == .confirm }
         context.pinCode = "2023"
         try await createDeferred.fulfill()
-        XCTAssertEqual(context.viewState.mode, .confirm, "The mode should transition to confirmation.")
-        XCTAssertEqual(context.viewState.numberOfConfirmAttempts, 0, "The mode should start with zero attempts.")
-        XCTAssertNil(context.alertInfo, "There shouldn't be an alert after a valid initial PIN.")
+        #expect(context.viewState.mode == .confirm, "The mode should transition to confirmation.")
+        #expect(context.viewState.numberOfConfirmAttempts == 0, "The mode should start with zero attempts.")
+        #expect(context.alertInfo == nil, "There shouldn't be an alert after a valid initial PIN.")
         
         // When entering the new PIN incorrectly
         var deferred = deferFulfillment(context.$viewState) { $0.numberOfConfirmAttempts == 1 }
@@ -85,8 +86,8 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the user should be alerted.
-        XCTAssertEqual(context.viewState.numberOfConfirmAttempts, 1, "The mismatch should be counted.")
-        XCTAssertEqual(context.alertInfo?.id, .pinMismatch, "A PIN mismatch should be rejected.")
+        #expect(context.viewState.numberOfConfirmAttempts == 1, "The mismatch should be counted.")
+        #expect(context.alertInfo?.id == .pinMismatch, "A PIN mismatch should be rejected.")
         
         // When dismissing the alert and repeating twice more.
         context.alertInfo?.primaryButton.action?()
@@ -97,42 +98,46 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         deferred = deferFulfillment(context.$viewState) { $0.numberOfConfirmAttempts == 3 }
         context.pinCode = "2024"
         try await deferred.fulfill()
-        XCTAssertEqual(context.viewState.numberOfConfirmAttempts, 3, "All the mismatches should be counted.")
-        XCTAssertEqual(context.alertInfo?.id, .pinMismatch, "A PIN mismatch should be rejected.")
+        #expect(context.viewState.numberOfConfirmAttempts == 3, "All the mismatches should be counted.")
+        #expect(context.alertInfo?.id == .pinMismatch, "A PIN mismatch should be rejected.")
         
         // Then tapping the alert button should reset back to create mode.
         context.alertInfo?.primaryButton.action?()
-        XCTAssertEqual(context.viewState.mode, .create, "The mode should revert back to creation.")
+        #expect(context.viewState.mode == .create, "The mode should revert back to creation.")
     }
     
-    func testUnlock() async throws {
+    @Test
+    func unlock() async throws {
+        setup(mode: .unlock)
+        
         // Given the screen in unlock mode.
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock, isMandatory: false, appLockService: appLockService)
         let pinCode = "2023"
         keychainController.pinCodeReturnValue = pinCode
         keychainController.containsPINCodeReturnValue = true
         keychainController.containsPINCodeBiometricStateReturnValue = false
         
         // When entering the configured PIN.
-        let deferred = deferFulfillment(viewModel.actions, message: "The screen should be finished.") { $0 == .complete }
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .complete }
         context.pinCode = pinCode
         
         // Then the screen should signal it is complete.
         try await deferred.fulfill()
     }
     
-    func testForgotPIN() async throws {
+    @Test
+    func forgotPIN() async throws {
+        setup(mode: .unlock)
+        
         // Given the screen in unlock mode.
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock, isMandatory: false, appLockService: appLockService)
-        XCTAssertNil(context.alertInfo, "There shouldn't be an alert to begin with.")
-        XCTAssertFalse(context.viewState.isLoggingOut, "The view should not start disabled.")
+        #expect(context.alertInfo == nil, "There shouldn't be an alert to begin with.")
+        #expect(!context.viewState.isLoggingOut, "The view should not start disabled.")
         
         // When the user has forgotten their PIN.
         context.send(viewAction: .forgotPIN)
         
         // Then an alert should be shown before logging out.
-        XCTAssertEqual(context.alertInfo?.id, .confirmResetPIN, "The weak PIN should be rejected.")
-        XCTAssertFalse(context.viewState.isLoggingOut, "The view should not be disabled until the user confirms.")
+        #expect(context.alertInfo?.id == .confirmResetPIN, "The weak PIN should be rejected.")
+        #expect(!context.viewState.isLoggingOut, "The view should not be disabled until the user confirms.")
         
         // When confirming the logout.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .forceLogout }
@@ -140,44 +145,52 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         
         // Then a force logout should be initiated.
         try await deferred.fulfill()
-        XCTAssertTrue(context.viewState.isLoggingOut, "The view should become disabled.")
+        #expect(context.viewState.isLoggingOut, "The view should become disabled.")
     }
     
-    func testUnlockFailed() async throws {
+    @Test
+    func unlockFailed() async throws {
+        setup(mode: .unlock)
+        
         // Given the screen in unlock mode.
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock, isMandatory: false, appLockService: appLockService)
         keychainController.pinCodeReturnValue = "2023"
         keychainController.containsPINCodeReturnValue = true
         keychainController.containsPINCodeBiometricStateReturnValue = false
-        XCTAssertEqual(context.viewState.numberOfUnlockAttempts, 0, "The screen should start with zero attempts.")
-        XCTAssertFalse(context.viewState.isSubtitleWarning, "The subtitle should start without a warning.")
-        XCTAssertFalse(context.viewState.isLoggingOut, "The view should not start disabled.")
+        #expect(context.viewState.numberOfUnlockAttempts == 0, "The screen should start with zero attempts.")
+        #expect(!context.viewState.isSubtitleWarning, "The subtitle should start without a warning.")
+        #expect(!context.viewState.isLoggingOut, "The view should not start disabled.")
         
         // When entering a different PIN.
-        var deferred = deferFulfillment(context.$viewState, keyPath: \.bindings.pinCode, transitionValues: ["", "2024", ""],
-                                        message: "The PIN should be entered and then cleared by the view model.")
+        var deferred = deferFulfillment(context.$viewState, keyPath: \.bindings.pinCode, transitionValues: ["", "2024", ""])
         context.pinCode = "2024"
         try await deferred.fulfill()
         
         // Then the PIN should be rejected and the user notified.
-        XCTAssertEqual(context.viewState.numberOfUnlockAttempts, 1, "An invalid attempt should be counted.")
-        XCTAssertTrue(context.viewState.isSubtitleWarning, "The subtitle should then show a warning.")
-        XCTAssertFalse(context.viewState.isLoggingOut, "The view should still work.")
+        #expect(context.viewState.numberOfUnlockAttempts == 1, "An invalid attempt should be counted.")
+        #expect(context.viewState.isSubtitleWarning, "The subtitle should then show a warning.")
+        #expect(!context.viewState.isLoggingOut, "The view should still work.")
         
         // When entering the same incorrect PIN twice more
-        deferred = deferFulfillment(context.$viewState, keyPath: \.bindings.pinCode, transitionValues: ["", "2024", ""],
-                                    message: "The PIN should be entered and then cleared by the view model.")
+        deferred = deferFulfillment(context.$viewState, keyPath: \.bindings.pinCode, transitionValues: ["", "2024", ""])
         context.pinCode = "2024"
         try await deferred.fulfill()
-        deferred = deferFulfillment(context.$viewState, keyPath: \.bindings.pinCode, transitionValues: ["", "2024", ""],
-                                    message: "The PIN should be entered and then cleared by the view model.")
+        deferred = deferFulfillment(context.$viewState, keyPath: \.bindings.pinCode, transitionValues: ["", "2024", ""])
         context.pinCode = "2024"
         try await deferred.fulfill()
         
         // Then the user should be alerted that they're being signed out.
-        XCTAssertEqual(context.viewState.numberOfUnlockAttempts, 3, "All invalid attempts should be counted.")
-        XCTAssertTrue(context.viewState.isSubtitleWarning, "The subtitle should continue showing a warning.")
-        XCTAssertEqual(context.alertInfo?.id, .forceLogout, "An alert should be shown about a force logout.")
-        XCTAssertTrue(context.viewState.isLoggingOut, "The view should become disabled.")
+        #expect(context.viewState.numberOfUnlockAttempts == 3, "All invalid attempts should be counted.")
+        #expect(context.viewState.isSubtitleWarning, "The subtitle should continue showing a warning.")
+        #expect(context.alertInfo?.id == .forceLogout, "An alert should be shown about a force logout.")
+        #expect(context.viewState.isLoggingOut, "The view should become disabled.")
+    }
+    
+    // MARK: - Helpers
+    
+    private func setup(mode: AppLockSetupPINScreenMode) {
+        AppSettings.resetAllSettings()
+        keychainController = KeychainControllerMock()
+        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
+        viewModel = AppLockSetupPINScreenViewModel(initialMode: mode, isMandatory: false, appLockService: appLockService)
     }
 }
