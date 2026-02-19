@@ -105,7 +105,7 @@ struct BugReportScreenViewModelTests {
         #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.githubLabels == [])
         #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.files == [])
     }
-
+    
     @Test
     func sendReportWithError() async throws {
         let mockService = BugReportServiceMock()

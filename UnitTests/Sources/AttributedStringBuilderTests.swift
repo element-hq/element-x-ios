@@ -215,7 +215,7 @@ class AttributedStringBuilderTests: XCTestCase {
         checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
         checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
     }
-        
+    
     func testDefaultFont() {
         let htmlString = "<b>Test</b> <i>string</i> "
         
@@ -313,7 +313,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTFail("Couldn't find blockquote")
     }
-
+    
     // swiftlint:enable line_length
     
     func testBlockquoteWithLink() {
@@ -515,7 +515,7 @@ class AttributedStringBuilderTests: XCTestCase {
         checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 1)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
         checkAttachment(attributedString: attributedStringFromPlain, expectedRuns: 1)
-
+        
         let string2 = "Hello @room"
         let attributedStringFromHTML2 = attributedStringBuilder.fromHTML(string2)
         checkAttachment(attributedString: attributedStringFromHTML2, expectedRuns: 2)
@@ -824,7 +824,7 @@ class AttributedStringBuilderTests: XCTestCase {
             XCTFail("Could not build the attributed string")
             return
         }
-                
+        
         guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
             XCTFail("Couldn't find the link")
             return
@@ -840,7 +840,7 @@ class AttributedStringBuilderTests: XCTestCase {
             XCTFail("Could not build the attributed string")
             return
         }
-                
+        
         guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
             XCTFail("Couldn't find the link")
             return
@@ -1108,7 +1108,7 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.org")
         XCTAssertEqual(link.confirmationParameters?.displayString, "👉️ #room:matrix.org")
     }
-
+    
     func testMxExternalPaymentDetailsRemoved() {
         var htmlString = "This is visible.<span data-msc4286-external-payment-details> But this is hidden <a href=\"https://matrix.org\">and this link too</a></span>"
         
@@ -1138,7 +1138,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
     }
-
+    
     // MARK: - Private
     
     private func checkLinkIn(attributedString: AttributedString?, expectedLink: String, expectedRuns: Int) {

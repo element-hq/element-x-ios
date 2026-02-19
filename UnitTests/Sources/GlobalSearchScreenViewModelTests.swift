@@ -21,7 +21,7 @@ struct GlobalSearchScreenViewModelTests {
                                                 mediaProvider: MediaProviderMock(configuration: .init()))
         context = viewModel.context
     }
-            
+    
     @Test
     mutating func searching() async throws {
         let deferred = deferFulfillment(context.$viewState) { state in
@@ -29,7 +29,7 @@ struct GlobalSearchScreenViewModelTests {
         }
         
         context.searchQuery = "Second"
-            
+        
         try await deferred.fulfill()
     }
     

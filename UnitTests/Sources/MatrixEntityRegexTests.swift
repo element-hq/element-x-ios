@@ -18,7 +18,7 @@ struct MatrixEntityRegexTests {
         #expect(MatrixEntityRegex.isMatrixHomeserver("MATRIX.ORG"))
         #expect(!MatrixEntityRegex.isMatrixHomeserver("matrix?.org"))
     }
-
+    
     @Test
     func userID() {
         #expect(MatrixEntityRegex.isMatrixUserIdentifier("@username:example.com"))

@@ -141,11 +141,11 @@ struct AudioPlayerStateTests {
         #expect(audioPlayerMock.seekToReceivedProgress == 0.4)
         #expect(audioPlayerState.isPublishingProgress)
     }
-
+    
     @Test
     func handlingAudioPlayerActionDidStartLoading() async throws {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
-
+        
         let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
             case .loading:
@@ -159,14 +159,14 @@ struct AudioPlayerStateTests {
         try await deferred.fulfill()
         #expect(audioPlayerState.playbackState == .loading)
     }
-
+    
     @Test
     mutating func handlingAudioPlayerActionDidFinishLoading() async throws {
         audioPlayerMock.duration = 10.0
         
         audioPlayerState = AudioPlayerState(id: .timelineItemIdentifier(.randomEvent), title: "", duration: 0)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
-
+        
         let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
             case .readyToPlay:
@@ -189,7 +189,7 @@ struct AudioPlayerStateTests {
     mutating func handlingAudioPlayerActionDidStartPlaying() async throws {
         await audioPlayerState.updateState(progress: 0.4)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
-
+        
         let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
             case .playing:
@@ -211,7 +211,7 @@ struct AudioPlayerStateTests {
     mutating func handlingAudioPlayerActionDidPausePlaying() async throws {
         await audioPlayerState.updateState(progress: 0.4)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
-
+        
         let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
             case .stopped:
@@ -233,7 +233,7 @@ struct AudioPlayerStateTests {
     mutating func handlingAudioPlayerActionsidStopPlaying() async throws {
         await audioPlayerState.updateState(progress: 0.4)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
-
+        
         let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
             case .stopped:
@@ -255,7 +255,7 @@ struct AudioPlayerStateTests {
     mutating func audioPlayerActionsDidFinishPlaying() async throws {
         await audioPlayerState.updateState(progress: 0.4)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
-
+        
         let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
             case .stopped:
@@ -277,7 +277,7 @@ struct AudioPlayerStateTests {
     @Test
     func audioPlayerActionsDidFailed() async throws {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
-
+        
         let deferredPlayingState = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
             case .playing:
@@ -289,7 +289,7 @@ struct AudioPlayerStateTests {
         audioPlayerActionsSubject.send(.didStartPlaying)
         try await deferredPlayingState.fulfill()
         #expect(!audioPlayerState.showProgressIndicator)
-
+        
         let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
             case .error:

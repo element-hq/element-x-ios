@@ -21,7 +21,7 @@ struct AudioRecorderStateTests {
     private var audioRecorderActions: AnyPublisher<AudioRecorderAction, Never> {
         audioRecorderActionsSubject.eraseToAnyPublisher()
     }
-        
+    
     private func buildAudioRecorderMock() -> AudioRecorderMock {
         let audioRecorderMock = AudioRecorderMock()
         audioRecorderMock.isRecording = false
@@ -62,7 +62,7 @@ struct AudioRecorderStateTests {
     @Test
     func handlingAudioRecorderActionDidStartRecording() async throws {
         audioRecorderState.attachAudioRecorder(audioRecorderMock)
-
+        
         let deferred = deferFulfillment(audioRecorderState.$recordingState) { action in
             switch action {
             case .recording:
@@ -76,11 +76,11 @@ struct AudioRecorderStateTests {
         try await deferred.fulfill()
         #expect(audioRecorderState.recordingState == .recording)
     }
-
+    
     @Test
     func handlingAudioPlayerActionDidStopRecording() async throws {
         audioRecorderState.attachAudioRecorder(audioRecorderMock)
-
+        
         let deferred = deferFulfillment(audioRecorderState.$recordingState) { action in
             switch action {
             case .stopped:

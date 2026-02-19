@@ -24,7 +24,7 @@ class ChatsTabFlowCoordinatorTests: XCTestCase {
     var detailCoordinator: CoordinatorProtocol? {
         splitCoordinator?.detailCoordinator
     }
-
+    
     var detailNavigationStack: NavigationStackCoordinator? {
         detailCoordinator as? NavigationStackCoordinator
     }

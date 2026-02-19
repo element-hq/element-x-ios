@@ -279,7 +279,7 @@ final class AnalyticsTests {
     func shouldNotReportIfNotStarted() throws {
         // Given a client with user properties set
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
-    
+        
         // No call to start
         
         client.screen(AnalyticsEvent.MobileScreen(durationMs: nil, screenName: .Home))

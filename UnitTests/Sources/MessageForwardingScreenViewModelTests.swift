@@ -48,7 +48,7 @@ struct MessageForwardingScreenViewModelTests {
         }
         
         context.searchQuery = "Second"
-            
+        
         try await deferred.fulfill()
     }
     

@@ -16,7 +16,7 @@ struct DateTests {
     var startOfToday: Date {
         Calendar.current.startOfDay(for: .now)
     }
-
+    
     var startOfYesterday: Date {
         // swiftlint: disable:next force_unwrapping
         Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: -1, to: .now)!)

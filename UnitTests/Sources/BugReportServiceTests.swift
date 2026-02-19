@@ -30,12 +30,12 @@ final class BugReportServiceTests {
     deinit {
         appSettings.bugReportRageshakeURL.reset()
     }
-
+    
     @Test
     func initialStateWithMockService() {
         #expect(!bugReportService.crashedLastRun)
     }
-
+    
     @Test
     func submitBugReportWithMockService() async throws {
         let bugReport = BugReport(userID: "@mock:client.com",
@@ -85,7 +85,7 @@ final class BugReportServiceTests {
                                        sdkGitSHA: "1234",
                                        session: .mock,
                                        appHooks: AppHooks())
-
+        
         let bugReport = BugReport(userID: "@mock:client.com",
                                   deviceID: nil,
                                   ed25519: nil,
@@ -121,7 +121,7 @@ final class BugReportServiceTests {
         
         appSettings.bugReportRageshakeURL.applyRemoteValue(.url("https://bugs.server.net/submit"))
         #expect(service.isEnabled)
-
+        
         let bugReport = BugReport(userID: "@mock:client.com",
                                   deviceID: nil,
                                   ed25519: nil,
@@ -158,15 +158,15 @@ private class MockURLProtocol: URLProtocol {
             client?.urlProtocolDidFinishLoading(self)
         }
     }
-
+    
     override func stopLoading() {
         //  no-op
     }
-
+    
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         request
     }
-
+    
     override class func canInit(with request: URLRequest) -> Bool {
         true
     }

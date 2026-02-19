@@ -41,7 +41,7 @@ final class LoggingTests {
         
         #expect(try String(contentsOf: logFile, encoding: .utf8).contains(infoLog))
     }
-        
+    
     @Test
     func logLevels() throws {
         try setupTest()
@@ -108,7 +108,7 @@ final class LoggingTests {
         #expect(!content.contains(lastMessage))
         #expect(!content.contains(heroName))
     }
-        
+    
     @Test
     func timelineContentIsRedacted() throws {
         try setupTest()
@@ -204,7 +204,7 @@ final class LoggingTests {
         #expect(content.contains(fileMessage.id.uniqueID.value))
         #expect(!content.contains(fileMessage.body))
     }
-        
+    
     @Test
     func rustMessageContentIsRedacted() throws {
         try setupTest()
@@ -248,7 +248,7 @@ final class LoggingTests {
         
         // Then the log file should not include the text content
         let logFile = try #require(Tracing.logFiles.first)
-
+        
         let content = try String(contentsOf: logFile, encoding: .utf8)
         #expect(content.contains(String(describing: TextMessageContent.self)))
         #expect(!content.contains(textString))

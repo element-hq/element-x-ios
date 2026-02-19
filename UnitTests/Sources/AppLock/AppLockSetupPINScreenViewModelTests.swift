@@ -20,13 +20,6 @@ final class AppLockSetupPINScreenViewModelTests {
         viewModel.context
     }
     
-    private func setup(mode: AppLockSetupPINScreenMode) {
-        AppSettings.resetAllSettings()
-        keychainController = KeychainControllerMock()
-        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: mode, isMandatory: false, appLockService: appLockService)
-    }
-    
     deinit {
         AppSettings.resetAllSettings()
     }
@@ -190,5 +183,14 @@ final class AppLockSetupPINScreenViewModelTests {
         #expect(context.viewState.isSubtitleWarning, "The subtitle should continue showing a warning.")
         #expect(context.alertInfo?.id == .forceLogout, "An alert should be shown about a force logout.")
         #expect(context.viewState.isLoggingOut, "The view should become disabled.")
+    }
+    
+    // MARK: - Helpers
+    
+    private func setup(mode: AppLockSetupPINScreenMode) {
+        AppSettings.resetAllSettings()
+        keychainController = KeychainControllerMock()
+        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
+        viewModel = AppLockSetupPINScreenViewModel(initialMode: mode, isMandatory: false, appLockService: appLockService)
     }
 }
