@@ -422,14 +422,14 @@ class TimelineInteractionHandler {
         let availableSpeeds = VoiceMessagePlaybackSpeed.allCases
         guard let currentIndex = availableSpeeds.firstIndex(of: appSettings.voiceMessagePlaybackSpeed) else {
             appSettings.voiceMessagePlaybackSpeed = .default
-            audioPlayerState(for: itemID)?.setPlaybackSpeed(VoiceMessagePlaybackSpeed.default.rawValue)
+            audioPlayerState(for: itemID)?.setPlaybackSpeed(VoiceMessagePlaybackSpeed.default)
             return
         }
 
         let nextIndex = (currentIndex + 1) % availableSpeeds.count
         let nextSpeed = availableSpeeds[nextIndex]
         appSettings.voiceMessagePlaybackSpeed = nextSpeed
-        audioPlayerState(for: itemID)?.setPlaybackSpeed(nextSpeed.rawValue)
+        audioPlayerState(for: itemID)?.setPlaybackSpeed(nextSpeed)
     }
 
     func playPauseAudio(for itemID: TimelineItemIdentifier) async {
@@ -461,7 +461,6 @@ class TimelineInteractionHandler {
         // Ensure this one is attached
         if !audioPlayerState.isAttached {
             audioPlayerState.attachAudioPlayer(audioPlayer)
-            audioPlayerState.setPlaybackSpeed(appSettings.voiceMessagePlaybackSpeed.rawValue)
         }
 
         // Detach all other states
@@ -518,7 +517,9 @@ class TimelineInteractionHandler {
         let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
                                            title: L10n.commonVoiceMessage,
                                            duration: voiceMessageRoomTimelineItem.content.duration,
-                                           waveform: voiceMessageRoomTimelineItem.content.waveform)
+                                           waveform: voiceMessageRoomTimelineItem.content.waveform,
+                                           playbackSpeed: appSettings.voiceMessagePlaybackSpeed,
+                                           playbackSpeedPublisher: appSettings.$voiceMessagePlaybackSpeed)
         mediaPlayerProvider.register(audioPlayerState: playerState)
         return playerState
     }

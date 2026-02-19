@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct PlaybackSpeedButton: View {
-    let speed: Float
+    let speed: VoiceMessagePlaybackSpeed
     let onTap: () -> Void
 
     var body: some View {
         Button(action: onTap) {
             ZStack {
-                Text("0.0x")
+                Text(speed.placeholder)
                     .font(.compound.bodyXSSemibold)
                     .hidden()
 
-                Text(speedLabel)
+                Text(speed.label)
                     .font(.compound.bodyXSSemibold)
                     .foregroundColor(.compound.iconSecondary)
             }
@@ -27,25 +27,17 @@ struct PlaybackSpeedButton: View {
             .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(UntranslatedL10n.a11yPlaybackSpeed(speedLabel))
-    }
-
-    private var speedLabel: String {
-        if speed == Float(Int(speed)) {
-            "\(Int(speed))x"
-        } else {
-            String(format: "%gx", speed)
-        }
+        .accessibilityLabel(L10n.a11yPlaybackSpeed)
+        .accessibilityValue(speed.label)
     }
 }
 
 struct PlaybackSpeedButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HStack(spacing: 8) {
-            PlaybackSpeedButton(speed: 0.5) { }
-            PlaybackSpeedButton(speed: 1.0) { }
-            PlaybackSpeedButton(speed: 1.5) { }
-            PlaybackSpeedButton(speed: 2.0) { }
+            ForEach(VoiceMessagePlaybackSpeed.allCases, id: \.self) { speed in
+                PlaybackSpeedButton(speed: speed) { }
+            }
         }
         .padding()
         .background(Color.gray)

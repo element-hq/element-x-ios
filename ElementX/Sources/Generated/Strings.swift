@@ -64,6 +64,8 @@ internal enum L10n {
   internal static var a11yPinField: String { return L10n.tr("Localizable", "a11y_pin_field") }
   /// Play
   internal static var a11yPlay: String { return L10n.tr("Localizable", "a11y_play") }
+  /// Playback speed
+  internal static var a11yPlaybackSpeed: String { return L10n.tr("Localizable", "a11y_playback_speed") }
   /// Poll
   internal static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
   /// Ended poll

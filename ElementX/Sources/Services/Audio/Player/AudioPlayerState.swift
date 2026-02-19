@@ -36,7 +36,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
     /// It's similar to `playbackState`, with the a difference: `.loading`
     /// updates are delayed by a fixed amount of time
     @Published private(set) var playerButtonPlaybackState: AudioPlayerPlaybackState
-    @Published private(set) var playbackSpeed: Float = 1.0
+    @Published private(set) var playbackSpeed: VoiceMessagePlaybackSpeed
 
     private weak var audioPlayer: AudioPlayerProtocol?
     private var audioPlayerSubscription: AnyCancellable?
@@ -59,14 +59,21 @@ class AudioPlayerState: ObservableObject, Identifiable {
         displayLink != nil
     }
 
-    init(id: AudioPlayerStateIdentifier, title: String, duration: Double, waveform: EstimatedWaveform? = nil, progress: Double = 0.0) {
+    init(id: AudioPlayerStateIdentifier, title: String,
+         duration: Double,
+         waveform: EstimatedWaveform? = nil,
+         progress: Double = 0.0,
+         playbackSpeed: VoiceMessagePlaybackSpeed = .default,
+         playbackSpeedPublisher: AnyPublisher<VoiceMessagePlaybackSpeed, Never>? = nil) {
         self.id = id
         self.title = title
         self.duration = duration
         self.waveform = waveform ?? EstimatedWaveform(data: [])
         self.progress = progress
+        self.playbackSpeed = playbackSpeed
         playbackState = .stopped
         playerButtonPlaybackState = .stopped
+        playbackSpeedPublisher?.assign(to: &$playbackSpeed)
         setupPlaybackStateSubscription()
     }
     
@@ -98,6 +105,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
         playbackState = .loading
         self.audioPlayer = audioPlayer
         subscribeToAudioPlayer(audioPlayer: audioPlayer)
+        setPlaybackSpeed(playbackSpeed)
     }
     
     func detachAudioPlayer() {
@@ -112,9 +120,9 @@ class AudioPlayerState: ObservableObject, Identifiable {
         playbackState = .error
     }
 
-    func setPlaybackSpeed(_ speed: Float) {
+    func setPlaybackSpeed(_ speed: VoiceMessagePlaybackSpeed) {
         playbackSpeed = speed
-        audioPlayer?.setPlaybackSpeed(speed)
+        audioPlayer?.setPlaybackSpeed(speed.rawValue)
     }
 
     // MARK: - Private
