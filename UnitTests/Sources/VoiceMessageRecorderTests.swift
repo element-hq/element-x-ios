@@ -42,6 +42,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         audioPlayer = AudioPlayerMock()
         audioPlayer.actions = audioPlayerActions
         audioPlayer.state = .stopped
+        audioPlayer.playbackSpeed = 1.0
         
         mediaPlayerProvider = MediaPlayerProviderMock()
         mediaPlayerProvider.player = audioPlayer

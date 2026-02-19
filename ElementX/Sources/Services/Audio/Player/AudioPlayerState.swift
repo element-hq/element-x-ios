@@ -36,6 +36,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
     /// It's similar to `playbackState`, with the a difference: `.loading`
     /// updates are delayed by a fixed amount of time
     @Published private(set) var playerButtonPlaybackState: AudioPlayerPlaybackState
+    @Published private(set) var playbackSpeed: Float = 1.0
 
     private weak var audioPlayer: AudioPlayerProtocol?
     private var audioPlayerSubscription: AnyCancellable?
@@ -110,7 +111,12 @@ class AudioPlayerState: ObservableObject, Identifiable {
     func reportError() {
         playbackState = .error
     }
-    
+
+    func setPlaybackSpeed(_ speed: Float) {
+        playbackSpeed = speed
+        audioPlayer?.setPlaybackSpeed(speed)
+    }
+
     // MARK: - Private
     
     private func subscribeToAudioPlayer(audioPlayer: AudioPlayerProtocol) {

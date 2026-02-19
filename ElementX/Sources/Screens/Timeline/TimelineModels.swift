@@ -42,6 +42,7 @@ enum TimelineViewPollAction {
 enum TimelineAudioPlayerAction {
     case playPause(itemID: TimelineItemIdentifier)
     case seek(itemID: TimelineItemIdentifier, progress: Double)
+    case changePlaybackSpeed(itemID: TimelineItemIdentifier)
 }
 
 enum TimelineViewAction {
@@ -114,6 +115,7 @@ struct TimelineViewState: BindableState {
     var isViewSourceEnabled: Bool
     var areThreadsEnabled: Bool
     var linkPreviewsEnabled: Bool
+    var voiceMessagePlaybackSpeed = VoiceMessagePlaybackSpeed.default.rawValue
     
     let hasPredecessor: Bool
         
