@@ -12,78 +12,79 @@ import Testing
 @MainActor
 @Suite
 struct RoomRolesAndPermissionsScreenViewModelTests {
-    @MainActor
-    private struct TestSetup {
-        var viewModel: RoomRolesAndPermissionsScreenViewModelProtocol
-        var roomProxy: JoinedRoomProxyMock
-        
-        var context: RoomRolesAndPermissionsScreenViewModelType.Context {
-            viewModel.context
-        }
-        
-        init(members: [RoomMemberProxyMock]) {
-            roomProxy = JoinedRoomProxyMock(.init(members: members))
-            viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
-                                                               userIndicatorController: UserIndicatorControllerMock(),
-                                                               analytics: ServiceLocator.shared.analytics)
-        }
+    var viewModel: RoomRolesAndPermissionsScreenViewModelProtocol!
+    var roomProxy: JoinedRoomProxyMock!
+
+    var context: RoomRolesAndPermissionsScreenViewModelType.Context {
+        viewModel.context
     }
 
     @Test
-    func emptyCounters() {
-        let testSetup = TestSetup(members: .allMembers)
-        #expect(testSetup.context.viewState.administratorCount == 0)
-        #expect(testSetup.context.viewState.moderatorCount == 0)
+    mutating func emptyCounters() {
+        setup(members: .allMembers)
+
+        #expect(context.viewState.administratorCount == 0)
+        #expect(context.viewState.moderatorCount == 0)
     }
 
     @Test
-    func filledCounters() {
-        let testSetup = TestSetup(members: .allMembersAsAdmin)
-        #expect(testSetup.context.viewState.administratorCount == 2)
-        #expect(testSetup.context.viewState.moderatorCount == 1)
+    mutating func filledCounters() {
+        setup(members: .allMembersAsAdmin)
+
+        #expect(context.viewState.administratorCount == 2)
+        #expect(context.viewState.moderatorCount == 1)
     }
     
     @Test
-    func resetPermissions() async throws {
-        let testSetup = TestSetup(members: .allMembersAsAdmin)
-        
-        testSetup.context.send(viewAction: .reset)
-        #expect(testSetup.context.alertInfo != nil)
-        
-        testSetup.context.alertInfo?.primaryButton.action?()
+    mutating func resetPermissions() async throws {
+        setup(members: .allMembersAsAdmin)
+
+        context.send(viewAction: .reset)
+        #expect(context.alertInfo != nil)
+
+        context.alertInfo?.primaryButton.action?()
         
         try await Task.sleep(for: .milliseconds(100))
         
-        #expect(testSetup.roomProxy.resetPowerLevelsCalled)
+        #expect(roomProxy.resetPowerLevelsCalled)
     }
     
     @Test
-    func demoteToModerator() async throws {
-        let testSetup = TestSetup(members: .allMembersAsAdmin)
-        
-        testSetup.context.send(viewAction: .editOwnUserRole)
-        #expect(testSetup.context.alertInfo != nil)
-        
-        testSetup.context.alertInfo?.verticalButtons?.first { $0.title.localizedStandardContains("moderator") }?.action?()
-        
+    mutating func demoteToModerator() async throws {
+        setup(members: .allMembersAsAdmin)
+
+        context.send(viewAction: .editOwnUserRole)
+        #expect(context.alertInfo != nil)
+
+        context.alertInfo?.verticalButtons?.first { $0.title.localizedStandardContains("moderator") }?.action?()
+
         try await Task.sleep(for: .milliseconds(100))
-        
-        #expect(testSetup.roomProxy.updatePowerLevelsForUsersCalled)
-        #expect(testSetup.roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel == RoomRole.moderator.powerLevelValue)
+
+        #expect(roomProxy.updatePowerLevelsForUsersCalled)
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel == RoomRole.moderator.powerLevelValue)
     }
     
     @Test
-    func demoteToMember() async throws {
-        let testSetup = TestSetup(members: .allMembersAsAdmin)
-        
-        testSetup.context.send(viewAction: .editOwnUserRole)
-        #expect(testSetup.context.alertInfo != nil)
-        
-        testSetup.context.alertInfo?.verticalButtons?.first { $0.title.localizedStandardContains("member") }?.action?()
-        
+    mutating func demoteToMember() async throws {
+        setup(members: .allMembersAsAdmin)
+
+        context.send(viewAction: .editOwnUserRole)
+        #expect(context.alertInfo != nil)
+
+        context.alertInfo?.verticalButtons?.first { $0.title.localizedStandardContains("member") }?.action?()
+
         try await Task.sleep(for: .milliseconds(100))
-        
-        #expect(testSetup.roomProxy.updatePowerLevelsForUsersCalled)
-        #expect(testSetup.roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel == RoomRole.user.powerLevelValue)
+
+        #expect(roomProxy.updatePowerLevelsForUsersCalled)
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel == RoomRole.user.powerLevelValue)
+    }
+
+    // MARK: - Helpers
+
+    private mutating func setup(members: [RoomMemberProxyMock]) {
+        roomProxy = JoinedRoomProxyMock(.init(members: members))
+        viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
+                                                           userIndicatorController: UserIndicatorControllerMock(),
+                                                           analytics: ServiceLocator.shared.analytics)
     }
 }

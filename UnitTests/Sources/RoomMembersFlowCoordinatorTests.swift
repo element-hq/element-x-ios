@@ -12,71 +12,22 @@ import Testing
 @MainActor
 @Suite
 struct RoomMembersFlowCoordinatorTests {
-    @MainActor
-    private struct TestSetup {
-        var membersFlowCoordinator: RoomMembersFlowCoordinator
-        var navigationStackCoordinator: NavigationStackCoordinator
-        var stateMachineFactory: PublishedStateMachineFactory
-        
-        init(entryPoint: RoomMembersFlowCoordinatorEntryPoint) async throws {
-            stateMachineFactory = .init()
-            navigationStackCoordinator = NavigationStackCoordinator()
-            navigationStackCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: false))
-            navigationStackCoordinator.push(BlankFormCoordinator())
-            
-            let clientProxy = ClientProxyMock(.init())
-            clientProxy.directRoomForUserIDReturnValue = .success(nil)
-                    
-            let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                      bugReportService: BugReportServiceMock(.init()),
-                                                      elementCallService: ElementCallServiceMock(.init()),
-                                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                      emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                                      linkMetadataProvider: LinkMetadataProvider(),
-                                                      appMediator: AppMediatorMock.default,
-                                                      appSettings: ServiceLocator.shared.settings,
-                                                      appHooks: AppHooks(),
-                                                      analytics: ServiceLocator.shared.analytics,
-                                                      userIndicatorController: UserIndicatorControllerMock(),
-                                                      notificationManager: NotificationManagerMock(),
-                                                      stateMachineFactory: stateMachineFactory)
-            
-            let roomProxy = JoinedRoomProxyMock(.init())
-            roomProxy.getMemberUserIDClosure = { _ in
-                .success(RoomMemberProxyMock(with: .init(userID: "test", membership: .join)))
-            }
-            
-            membersFlowCoordinator = RoomMembersFlowCoordinator(entryPoint: entryPoint,
-                                                                roomProxy: roomProxy,
-                                                                navigationStackCoordinator: navigationStackCoordinator,
-                                                                flowParameters: flowParameters)
-            
-            let deferred = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { state in
-                switch entryPoint {
-                case .roomMember(let userID):
-                    state == .roomMemberDetails(userID: userID, previousState: .initial)
-                case .roomMembersList:
-                    state == .roomMembersList
-                }
-            }
-            
-            membersFlowCoordinator.start()
-            try await deferred.fulfill()
-        }
-    }
-        
+    var membersFlowCoordinator: RoomMembersFlowCoordinator!
+    var navigationStackCoordinator: NavigationStackCoordinator!
+    var stateMachineFactory: PublishedStateMachineFactory!
+
     @Test
-    func clearRoute() async throws {
-        let testSetup = try await TestSetup(entryPoint: .roomMembersList)
-        #expect(testSetup.navigationStackCoordinator.stackCoordinators.last is RoomMembersListScreenCoordinator)
-        
-        var membersFlowStateExpectation = deferFulfillment(testSetup.stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMemberDetails(userID: "test", previousState: .roomMembersList) }
-        testSetup.membersFlowCoordinator.handleAppRoute(.roomMemberDetails(userID: "test"), animated: false)
+    mutating func clearRoute() async throws {
+        try await setup(entryPoint: .roomMembersList)
+        #expect(navigationStackCoordinator.stackCoordinators.last is RoomMembersListScreenCoordinator)
+
+        var membersFlowStateExpectation = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMemberDetails(userID: "test", previousState: .roomMembersList) }
+        membersFlowCoordinator.handleAppRoute(.roomMemberDetails(userID: "test"), animated: false)
         try await membersFlowStateExpectation.fulfill()
-        #expect(testSetup.navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
-        
-        membersFlowStateExpectation = deferFulfillment(testSetup.stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMembersList }
-        let membersFlowActionExpectation = deferFulfillment(testSetup.membersFlowCoordinator.actions) { action in
+        #expect(navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
+
+        membersFlowStateExpectation = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMembersList }
+        let membersFlowActionExpectation = deferFulfillment(membersFlowCoordinator.actions) { action in
             switch action {
             case .finished:
                 true
@@ -84,9 +35,57 @@ struct RoomMembersFlowCoordinatorTests {
                 false
             }
         }
-        testSetup.membersFlowCoordinator.clearRoute(animated: false)
+        membersFlowCoordinator.clearRoute(animated: false)
         try await membersFlowStateExpectation.fulfill()
         try await membersFlowActionExpectation.fulfill()
-        #expect(testSetup.navigationStackCoordinator.stackCoordinators.last is BlankFormCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.last is BlankFormCoordinator)
+    }
+
+    // MARK: - Helpers
+
+    private mutating func setup(entryPoint: RoomMembersFlowCoordinatorEntryPoint) async throws {
+        stateMachineFactory = .init()
+        navigationStackCoordinator = NavigationStackCoordinator()
+        navigationStackCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: false))
+        navigationStackCoordinator.push(BlankFormCoordinator())
+
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.directRoomForUserIDReturnValue = .success(nil)
+
+        let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                  bugReportService: BugReportServiceMock(.init()),
+                                                  elementCallService: ElementCallServiceMock(.init()),
+                                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  linkMetadataProvider: LinkMetadataProvider(),
+                                                  appMediator: AppMediatorMock.default,
+                                                  appSettings: ServiceLocator.shared.settings,
+                                                  appHooks: AppHooks(),
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  notificationManager: NotificationManagerMock(),
+                                                  stateMachineFactory: stateMachineFactory)
+
+        let roomProxy = JoinedRoomProxyMock(.init())
+        roomProxy.getMemberUserIDClosure = { _ in
+            .success(RoomMemberProxyMock(with: .init(userID: "test", membership: .join)))
+        }
+
+        membersFlowCoordinator = RoomMembersFlowCoordinator(entryPoint: entryPoint,
+                                                            roomProxy: roomProxy,
+                                                            navigationStackCoordinator: navigationStackCoordinator,
+                                                            flowParameters: flowParameters)
+
+        let deferred = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { state in
+            switch entryPoint {
+            case .roomMember(let userID):
+                state == .roomMemberDetails(userID: userID, previousState: .initial)
+            case .roomMembersList:
+                state == .roomMembersList
+            }
+        }
+
+        membersFlowCoordinator.start()
+        try await deferred.fulfill()
     }
 }
