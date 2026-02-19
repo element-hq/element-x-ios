@@ -419,17 +419,17 @@ class TimelineInteractionHandler {
     // MARK: Audio Playback
 
     func changePlaybackSpeed(for itemID: TimelineItemIdentifier) {
-        let availableSpeeds = AppSettings.VoiceMessagePlaybackSpeed.allCases
+        let availableSpeeds = VoiceMessagePlaybackSpeed.allCases
         guard let currentIndex = availableSpeeds.firstIndex(of: appSettings.voiceMessagePlaybackSpeed) else {
             appSettings.voiceMessagePlaybackSpeed = .default
-            audioPlayerState(for: itemID)?.setPlaybackSpeed(AppSettings.VoiceMessagePlaybackSpeed.default.speedRatio)
+            audioPlayerState(for: itemID)?.setPlaybackSpeed(VoiceMessagePlaybackSpeed.default.rawValue)
             return
         }
 
         let nextIndex = (currentIndex + 1) % availableSpeeds.count
         let nextSpeed = availableSpeeds[nextIndex]
         appSettings.voiceMessagePlaybackSpeed = nextSpeed
-        audioPlayerState(for: itemID)?.setPlaybackSpeed(nextSpeed.speedRatio)
+        audioPlayerState(for: itemID)?.setPlaybackSpeed(nextSpeed.rawValue)
     }
 
     func playPauseAudio(for itemID: TimelineItemIdentifier) async {
@@ -461,7 +461,7 @@ class TimelineInteractionHandler {
         // Ensure this one is attached
         if !audioPlayerState.isAttached {
             audioPlayerState.attachAudioPlayer(audioPlayer)
-            audioPlayerState.setPlaybackSpeed(appSettings.voiceMessagePlaybackSpeed.speedRatio)
+            audioPlayerState.setPlaybackSpeed(appSettings.voiceMessagePlaybackSpeed.rawValue)
         }
 
         // Detach all other states

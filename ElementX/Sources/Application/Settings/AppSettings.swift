@@ -36,15 +36,6 @@ enum AppBuildType {
 
 /// Store Element specific app settings.
 final class AppSettings {
-    enum VoiceMessagePlaybackSpeed: Float, CaseIterable, Codable {
-        case `default` = 1.0
-        case fast = 1.5
-        case fastest = 2.0
-        case slow = 0.5
-
-        var speedRatio: Float { rawValue }
-    }
-
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
@@ -461,3 +452,10 @@ final class AppSettings {
 }
 
 extension AppSettings: CommonSettingsProtocol { }
+
+enum VoiceMessagePlaybackSpeed: Float, CaseIterable, Codable {
+    case `default` = 1.0
+    case fast = 1.5
+    case fastest = 2.0
+    case slow = 0.5
+}
