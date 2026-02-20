@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct DeclineAndBlockScreenViewModelTests {
     var viewModel: DeclineAndBlockScreenViewModelProtocol
     var clientProxy: ClientProxyMock

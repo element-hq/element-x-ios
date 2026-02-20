@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct RoomChangePermissionsScreenViewModelTests {
     var roomProxy: JoinedRoomProxyMock!
     var viewModel: RoomChangePermissionsScreenViewModelProtocol!

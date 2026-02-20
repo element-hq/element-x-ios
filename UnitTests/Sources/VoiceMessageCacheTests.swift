@@ -11,8 +11,8 @@ import Combine
 import Foundation
 import Testing
 
+@Suite(.serialized)
 @MainActor
-@Suite
 final class VoiceMessageCacheTests {
     private var voiceMessageCache: VoiceMessageCache
     private var mediaSource: MediaSourceProxy

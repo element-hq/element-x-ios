@@ -11,7 +11,8 @@ import Foundation
 import KeychainAccess
 import Testing
 
-@Suite
+@Suite(.serialized)
+@MainActor
 struct KeychainControllerTests {
     var keychain: KeychainController
     

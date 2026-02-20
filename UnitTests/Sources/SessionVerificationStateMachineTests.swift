@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct SessionVerificationStateMachineTests {
     private var stateMachine: SessionVerificationScreenStateMachine
     

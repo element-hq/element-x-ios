@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct ManageRoomMemberSheetViewModelTests {
     private var viewModel: ManageRoomMemberSheetViewModel!
     private var context: ManageRoomMemberSheetViewModel.Context! {

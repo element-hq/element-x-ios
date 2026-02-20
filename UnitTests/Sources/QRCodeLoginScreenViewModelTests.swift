@@ -11,8 +11,8 @@ import Combine
 import MatrixRustSDKMocks
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct QRCodeLoginScreenViewModelTests {
     private enum Mode { case login, linkDesktop, linkMobile }
     

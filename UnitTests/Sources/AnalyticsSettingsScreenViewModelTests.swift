@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
+@Suite(.serialized)
 @MainActor
-@Suite
 final class AnalyticsSettingsScreenViewModelTests {
     private var appSettings: AppSettings!
     private var viewModel: AnalyticsSettingsScreenViewModelProtocol!

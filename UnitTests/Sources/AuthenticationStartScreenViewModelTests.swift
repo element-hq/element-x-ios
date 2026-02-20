@@ -11,8 +11,8 @@ import MatrixRustSDKMocks
 import Testing
 import UIKit
 
+@Suite(.serialized)
 @MainActor
-@Suite
 final class AuthenticationStartScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var client: ClientSDKMock!

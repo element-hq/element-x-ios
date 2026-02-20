@@ -10,8 +10,8 @@ import Combine
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct SettingsScreenViewModelTests {
     private var viewModel: SettingsScreenViewModelProtocol
     private var context: SettingsScreenViewModelType.Context

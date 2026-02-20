@@ -10,8 +10,8 @@
 import Foundation
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct NavigationTabCoordinatorTests {
     enum TestTab { case tab, chats, spaces }
     private var navigationTabCoordinator: NavigationTabCoordinator<TestTab>

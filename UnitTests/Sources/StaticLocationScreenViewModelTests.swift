@@ -10,8 +10,8 @@ import Combine
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct StaticLocationScreenViewModelTests {
     private let timelineProxy = TimelineProxyMock(.init())
     private var viewModel: StaticLocationScreenViewModelProtocol

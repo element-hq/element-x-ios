@@ -10,8 +10,8 @@ import Combine
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct RoomMembersListScreenViewModelTests {
     var viewModel: RoomMembersListScreenViewModel!
     var roomProxy: JoinedRoomProxyMock!

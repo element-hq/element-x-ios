@@ -11,7 +11,7 @@ import Combine
 import Foundation
 import Testing
 
-@Suite
+@Suite(.serialized)
 final class BugReportServiceTests {
     var appSettings: AppSettings!
     var bugReportService: BugReportServiceProtocol!

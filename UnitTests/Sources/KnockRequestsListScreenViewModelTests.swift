@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
+@Suite(.serialized)
 @MainActor
-@Suite
 struct KnockRequestsListScreenViewModelTests {
     init() {
         AppSettings.resetAllSettings()

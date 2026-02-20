@@ -10,8 +10,8 @@
 import Foundation
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct DeactivateAccountScreenViewModelTests {
     var clientProxy: ClientProxyMock!
     var viewModel: DeactivateAccountScreenViewModelProtocol!

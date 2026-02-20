@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
+@Suite(.serialized)
 @MainActor
-@Suite
 final class AppLockSetupBiometricsScreenViewModelTests {
     var appLockService: AppLockServiceMock
     var viewModel: AppLockSetupBiometricsScreenViewModelProtocol

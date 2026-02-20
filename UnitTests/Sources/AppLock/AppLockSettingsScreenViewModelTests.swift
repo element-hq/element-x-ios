@@ -9,9 +9,9 @@
 @testable import ElementX
 import Testing
 
+@Suite(.serialized)
 @MainActor
-@Suite
-struct AppLockSetupSettingsScreenViewModelTests {
+final class AppLockSetupSettingsScreenViewModelTests {
     var appLockService: AppLockServiceProtocol
     var keychainController: KeychainControllerMock
     var viewModel: AppLockSetupSettingsScreenViewModelProtocol
@@ -21,9 +21,14 @@ struct AppLockSetupSettingsScreenViewModelTests {
     }
     
     init() {
+        AppSettings.resetAllSettings()
         keychainController = KeychainControllerMock()
         appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
         viewModel = AppLockSetupSettingsScreenViewModel(appLockService: AppLockServiceMock.mock())
+    }
+    
+    deinit {
+        AppSettings.resetAllSettings()
     }
 
     @Test

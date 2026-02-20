@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct ReportContentScreenViewModelTests {
     let eventID = "test-id"
     let senderID = "@meany:server.com"

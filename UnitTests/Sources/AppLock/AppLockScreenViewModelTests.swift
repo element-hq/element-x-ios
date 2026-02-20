@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
+@Suite(.serialized)
 @MainActor
-@Suite
 final class AppLockScreenViewModelTests {
     var appSettings: AppSettings
     var appLockService: AppLockService

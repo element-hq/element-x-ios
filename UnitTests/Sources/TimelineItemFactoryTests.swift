@@ -10,8 +10,8 @@
 import MatrixRustSDK
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct TimelineItemFactoryTests {
     @Test
     func callInvite() throws {

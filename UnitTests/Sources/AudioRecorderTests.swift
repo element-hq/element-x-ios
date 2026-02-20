@@ -11,8 +11,8 @@ import Combine
 import Foundation
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct AudioRecorderTests {
     private var audioRecorder: AudioRecorder!
     private var audioSessionMock: AudioSessionMock!

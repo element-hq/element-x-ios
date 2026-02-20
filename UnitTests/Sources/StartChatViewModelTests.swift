@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct StartChatScreenViewModelTests {
     private var viewModel: StartChatScreenViewModelProtocol!
     private var clientProxy: ClientProxyMock!

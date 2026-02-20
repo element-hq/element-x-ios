@@ -10,8 +10,8 @@ import Combine
 @testable import ElementX
 import Testing
 
+@Suite(.serialized)
 @MainActor
-@Suite
 final class HomeScreenViewModelTests {
     var viewModel: HomeScreenViewModelProtocol!
     var context: HomeScreenViewModelType.Context! {

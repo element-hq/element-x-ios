@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct UserDiscoveryServiceTest {
     private var service: UserDiscoveryService
     private var clientProxy: ClientProxyMock

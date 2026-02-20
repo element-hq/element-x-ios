@@ -10,8 +10,8 @@ import Combine
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct SecureBackupLogoutConfirmationScreenViewModelTests {
     private var viewModel: SecureBackupLogoutConfirmationScreenViewModel
     private var context: SecureBackupLogoutConfirmationScreenViewModel.Context {

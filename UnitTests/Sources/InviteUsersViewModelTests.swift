@@ -10,8 +10,8 @@ import Combine
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct InviteUsersScreenViewModelTests {
     var viewModel: InviteUsersScreenViewModelProtocol!
     var userDiscoveryService: UserDiscoveryServiceMock!

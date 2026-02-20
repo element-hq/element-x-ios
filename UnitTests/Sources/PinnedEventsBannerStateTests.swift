@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct PinnedEventsBannerStateTests {
     @Test
     func empty() {

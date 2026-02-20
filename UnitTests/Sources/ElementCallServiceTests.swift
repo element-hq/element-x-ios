@@ -10,8 +10,8 @@ import Clocks
 import PushKit
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 final class ElementCallServiceTests {
     private var callProvider: CXProviderMock!
     private var currentDate: Date!
@@ -81,7 +81,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func expiredRingLifetimeIsIgnored() {
+    func expiredRingLifetimeIsIgnored() async throws {
         #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
         let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
@@ -91,7 +91,7 @@ final class ElementCallServiceTests {
         service.pushRegistry(pushRegistry,
                              didReceiveIncomingPushWith: pushPayload,
                              for: .voIP) { }
-        sleep(20)
+        try await Task.sleep(for: .seconds(20))
         
         #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
     }

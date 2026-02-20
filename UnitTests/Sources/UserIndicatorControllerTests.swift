@@ -10,8 +10,8 @@
 import Foundation
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct UserIndicatorControllerTests {
     private var indicatorController: UserIndicatorController
     

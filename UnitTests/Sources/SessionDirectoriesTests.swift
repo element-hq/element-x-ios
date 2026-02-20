@@ -10,7 +10,7 @@
 import Foundation
 import Testing
 
-@Suite
+@Suite(.serialized)
 struct SessionDirectoriesTests {
     let fileManager = FileManager.default
     

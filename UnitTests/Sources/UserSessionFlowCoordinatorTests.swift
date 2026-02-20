@@ -11,8 +11,9 @@ import Combine
 import Foundation
 import Testing
 
+/// Not sure why but this one needs run serialized or will break other tests
+@Suite(.serialized)
 @MainActor
-@Suite
 struct UserSessionFlowCoordinatorTests {
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator!
     private var rootCoordinator: NavigationRootCoordinator!

@@ -21,7 +21,6 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:ElementX.xcodeproj",
         "identifier" : "32C23C8D224D46EFE62AFAD0",

@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct ServerSelectionScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var service: AuthenticationServiceProtocol!

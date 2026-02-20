@@ -10,8 +10,8 @@ import Combine
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct MessageForwardingScreenViewModelTests {
     let forwardingItem = MessageForwardingItem(id: .event(uniqueID: .init("t1"), eventOrTransactionID: .eventID("t1")),
                                                roomID: "1",

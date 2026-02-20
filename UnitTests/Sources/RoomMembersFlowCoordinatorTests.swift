@@ -9,8 +9,8 @@ import Combine
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct RoomMembersFlowCoordinatorTests {
     var membersFlowCoordinator: RoomMembersFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!

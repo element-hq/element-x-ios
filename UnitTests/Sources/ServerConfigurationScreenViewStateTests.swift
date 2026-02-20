@@ -9,8 +9,8 @@
 @testable import ElementX
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct ServerConfirmationScreenViewStateTests {
     @Test
     func loginMessageString() {

@@ -9,7 +9,7 @@
 @testable import ElementX
 import Testing
 
-@Suite
+@Suite(.serialized)
 final class RoomListFiltersStateTests {
     var appSettings: AppSettings
     var state: RoomListFiltersState

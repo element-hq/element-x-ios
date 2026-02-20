@@ -11,8 +11,8 @@ import Combine
 import Foundation
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct BlockedUsersScreenViewModelTests {
     @Test
     func initialState() async throws {

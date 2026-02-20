@@ -10,8 +10,13 @@
 import Foundation
 import Testing
 
-@Suite
+@Suite(.serialized)
+@MainActor
 final class LocalizationTests {
+    init() {
+        Bundle.overrideLocalizations = nil
+    }
+    
     deinit {
         Bundle.overrideLocalizations = nil
     }

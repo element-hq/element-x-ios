@@ -10,8 +10,8 @@
 import Observation
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct DeferredFulfillmentTests {
     private let observable = SomeObservable()
     

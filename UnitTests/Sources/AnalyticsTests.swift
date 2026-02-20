@@ -11,7 +11,8 @@ import AnalyticsEvents
 import PostHog
 import Testing
 
-@Suite
+@Suite(.serialized)
+@MainActor
 final class AnalyticsTests {
     private var appSettings: AppSettings
     private var analyticsClient: AnalyticsClientMock
