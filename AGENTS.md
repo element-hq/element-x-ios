@@ -57,8 +57,6 @@ These rules are **non-negotiable**. Violating them will cause PR rejection.
 ## Pull Request Guidelines
 
 - Do not create conventional-commits, prefer the use of a single sentence instead.
-- Every PR must reference a well-defined issue. Feature/UI PRs **must** have Product team input.
-- Cross-platform changes need an [element-meta](https://github.com/element-hq/element-meta) issue.
 - Apply exactly **one** `pr-` label to categorise the changelog entry (mapping defined in `.github/release.yml`).
 - The PR title becomes the changelog entry — make it descriptive and complete (no "Fixes #…" or conventional-commit prefixes).
 - Include screenshots/videos for any visual changes.
@@ -70,11 +68,31 @@ These rules are **non-negotiable**. Violating them will cause PR rejection.
 
 ### Build System
 
-- **XcodeGen** generates the Xcode project from `project.yml`. Never edit `*.xcodeproj` directly, but make sure to still commit it.
-- **Sourcery** generates mocks, preview tests, and accessibility tests.
-- **SwiftGen** generates type-safe access to strings and assets.
-- **SwiftLint** and **SwiftFormat** enforce code style.
-- CI tools: `swift run tools ci --help` and Fastlane (`bundle exec fastlane`).
+- Run this first to set up all required tooling/dependencies:
+  - `swift run tools setup-project`
+
+The following tools are used to update the project. Commands must be run in the project's root directory.
+- **XcodeGen** (generate Xcode project from `project.yml`):
+  - Generate: `xcodegen`
+  - Notes: `project.yml` contains project configuration and includes `app.yml` along with various `target.yml` files.
+- **Sourcery** (generate mocks / preview tests / accessibility tests):
+  - Generate: `sourcery --config Tools/Sourcery/{configuration}`
+  - Configurations: AutoMockableConfig.yml, PreviewTestsConfig.yml, TestablePreviewsDictionary.yml, AccessibilityTests.yml
+  - Notes: Automatically run by Xcode when building the ElementX target.
+- **SwiftGen** (generate type-safe strings/assets):
+  - Generate: `swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml`
+  - Notes: Automatically run by Xcode when building the ElementX target.
+- **SwiftLint** (lint rules):
+  - Lint: `swiftlint`
+  - Auto-fix (if used): `swiftlint lint --fix`
+- **SwiftFormat** (formatting):
+  - Format: `swiftformat .`
+  - Notes: Do *not* run this outside of the project directory.
+
+Xcode Intelligence supplies tools to execute the tests. However on CI tests can be executed from the command line:
+  - UnitTests: `swift run tools ci unit-tests`
+  - Swift CI tools: `swift run tools ci --help`
+  - Fastlane lanes: `bundle exec fastlane lanes`
 
 ### Targets & Layout
 
