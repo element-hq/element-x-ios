@@ -119,6 +119,9 @@ func deferFulfillment<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
                 for await value in stream {
                     return value
                 }
+                guard !Task.isCancelled else {
+                    throw DeferredFulfillmentError.empty
+                }
                 throw DeferredFulfillmentError.noOutput(message: message, sourceLocation: sourceLocation)
             }
             group.addTask {
