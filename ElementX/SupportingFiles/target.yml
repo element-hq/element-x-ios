@@ -258,6 +258,7 @@ targets:
     - path: ../Sources
       excludes:
         - Other/Extensions/XCTestCase.swift
+        - Other/DeferredFulfillment.swift
         - Other/Extensions/XCUIElement.swift
     - path: ../../Secrets/Secrets.swift
     - path: ../Resources
