@@ -51,7 +51,7 @@ class Signposter {
     }
     
     enum TagName: String {
-        case homeserver = "Homeserver"
+        case homeserver
     }
     
     // MARK: - Transactions
