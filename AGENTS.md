@@ -1,6 +1,6 @@
 # AGENTS.md — Element X iOS
 
-> **Audience:** AI coding agents. **Repo:** `element-hq/element-x-ios` — iOS Matrix client (SwiftUI + `matrix-rust-sdk`).
+> **Repo:** `element-hq/element-x-ios` — iOS Matrix client (SwiftUI + `matrix-rust-sdk`).
 
 ---
 
@@ -59,6 +59,8 @@ PRs must meet these rules. Prefer Xcode MCP tools over terminal commands.
 ### Build System
 
 Initial setup: `swift run tools setup-project`
+
+**Git hooks** are installed by `swift run tools setup-project` and run SwiftLint/SwiftFormat on commit — if a hook fails, **do not abandon your changes**, fix the reported issues and recommit.
 
 | Tool | Command | Notes |
 |------|---------|-------|
