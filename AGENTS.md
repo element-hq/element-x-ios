@@ -1,63 +1,56 @@
 # AGENTS.md — Element X iOS
 
-> **Audience:** AI coding agents working on the project.
-> **Repository:** `element-hq/element-x-ios` — A Matrix client for iOS built with SwiftUI on top of `matrix-rust-sdk`.
+> **Audience:** AI coding agents. **Repo:** `element-hq/element-x-ios` — iOS Matrix client (SwiftUI + `matrix-rust-sdk`).
 
 ---
 
-## Strong Conventions:
+## Strong Conventions
 
-These rules must be met for a PR to be accepted. Always prefer the use of Xcode's MCP tools over executing commands in the terminal.
+PRs must meet these rules. Prefer Xcode MCP tools over terminal commands.
 
 ### Code Style
 
-- Code style is enforced by **SwiftLint** (`.swiftlint.yml`) and **SwiftFormat** (`.swiftformat`). Follow their configuration.
-- Whitespace-only lines: Do not remove indentation from blank/whitespace-only lines (we keep Xcode's "Trim whitespace-only lines" setting disabled).
-  - It’s OK to add or adjust indentation on whitespace-only lines to match the surrounding scope, but never strip it.
-  - PRs that remove indentation on whitespace-only lines will be rejected.
-- Follow [Swift's API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) everywhere, including when wrapping Rust SDK types (e.g. use `ID` not `Id`, `URL` not `Url`).
-- File headers are defined in `IDETemplateMacros.plist`.
+- Style enforced by **SwiftLint** (`.swiftlint.yml`) and **SwiftFormat** (`.swiftformat`).
+- **Whitespace-only lines:** never strip indentation (Xcode's "Trim whitespace-only lines" is disabled). Adjusting indentation to match scope is fine; removing it causes PR rejection.
+- Follow [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) everywhere, including Rust SDK wrappers (e.g. `ID` not `Id`, `URL` not `Url`, `configuration` not `config` or `cfg`).
+- File headers defined in `IDETemplateMacros.plist`.
 
 ### PII & Logging
 
-- Use `MXLog.info` by default, `.error` for unexpected failures and `.verbose` for noisy development-only logs. `.failure` and `.debug` are rarely used.
-- **NEVER log secrets, passwords, keys, or user content** (e.g. message bodies).
-- Action enums with associated values containing secrets (passwords, keys, tokens) **MUST** conform to `CustomStringConvertible` so only the case name is logged, not the associated values. The template includes a comment reminding you of this.
-- Matrix IDs are acceptable to log.
+- Default: `MXLog.info`; unexpected failures: `.error`; noisy dev logs: `.verbose`. `.failure`/`.debug` rarely used.
+- **Never log secrets, passwords, keys, or user content** (e.g. message bodies).
+- Action enums with secret-containing associated values **must** conform to `CustomStringConvertible` (logs only case name).
+- Matrix IDs are safe to log.
 
 ### Strings & Localisation
 
-- The project's default localisation is `en` which contains en-GB strings.
-- Strings are shared with Element X Android via [Localazy](https://localazy.com/p/element).
-- **Never edit `Localizable.strings`** — it is overwritten when downloading from Localazy.
-- Add new English strings to **`Untranslated.strings`** (or `Untranslated.stringsdict` for plurals). The team will import them into Localazy before merging.
-- Strings are accessed via generated `L10n` types (e.g. `L10n.actionDone`).
-- **Key naming rules** (from [element-x-android/tools/localazy/README.md](https://github.com/element-hq/element-x-android/blob/develop/tools/localazy/README.md#key-naming-rules)):
-  - Common strings reusable across screens: start with `action_` (verbs) or `common_` (nouns/other).
-  - Common accessibility strings: start with `a11y_` (e.g. `a11y_hide_password`).
-  - Keys for common strings should be named to match the string. Example: `action_copy_link` for the string `Copy link`.
-  - Screen-specific strings: start with `screen_` + screen name + free name (e.g. `screen_onboarding_welcome_title`).
-  - Error strings: start with `error_` or contain `_error_` for screen-specific errors.
-  - iOS-only strings: suffix with `_ios`. Android-only: suffix with `_android`.
-  - Placeholders:
-    - Use numbered form `%1$@`, `%1$d` etc.
-    - Use %1$@ for strings in iOS source; Localazy expects %1$s. Add a translator comment: Localazy: change %@ -> %s.
+- Default localisation: `en` (en-GB strings), shared with Element X Android via [Localazy](https://localazy.com/p/element).
+- **Never edit `Localizable.strings`** — it is auto-overwritten.
+- New English strings go in **`Untranslated.strings`** (plurals: `Untranslated.stringsdict`). Team imports to Localazy before merge.
+- Access strings via generated `L10n` types (e.g. `L10n.actionDone`).
+- **Key naming** (see [element-x-android README](https://github.com/element-hq/element-x-android/blob/develop/tools/localazy/README.md#key-naming-rules)):
+  - Cross-screen verbs: `action_`; nouns/other: `common_`; accessibility: `a11y_`.
+  - Key matches the string, e.g. `action_copy_link` → `Copy link`.
+  - Screen-specific: `screen_<name>_<free>` (e.g. `screen_onboarding_welcome_title`).
+  - Errors: `error_` prefix or `_error_` infix.
+  - iOS-only: `_ios` suffix; Android-only: `_android` suffix.
+  - Placeholders: always use numbered form `%1$@`, `%1$d`. Use `%x$@` in iOS source; add translator comment `Localazy: change %x$@ -> %x$s`.
 
 ### Previews
 
-- Create previews for **all main states** a screen/view will be in.
-- Use `PreviewProvider` (not `#Preview`) because snapshot/accessibility tests are generated from it.
-- Adding a second conformance `TestablePreview` marks the to have snapshot and accessibility tests generated.
+- Create previews for **all main states**.
+- Use `PreviewProvider` (not `#Preview`) — snapshot/accessibility tests are generated from it.
+- Add `TestablePreview` conformance to generate snapshot and accessibility tests.
 
 ---
 
 ## Pull Request Guidelines
 
-- Do not use conventional commit messages, prefer the use of sentences.
-- Apply exactly **one** `pr-` label to categorise the changelog entry (mapping defined in `.github/release.yml`).
-- The PR title becomes the changelog entry — make it descriptive and complete (no "Fixes #…" or conventional-commit prefixes).
-- Include screenshots/videos for any visual changes.
-- Keep PRs under 1000 additions when possible; split large changes.
+- Use sentence-style commit/PR messages (no conventional commits).
+- Apply exactly **one** `pr-` label (see `.github/release.yml`).
+- PR title = changelog entry — make it descriptive; no "Fixes #…" prefixes.
+- Include screenshots/videos for visual changes.
+- Keep PRs under 1000 additions; split large changes.
 
 ---
 
@@ -65,152 +58,124 @@ These rules must be met for a PR to be accepted. Always prefer the use of Xcode'
 
 ### Build System
 
-- Run this first to set up all required tooling/dependencies:
-  - `swift run tools setup-project`
+Initial setup: `swift run tools setup-project`
 
-The following tools are used to update the project. Commands must be run in the project's root directory.
-- **XcodeGen** (generate Xcode project from `project.yml`):
-  - Generate: `xcodegen`
-  - Notes: `project.yml` contains project configuration and includes `app.yml` along with various `target.yml` files.
-- **Sourcery** (generate mocks / preview tests / accessibility tests):
-  - Generate: `sourcery --config Tools/Sourcery/{configuration}`
-  - Configurations: AutoMockableConfig.yml, PreviewTestsConfig.yml, TestablePreviewsDictionary.yml, AccessibilityTests.yml
-  - Notes: Automatically run by Xcode when building the ElementX target.
-- **SwiftGen** (generate type-safe strings/assets):
-  - Generate: `swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml`
-  - Notes: Automatically run by Xcode when building the ElementX target.
-- **SwiftLint** (lint rules):
-  - Lint: `swiftlint`
-  - Auto-fix (if used): `swiftlint lint --fix`
-- **SwiftFormat** (formatting):
-  - Format: `swiftformat .`
-  - Notes: Do *not* run this outside of the project directory.
+| Tool | Command | Notes |
+|------|---------|-------|
+| **XcodeGen** | `xcodegen` | Generates Xcode project from `project.yml` (includes `app.yml` + `target.yml` files) |
+| **Sourcery** | `sourcery --config Tools/Sourcery/<config>` | Configs: `AutoMockableConfig.yml`, `PreviewTestsConfig.yml`, `TestablePreviewsDictionary.yml`, `AccessibilityTests.yml`. Auto-runs on ElementX build. |
+| **SwiftGen** | `swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml` | Auto-runs on ElementX build. |
+| **SwiftLint** | `swiftlint` | Auto-runs on ElementX build |
+| **SwiftFormat** | `swiftformat .` | Run from project root only. Auto-runs in lint mode on ElementX build. |
 
-Xcode Intelligence supplies tools to execute the tests. However on CI tests can be executed from the command line:
-  - UnitTests: `swift run tools ci unit-tests`
-  - Swift CI tools: `swift run tools ci --help`
-  - Fastlane lanes: `bundle exec fastlane lanes`
+CI test commands:
+- Unit tests: `swift run tools ci unit-tests`
+- CI help: `swift run tools ci --help`
+- Fastlane: `bundle exec fastlane lanes`
 
 ### Targets & Layout
 
-Key targets (each with their own `target.yml` for XcodeGen):
-
-- **ElementX** — the main app target
+Key targets (each has a `target.yml`):
+- **ElementX** — main app
 - **NSE** — Notification Service Extension
 - **ShareExtension** — Share Extension
 
-Within each target: `Sources/`, `Resources/`, `SupportingFiles/`.
-
-The main target's `Sources/` is organised as:
+Each target: `Sources/`, `Resources/`, `SupportingFiles/`.
 
 ```
 ElementX/Sources/
-├── Application/           # App lifecycle, settings, windowing, root coordinators
-├── FlowCoordinators/      # Flow coordinators with state machines
-├── Services/<Feature>/    # SDK proxies, app services, non-view logic
-├── Screens/<Screen>/      # Single screens (View, ViewModel, Coordinator, Models)
-├── Screens/<Feature>/     # Groups of related screens
-│   └── <Screen>/
-├── Other/                 # Shared extensions, utilities, SwiftUI helpers
-└── {Unit|UI|A11y}Tests/   # Any pieces of testing infrastructure that must be part of the app.
+├── Application/         # App lifecycle, settings, windowing, root coordinators
+├── FlowCoordinators/    # Flow coordinators + state machines
+├── Services/<Feature>/  # SDK proxies, app services, non-view logic
+├── Screens/<Screen>/    # View, ViewModel, Coordinator, Models per screen
+├── Other/               # Shared extensions, utilities, SwiftUI helpers
+└── {Unit|UI|A11y}Tests/ # Testing infrastructure 
 ```
 
-Mocks, test helpers, and generated files are found alongside their sources, often in `Generated/` directories. There are also dedicated targets for the test suites themselves.
-
-Not every top-level directory is a target — there are supporting files alongside the targets.
+Mocks, test helpers, and generated files live alongside sources in `Generated/` directories. Test suites are in dedicated targets.
 
 ### Swift Packages
 
-1. **`compound-ios/`** — The Compound design system (local package). All UI styling comes from here.
-2. **`Tools/Sources/`** — Helper CLI tools for developer experience.
+1. **`compound-ios/`** — Compound design system (local package, all UI styling).
+2. **`Tools/Sources/`** — Developer CLI helpers.
 
 ### Dependencies
 
-- **matrix-rust-sdk**: The Rust SDK source is at [`matrix-org/matrix-rust-sdk`](https://github.com/matrix-org/matrix-rust-sdk). Binary builds (xcframework + Swift bindings) are published at [`element-hq/matrix-rust-components-swift`](https://github.com/element-hq/matrix-rust-components-swift) and imported as a Swift package via `project.yml`. Each commit of the components repo references the SDK commit it was built from, so it is possible to find the SDK hash for a particular build of the app by cross-referencing the components version in the `project.yml` file, and finding the commit with that tag in the components repo.
+- **matrix-rust-sdk** source: [`matrix-org/matrix-rust-sdk`](https://github.com/matrix-org/matrix-rust-sdk).
+- Binary builds (xcframework + Swift bindings): [`element-hq/matrix-rust-components-swift`](https://github.com/element-hq/matrix-rust-components-swift), imported via `project.yml`.
+- SDK hash for a given build: cross-reference the components version in `project.yml` with its tag in the components repo. Find hash in commit message.
 
 ---
 
 ## Architecture: MVVM-C
 
-Every screen follows the **MVVM-Coordinator** pattern. A complete screen template is at `Tools/Scripts/Templates/SimpleScreenExample/` along with a script `createScreen.sh` that adds a new screen to the project based on the template.
+Every screen follows **MVVM-Coordinator**. Template: `Tools/Scripts/Templates/SimpleScreenExample/` + `createScreen.sh`.
 
-### Files Per Screen
-
-For a screen called `Foo`:
+### Files Per Screen (`Foo`)
 
 | File | Purpose |
 |------|---------|
-| `FooScreenModels.swift` | `FooScreenViewState`, `FooScreenViewStateBindings`, `FooScreenViewAction` enum, `FooScreenViewModelAction` enum |
-| `FooScreenViewModelProtocol.swift` | Protocol exposing `actionsPublisher` and `context` |
-| `FooScreenViewModel.swift` | Concrete view model subclassing `StateStoreViewModelV2` |
+| `FooScreenModels.swift` | `ViewState`, `ViewStateBindings`, `ViewAction` enum, `ViewModelAction` enum |
+| `FooScreenViewModelProtocol.swift` | Protocol: `actionsPublisher`, `context` |
+| `FooScreenViewModel.swift` | Concrete VM subclassing `StateStoreViewModelV2` |
 | `FooScreen.swift` (in `View/`) | SwiftUI view taking `@Bindable var context` |
-| `FooScreenCoordinator.swift` | Owns the view model, subscribes to actions, exposes its own `actionsPublisher` |
-| `FooScreenViewModelTests.swift` | Unit tests (this one lives in the UnitTests target, not ElementX) |
+| `FooScreenCoordinator.swift` | Owns VM, subscribes to actions, exposes own `actionsPublisher` |
+| `FooScreenViewModelTests.swift` | Unit tests (UnitTests target) |
 
 ### Data Flow
 
 ```
 View ──send(viewAction:)──► ViewModel ──actionsPublisher──► Coordinator ──actionsPublisher──► FlowCoordinator
-         ◄──viewState────                                                                          │
-         ◄──$context.bindings──►                                                                    │
-                                                                                    StateMachine<State, Event>
+     ◄──viewState──────────                                                                         │
+     ◄──$context.bindings──►                                                              StateMachine<State,Event>
 ```
 
 ### StateStoreViewModelV2
 
-The base view model class (in `ElementX/Sources/Other/SwiftUI/ViewModel/StateStoreViewModelV2.swift`) uses Swift's `Observation` framework:
+Located at `ElementX/Sources/Other/SwiftUI/ViewModel/StateStoreViewModelV2.swift` (uses Swift `Observation`):
 
-- `state` — the view model's mutable state (a struct conforming to `BindableState`)
-- `context` — a constrained `@Observable` class passed to the view. Provides:
-  - `context.viewState` — read-only access to state
-  - `context.send(viewAction:)` — sends actions to the view model
-  - `$context.<binding>` — two-way bindings for SwiftUI controls (via the state's `bindings` property)
-  - `context.mediaProvider` — optional media loading service
-- Override `process(viewAction:)` to handle incoming view actions
-- Use a `PassthroughSubject<ViewModelAction, Never>` to communicate back to the coordinator
+- `state` — mutable state struct conforming to `BindableState`
+- `context` — `@Observable` class passed to the view:
+  - `context.viewState` — read-only state
+  - `context.send(viewAction:)` — sends action to view model
+  - `$context.<binding>` — two-way SwiftUI bindings
+  - `context.mediaProvider` — optional media service
+- Override `process(viewAction:)` for incoming actions.
+- Use `PassthroughSubject<ViewModelAction, Never>` to notify the coordinator.
 
-Note: Some screens are still using the older `StateStoreViewModel.swift` class, which is based on the original Combine/`ObservableObject` SwiftUI pattern.
+> Some screens still use the older `StateStoreViewModel.swift` (Combine/`ObservableObject`).
 
 ### Screen Coordinator
 
 ```swift
 final class FooScreenCoordinator: CoordinatorProtocol {
-    private let parameters: FooScreenCoordinatorParameters  // Dependencies struct
+    private let parameters: FooScreenCoordinatorParameters
     private let viewModel: FooScreenViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    // Actions back to the flow coordinator
     private let actionsSubject: PassthroughSubject<FooScreenCoordinatorAction, Never> = .init()
-    var actionsPublisher: AnyPublisher<FooScreenCoordinatorAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
-    }
+    var actionsPublisher: AnyPublisher<FooScreenCoordinatorAction, Never> { actionsSubject.eraseToAnyPublisher() }
     
     init(parameters: FooScreenCoordinatorParameters) {
         self.parameters = parameters
-        viewModel = FooScreenViewModel(/* dependencies from parameters */)
+        viewModel = FooScreenViewModel(/* dependencies */)
     }
     
     func start() {
-        viewModel.actionsPublisher.sink { [weak self] action in
-            // Map view model actions to coordinator actions
-        }
-        .store(in: &cancellables)
+        viewModel.actionsPublisher.sink { [weak self] action in /* map to coordinator actions */ }
+            .store(in: &cancellables)
     }
-    
-    func toPresentable() -> AnyView {
-        AnyView(FooScreen(context: viewModel.context))
-    }
+
+    func toPresentable() -> AnyView { AnyView(FooScreen(context: viewModel.context)) }
 }
 ```
 
 ### Error Presentation
 
-Two patterns:
-
-1. **SwiftUI Alerts** — Add an `AlertInfo` to the view model's `bindings`. Present with a one-liner in the view.
-2. **User Indicators** — Via `UserIndicatorController`:
-   - `.toast` — a pill at the top of the screen (used for errors)
-   - `.modal` — a platter overlay for blocking operations (not an actual modal)
+1. **SwiftUI Alerts** — Add `AlertInfo` to `bindings`; present with a one-liner in the view.
+2. **User Indicators** (via `UserIndicatorController`):
+   - `.toast` — pill at top of screen (errors)
+   - `.modal` — not for errors (or an actual model). Blocking overlay for waiting.
 
 ---
 
@@ -219,8 +184,7 @@ Two patterns:
 ### FlowCoordinatorProtocol
 
 ```swift
-@MainActor
-protocol FlowCoordinatorProtocol {
+@MainActor protocol FlowCoordinatorProtocol {
     func start(animated: Bool)
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool)
     func clearRoute(animated: Bool)
@@ -229,114 +193,109 @@ protocol FlowCoordinatorProtocol {
 
 ### State Machines
 
-Flow coordinators use `StateMachine<State, Event>` from [`ReactKit/SwiftState`](https://github.com/ReactKit/SwiftState):
-
-- `State` and `Event` enums are defined inside the flow coordinator, conforming to `StateType` and `EventType`.
-- Routes are configured via `addRoutes(event:transitions:)` for simple transitions or `addRouteMapping` when associated values are involved.
-- An error handler (`addErrorHandler`) should `fatalError` on unexpected transitions to catch bugs early.
-- Transitions call handler closures to present/dismiss coordinators.
+Uses `StateMachine<State, Event>` from [`ReactKit/SwiftState`](https://github.com/ReactKit/SwiftState):
+- `State`/`Event` enums defined inside the flow coordinator, conforming to `StateType`/`EventType`.
+- Simple transitions: `addRoutes(event:transitions:)`. Associated values: `addRouteMapping`.
+- `addErrorHandler` should `fatalError` on unexpected transitions.
 
 ### Navigation Coordinators
 
 | Type | SwiftUI Equivalent | Usage |
 |------|--------------------|-------|
-| `NavigationStackCoordinator` | `NavigationStack` | Push/pop screens within a flow |
+| `NavigationStackCoordinator` | `NavigationStack` | Push/pop within a flow |
 | `NavigationSplitCoordinator` | `NavigationSplitView` | iPad split view |
-| `NavigationTabCoordinator` | `TabView` | Tab-based navigation |
-| `NavigationRootCoordinator` | Root view | Switches the app's root (e.g. auth → session) |
+| `NavigationTabCoordinator` | `TabView` | Tab navigation |
+| `NavigationRootCoordinator` | Root view | Switch app root (e.g. auth → session) |
 
 ### CommonFlowParameters
 
-A shared dependency bag passed between **flow coordinators only**. Never pass this directly to screen coordinators or view models. Screen coordinators receive specific dependencies via their `Parameters` struct.
+Shared dependency bag for **flow coordinators only**. Never pass to screen coordinators or view models — they receive specific dependencies via their `Parameters` struct.
 
 ### AppRoute (Deep Linking)
 
-`AppRoute` is an enum representing deep link destinations. Flow coordinators handle routes in `handleAppRoute` by either rebuilding their presented coordinators, clearing their stack, or doing nothing.
+`AppRoute` enum represents deep-link destinations. Handled in `handleAppRoute` by rebuilding coordinators, clearing stack, or no-op.
 
 ---
 
 ## The Rust SDK Layer
 
-### Proxy Pattern (for uniffi objects)
+### Proxy Pattern (uniffi::Object)
 
-SDK objects that are `uniffi::Object` are wrapped with:
+| Layer | Example | Location |
+|-------|---------|---------|
+| Protocol | `ClientProxyProtocol` | defines interface |
+| Proxy | `ClientProxy` | wraps SDK type, in `Services/<Feature>/` |
+| Mock | `ClientProxyMock` | Sourcery-generated |
 
-1. **Protocol** (e.g. `JoinedRoomProxyProtocol`) — defines the interface
-2. **Proxy** (e.g. `JoinedRoomProxy`) — wraps the Rust SDK type, lives in `Services/<Feature>/`
-3. **Mock** (e.g. `JoinedRoomProxyMock`) — generated by Sourcery for testing
+Naming: SDK type name + `Proxy` suffix (e.g. `Client` → `ClientProxy`). Exceptions where specialisation is needed (e.g. `JoinedRoomProxy`, `InvitedRoomProxy`).
 
-Naming: match the SDK type name + `Proxy` suffix (e.g. `Client` → `ClientProxy`). Exceptions exist where specialisation is needed (e.g. `JoinedRoomProxy`, `InvitedRoomProxy`).
+### Type Mapping (uniffi::Record/Enum)
 
-### Type Mapping (for uniffi records/enums)
-
-SDK types that are `uniffi::Record` or `uniffi::Enum` are mapped to app-owned Swift types to avoid importing `MatrixRustSDK` in views:
-
-- `init(sdkType:)` — to convert from SDK type
-- `var rustValue` — computed property to convert back
+Map SDK types to app-owned Swift types (avoids importing `MatrixRustSDK` in views):
+- `init(rustValue:)` — from SDK
+- `var rustValue` — back to SDK
 
 ### Wrapping Guidelines
 
-- Use `Result<T, E>` with typed errors — don't just throw untyped `Error`.
-- Make methods `async` only when the Rust method is async; otherwise use synchronous computed properties/methods.
-- Use computed `var` for simple properties, not methods.
-- Map FFI types to Swift types: `String` → `URL`, `String` → `TimeInterval`, etc.
-- Follow Swift API Design Guidelines for naming (e.g. `userID` not `userId`, `URL` not `Url`).
+- `Result<T, E>` with typed errors (no bare `throws`).
+- `async` only when the Rust method is async.
+- Prefer computed `var` over methods for simple properties.
+- Map FFI types: `String` → `URL`, timestamp `UInt64` → `Date`, etc.
+- Follow Swift API naming (`userID` not `userId`).
 
 ---
 
 ## Services
 
-Services live in `ElementX/Sources/Services/<Feature>/`. They serve two purposes:
+Located in `ElementX/Sources/Services/<Feature>/`.
 
-1. **Pure app services** (e.g. `AppLockService`) — app-level logic with no SDK involvement
-2. **SDK-wrapping services** — compose SDK proxies with app logic to keep view models simple and testable
+1. **Pure app services** (e.g. `AppLockService`) — no SDK involvement.
+2. **SDK-wrapping services** — compose proxies with app logic; keep view models simple/testable.
 
-The Rust SDK follows the Matrix spec closely and can't be opinionated. Services are where product-level opinions live (e.g. how to combine SDK calls, when to show certain states, etc.).
+Services are where product-level opinions live (the Rust SDK stays spec-faithful).
 
 ### Dependency Injection
 
-- Dependencies are injected via `init` parameters.
-- Screen coordinators receive a `Parameters` struct with their specific dependencies.
-- `CommonFlowParameters` is for flow coordinators only.
-- There is a `ServiceLocator` but it is **deprecated**. Never access it directly from a type that needs a service — always inject from a level above. This will be removed to support multiple accounts.
+- Inject via `init` parameters.
+- Screen coordinators get a `Parameters` struct with specific dependencies.
+- `CommonFlowParameters` is flow-coordinator-only.
+- `ServiceLocator` is **deprecated** — never use services directly; always inject from above.
 
 ---
 
 ## Concurrency & Actors
 
-- Most protocols are annotated `@MainActor`, so conforming types inherit this automatically.
-- Views, screens and coordinators are always `@MainActor` (automatically).
-- Some services are `nonisolated` if they do background work.
-- There are very few `actor` types in the codebase.
+- Most protocols are `@MainActor`; conforming types inherit this.
+- Views, screens, coordinators: always `@MainActor`.
+- Some services are `nonisolated` for background work.
+- `actor` types are rare in the codebase.
 
 ---
 
 ## Compound Design System
 
-The `compound-ios` package (at `compound-ios/` in-repo) provides **all** UI styling. Always use Compound over custom styling unless there's no Compound equivalent.
+`compound-ios/` provides **all** UI styling. Use Compound; only deviate when no equivalent exists.
 
-### Tokens
+### Tokens (`.compound` namespace)
 
-Access via the `.compound` namespace:
-
-- **Colours:** `Color.compound.textPrimary`, `.compound.bgCanvasDefault`, etc.
-- **Fonts:** `Font.compound.bodyLG`, `.compound.headingMDBold`, `.compound.bodySMSemibold`, etc.
-- **Icons:** Key paths on `CompoundIcons` (e.g. `\.userProfile`, `\.plus`, `\.leave`). Never use icon images directly — use `CompoundIcon(\.iconName)` which handles Dynamic Type scaling.
+- **Colours:** `Color.compound.textPrimary`, `.bgCanvasDefault`, …
+- **Fonts:** `Font.compound.bodyLG`, `.headingMDBold`, `.bodySMSemibold`, …
+- **Icons:** key paths on `CompoundIcons` (e.g. `\.userProfile`). Always use `CompoundIcon(\.iconName)` (handles Dynamic Type scaling).
 
 ### Key Components
 
-- **`ListRow`** — The primary building block for list/form screens. Supports labels (`.default`, `.plain`, `.action`, `.centeredAction`), detail views, and kinds (`.label`, `.button`, `.textField`, `.toggle`, etc.).
-- **`.compoundList()`** — Modifier to style a `Form`/`List` with Compound tokens.
-- **`.compoundListSectionHeader()`** / **`.compoundListSectionFooter()`** — Section header/footer styling.
-- **`CompoundButtonStyle`** — Button styles: `.compound(.primary)`, `.compound(.secondary)`, `.compound(.tertiary)`, `.compound(.super)`, `.compound(.textLink)`. Sizes: `.large`, `.medium`, `.small`, `.toolbarIcon`.
-- **`CompoundToggleStyle`** — Toggle styling: `.toggleStyle(.compound)`.
-- **`CompoundIcon`** — Icon view with sizes `.xSmall` (16pt), `.small` (20pt), `.medium` (24pt), `.custom(CGFloat)`.
-- **`SendButton`** — Specialised send button for message composition.
-- **`Label` with icon keypaths** — `Label("Title", icon: \.userProfile)` uses `CompoundIcon` internally.
+| Component | Notes |
+|-----------|-------|
+| `ListRow` | Primary list/form building block. Label styles: `.default`, `.plain`, `.action`, `.centeredAction`. Kinds: `.label`, `.button`, `.textField`, `.toggle`, etc. |
+| `.compoundList()` | Styles a `Form`/`List` with Compound tokens |
+| `.compoundListSectionHeader/Footer()` | Section header/footer styling |
+| `CompoundButtonStyle` | Styles: `.primary`, `.secondary`, `.tertiary`, `.super`, `.textLink`. Sizes: `.large`, `.medium`, `.small`, `.toolbarIcon` |
+| `CompoundToggleStyle` | `.toggleStyle(.compound)` |
+| `CompoundIcon` | Sizes: `.xSmall` (16pt), `.small` (20pt), `.medium` (24pt), `.custom(CGFloat)` |
+| `SendButton` | Specialised send button for message composition |
+| `Label` with icon keypaths | `Label("Title", icon: \.userProfile)` uses `CompoundIcon` internally |
 
-### Pattern
-
-A typical Compound-styled list screen:
+### Example
 
 ```swift
 Form {
@@ -352,38 +311,36 @@ Form {
 .navigationTitle("Settings")
 ```
 
-Explore `compound-ios/Sources/Compound/` for the full component set.
+See `compound-ios/Sources/Compound/` for the full component set.
 
 ---
 
 ## Testing
 
-Coverage is tracked in codecov with a target of 80% coverage as a minimum (including the coverage from the SDK, Compound and Rich Text Editor).
+Coverage target: **80%** (includes SDK, Compound, Rich Text Editor).
+Project is migrating from XCTest to **Swift Testing** (see PR #5119).
 
 ### Test Types
 
 | Type | Location | Purpose |
 |------|----------|---------|
-| **Unit Tests** | `UnitTests/Sources/` | View model logic, state machines, services |
-| **UI Tests** | `UITests/Sources/` | Flow coordinator integration (tapping through screens) |
-| **Preview Tests** | `PreviewTests/Sources/` | Auto-generated snapshot tests from SwiftUI previews |
-| **Accessibility Tests** | `AccessibilityTests/Sources` | Auto-generated Xcode Accessibility Audits from previews |
+| Unit Tests | `UnitTests/Sources/` | VM logic, state machines, services |
+| UI Tests | `UITests/Sources/` | Flow coordinator integration (snapshots) |
+| Preview Tests | `PreviewTests/Sources/` | Auto-generated snapshots from previews |
+| Accessibility Tests | `AccessibilityTests/Sources/` | Auto-generated Xcode Accessibility Audits |
 
-When the test suite uses Swift Testing, add the `.serialized` trait to the suite when it contains anything that is stored globally (such as AppSettings) to ensure consistent test states across runs (as some test plans randomise the run order).
+No need for `.serialized` suite traits, tests aren't run in parallel.
 
 ### Mocks
 
-Generated by **Sourcery** (config in `Tools/Sourcery/`). Generated files live in `Generated/` directories.
-
-- Sourcery mocks intentionally crash when calling un-configured methods.
-- Commonly-used mocks have a convenience `init` with a `Configuration` struct providing defaults and easy customisation:
+Generated by Sourcery (configs in `Tools/Sourcery/`); files in `Generated/` directories.
+- Un-configured methods intentionally crash.
+- Common mocks have a `Configuration`-based convenience `init`:
   ```swift
   let mock = ClientProxyMock(.init(userID: "@alice:example.com"))
   ```
 
 ### Async Testing
-
-Use `deferFulfillment` to await specific values from Combine publishers or `AsyncSequence` with a timeout:
 
 ```swift
 let deferred = deferFulfillment(context.observe(\.viewState.counter)) { $0 == 1 }
@@ -392,31 +349,27 @@ try await deferred.fulfill()
 #expect(context.viewState.counter == 1)
 ```
 
-The project is migrating from XCTest to **Swift Testing** (see PR #5119).
+Same pattern for publishers.
 
 ### Snapshots
 
-UI and Preview tests use snapshots to catch unwanted changes in the UI.
-
-- Snapshots are stored under `<Target>/Sources/__Snapshots__/`.
-- Snapshots are tracked via **Git LFS** — ensure `git lfs install` has been run.
-- If you change UI, snapshots may need to be re-recorded on the correct device/OS combination.
-
-Snapshots are handled by [`pointfreeco/swift-snapshot-testing`](https://github.com/pointfreeco/swift-snapshot-testing) and any failures are included in the test results as a set of 3 images: the reference, the failure and a diff.
+- Stored in `<Target>/Sources/__Snapshots__/`, tracked via **Git LFS** (`git lfs install`).
+- Re-record on the correct device/OS if UI changes.
+- Powered by [`pointfreeco/swift-snapshot-testing`](https://github.com/pointfreeco/swift-snapshot-testing). Failures produce 3 images: reference, failure, diff.
 
 ---
 
-## Key Files Reference
+## Key Files
 
 | File | Purpose |
 |------|---------|
-| `project.yml` | XcodeGen project definition (targets, packages, settings) |
-| `app.yml` | App-level XcodeGen configuration |
+| `project.yml` | XcodeGen project (targets, packages, settings) |
+| `app.yml` | App-level XcodeGen config |
 | `.swiftlint.yml` | SwiftLint rules |
 | `.swiftformat` | SwiftFormat rules |
 | `Dangerfile.swift` | Danger PR checks |
-| `Package.swift` | SPM package manifest (for the Tools CLI) |
-| `Gemfile` | Ruby dependencies (Fastlane, Danger) |
+| `Package.swift` | SPM manifest (Tools CLI) |
+| `Gemfile` | Ruby deps (Fastlane, Danger) |
 | `localazy.json` | Localazy translation config |
-| `codecov.yml` | Codecov configuration |
-| `.periphery.yml` | Periphery dead-code detection config |
+| `codecov.yml` | Codecov config |
+| `.periphery.yml` | Periphery dead-code detection |
