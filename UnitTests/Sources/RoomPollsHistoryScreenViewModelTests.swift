@@ -186,4 +186,3 @@ private enum SDKError: Error {
     case generic
 }
 
-
