@@ -54,7 +54,15 @@
       "Bash(/tmp/process_icon.swift:*)",
       "Bash(swiftc:*)",
       "Bash(/tmp/process_icon:*)",
-      "Bash(textutil:*)"
+      "Bash(textutil:*)",
+      "Bash(git clean:*)",
+      "Bash(file:*)",
+      "Bash(identify:*)",
+      "Bash(wc:*)",
+      "Bash(sips:*)",
+      "Bash(# Use:*)",
+      "Bash(xcrun simctl boot:*)",
+      "Bash(xcrun xcresulttool:*)"
     ]
   }
 }

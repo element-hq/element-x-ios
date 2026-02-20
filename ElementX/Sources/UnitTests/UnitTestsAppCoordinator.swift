@@ -19,7 +19,7 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
         windowManager = WindowManager(appDelegate: appDelegate)
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorControllerMock.default)
         
-        AppSettings.configureWithSuiteName("io.element.elementx.unittests")
+        AppSettings.configureWithSuiteName("org.ucmeet.ucmeetchat.unittests")
         AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
         

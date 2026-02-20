@@ -239,7 +239,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        let reachabilityNotificationID = "io.element.elementx.reachability.notification"
+        let reachabilityNotificationID = "org.ucmeet.ucmeetchat.reachability.notification"
         userSession.clientProxy.homeserverReachabilityPublisher.removeDuplicates()
             .combineLatest(flowParameters.appMediator.networkMonitor.reachabilityPublisher.removeDuplicates())
             .receive(on: DispatchQueue.main)

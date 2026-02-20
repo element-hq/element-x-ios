@@ -1,0 +1,27 @@
+NOTICE — UCMeet.Chat iOS
+
+This application is a modified version of Element X iOS.
+
+Original Software:
+  Name: Element X iOS
+  Copyright: 2022-2025 Element Creations Ltd. / New Vector Ltd.
+  Repository: https://github.com/element-hq/element-x-ios
+  License: GNU Affero General Public License v3.0 (AGPL-3.0)
+
+Modified by:
+  Organization: UC.Technology LLC
+  Developer: Saidakhror Murzaliev
+  Repository: https://github.com/smurzaliev/custom-element-messenger-ios
+
+Modifications include:
+  - Rebranded user interface (app name, icon, accent color, strings)
+  - Server configuration changed to customer infrastructure
+  - Firebase Cloud Messaging (FCM) push notification support added
+  - Localization trimmed to English and Russian
+  - Associated domains and URL schemes updated
+
+This modified software is distributed under the same AGPL-3.0 license
+as the original. See the LICENSE file for the full license text.
+
+The source code for this application is available at the repository
+listed above, in compliance with AGPL-3.0 Section 13.

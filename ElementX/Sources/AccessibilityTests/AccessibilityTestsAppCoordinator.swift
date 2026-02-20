@@ -38,7 +38,7 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
         
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         
-        AppSettings.configureWithSuiteName("io.element.elementx.accessibilitytests")
+        AppSettings.configureWithSuiteName("org.ucmeet.ucmeetchat.accessibilitytests")
         AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
         

@@ -97,7 +97,7 @@ final class AppSettings {
         return .debug
         #else
         switch InfoPlistReader.main.baseBundleIdentifier {
-        case "io.element.elementx.nightly":
+        case "org.ucmeet.ucmeetchat.nightly":
             return .nightly
         default:
             return .release
@@ -202,8 +202,7 @@ final class AppSettings {
     private(set) var hideBrandChrome = false
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
-    // TODO: UCMeet — update to match final bundle ID (e.g., "org.ucmeet.chat.background.refresh")
-    let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
+    let backgroundAppRefreshTaskIdentifier = "org.ucmeet.ucmeetchat.background.refresh"
 
     /// A URL where users can go read more about the app.
     private(set) var websiteURL: URL = "https://www.ucmeet.info"
@@ -290,7 +289,7 @@ final class AppSettings {
         #endif
     }
     
-    private(set) var pushGatewayBaseURL: URL = "https://matrix.ucmeet.org"
+    private(set) var pushGatewayBaseURL: URL = "https://push.ucmeet.org"
     var pushGatewayNotifyEndpoint: URL {
         pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify")
     }

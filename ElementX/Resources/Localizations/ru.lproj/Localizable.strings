@@ -836,8 +836,8 @@
 "screen_change_account_provider_subtitle" = "Используйте другого поставщика учетных записей, например, собственный частный сервер или рабочую учетную запись.";
 "screen_change_account_provider_title" = "Сменить поставщика учетной записи";
 "screen_change_server_error_element_pro_required_action_ios" = "Магазин приложений";
-"screen_change_server_error_element_pro_required_message" = "Требуется приложение UCMeet Pro для %1$@. Пожалуйста, загрузите его из магазина.";
-"screen_change_server_error_element_pro_required_title" = "Требуется UCMeet Pro";
+"screen_change_server_error_element_pro_required_message" = "Требуется приложение UCMeet.Chat Pro для %1$@. Пожалуйста, загрузите его из магазина.";
+"screen_change_server_error_element_pro_required_title" = "Требуется UCMeet.Chat Pro";
 "screen_change_server_error_invalid_homeserver" = "Нам не удалось связаться с этим домашним сервером. Убедитесь, что вы правильно ввели URL-адрес домашнего сервера. Если URL-адрес указан правильно, обратитесь к администратору домашнего сервера за дополнительной помощью.";
 "screen_change_server_error_invalid_well_known" = "Сервер недоступен из-за проблемы в файле .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Выбранный провайдер аккаунтов не поддерживает Sliding sync. Для использования %1$@ необходимо обновление сервера.";
@@ -995,7 +995,7 @@
 "screen_onboarding_sign_up" = "Создать учетную запись";
 "screen_onboarding_welcome_message" = "Добро пожаловать в самый быстрый клиент %1$@. Ориентирован на скорость и простоту.";
 "screen_onboarding_welcome_subtitle" = "Добро пожаловать в %1$@. Ориентирован на скорость и простоту.";
-"screen_onboarding_welcome_title" = "Добро пожаловать в UCMeet";
+"screen_onboarding_welcome_title" = "Добро пожаловать в UCMeet.Chat";
 "screen_polls_history_empty_ongoing" = "Не найдено текущих опросов.";
 "screen_polls_history_empty_past" = "Не найдено прошлых опросов.";
 "screen_polls_history_filter_ongoing" = "Текущие";
@@ -1185,7 +1185,7 @@
 "screen_room_timeline_add_reaction" = "Добавить эмодзи";
 "screen_room_timeline_beginning_of_room" = "Это начало %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Это начало разговора.";
-"screen_room_timeline_legacy_call" = "Неподдерживаемый вызов. Уточните, может ли звонящий использовать новое приложение UCMeet.";
+"screen_room_timeline_legacy_call" = "Неподдерживаемый вызов. Уточните, может ли звонящий использовать новое приложение UCMeet.Chat.";
 "screen_room_timeline_less_reactions" = "Показать меньше";
 "screen_room_timeline_message_copied" = "Сообщение скопировано";
 "screen_room_timeline_no_permission_to_post" = "У вас нет разрешения публиковать сообщения в этой комнате";
@@ -1217,7 +1217,7 @@
 "screen_roomlist_main_space_title" = "Все чаты";
 "screen_roomlist_mark_as_read" = "Пометить как прочитанное";
 "screen_roomlist_mark_as_unread" = "Отметить как непрочитанное";
-"screen_server_confirmation_message_login_element_dot_io" = "Частный сервер для сотрудников UCMeet.";
+"screen_server_confirmation_message_login_element_dot_io" = "Частный сервер для сотрудников UCMeet.Chat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix — это открытая сеть для безопасной децентрализованной связи.";
 "screen_server_confirmation_message_register" = "Здесь будут храниться ваши разговоры — точно так же, как если бы вы использовали почтового провайдера для хранения своих писем.";
 "screen_server_confirmation_title_login" = "Вы собираетесь войти в %1$@";
