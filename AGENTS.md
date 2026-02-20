@@ -5,27 +5,22 @@
 
 ---
 
-## Critical Rules
+## Strong Conventions:
 
-These rules are **non-negotiable**. Violating them will cause PR rejection.
+These rules must be met for a PR to be accepted. Always prefer the use of Xcode's MCP tools over executing commands in the terminal.
 
 ### Code Style
 
 - Code style is enforced by **SwiftLint** (`.swiftlint.yml`) and **SwiftFormat** (`.swiftformat`). Follow their configuration.
-- **Empty lines MUST preserve indentation** matching the surrounding context. Never trim whitespace from blank lines. This is important.
+- Whitespace-only lines: Do not remove indentation from blank/whitespace-only lines (we keep Xcode's "Trim whitespace-only lines" setting disabled).
+  - It’s OK to add or adjust indentation on whitespace-only lines to match the surrounding scope, but never strip it.
+  - PRs that remove indentation on whitespace-only lines will be rejected.
 - Follow [Swift's API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) everywhere, including when wrapping Rust SDK types (e.g. use `ID` not `Id`, `URL` not `Url`).
-- File headers are defined in `IDETemplateMacros.plist`. Use Xcode's MCP tools to work in the project so headers are applied automatically. If Xcode tools are unavailable on macOS, ask the user to install Xcode 26.3+ and enable Xcode Tools in Intelligence settings.
-
-### Concurrency & Actors
-
-- Most protocols are annotated `@MainActor`, so conforming types inherit this automatically.
-- Views, screens and coordinators are always `@MainActor` (automatically).
-- Some services are `nonisolated` if they do background work.
-- There are very few `actor` types in the codebase; use `Task` normally for async work.
+- File headers are defined in `IDETemplateMacros.plist`.
 
 ### PII & Logging
 
-- Use `MXLog.info` by default, `.error` for unexpected failures. `.verbose` for noisy development-only logs. `.failure` and `.debug` are rarely used.
+- Use `MXLog.info` by default, `.error` for unexpected failures and `.verbose` for noisy development-only logs. `.failure` and `.debug` are rarely used.
 - **NEVER log secrets, passwords, keys, or user content** (e.g. message bodies).
 - Action enums with associated values containing secrets (passwords, keys, tokens) **MUST** conform to `CustomStringConvertible` so only the case name is logged, not the associated values. The template includes a comment reminding you of this.
 - Matrix IDs are acceptable to log.
@@ -33,10 +28,10 @@ These rules are **non-negotiable**. Violating them will cause PR rejection.
 ### Strings & Localisation
 
 - The project's default localisation is `en` which contains en-GB strings.
+- Strings are shared with Element X Android via [Localazy](https://localazy.com/p/element).
 - **Never edit `Localizable.strings`** — it is overwritten when downloading from Localazy.
 - Add new English strings to **`Untranslated.strings`** (or `Untranslated.stringsdict` for plurals). The team will import them into Localazy before merging.
 - Strings are accessed via generated `L10n` types (e.g. `L10n.actionDone`).
-- Strings are shared with Element X Android via [Localazy](https://localazy.com/p/element).
 - **Key naming rules** (from [element-x-android/tools/localazy/README.md](https://github.com/element-hq/element-x-android/blob/develop/tools/localazy/README.md#key-naming-rules)):
   - Common strings reusable across screens: start with `action_` (verbs) or `common_` (nouns/other).
   - Common accessibility strings: start with `a11y_` (e.g. `a11y_hide_password`).
@@ -44,19 +39,21 @@ These rules are **non-negotiable**. Violating them will cause PR rejection.
   - Screen-specific strings: start with `screen_` + screen name + free name (e.g. `screen_onboarding_welcome_title`).
   - Error strings: start with `error_` or contain `_error_` for screen-specific errors.
   - iOS-only strings: suffix with `_ios`. Android-only: suffix with `_android`.
-  - Placeholders: use numbered form `%1$@`, `%1$d` etc, but add a comment that `@` should be changed to `s` adding to Localazy (it converts it back when downloaded.
+  - Placeholders:
+    - Use numbered form `%1$@`, `%1$d` etc.
+    - Use %1$@ for strings in iOS source; Localazy expects %1$s. Add a translator comment: Localazy: change %@ -> %s.
 
 ### Previews
 
 - Create previews for **all main states** a screen/view will be in.
-- Use `PreviewProvider`s (not `#Preview`) — this is how snapshot tests are hooked up:
-  - Adding a second conformance `TestablePreview` indicates the preview should have snapshot and accessibility tests generated.
+- Use `PreviewProvider` (not `#Preview`) because snapshot/accessibility tests are generated from it.
+- Adding a second conformance `TestablePreview` marks the to have snapshot and accessibility tests generated.
 
 ---
 
 ## Pull Request Guidelines
 
-- Do not create conventional-commits, prefer the use of a single sentence instead.
+- Do not use conventional commit messages, prefer the use of sentences.
 - Apply exactly **one** `pr-` label to categorise the changelog entry (mapping defined in `.github/release.yml`).
 - The PR title becomes the changelog entry — make it descriptive and complete (no "Fixes #…" or conventional-commit prefixes).
 - Include screenshots/videos for any visual changes.
@@ -302,6 +299,15 @@ The Rust SDK follows the Matrix spec closely and can't be opinionated. Services 
 - Screen coordinators receive a `Parameters` struct with their specific dependencies.
 - `CommonFlowParameters` is for flow coordinators only.
 - There is a `ServiceLocator` but it is **deprecated**. Never access it directly from a type that needs a service — always inject from a level above. This will be removed to support multiple accounts.
+
+---
+
+## Concurrency & Actors
+
+- Most protocols are annotated `@MainActor`, so conforming types inherit this automatically.
+- Views, screens and coordinators are always `@MainActor` (automatically).
+- Some services are `nonisolated` if they do background work.
+- There are very few `actor` types in the codebase.
 
 ---
 
