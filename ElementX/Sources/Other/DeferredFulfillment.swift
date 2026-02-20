@@ -42,25 +42,19 @@ struct DeferredFulfillmentError: Error {
 ///   - sourceLocation: The source location to attach to any recorded issues.
 ///   - until: callback that evaluates outputs until some condition is reached
 /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
-func deferFulfillment<P: Publisher>(_ publisher: P,
-                                    timeout: Duration = .seconds(10),
-                                    message: String? = nil,
-                                    sourceLocation: SourceLocation = #_sourceLocation,
-                                    until condition: @escaping (P.Output) -> Bool) -> DeferredFulfillment<P.Output> {
-    let (stream, continuation) = AsyncStream<Result<P.Output, Error>>.makeStream()
+func deferFulfillment<P: Publisher<P.Output, Never>>(_ publisher: P,
+                                                     timeout: Duration = .seconds(10),
+                                                     message: String? = nil,
+                                                     sourceLocation: SourceLocation = #_sourceLocation,
+                                                     until condition: @escaping (P.Output) -> Bool) -> DeferredFulfillment<P.Output> {
+    let (stream, continuation) = AsyncStream<P.Output>.makeStream()
     
     let cancellable = publisher
-        .sink { completion in
-            switch completion {
-            case .failure(let error):
-                continuation.yield(.failure(error))
-                continuation.finish()
-            case .finished:
-                continuation.finish()
-            }
+        .sink { _ in
+            continuation.finish()
         } receiveValue: { value in
             guard condition(value) else { return }
-            continuation.yield(.success(value))
+            continuation.yield(value)
             continuation.finish()
         }
     
@@ -70,7 +64,7 @@ func deferFulfillment<P: Publisher>(_ publisher: P,
         return try await withThrowingTaskGroup(of: P.Output.self) { group in
             group.addTask {
                 for await result in stream {
-                    return try result.get()
+                    return result
                 }
                 guard !Task.isCancelled else {
                     // Required to avoid a double recording of the issue in the case where the task is cancelled due to timeout.
@@ -148,12 +142,12 @@ func deferFulfillment<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
 ///   - timeout: A timeout after which we give up.
 ///   - sourceLocation: The source location to attach to any recorded issues.
 /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
-func deferFulfillment<P: Publisher, K: KeyPath<P.Output, V>, V: Equatable>(_ publisher: P,
-                                                                           keyPath: K,
-                                                                           transitionValues: [V],
-                                                                           timeout: Duration = .seconds(10),
-                                                                           message: String? = nil,
-                                                                           sourceLocation: SourceLocation = #_sourceLocation) -> DeferredFulfillment<P.Output> {
+func deferFulfillment<P: Publisher<P.Output, Never>, K: KeyPath<P.Output, V>, V: Equatable>(_ publisher: P,
+                                                                                            keyPath: K,
+                                                                                            transitionValues: [V],
+                                                                                            timeout: Duration = .seconds(10),
+                                                                                            message: String? = nil,
+                                                                                            sourceLocation: SourceLocation = #_sourceLocation) -> DeferredFulfillment<P.Output> {
     var expectedOrder = transitionValues
     return deferFulfillment(publisher, timeout: timeout, message: message, sourceLocation: sourceLocation) { value in
         let receivedValue = value[keyPath: keyPath]
@@ -193,11 +187,11 @@ func deferFulfillment<Value: Equatable>(_ asyncSequence: any AsyncSequence<Value
 ///   - sourceLocation: The source location to attach to any recorded issues.
 ///   - until: callback that evaluates outputs until some condition is reached
 /// - Returns: The deferred fulfilment to be executed after some actions. The publisher's result is not returned from this fulfilment.
-func deferFailure<P: Publisher>(_ publisher: P,
-                                timeout: Duration,
-                                message: String? = nil,
-                                sourceLocation: SourceLocation = #_sourceLocation,
-                                until condition: @escaping (P.Output) -> Bool) -> DeferredFulfillment<Void> where P.Failure == Never {
+func deferFailure<P: Publisher<P.Output, Never>>(_ publisher: P,
+                                                 timeout: Duration,
+                                                 message: String? = nil,
+                                                 sourceLocation: SourceLocation = #_sourceLocation,
+                                                 until condition: @escaping (P.Output) -> Bool) -> DeferredFulfillment<Void> where P.Failure == Never {
     let (stream, continuation) = AsyncStream<Void>.makeStream()
     
     let cancellable = publisher
