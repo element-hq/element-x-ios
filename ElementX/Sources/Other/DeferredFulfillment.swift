@@ -34,11 +34,12 @@ struct DeferredFulfillmentError: Error {
     }
 }
 
-/// Utility that assists in subscribing to a publisher and deferring the fulfilment and results until some other actions have been performed.
+/// Test utility that assists in subscribing to a publisher and deferring the fulfilment and results until some other actions have been performed.
 /// - Parameters:
 ///   - publisher: The publisher to wait on.
 ///   - timeout: A timeout after which we give up.
 ///   - message: An optional message to include in the error if the condition is never met.
+///   - sourceLocation: The source location to attach to any recorded issues.
 ///   - until: callback that evaluates outputs until some condition is reached
 /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
 func deferFulfillment<P: Publisher>(_ publisher: P,
@@ -72,6 +73,7 @@ func deferFulfillment<P: Publisher>(_ publisher: P,
                     return try result.get()
                 }
                 guard !Task.isCancelled else {
+                    // Required to avoid a double recording of the issue in the case where the task is cancelled due to timeout.
                     throw DeferredFulfillmentError.empty
                 }
                 throw DeferredFulfillmentError.noOutput(message: message, sourceLocation: sourceLocation)
@@ -88,11 +90,12 @@ func deferFulfillment<P: Publisher>(_ publisher: P,
     }
 }
 
-/// Utility that assists in observing an async sequence, deferring the fulfilment and results until some condition has been met.
+/// Test utility that assists in observing an async sequence, deferring the fulfilment and results until some condition has been met.
 /// - Parameters:
 ///   - asyncSequence: The sequence to wait on.
 ///   - timeout: A timeout after which we give up.
 ///   - message: An optional message to include in the error if the condition is never met.
+///   - sourceLocation: The source location to attach to any recorded issues.
 ///   - until: callback that evaluates outputs until some condition is reached
 /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the sequence.
 func deferFulfillment<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
@@ -120,6 +123,7 @@ func deferFulfillment<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
                     return value
                 }
                 guard !Task.isCancelled else {
+                    // Required to avoid a double recording of the issue in the case where the task is cancelled due to timeout.
                     throw DeferredFulfillmentError.empty
                 }
                 throw DeferredFulfillmentError.noOutput(message: message, sourceLocation: sourceLocation)
@@ -131,18 +135,18 @@ func deferFulfillment<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
             
             defer { group.cancelAll() }
             
-            // swiftlint:disable:next force_unwrapping
-            return try await group.next()!
+            return try #require(try await group.next())
         }
     }
 }
 
-/// Utility that assists in subscribing to a publisher and deferring the fulfilment and results until some other actions have been performed.
+/// Test utility that assists in subscribing to a publisher and deferring the fulfilment and results until some other actions have been performed.
 /// - Parameters:
 ///   - publisher: The publisher to wait on.
 ///   - keyPath: the key path for the expected values
 ///   - transitionValues: the values through which the keypath needs to transition through
 ///   - timeout: A timeout after which we give up.
+///   - sourceLocation: The source location to attach to any recorded issues.
 /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
 func deferFulfillment<P: Publisher, K: KeyPath<P.Output, V>, V: Equatable>(_ publisher: P,
                                                                            keyPath: K,
@@ -160,11 +164,12 @@ func deferFulfillment<P: Publisher, K: KeyPath<P.Output, V>, V: Equatable>(_ pub
     }
 }
 
-/// Utility that assists in subscribing to an async sequence and deferring the fulfilment and results until some other actions have been performed.
+/// Test utility that assists in subscribing to an async sequence and deferring the fulfilment and results until some other actions have been performed.
 /// - Parameters:
 ///   - asyncSequence: The sequence to wait on.
 ///   - transitionValues: the values through which the sequence needs to transition through
 ///   - timeout: A timeout after which we give up.
+///   - sourceLocation: The source location to attach to any recorded issues.
 /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the sequence.
 func deferFulfillment<Value: Equatable>(_ asyncSequence: any AsyncSequence<Value, Never>,
                                         transitionValues: [Value],
@@ -180,11 +185,12 @@ func deferFulfillment<Value: Equatable>(_ asyncSequence: any AsyncSequence<Value
     }
 }
 
-/// Utility that assists in subscribing to a publisher and deferring the failure for a particular value until some other actions have been performed.
+/// Test utility that assists in subscribing to a publisher and deferring the failure for a particular value until some other actions have been performed.
 /// - Parameters:
 ///   - publisher: The publisher to wait on.
 ///   - timeout: A timeout after which we give up.
 ///   - message: An optional message to include in the error if the condition is unexpectedly met.
+///   - sourceLocation: The source location to attach to any recorded issues.
 ///   - until: callback that evaluates outputs until some condition is reached
 /// - Returns: The deferred fulfilment to be executed after some actions. The publisher's result is not returned from this fulfilment.
 func deferFailure<P: Publisher>(_ publisher: P,
@@ -220,17 +226,17 @@ func deferFailure<P: Publisher>(_ publisher: P,
             
             defer { group.cancelAll() }
             
-            // swiftlint:disable:next force_unwrapping
-            try await group.next()!
+            return try #require(try await group.next())
         }
     }
 }
 
-/// Utility that assists in subscribing to an async sequence and deferring the failure for a particular value until some other actions have been performed.
+/// Test utility that assists in subscribing to an async sequence and deferring the failure for a particular value until some other actions have been performed.
 /// - Parameters:
 ///   - asyncSequence: The sequence to wait on.
 ///   - timeout: A timeout after which we give up.
 ///   - message: An optional message to include in the error if the condition is unexpectedly met.
+///   - sourceLocation: The source location to attach to any recorded issues.
 ///   - until: callback that evaluates outputs until some condition is reached
 /// - Returns: The deferred fulfilment to be executed after some actions. The sequence's result is not returned from this fulfilment.
 func deferFailure<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
@@ -266,8 +272,7 @@ func deferFailure<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
             
             defer { group.cancelAll() }
             
-            // swiftlint:disable:next force_unwrapping
-            try await group.next()!
+            return try #require(try await group.next())
         }
     }
 }
