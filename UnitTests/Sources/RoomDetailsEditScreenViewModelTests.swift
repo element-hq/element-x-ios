@@ -8,10 +8,11 @@
 
 @testable import ElementX
 import MatrixRustSDK
-import XCTest
+import Testing
 
 @MainActor
-class RoomDetailsEditScreenViewModelTests: XCTestCase {
+@Suite
+struct RoomDetailsEditScreenViewModelTests {
     var viewModel: RoomDetailsEditScreenViewModel!
     
     var userIndicatorController: UserIndicatorControllerMock!
@@ -20,65 +21,74 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    func testCannotSaveOnLanding() {
+    @Test
+    mutating func cannotSaveOnLanding() {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
-        XCTAssertFalse(context.viewState.canSave)
+        #expect(!context.viewState.canSave)
     }
     
-    func testCanEdit() async throws {
+    @Test
+    mutating func canEdit() async throws {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         
         let deferred = deferFulfillment(context.$viewState) { $0.canEditName }
         try await deferred.fulfill()
         
-        XCTAssertTrue(context.viewState.canEditAvatar)
-        XCTAssertTrue(context.viewState.canEditName)
-        XCTAssertTrue(context.viewState.canEditTopic)
+        #expect(context.viewState.canEditAvatar)
+        #expect(context.viewState.canEditName)
+        #expect(context.viewState.canEditTopic)
     }
     
-    func testCannotEdit() {
+    @Test
+    mutating func cannotEdit() {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMe]))
-        XCTAssertFalse(context.viewState.canEditAvatar)
-        XCTAssertFalse(context.viewState.canEditName)
-        XCTAssertFalse(context.viewState.canEditTopic)
+        #expect(!context.viewState.canEditAvatar)
+        #expect(!context.viewState.canEditName)
+        #expect(!context.viewState.canEditTopic)
     }
     
-    func testNameDidChange() {
+    @Test
+    mutating func nameDidChange() {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.name = "name"
-        XCTAssertTrue(context.viewState.nameDidChange)
-        XCTAssertTrue(context.viewState.canSave)
+        #expect(context.viewState.nameDidChange)
+        #expect(context.viewState.canSave)
     }
     
-    func testTopicDidChange() {
+    @Test
+    mutating func topicDidChange() {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.topic = "topic"
-        XCTAssertTrue(context.viewState.topicDidChange)
-        XCTAssertTrue(context.viewState.canSave)
+        #expect(context.viewState.topicDidChange)
+        #expect(context.viewState.canSave)
     }
     
-    func testAvatarDidChange() {
+    @Test
+    mutating func avatarDidChange() {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", avatarURL: .mockMXCAvatar, members: [.mockMeAdmin]))
         context.send(viewAction: .removeImage)
-        XCTAssertTrue(context.viewState.avatarDidChange)
-        XCTAssertTrue(context.viewState.canSave)
+        #expect(context.viewState.avatarDidChange)
+        #expect(context.viewState.canSave)
     }
     
-    func testEmptyNameCannotBeSaved() {
+    @Test
+    mutating func emptyNameCannotBeSaved() {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.name = ""
-        XCTAssertFalse(context.viewState.canSave)
+        #expect(!context.viewState.canSave)
     }
     
-    func testAvatarPickerShowsSheet() {
+    @Test
+    mutating func avatarPickerShowsSheet() {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.name = "name"
-        XCTAssertFalse(context.showMediaSheet)
+        #expect(!context.showMediaSheet)
         context.send(viewAction: .presentMediaSource)
-        XCTAssertTrue(context.showMediaSheet)
+        #expect(context.showMediaSheet)
     }
     
-    func testSaveTriggersViewModelAction() async throws {
+    @Test
+    mutating func saveTriggersViewModelAction() async throws {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         
         let deferred = deferFulfillment(viewModel.actions) { action in
@@ -89,67 +99,72 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         context.send(viewAction: .save)
         
         let action = try await deferred.fulfill()
-        XCTAssertEqual(action, .saveFinished)
+        #expect(action == .saveFinished)
     }
     
-    func testCancelWithoutChanges() async throws {
+    @Test
+    mutating func cancelWithoutChanges() async throws {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
-        XCTAssertFalse(context.viewState.canSave)
-        XCTAssertNil(context.alertInfo)
+        #expect(!context.viewState.canSave)
+        #expect(context.alertInfo == nil)
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .cancel }
         context.send(viewAction: .cancel)
         try await deferred.fulfill()
-        XCTAssertNil(context.alertInfo)
+        #expect(context.alertInfo == nil)
     }
     
-    func testCancelWithChangesAndDiscard() async throws {
+    @Test
+    mutating func cancelWithChangesAndDiscard() async throws {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.name = "name"
-        XCTAssertTrue(context.viewState.canSave)
-        XCTAssertNil(context.alertInfo)
+        #expect(context.viewState.canSave)
+        #expect(context.alertInfo == nil)
         
         context.send(viewAction: .cancel)
         
-        XCTAssertNotNil(context.alertInfo)
+        #expect(context.alertInfo != nil)
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .cancel }
         context.alertInfo?.secondaryButton?.action?() // Discard
         try await deferred.fulfill()
     }
     
-    func testCancelWithChangesAndSave() async throws {
+    @Test
+    mutating func cancelWithChangesAndSave() async throws {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.name = "name"
-        XCTAssertTrue(context.viewState.canSave)
-        XCTAssertNil(context.alertInfo)
+        #expect(context.viewState.canSave)
+        #expect(context.alertInfo == nil)
         
         context.send(viewAction: .cancel)
         
-        XCTAssertNotNil(context.alertInfo)
+        #expect(context.alertInfo != nil)
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .saveFinished }
         context.alertInfo?.primaryButton.action?() // Save
         try await deferred.fulfill()
     }
     
-    func testErrorShownOnFailedFetchOfMedia() async {
+    @Test
+    mutating func errorShownOnFailedFetchOfMedia() async {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         viewModel.didSelectMediaUrl(url: .picturesDirectory)
         try? await Task.sleep(for: .milliseconds(100))
-        XCTAssertNotNil(context.alertInfo)
+        #expect(context.alertInfo != nil)
     }
     
-    func testDeleteAvatar() {
+    @Test
+    mutating func deleteAvatar() {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", avatarURL: .mockMXCAvatar, members: [.mockMeAdmin]))
-        XCTAssertNotNil(context.viewState.avatarURL)
+        #expect(context.viewState.avatarURL != nil)
         context.send(viewAction: .removeImage)
-        XCTAssertNil(context.viewState.avatarURL)
+        #expect(context.viewState.avatarURL == nil)
     }
     
     // MARK: - Private
     
-    private func setupViewModel(roomProxyConfiguration: JoinedRoomProxyMockConfiguration) {
+    private mutating func setupViewModel(roomProxyConfiguration: JoinedRoomProxyMockConfiguration) {
         userIndicatorController = UserIndicatorControllerMock.default
         viewModel = .init(roomProxy: JoinedRoomProxyMock(roomProxyConfiguration),
                           userSession: UserSessionMock(.init()),
