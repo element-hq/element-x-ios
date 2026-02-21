@@ -10,7 +10,11 @@ import Combine
 import Testing
 
 struct DeferredFulfillment<T> {
-    let closure: () async throws -> T
+    private let closure: () async throws -> T
+    
+    fileprivate init(_ closure: @escaping () async throws -> T) {
+        self.closure = closure
+    }
     
     @discardableResult
     func fulfill() async throws -> T {
@@ -18,7 +22,7 @@ struct DeferredFulfillment<T> {
     }
 }
 
-struct DeferredFulfillmentError: Error {
+private struct DeferredFulfillmentError: Error {
     static func noOutput(message: String?, sourceLocation: SourceLocation) -> Self {
         defer { Issue.record(Comment(rawValue: message ?? "No Output"), sourceLocation: sourceLocation) }
         return .init()
