@@ -8,10 +8,9 @@
 
 import Combine
 @testable import ElementX
-import XCTest
+import Testing
 
-@MainActor
-class CreateRoomScreenViewModelTests: XCTestCase {
+@MainActor @Suite final class CreateRoomScreenViewModelTests {
     var viewModel: CreateRoomScreenViewModelProtocol!
     var clientProxy: ClientProxyMock!
     var spaceService: SpaceServiceProxyMock!
@@ -23,7 +22,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    override func tearDown() {
+    deinit {
         AppSettings.resetAllSettings()
         viewModel = nil
         clientProxy = nil
@@ -31,28 +30,31 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         userSession = nil
     }
     
-    func testDefaultState() {
+    @Test
+    func defaultState() {
         setup()
-        XCTAssertEqual(context.viewState.bindings.selectedAccessType, .private)
-        XCTAssertNil(context.selectedSpace)
-        XCTAssertEqual(context.viewState.availableAccessTypes, [.public, .askToJoin, .private])
-        XCTAssertTrue(context.viewState.canSelectSpace)
+        #expect(context.viewState.bindings.selectedAccessType == .private)
+        #expect(context.selectedSpace == nil)
+        #expect(context.viewState.availableAccessTypes == [.public, .askToJoin, .private])
+        #expect(context.viewState.canSelectSpace)
     }
     
-    func testCreateRoomRequirements() {
+    @Test
+    func createRoomRequirements() {
         setup()
-        XCTAssertFalse(context.viewState.canCreateRoom)
+        #expect(!context.viewState.canCreateRoom)
         context.send(viewAction: .updateRoomName("A"))
-        XCTAssertTrue(context.viewState.canCreateRoom)
+        #expect(context.viewState.canCreateRoom)
     }
     
-    func testCreateRoom() async throws {
+    @Test
+    func createRoom() async throws {
         setup()
         // Given a form with a blank topic.
         context.send(viewAction: .updateRoomName("A"))
         context.roomTopic = ""
         context.selectedAccessType = .private
-        XCTAssertTrue(context.viewState.canCreateRoom)
+        #expect(context.viewState.canCreateRoom)
         
         // When creating the room.
         clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
@@ -64,14 +66,15 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the room should be created and a topic should not be set.
-        XCTAssertTrue(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
-        XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name, "A")
-        XCTAssertNil(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.topic,
-                     "The topic should be sent as nil when it is empty.")
-        XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType, .private)
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name == "A")
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.topic == nil,
+                "The topic should be sent as nil when it is empty.")
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType == .private)
     }
     
-    func testCreateSpace() async throws {
+    @Test
+    func createSpace() async throws {
         setup(isSpace: true)
         clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org",
                                             userID: "@a:b.com",
@@ -92,7 +95,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         context.send(viewAction: .updateRoomName("A"))
         context.roomTopic = ""
         context.selectedAccessType = .private
-        XCTAssertTrue(context.viewState.canCreateRoom)
+        #expect(context.viewState.canCreateRoom)
         
         // When creating the room.
         clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
@@ -106,14 +109,15 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the room should be created and a topic should not be set.
-        XCTAssertTrue(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
-        XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name, "A")
-        XCTAssertNil(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.topic,
-                     "The topic should be sent as nil when it is empty.")
-        XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType, .private)
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name == "A")
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.topic == nil,
+                "The topic should be sent as nil when it is empty.")
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType == .private)
     }
     
-    func testCreateKnockingRoom() async {
+    @Test
+    func createKnockingRoom() async {
         setup()
         context.send(viewAction: .updateRoomName("A"))
         context.roomTopic = "B"
@@ -121,20 +125,21 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         // When setting the room as private we always reset the knocking state to the default value of false
         // so we need to wait a main actor cycle to ensure the view state is updated
         await Task.yield()
-        XCTAssertTrue(context.viewState.canCreateRoom)
+        #expect(context.viewState.canCreateRoom)
         
-        let expectation = expectation(description: "Wait for the room to be created")
-        clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure = { _, _, accessType, _, _, _, localAliasPart in
-            XCTAssertEqual(accessType, .askToJoin)
-            XCTAssertEqual(localAliasPart, "a")
-            defer { expectation.fulfill() }
-            return .success("")
+        await confirmation("Wait for the room to be created") { confirm in
+            clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure = { _, _, accessType, _, _, _, localAliasPart in
+                #expect(accessType == .askToJoin)
+                #expect(localAliasPart == "a")
+                defer { confirm() }
+                return .success("")
+            }
+            context.send(viewAction: .createRoom)
         }
-        context.send(viewAction: .createRoom)
-        await fulfillment(of: [expectation])
     }
     
-    func testCreatePublicRoomFailsForInvalidAlias() async throws {
+    @Test
+    func createPublicRoomFailsForInvalidAlias() async throws {
         setup()
         context.send(viewAction: .updateRoomName("A"))
         context.roomTopic = "B"
@@ -154,10 +159,11 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         // blocked it
         context.send(viewAction: .createRoom)
         await Task.yield()
-        XCTAssertFalse(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
+        #expect(!clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
     }
     
-    func testCreatePublicRoomFailsForExistingAlias() async throws {
+    @Test
+    func createPublicRoomFailsForExistingAlias() async throws {
         setup()
         clientProxy.isAliasAvailableReturnValue = .success(false)
         context.send(viewAction: .updateRoomName("A"))
@@ -176,61 +182,63 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         
         // We also want to force the room creation in case the user may tap the button before the debounce
         // blocked it
-        let expectation = expectation(description: "Wait for the alias to be checked again")
-        clientProxy.isAliasAvailableClosure = { _ in
-            defer {
-                expectation.fulfill()
+        await confirmation("Wait for the alias to be checked again") { confirm in
+            clientProxy.isAliasAvailableClosure = { _ in
+                defer {
+                    confirm()
+                }
+                return .success(false)
             }
-            return .success(false)
+            context.send(viewAction: .createRoom)
         }
-        context.send(viewAction: .createRoom)
-        await fulfillment(of: [expectation])
-        XCTAssertEqual(clientProxy.isAliasAvailableCallsCount, 2)
-        XCTAssertFalse(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
+        #expect(clientProxy.isAliasAvailableCallsCount == 2)
+        #expect(!clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
     }
     
-    func testNameAndAddressSync() async {
+    @Test
+    func nameAndAddressSync() async {
         setup()
         context.selectedAccessType = .private
         await Task.yield()
         context.send(viewAction: .updateRoomName("abc"))
-        XCTAssertEqual(context.viewState.aliasLocalPart, "abc")
-        XCTAssertEqual(context.viewState.roomName, "abc")
+        #expect(context.viewState.aliasLocalPart == "abc")
+        #expect(context.viewState.roomName == "abc")
         context.send(viewAction: .updateRoomName("DEF"))
-        XCTAssertEqual(context.viewState.roomName, "DEF")
-        XCTAssertEqual(context.viewState.aliasLocalPart, "def")
+        #expect(context.viewState.roomName == "DEF")
+        #expect(context.viewState.aliasLocalPart == "def")
         context.send(viewAction: .updateRoomName("a  b c"))
-        XCTAssertEqual(context.viewState.aliasLocalPart, "a-b-c")
-        XCTAssertEqual(context.viewState.roomName, "a  b c")
+        #expect(context.viewState.aliasLocalPart == "a-b-c")
+        #expect(context.viewState.roomName == "a  b c")
         context.send(viewAction: .updateAliasLocalPart("hello-world"))
         // This removes the sync
-        XCTAssertEqual(context.viewState.aliasLocalPart, "hello-world")
-        XCTAssertEqual(context.viewState.roomName, "a  b c")
+        #expect(context.viewState.aliasLocalPart == "hello-world")
+        #expect(context.viewState.roomName == "a  b c")
         
         context.send(viewAction: .updateRoomName("Hello Matrix!"))
-        XCTAssertEqual(context.viewState.aliasLocalPart, "hello-world")
-        XCTAssertEqual(context.viewState.roomName, "Hello Matrix!")
+        #expect(context.viewState.aliasLocalPart == "hello-world")
+        #expect(context.viewState.roomName == "Hello Matrix!")
         
         // Deleting the whole name will restore the sync
         context.send(viewAction: .updateRoomName(""))
-        XCTAssertEqual(context.viewState.aliasLocalPart, "")
-        XCTAssertEqual(context.viewState.roomName, "")
+        #expect(context.viewState.aliasLocalPart == "")
+        #expect(context.viewState.roomName == "")
         
         context.send(viewAction: .updateRoomName("Hello# Matrix!"))
-        XCTAssertEqual(context.viewState.aliasLocalPart, "hello-matrix!")
-        XCTAssertEqual(context.viewState.roomName, "Hello# Matrix!")
+        #expect(context.viewState.aliasLocalPart == "hello-matrix!")
+        #expect(context.viewState.roomName == "Hello# Matrix!")
     }
     
-    func testCreateRoomInASelectedSpaceFromTheList() async throws {
+    @Test
+    func createRoomInASelectedSpaceFromTheList() async throws {
         let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         setup()
         
         context.send(viewAction: .updateRoomName("A"))
         context.selectedAccessType = .public
-        XCTAssertTrue(context.viewState.canCreateRoom)
-        XCTAssertNil(context.selectedSpace)
-        XCTAssertEqual(context.viewState.availableAccessTypes, [.public, .askToJoin, .private])
-        XCTAssertTrue(context.viewState.canSelectSpace)
+        #expect(context.viewState.canCreateRoom)
+        #expect(context.selectedSpace == nil)
+        #expect(context.viewState.availableAccessTypes == [.public, .askToJoin, .private])
+        #expect(context.viewState.canSelectSpace)
         
         var deferred = deferFulfillment(context.$viewState) { viewState in
             viewState.editableSpaces.map(\.id) == spaces.map(\.id)
@@ -248,64 +256,62 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         
         // When creating the room.
         clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
-        let expectation = expectation(description: "Wait for the addChild function to be called")
-        spaceService.addChildToClosure = { roomID, spaceID in
-            defer { expectation.fulfill() }
-            XCTAssertEqual(roomID, "1")
-            XCTAssertEqual(spaceID, spaces[0].id)
-            return .success(())
-        }
-        
         let deferredAction = deferFulfillment(viewModel.actions) { action in
             guard case .createdRoom(let roomProxy, nil) = action, roomProxy.id == "1" else { return false }
             return true
         }
-        context.send(viewAction: .createRoom)
-        
-        await fulfillment(of: [expectation])
+        await confirmation("Wait for the addChild function to be called") { confirm in
+            spaceService.addChildToClosure = { roomID, spaceID in
+                defer { confirm() }
+                #expect(roomID == "1")
+                #expect(spaceID == spaces[0].id)
+                return .success(())
+            }
+            context.send(viewAction: .createRoom)
+        }
         try await deferredAction.fulfill()
         
-        XCTAssertTrue(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
-        XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name, "A")
-        XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType, .private)
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name == "A")
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType == .private)
     }
     
-    func testCreateRoomInAnAlreadySelectedSpace() async throws {
+    @Test
+    func createRoomInAnAlreadySelectedSpace() async throws {
         let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .invite)
         setup(spacesSelectionMode: .editableSpacesList(preSelectedSpace: space))
         
         context.send(viewAction: .updateRoomName("A"))
         context.selectedAccessType = .spaceMembers
-        XCTAssertTrue(context.viewState.canCreateRoom)
-        XCTAssertEqual(context.selectedSpace?.id, space.id)
-        XCTAssertEqual(context.viewState.availableAccessTypes, [.spaceMembers, .askToJoinWithSpaceMembers, .private])
-        XCTAssertTrue(context.viewState.canSelectSpace)
+        #expect(context.viewState.canCreateRoom)
+        #expect(context.selectedSpace?.id == space.id)
+        #expect(context.viewState.availableAccessTypes == [.spaceMembers, .askToJoinWithSpaceMembers, .private])
+        #expect(context.viewState.canSelectSpace)
         
         // When creating the room.
         clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
-        let expectation = expectation(description: "Wait for the addChild function to be called")
-        spaceService.addChildToClosure = { roomID, spaceID in
-            defer { expectation.fulfill() }
-            XCTAssertEqual(roomID, "1")
-            XCTAssertEqual(spaceID, space.id)
-            return .success(())
-        }
-        
         let deferredAction = deferFulfillment(viewModel.actions) { action in
             guard case .createdRoom(let roomProxy, nil) = action, roomProxy.id == "1" else { return false }
             return true
         }
-        context.send(viewAction: .createRoom)
-        
-        await fulfillment(of: [expectation])
+        await confirmation("Wait for the addChild function to be called") { confirm in
+            spaceService.addChildToClosure = { roomID, spaceID in
+                defer { confirm() }
+                #expect(roomID == "1")
+                #expect(spaceID == space.id)
+                return .success(())
+            }
+            context.send(viewAction: .createRoom)
+        }
         try await deferredAction.fulfill()
         
-        XCTAssertTrue(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
-        XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name, "A")
-        XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType, .spaceMembers(spaceID: space.id))
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name == "A")
+        #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType == .spaceMembers(spaceID: space.id))
     }
     
-    func testCreateRoomInAnPublicSpaceAvailableTypes() {
+    @Test
+    func createRoomInAnPublicSpaceAvailableTypes() {
         let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .public)
         setup(spacesSelectionMode: .editableSpacesList(preSelectedSpace: space))
         
@@ -313,10 +319,10 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         context.send(viewAction: .updateRoomName("A"))
         context.roomTopic = ""
         context.selectedAccessType = .spaceMembers
-        XCTAssertTrue(context.viewState.canCreateRoom)
-        XCTAssertEqual(context.selectedSpace?.id, space.id)
-        XCTAssertEqual(context.viewState.availableAccessTypes, [.public, .askToJoin, .private])
-        XCTAssertTrue(context.viewState.canSelectSpace)
+        #expect(context.viewState.canCreateRoom)
+        #expect(context.selectedSpace?.id == space.id)
+        #expect(context.viewState.availableAccessTypes == [.public, .askToJoin, .private])
+        #expect(context.viewState.canSelectSpace)
     }
     
     private func setup(isSpace: Bool = false, spacesSelectionMode: CreateRoomScreenSpaceSelectionMode = .editableSpacesList(preSelectedSpace: nil)) {
