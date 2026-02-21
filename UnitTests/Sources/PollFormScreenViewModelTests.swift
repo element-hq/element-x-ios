@@ -162,26 +162,17 @@ struct PollFormScreenViewModelTests {
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
-        try await confirmation { confirmation in
-            var redactReasonCalled = false
+        await waitConfirmation(timeout: .seconds(1)) { confirmation in
             timelineProxy.redactReasonClosure = { eventID, _ in
                 defer {
                     confirmation()
-                    redactReasonCalled = true
                 }
                 #expect(eventID == .eventID("foo"))
                 return .success(())
             }
             context.alertInfo?.secondaryButton?.action?()
-            
-            try await deferred.fulfill()
-            
-            // Since the redactReasonClosure is called asynchronously after closing the alert
-            // We need to actively wait for the redactReasonClosure to be called before fulfilling the test.
-            while !redactReasonCalled {
-                await Task.yield()
-            }
         }
+        try await deferred.fulfill()
     }
     
     // MARK: - Helpers
