@@ -67,6 +67,10 @@ final class WaitConfirmation: Sendable {
 /// Unlike the timeout variant, this overload does not escape the body closure, which means
 /// you can safely capture mutable structs — a common pattern in Swift Testing.
 ///
+/// > Warning: This overload has no timeout. If ``WaitConfirmation/confirm()`` is never called,
+/// > the test will hang indefinitely. Prefer the timeout variant when the confirmation
+/// > depends on asynchronous work that could silently fail.
+///
 /// Example:
 /// ```swift
 /// await waitConfirmation(expectedCount: 2) { confirmation in
