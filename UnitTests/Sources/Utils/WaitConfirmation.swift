@@ -58,11 +58,16 @@ final class WaitConfirmation: Sendable {
     }
 }
 
-/// Waits for a confirmation to be triggered an expected number of times within an async body.
+/// Waits for a confirmation to be triggered an expected number of times within a synchronous body.
 ///
 /// This is a wrapper around Swift Testing's `confirmation` that removes the need to manually
 /// manage an `AsyncStream` at the call site. The body receives a ``WaitConfirmation`` instance
 /// which can be called directly to signal that the expected event occurred.
+///
+/// The body is synchronous by design — it is intended for setting up mocks and triggering
+/// actions that schedule async work, rather than performing async work itself. The async
+/// waiting happens internally once the body returns, by draining the stream until all
+/// confirmations are received.
 ///
 /// Unlike the timeout variant, this overload does not escape the body closure, which means
 /// you can safely capture mutable structs — a common pattern in Swift Testing.
@@ -89,14 +94,15 @@ final class WaitConfirmation: Sendable {
 ///                    Defaults to `1`.
 ///   - isolation: The actor isolation context. Defaults to the caller's isolation via `#isolation`.
 ///   - sourceLocation: The source location for failure reporting. Defaults to the call site via `#_sourceLocation`.
-///   - body: An async closure receiving a ``WaitConfirmation`` instance. The closure may throw,
-///           and any thrown errors are rethrown to the caller.
+///   - body: A synchronous closure receiving a ``WaitConfirmation`` instance used to signal
+///           event occurrences. The closure may throw, and any thrown errors are rethrown to the caller.
+///           Typically used to configure mocks and trigger the action under test.
 /// - Returns: The value returned by `body`.
 func waitConfirmation<R>(_ comment: Comment? = nil,
                          expectedCount: Int = 1,
                          isolation: isolated (any Actor)? = #isolation,
                          sourceLocation: SourceLocation = #_sourceLocation,
-                         _ body: (WaitConfirmation) async throws -> sending R) async rethrows -> R {
+                         _ body: (WaitConfirmation) throws -> sending R) async rethrows -> R {
     guard expectedCount > 0 else {
         // Or may run indefinitely
         Issue.record("Expected count must be greater than 0", sourceLocation: sourceLocation)
@@ -108,8 +114,8 @@ func waitConfirmation<R>(_ comment: Comment? = nil,
                                   expectedCount: expectedCount,
                                   isolation: isolation,
                                   sourceLocation: sourceLocation) { confirmation in
-        let result = try await body(.init(continuation: continuation,
-                                          expectedCount: expectedCount))
+        let result = try body(.init(continuation: continuation,
+                                    expectedCount: expectedCount))
         for await _ in stream {
             confirmation()
         }
@@ -117,7 +123,7 @@ func waitConfirmation<R>(_ comment: Comment? = nil,
     }
 }
 
-/// Waits for a confirmation to be triggered an expected number of times within an async body,
+/// Waits for a confirmation to be triggered an expected number of times within a synchronous body,
 /// with a timeout.
 ///
 /// This overload behaves like ``waitConfirmation(_:expectedCount:isolation:sourceLocation:_:)``
@@ -126,11 +132,15 @@ func waitConfirmation<R>(_ comment: Comment? = nil,
 /// confirmations were received up to that point — which will cause a test failure if
 /// `expectedCount` was not reached.
 ///
-/// > Note: Because this overload uses `withThrowingTaskGroup` internally to race the stream
-/// > against the timeout, the `body` closure is implicitly `@escaping`. This is why this
-/// > is a separate overload rather than a single function with an optional timeout — keeping
-/// > them separate allows the non-timeout variant to avoid `@escaping`, which lets you
-/// > capture mutable structs in `body` as is common in Swift Testing.
+/// The body is synchronous by design — it is intended for setting up mocks and triggering
+/// actions that schedule async work, rather than performing async work itself. The async
+/// waiting and timeout racing happen internally once the body returns.
+///
+/// > Note: Because this overload uses `withTaskGroup` internally to race the stream against
+/// > the timeout, the `body` closure is implicitly `@escaping`. This is why this is a separate
+/// > overload rather than a single function with an optional timeout — keeping them separate
+/// > allows the non-timeout variant to avoid `@escaping`, which lets you capture mutable structs
+/// > in `body` as is common in Swift Testing.
 ///
 /// Example:
 /// ```swift
@@ -145,19 +155,21 @@ func waitConfirmation<R>(_ comment: Comment? = nil,
 ///   - expectedCount: The number of times ``WaitConfirmation/confirm()`` must be called.
 ///                    Must be equal to or greater than 0, otherwise a test failure is recorded
 ///                    and execution stops. Defaults to `1`.
-///                    Can be used with value `0` to assert that the event never fires within the timeout window.
+///                    Pass `0` to assert that the event never fires within the timeout window —
+///                    useful for verifying that a function does NOT trigger under specific conditions.
 ///   - timeout: The maximum duration to wait for all confirmations before finishing the stream.
 ///   - isolation: The actor isolation context. Defaults to the caller's isolation via `#isolation`.
 ///   - sourceLocation: The source location for failure reporting. Defaults to the call site via `#_sourceLocation`.
-///   - body: An async closure receiving a ``WaitConfirmation`` instance. The closure may throw,
-///           and any thrown errors are rethrown to the caller.
+///   - body: A synchronous closure receiving a ``WaitConfirmation`` instance used to signal
+///           event occurrences. The closure may throw, and any thrown errors are rethrown to the caller.
+///           Typically used to configure mocks and trigger the action under test.
 /// - Returns: The value returned by `body`.
 func waitConfirmation<R>(_ comment: Comment? = nil,
                          expectedCount: Int = 1,
                          timeout: Duration,
                          isolation: isolated (any Actor)? = #isolation,
                          sourceLocation: SourceLocation = #_sourceLocation,
-                         _ body: (WaitConfirmation) async throws -> sending R) async rethrows -> R {
+                         _ body: (WaitConfirmation) throws -> sending R) async rethrows -> R {
     guard expectedCount >= 0 else {
         // Or may run indefinitely
         Issue.record("Expected count must be equal or greater than 0", sourceLocation: sourceLocation)
@@ -169,8 +181,8 @@ func waitConfirmation<R>(_ comment: Comment? = nil,
                                   expectedCount: expectedCount,
                                   isolation: isolation,
                                   sourceLocation: sourceLocation) { confirmation in
-        let result = try await body(.init(continuation: continuation,
-                                          expectedCount: expectedCount))
+        let result = try body(.init(continuation: continuation,
+                                    expectedCount: expectedCount))
         
         // The reason why I don't add to the task group directly the non timeout implementation
         // is that I do not want the body to be marked as @escaping and thus to be able to capture
