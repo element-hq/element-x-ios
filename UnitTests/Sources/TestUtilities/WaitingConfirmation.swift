@@ -11,18 +11,18 @@ import Testing
 /// A class that provides a mechanism to confirm that a specific action or event
 /// has occurred a given number of times within an async context.
 ///
-/// `WaitConfirmation` is used in conjunction with ``waitConfirmation(_:expectedCount:isolation:sourceLocation:_:)``
+/// `WaitingConfirmation` is used in conjunction with ``waitForConfirmation(_:expectedCount:isolation:sourceLocation:_:)``
 /// to synchronize async test expectations. It bridges between your test code and
 /// Swift Testing's `confirmation` mechanism using an `AsyncStream` under the hood.
 ///
 /// You typically interact with this type via its `callAsFunction()` sugar:
 /// ```swift
-/// await waitConfirmation { confirmation in
+/// await waitForConfirmation { confirmation in
 ///     sut.onEvent = { confirmation() }
 ///     sut.triggerEvent()
 /// }
 /// ```
-final class WaitConfirmation: Sendable {
+final class WaitingConfirmation: Sendable {
     private let continuation: AsyncStream<Void>.Continuation
     private let expectedCount: Int
     private let confirmationsCount: Mutex<Int>
@@ -36,7 +36,7 @@ final class WaitConfirmation: Sendable {
     /// Confirms that the expected event has occurred once.
     ///
     /// Each call yields a value into the underlying stream, incrementing the confirmation count.
-    /// When the count reaches `expectedCount`, the stream is finished, unblocking ``waitConfirmation``.
+    /// When the count reaches `expectedCount`, the stream is finished, unblocking ``waitForConfirmation``.
     ///
     /// This method is thread-safe — the count increment and the finish check are performed
     /// atomically inside a `Mutex` lock.
@@ -61,7 +61,7 @@ final class WaitConfirmation: Sendable {
 /// Waits for a confirmation to be triggered an expected number of times within a synchronous body.
 ///
 /// This is a wrapper around Swift Testing's `confirmation` that removes the need to manually
-/// manage an `AsyncStream` at the call site. The body receives a ``WaitConfirmation`` instance
+/// manage an `AsyncStream` at the call site. The body receives a ``WaitingConfirmation`` instance
 /// which can be called directly to signal that the expected event occurred.
 ///
 /// The body is synchronous by design — it is intended for setting up mocks and triggering
@@ -72,13 +72,13 @@ final class WaitConfirmation: Sendable {
 /// Unlike the timeout variant, this overload does not escape the body closure, which means
 /// you can safely capture mutable structs — a common pattern in Swift Testing.
 ///
-/// > Warning: This overload has no timeout. If ``WaitConfirmation/confirm()`` is never called,
+/// > **Warning**: This overload has no timeout. If ``WaitingConfirmation/confirm()`` is never called,
 /// > the test will hang indefinitely. Prefer the timeout variant when the confirmation
 /// > depends on asynchronous work that could silently fail.
 ///
 /// Example:
 /// ```swift
-/// await waitConfirmation(expectedCount: 2) { confirmation in
+/// await waitForConfirmation(expectedCount: 2) { confirmation in
 ///     sut.onEvent = {
 ///         confirmation()
 ///     }
@@ -89,20 +89,20 @@ final class WaitConfirmation: Sendable {
 ///
 /// - Parameters:
 ///   - comment: An optional comment to attach to the confirmation for test reporting.
-///   - expectedCount: The number of times ``WaitConfirmation/confirm()`` must be called.
+///   - expectedCount: The number of times ``WaitingConfirmation/confirm()`` must be called.
 ///                    Must be greater than 0, otherwise a test failure is recorded and execution stops.
 ///                    Defaults to `1`.
 ///   - isolation: The actor isolation context. Defaults to the caller's isolation via `#isolation`.
 ///   - sourceLocation: The source location for failure reporting. Defaults to the call site via `#_sourceLocation`.
-///   - body: A synchronous closure receiving a ``WaitConfirmation`` instance used to signal
+///   - body: A synchronous closure receiving a ``WaitingConfirmation`` instance used to signal
 ///           event occurrences. The closure may throw, and any thrown errors are rethrown to the caller.
 ///           Typically used to configure mocks and trigger the action under test.
 /// - Returns: The value returned by `body`.
-func waitConfirmation<R>(_ comment: Comment? = nil,
-                         expectedCount: Int = 1,
-                         isolation: isolated (any Actor)? = #isolation,
-                         sourceLocation: SourceLocation = #_sourceLocation,
-                         _ body: (WaitConfirmation) throws -> sending R) async rethrows -> R {
+func waitForConfirmation<R>(_ comment: Comment? = nil,
+                            expectedCount: Int = 1,
+                            isolation: isolated (any Actor)? = #isolation,
+                            sourceLocation: SourceLocation = #_sourceLocation,
+                            _ body: (WaitingConfirmation) throws -> sending R) async rethrows -> R {
     guard expectedCount > 0 else {
         // Or may run indefinitely
         Issue.record("Expected count must be greater than 0", sourceLocation: sourceLocation)
@@ -126,7 +126,7 @@ func waitConfirmation<R>(_ comment: Comment? = nil,
 /// Waits for a confirmation to be triggered an expected number of times within a synchronous body,
 /// with a timeout.
 ///
-/// This overload behaves like ``waitConfirmation(_:expectedCount:isolation:sourceLocation:_:)``
+/// This overload behaves like ``waitForConfirmation(_:expectedCount:isolation:sourceLocation:_:)``
 /// but races the stream against a timeout. If the timeout expires before all confirmations
 /// are received, the stream is forcefully finished and Swift Testing records whatever
 /// confirmations were received up to that point — which will cause a test failure if
@@ -144,7 +144,7 @@ func waitConfirmation<R>(_ comment: Comment? = nil,
 ///
 /// Example:
 /// ```swift
-/// await waitConfirmation(expectedCount: 1, timeout: .seconds(2)) { confirmation in
+/// await waitForConfirmation(expectedCount: 1, timeout: .seconds(2)) { confirmation in
 ///     sut.onNetworkResponse = { confirmation() }
 ///     sut.startRequest()
 /// }
@@ -152,7 +152,7 @@ func waitConfirmation<R>(_ comment: Comment? = nil,
 ///
 /// - Parameters:
 ///   - comment: An optional comment to attach to the confirmation for test reporting.
-///   - expectedCount: The number of times ``WaitConfirmation/confirm()`` must be called.
+///   - expectedCount: The number of times ``WaitingConfirmation/confirm()`` must be called.
 ///                    Must be equal to or greater than 0, otherwise a test failure is recorded
 ///                    and execution stops. Defaults to `1`.
 ///                    Pass `0` to assert that the event never fires within the timeout window —
@@ -160,16 +160,16 @@ func waitConfirmation<R>(_ comment: Comment? = nil,
 ///   - timeout: The maximum duration to wait for all confirmations before finishing the stream.
 ///   - isolation: The actor isolation context. Defaults to the caller's isolation via `#isolation`.
 ///   - sourceLocation: The source location for failure reporting. Defaults to the call site via `#_sourceLocation`.
-///   - body: A synchronous closure receiving a ``WaitConfirmation`` instance used to signal
+///   - body: A synchronous closure receiving a ``WaitingConfirmation`` instance used to signal
 ///           event occurrences. The closure may throw, and any thrown errors are rethrown to the caller.
 ///           Typically used to configure mocks and trigger the action under test.
 /// - Returns: The value returned by `body`.
-func waitConfirmation<R>(_ comment: Comment? = nil,
-                         expectedCount: Int = 1,
-                         timeout: Duration,
-                         isolation: isolated (any Actor)? = #isolation,
-                         sourceLocation: SourceLocation = #_sourceLocation,
-                         _ body: (WaitConfirmation) throws -> sending R) async rethrows -> R {
+func waitForConfirmation<R>(_ comment: Comment? = nil,
+                            expectedCount: Int = 1,
+                            timeout: Duration,
+                            isolation: isolated (any Actor)? = #isolation,
+                            sourceLocation: SourceLocation = #_sourceLocation,
+                            _ body: (WaitingConfirmation) throws -> sending R) async rethrows -> R {
     guard expectedCount >= 0 else {
         // Or may run indefinitely
         Issue.record("Expected count must be equal or greater than 0", sourceLocation: sourceLocation)

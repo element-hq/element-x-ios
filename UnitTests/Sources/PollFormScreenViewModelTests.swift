@@ -162,7 +162,7 @@ struct PollFormScreenViewModelTests {
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
-        await waitConfirmation(timeout: .seconds(1)) { confirmation in
+        await waitForConfirmation(timeout: .seconds(1)) { confirmation in
             timelineProxy.redactReasonClosure = { eventID, _ in
                 defer {
                     confirmation()
