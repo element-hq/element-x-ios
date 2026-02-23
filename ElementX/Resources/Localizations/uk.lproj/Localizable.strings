@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Голосове повідомлення, тривалість: %1$@, поточна позиція: %2$@";
 "a11y_pin_field" = "Поле PIN-коду";
 "a11y_play" = "Відтворити";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Опитування завершено";
 "a11y_polls_will_remove_selection" = "Попередній вибір буде прибрано";
 "a11y_polls_winning_answer" = "Ця відповідь перемогла";

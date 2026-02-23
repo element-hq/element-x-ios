@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Röstmeddelande, varaktighet:%1$@, nuvarande position: %2$@";
 "a11y_pin_field" = "PIN-fält";
 "a11y_play" = "Spela upp";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Avslutade omröstning";
 "a11y_polls_will_remove_selection" = "Kommer att ta bort föregående val";
 "a11y_polls_winning_answer" = "Detta är det vinnande svaret";

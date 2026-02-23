@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "語音訊息，時長：%1$@，目前位置：%2$@";
 "a11y_pin_field" = "PIN 碼欄位";
 "a11y_play" = "播放";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "投票已結束";
 "a11y_polls_will_remove_selection" = "將會移除先前的選擇";
 "a11y_polls_winning_answer" = "這是得票數最高的選項";

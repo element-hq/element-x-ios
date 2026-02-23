@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Hlasová zpráva, délka: %1$@, aktuální pozice: %2$@";
 "a11y_pin_field" = "Pole pro PIN";
 "a11y_play" = "Přehrát";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Hlasování ukončeno";
 "a11y_polls_will_remove_selection" = "Odstraní předchozí výběr";
 "a11y_polls_winning_answer" = "Toto je vítězná odpověď";
@@ -273,10 +274,10 @@
 "common_poll_undisclosed_text" = "Výsledky se zobrazí po skončení hlasování";
 "common_preparing" = "Příprava…";
 "common_privacy_policy" = "Zásady ochrany osobních údajů";
-"common_private" = "Private";
+"common_private" = "Soukromé";
 "common_private_room" = "Soukromá místnost";
 "common_private_space" = "Soukromý prostor";
-"common_public" = "Public";
+"common_public" = "Veřejné";
 "common_public_room" = "Veřejná místnost";
 "common_public_space" = "Veřejný prostor";
 "common_reaction" = "Reakce";
@@ -319,7 +320,7 @@
 "common_something_went_wrong" = "Něco se nepovedlo";
 "common_something_went_wrong_message" = "Narazili jsme na problém. Zkuste to prosím znovu.";
 "common_space" = "Prostor";
-"common_space_members" = "Space members";
+"common_space_members" = "Členové prostoru";
 "common_space_topic_placeholder" = "O čem je tento prostor?";
 "common_starting_chat" = "Zahajování chatu…";
 "common_sticker" = "Nálepka";
@@ -378,9 +379,9 @@
 "crypto_event_authenticity_unverified_identity" = "Šifrováno neověřeným uživatelem.";
 "crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti.";
 "crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti.";
-"crypto_history_sharing_room_info_hidden_badge_content" = "New members don't see history";
-"crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
-"crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
+"crypto_history_sharing_room_info_hidden_badge_content" = "Noví členové nevidí historii";
+"crypto_history_sharing_room_info_shared_badge_content" = "Noví členové vidí historii";
+"crypto_history_sharing_room_info_world_readable_badge_content" = "Každý může vidět historii";
 "crypto_history_visible" = "Tato místnost byla nastavena tak, aby noví členové mohli číst historii. %1$@";
 "crypto_identity_change_pin_violation" = "Identita uživatele %1$@ se změnila. %2$@";
 "crypto_identity_change_pin_violation_new" = "Identita uživatele %1$@ %2$@ se změnila. %3$@";
@@ -462,7 +463,7 @@
 "notification_mentioned_you_body" = "Zmínili vás: %1$@";
 "notification_new_messages" = "Nové zprávy";
 "notification_reaction_body" = "Reagoval(a) s %1$@";
-"notification_received_while_offline_ios" = "You received one or more notifications while offline.";
+"notification_received_while_offline_ios" = "Když jste byli offline, obdrželi jste jedno nebo více oznámení.";
 "notification_room_invite_body" = "Vás pozval(a) do místnosti";
 "notification_room_invite_body_with_sender" = "%1$@ vás pozval(a) do místnosti";
 "notification_sender_me" = "Já";
@@ -565,8 +566,8 @@
 "screen_create_room_room_address_section_title" = "Adresa";
 "screen_create_room_room_visibility_section_title" = "Viditelnost místnosti";
 "screen_create_room_space_selection_no_space_description" = "(bez prostoru)";
-"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
-"screen_create_room_space_selection_no_space_title" = "Domov";
+"screen_create_room_space_selection_no_space_option" = "Nepřidávejte do prostoru";
+"screen_create_room_space_selection_no_space_title" = "Není vybrán žádný prostor";
 "screen_create_room_space_selection_sheet_title" = "Přidat do prostoru";
 "screen_create_room_topic_placeholder" = "Přidat popis…";
 "screen_decline_and_block_block_user_option_description" = "Od tohoto uživatele neuvidíte žádné zprávy ani pozvánky do místnosti";
@@ -1427,8 +1428,8 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Pokud budou pozváni, budou se moci do této místnosti znovu připojit.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Zrušit vykázání";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Rušení vykázání %1$@";
-"screen_create_room_room_access_section_private_option_title" = "Private";
-"screen_create_room_room_access_section_public_option_title" = "Public";
+"screen_create_room_room_access_section_private_option_title" = "Soukromé";
+"screen_create_room_room_access_section_public_option_title" = "Veřejné";
 "screen_decline_and_block_block_user_option_title" = "Zablokovat uživatele";
 "screen_decline_and_block_report_user_reason_placeholder" = "Popište důvod...";
 "screen_decline_and_block_title" = "Odmítnout a zablokovat";
@@ -1461,7 +1462,7 @@
 "screen_roomlist_knock_event_sent_description" = "Žádost o vstup odeslána";
 "screen_security_and_privacy_encryption_section_header" = "Šifrování";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Spravovat prostory";
-"screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
+"screen_security_and_privacy_room_access_space_members_option_title" = "Členové prostoru";
 "screen_security_and_privacy_room_address_section_footer" = "Budete potřebovat adresu místnosti, aby byla viditelná v adresáři místností.";
 "screen_space_settings_leave_space" = "Opustit prostor";
 "screen_space_settings_roles_and_permissions" = "Role a oprávnění";
@@ -1481,8 +1482,8 @@
 "screen_create_account_title" = "Vytvořit účet";
 "screen_create_poll_cancel_confirmation_content_ios" = "Vaše změny nebudou uloženy";
 "screen_create_room_add_people_title" = "Pozvat přátele";
-"screen_create_room_private_option_title" = "Private";
-"screen_create_room_public_option_title" = "Public";
+"screen_create_room_private_option_title" = "Soukromé";
+"screen_create_room_public_option_title" = "Veřejné";
 "screen_deactivate_account_title" = "Deaktivovat účet";
 "screen_dm_details_block_alert_action" = "Zablokovat";
 "screen_dm_details_block_alert_description" = "Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny jejich zprávy budou skryty. Můžete je kdykoli odblokovat.";

@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Glasovna poruka, trajanje: %1$@, trenutačno zaustavljeno na: %2$@";
 "a11y_pin_field" = "Polje za PIN";
 "a11y_play" = "Reproduciraj";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Završena anketa";
 "a11y_polls_will_remove_selection" = "Uklonit će prethodni odabir";
 "a11y_polls_winning_answer" = "Ovo je pobjednički odgovor";

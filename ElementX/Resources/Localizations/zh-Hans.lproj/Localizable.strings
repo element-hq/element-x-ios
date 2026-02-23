@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "语音消息，时长：%1$@，当前位置：%2$@";
 "a11y_pin_field" = "PIN 字段";
 "a11y_play" = "播放";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "投票已结束";
 "a11y_polls_will_remove_selection" = "将移除之前的选择";
 "a11y_polls_winning_answer" = "这是获胜的答案";

@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Talebesked, varighed: %1$@, aktuel position: %2$@";
 "a11y_pin_field" = "PIN-felt";
 "a11y_play" = "Afspil";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Afsluttet afstemning";
 "a11y_polls_will_remove_selection" = "Fjerner tidligere valg";
 "a11y_polls_winning_answer" = "Dette er det vindende svar";

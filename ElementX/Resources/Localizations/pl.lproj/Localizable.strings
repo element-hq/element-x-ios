@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Wiadomość głosowa, czas trwania: %1$@, aktualna pozycja: %2$@";
 "a11y_pin_field" = "Pole PIN";
 "a11y_play" = "Odtwórz";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Zakończona ankieta";
 "a11y_polls_will_remove_selection" = "Spowoduje to usunięcie poprzedniego zaznaczenia";
 "a11y_polls_winning_answer" = "Zwycięska odpowiedź";

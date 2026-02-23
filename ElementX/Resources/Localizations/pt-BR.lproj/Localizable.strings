@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Mensagem de voz, duração: %1$@, posição atual: %2$@";
 "a11y_pin_field" = "Campo de PIN";
 "a11y_play" = "Reproduzir";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Enquete encerrada";
 "a11y_polls_will_remove_selection" = "Removerá a seleção anterior";
 "a11y_polls_winning_answer" = "Esta é a resposta vencedora";

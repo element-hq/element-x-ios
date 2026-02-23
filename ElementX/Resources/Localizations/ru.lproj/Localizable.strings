@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Голосовое сообщение, длительность: %1$@, текущая позиция: %2$@";
 "a11y_pin_field" = "Поле PIN-кода";
 "a11y_play" = "Воспроизвести";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Завершённый опрос";
 "a11y_polls_will_remove_selection" = "Удалить предыдущий ответ";
 "a11y_polls_winning_answer" = "Это лучший ответ";
