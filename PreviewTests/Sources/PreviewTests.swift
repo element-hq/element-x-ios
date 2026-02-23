@@ -10,10 +10,11 @@ import Combine
 @testable import ElementX
 @testable import SnapshotTesting
 import SwiftUI
-import XCTest
+import Testing
 
+@Suite
 @MainActor
-class PreviewTests: XCTestCase {
+struct PreviewTests {
     private struct SnapshotDevice {
         let name: String
         let device: String
@@ -28,9 +29,7 @@ class PreviewTests: XCTestCase {
                                                      .init(name: "iPad", device: "iPad")]
     private var recordMode: SnapshotTestingConfiguration.Record = .missing
 
-    override func setUp() {
-        super.setUp()
-        
+    init() {
         if ProcessInfo().environment["RECORD_FAILURES"].map(Bool.init) == true {
             recordMode = .failed
         }
@@ -59,7 +58,10 @@ class PreviewTests: XCTestCase {
     
     // MARK: - Snapshots
 
-    func assertSnapshots(matching preview: _Preview, testName: String = #function, step: Int) async throws {
+    func assertSnapshots(matching preview: _Preview,
+                         step: Int,
+                         testName: String = #function,
+                         sourceLocation: SourceLocation = #_sourceLocation) async throws {
         let preferences = SnapshotPreferences()
         
         let preferenceReadingView = preview.content
@@ -82,7 +84,7 @@ class PreviewTests: XCTestCase {
             break
         }
         
-        var sanitizedSuiteName = String(testName.suffix(testName.count - "test".count).dropLast(2))
+        var sanitizedSuiteName = String(testName.dropLast(2))
         sanitizedSuiteName = sanitizedSuiteName.prefix(1).lowercased() + sanitizedSuiteName.dropFirst()
         
         for snapshotDevice in snapshotDevices {
@@ -112,7 +114,7 @@ class PreviewTests: XCTestCase {
                                              testName: sanitizedSuiteName,
                                              traits: traits,
                                              preferences: preferences) {
-                XCTFail(failure)
+                Issue.record(Comment(rawValue: failure), sourceLocation: sourceLocation)
             }
         }
     }
@@ -151,14 +153,6 @@ class PreviewTests: XCTestCase {
                            named: name,
                            testName: testName)
         }
-    }
-    
-    private func wait(for duration: TimeInterval) {
-        let expectation = XCTestExpectation(description: "Wait")
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            expectation.fulfill()
-        }
-        _ = XCTWaiter.wait(for: [expectation], timeout: duration + 1)
     }
 }
 

@@ -43,6 +43,7 @@
   },
   "testTargets" : [
     {
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:ElementX.xcodeproj",
         "identifier" : "7A17BE29BAC81ADBAC6349D9",
