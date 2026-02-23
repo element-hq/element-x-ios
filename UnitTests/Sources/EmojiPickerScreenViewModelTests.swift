@@ -25,27 +25,18 @@ struct EmojiPickerScreenViewModelTests {
         let reaction = "👋"
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
-        try await confirmation { confirmation in
-            var toggleReactionCalled = false
+        
+        try await waitForConfirmation(timeout: .seconds(5)) { confirmation in
             timelineProxy.toggleReactionToClosure = { toggledReaction, _ in
-                defer {
-                    confirmation()
-                    toggleReactionCalled = true
-                }
+                defer { confirmation() }
                 #expect(toggledReaction == reaction)
                 return .success(())
             }
             
             context.send(viewAction: .emojiTapped(emoji: .init(id: "wave", value: reaction)))
-            
-            try await deferred.fulfill()
-            
-            // Since the reaction is called asynchronously after dismissing the picker
-            // We need to actively wait for the function to be called before fulfilling the test.
-            while !toggleReactionCalled {
-                await Task.yield()
-            }
         }
+        
+        try await deferred.fulfill()
     }
     
     // MARK: - Helpers
