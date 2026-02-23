@@ -26,9 +26,12 @@ extension SessionVerificationControllerProxyMock {
         
         mock.acknowledgeVerificationRequestDetailsReturnValue = .success(())
 
-        mock.requestDeviceVerificationClosure = { [unowned mock] in
+        mock.requestDeviceVerificationClosure = { [weak mock] in
             Task.detached {
+                guard let mock else { return }
+                
                 try await Task.sleep(for: requestDelay)
+                
                 mock.actions.send(.acceptedVerificationRequest)
                 
                 if otherDeviceStartsSasVerification {
@@ -42,8 +45,10 @@ extension SessionVerificationControllerProxyMock {
             return .success(())
         }
 
-        mock.startSasVerificationClosure = { [unowned mock] in
+        mock.startSasVerificationClosure = { [weak mock] in
             Task.detached {
+                guard let mock else { return }
+                
                 try await Task.sleep(for: requestDelay)
                 mock.actions.send(.startedSasVerification)
 
@@ -56,8 +61,10 @@ extension SessionVerificationControllerProxyMock {
             return .success(())
         }
 
-        mock.approveVerificationClosure = { [unowned mock] in
+        mock.approveVerificationClosure = { [weak mock] in
             Task.detached {
+                guard let mock else { return }
+                
                 try await Task.sleep(for: requestDelay)
                 mock.actions.send(.finished)
             }
@@ -65,8 +72,10 @@ extension SessionVerificationControllerProxyMock {
             return .success(())
         }
 
-        mock.declineVerificationClosure = { [unowned mock] in
+        mock.declineVerificationClosure = { [weak mock] in
             Task.detached {
+                guard let mock else { return }
+                
                 try await Task.sleep(for: requestDelay)
                 mock.actions.send(.cancelled)
             }
@@ -74,8 +83,10 @@ extension SessionVerificationControllerProxyMock {
             return .success(())
         }
         
-        mock.cancelVerificationClosure = { [unowned mock] in
+        mock.cancelVerificationClosure = { [weak mock] in
             Task.detached {
+                guard let mock else { return }
+                
                 try await Task.sleep(for: requestDelay)
                 mock.actions.send(.cancelled)
             }

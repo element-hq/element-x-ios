@@ -133,7 +133,7 @@ func deferFulfillment<Value>(_ asyncSequence: any AsyncSequence<Value, Never>,
             
             defer { group.cancelAll() }
             
-            return try #require(try await group.next())
+            return try #require(await group.next())
         }
     }
 }

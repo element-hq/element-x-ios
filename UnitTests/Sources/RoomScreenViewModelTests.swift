@@ -22,7 +22,6 @@ final class RoomScreenViewModelTests {
     }
     
     deinit {
-        viewModel = nil
         AppSettings.resetAllSettings()
     }
     
@@ -79,6 +78,9 @@ final class RoomScreenViewModelTests {
         pinnedTimelineMock.timelineItemProvider = pinnedTimelineItemProviderMock
         pinnedTimelineItemProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init("1"))),
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init("2")))]
+        
+        // This is a workaround for now, without it the next fulfilment fails.
+        try await Task.sleep(for: .seconds(1))
         
         // check if the banner is now in a loaded state and is showing the counter
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in

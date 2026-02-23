@@ -120,18 +120,21 @@ struct RoomDetailsScreenViewModelTests {
     }
     
     @Test
-    func leaveRoomError() async {
-        await waitForConfirmation("leaveRoomError") { confirm in
+    func leaveRoomError() async throws {
+        try await confirmation("leaveRoomError") { confirm in
             roomProxyMock.leaveRoomClosure = {
                 defer {
                     confirm()
                 }
                 return .failure(.sdkError(ClientProxyMockError.generic))
             }
+            
+            let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
             context.send(viewAction: .confirmLeave)
+            try await deferred.fulfill()
         }
+        
         #expect(roomProxyMock.leaveRoomCallsCount == 1)
-        #expect(context.alertInfo != nil)
     }
     
     @Test
@@ -597,14 +600,17 @@ struct RoomDetailsScreenViewModelTests {
     func muteTappedFailure() async throws {
         try await notificationRoomNotMuted()
         
-        await waitForConfirmation("muteTappedFailure") { confirm in
+        try await confirmation("muteTappedFailure") { confirm in
             notificationSettingsProxyMock.setNotificationModeRoomIdModeClosure = { _, _ in
                 defer {
                     confirm()
                 }
                 throw NotificationSettingsError.Generic(msg: "mute error")
             }
+            
+            let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
             context.send(viewAction: .processToggleMuteNotifications)
+            try await deferred.fulfill()
         }
         
         #expect(!context.viewState.isProcessingMuteToggleAction)
@@ -623,15 +629,17 @@ struct RoomDetailsScreenViewModelTests {
     func muteTapped() async throws {
         try await notificationRoomNotMuted()
         
-        await waitForConfirmation("muteTapped") { confirm in
+        try await confirmation("muteTapped") { confirm in
             notificationSettingsProxyMock.setNotificationModeRoomIdModeClosure = { [weak notificationSettingsProxyMock] _, mode in
                 notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: mode, isDefault: false))
                 confirm()
             }
+            
+            let deferred = deferFulfillment(context.observe(\.viewState.isProcessingMuteToggleAction),
+                                            transitionValues: [false, true, false])
             context.send(viewAction: .processToggleMuteNotifications)
+            try await deferred.fulfill()
         }
-        
-        #expect(!context.viewState.isProcessingMuteToggleAction)
         
         let deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { state in
             switch state {
@@ -655,15 +663,17 @@ struct RoomDetailsScreenViewModelTests {
     func unmuteTapped() async throws {
         try await notificationRoomMuted()
         
-        await waitForConfirmation("unmuteTapped") { confirm in
+        try await confirmation("unmuteTapped") { confirm in
             notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedIsOneToOneClosure = { [weak notificationSettingsProxyMock] _, _, _ in
                 notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
                 confirm()
             }
+            
+            let deferred = deferFulfillment(context.observe(\.viewState.isProcessingMuteToggleAction),
+                                            transitionValues: [false, true, false])
             context.send(viewAction: .processToggleMuteNotifications)
+            try await deferred.fulfill()
         }
-        
-        #expect(!context.viewState.isProcessingMuteToggleAction)
         
         let deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { state in
             switch state {

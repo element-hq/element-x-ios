@@ -22,6 +22,10 @@ final class SecurityAndPrivacyScreenViewModelTests {
         viewModel.context
     }
     
+    init() {
+        AppSettings.resetAllSettings()
+    }
+    
     deinit {
         viewModel = nil
         roomProxy = nil
@@ -111,9 +115,10 @@ final class SecurityAndPrivacyScreenViewModelTests {
             return
         }
         
+        let saveDeferred = deferFulfillment(context.$viewState) { !$0.isSaveDisabled }
         context.desiredSettings.accessType = .anyone
+        try await saveDeferred.fulfill()
         #expect(context.viewState.isSpaceMembersOptionSelectable)
-        #expect(!context.viewState.isSaveDisabled)
         
         context.send(viewAction: .selectedSpaceMembersAccess)
         #expect(context.viewState.isSaveDisabled)

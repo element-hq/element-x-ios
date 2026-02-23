@@ -124,7 +124,7 @@ final class ComposerToolbarViewModelTests {
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
         // The display name can be used for HTML injection in the rich text editor and it's useless anyway as the clients don't use it when resolving display names
-        #expect(wysiwygViewModel.content.html == "<a href=\"https://matrix.to/#/@test:matrix.org\">@test:matrix.org</a> ")
+        #expect(wysiwygViewModel.content.html == "<a href=\"https://matrix.to/#/@test:matrix.org\">@test:matrix.org</a> ")
     }
     
     @Test
@@ -140,7 +140,7 @@ final class ComposerToolbarViewModelTests {
         
         // The display name can be used for HTML injection in the rich text editor and it's useless anyway as the clients don't use it when resolving display names
         
-        #expect(wysiwygViewModel.content.html == "<a href=\"https://matrix.to/#/%23room-alias:matrix.org\">#room-alias:matrix.org</a> ")
+        #expect(wysiwygViewModel.content.html == "<a href=\"https://matrix.to/#/%23room-alias:matrix.org\">#room-alias:matrix.org</a> ")
     }
     
     @Test
@@ -408,14 +408,21 @@ final class ComposerToolbarViewModelTests {
     }
     
     @Test
-    func restoreNormalFormattedTextMessage() async {
+    func restoreNormalFormattedTextMessage() async throws {
         viewModel.context.composerFormattingEnabled = false
-        draftServiceMock.loadDraftClosure = {
-            .success(.init(plainText: "__Hello__ world!",
-                           htmlText: "<strong>Hello</strong> world!",
-                           draftType: .newMessage))
+        
+        try await confirmation { confirmation in
+            draftServiceMock.loadDraftClosure = {
+                defer { confirmation() }
+                return .success(.init(plainText: "__Hello__ world!",
+                                      htmlText: "<strong>Hello</strong> world!",
+                                      draftType: .newMessage))
+            }
+            
+            let deferred = deferFulfillment(wysiwygViewModel.$isContentEmpty) { !$0 }
+            await viewModel.loadDraft()
+            try await deferred.fulfill()
         }
-        await viewModel.loadDraft()
         
         #expect(viewModel.context.composerFormattingEnabled)
         #expect(viewModel.state.composerMode == .default)

@@ -192,54 +192,48 @@ struct RoomNotificationSettingsScreenViewModelTests {
                                                                 roomProxy: roomProxyMock,
                                                                 displayAsUserDefinedRoomSettings: false)
         
-        let deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.notificationSettingsState.isLoaded
         }
         
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
-        try await deferredState.fulfill()
-
-        do {
-            viewModel.context.send(viewAction: .setCustomMode(.allMessages))
-            
-            let deferredState = deferFulfillment(viewModel.context.$viewState) { state in
-                state.pendingCustomMode == nil
-            }
-            
-            try await deferredState.fulfill()
-            
-            #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0 == roomProxyMock.id)
-            #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1 == .allMessages)
-            #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeCallsCount == 1)
-        }
+        try await deferred.fulfill()
         
-        do {
-            viewModel.context.send(viewAction: .setCustomMode(.mute))
-            
-            let deferredState = deferFulfillment(viewModel.context.$viewState) { state in
-                state.pendingCustomMode == nil
-            }
-            
-            try await deferredState.fulfill()
-            
-            #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0 == roomProxyMock.id)
-            #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1 == .mute)
-            #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeCallsCount == 2)
-        }
+        var deferredMode = deferFulfillment(viewModel.context.$viewState,
+                                            keyPath: \.pendingCustomMode,
+                                            transitionValues: [nil, .allMessages, nil])
+        viewModel.context.send(viewAction: .setCustomMode(.allMessages))
         
-        do {
-            viewModel.context.send(viewAction: .setCustomMode(.mentionsAndKeywordsOnly))
-            
-            let deferredState = deferFulfillment(viewModel.context.$viewState) { state in
-                state.pendingCustomMode == nil
-            }
-            
-            try await deferredState.fulfill()
-            
-            #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0 == roomProxyMock.id)
-            #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1 == .mentionsAndKeywordsOnly)
-            #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeCallsCount == 3)
-        }
+        try await deferredMode.fulfill()
+        
+        #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0 == roomProxyMock.id)
+        #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1 == .allMessages)
+        #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeCallsCount == 1)
+        
+        deferredMode = deferFulfillment(viewModel.context.$viewState,
+                                        keyPath: \.pendingCustomMode,
+                                        transitionValues: [nil, .mute, nil])
+        viewModel.context.send(viewAction: .setCustomMode(.mute))
+        
+        try await deferredMode.fulfill()
+        
+        #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0 == roomProxyMock.id)
+        #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1 == .mute)
+        #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeCallsCount == 2)
+        
+        // This is a workaround for now, without it the next fulfilment fails.
+        try await Task.sleep(for: .seconds(1))
+        
+        deferredMode = deferFulfillment(viewModel.context.$viewState,
+                                        keyPath: \.pendingCustomMode,
+                                        transitionValues: [nil, .mentionsAndKeywordsOnly, nil])
+        viewModel.context.send(viewAction: .setCustomMode(.mentionsAndKeywordsOnly))
+        
+        try await deferredMode.fulfill()
+        
+        #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0 == roomProxyMock.id)
+        #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1 == .mentionsAndKeywordsOnly)
+        #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeCallsCount == 3)
     }
     
     @Test
