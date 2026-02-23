@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "PIN поле";
 "a11y_play" = "Пускане";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Приключила анкета";
 "a11y_polls_will_remove_selection" = "Will remove previous selection";
 "a11y_polls_winning_answer" = "This is the winning answer";

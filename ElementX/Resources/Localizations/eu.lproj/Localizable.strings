@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Ahots-mezua, iraupena: %1$@, uneko posizioa: %2$@";
 "a11y_pin_field" = "PINaren eremua";
 "a11y_play" = "Erreproduzitu";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Amaitutako inkesta";
 "a11y_polls_will_remove_selection" = "Aurreko hautaketa kenduko du";
 "a11y_polls_winning_answer" = "Erantzun hau gailendu da";

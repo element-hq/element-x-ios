@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "Mesaj vocal, durată:%1$@, poziție curentă: %2$@";
 "a11y_pin_field" = "Câmp PIN";
 "a11y_play" = "Redați";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Sondaj încheiat";
 "a11y_polls_will_remove_selection" = "Va șterge selecția anterioară";
 "a11y_polls_winning_answer" = "Acesta este votul câștigător";

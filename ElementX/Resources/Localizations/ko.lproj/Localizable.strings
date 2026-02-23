@@ -20,6 +20,7 @@
 "a11y_paused_voice_message" = "음성 메시지, 지속 시간: %1$@, 현재 위치: %2$@";
 "a11y_pin_field" = "PIN 필드";
 "a11y_play" = "재생";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "종료된 투표";
 "a11y_polls_will_remove_selection" = "이전 선택 항목을 제거합니다";
 "a11y_polls_winning_answer" = "이것이 승리의 답입니다";
