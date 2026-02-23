@@ -11,7 +11,9 @@ import Combine
 import MatrixRustSDK
 import Testing
 
-@MainActor @Suite final class SecurityAndPrivacyScreenViewModelTests {
+@Suite
+@MainActor
+final class SecurityAndPrivacyScreenViewModelTests {
     var viewModel: SecurityAndPrivacyScreenViewModelProtocol!
     var spaceServiceProxy: SpaceServiceProxyMock!
     var roomProxy: JoinedRoomProxyMock!
@@ -48,7 +50,7 @@ import Testing
         #expect(!context.viewState.shouldShowAccessSectionFooter)
         #expect(!context.viewState.isSaveDisabled)
         
-        await confirmation("Join rule has updated") { confirm in
+        await waitForConfirmation("Join rule has updated") { confirm in
             roomProxy.updateJoinRuleClosure = { value in
                 #expect(value == .restricted(rules: [.roomMembership(roomID: space.id)]))
                 confirm()
@@ -80,7 +82,7 @@ import Testing
         #expect(!context.viewState.shouldShowAccessSectionFooter)
         #expect(!context.viewState.isSaveDisabled)
         
-        await confirmation("Join rule has updated") { confirm in
+        await waitForConfirmation("Join rule has updated") { confirm in
             roomProxy.updateJoinRuleClosure = { value in
                 #expect(value == .knockRestricted(rules: [.roomMembership(roomID: space.id)]))
                 confirm()
@@ -157,7 +159,7 @@ import Testing
         #expect(context.viewState.shouldShowAccessSectionFooter)
         #expect(!context.viewState.isSaveDisabled)
 
-        await confirmation("Join rule has updated") { confirm in
+        await waitForConfirmation("Join rule has updated") { confirm in
             roomProxy.updateJoinRuleClosure = { value in
                 #expect(value == .restricted(rules: [.roomMembership(roomID: spaces[0].id)]))
                 confirm()
@@ -202,7 +204,7 @@ import Testing
         #expect(context.viewState.shouldShowAccessSectionFooter)
         #expect(!context.viewState.isSaveDisabled)
 
-        await confirmation("Join rule has updated") { confirm in
+        await waitForConfirmation("Join rule has updated") { confirm in
             roomProxy.updateJoinRuleClosure = { value in
                 #expect(value == .knockRestricted(rules: [.roomMembership(roomID: spaces[0].id)]))
                 confirm()
@@ -249,7 +251,7 @@ import Testing
         #expect(context.viewState.shouldShowAccessSectionFooter)
         #expect(!context.viewState.isSaveDisabled)
 
-        await confirmation("Join rule has updated") { confirm in
+        await waitForConfirmation("Join rule has updated") { confirm in
             roomProxy.updateJoinRuleClosure = { value in
                 #expect(value == .restricted(rules: [.roomMembership(roomID: spaces[0].id), .roomMembership(roomID: "unknownSpaceID")]))
                 confirm()
@@ -361,7 +363,7 @@ import Testing
         setupViewModel(joinedParentSpaces: [], joinRule: .public)
         
         // Saving shouldn't dismiss this screen (or trigger any other action).
-        let deferred = deferFailure(viewModel.actionsPublisher, timeout: 1) { _ in true }
+        let deferred = deferFailure(viewModel.actionsPublisher, timeout: .seconds(1)) { _ in true }
         
         context.desiredSettings.accessType = .inviteOnly
         context.send(viewAction: .save)
@@ -428,7 +430,7 @@ import Testing
         #expect(context.alertInfo != nil)
         
         // The screen should not be dismissed if a failure occurred.
-        let deferred = deferFailure(viewModel.actionsPublisher, timeout: 1) { _ in true }
+        let deferred = deferFailure(viewModel.actionsPublisher, timeout: .seconds(1)) { _ in true }
         context.alertInfo?.primaryButton.action?() // Save
         try await deferred.fulfill()
     }

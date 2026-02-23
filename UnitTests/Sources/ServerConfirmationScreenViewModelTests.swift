@@ -8,10 +8,12 @@
 
 @testable import ElementX
 import MatrixRustSDKMocks
+import SwiftUI
 import Testing
 
+@Suite
 @MainActor
-@Suite final class ServerConfirmationScreenViewModelTests {
+final class ServerConfirmationScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var client: ClientSDKMock!
     var service: AuthenticationServiceProtocol!

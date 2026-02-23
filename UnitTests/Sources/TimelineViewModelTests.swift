@@ -8,10 +8,12 @@
 
 import Combine
 @testable import ElementX
+import Foundation
 import MatrixRustSDK
 import Testing
 
-@MainActor @Suite
+@Suite
+@MainActor
 final class TimelineViewModelTests {
     var userIndicatorControllerMock: UserIndicatorControllerMock!
     var cancellables = Set<AnyCancellable>()
@@ -197,7 +199,7 @@ final class TimelineViewModelTests {
         #expect(viewModel.context.viewState.timelineState.focussedEvent == nil)
         
         // When focussing on a loaded item.
-        let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { !$0.timelineState.isLive }
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: .seconds(1)) { !$0.timelineState.isLive }
         await viewModel.focusOnEvent(eventID: "t1")
         try await deferred.fulfill()
         

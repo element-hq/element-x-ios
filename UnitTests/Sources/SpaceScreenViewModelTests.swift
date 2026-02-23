@@ -12,8 +12,8 @@ import MatrixRustSDK
 import MatrixRustSDKMocks
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct SpaceScreenViewModelTests {
     var spaceRoomListProxy: SpaceRoomListProxyMock!
     var spaceServiceProxy: SpaceServiceProxyMock!
@@ -156,7 +156,7 @@ struct SpaceScreenViewModelTests {
         
         let deferredState = deferFulfillment(viewModel.context.observe(\.viewState.joiningRoomIDs), transitionValues: [[selectedSpace.id], []])
         
-        await confirmation("Join room") { confirm in
+        try await confirmation("Join room") { confirm in
             clientProxy.joinRoomViaClosure = { _, _ in
                 confirm()
                 return .success(())
@@ -174,7 +174,7 @@ struct SpaceScreenViewModelTests {
         
         let deferredState = deferFulfillment(viewModel.context.observe(\.viewState.joiningRoomIDs), transitionValues: [[selectedRoom.id], []])
         
-        await confirmation("Join room") { confirm in
+        try await confirmation("Join room") { confirm in
             clientProxy.joinRoomViaClosure = { _, _ in
                 confirm()
                 return .success(())
@@ -270,7 +270,7 @@ struct SpaceScreenViewModelTests {
         }
         
         let deferred = deferFulfillment(context.observe(\.viewState.visibleRooms.count)) { $0 == 2 }
-        let deferredFailure = deferFailure(context.observe(\.viewState.editMode), timeout: 1) { $0 == .inactive }
+        let deferredFailure = deferFailure(context.observe(\.viewState.editMode), timeout: .seconds(1)) { $0 == .inactive }
         context.send(viewAction: .confirmRemoveSelectedChildren)
         try await deferred.fulfill()
         try await deferredFailure.fulfill()
@@ -312,8 +312,8 @@ struct SpaceScreenViewModelTests {
         #expect(context.leaveSpaceViewModel == nil)
         #expect(rustLeaveHandle.leaveRoomIdsCalled)
         #expect(rustLeaveHandle.leaveRoomIdsReceivedRoomIds ==
-                       [firstSelectedRoom.spaceServiceRoom.id, spaceRoomListProxy.id],
-                "Confirming the leave should first leave the selected room and then the space.")
+            [firstSelectedRoom.spaceServiceRoom.id, spaceRoomListProxy.id],
+            "Confirming the leave should first leave the selected room and then the space.")
     }
     
     // MARK: - Helpers

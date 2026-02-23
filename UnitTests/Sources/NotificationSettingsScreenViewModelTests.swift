@@ -10,7 +10,8 @@
 import MatrixRustSDK
 import Testing
 
-@MainActor @Suite
+@Suite
+@MainActor
 struct NotificationSettingsScreenViewModelTests {
     private var viewModel: NotificationSettingsScreenViewModelProtocol
     private var context: NotificationSettingsScreenViewModelType.Context

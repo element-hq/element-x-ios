@@ -7,9 +7,12 @@
 //
 
 @testable import ElementX
+import Foundation
 import Testing
 
-@MainActor @Suite struct NavigationSplitCoordinatorTests {
+@Suite
+@MainActor
+struct NavigationSplitCoordinatorTests {
     private var navigationSplitCoordinator: NavigationSplitCoordinator
     
     init() {
@@ -121,7 +124,7 @@ import Testing
     func sidebarReplacementCallbacks() async {
         let sidebarCoordinator = SomeTestCoordinator()
         
-        await confirmation("Wait for callback") { confirm in
+        await waitForConfirmation("Wait for callback", timeout: .seconds(1)) { confirm in
             navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator) {
                 confirm()
             }
@@ -134,7 +137,7 @@ import Testing
     func detailReplacementCallbacks() async {
         let detailCoordinator = SomeTestCoordinator()
         
-        await confirmation("Wait for callback") { confirm in
+        await waitForConfirmation("Wait for callback", timeout: .seconds(1)) { confirm in
             navigationSplitCoordinator.setDetailCoordinator(detailCoordinator) {
                 confirm()
             }
@@ -147,7 +150,7 @@ import Testing
     func sheetDismissalCallback() async {
         let sheetCoordinator = SomeTestCoordinator()
         
-        await confirmation("Wait for callback") { confirm in
+        await waitForConfirmation("Wait for callback", timeout: .seconds(1)) { confirm in
             navigationSplitCoordinator.setSheetCoordinator(sheetCoordinator) {
                 confirm()
             }
@@ -160,7 +163,7 @@ import Testing
     func fullScreenCoverDismissalCallback() async {
         let fullScreenCoordinator = SomeTestCoordinator()
         
-        await confirmation("Wait for callback") { confirm in
+        await waitForConfirmation("Wait for callback", timeout: .seconds(1)) { confirm in
             navigationSplitCoordinator.setFullScreenCoverCoordinator(fullScreenCoordinator) {
                 confirm()
             }
@@ -196,9 +199,9 @@ import Testing
         
         sidebarNavigationStackCoordinator.setRootCoordinator(SomeTestCoordinator())
         
-        await confirmation("Coordinators should match") { confirm in
+        await waitForConfirmation("Coordinators should match", timeout: .seconds(1)) { confirm in
             DispatchQueue.main.async {
-                assertCoordinatorsEqual(sidebarNavigationStackCoordinator.rootCoordinator, self.navigationSplitCoordinator.compactLayoutRootCoordinator)
+                assertCoordinatorsEqual(sidebarNavigationStackCoordinator.rootCoordinator, navigationSplitCoordinator.compactLayoutRootCoordinator)
                 confirm()
             }
         }
@@ -215,11 +218,11 @@ import Testing
         
         sidebarNavigationStackCoordinator.push(SomeTestCoordinator())
         
-        await confirmation("Coordinators should match") { confirm in
+        await waitForConfirmation("Coordinators should match", timeout: .seconds(1)) { confirm in
             DispatchQueue.main.async {
-                #expect(sidebarNavigationStackCoordinator.stackCoordinators.count == self.navigationSplitCoordinator.compactLayoutStackCoordinators.count)
+                #expect(sidebarNavigationStackCoordinator.stackCoordinators.count == navigationSplitCoordinator.compactLayoutStackCoordinators.count)
                 for index in sidebarNavigationStackCoordinator.stackCoordinators.indices {
-                    assertCoordinatorsEqual(sidebarNavigationStackCoordinator.stackCoordinators[index], self.navigationSplitCoordinator.compactLayoutStackCoordinators[index])
+                    assertCoordinatorsEqual(sidebarNavigationStackCoordinator.stackCoordinators[index], navigationSplitCoordinator.compactLayoutStackCoordinators[index])
                 }
                 confirm()
             }
@@ -256,13 +259,13 @@ import Testing
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
         
-        await confirmation("Coordinators should match") { confirm in
+        await waitForConfirmation("Coordinators should match", timeout: .seconds(1)) { confirm in
             DispatchQueue.main.async {
-                assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
-                assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, sidebarCoordinator.stackCoordinators.first)
-                assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[1].coordinator, detailCoordinator.rootCoordinator)
-                assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[2].coordinator, detailCoordinator.stackCoordinators.first)
-                assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[3].coordinator, detailCoordinator.stackCoordinators.last)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, sidebarCoordinator.stackCoordinators.first)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[1].coordinator, detailCoordinator.rootCoordinator)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[2].coordinator, detailCoordinator.stackCoordinators.first)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[3].coordinator, detailCoordinator.stackCoordinators.last)
                 confirm()
             }
         }
@@ -280,17 +283,17 @@ import Testing
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
         
-        await confirmation("Coordinators should match") { confirm in
+        await waitForConfirmation("Coordinators should match", timeout: .seconds(1)) { confirm in
             DispatchQueue.main.async {
-                assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
-                assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, detailCoordinator.rootCoordinator)
-                assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[1].coordinator, detailCoordinator.stackCoordinators.first)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, detailCoordinator.rootCoordinator)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[1].coordinator, detailCoordinator.stackCoordinators.first)
                 
                 detailCoordinator.setRootCoordinator(nil)
                 
                 DispatchQueue.main.async {
-                    assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
-                    assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, detailCoordinator.stackCoordinators.first)
+                    assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                    assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, detailCoordinator.stackCoordinators.first)
                 }
                 
                 confirm()
@@ -312,7 +315,7 @@ import Testing
         splitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         splitCoordinator.setDetailCoordinator(detailCoordinator)
 
-        await confirmation("Details coordinator should be nil, and the compact layout revert to the sidebar root") { confirm in
+        await waitForConfirmation("Details coordinator should be nil, and the compact layout revert to the sidebar root", timeout: .seconds(1)) { confirm in
             DispatchQueue.main.async {
                 detailCoordinator.popToRoot(animated: true)
                 splitCoordinator.setDetailCoordinator(nil)

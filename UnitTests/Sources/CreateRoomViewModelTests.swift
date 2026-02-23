@@ -10,7 +10,9 @@ import Combine
 @testable import ElementX
 import Testing
 
-@MainActor @Suite final class CreateRoomScreenViewModelTests {
+@Suite
+@MainActor
+final class CreateRoomScreenViewModelTests {
     var viewModel: CreateRoomScreenViewModelProtocol!
     var clientProxy: ClientProxyMock!
     var spaceService: SpaceServiceProxyMock!
@@ -127,11 +129,11 @@ import Testing
         await Task.yield()
         #expect(context.viewState.canCreateRoom)
         
-        await confirmation("Wait for the room to be created") { confirm in
+        await waitForConfirmation("Wait for the room to be created") { confirmation in
             clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure = { _, _, accessType, _, _, _, localAliasPart in
                 #expect(accessType == .askToJoin)
                 #expect(localAliasPart == "a")
-                defer { confirm() }
+                defer { confirmation() }
                 return .success("")
             }
             context.send(viewAction: .createRoom)
@@ -182,11 +184,9 @@ import Testing
         
         // We also want to force the room creation in case the user may tap the button before the debounce
         // blocked it
-        await confirmation("Wait for the alias to be checked again") { confirm in
+        await waitForConfirmation("Wait for the alias to be checked again") { confirmation in
             clientProxy.isAliasAvailableClosure = { _ in
-                defer {
-                    confirm()
-                }
+                defer { confirmation() }
                 return .success(false)
             }
             context.send(viewAction: .createRoom)
@@ -256,11 +256,11 @@ import Testing
         
         // When creating the room.
         clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
-        let deferredAction = deferFulfillment(viewModel.actions) { action in
-            guard case .createdRoom(let roomProxy, nil) = action, roomProxy.id == "1" else { return false }
-            return true
-        }
-        await confirmation("Wait for the addChild function to be called") { confirm in
+        try await confirmation("Wait for the addChild function to be called") { confirm in
+            let deferredAction = deferFulfillment(viewModel.actions) { action in
+                guard case .createdRoom(let roomProxy, nil) = action, roomProxy.id == "1" else { return false }
+                return true
+            }
             spaceService.addChildToClosure = { roomID, spaceID in
                 defer { confirm() }
                 #expect(roomID == "1")
@@ -268,8 +268,8 @@ import Testing
                 return .success(())
             }
             context.send(viewAction: .createRoom)
+            try await deferredAction.fulfill()
         }
-        try await deferredAction.fulfill()
         
         #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
         #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name == "A")
@@ -290,11 +290,11 @@ import Testing
         
         // When creating the room.
         clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
-        let deferredAction = deferFulfillment(viewModel.actions) { action in
-            guard case .createdRoom(let roomProxy, nil) = action, roomProxy.id == "1" else { return false }
-            return true
-        }
-        await confirmation("Wait for the addChild function to be called") { confirm in
+        try await confirmation("Wait for the addChild function to be called") { confirm in
+            let deferredAction = deferFulfillment(viewModel.actions) { action in
+                guard case .createdRoom(let roomProxy, nil) = action, roomProxy.id == "1" else { return false }
+                return true
+            }
             spaceService.addChildToClosure = { roomID, spaceID in
                 defer { confirm() }
                 #expect(roomID == "1")
@@ -302,8 +302,8 @@ import Testing
                 return .success(())
             }
             context.send(viewAction: .createRoom)
+            try await deferredAction.fulfill()
         }
-        try await deferredAction.fulfill()
         
         #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled)
         #expect(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.name == "A")

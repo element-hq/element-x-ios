@@ -8,11 +8,14 @@
 
 import Combine
 @testable import ElementX
+import Foundation
 import MatrixRustSDK
 import Testing
 import WysiwygComposer
 
-@MainActor @Suite final class ComposerToolbarViewModelTests {
+@Suite
+@MainActor
+final class ComposerToolbarViewModelTests {
     private var appSettings: AppSettings!
     private var wysiwygViewModel: WysiwygComposerViewModel!
     private var viewModel: ComposerToolbarViewModel!
@@ -110,9 +113,9 @@ import WysiwygComposer
         
         // The first one is nil because when initialised the view model is empty
         #expect(completionSuggestionServiceMock.setSuggestionTriggerReceivedInvocations == [nil,
-                                                                                             .init(type: .user, text: "user-test", range: .init(location: 0, length: 10)),
-                                                                                             .init(type: .room, text: "room-alias-test",
-                                                                                                   range: .init(location: 0, length: 16))])
+                                                                                            .init(type: .user, text: "user-test", range: .init(location: 0, length: 10)),
+                                                                                            .init(type: .room, text: "room-alias-test",
+                                                                                                  range: .init(location: 0, length: 16))])
     }
     
     @Test
@@ -209,18 +212,20 @@ import WysiwygComposer
     
     @Test
     func saveDraftPlainText() async throws {
-        let saveDraftSubject = PassthroughSubject<ComposerDraftProxy, Never>()
-        draftServiceMock.saveDraftClosure = { draft in
-            saveDraftSubject.send(draft)
-            return .success(())
-        }
-        
         viewModel.context.composerFormattingEnabled = false
         viewModel.context.plainComposerText = .init(string: "Hello world!")
-        let deferred = deferFulfillment(saveDraftSubject) { _ in true }
-        viewModel.saveDraft()
         
-        let draft = try await deferred.fulfill()
+        var capturedDraft: ComposerDraftProxy?
+        await waitForConfirmation("Save draft") { confirmation in
+            draftServiceMock.saveDraftClosure = { draft in
+                capturedDraft = draft
+                confirmation()
+                return .success(())
+            }
+            viewModel.saveDraft()
+        }
+        
+        let draft = try #require(capturedDraft)
         #expect(draft.plainText == "Hello world!")
         #expect(draft.htmlText == nil)
         #expect(draft.draftType == .newMessage)
@@ -231,18 +236,20 @@ import WysiwygComposer
     
     @Test
     func saveDraftFormattedText() async throws {
-        let saveDraftSubject = PassthroughSubject<ComposerDraftProxy, Never>()
-        draftServiceMock.saveDraftClosure = { draft in
-            saveDraftSubject.send(draft)
-            return .success(())
-        }
-        
         viewModel.context.composerFormattingEnabled = true
         wysiwygViewModel.setHtmlContent("<strong>Hello</strong> world!")
-        let deferred = deferFulfillment(saveDraftSubject) { _ in true }
-        viewModel.saveDraft()
         
-        let draft = try await deferred.fulfill()
+        var capturedDraft: ComposerDraftProxy?
+        await waitForConfirmation("Save draft") { confirmation in
+            draftServiceMock.saveDraftClosure = { draft in
+                capturedDraft = draft
+                confirmation()
+                return .success(())
+            }
+            viewModel.saveDraft()
+        }
+        
+        let draft = try #require(capturedDraft)
         #expect(draft.plainText == "__Hello__ world!")
         #expect(draft.htmlText == "<strong>Hello</strong> world!")
         #expect(draft.draftType == .newMessage)
@@ -253,19 +260,21 @@ import WysiwygComposer
     
     @Test
     func saveDraftEdit() async throws {
-        let saveDraftSubject = PassthroughSubject<ComposerDraftProxy, Never>()
-        draftServiceMock.saveDraftClosure = { draft in
-            saveDraftSubject.send(draft)
-            return .success(())
-        }
-        
         viewModel.context.composerFormattingEnabled = false
         viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventID("testID"), type: .default)))
         viewModel.context.plainComposerText = .init(string: "Hello world!")
-        let deferred = deferFulfillment(saveDraftSubject) { _ in true }
-        viewModel.saveDraft()
         
-        let draft = try await deferred.fulfill()
+        var capturedDraft: ComposerDraftProxy?
+        await waitForConfirmation("Save draft") { confirmation in
+            draftServiceMock.saveDraftClosure = { draft in
+                capturedDraft = draft
+                confirmation()
+                return .success(())
+            }
+            viewModel.saveDraft()
+        }
+        
+        let draft = try #require(capturedDraft)
         #expect(draft.plainText == "Hello world!")
         #expect(draft.htmlText == nil)
         #expect(draft.draftType == .edit(eventID: "testID"))
@@ -276,12 +285,6 @@ import WysiwygComposer
     
     @Test
     func saveDraftReply() async throws {
-        let saveDraftSubject = PassthroughSubject<ComposerDraftProxy, Never>()
-        draftServiceMock.saveDraftClosure = { draft in
-            saveDraftSubject.send(draft)
-            return .success(())
-        }
-        
         viewModel.context.composerFormattingEnabled = false
         viewModel.process(timelineAction: .setMode(mode: .reply(eventID: "testID",
                                                                 replyDetails: .loaded(sender: .init(id: ""),
@@ -289,10 +292,18 @@ import WysiwygComposer
                                                                                       eventContent: .message(.text(.init(body: "reply text")))),
                                                                 isThread: false)))
         viewModel.context.plainComposerText = .init(string: "Hello world!")
-        let deferred = deferFulfillment(saveDraftSubject) { _ in true }
-        viewModel.saveDraft()
         
-        let draft = try await deferred.fulfill()
+        var capturedDraft: ComposerDraftProxy?
+        await waitForConfirmation("Save draft") { confirmation in
+            draftServiceMock.saveDraftClosure = { draft in
+                capturedDraft = draft
+                confirmation()
+                return .success(())
+            }
+            viewModel.saveDraft()
+        }
+        
+        let draft = try #require(capturedDraft)
         #expect(draft.plainText == "Hello world!")
         #expect(draft.htmlText == nil)
         #expect(draft.draftType == .reply(eventID: "testID"))
@@ -303,22 +314,24 @@ import WysiwygComposer
     
     @Test
     func saveDraftWhenEmptyReply() async throws {
-        let saveDraftSubject = PassthroughSubject<ComposerDraftProxy, Never>()
-        draftServiceMock.saveDraftClosure = { draft in
-            saveDraftSubject.send(draft)
-            return .success(())
-        }
-        
         viewModel.context.composerFormattingEnabled = false
         viewModel.process(timelineAction: .setMode(mode: .reply(eventID: "testID",
                                                                 replyDetails: .loaded(sender: .init(id: ""),
                                                                                       eventID: "testID",
                                                                                       eventContent: .message(.text(.init(body: "reply text")))),
                                                                 isThread: false)))
-        let deferred = deferFulfillment(saveDraftSubject) { _ in true }
-        viewModel.saveDraft()
         
-        let draft = try await deferred.fulfill()
+        var capturedDraft: ComposerDraftProxy?
+        await waitForConfirmation("Save draft") { confirmation in
+            draftServiceMock.saveDraftClosure = { draft in
+                capturedDraft = draft
+                confirmation()
+                return .success(())
+            }
+            viewModel.saveDraft()
+        }
+        
+        let draft = try #require(capturedDraft)
         #expect(draft.plainText == "")
         #expect(draft.htmlText == nil)
         #expect(draft.draftType == .reply(eventID: "testID"))
@@ -328,41 +341,39 @@ import WysiwygComposer
     }
     
     @Test
-    func clearDraftWhenEmptyNormalMessage() async throws {
-        let clearDraftSubject = PassthroughSubject<Void, Never>()
-        draftServiceMock.clearDraftClosure = {
-            clearDraftSubject.send(())
-            return .success(())
+    func clearDraftWhenEmptyNormalMessage() async {
+        viewModel.context.composerFormattingEnabled = false
+        
+        await waitForConfirmation("Clear draft") { confirmation in
+            draftServiceMock.clearDraftClosure = {
+                confirmation()
+                return .success(())
+            }
+            viewModel.saveDraft()
         }
         
-        viewModel.context.composerFormattingEnabled = false
-        let deferred = deferFulfillment(clearDraftSubject) { _ in true }
-        viewModel.saveDraft()
-        
-        try await deferred.fulfill()
         #expect(!draftServiceMock.saveDraftCalled)
         #expect(draftServiceMock.clearDraftCallsCount == 1)
         #expect(!draftServiceMock.loadDraftCalled)
     }
     
     @Test
-    func clearDraftForNonTextMode() async throws {
-        let clearDraftSubject = PassthroughSubject<Void, Never>()
-        draftServiceMock.clearDraftClosure = {
-            clearDraftSubject.send(())
-            return .success(())
-        }
-        
+    func clearDraftForNonTextMode() async {
         viewModel.context.composerFormattingEnabled = false
         let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
         viewModel.context.plainComposerText = .init(string: "Hello world!")
         viewModel.process(timelineAction: .setMode(mode: .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, title: "", duration: 10.0),
                                                                               waveform: .data(waveformData),
                                                                               isUploading: false)))
-        let deferred = deferFulfillment(clearDraftSubject) { _ in true }
-        viewModel.saveDraft()
         
-        try await deferred.fulfill()
+        await waitForConfirmation("Clear draft") { confirmation in
+            draftServiceMock.clearDraftClosure = {
+                confirmation()
+                return .success(())
+            }
+            viewModel.saveDraft()
+        }
+        
         #expect(!draftServiceMock.saveDraftCalled)
         #expect(draftServiceMock.clearDraftCallsCount == 1)
         #expect(!draftServiceMock.loadDraftCalled)
@@ -372,7 +383,7 @@ import WysiwygComposer
     func nothingToRestore() async {
         viewModel.context.composerFormattingEnabled = false
         draftServiceMock.loadDraftClosure = {
-            return .success(nil)
+            .success(nil)
         }
         
         await viewModel.loadDraft()
@@ -385,9 +396,9 @@ import WysiwygComposer
     func restoreNormalPlainTextMessage() async {
         viewModel.context.composerFormattingEnabled = false
         draftServiceMock.loadDraftClosure = {
-            return .success(.init(plainText: "Hello world!",
-                                  htmlText: nil,
-                                  draftType: .newMessage))
+            .success(.init(plainText: "Hello world!",
+                           htmlText: nil,
+                           draftType: .newMessage))
         }
         await viewModel.loadDraft()
         
@@ -400,9 +411,9 @@ import WysiwygComposer
     func restoreNormalFormattedTextMessage() async {
         viewModel.context.composerFormattingEnabled = false
         draftServiceMock.loadDraftClosure = {
-            return .success(.init(plainText: "__Hello__ world!",
-                                  htmlText: "<strong>Hello</strong> world!",
-                                  draftType: .newMessage))
+            .success(.init(plainText: "__Hello__ world!",
+                           htmlText: "<strong>Hello</strong> world!",
+                           draftType: .newMessage))
         }
         await viewModel.loadDraft()
         
@@ -416,9 +427,9 @@ import WysiwygComposer
     func restoreEdit() async {
         viewModel.context.composerFormattingEnabled = false
         draftServiceMock.loadDraftClosure = {
-            return .success(.init(plainText: "Hello world!",
-                                  htmlText: nil,
-                                  draftType: .edit(eventID: "testID")))
+            .success(.init(plainText: "Hello world!",
+                           htmlText: nil,
+                           draftType: .edit(eventID: "testID")))
         }
         await viewModel.loadDraft()
         
@@ -438,9 +449,9 @@ import WysiwygComposer
         
         viewModel.context.composerFormattingEnabled = false
         draftServiceMock.loadDraftClosure = {
-            return .success(.init(plainText: text,
-                                  htmlText: nil,
-                                  draftType: .reply(eventID: testEventID)))
+            .success(.init(plainText: text,
+                           htmlText: nil,
+                           draftType: .reply(eventID: testEventID)))
         }
         
         let deferredReplyLoaded = deferFulfillment(viewModel.context.$viewState) {
@@ -477,9 +488,9 @@ import WysiwygComposer
         
         viewModel.context.composerFormattingEnabled = false
         draftServiceMock.loadDraftClosure = {
-            return .success(.init(plainText: text,
-                                  htmlText: nil,
-                                  draftType: .reply(eventID: testEventID)))
+            .success(.init(plainText: text,
+                           htmlText: nil,
+                           draftType: .reply(eventID: testEventID)))
         }
         
         let replyLoadedSubject = PassthroughSubject<Void, Never>()
@@ -520,64 +531,50 @@ import WysiwygComposer
     }
     
     @Test
-    func restoreVolatileDraftWhenCancellingEdit() async throws {
-        let loadSubject = PassthroughSubject<Void, Never>()
-        draftServiceMock.loadVolatileDraftClosure = {
-            defer { loadSubject.send(()) }
-            return .init(plainText: "Hello world",
-                         htmlText: nil,
-                         draftType: .newMessage)
+    func restoreVolatileDraftWhenCancellingEdit() async {
+        await waitForConfirmation("Volatile draft loaded") { confirmation in
+            draftServiceMock.loadVolatileDraftClosure = {
+                defer { confirmation() }
+                return .init(plainText: "Hello world",
+                             htmlText: nil,
+                             draftType: .newMessage)
+            }
+            viewModel.process(viewAction: .cancelEdit)
         }
-        
-        let deferred = deferFulfillment(loadSubject) { _ in true }
-        viewModel.process(viewAction: .cancelEdit)
-        try await deferred.fulfill()
         #expect(viewModel.context.plainComposerText == NSAttributedString(string: "Hello world"))
     }
     
     @Test
-    func restoreVolatileDraftWhenClearing() async throws {
-        let loadSubject = PassthroughSubject<Void, Never>()
-        draftServiceMock.loadVolatileDraftClosure = {
-            defer { loadSubject.send(()) }
-            return .init(plainText: "Hello world",
-                         htmlText: nil,
-                         draftType: .newMessage)
+    func restoreVolatileDraftWhenClearing() async {
+        await waitForConfirmation("Volatile draft loaded and cleared", expectedCount: 2) { confirmation in
+            draftServiceMock.loadVolatileDraftClosure = {
+                defer { confirmation() }
+                return .init(plainText: "Hello world",
+                             htmlText: nil,
+                             draftType: .newMessage)
+            }
+            draftServiceMock.clearVolatileDraftClosure = {
+                confirmation()
+            }
+            viewModel.process(timelineAction: .clear)
         }
-        
-        let clearSubject = PassthroughSubject<Void, Never>()
-        draftServiceMock.clearVolatileDraftClosure = {
-            clearSubject.send(())
-        }
-        
-        let deferredLoad = deferFulfillment(loadSubject) { _ in true }
-        let deferredClear = deferFulfillment(clearSubject) { _ in true }
-        viewModel.process(timelineAction: .clear)
-        try await deferredLoad.fulfill()
-        try await deferredClear.fulfill()
         #expect(viewModel.context.plainComposerText == NSAttributedString(string: "Hello world"))
     }
     
     @Test
-    func restoreVolatileDraftDoubleClear() async throws {
-        let loadSubject = PassthroughSubject<Void, Never>()
-        draftServiceMock.loadVolatileDraftClosure = {
-            defer { loadSubject.send(()) }
-            return .init(plainText: "Hello world",
-                         htmlText: nil,
-                         draftType: .newMessage)
+    func restoreVolatileDraftDoubleClear() async {
+        await waitForConfirmation("Volatile draft loaded and cleared", expectedCount: 2) { confirmation in
+            draftServiceMock.loadVolatileDraftClosure = {
+                defer { confirmation() }
+                return .init(plainText: "Hello world",
+                             htmlText: nil,
+                             draftType: .newMessage)
+            }
+            draftServiceMock.clearVolatileDraftClosure = {
+                confirmation()
+            }
+            viewModel.process(timelineAction: .clear)
         }
-        
-        let clearSubject = PassthroughSubject<Void, Never>()
-        draftServiceMock.clearVolatileDraftClosure = {
-            clearSubject.send(())
-        }
-        
-        let deferredLoad = deferFulfillment(loadSubject) { _ in true }
-        let deferredClear = deferFulfillment(clearSubject) { _ in true }
-        viewModel.process(timelineAction: .clear)
-        try await deferredLoad.fulfill()
-        try await deferredClear.fulfill()
         #expect(viewModel.context.plainComposerText == NSAttributedString(string: "Hello world"))
     }
     

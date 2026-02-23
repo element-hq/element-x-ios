@@ -10,8 +10,8 @@
 import QuickLook
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct TimelineMediaPreviewDataSourceTests {
     var initialMediaItems: [EventBasedMessageTimelineItemProtocol]!
     var initialMediaViewStates: [RoomTimelineItemViewState]!
@@ -62,7 +62,7 @@ struct TimelineMediaPreviewDataSourceTests {
         let dataSource = try makeInitialDataSource()
         
         // When one of the items changes but no pagination has occurred.
-        let deferred = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: 1) { _ in true }
+        let deferred = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .seconds(1)) { _ in true }
         dataSource.updatePreviewItems(itemViewStates: initialMediaViewStates)
         
         // Then no pagination should be detected and none of the data should have changed.
@@ -219,7 +219,7 @@ struct TimelineMediaPreviewDataSourceTests {
         #expect(dataSource.currentMediaItemID == initialItem.id.eventOrTransactionID, "The current item should also be the initial item.")
         
         // When the timeline loads more items but still doesn't include the initial item.
-        let failure = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: 1) { _ in true }
+        let failure = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .seconds(1)) { _ in true }
         let loadedItems = newChunk().map { RoomTimelineItemViewState(item: $0, groupStyle: .single) }
         dataSource.updatePreviewItems(itemViewStates: loadedItems)
         try await failure.fulfill()

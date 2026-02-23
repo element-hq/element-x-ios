@@ -8,10 +8,11 @@
 
 import Combine
 @testable import ElementX
+import Foundation
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct ChatsTabFlowCoordinatorTests {
     var clientProxy: ClientProxyMock!
     var timelineControllerFactory: TimelineControllerFactoryMock!
@@ -142,7 +143,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
         #expect(detailCoordinator != nil)
         
-        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsTabFlowStatePublisher, timeout: 1) { _ in true }
+        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsTabFlowStatePublisher, timeout: .seconds(1)) { _ in true }
         chatsTabFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
         try await unexpectedFulfillment.fulfill()
         
@@ -167,7 +168,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         #expect(detailCoordinator != nil)
         
-        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsTabFlowStatePublisher, timeout: 1) { _ in true }
+        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsTabFlowStatePublisher, timeout: .seconds(1)) { _ in true }
         chatsTabFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
         try await unexpectedFulfillment.fulfill()
         
@@ -197,10 +198,7 @@ struct ChatsTabFlowCoordinatorTests {
         
         try await process(route: .userProfile(userID: "alice"), expectedState: .userProfileScreen)
         #expect(detailNavigationStack?.rootCoordinator == nil)
-        guard let sheetStackCoordinator = splitCoordinator.sheetCoordinator as? NavigationStackCoordinator else {
-            Issue.record("There should be a navigation stack presented as a sheet.")
-            return
-        }
+        let sheetStackCoordinator = try #require(splitCoordinator.sheetCoordinator as? NavigationStackCoordinator, "There should be a navigation stack presented as a sheet.")
         #expect(sheetStackCoordinator.rootCoordinator is UserProfileScreenCoordinator)
     }
     

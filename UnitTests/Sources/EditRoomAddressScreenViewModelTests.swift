@@ -9,8 +9,10 @@
 @testable import ElementX
 import Testing
 
-@MainActor @Suite struct EditRoomAddressScreenViewModelTests {
-    var viewModel: EditRoomAddressScreenViewModelProtocol! = nil
+@Suite
+@MainActor
+struct EditRoomAddressScreenViewModelTests {
+    var viewModel: EditRoomAddressScreenViewModelProtocol!
     
     var context: EditRoomAddressScreenViewModelType.Context {
         viewModel.context
@@ -80,23 +82,21 @@ import Testing
         #expect(roomProxy.infoPublisher.value.canonicalAlias == nil)
         #expect(viewModel.context.viewState.bindings.desiredAliasLocalPart == "room-name")
         
-        await confirmation("Wait for publishing") { confirmPublishing in
-            await confirmation("Wait for alias update") { confirmUpdate in
-                roomProxy.publishRoomAliasInRoomDirectoryClosure = { roomAlias in
-                    #expect(roomAlias == "#room-name:matrix.org")
-                    confirmPublishing()
-                    return .success(true)
-                }
-                
-                roomProxy.updateCanonicalAliasAltAliasesClosure = { roomAlias, altAliases in
-                    #expect(altAliases == [])
-                    #expect(roomAlias == "#room-name:matrix.org")
-                    confirmUpdate()
-                    return .success(())
-                }
-                
-                context.send(viewAction: .save)
+        await waitForConfirmation("Wait for save", expectedCount: 2) { confirm in
+            roomProxy.publishRoomAliasInRoomDirectoryClosure = { roomAlias in
+                #expect(roomAlias == "#room-name:matrix.org")
+                confirm()
+                return .success(true)
             }
+            
+            roomProxy.updateCanonicalAliasAltAliasesClosure = { roomAlias, altAliases in
+                #expect(altAliases == [])
+                #expect(roomAlias == "#room-name:matrix.org")
+                confirm()
+                return .success(())
+            }
+            
+            context.send(viewAction: .save)
         }
         #expect(!roomProxy.removeRoomAliasFromRoomDirectoryCalled)
     }
@@ -113,31 +113,27 @@ import Testing
         
         context.desiredAliasLocalPart = "room-name"
         
-        await confirmation("Wait for publishing") { confirmPublishing in
-            await confirmation("Wait for alias update") { confirmUpdate in
-                await confirmation("Wait for alias removal") { confirmRemoval in
-                    roomProxy.publishRoomAliasInRoomDirectoryClosure = { roomAlias in
-                        #expect(roomAlias == "#room-name:matrix.org")
-                        confirmPublishing()
-                        return .success(true)
-                    }
-                    
-                    roomProxy.updateCanonicalAliasAltAliasesClosure = { roomAlias, altAliases in
-                        #expect(altAliases == [])
-                        #expect(roomAlias == "#room-name:matrix.org")
-                        confirmUpdate()
-                        return .success(())
-                    }
-                    
-                    roomProxy.removeRoomAliasFromRoomDirectoryClosure = { roomAlias in
-                        #expect(roomAlias == "#old-room-name:matrix.org")
-                        confirmRemoval()
-                        return .success(true)
-                    }
-                    
-                    context.send(viewAction: .save)
-                }
+        await waitForConfirmation("Wait for save", expectedCount: 3) { confirm in
+            roomProxy.publishRoomAliasInRoomDirectoryClosure = { roomAlias in
+                #expect(roomAlias == "#room-name:matrix.org")
+                confirm()
+                return .success(true)
             }
+                
+            roomProxy.updateCanonicalAliasAltAliasesClosure = { roomAlias, altAliases in
+                #expect(altAliases == [])
+                #expect(roomAlias == "#room-name:matrix.org")
+                confirm()
+                return .success(())
+            }
+                
+            roomProxy.removeRoomAliasFromRoomDirectoryClosure = { roomAlias in
+                #expect(roomAlias == "#old-room-name:matrix.org")
+                confirm()
+                return .success(true)
+            }
+                
+            context.send(viewAction: .save)
         }
     }
     
@@ -153,23 +149,21 @@ import Testing
         
         context.desiredAliasLocalPart = "room-name"
         
-        await confirmation("Wait for publishing") { confirmPublishing in
-            await confirmation("Wait for alias update") { confirmUpdate in
-                roomProxy.publishRoomAliasInRoomDirectoryClosure = { roomAlias in
-                    #expect(roomAlias == "#room-name:matrix.org")
-                    confirmPublishing()
-                    return .success(true)
-                }
-                
-                roomProxy.updateCanonicalAliasAltAliasesClosure = { roomAlias, altAliases in
-                    #expect(altAliases == ["#room-name:matrix.org"])
-                    #expect(roomAlias == "#old-room-name:element.io")
-                    confirmUpdate()
-                    return .success(())
-                }
-                
-                context.send(viewAction: .save)
+        await waitForConfirmation("Wait for save", expectedCount: 2) { confirm in
+            roomProxy.publishRoomAliasInRoomDirectoryClosure = { roomAlias in
+                #expect(roomAlias == "#room-name:matrix.org")
+                confirm()
+                return .success(true)
             }
+            
+            roomProxy.updateCanonicalAliasAltAliasesClosure = { roomAlias, altAliases in
+                #expect(altAliases == ["#room-name:matrix.org"])
+                #expect(roomAlias == "#old-room-name:element.io")
+                confirm()
+                return .success(())
+            }
+            
+            context.send(viewAction: .save)
         }
         #expect(!roomProxy.removeRoomAliasFromRoomDirectoryCalled)
     }

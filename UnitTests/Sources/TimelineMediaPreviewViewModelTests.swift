@@ -13,8 +13,9 @@ import QuickLook
 import SwiftUI
 import Testing
 
+@Suite
 @MainActor
-@Suite struct TimelineMediaPreviewViewModelTests {
+struct TimelineMediaPreviewViewModelTests {
     var viewModel: TimelineMediaPreviewViewModel!
     var context: TimelineMediaPreviewViewModel.Context {
         viewModel.context
@@ -56,7 +57,7 @@ import Testing
         
         // When the preview controller sets an item that fails to load.
         mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
-        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: 1) { $0.isItemLoaded }
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(context.viewState.dataSource.previewItems[0])))
         try await failure.fulfill()
         
@@ -81,7 +82,7 @@ import Testing
         #expect(context.viewState.currentItem == .media(context.viewState.dataSource.previewItems[1]))
         
         // When swiping back to the first item.
-        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: 1) { $0.isItemLoaded }
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(context.viewState.dataSource.previewItems[0])))
         try await failure.fulfill()
         
@@ -99,7 +100,7 @@ import Testing
         // When swiping to a "loading more" item and there are more media items to load.
         timelineController.paginationState = .init(backward: .idle, forward: .endReached)
         timelineController.backPaginationResponses.append(RoomTimelineItemFixtures.mediaChunk)
-        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: 1) { $0.isItemLoaded }
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.loading(.paginatingBackwards)))
         try await failure.fulfill()
         
@@ -123,7 +124,7 @@ import Testing
         
         // And the preview controller attempts to update the current item (now at a new index in the array but it hasn't changed in the data source).
         mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
-        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: 1) { $0.isItemLoaded }
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(context.viewState.dataSource.previewItems[3])))
         try await failure.fulfill()
         

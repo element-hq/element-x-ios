@@ -7,10 +7,11 @@
 //
 
 @testable import ElementX
+import Foundation
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct RoomPollsHistoryScreenViewModelTests {
     var viewModel: RoomPollsHistoryScreenViewModelProtocol!
     var interactionHandler: PollInteractionHandlerMock!
@@ -185,4 +186,3 @@ struct RoomPollsHistoryScreenViewModelTests {
 private enum SDKError: Error {
     case generic
 }
-

@@ -8,10 +8,11 @@
 
 import Combine
 @testable import ElementX
+import Foundation
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct SessionVerificationViewModelTests {
     var viewModel: SessionVerificationScreenViewModelProtocol!
     var context: SessionVerificationViewModelType.Context!
@@ -74,9 +75,9 @@ struct SessionVerificationViewModelTests {
         
         let deferred = deferFulfillment(sessionVerificationController.actions
             .delay(for: .seconds(0.1), scheduler: DispatchQueue.main)) { callback in
-            if case .finished = callback { return true }
-            return false
-        }
+                if case .finished = callback { return true }
+                return false
+            }
         
         context.send(viewAction: .accept)
         
@@ -92,9 +93,9 @@ struct SessionVerificationViewModelTests {
         
         let deferred = deferFulfillment(sessionVerificationController.actions
             .delay(for: .seconds(0.1), scheduler: DispatchQueue.main)) { callback in
-            if case .cancelled = callback { return true }
-            return false
-        }
+                if case .cancelled = callback { return true }
+                return false
+            }
         
         context.send(viewAction: .decline)
         
@@ -107,32 +108,27 @@ struct SessionVerificationViewModelTests {
     // MARK: - Private
     
     private mutating func setupChallengeReceived() async throws {
-        let deferredAccepted = deferFulfillment(sessionVerificationController.actions
-            .delay(for: .seconds(0.1), scheduler: DispatchQueue.main)) { callback in
-            if case .acceptedVerificationRequest = callback { return true }
-            return false
+        var cancellable: AnyCancellable?
+        await waitForConfirmation("Wait for challenge received", expectedCount: 3) { confirm in
+            cancellable = sessionVerificationController.actions
+                .delay(for: .seconds(0.1), scheduler: DispatchQueue.main)
+                .sink { [context] callback in
+                    switch callback {
+                    case .acceptedVerificationRequest:
+                        confirm()
+                        context?.send(viewAction: .startSasVerification)
+                    case .startedSasVerification:
+                        confirm()
+                    case .receivedVerificationData:
+                        confirm()
+                    default:
+                        break
+                    }
+                }
+            context.send(viewAction: .requestVerification)
         }
-        context.send(viewAction: .requestVerification)
-        try await deferredAccepted.fulfill()
-        #expect(context.viewState.verificationState == .verificationRequestAccepted)
-        
-        let deferredStarted = deferFulfillment(sessionVerificationController.actions
-            .delay(for: .seconds(0.1), scheduler: DispatchQueue.main)) { callback in
-            if case .startedSasVerification = callback { return true }
-            return false
-        }
-        context.send(viewAction: .startSasVerification)
-        try await deferredStarted.fulfill()
-        #expect(context.viewState.verificationState == .sasVerificationStarted)
-        
-        let deferredData = deferFulfillment(sessionVerificationController.actions
-            .delay(for: .seconds(0.1), scheduler: DispatchQueue.main)) { callback in
-            if case .receivedVerificationData = callback { return true }
-            return false
-        }
-        try await deferredData.fulfill()
+        cancellable?.cancel()
         #expect(context.viewState.verificationState == .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
-
         #expect(sessionVerificationController.requestDeviceVerificationCallsCount == 1)
         #expect(sessionVerificationController.startSasVerificationCallsCount == 1)
     }

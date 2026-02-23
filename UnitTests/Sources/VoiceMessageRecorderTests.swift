@@ -11,8 +11,8 @@ import Combine
 import Foundation
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct VoiceMessageRecorderTests {
     private var voiceMessageRecorder: VoiceMessageRecorder!
     
@@ -62,7 +62,7 @@ struct VoiceMessageRecorderTests {
 
         let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
             switch action {
-            case .didStopRecording(_, let url) where url == self.recordingURL:
+            case .didStopRecording(_, let url) where url == recordingURL:
                 return true
             default:
                 return false
@@ -73,13 +73,13 @@ struct VoiceMessageRecorderTests {
     }
     
     @Test
-    func recordingURL() {
+    func recorderRecordingURL() {
         audioRecorder.audioFileURL = recordingURL
         #expect(voiceMessageRecorder.recordingURL == recordingURL)
     }
     
     @Test
-    func recordingDuration() {
+    func recorderRecordingDuration() {
         audioRecorder.currentTime = 10.3
         #expect(voiceMessageRecorder.recordingDuration == 10.3)
     }
@@ -187,7 +187,7 @@ struct VoiceMessageRecorderTests {
     }
     
     @Test
-    func buildRecordedWaveform() async {
+    func buildRecordedWaveform() async throws {
         // If there is no recording file, an error is expected
         audioRecorder.audioFileURL = nil
         guard case .failure(.missingRecordingFile) = await voiceMessageRecorder.buildRecordingWaveform() else {
@@ -195,10 +195,7 @@ struct VoiceMessageRecorderTests {
             return
         }
         
-        guard let audioFileURL = Bundle(for: BundleFinder.self).url(forResource: "test_audio", withExtension: "mp3") else {
-            Issue.record("Test audio file is missing")
-            return
-        }
+        let audioFileURL = try #require(Bundle(for: BundleFinder.self).url(forResource: "test_audio", withExtension: "mp3"), "Test audio file is missing")
         audioRecorder.audioFileURL = audioFileURL
         guard case .success(let data) = await voiceMessageRecorder.buildRecordingWaveform() else {
             Issue.record("A waveform is expected")
@@ -235,11 +232,8 @@ struct VoiceMessageRecorderTests {
     }
     
     @Test
-    func sendVoiceMessage_InvalidFile() async {
-        guard let audioFileURL = Bundle(for: BundleFinder.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
-            Issue.record("Test audio file is missing")
-            return
-        }
+    func sendVoiceMessage_InvalidFile() async throws {
+        let audioFileURL = try #require(Bundle(for: BundleFinder.self).url(forResource: "test_voice_message", withExtension: "m4a"), "Test audio file is missing")
         audioRecorder.audioFileURL = audioFileURL
         audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { _, destination in
             try? FileManager.default.removeItem(at: destination)
@@ -256,11 +250,8 @@ struct VoiceMessageRecorderTests {
     }
     
     @Test
-    func sendVoiceMessage_WaveformAnlyseFailed() async {
-        guard let imageFileURL = Bundle(for: BundleFinder.self).url(forResource: "test_image", withExtension: "png") else {
-            Issue.record("Test audio file is missing")
-            return
-        }
+    func sendVoiceMessage_WaveformAnlyseFailed() async throws {
+        let imageFileURL = try #require(Bundle(for: BundleFinder.self).url(forResource: "test_image", withExtension: "png"), "Test image file is missing")
         audioRecorder.audioFileURL = imageFileURL
         audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { _, destination in
             try? FileManager.default.removeItem(at: destination)
@@ -278,11 +269,8 @@ struct VoiceMessageRecorderTests {
     }
     
     @Test
-    func sendVoiceMessage_SendError() async {
-        guard let audioFileURL = Bundle(for: BundleFinder.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
-            Issue.record("Test audio file is missing")
-            return
-        }
+    func sendVoiceMessage_SendError() async throws {
+        let audioFileURL = try #require(Bundle(for: BundleFinder.self).url(forResource: "test_voice_message", withExtension: "m4a"), "Test audio file is missing")
         audioRecorder.audioFileURL = audioFileURL
         audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { source, destination in
             try? FileManager.default.removeItem(at: destination)
@@ -302,11 +290,8 @@ struct VoiceMessageRecorderTests {
     }
     
     @Test
-    func sendVoiceMessage() async {
-        guard let imageFileURL = Bundle(for: BundleFinder.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
-            Issue.record("Test audio file is missing")
-            return
-        }
+    func sendVoiceMessage() async throws {
+        let imageFileURL = try #require(Bundle(for: BundleFinder.self).url(forResource: "test_voice_message", withExtension: "m4a"), "Test audio file is missing")
         
         let timelineProxy = TimelineProxyMock()
         let timelineController = MockTimelineController(timelineProxy: timelineProxy)
@@ -332,7 +317,7 @@ struct VoiceMessageRecorderTests {
         
         timelineProxy.sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure = { url, audioInfo, waveform, _ in
             #expect(url == convertedFileURL)
-            #expect(audioInfo.duration == self.audioRecorder.currentTime)
+            #expect(audioInfo.duration == audioRecorder.currentTime)
             #expect(audioInfo.size == convertedFileSize)
             #expect(audioInfo.mimetype == "audio/ogg")
             #expect(!waveform.isEmpty)
@@ -377,7 +362,7 @@ struct VoiceMessageRecorderTests {
 
         let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
             switch action {
-            case .didStopRecording(_, let url) where url == self.recordingURL:
+            case .didStopRecording(_, let url) where url == recordingURL:
                 return true
             default:
                 return false
@@ -404,7 +389,7 @@ struct VoiceMessageRecorderTests {
     }
 }
 
-private class BundleFinder {}
+private class BundleFinder { }
 
 private enum SDKError: Error {
     case generic

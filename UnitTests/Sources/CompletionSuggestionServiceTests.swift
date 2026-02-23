@@ -10,14 +10,9 @@ import Combine
 @testable import ElementX
 import Testing
 
+@Suite
 @MainActor
-@Suite struct CompletionSuggestionServiceTests {
-    private var cancellables = Set<AnyCancellable>()
-    
-    init() {
-        cancellables.removeAll()
-    }
-    
+struct CompletionSuggestionServiceTests {
     @Test
     func userSuggestions() async throws {
         let alice: RoomMemberProxyMock = .mockAlice

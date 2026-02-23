@@ -133,15 +133,16 @@ final class JoinRoomScreenViewModelTests {
             action == .dismiss
         }
         
-        await confirmation("Wait for the user to be ignored") { confirm in
+        await waitForConfirmation("Wait for the user to be ignored") { confirm in
             clientProxy.ignoreUserClosure = { userID in
                 defer { confirm() }
                 #expect(userID == "@test:matrix.org")
                 return .success(())
             }
             context.alertInfo?.secondaryButton?.action?()
-            try await deferred.fulfill()
         }
+        
+        try await deferred.fulfill()
     }
     
     @Test

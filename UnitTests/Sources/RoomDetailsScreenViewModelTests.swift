@@ -13,8 +13,9 @@ import MatrixRustSDK
 import SwiftUI
 import Testing
 
+@Suite
 @MainActor
-@Suite struct RoomDetailsScreenViewModelTests {
+struct RoomDetailsScreenViewModelTests {
     var viewModel: RoomDetailsScreenViewModel!
     var roomProxyMock: JoinedRoomProxyMock!
     var notificationSettingsProxyMock: NotificationSettingsProxyMock!
@@ -120,7 +121,7 @@ import Testing
     
     @Test
     func leaveRoomError() async {
-        await confirmation("leaveRoomError") { confirm in
+        await waitForConfirmation("leaveRoomError") { confirm in
             roomProxyMock.leaveRoomClosure = {
                 defer {
                     confirm()
@@ -570,7 +571,7 @@ import Testing
     func unmuteTappedFailure() async throws {
         try await notificationRoomMuted()
         
-        await confirmation("unmuteTappedFailure") { confirm in
+        await waitForConfirmation("unmuteTappedFailure") { confirm in
             notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedIsOneToOneClosure = { _, _, _ in
                 defer {
                     confirm()
@@ -596,7 +597,7 @@ import Testing
     func muteTappedFailure() async throws {
         try await notificationRoomNotMuted()
         
-        await confirmation("muteTappedFailure") { confirm in
+        await waitForConfirmation("muteTappedFailure") { confirm in
             notificationSettingsProxyMock.setNotificationModeRoomIdModeClosure = { _, _ in
                 defer {
                     confirm()
@@ -622,7 +623,7 @@ import Testing
     func muteTapped() async throws {
         try await notificationRoomNotMuted()
         
-        await confirmation("muteTapped") { confirm in
+        await waitForConfirmation("muteTapped") { confirm in
             notificationSettingsProxyMock.setNotificationModeRoomIdModeClosure = { [weak notificationSettingsProxyMock] _, mode in
                 notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: mode, isDefault: false))
                 confirm()
@@ -654,7 +655,7 @@ import Testing
     func unmuteTapped() async throws {
         try await notificationRoomMuted()
         
-        await confirmation("unmuteTapped") { confirm in
+        await waitForConfirmation("unmuteTapped") { confirm in
             notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedIsOneToOneClosure = { [weak notificationSettingsProxyMock] _, _, _ in
                 notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
                 confirm()
@@ -797,7 +798,7 @@ import Testing
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferredInvisible = deferFailure(context.observe(\.viewState),
-                                             timeout: 1,
+                                             timeout: .seconds(1),
                                              message: "The pill should not be shown as the feature flag is not set") { state in
             state.details.historySharingState != nil
         }

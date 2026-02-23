@@ -9,10 +9,11 @@
 import Combine
 @testable import ElementX
 import Kingfisher
+import SwiftUI
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct MediaProviderTests {
     private var mediaLoader: MediaLoaderMock!
     private var imageCache: MockImageCache!
@@ -32,10 +33,7 @@ struct MediaProviderTests {
     @Test
     mutating func loadingRetriedOnReconnection() async throws {
         let testImage = try loadTestImage()
-        guard let pngData = testImage.pngData() else {
-            Issue.record("Test image should contain valid .png data")
-            return
-        }
+        let pngData = try #require(testImage.pngData(), "Test image should contain valid .png data")
         
         let loadTask = try mediaProvider.loadImageRetryingOnReconnection(MediaSourceProxy(url: .mockMXCImage, mimeType: "image/jpeg"))
         
@@ -218,7 +216,7 @@ struct MediaProviderTests {
     }
 }
 
-private class BundleFinder {}
+private class BundleFinder { }
 
 private enum MediaProviderTestsError: Error {
     case error

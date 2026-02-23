@@ -7,9 +7,11 @@
 //
 
 @testable import ElementX
+import Foundation
 import Testing
 
-@MainActor @Suite
+@Suite
+@MainActor
 struct MediaUploadPreviewScreenViewModelTests {
     var timelineProxy: TimelineProxyMock!
     var clientProxy: ClientProxyMock!
@@ -107,7 +109,7 @@ struct MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 0)
         
         // When attempting to send the file
-        let deferredFailure = deferFailure(viewModel.actions, timeout: 1, message: "The screen should remain visible.") { $0 == .dismiss }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The screen should remain visible.") { $0 == .dismiss }
         context.send(viewAction: .send)
         #expect(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1) // Loading indicator
@@ -127,7 +129,7 @@ struct MediaUploadPreviewScreenViewModelTests {
         
         // When attempting to send the media.
         let deferredAlert = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
-        let deferredFailure = deferFailure(viewModel.actions, timeout: 1, message: "The screen should remain visible.") { $0 == .dismiss }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The screen should remain visible.") { $0 == .dismiss }
         context.send(viewAction: .send)
         
         #expect(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
@@ -159,7 +161,7 @@ struct MediaUploadPreviewScreenViewModelTests {
         
         // When attempting to send an image that is larger the limit.
         let deferredAlert = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
-        let deferredFailure = deferFailure(viewModel.actions, timeout: 1, message: "The screen should remain visible.") { $0 == .dismiss }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The screen should remain visible.") { $0 == .dismiss }
         context.send(viewAction: .send)
         
         #expect(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
@@ -201,7 +203,7 @@ struct MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 0)
         
         // When attempting to send the file
-        let deferredFailure = deferFailure(viewModel.actions, timeout: 1, message: "The screen should remain visible.") { $0 == .dismiss }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The screen should remain visible.") { $0 == .dismiss }
         context.send(viewAction: .send)
         #expect(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1) // Loading indicator
@@ -235,7 +237,7 @@ struct MediaUploadPreviewScreenViewModelTests {
     
     // MARK: - Helpers
     
-    private class BundleFinder {}
+    private class BundleFinder { }
     
     private var audioURL: URL {
         assertResourceURL(filename: "test_audio.mp3")
@@ -269,17 +271,17 @@ struct MediaUploadPreviewScreenViewModelTests {
                                          simulateImageSendFailures: Bool = false) {
         timelineProxy = TimelineProxyMock(.init())
         timelineProxy.sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [self] _, _, caption, _ in
-            self.verifyCaption(caption, expectedCaption: expectedCaption)
+            verifyCaption(caption, expectedCaption: expectedCaption)
         }
         timelineProxy.sendFileUrlFileInfoCaptionRequestHandleClosure = { [self] _, _, caption, _ in
-            self.verifyCaption(caption, expectedCaption: expectedCaption)
+            verifyCaption(caption, expectedCaption: expectedCaption)
         }
         timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure = { [self] _, _, _, caption, _ in
             guard !simulateImageSendFailures else { return .failure(.sdkError(TestError.unknown)) }
-            return self.verifyCaption(caption, expectedCaption: expectedCaption)
+            return verifyCaption(caption, expectedCaption: expectedCaption)
         }
         timelineProxy.sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure = { [self] _, _, _, caption, _ in
-            self.verifyCaption(caption, expectedCaption: expectedCaption)
+            verifyCaption(caption, expectedCaption: expectedCaption)
         }
         
         clientProxy = ClientProxyMock(.init())

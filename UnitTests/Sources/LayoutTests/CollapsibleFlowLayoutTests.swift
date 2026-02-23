@@ -10,7 +10,8 @@
 import SwiftUI
 import Testing
 
-@Suite struct CollapsibleFlowLayoutTests {
+@Suite
+struct CollapsibleFlowLayoutTests {
     @Test
     func flowLayoutWithExpandAndCollapse() {
         let containerSize = CGSize(width: 250, height: 400)

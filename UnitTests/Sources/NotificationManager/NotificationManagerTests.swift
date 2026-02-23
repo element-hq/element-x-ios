@@ -11,7 +11,8 @@ import Combine
 import NotificationCenter
 import Testing
 
-@MainActor @Suite
+@Suite
+@MainActor
 final class NotificationManagerTests {
     var notificationManager: NotificationManager!
     private let clientProxy = ClientProxyMock(.init(userID: "@test:user.net"))
@@ -94,7 +95,7 @@ final class NotificationManagerTests {
                                                       alert: APSAlert(locKey: "Notification",
                                                                       locArgs: [])),
                                          pusherNotificationClientIdentifier: nil)
-        #expect(data.defaultPayload == (try defaultPayload.toJsonString()))
+        #expect(try data.defaultPayload == (defaultPayload.toJsonString()))
     }
 
     @Test
@@ -144,7 +145,7 @@ final class NotificationManagerTests {
 
     @Test
     func whenStart_requestAuthorizationCalledWithCorrectParams() async {
-        await confirmation("requestAuthorization should be called") { confirm in
+        await waitForConfirmation("requestAuthorization should be called", timeout: .seconds(10)) { confirm in
             notificationCenter.requestAuthorizationOptionsClosure = { _ in
                 confirm()
                 return true
@@ -158,7 +159,7 @@ final class NotificationManagerTests {
     func whenStartAndAuthorizationGranted_delegateCalled() async {
         authorizationStatusWasGranted = false
         notificationManager.delegate = self
-        await confirmation("registerForRemoteNotifications delegate function should be called") { confirm in
+        await waitForConfirmation("registerForRemoteNotifications delegate function should be called", timeout: .seconds(10)) { confirm in
             registerForRemoteNotificationsDelegateCalled = {
                 confirm()
             }
@@ -185,7 +186,7 @@ final class NotificationManagerTests {
         notificationCenter.authorizationStatusReturnValue = .authorized
         notificationManager.delegate = self
         
-        await confirmation("registerForRemoteNotifications delegate function should be called") { confirm in
+        await waitForConfirmation("registerForRemoteNotifications delegate function should be called", timeout: .seconds(10)) { confirm in
             registerForRemoteNotificationsDelegateCalled = {
                 confirm()
             }

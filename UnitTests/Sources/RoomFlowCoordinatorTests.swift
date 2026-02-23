@@ -11,8 +11,9 @@ import Combine
 import MatrixRustSDKMocks
 import Testing
 
+@Suite
 @MainActor
-@Suite final class RoomFlowCoordinatorTests {
+final class RoomFlowCoordinatorTests {
     var clientProxy: ClientProxyMock!
     var timelineControllerFactory: TimelineControllerFactoryMock!
     var roomFlowCoordinator: RoomFlowCoordinator!

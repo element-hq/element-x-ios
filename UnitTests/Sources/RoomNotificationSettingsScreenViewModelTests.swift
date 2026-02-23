@@ -11,8 +11,8 @@ import Combine
 import MatrixRustSDK
 import Testing
 
-@MainActor
 @Suite
+@MainActor
 struct RoomNotificationSettingsScreenViewModelTests {
     var roomProxyMock: JoinedRoomProxyMock!
     var notificationSettingsProxyMock: NotificationSettingsProxyMock!

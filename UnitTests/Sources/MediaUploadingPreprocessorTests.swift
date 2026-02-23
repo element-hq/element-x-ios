@@ -7,10 +7,12 @@
 //
 
 @testable import ElementX
+import SwiftUI
 import Testing
 import UniformTypeIdentifiers
 
-@Suite final class MediaUploadingPreprocessorTests {
+@Suite
+final class MediaUploadingPreprocessorTests {
     let maxUploadSize: UInt = 100 * 1024 * 1024
     var appSettings: AppSettings!
     var mediaUploadingPreprocessor: MediaUploadingPreprocessor!
@@ -28,11 +30,8 @@ import UniformTypeIdentifiers
     }
     
     @Test
-    func audioFileProcessing() async {
-        guard let url = Bundle(for: Self.self).url(forResource: "test_audio.mp3", withExtension: nil) else {
-            Issue.record("Failed retrieving test asset")
-            return
-        }
+    func audioFileProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "test_audio.mp3", withExtension: nil), "Failed retrieving test asset")
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .audio(audioURL, audioInfo) = result else {
@@ -49,11 +48,8 @@ import UniformTypeIdentifiers
     }
     
     @Test
-    func landscapeMovVideoProcessing() async {
-        guard let url = Bundle(for: Self.self).url(forResource: "landscape_test_video.mov", withExtension: nil) else {
-            Issue.record("Failed retrieving test asset")
-            return
-        }
+    func landscapeMovVideoProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "landscape_test_video.mov", withExtension: nil), "Failed retrieving test asset")
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .video(videoURL, thumbnailURL, videoInfo) = result else {
@@ -66,11 +62,8 @@ import UniformTypeIdentifiers
         #expect(videoURL.pathExtension == "mp4", "The file extension should match the container we use.")
         
         // Check that the thumbnail is generated correctly
-        guard let thumbnailData = try? Data(contentsOf: thumbnailURL),
-              let thumbnail = UIImage(data: thumbnailData) else {
-            Issue.record("Invalid thumbnail")
-            return
-        }
+        let thumbnailData = try Data(contentsOf: thumbnailURL)
+        let thumbnail = try #require(UIImage(data: thumbnailData), "Invalid thumbnail")
         
         #expect(thumbnail.size.width <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.width)
         #expect(thumbnail.size.height <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.height)
@@ -110,11 +103,8 @@ import UniformTypeIdentifiers
     }
     
     @Test
-    func portraitMp4VideoProcessing() async {
-        guard let url = Bundle(for: Self.self).url(forResource: "portrait_test_video.mp4", withExtension: nil) else {
-            Issue.record("Failed retrieving test asset")
-            return
-        }
+    func portraitMp4VideoProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "portrait_test_video.mp4", withExtension: nil), "Failed retrieving test asset")
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .video(videoURL, thumbnailURL, videoInfo) = result else {
@@ -127,11 +117,8 @@ import UniformTypeIdentifiers
         #expect(videoURL.pathExtension == "mp4", "The file extension should match the container we use.")
         
         // Check that the thumbnail is generated correctly
-        guard let thumbnailData = try? Data(contentsOf: thumbnailURL),
-              let thumbnail = UIImage(data: thumbnailData) else {
-            Issue.record("Invalid thumbnail")
-            return
-        }
+        let thumbnailData = try Data(contentsOf: thumbnailURL)
+        let thumbnail = try #require(UIImage(data: thumbnailData), "Invalid thumbnail")
         
         #expect(thumbnail.size.width <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.width)
         #expect(thumbnail.size.height <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.height)
@@ -171,11 +158,8 @@ import UniformTypeIdentifiers
     }
     
     @Test
-    func landscapeImageProcessing() async {
-        guard let url = Bundle(for: Self.self).url(forResource: "landscape_test_image.jpg", withExtension: nil) else {
-            Issue.record("Failed retrieving test asset")
-            return
-        }
+    func landscapeImageProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "landscape_test_image.jpg", withExtension: nil), "Failed retrieving test asset")
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, thumbnailURL, imageInfo) = result else {
@@ -183,7 +167,7 @@ import UniformTypeIdentifiers
             return
         }
         
-        compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
+        try compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
         
         // Check resulting image info
         #expect(imageInfo.mimetype == "image/jpeg")
@@ -207,7 +191,7 @@ import UniformTypeIdentifiers
             return
         }
         
-        compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
+        try compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
         
         // Check optimised image info
         #expect(optimizedImageInfo.mimetype == "image/jpeg")
@@ -218,11 +202,8 @@ import UniformTypeIdentifiers
     }
     
     @Test
-    func portraitImageProcessing() async {
-        guard let url = Bundle(for: Self.self).url(forResource: "portrait_test_image.jpg", withExtension: nil) else {
-            Issue.record("Failed retrieving test asset")
-            return
-        }
+    func portraitImageProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "portrait_test_image.jpg", withExtension: nil), "Failed retrieving test asset")
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, thumbnailURL, imageInfo) = result else {
@@ -230,7 +211,7 @@ import UniformTypeIdentifiers
             return
         }
         
-        compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
+        try compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
         
         // Check resulting image info
         #expect(imageInfo.mimetype == "image/jpeg")
@@ -254,7 +235,7 @@ import UniformTypeIdentifiers
             return
         }
         
-        compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
+        try compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
         
         // Check optimised image info
         #expect(optimizedImageInfo.mimetype == "image/jpeg")
@@ -265,11 +246,8 @@ import UniformTypeIdentifiers
     }
     
     @Test
-    func pngImageProcessing() async {
-        guard let url = Bundle(for: Self.self).url(forResource: "test_image.png", withExtension: nil) else {
-            Issue.record("Failed retrieving test asset")
-            return
-        }
+    func pngImageProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "test_image.png", withExtension: nil), "Failed retrieving test asset")
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, _, imageInfo) = result else {
@@ -317,11 +295,8 @@ import UniformTypeIdentifiers
     }
     
     @Test
-    func heicImageProcessing() async {
-        guard let url = Bundle(for: Self.self).url(forResource: "test_apple_image.heic", withExtension: nil) else {
-            Issue.record("Failed retrieving test asset")
-            return
-        }
+    func heicImageProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "test_apple_image.heic", withExtension: nil), "Failed retrieving test asset")
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, thumbnailURL, imageInfo) = result else {
@@ -329,7 +304,7 @@ import UniformTypeIdentifiers
             return
         }
         
-        compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
+        try compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
         
         // Make sure the output file matches the image info.
         #expect(mimeType(from: convertedImageURL) == "image/heic", "Unoptimised HEICs should always be sent as is.")
@@ -357,7 +332,7 @@ import UniformTypeIdentifiers
             return
         }
         
-        compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
+        try compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
         
         // Make sure the output file matches the image info.
         #expect(mimeType(from: optimizedImageURL) == "image/jpeg", "Optimised HEICs should always be converted to JPEG for compatibility.")
@@ -372,15 +347,10 @@ import UniformTypeIdentifiers
     }
     
     @Test
-    func gifImageProcessing() async {
-        guard let url = Bundle(for: Self.self).url(forResource: "test_animated_image.gif", withExtension: nil) else {
-            Issue.record("Failed retrieving test asset")
-            return
-        }
-        guard let originalSize = try? FileManager.default.sizeForItem(at: url), originalSize > 0 else {
-            Issue.record("Failed fetching test asset's original size")
-            return
-        }
+    func gifImageProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "test_animated_image.gif", withExtension: nil), "Failed retrieving test asset")
+        let originalSizeValue = try FileManager.default.sizeForItem(at: url)
+        let originalSize = try #require(originalSizeValue > 0 ? originalSizeValue : nil, "File size must be greater than zero")
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, _, imageInfo) = result else {
@@ -427,11 +397,8 @@ import UniformTypeIdentifiers
     }
     
     @Test
-    func rotatedImageProcessing() async {
-        guard let url = Bundle(for: Self.self).url(forResource: "test_rotated_image.jpg", withExtension: nil) else {
-            Issue.record("Failed retrieving test asset")
-            return
-        }
+    func rotatedImageProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "test_rotated_image.jpg", withExtension: nil), "Failed retrieving test asset")
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, thumbnailURL, imageInfo) = result else {
@@ -439,7 +406,7 @@ import UniformTypeIdentifiers
             return
         }
         
-        compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
+        try compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
         
         // Check resulting image info
         #expect(imageInfo.mimetype == "image/jpeg")
@@ -459,7 +426,7 @@ import UniformTypeIdentifiers
             return
         }
         
-        compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
+        try compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
         
         // Check optimised image info
         #expect(optimizedImageInfo.mimetype == "image/jpeg")
@@ -469,7 +436,7 @@ import UniformTypeIdentifiers
     
     // MARK: - Private
     
-    private func compare(originalImageAt originalImageURL: URL, toConvertedImageAt convertedImageURL: URL, withThumbnailAt thumbnailURL: URL) {
+    private func compare(originalImageAt originalImageURL: URL, toConvertedImageAt convertedImageURL: URL, withThumbnailAt thumbnailURL: URL) throws {
         guard let originalImageData = try? Data(contentsOf: originalImageURL),
               let originalImage = UIImage(data: originalImageData),
               let convertedImageData = try? Data(contentsOf: convertedImageURL),
@@ -489,18 +456,15 @@ import UniformTypeIdentifiers
         }
         
         // Check that the GPS data has been stripped
-        let originalMetadata = metadata(from: originalImageData)
+        let originalMetadata = try metadata(from: originalImageData)
         #expect(originalMetadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil)
         
-        let convertedMetadata = metadata(from: convertedImageData)
+        let convertedMetadata = try metadata(from: convertedImageData)
         #expect(convertedMetadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") == nil)
         
         // Check that the thumbnail is generated correctly
-        guard let thumbnailData = try? Data(contentsOf: thumbnailURL),
-              let thumbnail = UIImage(data: thumbnailData) else {
-            Issue.record("Invalid thumbnail")
-            return
-        }
+        let thumbnailData = try Data(contentsOf: thumbnailURL)
+        let thumbnail = try #require(UIImage(data: thumbnailData), "Invalid thumbnail")
         
         if thumbnail.size.width > thumbnail.size.height {
             #expect(thumbnail.size.width <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.width)
@@ -510,22 +474,13 @@ import UniformTypeIdentifiers
             #expect(thumbnail.size.height <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.width)
         }
         
-        let thumbnailMetadata = metadata(from: thumbnailData)
+        let thumbnailMetadata = try metadata(from: thumbnailData)
         #expect(thumbnailMetadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") == nil)
     }
     
-    private func metadata(from imageData: Data) -> NSDictionary {
-        guard let imageSource = CGImageSourceCreateWithData(imageData as NSData, nil) else {
-            Issue.record("Invalid asset")
-            return [:]
-        }
-        
-        guard let convertedMetadata: NSDictionary = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) else {
-            Issue.record("Test asset is expected to contain metadata")
-            return [:]
-        }
-        
-        return convertedMetadata
+    private func metadata(from imageData: Data) throws -> NSDictionary {
+        let imageSource = try #require(CGImageSourceCreateWithData(imageData as NSData, nil), "Invalid asset")
+        return try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as NSDictionary?, "Test asset is expected to contain metadata")
     }
     
     private func mimeType(from url: URL) -> String? {

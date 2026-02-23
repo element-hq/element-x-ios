@@ -7,11 +7,12 @@
 //
 
 @testable import ElementX
+import SwiftUI
 import Testing
 
 @Suite
 struct AttributedStringBuilderTests {
-    private var attributedStringBuilder: AttributedStringBuilder!
+    private let attributedStringBuilder: AttributedStringBuilder
     private let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
     
     init() async throws {
@@ -19,11 +20,8 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func renderHTMLStringWithHeaders() {
-        guard let attributedString = attributedStringBuilder.fromHTML(HTMLFixtures.headers.rawValue) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+    func renderHTMLStringWithHeaders() throws {
+        let attributedString = try #require(attributedStringBuilder.fromHTML(HTMLFixtures.headers.rawValue), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "H1 Header\nH2 Header\nH3 Header\nH4 Header\nH5 Header\nH6 Header")
         
@@ -34,30 +32,21 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func renderHTMLStringWithPreCode() {
-        guard let attributedString = attributedStringBuilder.fromHTML(HTMLFixtures.code.rawValue) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+    func renderHTMLStringWithPreCode() throws {
+        let attributedString = try #require(attributedStringBuilder.fromHTML(HTMLFixtures.code.rawValue), "Could not build the attributed string")
         
         #expect(attributedString.runs.first?.uiKit.font?.fontName == ".AppleSystemUIFontMonospaced-Regular")
         
         let string = String(attributedString.characters)
         
-        guard let regex = try? NSRegularExpression(pattern: "\\R", options: []) else {
-            Issue.record("Could not build the regex for the test.")
-            return
-        }
+        let regex = try #require(try? NSRegularExpression(pattern: "\\R", options: []), "Could not build the regex for the test.")
         
         #expect(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)) == 23)
     }
     
     @Test
-    func renderHTMLStringWithLink() {
-        guard let attributedString = attributedStringBuilder.fromHTML(HTMLFixtures.links.rawValue) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+    func renderHTMLStringWithLink() throws {
+        let attributedString = try #require(attributedStringBuilder.fromHTML(HTMLFixtures.links.rawValue), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Links too:\nMatrix rules! 🤘, beta.org, www.gamma.org, http://delta.org")
         
@@ -67,13 +56,10 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func renderPlainStringWithLink() {
+    func renderPlainStringWithLink() throws {
         let plainString = "This text contains a https://www.matrix.org link."
         
-        guard let attributedString = attributedStringBuilder.fromPlain(plainString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromPlain(plainString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == plainString)
         
@@ -85,13 +71,10 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func punctuationAtTheEndOfPlainStringLinks() {
+    func punctuationAtTheEndOfPlainStringLinks() throws {
         let plainString = "Most punctuation marks are removed https://www.matrix.org:;., but closing brackets are kept https://example.com/(test)"
         
-        guard let attributedString = attributedStringBuilder.fromPlain(plainString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromPlain(plainString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == plainString)
         
@@ -104,13 +87,10 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func linkDefaultScheme() {
+    func linkDefaultScheme() throws {
         let plainString = "This text contains a matrix.org link."
         
-        guard let attributedString = attributedStringBuilder.fromPlain(plainString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromPlain(plainString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == plainString)
         
@@ -122,37 +102,28 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func mailToLinks() {
+    func mailToLinks() throws {
         let plainString = "Linking to email addresses like stefan@matrix.org should work as well"
         
-        guard let attributedString = attributedStringBuilder.fromPlain(plainString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromPlain(plainString), "Could not build the attributed string")
         
         let link = attributedString.runs.first { $0.link != nil }?.link
         #expect(link == "mailto:stefan@matrix.org")
     }
     
     @Test
-    func renderHTMLStringWithLinkInHeader() {
+    func renderHTMLStringWithLinkInHeader() throws {
         let h1HTMLString = "<h1><a href=\"https://matrix.org/\">Matrix.org</a></h1>"
         let h2HTMLString = "<h2><a href=\"https://matrix.org/\">Matrix.org</a></h2>"
         let h3HTMLString = "<h3><a href=\"https://matrix.org/\">Matrix.org</a></h3>"
         
-        guard let h1AttributedString = attributedStringBuilder.fromHTML(h1HTMLString),
-              let h2AttributedString = attributedStringBuilder.fromHTML(h2HTMLString),
-              let h3AttributedString = attributedStringBuilder.fromHTML(h3HTMLString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let h1AttributedString = try #require(attributedStringBuilder.fromHTML(h1HTMLString), "Could not build the attributed string")
+        let h2AttributedString = try #require(attributedStringBuilder.fromHTML(h2HTMLString), "Could not build the attributed string")
+        let h3AttributedString = try #require(attributedStringBuilder.fromHTML(h3HTMLString), "Could not build the attributed string")
         
-        guard let h1Font = h1AttributedString.runs.first?.uiKit.font,
-              let h2Font = h2AttributedString.runs.first?.uiKit.font,
-              let h3Font = h3AttributedString.runs.first?.uiKit.font else {
-            Issue.record("Could not extract a font from the strings.")
-            return
-        }
+        let h1Font = try #require(h1AttributedString.runs.first?.uiKit.font, "Could not extract a font from the strings.")
+        let h2Font = try #require(h2AttributedString.runs.first?.uiKit.font, "Could not extract a font from the strings.")
+        let h3Font = try #require(h3AttributedString.runs.first?.uiKit.font, "Could not extract a font from the strings.")
         
         #expect(String(h1AttributedString.characters) == "Matrix.org")
         #expect(String(h2AttributedString.characters) == "Matrix.org")
@@ -174,83 +145,71 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func renderHTMLStringWithIFrame() {
+    func renderHTMLStringWithIFrame() throws {
         let htmlString = "<iframe src=\"https://www.matrix.org/\"></iframe>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(attributedString.uiKit.attachment == nil)
     }
     
     @Test
-    func linkWithFragment() {
+    func linkWithFragment() throws {
         var string = "https://example.com/#/"
-        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: "https://example.com", expectedRuns: 1)
-        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: "https://example.com", expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: "https://example.com", expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: "https://example.com", expectedRuns: 1)
         
         string = "https://example.com/#/some_fragment/"
-        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: "https://example.com/#/some_fragment", expectedRuns: 1)
-        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: "https://example.com/#/some_fragment", expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: "https://example.com/#/some_fragment", expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: "https://example.com/#/some_fragment", expectedRuns: 1)
     }
     
     @Test
-    func permalink() {
+    func permalink() throws {
         let string = "https://matrix.to/#/!hello:matrix.org/$world?via=matrix.org"
-        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: string, expectedRuns: 1)
-        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: string, expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: string, expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: string, expectedRuns: 1)
     }
     
     @Test
-    func matrixURI() {
+    func matrixURI() throws {
         let string = "matrix:roomid/hello:matrix.org/e/world?via=matrix.org"
-        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: string, expectedRuns: 1)
-        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: string, expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: string, expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: string, expectedRuns: 1)
     }
     
     @Test
-    func userIDLink() {
+    func userIDLink() throws {
         let userID = "@user:matrix.org"
         let string = "The user is \(userID)."
         let expectedLink = "https://matrix.to/#/\(userID)"
-        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink, expectedRuns: 3)
-        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink, expectedRuns: 3)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink, expectedRuns: 3)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink, expectedRuns: 3)
     }
     
     @Test
-    func roomAliasLink() {
+    func roomAliasLink() throws {
         let roomAlias = "#room:matrix.org"
         let string = "The room is \(roomAlias)."
-        guard let expectedLink = URL(string: "https://matrix.to/#/\(roomAlias)") else {
-            Issue.record("The expected link should be valid.")
-            return
-        }
-        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
-        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
+        let expectedLink = try #require(URL(string: "https://matrix.to/#/\(roomAlias)"), "The expected link should be valid.")
+        try checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
+        try checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
     }
     
     @Test
-    func defaultFont() {
+    func defaultFont() throws {
         let htmlString = "<b>Test</b> <i>string</i> "
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(attributedString.runs.count == 3)
     }
     
     @Test
-    func defaultForegroundColor() {
+    func defaultForegroundColor() throws {
         let htmlString = "<b>Test</b> <i>string</i> <a href=\"https://www.matrix.org/\">link</a> <code><a href=\"https://www.matrix.org/\">link</a></code>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(attributedString.runs.count == 7)
         
@@ -260,14 +219,11 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func customForegroundColor() {
+    func customForegroundColor() throws {
         // swiftlint:disable:next line_length
         let htmlString = "<font color=\"#ff00be\">R</font><font color=\"#ff0082\">a</font><font color=\"#ff0047\">i</font><font color=\"#ff5800\">n </font><font color=\"#ffa300\">w</font><font color=\"#d2ba00\">w</font><font color=\"#97ca00\">w</font><font color=\"#3ed500\">.</font><font color=\"#00dd00\">m</font><font color=\"#00e251\">a</font><font color=\"#00e595\">t</font><font color=\"#00e7d6\">r</font><font color=\"#00e7ff\">i</font><font color=\"#00e6ff\">x</font><font color=\"#00e3ff\">.</font><font color=\"#00dbff\">o</font><font color=\"#00ceff\">r</font><font color=\"#00baff\">g</font><font color=\"#f477ff\"> b</font><font color=\"#ff3aff\">o</font><font color=\"#ff00fb\">w</font>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(attributedString.runs.count == 3)
         
@@ -288,13 +244,10 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func singleBlockquote() {
+    func singleBlockquote() throws {
         let htmlString = "<blockquote>Blockquote</blockquote><p>Another paragraph</p>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(attributedString.runs.count == 2)
         
@@ -311,17 +264,14 @@ struct AttributedStringBuilderTests {
     
     // swiftlint:disable line_length
     @Test
-    func blockquoteWithinText() {
+    func blockquoteWithinText() throws {
         let htmlString = """
         The text before the blockquote
         <blockquote> For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.</blockquote>
         The text after the blockquote
         """
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(attributedString.runs.count == 3)
         
@@ -337,13 +287,10 @@ struct AttributedStringBuilderTests {
     // swiftlint:enable line_length
     
     @Test
-    func blockquoteWithLink() {
+    func blockquoteWithLink() throws {
         let htmlString = "<blockquote>Blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(attributedString.runs.count == 3)
         
@@ -362,31 +309,22 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func replyBlockquote() {
+    func replyBlockquote() throws {
         let htmlString = "<blockquote><a href=\"https://matrix.to/#/someroom/someevent\">In reply to</a> <a href=\"https://matrix.to/#/@user:matrix.org\">@user:matrix.org</a><br>The future is <code>swift run tools</code> 😎</blockquote>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         let coalescedComponents = attributedString.formattedComponents
         #expect(coalescedComponents.count == 1)
         
-        guard let component = coalescedComponents.first else {
-            Issue.record("Could not get the first component")
-            return
-        }
+        let component = try #require(coalescedComponents.first, "Could not get the first component")
         
         #expect(component.type == .blockquote, "The reply quote should be a blockquote.")
     }
     
     @Test
-    func multipleGroupedBlockquotes() {
-        guard let attributedString = attributedStringBuilder.fromHTML(HTMLFixtures.groupedBlockQuotes.rawValue) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+    func multipleGroupedBlockquotes() throws {
+        let attributedString = try #require(attributedStringBuilder.fromHTML(HTMLFixtures.groupedBlockQuotes.rawValue), "Could not build the attributed string")
         
         #expect(attributedString.runs.count == 11)
         #expect(attributedString.formattedComponents.count == 5)
@@ -400,11 +338,8 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func multipleSeparatedBlockquotes() {
-        guard let attributedString = attributedStringBuilder.fromHTML(HTMLFixtures.separatedBlockQuotes.rawValue) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+    func multipleSeparatedBlockquotes() throws {
+        let attributedString = try #require(attributedStringBuilder.fromHTML(HTMLFixtures.separatedBlockQuotes.rawValue), "Could not build the attributed string")
         
         let coalescedComponents = attributedString.formattedComponents
         
@@ -511,73 +446,67 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func userMentionAtachmentInBlockQuotes() {
+    func userMentionAtachmentInBlockQuotes() throws {
         let link = "https://matrix.to/#/@test:matrix.org"
         let string = "<blockquote>hello \(link) how are you?</blockquote>"
-        guard let attributedStringFromHTML = attributedStringBuilder.fromHTML(string) else {
-            Issue.record("Attributed string is nil")
-            return
-        }
+        let attributedStringFromHTML = try #require(attributedStringBuilder.fromHTML(string), "Attributed string is nil")
         
         for run in attributedStringFromHTML.runs {
             #expect(run.blockquote != nil)
         }
         
-        checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 3)
-        checkLinkIn(attributedString: attributedStringFromHTML, expectedLink: link, expectedRuns: 3)
+        try checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 3)
+        try checkLinkIn(attributedString: attributedStringFromHTML, expectedLink: link, expectedRuns: 3)
     }
     
     @Test
-    func allUsersMentionAtachmentInBlockQuotes() {
+    func allUsersMentionAtachmentInBlockQuotes() throws {
         let string = "<blockquote>hello @room how are you?</blockquote>"
-        guard let attributedStringFromHTML = attributedStringBuilder.fromHTML(string) else {
-            Issue.record("Attributed string is nil")
-            return
-        }
+        let attributedStringFromHTML = try #require(attributedStringBuilder.fromHTML(string), "Attributed string is nil")
         
         for run in attributedStringFromHTML.runs {
             #expect(run.blockquote != nil)
         }
         
-        checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 3)
+        try checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 3)
     }
     
     @Test
-    func allUsersMentionAttachment() {
+    func allUsersMentionAttachment() throws {
         let string = "@room"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
-        checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 1)
+        try checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 1)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
-        checkAttachment(attributedString: attributedStringFromPlain, expectedRuns: 1)
+        try checkAttachment(attributedString: attributedStringFromPlain, expectedRuns: 1)
         
         let string2 = "Hello @room"
         let attributedStringFromHTML2 = attributedStringBuilder.fromHTML(string2)
-        checkAttachment(attributedString: attributedStringFromHTML2, expectedRuns: 2)
+        try checkAttachment(attributedString: attributedStringFromHTML2, expectedRuns: 2)
         let attributedStringFromPlain2 = attributedStringBuilder.fromPlain(string2)
-        checkAttachment(attributedString: attributedStringFromPlain2, expectedRuns: 2)
+        try checkAttachment(attributedString: attributedStringFromPlain2, expectedRuns: 2)
         
         let string3 = "Hello @room how are you doing?"
         let attributedStringFromHTML3 = attributedStringBuilder.fromHTML(string3)
-        checkAttachment(attributedString: attributedStringFromHTML3, expectedRuns: 3)
+        try checkAttachment(attributedString: attributedStringFromHTML3, expectedRuns: 3)
         let attributedStringFromPlain3 = attributedStringBuilder.fromPlain(string3)
-        checkAttachment(attributedString: attributedStringFromPlain3, expectedRuns: 3)
+        try checkAttachment(attributedString: attributedStringFromPlain3, expectedRuns: 3)
     }
     
     @Test
-    func linksHavePriorityOverAllUserMention() {
+    func linksHavePriorityOverAllUserMention() throws {
         let string = "https://test@room.org"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
-        checkLinkIn(attributedString: attributedStringFromHTML, expectedLink: string, expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringFromHTML, expectedLink: string, expectedRuns: 1)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
-        checkLinkIn(attributedString: attributedStringFromPlain, expectedLink: string, expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringFromPlain, expectedLink: string, expectedRuns: 1)
         
         let string2 = "https://matrix.to/#/@roomusername:matrix.org"
         let attributedStringFromHTML2 = attributedStringBuilder.fromHTML(string2)
-        checkLinkIn(attributedString: attributedStringFromHTML2, expectedLink: string2, expectedRuns: 1)
-        checkAttachment(attributedString: attributedStringFromHTML2, expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringFromHTML2, expectedLink: string2, expectedRuns: 1)
+        try checkAttachment(attributedString: attributedStringFromHTML2, expectedRuns: 1)
         let attributedStringFromPlain2 = attributedStringBuilder.fromPlain(string2)
-        checkLinkIn(attributedString: attributedStringFromPlain2, expectedLink: string2, expectedRuns: 1)
-        checkAttachment(attributedString: attributedStringFromPlain2, expectedRuns: 1)
+        try checkLinkIn(attributedString: attributedStringFromPlain2, expectedLink: string2, expectedRuns: 1)
+        try checkAttachment(attributedString: attributedStringFromPlain2, expectedRuns: 1)
     }
     
     @Test
@@ -631,17 +560,11 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func multipleMentions() {
-        guard let url = URL(string: "https://matrix.to/#/@test:matrix.org") else {
-            Issue.record("Invalid url")
-            return
-        }
+    func multipleMentions() throws {
+        let url = try #require(URL(string: "https://matrix.to/#/@test:matrix.org"), "Invalid url")
         
         let string = "Hello @room, but especially hello to you \(url)"
-        guard let attributedStringFromHTML = attributedStringBuilder.fromHTML(string) else {
-            Issue.record("Attributed string is nil")
-            return
-        }
+        let attributedStringFromHTML = try #require(attributedStringBuilder.fromHTML(string), "Attributed string is nil")
         
         var foundAttachments = 0
         var foundLink: URL?
@@ -657,10 +580,7 @@ struct AttributedStringBuilderTests {
         #expect(foundLink == url)
         #expect(foundAttachments == 2)
         
-        guard let attributedStringFromPlain = attributedStringBuilder.fromPlain(string) else {
-            Issue.record("Attributed string is nil")
-            return
-        }
+        let attributedStringFromPlain = try #require(attributedStringBuilder.fromPlain(string), "Attributed string is nil")
         
         foundAttachments = 0
         foundLink = nil
@@ -678,17 +598,11 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func multipleMentions2() {
-        guard let url = URL(string: "https://matrix.to/#/@test:matrix.org") else {
-            Issue.record("Invalid url")
-            return
-        }
+    func multipleMentions2() throws {
+        let url = try #require(URL(string: "https://matrix.to/#/@test:matrix.org"), "Invalid url")
         
         let string = "\(url) @room"
-        guard let attributedStringFromHTML = attributedStringBuilder.fromHTML(string) else {
-            Issue.record("Attributed string is nil")
-            return
-        }
+        let attributedStringFromHTML = try #require(attributedStringBuilder.fromHTML(string), "Attributed string is nil")
         
         var foundAttachments = 0
         var foundLink: URL?
@@ -704,10 +618,7 @@ struct AttributedStringBuilderTests {
         #expect(foundLink == url)
         #expect(foundAttachments == 2)
         
-        guard let attributedStringFromPlain = attributedStringBuilder.fromPlain(string) else {
-            Issue.record("Attributed string is nil")
-            return
-        }
+        let attributedStringFromPlain = try #require(attributedStringBuilder.fromPlain(string), "Attributed string is nil")
         
         foundAttachments = 0
         foundLink = nil
@@ -725,104 +636,80 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func imageTags() {
+    func imageTags() throws {
         let htmlString = "Hey <img src=\"smiley.gif\" alt=\"Smiley face\">! How's work<img src=\"workplace.jpg\">?"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Hey [img: Smiley face]! How's work[img]?")
     }
     
     @Test
-    func listTags() {
+    func listTags() throws {
         let htmlString = "<p>like</p>\n<ul>\n<li>this<br />\ntest</li>\n</ul>\n"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "like\n    • this\ntest")
     }
     
     @Test
-    func unorderedList() {
+    func unorderedList() throws {
         let htmlString = "<ul><li>1</li><li>2</li><li>3</li></ul>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "  • 1\n  • 2\n  • 3")
     }
     
     @Test
-    func nestedUnorderedList() {
+    func nestedUnorderedList() throws {
         let htmlString = "<ul><li>A<ul><li>A1</li><li>A2</li><li>A3</li></ul></li><li>B</li><li>C</li></ul>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "  • A\n      • A1\n      • A2\n      • A3\n  • B\n  • C")
     }
     
     @Test
-    func orderedList() {
+    func orderedList() throws {
         let htmlString = "<ol><li>1</li><li>2</li><li>3</li></ol>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "  1. 1\n  2. 2\n  3. 3")
     }
     
     @Test
-    func nestedOrderedList() {
+    func nestedOrderedList() throws {
         let htmlString = "<ol><li>A<ol><li>A1</li><li>A2</li><li>A3</li></ol></li><li>B</li><li>C</li></ol>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "  1. A\n      1. A1\n      2. A2\n      3. A3\n  2. B\n  3. C")
     }
     
     @Test
-    func outOfOrderListNubmering() {
+    func outOfOrderListNubmering() throws {
         let htmlString = "<ol start=\"2\">\n<li>this is a two</li>\n</ol>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "   2. this is a two")
     }
     
     @Test
-    func nestedHeterogeneousLists() {
+    func nestedHeterogeneousLists() throws {
         let htmlString = "<ol><li>A<ul><li>A1</li><li>A2</li><li>A3</li></ul></li><li>B</li><li>C</li></ol>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "  1. A\n      • A1\n      • A2\n      • A3\n  2. B\n  3. C")
     }
     
     /// https://github.com/element-hq/element-x-ios/issues/4856
     @Test
-    func normalisedWhitespaces() {
+    func normalisedWhitespaces() throws {
         let html = """
         <a href="https://github.com/stefan">Stefan</a>      pushed
                 <a href="https://github.com">2 commits</a>
@@ -837,10 +724,7 @@ struct AttributedStringBuilderTests {
                 </li>
          </ul>
         """
-        guard let attributedString = attributedStringBuilder.fromHTML(html) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(html), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Stefan pushed 2 commits to main:\n   •  Some update \n   •  Some other update")
     }
@@ -848,224 +732,158 @@ struct AttributedStringBuilderTests {
     // MARK: - Phishing prevention
     
     @Test
-    func phishingLink() {
+    func phishingLink() throws {
         let htmlString = "Hey check the following link <a href=\"https://matrix.org\">https://element.io</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Hey check the following link https://element.io")
         
         #expect(attributedString.runs.count == 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(link.requiresConfirmation)
         #expect(link.confirmationParameters?.internalURL.absoluteString == "https://matrix.org")
         #expect(link.confirmationParameters?.displayString == "https://element.io")
     }
     
     @Test
-    func validLink() {
+    func validLink() throws {
         let htmlString = "Hey check the following <a href=\"https://matrix.org\">link</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(!link.requiresConfirmation)
         #expect(link.absoluteString == "https://matrix.org")
     }
     
     @Test
-    func validLinkWithRTLOverride() {
+    func validLinkWithRTLOverride() throws {
         let htmlString = "<a href=\"https://matrix.org\">\u{202E}https://matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(!link.requiresConfirmation)
         #expect(link.absoluteString == "https://matrix.org")
     }
     
     @Test
-    func phishingUserID() {
+    func phishingUserID() throws {
         let htmlString = "Hey check the following user <a href=\"https://matrix.org\">@alice:matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Hey check the following user @alice:matrix.org")
         
         #expect(attributedString.runs.count == 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(link.requiresConfirmation)
         #expect(link.confirmationParameters?.internalURL.absoluteString == "https://matrix.org")
         #expect(link.confirmationParameters?.displayString == "@alice:matrix.org")
     }
     
     @Test
-    func validUserIDLink() {
+    func validUserIDLink() throws {
         let htmlString = "Hey check the following user <a href=\"https://matrix.to/#/@alice:matrix.org\">@alice:matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        checkAttachment(attributedString: attributedString, expectedRuns: 2)
+        try checkAttachment(attributedString: attributedString, expectedRuns: 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(!link.requiresConfirmation)
         #expect(link.absoluteString == "https://matrix.to/#/@alice:matrix.org")
     }
     
     @Test
-    func phishingUserIDWithAnotherUserIDPermalink() {
+    func phishingUserIDWithAnotherUserIDPermalink() throws {
         let htmlString = "Hey check the following user <a href=\"https://matrix.to/#/@bob:matrix.org\">@alice:matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Hey check the following user @alice:matrix.org")
         
         #expect(attributedString.runs.count == 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(link.requiresConfirmation)
         #expect(link.confirmationParameters?.internalURL.absoluteString == "https://matrix.to/#/@bob:matrix.org")
         #expect(link.confirmationParameters?.displayString == "@alice:matrix.org")
     }
     
     @Test
-    func phishingUserIDWithDistractingCharacters() {
+    func phishingUserIDWithDistractingCharacters() throws {
         let htmlString = "Hey check the following user <a href=\"https://matrix.org\">👉️ @alice:matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Hey check the following user 👉️ @alice:matrix.org")
         
         #expect(attributedString.runs.count == 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(link.requiresConfirmation)
         #expect(link.confirmationParameters?.internalURL.absoluteString == "https://matrix.org")
         #expect(link.confirmationParameters?.displayString == "👉️ @alice:matrix.org")
     }
     
     @Test
-    func phishingLinkWithDistractingCharacters() {
+    func phishingLinkWithDistractingCharacters() throws {
         let htmlString = "Hey check the following link <a href=\"https://matrix.org\">👉️ https://element.io</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Hey check the following link 👉️ https://element.io")
         
         #expect(attributedString.runs.count == 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(link.requiresConfirmation)
         #expect(link.confirmationParameters?.internalURL.absoluteString == "https://matrix.org")
         #expect(link.confirmationParameters?.displayString == "👉️ https://element.io")
     }
     
     @Test
-    func validLinkWithDistractingCharacters() {
+    func validLinkWithDistractingCharacters() throws {
         let htmlString = "Hey check the following link <a href=\"https://element.io\">👉️ https://element.io</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         #expect(String(attributedString.characters) == "Hey check the following link 👉️ https://element.io")
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         
         #expect(!link.requiresConfirmation)
         #expect(link.absoluteString == "https://element.io")
     }
     
     @Test
-    func phishingLinkWithFakeDotCharacter() {
+    func phishingLinkWithFakeDotCharacter() throws {
         let htmlString = "Hey check the following link <a href=\"https://matrix.org\">https://element﹒io</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Hey check the following link https://element﹒io")
         
         #expect(attributedString.runs.count == 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(link.requiresConfirmation)
         #expect(link.confirmationParameters?.internalURL.absoluteString == "https://matrix.org")
         #expect(link.confirmationParameters?.displayString == "https://element﹒io")
     }
     
     @Test
-    func phishingMatrixPermalinks() {
+    func phishingMatrixPermalinks() throws {
         let htmlString = "Hey check the following room <a href=\"https://matrix.to/#/#offensive-room:matrix.org\">https://matrix.to/#/#beautiful-room:matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(attributedString.runs.count == 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         
         #expect(link.requiresConfirmation)
         #expect(link.confirmationParameters?.internalURL.absoluteString == "https://matrix.to/#/%23offensive-room:matrix.org")
@@ -1073,117 +891,84 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
-    func validMatrixPermalinks() {
+    func validMatrixPermalinks() throws {
         let htmlString = "Hey check the following room <a href=\"https://matrix.to/#/#beautiful-room:matrix.org\">https://matrix.to/#/#beautiful-room:matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        checkAttachment(attributedString: attributedString, expectedRuns: 2)
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        try checkAttachment(attributedString: attributedString, expectedRuns: 2)
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         
         #expect(!link.requiresConfirmation)
         #expect(link.absoluteString == "https://matrix.to/#/%23beautiful-room:matrix.org")
     }
     
     @Test
-    func phishingRoomAlias() {
+    func phishingRoomAlias() throws {
         let htmlString = "Hey check the following room <a href=\"https://matrix.org\">#room:matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Hey check the following room #room:matrix.org")
         
         #expect(attributedString.runs.count == 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(link.requiresConfirmation)
         #expect(link.confirmationParameters?.internalURL.absoluteString == "https://matrix.org")
         #expect(link.confirmationParameters?.displayString == "#room:matrix.org")
     }
     
     @Test
-    func validRoomAliasLink() {
+    func validRoomAliasLink() throws {
         let htmlString = "Hey check the following user <a href=\"https://matrix.to/#/#room:matrix.org\">#room:matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        checkAttachment(attributedString: attributedString, expectedRuns: 2)
+        try checkAttachment(attributedString: attributedString, expectedRuns: 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(!link.requiresConfirmation)
         #expect(link.absoluteString == "https://matrix.to/#/%23room:matrix.org")
     }
     
     @Test
-    func phishingRoomAliasWithAnotherRoomAliasPermalink() {
+    func phishingRoomAliasWithAnotherRoomAliasPermalink() throws {
         let htmlString = "Hey check the following room <a href=\"https://matrix.to/#/#another-room:matrix.org\">#room:matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Hey check the following room #room:matrix.org")
         
         #expect(attributedString.runs.count == 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(link.requiresConfirmation)
         #expect(link.confirmationParameters?.internalURL.absoluteString == "https://matrix.to/#/%23another-room:matrix.org")
         #expect(link.confirmationParameters?.displayString == "#room:matrix.org")
     }
     
     @Test
-    func roomAliasWithDistractingCharacters() {
+    func roomAliasWithDistractingCharacters() throws {
         let htmlString = "Hey check the following user <a href=\"https://matrix.org\">👉️ #room:matrix.org</a>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "Hey check the following user 👉️ #room:matrix.org")
         
         #expect(attributedString.runs.count == 2)
         
-        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        let link = try #require(attributedString.runs.first { $0.link != nil }?.link, "Couldn't find the link")
         #expect(link.requiresConfirmation)
         #expect(link.confirmationParameters?.internalURL.absoluteString == "https://matrix.org")
         #expect(link.confirmationParameters?.displayString == "👉️ #room:matrix.org")
     }
     
     @Test
-    func mxExternalPaymentDetailsRemoved() {
+    func mxExternalPaymentDetailsRemoved() throws {
         var htmlString = "This is visible.<span data-msc4286-external-payment-details> But this is hidden <a href=\"https://matrix.org\">and this link too</a></span>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
         #expect(String(attributedString.characters) == "This is visible.")
         
@@ -1194,26 +979,17 @@ struct AttributedStringBuilderTests {
         
         htmlString = "This is visible.<span> And this text <a href=\"https://matrix.org\">and link</a> are visible too.</span>"
         
-        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+        let attributedString2 = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        #expect(String(attributedString.characters) == "This is visible. And this text and link are visible too.")
+        #expect(String(attributedString2.characters) == "This is visible. And this text and link are visible too.")
         
-        guard attributedString.runs.first(where: { $0.link != nil })?.link != nil else {
-            Issue.record("Couldn't find the link")
-            return
-        }
+        try #require(attributedString2.runs.first { $0.link != nil }?.link, "Couldn't find the link")
     }
     
     // MARK: - Private
     
-    private func checkLinkIn(attributedString: AttributedString?, expectedLink: String, expectedRuns: Int) {
-        guard let attributedString else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+    private func checkLinkIn(attributedString: AttributedString?, expectedLink: String, expectedRuns: Int) throws {
+        let attributedString = try #require(attributedString, "Could not build the attributed string")
         
         #expect(attributedString.runs.count == expectedRuns)
         
@@ -1225,11 +1001,8 @@ struct AttributedStringBuilderTests {
         Issue.record("Couldn't find expected value.")
     }
     
-    private func checkAttachment(attributedString: AttributedString?, expectedRuns: Int) {
-        guard let attributedString else {
-            Issue.record("Could not build the attributed string")
-            return
-        }
+    private func checkAttachment(attributedString: AttributedString?, expectedRuns: Int) throws {
+        let attributedString = try #require(attributedString, "Could not build the attributed string")
         
         #expect(attributedString.runs.count == expectedRuns)
         

@@ -10,7 +10,8 @@
 import MatrixRustSDK
 import Testing
 
-@MainActor @Suite
+@Suite
+@MainActor
 struct NotificationSettingsEditScreenViewModelTests {
     private var viewModel: NotificationSettingsEditScreenViewModelProtocol!
     private var notificationSettingsProxy: NotificationSettingsProxyMock!
