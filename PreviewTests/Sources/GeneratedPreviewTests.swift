@@ -4,1498 +4,1711 @@
 // swiftlint:disable all
 // swiftformat:disable all
 
-import XCTest
+import Testing
 @testable import ElementX
 
 extension PreviewTests {
 
     // MARK: - PreviewProvider
 
-    func testAdvancedSettingsScreen() async throws {
+    @Test
+    func advancedSettingsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AdvancedSettingsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testAnalyticsPromptScreen() async throws {
+    @Test
+    func analyticsPromptScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AnalyticsPromptScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testAnalyticsSettingsScreen() async throws {
+    @Test
+    func analyticsSettingsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AnalyticsSettingsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testAppLockScreen() async throws {
+    @Test
+    func appLockScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AppLockScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testAppLockSetupBiometricsScreen() async throws {
+    @Test
+    func appLockSetupBiometricsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AppLockSetupBiometricsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testAppLockSetupPINScreen() async throws {
+    @Test
+    func appLockSetupPINScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AppLockSetupPINScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testAppLockSetupSettingsScreen() async throws {
+    @Test
+    func appLockSetupSettingsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AppLockSetupSettingsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testAudioMediaEventsTimelineView() async throws {
+    @Test
+    func audioMediaEventsTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AudioMediaEventsTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testAudioRoomTimelineView() async throws {
+    @Test
+    func audioRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AudioRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testAuthenticationStartScreen() async throws {
+    @Test
+    func authenticationStartScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AuthenticationStartScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testAvatarHeaderView() async throws {
+    @Test
+    func avatarHeaderView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AvatarHeaderView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testBadgeLabel() async throws {
+    @Test
+    func badgeLabel() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in BadgeLabel_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testBlockedUsersScreen() async throws {
+    @Test
+    func blockedUsersScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in BlockedUsersScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testBloomModifier() async throws {
+    @Test
+    func bloomModifier() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in BloomModifier_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testBugReportScreen() async throws {
+    @Test
+    func bugReportScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in BugReportScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testCallInviteRoomTimelineView() async throws {
+    @Test
+    func callInviteRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in CallInviteRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testCallNotificationRoomTimelineView() async throws {
+    @Test
+    func callNotificationRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in CallNotificationRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testChatsSpaceFilterCell() async throws {
+    @Test
+    func chatsSpaceFilterCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ChatsSpaceFilterCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testChatsSpaceFiltersScreen() async throws {
+    @Test
+    func chatsSpaceFiltersScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ChatsSpaceFiltersScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testCollapsibleRoomTimelineView() async throws {
+    @Test
+    func collapsibleRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in CollapsibleRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testCompletionSuggestion() async throws {
+    @Test
+    func completionSuggestion() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in CompletionSuggestion_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testComposerToolbar() async throws {
+    @Test
+    func composerToolbar() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ComposerToolbar_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testCopyTextButton() async throws {
+    @Test
+    func copyTextButton() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in CopyTextButton_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testCreateRoomSpaceSelectionSheet() async throws {
+    @Test
+    func createRoomSpaceSelectionSheet() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in CreateRoomSpaceSelectionSheet_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testCreateRoom() async throws {
+    @Test
+    func createRoom() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in CreateRoom_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testDeactivateAccountScreen() async throws {
+    @Test
+    func deactivateAccountScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in DeactivateAccountScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testDeclineAndBlockScreen() async throws {
+    @Test
+    func declineAndBlockScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in DeclineAndBlockScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testEditRoomAddressScreen() async throws {
+    @Test
+    func editRoomAddressScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in EditRoomAddressScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testElementTextFieldStyle() async throws {
+    @Test
+    func elementTextFieldStyle() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ElementTextFieldStyle_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testEmojiPickerScreenHeaderView() async throws {
+    @Test
+    func emojiPickerScreenHeaderView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in EmojiPickerScreenHeaderView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testEmojiPickerScreen() async throws {
+    @Test
+    func emojiPickerScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in EmojiPickerScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testEmoteRoomTimelineView() async throws {
+    @Test
+    func emoteRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in EmoteRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testEncryptedRoomTimelineView() async throws {
+    @Test
+    func encryptedRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in EncryptedRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testEncryptionResetPasswordScreen() async throws {
+    @Test
+    func encryptionResetPasswordScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in EncryptionResetPasswordScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testEncryptionResetScreen() async throws {
+    @Test
+    func encryptionResetScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in EncryptionResetScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testEstimatedWaveformView() async throws {
+    @Test
+    func estimatedWaveformView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in EstimatedWaveformView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testFileMediaEventsTimelineView() async throws {
+    @Test
+    func fileMediaEventsTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in FileMediaEventsTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testFileRoomTimelineView() async throws {
+    @Test
+    func fileRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in FileRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testFormButtonStyles() async throws {
+    @Test
+    func formButtonStyles() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in FormButtonStyles_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testFormattedBodyText() async throws {
+    @Test
+    func formattedBodyText() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in FormattedBodyText_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testFormattingToolbar() async throws {
+    @Test
+    func formattingToolbar() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in FormattingToolbar_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testFullscreenDialog() async throws {
+    @Test
+    func fullscreenDialog() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in FullscreenDialog_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testGlobalSearchScreenListRow() async throws {
+    @Test
+    func globalSearchScreenListRow() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in GlobalSearchScreenListRow_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testGlobalSearchScreen() async throws {
+    @Test
+    func globalSearchScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in GlobalSearchScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testHighlightedTimelineItemModifier() async throws {
+    @Test
+    func highlightedTimelineItemModifier() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in HighlightedTimelineItemModifier_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testHomeScreenEmptyStateView() async throws {
+    @Test
+    func homeScreenEmptyStateView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in HomeScreenEmptyStateView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testHomeScreenInviteCell() async throws {
+    @Test
+    func homeScreenInviteCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in HomeScreenInviteCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testHomeScreenKnockedCell() async throws {
+    @Test
+    func homeScreenKnockedCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in HomeScreenKnockedCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testHomeScreenNewSoundBanner() async throws {
+    @Test
+    func homeScreenNewSoundBanner() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in HomeScreenNewSoundBanner_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testHomeScreenRecoveryKeyConfirmationBanner() async throws {
+    @Test
+    func homeScreenRecoveryKeyConfirmationBanner() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in HomeScreenRecoveryKeyConfirmationBanner_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testHomeScreenRoomCell() async throws {
+    @Test
+    func homeScreenRoomCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in HomeScreenRoomCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testHomeScreen() async throws {
+    @Test
+    func homeScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in HomeScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testIdentityConfirmationScreen() async throws {
+    @Test
+    func identityConfirmationScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in IdentityConfirmationScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testIdentityConfirmedScreen() async throws {
+    @Test
+    func identityConfirmedScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in IdentityConfirmedScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testImageMediaEventsTimelineView() async throws {
+    @Test
+    func imageMediaEventsTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ImageMediaEventsTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testImageRoomTimelineView() async throws {
+    @Test
+    func imageRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ImageRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testInviteUsersScreenSelectedItem() async throws {
+    @Test
+    func inviteUsersScreenSelectedItem() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in InviteUsersScreenSelectedItem_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testInviteUsersScreen() async throws {
+    @Test
+    func inviteUsersScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in InviteUsersScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testJoinRoomByAddressView() async throws {
+    @Test
+    func joinRoomByAddressView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in JoinRoomByAddressView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testJoinRoomScreenSpace() async throws {
+    @Test
+    func joinRoomScreenSpace() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in JoinRoomScreenSpace_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testJoinRoomScreen() async throws {
+    @Test
+    func joinRoomScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in JoinRoomScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testJoinedMembersBadgeView() async throws {
+    @Test
+    func joinedMembersBadgeView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in JoinedMembersBadgeView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testKnockRequestCell() async throws {
+    @Test
+    func knockRequestCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in KnockRequestCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testKnockRequestsBannerView() async throws {
+    @Test
+    func knockRequestsBannerView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in KnockRequestsBannerView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testKnockRequestsListEmptyStateView() async throws {
+    @Test
+    func knockRequestsListEmptyStateView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in KnockRequestsListEmptyStateView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testKnockRequestsListScreen() async throws {
+    @Test
+    func knockRequestsListScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in KnockRequestsListScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testLabsScreen() async throws {
+    @Test
+    func labsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LabsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testLeaveSpaceRoomDetailsCell() async throws {
+    @Test
+    func leaveSpaceRoomDetailsCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LeaveSpaceRoomDetailsCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testLeaveSpaceView() async throws {
+    @Test
+    func leaveSpaceView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LeaveSpaceView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testLegalInformationScreen() async throws {
+    @Test
+    func legalInformationScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LegalInformationScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testLinkNewDeviceScreen() async throws {
+    @Test
+    func linkNewDeviceScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LinkNewDeviceScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testLoadableImage() async throws {
+    @Test
+    func loadableImage() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LoadableImage_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testLocationMarkerView() async throws {
+    @Test
+    func locationMarkerView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LocationMarkerView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testLocationRoomTimelineView() async throws {
+    @Test
+    func locationRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LocationRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testLoginScreen() async throws {
+    @Test
+    func loginScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LoginScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testLongPressWithFeedback() async throws {
+    @Test
+    func longPressWithFeedback() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LongPressWithFeedback_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testManageAuthorizedSpacesScreen() async throws {
+    @Test
+    func manageAuthorizedSpacesScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ManageAuthorizedSpacesScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testManageRoomMemberSheetView() async throws {
+    @Test
+    func manageRoomMemberSheetView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ManageRoomMemberSheetView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testMapLibreStaticMapView() async throws {
+    @Test
+    func mapLibreStaticMapView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in MapLibreStaticMapView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testMatrixUserPermalink() async throws {
+    @Test
+    func matrixUserPermalink() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in MatrixUserPermalink_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testMediaEventsTimelineScreen() async throws {
+    @Test
+    func mediaEventsTimelineScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in MediaEventsTimelineScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testMediaUploadPreviewScreen() async throws {
+    @Test
+    func mediaUploadPreviewScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in MediaUploadPreviewScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testMentionSuggestionItemView() async throws {
+    @Test
+    func mentionSuggestionItemView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in MentionSuggestionItemView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testMessageComposerTextField() async throws {
+    @Test
+    func messageComposerTextField() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in MessageComposerTextField_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testMessageComposer() async throws {
+    @Test
+    func messageComposer() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in MessageComposer_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testMessageForwardingScreen() async throws {
+    @Test
+    func messageForwardingScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in MessageForwardingScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testMessageText() async throws {
+    @Test
+    func messageText() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in MessageText_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testNoticeRoomTimelineView() async throws {
+    @Test
+    func noticeRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in NoticeRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testNotificationPermissionsScreen() async throws {
+    @Test
+    func notificationPermissionsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in NotificationPermissionsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testNotificationSettingsEditScreenRoomCell() async throws {
+    @Test
+    func notificationSettingsEditScreenRoomCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in NotificationSettingsEditScreenRoomCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testNotificationSettingsEditScreen() async throws {
+    @Test
+    func notificationSettingsEditScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in NotificationSettingsEditScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testNotificationSettingsScreen() async throws {
+    @Test
+    func notificationSettingsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in NotificationSettingsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPINTextField() async throws {
+    @Test
+    func pINTextField() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PINTextField_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPaginationIndicatorRoomTimelineView() async throws {
+    @Test
+    func paginationIndicatorRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PaginationIndicatorRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPillViewOnBubble() async throws {
+    @Test
+    func pillViewOnBubble() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PillViewOnBubble_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPillView() async throws {
+    @Test
+    func pillView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PillView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPinnedEventsTimelineScreen() async throws {
+    @Test
+    func pinnedEventsTimelineScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PinnedEventsTimelineScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPinnedItemsBannerView() async throws {
+    @Test
+    func pinnedItemsBannerView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PinnedItemsBannerView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPinnedItemsIndicatorView() async throws {
+    @Test
+    func pinnedItemsIndicatorView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PinnedItemsIndicatorView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPlaceholderAvatarImage() async throws {
+    @Test
+    func placeholderAvatarImage() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PlaceholderAvatarImage_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPlaceholderScreen() async throws {
+    @Test
+    func placeholderScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PlaceholderScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPlaybackSpeedButton() async throws {
+    @Test
+    func playbackSpeedButton() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PlaybackSpeedButton_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPollFormScreen() async throws {
+    @Test
+    func pollFormScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PollFormScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPollOptionView() async throws {
+    @Test
+    func pollOptionView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PollOptionView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPollRoomTimelineView() async throws {
+    @Test
+    func pollRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PollRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testPollView() async throws {
+    @Test
+    func pollView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in PollView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testQRCodeErrorView() async throws {
+    @Test
+    func qRCodeErrorView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in QRCodeErrorView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testQRCodeLoginScreen() async throws {
+    @Test
+    func qRCodeLoginScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in QRCodeLoginScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testReactionsSummaryView() async throws {
+    @Test
+    func reactionsSummaryView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ReactionsSummaryView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testReadMarkerRoomTimelineView() async throws {
+    @Test
+    func readMarkerRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ReadMarkerRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testReadReceiptCell() async throws {
+    @Test
+    func readReceiptCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ReadReceiptCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testReadReceiptsSummaryView() async throws {
+    @Test
+    func readReceiptsSummaryView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ReadReceiptsSummaryView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRedactedRoomTimelineView() async throws {
+    @Test
+    func redactedRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RedactedRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testReportContentScreen() async throws {
+    @Test
+    func reportContentScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ReportContentScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testReportRoomScreen() async throws {
+    @Test
+    func reportRoomScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ReportRoomScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testResolveVerifiedUserSendFailureScreen() async throws {
+    @Test
+    func resolveVerifiedUserSendFailureScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ResolveVerifiedUserSendFailureScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomAttachmentPicker() async throws {
+    @Test
+    func roomAttachmentPicker() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomAttachmentPicker_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomAvatarImage() async throws {
+    @Test
+    func roomAvatarImage() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomAvatarImage_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomChangePermissionsScreen() async throws {
+    @Test
+    func roomChangePermissionsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomChangePermissionsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomChangeRolesScreenRow() async throws {
+    @Test
+    func roomChangeRolesScreenRow() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomChangeRolesScreenRow_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomChangeRolesScreenSelectedItem() async throws {
+    @Test
+    func roomChangeRolesScreenSelectedItem() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomChangeRolesScreenSelectedItem_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomChangeRolesScreen() async throws {
+    @Test
+    func roomChangeRolesScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomChangeRolesScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomDetailsEditScreen() async throws {
+    @Test
+    func roomDetailsEditScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomDetailsEditScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomDetailsScreen() async throws {
+    @Test
+    func roomDetailsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomDetailsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomDirectorySearchCell() async throws {
+    @Test
+    func roomDirectorySearchCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomDirectorySearchCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomDirectorySearchScreen() async throws {
+    @Test
+    func roomDirectorySearchScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomDirectorySearchScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomHeaderView() async throws {
+    @Test
+    func roomHeaderView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomHeaderView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomInviterLabel() async throws {
+    @Test
+    func roomInviterLabel() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomInviterLabel_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomListFilterView() async throws {
+    @Test
+    func roomListFilterView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomListFilterView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomListFiltersEmptyStateView() async throws {
+    @Test
+    func roomListFiltersEmptyStateView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomListFiltersEmptyStateView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomListFiltersView() async throws {
+    @Test
+    func roomListFiltersView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomListFiltersView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomMemberDetailsScreen() async throws {
+    @Test
+    func roomMemberDetailsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomMemberDetailsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomMembersListMemberCell() async throws {
+    @Test
+    func roomMembersListMemberCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomMembersListMemberCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomMembersListScreen() async throws {
+    @Test
+    func roomMembersListScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomMembersListScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomNotificationSettingsCustomSectionView() async throws {
+    @Test
+    func roomNotificationSettingsCustomSectionView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomNotificationSettingsCustomSectionView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomNotificationSettingsScreen() async throws {
+    @Test
+    func roomNotificationSettingsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomNotificationSettingsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomNotificationSettingsUserDefinedScreen() async throws {
+    @Test
+    func roomNotificationSettingsUserDefinedScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomNotificationSettingsUserDefinedScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomPollsHistoryScreen() async throws {
+    @Test
+    func roomPollsHistoryScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomPollsHistoryScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomRolesAndPermissionsScreen() async throws {
+    @Test
+    func roomRolesAndPermissionsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomRolesAndPermissionsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomScreenFooterView() async throws {
+    @Test
+    func roomScreenFooterView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomScreenFooterView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomScreen() async throws {
+    @Test
+    func roomScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testRoomSelectionScreen() async throws {
+    @Test
+    func roomSelectionScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in RoomSelectionScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSFNumberedListView() async throws {
+    @Test
+    func sFNumberedListView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SFNumberedListView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSecureBackupKeyBackupScreen() async throws {
+    @Test
+    func secureBackupKeyBackupScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SecureBackupKeyBackupScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSecureBackupLogoutConfirmationScreen() async throws {
+    @Test
+    func secureBackupLogoutConfirmationScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SecureBackupLogoutConfirmationScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSecureBackupRecoveryKeyScreen() async throws {
+    @Test
+    func secureBackupRecoveryKeyScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SecureBackupRecoveryKeyScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSecureBackupScreen() async throws {
+    @Test
+    func secureBackupScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SecureBackupScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSecurityAndPrivacyScreen() async throws {
+    @Test
+    func securityAndPrivacyScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SecurityAndPrivacyScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSendInviteConfirmationView() async throws {
+    @Test
+    func sendInviteConfirmationView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SendInviteConfirmationView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSeparatorMediaEventsTimelineView() async throws {
+    @Test
+    func separatorMediaEventsTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SeparatorMediaEventsTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSeparatorRoomTimelineView() async throws {
+    @Test
+    func separatorRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SeparatorRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testServerConfirmationScreen() async throws {
+    @Test
+    func serverConfirmationScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ServerConfirmationScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testServerSelection() async throws {
+    @Test
+    func serverSelection() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ServerSelection_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSessionVerificationRequestDetailsView() async throws {
+    @Test
+    func sessionVerificationRequestDetailsView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SessionVerificationRequestDetailsView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSessionVerification() async throws {
+    @Test
+    func sessionVerification() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SessionVerification_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSettingsScreen() async throws {
+    @Test
+    func settingsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SettingsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testShimmerOverlay() async throws {
+    @Test
+    func shimmerOverlay() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ShimmerOverlay_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSoftLogoutScreen() async throws {
+    @Test
+    func softLogoutScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SoftLogoutScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSpaceAddRoomsScreenSelectedItem() async throws {
+    @Test
+    func spaceAddRoomsScreenSelectedItem() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpaceAddRoomsScreenSelectedItem_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSpaceAddRoomsScreen() async throws {
+    @Test
+    func spaceAddRoomsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpaceAddRoomsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSpaceHeaderTopicSheetView() async throws {
+    @Test
+    func spaceHeaderTopicSheetView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpaceHeaderTopicSheetView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSpaceHeaderView() async throws {
+    @Test
+    func spaceHeaderView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpaceHeaderView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSpaceRemoveChildrenConfirmationView() async throws {
+    @Test
+    func spaceRemoveChildrenConfirmationView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpaceRemoveChildrenConfirmationView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSpaceRoomCell() async throws {
+    @Test
+    func spaceRoomCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpaceRoomCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSpaceScreen() async throws {
+    @Test
+    func spaceScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpaceScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSpaceSettingsScreen() async throws {
+    @Test
+    func spaceSettingsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpaceSettingsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSpacesAnnouncementSheetView() async throws {
+    @Test
+    func spacesAnnouncementSheetView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpacesAnnouncementSheetView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSpacesScreen() async throws {
+    @Test
+    func spacesScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpacesScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSplashScreen() async throws {
+    @Test
+    func splashScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SplashScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testStackedAvatarsView() async throws {
+    @Test
+    func stackedAvatarsView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in StackedAvatarsView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testStartChatScreen() async throws {
+    @Test
+    func startChatScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in StartChatScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testStateRoomTimelineView() async throws {
+    @Test
+    func stateRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in StateRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testStaticLocationScreenViewer() async throws {
+    @Test
+    func staticLocationScreenViewer() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in StaticLocationScreenViewer_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testStickerRoomTimelineView() async throws {
+    @Test
+    func stickerRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in StickerRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSwipeRightAction() async throws {
+    @Test
+    func swipeRightAction() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SwipeRightAction_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testSwipeToReplyView() async throws {
+    @Test
+    func swipeToReplyView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SwipeToReplyView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTextRoomTimelineView() async throws {
+    @Test
+    func textRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TextRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testThreadDecorator() async throws {
+    @Test
+    func threadDecorator() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ThreadDecorator_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineDeliveryStatusView() async throws {
+    @Test
+    func timelineDeliveryStatusView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineDeliveryStatusView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineItemBubbledStylerView() async throws {
+    @Test
+    func timelineItemBubbledStylerView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineItemBubbledStylerView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineItemDebugView() async throws {
+    @Test
+    func timelineItemDebugView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineItemDebugView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineItemMenu() async throws {
+    @Test
+    func timelineItemMenu() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineItemMenu_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineItemSendInfoLabel() async throws {
+    @Test
+    func timelineItemSendInfoLabel() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineItemSendInfoLabel_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineItemStyler() async throws {
+    @Test
+    func timelineItemStyler() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineItemStyler_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineMediaPreviewDetailsView() async throws {
+    @Test
+    func timelineMediaPreviewDetailsView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineMediaPreviewDetailsView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineMediaPreviewRedactConfirmationView() async throws {
+    @Test
+    func timelineMediaPreviewRedactConfirmationView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineMediaPreviewRedactConfirmationView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineReactionView() async throws {
+    @Test
+    func timelineReactionView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineReactionView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineReadReceiptsView() async throws {
+    @Test
+    func timelineReadReceiptsView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineReadReceiptsView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineReplyView() async throws {
+    @Test
+    func timelineReplyView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineReplyView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineStartRoomTimelineView() async throws {
+    @Test
+    func timelineStartRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineStartRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTimelineThreadSummaryView() async throws {
+    @Test
+    func timelineThreadSummaryView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineThreadSummaryView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTombstonedAvatarImage() async throws {
+    @Test
+    func tombstonedAvatarImage() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TombstonedAvatarImage_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testToolbarButton() async throws {
+    @Test
+    func toolbarButton() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in ToolbarButton_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testTypingIndicatorView() async throws {
+    @Test
+    func typingIndicatorView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TypingIndicatorView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testUnsupportedRoomTimelineView() async throws {
+    @Test
+    func unsupportedRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in UnsupportedRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testUserDetailsEditScreen() async throws {
+    @Test
+    func userDetailsEditScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in UserDetailsEditScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testUserIndicatorModalView() async throws {
+    @Test
+    func userIndicatorModalView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in UserIndicatorModalView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testUserIndicatorToastView() async throws {
+    @Test
+    func userIndicatorToastView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in UserIndicatorToastView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testUserProfileCell() async throws {
+    @Test
+    func userProfileCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in UserProfileCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testUserProfileScreen() async throws {
+    @Test
+    func userProfileScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in UserProfileScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVerificationBadge() async throws {
+    @Test
+    func verificationBadge() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VerificationBadge_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVideoMediaEventsTimelineView() async throws {
+    @Test
+    func videoMediaEventsTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VideoMediaEventsTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVideoRoomTimelineView() async throws {
+    @Test
+    func videoRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VideoRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVisualListItem() async throws {
+    @Test
+    func visualListItem() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VisualListItem_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVoiceMessageButton() async throws {
+    @Test
+    func voiceMessageButton() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VoiceMessageButton_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVoiceMessageMediaEventsTimelineView() async throws {
+    @Test
+    func voiceMessageMediaEventsTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VoiceMessageMediaEventsTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVoiceMessagePreviewComposer() async throws {
+    @Test
+    func voiceMessagePreviewComposer() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VoiceMessagePreviewComposer_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVoiceMessageRecordingButton() async throws {
+    @Test
+    func voiceMessageRecordingButton() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VoiceMessageRecordingButton_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVoiceMessageRecordingComposer() async throws {
+    @Test
+    func voiceMessageRecordingComposer() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VoiceMessageRecordingComposer_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVoiceMessageRecordingView() async throws {
+    @Test
+    func voiceMessageRecordingView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VoiceMessageRecordingView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVoiceMessageRoomPlaybackView() async throws {
+    @Test
+    func voiceMessageRoomPlaybackView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VoiceMessageRoomPlaybackView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testVoiceMessageRoomTimelineView() async throws {
+    @Test
+    func voiceMessageRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VoiceMessageRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
 
-    func testWaveformCursorView() async throws {
+    @Test
+    func waveformCursorView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in WaveformCursorView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
