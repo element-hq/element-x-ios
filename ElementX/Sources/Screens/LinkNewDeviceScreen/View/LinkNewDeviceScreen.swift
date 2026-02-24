@@ -141,34 +141,8 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(mode: LinkNewDeviceScreenViewState.Mode) -> LinkNewDeviceScreenViewModel {
-        let clientProxy = ClientProxyMock(.init())
-        clientProxy.isLoginWithQRCodeSupportedClosure = {
-            switch mode {
-            case .loading:
-                try? await Task.sleep(for: .seconds(20))
-                return false
-            case .error(.notSupported):
-                return false
-            case .readyToLink, .error:
-                return true
-            }
-        }
-        
-        let linkMobileProgressSubject = CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError>(.starting)
-        clientProxy.linkNewDeviceServiceReturnValue = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: linkMobileProgressSubject.asCurrentValuePublisher()))
-        
-        let viewModel = LinkNewDeviceScreenViewModel(clientProxy: clientProxy)
-        
-        Task {
-            try? await Task.sleep(for: .milliseconds(100))
-            if case .readyToLink(isGeneratingCode: true) = mode {
-                viewModel.context.send(viewAction: .linkMobileDevice)
-            } else if case .error = mode {
-                viewModel.context.send(viewAction: .linkMobileDevice)
-                linkMobileProgressSubject.send(completion: .failure(.unknown))
-            }
-        }
-        
-        return viewModel
+        LinkNewDeviceScreenViewModel(clientProxy: ClientProxyMock(.init()),
+                                     initialState: .init(mode: mode,
+                                                         showLinkDesktopComputerButton: true))
     }
 }
