@@ -133,9 +133,7 @@ struct RoomScreen: View {
         .padding(.top, 16)
         .padding(.horizontal, 16)
         .padding(.bottom, 12)
-        .highlight(gradient: .compound.info,
-                   borderColor: .compound.borderInfoSubtle,
-                   backgroundColor: .compound.bgCanvasDefault)
+        .highlight(gradient: .compound.info, borderColor: .compound.borderInfoSubtle)
     }
     
     @ViewBuilder

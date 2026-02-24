@@ -11,7 +11,9 @@ import SwiftUI
 
 struct GradientsScreen: View {
     var body: some View {
-        ScreenContent(navigationTitle: "Colors") {
+        ScreenContent(navigationTitle: "Gradients") {
+            // allValues isn't currently working as gradients use computed properties
+            // in order for them to work with colour overrides.
             ForEach(Gradient.compound.allValues, id: \.name) { gradient in
                 GradientItem(gradient: gradient.value, name: gradient.name)
             }
