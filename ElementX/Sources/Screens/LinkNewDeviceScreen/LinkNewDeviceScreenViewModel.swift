@@ -19,8 +19,13 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(clientProxy: ClientProxyProtocol) {
+    init(clientProxy: ClientProxyProtocol, initialState: LinkNewDeviceScreenViewState? = nil) {
         self.clientProxy = clientProxy
+        
+        if let initialState {
+            super.init(initialViewState: initialState)
+            return
+        }
         
         let isQRCodeScanningSupported = !ProcessInfo.processInfo.isiOSAppOnMac
         
