@@ -22,7 +22,7 @@ extension ClientBuilder {
                             maxRequestRetryTime: UInt64? = nil,
                             threadsEnabled: Bool) -> ClientBuilder {
         var builder = ClientBuilder()
-            .crossProcessStoreLocksHolderName(holderName: InfoPlistReader.main.bundleIdentifier)
+            .crossProcessLockConfig(crossProcessLockConfig: .multiProcess(holderName: InfoPlistReader.main.bundleIdentifier))
             .enableOidcRefreshLock()
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
