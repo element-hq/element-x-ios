@@ -5142,6 +5142,77 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - subscribeToDuplicateKeyUploadErrors
+
+    open var subscribeToDuplicateKeyUploadErrorsListenerUnderlyingCallsCount = 0
+    open var subscribeToDuplicateKeyUploadErrorsListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToDuplicateKeyUploadErrorsListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToDuplicateKeyUploadErrorsListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToDuplicateKeyUploadErrorsListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToDuplicateKeyUploadErrorsListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToDuplicateKeyUploadErrorsListenerCalled: Bool {
+        return subscribeToDuplicateKeyUploadErrorsListenerCallsCount > 0
+    }
+    open var subscribeToDuplicateKeyUploadErrorsListenerReceivedListener: DuplicateKeyUploadErrorListener?
+    open var subscribeToDuplicateKeyUploadErrorsListenerReceivedInvocations: [DuplicateKeyUploadErrorListener] = []
+
+    open var subscribeToDuplicateKeyUploadErrorsListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToDuplicateKeyUploadErrorsListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToDuplicateKeyUploadErrorsListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToDuplicateKeyUploadErrorsListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToDuplicateKeyUploadErrorsListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToDuplicateKeyUploadErrorsListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToDuplicateKeyUploadErrorsListenerClosure: ((DuplicateKeyUploadErrorListener) -> TaskHandle)?
+
+    open override func subscribeToDuplicateKeyUploadErrors(listener: DuplicateKeyUploadErrorListener) -> TaskHandle {
+        subscribeToDuplicateKeyUploadErrorsListenerCallsCount += 1
+        subscribeToDuplicateKeyUploadErrorsListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToDuplicateKeyUploadErrorsListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToDuplicateKeyUploadErrorsListenerClosure = subscribeToDuplicateKeyUploadErrorsListenerClosure {
+            return subscribeToDuplicateKeyUploadErrorsListenerClosure(listener)
+        } else {
+            return subscribeToDuplicateKeyUploadErrorsListenerReturnValue
+        }
+    }
+
     //MARK: - subscribeToIgnoredUsers
 
     open var subscribeToIgnoredUsersListenerUnderlyingCallsCount = 0
@@ -6483,17 +6554,17 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
-    //MARK: - crossProcessStoreLocksHolderName
+    //MARK: - crossProcessLockConfig
 
-    open var crossProcessStoreLocksHolderNameHolderNameUnderlyingCallsCount = 0
-    open var crossProcessStoreLocksHolderNameHolderNameCallsCount: Int {
+    open var crossProcessLockConfigCrossProcessLockConfigUnderlyingCallsCount = 0
+    open var crossProcessLockConfigCrossProcessLockConfigCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return crossProcessStoreLocksHolderNameHolderNameUnderlyingCallsCount
+                return crossProcessLockConfigCrossProcessLockConfigUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = crossProcessStoreLocksHolderNameHolderNameUnderlyingCallsCount
+                    returnValue = crossProcessLockConfigCrossProcessLockConfigUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -6501,29 +6572,29 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
         set {
             if Thread.isMainThread {
-                crossProcessStoreLocksHolderNameHolderNameUnderlyingCallsCount = newValue
+                crossProcessLockConfigCrossProcessLockConfigUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    crossProcessStoreLocksHolderNameHolderNameUnderlyingCallsCount = newValue
+                    crossProcessLockConfigCrossProcessLockConfigUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var crossProcessStoreLocksHolderNameHolderNameCalled: Bool {
-        return crossProcessStoreLocksHolderNameHolderNameCallsCount > 0
+    open var crossProcessLockConfigCrossProcessLockConfigCalled: Bool {
+        return crossProcessLockConfigCrossProcessLockConfigCallsCount > 0
     }
-    open var crossProcessStoreLocksHolderNameHolderNameReceivedHolderName: String?
-    open var crossProcessStoreLocksHolderNameHolderNameReceivedInvocations: [String] = []
+    open var crossProcessLockConfigCrossProcessLockConfigReceivedCrossProcessLockConfig: CrossProcessLockConfig?
+    open var crossProcessLockConfigCrossProcessLockConfigReceivedInvocations: [CrossProcessLockConfig] = []
 
-    open var crossProcessStoreLocksHolderNameHolderNameUnderlyingReturnValue: ClientBuilder!
-    open var crossProcessStoreLocksHolderNameHolderNameReturnValue: ClientBuilder! {
+    open var crossProcessLockConfigCrossProcessLockConfigUnderlyingReturnValue: ClientBuilder!
+    open var crossProcessLockConfigCrossProcessLockConfigReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
-                return crossProcessStoreLocksHolderNameHolderNameUnderlyingReturnValue
+                return crossProcessLockConfigCrossProcessLockConfigUnderlyingReturnValue
             } else {
                 var returnValue: ClientBuilder? = nil
                 DispatchQueue.main.sync {
-                    returnValue = crossProcessStoreLocksHolderNameHolderNameUnderlyingReturnValue
+                    returnValue = crossProcessLockConfigCrossProcessLockConfigUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -6531,26 +6602,26 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
         set {
             if Thread.isMainThread {
-                crossProcessStoreLocksHolderNameHolderNameUnderlyingReturnValue = newValue
+                crossProcessLockConfigCrossProcessLockConfigUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    crossProcessStoreLocksHolderNameHolderNameUnderlyingReturnValue = newValue
+                    crossProcessLockConfigCrossProcessLockConfigUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var crossProcessStoreLocksHolderNameHolderNameClosure: ((String) -> ClientBuilder)?
+    open var crossProcessLockConfigCrossProcessLockConfigClosure: ((CrossProcessLockConfig) -> ClientBuilder)?
 
-    open override func crossProcessStoreLocksHolderName(holderName: String) -> ClientBuilder {
-        crossProcessStoreLocksHolderNameHolderNameCallsCount += 1
-        crossProcessStoreLocksHolderNameHolderNameReceivedHolderName = holderName
+    open override func crossProcessLockConfig(crossProcessLockConfig: CrossProcessLockConfig) -> ClientBuilder {
+        crossProcessLockConfigCrossProcessLockConfigCallsCount += 1
+        crossProcessLockConfigCrossProcessLockConfigReceivedCrossProcessLockConfig = crossProcessLockConfig
         DispatchQueue.main.async {
-            self.crossProcessStoreLocksHolderNameHolderNameReceivedInvocations.append(holderName)
+            self.crossProcessLockConfigCrossProcessLockConfigReceivedInvocations.append(crossProcessLockConfig)
         }
-        if let crossProcessStoreLocksHolderNameHolderNameClosure = crossProcessStoreLocksHolderNameHolderNameClosure {
-            return crossProcessStoreLocksHolderNameHolderNameClosure(holderName)
+        if let crossProcessLockConfigCrossProcessLockConfigClosure = crossProcessLockConfigCrossProcessLockConfigClosure {
+            return crossProcessLockConfigCrossProcessLockConfigClosure(crossProcessLockConfig)
         } else {
-            return crossProcessStoreLocksHolderNameHolderNameReturnValue
+            return crossProcessLockConfigCrossProcessLockConfigReturnValue
         }
     }
 
@@ -25135,71 +25206,6 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
             return try await finishClosure()
         } else {
             return finishReturnValue
-        }
-    }
-
-    //MARK: - withCrossProcessLock
-
-    open var withCrossProcessLockUnderlyingCallsCount = 0
-    open var withCrossProcessLockCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return withCrossProcessLockUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = withCrossProcessLockUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                withCrossProcessLockUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    withCrossProcessLockUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var withCrossProcessLockCalled: Bool {
-        return withCrossProcessLockCallsCount > 0
-    }
-
-    open var withCrossProcessLockUnderlyingReturnValue: SyncServiceBuilder!
-    open var withCrossProcessLockReturnValue: SyncServiceBuilder! {
-        get {
-            if Thread.isMainThread {
-                return withCrossProcessLockUnderlyingReturnValue
-            } else {
-                var returnValue: SyncServiceBuilder? = nil
-                DispatchQueue.main.sync {
-                    returnValue = withCrossProcessLockUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                withCrossProcessLockUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    withCrossProcessLockUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var withCrossProcessLockClosure: (() -> SyncServiceBuilder)?
-
-    open override func withCrossProcessLock() -> SyncServiceBuilder {
-        withCrossProcessLockCallsCount += 1
-        if let withCrossProcessLockClosure = withCrossProcessLockClosure {
-            return withCrossProcessLockClosure()
-        } else {
-            return withCrossProcessLockReturnValue
         }
     }
 

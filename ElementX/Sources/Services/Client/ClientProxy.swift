@@ -1325,7 +1325,6 @@ private struct ClientProxyServices {
          appSettings: AppSettings) async throws {
         let syncService = try await client
             .syncService()
-            .withCrossProcessLock()
             .withOfflineMode()
             .withSharePos(enable: true)
             .finish()
