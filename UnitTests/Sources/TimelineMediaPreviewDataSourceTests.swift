@@ -27,7 +27,7 @@ struct TimelineMediaPreviewDataSourceTests {
     
     @Test
     func initialItems() throws {
-        _ = try makeInitialDataSource()
+        try assertInitialDataSource()
     }
     
     @Test
@@ -59,7 +59,7 @@ struct TimelineMediaPreviewDataSourceTests {
     @Test
     func updatedItems() async throws {
         // Given a data source built with the initial items.
-        let dataSource = try makeInitialDataSource()
+        let dataSource = try assertInitialDataSource()
         
         // When one of the items changes but no pagination has occurred.
         let deferred = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .seconds(1)) { _ in true }
@@ -80,7 +80,7 @@ struct TimelineMediaPreviewDataSourceTests {
     @Test
     func pagination() async throws {
         // Given a data source built with the initial items.
-        let dataSource = try makeInitialDataSource()
+        let dataSource = try assertInitialDataSource()
         
         // When more items are loaded in a back pagination.
         var deferred = deferFulfillment(dataSource.previewItemsPaginationPublisher) { _ in true }
@@ -119,7 +119,7 @@ struct TimelineMediaPreviewDataSourceTests {
     mutating func paginationLimits() async throws {
         // Given a data source with a small amount of padding remaining.
         initialPadding = 2
-        let dataSource = try makeInitialDataSource()
+        let dataSource = try assertInitialDataSource()
         
         // When paginating backwards by more than the available padding.
         var deferred = deferFulfillment(dataSource.previewItemsPaginationPublisher) { _ in true }
@@ -245,7 +245,8 @@ struct TimelineMediaPreviewDataSourceTests {
             .filter(\.supportsMediaCaption) // Voice messages can't be previewed (and don't support captions).
     }
     
-    private func makeInitialDataSource() throws -> TimelineMediaPreviewDataSource {
+    @discardableResult
+    private func assertInitialDataSource() throws -> TimelineMediaPreviewDataSource {
         // Given a data source built with the initial items.
         let dataSource = TimelineMediaPreviewDataSource(itemViewStates: initialMediaViewStates,
                                                         initialItem: initialMediaItems[initialItemIndex],

@@ -195,7 +195,7 @@ struct VoiceMessageRecorderTests {
             return
         }
         
-        let audioFileURL = try #require(Bundle(for: BundleFinder.self).url(forResource: "test_audio", withExtension: "mp3"), "Test audio file is missing")
+        let audioFileURL = try #require(Bundle(for: UnitTestsAppCoordinator.self).url(forResource: "test_audio", withExtension: "mp3"), "Test audio file is missing")
         audioRecorder.audioFileURL = audioFileURL
         guard case .success(let data) = await voiceMessageRecorder.buildRecordingWaveform() else {
             Issue.record("A waveform is expected")
@@ -233,7 +233,7 @@ struct VoiceMessageRecorderTests {
     
     @Test
     func sendVoiceMessage_InvalidFile() async throws {
-        let audioFileURL = try #require(Bundle(for: BundleFinder.self).url(forResource: "test_voice_message", withExtension: "m4a"), "Test audio file is missing")
+        let audioFileURL = try #require(Bundle(for: UnitTestsAppCoordinator.self).url(forResource: "test_voice_message", withExtension: "m4a"), "Test audio file is missing")
         audioRecorder.audioFileURL = audioFileURL
         audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { _, destination in
             try? FileManager.default.removeItem(at: destination)
@@ -251,7 +251,7 @@ struct VoiceMessageRecorderTests {
     
     @Test
     func sendVoiceMessage_WaveformAnlyseFailed() async throws {
-        let imageFileURL = try #require(Bundle(for: BundleFinder.self).url(forResource: "test_image", withExtension: "png"), "Test image file is missing")
+        let imageFileURL = try #require(Bundle(for: UnitTestsAppCoordinator.self).url(forResource: "test_image", withExtension: "png"), "Test image file is missing")
         audioRecorder.audioFileURL = imageFileURL
         audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { _, destination in
             try? FileManager.default.removeItem(at: destination)
@@ -270,7 +270,7 @@ struct VoiceMessageRecorderTests {
     
     @Test
     func sendVoiceMessage_SendError() async throws {
-        let audioFileURL = try #require(Bundle(for: BundleFinder.self).url(forResource: "test_voice_message", withExtension: "m4a"), "Test audio file is missing")
+        let audioFileURL = try #require(Bundle(for: UnitTestsAppCoordinator.self).url(forResource: "test_voice_message", withExtension: "m4a"), "Test audio file is missing")
         audioRecorder.audioFileURL = audioFileURL
         audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { source, destination in
             try? FileManager.default.removeItem(at: destination)
@@ -291,7 +291,7 @@ struct VoiceMessageRecorderTests {
     
     @Test
     func sendVoiceMessage() async throws {
-        let imageFileURL = try #require(Bundle(for: BundleFinder.self).url(forResource: "test_voice_message", withExtension: "m4a"), "Test audio file is missing")
+        let imageFileURL = try #require(Bundle(for: UnitTestsAppCoordinator.self).url(forResource: "test_voice_message", withExtension: "m4a"), "Test audio file is missing")
         
         let timelineProxy = TimelineProxyMock()
         let timelineController = MockTimelineController(timelineProxy: timelineProxy)
@@ -388,8 +388,6 @@ struct VoiceMessageRecorderTests {
         try await deferred.fulfill()
     }
 }
-
-private class BundleFinder { }
 
 private enum SDKError: Error {
     case generic

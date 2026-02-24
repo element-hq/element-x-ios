@@ -150,7 +150,8 @@ struct AttributedStringBuilderTests {
         
         let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        #expect(attributedString.uiKit.attachment == nil)
+        #expect(attributedString.uiKit.attachment == nil,
+                "iFrame attachments should be removed as they're not included in the allowedHTMLTags array.")
     }
     
     @Test
@@ -305,7 +306,7 @@ struct AttributedStringBuilderTests {
             foundBlockquoteAndLink = true
         }
         
-        #expect(foundBlockquoteAndLink != nil)
+        #expect(foundBlockquoteAndLink != nil, "Couldn't find blockquote or link")
     }
     
     @Test

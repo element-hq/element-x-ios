@@ -43,8 +43,8 @@ final class MediaUploadingPreprocessorTests {
         #expect(audioURL.lastPathComponent == "test_audio.mp3")
         
         #expect(audioInfo.mimetype == "audio/mpeg")
-        #expect(abs(Double(audioInfo.duration ?? 0) - 27) <= 100)
-        #expect(abs(Double(audioInfo.size ?? 0) - 194_811) <= 100)
+        #expect(isEqual(audioInfo.duration ?? 0, 27, within: 100))
+        #expect(isEqual(audioInfo.size ?? 0, 194_811, within: 100))
     }
     
     @Test
@@ -71,14 +71,14 @@ final class MediaUploadingPreprocessorTests {
         // Check resulting video info
         #expect(videoInfo.mimetype == "video/mp4")
         #expect(videoInfo.blurhash == "K9F$LJZ9,+8yA9-:yT,@%1")
-        #expect(abs(Double(videoInfo.size ?? 0) - 4_016_620) <= 100)
+        #expect(isEqual(videoInfo.size ?? 0, 4_016_620, within: 100))
         #expect(videoInfo.width == 1280)
         #expect(videoInfo.height == 720)
-        #expect(abs(Double(videoInfo.duration ?? 0) - 30) <= 100)
+        #expect(isEqual(videoInfo.duration ?? 0, 30, within: 100))
         
         #expect(videoInfo.thumbnailInfo != nil)
         #expect(videoInfo.thumbnailInfo?.mimetype == "image/jpeg")
-        #expect(abs(Double(videoInfo.thumbnailInfo?.size ?? 0) - 183_093) <= 100)
+        #expect(isEqual(videoInfo.thumbnailInfo?.size ?? 0, 183_093, within: 100))
         #expect(videoInfo.thumbnailInfo?.width == 800)
         #expect(videoInfo.thumbnailInfo?.height == 450)
         
@@ -96,10 +96,10 @@ final class MediaUploadingPreprocessorTests {
         // Check optimised video info
         #expect(optimizedVideoInfo.mimetype == "video/mp4")
         #expect(optimizedVideoInfo.blurhash == "K9F$LJZ9,+8yA9-:yT,@%1")
-        #expect(abs(Double(optimizedVideoInfo.size ?? 0) - 4_016_620) <= 100) // Note: The video is already 720p so it doesn't change size.
+        #expect(isEqual(optimizedVideoInfo.size ?? 0, 4_016_620, within: 100)) // Note: The video is already 720p so it doesn't change size.
         #expect(optimizedVideoInfo.width == 1280)
         #expect(optimizedVideoInfo.height == 720)
-        #expect(abs(Double(optimizedVideoInfo.duration ?? 0) - 30) <= 100)
+        #expect(isEqual(optimizedVideoInfo.duration ?? 0, 30, within: 100))
     }
     
     @Test
@@ -126,14 +126,14 @@ final class MediaUploadingPreprocessorTests {
         // Check resulting video info
         #expect(videoInfo.mimetype == "video/mp4")
         #expect(videoInfo.blurhash == "KSB{R8O]MuwQS4oJvcaIt8")
-        #expect(abs(Double(videoInfo.size ?? 0) - 5_824_946) <= 100)
+        #expect(isEqual(videoInfo.size ?? 0, 5_824_946, within: 100))
         #expect(videoInfo.width == 1080)
         #expect(videoInfo.height == 1920)
-        #expect(abs(Double(videoInfo.duration ?? 0) - 21) <= 100)
+        #expect(isEqual(videoInfo.duration ?? 0, 21, within: 100))
         
         #expect(videoInfo.thumbnailInfo != nil)
         #expect(videoInfo.thumbnailInfo?.mimetype == "image/jpeg")
-        #expect(abs(Double(videoInfo.thumbnailInfo?.size ?? 0) - 40976) <= 100)
+        #expect(isEqual(videoInfo.thumbnailInfo?.size ?? 0, 40976, within: 100))
         #expect(videoInfo.thumbnailInfo?.width == 337)
         #expect(videoInfo.thumbnailInfo?.height == 600)
         
@@ -151,10 +151,10 @@ final class MediaUploadingPreprocessorTests {
         // Check optimised video info
         #expect(optimizedVideoInfo.mimetype == "video/mp4")
         #expect(optimizedVideoInfo.blurhash == "KSC5.vO]MuwQS4oJvcaIt8")
-        #expect(abs(Double(optimizedVideoInfo.size ?? 0) - 12_169_117) <= 100) // Note: This is slightly stupid because it is larger now 🤦‍♂️
+        #expect(isEqual(optimizedVideoInfo.size ?? 0, 12_169_117, within: 100)) // Note: This is slightly stupid because it is larger now 🤦‍♂️
         #expect(optimizedVideoInfo.width == 720)
         #expect(optimizedVideoInfo.height == 1280)
-        #expect(abs(Double(optimizedVideoInfo.duration ?? 0) - 30) <= 100)
+        #expect(isEqual(optimizedVideoInfo.duration ?? 0, 30, within: 100))
     }
     
     @Test
@@ -172,13 +172,13 @@ final class MediaUploadingPreprocessorTests {
         // Check resulting image info
         #expect(imageInfo.mimetype == "image/jpeg")
         #expect(imageInfo.blurhash == "K%I#.NofkC_4ayayxujsWB")
-        #expect(abs(Double(imageInfo.size ?? 0) - 3_305_795) <= 100)
+        #expect(isEqual(imageInfo.size ?? 0, 3_305_795, within: 100))
         #expect(imageInfo.width == 6103)
         #expect(imageInfo.height == 2621)
         
         #expect(imageInfo.thumbnailInfo != nil)
         #expect(imageInfo.thumbnailInfo?.mimetype == "image/jpeg")
-        #expect(abs(Double(imageInfo.thumbnailInfo?.size ?? 0) - 87733) <= 100)
+        #expect(isEqual(imageInfo.thumbnailInfo?.size ?? 0, 87733, within: 100))
         #expect(imageInfo.thumbnailInfo?.width == 800)
         #expect(imageInfo.thumbnailInfo?.height == 344)
         
@@ -196,7 +196,7 @@ final class MediaUploadingPreprocessorTests {
         // Check optimised image info
         #expect(optimizedImageInfo.mimetype == "image/jpeg")
         #expect(optimizedImageInfo.blurhash == "K%I#.NofkC_4ayaxxujsWB")
-        #expect(abs(Double(optimizedImageInfo.size ?? 0) - 524_226) <= 100)
+        #expect(isEqual(optimizedImageInfo.size ?? 0, 524_226, within: 100))
         #expect(optimizedImageInfo.width == 2048)
         #expect(optimizedImageInfo.height == 879)
     }
@@ -216,13 +216,13 @@ final class MediaUploadingPreprocessorTests {
         // Check resulting image info
         #expect(imageInfo.mimetype == "image/jpeg")
         #expect(imageInfo.blurhash == "KdE|0Ls+RP^-n*RP%OWAV@")
-        #expect(abs(Double(imageInfo.size ?? 0) - 4_414_666) <= 100)
+        #expect(isEqual(imageInfo.size ?? 0, 4_414_666, within: 100))
         #expect(imageInfo.width == 3024)
         #expect(imageInfo.height == 4032)
         
         #expect(imageInfo.thumbnailInfo != nil)
         #expect(imageInfo.thumbnailInfo?.mimetype == "image/jpeg")
-        #expect(abs(Double(imageInfo.thumbnailInfo?.size ?? 0) - 258_914) <= 100)
+        #expect(isEqual(imageInfo.thumbnailInfo?.size ?? 0, 258_914, within: 100))
         #expect(imageInfo.thumbnailInfo?.width == 600)
         #expect(imageInfo.thumbnailInfo?.height == 800)
         
@@ -240,7 +240,7 @@ final class MediaUploadingPreprocessorTests {
         // Check optimised image info
         #expect(optimizedImageInfo.mimetype == "image/jpeg")
         #expect(optimizedImageInfo.blurhash == "KdE|0Ls+RP^-n*RP%OWAV@")
-        #expect(abs(Double(optimizedImageInfo.size ?? 0) - 1_462_937) <= 100)
+        #expect(isEqual(optimizedImageInfo.size ?? 0, 1_462_937, within: 100))
         #expect(optimizedImageInfo.width == 1536)
         #expect(optimizedImageInfo.height == 2048)
     }
@@ -262,13 +262,13 @@ final class MediaUploadingPreprocessorTests {
         // Check resulting image info
         #expect(imageInfo.mimetype == "image/png")
         #expect(imageInfo.blurhash == "K0TSUA~qfQ~qj[fQfQfQfQ")
-        #expect(abs(Double(imageInfo.size ?? 0) - 4868) <= 100)
+        #expect(isEqual(imageInfo.size ?? 0, 4868, within: 100))
         #expect(imageInfo.width == 240)
         #expect(imageInfo.height == 240)
         
         #expect(imageInfo.thumbnailInfo != nil)
         #expect(imageInfo.thumbnailInfo?.mimetype == "image/jpeg")
-        #expect(abs(Double(imageInfo.thumbnailInfo?.size ?? 0) - 1725) <= 100)
+        #expect(isEqual(imageInfo.thumbnailInfo?.size ?? 0, 1725, within: 100))
         #expect(imageInfo.thumbnailInfo?.width == 240)
         #expect(imageInfo.thumbnailInfo?.height == 240)
         
@@ -288,7 +288,7 @@ final class MediaUploadingPreprocessorTests {
         // Check optimised image info
         #expect(optimizedImageInfo.mimetype == "image/png")
         #expect(optimizedImageInfo.blurhash == "K0TSUA~qfQ~qj[fQfQfQfQ")
-        #expect(abs(Double(optimizedImageInfo.size ?? 0) - 8199) <= 100)
+        #expect(isEqual(optimizedImageInfo.size ?? 0, 8199, within: 100))
         // Assert that resizing didn't upscale to the maxPixelSize.
         #expect(optimizedImageInfo.width == 240)
         #expect(optimizedImageInfo.height == 240)
@@ -313,13 +313,13 @@ final class MediaUploadingPreprocessorTests {
         // Check resulting image info
         #expect(imageInfo.mimetype == "image/heic")
         #expect(imageInfo.blurhash == "KGD]3ns:T00$kWxFXmt6xv")
-        #expect(abs(Double(imageInfo.size ?? 0) - 1_848_525) <= 100)
+        #expect(isEqual(imageInfo.size ?? 0, 1_848_525, within: 100))
         #expect(imageInfo.width == 3024)
         #expect(imageInfo.height == 4032)
         
         #expect(imageInfo.thumbnailInfo != nil)
         #expect(imageInfo.thumbnailInfo?.mimetype == "image/jpeg")
-        #expect(abs(Double(imageInfo.thumbnailInfo?.size ?? 0) - 218_108) <= 100)
+        #expect(isEqual(imageInfo.thumbnailInfo?.size ?? 0, 218_108, within: 100))
         #expect(imageInfo.thumbnailInfo?.width == 600)
         #expect(imageInfo.thumbnailInfo?.height == 800)
         
@@ -341,7 +341,7 @@ final class MediaUploadingPreprocessorTests {
         // Check optimised image info
         #expect(optimizedImageInfo.mimetype == "image/jpeg")
         #expect(optimizedImageInfo.blurhash == "KGD]3ns:T00#kWxFb^s:xv")
-        #expect(abs(Double(optimizedImageInfo.size ?? 0) - 1_049_393) <= 100)
+        #expect(isEqual(optimizedImageInfo.size ?? 0, 1_049_393, within: 100))
         #expect(optimizedImageInfo.width == 1536)
         #expect(optimizedImageInfo.height == 2048)
     }
@@ -349,7 +349,7 @@ final class MediaUploadingPreprocessorTests {
     @Test
     func gifImageProcessing() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "test_animated_image.gif", withExtension: nil), "Failed retrieving test asset")
-        let originalSizeValue = try FileManager.default.sizeForItem(at: url)
+        let originalSizeValue = try UInt64(FileManager.default.sizeForItem(at: url))
         let originalSize = try #require(originalSizeValue > 0 ? originalSizeValue : nil, "File size must be greater than zero")
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
@@ -365,13 +365,13 @@ final class MediaUploadingPreprocessorTests {
         // Check resulting image info
         #expect(imageInfo.mimetype == "image/gif")
         #expect(imageInfo.blurhash == "KpRMPTj[_NxuaeRj%MofMx")
-        #expect(abs(Double(imageInfo.size ?? 0) - Double(originalSize)) <= 100)
+        #expect(isEqual(imageInfo.size ?? 0, originalSize, within: 100))
         #expect(imageInfo.width == 331)
         #expect(imageInfo.height == 472)
         
         #expect(imageInfo.thumbnailInfo != nil)
         #expect(imageInfo.thumbnailInfo?.mimetype == "image/jpeg")
-        #expect(abs(Double(imageInfo.thumbnailInfo?.size ?? 0) - 34215) <= 100)
+        #expect(isEqual(imageInfo.thumbnailInfo?.size ?? 0, 34215, within: 100))
         #expect(imageInfo.thumbnailInfo?.width == 331)
         #expect(imageInfo.thumbnailInfo?.height == 472)
         
@@ -391,7 +391,7 @@ final class MediaUploadingPreprocessorTests {
         // Ensure optimised image is still the same as the original image.
         #expect(optimizedImageInfo.mimetype == "image/gif")
         #expect(optimizedImageInfo.blurhash == "KpRMPTj[_NxuaeRj%MofMx")
-        #expect(abs(Double(optimizedImageInfo.size ?? 0) - Double(originalSize)) <= 100)
+        #expect(isEqual(optimizedImageInfo.size ?? 0, originalSize, within: 100))
         #expect(optimizedImageInfo.width == 331)
         #expect(optimizedImageInfo.height == 472)
     }
@@ -435,6 +435,14 @@ final class MediaUploadingPreprocessorTests {
     }
     
     // MARK: - Private
+    
+    private func isEqual<N: UnsignedInteger>(_ lhs: N, _ rhs: N, within tolerance: N) -> Bool {
+        isEqual(Double(lhs), Double(rhs), within: Double(tolerance))
+    }
+    
+    private func isEqual<N: SignedNumeric & Comparable>(_ lhs: N, _ rhs: N, within tolerance: N) -> Bool {
+        abs(lhs - rhs) <= tolerance
+    }
     
     private func compare(originalImageAt originalImageURL: URL, toConvertedImageAt convertedImageURL: URL, withThumbnailAt thumbnailURL: URL) throws {
         guard let originalImageData = try? Data(contentsOf: originalImageURL),

@@ -12,7 +12,7 @@ import Testing
 
 @Suite
 @MainActor
-struct MediaUploadPreviewScreenViewModelTests {
+final class MediaUploadPreviewScreenViewModelTests {
     var timelineProxy: TimelineProxyMock!
     var clientProxy: ClientProxyMock!
     var userIndicatorController: UserIndicatorControllerMock!
@@ -34,22 +34,26 @@ struct MediaUploadPreviewScreenViewModelTests {
         ServiceLocator.shared.register(appSettings: appSettings)
     }
     
+    deinit {
+        AppSettings.resetAllSettings()
+    }
+    
     @Test
-    mutating func imageUploadWithoutCaption() async throws {
+    func imageUploadWithoutCaption() async throws {
         setUpViewModel(urls: [imageURL], expectedCaption: nil)
         context.caption = .init("")
         try await send()
     }
     
     @Test
-    mutating func imageUploadWithBlankCaption() async throws {
+    func imageUploadWithBlankCaption() async throws {
         setUpViewModel(urls: [imageURL], expectedCaption: nil)
         context.caption = .init("     ")
         try await send()
     }
     
     @Test
-    mutating func imageUploadWithCaption() async throws {
+    func imageUploadWithCaption() async throws {
         let caption = "This is a really great image!"
         setUpViewModel(urls: [imageURL], expectedCaption: caption)
         context.caption = .init(string: caption)
@@ -57,14 +61,14 @@ struct MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    mutating func videoUploadWithoutCaption() async throws {
+    func videoUploadWithoutCaption() async throws {
         setUpViewModel(urls: [videoURL], expectedCaption: nil)
         context.caption = .init("")
         try await send()
     }
     
     @Test
-    mutating func videoUploadWithCaption() async throws {
+    func videoUploadWithCaption() async throws {
         let caption = "Check out this video!"
         setUpViewModel(urls: [videoURL], expectedCaption: caption)
         context.caption = .init(string: caption)
@@ -72,14 +76,14 @@ struct MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    mutating func audioUploadWithoutCaption() async throws {
+    func audioUploadWithoutCaption() async throws {
         setUpViewModel(urls: [audioURL], expectedCaption: nil)
         context.caption = .init("")
         try await send()
     }
     
     @Test
-    mutating func audioUploadWithCaption() async throws {
+    func audioUploadWithCaption() async throws {
         let caption = "Listen to this!"
         setUpViewModel(urls: [audioURL], expectedCaption: caption)
         context.caption = .init(string: caption)
@@ -87,14 +91,14 @@ struct MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    mutating func fileUploadWithoutCaption() async throws {
+    func fileUploadWithoutCaption() async throws {
         setUpViewModel(urls: [fileURL], expectedCaption: nil)
         context.caption = .init("")
         try await send()
     }
     
     @Test
-    mutating func fileUploadWithCaption() async throws {
+    func fileUploadWithCaption() async throws {
         let caption = "Please will you check my article."
         setUpViewModel(urls: [fileURL], expectedCaption: caption)
         context.caption = .init(string: caption)
@@ -102,7 +106,7 @@ struct MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    mutating func processingFailure() async throws {
+    func processingFailure() async throws {
         // Given an upload screen for a non-existent file.
         setUpViewModel(urls: [badImageURL], expectedCaption: nil)
         #expect(!context.viewState.shouldDisableInteraction)
@@ -121,7 +125,7 @@ struct MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    mutating func uploadWithUnknownMaxUploadSize() async throws {
+    func uploadWithUnknownMaxUploadSize() async throws {
         // Given an upload screen that is unable to fetch the max upload size.
         setUpViewModel(urls: [imageURL], expectedCaption: nil, maxUploadSizeResult: .failure(.sdkError(ClientProxyMockError.generic)))
         #expect(!context.viewState.shouldDisableInteraction)
@@ -153,7 +157,7 @@ struct MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    mutating func uploadExceedingMaxUploadSize() async throws {
+    func uploadExceedingMaxUploadSize() async throws {
         // Given an upload screen with a really small max upload size.
         setUpViewModel(urls: [imageURL], expectedCaption: nil, maxUploadSizeResult: .success(100))
         #expect(!context.viewState.shouldDisableInteraction)
@@ -175,7 +179,7 @@ struct MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    mutating func multipleFiles() async throws {
+    func multipleFiles() async throws {
         // Given an upload screen with multiple media files.
         setUpViewModel(urls: [fileURL, imageURL, fileURL], expectedCaption: nil)
         #expect(!context.viewState.shouldDisableInteraction)
@@ -196,7 +200,7 @@ struct MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    mutating func multipleFilesWithProcessingFailure() async throws {
+    func multipleFilesWithProcessingFailure() async throws {
         // Given an upload screen for a non-existent file.
         setUpViewModel(urls: [imageURL, fileURL, badImageURL], expectedCaption: nil)
         #expect(!context.viewState.shouldDisableInteraction)
@@ -215,7 +219,7 @@ struct MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    mutating func multipleFilesWithSendFailure() async throws {
+    func multipleFilesWithSendFailure() async throws {
         // Given an upload screen with multiple media files where one of the files will fail to send.
         setUpViewModel(urls: [fileURL, imageURL, imageURL, fileURL], expectedCaption: nil, simulateImageSendFailures: true)
         #expect(!context.viewState.shouldDisableInteraction)
@@ -237,8 +241,6 @@ struct MediaUploadPreviewScreenViewModelTests {
     
     // MARK: - Helpers
     
-    private class BundleFinder { }
-    
     private var audioURL: URL {
         assertResourceURL(filename: "test_audio.mp3")
     }
@@ -258,30 +260,30 @@ struct MediaUploadPreviewScreenViewModelTests {
     private var badImageURL = URL(filePath: "/home/user/this_file_doesn't_exist.jpg")
     
     private func assertResourceURL(filename: String) -> URL {
-        guard let url = Bundle(for: BundleFinder.self).url(forResource: filename, withExtension: nil) else {
+        guard let url = Bundle(for: Self.self).url(forResource: filename, withExtension: nil) else {
             Issue.record("Failed retrieving test asset")
             return .picturesDirectory
         }
         return url
     }
     
-    private mutating func setUpViewModel(urls: [URL],
-                                         expectedCaption: String?,
-                                         maxUploadSizeResult: Result<UInt, ClientProxyError>? = nil,
-                                         simulateImageSendFailures: Bool = false) {
+    private func setUpViewModel(urls: [URL],
+                                expectedCaption: String?,
+                                maxUploadSizeResult: Result<UInt, ClientProxyError>? = nil,
+                                simulateImageSendFailures: Bool = false) {
         timelineProxy = TimelineProxyMock(.init())
-        timelineProxy.sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [self] _, _, caption, _ in
-            verifyCaption(caption, expectedCaption: expectedCaption)
+        timelineProxy.sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
+            self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendFileUrlFileInfoCaptionRequestHandleClosure = { [self] _, _, caption, _ in
-            verifyCaption(caption, expectedCaption: expectedCaption)
+        timelineProxy.sendFileUrlFileInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
+            self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure = { [self] _, _, _, caption, _ in
+        timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure = { [weak self] _, _, _, caption, _ in
             guard !simulateImageSendFailures else { return .failure(.sdkError(TestError.unknown)) }
-            return verifyCaption(caption, expectedCaption: expectedCaption)
+            return self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure = { [self] _, _, _, caption, _ in
-            verifyCaption(caption, expectedCaption: expectedCaption)
+        timelineProxy.sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure = { [weak self] _, _, _, caption, _ in
+            self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
         
         clientProxy = ClientProxyMock(.init())

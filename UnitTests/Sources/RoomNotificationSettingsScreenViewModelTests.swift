@@ -18,7 +18,7 @@ struct RoomNotificationSettingsScreenViewModelTests {
     var notificationSettingsProxyMock: NotificationSettingsProxyMock!
     var cancellables = Set<AnyCancellable>()
 
-    init() throws {
+    init() {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test"))
         notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
     }

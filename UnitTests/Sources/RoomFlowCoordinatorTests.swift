@@ -257,14 +257,14 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .event(eventID: "2", roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        try #require(navigationStackCoordinator.stackCoordinators.count == 1) // #require these counts so accessing by index is safe.
         #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
         
         // From the thread screen, navigate to another threaded event in the same room, and in the same thread.
         let threadCoordinator = navigationStackCoordinator.stackCoordinators[0] as? ThreadTimelineScreenCoordinator
         try await process(route: .childEvent(eventID: "3", roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        try #require(navigationStackCoordinator.stackCoordinators.count == 1)
         #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators[0] === threadCoordinator)
         // Would be nice to test if the focusEvent function has been called but there is no way to mock that.
@@ -275,7 +275,7 @@ final class RoomFlowCoordinatorTests {
         roomProxy.loadOrFetchEventDetailsForReturnValue = .success(mockedEvent)
         try await process(route: .childEvent(eventID: "5", roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 2)
+        try #require(navigationStackCoordinator.stackCoordinators.count == 2)
         #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators[1] is ThreadTimelineScreenCoordinator)
         
@@ -296,7 +296,7 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .childEvent(eventID: "2", roomID: "2", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 4)
+        try #require(navigationStackCoordinator.stackCoordinators.count == 4)
         #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators[1] is ThreadTimelineScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators[2] is RoomScreenCoordinator)
@@ -309,7 +309,7 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .childEvent(eventID: "3", roomID: "2", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 5)
+        try #require(navigationStackCoordinator.stackCoordinators.count == 5)
         #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators[1] is ThreadTimelineScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators[2] is RoomScreenCoordinator)

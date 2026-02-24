@@ -98,6 +98,9 @@ struct EditRoomAddressScreenViewModelTests {
             
             context.send(viewAction: .save)
         }
+        
+        #expect(roomProxy.publishRoomAliasInRoomDirectoryCalled)
+        #expect(roomProxy.updateCanonicalAliasAltAliasesCalled)
         #expect(!roomProxy.removeRoomAliasFromRoomDirectoryCalled)
     }
     
@@ -135,6 +138,10 @@ struct EditRoomAddressScreenViewModelTests {
                 
             context.send(viewAction: .save)
         }
+        
+        #expect(roomProxy.publishRoomAliasInRoomDirectoryCalled)
+        #expect(roomProxy.updateCanonicalAliasAltAliasesCalled)
+        #expect(roomProxy.removeRoomAliasFromRoomDirectoryCalled)
     }
     
     @Test
@@ -165,6 +172,9 @@ struct EditRoomAddressScreenViewModelTests {
             
             context.send(viewAction: .save)
         }
+        
+        #expect(roomProxy.publishRoomAliasInRoomDirectoryCalled)
+        #expect(roomProxy.updateCanonicalAliasAltAliasesCalled)
         #expect(!roomProxy.removeRoomAliasFromRoomDirectoryCalled)
     }
 }

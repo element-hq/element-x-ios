@@ -79,7 +79,7 @@ final class RoomScreenViewModelTests {
         pinnedTimelineMock.timelineItemProvider = pinnedTimelineItemProviderMock
         pinnedTimelineItemProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init("1"))),
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init("2")))]
-                
+        
         // check if the banner is now in a loaded state and is showing the counter
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             !viewState.pinnedEventsBannerState.isLoading

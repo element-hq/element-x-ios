@@ -108,28 +108,26 @@ struct SessionVerificationViewModelTests {
     // MARK: - Private
     
     private mutating func setupChallengeReceived() async throws {
-        var cancellable: AnyCancellable?
-        await waitForConfirmation("Wait for challenge received", expectedCount: 3) { confirm in
-            cancellable = sessionVerificationController.actions
-                .delay(for: .seconds(0.1), scheduler: DispatchQueue.main)
-                .sink { [context] callback in
-                    switch callback {
-                    case .acceptedVerificationRequest:
-                        confirm()
-                        context?.send(viewAction: .startSasVerification)
-                    case .startedSasVerification:
-                        confirm()
-                    case .receivedVerificationData:
-                        confirm()
-                    default:
-                        break
-                    }
+        let actionsPublisher = sessionVerificationController.actions.delay(for: .seconds(0.1), scheduler: DispatchQueue.main)
+        let cancellable = actionsPublisher
+            .sink { [context] action in
+                if case .acceptedVerificationRequest = action {
+                    context?.send(viewAction: .startSasVerification)
                 }
-            context.send(viewAction: .requestVerification)
-        }
-        cancellable?.cancel()
+            }
+        
+        let deferred = deferFulfillment(actionsPublisher,
+                                        keyPath: \.self,
+                                        transitionValues: [.acceptedVerificationRequest,
+                                                           .startedSasVerification,
+                                                           .receivedVerificationData(SessionVerificationControllerProxyMock.emojis)])
+        context.send(viewAction: .requestVerification)
+        try await deferred.fulfill()
+        
         #expect(context.viewState.verificationState == .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
         #expect(sessionVerificationController.requestDeviceVerificationCallsCount == 1)
         #expect(sessionVerificationController.startSasVerificationCallsCount == 1)
+        
+        cancellable.cancel()
     }
 }

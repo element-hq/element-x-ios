@@ -304,7 +304,6 @@ struct NavigationSplitCoordinatorTests {
     @Test
     mutating func setRootDetailToNilAfterPoppingToRoot() async {
         navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SomeTestCoordinator())
-        let splitCoordinator = navigationSplitCoordinator
         let sidebarCoordinator = NavigationStackCoordinator()
         sidebarCoordinator.setRootCoordinator(SomeTestCoordinator())
 
@@ -312,17 +311,18 @@ struct NavigationSplitCoordinatorTests {
         detailCoordinator.setRootCoordinator(SomeTestCoordinator())
         detailCoordinator.push(SomeTestCoordinator())
 
-        splitCoordinator.setSidebarCoordinator(sidebarCoordinator)
-        splitCoordinator.setDetailCoordinator(detailCoordinator)
+        navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
+        navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
 
-        await waitForConfirmation("Details coordinator should be nil, and the compact layout revert to the sidebar root", timeout: .seconds(1)) { confirm in
+        await waitForConfirmation("Details coordinator should be nil, and the compact layout revert to the sidebar root",
+                                  timeout: .seconds(1)) { [navigationSplitCoordinator] confirm in
             DispatchQueue.main.async {
                 detailCoordinator.popToRoot(animated: true)
-                splitCoordinator.setDetailCoordinator(nil)
+                navigationSplitCoordinator.setDetailCoordinator(nil)
                 DispatchQueue.main.async {
-                    #expect(splitCoordinator.detailCoordinator == nil)
-                    assertCoordinatorsEqual(splitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
-                    #expect(splitCoordinator.compactLayoutStackModules.isEmpty)
+                    #expect(navigationSplitCoordinator.detailCoordinator == nil)
+                    assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                    #expect(navigationSplitCoordinator.compactLayoutStackModules.isEmpty)
                     confirm()
                 }
             }
