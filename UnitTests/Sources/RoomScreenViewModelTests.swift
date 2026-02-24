@@ -8,6 +8,7 @@
 
 import Combine
 @testable import ElementX
+import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
 import Testing
@@ -28,12 +29,12 @@ final class RoomScreenViewModelTests {
     @Test
     func pinnedEventsBanner() async throws {
         var configuration = JoinedRoomProxyMockConfiguration()
-        let timelineSubject = PassthroughSubject<TimelineProxyProtocol, Never>()
+        let (stream, continuation) = AsyncStream.makeStream(of: TimelineProxyProtocol.self)
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
         // setup a way to inject the mock of the pinned events timeline
         roomProxyMock.pinnedEventsTimelineClosure = {
-            guard let timeline = await timelineSubject.values.first() else {
+            guard let timeline = await stream.first() else {
                 fatalError()
             }
             
@@ -78,15 +79,12 @@ final class RoomScreenViewModelTests {
         pinnedTimelineMock.timelineItemProvider = pinnedTimelineItemProviderMock
         pinnedTimelineItemProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init("1"))),
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init("2")))]
-        
-        // This is a workaround for now, without it the next fulfilment fails.
-        try await Task.sleep(for: .seconds(1))
-        
+                
         // check if the banner is now in a loaded state and is showing the counter
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             !viewState.pinnedEventsBannerState.isLoading
         }
-        timelineSubject.send(pinnedTimelineMock)
+        continuation.yield(pinnedTimelineMock)
         try await deferred.fulfill()
         #expect(viewModel.context.viewState.pinnedEventsBannerState.count == 2)
         #expect(viewModel.context.viewState.shouldShowPinnedEventsBanner)

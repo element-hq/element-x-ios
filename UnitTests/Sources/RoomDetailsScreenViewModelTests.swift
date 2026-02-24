@@ -574,7 +574,7 @@ struct RoomDetailsScreenViewModelTests {
     func unmuteTappedFailure() async throws {
         try await notificationRoomMuted()
         
-        await waitForConfirmation("unmuteTappedFailure") { confirm in
+        try await confirmation("unmuteTappedFailure") { confirm in
             notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedIsOneToOneClosure = { _, _, _ in
                 defer {
                     confirm()
@@ -582,6 +582,7 @@ struct RoomDetailsScreenViewModelTests {
                 throw NotificationSettingsError.Generic(msg: "unmute error")
             }
             context.send(viewAction: .processToggleMuteNotifications)
+            try await deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }.fulfill()
         }
         
         #expect(!context.viewState.isProcessingMuteToggleAction)

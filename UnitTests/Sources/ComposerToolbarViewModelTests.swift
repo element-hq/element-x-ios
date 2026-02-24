@@ -546,7 +546,9 @@ final class ComposerToolbarViewModelTests {
                              htmlText: nil,
                              draftType: .newMessage)
             }
-            viewModel.process(viewAction: .cancelEdit)
+            DispatchQueue.main.async {
+                self.viewModel.process(viewAction: .cancelEdit)
+            }
         }
         #expect(viewModel.context.plainComposerText == NSAttributedString(string: "Hello world"))
     }
@@ -563,7 +565,9 @@ final class ComposerToolbarViewModelTests {
             draftServiceMock.clearVolatileDraftClosure = {
                 confirmation()
             }
-            viewModel.process(timelineAction: .clear)
+            DispatchQueue.main.async {
+                self.viewModel.process(timelineAction: .clear)
+            }
         }
         #expect(viewModel.context.plainComposerText == NSAttributedString(string: "Hello world"))
     }
@@ -580,7 +584,9 @@ final class ComposerToolbarViewModelTests {
             draftServiceMock.clearVolatileDraftClosure = {
                 confirmation()
             }
-            viewModel.process(timelineAction: .clear)
+            DispatchQueue.main.async {
+                self.viewModel.process(timelineAction: .clear)
+            }
         }
         #expect(viewModel.context.plainComposerText == NSAttributedString(string: "Hello world"))
     }
