@@ -9,161 +9,171 @@
 import Combine
 @testable import ElementX
 import MatrixRustSDKMocks
-import XCTest
+import Testing
 
+@Suite
 @MainActor
-class RoomFlowCoordinatorTests: XCTestCase {
+final class RoomFlowCoordinatorTests {
     var clientProxy: ClientProxyMock!
     var timelineControllerFactory: TimelineControllerFactoryMock!
     var roomFlowCoordinator: RoomFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!
     var cancellables = Set<AnyCancellable>()
     
-    override func tearDown() {
+    deinit {
         AppSettings.resetAllSettings()
     }
     
-    func testRoomPresentation() async throws {
+    @Test
+    func roomPresentation() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
-        XCTAssertNil(navigationStackCoordinator.rootCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator == nil)
     }
     
-    func testRoomDetailsPresentation() async throws {
+    @Test
+    func roomDetailsPresentation() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .roomDetails(roomID: "1"))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
-        XCTAssertNil(navigationStackCoordinator.rootCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator == nil)
     }
     
-    func testNoOp() async throws {
+    @Test
+    func noOp() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .roomDetails(roomID: "1"))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         let detailsCoordinator = navigationStackCoordinator.rootCoordinator
         
         roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
         await Task.yield()
         
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.rootCoordinator === detailsCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator === detailsCoordinator)
     }
     
-    func testPushDetails() async throws {
+    @Test
+    func pushDetails() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
         try await process(route: .roomDetails(roomID: "1"))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        #expect(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
     }
     
-    func testChildRoomFlow() async throws {
+    @Test
+    func childRoomFlow() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
         try await process(route: .childRoom(roomID: "2", via: []))
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
         try await process(route: .childRoom(roomID: "3", via: []))
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 2)
+        #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
-        XCTAssertNil(navigationStackCoordinator.rootCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator == nil)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
     }
     
     /// Tests the child flow teardown in isolation of it's parent.
-    func testChildFlowTearDown() async throws {
+    @Test
+    func childFlowTearDown() async throws {
         setupRoomFlowCoordinator(asChildFlow: true)
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
         try await process(route: .room(roomID: "1", via: []))
         try await process(route: .roomDetails(roomID: "1"))
-        XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2)
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomDetailsScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
+        #expect(navigationStackCoordinator.stackCoordinators.count == 2)
+        #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.last is RoomDetailsScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
-        XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2, "A child room flow should leave its parent to clean up the stack.")
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator, "A child room flow should leave its parent to clean up the stack.")
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomDetailsScreenCoordinator, "A child room flow should leave its parent to clean up the stack.")
+        #expect(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 2, "A child room flow should leave its parent to clean up the stack.")
+        #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator, "A child room flow should leave its parent to clean up the stack.")
+        #expect(navigationStackCoordinator.stackCoordinators.last is RoomDetailsScreenCoordinator, "A child room flow should leave its parent to clean up the stack.")
     }
     
-    func testChildRoomMemberDetails() async throws {
+    @Test
+    func childRoomMemberDetails() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
         try await process(route: .childRoom(roomID: "2", via: []))
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
         try await process(route: .roomMemberDetails(userID: RoomMemberProxyMock.mockMe.userID))
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 2)
+        #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
     }
     
-    func testChildRoomIgnoresDirectDuplicate() async throws {
+    @Test
+    func childRoomIgnoresDirectDuplicate() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
         try await process(route: .childRoom(roomID: "1", via: []))
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0,
-                       "A room flow shouldn't present a direct child for the same room.")
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0,
+                "A room flow shouldn't present a direct child for the same room.")
         
         try await process(route: .childRoom(roomID: "2", via: []))
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
         try await process(route: .childRoom(roomID: "1", via: []))
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2,
-                       "Presenting the same room multiple times should be allowed when it's not a direct child of itself.")
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 2,
+                "Presenting the same room multiple times should be allowed when it's not a direct child of itself.")
+        #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
     }
     
-    func testRoomMembershipInvite() async throws {
+    @Test
+    func roomMembershipInvite() async throws {
         setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
         try await clearRoute(expectedActions: [.finished])
-        XCTAssertNil(navigationStackCoordinator.rootCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator == nil)
         
         setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
         // "Join" the room
         clientProxy.roomForIdentifierClosure = { _ in
@@ -171,29 +181,30 @@ class RoomFlowCoordinatorTests: XCTestCase {
         }
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
     }
     
-    func testChildRoomMembershipInvite() async throws {
+    @Test
+    func childRoomMembershipInvite() async throws {
         setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
-        XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is JoinRoomScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
+        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        #expect(navigationStackCoordinator.stackCoordinators.last is JoinRoomScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
-        XCTAssertNil(navigationStackCoordinator.stackCoordinators.last, "A child room flow should remove the join room scren on dismissal")
+        #expect(navigationStackCoordinator.stackCoordinators.last == nil, "A child room flow should remove the join room scren on dismissal")
         
         setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
-        XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is JoinRoomScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
+        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        #expect(navigationStackCoordinator.stackCoordinators.last is JoinRoomScreenCoordinator)
         
         // "Join" the room
         clientProxy.roomForIdentifierClosure = { _ in
@@ -201,29 +212,31 @@ class RoomFlowCoordinatorTests: XCTestCase {
         }
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
-        XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
+        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        #expect(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
     }
     
-    func testEventRoute() async throws {
+    @Test
+    func eventRoute() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .event(eventID: "1", roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
         try await process(route: .childEvent(eventID: "2", roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
         try await process(route: .childEvent(eventID: "3", roomID: "2", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
     }
     
-    func testThreadedEventRoutes() async throws {
+    @Test
+    func threadedEventRoutes() async throws {
         ServiceLocator.shared.settings.threadsEnabled = true
         setupRoomFlowCoordinator()
         
@@ -243,17 +256,17 @@ class RoomFlowCoordinatorTests: XCTestCase {
         }
         
         try await process(route: .event(eventID: "2", roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        try #require(navigationStackCoordinator.stackCoordinators.count == 1) // #require these counts so accessing by index is safe.
+        #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
         
         // From the thread screen, navigate to another threaded event in the same room, and in the same thread.
         let threadCoordinator = navigationStackCoordinator.stackCoordinators[0] as? ThreadTimelineScreenCoordinator
         try await process(route: .childEvent(eventID: "3", roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
-        XCTAssertIdentical(navigationStackCoordinator.stackCoordinators[0], threadCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        try #require(navigationStackCoordinator.stackCoordinators.count == 1)
+        #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators[0] === threadCoordinator)
         // Would be nice to test if the focusEvent function has been called but there is no way to mock that.
         
         // From the thread screen, navigate to another threaded event in the same room, but in a different thread.
@@ -261,10 +274,10 @@ class RoomFlowCoordinatorTests: XCTestCase {
         mockedEvent.threadRootEventIdReturnValue = "4"
         roomProxy.loadOrFetchEventDetailsForReturnValue = .success(mockedEvent)
         try await process(route: .childEvent(eventID: "5", roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[1] is ThreadTimelineScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        try #require(navigationStackCoordinator.stackCoordinators.count == 2)
+        #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators[1] is ThreadTimelineScreenCoordinator)
         
         // From the thread screen, navigate to another threaded event in a different room.
         configuration = JoinedRoomProxyMockConfiguration(id: "2")
@@ -282,12 +295,12 @@ class RoomFlowCoordinatorTests: XCTestCase {
         }
         
         try await process(route: .childEvent(eventID: "2", roomID: "2", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 4)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[1] is ThreadTimelineScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[2] is RoomScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[3] is ThreadTimelineScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        try #require(navigationStackCoordinator.stackCoordinators.count == 4)
+        #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators[1] is ThreadTimelineScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators[2] is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators[3] is ThreadTimelineScreenCoordinator)
         
         // From the thread screen, navigate to an event of the same room that is not threaded
         mockedEvent = TimelineEventSDKMock()
@@ -295,66 +308,69 @@ class RoomFlowCoordinatorTests: XCTestCase {
         roomProxy.loadOrFetchEventDetailsForReturnValue = .success(mockedEvent)
         
         try await process(route: .childEvent(eventID: "3", roomID: "2", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 5)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[1] is ThreadTimelineScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[2] is RoomScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[3] is ThreadTimelineScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators[4] is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        try #require(navigationStackCoordinator.stackCoordinators.count == 5)
+        #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators[1] is ThreadTimelineScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators[2] is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators[3] is ThreadTimelineScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators[4] is RoomScreenCoordinator)
     }
     
-    func testShareMediaRoute() async throws {
+    @Test
+    func shareMediaRoute() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
         let sharePayload: ShareExtensionPayload = .mediaFiles(roomID: "1", mediaFiles: [.init(url: .picturesDirectory, suggestedName: nil)])
         try await process(route: .share(sharePayload))
         
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
-        XCTAssertTrue((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
+        #expect((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
         
         try await process(route: .childRoom(roomID: "2", via: []))
-        XCTAssertNil(navigationStackCoordinator.sheetCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
+        #expect(navigationStackCoordinator.sheetCoordinator == nil)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
         
         try await process(route: .share(sharePayload))
         
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
-        XCTAssertTrue((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
     }
     
-    func testShareTextRoute() async throws {
+    @Test
+    func shareTextRoute() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
         let sharePayload: ShareExtensionPayload = .text(roomID: "1", text: "Important text")
         try await process(route: .share(sharePayload))
         
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
         
-        XCTAssertNil(navigationStackCoordinator.sheetCoordinator, "The media upload sheet shouldn't be shown when sharing text.")
+        #expect(navigationStackCoordinator.sheetCoordinator == nil, "The media upload sheet shouldn't be shown when sharing text.")
         
         try await process(route: .childRoom(roomID: "2", via: []))
-        XCTAssertNil(navigationStackCoordinator.sheetCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
+        #expect(navigationStackCoordinator.sheetCoordinator == nil)
+        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
         
         try await process(route: .share(sharePayload))
         
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
-        XCTAssertNil(navigationStackCoordinator.sheetCoordinator, "The media upload sheet shouldn't be shown when sharing text.")
+        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.sheetCoordinator == nil, "The media upload sheet shouldn't be shown when sharing text.")
     }
     
-    func testLeavingRoom() async throws {
+    @Test
+    func leavingRoom() async throws {
         setupRoomFlowCoordinator()
         
         var configuration = JoinedRoomProxyMockConfiguration()
@@ -381,15 +397,16 @@ class RoomFlowCoordinatorTests: XCTestCase {
     
     // MARK: - Spaces
     
-    func testSpacePermalink() async throws {
+    @Test
+    func spacePermalink() async throws {
         setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
         try await process(route: .childRoom(roomID: "space1", via: []))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is SpaceScreenCoordinator)
+        #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        #expect(navigationStackCoordinator.stackCoordinators.first is SpaceScreenCoordinator)
     }
     
     // MARK: - Private

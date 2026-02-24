@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum RoomNotificationModeProxy: String, CaseIterable {
+enum RoomNotificationModeProxy: String, CaseIterable, Equatable {
     case allMessages
     case mentionsAndKeywordsOnly
     case mute

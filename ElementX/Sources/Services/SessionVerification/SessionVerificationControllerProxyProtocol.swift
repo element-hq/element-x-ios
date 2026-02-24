@@ -20,7 +20,7 @@ enum SessionVerificationControllerProxyError: Error {
     case failedCancellingVerification
 }
 
-enum SessionVerificationControllerProxyAction {
+enum SessionVerificationControllerProxyAction: Equatable {
     case receivedVerificationRequest(details: SessionVerificationRequestDetails)
     case acceptedVerificationRequest
     case startedSasVerification
@@ -30,7 +30,7 @@ enum SessionVerificationControllerProxyAction {
     case failed
 }
 
-struct SessionVerificationRequestDetails {
+struct SessionVerificationRequestDetails: Equatable {
     let senderProfile: UserProfileProxy
     let flowID: String
     let deviceID: String

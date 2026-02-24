@@ -7,37 +7,42 @@
 //
 
 @testable import ElementX
-import XCTest
+import Foundation
+import Testing
 
+@Suite
 @MainActor
-class NavigationSplitCoordinatorTests: XCTestCase {
-    private var navigationSplitCoordinator: NavigationSplitCoordinator!
+struct NavigationSplitCoordinatorTests {
+    private var navigationSplitCoordinator: NavigationSplitCoordinator
     
-    override func setUp() {
+    init() {
         navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SomeTestCoordinator())
     }
     
-    func testSidebar() {
-        XCTAssertNil(navigationSplitCoordinator.sidebarCoordinator)
-        XCTAssertNil(navigationSplitCoordinator.detailCoordinator)
+    @Test
+    func sidebar() {
+        #expect(navigationSplitCoordinator.sidebarCoordinator == nil)
+        #expect(navigationSplitCoordinator.detailCoordinator == nil)
         
         let sidebarCoordinator = SomeTestCoordinator()
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         assertCoordinatorsEqual(sidebarCoordinator, navigationSplitCoordinator.sidebarCoordinator)
     }
     
-    func testDetail() {
-        XCTAssertNil(navigationSplitCoordinator.sidebarCoordinator)
-        XCTAssertNil(navigationSplitCoordinator.detailCoordinator)
+    @Test
+    func detail() {
+        #expect(navigationSplitCoordinator.sidebarCoordinator == nil)
+        #expect(navigationSplitCoordinator.detailCoordinator == nil)
         
         let detailCoordinator = SomeTestCoordinator()
         navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
         assertCoordinatorsEqual(detailCoordinator, navigationSplitCoordinator.detailCoordinator)
     }
     
-    func testSidebarAndDetail() {
-        XCTAssertNil(navigationSplitCoordinator.sidebarCoordinator)
-        XCTAssertNil(navigationSplitCoordinator.detailCoordinator)
+    @Test
+    func sidebarAndDetail() {
+        #expect(navigationSplitCoordinator.sidebarCoordinator == nil)
+        #expect(navigationSplitCoordinator.detailCoordinator == nil)
         
         let sidebarCoordinator = SomeTestCoordinator()
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
@@ -49,7 +54,8 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         assertCoordinatorsEqual(detailCoordinator, navigationSplitCoordinator.detailCoordinator)
     }
     
-    func testSingleSheet() {
+    @Test
+    func singleSheet() {
         let sidebarCoordinator = SomeTestCoordinator()
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         let detailCoordinator = SomeTestCoordinator()
@@ -66,10 +72,11 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         
         assertCoordinatorsEqual(sidebarCoordinator, navigationSplitCoordinator.sidebarCoordinator)
         assertCoordinatorsEqual(detailCoordinator, navigationSplitCoordinator.detailCoordinator)
-        XCTAssertNil(navigationSplitCoordinator.sheetCoordinator)
+        #expect(navigationSplitCoordinator.sheetCoordinator == nil)
     }
     
-    func testMultipleSheets() {
+    @Test
+    func multipleSheets() {
         let sidebarCoordinator = SomeTestCoordinator()
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         let detailCoordinator = SomeTestCoordinator()
@@ -90,7 +97,8 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         assertCoordinatorsEqual(someOtherSheetCoordinator, navigationSplitCoordinator.sheetCoordinator)
     }
     
-    func testFullScreenCover() {
+    @Test
+    func fullScreenCover() {
         let sidebarCoordinator = SomeTestCoordinator()
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         let detailCoordinator = SomeTestCoordinator()
@@ -107,62 +115,67 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         
         assertCoordinatorsEqual(sidebarCoordinator, navigationSplitCoordinator.sidebarCoordinator)
         assertCoordinatorsEqual(detailCoordinator, navigationSplitCoordinator.detailCoordinator)
-        XCTAssertNil(navigationSplitCoordinator.fullScreenCoverCoordinator)
+        #expect(navigationSplitCoordinator.fullScreenCoverCoordinator == nil)
     }
     
     // MARK: - Dismissal Callbacks
     
-    func testSidebarReplacementCallbacks() {
+    @Test
+    func sidebarReplacementCallbacks() async {
         let sidebarCoordinator = SomeTestCoordinator()
         
-        let expectation = expectation(description: "Wait for callback")
-        navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator) {
-            expectation.fulfill()
+        await waitForConfirmation("Wait for callback", timeout: .seconds(1)) { confirm in
+            navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator) {
+                confirm()
+            }
+            
+            navigationSplitCoordinator.setSidebarCoordinator(nil)
         }
-        
-        navigationSplitCoordinator.setSidebarCoordinator(nil)
-        waitForExpectations(timeout: 1.0)
     }
     
-    func testDetailReplacementCallbacks() {
+    @Test
+    func detailReplacementCallbacks() async {
         let detailCoordinator = SomeTestCoordinator()
         
-        let expectation = expectation(description: "Wait for callback")
-        navigationSplitCoordinator.setDetailCoordinator(detailCoordinator) {
-            expectation.fulfill()
+        await waitForConfirmation("Wait for callback", timeout: .seconds(1)) { confirm in
+            navigationSplitCoordinator.setDetailCoordinator(detailCoordinator) {
+                confirm()
+            }
+            
+            navigationSplitCoordinator.setDetailCoordinator(nil)
         }
-        
-        navigationSplitCoordinator.setDetailCoordinator(nil)
-        waitForExpectations(timeout: 1.0)
     }
     
-    func testSheetDismissalCallback() {
+    @Test
+    func sheetDismissalCallback() async {
         let sheetCoordinator = SomeTestCoordinator()
         
-        let expectation = expectation(description: "Wait for callback")
-        navigationSplitCoordinator.setSheetCoordinator(sheetCoordinator) {
-            expectation.fulfill()
+        await waitForConfirmation("Wait for callback", timeout: .seconds(1)) { confirm in
+            navigationSplitCoordinator.setSheetCoordinator(sheetCoordinator) {
+                confirm()
+            }
+            
+            navigationSplitCoordinator.setSheetCoordinator(nil)
         }
-        
-        navigationSplitCoordinator.setSheetCoordinator(nil)
-        waitForExpectations(timeout: 1.0)
     }
     
-    func testFullScreenCoverDismissalCallback() {
+    @Test
+    func fullScreenCoverDismissalCallback() async {
         let fullScreenCoordinator = SomeTestCoordinator()
         
-        let expectation = expectation(description: "Wait for callback")
-        navigationSplitCoordinator.setFullScreenCoverCoordinator(fullScreenCoordinator) {
-            expectation.fulfill()
+        await waitForConfirmation("Wait for callback", timeout: .seconds(1)) { confirm in
+            navigationSplitCoordinator.setFullScreenCoverCoordinator(fullScreenCoordinator) {
+                confirm()
+            }
+            
+            navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
         }
-        
-        navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
-        waitForExpectations(timeout: 1.0)
     }
     
     // MARK: - Advanced
     
-    func testEmbeddedStackPresentsSheetThroughSplit() {
+    @Test
+    func embeddedStackPresentsSheetThroughSplit() {
         let sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         sidebarNavigationStackCoordinator.setRootCoordinator(SomeTestCoordinator())
         
@@ -175,7 +188,8 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         assertCoordinatorsEqual(sheetCoordinator, navigationSplitCoordinator.sheetCoordinator)
     }
     
-    func testSplitTracksEmbeddedStackRootChanges() {
+    @Test
+    func splitTracksEmbeddedStackRootChanges() async {
         let sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         sidebarNavigationStackCoordinator.setRootCoordinator(SomeTestCoordinator())
                 
@@ -185,36 +199,38 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         
         sidebarNavigationStackCoordinator.setRootCoordinator(SomeTestCoordinator())
         
-        let expectation = expectation(description: "Coordinators should match")
-        DispatchQueue.main.async {
-            self.assertCoordinatorsEqual(sidebarNavigationStackCoordinator.rootCoordinator, self.navigationSplitCoordinator.compactLayoutRootCoordinator)
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 1.0)
-    }
-    
-    func testSplitTracksEmbeddedStackChanges() {
-        let sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
-        sidebarNavigationStackCoordinator.setRootCoordinator(SomeTestCoordinator())
-                
-        navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
-        
-        assertCoordinatorsEqual(sidebarNavigationStackCoordinator.rootCoordinator, navigationSplitCoordinator.compactLayoutRootCoordinator)
-        
-        sidebarNavigationStackCoordinator.push(SomeTestCoordinator())
-        
-        let expectation = expectation(description: "Coordinators should match")
-        DispatchQueue.main.async {
-            XCTAssertEqual(sidebarNavigationStackCoordinator.stackCoordinators.count, self.navigationSplitCoordinator.compactLayoutStackCoordinators.count)
-            for index in sidebarNavigationStackCoordinator.stackCoordinators.indices {
-                self.assertCoordinatorsEqual(sidebarNavigationStackCoordinator.stackCoordinators[index], self.navigationSplitCoordinator.compactLayoutStackCoordinators[index])
+        await waitForConfirmation("Coordinators should match", timeout: .seconds(1)) { confirm in
+            DispatchQueue.main.async {
+                assertCoordinatorsEqual(sidebarNavigationStackCoordinator.rootCoordinator, navigationSplitCoordinator.compactLayoutRootCoordinator)
+                confirm()
             }
-            expectation.fulfill()
         }
-        waitForExpectations(timeout: 1.0)
     }
     
-    func testSplitPropagatesCompactStackChanges() {
+    @Test
+    func splitTracksEmbeddedStackChanges() async {
+        let sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
+        sidebarNavigationStackCoordinator.setRootCoordinator(SomeTestCoordinator())
+                
+        navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
+        
+        assertCoordinatorsEqual(sidebarNavigationStackCoordinator.rootCoordinator, navigationSplitCoordinator.compactLayoutRootCoordinator)
+        
+        sidebarNavigationStackCoordinator.push(SomeTestCoordinator())
+        
+        await waitForConfirmation("Coordinators should match", timeout: .seconds(1)) { confirm in
+            DispatchQueue.main.async {
+                #expect(sidebarNavigationStackCoordinator.stackCoordinators.count == navigationSplitCoordinator.compactLayoutStackCoordinators.count)
+                for index in sidebarNavigationStackCoordinator.stackCoordinators.indices {
+                    assertCoordinatorsEqual(sidebarNavigationStackCoordinator.stackCoordinators[index], navigationSplitCoordinator.compactLayoutStackCoordinators[index])
+                }
+                confirm()
+            }
+        }
+    }
+    
+    @Test
+    func splitPropagatesCompactStackChanges() {
         let sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         sidebarNavigationStackCoordinator.setRootCoordinator(SomeTestCoordinator())
         sidebarNavigationStackCoordinator.push(SomeTestCoordinator())
@@ -222,14 +238,15 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
         
         assertCoordinatorsEqual(sidebarNavigationStackCoordinator.rootCoordinator, navigationSplitCoordinator.compactLayoutRootCoordinator)
-        XCTAssertEqual(sidebarNavigationStackCoordinator.stackCoordinators.count, navigationSplitCoordinator.compactLayoutStackCoordinators.count)
+        #expect(sidebarNavigationStackCoordinator.stackCoordinators.count == navigationSplitCoordinator.compactLayoutStackCoordinators.count)
         
         navigationSplitCoordinator.compactLayoutStackModules.removeAll()
         
-        XCTAssertTrue(sidebarNavigationStackCoordinator.stackCoordinators.isEmpty)
+        #expect(sidebarNavigationStackCoordinator.stackCoordinators.isEmpty)
     }
     
-    func testCompactStackCreation() {
+    @Test
+    func compactStackCreation() async {
         let sidebarCoordinator = NavigationStackCoordinator()
         sidebarCoordinator.setRootCoordinator(SomeTestCoordinator())
         sidebarCoordinator.push(SomeTestCoordinator())
@@ -242,19 +259,20 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
         
-        let expectation = expectation(description: "Coordinators should match")
-        DispatchQueue.main.async {
-            self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
-            self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, sidebarCoordinator.stackCoordinators.first)
-            self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[1].coordinator, detailCoordinator.rootCoordinator)
-            self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[2].coordinator, detailCoordinator.stackCoordinators.first)
-            self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[3].coordinator, detailCoordinator.stackCoordinators.last)
-            expectation.fulfill()
+        await waitForConfirmation("Coordinators should match", timeout: .seconds(1)) { confirm in
+            DispatchQueue.main.async {
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, sidebarCoordinator.stackCoordinators.first)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[1].coordinator, detailCoordinator.rootCoordinator)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[2].coordinator, detailCoordinator.stackCoordinators.first)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[3].coordinator, detailCoordinator.stackCoordinators.last)
+                confirm()
+            }
         }
-        waitForExpectations(timeout: 1.0)
     }
     
-    func testRemovesDetailRootFromCompactStack() {
+    @Test
+    func removesDetailRootFromCompactStack() async {
         let sidebarCoordinator = NavigationStackCoordinator()
         sidebarCoordinator.setRootCoordinator(SomeTestCoordinator())
         
@@ -265,25 +283,26 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
         
-        let expectation = expectation(description: "Coordinators should match")
-        DispatchQueue.main.async {
-            self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
-            self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, detailCoordinator.rootCoordinator)
-            self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[1].coordinator, detailCoordinator.stackCoordinators.first)
-            
-            detailCoordinator.setRootCoordinator(nil)
-            
+        await waitForConfirmation("Coordinators should match", timeout: .seconds(1)) { confirm in
             DispatchQueue.main.async {
-                self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
-                self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, detailCoordinator.stackCoordinators.first)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, detailCoordinator.rootCoordinator)
+                assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[1].coordinator, detailCoordinator.stackCoordinators.first)
+                
+                detailCoordinator.setRootCoordinator(nil)
+                
+                DispatchQueue.main.async {
+                    assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                    assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, detailCoordinator.stackCoordinators.first)
+                }
+                
+                confirm()
             }
-            
-            expectation.fulfill()
         }
-        waitForExpectations(timeout: 1.0)
     }
 
-    func testSetRootDetailToNilAfterPoppingToRoot() {
+    @Test
+    mutating func setRootDetailToNilAfterPoppingToRoot() async {
         navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SomeTestCoordinator())
         let sidebarCoordinator = NavigationStackCoordinator()
         sidebarCoordinator.setRootCoordinator(SomeTestCoordinator())
@@ -295,35 +314,36 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
 
-        let expectation = expectation(description: "Details coordinator should be nil, and the compact layout revert to the sidebar root")
-        DispatchQueue.main.async {
-            detailCoordinator.popToRoot(animated: true)
-            self.navigationSplitCoordinator.setDetailCoordinator(nil)
+        await waitForConfirmation("Details coordinator should be nil, and the compact layout revert to the sidebar root",
+                                  timeout: .seconds(1)) { [navigationSplitCoordinator] confirm in
             DispatchQueue.main.async {
-                XCTAssertNil(self.navigationSplitCoordinator.detailCoordinator)
-                self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
-                XCTAssertTrue(self.navigationSplitCoordinator.compactLayoutStackModules.isEmpty)
-                expectation.fulfill()
+                detailCoordinator.popToRoot(animated: true)
+                navigationSplitCoordinator.setDetailCoordinator(nil)
+                DispatchQueue.main.async {
+                    #expect(navigationSplitCoordinator.detailCoordinator == nil)
+                    assertCoordinatorsEqual(navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                    #expect(navigationSplitCoordinator.compactLayoutStackModules.isEmpty)
+                    confirm()
+                }
             }
         }
-        waitForExpectations(timeout: 1.0)
+    }
+}
+
+// MARK: - Private
+
+private func assertCoordinatorsEqual(_ lhs: CoordinatorProtocol?, _ rhs: CoordinatorProtocol?) {
+    if lhs == nil, rhs == nil {
+        return
     }
     
-    // MARK: - Private
-    
-    private func assertCoordinatorsEqual(_ lhs: CoordinatorProtocol?, _ rhs: CoordinatorProtocol?) {
-        if lhs == nil, rhs == nil {
-            return
-        }
-        
-        guard let lhs = lhs as? SomeTestCoordinator,
-              let rhs = rhs as? SomeTestCoordinator else {
-            XCTFail("Coordinators are not the same: \(String(describing: lhs)) != \(String(describing: rhs))")
-            return
-        }
-        
-        XCTAssertEqual(lhs.id, rhs.id)
+    guard let lhs = lhs as? SomeTestCoordinator,
+          let rhs = rhs as? SomeTestCoordinator else {
+        Issue.record("Coordinators are not the same: \(String(describing: lhs)) != \(String(describing: rhs))")
+        return
     }
+    
+    #expect(lhs.id == rhs.id)
 }
 
 private class SomeTestCoordinator: CoordinatorProtocol {

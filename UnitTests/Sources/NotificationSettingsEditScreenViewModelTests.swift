@@ -8,10 +8,11 @@
 
 @testable import ElementX
 import MatrixRustSDK
-import XCTest
+import Testing
 
+@Suite
 @MainActor
-class NotificationSettingsEditScreenViewModelTests: XCTestCase {
+struct NotificationSettingsEditScreenViewModelTests {
     private var viewModel: NotificationSettingsEditScreenViewModelProtocol!
     private var notificationSettingsProxy: NotificationSettingsProxyMock!
     private var userSession: UserSessionMock!
@@ -21,7 +22,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    @MainActor override func setUpWithError() throws {
+    init() throws {
         notificationSettingsProxy = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         
@@ -29,7 +30,8 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
     }
     
-    func testFetchSettings() async throws {
+    @Test
+    mutating func fetchSettings() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
             switch (isEncrypted, isOneToOne) {
             case (_, true):
@@ -49,21 +51,22 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         // `getDefaultRoomNotificationModeIsEncryptedIsOneToOne` must have been called twice (for encrypted and unencrypted group chats)
         let invocations = notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReceivedInvocations
         
-        XCTAssertEqual(invocations.count, 2)
+        #expect(invocations.count == 2)
         // First call for encrypted group chats
-        XCTAssertEqual(invocations[0].isEncrypted, true)
-        XCTAssertEqual(invocations[0].isOneToOne, false)
+        #expect(invocations[0].isEncrypted == true)
+        #expect(invocations[0].isOneToOne == false)
         // Second call for unencrypted group chats
-        XCTAssertEqual(invocations[1].isEncrypted, false)
-        XCTAssertEqual(invocations[1].isOneToOne, false)
+        #expect(invocations[1].isEncrypted == false)
+        #expect(invocations[1].isOneToOne == false)
         
-        XCTAssertEqual(context.viewState.defaultMode, .mentionsAndKeywordsOnly)
-        XCTAssertNil(context.viewState.bindings.alertInfo)
-        XCTAssertFalse(context.viewState.canPushEncryptedEvents)
-        XCTAssertNotNil(context.viewState.description(for: .mentionsAndKeywordsOnly))
+        #expect(context.viewState.defaultMode == .mentionsAndKeywordsOnly)
+        #expect(context.viewState.bindings.alertInfo == nil)
+        #expect(!context.viewState.canPushEncryptedEvents)
+        #expect(context.viewState.description(for: .mentionsAndKeywordsOnly) != nil)
     }
     
-    func testFetchSettingsWithCanPushEncryptedEvents() async throws {
+    @Test
+    mutating func fetchSettingsWithCanPushEncryptedEvents() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
             switch (isEncrypted, isOneToOne) {
             case (_, true):
@@ -86,21 +89,22 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         // `getDefaultRoomNotificationModeIsEncryptedIsOneToOne` must have been called twice (for encrypted and unencrypted group chats)
         let invocations = notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReceivedInvocations
         
-        XCTAssertEqual(invocations.count, 2)
+        #expect(invocations.count == 2)
         // First call for encrypted group chats
-        XCTAssertEqual(invocations[0].isEncrypted, true)
-        XCTAssertEqual(invocations[0].isOneToOne, false)
+        #expect(invocations[0].isEncrypted == true)
+        #expect(invocations[0].isOneToOne == false)
         // Second call for unencrypted group chats
-        XCTAssertEqual(invocations[1].isEncrypted, false)
-        XCTAssertEqual(invocations[1].isOneToOne, false)
+        #expect(invocations[1].isEncrypted == false)
+        #expect(invocations[1].isOneToOne == false)
         
-        XCTAssertEqual(context.viewState.defaultMode, .mentionsAndKeywordsOnly)
-        XCTAssertNil(context.viewState.bindings.alertInfo)
-        XCTAssertTrue(context.viewState.canPushEncryptedEvents)
-        XCTAssertNil(context.viewState.description(for: .mentionsAndKeywordsOnly))
+        #expect(context.viewState.defaultMode == .mentionsAndKeywordsOnly)
+        #expect(context.viewState.bindings.alertInfo == nil)
+        #expect(context.viewState.canPushEncryptedEvents)
+        #expect(context.viewState.description(for: .mentionsAndKeywordsOnly) == nil)
     }
     
-    func testSetModeAllMessages() async throws {
+    @Test
+    mutating func setModeAllMessages() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat, userSession: userSession)
         let deferred = deferFulfillment(viewModel.context.observe(\.viewState.defaultMode)) { $0 != nil }
@@ -118,26 +122,27 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         // `setDefaultRoomNotificationModeIsEncryptedIsOneToOneMode` must have been called twice (for encrypted and unencrypted group chats)
         let invocations = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations
-        XCTAssertEqual(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount, 2)
+        #expect(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount == 2)
         // First call for encrypted group chats
-        XCTAssertEqual(invocations[0].isEncrypted, true)
-        XCTAssertEqual(invocations[0].isOneToOne, false)
-        XCTAssertEqual(invocations[0].mode, .allMessages)
+        #expect(invocations[0].isEncrypted == true)
+        #expect(invocations[0].isOneToOne == false)
+        #expect(invocations[0].mode == .allMessages)
         // Second call for unencrypted group chats
-        XCTAssertEqual(invocations[1].isEncrypted, false)
-        XCTAssertEqual(invocations[1].isOneToOne, false)
-        XCTAssertEqual(invocations[1].mode, .allMessages)
+        #expect(invocations[1].isEncrypted == false)
+        #expect(invocations[1].isOneToOne == false)
+        #expect(invocations[1].mode == .allMessages)
         
         deferredViewState = deferFulfillment(viewModel.context.observe(\.viewState.defaultMode),
                                              transitionValues: [.allMessages])
         
         try await deferredViewState.fulfill()
 
-        XCTAssertEqual(context.viewState.defaultMode, .allMessages)
-        XCTAssertNil(context.viewState.bindings.alertInfo)
+        #expect(context.viewState.defaultMode == .allMessages)
+        #expect(context.viewState.bindings.alertInfo == nil)
     }
 
-    func testSetModeMentions() async throws {
+    @Test
+    mutating func setModeMentions() async throws {
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat, userSession: userSession)
         
         let deferred = deferFulfillment(viewModel.context.observe(\.viewState.defaultMode)) { $0 != nil }
@@ -155,26 +160,27 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         // `setDefaultRoomNotificationModeIsEncryptedIsOneToOneMode` must have been called twice (for encrypted and unencrypted group chats)
         let invocations = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations
-        XCTAssertEqual(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount, 2)
+        #expect(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount == 2)
         // First call for encrypted group chats
-        XCTAssertEqual(invocations[0].isEncrypted, true)
-        XCTAssertEqual(invocations[0].isOneToOne, false)
-        XCTAssertEqual(invocations[0].mode, .mentionsAndKeywordsOnly)
+        #expect(invocations[0].isEncrypted == true)
+        #expect(invocations[0].isOneToOne == false)
+        #expect(invocations[0].mode == .mentionsAndKeywordsOnly)
         // Second call for unencrypted group chats
-        XCTAssertEqual(invocations[1].isEncrypted, false)
-        XCTAssertEqual(invocations[1].isOneToOne, false)
-        XCTAssertEqual(invocations[1].mode, .mentionsAndKeywordsOnly)
+        #expect(invocations[1].isEncrypted == false)
+        #expect(invocations[1].isOneToOne == false)
+        #expect(invocations[1].mode == .mentionsAndKeywordsOnly)
         
         deferredViewState = deferFulfillment(viewModel.context.observe(\.viewState.defaultMode),
                                              transitionValues: [.mentionsAndKeywordsOnly])
         
         try await deferredViewState.fulfill()
 
-        XCTAssertEqual(context.viewState.defaultMode, .mentionsAndKeywordsOnly)
-        XCTAssertNil(context.viewState.bindings.alertInfo)
+        #expect(context.viewState.defaultMode == .mentionsAndKeywordsOnly)
+        #expect(context.viewState.bindings.alertInfo == nil)
     }
 
-    func testSetModeDirectChats() async throws {
+    @Test
+    mutating func setModeDirectChats() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         // Initialize for direct chats
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat, userSession: userSession)
@@ -194,18 +200,19 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
 
         // `setDefaultRoomNotificationModeIsEncryptedIsOneToOneMode` must have been called twice (for encrypted and unencrypted direct chats)
         let invocations = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations
-        XCTAssertEqual(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount, 2)
+        #expect(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount == 2)
         // First call for encrypted direct chats
-        XCTAssertEqual(invocations[0].isEncrypted, true)
-        XCTAssertEqual(invocations[0].isOneToOne, true)
-        XCTAssertEqual(invocations[0].mode, .allMessages)
+        #expect(invocations[0].isEncrypted == true)
+        #expect(invocations[0].isOneToOne == true)
+        #expect(invocations[0].mode == .allMessages)
         // Second call for unencrypted direct chats
-        XCTAssertEqual(invocations[1].isEncrypted, false)
-        XCTAssertEqual(invocations[1].isOneToOne, true)
-        XCTAssertEqual(invocations[1].mode, .allMessages)
+        #expect(invocations[1].isEncrypted == false)
+        #expect(invocations[1].isOneToOne == true)
+        #expect(invocations[1].mode == .allMessages)
     }
 
-    func testSetModeFailure() async throws {
+    @Test
+    mutating func setModeFailure() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError = NotificationSettingsError.Generic(msg: "error")
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat, userSession: userSession)
@@ -223,10 +230,11 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         try await deferredViewState.fulfill()
         
-        XCTAssertNotNil(context.viewState.bindings.alertInfo)
+        #expect(context.viewState.bindings.alertInfo != nil)
     }
 
-    func testSelectRoom() async throws {
+    @Test
+    mutating func selectRoom() async throws {
         let roomID = "!roomidentifier:matrix.org"
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat, userSession: userSession)
         
@@ -243,7 +251,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         let expectedAction = NotificationSettingsEditScreenViewModelAction.requestRoomNotificationSettingsPresentation(roomID: roomID)
         guard case let .requestRoomNotificationSettingsPresentation(roomID: receivedRoomID) = sentAction, receivedRoomID == roomID else {
-            XCTFail("Expected action \(expectedAction), but was \(sentAction)")
+            Issue.record("Expected action \(expectedAction), but was \(sentAction)")
             return
         }
     }

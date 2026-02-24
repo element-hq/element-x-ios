@@ -8,10 +8,12 @@
 
 @testable import ElementX
 import MatrixRustSDKMocks
-import XCTest
+import SwiftUI
+import Testing
 
+@Suite
 @MainActor
-class ServerConfirmationScreenViewModelTests: XCTestCase {
+final class ServerConfirmationScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var client: ClientSDKMock!
     var service: AuthenticationServiceProtocol!
@@ -22,26 +24,27 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    override func setUp() {
+    init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         // These app settings are kept local to the tests on purpose as if they are registered in the
         // ServiceLocator, the providers override that we apply will break other tests in the suite.
     }
     
-    override func tearDown() {
+    deinit {
         AppSettings.resetAllSettings()
     }
     
     // MARK: - Confirmation mode
     
-    func testConfirmLoginWithoutConfiguration() async throws {
+    @Test
+    func confirmLoginWithoutConfiguration() async throws {
         // Given a view model for login using a service that hasn't been configured.
         setupViewModel(authenticationFlow: .login)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(context.viewState.mode, .confirmation(service.homeserver.value.address))
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(service.homeserver.value.loginMode == .unknown)
+        #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -49,23 +52,24 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then a call to configure service should be made.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt, .consent)
-        XCTAssertEqual(service.homeserver.value.loginMode, .oidc(supportsCreatePrompt: true))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
+        #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
     }
     
-    func testConfirmLoginAfterConfiguration() async throws {
+    @Test
+    func confirmLoginAfterConfiguration() async throws {
         // Given a view model for login using a service that has already been configured (via the server selection screen).
         setupViewModel(authenticationFlow: .login)
         guard case .success = await service.configure(for: viewModel.state.homeserverAddress, flow: .login) else {
-            XCTFail("The configuration should succeed.")
+            Issue.record("The configuration should succeed.")
             return
         }
-        XCTAssertEqual(service.homeserver.value.loginMode, .oidc(supportsCreatePrompt: true))
-        XCTAssertEqual(context.viewState.mode, .confirmation(service.homeserver.value.address))
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
+        #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -73,18 +77,19 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the configured homeserver should be used and no additional client should be built.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt, .consent)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
     }
     
-    func testConfirmRegisterWithoutConfiguration() async throws {
+    @Test
+    func confirmRegisterWithoutConfiguration() async throws {
         // Given a view model for registration using a service that hasn't been configured.
         setupViewModel(authenticationFlow: .register)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(context.viewState.mode, .confirmation(service.homeserver.value.address))
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(service.homeserver.value.loginMode == .unknown)
+        #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -92,24 +97,25 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then a call to configure service should be made.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 1)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
         // The create prompt is broken: https://github.com/element-hq/matrix-authentication-service/issues/3429
-        // XCTAssertEqual(client.urlForOidcOidcConfigurationPromptReceivedArguments?.prompt, .create)
-        XCTAssertEqual(service.homeserver.value.loginMode, .oidc(supportsCreatePrompt: true))
+        // #expect(client.urlForOidcOidcConfigurationPromptReceivedArguments?.prompt == .create)
+        #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
     }
     
-    func testConfirmRegisterAfterConfiguration() async throws {
+    @Test
+    func confirmRegisterAfterConfiguration() async throws {
         // Given a view model for registration using a service that has already been configured (via the server selection screen).
         setupViewModel(authenticationFlow: .register)
         guard case .success = await service.configure(for: viewModel.state.homeserverAddress, flow: .register) else {
-            XCTFail("The configuration should succeed.")
+            Issue.record("The configuration should succeed.")
             return
         }
-        XCTAssertEqual(service.homeserver.value.loginMode, .oidc(supportsCreatePrompt: true))
-        XCTAssertEqual(context.viewState.mode, .confirmation(service.homeserver.value.address))
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
+        #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -117,19 +123,20 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the configured homeserver should be used and no additional client should be built.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         // The create prompt is broken: https://github.com/element-hq/matrix-authentication-service/issues/3429
-        // XCTAssertEqual(client.urlForOidcOidcConfigurationPromptReceivedArguments?.prompt, .create)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 1)
+        // #expect(client.urlForOidcOidcConfigurationPromptReceivedArguments?.prompt == .create)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
     }
     
-    func testConfirmPasswordLoginWithoutConfiguration() async throws {
+    @Test
+    func confirmPasswordLoginWithoutConfiguration() async throws {
         // Given a view model for login using a service that hasn't been configured (against a server that doesn't support OIDC).
         setupViewModel(authenticationFlow: .login, supportsOIDC: false)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(context.viewState.mode, .confirmation(service.homeserver.value.address))
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(service.homeserver.value.loginMode == .unknown)
+        #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -137,22 +144,23 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then a call to configure service should be made, but not for the OIDC URL.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
-        XCTAssertEqual(service.homeserver.value.loginMode, .password)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(service.homeserver.value.loginMode == .password)
     }
     
-    func testConfirmPasswordLoginAfterConfiguration() async throws {
+    @Test
+    func confirmPasswordLoginAfterConfiguration() async throws {
         // Given a view model for login using a service that has already been configured (via the server selection screen).
         setupViewModel(authenticationFlow: .login, supportsOIDC: false)
         guard case .success = await service.configure(for: viewModel.state.homeserverAddress, flow: .login) else {
-            XCTFail("The configuration should succeed.")
+            Issue.record("The configuration should succeed.")
             return
         }
-        XCTAssertEqual(service.homeserver.value.loginMode, .password)
-        XCTAssertEqual(context.viewState.mode, .confirmation(service.homeserver.value.address))
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(service.homeserver.value.loginMode == .password)
+        #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -160,17 +168,18 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the configured homeserver should be used and no additional client should be built, nor a call to get the OIDC URL.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
     }
     
-    func testRegistrationNotSupportedAlert() async throws {
+    @Test
+    func registrationNotSupportedAlert() async throws {
         // Given a view model for registration using a service that hasn't been configured and the default server doesn't support registration.
         // Note: We don't currently take the create prompt into account when determining registration support.
         setupViewModel(authenticationFlow: .register, supportsOIDC: false, supportsOIDCCreatePrompt: false)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertNil(context.alertInfo)
+        #expect(service.homeserver.value.loginMode == .unknown)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(context.alertInfo == nil)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
@@ -178,16 +187,17 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the configuration should fail with an alert about not supporting registration.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(context.alertInfo?.id, .registration)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(context.alertInfo?.id == .registration)
     }
     
-    func testLoginNotSupportedAlert() async throws {
+    @Test
+    func loginNotSupportedAlert() async throws {
         // Given a view model for login using a service that hasn't been configured and the default server doesn't support login.
         setupViewModel(authenticationFlow: .login, supportsOIDC: false, supportsOIDCCreatePrompt: false, supportsPasswordLogin: false)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertNil(context.alertInfo)
+        #expect(service.homeserver.value.loginMode == .unknown)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(context.alertInfo == nil)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
@@ -195,16 +205,17 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the configuration should fail with an alert about not supporting login.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(context.alertInfo?.id, .login)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(context.alertInfo?.id == .login)
     }
     
-    func testElementProRequired() async throws {
+    @Test
+    func elementProRequired() async throws {
         // Given a view model for login using a service that hasn't been configured and the default server requires Element Pro.
         setupViewModel(authenticationFlow: .login, supportsOIDC: false, supportsOIDCCreatePrompt: false, supportsPasswordLogin: false, requiresElementPro: true)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertNil(context.alertInfo)
+        #expect(service.homeserver.value.loginMode == .unknown)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(context.alertInfo == nil)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
@@ -212,19 +223,20 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the configuration should fail with an alert telling the user to download Element Pro.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(context.alertInfo?.id, .elementProRequired(serverName: "matrix.org"))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(context.alertInfo?.id == .elementProRequired(serverName: "matrix.org"))
     }
     
     // MARK: - Picker mode
     
-    func testPickerWithoutConfiguration() async throws {
+    @Test
+    func pickerWithoutConfiguration() async throws {
         // Given a view model for login using a service that hasn't been configured.
         setupViewModel(authenticationFlow: .login, restrictedFlow: true)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(context.viewState.mode, .picker(appSettings.accountProviders))
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(service.homeserver.value.loginMode == .unknown)
+        #expect(context.viewState.mode == .picker(appSettings.accountProviders))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -232,23 +244,24 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then a call to configure service should be made.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt, .consent)
-        XCTAssertEqual(service.homeserver.value.loginMode, .oidc(supportsCreatePrompt: true))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
+        #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
     }
     
-    func testPickerAfterConfiguration() async throws {
+    @Test
+    func pickerAfterConfiguration() async throws {
         // Given a view model for login using a service that has already been configured (via the server selection screen).
         setupViewModel(authenticationFlow: .login, restrictedFlow: true)
         guard case .success = await service.configure(for: appSettings.accountProviders[0], flow: .login) else {
-            XCTFail("The configuration should succeed.")
+            Issue.record("The configuration should succeed.")
             return
         }
-        XCTAssertEqual(service.homeserver.value.loginMode, .oidc(supportsCreatePrompt: true))
-        XCTAssertEqual(context.viewState.mode, .picker(appSettings.accountProviders))
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
+        #expect(context.viewState.mode == .picker(appSettings.accountProviders))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -256,18 +269,19 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the configured homeserver should be used and no additional client should be built.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt, .consent)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
     }
     
-    func testPickerForPasswordLoginWithoutConfiguration() async throws {
+    @Test
+    func pickerForPasswordLoginWithoutConfiguration() async throws {
         // Given a view model for login using a service that hasn't been configured (against a server that doesn't support OIDC).
         setupViewModel(authenticationFlow: .login, supportsOIDC: false, restrictedFlow: true)
-        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(context.viewState.mode, .picker(appSettings.accountProviders))
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(service.homeserver.value.loginMode == .unknown)
+        #expect(context.viewState.mode == .picker(appSettings.accountProviders))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -275,22 +289,23 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then a call to configure service should be made, but not for the OIDC URL.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
-        XCTAssertEqual(service.homeserver.value.loginMode, .password)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(service.homeserver.value.loginMode == .password)
     }
     
-    func testPickerForPasswordLoginAfterConfiguration() async throws {
+    @Test
+    func pickerForPasswordLoginAfterConfiguration() async throws {
         // Given a view model for login using a service that has already been configured (via the server selection screen).
         setupViewModel(authenticationFlow: .login, supportsOIDC: false, restrictedFlow: true)
         guard case .success = await service.configure(for: appSettings.accountProviders[0], flow: .login) else {
-            XCTFail("The configuration should succeed.")
+            Issue.record("The configuration should succeed.")
             return
         }
-        XCTAssertEqual(service.homeserver.value.loginMode, .password)
-        XCTAssertEqual(context.viewState.mode, .picker(appSettings.accountProviders))
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(service.homeserver.value.loginMode == .password)
+        #expect(context.viewState.mode == .picker(appSettings.accountProviders))
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -298,8 +313,8 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the configured homeserver should be used and no additional client should be built, nor a call to get the OIDC URL.
-        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 0)
+        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
     }
     
     // MARK: - Helpers

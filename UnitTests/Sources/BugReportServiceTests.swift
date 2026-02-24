@@ -54,6 +54,7 @@ final class BugReportServiceTests {
     }
     
     @Test
+    @MainActor
     func initialStateWithRealService() {
         let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.url("https://example.com/submit"))
         let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),

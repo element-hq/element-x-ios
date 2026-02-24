@@ -7,10 +7,11 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class JoinRoomScreenViewModelTests: XCTestCase {
+@Suite
+final class JoinRoomScreenViewModelTests {
     private enum TestMode {
         case joined
         case knocked
@@ -27,74 +28,79 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    override func setUp() {
+    init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         ServiceLocator.shared.register(appSettings: appSettings)
     }
     
-    override func tearDown() {
+    deinit {
         viewModel = nil
         clientProxy = nil
         AppSettings.resetAllSettings()
     }
     
-    func testInteraction() async throws {
-        XCTAssertTrue(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+    @Test
+    func interaction() async throws {
+        #expect(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
         
         setupViewModel()
         try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .joinable }.fulfill()
         
-        XCTAssertTrue(appSettings.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
+        #expect(appSettings.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .joined(.roomID("1")) }
         context.send(viewAction: .join)
         try await deferred.fulfill()
     }
     
-    func testAcceptInviteInteraction() async throws {
-        XCTAssertTrue(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+    @Test
+    func acceptInviteInteraction() async throws {
+        #expect(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
         
         setupViewModel(mode: .invited)
         try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .invited(isDM: false) }.fulfill()
         
-        XCTAssertEqual(appSettings.seenInvites, ["1"], "The invited room's ID should be registered as a seen invite.")
+        #expect(appSettings.seenInvites == ["1"], "The invited room's ID should be registered as a seen invite.")
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .joined(.roomID("1")) }
         context.send(viewAction: .acceptInvite)
         try await deferred.fulfill()
         
-        XCTAssertTrue(appSettings.seenInvites.isEmpty, "The after accepting an invite the invite should be forgotten in case the user leaves.")
+        #expect(appSettings.seenInvites.isEmpty, "The after accepting an invite the invite should be forgotten in case the user leaves.")
     }
     
-    func testDeclineInviteInteraction() async throws {
-        XCTAssertTrue(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+    @Test
+    func declineInviteInteraction() async throws {
+        #expect(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
         
         setupViewModel(mode: .invited)
         
         try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .invited(isDM: false) }.fulfill()
-        XCTAssertEqual(appSettings.seenInvites, ["1"], "The invited room's ID should be registered as a seen invite.")
+        #expect(appSettings.seenInvites == ["1"], "The invited room's ID should be registered as a seen invite.")
         
         context.send(viewAction: .declineInvite)
         
-        XCTAssertEqual(viewModel.context.alertInfo?.id, .declineInvite)
+        #expect(viewModel.context.alertInfo?.id == .declineInvite)
         let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .dismiss }
         context.alertInfo?.secondaryButton?.action?()
         try await deferred.fulfill()
         
-        XCTAssertTrue(appSettings.seenInvites.isEmpty, "The after declining an invite the invite should be forgotten in case another invite is received.")
+        #expect(appSettings.seenInvites.isEmpty, "The after declining an invite the invite should be forgotten in case another invite is received.")
     }
     
-    func testKnockedState() async throws {
-        XCTAssertTrue(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+    @Test
+    func knockedState() async throws {
+        #expect(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
         setupViewModel(mode: .knocked)
         
         try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .knocked }.fulfill()
         
-        XCTAssertTrue(appSettings.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
+        #expect(appSettings.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
     }
     
-    func testCancelKnock() async throws {
+    @Test
+    func cancelKnock() async throws {
         setupViewModel(mode: .knocked)
         
         try await deferFulfillment(viewModel.context.$viewState) { state in
@@ -102,7 +108,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         }.fulfill()
         
         context.send(viewAction: .cancelKnock)
-        XCTAssertEqual(viewModel.context.alertInfo?.id, .cancelKnock)
+        #expect(viewModel.context.alertInfo?.id == .cancelKnock)
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
             action == .dismiss
@@ -111,32 +117,36 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testDeclineAndBlockInviteLegacyInteraction() async throws {
+    @Test
+    func declineAndBlockInviteLegacyInteraction() async throws {
         setupViewModel(mode: .invited)
         clientProxy.underlyingIsReportRoomSupported = false
-        let expectation = expectation(description: "Wait for the user to be ignored")
-        clientProxy.ignoreUserClosure = { userID in
-            defer { expectation.fulfill() }
-            XCTAssertEqual(userID, "@test:matrix.org")
-            return .success(())
-        }
         
         try await deferFulfillment(viewModel.context.$viewState) { $0.roomDetails != nil }.fulfill()
         
         context.send(viewAction: .declineInviteAndBlock(userID: "@test:matrix.org"))
         
         try await deferFulfillment(viewModel.context.$viewState) { $0.bindings.alertInfo != nil }.fulfill()
-        XCTAssertEqual(viewModel.context.alertInfo?.id, .declineInviteAndBlock)
+        #expect(viewModel.context.alertInfo?.id == .declineInviteAndBlock)
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
             action == .dismiss
         }
-        context.alertInfo?.secondaryButton?.action?()
-        await fulfillment(of: [expectation], timeout: 10)
+        
+        await waitForConfirmation("Wait for the user to be ignored") { confirm in
+            clientProxy.ignoreUserClosure = { userID in
+                defer { confirm() }
+                #expect(userID == "@test:matrix.org")
+                return .success(())
+            }
+            context.alertInfo?.secondaryButton?.action?()
+        }
+        
         try await deferred.fulfill()
     }
     
-    func testDeclineAndBlockInviteInteraction() async throws {
+    @Test
+    func declineAndBlockInviteInteraction() async throws {
         setupViewModel(mode: .invited)
         try await deferFulfillment(viewModel.context.$viewState) { $0.roomDetails != nil }.fulfill()
         let deferredAction = deferFulfillment(viewModel.actionsPublisher) { $0 == .presentDeclineAndBlock(userID: "@test:matrix.org") }
@@ -144,7 +154,8 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         try await deferredAction.fulfill()
     }
     
-    func testForgetRoom() async throws {
+    @Test
+    func forgetRoom() async throws {
         setupViewModel(mode: .banned)
         
         try await deferFulfillment(viewModel.context.$viewState) { $0.roomDetails != nil }.fulfill()
