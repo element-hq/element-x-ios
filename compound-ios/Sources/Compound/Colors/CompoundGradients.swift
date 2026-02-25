@@ -36,11 +36,10 @@ public struct CompoundGradients {
     }
 
     public var info: Gradient {
-        .init(colors: [.compound.gradientInfoStop1,
-                       .compound.gradientInfoStop2,
-                       .compound.gradientInfoStop3,
-                       .compound.gradientInfoStop4,
-                       .compound.gradientInfoStop5,
-                       .compound.gradientInfoStop6])
+        .init(colors: [.compound.gradientInfoStop1, .compound.gradientInfoStop2])
+    }
+    
+    public var critical: Gradient {
+        .init(colors: [.compound.gradientCriticalStop1, .compound.gradientCriticalStop2])
     }
 }
