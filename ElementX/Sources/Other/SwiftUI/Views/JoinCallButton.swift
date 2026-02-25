@@ -22,12 +22,19 @@ struct JoinCallButton: View {
     
     var glassButton: some View {
         Button(action: action) {
-            Text(L10n.a11yJoinCall)
-                .font(.compound.bodyLG.weight(.medium))
-                .foregroundStyle(.compound.textOnSolidPrimary)
+            // Use an HStack on iOS 26 as .labelStyle(.titleAndIcon) doesn't
+            // seem to have any effect on a label in the navigation bar 🤷‍♂️
+            HStack(spacing: 6) {
+                CompoundIcon(\.videoCallSolid)
+                Text(L10n.actionJoin)
+                    .padding(.trailing, 4)
+            }
+            .font(.compound.bodyLG.weight(.medium))
+            .foregroundStyle(.compound.textOnSolidPrimary)
         }
-        .tint(.compound.bgAccentRest)
+        .tint(.compound.bgActionPrimaryRest)
         .backportButtonStyleGlassProminent()
+        .accessibilityLabel(L10n.a11yJoinCall)
     }
     
     var customButton: some View {
