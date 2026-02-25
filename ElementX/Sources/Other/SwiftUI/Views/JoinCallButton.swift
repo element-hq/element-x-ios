@@ -22,12 +22,16 @@ struct JoinCallButton: View {
     
     var glassButton: some View {
         Button(action: action) {
-            Text(L10n.a11yJoinCall)
-                .font(.compound.bodyLG.weight(.medium))
-                .foregroundStyle(.compound.textOnSolidPrimary)
+            HStack(spacing: 8) {
+                CompoundIcon(\.videoCallSolid)
+                Text(L10n.actionJoin)
+                    .font(.compound.bodyLG.weight(.medium))
+            }
+            .foregroundStyle(.compound.textOnSolidPrimary)
         }
-        .tint(.compound.bgAccentRest)
+        .tint(.compound.bgActionPrimaryRest)
         .backportButtonStyleGlassProminent()
+        .accessibilityLabel(L10n.a11yJoinCall)
     }
     
     var customButton: some View {
