@@ -3,10 +3,9 @@
 ### What's Changed
 
 ✨ Features
-* Playback speed button by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5124
+* Playback speed button by @Medformatik and @Velin92 in https://github.com/element-hq/element-x-ios/pull/5121 and https://github.com/element-hq/element-x-ios/pull/5124
 
 🙌 Improvements
-* Update the active Space Filter Button in the Chats header to be Primary instead of Accent by @americanrefugee in https://github.com/element-hq/element-x-ios/pull/5091
 * Lock the Link New Device flow to portrait and improve Cancel/Try Again handling. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5094
 * Unify session verification with Android by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5116
 
@@ -21,7 +20,6 @@
 * Fix A11y tests by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5104
 
 🧱 Build
-* Remove the Signposter from the integration tests target, fix build. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5096
 * Fix integration tests room header discovery by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5099
 * Update the Gemfile.lock with Ruby 4.0 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5101
 * Fix the `upload_dsyms_to_sentry` lane after plugin update. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5112
@@ -33,11 +31,7 @@
 * Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5138
 * Simplify LinkNewDeviceScreen preview test setup and fix preview and accessibility test reliability by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5142
 
-🚧 In development 🚧
-* Add history sharing badges to room details by @kaylendog in https://github.com/element-hq/element-x-ios/pull/5043
-
 Others
-* Update dependency fastlane to v2.232.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5089
 * Re-write the space flow state machine configuration and cover it more in UI tests. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5098
 * Fix UI Tests by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5107
 * Adopt the new tracing configuration that allows maximum size and age limits on all logs. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5108
@@ -52,6 +46,7 @@ Others
 
 ### New Contributors
 * @americanrefugee made their first contribution in https://github.com/element-hq/element-x-ios/pull/5091
+* @medformatik made their first contribution in https://github.com/element-hq/element-x-ios/pull/5121
 
 **Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.02.1...release/26.03.0
 
