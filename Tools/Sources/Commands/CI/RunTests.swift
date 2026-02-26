@@ -25,7 +25,7 @@ struct RunTests: AsyncParsableCommand {
     var osVersion = "26.1"
     
     @Option(help: "Number of times to retry failed tests. Only the failing tests are re-run, not the entire suite.")
-    var retries = 3
+    var retries = 0
     
     @Option(help: "When set, create a simulator with this name if one doesn't already exist.")
     var createSimulatorName: String?
