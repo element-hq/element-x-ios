@@ -351,7 +351,6 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                                                           spaceServiceProxy: spaceServiceProxy,
                                                           selectedSpaceRoomPublisher: selectedSpaceRoomSubject.asCurrentValuePublisher(),
                                                           userSession: flowParameters.userSession,
-                                                          appSettings: flowParameters.appSettings,
                                                           userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpaceScreenCoordinator(parameters: parameters)
         spaceScreenCoordinator = coordinator

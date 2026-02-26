@@ -229,7 +229,6 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
                                              spaceServiceProxy: SpaceServiceProxyMock(.init()),
                                              selectedSpaceRoomPublisher: .init(nil),
                                              userSession: userSession,
-                                             appSettings: AppSettings(),
                                              userIndicatorController: UserIndicatorControllerMock())
         
         if isManagingRooms {

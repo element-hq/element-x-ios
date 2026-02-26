@@ -341,7 +341,6 @@ struct SpaceScreenViewModelTests {
                                          spaceServiceProxy: spaceServiceProxy,
                                          selectedSpaceRoomPublisher: .init(nil),
                                          userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                         appSettings: AppSettings(),
                                          userIndicatorController: UserIndicatorControllerMock())
     }
 }
