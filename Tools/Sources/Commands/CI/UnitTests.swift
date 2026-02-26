@@ -23,7 +23,8 @@ struct UnitTests: AsyncParsableCommand {
             try await RunTests.parse([
                 "--scheme", "UnitTests",
                 "--device", device,
-                "--os-version", osVersion
+                "--os-version", osVersion,
+                "--retries", "3"
             ]).run()
         } catch {
             failures.append("Unit tests failed: \(error)")
