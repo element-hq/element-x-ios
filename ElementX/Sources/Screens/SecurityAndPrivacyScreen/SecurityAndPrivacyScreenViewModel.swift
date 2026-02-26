@@ -38,7 +38,6 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                                                                        historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility,
                                                                        isSpace: roomProxy.infoPublisher.value.isSpace,
                                                                        isKnockingEnabled: appSettings.knockingEnabled,
-                                                                       isSpaceSettingsEnabled: appSettings.spaceSettingsEnabled,
                                                                        historySharingDetailsURL: appSettings.historySharingDetailsURL))
         
         if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
@@ -152,10 +151,6 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         
         appSettings.$knockingEnabled
             .weakAssign(to: \.state.isKnockingEnabled, on: self)
-            .store(in: &cancellables)
-        
-        appSettings.$spaceSettingsEnabled
-            .weakAssign(to: \.state.isSpaceSettingsEnabled, on: self)
             .store(in: &cancellables)
     }
     

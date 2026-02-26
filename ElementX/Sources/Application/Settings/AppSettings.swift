@@ -77,11 +77,6 @@ final class AppSettings {
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
         
-        // Spaces
-        case spaceFiltersEnabled
-        case spaceSettingsEnabled
-        case createSpaceEnabled
-        
         case voiceMessagePlaybackSpeed
 
         // Doug's tweaks 🔧
@@ -403,16 +398,6 @@ final class AppSettings {
     var sharePresence
     
     // MARK: - Feature Flags
-    
-    /// Spaces
-    @UserPreference(key: UserDefaultsKeys.spaceSettingsEnabled, defaultValue: true, storageType: .volatile)
-    var spaceSettingsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.createSpaceEnabled, defaultValue: true, storageType: .volatile)
-    var createSpaceEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.spaceFiltersEnabled, defaultValue: true, storageType: .volatile)
-    var spaceFiltersEnabled
     
     /// Others
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .userDefaults(store))

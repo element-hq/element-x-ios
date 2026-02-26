@@ -27,7 +27,7 @@ struct SpacesScreen: View {
     
     @ViewBuilder
     private var mainContent: some View {
-        if context.viewState.isCreateSpaceEnabled, context.viewState.topLevelSpaces.isEmpty {
+        if context.viewState.topLevelSpaces.isEmpty {
             emptyState
         } else {
             ScrollView {
@@ -118,16 +118,14 @@ struct SpacesScreen: View {
         }
         .backportSharedBackgroundVisibility(.hidden)
         
-        if context.viewState.isCreateSpaceEnabled {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    context.send(viewAction: .createSpace)
-                } label: {
-                    CompoundIcon(\.plus)
-                        .accessibilityHidden(true)
-                }
-                .accessibilityLabel(L10n.actionCreateSpace)
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button {
+                context.send(viewAction: .createSpace)
+            } label: {
+                CompoundIcon(\.plus)
+                    .accessibilityHidden(true)
             }
+            .accessibilityLabel(L10n.actionCreateSpace)
         }
     }
 }
@@ -152,7 +150,6 @@ struct SpacesScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(isEmpty: Bool = false) -> SpacesScreenViewModel {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
-        appSettings.createSpaceEnabled = true
         appSettings.hasSeenSpacesAnnouncement = true
         
         let clientProxy = ClientProxyMock(.init())

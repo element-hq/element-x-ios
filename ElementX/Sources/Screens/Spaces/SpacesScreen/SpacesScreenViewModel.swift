@@ -31,7 +31,6 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
         
         super.init(initialViewState: SpacesScreenViewState(userID: userSession.clientProxy.userID,
                                                            topLevelSpaces: spaceServiceProxy.topLevelSpacesPublisher.value,
-                                                           isCreateSpaceEnabled: appSettings.createSpaceEnabled,
                                                            bindings: .init()),
                    mediaProvider: userSession.mediaProvider)
         
@@ -52,10 +51,6 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
         userSession.clientProxy.userDisplayNamePublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userDisplayName, on: self)
-            .store(in: &cancellables)
-        
-        appSettings.$createSpaceEnabled
-            .weakAssign(to: \.state.isCreateSpaceEnabled, on: self)
             .store(in: &cancellables)
     }
     

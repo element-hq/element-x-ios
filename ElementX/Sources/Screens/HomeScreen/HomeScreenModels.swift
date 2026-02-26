@@ -109,9 +109,7 @@ struct HomeScreenViewState: BindableState {
     var hideInviteAvatars = false
     
     var reportRoomEnabled = false
-    
-    var spaceFiltersEnabled = false
-    
+        
     var shouldShowSpaceFilters = false
     var selectedSpaceFilter: SpaceServiceFilter?
     

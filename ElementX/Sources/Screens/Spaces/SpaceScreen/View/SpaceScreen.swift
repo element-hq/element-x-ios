@@ -78,12 +78,10 @@ struct SpaceScreen: View {
                 }
                 .buttonStyle(.compound(.primary))
                 
-                if context.viewState.canCreateRoom {
-                    Button(L10n.actionCreateRoom) {
-                        context.send(viewAction: .createChildRoom)
-                    }
-                    .buttonStyle(.compound(.secondary))
+                Button(L10n.actionCreateRoom) {
+                    context.send(viewAction: .createChildRoom)
                 }
+                .buttonStyle(.compound(.secondary))
             }
             .padding(.horizontal, 16)
         }
@@ -128,11 +126,9 @@ struct SpaceScreen: View {
                 Menu {
                     if context.viewState.canEditChildren {
                         Section {
-                            if context.viewState.canCreateRoom {
-                                Button { context.send(viewAction: .createChildRoom) } label: {
-                                    Label(L10n.actionCreateRoom, icon: \.plus)
-                                }
-                                .accessibilityIdentifier(A11yIdentifiers.spaceScreen.createRoom)
+                            Button { context.send(viewAction: .createChildRoom) } label: {
+                                Label(L10n.actionCreateRoom, icon: \.plus)
+                                    .accessibilityIdentifier(A11yIdentifiers.spaceScreen.createRoom)
                             }
                             
                             Button { context.send(viewAction: .addExistingRooms) } label: {
@@ -207,16 +203,10 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
             SpaceScreen(context: newSpaceViewModel.context)
         }
         .previewDisplayName("New Space")
-        .snapshotPreferences(expect: newSpaceViewModel.context.observe(\.viewState).map {
-            $0.canCreateRoom && $0.canEditChildren
-        })
+        .snapshotPreferences(expect: newSpaceViewModel.context.observe(\.viewState).map(\.canEditChildren))
     }
     
     static func makeViewModel(isManagingRooms: Bool = false, isNewSpace: Bool = false) -> SpaceScreenViewModel {
-        let appSettings = AppSettings()
-        appSettings.spaceSettingsEnabled = true
-        appSettings.createSpaceEnabled = true
-        
         let spaceServiceRoom = SpaceServiceRoom.mock(id: "!eng-space:matrix.org",
                                                      name: "Engineering Team",
                                                      isSpace: true,
@@ -239,7 +229,7 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
                                              spaceServiceProxy: SpaceServiceProxyMock(.init()),
                                              selectedSpaceRoomPublisher: .init(nil),
                                              userSession: userSession,
-                                             appSettings: appSettings,
+                                             appSettings: AppSettings(),
                                              userIndicatorController: UserIndicatorControllerMock())
         
         if isManagingRooms {
