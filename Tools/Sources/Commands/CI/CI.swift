@@ -6,7 +6,8 @@ struct CI: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "CI workflow commands that can be run both locally and in CI environments.",
                                                     subcommands: [
                                                         UnitTests.self,
-                                                        RunTests.self
+                                                        RunTests.self,
+                                                        ConfigureNightly.self
                                                     ])
     
     static let testOutputDirectory = "test_output"

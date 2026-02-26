@@ -124,35 +124,6 @@ lane :config_production do
   xcodegen(spec: "project.yml")
 end
 
-lane :config_nightly do |options|
-  build_number = options[:build_number]
-  UI.user_error!("Invalid build number.") unless !build_number.to_s.empty?
-
-  target_file_path = "../project.yml"
-  data = YAML.load_file target_file_path
-  
-  # Check if the "path" already exists in the "include" array
-  if !data["include"].any? { |item| item["path"] == "Variants/Nightly/nightly.yml" }
-    data["include"].append({ "path" => "Variants/Nightly/nightly.yml" })
-  end
-
-  sh("(cd .. && swift run pipeline update-foss-secrets)")
-  
-  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
-
-  xcodegen(spec: "project.yml")
-
-  # Automatically done by Xcode Cloud. Cannot override
-  # https://developer.apple.com/documentation/xcode/setting-the-next-build-number-for-xcode-cloud-builds
-  # bump_build_number()
-
-  release_version = get_version_number(target: "ElementX")
-
-  Dir.chdir ".." do
-    sh("swift run tools app-icon-banner Variants/Nightly/Resources/NightlyAppIcon.icon/Assets/Version.png --banner-text '#{release_version} (#{build_number})'")
-  end
-end
-
 $sentry_retry=0
 lane :upload_dsyms_to_sentry do |options|
   auth_token = ENV["SENTRY_AUTH_TOKEN"]
