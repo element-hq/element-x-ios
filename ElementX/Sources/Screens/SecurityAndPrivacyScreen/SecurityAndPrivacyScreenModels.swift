@@ -23,7 +23,6 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     
     var canonicalAlias: String?
     var isKnockingEnabled: Bool
-    var isSpaceSettingsEnabled: Bool
     var isSpace: Bool
     
     var canEditAddress = false
@@ -65,7 +64,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     }
     
     var isSpaceMembersOptionSelectable: Bool {
-        isSpaceSettingsEnabled && selectableSpacesCount > 0
+        selectableSpacesCount > 0
     }
     
     var isAskToJoinWithSpaceMembersOptionAvailable: Bool {
@@ -160,12 +159,10 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
          historyVisibility: SecurityAndPrivacyHistoryVisibility,
          isSpace: Bool,
          isKnockingEnabled: Bool,
-         isSpaceSettingsEnabled: Bool,
          historySharingDetailsURL: URL) {
         self.serverName = serverName
         self.isKnockingEnabled = isKnockingEnabled
         self.isSpace = isSpace
-        self.isSpaceSettingsEnabled = isSpaceSettingsEnabled
         
         let settings = SecurityAndPrivacySettings(accessType: accessType,
                                                   isEncryptionEnabled: isEncryptionEnabled,

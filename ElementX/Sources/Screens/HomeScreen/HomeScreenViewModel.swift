@@ -46,7 +46,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
         super.init(initialViewState: .init(userID: userSession.clientProxy.userID,
-                                           spaceFiltersEnabled: appSettings.spaceFiltersEnabled,
                                            bindings: .init(filtersState: .init(appSettings: appSettings))),
                    mediaProvider: userSession.mediaProvider)
         
@@ -130,11 +129,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] hasSeenNewSoundBanner in
                 self?.state.shouldShowNewSoundBanner = !hasSeenNewSoundBanner
             }
-            .store(in: &cancellables)
-        
-        appSettings.$spaceFiltersEnabled
-            .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.spaceFiltersEnabled, on: self)
             .store(in: &cancellables)
         
         userSession.clientProxy.hideInviteAvatarsPublisher

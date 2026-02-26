@@ -446,7 +446,6 @@ final class SecurityAndPrivacyScreenViewModelTests {
                                 topLevelSpaces: [SpaceServiceRoom] = [],
                                 joinRule: ElementX.JoinRule) {
         let appSettings = AppSettings()
-        appSettings.spaceSettingsEnabled = true
         appSettings.knockingEnabled = true
         roomProxy = JoinedRoomProxyMock(.init(isEncrypted: false,
                                               canonicalAlias: "#room:matrix.org",

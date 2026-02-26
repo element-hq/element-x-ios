@@ -150,7 +150,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .createRoom(isSpace: false), transitions: [.startChat => .createRoom]) { [weak self] context in
             guard let self, context.fromState == .startChat else { return } // Required check because the event is used in another route.
             presentCreateRoomScreen(isSpace: false,
-                                    spaceSelectionMode: flowParameters.appSettings.createSpaceEnabled ? .editableSpacesList(preSelectedSpace: nil) : .none,
+                                    spaceSelectionMode: .editableSpacesList(preSelectedSpace: nil),
                                     isRoot: false)
         }
         stateMachine.addRoutes(event: .dismissedCreateRoom, transitions: [.createRoom => .startChat]) { [weak self] _ in

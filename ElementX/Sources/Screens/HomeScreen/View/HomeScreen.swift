@@ -66,7 +66,7 @@ struct HomeScreen: View {
             }
         }
         
-        if context.viewState.spaceFiltersEnabled, context.viewState.shouldShowSpaceFilters {
+        if context.viewState.shouldShowSpaceFilters {
             if #available(iOS 26, *) {
                 ToolbarSpacer(.fixed, placement: .primaryAction)
             }

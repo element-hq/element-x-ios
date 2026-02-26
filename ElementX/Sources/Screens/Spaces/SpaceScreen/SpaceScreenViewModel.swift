@@ -75,10 +75,6 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             .weakAssign(to: \.state.selectedSpaceRoomID, on: self)
             .store(in: &cancellables)
         
-        appSettings.$createSpaceEnabled
-            .weakAssign(to: \.state.canCreateRoom, on: self)
-            .store(in: &cancellables)
-        
         Task {
             if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.id) {
                 // Required to listen for membership updates in the members flow
@@ -88,11 +84,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                     state.permalink = permalinkURL
                 }
                 
-                appSettings.$spaceSettingsEnabled
-                    .combineLatest(roomProxy.infoPublisher)
-                    .sink { [weak self] isEnabled, roomInfo in
+                roomProxy.infoPublisher
+                    .sink { [weak self] roomInfo in
                         guard let self else { return }
-                        guard isEnabled, let powerLevels = roomInfo.powerLevels else {
+                        guard let powerLevels = roomInfo.powerLevels else {
                             state.canEditBaseInfo = false
                             state.canEditRolesAndPermissions = false
                             state.canEditSecurityAndPrivacy = false
@@ -247,7 +242,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         }
         
         let leaveSpaceViewModel = LeaveSpaceViewModel(spaceName: state.space.name,
-                                                      canEditRolesAndPermissions: appSettings.spaceSettingsEnabled && state.canEditRolesAndPermissions,
+                                                      canEditRolesAndPermissions: state.canEditRolesAndPermissions,
                                                       leaveHandle: leaveHandle,
                                                       userIndicatorController: userIndicatorController,
                                                       mediaProvider: mediaProvider)
