@@ -2,11 +2,6 @@ require 'yaml'
 
 skip_docs
 
-enterprise = '../Enterprise/Pipeline/Scripts/iOS/Fastfile'
-if File.exist?(enterprise)
-  import enterprise
-end
-
 simulator_version = "26.1"
 
 before_all do
@@ -125,7 +120,7 @@ lane :integration_tests do
 end
 
 lane :config_production do
-  update_foss_secrets()
+  sh("(cd .. && swift run pipeline update-foss-secrets)")
   xcodegen(spec: "project.yml")
 end
 
@@ -141,7 +136,7 @@ lane :config_nightly do |options|
     data["include"].append({ "path" => "Variants/Nightly/nightly.yml" })
   end
 
-  update_foss_secrets()
+  sh("(cd .. && swift run pipeline update-foss-secrets)")
   
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
