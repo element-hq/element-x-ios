@@ -48,10 +48,6 @@ cd $SCREENS_DIR
 rename_files
 cd - > /dev/null
 
-cd $UI_TESTS_DIR
-rename_files
-cd - > /dev/null
-
 cd $UNIT_TESTS_DIR
 rename_files
 cd - > /dev/null
