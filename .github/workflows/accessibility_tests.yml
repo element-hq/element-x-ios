@@ -39,7 +39,7 @@ jobs:
         run: zip -r AccessibilityTests.xcresult.zip AccessibilityTests.xcresult
 
       - name: Archive artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: Results

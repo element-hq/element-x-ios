@@ -53,7 +53,7 @@ jobs:
         run: zip -r IntegrationTests.xcresult.zip IntegrationTests.xcresult
       
       - name: Archive artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         # We only care about artefacts if the tests fail
         if: failure()
         with:
@@ -63,7 +63,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Archive raw log file
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: raw.log
