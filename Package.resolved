@@ -1,5 +1,5 @@
 {
-  "originHash" : "de3b5dfdd30df13c55deff097064bd887e3cc34e6259ed01bd9d29091b158262",
+  "originHash" : "14d9f7d61d174bcc8bb501ca7bfd906a95e437203049c1756fd88e793c873bac",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -15,7 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/swift-command-line-tools.git",
       "state" : {
-        "revision" : "e5eaab1558ef664e6cd80493f64259381670fb3a"
+        "branch" : "main",
+        "revision" : "c085ad85c27970e4bba2dd1180c2a53ab77022ba"
       }
     },
     {
