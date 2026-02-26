@@ -10,7 +10,7 @@ if [ "$CI_WORKFLOW" = "Nightly" ]; then
     bundle exec fastlane config_nightly build_number:"$CI_BUILD_NUMBER"
 elif [ "$CI_WORKFLOW" = "Element Pro" ]; then
     # Xcode Cloud automatically fetches the submodules.
-    bundle exec fastlane config_element_pro
+    swift run pipeline configure Variants/ElementPro/ElementPro.pkl
 else
     bundle exec fastlane config_production
 fi
