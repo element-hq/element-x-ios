@@ -422,16 +422,9 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.inviteRequired)
             clientProxy.roomForIdentifierReturnValue = nil
         case .invited(let isDM):
-            if isDM {
-                clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.inviteDM())
-                clientProxy.roomForIdentifierClosure = { _ in
-                    .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
-                }
-            } else {
-                clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.invited())
-                clientProxy.roomForIdentifierClosure = { _ in
-                    .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
-                }
+            clientProxy.roomPreviewForIdentifierViaReturnValue = .success(isDM ? RoomPreviewProxyMock.inviteDM() : .invited())
+            clientProxy.roomForIdentifierClosure = { _ in
+                .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar, inviter: .mockDan)))
             }
         case .knockable:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.knockable)
