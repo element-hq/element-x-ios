@@ -144,7 +144,7 @@ extension RoomFlowCoordinator {
         case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
         case dismissEmojiPicker
 
-        case presentMapNavigator(interactionMode: StaticLocationInteractionMode)
+        case presentMapNavigator(interactionMode: LocationSharingInteractionMode)
         case dismissMapNavigator
         
         case presentMessageForwarding(forwardingItem: MessageForwardingItem)

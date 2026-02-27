@@ -76,6 +76,10 @@ struct DeveloperOptionsScreen: View {
                     Text("Can leak the device IP address when loading link metadata.")
                         .foregroundStyle(.compound.textCriticalPrimary)
                 }
+                
+                Toggle(isOn: $context.liveLocationSharingEnabled) {
+                    Text("Live location sharing")
+                }
             }
                         
             Section("Join rules") {

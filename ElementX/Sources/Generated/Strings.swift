@@ -334,6 +334,8 @@ internal enum L10n {
   internal static var actionShare: String { return L10n.tr("Localizable", "action_share") }
   /// Share link
   internal static var actionShareLink: String { return L10n.tr("Localizable", "action_share_link") }
+  /// Share live location
+  internal static var actionShareLiveLocation: String { return L10n.tr("Localizable", "action_share_live_location") }
   /// Show
   internal static var actionShow: String { return L10n.tr("Localizable", "action_show") }
   /// Sign in again
@@ -882,6 +884,8 @@ internal enum L10n {
   }
   /// Withdraw verification
   internal static var cryptoIdentityChangeWithdrawVerificationAction: String { return L10n.tr("Localizable", "crypto_identity_change_withdraw_verification_action") }
+  /// Allow access
+  internal static var dialogAllowAccess: String { return L10n.tr("Localizable", "dialog_allow_access") }
   /// The link %1$@ is taking you to another site %2$@
   /// 
   /// Are you sure you want to continue?
@@ -904,7 +908,7 @@ internal enum L10n {
   internal static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
   /// Please grant the permission in the system settings.
   internal static var dialogPermissionGeneric: String { return L10n.tr("Localizable", "dialog_permission_generic") }
-  /// Grant access in Settings -> Location.
+  /// To share your current location, Element needs location access. Go to Settings > Location.
   internal static var dialogPermissionLocationDescriptionIos: String { return L10n.tr("Localizable", "dialog_permission_location_description_ios") }
   /// %1$@ does not have access to your location.
   internal static func dialogPermissionLocationTitleIos(_ p1: Any) -> String {

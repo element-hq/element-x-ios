@@ -33,12 +33,7 @@ struct HomeScreenRoomCell: View {
                 
                 content
                     .padding(.vertical, verticalInsets)
-                    .overlay(alignment: .bottom) {
-                        Rectangle()
-                            .fill(Color.compound.borderDisabled)
-                            .frame(height: 1 / UIScreen.main.scale)
-                            .padding(.trailing, -horizontalInsets)
-                    }
+                    .rowDivider(horizontalInsets: horizontalInsets)
             }
             .padding(.horizontal, horizontalInsets)
             .accessibilityElement(children: .combine)
