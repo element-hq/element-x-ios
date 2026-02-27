@@ -7,6 +7,7 @@
 // MARK: - Authentication
 
 "screen_onboarding_sign_in_with_classic" = "Sign in with Element Classic";
+"screen_classic_app_account_confirmation_message" = "Tap on Continue to sign in using your current Element Classic session.";
 
 // MARK: - Soft logout
 

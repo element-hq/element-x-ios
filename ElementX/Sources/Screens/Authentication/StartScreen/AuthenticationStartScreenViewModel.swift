@@ -72,7 +72,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             guard state.window != window else { return }
             state.window = window
         case .loginWithClassic:
-            Task { await login(withClassic: true) }
+            actionsSubject.send(.loginWithClassic)
         case .loginWithQR:
             actionsSubject.send(.loginWithQR)
         case .login:
@@ -88,11 +88,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     
     // MARK: - Private
     
-    private func login(withClassic: Bool = false) async {
-        if withClassic {
-            guard let classicAppAccount = authenticationService.classicAppAccount else { fatalError("Invalid action without a classic account.") }
-            await configureAccountProvider(classicAppAccount.serverName, loginHint: "mxid:\(classicAppAccount.userID)", verifyWithClassic: true)
-        } else if let serverName = state.serverName {
+    private func login() async {
+        if let serverName = state.serverName {
             await configureAccountProvider(serverName, loginHint: provisioningParameters?.loginHint)
         } else {
             actionsSubject.send(.login) // No need to configure anything here, continue the flow.
@@ -141,6 +138,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     }
     
     private func displayError() {
+        #warning("We should have specific messages here.")
         state.bindings.alertInfo = AlertInfo(id: .genericError)
     }
 }

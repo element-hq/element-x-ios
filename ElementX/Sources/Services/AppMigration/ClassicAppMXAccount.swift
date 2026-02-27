@@ -9,6 +9,7 @@ import Foundation
 
 struct ClassicAppAccount {
     let userID: String
+    let displayName: String?
     let serverName: String
     let cryptoStoreURL: URL
 }
@@ -217,6 +218,49 @@ class ClassicAppMXDevice: NSObject, NSCoding {
         lastSeenIP = aDecoder.decodeObject(forKey: Self.kLastSeenIPJSONKey) as? String
         lastSeenTimestamp = (aDecoder.decodeObject(forKey: Self.kLastSeenTimestampJSONKey) as? NSNumber)?.uint64Value ?? 0
         lastSeenUserAgent = aDecoder.decodeObject(forKey: Self.kLastSeenUserAgentJSONKey) as? String
+    }
+    
+    func encode(with coder: NSCoder) {
+        fatalError("Not available")
+    }
+}
+
+/// `MXUser` represents a user in Matrix.
+class ClassicAppMXUser: NSObject, NSCoding {
+    /// The user id.
+    private(set) var userID: String
+    /// The user display name.
+    var displayName: String?
+    /// The url of the user of the avatar.
+    var avatarURL: String?
+    /// The user status.
+    var statusMessage: String?
+    
+    /// Whether the user is currently active.
+    /// If YES, lastActiveAgo is an approximation and "Now" should be shown instead.
+    private(set) var currentlyActive = false
+    /// The time in milliseconds since epoch the last activity by the user has
+    /// been tracked by the home server.
+    var lastActiveLocalTimetamp: UInt64 = 0
+    /// Only when event.originServerTs > latestUpdateTS, we change displayname and avatarUrl.
+    var latestUpdateTimstamp: UInt64 = 0
+    
+    // MARK: - NSCoding
+
+    required init?(coder aDecoder: NSCoder) {
+        guard let userID = aDecoder.decodeObject(forKey: "userId") as? String else {
+            return nil
+        }
+        
+        self.userID = userID
+        displayName = aDecoder.decodeObject(forKey: "displayname") as? String
+        avatarURL = aDecoder.decodeObject(forKey: "avatarUrl") as? String
+        statusMessage = aDecoder.decodeObject(forKey: "statusMsg") as? String
+        currentlyActive = aDecoder.decodeBool(forKey: "currentlyActive")
+        // lastActiveLocalTimetamp = UInt64(aDecoder.decodeInt64(forKey: "lastActiveLocalTS"))
+        // latestUpdateTimstamp = UInt64(aDecoder.decodeInt64(forKey: "latestUpdateTS"))
+        
+        super.init()
     }
     
     func encode(with coder: NSCoder) {

@@ -17,6 +17,17 @@ struct AuthenticationStartScreenParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
+enum AuthenticationStartScreenCoordinatorAction {
+    case loginWithClassic
+    case loginWithQR
+    case login
+    case register
+    case reportProblem
+    
+    case loginDirectlyWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
+    case loginDirectlyWithPassword(loginHint: String?)
+}
+
 final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
     private var viewModel: AuthenticationStartScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<AuthenticationStartScreenCoordinatorAction, Never> = .init()
@@ -42,6 +53,8 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
+                case .loginWithClassic:
+                    actionsSubject.send(.loginWithClassic)
                 case .loginWithQR:
                     actionsSubject.send(.loginWithQR)
                 case .login:

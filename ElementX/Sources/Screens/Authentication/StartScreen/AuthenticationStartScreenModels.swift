@@ -8,19 +8,8 @@
 
 import SwiftUI
 
-// MARK: - Coordinator
-
-enum AuthenticationStartScreenCoordinatorAction {
-    case loginWithQR
-    case login
-    case register
-    case reportProblem
-    
-    case loginDirectlyWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
-    case loginDirectlyWithPassword(loginHint: String?)
-}
-
 enum AuthenticationStartScreenViewModelAction: Equatable {
+    case loginWithClassic
     case loginWithQR
     case login
     case register

@@ -46,6 +46,8 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
         
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError>
+    /// Sets up the service for login against the specified Element Classic account.
+    func configure(for classicAppAccount: ClassicAppAccount) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OIDC for the current homeserver.
     func urlForOIDCLogin(loginHint: String?) async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError>
     /// Asks the SDK to abort an ongoing OIDC login if we didn't get a callback to complete the request with.

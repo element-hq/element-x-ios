@@ -28,6 +28,7 @@ enum TestablePreviewsDictionary {
         "CallNotificationRoomTimelineView_Previews" : CallNotificationRoomTimelineView_Previews.self,
         "ChatsSpaceFilterCell_Previews" : ChatsSpaceFilterCell_Previews.self,
         "ChatsSpaceFiltersScreen_Previews" : ChatsSpaceFiltersScreen_Previews.self,
+        "ClassicAppAccountConfirmationScreen_Previews" : ClassicAppAccountConfirmationScreen_Previews.self,
         "CollapsibleRoomTimelineView_Previews" : CollapsibleRoomTimelineView_Previews.self,
         "CompletionSuggestion_Previews" : CompletionSuggestion_Previews.self,
         "ComposerToolbar_Previews" : ComposerToolbar_Previews.self,

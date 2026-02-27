@@ -35,6 +35,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         /// The screen used for the whole QR Code flow.
         case qrCodeLoginScreen
         
+        /// The screen to continue authentication with an Element Classic account.
+        case classicAppAccountConfirmationScreen
         /// The screen to continue authentication with the current server.
         case serverConfirmationScreen
         /// The screen to choose a different server.
@@ -58,6 +60,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         /// Modify the flow using the provisioning parameters in the `userInfo`.
         case applyProvisioningParameters
         
+        /// The user would like to login with the existing account in Element Classic.
+        case loginWithClassicAppAccount
         /// The user would like to login with a QR code.
         case loginWithQR
         /// Show the server confirmation screen.
@@ -65,6 +69,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         /// The user encountered a problem.
         case reportProblem
         
+        /// The user aborted logging in with Element Classic.
+        case cancelledClassicAppAccountConfirmation
         /// The QR login flow was aborted.
         case cancelledLoginWithQR
         /// The user aborted manual login.
@@ -151,6 +157,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case .qrCodeLoginScreen:
             navigationStackCoordinator.setSheetCoordinator(nil)
             stateMachine.tryEvent(.cancelledLoginWithQR) // Needs to be handled manually.
+        case .classicAppAccountConfirmationScreen:
+            navigationStackCoordinator.popToRoot(animated: animated)
         case .serverConfirmationScreen:
             navigationStackCoordinator.popToRoot(animated: animated)
         case .serverSelectionScreen:
@@ -181,6 +189,13 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             self?.showStartScreen(fromState: context.fromState, applying: provisioningParameters)
         }
         
+        // Classic App
+        
+        stateMachine.addRoutes(event: .loginWithClassicAppAccount, transitions: [.startScreen => .classicAppAccountConfirmationScreen]) { [weak self] _ in
+            self?.showClassicAppAccountConfirmationScreen()
+        }
+        stateMachine.addRoutes(event: .cancelledClassicAppAccountConfirmation, transitions: [.classicAppAccountConfirmationScreen => .startScreen])
+        
         // QR Code
         
         stateMachine.addRoutes(event: .loginWithQR, transitions: [.startScreen => .qrCodeLoginScreen]) { [weak self] _ in
@@ -207,7 +222,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .dismissedServerSelection, transitions: [.serverSelectionScreen => .serverConfirmationScreen])
         
         stateMachine.addRoutes(event: .continueWithOIDC, transitions: [.serverConfirmationScreen => .oidcAuthentication,
-                                                                       .startScreen => .oidcAuthentication]) { [weak self] context in
+                                                                       .startScreen => .oidcAuthentication,
+                                                                       .classicAppAccountConfirmationScreen => .oidcAuthentication]) { [weak self] context in
             guard let (oidcData, window) = context.userInfo as? (OIDCAuthorizationDataProxy, UIWindow) else {
                 fatalError("Missing the OIDC data and presentation anchor.")
             }
@@ -215,14 +231,17 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .serverConfirmationScreen), transitions: [.oidcAuthentication => .serverConfirmationScreen])
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .startScreen), transitions: [.oidcAuthentication => .startScreen])
+        stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .classicAppAccountConfirmationScreen), transitions: [.oidcAuthentication => .classicAppAccountConfirmationScreen])
         
         stateMachine.addRoutes(event: .continueWithPassword, transitions: [.serverConfirmationScreen => .loginScreen,
-                                                                           .startScreen => .loginScreen]) { [weak self] context in
+                                                                           .startScreen => .loginScreen,
+                                                                           .classicAppAccountConfirmationScreen => .loginScreen]) { [weak self] context in
             let loginHint = context.userInfo as? String
             self?.showLoginScreen(loginHint: loginHint, fromState: context.fromState)
         }
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .serverConfirmationScreen), transitions: [.loginScreen => .serverConfirmationScreen])
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .startScreen), transitions: [.loginScreen => .startScreen])
+        stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .classicAppAccountConfirmationScreen), transitions: [.loginScreen => .classicAppAccountConfirmationScreen])
         
         // Bug Report
         
@@ -271,6 +290,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
+                case .loginWithClassic:
+                    stateMachine.tryEvent(.loginWithClassicAppAccount)
                 case .loginWithQR:
                     stateMachine.tryEvent(.loginWithQR)
                 case .login:
@@ -335,6 +356,31 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     // MARK: - Manual Authentication
+    
+    private func showClassicAppAccountConfirmationScreen() {
+        // FIXME: Pass the account around as a parameter if we keep this screen??
+        guard let classicAppAccount = authenticationService.classicAppAccount else { fatalError("Attempting to confirm a ClassicAppAccount without one.") }
+        let parameters = ClassicAppAccountConfirmationScreenCoordinatorParameters(classicAppAccount: classicAppAccount,
+                                                                                  authenticationService: authenticationService,
+                                                                                  userIndicatorController: userIndicatorController)
+        let coordinator = ClassicAppAccountConfirmationScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .loginDirectlyWithOIDC(let oidcData, let window):
+                    stateMachine.tryEvent(.continueWithOIDC, userInfo: (oidcData, window))
+                case .loginDirectlyWithPassword(let loginHint):
+                    stateMachine.tryEvent(.continueWithPassword, userInfo: loginHint)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.cancelledClassicAppAccountConfirmation)
+        }
+    }
     
     private func showServerConfirmationScreen(authenticationFlow: AuthenticationFlow) {
         // Reset the service back to the default homeserver before continuing. This ensures

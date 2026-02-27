@@ -29,6 +29,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private(set) var flow: AuthenticationFlow
     
     let classicAppAccount: ClassicAppAccount?
+    private var shouldVerifyWithClassicApp = false
     
     init(userSessionStore: UserSessionStoreProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
@@ -48,6 +49,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         do {
             classicAppAccount = try appMigrationManager?.loadClassicAppAccounts().first
         } catch {
+            // FIXME: We have detected an older version of Element Classic, but no bueno!
             MXLog.error("Failed loading accounts from the Classic app: \(error)")
             classicAppAccount = nil
         }
@@ -59,7 +61,15 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     // MARK: - Public
     
+    func configure(for classicAppAccount: ClassicAppAccount) async -> Result<Void, AuthenticationServiceError> {
+        let result = await configure(for: classicAppAccount.serverName, flow: .login)
+        shouldVerifyWithClassicApp = true
+        return result
+    }
+    
     func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError> {
+        shouldVerifyWithClassicApp = false
+        
         do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
@@ -126,6 +136,10 @@ class AuthenticationService: AuthenticationServiceProtocol {
         guard let client else { return .failure(.failedLoggingIn) }
         do {
             try await client.loginWithOidcCallback(callbackUrl: callbackURL.absoluteString)
+            if shouldVerifyWithClassicApp, let cryptoStoreURL = classicAppAccount?.cryptoStoreURL {
+                // The SDK will make sure the secrets are the for this account.
+                // client.importSecrets()
+            }
             return await userSession(for: client)
         } catch OidcError.Cancelled {
             return .failure(.oidcError(.userCancellation))
@@ -145,6 +159,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
                 _ = try? await client.logout()
                 return .failure(.sessionTokenRefreshNotSupported)
+            }
+            
+            if shouldVerifyWithClassicApp, let cryptoStoreURL = classicAppAccount?.cryptoStoreURL {
+                // The SDK will make sure the secrets are the for this account.
+                // client.importSecrets()
             }
             
             return await userSession(for: client)
@@ -226,6 +245,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         homeserverSubject.send(LoginHomeserver(address: appSettings.accountProviders[0], loginMode: .unknown))
         flow = .login
         client = nil
+        shouldVerifyWithClassicApp = false
     }
     
     // MARK: - Private

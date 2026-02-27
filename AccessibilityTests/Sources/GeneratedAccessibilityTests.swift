@@ -83,6 +83,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ChatsSpaceFiltersScreen_Previews")
     }
 
+    func testClassicAppAccountConfirmationScreen() async throws {
+        try await performAccessibilityAudit(named: "ClassicAppAccountConfirmationScreen_Previews")
+    }
+
     func testCollapsibleRoomTimelineView() async throws {
         try await performAccessibilityAudit(named: "CollapsibleRoomTimelineView_Previews")
     }

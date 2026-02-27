@@ -164,6 +164,14 @@ extension PreviewTests {
     }
 
     @Test
+    func classicAppAccountConfirmationScreen() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in ClassicAppAccountConfirmationScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func collapsibleRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in CollapsibleRoomTimelineView_Previews._allPreviews.enumerated() {
