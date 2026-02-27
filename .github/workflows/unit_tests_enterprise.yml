@@ -39,7 +39,7 @@ jobs:
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
       
       - name: Configure Enterprise
-        run: swift run pipeline configure Variants/ElementPro/ElementPro.pkl
+        run: swift run pipeline configure-element-pro
       
       - name: SwiftFormat
         run: swiftformat --lint .
