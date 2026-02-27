@@ -1128,18 +1128,19 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentMapNavigator(interactionMode: StaticLocationInteractionMode,
+    private func presentMapNavigator(interactionMode: LocationSharingInteractionMode,
                                      timelineController: TimelineControllerProtocol,
                                      animated: Bool) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode,
-                                                               mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
-                                                               timelineController: timelineController,
-                                                               appMediator: flowParameters.appMediator,
-                                                               analytics: flowParameters.analytics,
-                                                               userIndicatorController: flowParameters.userIndicatorController)
-        let coordinator = StaticLocationScreenCoordinator(parameters: params)
+        let params = LocationSharingScreenCoordinatorParameters(interactionMode: interactionMode,
+                                                                mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
+                                                                liveLocationSharingEnabled: flowParameters.appSettings.liveLocationSharingEnabled,
+                                                                timelineController: timelineController,
+                                                                appMediator: flowParameters.appMediator,
+                                                                analytics: flowParameters.analytics,
+                                                                userIndicatorController: flowParameters.userIndicatorController)
+        let coordinator = LocationSharingScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }

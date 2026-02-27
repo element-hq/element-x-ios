@@ -9,8 +9,10 @@
 import Compound
 import SwiftUI
 
-struct StaticLocationScreen: View {
-    @Bindable var context: StaticLocationScreenViewModel.Context
+struct LocationSharingScreen: View {
+    @Bindable var context: LocationSharingScreenViewModel.Context
+    
+    @State private var sharingOptionsSheetHeight: CGFloat = .zero
     
     var body: some View {
         VStack(spacing: 0) {
@@ -29,6 +31,9 @@ struct StaticLocationScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
+        .sheet(isPresented: .constant(context.viewState.isLocationPickerMode)) {
+            sharingOptionsSheet
+        }
     }
     
     private var mapView: some View {
@@ -43,7 +48,7 @@ struct StaticLocationScreen: View {
                 context.send(viewAction: .userDidPan)
             }
             .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
-
+            
             if context.viewState.isLocationPickerMode {
                 LocationMarkerView()
             }
@@ -52,7 +57,7 @@ struct StaticLocationScreen: View {
             centerToUserLocationButton
         }
     }
-
+    
     // MARK: - Private
     
     @ToolbarContentBuilder
@@ -60,22 +65,15 @@ struct StaticLocationScreen: View {
         ToolbarItem(placement: .navigationBarLeading) {
             closeButton
         }
-
+        
         if context.viewState.showShareAction {
             ToolbarItem(placement: .navigationBarTrailing) {
                 shareButton
                     .popover(isPresented: $context.showShareSheet) { shareSheet }
             }
         }
-
-        if context.viewState.isLocationPickerMode {
-            ToolbarItemGroup(placement: .bottomBar) {
-                selectLocationButton
-                Spacer()
-            }
-        }
     }
-
+    
     private var mapOptions: MapLibreMapView.Options {
         var annotations: [LocationAnnotation] = []
         if context.viewState.isLocationPickerMode == false {
@@ -84,13 +82,13 @@ struct StaticLocationScreen: View {
             }
             annotations.append(annotation)
         }
-
+        
         return .init(zoomLevel: context.viewState.zoomLevel,
                      initialZoomLevel: context.viewState.initialZoomLevel,
                      mapCenter: context.viewState.initialMapCenter,
                      annotations: annotations)
     }
-
+    
     private var mapSafeAreaEdges: Edge.Set {
         context.viewState.isLocationPickerMode ? .horizontal : [.horizontal, .bottom]
     }
@@ -123,7 +121,7 @@ struct StaticLocationScreen: View {
             context.send(viewAction: .close)
         }
     }
-
+    
     private var shareButton: some View {
         Button {
             context.showShareSheet = true
@@ -151,43 +149,97 @@ struct StaticLocationScreen: View {
             .sheet
         }
     }
+    
+    private var sharingOptionsSheet: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Button { } label: {
+                LocationSharingLabel(text: L10n.screenShareThisLocationAction,
+                                     icon: \.locationNavigator,
+                                     iconColor: .compound.iconSecondary)
+            }
+            Button { } label: {
+                LocationSharingLabel(text: L10n.screenShareMyLocationAction,
+                                     icon: \.locationNavigatorCentred,
+                                     iconColor: .compound.iconSecondary)
+            }
+            if context.viewState.showLiveLocationSharingButton {
+                Button { } label: {
+                    LocationSharingLabel(text: L10n.actionShareLiveLocation,
+                                         icon: \.locationPinSolid,
+                                         iconColor: .compound.iconAccentPrimary)
+                }
+            }
+         }
+        .font(.compound.bodyLG)
+        .foregroundStyle(.compound.textPrimary)
+        .padding(.top, 38)
+        .padding(.leading, 16)
+        .readHeight($sharingOptionsSheetHeight)
+        .interactiveDismissDisabled()
+        .presentationBackground(.compound.bgCanvasDefault)
+        .presentationBackgroundInteraction(.enabled)
+        .presentationDragIndicator(.hidden)
+        .presentationDetents([.height(sharingOptionsSheetHeight)])
+    }
+}
+
+private struct LocationSharingLabel: View {
+    let text: String
+    let icon: KeyPath<CompoundIcons, Image>
+    let iconColor: Color
+    
+    var body: some View {
+        Label {
+            Text(text)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 14)
+                .rowDivider(alignment: .top, horizontalInsets: 16.0)
+        } icon: {
+            CompoundIcon(icon)
+                .foregroundStyle(iconColor)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
 }
 
 // MARK: - Previews
 
-struct StaticLocationScreenViewer_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = StaticLocationScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835,
-                                                                                                  longitude: 12.4963655)),
-                                                         mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
-                                                         timelineController: MockTimelineController(),
-                                                         analytics: ServiceLocator.shared.analytics,
-                                                         userIndicatorController: UserIndicatorControllerMock())
-    static let pickerViewModel = StaticLocationScreenViewModel(interactionMode: .picker,
-                                                               mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
-                                                               timelineController: MockTimelineController(),
-                                                               analytics: ServiceLocator.shared.analytics,
-                                                               userIndicatorController: UserIndicatorControllerMock())
-    static let descriptionViewModel = StaticLocationScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835,
-                                                                                                             longitude: 12.4963655),
-                                                                                               description: "Cool position"),
-                                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
-                                                                    timelineController: MockTimelineController(),
-                                                                    analytics: ServiceLocator.shared.analytics,
-                                                                    userIndicatorController: UserIndicatorControllerMock())
+struct LocationSharingScreen_Previews: PreviewProvider, TestablePreview {
+    static let viewModel = LocationSharingScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835,
+                                                                                                   longitude: 12.4963655)),
+                                                          mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                                          liveLocationSharingEnabled: true,
+                                                          timelineController: MockTimelineController(),
+                                                          analytics: ServiceLocator.shared.analytics,
+                                                          userIndicatorController: UserIndicatorControllerMock())
+    static let pickerViewModel = LocationSharingScreenViewModel(interactionMode: .picker,
+                                                                mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                                                liveLocationSharingEnabled: true,
+                                                                timelineController: MockTimelineController(),
+                                                                analytics: ServiceLocator.shared.analytics,
+                                                                userIndicatorController: UserIndicatorControllerMock())
+    static let descriptionViewModel = LocationSharingScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835,
+                                                                                                              longitude: 12.4963655),
+                                                                                                description: "Cool position"),
+                                                                     mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                                                     liveLocationSharingEnabled: true,
+                                                                     timelineController: MockTimelineController(),
+                                                                     analytics: ServiceLocator.shared.analytics,
+                                                                     userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {
         ElementNavigationStack {
-            StaticLocationScreen(context: pickerViewModel.context)
+            LocationSharingScreen(context: pickerViewModel.context)
         }
         .previewDisplayName("Picker")
-
+        
         ElementNavigationStack {
-            StaticLocationScreen(context: viewModel.context)
+            LocationSharingScreen(context: viewModel.context)
         }
         .previewDisplayName("View Only")
-
+        
         ElementNavigationStack {
-            StaticLocationScreen(context: descriptionViewModel.context)
+            LocationSharingScreen(context: descriptionViewModel.context)
         }
         .previewDisplayName("View Only (with description)")
     }

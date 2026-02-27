@@ -303,6 +303,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "LocationRoomTimelineView_Previews")
     }
 
+    func testLocationSharingScreen() async throws {
+        try await performAccessibilityAudit(named: "LocationSharingScreen_Previews")
+    }
+
     func testLoginScreen() async throws {
         try await performAccessibilityAudit(named: "LoginScreen_Previews")
     }
@@ -693,10 +697,6 @@ extension AccessibilityTests {
 
     func testStateRoomTimelineView() async throws {
         try await performAccessibilityAudit(named: "StateRoomTimelineView_Previews")
-    }
-
-    func testStaticLocationScreenViewer() async throws {
-        try await performAccessibilityAudit(named: "StaticLocationScreenViewer_Previews")
     }
 
     func testStickerRoomTimelineView() async throws {
