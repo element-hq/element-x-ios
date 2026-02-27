@@ -20,7 +20,7 @@ struct ConfigureNightly: AsyncParsableCommand {
         try Zsh.run(command: "swift run pipeline update-foss-secrets")
         try Zsh.run(command: "xcodegen")
 
-        let releaseVersion = try readMarketingVersion()
+        let releaseVersion = try CI.readMarketingVersion()
         try await generateAppIconBanner(version: releaseVersion, buildNumber: buildNumber)
     }
 
@@ -39,19 +39,6 @@ struct ConfigureNightly: AsyncParsableCommand {
 
         let updatedYAMLString = try Yams.serialize(node: projectConfig)
         try updatedYAMLString.write(to: projectURL, atomically: true, encoding: .utf8)
-    }
-
-    /// Reads the MARKETING_VERSION from `project.yml`.
-    private func readMarketingVersion() throws -> String {
-        let projectURL = URL.projectDirectory.appending(component: "project.yml")
-        let projectString = try String(contentsOf: projectURL)
-
-        let marketingVersionRegex = /MARKETING_VERSION:\s*([^\s]+)/
-        guard let match = projectString.firstMatch(of: marketingVersionRegex) else {
-            throw ValidationError("Could not find MARKETING_VERSION in project.yml.")
-        }
-
-        return String(match.1)
     }
 
     /// Generates the app icon banner with version and build number.

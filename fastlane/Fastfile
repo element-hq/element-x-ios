@@ -45,65 +45,6 @@ lane :unit_tests do |options|
   # We use xcresultparser in the workflow to collect coverage from both result bundles.
 end
 
-lane :ui_tests do |options|
-  # We used to run these simultaneously on iPhone and iPad but it is *really* slow on GitHub runners.
-  # Presumably because launching 2 simulators uses more memory than the runner has available.
-  
-  if options[:device] == "iPhone"
-    device = "iPhone-#{simulator_version}"
-    
-    create_simulator_if_necessary(
-      name: "iPhone-#{simulator_version}",
-      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
-    )
-  elsif options[:device] == "iPad"
-    device = "iPad-#{simulator_version}"
-    
-    create_simulator_if_necessary(
-      name: "iPad-#{simulator_version}",
-      type: "com.apple.CoreSimulator.SimDeviceType.iPad-A16"
-    )
-  else
-    UI.user_error!("Please supply a device argument as device:iPhone or device:iPad")
-  end
-
-  if options[:test_name]
-    test_to_run = ["UITests/#{options[:test_name]}"]
-  else
-    test_to_run = nil
-  end
-
-  reset_simulator = ENV.key?('CI')
-  
-  run_tests(
-    scheme: "UITests",
-    device: "#{device} (#{simulator_version})",
-    ensure_devices_found: true,
-    prelaunch_simulator: false,
-    result_bundle: true,
-    only_testing: test_to_run,
-    number_of_retries: 3,
-    reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
-  )
-end
-
-lane :accessibility_tests do |options|
-  reset_simulator = ENV.key?('CI')
-  
-  run_tests(
-    scheme: "AccessibilityTests",
-    device: "iPhone 17 (#{simulator_version})",
-    ensure_devices_found: true,
-    prelaunch_simulator: false,
-    result_bundle: true,
-    number_of_retries: 0,
-    reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
-  )
-end
-
-
 lane :integration_tests do
   clear_derived_data()
 

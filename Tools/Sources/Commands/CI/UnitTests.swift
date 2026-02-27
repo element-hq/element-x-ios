@@ -33,7 +33,7 @@ struct UnitTests: AsyncParsableCommand {
         
         // Run preview tests on a smaller device
         do {
-            logger.info("\n🧪 Running preview tests…")
+            logger.info("\n🧪 Running preview tests…\n")
             try await RunTests.parse([
                 "--scheme", "PreviewTests",
                 "--device", "iPhone SE (3rd generation)",
