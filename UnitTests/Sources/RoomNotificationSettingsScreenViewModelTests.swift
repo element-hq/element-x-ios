@@ -221,6 +221,8 @@ struct RoomNotificationSettingsScreenViewModelTests {
         #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1 == .mute)
         #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeCallsCount == 2)
         
+        try await Task.sleep(for: .milliseconds(10)) // Workaround for flaky test
+        
         deferredMode = deferFulfillment(viewModel.context.observe(\.viewState.pendingCustomMode),
                                         transitionValues: [nil, .mentionsAndKeywordsOnly, nil])
         viewModel.context.send(viewAction: .setCustomMode(.mentionsAndKeywordsOnly))
