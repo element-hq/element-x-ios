@@ -5,6 +5,7 @@ import Subprocess
 struct CI: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "CI workflow commands that can be run both locally and in CI environments.",
                                                     subcommands: [
+                                                        AccessibilityTests.self,
                                                         UnitTests.self,
                                                         RunTests.self,
                                                         ConfigureNightly.self
