@@ -8,6 +8,7 @@ struct CI: ParsableCommand {
                                                     subcommands: [
                                                         AccessibilityTests.self,
                                                         UnitTests.self,
+                                                        UITests.self,
                                                         RunTests.self,
                                                         ConfigureNightly.self
                                                     ])
