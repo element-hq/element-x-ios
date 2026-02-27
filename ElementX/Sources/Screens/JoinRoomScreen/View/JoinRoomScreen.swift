@@ -87,6 +87,7 @@ struct JoinRoomScreen: View {
                 
                 if !context.viewState.isDMInvite, let memberCount = context.viewState.roomDetails?.memberCount {
                     JoinedMembersBadgeView(heroes: context.viewState.roomDetails?.heroes ?? [],
+                                           shouldHideAvatars: context.viewState.shouldHideAvatars,
                                            joinedCount: memberCount,
                                            mediaProvider: context.mediaProvider)
                 }
@@ -303,7 +304,7 @@ struct JoinRoomScreen: View {
 
 private struct InviterView: View {
     let inviter: RoomInviterDetails
-    var shouldHideAvatar: Bool
+    let shouldHideAvatar: Bool
     
     let mediaProvider: MediaProviderProtocol?
     
