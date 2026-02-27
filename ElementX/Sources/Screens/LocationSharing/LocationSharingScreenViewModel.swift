@@ -9,20 +9,21 @@
 import Combine
 import Foundation
 
-typealias StaticLocationScreenViewModelType = StateStoreViewModelV2<StaticLocationScreenViewState, StaticLocationScreenViewAction>
+typealias LocationSharingScreenViewModelType = StateStoreViewModelV2<LocationSharingScreenViewState, LocationSharingScreenViewAction>
 
-class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLocationScreenViewModelProtocol {
+class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, LocationSharingScreenViewModelProtocol {
     private let timelineController: TimelineControllerProtocol
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    private let actionsSubject: PassthroughSubject<StaticLocationScreenViewModelAction, Never> = .init()
-    var actions: AnyPublisher<StaticLocationScreenViewModelAction, Never> {
+    private let actionsSubject: PassthroughSubject<LocationSharingScreenViewModelAction, Never> = .init()
+    var actions: AnyPublisher<LocationSharingScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(interactionMode: StaticLocationInteractionMode,
+    init(interactionMode: LocationSharingInteractionMode,
          mapURLBuilder: MapTilerURLBuilderProtocol,
+         liveLocationSharingEnabled: Bool,
          timelineController: TimelineControllerProtocol,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) {
@@ -30,10 +31,12 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: .init(interactionMode: interactionMode, mapURLBuilder: mapURLBuilder))
+        super.init(initialViewState: .init(interactionMode: interactionMode,
+                                           mapURLBuilder: mapURLBuilder,
+                                           showLiveLocationSharingButton: liveLocationSharingEnabled))
     }
     
-    override func process(viewAction: StaticLocationScreenViewAction) {
+    override func process(viewAction: LocationSharingScreenViewAction) {
         switch viewAction {
         case .close:
             actionsSubject.send(.close)

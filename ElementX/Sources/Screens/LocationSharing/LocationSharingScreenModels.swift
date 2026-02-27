@@ -14,20 +14,23 @@ enum LocationSharingViewError: Error, Hashable {
     case mapError(MapLibreError)
 }
 
-enum StaticLocationScreenViewModelAction {
+enum LocationSharingScreenViewModelAction {
     case close
     case openSystemSettings
 }
 
-enum StaticLocationInteractionMode: Hashable {
+enum LocationSharingInteractionMode: Hashable {
     case picker
     case viewOnly(geoURI: GeoURI, description: String? = nil)
 }
 
-struct StaticLocationScreenViewState: BindableState {
-    init(interactionMode: StaticLocationInteractionMode, mapURLBuilder: MapTilerURLBuilderProtocol) {
+struct LocationSharingScreenViewState: BindableState {
+    init(interactionMode: LocationSharingInteractionMode,
+         mapURLBuilder: MapTilerURLBuilderProtocol,
+         showLiveLocationSharingButton: Bool) {
         self.interactionMode = interactionMode
         self.mapURLBuilder = mapURLBuilder
+        self.showLiveLocationSharingButton = showLiveLocationSharingButton
         
         bindings.showsUserLocationMode = switch interactionMode {
         case .picker: .showAndFollow
@@ -35,10 +38,11 @@ struct StaticLocationScreenViewState: BindableState {
         }
     }
 
-    let interactionMode: StaticLocationInteractionMode
+    let interactionMode: LocationSharingInteractionMode
     let mapURLBuilder: MapTilerURLBuilderProtocol
+    let showLiveLocationSharingButton: Bool
     
-    var bindings = StaticLocationScreenBindings(showsUserLocationMode: .hide)
+    var bindings = LocationSharingScreenBindings(showsUserLocationMode: .hide)
  
     /// Indicates whether the user is sharing his current location
     var isSharingUserLocation: Bool {
@@ -100,7 +104,7 @@ struct StaticLocationScreenViewState: BindableState {
     }
 }
 
-struct StaticLocationScreenBindings {
+struct LocationSharingScreenBindings {
     var mapCenterLocation: CLLocationCoordinate2D?
     var geolocationUncertainty: CLLocationAccuracy?
 
@@ -127,7 +131,7 @@ struct StaticLocationScreenBindings {
     var showShareSheet = false
 }
 
-enum StaticLocationScreenViewAction {
+enum LocationSharingScreenViewAction {
     case close
     case selectLocation
     case centerToUser
@@ -141,7 +145,7 @@ extension AlertInfo where T == LocationSharingViewError {
         switch error {
         case .missingAuthorization:
             self.init(id: error,
-                      title: L10n.dialogPermissionLocationTitleIos(InfoPlistReader.main.bundleDisplayName),
+                      title: L10n.dialogAllowAccess,
                       message: L10n.dialogPermissionLocationDescriptionIos,
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)

@@ -9,7 +9,7 @@
 import Combine
 
 @MainActor
-protocol StaticLocationScreenViewModelProtocol {
-    var actions: AnyPublisher<StaticLocationScreenViewModelAction, Never> { get }
-    var context: StaticLocationScreenViewModelType.Context { get }
+protocol LocationSharingScreenViewModelProtocol {
+    var actions: AnyPublisher<LocationSharingScreenViewModelAction, Never> { get }
+    var context: LocationSharingScreenViewModelType.Context { get }
 }
