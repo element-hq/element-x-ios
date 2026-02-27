@@ -68,7 +68,7 @@ GEM
     faraday_middleware (1.2.1)
       faraday (~> 1.0)
     fastimage (2.4.0)
-    fastlane (2.232.1)
+    fastlane (2.232.2)
       CFPropertyList (>= 2.3, < 4.0.0)
       abbrev (~> 0.1.2)
       addressable (>= 2.8, < 3.0.0)
@@ -289,7 +289,7 @@ CHECKSUMS
   faraday-rack (1.0.0) sha256=ef60ec969a2bb95b8dbf24400155aee64a00fc8ba6c6a4d3968562bcc92328c0
   faraday_middleware (1.2.1) sha256=d45b78c8ee864c4783fbc276f845243d4a7918a67301c052647bacabec0529e9
   fastimage (2.4.0) sha256=5fce375e27d3bdbb46c18dbca6ba9af29d3304801ae1eb995771c4796c5ac7e8
-  fastlane (2.232.1) sha256=5b768d7a515332bea357ec836425e389b931a8cce64a6c31bcdd67353df8c25a
+  fastlane (2.232.2) sha256=978689f60f0fc3d54699de86ef12be4eda9f5b52217c1798965257c390d2b112
   fastlane-plugin-brew (0.1.1) sha256=c2d1c98ead82f78818621b5b1eb123e0bf9da7e1a7b3efeaac77a776725a7fbf
   fastlane-plugin-sentry (2.1.0) sha256=21400b8d06c764c546221ef26baceb9d7ef665761219cf0a789fe73ef84db5f2
   fastlane-plugin-xcconfig (2.1.0) sha256=208a01c4f913f38fb19bb258e596f90c3a92ae4796f5d07347c034451d6895c2
