@@ -87,6 +87,7 @@ struct JoinRoomScreen: View {
                 
                 if !context.viewState.isDMInvite, let memberCount = context.viewState.roomDetails?.memberCount {
                     JoinedMembersBadgeView(heroes: context.viewState.roomDetails?.heroes ?? [],
+                                           shouldHideAvatars: context.viewState.shouldHideAvatars,
                                            joinedCount: memberCount,
                                            mediaProvider: context.mediaProvider)
                 }
@@ -101,35 +102,10 @@ struct JoinRoomScreen: View {
             }
             
             if let inviter = context.viewState.roomDetails?.inviter {
-                VStack(spacing: 8) {
-                    Text(L10n.screenJoinRoomInvitedBy)
-                        .font(.compound.bodyMD)
-                        .foregroundStyle(.compound.textPrimary)
-                        .multilineTextAlignment(.center)
-                    
-                    LoadableAvatarImage(url: inviter.avatarURL,
-                                        name: inviter.displayName,
-                                        contentID: inviter.id,
-                                        avatarSize: .custom(52),
-                                        mediaProvider: context.mediaProvider)
-                        .accessibilityHidden(true)
-                    
-                    VStack(spacing: 4) {
-                        if let displayName = inviter.displayName {
-                            Text(displayName)
-                                .font(.compound.bodyLGSemibold)
-                                .foregroundStyle(.compound.textPrimary)
-                                .multilineTextAlignment(.center)
-                        }
-                        
-                        Text(inviter.id)
-                            .font(.compound.bodySM)
-                            .foregroundStyle(.compound.textSecondary)
-                            .multilineTextAlignment(.center)
-                    }
-                }
-                .accessibilityElement(children: .combine)
-                .padding(.top, 16)
+                InviterView(inviter: inviter,
+                            shouldHideAvatar: context.viewState.shouldHideAvatars,
+                            mediaProvider: context.mediaProvider)
+                    .padding(.top, 16)
             }
             
             if context.viewState.mode == .knockable {
@@ -326,6 +302,44 @@ struct JoinRoomScreen: View {
     }
 }
 
+private struct InviterView: View {
+    let inviter: RoomInviterDetails
+    let shouldHideAvatar: Bool
+    
+    let mediaProvider: MediaProviderProtocol?
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(L10n.screenJoinRoomInvitedBy)
+                .font(.compound.bodyMD)
+                .foregroundStyle(.compound.textPrimary)
+                .multilineTextAlignment(.center)
+            
+            LoadableAvatarImage(url: shouldHideAvatar ? nil : inviter.avatarURL,
+                                name: inviter.displayName,
+                                contentID: inviter.id,
+                                avatarSize: .custom(52),
+                                mediaProvider: mediaProvider)
+                .accessibilityHidden(true)
+            
+            VStack(spacing: 4) {
+                if let displayName = inviter.displayName {
+                    Text(displayName)
+                        .font(.compound.bodyLGSemibold)
+                        .foregroundStyle(.compound.textPrimary)
+                        .multilineTextAlignment(.center)
+                }
+                
+                Text(inviter.id)
+                    .font(.compound.bodySM)
+                    .foregroundStyle(.compound.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+}
+
 // MARK: - Previews
 
 struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
@@ -409,16 +423,9 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.inviteRequired)
             clientProxy.roomForIdentifierReturnValue = nil
         case .invited(let isDM):
-            if isDM {
-                clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.inviteDM())
-                clientProxy.roomForIdentifierClosure = { _ in
-                    .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
-                }
-            } else {
-                clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.invited())
-                clientProxy.roomForIdentifierClosure = { _ in
-                    .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
-                }
+            clientProxy.roomPreviewForIdentifierViaReturnValue = .success(isDM ? RoomPreviewProxyMock.inviteDM() : .invited())
+            clientProxy.roomForIdentifierClosure = { _ in
+                .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar, inviter: .mockDan)))
             }
         case .knockable:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.knockable)
