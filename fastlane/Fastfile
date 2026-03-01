@@ -45,21 +45,6 @@ lane :unit_tests do |options|
   # We use xcresultparser in the workflow to collect coverage from both result bundles.
 end
 
-lane :integration_tests do
-  clear_derived_data()
-
-  reset_simulator = ENV.key?('CI')
-
-  run_tests(
-    scheme: "IntegrationTests",
-    device: "iPhone 17 (#{simulator_version})",
-    ensure_devices_found: true,
-    result_bundle: true,
-    reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
-  )
-end
-
 lane :config_production do
   sh("(cd .. && swift run pipeline update-foss-secrets)")
   xcodegen(spec: "project.yml")
