@@ -164,6 +164,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             await notificationHandler?.processEvent(eventID, roomID: roomID)
         } catch {
             MXLog.error("Failed creating user session with error: \(error)")
+            contentHandler(mutableContent)
         }
     }
     

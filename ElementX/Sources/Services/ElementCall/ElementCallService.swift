@@ -194,7 +194,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
-        let ringDuration: Duration = .seconds(min(expirationDate.timeIntervalSince1970 - nowDate.timeIntervalSince1970, 90))
+        let rawDuration = expirationDate.timeIntervalSince1970 - nowDate.timeIntervalSince1970
+        let ringDuration: Duration = .seconds(min(max(rawDuration, 15), 90))
         
         let roomDisplayName = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
         
@@ -267,12 +268,13 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         // And delay ending the call so that the app has enough time
         // to get deeplinked into
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self else { return }
             // Then end the and call rely on `setupCallSession` to create a new one
             provider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
-            
-            self.actionsSubject.send(.startCall(roomID: incomingCallID.roomID))
-            self.endUnansweredCallTask?.cancel()
+
+            actionsSubject.send(.startCall(roomID: incomingCallID.roomID))
+            endUnansweredCallTask?.cancel()
         }
     }
     
@@ -412,9 +414,11 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     private func reportEndedCall(incomingCallID: CallID, reason: CXCallEndedReason) {
+        incomingCallRoomInfoCancellable = nil
         declineListenerHandle?.cancel()
         declineListenerHandle = nil
         endUnansweredCallTask?.cancel()
+        self.incomingCallID = nil
         callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: reason)
     }
 }

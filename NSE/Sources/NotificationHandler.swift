@@ -182,10 +182,12 @@ class NotificationHandler {
         // Check to see if a call is still ongoing
         if let room = userSession.roomForIdentifier(roomID) { // Try to get call details from the room info
             if !room.hasActiveRoomCall() { // If I don't have an active call wait a bit and make sure
+                var hasResumed = false
                 let expiringTask = ExpiringTaskRunner {
                     await withCheckedContinuation { [weak self] continuation in
                         self?.roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: SDKListener { info in
-                            if info.hasRoomCall {
+                            if info.hasRoomCall, !hasResumed {
+                                hasResumed = true
                                 MXLog.info("Received room info update and the room has an active call now.")
                                 continuation.resume()
                             } else {

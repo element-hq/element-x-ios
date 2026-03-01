@@ -18,4 +18,4 @@ enum ElementCallServiceNotificationKey: String {
     case expirationDate
 }
 
-let ElementCallServiceNotificationDiscardDelta = 15.0
+let ElementCallServiceNotificationDiscardDelta = 25.0
