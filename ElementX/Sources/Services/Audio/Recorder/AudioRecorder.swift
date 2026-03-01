@@ -44,7 +44,7 @@ class AudioRecorder: AudioRecorderProtocol {
         audioEngine?.isRunning ?? false
     }
     
-    private let dispatchQueue = DispatchQueue(label: "org.ucmeet.ucmeetchat.audio_recorder", qos: .userInitiated)
+    private let dispatchQueue = DispatchQueue(label: "org.ucmeet.UCMeetChat.audio_recorder", qos: .userInitiated)
     private var stopped = false
     
     init(audioSession: AudioSessionProtocol = AVAudioSession.sharedInstance()) {

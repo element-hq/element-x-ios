@@ -1,6 +1,6 @@
 settings:
   APP_GROUP_IDENTIFIER: group.org.ucmeet.nightly
-  BASE_BUNDLE_IDENTIFIER: org.ucmeet.ucmeetchat.nightly
+  BASE_BUNDLE_IDENTIFIER: org.ucmeet.UCMeetChat.nightly
 
 targets:
   ElementX:

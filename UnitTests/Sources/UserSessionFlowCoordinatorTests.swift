@@ -250,7 +250,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     private var retractReachabilityIndicatorCallsCount: Int {
         userIndicatorController
             .retractIndicatorWithIdReceivedInvocations
-            .filter { $0 == "org.ucmeet.ucmeetchat.reachability.notification" }
+            .filter { $0 == "org.ucmeet.UCMeetChat.reachability.notification" }
             .count
     }
 }

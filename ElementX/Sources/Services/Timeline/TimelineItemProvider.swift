@@ -47,7 +47,7 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
     }
 
     init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<TimelinePaginationState, Never>) {
-        serialDispatchQueue = DispatchQueue(label: "org.ucmeet.ucmeetchat.timeline_item_provider", qos: .utility)
+        serialDispatchQueue = DispatchQueue(label: "org.ucmeet.UCMeetChat.timeline_item_provider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
         self.kind = kind
         

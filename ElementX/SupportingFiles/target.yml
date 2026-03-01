@@ -94,7 +94,7 @@ targets:
           voip
         ]
         BGTaskSchedulerPermittedIdentifiers: [
-          org.ucmeet.ucmeetchat.background.refresh
+          org.ucmeet.UCMeetChat.background.refresh
         ]
         UTExportedTypeDeclarations:
         - UTTypeConformsTo: [public.text]

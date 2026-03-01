@@ -1,15 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "app-logo.pdf",
+      "filename" : "app-logo.png",
       "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "preserves-vector-representation" : true
   }
 }

@@ -20,7 +20,7 @@ class NetworkMonitor: NetworkMonitorProtocol {
     }
     
     init() {
-        queue = DispatchQueue(label: "org.ucmeet.ucmeetchat.network_monitor", qos: .background)
+        queue = DispatchQueue(label: "org.ucmeet.UCMeetChat.network_monitor", qos: .background)
         pathMonitor = NWPathMonitor()
         reachabilitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
         

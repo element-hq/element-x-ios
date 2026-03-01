@@ -20,7 +20,7 @@ struct EmojiItem: Equatable, Identifiable {
 }
 
 struct EmojiCategory: Equatable, Identifiable {
-    static let frequentlyUsedCategoryIdentifier = "org.ucmeet.ucmeetchat.frequently_used"
+    static let frequentlyUsedCategoryIdentifier = "org.ucmeet.UCMeetChat.frequently_used"
     
     let id: String
     let emojis: [EmojiItem]

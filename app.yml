@@ -2,6 +2,6 @@ settings:
   APP_DISPLAY_NAME: UCMeet.Chat
   PRODUCTION_APP_NAME: UCMeet.Chat
   APP_GROUP_IDENTIFIER: group.org.ucmeet
-  BASE_BUNDLE_IDENTIFIER: org.ucmeet.ucmeetchat
+  BASE_BUNDLE_IDENTIFIER: org.ucmeet.UCMeetChat
   ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "colors/accent-color"
   DEVELOPMENT_TEAM: 26UC01GH

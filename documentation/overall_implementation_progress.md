@@ -8,9 +8,9 @@
 
 ---
 
-## Latest Analysis: 2026-02-17
+## Latest Analysis: 2026-03-01
 
-**Calendar day:** ~19 since project start (Feb 8)
+**Calendar day:** ~31 since project start (Feb 8)
 
 ---
 
@@ -21,7 +21,7 @@
 | TOR Section | Requirement | Status | Notes |
 |-------------|-------------|--------|-------|
 | **3.1** Source code adaptation | Bundle ID, identifiers, build scheme, libraries | **MOSTLY DONE** | Server config applied, Element refs cleaned, associated domains updated. Bundle ID still needs D-001. |
-| **3.2** Branding | Icon, name, colors | **MOSTLY DONE** (D-008) | Display name "UCMeet" applied, temp icon applied, all user-facing strings rebranded. Zero Element branding visible. Final assets (accent color, icon re-export) promised via email. |
+| **3.2** Branding | Icon, name, colors | **DONE** | Display name "UCMeet.Chat" applied, new 3D logos installed (square + circular), accent color #003B5D (dark navy blue). Zero Element branding visible. |
 | **3.3** FCM push integration | Firebase SDK, Sygnal, APNs key, testing | **70% DONE** | Code + 14 tests complete. Awaiting real GoogleService-Info.plist (D-002). |
 | **3.4** Server configuration | Homeserver URL, identity server, .well-known, Scalar, Jitsi | **DONE** | `matrix.ucmeet.org` configured, `.well-known` verified, legal URLs → ucmeet.info. Scalar N/A. |
 | **3.5** Calls support | 1:1 + group calls | **DONE** | URL scheme → `org.ucmeet.call`, LiveKit confirmed in `.well-known`, embedded Element Call bundle. |
@@ -56,7 +56,7 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | 7.2 All functionality works | **PARTIALLY VERIFIED** | OIDC login + Sliding Sync verified. Calls, push, E2EE need testing. |
 | 7.3 Stability/quality | **NOT VERIFIED** | Needs full testing cycle |
 | 7.4 Apple compliance | **TEMPLATES READY** | Privacy labels mapped, export compliance analyzed |
-| 7.5 Branding matches customer | **MOSTLY DONE** | Display name "UCMeet", temp icon applied, zero Element branding visible. Final icon/color awaited (D-008). |
+| 7.5 Branding matches customer | **DONE** | Display name "UCMeet.Chat", new 3D logos installed, accent color #003B5D, zero Element branding visible. |
 | 7.6 Source code + build docs | **DONE** | 22+ docs + build & handover guide (`build_and_handover_guide.md`) |
 | 7.7 Maintenance guidance | **DONE** | Upstream sync documented in handover guide, `/upstream-sync` command available |
 
@@ -64,7 +64,7 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 
 ## 2. Hours: Invested vs. Remaining
 
-### Hours Invested (as of 2026-02-17)
+### Hours Invested (as of 2026-03-01)
 
 | Category | Hours | Deliverables |
 |----------|-------|-------------|
@@ -84,7 +84,11 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | Unit test fixes | ~1h | 16 test assertions updated across 5 test files to match rebrand |
 | App display name + branding audit | ~1h | APP_DISPLAY_NAME → UCMeet, full branding audit, NSE/ShareExtension audit |
 | Launch screen + checkpoint + handover guide | ~2h | Launch screen verified, checkpoint/branding-complete tag, 10-section build guide |
-| **Total invested** | **~60-63h** | |
+| Platform restrictions + push hardening | ~1h | Mac/Vision Pro disabled, push gateway URL, dynamic NSE notification ID |
+| Bundle ID application (Forking Data.doc) | ~3h | 22 files updated, display name UCMeet.Chat, all dispatch queue labels migrated |
+| Bundle ID casing fix + new logos + accent color | ~3h | 20 files corrected, 2 logos processed, accent color extracted and applied |
+| Sprint docs + App Store Connect guide | ~2h | 3 new documentation files (sprints.md, dev_plan.md, appstore_connect_guide.md) |
+| **Total invested** | **~69-72h** | |
 
 ### Remaining Work Estimate (by phase)
 
@@ -109,11 +113,11 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 |--------|-------|
 | Original estimate (with AI) | 60-95h, expected ~80h |
 | Original estimate (without AI) | 85-132h, expected ~120h |
-| Hours invested so far | ~60-63h |
-| Hours remaining (estimated) | 28-54h, expected ~36h |
-| **Projected total** | **~94-99h** |
-| Budget position | Within AI-assisted range (60-95h), on track |
-| Budget consumed | ~62% of hours, ~67% of $2,200 fixed price |
+| Hours invested so far | ~69-72h |
+| Hours remaining (estimated) | 24-48h, expected ~32h |
+| **Projected total** | **~97-104h** |
+| Budget position | Slightly above AI-assisted range (60-95h), within non-AI range (85-132h) |
+| Budget consumed | ~72% of hours, ~73% of $2,200 fixed price |
 
 > Project is tracking well within budget. String rebranding and source cleanup further reduced remaining work. Main cost centers left: testing (~10-16h) and App Store submission (~8-14h).
 
@@ -172,8 +176,8 @@ At 20h/week (4h/day), this is **2-3 weeks of active development** once remaining
 | **D-004 Calls** | ~~LiveKit deployed~~ | ~~No LiveKit~~ | ~~N/A~~ | ✅ Resolved + configured |
 | **D-005 Servers** | ~~All ready~~ | ~~Not set up~~ | ~~N/A~~ | ✅ Resolved + configured |
 | **D-006 OIDC** | ~~MAS works~~ | ~~No OIDC~~ | ~~N/A~~ | ✅ Resolved + login verified |
-| **D-007 Apple Account** | Developer's account ready | No account, need to register | +2-3 days | 🔴 Not discussed |
-| **D-008 Design** | Assets arrive this week | Design delayed | Can proceed with temp icon | 🟡 Promised via email |
+| **D-007 Apple Account** | Developer's account ready | No account, need to register | +2-3 days | ✅ Resolved (Administrator access) |
+| **D-008 Design** | Assets arrive this week | Design delayed | Can proceed with temp icon | ✅ Resolved — new logos + accent color applied |
 
 ### Kill Scenarios (project cannot complete)
 
@@ -283,36 +287,37 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 |--------|-------|
 | Total Swift files | ~1,260 |
 | Test files | 162 |
-| Documentation files | 21+ |
+| Documentation files | 24+ |
 | Automation scripts | 2 (1,272 lines total) |
 | Localization locales | 3 (en, en-US, ru) — trimmed from 37 |
 | Localization files | ~13 (was ~130 before trim) |
 | Associated domains | 2 (matrix.to + webcredentials:*.element.io) — trimmed from 9 |
 | Remaining `element.io` in production Swift | ~10 (OIDC URLs intentional, Compound library previews) |
-| Remaining `io.element.elementx` identifiers | 16 dispatch queue labels (blocked on D-001 Bundle ID) |
-| Git tags (fork-specific) | 2 (`checkpoint/unmodified-build`, `backup/pre-upstream-sync-20260211`) |
+| Remaining `io.element.elementx` identifiers | 0 — all migrated to `org.ucmeet.UCMeetChat` |
+| Git tags (fork-specific) | 3 (`checkpoint/unmodified-build`, `backup/pre-upstream-sync-20260211`, `checkpoint/branding-complete`) |
 
 ---
 
-## 9. Conclusions (2026-02-17)
+## 9. Conclusions (2026-03-01)
 
-**The project has shifted from "stalled" to "rapidly progressing with 3 remaining blockers."**
+**The project is feature-complete for all code changes. Only infrastructure setup and testing remain.**
 
-1. **Customer engagement unlocked major progress.** 5 of 12 decisions resolved in a single exchange. Server configured, OIDC login working, calls configured, localization trimmed, Element-specific references cleaned up. The app is functional on the simulator.
+1. **All branding work is done.** New 3D logos installed, accent color extracted from logo (#003B5D), display name "UCMeet.Chat", Bundle ID `org.ucmeet.UCMeetChat` correctly cased and cascaded through all files. Zero user-visible Element branding remains.
 
-2. **The critical path is now Bundle ID + Apple Developer account.** These two items (D-001, D-007) gate everything remaining: Firebase project creation, provisioning, OIDC migration to ucmeet.info, and App Store submission.
+2. **7 of 12 decisions resolved** (D-003, D-004, D-005, D-006, D-007, D-008, D-011). D-008 (design assets) is now resolved with the new logos and accent color.
 
-3. **Hours tracking is healthy.** ~55h invested at ~55% of budget, with ~60% of work complete by task weight. The remaining work (~42h expected) fits within the original AI-assisted estimate of 60-95h.
+3. **The critical path is now Apple Developer portal registration → Firebase project → push testing → App Store submission.** Developer has Administrator access (D-007 resolved). Step-by-step guide available in `appstore_connect_guide.md`.
 
-4. **Licensing still needs written confirmation.** Customer claims it's resolved, but we need explicit confirmation that the license covers Element X iOS (AGPL v3), not just old Element iOS (Apache 2.0).
+4. **Hours tracking is slightly above initial AI-assisted estimate.** ~69-72h invested vs 60-95h estimated. Projected total ~97-104h, within the non-AI range (85-132h). Extensive documentation and automation created (24+ docs, 2 scripts) that weren't in original scope.
 
-5. **Design assets are the easiest remaining blocker.** Customer promised to send via email. When received, branding can be finalized in <1 day using the automation scripts.
+5. **Three blockers remain:** (a) AGPL licensing written confirmation, (b) Firebase project creation + Sygnal URL for push testing, (c) MapLibre API key for location sharing.
 
 **Recommended immediate actions:**
-1. Ask customer for Bundle ID preference (e.g., `org.ucmeet.chat`).
-2. Clarify Apple Developer account ownership (D-007).
-3. Request Sygnal URL for push notification testing.
-4. Get written AGPL licensing confirmation.
+1. Register Bundle IDs + App Group in Apple Developer Portal (see `appstore_connect_guide.md`).
+2. Create Firebase project with Bundle ID `org.ucmeet.UCMeetChat`.
+3. Request Sygnal URL from customer for push E2E testing.
+4. Request MapLibre API key from customer.
+5. Get written AGPL licensing confirmation.
 
 ---
 
@@ -326,7 +331,9 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 | 2026-02-17 | App display name + branding audit. Changed APP_DISPLAY_NAME/PRODUCTION_APP_NAME → "UCMeet" in app.yml (propagates to main app, NSE, ShareExtension). Verified on simulator: iOS Settings shows "< UCMeet". Full branding audit: **zero user-visible Element branding remains**. NSE/ShareExtension audit: clean. ~58-61h invested (~60% budget). |
 | 2026-02-17 | Launch screen verified clean (plain background). Checkpoint tag `checkpoint/branding-complete` created. Build & handover guide written (10 sections). TOR 7.6 (source + docs) and 7.7 (maintenance) now DONE. ~60-63h invested (~62% budget). |
 | 2026-02-18 | Platform restriction + push notification hardening. Disabled Mac/Vision Pro "Designed for iPad" compatibility. Push gateway URL → `matrix.ucmeet.org`. NSE notification ID → dynamic bundle identifier. ~61-64h invested (~63% budget). |
+| 2026-02-20 | Customer provided "Forking Data.doc" — Bundle ID `org.ucmeet.ucmeetchat`, App Group `group.org.ucmeet`, Team `26UC01GH`, Display Name `UCMeet.Chat`. All cascaded through 22 files. 962 tests: 899 passed, 0 new failures. ~66-69h invested (~68% budget). |
+| 2026-03-01 | Sprint planning docs + new logos + Bundle ID casing fix + accent color. Bundle ID corrected to `org.ucmeet.UCMeetChat` (20 files). New 3D logos installed (square AppIcon + circular in-app). Accent color → #003B5D (dark navy blue from logo). 3 new docs: sprints.md, dev_plan.md, appstore_connect_guide.md. D-008 resolved. 7/12 decisions now resolved. BUILD SUCCEEDED. ~69-72h invested (~72% budget). |
 
 ---
 
-*This document is updated after each significant milestone, customer interaction, or periodic review. Next update: after Bundle ID decision or design assets received.*
+*This document is updated after each significant milestone, customer interaction, or periodic review. Next update: after Apple Developer portal registration or push E2E testing.*

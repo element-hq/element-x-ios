@@ -35,7 +35,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         
-        AppSettings.configureWithSuiteName("org.ucmeet.ucmeetchat.uitests")
+        AppSettings.configureWithSuiteName("org.ucmeet.UCMeetChat.uitests")
         AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
         

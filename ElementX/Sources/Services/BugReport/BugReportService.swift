@@ -91,7 +91,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         
         params.append(contentsOf: defaultParams)
         
-        if InfoPlistReader.main.baseBundleIdentifier == "org.ucmeet.ucmeetchat.nightly" {
+        if InfoPlistReader.main.baseBundleIdentifier == "org.ucmeet.UCMeetChat.nightly" {
             bugReport.githubLabels.append("Nightly")
         }
         

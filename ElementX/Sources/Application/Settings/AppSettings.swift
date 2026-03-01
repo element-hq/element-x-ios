@@ -97,7 +97,7 @@ final class AppSettings {
         return .debug
         #else
         switch InfoPlistReader.main.baseBundleIdentifier {
-        case "org.ucmeet.ucmeetchat.nightly":
+        case "org.ucmeet.UCMeetChat.nightly":
             return .nightly
         default:
             return .release
@@ -202,7 +202,7 @@ final class AppSettings {
     private(set) var hideBrandChrome = false
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
-    let backgroundAppRefreshTaskIdentifier = "org.ucmeet.ucmeetchat.background.refresh"
+    let backgroundAppRefreshTaskIdentifier = "org.ucmeet.UCMeetChat.background.refresh"
 
     /// A URL where users can go read more about the app.
     private(set) var websiteURL: URL = "https://www.ucmeet.info"

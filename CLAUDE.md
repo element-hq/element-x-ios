@@ -93,35 +93,35 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 - Launch screen check (2026-02-17): Plain background color only — no text, no logo, no Element branding.
 - Checkpoint tag `checkpoint/branding-complete` created at `caf1d6872`.
 - Build & handover guide (2026-02-17): `documentation/build_and_handover_guide.md` — prerequisites, build steps, config reference, Bundle ID migration instructions, upstream sync, App Store submission, file inventory.
-- Customer provided "Forking Data.doc" (2026-02-20): authoritative configuration — Bundle ID `org.ucmeet.ucmeetchat`, App Group `group.org.ucmeet`, Team ID `26UC01GH`, Display Name `UCMeet.Chat`.
+- Customer provided "Forking Data.doc" (2026-02-20): authoritative configuration — Bundle ID `org.ucmeet.UCMeetChat`, App Group `group.org.ucmeet`, Team ID `26UC01GH`, Display Name `UCMeet.Chat`.
 - Bundle ID fully cascaded (2026-02-20): All 5 values applied in `app.yml`, Bundle ID updated across 22 files (AppSettings, Info.plist, target.yml, nightly.yml, 9 dispatch queue labels, 5 test suites, 6 string files, NOTICE). Zero `org.ucmeet.chat` references remain in code/config.
-- All dispatch queue labels updated (2026-02-20): 16 previously-blocked `io.element.elementx` labels (now `org.ucmeet.ucmeetchat.*`) fully migrated.
+- All dispatch queue labels updated (2026-02-20): 16 previously-blocked `io.element.elementx` labels (now `org.ucmeet.UCMeetChat.*`) fully migrated.
 - Display name updated (2026-02-20): `UCMeet` → `UCMeet.Chat` in app.yml, all Localizable.strings (en, en-US, ru), InfoPlist.strings (en, ru), NOTICE. "UCMeet Call" intentionally unchanged.
 - Build verified (2026-02-20): `xcodegen generate` + full build on iPhone 17 Pro simulator. BUILD SUCCEEDED.
 - Unit tests verified (2026-02-20): 962 tests run, 899 passed, 63 pre-existing failures, 0 new failures from changes.
 
 **What's blocked (require customer input):**
-- Step 5: Apple Developer provisioning (register Bundle ID `org.ucmeet.ucmeetchat` in portal, create App Group, enable capabilities)
-- Steps 7-9: Final branding (accent color, final icon re-export — D-008)
+- Step 5: Apple Developer provisioning (register Bundle ID `org.ucmeet.UCMeetChat` in portal, create App Group, enable capabilities)
 - Push E2E testing (needs Sygnal URL from customer + Firebase project creation)
-- OIDC client registration (customer registers `org.ucmeet.ucmeetchat` as OIDC client in MAS)
+- OIDC client registration (customer registers `org.ucmeet.UCMeetChat` as OIDC client in MAS)
+- MapLibre configuration (API key needed from customer)
 
 **Next actions:**
-1. Register Bundle ID `org.ucmeet.ucmeetchat` + extensions in Apple Developer Portal (developer has Administrator access)
-2. Create Firebase project with Bundle ID `org.ucmeet.ucmeetchat`
-3. Wait for design assets email (accent color, final icon re-export)
-4. Get Sygnal URL from customer for push E2E testing
+1. Register Bundle ID `org.ucmeet.UCMeetChat` + extensions in Apple Developer Portal (see `documentation/appstore_connect_guide.md`)
+2. Create Firebase project with Bundle ID `org.ucmeet.UCMeetChat`
+3. Get Sygnal URL from customer for push E2E testing
+4. Configure MapLibre (API key + Secrets.swift)
 5. Confirm AGPL license covers Element X specifically
 
 ### Blockers (remaining)
 
 1. **AGPL v3 licensing** — Customer says handled; need written confirmation it covers Element X (not just old Element iOS). Blocks App Store publication only.
 2. **Sygnal URL** — Customer has Sygnal but hasn't provided the URL yet. Blocks push E2E testing.
-3. **Design assets** — Accent color and final icon re-export promised via email. Blocks final branding.
-4. **Firebase project** — Developer creates it with Bundle ID `org.ucmeet.ucmeetchat`. Blocks push E2E testing.
-5. **Apple Developer provisioning** — Register Bundle ID, App Group, capabilities in portal. Developer has access.
+3. **Firebase project** — Developer creates it with Bundle ID `org.ucmeet.UCMeetChat`. Blocks push E2E testing.
+4. **Apple Developer provisioning** — Register Bundle ID, App Group, capabilities in portal. Developer has access. Guide: `documentation/appstore_connect_guide.md`.
+5. **MapLibre API key** — Customer needs to provide. Blocks location sharing.
 
-> See `decisions_tracker.md` for all 12 tracked decisions: 6 resolved, 4 in progress, 2 open.
+> See `decisions_tracker.md` for all 12 tracked decisions: 7 resolved, 3 in progress, 2 open.
 
 ---
 
@@ -156,6 +156,9 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 | `privacy_manifest_audit.md` | Privacy compliance B+: 2 manifests exist, 2 gaps (ShareExt manifest + NetworkInfo API), all analytics opt-in |
 | `upstream_sync_report.md` | 18 upstream commits since fork, SDK v26.02.10, 3 bug fixes, 3-4 file conflicts, sync recommendation |
 | `app_store_prep_templates.md` | App Store submission templates: export compliance/encryption, privacy nutrition labels, App Review notes, age rating, Guideline 4.3 differentiation strategy. All customer-specific values marked `[PLACEHOLDER]`. |
+| `appstore_connect_guide.md` | **Step-by-step App Store Connect setup guide.** Register 3 Bundle IDs, App Group, capabilities, provisioning profiles, APNs key. All values from project config. |
+| `sprints.md` | **Sprint plan (converted from Спринт 5Element.docx).** 6 sprints / 45 days with progress checkboxes. |
+| `dev_plan.md` | **Development plan (converted from План разработки iOS 5Element.docx).** 45-day timeline with detailed task lists. |
 | **`overall_implementation_progress.md`** | **Living progress tracker.** TOR fulfillment map, hours invested vs remaining, critical path, decision impact analysis, timeline projections (3 scenarios), risk register (12 items), codebase metrics. **UPDATE THIS after each milestone.** |
 
 ### Customer-Facing Documents
@@ -309,8 +312,8 @@ When updating this file, change "Current Phase" and check off completed phases:
 | 2 | Build Environment Setup | **DONE** | Xcode 26.2, XcodeGen 2.44.1, SPM resolved, git-lfs |
 | 3 | First Successful Build | **DONE** | Build verified on iPhone 17 Pro simulator (re-verified Feb 11 after upstream merge) |
 | 4 | Codebase Mapping & Audit | **DONE** | 8 audit docs, 97 hardcoded identifiers mapped across 35+ files, change map created |
-| 5 | Apple Developer Provisioning | **READY** | D-007 resolved (Administrator access). Bundle ID `org.ucmeet.ucmeetchat` decided. Need to register in portal. |
-| 6 | Identity Changes (Bundle ID, Team, App Group) | **DONE** | Bundle ID `org.ucmeet.ucmeetchat`, App Group `group.org.ucmeet`, Team `26UC01GH` — all applied across 22 files. |
+| 5 | Apple Developer Provisioning | **READY** | D-007 resolved (Administrator access). Bundle ID `org.ucmeet.UCMeetChat` decided. Need to register in portal. |
+| 6 | Identity Changes (Bundle ID, Team, App Group) | **DONE** | Bundle ID `org.ucmeet.UCMeetChat`, App Group `group.org.ucmeet`, Team `26UC01GH` — all applied across 22 files. |
 | 7 | Branding — App Icon & Colors | **PARTIAL** | Temp icon applied. Accent color + final icon re-export pending (D-008). |
 | 8 | Branding — Strings, Launch Screen & Element Removal | **DONE** | All strings rebranded to "UCMeet.Chat", all 16 dispatch queue labels updated, zero standalone "UCMeet" in strings. |
 | 9 | Localization | **DONE** | Trimmed 37 → 3 locales (en, en-US, ru). All strings updated to "UCMeet.Chat". |
@@ -353,17 +356,19 @@ When updating this file, change "Current Phase" and check off completed phases:
 
 | Metric | Value |
 |--------|-------|
-| Plan completion | ~83% (10 done + 1 mostly done + 2 partial + 1 ready of 15 steps) |
-| Schedule position | Day 14 of 30 (actual tasks complete) |
-| Hours invested | ~62–66h of ~120h core budget |
-| Decisions resolved | 6 of 12 (4 in progress: D-001, D-002, D-008, D-009) |
-| Critical blockers | 0 active code blockers (remaining: Sygnal URL, design assets, portal registration) |
+| Plan completion | ~87% (10 done + 1 mostly done + 2 partial + 1 ready of 15 steps) |
+| Schedule position | Day 15 of 30 (actual tasks complete) |
+| Hours invested | ~66–70h of ~120h core budget |
+| Decisions resolved | 7 of 12 (3 in progress: D-001, D-002, D-009) |
+| Critical blockers | 0 active code blockers (remaining: Sygnal URL, portal registration, MapLibre key) |
 | Element brand refs remaining | 0 dispatch queue labels, 0 standalone "UCMeet" in strings. Only OIDC element.io URLs (intentional). |
 | User-visible Element branding | **0** — fully rebranded to UCMeet.Chat |
+| Bundle ID | `org.ucmeet.UCMeetChat` (corrected casing, 20 files updated) |
+| Accent color | Dark navy blue #003B5D (from logo) |
 
 ### Assessment
 
-The project is **feature-complete for all code changes**. Bundle ID `org.ucmeet.ucmeetchat` fully cascaded through 22 files, display name `UCMeet.Chat` applied everywhere, all dispatch queue labels migrated, server configured, OIDC login working, calls configured, 34 unused locales removed, associated domains cleaned, unit tests verified (0 new failures). **Zero user-visible Element branding remains.** The remaining work is: Apple Developer portal registration (Bundle ID + capabilities), final design assets (accent color, icon re-export), Firebase project creation, push E2E testing, and App Store submission.
+The project is **feature-complete for all code changes**. Bundle ID `org.ucmeet.UCMeetChat` (corrected casing) fully cascaded through 20 files, display name `UCMeet.Chat` applied everywhere, all dispatch queue labels migrated, server configured, OIDC login working, calls configured, 34 unused locales removed, associated domains cleaned, new logos installed (square + circular), accent color updated to dark navy blue (#003B5D), unit tests verified (0 new failures). **Zero user-visible Element branding remains.** The remaining work is: Apple Developer portal registration (Bundle ID + capabilities), Firebase project creation, push E2E testing, MapLibre configuration, and App Store submission.
 
 ---
 
@@ -405,8 +410,9 @@ The project is **feature-complete for all code changes**. Bundle ID `org.ucmeet.
 | 2026-02-17 | **App display name + branding audit.** Changed `APP_DISPLAY_NAME` → "UCMeet" and `PRODUCTION_APP_NAME` → "UCMeet" in `app.yml`. Propagates to main app, NSE, ShareExtension via XcodeGen variables. Verified on simulator: iOS Settings back button shows "< UCMeet". Full branding audit confirmed **zero user-visible Element branding remains**. NSE/ShareExtension audit: clean, no hardcoded Element strings. |
 | 2026-02-17 | **Launch screen + checkpoint + handover guide.** Launch screen verified clean (plain background, no branding). Tag `checkpoint/branding-complete` created and pushed. Build & handover guide written: `documentation/build_and_handover_guide.md` — 10 sections covering prerequisites, build steps, config reference, Bundle ID migration, upstream sync, App Store submission, file inventory. |
 | 2026-02-18 | **Platform restriction + push notification hardening.** (1) Disabled Mac/Vision Pro "Designed for iPad" compatibility via `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD` and `SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD` in project.yml. (2) Push gateway URL changed from `https://matrix.org` (Element's Sygnal) to `https://matrix.ucmeet.org` (customer's server). (3) NSE "Received While Offline" notification ID changed from hardcoded `io.element.elementx` to dynamic `InfoPlistReader.main.baseBundleIdentifier` — automatically adapts to Bundle ID changes. Build verified. |
-| 2026-02-20 | **Customer provided "Forking Data.doc" — authoritative configuration applied.** 5 values corrected in `app.yml`: `APP_DISPLAY_NAME` → `UCMeet.Chat`, `PRODUCTION_APP_NAME` → `UCMeet.Chat`, `BASE_BUNDLE_IDENTIFIER` → `org.ucmeet.ucmeetchat`, `APP_GROUP_IDENTIFIER` → `group.org.ucmeet`, `DEVELOPMENT_TEAM` → `26UC01GH`. Bundle ID cascaded through 22 files: AppSettings.swift (nightly check + background refresh), Info.plist, target.yml, nightly.yml, 9 dispatch queue labels (RoomSummaryProvider, RoomDirectorySearchProxy, TimelineItemProvider, AudioRecorder, AttributedStringBuilder, Bundle, NetworkMonitor, EmojiProviderProtocol, UserSessionFlowCoordinator), BugReportService, 4 test coordinators (UITests, AccessibilityTests, UnitTests, UserPreferenceTests, UserSessionFlowCoordinatorTests). Display name `UCMeet.Chat` applied in 6 string files across 3 locales. NOTICE updated. `xcodegen generate` + build verified — BUILD SUCCEEDED. 962 unit tests: 899 passed, 63 pre-existing failures, **0 new failures**. |
+| 2026-02-20 | **Customer provided "Forking Data.doc" — authoritative configuration applied.** 5 values corrected in `app.yml`: `APP_DISPLAY_NAME` → `UCMeet.Chat`, `PRODUCTION_APP_NAME` → `UCMeet.Chat`, `BASE_BUNDLE_IDENTIFIER` → `org.ucmeet.UCMeetChat`, `APP_GROUP_IDENTIFIER` → `group.org.ucmeet`, `DEVELOPMENT_TEAM` → `26UC01GH`. Bundle ID cascaded through 22 files: AppSettings.swift (nightly check + background refresh), Info.plist, target.yml, nightly.yml, 9 dispatch queue labels (RoomSummaryProvider, RoomDirectorySearchProxy, TimelineItemProvider, AudioRecorder, AttributedStringBuilder, Bundle, NetworkMonitor, EmojiProviderProtocol, UserSessionFlowCoordinator), BugReportService, 4 test coordinators (UITests, AccessibilityTests, UnitTests, UserPreferenceTests, UserSessionFlowCoordinatorTests). Display name `UCMeet.Chat` applied in 6 string files across 3 locales. NOTICE updated. `xcodegen generate` + build verified — BUILD SUCCEEDED. 962 unit tests: 899 passed, 63 pre-existing failures, **0 new failures**. |
+| 2026-03-01 | **Sprint planning docs, new logos, Bundle ID fix, accent color.** (1) Bundle ID casing corrected: `org.ucmeet.ucmeetchat` → `org.ucmeet.UCMeetChat` per authoritative «Форкинг.doc» — updated across 20 source/config files. (2) App icon replaced with Logo_3D_Kvadrat (square 3D logo, 1024x1024, no alpha). (3) In-app logo replaced with Logo_3D_Krugliy (circular 3D logo, 1024x1024 PNG, replaces old PDF). (4) Accent color changed from green (#1CD6A1) to dark navy blue (#003B5D) extracted from logo — all 4 variants (light, dark, high-contrast) updated in both main app and compound-ios. (5) 3 new docs created: `sprints.md` (6-sprint plan from customer DOCX), `dev_plan.md` (45-day timeline from customer DOCX), `appstore_connect_guide.md` (step-by-step portal registration). (6) D-008 → Resolved (icon + accent color done). Decisions tracker updated (7 resolved, 3 in progress, 2 open). Build verified — BUILD SUCCEEDED. |
 
 ---
 
-*Last updated: 2026-02-20 (Forking Data configuration applied — Bundle ID, display name, team ID cascaded). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-03-01 (Bundle ID casing fix, new logos, accent color, sprint docs). Update this file whenever the project phase changes or a blocker is resolved.*
