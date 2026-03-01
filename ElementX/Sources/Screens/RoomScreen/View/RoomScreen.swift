@@ -183,7 +183,7 @@ struct RoomScreen: View {
             Button {
                 context.send(viewAction: .displayCall)
             } label: {
-                CompoundIcon(\.videoCallSolid)
+                CompoundIcon(\.voiceCallSolid)
             }
             .accessibilityLabel(L10n.a11yStartCall)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)

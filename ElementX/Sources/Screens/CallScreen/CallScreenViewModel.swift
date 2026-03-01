@@ -157,6 +157,9 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
            decodedMessage.hasLoaded {
             // This means that the call room was joined succesfully, we can stop the timeout task
             timeoutTask = nil
+            if !state.isGenericCallLink {
+                await setVideoEnabled(false)
+            }
         }
         await widgetDriver.handleMessage(message)
     }
@@ -254,6 +257,14 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         let message = ElementCallWidgetMessage(direction: .toWidget,
                                                action: .mediaState,
                                                data: .init(audioEnabled: enabled),
+                                               widgetId: widgetDriver.widgetID)
+        await postMessageToWidget(message)
+    }
+
+    private func setVideoEnabled(_ enabled: Bool) async {
+        let message = ElementCallWidgetMessage(direction: .toWidget,
+                                               action: .mediaState,
+                                               data: .init(videoEnabled: enabled),
                                                widgetId: widgetDriver.widgetID)
         await postMessageToWidget(message)
     }
