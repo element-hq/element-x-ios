@@ -40,9 +40,6 @@ setup_github_actions_environment() {
     export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
     
     brew update && brew install xcodegen swiftlint swiftformat git-lfs pkl a7ex/homebrew-formulae/xcresultparser
-
-    bundle config path vendor/bundle
-    bundle install --jobs 4 --retry 3
 }
 
 setup_github_actions_translations_environment() {
@@ -57,7 +54,6 @@ setup_github_actions_translations_environment() {
 }
 
 xcode_select_for_github_actions() {
-    # While fastlane has its own way of selecting Xcode, that only works inside of fastlane.
     # We need to select it globally for other processes like xcresultparser and our custom tools to use the same Xcode version.
     sudo xcode-select -s /Applications/Xcode_26.1.1.app
 }
