@@ -12,6 +12,9 @@ struct UnitTests: AsyncParsableCommand {
     @Option(help: "iOS version for the simulator.")
     var osVersion = "26.1"
     
+    @Flag(help: "Skip preview tests")
+    var skipPreviews = false
+    
     func run() async throws {
         try await CI.lint()
         
@@ -31,19 +34,21 @@ struct UnitTests: AsyncParsableCommand {
             logger.error("\n❌ Unit tests failed. \(error)\n")
         }
         
-        // Run preview tests on a smaller device
-        do {
-            logger.info("\n🧪 Running preview tests…\n")
-            try await RunTests.parse([
-                "--scheme", "PreviewTests",
-                "--device", "iPhone SE (3rd generation)",
-                "--os-version", osVersion,
-                "--create-simulator-name", "iPhone SE (3rd generation)",
-                "--create-simulator-type", "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
-            ]).run()
-        } catch {
-            failures.append("Preview tests failed: \(error)")
-            logger.error("\n❌ Preview tests failed.\n")
+        if !skipPreviews {
+            // Run preview tests on a smaller device
+            do {
+                logger.info("\n🧪 Running preview tests…\n")
+                try await RunTests.parse([
+                    "--scheme", "PreviewTests",
+                    "--device", "iPhone SE (3rd generation)",
+                    "--os-version", osVersion,
+                    "--create-simulator-name", "iPhone SE (3rd generation)",
+                    "--create-simulator-type", "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
+                ]).run()
+            } catch {
+                failures.append("Preview tests failed: \(error)")
+                logger.error("\n❌ Preview tests failed.\n")
+            }
         }
         
         // Zip results (best-effort, useful for CI artifact uploads)

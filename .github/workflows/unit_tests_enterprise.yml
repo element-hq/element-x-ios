@@ -28,36 +28,21 @@ jobs:
           submodules: recursive
           token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-      - uses: actions/cache@v5
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
       - name: Setup environment
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
       
       - name: Configure Enterprise
         run: swift run pipeline configure-element-pro
       
-      - name: SwiftFormat
-        run: swiftformat --lint .
-
       - name: Run tests
-        run: bundle exec fastlane unit_tests skip_previews:true
-        
-      - name: Zip results # for faster upload
-        if: failure()
-        working-directory: fastlane/test_output
-        run: zip -r UnitTests.zip UnitTests.xcresult
-      
+        run: swift run -q tools ci unit-tests --skip-previews
+              
       - name: Archive artifacts
         uses: actions/upload-artifact@v7
         # We only care about artefacts if the tests fail
         if: failure()
         with:
             name: Results
-            path: fastlane/test_output/UnitTests.zip
+            path: test_output/UnitTests.zip
             retention-days: 1
             if-no-files-found: ignore
