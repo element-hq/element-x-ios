@@ -23,7 +23,6 @@ extension ClientBuilder {
                             threadsEnabled: Bool) -> ClientBuilder {
         var builder = ClientBuilder()
             .crossProcessLockConfig(crossProcessLockConfig: .multiProcess(holderName: InfoPlistReader.main.bundleIdentifier))
-            .enableOidcRefreshLock()
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .threadsEnabled(enabled: threadsEnabled, threadSubscriptions: threadsEnabled)
