@@ -3,7 +3,7 @@
 
 **Назначение:** Живой документ для отслеживания всех открытых решений, блокеров и их статусов. Обновляется по мере продвижения проекта.
 
-**Последнее обновление:** 1 марта 2026 г.
+**Последнее обновление:** 2 марта 2026 г.
 
 ---
 
@@ -64,7 +64,7 @@ Element X iOS лицензирован под AGPL v3. Условия AGPL v3 ю
 | **Дедлайн решения** | До начала тестирования push-уведомлений |
 | **Фазы, которые блокирует** | Фаза 5 (тестирование Push-уведомлений) |
 | **Дата создания** | 2026-02-08 |
-| **Дата последнего обновления** | 2026-02-17 |
+| **Дата последнего обновления** | 2026-03-02 |
 
 **Описание:**
 FCM реализован полностью согласно ТЗ. Код написан, протестирован (14 unit-тестов), сборка проверена.
@@ -81,17 +81,19 @@ FCM реализован полностью согласно ТЗ. Код нап
 - `NotificationManager.registerWithFCMToken()` — регистрация pusher с FCM-токеном (raw string, не base64)
 - 14 unit-тестов: 5 NotificationManager FCM, 5 FirebaseIntegration, 4 PushProvider — все проходят
 - Заглушка `GoogleService-Info.plist` с TODO-значениями
+- ✅ Получен APNs Authentication Key: `AuthKey_XZANH7CD3Z.p8` (Key ID: `XZANH7CD3Z`)
 
 **Что осталось:**
 - ✅ ~~Решение APNs vs FCM~~ — FCM подтверждён
+- ✅ ~~APNs-ключ (.p8)~~ — получен от заказчика (`AuthKey_XZANH7CD3Z.p8`)
 - 🔲 Создать Firebase-проект в Google Console (**разработчик**)
 - 🔲 Скачать реальный `GoogleService-Info.plist` (**разработчик**)
-- 🔲 Загрузить APNs-ключ (.p8) в Firebase Console (**разработчик** — требует Apple Developer account, D-007)
+- 🔲 Загрузить APNs-ключ в Firebase Console (**разработчик**)
 - 🔲 Получить URL Sygnal от заказчика
 - 🔲 Заказчик настраивает Sygnal для FCM (предоставить им FCM Server Key)
 - 🔲 Сквозное тестирование push-уведомлений
 
-**Решение:** FCM. Разработчик создаёт Firebase-проект самостоятельно. Sygnal URL от заказчика — ожидаем.
+**Решение:** FCM. Разработчик создаёт Firebase-проект самостоятельно. Sygnal URL от заказчика — ожидаем. APNs ключ получен.
 
 ---
 
@@ -207,7 +209,7 @@ FCM реализован полностью согласно ТЗ. Код нап
 | **Дедлайн решения** | ~~День 1~~ |
 | **Фазы, которые блокирует** | ~~Фаза 1, 8-9~~ — разблокировано |
 | **Дата создания** | 2026-02-08 |
-| **Дата последнего обновления** | 2026-02-18 |
+| **Дата последнего обновления** | 2026-03-02 |
 
 **Решение (18.02.2026):** Заказчик добавил разработчика как **Administrator** в свой App Store Connect аккаунт. Разработчик имеет полный доступ для создания приложений, регистрации Bundle ID, управления провижинингом и публикации в App Store.
 
@@ -215,11 +217,18 @@ FCM реализован полностью согласно ТЗ. Код нап
 
 **Обновление 01.03.2026:** Bundle ID исправлен на `org.ucmeet.UCMeetChat` (корректный регистр из «Форкинг.doc»). Создано руководство по регистрации: `documentation/appstore_connect_guide.md`.
 
+**Обновление 02.03.2026:** Bundle ID и все расширения зарегистрированы в Apple Developer Portal. App Group `group.org.ucmeet` создан. Capabilities включены. Однако обнаружена проблема: разработчик добавлен только в App Store Connect, но **не имеет доступа к Apple Developer Program team** (Team ID `26UC01GH`). Команда заказчика не отображается в Xcode — доступны только Personal Team и другие команды разработчика. Возможно, аккаунт заказчика — **Individual** (не Organization), что не позволяет добавлять участников. **Решение:** добавить Apple ID заказчика в Xcode Accounts.
+
+Заказчик также предоставил 2 ключа .p8:
+- `ApiKey_QVGWLXJNNMOZ.p8` — App Store Connect API Key (для загрузки в TestFlight/App Store)
+- `AuthKey_XZANH7CD3Z.p8` — APNs Authentication Key (для Firebase push-уведомлений, Key ID: `XZANH7CD3Z`)
+
 **Следующие шаги:**
-- 🔲 Зарегистрировать Bundle ID `org.ucmeet.UCMeetChat` в Apple Developer Portal
-- 🔲 Зарегистрировать Bundle ID для расширений: `org.ucmeet.UCMeetChat.nse`, `org.ucmeet.UCMeetChat.shareextension`
-- 🔲 Создать App Group `group.org.ucmeet`
-- 🔲 Включить capabilities: Associated Domains, Push Notifications, App Groups
+- ✅ ~~Зарегистрировать Bundle ID `org.ucmeet.UCMeetChat` в Apple Developer Portal~~
+- ✅ ~~Зарегистрировать Bundle ID для расширений: `org.ucmeet.UCMeetChat.nse`, `org.ucmeet.UCMeetChat.shareextension`~~
+- ✅ ~~Создать App Group `group.org.ucmeet`~~
+- ✅ ~~Включить capabilities: Associated Domains, Push Notifications, App Groups~~
+- 🔲 Получить доступ к команде заказчика в Xcode (добавить Apple ID заказчика в Xcode Accounts)
 - 🔲 Создать приложение в App Store Connect
 
 ---
@@ -395,6 +404,16 @@ FCM реализован полностью согласно ТЗ. Код нап
 | | D-007 обновлён: Bundle ID для расширений исправлен на `.shareextension` (не `.share-extension`). |
 | | Создано 3 новых документа: `sprints.md`, `dev_plan.md`, `appstore_connect_guide.md`. |
 | | Сборка проверена — BUILD SUCCEEDED. |
+| 2026-03-02 | **Регистрация в Apple Developer Portal + обнаружение проблемы доступа:** |
+| | ✅ Bundle ID `org.ucmeet.UCMeetChat` + расширения (.nse, .shareextension) зарегистрированы. |
+| | ✅ App Group `group.org.ucmeet` создан и привязан ко всем 3 Bundle ID. |
+| | ✅ Capabilities включены: Push Notifications, Associated Domains, App Groups. |
+| | ⚠️ Keychain Sharing — отсутствует в Developer Portal как отдельная capability, настраивается через entitlements (уже в проекте). |
+| | ❌ Команда заказчика (Team ID `26UC01GH`) не отображается в Xcode. Разработчик добавлен в App Store Connect, но не в Apple Developer Program team. |
+| | ❌ Возможно, аккаунт заказчика — Individual (не Organization), что не позволяет добавлять участников. |
+| | 🔑 Получены 2 ключа .p8: ApiKey (App Store Connect API) + AuthKey (APNs, Key ID: `XZANH7CD3Z`). |
+| | D-002 обновлён: APNs ключ получен. |
+| | **Решение:** Добавить Apple ID заказчика в Xcode Accounts для доступа к команде и подписанию. |
 
 ---
 
