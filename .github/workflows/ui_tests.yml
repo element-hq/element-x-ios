@@ -37,7 +37,7 @@ jobs:
           if [[ -n "${{ github.event.inputs.test_name }}" ]]; then
             args+=( --test-name "${{ github.event.inputs.test_name }}")
           fi
-          swift run tools ci ui-tests "${args[@]}"
+          swift run -q tools ci ui-tests "${args[@]}"
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v7

@@ -24,7 +24,7 @@ jobs:
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
 
       - name: Run tests
-        run: swift run tools ci accessibility-tests
+        run: swift run -q tools ci accessibility-tests
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v7

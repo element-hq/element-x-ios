@@ -32,7 +32,7 @@ jobs:
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
       
       - name: Configure Enterprise
-        run: swift run pipeline configure-element-pro
+        run: swift run -q pipeline configure-element-pro
       
       - name: Run tests
         run: swift run -q tools ci unit-tests --skip-previews
