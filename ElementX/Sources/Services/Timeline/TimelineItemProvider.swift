@@ -220,7 +220,7 @@ extension TimelineDiff: @retroactive CustomDebugStringConvertible {
         case .set(let index, _):
             return "Set(\(index))"
         case .remove(let index):
-            return "Remove(\(index)"
+            return "Remove(\(index))"
         case .pushBack:
             return "PushBack"
         case .pushFront:
