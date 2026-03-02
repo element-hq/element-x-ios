@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Trimiteți un mesaj vocal";
 "action_share" = "Partajați";
 "action_share_link" = "Partajați linkul";
+"action_share_live_location" = "Share live location";
 "action_show" = "Afișare";
 "action_sign_in_again" = "Autentificați-vă din nou";
 "action_signout" = "Deconectați-vă";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "Identitatea lui %1$@ a fost resetată.";
 "crypto_identity_change_verification_violation_new" = "Identitatea %2$@ a lui %1$@ a fost resetată. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Retrageți verificarea";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "Linkul %1$@ vă redirecționează către un alt site %2$@\n\nSunteți sigur că doriți să continuați?";
 "dialog_confirm_link_title" = "Verificați din nou acest link";
 "dialog_file_too_large_to_upload_title" = "Dimensiunea fișierului este prea mare pentru a fi încărcat.";

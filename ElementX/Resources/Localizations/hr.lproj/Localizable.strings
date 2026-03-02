@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Pošalji glasovnu poruku";
 "action_share" = "Podijeli";
 "action_share_link" = "Podijeli poveznicu";
+"action_share_live_location" = "Share live location";
 "action_show" = "Prikaži";
 "action_sign_in_again" = "Ponovno se prijavite";
 "action_signout" = "Odjava";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "Identitet korisnika %1$@ je poništen.";
 "crypto_identity_change_verification_violation_new" = "Identitet korisnika %1$@ %2$@ je poništen. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Povuci provjeru";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "Poveznica %1$@ vodi vas na drugo mrežno mjesto %2$@\n\nJeste li sigurni da želite nastaviti?";
 "dialog_confirm_link_title" = "Dvaput provjerite ovu poveznicu";
 "dialog_file_too_large_to_upload_title" = "Datoteka je prevelika za prijenos";

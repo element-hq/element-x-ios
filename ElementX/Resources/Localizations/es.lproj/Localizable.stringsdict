@@ -365,9 +365,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Una persona</string>
+			<string>%1$d Persona</string>
 			<key>other</key>
-			<string>%1$d personas</string>
+			<string>%1$d Personas</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_pending_header_title</key>

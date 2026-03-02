@@ -139,9 +139,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d selected</string>
+			<string>%1$d valgt</string>
 			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d valgt</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -203,9 +203,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
+			<string>Du har %d ny melding.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>Du har %d nye meldinger.</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -491,9 +491,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
+			<string>Fjern %1$d rom fra %2$@</string>
 			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>Fjern %1$d rommene fra %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>

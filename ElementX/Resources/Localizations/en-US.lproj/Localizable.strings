@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Send voice message";
 "action_share" = "Share";
 "action_share_link" = "Share link";
+"action_share_live_location" = "Share live location";
 "action_show" = "Show";
 "action_sign_in_again" = "Sign in again";
 "action_signout" = "Sign out";
@@ -389,12 +390,13 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@’s identity was reset.";
 "crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ identity was reset. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
 "dialog_confirm_link_title" = "Double-check this link";
 "dialog_file_too_large_to_upload_title" = "The file size is too large to upload";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
 "dialog_permission_generic" = "Please grant the permission in the system settings.";
-"dialog_permission_location_description_ios" = "Grant access in Settings -> Location.";
+"dialog_permission_location_description_ios" = "To share your current location, Element needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ does not have access to your location.";
 "dialog_permission_microphone" = "In order to let the application use the microphone, please grant the permission in the system settings.";
 "dialog_permission_microphone_description_ios" = "Grant access so you can record and send messages with audio.";

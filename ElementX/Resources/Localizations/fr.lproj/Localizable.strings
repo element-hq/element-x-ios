@@ -1,6 +1,6 @@
 "Notification" = "Notification";
 "a11y_add_reaction" = "Ajouter une réaction: %1$@";
-"a11y_address" = "Address";
+"a11y_address" = "Adresse";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Réduire la taille du composeur";
 "a11y_delete" = "Supprimer";
@@ -20,11 +20,11 @@
 "a11y_paused_voice_message" = "Message vocal, durée: %1$@, position actuelle: %2$@";
 "a11y_pin_field" = "Code PIN";
 "a11y_play" = "Lecture";
-"a11y_playback_speed" = "Playback speed";
+"a11y_playback_speed" = "Vitesse de lecture";
 "a11y_poll_end" = "Sondage terminé";
 "a11y_polls_will_remove_selection" = "Supprimera la sélection précédente";
 "a11y_polls_winning_answer" = "C'est la réponse gagnante";
-"a11y_qr_code" = "QR Code";
+"a11y_qr_code" = "Code QR";
 "a11y_react_with" = "Réagir avec %1$@";
 "a11y_react_with_other_emojis" = "Réagir avec d’autres émojis";
 "a11y_read_receipts_multiple" = "Lu par %1$@ et %2$@";
@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Envoyer un message vocal";
 "action_share" = "Partager";
 "action_share_link" = "Partager le lien";
+"action_share_live_location" = "Share live location";
 "action_show" = "Afficher";
 "action_sign_in_again" = "Se connecter à nouveau";
 "action_signout" = "Se déconnecter";
@@ -389,12 +390,13 @@
 "crypto_identity_change_profile_pin_violation" = "L'identité de %1$@ a été réinitialisée.";
 "crypto_identity_change_verification_violation_new" = "L'identité de %1$@ %2$@ a été réinitialisée. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Révoquer la vérification";
+"dialog_allow_access" = "Autoriser l'accès";
 "dialog_confirm_link_message" = "Le lien \"%1$@\" vous redirige vers un autre site \"%2$@\".\n\nÊtes-vous sûr de vouloir continuer ?";
 "dialog_confirm_link_title" = "Veuillez vérifier ce lien";
 "dialog_file_too_large_to_upload_title" = "Le fichier est trop gros pour être envoyé";
 "dialog_permission_camera" = "Pour permettre à l’application d’utiliser l’appareil photo, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_generic" = "Veuillez accorder l’autorisation dans les paramètres du système.";
-"dialog_permission_location_description_ios" = "Autorisez l’accès dans Paramètres / Localisation.";
+"dialog_permission_location_description_ios" = "Pour partager votre position actuelle, Element a besoin d'accéder à votre position. Allez dans Paramètres > Localisation.";
 "dialog_permission_location_title_ios" = "%1$@ n’a pas accès à votre position";
 "dialog_permission_microphone" = "Pour permettre à l’application d’utiliser le microphone, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_microphone_description_ios" = "Donnez la permission afin de pouvoir enregistrer et envoyer des messages vocaux";
@@ -444,7 +446,7 @@
 "leave_conversation_alert_subtitle" = "Êtes-vous sûr de vouloir quitter cette discussion ? Vous ne pourrez pas la rejoindre à nouveau sans y être invité.";
 "leave_room_alert_empty_subtitle" = "Êtes-vous sûr de vouloir quitter ce salon ? Vous êtes la seule personne ici. Si vous partez, personne ne pourra rejoindre le salon à l’avenir, y compris vous.";
 "leave_room_alert_private_subtitle" = "Êtes-vous sûr de vouloir quitter ce salon ? Ce salon n’est pas public et vous ne pourrez pas le rejoindre sans invitation.";
-"leave_room_alert_select_new_owner_action" = "Choisissez les propriétaires";
+"leave_room_alert_select_new_owner_action" = "Choisir les propriétaires";
 "leave_room_alert_select_new_owner_subtitle" = "Vous êtes le seul propriétaire de ce salon. Vous devez en transférer la propriété à quelqu'un d'autre avant de le quitter.";
 "leave_room_alert_select_new_owner_title" = "Transférer la propriété";
 "leave_room_alert_subtitle" = "Êtes-vous sûr de vouloir quitter le salon ?";
@@ -1112,7 +1114,7 @@
 "screen_room_change_role_moderators_admin_section_footer" = "Les administrateurs ont automatiquement les privilèges des modérateurs";
 "screen_room_change_role_moderators_owner_section_footer" = "Les propriétaires disposent automatiquement des privilèges des administrateurs.";
 "screen_room_change_role_moderators_title" = "Modifier les modérateurs";
-"screen_room_change_role_owners_title" = "Choisissez les propriétaires";
+"screen_room_change_role_owners_title" = "Choisir les propriétaires";
 "screen_room_details_add_topic_title" = "Ajouter un sujet";
 "screen_room_details_badge_encrypted" = "Chiffré";
 "screen_room_details_badge_not_encrypted" = "Non chiffré";
@@ -1437,7 +1439,7 @@
 "screen_home_tab_spaces" = "Espaces";
 "screen_join_room_decline_and_block_button_title" = "Refuser et bloquer";
 "screen_knock_requests_list_title" = "Demandes en attente";
-"screen_leave_space_choose_owners_action" = "Choisissez les propriétaires";
+"screen_leave_space_choose_owners_action" = "Choisir les propriétaires";
 "screen_link_new_device_desktop_scanning_title" = "Scannez le code QR";
 "screen_link_new_device_desktop_step3" = "Scanner le code QR avec cet appareil";
 "screen_link_new_device_desktop_submit" = "Prêt à scanner";

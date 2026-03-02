@@ -77,9 +77,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d μέλος</string>
+			<string>%1$d Μέλος</string>
 			<key>other</key>
-			<string>%1$d μέλη</string>
+			<string>%1$d Μέλη</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
+			<string>%1$d Αίθουσα</string>
 			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d Αίθουσες</string>
 		</dict>
 	</dict>
 	<key>common_selected_count</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d selected</string>
+			<string>%1$d επιλέχθηκε</string>
 			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d επιλέχθηκαν</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -157,9 +157,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Space</string>
+			<string>%1$d Χώρος</string>
 			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d Χώροι</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -205,9 +205,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
+			<string>Έχετε %d νέο μήνυμα.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>Έχετε %d νέα μηνύματα.</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -317,9 +317,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Leave %1$d room and space</string>
+			<string>Αφήστε αίθουσα και χώρο του %1$d</string>
 			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>Αφήστε τις αίθουσες και τους χώρους του %1$d</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -349,9 +349,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Banned</string>
+			<string>%1$d Αποκλείστηκε</string>
 			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d Αποκλείστηκαν</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -365,9 +365,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d άτομο</string>
+			<string>%1$d Άτομο</string>
 			<key>other</key>
-			<string>%1$d άτομα</string>
+			<string>%1$d Άτομα</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_pending_header_title</key>
@@ -381,9 +381,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Invited</string>
+			<string>%1$d Προσκλήθηκε</string>
 			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d Προσκλήθηκαν</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -493,9 +493,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
+			<string>Αφαιρείται η %1$d αίθουσα από %2$@</string>
 			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>Αφαιρούνται οι %1$d αίθουσες από %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>
@@ -509,9 +509,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
+			<string>Αποκλείσατε τον χρήστη %1$d. Δεν θα λαμβάνετε ειδοποιήσεις για αυτόν τον χρήστη.</string>
 			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>Αποκλείσατε τους χρήστες %1$d. Δεν θα λαμβάνετε ειδοποιήσεις για αυτούς τους χρήστες.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

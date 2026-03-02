@@ -20,7 +20,7 @@
 "a11y_paused_voice_message" = "Häälsõnum, kestus:%1$@, praegune asukoht: %2$@";
 "a11y_pin_field" = "PIN-koodi väli";
 "a11y_play" = "Esita";
-"a11y_playback_speed" = "Playback speed";
+"a11y_playback_speed" = "Taasesituse kiirus";
 "a11y_poll_end" = "Lõppenud küsitlus";
 "a11y_polls_will_remove_selection" = "See kustutab eelmise valiku";
 "a11y_polls_winning_answer" = "See vastus võitis";
@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Saada häälsõnum";
 "action_share" = "Jaga";
 "action_share_link" = "Jaga linki";
+"action_share_live_location" = "Share live location";
 "action_show" = "Näita";
 "action_sign_in_again" = "Logi uuesti sisse";
 "action_signout" = "Logi välja";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@ kasutaja verifitseeritud identiteet on lähtestatud.";
 "crypto_identity_change_verification_violation_new" = "%1$@ kasutaja (%2$@ kasutajanimi) verifitseeritud identiteet on lähtestatud. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Võta verifitseerimine tagasi";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "%1$@ link viib sind teise veebisaiti %2$@\n\nKas sa oled kindel, et soovid jätkata?";
 "dialog_confirm_link_title" = "Palun kontrolli seda linki mõttega";
 "dialog_file_too_large_to_upload_title" = "See fail on üleslaadimiseks liiga suur";

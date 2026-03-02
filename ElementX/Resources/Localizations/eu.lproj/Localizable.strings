@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Bidali ahots-mezua";
 "action_share" = "Partekatu";
 "action_share_link" = "Partekatu esteka";
+"action_share_live_location" = "Share live location";
 "action_show" = "Erakutsi";
 "action_sign_in_again" = "Hasi saioa berriro";
 "action_signout" = "Amaitu saioa";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@(r)en identitatea berrezarri da.";
 "crypto_identity_change_verification_violation_new" = "%1$@(r)en %2$@ identitatea berrezarri da. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "%1$@ estekak %2$@ gunera zaramatza.\n\nZiur jarraitu nahi duzula?";
 "dialog_confirm_link_title" = "Egiaztatu honako esteka";
 "dialog_file_too_large_to_upload_title" = "Fitxategiaren tamaina handiegia da igotzeko";

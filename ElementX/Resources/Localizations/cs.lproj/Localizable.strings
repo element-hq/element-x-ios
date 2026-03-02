@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Odeslat hlasovou zprávu";
 "action_share" = "Sdílet";
 "action_share_link" = "Sdílet odkaz";
+"action_share_live_location" = "Share live location";
 "action_show" = "Zobrazit";
 "action_sign_in_again" = "Přihlásit se znovu";
 "action_signout" = "Odhlásit se";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "Identita uživatele %1$@ se změnila.";
 "crypto_identity_change_verification_violation_new" = "Identita uživatele %1$@ %2$@ se změnila. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Zrušit ověření";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "Odkaz %1$@ vás přesměruje na jinou stránku %2$@\n\nOpravdu chcete pokračovat?";
 "dialog_confirm_link_title" = "Zkontrolujte tento odkaz";
 "dialog_file_too_large_to_upload_title" = "Soubor je pro nahrání příliš velký.";

@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Enviar mensagem de voz";
 "action_share" = "Compartilhar";
 "action_share_link" = "Compartilhar link";
+"action_share_live_location" = "Share live location";
 "action_show" = "Mostrar";
 "action_sign_in_again" = "Entrar novamente";
 "action_signout" = "Sair";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "A identidade de %1$@ foi redefinida.";
 "crypto_identity_change_verification_violation_new" = "A identidade de %1$@ %2$@ foi redefinida. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Anular verificação";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "O link %1$@ está levando você para outro site %2$@\n\nVocê tem certeza de que deseja continuar?";
 "dialog_confirm_link_title" = "Verifique este link duas vezes";
 "dialog_file_too_large_to_upload_title" = "O tamanho do arquivo é muito grande para ser enviado";
@@ -718,7 +720,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Uma vez ativada, a criptografia não poderá ser desativada.";
 "screen_security_and_privacy_encryption_toggle_title" = "Ativar a criptografia de ponta a ponta";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Qualquer um pode entrar";
-"screen_security_and_privacy_room_access_anyone_option_title" = "Anyone";
+"screen_security_and_privacy_room_access_anyone_option_title" = "Público";
 "screen_security_and_privacy_room_access_footer" = "Escolha os espaços dos quais os membros podem entrar nesta sala sem um convite. %1$@";
 "screen_security_and_privacy_room_access_invite_only_option_description" = "Apenas pessoas convidadas podem entrar.";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Privado";

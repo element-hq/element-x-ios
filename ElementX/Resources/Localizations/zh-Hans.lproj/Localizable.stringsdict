@@ -124,10 +124,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d selected</string>
 			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d 已选中</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -182,10 +180,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>You have %d new message.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>您有 %d 条新消息。</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -310,10 +306,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Banned</string>
 			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d 被禁用</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -327,7 +321,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d 人</string>
+			<string>%1$d 个人</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_pending_header_title</key>
@@ -340,10 +334,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Invited</string>
 			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d 受邀</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -440,10 +432,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
 			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>移除 %1$d 个 %2$@ 中的聊天室</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>

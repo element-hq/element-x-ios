@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Надіслати голосове повідомлення";
 "action_share" = "Поділитися";
 "action_share_link" = "Поділитися посиланням";
+"action_share_live_location" = "Share live location";
 "action_show" = "Показати";
 "action_sign_in_again" = "Увійдіть знову";
 "action_signout" = "Вийти";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "Ідентичність %1$@ скинуто.";
 "crypto_identity_change_verification_violation_new" = "Ідентичність %1$@ %2$@ скинуто. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Відкликати верифікацію";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "Посилання %1$@ спрямовує вас на інший сайт %2$@\n\nВи впевнені, що хочете продовжити?";
 "dialog_confirm_link_title" = "Уважно перевірте це посилання";
 "dialog_file_too_large_to_upload_title" = "Розмір файлу завеликий для вивантаження";

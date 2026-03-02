@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Odoslať hlasovú správu";
 "action_share" = "Zdieľať";
 "action_share_link" = "Zdieľať odkaz";
+"action_share_live_location" = "Share live location";
 "action_show" = "Zobraziť";
 "action_sign_in_again" = "Prihláste sa znova";
 "action_signout" = "Odhlásiť sa";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "Totožnosť používateľa %1$@ bola obnovená.";
 "crypto_identity_change_verification_violation_new" = "Totožnosť používateľa %1$@ %2$@ bola obnovená. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Zrušiť overenie";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "Odkaz %1$@ vás presmeruje na inú stránku %2$@\n\nNaozaj chcete pokračovať?";
 "dialog_confirm_link_title" = "Dôkladne skontrolujte tento odkaz";
 "dialog_file_too_large_to_upload_title" = "Súbor je príliš veľký na nahratie";

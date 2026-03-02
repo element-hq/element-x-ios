@@ -109,9 +109,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d reply</string>
+			<string>%1$d antwoord</string>
 			<key>other</key>
-			<string>%1$d replies</string>
+			<string>%1$d antwoorden</string>
 		</dict>
 	</dict>
 	<key>common_rooms</key>

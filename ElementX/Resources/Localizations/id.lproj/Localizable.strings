@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Kirim pesan suara";
 "action_share" = "Bagikan";
 "action_share_link" = "Bagikan tautan";
+"action_share_live_location" = "Share live location";
 "action_show" = "Tampilkan";
 "action_sign_in_again" = "Masuk lagi";
 "action_signout" = "Keluar dari akun";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "Identitasnya %1$@ sudah diatur ulang.";
 "crypto_identity_change_verification_violation_new" = "Identitas %2$@ %1$@ telah diatur ulang. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Tolak verifikasi";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "Tautan %1$@ membawa Anda ke situs lain %2$@\n\nApakah Anda yakin ingin melanjutkan?";
 "dialog_confirm_link_title" = "Periksa kembali tautan ini";
 "dialog_file_too_large_to_upload_title" = "The file size is too large to upload";

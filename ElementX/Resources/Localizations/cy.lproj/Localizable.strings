@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Anfon neges llais";
 "action_share" = "Rhannu";
 "action_share_link" = "Rhannwch ddolen";
+"action_share_live_location" = "Share live location";
 "action_show" = "Dangos";
 "action_sign_in_again" = "Mewngofnodi eto";
 "action_signout" = "Allgofnodi";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "Cafodd hunaniaeth %1$@ ei ailosod.";
 "crypto_identity_change_verification_violation_new" = "Cafodd hunaniaeth %2$@ %1$@ ei ailosod. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Tynnu'r gwiriad yn ôl";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "Mae'r ddolen %1$@ yn mynd â chi i wefan arall %2$@\n\nYdych chi'n siŵr eich bod am barhau?";
 "dialog_confirm_link_title" = "Gwnewch yn siŵr fod y ddolen hon yn iawn";
 "dialog_file_too_large_to_upload_title" = "Mae maint y ffeil yn rhy fawr i'w llwytho";

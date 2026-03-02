@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Enviar mensagem de voz";
 "action_share" = "Partilhar";
 "action_share_link" = "Partilhar ligação";
+"action_share_live_location" = "Share live location";
 "action_show" = "Mostrar";
 "action_sign_in_again" = "Iniciar sessão novamente";
 "action_signout" = "Terminar sessão";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "A identidade de %1$@ foi reposta.";
 "crypto_identity_change_verification_violation_new" = "A identidade de %1$@ (%2$@) foi reposta. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Retirar verificação";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "O link %1$@ está a levar-te para outro site %2$@\n\nTens a certeza de que queres continuar?";
 "dialog_confirm_link_title" = "Verifica novamente esta ligação";
 "dialog_file_too_large_to_upload_title" = "O tamanho do ficheiro é demasiado grande para ser carregado";

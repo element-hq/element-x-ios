@@ -148,6 +148,7 @@
 "action_send_voice_message" = "Invia messaggio vocale";
 "action_share" = "Condividi";
 "action_share_link" = "Condividi collegamento";
+"action_share_live_location" = "Share live location";
 "action_show" = "Mostra";
 "action_sign_in_again" = "Accedi di nuovo";
 "action_signout" = "Disconnetti";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "L'identità di %1$@ è stata reimpostata.";
 "crypto_identity_change_verification_violation_new" = "L'identità %2$@ di %1$@ è stata reimpostata. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Ritira verifica";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "Il link %1$@ ti porta ad un altro sito %2$@\n\nSei sicuro di voler continuare?";
 "dialog_confirm_link_title" = "Ricontrolla questo link";
 "dialog_file_too_large_to_upload_title" = "La dimensione del file è troppo grande per essere caricata";

@@ -203,9 +203,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
+			<string>Du har %d ny besked.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>Du har %d nye beskeder.</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>

@@ -148,6 +148,7 @@
 "action_send_voice_message" = "음성 메세지 보내기";
 "action_share" = "공유";
 "action_share_link" = "링크 공유";
+"action_share_live_location" = "Share live location";
 "action_show" = "표시";
 "action_sign_in_again" = "다시 로그인";
 "action_signout" = "로그아웃";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@의 신원이 재설정되었습니다.";
 "crypto_identity_change_verification_violation_new" = "%1$@의 %2$@ 신원이 재설정되었습니다. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "확인 취소";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "%1$@ 링크는 다른 사이트로 이동합니다 %2$@\n\n정말 계속 진행하시겠습니까?";
 "dialog_confirm_link_title" = "이 링크를 다시 확인하세요.";
 "dialog_file_too_large_to_upload_title" = "파일 크기가 너무 커서 업로드할 수 없습니다.";

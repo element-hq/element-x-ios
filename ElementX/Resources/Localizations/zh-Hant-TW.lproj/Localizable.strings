@@ -148,6 +148,7 @@
 "action_send_voice_message" = "傳送語音訊息";
 "action_share" = "分享";
 "action_share_link" = "分享連結";
+"action_share_live_location" = "Share live location";
 "action_show" = "顯示";
 "action_sign_in_again" = "再登入一次";
 "action_signout" = "登出";
@@ -160,7 +161,7 @@
 "action_static_map_load" = "點擊以載入地圖";
 "action_take_photo" = "拍照";
 "action_tap_for_options" = "點擊以查看選項";
-"action_translate" = "Translate";
+"action_translate" = "翻譯";
 "action_try_again" = "再試一次";
 "action_unpin" = "取消釘選";
 "action_view" = "檢視";
@@ -389,6 +390,7 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@ 的已驗證身份被重設。";
 "crypto_identity_change_verification_violation_new" = "%1$@ 的 %2$@ 驗證身份已重設。  %3$@";
 "crypto_identity_change_withdraw_verification_action" = "撤回驗證";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "連結 %1$@ 會將您帶往其他網站 %2$@\n\n您確定您想要繼續嗎？";
 "dialog_confirm_link_title" = "仔細檢查此連結";
 "dialog_file_too_large_to_upload_title" = "檔案太大，無法上傳";
