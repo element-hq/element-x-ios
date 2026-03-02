@@ -40,7 +40,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         switch viewAction {
         case .close:
             actionsSubject.send(.close)
-        case .selectLocation:
+        case .selectThisLocation:
             guard let coordinate = state.bindings.mapCenterLocation else { return }
             let uncertainty = state.isSharingUserLocation ? context.geolocationUncertainty : nil
             Task { await sendLocation(.init(coordinate: coordinate, uncertainty: uncertainty), isUserLocation: state.isSharingUserLocation) }

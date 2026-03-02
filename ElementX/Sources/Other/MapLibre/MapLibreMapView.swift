@@ -90,7 +90,7 @@ struct MapLibreMapView: UIViewRepresentable {
         mapView.logoViewPosition = .topLeft
         mapView.attributionButtonPosition = .topLeft
         mapView.attributionButtonMargins = .init(x: mapView.logoView.frame.maxX + 8, y: mapView.logoView.center.y / 2)
-        mapView.tintColor = .black
+        mapView.tintColor = .compound.iconAccentPrimary
         mapView.allowsRotating = false
         mapView.allowsTilting = false
         return mapView

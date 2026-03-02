@@ -50,10 +50,10 @@ struct LocationSharingScreen: View {
             .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
             
             if context.viewState.isLocationPickerMode {
-                LocationMarkerView()
+                LocationMarkerView(mediaProvider: context.mediaProvider)
             }
         }
-        .overlay(alignment: .bottomTrailing) {
+        .overlay(alignment: .topTrailing) {
             centerToUserLocationButton
         }
     }
@@ -78,7 +78,7 @@ struct LocationSharingScreen: View {
         var annotations: [LocationAnnotation] = []
         if context.viewState.isLocationPickerMode == false {
             let annotation = LocationAnnotation(coordinate: context.viewState.initialMapCenter, anchorPoint: .bottomCenter) {
-                LocationMarkerView()
+                LocationMarkerView(mediaProvider: context.mediaProvider)
             }
             annotations.append(annotation)
         }
@@ -93,24 +93,24 @@ struct LocationSharingScreen: View {
         context.viewState.isLocationPickerMode ? .horizontal : [.horizontal, .bottom]
     }
     
-    private var selectLocationButton: some View {
-        Button {
-            context.send(viewAction: .selectLocation)
-        } label: {
-            HStack(spacing: 8) {
-                CompoundIcon(\.shareIos)
-                Text(context.viewState.isSharingUserLocation ? L10n.screenShareMyLocationAction : L10n.screenShareThisLocationAction)
-            }
-        }
+    private var centerToUseIcon: some View {
+        CompoundIcon(context.viewState.isSharingUserLocation ? \.locationNavigatorCentred : \.locationNavigator)
+            .foregroundStyle(.compound.iconPrimary)
+            .padding(13)
     }
     
     private var centerToUserLocationButton: some View {
         Button {
             context.send(viewAction: .centerToUser)
         } label: {
-            CompoundIcon(context.viewState.isSharingUserLocation ? \.locationNavigatorCentred : \.locationNavigator)
-                .padding(8)
-                .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 6))
+            if #available(iOS 26.0, *) {
+                centerToUseIcon
+                    .glassEffect(.regular.interactive(), in: Circle())
+                    .tint(.compound.bgCanvasDefault)
+            } else {
+                centerToUseIcon
+                    .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 6))
+            }
         }
         .dynamicTypeSize(.large)
         .padding(16)
@@ -152,7 +152,9 @@ struct LocationSharingScreen: View {
     
     private var sharingOptionsSheet: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Button { } label: {
+            Button {
+                context.send(viewAction: .selectThisLocation)
+            } label: {
                 LocationSharingLabel(text: L10n.screenShareThisLocationAction,
                                      icon: \.locationNavigator,
                                      iconColor: .compound.iconSecondary)
@@ -169,11 +171,10 @@ struct LocationSharingScreen: View {
                                          iconColor: .compound.iconAccentPrimary)
                 }
             }
-         }
+        }
         .font(.compound.bodyLG)
         .foregroundStyle(.compound.textPrimary)
         .padding(.top, 38)
-        .padding(.leading, 16)
         .readHeight($sharingOptionsSheetHeight)
         .interactiveDismissDisabled()
         .presentationBackground(.compound.bgCanvasDefault)
@@ -198,6 +199,7 @@ private struct LocationSharingLabel: View {
             CompoundIcon(icon)
                 .foregroundStyle(iconColor)
         }
+        .padding(.leading, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
