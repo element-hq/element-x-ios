@@ -113,7 +113,7 @@ targets:
         aps-environment: development
         com.apple.developer.associated-domains:
         - applinks:matrix.to
-        - webcredentials:*.element.io # Required for OIDC ASWebAuthenticationSession until AASA on ucmeet.info
+        # webcredentials not needed — OIDC uses custom URL scheme (no AASA required)
         com.apple.developer.usernotifications.communication: true
         com.apple.security.app-sandbox: true
         com.apple.security.application-groups:

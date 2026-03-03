@@ -252,21 +252,19 @@ final class AppSettings {
     
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
-    /// The redirect URL used for OIDC. This no longer uses universal links so we don't need the bundle ID to avoid conflicts between Element X, Nightly and PR builds.
-    private(set) var oidcRedirectURL: URL = "https://element.io/oidc/login"
+    /// The redirect URL used for OIDC. Uses custom URL scheme with SINGLE slash (no authority).
+    /// MAS native app policy requires: no "://", scheme matches client_uri in reverse-DNS.
+    /// org.ucmeet.UCMeetChat:/callback → matches ucmeet.org
+    private(set) var oidcRedirectURL: URL = "org.ucmeet.UCMeetChat:/callback"
 
-    // UCMeet: MAS requires ALL URIs (client, redirect, logo, tos, policy) on the same host.
-    // We use element.io for OIDC registration metadata since:
-    // 1. element.io is already in the app's associated domains (webcredentials:*.element.io)
-    // 2. ASWebAuthenticationSession requires AASA file on the redirect host (ucmeet.info has none)
-    // 3. These are technical OIDC client metadata, not user-facing URLs
-    // TODO: UCMeet — when customer adds AASA file to www.ucmeet.info, switch all to ucmeet.info
+    /// All OIDC metadata URIs must be on the same host (MAS policy).
+    /// Using ucmeet.org because redirect scheme org.ucmeet.* maps to ucmeet.org in reverse-DNS.
     private(set) lazy var oidcConfiguration = OIDCConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
                                                                 redirectURI: oidcRedirectURL,
-                                                                clientURI: URL(string: "https://element.io")!,
-                                                                logoURI: URL(string: "https://element.io/favicon.png")!,
-                                                                tosURI: URL(string: "https://element.io/acceptable-use-policy-terms")!,
-                                                                policyURI: URL(string: "https://element.io/privacy")!,
+                                                                clientURI: URL(string: "https://ucmeet.org")!,
+                                                                logoURI: URL(string: "https://ucmeet.org/favicon.png")!,
+                                                                tosURI: URL(string: "https://ucmeet.org/terms")!,
+                                                                policyURI: URL(string: "https://ucmeet.org/privacy")!,
                                                                 staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
     
     /// Whether or not the Create Account button is shown on the start screen.

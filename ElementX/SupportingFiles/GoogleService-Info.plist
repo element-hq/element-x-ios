@@ -3,18 +3,28 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>TODO-customer-api-key</string>
+	<string>AIzaSyBn9RFem8XSJ_GOOhK9YJgo0qPeQr2ErFc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>000000000000</string>
+	<string>951982198962</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>PROJECT_ID</key>
-	<string>TODO-customer-project-id</string>
-	<key>GOOGLE_APP_ID</key>
-	<string>1:000000000000:ios:0000000000000000</string>
+	<string>matrix-8c24a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>matrix-8c24a.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
 	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:951982198962:ios:7f7f03ce7ebe75eba3b9ab</string>
 </dict>
 </plist>

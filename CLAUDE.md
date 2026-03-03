@@ -104,25 +104,26 @@ A branded fork of **Element X iOS** (open-source Matrix messenger, SwiftUI) to b
 - APNs key received (2026-03-02): Customer provided APNs Authentication Key (`AuthKey_XZANH7CD3Z.p8`, Key ID: `XZANH7CD3Z`). Also received App Store Connect API Key (`ApiKey_QVGWLXJNNMOZ.p8`). APNs key needed for Firebase Console push notification configuration (D-002). ASC API key installed to `~/Library/Developer/Xcode/API Keys/` for CLI xcodebuild/altool use.
 
 **What's blocked (require resolution):**
-- **Xcode signing**: Customer's team `26UC01GH` not visible in Xcode. Developer needs Apple Developer Program membership (not just ASC Administrator role). Either: (a) customer adds developer to Developer Program, or (b) developer uses customer's Apple ID in Xcode as workaround.
 - Push E2E testing (needs Firebase project with Bundle ID `org.ucmeet.UCMeetChat` + Sygnal URL from customer)
-- OIDC client registration (customer registers `org.ucmeet.UCMeetChat` as OIDC client in MAS)
 - MapLibre configuration (API key needed from customer)
 
+**What was recently unblocked:**
+- ~~Xcode signing~~ — **RESOLVED** (2026-03-03): Added customer's Apple ID to Xcode Accounts. Team visible, automatic signing works.
+- ~~OIDC login~~ — **RESOLVED** (2026-03-03): Changed redirect URI to custom URL scheme `org.ucmeet.UCMeetChat:/callback` (single slash). MAS DCR accepts native app custom schemes without authority component. Login verified on simulator.
+
 **Next actions:**
-1. **Resolve Xcode signing** — get developer added to Apple Developer Program team, OR add customer's Apple ID to Xcode Accounts
-2. Create Firebase project with Bundle ID `org.ucmeet.UCMeetChat`, upload APNs key (`XZANH7CD3Z`)
-3. Get Sygnal URL from customer for push E2E testing
-4. Configure MapLibre (API key + Secrets.swift)
-5. Confirm AGPL license covers Element X specifically
+1. Create Firebase project with Bundle ID `org.ucmeet.UCMeetChat`, upload APNs key (`XZANH7CD3Z`)
+2. Get Sygnal URL from customer for push E2E testing
+3. Configure MapLibre (API key + Secrets.swift)
+4. Confirm AGPL license covers Element X specifically
+5. Customer should set up basic pages at `ucmeet.org` (terms, privacy, favicon) for OIDC consent screen
 
 ### Blockers (remaining)
 
-1. **Xcode signing / Developer Program access** — Developer is ASC Administrator but not in Apple Developer Program team. Customer's team `26UC01GH` doesn't appear in Xcode. Must resolve before real device testing or archive builds.
-2. **AGPL v3 licensing** — Customer says handled; need written confirmation it covers Element X (not just old Element iOS). Blocks App Store publication only.
-3. **Sygnal URL** — Customer has Sygnal but hasn't provided the URL yet. Blocks push E2E testing.
-4. **Firebase project** — Developer creates it with Bundle ID `org.ucmeet.UCMeetChat` + APNs key. Blocks push E2E testing.
-5. **MapLibre API key** — Customer needs to provide. Blocks location sharing.
+1. **AGPL v3 licensing** — Customer says handled; need written confirmation it covers Element X (not just old Element iOS). Blocks App Store publication only.
+2. **Sygnal URL** — Customer has Sygnal but hasn't provided the URL yet. Blocks push E2E testing.
+3. **Firebase project** — Developer creates it with Bundle ID `org.ucmeet.UCMeetChat` + APNs key. Blocks push E2E testing.
+4. **MapLibre API key** — Customer needs to provide. Blocks location sharing.
 
 > See `decisions_tracker.md` for all 12 tracked decisions: 7 resolved, 3 in progress, 2 open.
 
@@ -417,7 +418,8 @@ The project is **feature-complete for all code changes**. Bundle ID `org.ucmeet.
 | 2026-02-20 | **Customer provided "Forking Data.doc" — authoritative configuration applied.** 5 values corrected in `app.yml`: `APP_DISPLAY_NAME` → `UCMeet.Chat`, `PRODUCTION_APP_NAME` → `UCMeet.Chat`, `BASE_BUNDLE_IDENTIFIER` → `org.ucmeet.UCMeetChat`, `APP_GROUP_IDENTIFIER` → `group.org.ucmeet`, `DEVELOPMENT_TEAM` → `26UC01GH`. Bundle ID cascaded through 22 files: AppSettings.swift (nightly check + background refresh), Info.plist, target.yml, nightly.yml, 9 dispatch queue labels (RoomSummaryProvider, RoomDirectorySearchProxy, TimelineItemProvider, AudioRecorder, AttributedStringBuilder, Bundle, NetworkMonitor, EmojiProviderProtocol, UserSessionFlowCoordinator), BugReportService, 4 test coordinators (UITests, AccessibilityTests, UnitTests, UserPreferenceTests, UserSessionFlowCoordinatorTests). Display name `UCMeet.Chat` applied in 6 string files across 3 locales. NOTICE updated. `xcodegen generate` + build verified — BUILD SUCCEEDED. 962 unit tests: 899 passed, 63 pre-existing failures, **0 new failures**. |
 | 2026-03-01 | **Sprint planning docs, new logos, Bundle ID fix, accent color.** (1) Bundle ID casing corrected: `org.ucmeet.ucmeetchat` → `org.ucmeet.UCMeetChat` per authoritative «Форкинг.doc» — updated across 20 source/config files. (2) App icon replaced with Logo_3D_Kvadrat (square 3D logo, 1024x1024, no alpha). (3) In-app logo replaced with Logo_3D_Krugliy (circular 3D logo, 1024x1024 PNG, replaces old PDF). (4) Accent color changed from green (#1CD6A1) to dark navy blue (#003B5D) extracted from logo — all 4 variants (light, dark, high-contrast) updated in both main app and compound-ios. (5) 3 new docs created: `sprints.md` (6-sprint plan from customer DOCX), `dev_plan.md` (45-day timeline from customer DOCX), `appstore_connect_guide.md` (step-by-step portal registration). (6) D-008 → Resolved (icon + accent color done). Decisions tracker updated (7 resolved, 3 in progress, 2 open). Build verified — BUILD SUCCEEDED. |
 | 2026-03-02 | **Apple Developer Portal registration + access issue discovered.** (1) Bundle IDs registered in Apple Developer Portal: main `org.ucmeet.UCMeetChat`, NSE `.nse`, ShareExtension `.shareextension`. (2) App Group `group.org.ucmeet` created and assigned. (3) Capabilities enabled: Push Notifications, Associated Domains, App Groups per target. (4) **Access issue identified:** Developer added as App Store Connect Administrator but NOT as Apple Developer Program team member — customer's team `26UC01GH` does not appear in Xcode team dropdown. ASC and Developer Portal are separate systems; ASC Administrator role doesn't grant Developer Program access. (5) APNs Authentication Key received: `AuthKey_XZANH7CD3Z.p8` (Key ID: `XZANH7CD3Z`) — needed for Firebase Console push configuration. (6) App Store Connect API Key received: `ApiKey_QVGWLXJNNMOZ.p8` — installed to `~/Library/Developer/Xcode/API Keys/` for CLI use. (7) Workaround identified: use customer's Apple ID in Xcode, or get added to Developer Program team. Decisions tracker updated. |
+| 2026-03-03 | **Xcode signing resolved + OIDC fix + logo sizing fix.** (1) **Xcode signing resolved:** Added customer's Apple ID to Xcode Accounts — team visible, automatic signing works, provisioning profiles generated for all 3 targets. (2) **OIDC redirect URI fixed:** Changed from `https://element.io/oidc/login` (AASA rejected our Bundle ID) to custom URL scheme `org.ucmeet.UCMeetChat:/callback` (single slash — MAS native app policy requires no authority component). MAS DCR tested and confirmed working. All OIDC metadata URIs moved from element.io to ucmeet.org (MAS same-host policy, reverse-DNS match with org.ucmeet.*). Removed `webcredentials:*.element.io` from entitlements (no longer needed). OIDC login verified working on simulator. (3) **In-app logo sizing fixed:** Logo was rendering at 1024×1024 points (full screen) because original was a PDF (110pt intrinsic) replaced with 1024px PNG. Fixed by resizing to 330×330px and marking as @3x in asset catalog (110pt at Retina). (4) **Firebase GoogleService-Info.plist:** Replaced placeholder with real Firebase project config. |
 
 ---
 
-*Last updated: 2026-03-02 (Apple Developer Portal registration, signing access issue, APNs key received). Update this file whenever the project phase changes or a blocker is resolved.*
+*Last updated: 2026-03-03 (Xcode signing resolved, OIDC custom scheme redirect, logo sizing fix). Update this file whenever the project phase changes or a blocker is resolved.*
