@@ -126,7 +126,7 @@ class NotificationHandler {
                 }
                 
                 return .processedShouldDiscard
-            case .rtcNotification(let notificationType, let expirationTimestamp):
+            case .rtcNotification(let notificationType, let expirationTimestamp, _):
                 return await handleCallNotification(notificationType: notificationType,
                                                     rtcNotifyEventID: event.eventId(),
                                                     timestamp: event.timestamp(),
