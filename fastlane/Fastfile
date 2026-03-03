@@ -9,40 +9,11 @@ before_all do
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
-  ENV["SENTRY_LOG_LEVEL"] = "DEBUG"
 end
 
 lane :config_production do
   sh("(cd .. && swift run pipeline update-foss-secrets)")
   xcodegen(spec: "project.yml")
-end
-
-$sentry_retry=0
-lane :upload_dsyms_to_sentry do |options|
-  auth_token = ENV["SENTRY_AUTH_TOKEN"]
-  UI.user_error!("Invalid Sentry Auth token.") unless !auth_token.to_s.empty?
-
-  dsym_path = options[:dsym_path]
-  UI.user_error!("Invalid DSYM path.") unless !dsym_path.to_s.empty?
-
-  begin
-    sentry_debug_files_upload(
-      auth_token: auth_token,
-      org_slug: 'element',
-      project_slug: 'element-x-ios',
-      url: 'https://sentry.tools.element.io/',
-      path: dsym_path,
-    )
-  rescue => exception
-    $sentry_retry += 1
-
-    if $sentry_retry <= 5
-      UI.message "Sentry failed, retrying."
-      upload_dsyms_to_sentry options
-    else
-      raise exception
-    end
-  end
 end
 
 lane :release_to_github do

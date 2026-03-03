@@ -30,7 +30,7 @@ setup_xcode_cloud_environment () {
 }
 
 install_xcode_cloud_brew_dependencies () {
-    brew update && brew install xcodegen pkl
+    brew update && brew install xcodegen pkl getsentry/tools/sentry-cli
 }
 
 setup_github_actions_environment() {
