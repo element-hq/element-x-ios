@@ -34,13 +34,15 @@ jobs:
       - name: Run tests
         run: |
           args=(--device-type "${{ matrix.device }}")
-          if [[ -n "${{ github.event.inputs.test_name }}" ]]; then
-            args+=( --test-name "${{ github.event.inputs.test_name }}")
+          if [[ -n "${GITHUB_EVENT_INPUTS_TEST_NAME}" ]]; then
+            args+=( --test-name "${GITHUB_EVENT_INPUTS_TEST_NAME}")
           fi
           swift run -q tools ci ui-tests "${args[@]}"
+        env:
+          GITHUB_EVENT_INPUTS_TEST_NAME: ${{ github.event.inputs.test_name }}
 
       - name: Archive artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         # We only care about artefacts if the tests fail
         if: failure()
         with:

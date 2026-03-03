@@ -38,7 +38,7 @@ jobs:
         run: swift run -q tools ci unit-tests --skip-previews
               
       - name: Archive artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         # We only care about artefacts if the tests fail
         if: failure()
         with:
