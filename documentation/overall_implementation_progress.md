@@ -8,9 +8,9 @@
 
 ---
 
-## Latest Analysis: 2026-03-01
+## Latest Analysis: 2026-03-03
 
-**Calendar day:** ~31 since project start (Feb 8)
+**Calendar day:** ~33 since project start (Feb 8)
 
 ---
 
@@ -20,14 +20,14 @@
 
 | TOR Section | Requirement | Status | Notes |
 |-------------|-------------|--------|-------|
-| **3.1** Source code adaptation | Bundle ID, identifiers, build scheme, libraries | **MOSTLY DONE** | Server config applied, Element refs cleaned, associated domains updated. Bundle ID still needs D-001. |
+| **3.1** Source code adaptation | Bundle ID, identifiers, build scheme, libraries | **DONE** | Server config applied, Element refs cleaned, associated domains updated, Bundle ID fully cascaded, Xcode signing works. |
 | **3.2** Branding | Icon, name, colors | **DONE** | Display name "UCMeet.Chat" applied, new 3D logos installed (square + circular), accent color #003B5D (dark navy blue). Zero Element branding visible. |
-| **3.3** FCM push integration | Firebase SDK, Sygnal, APNs key, testing | **70% DONE** | Code + 14 tests complete. Awaiting real GoogleService-Info.plist (D-002). |
+| **3.3** FCM push integration | Firebase SDK, Sygnal, APNs key, testing | **80% DONE** | Code + 14 tests complete. Real GoogleService-Info.plist added. Awaiting Sygnal URL + APNs key upload to Firebase Console for E2E testing. |
 | **3.4** Server configuration | Homeserver URL, identity server, .well-known, Scalar, Jitsi | **DONE** | `matrix.ucmeet.org` configured, `.well-known` verified, legal URLs → ucmeet.info. Scalar N/A. |
 | **3.5** Calls support | 1:1 + group calls | **DONE** | URL scheme → `org.ucmeet.call`, LiveKit confirmed in `.well-known`, embedded Element Call bundle. |
 | **3.6** Testing | Full test cycle across devices/iOS versions | **IN PROGRESS** | OIDC login verified on simulator. 16 rebrand-affected unit tests fixed and passing. Full test cycle needs more device coverage. |
-| **3.7** Release build | Version, signing, validation | **BLOCKED** (D-001, D-007) | Requires Apple Developer account + licensing resolution |
-| **3.8** App Store publication | Listing, TestFlight, review, release | **TEMPLATES READY** | App Store prep templates created. Execution blocked on D-001, D-007. |
+| **3.7** Release build | Version, signing, validation | **READY** | Xcode signing works (D-007 resolved). Blocked only on D-001 (licensing) for publication. |
+| **3.8** App Store publication | Listing, TestFlight, review, release | **TEMPLATES READY** | App Store prep templates created. Xcode signing works. Blocked on D-001 (licensing). |
 
 ### Functionality (TOR Section 4)
 
@@ -52,7 +52,7 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 
 | Requirement | Status | Gap |
 |-------------|--------|-----|
-| 7.1 App in App Store | **NOT DONE** | Blocked on D-001 (licensing), D-007 (Apple account) |
+| 7.1 App in App Store | **NOT DONE** | Blocked on D-001 (licensing). D-007 (Apple account) resolved. |
 | 7.2 All functionality works | **PARTIALLY VERIFIED** | OIDC login + Sliding Sync verified. Calls, push, E2EE need testing. |
 | 7.3 Stability/quality | **NOT VERIFIED** | Needs full testing cycle |
 | 7.4 Apple compliance | **TEMPLATES READY** | Privacy labels mapped, export compliance analyzed |
@@ -88,7 +88,9 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | Bundle ID application (Forking Data.doc) | ~3h | 22 files updated, display name UCMeet.Chat, all dispatch queue labels migrated |
 | Bundle ID casing fix + new logos + accent color | ~3h | 20 files corrected, 2 logos processed, accent color extracted and applied |
 | Sprint docs + App Store Connect guide | ~2h | 3 new documentation files (sprints.md, dev_plan.md, appstore_connect_guide.md) |
-| **Total invested** | **~69-72h** | |
+| Apple Developer Portal registration | ~3h | 3 Bundle IDs registered, App Group created, capabilities enabled |
+| Xcode signing + OIDC fix + logo sizing + Firebase config | ~4h | Signing resolved, custom URL scheme redirect, logo @3x fix, real GoogleService-Info.plist |
+| **Total invested** | **~76-79h** | |
 
 ### Remaining Work Estimate (by phase)
 
@@ -113,11 +115,11 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 |--------|-------|
 | Original estimate (with AI) | 60-95h, expected ~80h |
 | Original estimate (without AI) | 85-132h, expected ~120h |
-| Hours invested so far | ~69-72h |
-| Hours remaining (estimated) | 24-48h, expected ~32h |
-| **Projected total** | **~97-104h** |
+| Hours invested so far | ~76-79h |
+| Hours remaining (estimated) | 20-40h, expected ~28h |
+| **Projected total** | **~100-107h** |
 | Budget position | Slightly above AI-assisted range (60-95h), within non-AI range (85-132h) |
-| Budget consumed | ~72% of hours, ~73% of $2,200 fixed price |
+| Budget consumed | ~78% of hours, ~77% of $2,200 fixed price |
 
 > Project is tracking well within budget. String rebranding and source cleanup further reduced remaining work. Main cost centers left: testing (~10-16h) and App Store submission (~8-14h).
 
@@ -125,28 +127,28 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 
 ## 3. Critical Path
 
-### Dependency Chain (Updated 2026-02-17)
+### Dependency Chain (Updated 2026-03-03)
 
 ```
-✅ Customer responded (Feb 16) — 5 decisions resolved
+✅ Xcode signing resolved (Mar 3) — customer's Apple ID in Xcode
     |
     |---> D-001 licensing → 🟡 Customer claims resolved, need written confirmation
     |
     |---> ✅ D-005 server URLs → DONE (matrix.ucmeet.org configured)
     |       |
-    |       |---> ✅ D-006 OIDC → DONE (MAS login working on simulator)
-    |       |---> D-002 Firebase project → Needs Bundle ID first (D-001)
+    |       |---> ✅ D-006 OIDC → DONE (custom URL scheme, MAS login verified)
+    |       |---> D-002 Firebase push E2E → Needs Sygnal URL + APNs key in Firebase Console
     |       +---> ✅ D-004 calls → DONE (LiveKit confirmed, URL scheme updated)
     |
-    |---> D-008 design assets → 🟡 Promised via email (awaiting)
+    |---> ✅ D-008 design assets → DONE (logos + accent color applied)
     |
-    +---> D-007 Apple Developer account → 🔴 Not discussed yet
+    +---> ✅ D-007 Apple Developer account → DONE (signing works, provisioning auto)
             |
-            +---> D-001 Bundle ID → Provisioning → Signing → TestFlight → App Review
+            +---> Push E2E testing → TestFlight → App Review
 ```
 
 **The critical path is now:**
-Bundle ID (D-001) -> Firebase project (D-002) -> Push testing -> TestFlight -> App Review -> Release
+APNs key upload to Firebase Console + Sygnal URL → Push E2E testing → Full test cycle → TestFlight → App Review → Release
 
 **Licensing (D-001) runs in parallel** but must be resolved before App Store submission.
 
@@ -154,15 +156,15 @@ Bundle ID (D-001) -> Firebase project (D-002) -> Push testing -> TestFlight -> A
 
 | Action | Blocker | Time to complete |
 |--------|---------|-----------------|
-| Final branding (run scripts + verify) | D-008 (design assets email) | 0.5-1 day |
-| Bundle ID + provisioning | D-001 (customer choice) + D-007 (Apple account) | 1 day |
-| Create Firebase project + push testing | D-001 (Bundle ID) + Sygnal URL | 1-2 days |
-| Full test cycle | All above | 3-4 days |
-| App Store prep (fill templates) | — | 1-2 days |
-| TestFlight + customer approval | D-007 (Apple account) | 2-3 days |
-| **Active dev total** | | **~9-13 working days** |
+| Upload APNs key to Firebase Console | None (key available locally) | 0.5h |
+| Push E2E testing | Sygnal URL from customer | 1-2 days |
+| MapLibre configuration | API key from customer | 0.5 day |
+| Full test cycle | Push working | 2-3 days |
+| App Store prep (fill templates) | D-009 (listing details from customer) | 1-2 days |
+| TestFlight + customer approval | — | 2-3 days |
+| **Active dev total** | | **~7-11 working days** |
 
-At 20h/week (4h/day), this is **2-3 weeks of active development** once remaining blockers are resolved.
+At 20h/week (4h/day), this is **2-3 weeks of active development** once Sygnal URL is provided.
 
 ---
 
@@ -298,26 +300,28 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 
 ---
 
-## 9. Conclusions (2026-03-01)
+## 9. Conclusions (2026-03-03)
 
-**The project is feature-complete for all code changes. Only infrastructure setup and testing remain.**
+**The project is feature-complete for all code changes. Xcode signing resolved. Only push E2E testing and App Store submission remain.**
 
-1. **All branding work is done.** New 3D logos installed, accent color extracted from logo (#003B5D), display name "UCMeet.Chat", Bundle ID `org.ucmeet.UCMeetChat` correctly cased and cascaded through all files. Zero user-visible Element branding remains.
+1. **All branding work is done.** New 3D logos installed (sizing fixed to 110pt @3x), accent color #003B5D, display name "UCMeet.Chat", Bundle ID `org.ucmeet.UCMeetChat` correctly cased and cascaded through all files. Zero user-visible Element branding remains.
 
-2. **7 of 12 decisions resolved** (D-003, D-004, D-005, D-006, D-007, D-008, D-011). D-008 (design assets) is now resolved with the new logos and accent color.
+2. **7 of 12 decisions resolved** (D-003, D-004, D-005, D-006, D-007, D-008, D-011). Xcode signing fully resolved — customer's Apple ID in Xcode, automatic provisioning works for all 3 targets.
 
-3. **The critical path is now Apple Developer portal registration → Firebase project → push testing → App Store submission.** Developer has Administrator access (D-007 resolved). Step-by-step guide available in `appstore_connect_guide.md`.
+3. **OIDC is fully independent of element.io.** Custom URL scheme `org.ucmeet.UCMeetChat:/callback` replaces HTTPS callback. All OIDC metadata URIs on ucmeet.org. No webcredentials entitlement needed.
 
-4. **Hours tracking is slightly above initial AI-assisted estimate.** ~69-72h invested vs 60-95h estimated. Projected total ~97-104h, within the non-AI range (85-132h). Extensive documentation and automation created (24+ docs, 2 scripts) that weren't in original scope.
+4. **Firebase project configured.** Real GoogleService-Info.plist in place. APNs key available locally (`AuthKey_XZANH7CD3Z.p8`). Need to upload APNs key to Firebase Console and get Sygnal URL from customer for E2E testing.
 
-5. **Three blockers remain:** (a) AGPL licensing written confirmation, (b) Firebase project creation + Sygnal URL for push testing, (c) MapLibre API key for location sharing.
+5. **Hours tracking:** ~76-79h invested vs 60-95h estimated. Projected total ~100-107h, within the non-AI range (85-132h). Extensive documentation and automation created (24+ docs, 2 scripts) beyond original scope.
+
+6. **Two blockers remain for push E2E:** (a) Upload APNs key to Firebase Console, (b) Sygnal URL from customer. **One blocker for App Store:** AGPL licensing written confirmation. **One blocker for location sharing:** MapLibre API key.
 
 **Recommended immediate actions:**
-1. Register Bundle IDs + App Group in Apple Developer Portal (see `appstore_connect_guide.md`).
-2. Create Firebase project with Bundle ID `org.ucmeet.UCMeetChat`.
-3. Request Sygnal URL from customer for push E2E testing.
-4. Request MapLibre API key from customer.
-5. Get written AGPL licensing confirmation.
+1. Upload APNs key (`AuthKey_XZANH7CD3Z.p8`) to Firebase Console.
+2. Request Sygnal URL from customer for push E2E testing.
+3. Request MapLibre API key from customer.
+4. Get written AGPL licensing confirmation.
+5. Create app in App Store Connect (signing now works).
 
 ---
 
@@ -333,7 +337,9 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 | 2026-02-18 | Platform restriction + push notification hardening. Disabled Mac/Vision Pro "Designed for iPad" compatibility. Push gateway URL → `matrix.ucmeet.org`. NSE notification ID → dynamic bundle identifier. ~61-64h invested (~63% budget). |
 | 2026-02-20 | Customer provided "Forking Data.doc" — Bundle ID `org.ucmeet.ucmeetchat`, App Group `group.org.ucmeet`, Team `26UC01GH`, Display Name `UCMeet.Chat`. All cascaded through 22 files. 962 tests: 899 passed, 0 new failures. ~66-69h invested (~68% budget). |
 | 2026-03-01 | Sprint planning docs + new logos + Bundle ID casing fix + accent color. Bundle ID corrected to `org.ucmeet.UCMeetChat` (20 files). New 3D logos installed (square AppIcon + circular in-app). Accent color → #003B5D (dark navy blue from logo). 3 new docs: sprints.md, dev_plan.md, appstore_connect_guide.md. D-008 resolved. 7/12 decisions now resolved. BUILD SUCCEEDED. ~69-72h invested (~72% budget). |
+| 2026-03-02 | Apple Developer Portal: 3 Bundle IDs registered, App Group created, capabilities enabled. Access issue found — developer in ASC only, not Developer Program. APNs key + ASC API key received. ~72-75h invested (~75% budget). |
+| 2026-03-03 | **Major unblocks:** (1) Xcode signing resolved — customer's Apple ID added to Xcode, automatic signing works for all 3 targets. (2) OIDC redirect URI fixed — custom URL scheme `org.ucmeet.UCMeetChat:/callback`, all OIDC metadata on ucmeet.org, removed webcredentials entitlement. (3) In-app logo sizing fixed — 330x330px @3x (was 1024px full-screen). (4) Firebase GoogleService-Info.plist replaced with real config. Login verified on simulator. ~76-79h invested (~78% budget). |
 
 ---
 
-*This document is updated after each significant milestone, customer interaction, or periodic review. Next update: after Apple Developer portal registration or push E2E testing.*
+*This document is updated after each significant milestone, customer interaction, or periodic review. Next update: after push E2E testing or App Store Connect app creation.*

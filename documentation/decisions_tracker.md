@@ -3,7 +3,7 @@
 
 **Назначение:** Живой документ для отслеживания всех открытых решений, блокеров и их статусов. Обновляется по мере продвижения проекта.
 
-**Последнее обновление:** 2 марта 2026 г.
+**Последнее обновление:** 3 марта 2026 г.
 
 ---
 
@@ -86,14 +86,14 @@ FCM реализован полностью согласно ТЗ. Код нап
 **Что осталось:**
 - ✅ ~~Решение APNs vs FCM~~ — FCM подтверждён
 - ✅ ~~APNs-ключ (.p8)~~ — получен от заказчика (`AuthKey_XZANH7CD3Z.p8`)
-- 🔲 Создать Firebase-проект в Google Console (**разработчик**)
-- 🔲 Скачать реальный `GoogleService-Info.plist` (**разработчик**)
+- ✅ ~~Создать Firebase-проект в Google Console~~ — создан (03.03.2026)
+- ✅ ~~Скачать реальный `GoogleService-Info.plist`~~ — установлен в проект (03.03.2026)
 - 🔲 Загрузить APNs-ключ в Firebase Console (**разработчик**)
 - 🔲 Получить URL Sygnal от заказчика
 - 🔲 Заказчик настраивает Sygnal для FCM (предоставить им FCM Server Key)
 - 🔲 Сквозное тестирование push-уведомлений
 
-**Решение:** FCM. Разработчик создаёт Firebase-проект самостоятельно. Sygnal URL от заказчика — ожидаем. APNs ключ получен.
+**Решение:** FCM. Firebase-проект создан, реальный GoogleService-Info.plist установлен. Необходимо: загрузить APNs ключ в Firebase Console и получить Sygnal URL от заказчика.
 
 ---
 
@@ -223,12 +223,14 @@ FCM реализован полностью согласно ТЗ. Код нап
 - `ApiKey_QVGWLXJNNMOZ.p8` — App Store Connect API Key (для загрузки в TestFlight/App Store)
 - `AuthKey_XZANH7CD3Z.p8` — APNs Authentication Key (для Firebase push-уведомлений, Key ID: `XZANH7CD3Z`)
 
+**Обновление 03.03.2026:** Проблема с подписанием решена — Apple ID заказчика добавлен в Xcode Accounts. Команда видна, автоматическое подписание работает для всех 3 targets (main app, NSE, ShareExtension). Provisioning profiles генерируются автоматически.
+
 **Следующие шаги:**
 - ✅ ~~Зарегистрировать Bundle ID `org.ucmeet.UCMeetChat` в Apple Developer Portal~~
 - ✅ ~~Зарегистрировать Bundle ID для расширений: `org.ucmeet.UCMeetChat.nse`, `org.ucmeet.UCMeetChat.shareextension`~~
 - ✅ ~~Создать App Group `group.org.ucmeet`~~
 - ✅ ~~Включить capabilities: Associated Domains, Push Notifications, App Groups~~
-- 🔲 Получить доступ к команде заказчика в Xcode (добавить Apple ID заказчика в Xcode Accounts)
+- ✅ ~~Получить доступ к команде заказчика в Xcode~~ — Apple ID заказчика добавлен (03.03.2026)
 - 🔲 Создать приложение в App Store Connect
 
 ---
@@ -414,6 +416,12 @@ FCM реализован полностью согласно ТЗ. Код нап
 | | 🔑 Получены 2 ключа .p8: ApiKey (App Store Connect API) + AuthKey (APNs, Key ID: `XZANH7CD3Z`). |
 | | D-002 обновлён: APNs ключ получен. |
 | | **Решение:** Добавить Apple ID заказчика в Xcode Accounts для доступа к команде и подписанию. |
+| 2026-03-03 | **Критические разблокировки:** |
+| | ✅ Подписание Xcode решено: Apple ID заказчика добавлен в Xcode Accounts, автоматическое подписание работает для всех 3 targets. |
+| | ✅ OIDC redirect URI исправлен: пользовательская URL-схема `org.ucmeet.UCMeetChat:/callback` (одинарный слэш). Все URI метаданных OIDC перенесены на ucmeet.org. `webcredentials:*.element.io` удалён из entitlements. |
+| | ✅ Размер in-app логотипа исправлен: 330x330px @3x (было 1024px — рендерился на весь экран). |
+| | ✅ Firebase GoogleService-Info.plist заменён реальной конфигурацией Firebase-проекта. |
+| | D-002 обновлён: Firebase-проект создан, GoogleService-Info.plist установлен. Осталось загрузить APNs ключ в Firebase Console + получить Sygnal URL. |
 
 ---
 

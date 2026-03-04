@@ -44,13 +44,20 @@ Timeline: 6 sprints / 45 days.
 - [x] Logout/login cycle
 - [x] Profile: change display name, avatar, device list
 - [x] Verify E2EE: encryption indicators, key exchange between devices
+- [x] In-app logo sizing fixed (330x330px @3x, renders at 110pt)
 - [ ] Configure MapLibre: obtain API key, update Secrets.swift, configure map styles, exclude Secrets.swift from git
 
 **Result:**
 - [x] Fully functional messenger (without push)
-- [ ] Customer demonstration (pending MapLibre + final assets)
+- [ ] Customer demonstration (pending MapLibre API key)
 
 **Blocking:** MapLibre API key needed from customer.
+
+**Updates (2026-03-03):**
+- Xcode signing resolved: customer's Apple ID added to Xcode Accounts, automatic signing works for all 3 targets
+- OIDC redirect URI fixed: custom URL scheme `org.ucmeet.UCMeetChat:/callback` (MAS DCR confirmed working)
+- In-app logo sizing fixed: resized to 330x330px @3x (was 1024px causing full-screen render)
+- Firebase GoogleService-Info.plist replaced with real Firebase project config
 
 ---
 
@@ -59,12 +66,13 @@ Timeline: 6 sprints / 45 days.
 **Goal:** Full push notification and OIDC setup.
 
 ### Push Notifications
-- [ ] Create Firebase project for `org.ucmeet.UCMeetChat`
-- [ ] Add real `GoogleService-Info.plist`
+- [x] Create Firebase project for `org.ucmeet.UCMeetChat`
+- [x] Add real `GoogleService-Info.plist` (replaced placeholder 2026-03-03)
 - [x] Configure APNs key in Firebase (code ready)
 - [x] Integrate Firebase SDK (FirebaseMessaging via SPM)
 - [x] Implement FCM token registration
 - [x] Configure Sygnal integration (`https://push.ucmeet.org`)
+- [ ] Upload APNs key to Firebase Console
 - [ ] Verify push: app active
 - [ ] Verify push: app in background
 - [ ] Verify push: app terminated
@@ -73,20 +81,21 @@ Timeline: 6 sprints / 45 days.
 
 ### OIDC / MAS
 - [x] OIDC login working (tested on simulator)
-- [ ] Register `org.ucmeet.UCMeetChat` as OIDC client in MAS
+- [x] OIDC redirect URI: custom URL scheme `org.ucmeet.UCMeetChat:/callback` (2026-03-03)
+- [x] OIDC metadata URIs moved to ucmeet.org (MAS same-host policy)
+- [ ] Register `org.ucmeet.UCMeetChat` as OIDC client in MAS (currently using DCR)
 - [ ] Verify full OIDC flow with registered client
 
 ### Associated Domains
 - [x] Added Associated Domains capability
-- [x] `webcredentials:*.element.io` configured (temporary)
-- [ ] Host AASA file on `ucmeet.info`
-- [ ] Migrate webcredentials to `ucmeet.info`
+- [x] Removed `webcredentials:*.element.io` (no longer needed after custom URL scheme)
+- [ ] Host AASA file on `ucmeet.info` (for universal links, not required for auth)
 
 **Result:**
-- [ ] Fully working push notifications
-- [x] Working authentication via MAS (using element.io URIs temporarily)
+- [ ] Fully working push notifications (blocked on Sygnal URL + APNs key upload to Firebase Console)
+- [x] Working authentication via MAS (custom URL scheme, no element.io dependency)
 
-**Blocking:** Firebase project creation (D-002), Sygnal URL verification, AASA file hosting.
+**Blocking:** Sygnal URL from customer, APNs key upload to Firebase Console.
 
 ---
 
@@ -149,4 +158,4 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-*Last updated: 2026-03-01. Converted from Спринт 5Element.docx with progress tracking.*
+*Last updated: 2026-03-03. Converted from Спринт 5Element.docx with progress tracking.*
