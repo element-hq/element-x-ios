@@ -11,7 +11,6 @@ import Combine
 import Testing
 
 @MainActor
-@Suite
 struct LocationSharingScreenViewModelTests {
     private let timelineProxy = TimelineProxyMock(.init())
     private var viewModel: LocationSharingScreenViewModelProtocol
