@@ -11,11 +11,6 @@ before_all do
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
 end
 
-lane :config_production do
-  sh("(cd .. && swift run pipeline update-foss-secrets)")
-  xcodegen(spec: "project.yml")
-end
-
 lane :release_to_github do
   api_token = ENV["GITHUB_TOKEN"]
   UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
