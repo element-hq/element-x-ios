@@ -703,8 +703,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentPollForm(let mode):
                     stateMachine.tryEvent(.presentPollForm(mode: mode),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-                case .presentLocationViewer(let senderID, _, let geoURI, let description):
-                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewStatic(senderID: senderID, geoURI: geoURI, description: description)),
+                case .presentLocationViewer(let senderID, let geoURI):
+                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewStatic(senderID: senderID, geoURI: geoURI)),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .presentRoomMemberDetails(userID: let userID):
                     stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
@@ -788,10 +788,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .presentPollForm(let mode):
                 stateMachine.tryEvent(.presentPollForm(mode: mode),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-            case .presentLocationViewer(let senderID, _, let geoURI, let description):
+            case .presentLocationViewer(let senderID, let geoURI):
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewStatic(senderID: senderID,
-                                                                                        geoURI: geoURI,
-                                                                                        description: description)),
+                                                                                        geoURI: geoURI)),
                                       userInfo: EventUserInfo(animated: animated,
                                                               timelineController: timelineController))
             case .presentEmojiPicker(let itemID, let selectedEmojis):

@@ -21,11 +21,11 @@ enum LocationSharingScreenViewModelAction {
 
 enum LocationSharingInteractionMode: Hashable {
     case picker
-    case viewStatic(senderID: String?, geoURI: GeoURI, description: String? = nil)
+    case viewStatic(senderID: String?, geoURI: GeoURI)
     
     var canShowAvatar: Bool {
         switch self {
-        case .picker, .viewStatic(.some(_), _, _):
+        case .picker, .viewStatic(.some(_), _):
             true
         default:
             false
@@ -63,7 +63,7 @@ struct LocationSharingScreenViewState: BindableState {
         case .picker:
             // middle point in Europe, to be used if the users location is not yet known
             return .init(latitude: 49.843, longitude: 9.902056)
-        case .viewStatic(_, let geoURI, _):
+        case .viewStatic(_, let geoURI):
             return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
         }
     }
@@ -96,15 +96,6 @@ struct LocationSharingScreenViewState: BindableState {
             return 2.7
         case .viewStatic:
             return 15.0
-        }
-    }
-
-    var locationDescription: String? {
-        switch interactionMode {
-        case .picker:
-            return nil
-        case .viewStatic(_, _, let description):
-            return description
         }
     }
     

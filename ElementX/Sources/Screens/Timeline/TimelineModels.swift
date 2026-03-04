@@ -23,7 +23,7 @@ enum TimelineViewModelAction {
     case displaySenderDetails(userID: String)
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayMediaPreview(TimelineMediaPreviewViewModel)
-    case displayLocation(senderID: String?, body: String, geoURI: GeoURI, description: String?)
+    case displayLocation(senderID: String?, geoURI: GeoURI)
     case displayResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case displayThread(itemID: TimelineItemIdentifier)
     case composer(action: TimelineComposerAction)

@@ -20,8 +20,8 @@ struct LocationMarkerView: View {
     private let circleCenter = CGPoint(x: 21, y: 21) // in SVG space
     private let circleRadius: CGFloat = 6 // in SVG space
     
-    /// Generated through the SVG
     var body: some View {
+        // Generated through the SVG
         Canvas { context, canvasSize in
             let scaleX = canvasSize.width / 42
             let scaleY = canvasSize.height / 50

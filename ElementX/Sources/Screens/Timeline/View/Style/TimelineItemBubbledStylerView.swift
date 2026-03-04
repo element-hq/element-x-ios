@@ -705,8 +705,7 @@ private struct MockTimelineContent: View {
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782,
-                                                                                  longitude: 12.496366),
-                                                                    description: "Location description description description description description description description description"),
+                                                                                  longitude: 12.496366)),
                                                      properties: .init(replyDetails: replyDetails,
                                                                        isThreaded: isThreaded,
                                                                        threadSummary: threadSummary)))
@@ -718,7 +717,7 @@ private struct MockTimelineContent: View {
                                                      canBeRepliedTo: true,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
-                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
+                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366)),
                                                      properties: .init(replyDetails: replyDetails,
                                                                        isThreaded: isThreaded,
                                                                        threadSummary: threadSummary)))

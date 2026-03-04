@@ -25,16 +25,13 @@ struct LocationRoomTimelineItemContent: Hashable {
     
     let body: String
     let geoURI: GeoURI?
-    let description: String?
     let kind: Kind
 
     init(body: String,
          geoURI: GeoURI? = nil,
-         description: String? = nil,
          kind: Kind = .sender) {
         self.body = body
         self.geoURI = geoURI
-        self.description = description
         self.kind = kind
     }
 }

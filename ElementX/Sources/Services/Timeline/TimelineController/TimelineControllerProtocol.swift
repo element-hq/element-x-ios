@@ -25,7 +25,7 @@ enum TimelineControllerAction {
     }
     
     case displayMediaPreview(item: EventBasedMessageTimelineItemProtocol, timelineViewModel: TimelineViewModelKind)
-    case displayLocation(senderID: String?, body: String, geoURI: GeoURI, description: String?)
+    case displayLocation(senderID: String?, geoURI: GeoURI)
     case none
 }
 
