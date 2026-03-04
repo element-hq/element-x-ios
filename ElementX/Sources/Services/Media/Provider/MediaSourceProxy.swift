@@ -9,7 +9,7 @@
 import Foundation
 @preconcurrency import MatrixRustSDK
 
-struct MediaSourceProxy: Hashable, Sendable {
+struct MediaSourceProxy: Hashable {
     /// The media source provided by Rust.
     let underlyingSource: MediaSource
     /// The media's mime type, used when loading the media's file.

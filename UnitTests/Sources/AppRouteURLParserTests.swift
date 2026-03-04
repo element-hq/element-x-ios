@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 struct AppRouteURLParserTests {
     var appSettings: AppSettings
     var appRouteURLParser: AppRouteURLParser

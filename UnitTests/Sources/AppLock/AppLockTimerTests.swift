@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 struct AppLockTimerTests {
     private let now = Date.now
     private var timer: AppLockTimer!

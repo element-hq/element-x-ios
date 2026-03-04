@@ -11,7 +11,6 @@ import Combine
 import Testing
 
 @MainActor
-@Suite
 struct RoomMembersListScreenViewModelTests {
     var viewModel: RoomMembersListScreenViewModel!
     var roomProxy: JoinedRoomProxyMock!

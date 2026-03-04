@@ -12,7 +12,6 @@ import Kingfisher
 import SwiftUI
 import Testing
 
-@Suite
 @MainActor
 struct MediaProviderTests {
     private var mediaLoader: MediaLoaderMock

@@ -10,7 +10,6 @@
 import Testing
 
 @MainActor
-@Suite
 final class AppLockSetupBiometricsScreenViewModelTests {
     var appLockService: AppLockServiceMock
     var viewModel: AppLockSetupBiometricsScreenViewModelProtocol

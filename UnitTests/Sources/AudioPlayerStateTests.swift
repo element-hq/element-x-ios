@@ -12,7 +12,6 @@ import Foundation
 import Testing
 
 @MainActor
-@Suite
 struct AudioPlayerStateTests {
     static let audioDuration = 10.0
     private var audioPlayerState: AudioPlayerState!

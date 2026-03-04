@@ -11,7 +11,6 @@ import Combine
 import Testing
 
 @MainActor
-@Suite
 struct SpaceAddRoomsScreenViewModelTests {
     var spaceRoomListProxy: SpaceRoomListProxyMock
     var spaceServiceProxy: SpaceServiceProxyMock

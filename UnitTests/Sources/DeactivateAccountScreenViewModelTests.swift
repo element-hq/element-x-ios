@@ -11,7 +11,6 @@ import Foundation
 import Testing
 
 @MainActor
-@Suite
 struct DeactivateAccountScreenViewModelTests {
     var clientProxy: ClientProxyMock!
     var viewModel: DeactivateAccountScreenViewModelProtocol!

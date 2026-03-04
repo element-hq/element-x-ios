@@ -10,7 +10,6 @@
 import Testing
 
 @MainActor
-@Suite
 struct UserDiscoveryServiceTest {
     private var service: UserDiscoveryService
     private var clientProxy: ClientProxyMock

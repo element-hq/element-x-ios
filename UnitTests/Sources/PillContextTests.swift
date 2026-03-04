@@ -12,7 +12,6 @@ import Foundation
 import Testing
 
 @MainActor
-@Suite
 struct PillContextTests {
     @Test
     func user() async {

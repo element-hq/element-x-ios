@@ -11,7 +11,6 @@ import PushKit
 import Testing
 
 @MainActor
-@Suite
 final class ElementCallServiceTests {
     private var callProvider: CXProviderMock!
     private var currentDate: Date!

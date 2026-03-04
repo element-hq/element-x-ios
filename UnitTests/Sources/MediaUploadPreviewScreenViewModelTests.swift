@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 @MainActor
 final class MediaUploadPreviewScreenViewModelTests {
     var timelineProxy: TimelineProxyMock!

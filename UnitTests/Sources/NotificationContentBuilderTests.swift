@@ -11,7 +11,6 @@ import MatrixRustSDK
 import Testing
 import UserNotifications
 
-@Suite
 struct NotificationContentBuilderTests {
     var notificationContentBuilder: NotificationContentBuilder
     var mediaProvider: MediaProviderMock

@@ -11,7 +11,6 @@ import Foundation
 @testable import MatrixRustSDK
 import Testing
 
-@Suite
 final class LoggingTests {
     private enum Constants {
         static let genericFailure = "Test failed"

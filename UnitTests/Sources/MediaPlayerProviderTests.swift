@@ -12,7 +12,6 @@ import Foundation
 import Testing
 
 @MainActor
-@Suite
 struct MediaPlayerProviderTests {
     private var mediaPlayerProvider: MediaPlayerProvider
     

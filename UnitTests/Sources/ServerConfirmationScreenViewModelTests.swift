@@ -11,7 +11,6 @@ import MatrixRustSDKMocks
 import SwiftUI
 import Testing
 
-@Suite
 @MainActor
 final class ServerConfirmationScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!

@@ -11,7 +11,6 @@ import Combine
 import Foundation
 import Testing
 
-@Suite
 @MainActor
 struct VoiceMessageRecorderTests {
     private var voiceMessageRecorder: VoiceMessageRecorder!

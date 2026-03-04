@@ -10,7 +10,6 @@ import Combine
 import Testing
 
 @MainActor
-@Suite
 struct RoomMembersFlowCoordinatorTests {
     var membersFlowCoordinator: RoomMembersFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!

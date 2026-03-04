@@ -11,7 +11,6 @@ import SwiftUI
 import Testing
 
 @MainActor
-@Suite
 struct FontSizeTests {
     /// Test all system text styles to assert mapping between `Font` and `UIFont`.
     @Test("Text style")

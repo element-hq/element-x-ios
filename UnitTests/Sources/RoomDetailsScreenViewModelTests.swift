@@ -13,7 +13,6 @@ import MatrixRustSDK
 import SwiftUI
 import Testing
 
-@Suite
 @MainActor
 struct RoomDetailsScreenViewModelTests {
     var viewModel: RoomDetailsScreenViewModel!

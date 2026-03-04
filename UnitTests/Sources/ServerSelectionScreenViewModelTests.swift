@@ -10,7 +10,6 @@
 import Testing
 
 @MainActor
-@Suite
 struct ServerSelectionScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var service: AuthenticationServiceProtocol!

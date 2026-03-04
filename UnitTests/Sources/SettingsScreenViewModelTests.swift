@@ -11,7 +11,6 @@ import Combine
 import Testing
 
 @MainActor
-@Suite
 struct SettingsScreenViewModelTests {
     private var viewModel: SettingsScreenViewModelProtocol
     private var context: SettingsScreenViewModelType.Context

@@ -11,7 +11,6 @@ import Combine
 import Testing
 
 @MainActor
-@Suite
 struct SecureBackupLogoutConfirmationScreenViewModelTests {
     private var viewModel: SecureBackupLogoutConfirmationScreenViewModel
     private var context: SecureBackupLogoutConfirmationScreenViewModel.Context {

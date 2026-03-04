@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 struct OverrideColorTests {
     @Test("SwiftUI color override")
     func swiftUI() {

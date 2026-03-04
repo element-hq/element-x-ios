@@ -9,7 +9,6 @@
 @testable import ElementX
 import Testing
 
-@Suite
 struct RemotePreferenceTests {
     @Test
     func overrideAndReset() {

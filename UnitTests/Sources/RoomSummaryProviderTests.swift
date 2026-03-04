@@ -11,7 +11,6 @@ import MatrixRustSDK
 import MatrixRustSDKMocks
 import Testing
 
-@Suite
 @MainActor
 final class RoomSummaryProviderTests {
     private let baseFilters: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),

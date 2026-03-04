@@ -11,7 +11,6 @@ import Combine
 import MatrixRustSDKMocks
 import Testing
 
-@Suite
 @MainActor
 final class RoomFlowCoordinatorTests {
     var clientProxy: ClientProxyMock!

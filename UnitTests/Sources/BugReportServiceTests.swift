@@ -11,7 +11,6 @@ import Combine
 import Foundation
 import Testing
 
-@Suite
 final class BugReportServiceTests {
     var appSettings: AppSettings!
     var bugReportService: BugReportServiceProtocol!

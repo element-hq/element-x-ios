@@ -10,7 +10,6 @@
 import MatrixRustSDK
 import Testing
 
-@Suite
 @MainActor
 struct RoomDetailsEditScreenViewModelTests {
     var viewModel: RoomDetailsEditScreenViewModel!

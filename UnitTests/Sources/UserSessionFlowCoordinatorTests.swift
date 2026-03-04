@@ -12,7 +12,6 @@ import Foundation
 import Testing
 
 @MainActor
-@Suite
 struct UserSessionFlowCoordinatorTests {
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator!
     private var rootCoordinator: NavigationRootCoordinator!

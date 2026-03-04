@@ -12,7 +12,6 @@ import MatrixRustSDK
 import MatrixRustSDKMocks
 import Testing
 
-@Suite
 @MainActor
 struct SpaceScreenViewModelTests {
     var spaceRoomListProxy: SpaceRoomListProxyMock!

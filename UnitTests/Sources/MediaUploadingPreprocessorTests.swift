@@ -11,7 +11,6 @@ import SwiftUI
 import Testing
 import UniformTypeIdentifiers
 
-@Suite
 final class MediaUploadingPreprocessorTests {
     let maxUploadSize: UInt = 100 * 1024 * 1024
     var appSettings: AppSettings!

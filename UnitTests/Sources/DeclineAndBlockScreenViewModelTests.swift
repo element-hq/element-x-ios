@@ -10,7 +10,6 @@
 import Testing
 
 @MainActor
-@Suite
 struct DeclineAndBlockScreenViewModelTests {
     var viewModel: DeclineAndBlockScreenViewModelProtocol
     var clientProxy: ClientProxyMock

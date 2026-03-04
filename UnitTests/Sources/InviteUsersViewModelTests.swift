@@ -11,7 +11,6 @@ import Combine
 import Testing
 
 @MainActor
-@Suite
 struct InviteUsersScreenViewModelTests {
     var viewModel: InviteUsersScreenViewModelProtocol!
     var userDiscoveryService: UserDiscoveryServiceMock!

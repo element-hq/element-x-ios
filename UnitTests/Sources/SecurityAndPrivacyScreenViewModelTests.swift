@@ -11,7 +11,6 @@ import Combine
 import MatrixRustSDK
 import Testing
 
-@Suite
 @MainActor
 final class SecurityAndPrivacyScreenViewModelTests {
     var viewModel: SecurityAndPrivacyScreenViewModelProtocol!

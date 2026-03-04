@@ -11,7 +11,6 @@ import Foundation
 import KeychainAccess
 import Testing
 
-@Suite
 struct KeychainControllerTests {
     var keychain: KeychainController
     

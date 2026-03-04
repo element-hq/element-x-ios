@@ -12,7 +12,6 @@ import Testing
 import UIKit
 
 @MainActor
-@Suite
 final class AuthenticationStartScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var client: ClientSDKMock!

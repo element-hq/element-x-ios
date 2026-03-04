@@ -10,7 +10,6 @@
 import MatrixRustSDK
 import Testing
 
-@Suite
 struct RoomStateEventStringBuilderTests {
     private let userID: String
     private let stringBuilder: RoomStateEventStringBuilder

@@ -12,7 +12,6 @@ import Foundation
 import Testing
 
 @MainActor
-@Suite
 struct VoiceMessageMediaManagerTests {
     private var voiceMessageMediaManager: VoiceMessageMediaManager
     private var voiceMessageCache: VoiceMessageCacheMock

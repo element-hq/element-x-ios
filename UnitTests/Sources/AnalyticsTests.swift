@@ -11,7 +11,6 @@ import AnalyticsEvents
 import PostHog
 import Testing
 
-@Suite
 final class AnalyticsTests {
     private var appSettings: AppSettings
     private var analyticsClient: AnalyticsClientMock

@@ -10,7 +10,6 @@
 import Testing
 
 @MainActor
-@Suite
 struct ManageRoomMemberSheetViewModelTests {
     private var viewModel: ManageRoomMemberSheetViewModel!
     private var context: ManageRoomMemberSheetViewModel.Context! {

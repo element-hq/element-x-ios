@@ -10,7 +10,6 @@
 import Testing
 
 @MainActor
-@Suite
 struct PollFormScreenViewModelTests {
     private let timelineProxy = TimelineProxyMock(.init())
     

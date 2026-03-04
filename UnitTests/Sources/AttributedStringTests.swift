@@ -9,7 +9,6 @@
 @testable import ElementX
 import Testing
 
-@Suite
 struct AttributedStringTests {
     @Test
     func replacingFontWithPresentationIntent() throws {

@@ -8,7 +8,6 @@
 @testable import ElementX
 import Testing
 
-@Suite
 @MainActor
 struct TemplateScreenViewModelTests {
     var viewModel: TemplateScreenViewModelProtocol

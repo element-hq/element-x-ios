@@ -11,7 +11,6 @@ import Foundation
 import SwiftUI
 import Testing
 
-@Suite
 struct DecorativeColorsTests {
     struct TestCase {
         let input: String

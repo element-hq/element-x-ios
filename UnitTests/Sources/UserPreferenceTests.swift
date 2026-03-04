@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 struct UserPreferenceTests {
     init() {
         UserDefaults.testDefaults.removeVolatileDomain(forName: .userDefaultsSuiteName)

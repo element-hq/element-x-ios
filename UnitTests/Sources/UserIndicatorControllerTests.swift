@@ -11,7 +11,6 @@ import Foundation
 import Testing
 
 @MainActor
-@Suite
 struct UserIndicatorControllerTests {
     private var indicatorController: UserIndicatorController
     

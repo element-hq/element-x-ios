@@ -11,7 +11,6 @@ import Foundation
 import MatrixRustSDK
 import Testing
 
-@Suite
 struct RestorationTokenTests {
     @Test
     func decodeTokenWithSlidingSyncProxy() throws {

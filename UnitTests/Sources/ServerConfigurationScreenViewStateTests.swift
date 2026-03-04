@@ -10,7 +10,6 @@
 import Testing
 
 @MainActor
-@Suite
 struct ServerConfirmationScreenViewStateTests {
     @Test
     func loginMessageString() {

@@ -10,7 +10,6 @@
 import Testing
 
 @MainActor
-@Suite
 struct SessionVerificationStateMachineTests {
     private var stateMachine: SessionVerificationScreenStateMachine
     

@@ -9,7 +9,6 @@
 @testable import ElementX
 import Testing
 
-@Suite
 struct UserAgentBuilderTests {
     @Test
     func isNotUnknow() {

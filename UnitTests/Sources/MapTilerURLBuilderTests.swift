@@ -10,7 +10,6 @@ import CoreLocation
 @testable import ElementX
 import Testing
 
-@Suite
 struct MapTilerURLBuilderTests {
     private static let baseURL: URL = "http://www.foo.com"
     private static let apiKey = "some_key"

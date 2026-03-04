@@ -11,7 +11,6 @@ import Combine
 import Testing
 
 @MainActor
-@Suite
 final class SpacesScreenViewModelTests {
     var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoom], Never>
     var spaceServiceProxy: SpaceServiceProxyMock

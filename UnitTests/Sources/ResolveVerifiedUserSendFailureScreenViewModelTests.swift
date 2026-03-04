@@ -10,7 +10,6 @@
 import Testing
 
 @MainActor
-@Suite
 struct ResolveVerifiedUserSendFailureScreenViewModelTests {
     private let roomProxy = JoinedRoomProxyMock(.init())
     

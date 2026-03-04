@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 struct ExpiringTaskRunnerTests {
     enum ExpiringTaskTestError: Error {
         case failed

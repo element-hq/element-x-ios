@@ -12,7 +12,6 @@ import Foundation
 import Testing
 
 @MainActor
-@Suite
 struct AudioRecorderStateTests {
     private var audioRecorderState: AudioRecorderState!
     private var audioRecorderMock: AudioRecorderMock!

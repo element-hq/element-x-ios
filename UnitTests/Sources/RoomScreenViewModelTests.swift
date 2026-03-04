@@ -13,7 +13,6 @@ import MatrixRustSDK
 import MatrixRustSDKMocks
 import Testing
 
-@Suite
 @MainActor
 final class RoomScreenViewModelTests {
     private var viewModel: RoomScreenViewModel!

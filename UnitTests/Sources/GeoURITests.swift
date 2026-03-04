@@ -9,7 +9,6 @@
 @testable import ElementX
 import Testing
 
-@Suite
 struct GeoURITests {
     @Test
     func validPositiveCoordinates() throws {

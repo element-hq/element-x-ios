@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 struct DateTests {
     let calendar = Calendar.current
     var startOfToday: Date {

@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 @MainActor
 struct RoomPollsHistoryScreenViewModelTests {
     var viewModel: RoomPollsHistoryScreenViewModelProtocol!

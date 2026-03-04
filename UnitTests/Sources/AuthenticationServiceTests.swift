@@ -11,7 +11,6 @@ import Foundation
 import MatrixRustSDKMocks
 import Testing
 
-@Suite
 @MainActor
 struct AuthenticationServiceTests {
     var client: ClientSDKMock!

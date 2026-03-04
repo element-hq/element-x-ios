@@ -10,7 +10,6 @@ import Combine
 @testable import ElementX
 import Testing
 
-@Suite
 @MainActor
 struct CompletionSuggestionServiceTests {
     @Test

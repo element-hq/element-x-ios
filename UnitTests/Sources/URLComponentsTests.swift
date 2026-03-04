@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 struct URLComponentsTests {
     @Test
     func addFragmentQueryItems() throws {

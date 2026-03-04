@@ -9,7 +9,6 @@
 @testable import ElementX
 import Testing
 
-@Suite
 @MainActor
 struct EditRoomAddressScreenViewModelTests {
     var viewModel: EditRoomAddressScreenViewModelProtocol!

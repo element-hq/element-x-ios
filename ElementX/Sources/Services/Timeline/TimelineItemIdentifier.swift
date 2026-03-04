@@ -14,7 +14,7 @@ import Foundation
 /// Its value is consistent only per timeline instance, it should **not** be used to identify an item across timeline instances.
 /// - eventOrTransactionID: Contains the 2 possible identifiers of an event, either it has a remote event id or
 /// a local transaction id, never both or none.
-enum TimelineItemIdentifier: Hashable, Sendable {
+enum TimelineItemIdentifier: Hashable {
     struct UniqueID: Hashable {
         let value: String
         

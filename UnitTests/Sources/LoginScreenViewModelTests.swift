@@ -10,7 +10,6 @@
 import Testing
 
 @MainActor
-@Suite
 struct LoginScreenViewModelTests {
     var viewModel: LoginScreenViewModelProtocol!
     var context: LoginScreenViewModelType.Context {

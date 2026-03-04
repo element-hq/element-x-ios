@@ -12,7 +12,6 @@ import MatrixRustSDK
 import Testing
 
 /// Just for API sanity checking, they're already properly tested in the SDK/Ruma
-@Suite
 struct PermalinkTests {
     @Test
     func userIdentifierPermalink() throws {

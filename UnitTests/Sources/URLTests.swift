@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 struct URLTests {
     @Test
     func urlDirectoryName() throws {

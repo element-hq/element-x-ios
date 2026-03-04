@@ -11,7 +11,6 @@ import Testing
 import UIKit
 
 @MainActor
-@Suite
 struct BugReportScreenViewModelTests {
     let logFiles: [URL] = [URL(filePath: "/path/to/file1.log"), URL(filePath: "/path/to/file2.log")]
     

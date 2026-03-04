@@ -12,7 +12,6 @@ import MatrixRustSDK
 import MatrixRustSDKMocks
 import Testing
 
-@Suite
 struct MediaLoaderTests {
     @Test
     func mediaRequestCoalescing() async throws {

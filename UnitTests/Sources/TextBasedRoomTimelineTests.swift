@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 struct TextBasedRoomTimelineTests {
     @Test
     func textRoomTimelineItemWhitespaceEnd() {

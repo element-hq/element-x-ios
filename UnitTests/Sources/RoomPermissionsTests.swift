@@ -10,7 +10,6 @@
 import MatrixRustSDK
 import Testing
 
-@Suite
 struct RoomPermissionsTests {
     @Test
     func fromRust() {

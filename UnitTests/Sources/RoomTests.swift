@@ -11,7 +11,6 @@ import MatrixRustSDK
 import MatrixRustSDKMocks
 import Testing
 
-@Suite
 struct RoomTests {
     @Test
     func callIntent() async {

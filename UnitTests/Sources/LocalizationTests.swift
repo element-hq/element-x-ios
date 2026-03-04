@@ -10,7 +10,6 @@
 import Foundation
 import Testing
 
-@Suite
 final class LocalizationTests {
     deinit {
         Bundle.overrideLocalizations = nil
