@@ -710,18 +710,6 @@ private struct MockTimelineContent: View {
                                                                        isThreaded: isThreaded,
                                                                        threadSummary: threadSummary)))
         
-        LocationRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
-                                                     timestamp: .mock,
-                                                     isOutgoing: false,
-                                                     isEditable: false,
-                                                     canBeRepliedTo: true,
-                                                     sender: .init(id: "Bob"),
-                                                     content: .init(body: "Fallback geo uri description",
-                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366)),
-                                                     properties: .init(replyDetails: replyDetails,
-                                                                       isThreaded: isThreaded,
-                                                                       threadSummary: threadSummary)))
-        
         VoiceMessageRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                          timestamp: .mock,
                                                          isOutgoing: true,

@@ -140,7 +140,7 @@ struct LocationSharingScreenBindings {
 
 enum LocationSharingScreenViewAction {
     case close
-    case selectThisLocation
+    case selectLocation
     case centerToUser
     case userDidPan
 }

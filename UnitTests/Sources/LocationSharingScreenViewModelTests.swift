@@ -94,7 +94,7 @@ struct LocationSharingScreenViewModelTests {
                 return .success(())
             }
             
-            context.send(viewAction: .selectThisLocation)
+            context.send(viewAction: .selectLocation)
             
             try await deferred.fulfill()
         }
@@ -116,7 +116,7 @@ struct LocationSharingScreenViewModelTests {
                 return .success(())
             }
             
-            context.send(viewAction: .selectThisLocation)
+            context.send(viewAction: .selectLocation)
             
             try await deferred.fulfill()
         }

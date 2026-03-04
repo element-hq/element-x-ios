@@ -20,10 +20,10 @@ struct MapLibreMapView: UIViewRepresentable {
         /// The initial map center
         let mapCenter: CLLocationCoordinate2D
         
-        /// Map annotations
-        let annotations: [LocationAnnotation]
+        /// Map annotations keyed by a stable identifier (e.g. sender userID for user pins, UUID string for generic pins)
+        let annotations: [String: LocationAnnotation]
 
-        init(zoomLevel: Double, initialZoomLevel: Double, mapCenter: CLLocationCoordinate2D, annotations: [LocationAnnotation] = []) {
+        init(zoomLevel: Double, initialZoomLevel: Double, mapCenter: CLLocationCoordinate2D, annotations: [String: LocationAnnotation] = [:]) {
             self.zoomLevel = zoomLevel
             self.initialZoomLevel = initialZoomLevel
             self.mapCenter = mapCenter
@@ -70,6 +70,11 @@ struct MapLibreMapView: UIViewRepresentable {
             mapView.styleURL = dynamicMapURL
         }
         
+        // Update existing annotation views with fresh SwiftUI content.
+        // This handles the case where the annotation's view data changes after
+        // the annotation was initially placed (e.g. user avatar loads asynchronously).
+        updateAnnotations(in: mapView)
+        
         showUserLocation(in: mapView)
     }
     
@@ -80,9 +85,44 @@ struct MapLibreMapView: UIViewRepresentable {
     // MARK: - Private
 
     private func setupMap(mapView: MLNMapView, with options: Options) {
-        mapView.addAnnotations(options.annotations)
+        mapView.addAnnotations(Array(options.annotations.values))
         mapView.zoomLevel = options.annotations.isEmpty ? options.initialZoomLevel : options.zoomLevel
         mapView.centerCoordinate = options.mapCenter
+    }
+    
+    private func updateAnnotations(in mapView: MLNMapView) {
+        let existingByID = Dictionary(uniqueKeysWithValues:
+            (mapView.annotations ?? []).compactMap { $0 as? LocationAnnotation }.map { ($0.id, $0) })
+        
+        let existingIDs = Set(existingByID.keys)
+        let updatedIDs = Set(options.annotations.keys)
+        
+        // Remove annotations that are no longer present
+        let removedIDs = existingIDs.subtracting(updatedIDs)
+        if !removedIDs.isEmpty {
+            let toRemove = removedIDs.compactMap { existingByID[$0] }
+            mapView.removeAnnotations(toRemove)
+        }
+        
+        // Add new annotations
+        let addedIDs = updatedIDs.subtracting(existingIDs)
+        if !addedIDs.isEmpty {
+            let toAdd = addedIDs.compactMap { options.annotations[$0] }
+            mapView.addAnnotations(toAdd)
+        }
+        
+        // Update existing annotations that are still present
+        let keptIDs = existingIDs.intersection(updatedIDs)
+        for id in keptIDs {
+            guard let existingAnnotation = existingByID[id],
+                  let updatedAnnotation = options.annotations[id] else {
+                continue
+            }
+            existingAnnotation.coordinate = updatedAnnotation.coordinate
+            if let annotationView = mapView.view(for: existingAnnotation) as? LocationAnnotationView {
+                annotationView.updateContent(with: updatedAnnotation.view)
+            }
+        }
     }
     
     private func makeMapView() -> MLNMapView {

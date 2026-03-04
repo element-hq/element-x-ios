@@ -6,7 +6,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Combine
 import Compound
 import SwiftUI
 
@@ -15,19 +14,15 @@ struct LocationSharingScreen: View {
     
     var body: some View {
         mapView
+            .ignoresSafeArea(edges: .bottom)
             .track(screen: context.viewState.isLocationPickerMode ? .LocationSend : .LocationView)
             .navigationTitle(L10n.screenViewLocationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .alert(item: $context.alertInfo)
-            .sheet(isPresented: .constant(context.viewState.isLocationPickerMode)) {
-                sharingOptionsSheet
-            }
     }
     
     // MARK: - Private
-    
-    @State private var sharingOptionsSheetHeight: CGFloat = .zero
     
     private var mapView: some View {
         ZStack(alignment: .center) {
@@ -48,6 +43,12 @@ struct LocationSharingScreen: View {
         }
         .overlay(alignment: .topTrailing) {
             centerToUserLocationButton
+        }
+        .overlay(alignment: .bottom) {
+            // We can't use a sheet because it might interfer with the alerts.
+            if context.viewState.isLocationPickerMode {
+                sharingOptionsOverlay
+            }
         }
     }
     
@@ -72,12 +73,15 @@ struct LocationSharingScreen: View {
     }
     
     private var mapOptions: MapLibreMapView.Options {
-        var annotations: [LocationAnnotation] = []
+        var annotations: [String: LocationAnnotation] = [:]
         if !context.viewState.isLocationPickerMode {
-            let annotation = LocationAnnotation(coordinate: context.viewState.initialMapCenter, anchorPoint: .bottomCenter) {
+            let id = context.viewState.shownUserProfile?.userID ?? UUID().uuidString
+            let annotation = LocationAnnotation(id: id,
+                                                coordinate: context.viewState.initialMapCenter,
+                                                anchorPoint: .bottomCenter) {
                 LocationMarkerView(userProfile: context.viewState.shownUserProfile, mediaProvider: context.mediaProvider)
             }
-            annotations.append(annotation)
+            annotations[id] = annotation
         }
         
         return .init(zoomLevel: context.viewState.zoomLevel,
@@ -133,19 +137,20 @@ struct LocationSharingScreen: View {
         }
     }
     
-    private var sharingOptionsSheet: some View {
+    private var sharingOptionsOverlay: some View {
         VStack(alignment: .leading, spacing: 0) {
             Button {
-                context.send(viewAction: .selectThisLocation)
+                context.send(viewAction: .selectLocation)
             } label: {
-                LocationSharingLabel(text: L10n.screenShareThisLocationAction,
-                                     icon: \.locationNavigator,
-                                     iconColor: .compound.iconSecondary)
-            }
-            Button { } label: {
-                LocationSharingLabel(text: L10n.screenShareMyLocationAction,
-                                     icon: \.locationNavigatorCentred,
-                                     iconColor: .compound.iconSecondary)
+                if context.viewState.isSharingUserLocation {
+                    LocationSharingLabel(text: L10n.screenShareMyLocationAction,
+                                         icon: \.locationNavigatorCentred,
+                                         iconColor: .compound.iconSecondary)
+                } else {
+                    LocationSharingLabel(text: L10n.screenShareThisLocationAction,
+                                         icon: \.locationNavigator,
+                                         iconColor: .compound.iconSecondary)
+                }
             }
             if context.viewState.showLiveLocationSharingButton {
                 Button { } label: {
@@ -157,13 +162,27 @@ struct LocationSharingScreen: View {
         }
         .font(.compound.bodyLG)
         .foregroundStyle(.compound.textPrimary)
-        .padding(.top, 38)
-        .readHeight($sharingOptionsSheetHeight)
-        .interactiveDismissDisabled()
-        .presentationBackground(.compound.bgCanvasDefault)
-        .presentationBackgroundInteraction(.enabled)
-        .presentationDragIndicator(.hidden)
-        .presentationDetents([.height(sharingOptionsSheetHeight)])
+        .frame(maxWidth: .infinity)
+        .modifier(SharingOptionsBackgroundModifier())
+    }
+}
+
+private struct SharingOptionsBackgroundModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .padding(.top, 40)
+                .padding(.bottom, 32)
+                .background(.compound.bgCanvasDefault, in: .rect(cornerRadius: 38))
+                .padding(.horizontal, 6)
+                .padding(.bottom, 6)
+            
+        } else {
+            content
+                .padding(.top, 40)
+                .padding(.bottom, 32)
+                .background(.compound.bgCanvasDefault, in: .rect(topLeadingRadius: 14, topTrailingRadius: 14))
+        }
     }
 }
 

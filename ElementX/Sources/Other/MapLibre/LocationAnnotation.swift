@@ -11,23 +11,32 @@ import MapLibre
 import SwiftUI
 
 final class LocationAnnotation: NSObject, MLNAnnotation {
-    let coordinate: CLLocationCoordinate2D
+    let id: String
+    var coordinate: CLLocationCoordinate2D
     let anchorPoint: CGPoint
-    let view: AnyView
+    var view: AnyView
     
     // MARK: - Setup
     
-    init(coordinate: CLLocationCoordinate2D,
+    init(id: String = UUID().uuidString,
+         coordinate: CLLocationCoordinate2D,
          anchorPoint: CGPoint = .init(x: 0.5, y: 0.5),
          @ViewBuilder label: () -> some View) {
+        self.id = id
         self.coordinate = coordinate
         self.anchorPoint = anchorPoint
         view = AnyView(label())
         super.init()
     }
+    
+    func updateView(@ViewBuilder label: () -> some View) {
+        view = AnyView(label())
+    }
 }
 
 final class LocationAnnotationView: MLNUserLocationAnnotationView {
+    private var hostingController: UIHostingController<AnyView>?
+    
     // MARK: - Setup
     
     override init(annotation: MLNAnnotation?, reuseIdentifier: String?) {
@@ -37,11 +46,20 @@ final class LocationAnnotationView: MLNUserLocationAnnotationView {
     
     convenience init(annotation: LocationAnnotation) {
         self.init(annotation: annotation, reuseIdentifier: "\(Self.self)")
-        let view: UIView = UIHostingController(rootView: annotation.view).view
+        let hostingController = UIHostingController(rootView: annotation.view)
+        self.hostingController = hostingController
+        let view: UIView = hostingController.view
         view.backgroundColor = .clear
         view.anchorPoint = annotation.anchorPoint
         addSubview(view)
         view.bounds.size = view.intrinsicContentSize
+    }
+        
+    func updateContent(with view: AnyView) {
+        hostingController?.rootView = view
+        if let hostedView = hostingController?.view {
+            hostedView.bounds.size = hostedView.intrinsicContentSize
+        }
     }
     
     @available(*, unavailable)
