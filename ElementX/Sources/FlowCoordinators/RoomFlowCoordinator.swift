@@ -703,8 +703,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentPollForm(let mode):
                     stateMachine.tryEvent(.presentPollForm(mode: mode),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-                case .presentLocationViewer(_, let geoURI, let description):
-                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)),
+                case .presentLocationViewer(let senderID, _, let geoURI, let description):
+                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewStatic(senderID: senderID, geoURI: geoURI, description: description)),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .presentRoomMemberDetails(userID: let userID):
                     stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
@@ -788,10 +788,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .presentPollForm(let mode):
                 stateMachine.tryEvent(.presentPollForm(mode: mode),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-            case .presentLocationViewer(_, let geoURI, let description):
-                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI,
-                                                                                      description: description)),
-                                      userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
+            case .presentLocationViewer(let senderID, _, let geoURI, let description):
+                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewStatic(senderID: senderID,
+                                                                                        geoURI: geoURI,
+                                                                                        description: description)),
+                                      userInfo: EventUserInfo(animated: animated,
+                                                              timelineController: timelineController))
             case .presentEmojiPicker(let itemID, let selectedEmojis):
                 stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
@@ -1136,10 +1138,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let params = LocationSharingScreenCoordinatorParameters(interactionMode: interactionMode,
                                                                 mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
                                                                 liveLocationSharingEnabled: flowParameters.appSettings.liveLocationSharingEnabled,
+                                                                roomProxy: roomProxy,
                                                                 timelineController: timelineController,
                                                                 appMediator: flowParameters.appMediator,
                                                                 analytics: flowParameters.analytics,
-                                                                userIndicatorController: flowParameters.userIndicatorController)
+                                                                userIndicatorController: flowParameters.userIndicatorController,
+                                                                mediaProvider: flowParameters.userSession.mediaProvider)
         let coordinator = LocationSharingScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in

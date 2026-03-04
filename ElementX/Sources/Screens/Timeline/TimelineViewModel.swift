@@ -655,8 +655,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             
             let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind)
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
-        case .displayLocation(let body, let geoURI, let description):
-            actionsSubject.send(.displayLocation(body: body, geoURI: geoURI, description: description))
+        case .displayLocation(let senderID, let body, let geoURI, let description):
+            actionsSubject.send(.displayLocation(senderID: senderID, body: body, geoURI: geoURI, description: description))
         case .none:
             break
         }

@@ -24,9 +24,11 @@ struct LocationSharingScreenViewModelTests {
         let viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
                                                        mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
                                                        liveLocationSharingEnabled: true,
+                                                       roomProxy: JoinedRoomProxyMock(.init()),
                                                        timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                        analytics: ServiceLocator.shared.analytics,
-                                                       userIndicatorController: UserIndicatorControllerMock())
+                                                       userIndicatorController: UserIndicatorControllerMock(),
+                                                       mediaProvider: MediaProviderMock(configuration: .init()))
         viewModel.state.bindings.isLocationAuthorized = true
         self.viewModel = viewModel
     }

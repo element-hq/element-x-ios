@@ -44,6 +44,10 @@ struct UserProfileProxy: Equatable, Hashable {
         avatarURL = sdkRoomHero.avatarUrl.flatMap(URL.init(string:))
     }
     
+    init(member: RoomMemberProxyProtocol) {
+        self.init(member: RoomMemberDetails(withProxy: member))
+    }
+    
     /// A user is meant to be "verified" when the GET profile returns back either the display name or the avatar
     /// If isn't we aren't sure that the related matrix id really exists.
     var isVerified: Bool {

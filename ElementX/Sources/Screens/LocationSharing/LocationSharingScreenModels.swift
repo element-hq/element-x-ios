@@ -21,7 +21,16 @@ enum LocationSharingScreenViewModelAction {
 
 enum LocationSharingInteractionMode: Hashable {
     case picker
-    case viewOnly(geoURI: GeoURI, description: String? = nil)
+    case viewStatic(senderID: String?, geoURI: GeoURI, description: String? = nil)
+    
+    var canShowAvatar: Bool {
+        switch self {
+        case .picker, .viewStatic(.some(_), _, _):
+            true
+        default:
+            false
+        }
+    }
 }
 
 struct LocationSharingScreenViewState: BindableState {
@@ -34,7 +43,7 @@ struct LocationSharingScreenViewState: BindableState {
         
         bindings.showsUserLocationMode = switch interactionMode {
         case .picker: .showAndFollow
-        case .viewOnly: .show
+        case .viewStatic: .show
         }
     }
 
@@ -54,21 +63,17 @@ struct LocationSharingScreenViewState: BindableState {
         case .picker:
             // middle point in Europe, to be used if the users location is not yet known
             return .init(latitude: 49.843, longitude: 9.902056)
-        case .viewOnly(let geoURI, _):
+        case .viewStatic(_, let geoURI, _):
             return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
         }
     }
 
     var isLocationPickerMode: Bool {
-        interactionMode == .picker
-    }
-
-    var navigationTitle: String {
         switch interactionMode {
         case .picker:
-            return L10n.screenShareLocationTitle
-        case .viewOnly:
-            return L10n.screenViewLocationTitle
+            true
+        default:
+            false
         }
     }
 
@@ -76,7 +81,7 @@ struct LocationSharingScreenViewState: BindableState {
         switch interactionMode {
         case .picker:
             return false
-        case .viewOnly:
+        case .viewStatic:
             return true
         }
     }
@@ -89,7 +94,7 @@ struct LocationSharingScreenViewState: BindableState {
         switch interactionMode {
         case .picker:
             return 2.7
-        case .viewOnly:
+        case .viewStatic:
             return 15.0
         }
     }
@@ -98,8 +103,19 @@ struct LocationSharingScreenViewState: BindableState {
         switch interactionMode {
         case .picker:
             return nil
-        case .viewOnly(_, let description):
+        case .viewStatic(_, _, let description):
             return description
+        }
+    }
+    
+    var userProfile: UserProfileProxy?
+    
+    var shownUserProfile: UserProfileProxy? {
+        switch interactionMode {
+        case .picker:
+            isSharingUserLocation ? userProfile : nil
+        case .viewStatic:
+            userProfile
         }
     }
 }

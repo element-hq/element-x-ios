@@ -12,6 +12,7 @@ import Foundation
 typealias LocationSharingScreenViewModelType = StateStoreViewModelV2<LocationSharingScreenViewState, LocationSharingScreenViewAction>
 
 class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, LocationSharingScreenViewModelProtocol {
+    private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -24,16 +25,25 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     init(interactionMode: LocationSharingInteractionMode,
          mapURLBuilder: MapTilerURLBuilderProtocol,
          liveLocationSharingEnabled: Bool,
+         roomProxy: JoinedRoomProxyProtocol,
          timelineController: TimelineControllerProtocol,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         mediaProvider: MediaProviderProtocol) {
+        self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(interactionMode: interactionMode,
                                            mapURLBuilder: mapURLBuilder,
-                                           showLiveLocationSharingButton: liveLocationSharingEnabled))
+                                           showLiveLocationSharingButton: liveLocationSharingEnabled),
+                   mediaProvider: mediaProvider)
+        
+        if interactionMode.canShowAvatar {
+            updateShownUserProfile(members: roomProxy.membersPublisher.value)
+            setupSubscriptions()
+        }
     }
     
     override func process(viewAction: LocationSharingScreenViewAction) {
@@ -60,6 +70,32 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     }
     
     // MARK: - Private
+    
+    private func setupSubscriptions() {
+        roomProxy.membersPublisher.sink { [weak self] members in
+            self?.updateShownUserProfile(members: members)
+        }
+        .store(in: &cancellables)
+    }
+    
+    private func updateShownUserProfile(members: [RoomMemberProxyProtocol]) {
+        switch state.interactionMode {
+        case .picker:
+            if let ownUser = members.first { $0.userID == roomProxy.ownUserID }.map(UserProfileProxy.init) {
+                state.userProfile = ownUser
+            } else {
+                state.userProfile = .init(userID: roomProxy.ownUserID)
+            }
+        case .viewStatic(.some(let senderID), _, _):
+            if let sender = members.first { $0.userID == senderID }.map(UserProfileProxy.init) {
+                state.userProfile = sender
+            } else {
+                state.userProfile = .init(userID: senderID)
+            }
+        default:
+            state.userProfile = nil
+        }
+    }
     
     private func sendLocation(_ geoURI: GeoURI, isUserLocation: Bool) async {
         guard case .success = await timelineController.sendLocation(body: geoURI.bodyMessage,

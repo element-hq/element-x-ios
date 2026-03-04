@@ -34,7 +34,7 @@ struct LocationRoomTimelineView: View {
                 MapLibreStaticMapView(geoURI: geoURI,
                                       mapURLBuilder: context.viewState.mapTilerConfiguration,
                                       mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
-                    LocationMarkerView()
+                    LocationMarkerView(userProfile: timelineItem.content.kind == .sender ? .init(sender: timelineItem.sender) : nil, mediaProvider: context.mediaProvider)
                 }
                 .frame(maxHeight: mapMaxHeight)
                 .aspectRatio(mapAspectRatio, contentMode: .fit)
@@ -107,7 +107,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
-                                                     sender: .init(id: "Bob"),
+                                                     sender: .init(id: "@bob:matrix.org", displayName: "Bob", avatarURL: .mockMXCUserAvatar),
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description")))
         LocationRoomTimelineView(timelineItem: .init(id: .randomEvent,
@@ -117,7 +117,8 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      canBeRepliedTo: true,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
-                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description"),
+                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description",
+                                                                    kind: .pin),
                                                      properties: .init(replyDetails: .loaded(sender: .init(id: "Someone"),
                                                                                              eventID: "123",
                                                                                              eventContent: .message(.text(.init(body: "The thread content goes 'ere.")))),

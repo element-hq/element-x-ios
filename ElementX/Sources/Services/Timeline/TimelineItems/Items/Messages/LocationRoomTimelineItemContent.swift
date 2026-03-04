@@ -6,16 +6,35 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import MatrixRustSDK
+
 struct LocationRoomTimelineItemContent: Hashable {
+    enum Kind {
+        case sender
+        case pin
+        
+        init(from asset: AssetType?) {
+            self = switch asset {
+            case .pin:
+                .pin
+            case .sender, .none:
+                .sender
+            }
+        }
+    }
+    
     let body: String
     let geoURI: GeoURI?
     let description: String?
+    let kind: Kind
 
     init(body: String,
          geoURI: GeoURI? = nil,
-         description: String? = nil) {
+         description: String? = nil,
+         kind: Kind = .sender) {
         self.body = body
         self.geoURI = geoURI
         self.description = description
+        self.kind = kind
     }
 }

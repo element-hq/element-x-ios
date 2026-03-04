@@ -26,7 +26,7 @@ struct PinnedEventsTimelineScreenCoordinatorParameters {
 enum PinnedEventsTimelineScreenCoordinatorAction {
     case dismiss
     case displayUser(userID: String)
-    case presentLocationViewer(geoURI: GeoURI, description: String?)
+    case presentLocationViewer(senderID: String?, geoURI: GeoURI, description: String?)
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayRoomScreenWithFocussedPin(eventID: String, threadRootEventID: String?)
 }
@@ -87,8 +87,10 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
             case .displayMediaPreview(let mediaPreviewViewModel):
                 viewModel.displayMediaPreview(mediaPreviewViewModel)
-            case .displayLocation(_, let geoURI, let description):
-                actionsSubject.send(.presentLocationViewer(geoURI: geoURI, description: description))
+            case .displayLocation(let senderID, _, let geoURI, let description):
+                actionsSubject.send(.presentLocationViewer(senderID: senderID,
+                                                           geoURI: geoURI,
+                                                           description: description))
             case .viewInRoomTimeline(let eventID, let threadRootEventID):
                 actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID, threadRootEventID: threadRootEventID))
             // These other actions will not be handled in this view
