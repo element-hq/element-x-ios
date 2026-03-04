@@ -17,8 +17,8 @@ struct ConfigureNightly: AsyncParsableCommand {
 
         try addNightlyVariant()
         
-        try Zsh.run(command: "swift run pipeline update-foss-secrets")
-        try Zsh.run(command: "xcodegen")
+        try await CI.run(.name("swift"), ["run", "pipeline", "update-foss-secrets"])
+        try await CI.run(.name("xcodegen"))
 
         let releaseVersion = try CI.readMarketingVersion()
         try await generateAppIconBanner(version: releaseVersion, buildNumber: buildNumber)
