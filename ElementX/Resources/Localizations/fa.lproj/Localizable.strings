@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "نیازمند کنش محدود به زمان";
 "a11y_show_password" = "نمایش گذرواژه";
 "a11y_start_call" = "آغاز یک تماس";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "فهرست کاربر";
 "a11y_view_avatar" = "دیدن چهرک";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "در انتظار این پیام";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "شما";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "کلید بازیابی خود را تأیید کنید تا دسترسی به حافظه کلیدها و تاریخچه پیام‌هایتان حفظ شود .";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "زنگ خوردن تماس";
 "notification_channel_silent" = "اعلان‌های صامت";
 "notification_fallback_content" = "پیام‌های جدیدی دارید.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 تماس ورودی";
 "notification_inline_reply_failed" = "**‌شکست در فرستادن - لطفاً اتاق را بگشایید";
 "notification_invite_body" = "به گپ دعوتتان کرد";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "نشانی کارساز خانگی";
 "screen_account_provider_form_notice" = "ورود عبارت جست‌وجو یا نشانی دامنه.";
 "screen_account_provider_form_subtitle" = "جست‌وجو برای شرکت، اجتماع یا کارسازی خصوصی.";

@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "Mostrar contraseña";
 "a11y_start_call" = "Iniciar llamada";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Menú de usuario";
 "a11y_view_avatar" = "Ver avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Esperando este mensaje";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Tú";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Enviado desde un dispositivo no seguro";
 "common_unable_to_decrypt_verification_violation" = "Se restableció la identidad verificada del remitente";
 "confirm_recovery_key_banner_message" = "Confirma tu clave de recuperación para mantener el acceso a tu almacén de claves y al historial de mensajes.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Llamadas entrantes";
 "notification_channel_silent" = "Notificaciones silenciosas";
 "notification_fallback_content" = "Tienes nuevos mensajes.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Llamada entrante";
 "notification_inline_reply_failed" = "** No se ha podido enviar - por favor, abre la sala";
 "notification_invite_body" = "Te invitó a chatear";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mensaje no enviado porque la identidad verificada de %1$@ fue restablecida.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mensaje no enviado porque %1$@ no ha verificado todos los dispositivos.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mensaje no enviado porque no has verificado uno o más de tus dispositivos.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Dirección del servidor base";
 "screen_account_provider_form_notice" = "Introduce un término de búsqueda o una dirección de dominio.";
 "screen_account_provider_form_subtitle" = "Busca una empresa, comunidad o servidor privado.";

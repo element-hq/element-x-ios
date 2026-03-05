@@ -116,6 +116,8 @@ internal enum L10n {
   internal static var a11yShowPassword: String { return L10n.tr("Localizable", "a11y_show_password") }
   /// Start a call
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
+  /// Start a voice call
+  internal static var a11yStartVoiceCall: String { return L10n.tr("Localizable", "a11y_start_voice_call") }
   /// Tombstoned room
   internal static var a11yTombstonedRoom: String { return L10n.tr("Localizable", "a11y_tombstoned_room") }
   /// User menu
@@ -1062,6 +1064,8 @@ internal enum L10n {
   internal static func notificationFallbackNContent(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_fallback_n_content", p1)
   }
+  /// 📞 Incoming call
+  internal static var notificationIncomingAudioCall: String { return L10n.tr("Localizable", "notification_incoming_audio_call") }
   /// 📹 Incoming call
   internal static var notificationIncomingCall: String { return L10n.tr("Localizable", "notification_incoming_call") }
   /// ** Failed to send - please open room
@@ -3157,7 +3161,7 @@ internal enum L10n {
   internal static var screenShareOpenGoogleMaps: String { return L10n.tr("Localizable", "screen_share_open_google_maps") }
   /// Open in OpenStreetMap
   internal static var screenShareOpenOsmMaps: String { return L10n.tr("Localizable", "screen_share_open_osm_maps") }
-  /// Share this location
+  /// Share pinned location
   internal static var screenShareThisLocationAction: String { return L10n.tr("Localizable", "screen_share_this_location_action") }
   /// You’ve changed your password on another session
   internal static var screenSignedOutReason1: String { return L10n.tr("Localizable", "screen_signed_out_reason_1") }
@@ -3701,10 +3705,22 @@ internal enum L10n {
     internal static var yourAvatar: String { return L10n.tr("Localizable", "a11y.your_avatar") }
   }
 
+  internal enum Common {
+    /// Other options
+    internal static var otherOptions: String { return L10n.tr("Localizable", "common.other_options") }
+  }
+
   internal enum Error {
     /// You're already logged in on this device as %1$@.
     internal static func accountAlreadyLoggedIn(_ p1: Any) -> String {
       return L10n.tr("Localizable", "error.account_already_logged_in", String(describing: p1))
+    }
+  }
+
+  internal enum Screen {
+    internal enum Onboarding {
+      /// Welcome back
+      internal static var welcomeBack: String { return L10n.tr("Localizable", "screen.onboarding.welcome_back") }
     }
   }
 }

@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Необхідно виконати дію, обмежену в часі, у вас є одна хвилина для верифікації";
 "a11y_show_password" = "Показати пароль";
 "a11y_start_call" = "Розпочати виклик";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Кімната більше не використовується";
 "a11y_user_menu" = "Меню користувача";
 "a11y_view_avatar" = "Переглянути аватар";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Чекаємо на це повідомлення";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Ви";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Надіслано з незахищеного пристрою";
 "common_unable_to_decrypt_verification_violation" = "Ідентичність відправника скинуто";
 "confirm_recovery_key_banner_message" = "Підтвердіть свій ключ відновлення, щоб мати доступ до сховища ключів та історії повідомлень.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Виклики";
 "notification_channel_silent" = "Тихі сповіщення";
 "notification_fallback_content" = "У вас є нові повідомлення.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Вхідний виклик";
 "notification_inline_reply_failed" = "** Не вдалося надіслати - відкрийте кімнату";
 "notification_invite_body" = "Запрошує вас до бесіди";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Повідомлення не надіслано, оскільки підтверджену особистість %1$@ скинуто.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Повідомлення не надіслано, оскільки %1$@ перевірив не всі пристрої.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Повідомлення не надіслано, оскільки ви не підтвердили один або кілька своїх пристроїв.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Адреса домашнього сервера";
 "screen_account_provider_form_notice" = "Уведіть пошуковий термін або адресу домену.";
 "screen_account_provider_form_subtitle" = "Пошук компанії, спільноти або приватного сервера.";

@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "لفظ عبور دکھائیں";
 "a11y_start_call" = "مکالمہ شروع کریں";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "لائحۂ صارف";
 "a11y_view_avatar" = "View avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "اس پیغام کا منتظر";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "آپ";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "اپنے کلید کے ذخیرہ اور پیغام کی سرگزشت تک رسائی کو برقرار رکھنے کیلئے اپنی بازیابی کلید کی تصدیق کریں۔";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "بجنے والے مکالمات";
 "notification_channel_silent" = "خاموش اطلاعات";
 "notification_fallback_content" = "آپ کے لیے نئے پیغامات ہیں۔";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 آنے والا مکالمہ";
 "notification_inline_reply_failed" = "** بھیجنے میں ناکام - براہ کرم کمرہ کھولیں";
 "notification_invite_body" = "آپ کو گفتگو کیلئے مدعو کیا";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "پیغام نہیں بھیجا گیا کیونکہ %1$@ کی تصدیق شدہ شناخت کو دوبارہ ترتیب دے دیا گیا ہے۔";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "پیغام نہیں بھیجا گیا کیونکہ%1$@ نے تمام آلات کی تصدیق نہیں کی ہے۔";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "پیغام نہیں بھیجا گیا کیونکہ آپ نے اپنے ایک یا زیادہ آلات کی تصدیق نہیں کی ہے۔";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "منزلی خادم پتہ";
 "screen_account_provider_form_notice" = "تلاش کی اصطلاح یا عنوانِ مجال درج کریں۔";
 "screen_account_provider_form_subtitle" = "کسی شرکت، برادری، یا نجی خادم کیلئے تلاش کریں۔";

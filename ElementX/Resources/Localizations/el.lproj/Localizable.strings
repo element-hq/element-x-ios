@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Απαιτείται ενέργεια περιορισμένης χρονικής διάρκειας, έχετε ένα λεπτό για επαλήθευση.";
 "a11y_show_password" = "Εμφάνιση κωδικού πρόσβασης";
 "a11y_start_call" = "Ξεκίνησε μια κλήση";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Θαμένη αίθουσα";
 "a11y_user_menu" = "Μενού χρήστη";
 "a11y_view_avatar" = "Προβολή avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Αναμονή για αυτό το μήνυμα";
 "common_world_readable_history" = "Οποιοσδήποτε μπορεί να δει το ιστορικό";
 "common_you" = "Εσύ";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Στάλθηκε από μια μη ασφαλής συσκευή";
 "common_unable_to_decrypt_verification_violation" = "Η επαληθευμένη ταυτότητα του αποστολέα έχει επαναφερθεί";
 "confirm_recovery_key_banner_message" = "Επιβεβαίωσε το κλειδί ανάκτησης για να διατηρήσεις την πρόσβαση στο χώρο αποθήκευσης κλειδιών και στο ιστορικό μηνυμάτων.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Κουδούνισμα κλήσεων";
 "notification_channel_silent" = "Αθόρυβες ειδοποιήσεις";
 "notification_fallback_content" = "Έχεις νέο(α) μήνυμα(τα).";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Εισερχόμενη κλήση";
 "notification_inline_reply_failed" = "** Αποτυχία αποστολής - παρακαλώ ανοίξτε την αίθουσα";
 "notification_invite_body" = "Σε προσκάλεσε να συνομιλήσετε";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Το μήνυμα δεν στάλθηκε γιατί έγινε επαναφορά της επαληθευμένης ταυτότητας του χρήστη %1$@.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Το μήνυμα δεν στάλθηκε επειδή ο χρήστης %1$@ δεν έχει επαληθεύσει όλες τις συσκευές.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Το μήνυμα δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Διεύθυνση οικιακού διακομιστή";
 "screen_account_provider_form_notice" = "Εισήγαγε έναν όρο αναζήτησης ή μια διεύθυνση τομέα.";
 "screen_account_provider_form_subtitle" = "Αναζήτησε μια εταιρεία, κοινότητα ή ιδιωτικό διακομιστή.";

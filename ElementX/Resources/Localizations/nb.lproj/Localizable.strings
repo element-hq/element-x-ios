@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Tidsbegrenset handling kreves, du har ett minutt på deg til å verifisere";
 "a11y_show_password" = "Vis passord";
 "a11y_start_call" = "Start en samtale";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Deaktivert rom";
 "a11y_user_menu" = "Brukermeny";
 "a11y_view_avatar" = "Vis avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Venter på denne meldingen";
 "common_world_readable_history" = "Alle kan se historikk";
 "common_you" = "Du";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Sendt fra en usikker enhet";
 "common_unable_to_decrypt_verification_violation" = "Avsenderens verifiserte identitet ble tilbakestilt";
 "confirm_recovery_key_banner_message" = "Verifiser gjenopprettingsnøkkelen for å opprettholde tilgangen til nøkkellageret og meldingshistorikken.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Ringende anrop";
 "notification_channel_silent" = "Stille varsler";
 "notification_fallback_content" = "Du har nye meldinger.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Innkommende anrop";
 "notification_inline_reply_failed" = "** Kunne ikke sende - vennligst åpne rommet";
 "notification_invite_body" = "Inviterte deg til å chatte";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Meldingen ble ikke sendt fordi %1$@s verifiserte identitet er tilbakestilt.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meldingen ble ikke sendt fordi %1$@ ikke har verifisert alle enheter.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Hjemmeserveradresse";
 "screen_account_provider_form_notice" = "Skriv inn et søkeord eller en domeneadresse.";
 "screen_account_provider_form_subtitle" = "Søk etter et selskap, fellesskap eller privat server.";

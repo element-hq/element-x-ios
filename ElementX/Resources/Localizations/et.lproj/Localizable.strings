@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Palun tee see ajapiiranguga toiming, sul on aega üks minut";
 "a11y_show_password" = "Näita salasõna";
 "a11y_start_call" = "Helista";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Lõpetatuks märgitud jututuba";
 "a11y_user_menu" = "Kasutajamenüü";
 "a11y_view_avatar" = "Vaata tunnuspilti";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Ootame selle sõnumi dekrüptimisvõtit";
 "common_world_readable_history" = "Kõik võivad ajalugu näha";
 "common_you" = "Sina";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Saadetud ebaturvalisest seadmest";
 "common_unable_to_decrypt_verification_violation" = "Saatja verifitseeritud identiteet on lähtestatud";
 "confirm_recovery_key_banner_message" = "Säilitamaks ligipääsu vestluste ja krüptovõtmete varukoopiale, palun sisesta kinnituseks oma taastevõti.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Kõnehelinad";
 "notification_channel_silent" = "Vaiksed teavitused";
 "notification_fallback_content" = "Sulle on uusi sõnumeid.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Sissetulev kõne";
 "notification_inline_reply_failed" = "** Saatmine ei õnnestunud - palun ava jututoa täisvaade";
 "notification_invite_body" = "Kutse osalema vestluses";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Sõnum on saatmata, kuna kasutaja %1$@ verifitseeritud identiteet on lähtestatud.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Sõnum on saatmata, kuna %1$@ pole verifitseerinud kõiki oma seadmeid.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Koduserveri aadress";
 "screen_account_provider_form_notice" = "Sisesta otsingusõna või domeeni nimi.";
 "screen_account_provider_form_subtitle" = "Otsi äriühingut, kogukonda või võrgus leiduvat Matrixi serverit.";

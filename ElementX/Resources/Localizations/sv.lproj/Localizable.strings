@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Tidsbegränsad åtgärd krävs";
 "a11y_show_password" = "Visa lösenord";
 "a11y_start_call" = "Starta ett samtal";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Gravstensmärkt rum";
 "a11y_user_menu" = "Användarmeny";
 "a11y_view_avatar" = "Visa avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Väntar på detta meddelande";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Du";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Skickad från en osäker enhet";
 "common_unable_to_decrypt_verification_violation" = "Avsändarens verifierade identitet återställdes";
 "confirm_recovery_key_banner_message" = "Bekräfta din återställningsnyckel för att behålla åtkomsten till din nyckellagring och meddelandehistorik.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Ringande samtal";
 "notification_channel_silent" = "Tysta aviseringar";
 "notification_fallback_content" = "Du har nya meddelanden.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Inkommande samtal";
 "notification_inline_reply_failed" = "** Misslyckades att skicka - vänligen öppna rummet";
 "notification_invite_body" = "Bjöd in dig att chatta";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Meddelandet skickades inte eftersom verifierad identitet för %1$@ återställdes.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meddelandet skickades inte eftersom %1$@ inte har verifierat alla enheter.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Meddelandet skickades inte eftersom du inte har verifierat en eller flera av dina enheter.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Hemserveradress";
 "screen_account_provider_form_notice" = "Ange ett sökord eller en domänadress.";
 "screen_account_provider_form_subtitle" = "Sök efter ett företag, en gemenskap eller en privat server.";
@@ -927,7 +931,7 @@
 "screen_join_room_ban_message" = "Du bannades från det här rummet";
 "screen_join_room_ban_reason" = "Anledning: %1$@.";
 "screen_join_room_fail_message" = "Misslyckades att gå med.";
-"screen_join_room_fail_reason" = "Detta rum är antingen endast för inbjudna eller så kan det finnas begränsningar för åtkomst på utrymmesnivå.";
+"screen_join_room_fail_reason" = "Du måste antingen bli inbjuden att gå med eller så kan det finnas åtkomstbegränsningar.";
 "screen_join_room_forget_action" = "Glöm";
 "screen_join_room_invite_required_message" = "Du behöver en inbjudan för att gå med";
 "screen_join_room_join_restricted_message" = "Du kan behöva bli inbjuden eller vara medlem i ett utrymme för att gå med.";

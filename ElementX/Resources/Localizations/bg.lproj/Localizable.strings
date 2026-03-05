@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "Показване на паролата";
 "a11y_start_call" = "Започнете обаждане";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Потребителско меню";
 "a11y_view_avatar" = "View avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "В очакване на това съобщение";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Вие";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Потвърдете ключа си за възстановяване, за да запазите достъп до хранилището за ключове и историята на съобщенията си.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Безшумни известия";
 "notification_fallback_content" = "Имате нови съобщения.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Incoming call";
 "notification_inline_reply_failed" = "** Неуспешно изпращане - моля, отворете стаята";
 "notification_invite_body" = "Поканиха ви за чат";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Адрес на сървъра";
 "screen_account_provider_form_notice" = "Въведете термин за търсене или адрес на домейн.";
 "screen_account_provider_form_subtitle" = "Потърсете компания, общност или частен сървър.";

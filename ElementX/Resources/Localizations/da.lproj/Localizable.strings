@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Tidsbegrænset handling påkrævet, du har et minut til at bekræfte";
 "a11y_show_password" = "Vis adgangskode";
 "a11y_start_call" = "Start et opkald";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Deaktiveret rum";
 "a11y_user_menu" = "Brugermenu";
 "a11y_view_avatar" = "Se avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Venter på denne besked";
 "common_world_readable_history" = "Alle kan se historikken";
 "common_you" = "Dig";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Sendt fra en usikker enhed";
 "common_unable_to_decrypt_verification_violation" = "Afsenderens verificerede identitet blev nulstillet";
 "confirm_recovery_key_banner_message" = "Bekræft din gendannelsesnøgle for at bevare adgangen til nøglelager og meddelelseshistorik.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Ringende opkald";
 "notification_channel_silent" = "Lydløse notifikationer";
 "notification_fallback_content" = "Du har nye beskeder.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Indgående opkald";
 "notification_inline_reply_failed" = "** Kunne ikke sende - åbn venligst rummet";
 "notification_invite_body" = "Inviterede dig til at samtale";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Beskeden blev ikke sendt fordi %1$@ s bekræftede identitet blev nulstillet.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meddelelsen er ikke sendt, fordi %1$@ ikke har bekræftet alle enheder.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Beskeden er ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Hjemmeserverens adresse";
 "screen_account_provider_form_notice" = "Indtast et søgeudtryk eller en domæneadresse.";
 "screen_account_provider_form_subtitle" = "Søg efter en virksomhed, et fællesskab eller en privat server.";

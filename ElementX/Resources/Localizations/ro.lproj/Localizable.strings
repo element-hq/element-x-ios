@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Acțiune limitată în timp necesară, aveți un minut pentru a verifica";
 "a11y_show_password" = "Afișați parola";
 "a11y_start_call" = "Începeți un apel";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Cameră terminată";
 "a11y_user_menu" = "Meniu utilizator";
 "a11y_view_avatar" = "Vizualizați avatarul";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Mesaj în așteptare";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Dumneavoastră";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Trimis de pe un dispozitiv nesigur";
 "common_unable_to_decrypt_verification_violation" = "Identitatea verificată a expeditorului a fost resetată";
 "confirm_recovery_key_banner_message" = "Backup-ul pentru chat nu este sincronizat. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Apeluri care sună";
 "notification_channel_silent" = "Notificări silențioase";
 "notification_fallback_content" = "Aveți mesaje noi";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "Apel primit";
 "notification_inline_reply_failed" = "** Trimiterea eșuată - vă rugăm să deschideți camera";
 "notification_invite_body" = "V-a invitat la o discuție";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mesajul nu a fost trimis deoarece identitatea verificată a lui %1$@ s-a schimbat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mesajul nu a fost trimis deoarece %1$@ nu a verificat toate dispozitivele.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mesajul nu a fost trimis deoarece nu ați verificat unul sau mai multe dispozitive.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Adresa Homeserver-ului";
 "screen_account_provider_form_notice" = "Introduceţi un termen de căutare sau o adresă de domeniu.";
 "screen_account_provider_form_subtitle" = "Căutați o companie, o comunitate sau un server privat.";

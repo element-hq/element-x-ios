@@ -225,9 +225,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
+			<string>Máte %d novou zprávu.</string>
+			<key>few</key>
+			<string>Máte %d nové zprávy.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>Máte %d nových zpráv.</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>

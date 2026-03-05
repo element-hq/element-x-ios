@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Időkorlátos művelet szükséges, egy perce van az ellenőrzésre";
 "a11y_show_password" = "Jelszó megjelenítése";
 "a11y_start_call" = "Hanghívás indítása";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Elévült szoba";
 "a11y_user_menu" = "Felhasználói menü";
 "a11y_view_avatar" = "Profilkép megtekintése";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Várakozás erre az üzenetre";
 "common_world_readable_history" = "Bárki láthatja az előzményeket";
 "common_you" = "Ön";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Nem biztonságos eszközről küldve";
 "common_unable_to_decrypt_verification_violation" = "A feladó ellenőrzött személyazonossága megváltozott";
 "confirm_recovery_key_banner_message" = "Erősítse meg a helyreállítási kulcsát, hogy továbbra is hozzáférjen a kulcstárolójához és az üzenetelőzményekhez.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Csörgő hívások";
 "notification_channel_silent" = "Csendes értesítések";
 "notification_fallback_content" = "Értesítés";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Bejövő hívás";
 "notification_inline_reply_failed" = "** Nem sikerült elküldeni – nyissa meg a szobát";
 "notification_invite_body" = "Meghívta, hogy csevegjen";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Az üzenet nem lett elküldve, mert %1$@ ellenőrzött személyazonossága megváltozott.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Az üzenet nem lett elküldve, mert %1$@ nem ellenőrizte az összes eszközét.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Matrix-kiszolgáló webcíme";
 "screen_account_provider_form_notice" = "Adjon meg egy keresési kifejezést vagy egy tartománycímet.";
 "screen_account_provider_form_subtitle" = "Keresés egy cégre, közösségre vagy privát kiszolgálóra.";

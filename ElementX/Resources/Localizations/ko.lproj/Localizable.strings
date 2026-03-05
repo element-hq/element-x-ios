@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "시간 제한 조치가 필요합니다";
 "a11y_show_password" = "비밀번호 표시";
 "a11y_start_call" = "통화 시작";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "묘비 방";
 "a11y_user_menu" = "사용자 메뉴";
 "a11y_view_avatar" = "아바타 보기";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "이 메시지를 기다리고 있습니다";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "당신";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "보안되지 않은 장치에서 전송됨";
 "common_unable_to_decrypt_verification_violation" = "발신자의 검증된 신원이 재설정되었습니다.";
 "confirm_recovery_key_banner_message" = "키 저장소 및 메시지 기록에 대한 액세스를 유지하려면 복구 키를 확인하세요.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "전화벨이 울린다";
 "notification_channel_silent" = "무음 알림";
 "notification_fallback_content" = "알림";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 수신 전화";
 "notification_inline_reply_failed" = "** 전송 실패 - 방을 열여주세요";
 "notification_invite_body" = "채팅에 초대됨";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "%1$@의 인증된 신원이 재설정되어 메시지가 전송되지 않았습니다.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "%1$@ 이 모든 장치를 확인하지 않았기 때문에 메시지가 전송되지 않았습니다.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "하나 이상의 기기를 확인하지 않았기 때문에 메시지가 전송되지 않았습니다.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "홈서버 주소";
 "screen_account_provider_form_notice" = "검색어 또는 도메인 주소를 입력하세요.";
 "screen_account_provider_form_subtitle" = "회사, 커뮤니티, 또는 개인 서버를 검색하세요.";

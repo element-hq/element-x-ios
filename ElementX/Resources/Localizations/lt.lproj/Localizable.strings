@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "Rodyti slaptažodį";
 "a11y_start_call" = "Start a call";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Vartotojo meniu";
 "a11y_view_avatar" = "View avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Waiting for this message";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "You";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Tylūs pranešimai";
 "notification_fallback_content" = "You have new messages.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Incoming call";
 "notification_inline_reply_failed" = "** Nepavyko išsiųsti - prašome atidaryti kambarį";
 "notification_invite_body" = "Pakvietė jus bendrauti";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Homeserver address";
 "screen_account_provider_form_notice" = "Enter a search term or a domain address.";
 "screen_account_provider_form_subtitle" = "Ieškokite bendrovės, bendruomenės arba privataus serverio.";
@@ -1267,7 +1271,7 @@
 "screen_share_open_apple_maps" = "Open in Apple Maps";
 "screen_share_open_google_maps" = "Open in Google Maps";
 "screen_share_open_osm_maps" = "Open in OpenStreetMap";
-"screen_share_this_location_action" = "Share this location";
+"screen_share_this_location_action" = "Share pinned location";
 "screen_signed_out_reason_1" = "You’ve changed your password on another session";
 "screen_signed_out_reason_2" = "You have deleted the session from another session";
 "screen_signed_out_reason_3" = "Your server’s administrator has invalidated your access";

@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Zaman sınırlı işlem gerekli, doğrulamak için bir dakikanız var";
 "a11y_show_password" = "Şifreyi göster";
 "a11y_start_call" = "Bir arama başlatın";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Kullanıcı menüsü";
 "a11y_view_avatar" = "View avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Bu mesajı bekliyorum";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Sen";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Güvenli olmayan bir cihazdan gönderildi";
 "common_unable_to_decrypt_verification_violation" = "Gönderenin doğrulanmış kimliği değişti";
 "confirm_recovery_key_banner_message" = "Anahtar depolama alanınıza ve mesaj geçmişinize erişimi sürdürmek için kurtarma anahtarınızı onaylayın.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Çalan aramalar";
 "notification_channel_silent" = "Sessiz bildirimler";
 "notification_fallback_content" = "Yeni mesajlarınız var";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Gelen çağrı";
 "notification_inline_reply_failed" = "** Gönderilemedi - lütfen odayı açın";
 "notification_invite_body" = "Sizi sohbete davet etti";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "%1$@ kullanıcısının doğrulanmış kimliği değiştiği için ileti gönderilmedi.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "%1$@ tüm cihazları doğrulamadığı için mesaj gönderilmedi.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Bir veya daha fazla cihazınızı doğrulamadığınız için mesaj gönderilmedi.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Ana sunucu adresi";
 "screen_account_provider_form_notice" = "Bir arama terimi veya alan adı adresi girin.";
 "screen_account_provider_form_subtitle" = "Bir şirket, topluluk veya özel sunucu arayın.";

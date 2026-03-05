@@ -1,6 +1,6 @@
 "Notification" = "Oznámení";
 "a11y_add_reaction" = "Přidat reakci: %1$@";
-"a11y_address" = "Address";
+"a11y_address" = "Adresa";
 "a11y_avatar" = "Profilový obrázek";
 "a11y_collapse_message_text_field" = "Minimalizovat textové pole zprávy";
 "a11y_delete" = "Smazat";
@@ -20,11 +20,11 @@
 "a11y_paused_voice_message" = "Hlasová zpráva, délka: %1$@, aktuální pozice: %2$@";
 "a11y_pin_field" = "Pole pro PIN";
 "a11y_play" = "Přehrát";
-"a11y_playback_speed" = "Playback speed";
+"a11y_playback_speed" = "Rychlost přehrávání";
 "a11y_poll_end" = "Hlasování ukončeno";
 "a11y_polls_will_remove_selection" = "Odstraní předchozí výběr";
 "a11y_polls_winning_answer" = "Toto je vítězná odpověď";
-"a11y_qr_code" = "QR Code";
+"a11y_qr_code" = "QR kód";
 "a11y_react_with" = "Reagovat s %1$@";
 "a11y_react_with_other_emojis" = "Reagovat s dalšími emoji";
 "a11y_read_receipts_multiple" = "%1$@ a %2$@ přečetli";
@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Vyžaduje se časově omezená akce, na ověření máte jednu minutu";
 "a11y_show_password" = "Zobrazit heslo";
 "a11y_start_call" = "Zahájit hovor";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Místnost s náhrobkem";
 "a11y_user_menu" = "Uživatelské menu";
 "a11y_view_avatar" = "Zobrazit avatar";
@@ -148,7 +149,7 @@
 "action_send_voice_message" = "Odeslat hlasovou zprávu";
 "action_share" = "Sdílet";
 "action_share_link" = "Sdílet odkaz";
-"action_share_live_location" = "Share live location";
+"action_share_live_location" = "Sdílet aktuální polohu";
 "action_show" = "Zobrazit";
 "action_sign_in_again" = "Přihlásit se znovu";
 "action_signout" = "Odhlásit se";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
 "common_world_readable_history" = "Kdokoli může vidět historii";
 "common_you" = "Vy";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Šifrováno nezabezpečeným zařízením";
 "common_unable_to_decrypt_verification_violation" = "Ověřená identita odesílatele se změnila";
 "confirm_recovery_key_banner_message" = "Potvrďte klíč pro obnovení, abyste zachovali přístup k úložišti klíčů a historii zpráv.";
@@ -390,13 +392,13 @@
 "crypto_identity_change_profile_pin_violation" = "Identita uživatele %1$@ se změnila.";
 "crypto_identity_change_verification_violation_new" = "Identita uživatele %1$@ %2$@ se změnila. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Zrušit ověření";
-"dialog_allow_access" = "Allow access";
+"dialog_allow_access" = "Povolit přístup";
 "dialog_confirm_link_message" = "Odkaz %1$@ vás přesměruje na jinou stránku %2$@\n\nOpravdu chcete pokračovat?";
 "dialog_confirm_link_title" = "Zkontrolujte tento odkaz";
 "dialog_file_too_large_to_upload_title" = "Soubor je pro nahrání příliš velký.";
 "dialog_permission_camera" = "Aby mohla aplikace používat fotoaparát, udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_generic" = "Udělte prosím oprávnění v nastavení systému.";
-"dialog_permission_location_description_ios" = "Udělte přístup v Nastavení -> Poloha.";
+"dialog_permission_location_description_ios" = "Abyste mohli sdílet svou aktuální polohu, Element potřebuje přístup k poloze. Přejděte do Nastavení > Poloha.";
 "dialog_permission_location_title_ios" = "%1$@ nemá přístup k vaší poloze.";
 "dialog_permission_microphone" = "Aby aplikace mohla používat mikrofon, udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_microphone_description_ios" = "Udělte přístup, abyste mohli nahrávat a odesílat zprávy se zvukem.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Vyzvánění hovorů";
 "notification_channel_silent" = "Tichá oznámení";
 "notification_fallback_content" = "Oznámení";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Příchozí hovor";
 "notification_inline_reply_failed" = "** Nepodařilo se odeslat - otevřete prosím místnost";
 "notification_invite_body" = "Vás pozval(a) do chatu";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Zpráva nebyla odeslána, protože ověřená identita uživatele %1$@ se změnila.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Zpráva nebyla odeslána, protože%1$@ neověřil(a) všechna zařízení.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Adresa domovského serveru";
 "screen_account_provider_form_notice" = "Zadejte hledaný výraz nebo adresu domény.";
 "screen_account_provider_form_subtitle" = "Vyhledejte společnost, komunitu nebo soukromý server.";

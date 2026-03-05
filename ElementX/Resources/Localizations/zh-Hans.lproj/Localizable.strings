@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "限时操作，您有一分钟的时间来验证";
 "a11y_show_password" = "显示密码";
 "a11y_start_call" = "开始通话";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "墓碑聊天室";
 "a11y_user_menu" = "用户菜单";
 "a11y_view_avatar" = "查看头像";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "正在等待解密密钥";
 "common_world_readable_history" = "任何人都可查看历史记录";
 "common_you" = "您";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "从不安全的设备发送";
 "common_unable_to_decrypt_verification_violation" = "发送者的已验证身份已重置";
 "confirm_recovery_key_banner_message" = "确认恢复密钥，以保持对密钥存储和消息历史的访问。";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "来电振铃";
 "notification_channel_silent" = "静默通知";
 "notification_fallback_content" = "您有新消息。";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 来电";
 "notification_inline_reply_failed" = "** 无法发送——请打开聊天室";
 "notification_invite_body" = "邀请您聊天";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "消息未发送，因为%1$@的已验证身份已被重置。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "消息未发送，因为%1$@尚未验证所有设备。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "消息未发送，因为您有尚未验证的设备。";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "服务器地址";
 "screen_account_provider_form_notice" = "输入搜索词或域名地址。";
 "screen_account_provider_form_subtitle" = "搜索公司、社区或私人服务器。";

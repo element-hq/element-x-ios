@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Potrebna je vremenski ograničena radnja, imate jednu minutu za potvrdu";
 "a11y_show_password" = "Prikaži zaporku";
 "a11y_start_call" = "Započni poziv";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Soba označena za uklanjanje";
 "a11y_user_menu" = "Korisnički izbornik";
 "a11y_view_avatar" = "Prikaži avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Čekam ovu poruku";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Vi";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Poslano s nesigurnog uređaja";
 "common_unable_to_decrypt_verification_violation" = "Pošiljateljev potvrđeni identitet je poništen";
 "confirm_recovery_key_banner_message" = "Potvrdite svoj ključ za oporavak kako biste zadržali pristup pohrani ključeva i povijesti poruka.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Pozivi (telefon zvoni)";
 "notification_channel_silent" = "Tihe obavijesti";
 "notification_fallback_content" = "Imate nove poruke.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Dolazni poziv";
 "notification_inline_reply_failed" = "** Slanje nije uspjelo – otvorite sobu";
 "notification_invite_body" = "Pozvao/la te na razgovor";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Poruka nije poslana jer je poništen potvrđeni identitet korisnika %1$@.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Poruka nije poslana jer %1$@ nije potvrdio sve uređaje.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Poruka nije poslana jer niste potvrdili jedan svoj uređaj ili više njih.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Adresa matičnog poslužitelja";
 "screen_account_provider_form_notice" = "Unesite pojam za pretraživanje ili adresu domene.";
 "screen_account_provider_form_subtitle" = "Potražite tvrtku, zajednicu ili privatni poslužitelj.";

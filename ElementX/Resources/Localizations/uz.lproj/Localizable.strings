@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Amal bajarish vaqti cheklangan, tasdiqlash uchun bir daqiqa vaqtingiz bor";
 "a11y_show_password" = "Parolni ko'rsatish";
 "a11y_start_call" = "Qoʻngʻiroqni boshlash";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Arxivlangan xona";
 "a11y_user_menu" = "Foydalanuvchi menyusi";
 "a11y_view_avatar" = "Avatarni koʻrish";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Ushbu xabarni kutilmoqda";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Siz";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Xavfsiz boʻlmagan qurilmadan yuborilgan";
 "common_unable_to_decrypt_verification_violation" = "Yuboruvchining tasdiqlangan shaxsi qayta tiklandi";
 "confirm_recovery_key_banner_message" = "Kalit saqlash joyingiz va xabarlar tarixingizga kirishni saqlab qolish uchun tiklash kalitingizni tasdiqlang.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Jiringlayotgan qoʻngʻiroqlar";
 "notification_channel_silent" = "Ovozsiz bildirishnomalar";
 "notification_fallback_content" = "Sizda yangi xabarlar bor.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Kiruvchi qoʻngʻiroq";
 "notification_inline_reply_failed" = "** Yuborilmadi - iltimos, xonani oching";
 "notification_invite_body" = "Sizni suhbatga taklif qildi";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Xabar yuborilmadi, chunki %1$@ʼning tasdiqlangan identifikatori asliga qaytarildi.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Xabar yuborilmadi, chunki %1$@ barcha qurilmalarni tasdiqlamagan.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Xabaringiz yuborilmadi, chunki siz bir yoki bir nechta qurilmangizni tasdiqlamagan ekansiz.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Uy server manzili";
 "screen_account_provider_form_notice" = "Qidiruv so'zini yoki domen manzilini kiriting.";
 "screen_account_provider_form_subtitle" = "Kompaniya, jamoa yoki shaxsiy serverni qidiring.";

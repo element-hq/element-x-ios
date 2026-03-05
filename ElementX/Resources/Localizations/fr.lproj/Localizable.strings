@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Action limitée dans le temps requise, vous avez une minute pour effectuer la vérification";
 "a11y_show_password" = "Afficher le mot de passe";
 "a11y_start_call" = "Démarrer un appel";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Salon clôturé";
 "a11y_user_menu" = "Menu utilisateur";
 "a11y_view_avatar" = "Voir l'avatar";
@@ -148,7 +149,7 @@
 "action_send_voice_message" = "Envoyer un message vocal";
 "action_share" = "Partager";
 "action_share_link" = "Partager le lien";
-"action_share_live_location" = "Share live location";
+"action_share_live_location" = "Partager la position en continu";
 "action_show" = "Afficher";
 "action_sign_in_again" = "Se connecter à nouveau";
 "action_signout" = "Se déconnecter";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
 "common_world_readable_history" = "Tout le monde peut voir les anciens messages";
 "common_you" = "Vous";
+"common.other_options" = "Autres options";
 "common_unable_to_decrypt_insecure_device" = "Envoyé depuis un appareil non sécurisé";
 "common_unable_to_decrypt_verification_violation" = "L'identité vérifiée de l'expéditeur a été réinitialisée";
 "confirm_recovery_key_banner_message" = "Confirmez votre clé de récupération pour conserver l’accès à votre stockage de clés et à l’historique des messages.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Appels entrants";
 "notification_channel_silent" = "Notifications silencieuses";
 "notification_fallback_content" = "Vous avez de nouveau(x) message(s).";
+"notification_incoming_audio_call" = "📞 Appel entrant";
 "notification_incoming_call" = "📹 Appel entrant";
 "notification_inline_reply_failed" = "** Échec de l’envoi - veuillez ouvrir le salon";
 "notification_invite_body" = "Vous a invité(e) à discuter";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Le message n'a pas été envoyé car l'identité vérifiée de %1$@ a été réinitialisée.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Le message n'a pas été envoyé car %1$@ n'a pas vérifié tous ses appareils.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message non envoyé car vous n'avez pas vérifié tous vos appareils.";
+"screen.onboarding.welcome_back" = "Bon retour parmi nous";
 "screen_account_provider_form_hint" = "Adresse du serveur d’accueil";
 "screen_account_provider_form_notice" = "Entrez un terme de recherche ou une adresse de domaine.";
 "screen_account_provider_form_subtitle" = "Recherchez une entreprise, une communauté ou un serveur privé.";

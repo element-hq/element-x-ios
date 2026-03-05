@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Necessária ação em tempo limitado, tens um minuto para verificares";
 "a11y_show_password" = "Mostrar palavra-passe";
 "a11y_start_call" = "Iniciar chamada";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Sala antiga";
 "a11y_user_menu" = "Menu de utilizador";
 "a11y_view_avatar" = "Ver avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "À espera desta mensagem";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Tu";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Enviado de um dispositivo inseguro";
 "common_unable_to_decrypt_verification_violation" = "A identidade verificada do remetente foi reposta";
 "confirm_recovery_key_banner_message" = "Confirma a tua chave de recuperação para manteres o acesso ao teu armazenamento de chaves e ao histórico de mensagens.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Chamadas a tocar";
 "notification_channel_silent" = "Notificações silenciosas";
 "notification_fallback_content" = "Tens novas mensagens.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 A receber chamada";
 "notification_inline_reply_failed" = "** Falha no envio - por favor abre a sala";
 "notification_invite_body" = "Convidou-te para conversar";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mensagem não enviada porque a identidade verificada de %1$@ foi reposta.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mensagem não enviada porque %1$@ não verificou todos os dispositivos.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mensagem não enviada porque não verificou um ou mais dos seus dispositivos.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Endereço do servidor";
 "screen_account_provider_form_notice" = "Insira um termo para pesquisa ou um endereço.";
 "screen_account_provider_form_subtitle" = "Pesquisar por uma empresa, comunidade ou servidor privado.";

@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "需要限時動作，您有一分鐘可以驗證";
 "a11y_show_password" = "顯示密碼";
 "a11y_start_call" = "開始通話";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "墓碑聊天室";
 "a11y_user_menu" = "使用者選單";
 "a11y_view_avatar" = "檢視大頭照";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "等待此則訊息";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "您";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "從不安全的裝置傳送";
 "common_unable_to_decrypt_verification_violation" = "傳送者的驗證身份已重設";
 "confirm_recovery_key_banner_message" = "確認您的復原金鑰以維持對金鑰儲存空間與訊息歷史紀錄的存取權。";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "來電鈴聲";
 "notification_channel_silent" = "無聲通知";
 "notification_fallback_content" = "您有新訊息。";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 來電";
 "notification_inline_reply_failed" = "** 無法傳送，請開啟聊天室";
 "notification_invite_body" = "邀請您聊天";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "因為 %1$@ 的驗證身份已重設，因此未傳送訊息。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "訊息未傳送，因為 %1$@ 尚未驗證所有裝置。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "因為您尚未驗證一個或多個裝置，因此未傳送訊息";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "家伺服器位址";
 "screen_account_provider_form_notice" = "輸入關鍵字或網域名稱。";
 "screen_account_provider_form_subtitle" = "搜尋公司、社群、私有伺服器。";

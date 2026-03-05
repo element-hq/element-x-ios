@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Tindakan terbatas waktu diperlukan, Anda memiliki satu menit untuk memverifikasi";
 "a11y_show_password" = "Tampilkan kata sandi";
 "a11y_start_call" = "Mulai panggilan";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Menu pengguna";
 "a11y_view_avatar" = "Lihat avatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Menunggu pesan ini";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Anda";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Dikirim dari perangkat yang tidak aman";
 "common_unable_to_decrypt_verification_violation" = "Identitas terverifikasi pengirim diatur ulang";
 "confirm_recovery_key_banner_message" = "Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Panggilan berdering";
 "notification_channel_silent" = "Pemberitahuan diam";
 "notification_fallback_content" = "Anda memiliki pesan baru.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Panggilan masuk";
 "notification_inline_reply_failed" = "** Gagal mengirim — silakan buka ruangan";
 "notification_invite_body" = "Mengundang Anda untuk mengobrol";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Pesan tidak terkirim karena identitas terverifikasi %1$@ telah diatur ulang.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Pesan tidak terkirim karena %1$@ belum memverifikasi semua perangkat.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Pesan tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Alamat homeserver";
 "screen_account_provider_form_notice" = "Masukkan istilah pencarian atau alamat domain.";
 "screen_account_provider_form_subtitle" = "Cari perusahaan, komunitas, atau server pribadi.";

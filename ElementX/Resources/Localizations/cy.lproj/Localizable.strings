@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Mae angen gweithredu o fewn amser cyfyngedig, mae gennych un funud i wirio";
 "a11y_show_password" = "Dangos y cyfrinair";
 "a11y_start_call" = "Cychwyn galwad";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Ystafell Tombstoned";
 "a11y_user_menu" = "Dewislen defnyddiwr";
 "a11y_view_avatar" = "Gweld afatar";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Yn aros am y neges hon";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Chi";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Wedi'i anfon o ddyfais anniogel";
 "common_unable_to_decrypt_verification_violation" = "Cafodd hunaniaeth yr anfonwr ei hailosod";
 "confirm_recovery_key_banner_message" = "Cadarnhewch eich allwedd adfer i gynnal mynediad i'ch storfa allweddi a'ch hanes negeseuon.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Galwadau'n canu";
 "notification_channel_silent" = "Hysbysiadau tawel";
 "notification_fallback_content" = "Mae gennych chi negeseuon newydd.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Galwad i mewn";
 "notification_inline_reply_failed" = "** Wedi methu anfon - agorwch yr ystafell";
 "notification_invite_body" = "Wedi eich gwahodd i sgwrsio";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Heb anfon y neges oherwydd bod hunaniaeth wedi 'i ddilysu %1$@ wedi'i ailosod.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Heb anfon y neges oherwydd nid yw %1$@ wedi gwirio pob dyfais.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Heb anfon y neges oherwydd nad ydych wedi gwirio un neu fwy o'ch dyfeisiau.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Cyfeiriad y gweinydd cartref";
 "screen_account_provider_form_notice" = "Rhowch derm chwilio neu gyfeiriad parth.";
 "screen_account_provider_form_subtitle" = "Chwiliwch am gwmni, gweinyddwr cymunedol neu weinydd preifat.";

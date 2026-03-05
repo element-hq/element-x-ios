@@ -36,6 +36,7 @@
 "a11y_session_verification_time_limited_action_required" = "Zeitlich begrenzte Handlung erforderlich, du hast eine Minute Zeit zur Verifizierung";
 "a11y_show_password" = "Passwort anzeigen";
 "a11y_start_call" = "Anruf starten";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Stillgelegter Chat";
 "a11y_user_menu" = "Nutzer-Menü";
 "a11y_view_avatar" = "Avatar ansehen";
@@ -364,6 +365,7 @@
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
 "common_world_readable_history" = "Jeder kann den Nachrichtenverlauf sehen";
 "common_you" = "Du";
+"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Von einem ungesicherten Gerät gesendet";
 "common_unable_to_decrypt_verification_violation" = "Die verifizierte Identität des Senders hat sich geändert";
 "confirm_recovery_key_banner_message" = "Bestätige deinen Wiederherstellungsschlüssel, um weiterhin auf deinen Schlüsselspeicher und den Nachrichtenverlauf zugreifen zu können.";
@@ -458,6 +460,7 @@
 "notification_channel_ringing_calls" = "Klingelnde Anrufe";
 "notification_channel_silent" = "Stumme Benachrichtigungen";
 "notification_fallback_content" = "Du hast neue Nachrichten.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "Eingehender Anruf";
 "notification_inline_reply_failed" = "** Fehler beim Senden - bitte Chat öffnen";
 "notification_invite_body" = "Du wurdest zu einem Chat eingeladen";
@@ -770,6 +773,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$@ geändert hat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil %1$@ nicht alle Geräte verifiziert hat.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil du eines oder mehrere deiner Geräte nicht verifiziert hast.";
+"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Homeserver-Adresse";
 "screen_account_provider_form_notice" = "Gib einen Suchbegriff oder eine Domainadresse ein.";
 "screen_account_provider_form_subtitle" = "Suche nach einem Unternehmen, einer Community oder einem privaten Server.";
