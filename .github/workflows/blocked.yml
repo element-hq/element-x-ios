@@ -1,7 +1,9 @@
 name: Prevent blocked
 
 on:
-  pull_request_target:
+  # Privilege escalation necessary to access PR context and set status checks
+  # 🚨 We must not execute any checked out code here, and be careful around use of user-controlled inputs.
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
     types: [opened, labeled, unlabeled, synchronize]
 
 permissions: {}
