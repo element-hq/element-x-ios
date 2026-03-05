@@ -13,16 +13,28 @@ struct LocationSharingScreen: View {
     @Bindable var context: LocationSharingScreenViewModel.Context
     
     var body: some View {
+        if context.viewState.isLocationPickerMode {
+            mainContent
+                .sheet(isPresented: .constant(true)) {
+                    sharingOptionsSheet
+                        .alert(item: $context.alertInfo)
+                }
+        } else {
+            mainContent
+                .alert(item: $context.alertInfo)
+        }
+    }
+    
+    // MARK: - Private
+    
+    private var mainContent: some View {
         mapView
             .ignoresSafeArea(edges: .bottom)
             .track(screen: context.viewState.isLocationPickerMode ? .LocationSend : .LocationView)
             .navigationTitle(L10n.screenViewLocationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
-            .alert(item: $context.alertInfo)
     }
-    
-    // MARK: - Private
     
     private var mapView: some View {
         ZStack(alignment: .center) {
@@ -31,6 +43,7 @@ struct LocationSharingScreen: View {
                             showsUserLocationMode: $context.showsUserLocationMode,
                             error: $context.mapError,
                             mapCenterCoordinate: $context.mapCenterLocation,
+                            hasLoadedUserLocation: $context.hasLoadedUserLocation,
                             isLocationAuthorized: $context.isLocationAuthorized,
                             geolocationUncertainty: $context.geolocationUncertainty) {
                 context.send(viewAction: .userDidPan)
@@ -44,24 +57,18 @@ struct LocationSharingScreen: View {
         .overlay(alignment: .topTrailing) {
             centerToUserLocationButton
         }
-        .overlay(alignment: .bottom) {
-            // We can't use a sheet because it might interfer with the alerts.
-            if context.viewState.isLocationPickerMode {
-                sharingOptionsOverlay
-            }
-        }
     }
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
+        ToolbarItem(placement: context.viewState.showShareAction ? .topBarLeading : .topBarTrailing) {
             ToolbarButton(role: .close) {
                 context.send(viewAction: .close)
             }
         }
-        
+                
         if context.viewState.showShareAction {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     context.showShareSheet = true
                 } label: {
@@ -94,10 +101,17 @@ struct LocationSharingScreen: View {
         context.viewState.isLocationPickerMode ? .horizontal : [.horizontal, .bottom]
     }
     
+    @ViewBuilder
     private var centerToUseIcon: some View {
-        CompoundIcon(context.viewState.isSharingUserLocation ? \.locationNavigatorCentred : \.locationNavigator)
-            .foregroundStyle(.compound.iconPrimary)
-            .padding(13)
+        if context.viewState.isLocationLoading {
+            ProgressView()
+                .tint(.compound.iconPrimary)
+                .padding(13)
+        } else {
+            CompoundIcon(context.viewState.isSharingUserLocation ? \.locationNavigatorCentred : \.locationNavigator)
+                .foregroundStyle(.compound.iconPrimary)
+                .padding(13)
+        }
     }
     
     private var centerToUserLocationButton: some View {
@@ -113,8 +127,9 @@ struct LocationSharingScreen: View {
                     .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 6))
             }
         }
+        .disabled(context.viewState.isLocationLoading)
         .dynamicTypeSize(.large)
-        .padding(16)
+        .padding(13)
     }
     
     @ViewBuilder
@@ -137,7 +152,9 @@ struct LocationSharingScreen: View {
         }
     }
     
-    private var sharingOptionsOverlay: some View {
+    @State private var sharingOptionsSheetHeight: CGFloat = .zero
+    
+    private var sharingOptionsSheet: some View {
         VStack(alignment: .leading, spacing: 0) {
             Button {
                 context.send(viewAction: .selectLocation)
@@ -162,27 +179,13 @@ struct LocationSharingScreen: View {
         }
         .font(.compound.bodyLG)
         .foregroundStyle(.compound.textPrimary)
-        .frame(maxWidth: .infinity)
-        .modifier(SharingOptionsBackgroundModifier())
-    }
-}
-
-private struct SharingOptionsBackgroundModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
-            content
-                .padding(.top, 40)
-                .padding(.bottom, 32)
-                .background(.compound.bgCanvasDefault, in: .rect(cornerRadius: 38))
-                .padding(.horizontal, 6)
-                .padding(.bottom, 6)
-            
-        } else {
-            content
-                .padding(.top, 40)
-                .padding(.bottom, 32)
-                .background(.compound.bgCanvasDefault, in: .rect(topLeadingRadius: 14, topTrailingRadius: 14))
-        }
+        .padding(.top, 38)
+        .readHeight($sharingOptionsSheetHeight)
+        .interactiveDismissDisabled()
+        .presentationBackground(.compound.bgCanvasDefault)
+        .presentationBackgroundInteraction(.enabled)
+        .presentationDragIndicator(.hidden)
+        .presentationDetents([.height(sharingOptionsSheetHeight)])
     }
 }
 

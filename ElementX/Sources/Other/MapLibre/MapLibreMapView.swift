@@ -45,6 +45,7 @@ struct MapLibreMapView: UIViewRepresentable {
     @Binding var error: MapLibreError?
     /// Coordinate of the center of the map
     @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
+    @Binding var hasLoadedUserLocation: Bool
     @Binding var isLocationAuthorized: Bool?
     /// The radius of uncertainty for the location, measured in meters.
     @Binding var geolocationUncertainty: CLLocationAccuracy?
@@ -189,7 +190,8 @@ extension MapLibreMapView {
         
         func mapView(_ mapView: MLNMapView, didUpdate userLocation: MLNUserLocation?) {
             guard let userLocation else { return }
-
+            mapLibreView.hasLoadedUserLocation = true
+            
             if previousUserLocation == nil, mapLibreView.options.annotations.isEmpty {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     mapView.setCenter(userLocation.coordinate, zoomLevel: self.mapLibreView.options.zoomLevel, animated: true)

@@ -85,6 +85,10 @@ struct LocationSharingScreenViewState: BindableState {
             return true
         }
     }
+    
+    var isLocationLoading: Bool {
+        !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized != false
+    }
 
     var zoomLevel: Double {
         15.0
@@ -114,9 +118,8 @@ struct LocationSharingScreenViewState: BindableState {
 struct LocationSharingScreenBindings {
     var mapCenterLocation: CLLocationCoordinate2D?
     var geolocationUncertainty: CLLocationAccuracy?
-
     var showsUserLocationMode: ShowUserLocationMode
-    
+    var hasLoadedUserLocation = false
     var isLocationAuthorized: Bool?
     
     /// Information describing the currently displayed alert.
