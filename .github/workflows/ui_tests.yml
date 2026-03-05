@@ -27,6 +27,8 @@ jobs:
 
     steps:
       - uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 #v1.2.3
+        with:
+          persist-credentials: false
 
       - name: Setup environment
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment

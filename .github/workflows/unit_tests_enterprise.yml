@@ -27,6 +27,7 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          persist-credentials: false
 
       - name: Setup environment
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
