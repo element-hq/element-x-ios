@@ -71,11 +71,11 @@ struct LocationSharingScreenViewModelTests {
     @Test
     func errorMapping() {
         let mapError = AlertInfo(locationSharingViewError: .mapError(.failedLoadingMap))
-        #expect(mapError.message == L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName))
+        #expect(mapError.title == L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName))
         let locationError = AlertInfo(locationSharingViewError: .mapError(.failedLocatingUser))
-        #expect(locationError.message == L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName))
+        #expect(locationError.title == L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName))
         let authorizationError = AlertInfo(locationSharingViewError: .missingAuthorization)
-        #expect(authorizationError.message == L10n.dialogPermissionLocationDescriptionIos)
+        #expect(authorizationError.message == L10n.dialogPermissionLocationDescriptionIos(InfoPlistReader.main.bundleDisplayName))
     }
 
     @Test
