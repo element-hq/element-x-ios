@@ -5,7 +5,9 @@ on:
 
   schedule:
     - cron:  '0 2 * * 1-5'
-    
+
+permissions: {}
+
 jobs:
   tests:
     name: Tests

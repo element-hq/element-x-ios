@@ -16,6 +16,8 @@ on:
     paths:
       - 'compound-ios/**'
 
+permissions: {}
+
 jobs:
   tests:
 

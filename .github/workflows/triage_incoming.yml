@@ -4,6 +4,8 @@ on:
   issues:
     types: [opened]
 
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+
 jobs:
   add_to_triage:
     runs-on: ubuntu-latest

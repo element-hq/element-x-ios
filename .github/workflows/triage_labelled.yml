@@ -4,6 +4,8 @@ on:
   issues:
     types: [labeled]
 
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+
 jobs:
   ex_plorers:
     name: Add labelled issues to X-Plorer project

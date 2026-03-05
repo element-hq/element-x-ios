@@ -5,6 +5,8 @@ on:
     tags:
       - 'release/**'
 
+permissions: {}
+
 jobs:
   post-release:
     runs-on: ubuntu-latest

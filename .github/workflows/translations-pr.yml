@@ -5,6 +5,8 @@ on:
     - cron: '0 3 * * 1'
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   open-translations-pr:
     runs-on: macos-15
