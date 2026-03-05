@@ -14,8 +14,8 @@ struct TagNightly: AsyncParsableCommand {
             throw ValidationError("Invalid build number.")
         }
         
-        guard let apiToken = ProcessInfo.processInfo.environment["GITHUB_TOKEN"], !apiToken.isEmpty
-        else {
+        guard let apiToken = ProcessInfo.processInfo.environment["GITHUB_TOKEN"],
+              !apiToken.isEmpty else {
             throw ValidationError("Invalid GitHub API token. Please set the GITHUB_TOKEN environment variable.")
         }
         

@@ -24,8 +24,7 @@ struct UploadDSYMs: AsyncParsableCommand {
 
     func run() async throws {
         guard let authToken = ProcessInfo.processInfo.environment["SENTRY_AUTH_TOKEN"],
-              !authToken.isEmpty
-        else {
+              !authToken.isEmpty else {
             throw ValidationError("SENTRY_AUTH_TOKEN environment variable is not set.")
         }
 

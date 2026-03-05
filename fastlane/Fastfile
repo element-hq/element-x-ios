@@ -121,30 +121,3 @@ private_lane :bump_build_number do
   build_number = Time.now.strftime("%Y%m%d%H%M")
   increment_build_number(build_number: build_number)
 end
-
-private_lane :create_simulator_if_necessary do |options|
-  simulator_name = options[:name]
-  UI.user_error!("Invalid simulator name") unless !simulator_name.to_s.empty?
-
-  simulator_type = options[:type]
-  UI.user_error!("Invalid simulator type") unless !simulator_type.to_s.empty?
-
-  simulator_runtime = "com.apple.CoreSimulator.SimRuntime.iOS-#{simulator_version.gsub('.', '-')}"
-
-  simulators = sh("xcrun simctl list devices \"iOS #{simulator_version}\" available")
-  # Use a `(` here to avoid matching `iPhone 14 Pro` on `iPhone 14 Pro Max` for example
-  existing_simulator = simulators.lines.find { |line| line.include?("#{simulator_name} (") }
-  
-  if existing_simulator
-    UI.message("Found simulator: #{existing_simulator.inspect}")
-    device_id = existing_simulator.match(/\(([A-F0-9-]+)\)/)[1] # Extract the device ID for the existing simulator
-  else
-    UI.message "Simulator #{simulator_name} not found. Creating new simulator…"
-    create_command = "xcrun simctl create '#{simulator_name}\' #{simulator_type} #{simulator_runtime}"
-    device_id = sh(create_command).strip # Create a new simulator and get its device ID.
-    
-    UI.message "Created new simulator: #{simulator_name} (#{device_id})"
-  end
-  
-  # device_id is unused right now but is useful to check e.g. the boot status of a simulator.
-end
