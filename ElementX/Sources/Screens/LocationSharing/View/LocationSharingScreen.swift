@@ -25,6 +25,7 @@ struct LocationSharingScreen: View {
                 .sheet(isPresented: .constant(true)) {
                     StaticLocationSheet(context: context)
                         .alert(item: $context.alertInfo)
+                        .popover(isPresented: $context.showShareSheet) { shareSheet }
                 }
         }
     }

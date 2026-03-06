@@ -41,7 +41,6 @@ struct StaticLocationSheet: View {
                                      timestamp: location.timestamp,
                                      mediaProvider: context.mediaProvider)
                 }
-                accessibilityHint(L10n.actionShare)
             }
         }
     }
@@ -88,7 +87,7 @@ private struct UserLocationCell: View {
                 Spacer()
                 CompoundIcon(\.shareIos)
                     .foregroundStyle(.compound.iconSecondary)
-                    .accessibilityHidden(true)
+                    .accessibilityLabel(L10n.actionShare)
             }
             .padding(.vertical, 12)
             .rowDivider(alignment: .top)
