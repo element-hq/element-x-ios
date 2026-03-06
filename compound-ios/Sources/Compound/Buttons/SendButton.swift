@@ -20,10 +20,6 @@ public struct SendButton: View {
         return colorScheme == .light ? .compound.iconOnSolidPrimary : .compound.iconPrimary
     }
     
-    private var gradient: Gradient {
-        isEnabled ? .compound.action : .init(colors: [.clear])
-    }
-    
     /// Creates a send button that performs the provided action.
     public init(action: @escaping () -> Void) {
         self.action = action
@@ -41,7 +37,9 @@ public struct SendButton: View {
     
     var buttonShape: some View {
         Circle()
-            .fill(LinearGradient(gradient: gradient, startPoint: .top, endPoint: .bottom))
+            .fill(isEnabled
+                ? Color.compound.bgAccentRest
+                : Color.clear)
     }
 }
 
