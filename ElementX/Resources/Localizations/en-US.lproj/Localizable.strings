@@ -19,6 +19,7 @@
 "a11y_pause" = "Pause";
 "a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "PIN field";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "Play";
 "a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Ended poll";
@@ -33,6 +34,7 @@
 "a11y_remove_reaction" = "Remove reaction: %1$@";
 "a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Send files";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "Show password";
 "a11y_start_call" = "Start a call";
@@ -771,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Matching room found";
 "screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
 "screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";

@@ -8,6 +8,7 @@
 
 import CoreLocation
 import Foundation
+import MatrixRustSDK
 
 enum LocationSharingViewError: Error, Hashable {
     case missingAuthorization
@@ -21,25 +22,18 @@ enum LocationSharingScreenViewModelAction {
 
 enum LocationSharingInteractionMode: Hashable {
     case picker
-    case viewStatic(senderID: String?, geoURI: GeoURI)
-    
-    var canShowAvatar: Bool {
-        switch self {
-        case .picker, .viewStatic(.some(_), _):
-            true
-        default:
-            false
-        }
-    }
+    case viewStatic(StaticLocationData)
 }
 
 struct LocationSharingScreenViewState: BindableState {
     init(interactionMode: LocationSharingInteractionMode,
          mapURLBuilder: MapTilerURLBuilderProtocol,
-         showLiveLocationSharingButton: Bool) {
+         showLiveLocationSharingButton: Bool,
+         ownUserID: String) {
         self.interactionMode = interactionMode
         self.mapURLBuilder = mapURLBuilder
         self.showLiveLocationSharingButton = showLiveLocationSharingButton
+        self.ownUserID = ownUserID
         
         bindings.showsUserLocationMode = switch interactionMode {
         case .picker: .showAndFollow
@@ -50,6 +44,7 @@ struct LocationSharingScreenViewState: BindableState {
     let interactionMode: LocationSharingInteractionMode
     let mapURLBuilder: MapTilerURLBuilderProtocol
     let showLiveLocationSharingButton: Bool
+    let ownUserID: String
     
     var bindings = LocationSharingScreenBindings(showsUserLocationMode: .hide)
  
@@ -62,9 +57,9 @@ struct LocationSharingScreenViewState: BindableState {
         switch interactionMode {
         case .picker:
             // middle point in Europe, to be used if the users location is not yet known
-            return .init(latitude: 49.843, longitude: 9.902056)
-        case .viewStatic(_, let geoURI):
-            return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
+            .init(latitude: 49.843, longitude: 9.902056)
+        case .viewStatic(let location):
+            .init(latitude: location.geoURI.latitude, longitude: location.geoURI.longitude)
         }
     }
 
@@ -74,15 +69,6 @@ struct LocationSharingScreenViewState: BindableState {
             true
         default:
             false
-        }
-    }
-
-    var showShareAction: Bool {
-        switch interactionMode {
-        case .picker:
-            return false
-        case .viewStatic:
-            return true
         }
     }
     
@@ -105,12 +91,12 @@ struct LocationSharingScreenViewState: BindableState {
     
     var userProfile: UserProfileProxy?
     
-    var shownUserProfile: UserProfileProxy? {
+    var staticLocationMarkerUserProfile: UserProfileProxy? {
         switch interactionMode {
         case .picker:
             isSharingUserLocation ? userProfile : nil
-        case .viewStatic:
-            userProfile
+        case .viewStatic(let location):
+            location.kind == .sender ? userProfile : nil
         }
     }
 }
@@ -171,4 +157,11 @@ extension AlertInfo where T == LocationSharingViewError {
                       secondaryButton: secondaryButton)
         }
     }
+}
+
+struct StaticLocationData: Hashable {
+    let sender: TimelineItemSender
+    let geoURI: GeoURI
+    let kind: StaticLocationKind
+    let timestamp: Date
 }

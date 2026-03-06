@@ -37,13 +37,12 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         
         super.init(initialViewState: .init(interactionMode: interactionMode,
                                            mapURLBuilder: mapURLBuilder,
-                                           showLiveLocationSharingButton: liveLocationSharingEnabled),
+                                           showLiveLocationSharingButton: liveLocationSharingEnabled,
+                                           ownUserID: roomProxy.ownUserID),
                    mediaProvider: mediaProvider)
         
-        if interactionMode.canShowAvatar {
-            updateShownUserProfile(members: roomProxy.membersPublisher.value)
-            setupSubscriptions()
-        }
+        updateShownUserProfile(members: roomProxy.membersPublisher.value)
+        setupSubscriptions()
     }
     
     override func process(viewAction: LocationSharingScreenViewAction) {
@@ -86,14 +85,12 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             } else {
                 state.userProfile = .init(userID: roomProxy.ownUserID)
             }
-        case .viewStatic(.some(let senderID), _):
-            if let sender = members.first(where: { $0.userID == senderID }).map(UserProfileProxy.init) {
+        case .viewStatic(let location):
+            if let sender = members.first(where: { $0.userID == location.sender.id }).map(UserProfileProxy.init) {
                 state.userProfile = sender
             } else {
-                state.userProfile = .init(userID: senderID)
+                state.userProfile = .init(sender: location.sender)
             }
-        default:
-            state.userProfile = nil
         }
     }
     
@@ -125,5 +122,41 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     
     private var statusIndicatorID: String {
         "\(Self.self)-Status"
+    }
+}
+
+extension LocationSharingScreenViewModel {
+    enum MockType {
+        case picker
+        case staticSenderLocation
+        case staticPinLocation
+    }
+    
+    static func mock(type: MockType, senderID: String = "@dan:matrix.org") -> LocationSharingScreenViewModel {
+        let interactionMode: LocationSharingInteractionMode = switch type {
+        case .picker:
+            .picker
+        case .staticPinLocation:
+            .viewStatic(.init(sender: .init(id: senderID),
+                              geoURI: .init(latitude: 41.9027835,
+                                            longitude: 12.4963655),
+                              kind: .pin,
+                              timestamp: .mock))
+        case .staticSenderLocation:
+            .viewStatic(.init(sender: .init(id: senderID),
+                              geoURI: .init(latitude: 41.9027835,
+                                            longitude: 12.4963655),
+                              kind: .sender,
+                              timestamp: .mock))
+        }
+        
+        return LocationSharingScreenViewModel(interactionMode: interactionMode,
+                                              mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                              liveLocationSharingEnabled: true,
+                                              roomProxy: JoinedRoomProxyMock(.init()),
+                                              timelineController: MockTimelineController(),
+                                              analytics: ServiceLocator.shared.analytics,
+                                              userIndicatorController: UserIndicatorControllerMock(),
+                                              mediaProvider: MediaProviderMock(configuration: .init()))
     }
 }

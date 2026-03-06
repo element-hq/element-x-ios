@@ -13,15 +13,19 @@ struct LocationSharingScreen: View {
     @Bindable var context: LocationSharingScreenViewModel.Context
     
     var body: some View {
-        if context.viewState.isLocationPickerMode {
+        switch context.viewState.interactionMode {
+        case .picker:
             mainContent
                 .sheet(isPresented: .constant(true)) {
-                    sharingOptionsSheet
+                    LocationPickerSheet(context: context)
                         .alert(item: $context.alertInfo)
                 }
-        } else {
+        case .viewStatic:
             mainContent
-                .alert(item: $context.alertInfo)
+                .sheet(isPresented: .constant(true)) {
+                    StaticLocationSheet(context: context)
+                        .alert(item: $context.alertInfo)
+                }
         }
     }
     
@@ -51,7 +55,7 @@ struct LocationSharingScreen: View {
             .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
             
             if context.viewState.isLocationPickerMode {
-                LocationMarkerView(userProfile: context.viewState.shownUserProfile, mediaProvider: context.mediaProvider)
+                LocationMarkerView(userProfile: context.viewState.staticLocationMarkerUserProfile, mediaProvider: context.mediaProvider)
             }
         }
         .overlay(alignment: .topTrailing) {
@@ -61,20 +65,9 @@ struct LocationSharingScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: context.viewState.showShareAction ? .topBarLeading : .topBarTrailing) {
+        ToolbarItem(placement: .primaryAction) {
             ToolbarButton(role: .close) {
                 context.send(viewAction: .close)
-            }
-        }
-                
-        if context.viewState.showShareAction {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    context.showShareSheet = true
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
-                }
-                .popover(isPresented: $context.showShareSheet) { shareSheet }
             }
         }
     }
@@ -82,11 +75,11 @@ struct LocationSharingScreen: View {
     private var mapOptions: MapLibreMapView.Options {
         var annotations: [String: LocationAnnotation] = [:]
         if !context.viewState.isLocationPickerMode {
-            let id = context.viewState.shownUserProfile?.userID ?? UUID().uuidString
+            let id = context.viewState.staticLocationMarkerUserProfile?.userID ?? UUID().uuidString
             let annotation = LocationAnnotation(id: id,
                                                 coordinate: context.viewState.initialMapCenter,
                                                 anchorPoint: .bottomCenter) {
-                LocationMarkerView(userProfile: context.viewState.shownUserProfile, mediaProvider: context.mediaProvider)
+                LocationMarkerView(userProfile: context.viewState.staticLocationMarkerUserProfile, mediaProvider: context.mediaProvider)
             }
             annotations[id] = annotation
         }
@@ -135,7 +128,7 @@ struct LocationSharingScreen: View {
     @ViewBuilder
     private var shareSheet: some View {
         let location = context.viewState.initialMapCenter
-        let senderName = context.viewState.shownUserProfile?.displayName
+        let senderName = context.viewState.staticLocationMarkerUserProfile?.displayName ?? context.viewState.staticLocationMarkerUserProfile?.userID
         AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location, senderName: senderName)],
                         applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location, senderName: senderName) })
             .edgesIgnoringSafeArea(.bottom)
@@ -151,95 +144,16 @@ struct LocationSharingScreen: View {
             .sheet
         }
     }
-    
-    @State private var sharingOptionsSheetHeight: CGFloat = .zero
-    
-    private var sharingOptionsSheet: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Button {
-                context.send(viewAction: .selectLocation)
-            } label: {
-                if context.viewState.isSharingUserLocation {
-                    LocationSharingLabel(text: L10n.screenShareMyLocationAction,
-                                         icon: \.locationNavigatorCentred,
-                                         iconColor: .compound.iconSecondary)
-                } else {
-                    LocationSharingLabel(text: L10n.screenShareThisLocationAction,
-                                         icon: \.locationNavigator,
-                                         iconColor: .compound.iconSecondary)
-                }
-            }
-            if context.viewState.showLiveLocationSharingButton {
-                Button { } label: {
-                    LocationSharingLabel(text: L10n.actionShareLiveLocation,
-                                         icon: \.locationPinSolid,
-                                         iconColor: .compound.iconAccentPrimary)
-                }
-            }
-        }
-        .font(.compound.bodyLG)
-        .foregroundStyle(.compound.textPrimary)
-        .padding(.top, 38)
-        .readHeight($sharingOptionsSheetHeight)
-        .interactiveDismissDisabled()
-        .presentationBackground(.compound.bgCanvasDefault)
-        .presentationBackgroundInteraction(.enabled)
-        .presentationDragIndicator(.hidden)
-        .presentationDetents([.height(sharingOptionsSheetHeight)])
-    }
-}
-
-private struct LocationSharingLabel: View {
-    let text: String
-    let icon: KeyPath<CompoundIcons, Image>
-    let iconColor: Color
-    
-    var body: some View {
-        Label {
-            Text(text)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 14)
-                .rowDivider(alignment: .top, horizontalInsets: 16.0)
-        } icon: {
-            CompoundIcon(icon)
-                .foregroundStyle(iconColor)
-        }
-        .padding(.leading, 16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
 }
 
 // MARK: - Previews
 
 struct LocationSharingScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = LocationSharingScreenViewModel(interactionMode: .viewStatic(senderID: "@dan:matrix.org", geoURI: .init(latitude: 41.9027835,
-                                                                                                                                  longitude: 12.4963655)),
-                                                          mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
-                                                          liveLocationSharingEnabled: true,
-                                                          roomProxy: JoinedRoomProxyMock(.init()),
-                                                          timelineController: MockTimelineController(),
-                                                          analytics: ServiceLocator.shared.analytics,
-                                                          userIndicatorController: UserIndicatorControllerMock(),
-                                                          mediaProvider: MediaProviderMock(configuration: .init()))
+    static let viewModel = LocationSharingScreenViewModel.mock(type: .staticSenderLocation)
     
-    static let pinViewModel = LocationSharingScreenViewModel(interactionMode: .viewStatic(senderID: nil, geoURI: .init(latitude: 41.9027835,
-                                                                                                                       longitude: 12.4963655)),
-                                                             mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
-                                                             liveLocationSharingEnabled: true,
-                                                             roomProxy: JoinedRoomProxyMock(.init()),
-                                                             timelineController: MockTimelineController(),
-                                                             analytics: ServiceLocator.shared.analytics,
-                                                             userIndicatorController: UserIndicatorControllerMock(),
-                                                             mediaProvider: MediaProviderMock(configuration: .init()))
+    static let pinViewModel = LocationSharingScreenViewModel.mock(type: .staticPinLocation)
     
-    static let pickerViewModel = LocationSharingScreenViewModel(interactionMode: .picker,
-                                                                mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
-                                                                liveLocationSharingEnabled: true,
-                                                                roomProxy: JoinedRoomProxyMock(.init()),
-                                                                timelineController: MockTimelineController(),
-                                                                analytics: ServiceLocator.shared.analytics,
-                                                                userIndicatorController: UserIndicatorControllerMock(),
-                                                                mediaProvider: MediaProviderMock(configuration: .init()))
+    static let pickerViewModel = LocationSharingScreenViewModel.mock(type: .picker)
     
     static var previews: some View {
         ElementNavigationStack {

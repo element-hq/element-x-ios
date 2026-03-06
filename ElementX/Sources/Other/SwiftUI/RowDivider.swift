@@ -24,7 +24,7 @@ struct RowDivider: ViewModifier {
 }
 
 extension View {
-    func rowDivider(alignment: Alignment = .bottom, horizontalInsets: CGFloat) -> some View {
+    func rowDivider(alignment: Alignment = .bottom, horizontalInsets: CGFloat = .zero) -> some View {
         modifier(RowDivider(alignment: alignment, horizontalInsets: horizontalInsets))
     }
 }

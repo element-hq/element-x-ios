@@ -85,9 +85,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.finished)
                 case .displayUser(let userID):
                     actionsSubject.send(.displayUser(userID: userID))
-                case .presentLocationViewer(let senderID, let geoURI):
-                    presentMapNavigator(senderID: senderID,
-                                        geoURI: geoURI,
+                case .presentLocationViewer(let location):
+                    presentMapNavigator(location: location,
                                         timelineController: timelineController)
                 case .displayMessageForwarding(let forwardingItem):
                     presentMessageForwarding(with: forwardingItem)
@@ -100,13 +99,11 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
-    private func presentMapNavigator(senderID: String?,
-                                     geoURI: GeoURI,
+    private func presentMapNavigator(location: StaticLocationData,
                                      timelineController: TimelineControllerProtocol) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let params = LocationSharingScreenCoordinatorParameters(interactionMode: .viewStatic(senderID: senderID,
-                                                                                             geoURI: geoURI),
+        let params = LocationSharingScreenCoordinatorParameters(interactionMode: .viewStatic(location),
                                                                 mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
                                                                 liveLocationSharingEnabled: flowParameters.appSettings.liveLocationSharingEnabled,
                                                                 roomProxy: roomProxy,

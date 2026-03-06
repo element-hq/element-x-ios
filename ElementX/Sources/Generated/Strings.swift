@@ -62,6 +62,8 @@ internal enum L10n {
   }
   /// PIN field
   internal static var a11yPinField: String { return L10n.tr("Localizable", "a11y_pin_field") }
+  /// Pinned location
+  internal static var a11yPinnedLocation: String { return L10n.tr("Localizable", "a11y_pinned_location") }
   /// Play
   internal static var a11yPlay: String { return L10n.tr("Localizable", "a11y_play") }
   /// Playback speed
@@ -110,6 +112,8 @@ internal enum L10n {
   }
   /// Send files
   internal static var a11ySendFiles: String { return L10n.tr("Localizable", "a11y_send_files") }
+  /// Sender location
+  internal static var a11ySenderLocation: String { return L10n.tr("Localizable", "a11y_sender_location") }
   /// Time limited action required, you have one minute to verify
   internal static var a11ySessionVerificationTimeLimitedActionRequired: String { return L10n.tr("Localizable", "a11y_session_verification_time_limited_action_required") }
   /// Show password
@@ -3279,6 +3283,12 @@ internal enum L10n {
   internal static var screenStartChatJoinRoomByAddressRoomNotFound: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_room_not_found") }
   /// e.g. #room-name:matrix.org
   internal static var screenStartChatJoinRoomByAddressSupportingText: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_supporting_text") }
+  /// Shared %1$@
+  internal static func screenStaticLocationSheetTimestampDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_static_location_sheet_timestamp_description", String(describing: p1))
+  }
+  /// On the map
+  internal static var screenStaticLocationSheetTitle: String { return L10n.tr("Localizable", "screen_static_location_sheet_title") }
   /// Message not sent because %1$@’s verified identity was reset.
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))

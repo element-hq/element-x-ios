@@ -30,7 +30,8 @@ struct LocationRoomTimelineView: View {
             MapLibreStaticMapView(geoURI: geoURI,
                                   mapURLBuilder: context.viewState.mapTilerConfiguration,
                                   mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
-                LocationMarkerView(userProfile: timelineItem.content.kind == .sender ? .init(sender: timelineItem.sender) : nil, mediaProvider: context.mediaProvider)
+                LocationMarkerView(userProfile: timelineItem.content.kind == .sender ? .init(sender: timelineItem.sender) : nil,
+                                   mediaProvider: context.mediaProvider)
             }
             .frame(maxHeight: mapMaxHeight)
             .aspectRatio(mapAspectRatio, contentMode: .fit)
