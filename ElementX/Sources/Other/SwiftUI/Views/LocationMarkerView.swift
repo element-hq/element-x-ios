@@ -21,7 +21,7 @@ struct LocationMarkerView: View {
     private let circleRadius: CGFloat = 6 // in SVG space
     
     var body: some View {
-        // Generated through the SVG
+        // Generated from the SVG
         Canvas { context, canvasSize in
             let scaleX = canvasSize.width / 42
             let scaleY = canvasSize.height / 50
@@ -106,7 +106,8 @@ struct LocationMarkerView_Previews: PreviewProvider, TestablePreview {
                                mediaProvider: MediaProviderMock(configuration: .init()))
                 .colorScheme(.dark)
         }
-        .background(.red)
+        .padding(16)
+        .background(Color(red: 0.9, green: 0.85, blue: 0.8))
         .previewLayout(.sizeThatFits)
     }
 }

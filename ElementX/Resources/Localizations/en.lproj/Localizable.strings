@@ -263,6 +263,7 @@
 "common_open_source_licenses" = "Open source licenses";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "or";
+"common_other_options" = "Other options";
 "common_password" = "Password";
 "common_people" = "People";
 "common_permalink" = "Permalink";
@@ -365,7 +366,6 @@
 "common_waiting_for_decryption_key" = "Waiting for this message";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "You";
-"common.other_options" = "Other options";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";
@@ -668,6 +668,7 @@
 "screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
 "screen_media_upload_preview_processing" = "Processing...";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_push_history_title" = "Push history";
@@ -773,7 +774,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
-"screen.onboarding.welcome_back" = "Welcome back";
 "screen_account_provider_form_hint" = "Homeserver address";
 "screen_account_provider_form_notice" = "Enter a search term or a domain address.";
 "screen_account_provider_form_subtitle" = "Search for a company, community, or private server.";

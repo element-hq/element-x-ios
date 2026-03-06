@@ -586,6 +586,8 @@ internal enum L10n {
   internal static var commonOpticIdIos: String { return L10n.tr("Localizable", "common_optic_id_ios") }
   /// or
   internal static var commonOr: String { return L10n.tr("Localizable", "common_or") }
+  /// Other options
+  internal static var commonOtherOptions: String { return L10n.tr("Localizable", "common_other_options") }
   /// Password
   internal static var commonPassword: String { return L10n.tr("Localizable", "common_password") }
   /// People
@@ -2244,6 +2246,8 @@ internal enum L10n {
   internal static var screenOnboardingSignInWithQrCode: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_with_qr_code") }
   /// Create account
   internal static var screenOnboardingSignUp: String { return L10n.tr("Localizable", "screen_onboarding_sign_up") }
+  /// Welcome back
+  internal static var screenOnboardingWelcomeBack: String { return L10n.tr("Localizable", "screen_onboarding_welcome_back") }
   /// Welcome to the fastest %1$@ ever. Supercharged for speed and simplicity.
   internal static func screenOnboardingWelcomeMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_message", String(describing: p1))
@@ -3707,22 +3711,10 @@ internal enum L10n {
     internal static var yourAvatar: String { return L10n.tr("Localizable", "a11y.your_avatar") }
   }
 
-  internal enum Common {
-    /// Other options
-    internal static var otherOptions: String { return L10n.tr("Localizable", "common.other_options") }
-  }
-
   internal enum Error {
     /// You're already logged in on this device as %1$@.
     internal static func accountAlreadyLoggedIn(_ p1: Any) -> String {
       return L10n.tr("Localizable", "error.account_already_logged_in", String(describing: p1))
-    }
-  }
-
-  internal enum Screen {
-    internal enum Onboarding {
-      /// Welcome back
-      internal static var welcomeBack: String { return L10n.tr("Localizable", "screen.onboarding.welcome_back") }
     }
   }
 }
