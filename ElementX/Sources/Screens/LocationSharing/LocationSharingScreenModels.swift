@@ -73,6 +73,7 @@ struct LocationSharingScreenViewState: BindableState {
     }
     
     var isLocationLoading: Bool {
+        // May not work as intended on simulator
         !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized != false
     }
 
