@@ -399,8 +399,8 @@ final class AppSettings {
     /// maptiler base url
     private(set) var mapTilerConfiguration = MapTilerConfiguration(baseURL: "https://api.maptiler.com/maps",
                                                                    apiKey: Secrets.mapLibreAPIKey,
-                                                                   lightStyleID: "9bc819c8-e627-474a-a348-ec144fe3d810",
-                                                                   darkStyleID: "dea61faf-292b-4774-9660-58fcef89a7f3")
+                                                                   lightStyleID: "basic-v2",
+                                                                   darkStyleID: "basic-v2-dark")
     
     // MARK: - Presence
     

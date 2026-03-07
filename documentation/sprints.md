@@ -28,7 +28,7 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-## Sprint 2: Branding & Basic Functionality (Days 8-14) — MOSTLY DONE
+## Sprint 2: Branding & Basic Functionality (Days 8-14) — DONE
 
 **Goal:** Fully functional basic messenger with branding.
 
@@ -45,19 +45,24 @@ Timeline: 6 sprints / 45 days.
 - [x] Profile: change display name, avatar, device list
 - [x] Verify E2EE: encryption indicators, key exchange between devices
 - [x] In-app logo sizing fixed (330x330px @3x, renders at 110pt)
-- [ ] Configure MapLibre: obtain API key, update Secrets.swift, configure map styles, exclude Secrets.swift from git
+- [x] Configure MapLibre: API key obtained, Secrets.swift updated, styles set to `basic-v2`/`basic-v2-dark`, Secrets.swift excluded from git via `assume-unchanged`
 
 **Result:**
 - [x] Fully functional messenger (without push)
-- [ ] Customer demonstration (pending MapLibre API key)
+- [x] Customer demonstration ready
 
-**Blocking:** MapLibre API key needed from customer.
+**Note:** MapLibre interactive map works. Static map previews in timeline show "Invalid key" — the API key lacks Static Maps API permission on MapTiler. Needs key permission update on MapTiler account. Not originally in customer's sprint spec (Спринт 5Element.docx).
 
 **Updates (2026-03-03):**
 - Xcode signing resolved: customer's Apple ID added to Xcode Accounts, automatic signing works for all 3 targets
 - OIDC redirect URI fixed: custom URL scheme `org.ucmeet.UCMeetChat:/callback` (MAS DCR confirmed working)
 - In-app logo sizing fixed: resized to 330x330px @3x (was 1024px causing full-screen render)
 - Firebase GoogleService-Info.plist replaced with real Firebase project config
+
+**Updates (2026-03-07):**
+- MapLibre API key configured, styles updated to MapTiler built-in defaults
+- Interactive map (location sharing screen) works correctly
+- Static map preview (timeline) returns 403 — key needs Static Maps permission enabled on MapTiler
 
 ---
 
@@ -158,4 +163,4 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-*Last updated: 2026-03-03. Converted from Спринт 5Element.docx with progress tracking.*
+*Last updated: 2026-03-07. Converted from Спринт 5Element.docx with progress tracking.*
