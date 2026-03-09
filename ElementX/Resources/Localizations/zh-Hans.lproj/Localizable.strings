@@ -19,6 +19,7 @@
 "a11y_pause" = "暂停";
 "a11y_paused_voice_message" = "语音消息，时长：%1$@，当前位置：%2$@";
 "a11y_pin_field" = "PIN 字段";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "播放";
 "a11y_playback_speed" = "播放速度";
 "a11y_poll_end" = "投票已结束";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "撤回反应 %1$@";
 "a11y_remove_reaction_with" = "移除表情符号%1$@";
 "a11y_send_files" = "发送文件";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "限时操作，您有一分钟的时间来验证";
 "a11y_show_password" = "显示密码";
 "a11y_start_call" = "开始通话";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "墓碑聊天室";
 "a11y_user_menu" = "用户菜单";
 "a11y_view_avatar" = "查看头像";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "开源许可证";
 "common_optic_id_ios" = "视控 ID";
 "common_or" = "或";
+"common_other_options" = "Other options";
 "common_password" = "密码";
 "common_people" = "用户";
 "common_permalink" = "固定链接";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "文件太大，无法上传";
 "dialog_permission_camera" = "为了让应用程序使用相机，请在系统设置中授予权限。";
 "dialog_permission_generic" = "请在系统设置中授予权限。";
-"dialog_permission_location_description_ios" = "在设置->位置中授予访问权限。";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ 无权访问您的位置。";
 "dialog_permission_microphone" = "为了让应用程序使用麦克风，请在系统设置中授予权限。";
 "dialog_permission_microphone_description_ios" = "授予访问权限以便录制和发送音频消息。";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "来电振铃";
 "notification_channel_silent" = "静默通知";
 "notification_fallback_content" = "您有新消息。";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 来电";
 "notification_inline_reply_failed" = "** 无法发送——请打开聊天室";
 "notification_invite_body" = "邀请您聊天";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "第%1$d/%2$d项";
 "screen_media_upload_preview_optimize_image_quality_title" = "优化图像质量";
 "screen_media_upload_preview_processing" = "处理中…";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "按下消息并选择 “%1$@” 将其包含在此处。";
 "screen_pinned_timeline_empty_state_headline" = "固定重要消息，以便轻松发现它们";
 "screen_push_history_title" = "推送历史记录";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "找到匹配的房间";
 "screen_start_chat_join_room_by_address_room_not_found" = "未找到房间";
 "screen_start_chat_join_room_by_address_supporting_text" = "例如 #room-name:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "消息未发送，因为%1$@的已验证身份已被重置。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "消息未发送，因为%1$@尚未验证所有设备。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "消息未发送，因为您有尚未验证的设备。";

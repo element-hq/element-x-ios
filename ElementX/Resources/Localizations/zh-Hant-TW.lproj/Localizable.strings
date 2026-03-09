@@ -19,6 +19,7 @@
 "a11y_pause" = "暫停";
 "a11y_paused_voice_message" = "語音訊息，時長：%1$@，目前位置：%2$@";
 "a11y_pin_field" = "PIN 碼欄位";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "播放";
 "a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "投票已結束";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "移除 %1$@ 的反應";
 "a11y_remove_reaction_with" = "移除反應 %1$@";
 "a11y_send_files" = "傳送檔案";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "需要限時動作，您有一分鐘可以驗證";
 "a11y_show_password" = "顯示密碼";
 "a11y_start_call" = "開始通話";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "墓碑聊天室";
 "a11y_user_menu" = "使用者選單";
 "a11y_view_avatar" = "檢視大頭照";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "開放原始碼授權條款";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "或";
+"common_other_options" = "Other options";
 "common_password" = "密碼";
 "common_people" = "夥伴";
 "common_permalink" = "永久連結";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "檔案太大，無法上傳";
 "dialog_permission_camera" = "為了讓應用程式使用相機，請到系統設定中開啟權限。";
 "dialog_permission_generic" = "請到系統設定中開啟權限。";
-"dialog_permission_location_description_ios" = "在「設定」->「位置」中開啟權限。";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ 沒有權限存取您的位置。";
 "dialog_permission_microphone" = "為了讓應用程式使用麥克風，請到系統設定中開啟權限。";
 "dialog_permission_microphone_description_ios" = "請授予權限，如此您才可以錄製並傳送語音訊息。";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "來電鈴聲";
 "notification_channel_silent" = "無聲通知";
 "notification_fallback_content" = "您有新訊息。";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 來電";
 "notification_inline_reply_failed" = "** 無法傳送，請開啟聊天室";
 "notification_invite_body" = "邀請您聊天";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "第 %1$d 個項目，共 %2$d 個";
 "screen_media_upload_preview_optimize_image_quality_title" = "最佳化影像品質";
 "screen_media_upload_preview_processing" = "正在處理……";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "按一下訊息，然後選擇「%1$@」以加入至此。";
 "screen_pinned_timeline_empty_state_headline" = "釘選重要訊息，如此才能輕鬆發現";
 "screen_push_history_title" = "推播通知歷史紀錄";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "找到相符的聊天室";
 "screen_start_chat_join_room_by_address_room_not_found" = "找不到聊天室";
 "screen_start_chat_join_room_by_address_supporting_text" = "例如 #room-name:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "因為 %1$@ 的驗證身份已重設，因此未傳送訊息。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "訊息未傳送，因為 %1$@ 尚未驗證所有裝置。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "因為您尚未驗證一個或多個裝置，因此未傳送訊息";

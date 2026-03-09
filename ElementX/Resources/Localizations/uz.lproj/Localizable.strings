@@ -19,6 +19,7 @@
 "a11y_pause" = "Pauza";
 "a11y_paused_voice_message" = "Ovoz xabar, davomiyligi: %1$@, joriy holati: %2$@";
 "a11y_pin_field" = "PIN-kod maydoni";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "O'ynang";
 "a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "So‘rovnoma yakunlandi";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Reaktsiyani olib tashlang: %1$@";
 "a11y_remove_reaction_with" = "%1$@ bilan reaktsiyani olib tashlang";
 "a11y_send_files" = "Fayllarni yuborish";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Amal bajarish vaqti cheklangan, tasdiqlash uchun bir daqiqa vaqtingiz bor";
 "a11y_show_password" = "Parolni ko'rsatish";
 "a11y_start_call" = "Qoʻngʻiroqni boshlash";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Arxivlangan xona";
 "a11y_user_menu" = "Foydalanuvchi menyusi";
 "a11y_view_avatar" = "Avatarni koʻrish";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Ochiq kodli litsenziyalar";
 "common_optic_id_ios" = "Optik ID";
 "common_or" = "yoki";
+"common_other_options" = "Other options";
 "common_password" = "Parol";
 "common_people" = "Odamlar";
 "common_permalink" = "Doimiy havola";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "Fayl hajmi yuklash uchun juda katta";
 "dialog_permission_camera" = "Ilovaga kameradan foydalanishiga ruxsat berish uchun tizim sozlamalarida ruxsat bering.";
 "dialog_permission_generic" = "Iltimos, tizim sozlamalarida ruxsat bering.";
-"dialog_permission_location_description_ios" = "Sozlamalar -> Joylashuv boʻlimida ruxsat bering.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ sizning joylashuvingizga kira olmaydi.";
 "dialog_permission_microphone" = "Ilovaga mikrofondan foydalanishiga ruxsat berish uchun tizim sozlamalarida ruxsat bering.";
 "dialog_permission_microphone_description_ios" = "Xabarlarni audio bilan yozib olish va yuborishingiz uchun ruxsat bering.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Jiringlayotgan qoʻngʻiroqlar";
 "notification_channel_silent" = "Ovozsiz bildirishnomalar";
 "notification_fallback_content" = "Sizda yangi xabarlar bor.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Kiruvchi qoʻngʻiroq";
 "notification_inline_reply_failed" = "** Yuborilmadi - iltimos, xonani oching";
 "notification_invite_body" = "Sizni suhbatga taklif qildi";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Element%1$d ning %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Tasvir sifatini optimallashtirish";
 "screen_media_upload_preview_processing" = "Qayta ishlanmoqda...";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Xabarni bosib, bu yerga kiritish uchun \"%1$@\"-ni tanlang.";
 "screen_pinned_timeline_empty_state_headline" = "Muhim xabarlarni osongina topish uchun qadang";
 "screen_push_history_title" = "Bildirishnoma tarixi";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Mos xona topildi";
 "screen_start_chat_join_room_by_address_room_not_found" = "Xona topilmadi";
 "screen_start_chat_join_room_by_address_supporting_text" = "masalan #xona-nomi:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Xabar yuborilmadi, chunki %1$@ʼning tasdiqlangan identifikatori asliga qaytarildi.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Xabar yuborilmadi, chunki %1$@ barcha qurilmalarni tasdiqlamagan.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Xabaringiz yuborilmadi, chunki siz bir yoki bir nechta qurilmangizni tasdiqlamagan ekansiz.";

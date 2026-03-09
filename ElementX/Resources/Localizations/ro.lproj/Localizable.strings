@@ -19,6 +19,7 @@
 "a11y_pause" = "Pauză";
 "a11y_paused_voice_message" = "Mesaj vocal, durată:%1$@, poziție curentă: %2$@";
 "a11y_pin_field" = "Câmp PIN";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "Redați";
 "a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Sondaj încheiat";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Îndepărtați reacția cu %1$@";
 "a11y_remove_reaction_with" = "Îndepărtați reacția %1$@";
 "a11y_send_files" = "Trimiteți fișiere";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Acțiune limitată în timp necesară, aveți un minut pentru a verifica";
 "a11y_show_password" = "Afișați parola";
 "a11y_start_call" = "Începeți un apel";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Cameră terminată";
 "a11y_user_menu" = "Meniu utilizator";
 "a11y_view_avatar" = "Vizualizați avatarul";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Licențe open source";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "sau";
+"common_other_options" = "Other options";
 "common_password" = "Parola";
 "common_people" = "Persoane";
 "common_permalink" = "Permalink";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "Dimensiunea fișierului este prea mare pentru a fi încărcat.";
 "dialog_permission_camera" = "Pentru a permite aplicației să utilizeze camera, vă rugăm să acordați permisiunea în setările sistemului.";
 "dialog_permission_generic" = "Vă rugăm să acordați permisiunea în setările sistemului.";
-"dialog_permission_location_description_ios" = "Acordați accesul în Setări -> Locație.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ nu are acces la locația dumneavoastră.";
 "dialog_permission_microphone" = "Pentru a permite aplicației să utilizeze microfonul, vă rugăm să acordați permisiunea în setările sistemului.";
 "dialog_permission_microphone_description_ios" = "Acordați accesul pentru a putea înregistra și trimite mesaje vocale.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Apeluri care sună";
 "notification_channel_silent" = "Notificări silențioase";
 "notification_fallback_content" = "Aveți mesaje noi";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "Apel primit";
 "notification_inline_reply_failed" = "** Trimiterea eșuată - vă rugăm să deschideți camera";
 "notification_invite_body" = "V-a invitat la o discuție";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Elementul %1$d din %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimizați calitatea imaginii";
 "screen_media_upload_preview_processing" = "Se procesează...";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Apăsați pe un mesaj și alegeți \"%1$@\" pentru a-l include aici.";
 "screen_pinned_timeline_empty_state_headline" = "Fixați mesajele importante, astfel încât să poată fi descoperite cu ușurință";
 "screen_push_history_title" = "Istoricul notificărilor";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "S-a găsit o cameră";
 "screen_start_chat_join_room_by_address_room_not_found" = "Nu a putut fi găsită nici o cameră";
 "screen_start_chat_join_room_by_address_supporting_text" = "de exemplu #nume-camera:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mesajul nu a fost trimis deoarece identitatea verificată a lui %1$@ s-a schimbat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mesajul nu a fost trimis deoarece %1$@ nu a verificat toate dispozitivele.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mesajul nu a fost trimis deoarece nu ați verificat unul sau mai multe dispozitive.";

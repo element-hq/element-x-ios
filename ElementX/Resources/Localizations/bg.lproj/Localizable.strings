@@ -19,6 +19,7 @@
 "a11y_pause" = "Пауза";
 "a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "PIN поле";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "Пускане";
 "a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Приключила анкета";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Премахване на реакция с %1$@";
 "a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Изпращане на файлове";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "Показване на паролата";
 "a11y_start_call" = "Започнете обаждане";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Потребителско меню";
 "a11y_view_avatar" = "View avatar";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Лицензи за отворен код";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "или";
+"common_other_options" = "Other options";
 "common_password" = "Парола";
 "common_people" = "Хора";
 "common_permalink" = "Постоянна връзка";
@@ -334,7 +338,7 @@
 "common_third_party_notices" = "Уведомления от трети страни";
 "common_thread" = "Нишка";
 "common_topic" = "Тема";
-"common_topic_placeholder" = "За какво се отнася тази стая?";
+"common_topic_placeholder" = "За какво е тази стая?";
 "common_touch_id_ios" = "Touch ID";
 "common_unable_to_decrypt" = "Не може да се разшифрова";
 "common_unable_to_decrypt_no_access" = "Нямате достъп до това съобщение";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "The file size is too large to upload";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
 "dialog_permission_generic" = "Please grant the permission in the system settings.";
-"dialog_permission_location_description_ios" = "To share your current location, Element needs location access. Go to Settings > Location.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ does not have access to your location.";
 "dialog_permission_microphone" = "In order to let the application use the microphone, please grant the permission in the system settings.";
 "dialog_permission_microphone_description_ios" = "Grant access so you can record and send messages with audio.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Безшумни известия";
 "notification_fallback_content" = "Имате нови съобщения.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Incoming call";
 "notification_inline_reply_failed" = "** Неуспешно изпращане - моля, отворете стаята";
 "notification_invite_body" = "Поканиха ви за чат";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
 "screen_media_upload_preview_processing" = "Processing...";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Натиснете върху съобщение и изберете „%1$@“, за да го включите тук.";
 "screen_pinned_timeline_empty_state_headline" = "Закачете важни съобщения, за да могат лесно да бъдат намерени";
 "screen_push_history_title" = "Push history";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Matching room found";
 "screen_start_chat_join_room_by_address_room_not_found" = "Стаята не е намерена";
 "screen_start_chat_join_room_by_address_supporting_text" = "напр. #room-name:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
@@ -973,7 +981,7 @@
 "screen_notification_settings_additional_settings_section_title" = "Допълнителни настройки";
 "screen_notification_settings_calls_label" = "Аудио и видео разговори";
 "screen_notification_settings_configuration_mismatch" = "Несъответствие в конфигурацията";
-"screen_notification_settings_configuration_mismatch_description" = "We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active.\n\nIf you proceed, some of your settings may change.";
+"screen_notification_settings_configuration_mismatch_description" = "Опростихме настройките за известия, за да улесним намирането на опции. Някои персонализирани настройки, които сте избрали в миналото, не се показват тук, но те все още са активни.\n\nАко продължите, някои от настройките ви може да се променят.";
 "screen_notification_settings_direct_chats" = "Директни чатове";
 "screen_notification_settings_edit_custom_settings_section_title" = "Персонализирана настройка за чат";
 "screen_notification_settings_edit_failed_updating_default_mode" = "Възникна грешка при обновяването на настройките за известия.";
@@ -986,7 +994,7 @@
 "screen_notification_settings_group_chats" = "Групови чатове";
 "screen_notification_settings_invite_for_me_label" = "Покани";
 "screen_notification_settings_mentions_only_disclaimer" = "Вашият сървър не поддържа тази опция в шифровани стаи, може да не получавате известия в някои стаи.";
-"screen_notification_settings_mode_all" = "All";
+"screen_notification_settings_mode_all" = "Всички";
 "screen_notification_settings_mode_mentions" = "Споменавания";
 "screen_notification_settings_notification_section_title" = "Да бъда известяван за";
 "screen_notification_settings_room_mention_label" = "Известяване за @room";
@@ -1288,7 +1296,7 @@
 "session_verification_banner_message" = "Изглежда, че използвате ново устройство. Потвърдете с друго устройство за достъп до вашите шифровани съобщения.";
 "session_verification_banner_title" = "Потвърдете, че сте вие";
 "settings_rageshake" = "Rageshake";
-"settings_rageshake_detection_threshold" = "Detection threshold";
+"settings_rageshake_detection_threshold" = "Праг на откриване";
 "settings_version_number" = "Версия: %1$@ (%2$@)";
 "state_event_avatar_changed_too" = "(профилната снимка също е променена)";
 "state_event_avatar_url_changed" = "%1$@ промени своята профилна снимка";
@@ -1308,7 +1316,7 @@
 "state_event_room_avatar_removed" = "%1$@ премахна снимката на стаята";
 "state_event_room_avatar_removed_by_you" = "Вие премахнахте снимката на стаята";
 "state_event_room_ban" = "%1$@ banned %2$@";
-"state_event_room_ban_by_you" = "You banned %1$@";
+"state_event_room_ban_by_you" = "Вие забранихте %1$@";
 "state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
 "state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ създаде стаята";
@@ -1358,7 +1366,7 @@
 "state_event_room_topic_removed" = "%1$@ премахна темата на стаята";
 "state_event_room_topic_removed_by_you" = "Вие премахнахте темата на стаята";
 "state_event_room_unban" = "%1$@ премахна забраната на %2$@";
-"state_event_room_unban_by_you" = "You unbanned %1$@";
+"state_event_room_unban_by_you" = "Вие отблокирахте %1$@";
 "state_event_room_unknown_membership_change" = "%1$@ направи неизвестна промяна в членството си";
 "test_language_identifier" = "bg";
 "test_untranslated_default_language_identifier" = "en";

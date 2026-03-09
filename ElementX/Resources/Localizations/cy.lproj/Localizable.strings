@@ -19,6 +19,7 @@
 "a11y_pause" = "Oedi";
 "a11y_paused_voice_message" = "Neges llais, hyd: %1$@, safle presennol: %2$@";
 "a11y_pin_field" = "Maes PIN";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "Chwarae";
 "a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Mae'r bleidlais wedi gorffen";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Wedi dileu adwaith gyda %1$@";
 "a11y_remove_reaction_with" = "Wedi dileu adwaith gyda %1$@";
 "a11y_send_files" = "Anfon ffeiliau";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Mae angen gweithredu o fewn amser cyfyngedig, mae gennych un funud i wirio";
 "a11y_show_password" = "Dangos y cyfrinair";
 "a11y_start_call" = "Cychwyn galwad";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Ystafell Tombstoned";
 "a11y_user_menu" = "Dewislen defnyddiwr";
 "a11y_view_avatar" = "Gweld afatar";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Trwyddedau cod agored";
 "common_optic_id_ios" = "ID optig";
 "common_or" = "neu";
+"common_other_options" = "Other options";
 "common_password" = "Cyfrinair";
 "common_people" = "Pobl";
 "common_permalink" = "Dolen Barhaol";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "Mae maint y ffeil yn rhy fawr i'w llwytho";
 "dialog_permission_camera" = "Er mwyn gadael i'r rhaglen ddefnyddio'r camera, rhowch ganiatâd iddo yn y gosodiadau system.";
 "dialog_permission_generic" = "Rhowch ganiatâd yn y gosodiadau system.";
-"dialog_permission_location_description_ios" = "Caniatáu mynediad yn y Gosodiadau -> Lleoliad.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "Does gan %1$@ ddim mynediad i'ch lleoliad.";
 "dialog_permission_microphone" = "Er mwyn gadael i'r cais ddefnyddio'r meicroffon, rhowch ganiatâd yng ngosodiadau'r system.";
 "dialog_permission_microphone_description_ios" = "Rhowch ganiatáu mynediad er mwyn i chi allu recordio ac anfon negeseuon gyda sain.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Galwadau'n canu";
 "notification_channel_silent" = "Hysbysiadau tawel";
 "notification_fallback_content" = "Mae gennych chi negeseuon newydd.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Galwad i mewn";
 "notification_inline_reply_failed" = "** Wedi methu anfon - agorwch yr ystafell";
 "notification_invite_body" = "Wedi eich gwahodd i sgwrsio";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Eitem %1$d o %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimeiddio ansawdd delwedd";
 "screen_media_upload_preview_processing" = "Prosesu...";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Pwyswch ar neges a dewis “%1$@” i'w cynnwys yma.";
 "screen_pinned_timeline_empty_state_headline" = "Pinio negeseuon pwysig fel y mae modd eu darganfod yn hawdd";
 "screen_push_history_title" = "Hanes gwthio";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Cafwyd hyd i ystafell gyfatebol";
 "screen_start_chat_join_room_by_address_room_not_found" = "Heb ganfod yr ystafell";
 "screen_start_chat_join_room_by_address_supporting_text" = "e.e. #enw-ystafell:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Heb anfon y neges oherwydd bod hunaniaeth wedi 'i ddilysu %1$@ wedi'i ailosod.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Heb anfon y neges oherwydd nid yw %1$@ wedi gwirio pob dyfais.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Heb anfon y neges oherwydd nad ydych wedi gwirio un neu fwy o'ch dyfeisiau.";

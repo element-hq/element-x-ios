@@ -15,9 +15,9 @@
 			<key>one</key>
 			<string>Введена %1$d цифра</string>
 			<key>few</key>
-			<string>Ведено %1$d цифры</string>
+			<string>Введено %1$d цифры</string>
 			<key>many</key>
-			<string>Введено много цифр</string>
+			<string>Введено %1$d цифр</string>
 		</dict>
 	</dict>
 	<key>a11y_polls_percent_of_total</key>
@@ -175,11 +175,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Пространство</string>
+			<string>%1$d пространство</string>
 			<key>few</key>
-			<string>%1$d Пространств</string>
+			<string>%1$d пространства</string>
 			<key>many</key>
-			<string>%1$d Пространств</string>
+			<string>%1$d пространств</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -229,9 +229,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
-			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>У Вас %d новое сообщение.</string>
+			<key>few</key>
+			<string>У Вас %d новых сообщения.</string>
+			<key>many</key>
+			<string>У Вас %d новых сообщений.</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -317,11 +319,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>У вас осталась %1$d попытка на разблокировку</string>
+			<string>У вас осталась %1$d попытка разблокировки</string>
 			<key>few</key>
-			<string>У вас остались %1$d попытки на разблокировку</string>
+			<string>У вас остались %1$d попытки разблокировки</string>
 			<key>many</key>
-			<string>У вас осталось %1$d попыток на разблокировку</string>
+			<string>У вас осталось %1$d попыток разблокировки</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -533,11 +535,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ набирает сообщение</string>
+			<string>%1$@ печатает</string>
 			<key>few</key>
-			<string>%1$@ набирают сообщения</string>
+			<string>%1$@ печатают</string>
 			<key>many</key>
-			<string>%1$@ набирают сообщения</string>
+			<string>%1$@ печатают</string>
 		</dict>
 	</dict>
 	<key>screen_space_remove_rooms_confirmation_title</key>

@@ -19,6 +19,7 @@
 "a11y_pause" = "مکث";
 "a11y_paused_voice_message" = "پیام صوتی. طول %1$@. موقعیت کنونی: %2$@";
 "a11y_pin_field" = "زمینهٔ پین";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "پخش";
 "a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "نظرسنجی پایان یافته";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "برداشتن واکنش با %1$@";
 "a11y_remove_reaction_with" = "برداشتن واکنش با %1$@";
 "a11y_send_files" = "ارسال پرونده‌ها";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "نیازمند کنش محدود به زمان";
 "a11y_show_password" = "نمایش گذرواژه";
 "a11y_start_call" = "آغاز یک تماس";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "فهرست کاربر";
 "a11y_view_avatar" = "دیدن چهرک";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "پروانه‌های نرم‌افزاری آزاد";
 "common_optic_id_ios" = "شناسهٔ نوری";
 "common_or" = "یا";
+"common_other_options" = "Other options";
 "common_password" = "گذرواژه";
 "common_people" = "افراد";
 "common_permalink" = "پایاپیوند";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "The file size is too large to upload";
 "dialog_permission_camera" = "برای اینکه برنامه از دوربین استفاده کند، لطفا در تنظیمات سیستم مجوز بدهید.";
 "dialog_permission_generic" = "لطفاً در تنظیمات سامانه اجازه بدهید.";
-"dialog_permission_location_description_ios" = "اعطای دسترسی در تنظیمات -> مکان.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ به مکانتان دسترسی ندارد.";
 "dialog_permission_microphone" = "برای اینکه برنامه از میکروفون استفاده کند، لطفا اجازه دهید در تنظیمات سیستم مجوز بدهید.";
 "dialog_permission_microphone_description_ios" = "Grant access so you can record and send messages with audio.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "زنگ خوردن تماس";
 "notification_channel_silent" = "اعلان‌های صامت";
 "notification_fallback_content" = "پیام‌های جدیدی دارید.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 تماس ورودی";
 "notification_inline_reply_failed" = "**‌شکست در فرستادن - لطفاً اتاق را بگشایید";
 "notification_invite_body" = "به گپ دعوتتان کرد";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
 "screen_media_upload_preview_processing" = "پردازش کردن…";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_push_history_title" = "تاریخچهٔ آگاهی‌های ارسالی";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "اتاق مطابق پیدا شد";
 "screen_start_chat_join_room_by_address_room_not_found" = "اتاق پیدا نشد";
 "screen_start_chat_join_room_by_address_supporting_text" = "نمونه: ‪#room-name:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";

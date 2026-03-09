@@ -19,6 +19,7 @@
 "a11y_pause" = "Паўза";
 "a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "Поле PIN-кода";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "Прайграць";
 "a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Апытанне скончана";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Выдаліць рэакцыю з %1$@";
 "a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Адправіць файлы";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "Паказаць пароль";
 "a11y_start_call" = "Пазваніць";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Меню карыстальніка";
 "a11y_view_avatar" = "View avatar";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Ліцэнзіі з адкрытым зыходным кодам";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "або";
+"common_other_options" = "Other options";
 "common_password" = "Пароль";
 "common_people" = "Людзі";
 "common_permalink" = "Пастаянная спасылка";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "The file size is too large to upload";
 "dialog_permission_camera" = "Каб дазволіць праграме выкарыстоўваць камеру, дайце дазвол у наладах сістэмы.";
 "dialog_permission_generic" = "Калі ласка, дайце дазвол у наладах сістэмы.";
-"dialog_permission_location_description_ios" = "Дайце доступ у Наладах -> Месца знаходжання.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ не мае доступу да вашага месцазнаходжання.";
 "dialog_permission_microphone" = "Каб дазволіць праграме выкарыстоўваць мікрафон, дайце дазвол у наладах сістэмы.";
 "dialog_permission_microphone_description_ios" = "Дайце доступ, каб вы маглі запісваць і адпраўляць паведамленні з аўдыя.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Званкі";
 "notification_channel_silent" = "Ціхія апавяшчэнні";
 "notification_fallback_content" = "You have new messages.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Уваходны выклік";
 "notification_inline_reply_failed" = "** Не атрымалася даслаць - калі ласка, адкрыйце пакой";
 "notification_invite_body" = "Запрасіў(-ла) вас у чат";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
 "screen_media_upload_preview_processing" = "Processing...";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Націсніце на паведамленне і абярыце «%1$@ », каб уключыць сюды.";
 "screen_pinned_timeline_empty_state_headline" = "Замацуеце важныя паведамленні, каб іх можна было лёгка знайсці";
 "screen_push_history_title" = "Push history";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Matching room found";
 "screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
 "screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Паведамленне не адпраўлена таму што%1$@ не праверыў усе прылады.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";

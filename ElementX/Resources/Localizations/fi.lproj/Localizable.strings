@@ -19,6 +19,7 @@
 "a11y_pause" = "Keskeytä";
 "a11y_paused_voice_message" = "Ääniviesti, kesto: %1$@, nykyinen sijainti: %2$@";
 "a11y_pin_field" = "PIN-kenttä";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "Toista";
 "a11y_playback_speed" = "Toistonopeus";
 "a11y_poll_end" = "Päättynyt kysely";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Poista reaktio: %1$@";
 "a11y_remove_reaction_with" = "Poista reaktio: %1$@";
 "a11y_send_files" = "Lähetä tiedostoja";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Aikarajoitettu toimenpide vaaditaan, sinulla on yksi minuutti aikaa vahvistaa";
 "a11y_show_password" = "Näytä salasana";
 "a11y_start_call" = "Aloita puhelu";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Haudattu huone";
 "a11y_user_menu" = "Käyttäjävalikko";
 "a11y_view_avatar" = "Näytä avatar";
@@ -87,7 +90,7 @@
 "action_edit_poll" = "Muokkaa kyselyä";
 "action_enable" = "Ota käyttöön";
 "action_end_poll" = "Lopeta kysely";
-"action_enter_pin" = "Syötä PIN-koodi";
+"action_enter_pin" = "Anna PIN-koodi";
 "action_explore_public_spaces" = "Selaa julkisia tiloja";
 "action_finish" = "Valmis";
 "action_forgot_password" = "Unohditko salasanan?";
@@ -221,7 +224,7 @@
 "common_empty_file" = "Tyhjä tiedosto";
 "common_encryption" = "Salaus";
 "common_encryption_enabled" = "Salaus käytössä";
-"common_enter_your_pin" = "Syötä PIN-koodisi";
+"common_enter_your_pin" = "Anna PIN-koodisi";
 "common_error" = "Virhe";
 "common_everyone" = "Kaikki";
 "common_face_id_ios" = "Face ID";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Avoimen lähdekoodin lisenssit";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "tai";
+"common_other_options" = "Muut vaihtoehdot";
 "common_password" = "Salasana";
 "common_people" = "Ihmiset";
 "common_permalink" = "Pysyvä linkki";
@@ -367,7 +371,7 @@
 "common_unable_to_decrypt_insecure_device" = "Lähetetty suojaamattomasta laitteesta";
 "common_unable_to_decrypt_verification_violation" = "Lähettäjän vahvistettu identiteetti nollattiin";
 "confirm_recovery_key_banner_message" = "Vahvista palautusavaimesi, jotta pääset edelleen käyttämään avainten säilytystä ja viestihistoriaa.";
-"confirm_recovery_key_banner_primary_button_title" = "Syötä palautusavaimesi";
+"confirm_recovery_key_banner_primary_button_title" = "Anna palautusavaimesi";
 "confirm_recovery_key_banner_secondary_button_title" = "Unohditko palautusavaimesi?";
 "confirm_recovery_key_banner_title" = "Avainten säilytys ei ole synkronoitu";
 "crash_detection_dialog_content" = "%1$@ kaatui edellisellä käyttökerralla. Haluatko jakaa virheraportin kanssamme?";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "Tiedostokoko on liian suuri lähetettäväksi";
 "dialog_permission_camera" = "Jotta sovellus voisi käyttää kameraa, anna lupa järjestelmän asetuksista.";
 "dialog_permission_generic" = "Anna lupa järjestelmän asetuksista.";
-"dialog_permission_location_description_ios" = "Jotta voit jakaa nykyisen sijaintisi, Element tarvitsee sijaintioikeudet. Siirry laitteen sijaintiasetuksiin.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ -sovelluksella ei ole lupaa sijaintiisi.";
 "dialog_permission_microphone" = "Jotta sovellus voisi käyttää mikrofonia, anna lupa järjestelmän asetuksista.";
 "dialog_permission_microphone_description_ios" = "Anna lupa, jotta voit nauhoittaa ja lähettää ääniviestejä.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Soivat puhelut";
 "notification_channel_silent" = "Hiljaiset ilmoitukset";
 "notification_fallback_content" = "Sinulle on uusia viestejä.";
+"notification_incoming_audio_call" = "📞 Saapuva puhelu";
 "notification_incoming_call" = "📹 Saapuva puhelu";
 "notification_inline_reply_failed" = "** Lähetys epäonnistui - avaa huone";
 "notification_invite_body" = "Kutsui sinut keskustelemaan";
@@ -632,7 +637,7 @@
 "screen_link_new_device_desktop_step1" = "Avaa %1$@ läppärillä tai pöytätietokoneella";
 "screen_link_new_device_desktop_title" = "Avaa %1$@ pöytätietokoneella saadaksesi QR-koodin";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Numerot eivät täsmää";
-"screen_link_new_device_enter_number_notice" = "Syötä 2-numeroinen koodi";
+"screen_link_new_device_enter_number_notice" = "Kirjoita 2-numeroinen koodi";
 "screen_link_new_device_enter_number_subtitle" = "Tämä varmistaa, että yhteys toiseen laitteeseesi on turvallinen.";
 "screen_link_new_device_enter_number_title" = "Kirjoita toisessa laitteessa näkyvä numero";
 "screen_link_new_device_error_not_supported_subtitle" = "Palveluntarjoajasi ei tue kirjautumista uuteen laitteeseen QR-koodilla.";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Kohde %1$d / %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimoi kuvanlaatu";
 "screen_media_upload_preview_processing" = "Käsitellään…";
+"screen_onboarding_welcome_back" = "Tervetuloa takaisin";
 "screen_pinned_timeline_empty_state_description" = "Paina viestiä ja valitse “%1$@” lisätäksesi sen tänne.";
 "screen_pinned_timeline_empty_state_headline" = "Kiinnitä tärkeät viestit, jotta ne löytyvät helposti.";
 "screen_push_history_title" = "Push-historia";
@@ -763,10 +769,12 @@
 "screen_space_list_title" = "Tilat";
 "screen_start_chat_join_room_by_address_action" = "Liity huoneeseen osoitteella";
 "screen_start_chat_join_room_by_address_invalid_address" = "Osoite ei ole kelvollinen";
-"screen_start_chat_join_room_by_address_placeholder" = "Syötä...";
+"screen_start_chat_join_room_by_address_placeholder" = "Kirjoita...";
 "screen_start_chat_join_room_by_address_room_found" = "Täsmäävä huone löytyi";
 "screen_start_chat_join_room_by_address_room_not_found" = "Huonetta ei löytynyt";
 "screen_start_chat_join_room_by_address_supporting_text" = "esim. #huoneen-nimi:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Viestiä ei lähetetty, koska käyttäjän %1$@ vahvistettu identiteetti nollattiin.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Viestiä ei lähetetty, koska %1$@ ei ole vahvistanut kaikkia laitteitaan.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Viestiä ei lähetetty, koska et ole vahvistanut yhtä tai useampaa laitettasi.";
@@ -950,7 +958,7 @@
 "screen_login_error_invalid_user_id" = "Tämä ei ole kelvollinen käyttäjätunnus. Odotettu muoto: '@käyttäjä:kotipalvelin.fi'";
 "screen_login_error_refresh_tokens" = "Tämä palvelin on määritetty käyttämään refresh tokeneja. Näitä ei tueta salasanapohjaisen kirjautumisen kanssa.";
 "screen_login_error_unsupported_authentication" = "Valitsemasi kotipalvelin ei tue salasana- tai OIDC-kirjautumista. Ota yhteyttä palvelimesi ylläpitäjään tai valitse toinen kotipalvelin.";
-"screen_login_form_header" = "Syötä tietosi";
+"screen_login_form_header" = "Anna tietosi";
 "screen_login_title" = "Tervetuloa takaisin!";
 "screen_login_title_with_homeserver" = "Kirjaudu sisään %1$@ -palvelimelle";
 "screen_media_browser_delete_confirmation_subtitle" = "Tämä tiedosto poistetaan huoneesta, eikä jäsenillä ole enää pääsyä siihen.";
@@ -1056,7 +1064,7 @@
 "screen_recovery_key_confirm_error_content" = "Yritä uudelleen vahvistaaksesi pääsyn avainten säilytykseen.";
 "screen_recovery_key_confirm_error_title" = "Väärä palautusavain";
 "screen_recovery_key_confirm_key_description" = "Jos sinulla on turva-avain tai turvalause, sekin toimii.";
-"screen_recovery_key_confirm_key_placeholder" = "Syötä...";
+"screen_recovery_key_confirm_key_placeholder" = "Kirjoita...";
 "screen_recovery_key_confirm_lost_recovery_key" = "Hukkasitko palautusavaimesi?";
 "screen_recovery_key_confirm_success" = "Palautusavain vahvistettu";
 "screen_recovery_key_copied_to_clipboard" = "Palautusavain kopioitu";
@@ -1236,7 +1244,7 @@
 "screen_session_verification_compare_numbers_title" = "Vertaa numeroita";
 "screen_session_verification_complete_subtitle" = "Nyt voit lukea tai lähettää viestejä turvallisesti toisella laitteellasi.";
 "screen_session_verification_complete_user_subtitle" = "Nyt voit luottaa tämän käyttäjän identiteettiin, kun lähetät tai vastaanotat viestejä.";
-"screen_session_verification_enter_recovery_key" = "Syötä palautusavain";
+"screen_session_verification_enter_recovery_key" = "Anna palautusavain";
 "screen_session_verification_failed_subtitle" = "Joko pyyntö aikakatkaistiin, pyyntö hylättiin tai vahvistus ei täsmännyt.";
 "screen_session_verification_open_existing_session_subtitle" = "Vahvista, että se olet sinä, jotta näet aiemmat salatut viestisi.";
 "screen_session_verification_open_existing_session_title" = "Avaa laite, jossa olet jo kirjautuneena";
@@ -1479,7 +1487,7 @@
 "screen_blocked_users_unblock_alert_description" = "Näet jälleen kaikki heidän lähettämänsä viestit.";
 "screen_blocked_users_unblock_alert_title" = "Poista käyttäjän esto";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ kaatui edellisellä käyttökerralla. Haluatko jakaa virheraportin kanssamme?";
-"screen_chat_backup_recovery_action_confirm" = "Syötä palautusavain";
+"screen_chat_backup_recovery_action_confirm" = "Anna palautusavain";
 "screen_chat_backup_recovery_action_setup" = "Ota palautus käyttöön";
 "screen_create_account_title" = "Luo tili";
 "screen_create_poll_cancel_confirmation_content_ios" = "Muutoksiasi ei tallenneta";
@@ -1503,9 +1511,9 @@
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Yritä uudelleen";
 "screen_qr_code_login_start_over_button" = "Aloita alusta";
 "screen_recovery_key_change_generate_key_description" = "Älä jaa tätä kenenkään kanssa!";
-"screen_recovery_key_confirm_title" = "Syötä palautusavaimesi";
+"screen_recovery_key_confirm_title" = "Anna palautusavaimesi";
 "screen_report_content_block_user" = "Estä käyttäjä";
-"screen_reset_encryption_password_placeholder" = "Syötä...";
+"screen_reset_encryption_password_placeholder" = "Kirjoita...";
 "screen_room_attachment_source_camera_photo" = "Ota kuva";
 "screen_room_change_permissions_messages_and_content" = "Viestit ja sisältö";
 "screen_room_change_permissions_room_details" = "Muokkaa tietoja";

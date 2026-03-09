@@ -19,6 +19,7 @@
 "a11y_pause" = "Peata";
 "a11y_paused_voice_message" = "Häälsõnum, kestus:%1$@, praegune asukoht: %2$@";
 "a11y_pin_field" = "PIN-koodi väli";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "Esita";
 "a11y_playback_speed" = "Taasesituse kiirus";
 "a11y_poll_end" = "Lõppenud küsitlus";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Eemalda reageerimine %1$@ emotikoniga";
 "a11y_remove_reaction_with" = "Eemalda reageerimine: %1$@";
 "a11y_send_files" = "Saada faile";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Palun tee see ajapiiranguga toiming, sul on aega üks minut";
 "a11y_show_password" = "Näita salasõna";
 "a11y_start_call" = "Helista";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Lõpetatuks märgitud jututuba";
 "a11y_user_menu" = "Kasutajamenüü";
 "a11y_view_avatar" = "Vaata tunnuspilti";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Avatud lähtekoodiga litsentsid";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "või";
+"common_other_options" = "Other options";
 "common_password" = "Salasõna";
 "common_people" = "Inimesed";
 "common_permalink" = "Püsilink";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "See fail on üleslaadimiseks liiga suur";
 "dialog_permission_camera" = "Selleks, et rakendus saaks kaamerat kasutada, palun luba see süsteemi seadistuses.";
 "dialog_permission_generic" = "Palun luba süsteemi seadistustest vajalikud õigused.";
-"dialog_permission_location_description_ios" = "Luba õigused Seadistused -> Asukoht valikust.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "Rakendusel %1$@ puudub õigus sinu asukohta tuvastada.";
 "dialog_permission_microphone" = "Selleks, et rakendus saaks mikrofoni kasutada, palun luba see süsteemi seadistuses.";
 "dialog_permission_microphone_description_ios" = "Et võiksid salvestada ja saata häälsõnumeid, palun luba vajalikud õigused.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Kõnehelinad";
 "notification_channel_silent" = "Vaiksed teavitused";
 "notification_fallback_content" = "Sulle on uusi sõnumeid.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Sissetulev kõne";
 "notification_inline_reply_failed" = "** Saatmine ei õnnestunud - palun ava jututoa täisvaade";
 "notification_invite_body" = "Kutse osalema vestluses";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Objekt %1$d/%2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimeeri pildikvaliteeti";
 "screen_media_upload_preview_processing" = "Töötlen...";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Siia lisamiseks vajuta sõnumil ja vali „%1$@“.";
 "screen_pinned_timeline_empty_state_headline" = "Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile";
 "screen_push_history_title" = "Tõuketeadete ajalugu";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Leidsime vastava jututoa";
 "screen_start_chat_join_room_by_address_room_not_found" = "Jututuba ei leidu";
 "screen_start_chat_join_room_by_address_supporting_text" = "nt. #jututoa-nimi:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Sõnum on saatmata, kuna kasutaja %1$@ verifitseeritud identiteet on lähtestatud.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Sõnum on saatmata, kuna %1$@ pole verifitseerinud kõiki oma seadmeid.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata.";

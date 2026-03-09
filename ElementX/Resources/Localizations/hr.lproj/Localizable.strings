@@ -19,6 +19,7 @@
 "a11y_pause" = "Pauziraj";
 "a11y_paused_voice_message" = "Glasovna poruka, trajanje: %1$@, trenutačno zaustavljeno na: %2$@";
 "a11y_pin_field" = "Polje za PIN";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "Reproduciraj";
 "a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Završena anketa";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Ukloni reakciju: %1$@";
 "a11y_remove_reaction_with" = "Ukloni reakciju s %1$@";
 "a11y_send_files" = "Pošalji datoteke";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Potrebna je vremenski ograničena radnja, imate jednu minutu za potvrdu";
 "a11y_show_password" = "Prikaži zaporku";
 "a11y_start_call" = "Započni poziv";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Soba označena za uklanjanje";
 "a11y_user_menu" = "Korisnički izbornik";
 "a11y_view_avatar" = "Prikaži avatar";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Licencije otvorenog koda";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "ili";
+"common_other_options" = "Other options";
 "common_password" = "Zaporka";
 "common_people" = "Osobe";
 "common_permalink" = "Stalna poveznica";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "Datoteka je prevelika za prijenos";
 "dialog_permission_camera" = "Kako biste aplikaciji omogućili korištenje kamere, dajte dopuštenje u postavkama sustava.";
 "dialog_permission_generic" = "Dajte dopuštenje u postavkama sustava.";
-"dialog_permission_location_description_ios" = "Odobrite pristup u dijelu Postavke -> Lokacija.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ nema pristup vašoj lokaciji.";
 "dialog_permission_microphone" = "Kako biste aplikaciji omogućili korištenje mikrofona, dajte dopuštenje u postavkama sustava.";
 "dialog_permission_microphone_description_ios" = "Odobrite pristup kako biste mogli snimati i slati poruke sa zvukom.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Pozivi (telefon zvoni)";
 "notification_channel_silent" = "Tihe obavijesti";
 "notification_fallback_content" = "Imate nove poruke.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Dolazni poziv";
 "notification_inline_reply_failed" = "** Slanje nije uspjelo – otvorite sobu";
 "notification_invite_body" = "Pozvao/la te na razgovor";
@@ -552,7 +557,7 @@
 "screen_create_poll_settings_section_title" = "Postavke";
 "screen_create_room_error_creating_space" = "The space could not be created because of an unknown error. Try again later.";
 "screen_create_room_name_placeholder" = "Add name…";
-"screen_create_room_new_room_title" = "New room";
+"screen_create_room_new_room_title" = "Nova soba";
 "screen_create_room_new_space_title" = "New space";
 "screen_create_room_public_option_short_description" = "Anyone can join.";
 "screen_create_room_room_access_section_knocking_option_description" = "Svatko može zatražiti pridruživanje sobi, ali administrator ili moderator morat će prihvatiti zahtjev.";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Stavka %1$d od %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimiziraj kvalitetu slike";
 "screen_media_upload_preview_processing" = "Obrada...";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Pritisnite poruku i odaberite “%1$@” kako biste uključili ovdje.";
 "screen_pinned_timeline_empty_state_headline" = "Prikvačite važne poruke kako bi ih se lakše moglo pronaći";
 "screen_push_history_title" = "Povijest push obavijesti";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Pronađena je odgovarajuća soba";
 "screen_start_chat_join_room_by_address_room_not_found" = "Soba nije pronađena";
 "screen_start_chat_join_room_by_address_supporting_text" = "npr. #naziv-sobe:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Poruka nije poslana jer je poništen potvrđeni identitet korisnika %1$@.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Poruka nije poslana jer %1$@ nije potvrdio sve uređaje.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Poruka nije poslana jer niste potvrdili jedan svoj uređaj ili više njih.";

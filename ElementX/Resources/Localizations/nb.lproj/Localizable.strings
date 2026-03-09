@@ -19,6 +19,7 @@
 "a11y_pause" = "Setter på pause";
 "a11y_paused_voice_message" = "Talemelding, lengde: %1$@, nåværende posisjon: %2$@";
 "a11y_pin_field" = "PIN-felt";
+"a11y_pinned_location" = "Festet lokasjon";
 "a11y_play" = "Spill av";
 "a11y_playback_speed" = "Avspillingshastighet";
 "a11y_poll_end" = "Avsluttet avstemning";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Fjern reaksjonen med %1$@";
 "a11y_remove_reaction_with" = "Fjern reaksjonen med %1$@";
 "a11y_send_files" = "Sende filer";
+"a11y_sender_location" = "Avsenderens lokasjon";
 "a11y_session_verification_time_limited_action_required" = "Tidsbegrenset handling kreves, du har ett minutt på deg til å verifisere";
 "a11y_show_password" = "Vis passord";
 "a11y_start_call" = "Start en samtale";
+"a11y_start_voice_call" = "Start et taleanrop";
 "a11y_tombstoned_room" = "Deaktivert rom";
 "a11y_user_menu" = "Brukermeny";
 "a11y_view_avatar" = "Vis avatar";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Åpen kildekode-lisenser";
 "common_optic_id_ios" = "Optisk ID";
 "common_or" = "eller";
+"common_other_options" = "Andre alternativer";
 "common_password" = "Passord";
 "common_people" = "Personer";
 "common_permalink" = "Permalenke";
@@ -378,8 +382,8 @@
 "crypto_event_authenticity_unknown_device" = "Kryptert av en ukjent eller slettet enhet.";
 "crypto_event_authenticity_unsigned_device" = "Kryptert med en enhet som ikke er verifisert av eieren.";
 "crypto_event_authenticity_unverified_identity" = "Kryptert av en ubekreftet bruker.";
-"crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) shared this message since you were not in the room when it was sent.";
-"crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ shared this message since you were not in the room when it was sent.";
+"crypto_event_key_forwarded_known_profile_dialog_content" = "%1$@ (%2$@) delte denne meldingen siden du ikke var i rommet da den ble sendt.";
+"crypto_event_key_forwarded_unknown_profile_dialog_content" = "%1$@ delte denne meldingen siden du ikke var i rommet da den ble sendt.";
 "crypto_history_sharing_room_info_hidden_badge_content" = "Nye medlemmer ser ikke historikken";
 "crypto_history_sharing_room_info_shared_badge_content" = "Nye medlemmer ser historikk";
 "crypto_history_sharing_room_info_world_readable_badge_content" = "Alle kan se historikk";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "Filstørrelsen er for stor til å kunne lastes opp";
 "dialog_permission_camera" = "For å la programmet bruke kameraet, vennligst gi tillatelse i systeminnstillingene.";
 "dialog_permission_generic" = "Vennligst gi tillatelse i systeminnstillingene.";
-"dialog_permission_location_description_ios" = "For å dele din nåværende posisjon, trenger Element tilgang til posisjonen din. Gå til Innstillinger > Posisjon.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ har ikke tilgang til posisjonen din.";
 "dialog_permission_microphone" = "For å la applikasjonen bruke mikrofonen, må du gi tillatelse i systeminnstillingene.";
 "dialog_permission_microphone_description_ios" = "Gi tilgang slik at du kan ta opp og sende meldinger med lyd.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Ringende anrop";
 "notification_channel_silent" = "Stille varsler";
 "notification_fallback_content" = "Du har nye meldinger.";
+"notification_incoming_audio_call" = "📞 Innkommende anrop";
 "notification_incoming_call" = "📹 Innkommende anrop";
 "notification_inline_reply_failed" = "** Kunne ikke sende - vennligst åpne rommet";
 "notification_invite_body" = "Inviterte deg til å chatte";
@@ -557,7 +562,7 @@
 "screen_create_room_public_option_short_description" = "Alle kan bli med.";
 "screen_create_room_room_access_section_knocking_option_description" = "Alle kan be om å få bli med, men en administrator eller moderator må godta forespørselen.";
 "screen_create_room_room_access_section_knocking_option_title" = "Be om å bli med";
-"screen_create_room_room_access_section_knocking_restricted_option_description" = "Anyone in %1$@ can join but everyone else must request access.";
+"screen_create_room_room_access_section_knocking_restricted_option_description" = "Alle i %1$@ kan bli med, mens alle andre må be om tilgang.";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Be om å få bli med";
 "screen_create_room_room_access_section_private_option_description" = "Bare inviterte personer kan bli med.";
 "screen_create_room_room_access_section_public_option_description" = "Alle kan bli med.";
@@ -568,7 +573,7 @@
 "screen_create_room_room_address_section_title" = "Adresse";
 "screen_create_room_room_visibility_section_title" = "Romsynlighet";
 "screen_create_room_space_selection_no_space_description" = "(ingen område)";
-"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
+"screen_create_room_space_selection_no_space_option" = "Skal ikke legges til et område";
 "screen_create_room_space_selection_no_space_title" = "Ingen områder valgt";
 "screen_create_room_space_selection_sheet_title" = "Legg til området";
 "screen_create_room_topic_placeholder" = "Legg til beskrivelse…";
@@ -624,7 +629,7 @@
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Velg rommene du vil forlate, som du ikke er den eneste administratoren for:";
 "screen_leave_space_subtitle_last_admin" = "Du må tildele en annen administrator for dette området før du kan forlate det.";
-"screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
+"screen_leave_space_subtitle_last_owner" = "Du er den eneste eieren av%1$@. Du må overføre eierskapet til noen andre før du drar.";
 "screen_leave_space_subtitle_only_last_admin" = "Du vil ikke bli fjernet fra følgende rom fordi du er den eneste administratoren:";
 "screen_leave_space_title" = "Forlat %1$@?";
 "screen_leave_space_title_last_admin" = "Du er den eneste administratoren for %1$@";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Fil %1$d av %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimaliser bildekvaliteten";
 "screen_media_upload_preview_processing" = "Behandler…";
+"screen_onboarding_welcome_back" = "Velkommen tilbake";
 "screen_pinned_timeline_empty_state_description" = "Trykk på en melding og velg “%1$@” for å inkludere her.";
 "screen_pinned_timeline_empty_state_headline" = "Fest viktige meldinger slik at de lett kan ses";
 "screen_push_history_title" = "Push-historikk";
@@ -745,9 +751,9 @@
 "screen_space_add_room_action" = "Rom";
 "screen_space_empty_state_title" = "Legg til ditt første rom";
 "screen_space_menu_action_members" = "Vis medlemmer";
-"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Fjerning av et rom vil ikke påvirke tilgangen til rommet. For å endre tilgangen, gå til Rominformasjon > Personvern og sikkerhet.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Fjern rom fra %1$@ ?";
-"screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
+"screen_space_add_rooms_room_access_description" = "Hvis du legger til et rom, vil det ikke påvirke tilgangen til rommet. For å endre tilgangen, gå til Rominnstillinger > Sikkerhet og personvern.";
 "screen_space_announcement_item1" = "Se områder du har opprettet eller blitt med i";
 "screen_space_announcement_item2" = "Godta eller avslå invitasjoner til områder";
 "screen_space_announcement_item3" = "Oppdag alle rom du kan bli med i i dine områder";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Matchende rom funnet";
 "screen_start_chat_join_room_by_address_room_not_found" = "Rom ikke funnet";
 "screen_start_chat_join_room_by_address_supporting_text" = "f.eks. #rom-navn:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Delt %1$@";
+"screen_static_location_sheet_title" = "På kartet";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Meldingen ble ikke sendt fordi %1$@s verifiserte identitet er tilbakestilt.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meldingen ble ikke sendt fordi %1$@ ikke har verifisert alle enheter.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine.";
@@ -1267,7 +1275,7 @@
 "screen_share_open_apple_maps" = "Åpne i Apple Maps";
 "screen_share_open_google_maps" = "Åpne i Google Maps";
 "screen_share_open_osm_maps" = "Åpne i OpenStreetMap";
-"screen_share_this_location_action" = "Del denne posisjonen";
+"screen_share_this_location_action" = "Del valgt lokasjon";
 "screen_signed_out_reason_1" = "Du har endret passordet ditt i en annen sesjon";
 "screen_signed_out_reason_2" = "Du har slettet sesjonen fra en annen sesjon";
 "screen_signed_out_reason_3" = "Serveradministratoren har ugyldiggjort tilgangen din";

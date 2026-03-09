@@ -19,6 +19,7 @@
 "a11y_pause" = "Pausar";
 "a11y_paused_voice_message" = "Mensagem de voz, duração: %1$@, posição atual: %2$@";
 "a11y_pin_field" = "Campo para PIN";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "Reproduzir";
 "a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Sondagem concluída";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Remover reação com %1$@";
 "a11y_remove_reaction_with" = "Remover reação com %1$@";
 "a11y_send_files" = "Enviar ficheiros";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Necessária ação em tempo limitado, tens um minuto para verificares";
 "a11y_show_password" = "Mostrar palavra-passe";
 "a11y_start_call" = "Iniciar chamada";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Sala antiga";
 "a11y_user_menu" = "Menu de utilizador";
 "a11y_view_avatar" = "Ver avatar";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Licenças de código aberto";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "ou";
+"common_other_options" = "Other options";
 "common_password" = "Senha";
 "common_people" = "Pessoas";
 "common_permalink" = "Ligação permanente";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "O tamanho do ficheiro é demasiado grande para ser carregado";
 "dialog_permission_camera" = "Para que a aplicação possa utilizar a câmara, concede a permissão nas configurações do sistema.";
 "dialog_permission_generic" = "Concede a permissão nas configurações do sistema.";
-"dialog_permission_location_description_ios" = "Concede a permissão em Definições -> Localização.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "A %1$@ não tem acesso à tua localização.";
 "dialog_permission_microphone" = "Para que a aplicação possa utilizar o microfone, concede essa permissão nas configurações do sistema.";
 "dialog_permission_microphone_description_ios" = "Concede a permissão para que possas gravar e enviar mensagens com áudio.";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Chamadas a tocar";
 "notification_channel_silent" = "Notificações silenciosas";
 "notification_fallback_content" = "Tens novas mensagens.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 A receber chamada";
 "notification_inline_reply_failed" = "** Falha no envio - por favor abre a sala";
 "notification_invite_body" = "Convidou-te para conversar";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Item %1$d de %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimiza a qualidade da imagem";
 "screen_media_upload_preview_processing" = "A processar...";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Pressione uma mensagem e escolha \"%1$@\" para incluir aqui.";
 "screen_pinned_timeline_empty_state_headline" = "Fixa mensagens importantes para que possam ser facilmente descobertas";
 "screen_push_history_title" = "Histórico de push";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Sala correspondente encontrado";
 "screen_start_chat_join_room_by_address_room_not_found" = "Sala não encontrada";
 "screen_start_chat_join_room_by_address_supporting_text" = "por exemplo, #sala:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mensagem não enviada porque a identidade verificada de %1$@ foi reposta.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mensagem não enviada porque %1$@ não verificou todos os dispositivos.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mensagem não enviada porque não verificou um ou mais dos seus dispositivos.";

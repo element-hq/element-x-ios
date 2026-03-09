@@ -19,6 +19,7 @@
 "a11y_pause" = "Pause";
 "a11y_paused_voice_message" = "Message vocal, durée: %1$@, position actuelle: %2$@";
 "a11y_pin_field" = "Code PIN";
+"a11y_pinned_location" = "Position épinglée";
 "a11y_play" = "Lecture";
 "a11y_playback_speed" = "Vitesse de lecture";
 "a11y_poll_end" = "Sondage terminé";
@@ -33,9 +34,11 @@
 "a11y_remove_reaction" = "Supprimer la réaction avec %1$@";
 "a11y_remove_reaction_with" = "Supprimer la réaction avec %1$@";
 "a11y_send_files" = "Envoyer des fichiers";
+"a11y_sender_location" = "Position de l'expéditeur";
 "a11y_session_verification_time_limited_action_required" = "Action limitée dans le temps requise, vous avez une minute pour effectuer la vérification";
 "a11y_show_password" = "Afficher le mot de passe";
 "a11y_start_call" = "Démarrer un appel";
+"a11y_start_voice_call" = "Lancer un appel vocal";
 "a11y_tombstoned_room" = "Salon clôturé";
 "a11y_user_menu" = "Menu utilisateur";
 "a11y_view_avatar" = "Voir l'avatar";
@@ -148,7 +151,7 @@
 "action_send_voice_message" = "Envoyer un message vocal";
 "action_share" = "Partager";
 "action_share_link" = "Partager le lien";
-"action_share_live_location" = "Share live location";
+"action_share_live_location" = "Partager la position en continu";
 "action_show" = "Afficher";
 "action_sign_in_again" = "Se connecter à nouveau";
 "action_signout" = "Se déconnecter";
@@ -262,6 +265,7 @@
 "common_open_source_licenses" = "Licences open source";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "ou";
+"common_other_options" = "Autres options";
 "common_password" = "Mot de passe";
 "common_people" = "Personnes";
 "common_permalink" = "Permalien";
@@ -396,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "Le fichier est trop gros pour être envoyé";
 "dialog_permission_camera" = "Pour permettre à l’application d’utiliser l’appareil photo, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_generic" = "Veuillez accorder l’autorisation dans les paramètres du système.";
-"dialog_permission_location_description_ios" = "Pour partager votre position actuelle, Element a besoin d'accéder à votre position. Allez dans Paramètres > Localisation.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ n’a pas accès à votre position";
 "dialog_permission_microphone" = "Pour permettre à l’application d’utiliser le microphone, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_microphone_description_ios" = "Donnez la permission afin de pouvoir enregistrer et envoyer des messages vocaux";
@@ -458,6 +462,7 @@
 "notification_channel_ringing_calls" = "Appels entrants";
 "notification_channel_silent" = "Notifications silencieuses";
 "notification_fallback_content" = "Vous avez de nouveau(x) message(s).";
+"notification_incoming_audio_call" = "📞 Appel entrant";
 "notification_incoming_call" = "📹 Appel entrant";
 "notification_inline_reply_failed" = "** Échec de l’envoi - veuillez ouvrir le salon";
 "notification_invite_body" = "Vous a invité(e) à discuter";
@@ -665,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Élément %1$d sur %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimiser la qualité de l'image";
 "screen_media_upload_preview_processing" = "Traitement en cours…";
+"screen_onboarding_welcome_back" = "Bon retour parmi nous";
 "screen_pinned_timeline_empty_state_description" = "Cliquez (clic long) sur un message et choisissez « %1$@ » pour qu‘il apparaisse ici.";
 "screen_pinned_timeline_empty_state_headline" = "Épinglez les messages importants pour leur donner plus de visibilité";
 "screen_push_history_title" = "Historique des Push";
@@ -767,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Ce salon existe";
 "screen_start_chat_join_room_by_address_room_not_found" = "Salon non trouvé";
 "screen_start_chat_join_room_by_address_supporting_text" = "ex: #nom-du-salon:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Partagé %1$@";
+"screen_static_location_sheet_title" = "Sur la carte";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Le message n'a pas été envoyé car l'identité vérifiée de %1$@ a été réinitialisée.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Le message n'a pas été envoyé car %1$@ n'a pas vérifié tous ses appareils.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message non envoyé car vous n'avez pas vérifié tous vos appareils.";
@@ -1267,7 +1275,7 @@
 "screen_share_open_apple_maps" = "Ouvrir dans Apple Maps";
 "screen_share_open_google_maps" = "Ouvrir dans Google Maps";
 "screen_share_open_osm_maps" = "Ouvrir dans OpenStreetMap";
-"screen_share_this_location_action" = "Partager cette position";
+"screen_share_this_location_action" = "Partager la position sélectionnée";
 "screen_signed_out_reason_1" = "Le mot de passe de votre compte a été modifié sur un autre appareil";
 "screen_signed_out_reason_2" = "Cette session a été supprimée depuis un autre appareil";
 "screen_signed_out_reason_3" = "L’administrateur de votre serveur a révoqué votre accès.";
