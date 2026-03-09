@@ -48,15 +48,11 @@ final class ClassicAppManager: ClassicAppManagerProtocol {
             throw ClassicAppManagerError.missingCryptoStorePassphrase
         }
         
-        let accountManager = ClassicAppAccountManager(cacheFolder: url, iv: accountIV, aesKey: accountAESKey)
+        let accountManager = ClassicAppAccountManager(cacheFolder: url,
+                                                      aesKey: accountAESKey,
+                                                      iv: accountIV,
+                                                      cryptoStorePassphrase: cryptoStorePassphrase)
         accountManager.loadAccounts()
-        let activeAccounts = accountManager.activeAccounts
-        
-        MXLog.info("Loaded \(accountManager.accounts.count) accounts")
-        MXLog.verbose("Loaded accounts: \(accountManager.accounts.compactMap(\.credentials.userID).formatted(.list(type: .and)))")
-        MXLog.info("Found \(activeAccounts.count) active accounts")
-        MXLog.verbose("Active accounts: \(activeAccounts.compactMap(\.userID).formatted(.list(type: .and)))")
-        
-        return activeAccounts
+        return accountManager.accounts
     }
 }
