@@ -2516,7 +2516,7 @@ internal enum L10n {
   internal static var screenRoomAttachmentSourceFiles: String { return L10n.tr("Localizable", "screen_room_attachment_source_files") }
   /// Photo & Video Library
   internal static var screenRoomAttachmentSourceGallery: String { return L10n.tr("Localizable", "screen_room_attachment_source_gallery") }
-  /// Location
+  /// Share location
   internal static var screenRoomAttachmentSourceLocation: String { return L10n.tr("Localizable", "screen_room_attachment_source_location") }
   /// Poll
   internal static var screenRoomAttachmentSourcePoll: String { return L10n.tr("Localizable", "screen_room_attachment_source_poll") }
@@ -3171,8 +3171,10 @@ internal enum L10n {
   internal static var screenShareOpenGoogleMaps: String { return L10n.tr("Localizable", "screen_share_open_google_maps") }
   /// Open in OpenStreetMap
   internal static var screenShareOpenOsmMaps: String { return L10n.tr("Localizable", "screen_share_open_osm_maps") }
-  /// Share pinned location
+  /// Share selected location
   internal static var screenShareThisLocationAction: String { return L10n.tr("Localizable", "screen_share_this_location_action") }
+  /// Sharing options
+  internal static var screenSharingLocationOptionSheetTitle: String { return L10n.tr("Localizable", "screen_sharing_location_option_sheet_title") }
   /// You’ve changed your password on another session
   internal static var screenSignedOutReason1: String { return L10n.tr("Localizable", "screen_signed_out_reason_1") }
   /// You have deleted the session from another session

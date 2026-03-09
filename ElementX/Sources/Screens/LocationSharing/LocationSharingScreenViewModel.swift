@@ -132,7 +132,9 @@ extension LocationSharingScreenViewModel {
         case staticPinLocation
     }
     
-    static func mock(type: MockType, senderID: String = "@dan:matrix.org") -> LocationSharingScreenViewModel {
+    static func mock(type: MockType,
+                     senderID: String = "@dan:matrix.org",
+                     liveLocationSharingEnabled: Bool = true) -> LocationSharingScreenViewModel {
         let interactionMode: LocationSharingInteractionMode = switch type {
         case .picker:
             .picker
@@ -152,7 +154,7 @@ extension LocationSharingScreenViewModel {
         
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
                                               mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
-                                              liveLocationSharingEnabled: true,
+                                              liveLocationSharingEnabled: liveLocationSharingEnabled,
                                               roomProxy: JoinedRoomProxyMock(.init()),
                                               timelineController: MockTimelineController(),
                                               analytics: ServiceLocator.shared.analytics,

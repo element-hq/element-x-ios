@@ -12,6 +12,11 @@ struct StaticLocationSheet: View {
     @Bindable var context: LocationSharingScreenViewModel.Context
     @State private var height = CGFloat.zero
     
+    /// Fixes an iOS 26 sheet issue
+    /// if the content doesn't meet a certain size
+    /// additional insets are added.
+    private let additionalHeight: CGFloat = 14
+    
     var body: some View {
         mainContent
             .readHeight($height)
@@ -19,19 +24,18 @@ struct StaticLocationSheet: View {
             .presentationBackground(.compound.bgCanvasDefault)
             .presentationBackgroundInteraction(.enabled)
             .presentationDragIndicator(.hidden)
-            .presentationDetents([.height(height)])
+            .presentationDetents([.height(height + additionalHeight)])
     }
     
-    @ViewBuilder
     private var mainContent: some View {
-        if case let .viewStatic(location) = context.viewState.interactionMode,
-           let userProfile = context.viewState.userProfile {
-            VStack(spacing: 0) {
-                Text(L10n.screenStaticLocationSheetTitle)
-                    .foregroundStyle(.compound.textPrimary)
-                    .font(.compound.bodyLGSemibold)
-                    .padding(.top, 29)
-                    .padding(.bottom, 25)
+        VStack(spacing: 0) {
+            Text(L10n.screenStaticLocationSheetTitle)
+                .foregroundStyle(.compound.textPrimary)
+                .font(.compound.bodyLGSemibold)
+                .padding(.bottom, 25)
+                .padding(.top, 29)
+            if case let .viewStatic(location) = context.viewState.interactionMode,
+               let userProfile = context.viewState.userProfile {
                 Button {
                     context.showShareSheet = true
                 } label: {

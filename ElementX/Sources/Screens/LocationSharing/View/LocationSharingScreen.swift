@@ -56,7 +56,7 @@ struct LocationSharingScreen: View {
             .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
             
             if context.viewState.isLocationPickerMode {
-                LocationMarkerView(userProfile: context.viewState.staticLocationMarkerUserProfile, mediaProvider: context.mediaProvider)
+                LocationMarkerView(userProfile: context.viewState.locationMarkerUserProfile, mediaProvider: context.mediaProvider)
             }
         }
         .overlay(alignment: .topTrailing) {
@@ -76,11 +76,11 @@ struct LocationSharingScreen: View {
     private var mapOptions: MapLibreMapView.Options {
         var annotations: [String: LocationAnnotation] = [:]
         if !context.viewState.isLocationPickerMode {
-            let id = context.viewState.staticLocationMarkerUserProfile?.userID ?? UUID().uuidString
+            let id = context.viewState.locationMarkerUserProfile?.userID ?? UUID().uuidString
             let annotation = LocationAnnotation(id: id,
                                                 coordinate: context.viewState.initialMapCenter,
                                                 anchorPoint: .bottomCenter) {
-                LocationMarkerView(userProfile: context.viewState.staticLocationMarkerUserProfile, mediaProvider: context.mediaProvider)
+                LocationMarkerView(userProfile: context.viewState.locationMarkerUserProfile, mediaProvider: context.mediaProvider)
             }
             annotations[id] = annotation
         }
@@ -129,10 +129,10 @@ struct LocationSharingScreen: View {
     @ViewBuilder
     private var shareSheet: some View {
         let location = context.viewState.initialMapCenter
-        let senderName = context.viewState.staticLocationMarkerUserProfile?.displayName ?? context.viewState.staticLocationMarkerUserProfile?.userID
+        let senderName = context.viewState.locationMarkerUserProfile?.displayName ?? context.viewState.locationMarkerUserProfile?.userID
         AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location, senderName: senderName)],
                         applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location, senderName: senderName) })
-            .edgesIgnoringSafeArea(.bottom)
+            .ignoresSafeArea(edges: .bottom)
             .presentationDetents([.medium, .large])
             .presentationCompactAdaptation(shareSheetCompactPresentation)
             .presentationDragIndicator(.hidden)
@@ -152,6 +152,8 @@ struct LocationSharingScreen: View {
 struct LocationSharingScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = LocationSharingScreenViewModel.mock(type: .staticSenderLocation)
     
+    static let withoutLiveSharingViewModel = LocationSharingScreenViewModel.mock(type: .picker, liveLocationSharingEnabled: false)
+    
     static let pinViewModel = LocationSharingScreenViewModel.mock(type: .staticPinLocation)
     
     static let pickerViewModel = LocationSharingScreenViewModel.mock(type: .picker)
@@ -161,6 +163,11 @@ struct LocationSharingScreen_Previews: PreviewProvider, TestablePreview {
             LocationSharingScreen(context: pickerViewModel.context)
         }
         .previewDisplayName("Picker")
+        
+        ElementNavigationStack {
+            LocationSharingScreen(context: withoutLiveSharingViewModel.context)
+        }
+        .previewDisplayName("Picker without live location sharing")
         
         ElementNavigationStack {
             LocationSharingScreen(context: viewModel.context)

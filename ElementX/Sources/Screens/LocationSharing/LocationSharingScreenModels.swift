@@ -72,8 +72,9 @@ struct LocationSharingScreenViewState: BindableState {
         }
     }
     
+    /// Returns true if the user's location has not yet been determined, while location permissions are given or not yet set
+    /// Does not work as intended on simulator.
     var isLocationLoading: Bool {
-        // May not work as intended on simulator
         !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized != false
     }
 
@@ -92,7 +93,7 @@ struct LocationSharingScreenViewState: BindableState {
     
     var userProfile: UserProfileProxy?
     
-    var staticLocationMarkerUserProfile: UserProfileProxy? {
+    var locationMarkerUserProfile: UserProfileProxy? {
         switch interactionMode {
         case .picker:
             isSharingUserLocation ? userProfile : nil
@@ -158,11 +159,4 @@ extension AlertInfo where T == LocationSharingViewError {
                       secondaryButton: secondaryButton)
         }
     }
-}
-
-struct StaticLocationData: Hashable {
-    let sender: TimelineItemSender
-    let geoURI: GeoURI
-    let kind: StaticLocationKind
-    let timestamp: Date
 }

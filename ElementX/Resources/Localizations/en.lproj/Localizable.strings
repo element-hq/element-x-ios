@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Security & privacy";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "View members";
@@ -1095,7 +1096,7 @@
 "screen_room_attachment_source_camera_video" = "Record video";
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
-"screen_room_attachment_source_location" = "Location";
+"screen_room_attachment_source_location" = "Share location";
 "screen_room_attachment_source_poll" = "Poll";
 "screen_room_attachment_text_formatting" = "Text Formatting";
 "screen_room_change_permissions_administrators" = "Admin";
@@ -1275,7 +1276,7 @@
 "screen_share_open_apple_maps" = "Open in Apple Maps";
 "screen_share_open_google_maps" = "Open in Google Maps";
 "screen_share_open_osm_maps" = "Open in OpenStreetMap";
-"screen_share_this_location_action" = "Share pinned location";
+"screen_share_this_location_action" = "Share selected location";
 "screen_signed_out_reason_1" = "You’ve changed your password on another session";
 "screen_signed_out_reason_2" = "You have deleted the session from another session";
 "screen_signed_out_reason_3" = "Your server’s administrator has invalidated your access";

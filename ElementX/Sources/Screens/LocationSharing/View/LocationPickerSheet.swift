@@ -12,8 +12,20 @@ struct LocationPickerSheet: View {
     @Bindable var context: LocationSharingScreenViewModel.Context
     @State private var height: CGFloat = .zero
     
+    /// Fixes an iOS 26 sheet issue
+    /// if the content doesn't meet a certain size
+    /// additional insets are added.
+    private var additionalHeight: CGFloat {
+        context.viewState.showLiveLocationSharingButton ? 0 : 28
+    }
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(spacing: 0) {
+            Text(L10n.screenSharingLocationOptionSheetTitle)
+                .foregroundStyle(.compound.textPrimary)
+                .font(.compound.bodyLGSemibold)
+                .padding(.top, 29)
+                .padding(.bottom, 25)
             Button {
                 context.send(viewAction: .selectLocation)
             } label: {
@@ -35,15 +47,12 @@ struct LocationPickerSheet: View {
                 }
             }
         }
-        .font(.compound.bodyLG)
-        .foregroundStyle(.compound.textPrimary)
-        .padding(.top, 38)
         .readHeight($height)
         .interactiveDismissDisabled()
         .presentationBackground(.compound.bgCanvasDefault)
         .presentationBackgroundInteraction(.enabled)
         .presentationDragIndicator(.hidden)
-        .presentationDetents([.height(height)])
+        .presentationDetents([.height(height + additionalHeight)])
     }
 }
 
@@ -59,6 +68,8 @@ private struct LocationPickerLabel: View {
                 .padding(.vertical, 14)
                 .rowDivider(alignment: .top)
                 .padding(.trailing, 16)
+                .font(.compound.bodyLG)
+                .foregroundStyle(.compound.textPrimary)
         } icon: {
             CompoundIcon(icon)
                 .foregroundStyle(iconColor)
