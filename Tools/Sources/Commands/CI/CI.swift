@@ -14,7 +14,8 @@ struct CI: ParsableCommand {
                                                         ConfigureNightly.self,
                                                         ConfigureProduction.self,
                                                         TagNightly.self,
-                                                        UploadDSYMs.self
+                                                        UploadDSYMs.self,
+                                                        ReleaseToGitHub.self
                                                     ])
     
     static let testOutputDirectory = "test_output"
@@ -122,5 +123,42 @@ struct CI: ParsableCommand {
         }
         
         return result
+    }
+    
+    // MARK: - Git
+    
+    static func gitConfigureGlobals() async throws {
+        try await CI.run(.name("git"), ["config", "--global", "user.name", "Element CI"])
+        try await CI.run(.name("git"), ["config", "--global", "user.email", "ci@element.io"])
+    }
+    
+    static func gitRepositoryURL() async throws -> String {
+        guard let rawURL = try await CI.run(.name("git"), ["ls-remote", "--get-url", "origin"],
+                                            output: .string(limit: 4096)).standardOutput else {
+            throw ValidationError("Could not determine the git remote URL.")
+        }
+        
+        return rawURL
+            .replacingOccurrences(of: "http://", with: "")
+            .replacingOccurrences(of: "https://", with: "")
+            .replacingOccurrences(of: "git@", with: "")
+            .replacingOccurrences(of: ".git", with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    static func gitPush(tagName: String? = nil) async throws {
+        guard let apiToken = ProcessInfo.processInfo.environment["GITHUB_TOKEN"], !apiToken.isEmpty
+        else {
+            throw ValidationError("GITHUB_TOKEN environment variable is not set.")
+        }
+
+        let repoURL = try await CI.gitRepositoryURL()
+        
+        if let tagName {
+            try await CI.run(.name("git"), ["tag", tagName])
+            try await CI.run(.name("git"), ["push", "https://\(apiToken)@\(repoURL)", tagName])
+        } else {
+            try await CI.run(.name("git"), ["push", "https://\(apiToken)@\(repoURL)"])
+        }
     }
 }

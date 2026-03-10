@@ -1,5 +1,4 @@
 import ArgumentParser
-import CommandLineTools
 import Foundation
 
 struct UnitTests: AsyncParsableCommand {
