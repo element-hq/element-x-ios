@@ -6,21 +6,6 @@
 
 import Foundation
 
-open class BackupSecretsSDKMock: MatrixRustSDK.BackupSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-}
 open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -8015,21 +8000,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 }
-open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-}
 open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -8717,6 +8687,52 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
             self.recoverRecoveryKeyReceivedInvocations.append(recoveryKey)
         }
         try await recoverRecoveryKeyClosure?(recoveryKey)
+    }
+
+    //MARK: - recoverAndFixBackup
+
+    open var recoverAndFixBackupRecoveryKeyThrowableError: Error?
+    open var recoverAndFixBackupRecoveryKeyUnderlyingCallsCount = 0
+    open var recoverAndFixBackupRecoveryKeyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return recoverAndFixBackupRecoveryKeyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = recoverAndFixBackupRecoveryKeyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                recoverAndFixBackupRecoveryKeyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    recoverAndFixBackupRecoveryKeyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var recoverAndFixBackupRecoveryKeyCalled: Bool {
+        return recoverAndFixBackupRecoveryKeyCallsCount > 0
+    }
+    open var recoverAndFixBackupRecoveryKeyReceivedRecoveryKey: String?
+    open var recoverAndFixBackupRecoveryKeyReceivedInvocations: [String] = []
+    open var recoverAndFixBackupRecoveryKeyClosure: ((String) async throws -> Void)?
+
+    open override func recoverAndFixBackup(recoveryKey: String) async throws {
+        if let error = recoverAndFixBackupRecoveryKeyThrowableError {
+            throw error
+        }
+        recoverAndFixBackupRecoveryKeyCallsCount += 1
+        recoverAndFixBackupRecoveryKeyReceivedRecoveryKey = recoveryKey
+        DispatchQueue.main.async {
+            self.recoverAndFixBackupRecoveryKeyReceivedInvocations.append(recoveryKey)
+        }
+        try await recoverAndFixBackupRecoveryKeyClosure?(recoveryKey)
     }
 
     //MARK: - recoverAndReset
@@ -16663,16 +16679,16 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - reportContent
 
-    open var reportContentEventIdScoreReasonThrowableError: Error?
-    open var reportContentEventIdScoreReasonUnderlyingCallsCount = 0
-    open var reportContentEventIdScoreReasonCallsCount: Int {
+    open var reportContentEventIdReasonThrowableError: Error?
+    open var reportContentEventIdReasonUnderlyingCallsCount = 0
+    open var reportContentEventIdReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return reportContentEventIdScoreReasonUnderlyingCallsCount
+                return reportContentEventIdReasonUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = reportContentEventIdScoreReasonUnderlyingCallsCount
+                    returnValue = reportContentEventIdReasonUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -16680,31 +16696,31 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                reportContentEventIdScoreReasonUnderlyingCallsCount = newValue
+                reportContentEventIdReasonUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    reportContentEventIdScoreReasonUnderlyingCallsCount = newValue
+                    reportContentEventIdReasonUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var reportContentEventIdScoreReasonCalled: Bool {
-        return reportContentEventIdScoreReasonCallsCount > 0
+    open var reportContentEventIdReasonCalled: Bool {
+        return reportContentEventIdReasonCallsCount > 0
     }
-    open var reportContentEventIdScoreReasonReceivedArguments: (eventId: String, score: Int32?, reason: String?)?
-    open var reportContentEventIdScoreReasonReceivedInvocations: [(eventId: String, score: Int32?, reason: String?)] = []
-    open var reportContentEventIdScoreReasonClosure: ((String, Int32?, String?) async throws -> Void)?
+    open var reportContentEventIdReasonReceivedArguments: (eventId: String, reason: String?)?
+    open var reportContentEventIdReasonReceivedInvocations: [(eventId: String, reason: String?)] = []
+    open var reportContentEventIdReasonClosure: ((String, String?) async throws -> Void)?
 
-    open override func reportContent(eventId: String, score: Int32?, reason: String?) async throws {
-        if let error = reportContentEventIdScoreReasonThrowableError {
+    open override func reportContent(eventId: String, reason: String?) async throws {
+        if let error = reportContentEventIdReasonThrowableError {
             throw error
         }
-        reportContentEventIdScoreReasonCallsCount += 1
-        reportContentEventIdScoreReasonReceivedArguments = (eventId: eventId, score: score, reason: reason)
+        reportContentEventIdReasonCallsCount += 1
+        reportContentEventIdReasonReceivedArguments = (eventId: eventId, reason: reason)
         DispatchQueue.main.async {
-            self.reportContentEventIdScoreReasonReceivedInvocations.append((eventId: eventId, score: score, reason: reason))
+            self.reportContentEventIdReasonReceivedInvocations.append((eventId: eventId, reason: reason))
         }
-        try await reportContentEventIdScoreReasonClosure?(eventId, score, reason)
+        try await reportContentEventIdReasonClosure?(eventId, reason)
     }
 
     //MARK: - reportRoom
@@ -22057,21 +22073,6 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
             return ownMembershipDetailsReturnValue
         }
     }
-}
-open class SecretsBundleSDKMock: MatrixRustSDK.SecretsBundle, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
 }
 open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle, @unchecked Sendable {
     public init() {

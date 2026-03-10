@@ -69,6 +69,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return buildCallInviteTimelineItem(for: eventItemProxy)
         case .rtcNotification:
             return buildCallNotificationTimelineItem(for: eventItemProxy)
+        case .liveLocation:
+            // TODO: Implement
+            return nil
         }
     }
     

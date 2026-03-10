@@ -86,6 +86,9 @@ struct RoomEventStringBuilder {
             return prefix(L10n.commonUnsupportedCall, with: displayName, isOutgoing: isOutgoing)
         case .rtcNotification:
             return prefix(L10n.commonCallStarted, with: displayName, isOutgoing: isOutgoing)
+        case .liveLocation:
+            // TODO: Implement
+            return nil
         }
     }
     
