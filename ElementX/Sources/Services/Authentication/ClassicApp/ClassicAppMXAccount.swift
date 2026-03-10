@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ClassicAppAccount {
+struct ClassicAppAccount: Equatable {
     let userID: String
     let displayName: String?
     let avatarURL: URL?
@@ -18,7 +18,7 @@ struct ClassicAppAccount {
 
 // MARK: NSCoding Types
 
-class ClassicAppMXAccount: NSObject, NSCoding {
+final class ClassicAppMXAccount: NSObject, NSCoding {
     /// The obtained user ID.
     var userID: String
     /// The homeserver url (ex: "https://matrix.org").
@@ -83,7 +83,7 @@ class ClassicAppMXAccount: NSObject, NSCoding {
 }
 
 /// `MXUser` represents a user in Matrix.
-class ClassicAppMXUser: NSObject, NSCoding {
+final class ClassicAppMXUser: NSObject, NSCoding {
     /// The user id.
     let userID: String
     /// The user display name.

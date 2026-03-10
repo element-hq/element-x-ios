@@ -25,16 +25,16 @@ class ClassicAppAccountManager {
     func loadAccounts() {
         MXLog.info("Loading accounts from Classic app.")
         
+        // First we need to load the accounts file, which contains an array of MXKAccounts (a super class of MXAccount).
         let accountFile = accountFile()
         if FileManager.default.fileExists(atPath: accountFile.path(percentEncoded: false)) {
             let startDate = Date()
             
             do {
                 let fileContent = try Data(contentsOf: accountFile, options: [.alwaysMapped, .uncached])
-                
-                // Decrypt data if encryption method is provided
                 let unciphered = try ClassicAppAES.decrypt(fileContent, aesKey: aesKey, iv: iv)
-                let decoder = NSKeyedUnarchiver(forReadingWith: unciphered)
+                let decoder = try NSKeyedUnarchiver(forReadingFrom: unciphered)
+                decoder.requiresSecureCoding = false
                 decoder.setClass(ClassicAppMXAccount.self, forClassName: "MXKAccount")
                 
                 guard let mxAccounts = decoder.decodeObject(forKey: "mxAccounts") as? [ClassicAppMXAccount] else {
@@ -44,6 +44,8 @@ class ClassicAppAccountManager {
                 
                 MXLog.info("\(mxAccounts.count) accounts loaded in \(Date().timeIntervalSince(startDate) * 1000)ms.")
                 
+                // Only consider active accounts using the same logic as Element Classic and then
+                // combine the MXAccount data with its profile and crypto store details.
                 accounts = mxAccounts
                     .filter(\.isActive)
                     .compactMap(makeAccount)
@@ -57,9 +59,10 @@ class ClassicAppAccountManager {
     
     // MARK: - Private
     
+    /// Combines an MXAccount with its profile and crypto store details.
     private func makeAccount(for mxAccount: ClassicAppMXAccount) -> ClassicAppAccount? {
         let userID = mxAccount.userID
-        let user = loadUser(for: mxAccount)
+        let user = loadUser(for: mxAccount) // We need an MXUser for the profile as MXAccount doesn't contain that data.
         
         guard let serverName = serverName(for: userID) else { return nil }
         
@@ -72,13 +75,21 @@ class ClassicAppAccountManager {
     }
     
     private func loadUser(for mxAccount: ClassicAppMXAccount) -> ClassicAppMXUser? {
+        // Users are stored across multiple files, so first find the right file for this particular user.
         let userID = mxAccount.userID
-        let groupID = String(userID.hash % 100)
-        let groupFile = storeUsersPath(for: userID).appendingPathComponent(groupID)
+        let groupID = String(UInt(bitPattern: userID.hash) % 100) // Swift's .hash is Int whereas Objective-C's is UInt.
+        let groupFile = storeUsersPath(for: userID).appending(component: groupID)
+        
+        guard FileManager.default.fileExists(atPath: groupFile.path(percentEncoded: false)) else {
+            MXLog.warning("Missing users group \(groupID) file for \(mxAccount.userID).")
+            return nil
+        }
         
         do {
+            // And then load that file and find the user within its data.
             let fileContent = try Data(contentsOf: groupFile)
-            let decoder = NSKeyedUnarchiver(forReadingWith: fileContent)
+            let decoder = try NSKeyedUnarchiver(forReadingFrom: fileContent)
+            decoder.requiresSecureCoding = false
             decoder.setClass(ClassicAppMXUser.self, forClassName: "MXUser")
             decoder.setClass(ClassicAppMXUser.self, forClassName: "MXMyUser")
             
@@ -92,7 +103,6 @@ class ClassicAppAccountManager {
     
     /// The server name extracted from the user's ID.
     private func serverName(for userID: String) -> String? {
-        #warning("Expose a serverName method for this from the SDK?")
         let components = userID.components(separatedBy: ":")
         guard components.count > 1 else { return nil }
         return components[1] // Directly use [1] as .last may be the port number.
@@ -107,17 +117,17 @@ class ClassicAppAccountManager {
     private static let kMXFileStoreUsersFolder = "users"
     
     /// The file URL that contains the app's `MXAccounts` array.
-    private func accountFile() -> URL {
+    func accountFile() -> URL {
         cacheFolder.appending(component: Self.matrixKitFolder).appending(component: Self.kMXKAccountsKey)
     }
     
     /// The database file URL as defined in `MXCryptoMachineStore`.
-    private func cryptoStoreURL(for userID: String) -> URL {
+    func cryptoStoreURL(for userID: String) -> URL {
         cacheFolder.appending(component: Self.cryptoStoreFolder).appending(component: userID)
     }
     
     /// This store contains all of the users known to the specific user ID.
-    private func storeUsersPath(for userID: String) -> URL {
+    func storeUsersPath(for userID: String) -> URL {
         storePath(for: userID).appending(component: Self.kMXFileStoreUsersFolder)
     }
     

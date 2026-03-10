@@ -19,6 +19,7 @@ enum ClassicAppManagerError: Error {
     case missingCryptoStorePassphrase
 }
 
+/// Reads accounts from Element Classic's shared storage.
 final class ClassicAppManager: ClassicAppManagerProtocol {
     private enum KeychainKeys: String {
         case cryptoSDKStoreKey
@@ -29,16 +30,28 @@ final class ClassicAppManager: ClassicAppManagerProtocol {
     private let classicAppGroupIdentifier: String
     private let keychain: Keychain
     
-    init(classicAppGroupIdentifier: String, classicAppKeychainServiceIdentifier: String, classicAppKeychainAccessGroupIdentifier: String) {
+    /// Creates an instance using the Classic app identifiers specified in the `Info.plist` file.
+    /// Returns `nil` when a Classic app has not been configured in the project.
+    init?(classicAppGroupIdentifier: String? = InfoPlistReader.main.classicAppGroupIdentifier,
+          classicAppKeychainServiceIdentifier: String? = InfoPlistReader.main.classicAppKeychainServiceIdentifier,
+          classicAppKeychainAccessGroupIdentifier: String? = InfoPlistReader.main.classicAppKeychainAccessGroupIdentifier) {
+        guard let classicAppGroupIdentifier, let classicAppKeychainServiceIdentifier, let classicAppKeychainAccessGroupIdentifier else {
+            MXLog.info("Classic App IDs not available, skipping initialisation.")
+            return nil
+        }
+        
         self.classicAppGroupIdentifier = classicAppGroupIdentifier
         keychain = Keychain(service: classicAppKeychainServiceIdentifier, accessGroup: classicAppKeychainAccessGroupIdentifier)
     }
     
+    /// Loads all of the active accounts from the Classic app.
     func loadAccounts() throws -> [ClassicAppAccount] {
+        // The account data is stored in the App Group container.
         guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: classicAppGroupIdentifier) else {
             throw ClassicAppManagerError.invalidAppGroupIdentifier(classicAppGroupIdentifier)
         }
         
+        // And the data is encrypted with keys that are stored in the Keychain.
         guard let accountIV = try keychain.getData(KeychainKeys.accountIV.rawValue),
               let accountAESKey = try keychain.getData(KeychainKeys.accountAESKey.rawValue) else {
             throw ClassicAppManagerError.missingAccountKeys
