@@ -28,7 +28,7 @@ struct PlaceholderScreen: View {
     let hideGradientBackground: Bool
     
     var body: some View {
-        AuthenticationStartLogo(hideBrandChrome: hideBrandChrome)
+        AuthenticationStartLogo(hideBrandChrome: hideBrandChrome, isOnGradient: !hideGradientBackground)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background {
                 if !hideGradientBackground {
