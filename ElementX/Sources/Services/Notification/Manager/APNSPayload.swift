@@ -21,10 +21,12 @@ struct APSAlert: Encodable {
 struct APSInfo: Encodable {
     let mutableContent: Int
     let alert: APSAlert
+    let sound: String?
 
     enum CodingKeys: String, CodingKey {
         case mutableContent = "mutable-content"
         case alert
+        case sound
     }
 }
 

@@ -92,7 +92,8 @@ final class NotificationManagerTests {
         #expect(data.format == .eventIdOnly)
         let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
                                                       alert: APSAlert(locKey: "Notification",
-                                                                      locArgs: [])),
+                                                                      locArgs: []),
+                                                      sound: "default"),
                                          pusherNotificationClientIdentifier: nil)
         #expect(try data.defaultPayload == (defaultPayload.toJsonString()))
     }
