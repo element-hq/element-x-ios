@@ -116,6 +116,12 @@
 	<string>$(APP_GROUP_IDENTIFIER)</string>
 	<key>baseBundleIdentifier</key>
 	<string>$(BASE_BUNDLE_IDENTIFIER)</string>
+	<key>classicAppGroupIdentifier</key>
+	<string>$(CLASSIC_APP_GROUP_IDENTIFIER)</string>
+	<key>classicAppKeychainAccessGroupIdentifier</key>
+	<string>$(CLASSIC_APP_KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
+	<key>classicAppKeychainServiceIdentifier</key>
+	<string>$(CLASSIC_APP_KEYCHAIN_SERVICE_IDENTIFIER)</string>
 	<key>keychainAccessGroupIdentifier</key>
 	<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
 	<key>productionAppName</key>

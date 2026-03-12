@@ -20,18 +20,21 @@ struct TemplateScreenViewModelTests {
         viewModel = TemplateScreenViewModel()
     }
     
-    func testInitialState() {
+    @Test
+    func initialState() {
         #expect(!context.composerText.isEmpty)
         #expect(context.viewState.counter == 0)
     }
     
-    func testTextField() {
+    @Test
+    func textField() {
         context.composerText = "123"
         context.send(viewAction: .textChanged)
         #expect(context.composerText == "123")
     }
     
-    func testCounter() async throws {
+    @Test
+    func counter() async throws {
         var deferred = deferFulfillment(context.observe(\.viewState.counter)) { $0 == 1 }
         context.send(viewAction: .incrementCounter)
         try await deferred.fulfill()
