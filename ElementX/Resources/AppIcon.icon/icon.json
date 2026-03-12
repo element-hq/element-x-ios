@@ -4,6 +4,17 @@
     {
       "layers" : [
         {
+          "image-name" : "Logo-1 (1).png",
+          "name" : "Logo-1 (1)",
+          "position" : {
+            "scale" : 1.18,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        },
+        {
           "glass" : false,
           "image-name" : "AppIcon.png",
           "name" : "AppIcon"
@@ -17,6 +28,19 @@
       "specular" : false,
       "translucency" : {
         "enabled" : false,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
         "value" : 0.5
       }
     }
