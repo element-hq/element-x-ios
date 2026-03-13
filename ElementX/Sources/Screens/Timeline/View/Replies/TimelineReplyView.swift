@@ -73,6 +73,11 @@ struct TimelineReplyView: View {
                               plainBody: question,
                               formattedBody: nil,
                               icon: .init(kind: .icon(\.polls), cornerRadii: iconCornerRadii))
+                case .liveLocation:
+                    ReplyView(sender: sender,
+                              plainBody: L10n.commonSharedLiveLocation,
+                              formattedBody: nil,
+                              icon: .init(kind: .icon(\.locationPin), cornerRadii: iconCornerRadii))
                 case .redacted:
                     ReplyView(sender: sender,
                               plainBody: L10n.commonMessageRemoved,
@@ -282,6 +287,11 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                 eventID: "123",
                                                                 eventContent: .message(.location(.init(body: ""))))),
+            
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
+                                                                eventContent: .liveLocation)),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),

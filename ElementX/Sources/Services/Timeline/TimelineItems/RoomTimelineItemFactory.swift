@@ -439,22 +439,22 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                _ messageLikeContent: MsgLikeContent,
                                                _ liveLocationContent: LiveLocationContent,
                                                _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
-        LiveLocationTimelineItem(id: eventItemProxy.id,
-                                 timestamp: eventItemProxy.timestamp,
-                                 isOutgoing: isOutgoing,
-                                 isEditable: eventItemProxy.isEditable,
-                                 canBeRepliedTo: eventItemProxy.canBeRepliedTo,
-                                 sender: eventItemProxy.sender,
-                                 content: .init(from: liveLocationContent, timestamp: eventItemProxy.timestamp),
-                                 properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
-                                                   isThreaded: messageLikeContent.threadRoot != nil,
-                                                   threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
-                                                   isEdited: false, // Can never be edited
-                                                   reactions: buildAggregatedReactions(messageLikeContent.reactions),
-                                                   deliveryStatus: eventItemProxy.deliveryStatus,
-                                                   orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                                   encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
-                                                   encryptionForwarder: eventItemProxy.forwarder))
+        LiveLocationRoomTimelineItem(id: eventItemProxy.id,
+                                     timestamp: eventItemProxy.timestamp,
+                                     isOutgoing: isOutgoing,
+                                     isEditable: eventItemProxy.isEditable,
+                                     canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                     sender: eventItemProxy.sender,
+                                     content: .init(from: liveLocationContent, timestamp: eventItemProxy.timestamp),
+                                     properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
+                                                       isThreaded: messageLikeContent.threadRoot != nil,
+                                                       threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
+                                                       isEdited: false, // Can never be edited
+                                                       reactions: buildAggregatedReactions(messageLikeContent.reactions),
+                                                       deliveryStatus: eventItemProxy.deliveryStatus,
+                                                       orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
+                                                       encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                       encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildRedactedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
@@ -874,6 +874,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                     replyContent = .message(.text(.init(body: body)))
                 case .redacted:
                     replyContent = .redacted
+                case .liveLocation:
+                    replyContent = .liveLocation
                 default:
                     replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
                 }

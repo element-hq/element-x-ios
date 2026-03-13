@@ -271,6 +271,10 @@ private extension EventBasedTimelineItemProtocol {
             return locationTimelineItem.content.geoURI == nil ||
                 properties.replyDetails != nil ||
                 properties.isThreaded ? defaultInsets : .zero
+        case let liveLocationTimelineItem as LiveLocationRoomTimelineItem:
+            return liveLocationTimelineItem.content.lastLocation?.geoURI == nil ||
+                properties.replyDetails != nil ||
+                properties.isThreaded ? defaultInsets : .zero
         default:
             return defaultInsets
         }
@@ -278,7 +282,7 @@ private extension EventBasedTimelineItemProtocol {
     
     var contentCornerRadius: CGFloat {
         switch self {
-        case is ImageRoomTimelineItem, is VideoRoomTimelineItem, is LocationRoomTimelineItem:
+        case is ImageRoomTimelineItem, is VideoRoomTimelineItem, is LocationRoomTimelineItem, is LiveLocationRoomTimelineItem:
             return properties.replyDetails != nil || properties.isThreaded ? 8 : .zero
         default:
             return .zero

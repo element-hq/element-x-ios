@@ -32,7 +32,7 @@ private struct TimelineItemSendInfoModifier: ViewModifier {
             AnyLayout(HStackLayout(alignment: .bottom, spacing: spacing))
         case .vertical(let spacing):
             AnyLayout(GridLayout(alignment: .leading, verticalSpacing: spacing))
-        case .overlay:
+        case .overlay, .hidden:
             AnyLayout(ZStackLayout(alignment: .bottomTrailing))
         }
     }
@@ -93,6 +93,8 @@ private struct TimelineItemSendInfoLabel: View {
                 content
                     .gridColumnAlignment(.trailing)
             }
+        case .hidden:
+            EmptyView()
         }
     }
     
@@ -125,6 +127,7 @@ private struct TimelineItemSendInfo {
         case horizontal(spacing: CGFloat = 4)
         case vertical(spacing: CGFloat = 4)
         case overlay(capsuleStyle: Bool)
+        case hidden
     }
     
     let itemID: TimelineItemIdentifier
@@ -164,6 +167,9 @@ private extension TimelineItemSendInfo {
         layoutType = switch timelineItem {
         case is TextBasedRoomTimelineItem:
             .overlay(capsuleStyle: false)
+        case let liveLocationTimelineItem as LiveLocationRoomTimelineItem:
+            // swiftlint:disable:next void_function_in_ternary
+            liveLocationTimelineItem.isOutgoing ? .hidden : liveLocationTimelineItem.content.lastLocation?.geoURI != nil ? .overlay(capsuleStyle: true) : .horizontal()
         case let message as EventBasedMessageTimelineItemProtocol:
             switch message {
             case is ImageRoomTimelineItem, is VideoRoomTimelineItem:

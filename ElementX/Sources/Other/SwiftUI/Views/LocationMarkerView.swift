@@ -9,11 +9,85 @@
 import Compound
 import SwiftUI
 
+enum LocationMarkerKind {
+    case pin
+    case staticUser(UserProfileProxy)
+    case liveUser(UserProfileProxy)
+    case placeholder
+    
+    var id: String {
+        switch self {
+        case .pin, .placeholder:
+            UUID().uuidString
+        case .staticUser(let profile), .liveUser(let profile):
+            profile.userID
+        }
+    }
+    
+    var displayName: String? {
+        switch self {
+        case .pin, .placeholder:
+            nil
+        case .staticUser(let profile), .liveUser(let profile):
+            profile.displayName
+        }
+    }
+    
+    var userProfile: UserProfileProxy? {
+        switch self {
+        case .pin, .placeholder:
+            nil
+        case .staticUser(let profile), .liveUser(let profile):
+            profile
+        }
+    }
+}
+
 struct LocationMarkerView: View {
-    var userProfile: UserProfileProxy?
-    var fillColor = Color.compound.bgCanvasDefault
-    var strokeColor = Color.compound.iconSecondaryAlpha
-    var dotColor = Color.compound.iconPrimary
+    var kind: LocationMarkerKind
+    
+    var fillColor: Color {
+        switch kind {
+        case .pin, .staticUser:
+            .compound.bgCanvasDefault
+        case .liveUser:
+            .compound.iconAccentPrimary
+        case .placeholder:
+            .compound.bgSubtleSecondary
+        }
+    }
+    
+    var externalStrokeColor: Color {
+        switch kind {
+        case .pin, .staticUser:
+            .compound.iconSecondaryAlpha
+        case .liveUser:
+            .compound.iconAccentPrimary
+        case .placeholder:
+            .compound.iconDisabled
+        }
+    }
+    
+    var internalStrokeColor: Color {
+        switch kind {
+        case .pin, .staticUser:
+            .compound.iconSecondaryAlpha
+        case .liveUser:
+            .compound.bgCanvasDefault
+        case .placeholder:
+            .compound.iconDisabled
+        }
+    }
+    
+    var dotColor: Color {
+        switch kind {
+        case .placeholder:
+            .compound.iconDisabled
+        default:
+            .compound.iconPrimary
+        }
+    }
+    
     @ScaledMetric var size: CGFloat = 42
     var mediaProvider: MediaProviderProtocol?
     
@@ -55,7 +129,7 @@ struct LocationMarkerView: View {
                 p.closeSubpath()
             }
             
-            context.stroke(pinPath, with: .color(strokeColor), lineWidth: 2 * scaleX)
+            context.stroke(pinPath, with: .color(externalStrokeColor), lineWidth: 2 * scaleX)
             context.fill(pinPath, with: .color(fillColor))
             
             // Dot
@@ -66,20 +140,20 @@ struct LocationMarkerView: View {
             context.fill(dotPath, with: .color(dotColor))
             
             // Draw resolved symbol centered on the circle
-            if userProfile != nil, let symbol = context.resolveSymbol(id: 0) {
+            if kind.userProfile != nil, let symbol = context.resolveSymbol(id: 0) {
                 let center = CGPoint(x: circleCenter.x * scaleX,
                                      y: circleCenter.y * scaleY)
                 context.draw(symbol, at: center, anchor: .center)
             }
         } symbols: {
-            if let userProfile {
+            if let userProfile = kind.userProfile {
                 LoadableAvatarImage(url: userProfile.avatarURL,
                                     name: userProfile.displayName,
                                     contentID: userProfile.userID,
                                     avatarSize: .user(on: .map),
                                     mediaProvider: mediaProvider)
                     .overlay {
-                        Circle().inset(by: 0.5).stroke(strokeColor)
+                        Circle().inset(by: 0.5).stroke(internalStrokeColor)
                     }
                     .tag(0)
             }
@@ -94,17 +168,27 @@ struct LocationMarkerView: View {
 struct LocationMarkerView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 30) {
-            LocationMarkerView()
+            // Placeholder
+            LocationMarkerView(kind: .placeholder)
             
-            LocationMarkerView()
-                .colorScheme(.dark)
+            // Pin (no user)
+            LocationMarkerView(kind: .pin)
             
-            LocationMarkerView(userProfile: UserProfileProxy.mockDan,
+            // Static user with avatar
+            LocationMarkerView(kind: .staticUser(.mockDan),
                                mediaProvider: MediaProviderMock(configuration: .init()))
             
-            LocationMarkerView(userProfile: UserProfileProxy.mockDan,
+            // Static user without avatar
+            LocationMarkerView(kind: .staticUser(.init(userID: "@someone:matrix.org",
+                                                       displayName: "Someone")))
+            
+            // Live user with avatar
+            LocationMarkerView(kind: .liveUser(.mockDan),
                                mediaProvider: MediaProviderMock(configuration: .init()))
-                .colorScheme(.dark)
+            
+            // Live user without avatar
+            LocationMarkerView(kind: .liveUser(.init(userID: "@someone:matrix.org",
+                                                     displayName: "Someone")))
         }
         .padding(16)
         .background(Color(red: 0.9, green: 0.85, blue: 0.8))

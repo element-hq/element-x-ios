@@ -34,6 +34,12 @@ struct LocationSharingScreenViewState: BindableState {
         self.mapURLBuilder = mapURLBuilder
         self.showLiveLocationSharingButton = showLiveLocationSharingButton
         self.ownUserID = ownUserID
+        userProfile = switch interactionMode {
+        case .viewStatic(let locationData):
+            .init(sender: locationData.sender)
+        case .picker:
+            .init(userID: ownUserID)
+        }
         
         bindings.showsUserLocationMode = switch interactionMode {
         case .picker: .showAndFollow
@@ -45,6 +51,10 @@ struct LocationSharingScreenViewState: BindableState {
     let mapURLBuilder: MapTilerURLBuilderProtocol
     let showLiveLocationSharingButton: Bool
     let ownUserID: String
+    
+    var isOwnUser: Bool {
+        userProfile.userID == ownUserID
+    }
     
     var bindings = LocationSharingScreenBindings(showsUserLocationMode: .hide)
  
@@ -91,14 +101,14 @@ struct LocationSharingScreenViewState: BindableState {
         }
     }
     
-    var userProfile: UserProfileProxy?
+    var userProfile: UserProfileProxy
     
-    var locationMarkerUserProfile: UserProfileProxy? {
+    var locationMarkerKind: LocationMarkerKind {
         switch interactionMode {
         case .picker:
-            isSharingUserLocation ? userProfile : nil
+            isSharingUserLocation ? .staticUser(userProfile) : .pin
         case .viewStatic(let location):
-            location.kind == .sender ? userProfile : nil
+            location.kind == .sender ? .staticUser(userProfile) : .pin
         }
     }
 }

@@ -34,13 +34,12 @@ struct StaticLocationSheet: View {
                 .font(.compound.bodyLGSemibold)
                 .padding(.bottom, 25)
                 .padding(.top, 29)
-            if case let .viewStatic(location) = context.viewState.interactionMode,
-               let userProfile = context.viewState.userProfile {
+            if case let .viewStatic(location) = context.viewState.interactionMode {
                 Button {
                     context.showShareSheet = true
                 } label: {
-                    UserLocationCell(profile: userProfile,
-                                     isOwnUser: userProfile.userID == context.viewState.ownUserID,
+                    UserLocationCell(profile: context.viewState.userProfile,
+                                     isOwnUser: context.viewState.isOwnUser,
                                      isUserLocation: location.kind == .sender,
                                      timestamp: location.timestamp,
                                      mediaProvider: context.mediaProvider)

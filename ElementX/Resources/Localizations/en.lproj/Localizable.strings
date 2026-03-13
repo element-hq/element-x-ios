@@ -244,6 +244,7 @@
 "common_image" = "Image";
 "common_in_reply_to" = "In reply to %1$@";
 "common_invite_unknown_profile" = "This Matrix ID can't be found, so the invite might not be received.";
+"common_ios_expiration_time" = "Ends %1$@";
 "common_leaving_room" = "Leaving room";
 "common_leaving_space" = "Leaving space";
 "common_light" = "Light";

@@ -56,7 +56,7 @@ struct LocationSharingScreen: View {
             .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
             
             if context.viewState.isLocationPickerMode {
-                LocationMarkerView(userProfile: context.viewState.locationMarkerUserProfile, mediaProvider: context.mediaProvider)
+                LocationMarkerView(kind: context.viewState.locationMarkerKind, mediaProvider: context.mediaProvider)
             }
         }
         .overlay(alignment: .topTrailing) {
@@ -76,13 +76,13 @@ struct LocationSharingScreen: View {
     private var mapOptions: MapLibreMapView.Options {
         var annotations: [String: LocationAnnotation] = [:]
         if !context.viewState.isLocationPickerMode {
-            let id = context.viewState.locationMarkerUserProfile?.userID ?? UUID().uuidString
-            let annotation = LocationAnnotation(id: id,
+            let kind = context.viewState.locationMarkerKind
+            let annotation = LocationAnnotation(id: kind.id,
                                                 coordinate: context.viewState.initialMapCenter,
                                                 anchorPoint: .bottomCenter) {
-                LocationMarkerView(userProfile: context.viewState.locationMarkerUserProfile, mediaProvider: context.mediaProvider)
+                LocationMarkerView(kind: kind, mediaProvider: context.mediaProvider)
             }
-            annotations[id] = annotation
+            annotations[kind.id] = annotation
         }
         
         return .init(zoomLevel: context.viewState.zoomLevel,
@@ -129,7 +129,7 @@ struct LocationSharingScreen: View {
     @ViewBuilder
     private var shareSheet: some View {
         let location = context.viewState.initialMapCenter
-        let senderName = context.viewState.locationMarkerUserProfile?.displayName ?? context.viewState.locationMarkerUserProfile?.userID
+        let senderName = context.viewState.locationMarkerKind.displayName ?? context.viewState.locationMarkerKind.userProfile?.userID
         AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location, senderName: senderName)],
                         applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location, senderName: senderName) })
             .ignoresSafeArea(edges: .bottom)

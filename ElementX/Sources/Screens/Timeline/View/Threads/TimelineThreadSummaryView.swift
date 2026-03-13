@@ -89,6 +89,12 @@ struct TimelineThreadSummaryView: View {
                            plainBody: question,
                            formattedBody: nil,
                            numberOfReplies: numberOfReplies)
+            case .liveLocation:
+                ThreadView(senderID: senderID,
+                           sender: sender,
+                           plainBody: L10n.commonSharedLiveLocation,
+                           formattedBody: nil,
+                           numberOfReplies: numberOfReplies)
             case .redacted:
                 ThreadView(senderID: senderID,
                            sender: sender,
@@ -254,6 +260,11 @@ struct TimelineThreadSummaryView_Previews: PreviewProvider, TestablePreview {
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
                                                              latestEventContent: .message(.location(.init(body: ""))),
+                                                             numberOfReplies: 42)),
+            
+            TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
+                                                             sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
+                                                             latestEventContent: .liveLocation,
                                                              numberOfReplies: 42)),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",

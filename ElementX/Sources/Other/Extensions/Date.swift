@@ -64,6 +64,11 @@ extension Date {
     static var mock: Date {
         DateComponents(calendar: .current, year: 2007, month: 1, day: 9, hour: 9, minute: 41).date ?? .now
     }
+    
+    /// A fixed date used for mocks, previews etc.
+    static var inOneMinute: Date {
+        Date.now.addingTimeInterval(60)
+    }
 }
 
 private extension DateFormatter {
