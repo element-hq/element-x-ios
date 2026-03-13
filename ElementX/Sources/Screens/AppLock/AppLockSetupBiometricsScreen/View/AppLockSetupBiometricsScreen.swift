@@ -77,12 +77,12 @@ struct AppLockSetupBiometricsScreen_Previews: PreviewProvider, TestablePreview {
     static let touchIDViewModel = AppLockSetupBiometricsScreenViewModel(appLockService: AppLockServiceMock.mock(biometryType: .touchID))
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             AppLockSetupBiometricsScreen(context: faceIDViewModel.context)
         }
         .previewDisplayName("Face ID")
         
-        NavigationStack {
+        ElementNavigationStack {
             AppLockSetupBiometricsScreen(context: touchIDViewModel.context)
         }
         .previewDisplayName("Touch ID")

@@ -48,6 +48,7 @@ enum A11yIdentifiers {
     static let spacesScreen = SpacesScreen()
     static let spaceScreen = SpaceScreen()
     static let spaceAddRoomsScreen = SpaceAddRoomsScreen()
+    static let spaceSettingsScreen = SpaceSettingsScreen()
     static let linkNewDeviceScreen = LinkNewDeviceScreen()
     
     struct AlertInfo {
@@ -234,7 +235,6 @@ enum A11yIdentifiers {
         let acceptVerificationRequest = "session_verification-accept_verification_request"
         let ignoreVerificationRequest = "session_verification-ignore_verification_request"
         let requestVerification = "session_verification-request_verification"
-        let startSasVerification = "session_verification-start_sas_verification"
         let acceptChallenge = "session_verification-accept_challenge"
         let declineChallenge = "session_verification-decline_challenge"
         let emojiWrapper = "session_verification-emojis"
@@ -276,6 +276,7 @@ enum A11yIdentifiers {
     
     struct CreateRoomScreen {
         let create = "create_room-create"
+        let cancel = "create_room-cancel"
         let roomAvatar = "create_room-room_avatar"
         let roomName = "create_room-room_name"
         let roomTopic = "create_room-room_topic"
@@ -328,12 +329,18 @@ enum A11yIdentifiers {
     
     struct SpaceScreen {
         let moreMenu = "space_screen-more_menu"
+        let createRoom = "space_screen-create_room"
         let addExistingRooms = "space_screen-add_existing_rooms"
         let viewMembers = "space_screen-view_members"
+        let settings = "space_screen-settings"
     }
     
     struct SpaceAddRoomsScreen {
         let cancel = "space_add_rooms_screen-cancel"
+    }
+    
+    struct SpaceSettingsScreen {
+        let editBaseInfo = "space_settings_screen-edit_space_info"
     }
     
     struct LinkNewDeviceScreen {

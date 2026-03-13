@@ -69,6 +69,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return buildCallInviteTimelineItem(for: eventItemProxy)
         case .rtcNotification:
             return buildCallNotificationTimelineItem(for: eventItemProxy)
+        case .liveLocation:
+            // TODO: Implement
+            return nil
         }
     }
     
@@ -583,7 +586,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildLocationTimelineItemContent(_ locationContent: LocationContent) -> LocationRoomTimelineItemContent {
         LocationRoomTimelineItemContent(body: locationContent.body,
                                         geoURI: .init(string: locationContent.geoUri),
-                                        description: locationContent.description)
+                                        kind: .init(from: locationContent.asset))
     }
 
     private func buildFileTimelineItemContent(_ messageContent: FileMessageContent) -> FileRoomTimelineItemContent {

@@ -131,7 +131,7 @@ struct UserDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
                                                           userIndicatorController: UserIndicatorControllerMock.default)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             UserDetailsEditScreen(context: viewModel.context)
         }
     }

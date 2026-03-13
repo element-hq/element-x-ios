@@ -85,8 +85,9 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.finished)
                 case .displayUser(let userID):
                     actionsSubject.send(.displayUser(userID: userID))
-                case .presentLocationViewer(let geoURI, let description):
-                    presentMapNavigator(geoURI: geoURI, description: description, timelineController: timelineController)
+                case .presentLocationViewer(let location):
+                    presentMapNavigator(location: location,
+                                        timelineController: timelineController)
                 case .displayMessageForwarding(let forwardingItem):
                     presentMessageForwarding(with: forwardingItem)
                 case .displayRoomScreenWithFocussedPin(let eventID, let threadRootEventID):
@@ -98,16 +99,20 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
-    private func presentMapNavigator(geoURI: GeoURI, description: String?, timelineController: TimelineControllerProtocol) {
+    private func presentMapNavigator(location: StaticLocationData,
+                                     timelineController: TimelineControllerProtocol) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let params = StaticLocationScreenCoordinatorParameters(interactionMode: .viewOnly(geoURI: geoURI, description: description),
-                                                               mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
-                                                               timelineController: timelineController,
-                                                               appMediator: flowParameters.appMediator,
-                                                               analytics: flowParameters.analytics,
-                                                               userIndicatorController: flowParameters.userIndicatorController)
-        let coordinator = StaticLocationScreenCoordinator(parameters: params)
+        let params = LocationSharingScreenCoordinatorParameters(interactionMode: .viewStatic(location),
+                                                                mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
+                                                                liveLocationSharingEnabled: flowParameters.appSettings.liveLocationSharingEnabled,
+                                                                roomProxy: roomProxy,
+                                                                timelineController: timelineController,
+                                                                appMediator: flowParameters.appMediator,
+                                                                analytics: flowParameters.analytics,
+                                                                userIndicatorController: flowParameters.userIndicatorController,
+                                                                mediaProvider: flowParameters.userSession.mediaProvider)
+        let coordinator = LocationSharingScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }

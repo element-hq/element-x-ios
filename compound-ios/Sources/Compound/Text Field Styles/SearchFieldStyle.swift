@@ -11,7 +11,6 @@ import SwiftUIIntrospect
 public extension View {
     /// Styles a search bar text field using the Compound design tokens.
     /// This modifier is to be used in combination with `.searchable`.
-    @MainActor
     func compoundSearchField() -> some View {
         introspect(.navigationStack, on: .supportedVersions, scope: .ancestor) { navigationController in
             // Uses the navigation stack as .searchField is unreliable when pushing the second search bar, during the create rooms flow.

@@ -2,11 +2,6 @@ require 'yaml'
 
 skip_docs
 
-enterprise = '../Enterprise/Pipeline/Scripts/iOS/Fastfile'
-if File.exist?(enterprise)
-  import enterprise
-end
-
 simulator_version = "26.1"
 
 before_all do
@@ -14,176 +9,6 @@ before_all do
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
-  ENV["SENTRY_LOG_LEVEL"] = "DEBUG"
-end
-
-lane :unit_tests do |options|
-  reset_simulator = ENV.key?('CI')
-  
-  run_tests(
-    scheme: "UnitTests",
-    device: "iPhone 17 (#{simulator_version})",
-    ensure_devices_found: true,
-    result_bundle: true,
-    number_of_retries: 3,
-    reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
-  )
-  
-  if !options[:skip_previews]
-    create_simulator_if_necessary(
-      name: "iPhone SE (3rd generation)",
-      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
-    )
-
-    run_tests(
-      scheme: "PreviewTests",
-      device: "iPhone SE (3rd generation) (#{simulator_version})",
-      ensure_devices_found: true,
-      result_bundle: true,
-      number_of_retries: 3,
-      reset_simulator: reset_simulator,
-      xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
-    )
-  end
-  
-  # We use xcresultparser in the workflow to collect coverage from both result bundles.
-end
-
-lane :ui_tests do |options|
-  # We used to run these simultaneously on iPhone and iPad but it is *really* slow on GitHub runners.
-  # Presumably because launching 2 simulators uses more memory than the runner has available.
-  
-  if options[:device] == "iPhone"
-    device = "iPhone-#{simulator_version}"
-    
-    create_simulator_if_necessary(
-      name: "iPhone-#{simulator_version}",
-      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
-    )
-  elsif options[:device] == "iPad"
-    device = "iPad-#{simulator_version}"
-    
-    create_simulator_if_necessary(
-      name: "iPad-#{simulator_version}",
-      type: "com.apple.CoreSimulator.SimDeviceType.iPad-A16"
-    )
-  else
-    UI.user_error!("Please supply a device argument as device:iPhone or device:iPad")
-  end
-
-  if options[:test_name]
-    test_to_run = ["UITests/#{options[:test_name]}"]
-  else
-    test_to_run = nil
-  end
-
-  reset_simulator = ENV.key?('CI')
-  
-  run_tests(
-    scheme: "UITests",
-    device: "#{device} (#{simulator_version})",
-    ensure_devices_found: true,
-    prelaunch_simulator: false,
-    result_bundle: true,
-    only_testing: test_to_run,
-    number_of_retries: 3,
-    reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
-  )
-end
-
-lane :accessibility_tests do |options|
-  reset_simulator = ENV.key?('CI')
-  
-  run_tests(
-    scheme: "AccessibilityTests",
-    device: "iPhone 16 (18.5)", # The tests are randomly crashing on iOS 26
-    ensure_devices_found: true,
-    prelaunch_simulator: false,
-    result_bundle: true,
-    number_of_retries: 0,
-    reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
-  )
-end
-
-
-lane :integration_tests do
-  clear_derived_data()
-
-  reset_simulator = ENV.key?('CI')
-
-  run_tests(
-    scheme: "IntegrationTests",
-    device: "iPhone 17 (#{simulator_version})",
-    ensure_devices_found: true,
-    result_bundle: true,
-    reset_simulator: reset_simulator,
-    xcodebuild_formatter: "xcbeautify --quiet --is-ci --renderer github-actions"
-  )
-end
-
-lane :config_production do
-  update_foss_secrets()
-  xcodegen(spec: "project.yml")
-end
-
-lane :config_nightly do |options|
-  build_number = options[:build_number]
-  UI.user_error!("Invalid build number.") unless !build_number.to_s.empty?
-
-  target_file_path = "../project.yml"
-  data = YAML.load_file target_file_path
-  
-  # Check if the "path" already exists in the "include" array
-  if !data["include"].any? { |item| item["path"] == "Variants/Nightly/nightly.yml" }
-    data["include"].append({ "path" => "Variants/Nightly/nightly.yml" })
-  end
-
-  update_foss_secrets()
-  
-  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
-
-  xcodegen(spec: "project.yml")
-
-  # Automatically done by Xcode Cloud. Cannot override
-  # https://developer.apple.com/documentation/xcode/setting-the-next-build-number-for-xcode-cloud-builds
-  # bump_build_number()
-
-  release_version = get_version_number(target: "ElementX")
-
-  Dir.chdir ".." do
-    sh("swift run tools app-icon-banner Variants/Nightly/Resources/NightlyAppIcon.icon/Assets/Version.png --banner-text '#{release_version} (#{build_number})'")
-  end
-end
-
-$sentry_retry=0
-lane :upload_dsyms_to_sentry do |options|
-  auth_token = ENV["SENTRY_AUTH_TOKEN"]
-  UI.user_error!("Invalid Sentry Auth token.") unless !auth_token.to_s.empty?
-
-  dsym_path = options[:dsym_path]
-  UI.user_error!("Invalid DSYM path.") unless !dsym_path.to_s.empty?
-
-  begin
-    sentry_upload_dif(
-      auth_token: auth_token,
-      org_slug: 'element',
-      project_slug: 'element-x-ios',
-      url: 'https://sentry.tools.element.io/',
-      path: dsym_path,
-    )
-  rescue => exception
-    $sentry_retry += 1
-
-    if $sentry_retry <= 5
-      UI.message "Sentry failed, retrying."
-      upload_dsyms_to_sentry options
-    else
-      raise exception
-    end
-  end
 end
 
 lane :release_to_github do
@@ -267,22 +92,6 @@ def rebase_main_onto_current_branch
   UI.success("Successfully rebased main onto #{current_branch}")
 end
 
-lane :tag_nightly do |options|
-  build_number = options[:build_number]
-  UI.user_error!("Invalid build number.") unless !build_number.to_s.empty?
-
-  xcodegen_project_file_path = "../project.yml"
-  data = YAML.load_file xcodegen_project_file_path
-  current_version = data["settings"]["MARKETING_VERSION"]
-
-  setup_git()
-
-  tag_name = "nightly/#{current_version}.#{build_number}"
-  sh("git tag #{tag_name}")
-
-  git_push(tag_name: tag_name)
-end
-
 private_lane :setup_git do
   sh("git config --global user.name 'Element CI'")
   sh("git config --global user.email 'ci@element.io'")
@@ -311,31 +120,4 @@ private_lane :bump_build_number do
   # Increment build number to current date
   build_number = Time.now.strftime("%Y%m%d%H%M")
   increment_build_number(build_number: build_number)
-end
-
-private_lane :create_simulator_if_necessary do |options|
-  simulator_name = options[:name]
-  UI.user_error!("Invalid simulator name") unless !simulator_name.to_s.empty?
-
-  simulator_type = options[:type]
-  UI.user_error!("Invalid simulator type") unless !simulator_type.to_s.empty?
-
-  simulator_runtime = "com.apple.CoreSimulator.SimRuntime.iOS-#{simulator_version.gsub('.', '-')}"
-
-  simulators = sh("xcrun simctl list devices \"iOS #{simulator_version}\" available")
-  # Use a `(` here to avoid matching `iPhone 14 Pro` on `iPhone 14 Pro Max` for example
-  existing_simulator = simulators.lines.find { |line| line.include?("#{simulator_name} (") }
-  
-  if existing_simulator
-    UI.message("Found simulator: #{existing_simulator.inspect}")
-    device_id = existing_simulator.match(/\(([A-F0-9-]+)\)/)[1] # Extract the device ID for the existing simulator
-  else
-    UI.message "Simulator #{simulator_name} not found. Creating new simulator…"
-    create_command = "xcrun simctl create '#{simulator_name}\' #{simulator_type} #{simulator_runtime}"
-    device_id = sh(create_command).strip # Create a new simulator and get its device ID.
-    
-    UI.message "Created new simulator: #{simulator_name} (#{device_id})"
-  end
-  
-  # device_id is unused right now but is useful to check e.g. the boot status of a simulator.
 end

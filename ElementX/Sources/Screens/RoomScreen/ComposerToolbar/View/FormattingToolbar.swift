@@ -38,6 +38,7 @@ struct FormattingToolbar: View {
     }
 }
 
+@MainActor
 private extension FormatItem {
     var foregroundColor: Color {
         switch state {

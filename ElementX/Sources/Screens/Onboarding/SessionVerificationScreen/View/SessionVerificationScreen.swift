@@ -81,7 +81,7 @@ struct SessionVerificationScreen: View {
     @ViewBuilder
     private var mainContent: some View {
         switch context.viewState.verificationState {
-        case .initial:
+        case .initial, .acceptingVerificationRequest, .requestingVerification, .verificationRequestAccepted, .startingSasVerification, .sasVerificationStarted:
             switch context.viewState.flow {
             case .deviceResponder(let details):
                 SessionVerificationRequestDetailsView(details: details,
@@ -126,27 +126,18 @@ struct SessionVerificationScreen: View {
     @ViewBuilder
     private var actionButtons: some View {
         switch context.viewState.verificationState {
-        case .initial:
-            switch context.viewState.flow {
-            case .deviceInitiator, .userInitiator:
-                Button(L10n.actionStartVerification) {
-                    context.send(viewAction: .requestVerification)
-                }
-                .buttonStyle(.compound(.primary))
-                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
-            case .deviceResponder, .userResponder:
-                VStack(spacing: 16) {
-                    Button(L10n.actionStartVerification) {
-                        context.send(viewAction: .acceptVerificationRequest)
-                    }
-                    .buttonStyle(.compound(.primary))
-                    .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptVerificationRequest)
-                    
+        case .initial, .acceptingVerificationRequest, .requestingVerification,
+             .verificationRequestAccepted, .startingSasVerification, .sasVerificationStarted, .cancelling:
+            VStack(spacing: 16) {
+                startVerificationButton
+                
+                if context.viewState.showIgnoreButton {
                     Button(L10n.actionIgnore) {
                         context.send(viewAction: .ignoreVerificationRequest)
                     }
                     .buttonStyle(.compound(.tertiary))
                     .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.ignoreVerificationRequest)
+                    .disabled(context.viewState.isWaiting)
                 }
             }
         case .cancelled:
@@ -162,13 +153,6 @@ struct SessionVerificationScreen: View {
                 }
                 .buttonStyle(.compound(.primary))
             }
-            
-        case .verificationRequestAccepted:
-            Button(L10n.actionStart) {
-                context.send(viewAction: .startSasVerification)
-            }
-            .buttonStyle(.compound(.primary))
-            .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.startSasVerification)
         
         case .showingChallenge:
             VStack(spacing: 16) {
@@ -187,6 +171,38 @@ struct SessionVerificationScreen: View {
             
         default:
             EmptyView()
+        }
+    }
+    
+    private var startVerificationButton: some View {
+        Button {
+            switch context.viewState.flow {
+            case .deviceInitiator, .userInitiator:
+                context.send(viewAction: .requestVerification)
+            case .deviceResponder, .userResponder:
+                context.send(viewAction: .acceptVerificationRequest)
+            }
+        } label: {
+            Label {
+                Text(L10n.actionStartVerification)
+            } icon: {
+                if context.viewState.isWaiting {
+                    ProgressView()
+                        .tint(.compound.iconOnSolidPrimary)
+                }
+            }
+        }
+        .buttonStyle(.compound(.primary))
+        .disabled(context.viewState.isWaiting)
+        .accessibilityIdentifier(startVerificationButtonAccessibilityIdentifier)
+    }
+    
+    private var startVerificationButtonAccessibilityIdentifier: String {
+        switch context.viewState.flow {
+        case .deviceInitiator, .userInitiator:
+            A11yIdentifiers.sessionVerificationScreen.requestVerification
+        case .deviceResponder, .userResponder:
+            A11yIdentifiers.sessionVerificationScreen.acceptVerificationRequest
         }
     }
     
@@ -224,24 +240,33 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
                                                         deviceDisplayName: "Bob's Element X iOS",
                                                         firstSeenDate: .init(timeIntervalSince1970: 0))
         
-        sessionVerificationScreen(state: .initial, flow: .deviceResponder(requestDetails: details))
+        sessionVerificationScreen(state: .initial,
+                                  flow: .deviceResponder(requestDetails: details))
             .previewDisplayName("Initial - Device Responder")
         
-        sessionVerificationScreen(state: .initial, flow: .userResponder(requestDetails: details))
+        sessionVerificationScreen(state: .initial,
+                                  flow: .userResponder(requestDetails: details))
             .previewDisplayName("Initial - User Responder")
         
-        sessionVerificationScreen(state: .acceptingVerificationRequest)
-            .previewDisplayName("Accepting Verification Request")
+        sessionVerificationScreen(state: .acceptingVerificationRequest,
+                                  flow: .deviceResponder(requestDetails: details))
+            .previewDisplayName("Accepting Verification Request - Device Responder")
         
-        sessionVerificationScreen(state: .requestingVerification)
-            .previewDisplayName("Requesting Verification")
-        sessionVerificationScreen(state: .verificationRequestAccepted)
-            .previewDisplayName("Request Accepted")
+        sessionVerificationScreen(state: .requestingVerification,
+                                  flow: .deviceInitiator)
+            .previewDisplayName("Requesting Verification - Device Initiator")
         
-        sessionVerificationScreen(state: .startingSasVerification)
-            .previewDisplayName("Starting SAS Verification")
-        sessionVerificationScreen(state: .sasVerificationStarted)
-            .previewDisplayName("SAS Verification started")
+        sessionVerificationScreen(state: .verificationRequestAccepted,
+                                  flow: .userInitiator(userID: "@bob:matrix.org"))
+            .previewDisplayName("Request Accepted - User Initiator")
+        
+        sessionVerificationScreen(state: .startingSasVerification,
+                                  flow: .userResponder(requestDetails: details))
+            .previewDisplayName("Starting SAS Verification - User Responder")
+        
+        sessionVerificationScreen(state: .sasVerificationStarted,
+                                  flow: .deviceResponder(requestDetails: details))
+            .previewDisplayName("SAS Verification started - Device Responder")
         
         sessionVerificationScreen(state: .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
             .previewDisplayName("Showing Challenge")
@@ -252,6 +277,9 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
         
         sessionVerificationScreen(state: .verified)
             .previewDisplayName("Verified")
+        
+        sessionVerificationScreen(state: .cancelling, flow: .deviceInitiator)
+            .previewDisplayName("Cancelling - Device Initiator")
         
         sessionVerificationScreen(state: .cancelled)
             .previewDisplayName("Cancelled")

@@ -12,11 +12,13 @@ struct QRCodeErrorView: View {
     let errorState: QRCodeLoginState.ErrorState
     let canSignInManually: Bool
     
-    enum Action { case openSettings, startOver, signInManually, dismiss }
+    enum Action { case openSettings, startOver, signInManually, cancel }
     let action: (Action) -> Void
     
     var title: String {
         switch errorState {
+        case .notSupported:
+            L10n.screenLinkNewDeviceErrorNotSupportedTitle
         case .noCameraPermission:
             L10n.screenQrCodeLoginNoCameraPermissionStateTitle
         case .connectionNotSecure:
@@ -29,7 +31,7 @@ struct QRCodeErrorView: View {
             L10n.screenQrCodeLoginErrorExpiredTitle
         case .linkingNotSupported:
             L10n.screenQrCodeLoginErrorLinkingNotSuportedTitle
-        case .deviceNotSupported:
+        case .slidingSyncNotAvailable:
             L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedTitle(InfoPlistReader.main.bundleDisplayName)
         case .deviceAlreadySignedIn:
             L10n.screenQrCodeLoginErrorDeviceAlreadySignedInTitle
@@ -40,6 +42,8 @@ struct QRCodeErrorView: View {
     
     var subtitle: String {
         switch errorState {
+        case .notSupported:
+            L10n.screenLinkNewDeviceErrorNotSupportedSubtitle
         case .noCameraPermission:
             L10n.screenQrCodeLoginNoCameraPermissionStateDescription(InfoPlistReader.main.productionAppName)
         case .connectionNotSecure:
@@ -52,7 +56,7 @@ struct QRCodeErrorView: View {
             L10n.screenQrCodeLoginErrorExpiredSubtitle
         case .linkingNotSupported:
             L10n.screenQrCodeLoginErrorLinkingNotSuportedSubtitle(InfoPlistReader.main.bundleDisplayName)
-        case .deviceNotSupported:
+        case .slidingSyncNotAvailable:
             L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedSubtitle(InfoPlistReader.main.bundleDisplayName)
         case .deviceAlreadySignedIn:
             L10n.screenQrCodeLoginErrorDeviceAlreadySignedInSubtitle
@@ -117,26 +121,30 @@ struct QRCodeErrorView: View {
                      iconStyle: iconStyle)
     }
     
-    @ViewBuilder
     private var buttons: some View {
-        switch errorState {
-        case .noCameraPermission:
-            Button(L10n.screenQrCodeLoginNoCameraPermissionButton) {
-                action(.openSettings)
-            }
-            .buttonStyle(.compound(.primary))
-        case .connectionNotSecure, .unknown, .expired, .declined, .deviceNotSupported:
-            Button(L10n.screenQrCodeLoginStartOverButton) {
-                action(.startOver)
-            }
-            .buttonStyle(.compound(.primary))
-        case .cancelled:
-            Button(L10n.actionTryAgain) {
-                action(.startOver)
-            }
-            .buttonStyle(.compound(.primary))
-        case .linkingNotSupported:
-            VStack(spacing: 16) {
+        VStack(spacing: 16) {
+            switch errorState {
+            case .noCameraPermission:
+                Button(L10n.screenQrCodeLoginNoCameraPermissionButton) {
+                    action(.openSettings)
+                }
+                .buttonStyle(.compound(.primary))
+                
+                Button(L10n.actionCancel) {
+                    action(.cancel)
+                }
+                .buttonStyle(.compound(.secondary))
+            case .connectionNotSecure, .unknown, .expired, .declined, .slidingSyncNotAvailable, .cancelled:
+                Button(L10n.actionTryAgain) {
+                    action(.startOver)
+                }
+                .buttonStyle(.compound(.primary))
+                
+                Button(L10n.actionCancel) {
+                    action(.cancel)
+                }
+                .buttonStyle(.compound(.secondary))
+            case .notSupported, .linkingNotSupported:
                 if canSignInManually {
                     Button(L10n.screenOnboardingSignInManually) {
                         action(.signInManually)
@@ -144,16 +152,16 @@ struct QRCodeErrorView: View {
                     .buttonStyle(.compound(.primary))
                 }
                 
-                Button(L10n.actionCancel) {
-                    action(.dismiss)
+                Button(L10n.actionDismiss) {
+                    action(.cancel)
                 }
-                .buttonStyle(.compound(.tertiary))
+                .buttonStyle(.compound(canSignInManually ? .secondary : .primary))
+            case .deviceAlreadySignedIn:
+                Button(L10n.actionContinue) {
+                    action(.cancel)
+                }
+                .buttonStyle(.compound(.primary))
             }
-        case .deviceAlreadySignedIn:
-            Button(L10n.actionContinue) {
-                action(.dismiss)
-            }
-            .buttonStyle(.compound(.primary))
         }
     }
 }
@@ -163,14 +171,14 @@ struct QRCodeErrorView: View {
 struct QRCodeErrorView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ForEach(QRCodeLoginState.ErrorState.allCases, id: \.self) { errorState in
-            NavigationStack {
+            ElementNavigationStack {
                 QRCodeErrorView(errorState: errorState, canSignInManually: true) { _ in }
                     .toolbar(.visible, for: .navigationBar)
             }
             .previewDisplayName(errorState.previewDisplayName)
         }
         
-        NavigationStack {
+        ElementNavigationStack {
             QRCodeErrorView(errorState: .linkingNotSupported, canSignInManually: false) { _ in }
                 .toolbar(.visible, for: .navigationBar)
         }
@@ -181,13 +189,14 @@ struct QRCodeErrorView_Previews: PreviewProvider, TestablePreview {
 private extension QRCodeLoginState.ErrorState {
     var previewDisplayName: String {
         switch self {
+        case .notSupported: "Not supported"
         case .noCameraPermission: "No Camera Permission"
         case .connectionNotSecure: "Connection not secure"
         case .linkingNotSupported: "Linking unsupported"
         case .cancelled: "Cancelled"
         case .declined: "Declined"
         case .expired: "Expired"
-        case .deviceNotSupported: "Device not supported"
+        case .slidingSyncNotAvailable: "Sliding sync not available"
         case .deviceAlreadySignedIn: "Device already signed in"
         case .unknown: "Unknown error"
         }

@@ -103,7 +103,7 @@ enum QRCodeLoginError: Error, Equatable {
     case declined
     case linkingNotSupported
     case expired
-    case deviceNotSupported
+    case slidingSyncNotAvailable
     case deviceNotSignedIn
     case deviceAlreadySignedIn
     case unknown

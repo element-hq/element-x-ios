@@ -263,7 +263,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     static let singleSpaceMembersViewModel = {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
-        appSettings.spaceSettingsEnabled = true
+        
         let space = [SpaceServiceRoom].mockSingleRoom[0]
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
@@ -280,7 +280,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     static let multipleSpacesMembersViewModel = {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
-        appSettings.spaceSettingsEnabled = true
+        
         let spaces = [SpaceServiceRoom].mockJoinedSpaces
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
@@ -312,8 +312,8 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     static let singleAskToJoinSpaceMembersViewModel = {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
-        appSettings.spaceSettingsEnabled = true
         appSettings.knockingEnabled = true
+        
         let space = [SpaceServiceRoom].mockSingleRoom[0]
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
@@ -330,8 +330,8 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     static let multipleAskToJoinSpacesMembersViewModel = {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
-        appSettings.spaceSettingsEnabled = true
         appSettings.knockingEnabled = true
+        
         let spaces = [SpaceServiceRoom].mockJoinedSpaces
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
@@ -359,12 +359,12 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SecurityAndPrivacyScreen(context: inviteOnlyViewModel.context)
         }
         .previewDisplayName("Private invite only room")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecurityAndPrivacyScreen(context: publicViewModel.context)
         }
         .snapshotPreferences(expect: publicViewModel.context.$viewState.map { state in
@@ -372,12 +372,12 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Public room")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecurityAndPrivacyScreen(context: publicNoAddressViewModel.context)
         }
         .previewDisplayName("Public room without address")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecurityAndPrivacyScreen(context: singleSpaceMembersViewModel.context)
         }
         .snapshotPreferences(expect: singleSpaceMembersViewModel.context.$viewState.map { state in
@@ -385,7 +385,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Space members")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecurityAndPrivacyScreen(context: multipleSpacesMembersViewModel.context)
         }
         .snapshotPreferences(expect: multipleSpacesMembersViewModel.context.$viewState.map { state in
@@ -393,7 +393,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Multiple Spaces members")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecurityAndPrivacyScreen(context: askToJoinViewModel.context)
         }
         .snapshotPreferences(expect: askToJoinViewModel.context.$viewState.map { state in
@@ -401,7 +401,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Ask to join room")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecurityAndPrivacyScreen(context: singleAskToJoinSpaceMembersViewModel.context)
         }
         .snapshotPreferences(expect: singleAskToJoinSpaceMembersViewModel.context.$viewState.map { state in
@@ -409,7 +409,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Ask to join with single space members room")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecurityAndPrivacyScreen(context: multipleAskToJoinSpacesMembersViewModel.context)
         }
         .snapshotPreferences(expect: multipleAskToJoinSpacesMembersViewModel.context.$viewState.map { state in
@@ -417,7 +417,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Ask to join with multiple spaces members room")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecurityAndPrivacyScreen(context: publicSpaceViewModel.context)
         }
         .snapshotPreferences(expect: publicSpaceViewModel.context.$viewState.map { state in

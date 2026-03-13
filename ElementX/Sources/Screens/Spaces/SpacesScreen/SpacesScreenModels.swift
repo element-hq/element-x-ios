@@ -21,9 +21,7 @@ struct SpacesScreenViewState: BindableState {
     
     var topLevelSpaces: [SpaceServiceRoom]
     var selectedSpaceID: String?
-    
-    var isCreateSpaceEnabled: Bool
-    
+        
     var bindings: SpacesScreenViewStateBindings
 }
 

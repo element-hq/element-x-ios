@@ -1222,6 +1222,11 @@ class AudioPlayerMock: AudioPlayerProtocol, @unchecked Sendable {
         set(value) { underlyingState = value }
     }
     var underlyingState: MediaPlayerState!
+    var playbackSpeed: Float {
+        get { return underlyingPlaybackSpeed }
+        set(value) { underlyingPlaybackSpeed = value }
+    }
+    var underlyingPlaybackSpeed: Float!
     var actions: AnyPublisher<AudioPlayerAction, Never> {
         get { return underlyingActions }
         set(value) { underlyingActions = value }
@@ -1449,6 +1454,47 @@ class AudioPlayerMock: AudioPlayerProtocol, @unchecked Sendable {
             self.seekToReceivedInvocations.append(progress)
         }
         await seekToClosure?(progress)
+    }
+    //MARK: - setPlaybackSpeed
+
+    var setPlaybackSpeedUnderlyingCallsCount = 0
+    var setPlaybackSpeedCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setPlaybackSpeedUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setPlaybackSpeedUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setPlaybackSpeedUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setPlaybackSpeedUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setPlaybackSpeedCalled: Bool {
+        return setPlaybackSpeedCallsCount > 0
+    }
+    var setPlaybackSpeedReceivedSpeed: Float?
+    var setPlaybackSpeedReceivedInvocations: [Float] = []
+    var setPlaybackSpeedClosure: ((Float) -> Void)?
+
+    func setPlaybackSpeed(_ speed: Float) {
+        setPlaybackSpeedCallsCount += 1
+        setPlaybackSpeedReceivedSpeed = speed
+        DispatchQueue.main.async {
+            self.setPlaybackSpeedReceivedInvocations.append(speed)
+        }
+        setPlaybackSpeedClosure?(speed)
     }
 }
 class AudioRecorderMock: AudioRecorderProtocol, @unchecked Sendable {

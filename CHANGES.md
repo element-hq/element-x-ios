@@ -1,3 +1,143 @@
+## Changes in 26.03.3 (2026-03-10)
+
+### What's Changed
+
+🙌 Improvements
+* Refactor and redesign Location Sharing Screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5155
+* Static Location Sheet by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5171
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5178
+
+Others
+* Update zizmorcore/zizmor-action action to v0.5.2 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5177
+* Bump element-call-swift to v0.17.0 by @Copilot in https://github.com/element-hq/element-x-ios/pull/5184
+* Update SDK to 26.03.10 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5185
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.03.2...release/26.03.3
+
+## Changes in 26.03.2 (2026-03-05)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fixes an SDK issue with the crypto store. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5167
+
+🧱 Build
+* Add zizmor checks on CI. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5161
+* Convert more fastlane tools to swift commands  by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5163
+
+Others
+* Fix new `redundantSendable` and `redundantSwiftTestingSuite` swiftformat errors by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5164
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.03.1...release/26.03.2
+
+## Changes in 26.03.1 (2026-03-03)
+
+### What's Changed
+
+🙌 Improvements
+* Update join call button in room header by @americanrefugee in https://github.com/element-hq/element-x-ios/pull/5143
+
+🐛 Bugfixes
+* Make sure the inviter's avatar is hidden in the JoinRoomScreen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5151
+* Stop messages disappearing and then re-appearing after being sent. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5162
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5158
+
+🧱 Build
+* Fix createScreen.sh by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5145
+* Set CI RunTests command retries default to 0, use 3 only for running unit tests by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5144
+* More fastlane to swift tool conversions by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5146
+* Move more fastlane lanes to swift tool CI commands by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5150
+
+Others
+* Update dependency element-hq/compound-design-tokens to v6.10.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5123
+* Remove space FFs by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5147
+* Update actions/upload-artifact action to v7 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5148
+* Flaky test possible fix by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5149
+* Update dependency fastlane to v2.232.2 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5153
+* Update the RustSDK to v26.03.02 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5160
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.03.0...release/26.03.1
+
+## Changes in 26.03.0 (2026-02-25)
+
+### What's Changed
+
+✨ Features
+* Playback speed button by @Medformatik and @Velin92 in https://github.com/element-hq/element-x-ios/pull/5121 and https://github.com/element-hq/element-x-ios/pull/5124
+
+🙌 Improvements
+* Lock the Link New Device flow to portrait and improve Cancel/Try Again handling. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5094
+* Unify session verification with Android by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5116
+
+🐛 Bugfixes
+* Make `.invited` the default history visibility of a dm by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5114
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5113
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5133
+
+🦻 Accessibility
+* Fix A11y tests by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5104
+
+🧱 Build
+* Fix integration tests room header discovery by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5099
+* Update the Gemfile.lock with Ruby 4.0 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5101
+* Fix the `upload_dsyms_to_sentry` lane after plugin update. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5112
+* Compound - Swift 6.2 and Main actor isolation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5109
+* Swift Testing for Compound by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5110
+* Fix some iPad  UI test snapshots by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5117
+* Replace the use of Ruby/Fastlane for running UnitTests on CI with new tools written in Swift. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5105
+* Add an `AGENTS.md` file to the project. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5125
+* Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5138
+* Simplify LinkNewDeviceScreen preview test setup and fix preview and accessibility test reliability by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5142
+
+Others
+* Re-write the space flow state machine configuration and cover it more in UI tests. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5098
+* Fix UI Tests by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5107
+* Adopt the new tracing configuration that allows maximum size and age limits on all logs. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5108
+* Define the notification sound name in AppSettings. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5106
+* Session verification UI tests update by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5120
+* Swift Testing for Unit Tests PART 1 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5119
+* Improved Defer Fulfillment by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5127
+* Add a `waitForConfirmation` function for testing. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5130
+* PreviewTests migration to Swift Testing by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5136
+* Finish migration of UnitTests target from XCTestCase to Swift Testing by @Copilot in https://github.com/element-hq/element-x-ios/pull/5129
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5141
+
+### New Contributors
+* @americanrefugee made their first contribution in https://github.com/element-hq/element-x-ios/pull/5091
+* @medformatik made their first contribution in https://github.com/element-hq/element-x-ios/pull/5121
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.02.1...release/26.03.0
+
+## Changes in 26.02.2 (2026-02-12)
+
+### What's Changed
+
+🙌 Improvements
+* Update the active Space Filter Button in the Chats header to be Primary instead of Accent by @americanrefugee in https://github.com/element-hq/element-x-ios/pull/5091
+
+🧱 Build
+* Remove the Signposter from the integration tests target, fix build. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5096
+
+🚧 In development 🚧
+* Add history sharing badges to room details by @kaylendog in https://github.com/element-hq/element-x-ios/pull/5043
+
+Others
+* Update dependency fastlane to v2.232.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5089
+
+### New Contributors
+* @americanrefugee made their first contribution in https://github.com/element-hq/element-x-ios/pull/5091
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.02.1...release/26.02.2
+
 ## Changes in 26.02.1 (2026-02-10)
 
 ### What's Changed

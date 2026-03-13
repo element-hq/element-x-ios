@@ -10,10 +10,9 @@ import Combine
 @testable import Compound
 @testable import SnapshotTesting
 import SwiftUI
-import XCTest
+import Testing
 
-@MainActor
-class PreviewTests: XCTestCase {
+struct PreviewTests {
     private struct SnapshotDevice {
         let name: String
         let device: String
@@ -28,9 +27,7 @@ class PreviewTests: XCTestCase {
                                                      .init(name: "iPad", device: "iPad")]
     private var recordMode: SnapshotTestingConfiguration.Record = .missing
 
-    override func setUp() {
-        super.setUp()
-        
+    init() {
         if ProcessInfo().environment["RECORD_FAILURES"].map(Bool.init) == true {
             recordMode = .failed
         }
@@ -70,8 +67,7 @@ class PreviewTests: XCTestCase {
         let imageRenderer = ImageRenderer(content: preferenceReadingView)
         _ = imageRenderer.uiImage
         
-        var sanitizedSuiteName = String(testName.suffix(testName.count - "test".count).dropLast(2))
-        sanitizedSuiteName = sanitizedSuiteName.prefix(1).lowercased() + sanitizedSuiteName.dropFirst()
+        let sanitizedSuiteName = String(testName.dropLast(2))
         
         for snapshotDevice in snapshotDevices {
             guard var device = PreviewDevice(rawValue: snapshotDevice.device).snapshotDevice() else {
@@ -100,7 +96,7 @@ class PreviewTests: XCTestCase {
                                              testName: sanitizedSuiteName,
                                              traits: traits,
                                              preferences: preferences) {
-                XCTFail(failure)
+                Issue.record(Comment(rawValue: failure))
             }
         }
     }
@@ -140,14 +136,6 @@ class PreviewTests: XCTestCase {
                            testName: testName)
         }
     }
-    
-    private func wait(for duration: TimeInterval) {
-        let expectation = XCTestExpectation(description: "Wait")
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            expectation.fulfill()
-        }
-        _ = XCTWaiter.wait(for: [expectation], timeout: duration + 1)
-    }
 }
 
 private class SnapshotPreferences: @unchecked Sendable {
@@ -183,6 +171,7 @@ private extension PreviewDevice {
 }
 
 private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
+    @MainActor
     static func prefireImage(drawHierarchyInKeyWindow: Bool = false,
                              preferences: SnapshotPreferences,
                              layout: SwiftUISnapshotLayout = .sizeThatFits,
@@ -204,7 +193,7 @@ private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
         }
 
         return SimplySnapshotting<UIImage>(pathExtension: "png", diffing: .prefireImage(preferences: preferences, scale: traits.displayScale))
-            .asyncPullback { view in
+            .asyncPullback { @MainActor view in
                 var config = config
 
                 let controller: UIViewController

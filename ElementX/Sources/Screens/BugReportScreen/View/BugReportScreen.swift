@@ -155,7 +155,7 @@ struct BugReportScreen: View {
 
 struct BugReportScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(.init()),
                                                               clientProxy: clientProxy,
@@ -164,7 +164,7 @@ struct BugReportScreen_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Without Screenshot")
         
-        NavigationStack {
+        ElementNavigationStack {
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(.init()),
                                                               clientProxy: clientProxy,

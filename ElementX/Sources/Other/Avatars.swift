@@ -84,55 +84,38 @@ enum UserAvatarSizeOnScreen {
     case sendInviteConfirmation
     case sessionVerification
     case threadSummary
+    case map
 
     var value: CGFloat {
         switch self {
-        case .chats, .spaces:
-            return 32
-        case .timeline:
-            return 32
         case .readReceipt:
-            return 16
-        case .readReceiptSheet:
-            return 32
+            16
         case .spaceHeader:
-            return 20
-        case .completionSuggestions:
-            return 32
-        case .blockedUsers:
-            return 32
-        case .settings:
-            return 52
-        case .roomDetails:
-            return 44
-        case .roomMembersList:
-            return 32
-        case .roomChangeRoles:
-            return 56
-        case .startChat:
-            return 36
-        case .memberDetails:
-            return 96
-        case .inviteUsers:
-            return 52
-        case .editUserDetails:
-            return 96
-        case .dmDetails:
-            return 75
-        case .knockingUsersBannerStack:
-            return 28
-        case .knockingUserBanner:
-            return 32
-        case .knockingUserList:
-            return 52
-        case .mediaPreviewDetails:
-            return 32
-        case .sendInviteConfirmation:
-            return 64
-        case .sessionVerification:
-            return 52
+            20
         case .threadSummary:
-            return 24
+            24
+        case .knockingUsersBannerStack:
+            28
+        case .chats, .spaces, .map,
+             .timeline, .readReceiptSheet, .completionSuggestions,
+             .blockedUsers, .roomMembersList, .knockingUserBanner,
+             .mediaPreviewDetails:
+            32
+        case .startChat:
+            36
+        case .roomDetails:
+            44
+        case .inviteUsers, .knockingUserList, .sessionVerification,
+             .settings:
+            52
+        case .roomChangeRoles:
+            56
+        case .sendInviteConfirmation:
+            64
+        case .dmDetails:
+            75
+        case .memberDetails, .editUserDetails:
+            96
         }
     }
 }
@@ -160,24 +143,22 @@ enum RoomAvatarSizeOnScreen {
 
     var value: CGFloat {
         switch self {
-        case .chats, .spaces, .spaceSettings:
-            return 52
+        case .notificationSettings:
+            30
         case .timeline, .leaveSpace, .roomDirectorySearch,
              .completionSuggestions, .authorizedSpaces, .createRoomSelectSpace,
              .spaceFilters:
-            return 32
-        case .notificationSettings:
-            return 30
-        case .messageForwarding, .globalSearch, .roomSelection, .spaceAddRooms:
-            return 36
-        case .spaceAddRoomsSelected:
-            return 52
+            32
+        case .messageForwarding, .globalSearch, .roomSelection,
+             .spaceAddRooms:
+            36
+        case .chats, .spaces, .spaceSettings,
+             .spaceAddRoomsSelected:
+            52
+        case .joinRoom, .spaceHeader:
+            64
         case .details:
-            return 96
-        case .joinRoom:
-            return 64
-        case .spaceHeader:
-            return 64
+            96
         }
     }
 }

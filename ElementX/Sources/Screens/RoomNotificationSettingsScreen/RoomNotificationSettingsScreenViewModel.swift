@@ -9,7 +9,7 @@
 import Combine
 import SwiftUI
 
-typealias RoomNotificationSettingsScreenViewModelType = StateStoreViewModel<RoomNotificationSettingsScreenViewState, RoomNotificationSettingsScreenViewAction>
+typealias RoomNotificationSettingsScreenViewModelType = StateStoreViewModelV2<RoomNotificationSettingsScreenViewState, RoomNotificationSettingsScreenViewAction>
 
 class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenViewModelType, RoomNotificationSettingsScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<RoomNotificationSettingsScreenViewModelAction, Never> = .init()
@@ -115,7 +115,9 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
             } catch {
                 displayError(.restoreDefaultFailed)
             }
-            state.isRestoringDefaultSetting = false
+            await MainActor.run {
+                state.isRestoringDefaultSetting = false
+            }
         }
     }
     
@@ -134,7 +136,9 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
             } catch {
                 displayError(.setModeFailed)
             }
-            state.pendingCustomMode = nil
+            await MainActor.run {
+                state.pendingCustomMode = nil
+            }
         }
     }
     

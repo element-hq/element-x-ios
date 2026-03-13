@@ -585,7 +585,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     private func subscribeToPagination() async {
         switch kind {
         case .live:
-            let backPaginationListener = SDKListener<RoomPaginationStatus> { [weak self] status in
+            let backPaginationListener = SDKListener<PaginationStatus> { [weak self] status in
                 guard let self else {
                     return
                 }

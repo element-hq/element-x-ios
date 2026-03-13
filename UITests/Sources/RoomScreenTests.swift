@@ -13,8 +13,8 @@ class RoomScreenUITests: XCTestCase {
     func testPlainNoAvatar() async throws {
         let app = Application.launch(.roomPlainNoAvatar)
 
-        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].exists)
-        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.avatar].exists)
+        XCTAssert(app.buttons[A11yIdentifiers.roomScreen.name].exists)
+        XCTAssert(app.buttons[A11yIdentifiers.roomScreen.avatar].exists)
 
         try await app.assertScreenshot()
     }

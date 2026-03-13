@@ -280,7 +280,7 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              clientProxy: ClientProxyMock(.init()),
                                                              userIndicatorController: UserIndicatorControllerMock.default)
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             MediaUploadPreviewScreen(context: viewModel.context)
         }
         

@@ -107,22 +107,22 @@ struct AppLockSetupPINScreen_Previews: PreviewProvider, TestablePreview {
                                                                       appLockService: failedService)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             AppLockSetupPINScreen(context: createViewModel.context)
         }
         .previewDisplayName("Create")
         
-        NavigationStack {
+        ElementNavigationStack {
             AppLockSetupPINScreen(context: confirmViewModel.context)
         }
         .previewDisplayName("Confirm")
         
-        NavigationStack {
+        ElementNavigationStack {
             AppLockSetupPINScreen(context: unlockViewModel.context)
         }
         .previewDisplayName("Unlock")
         
-        NavigationStack {
+        ElementNavigationStack {
             AppLockSetupPINScreen(context: unlockFailedViewModel.context)
         }
         .previewDisplayName("Unlock Failed")

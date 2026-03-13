@@ -119,7 +119,7 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
     static var loadingViewModel = makeViewModel(recoveryState: .unknown)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             IdentityConfirmationScreen(context: viewModel.context)
         }
         .previewDisplayName("Actions")
@@ -127,7 +127,7 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
             actions?.contains([.interactiveVerification, .recovery]) == true
         })
         
-        NavigationStack {
+        ElementNavigationStack {
             IdentityConfirmationScreen(context: loadingViewModel.context)
         }
         .previewDisplayName("Loading")

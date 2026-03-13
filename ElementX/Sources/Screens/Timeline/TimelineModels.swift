@@ -23,7 +23,7 @@ enum TimelineViewModelAction {
     case displaySenderDetails(userID: String)
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayMediaPreview(TimelineMediaPreviewViewModel)
-    case displayLocation(body: String, geoURI: GeoURI, description: String?)
+    case displayLocation(StaticLocationData)
     case displayResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case displayThread(itemID: TimelineItemIdentifier)
     case composer(action: TimelineComposerAction)
@@ -42,6 +42,7 @@ enum TimelineViewPollAction {
 enum TimelineAudioPlayerAction {
     case playPause(itemID: TimelineItemIdentifier)
     case seek(itemID: TimelineItemIdentifier, progress: Double)
+    case changePlaybackSpeed(itemID: TimelineItemIdentifier)
 }
 
 enum TimelineViewAction {

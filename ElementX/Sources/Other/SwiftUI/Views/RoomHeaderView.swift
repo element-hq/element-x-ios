@@ -82,9 +82,9 @@ struct RoomHeaderView: View {
     
     private var historySharingIcon: KeyPath<CompoundIcons, Image>? {
         switch roomHistorySharingState {
+        case .none, .hidden: nil
         case .shared: \.history
         case .worldReadable: \.userProfileSolid
-        case .none: nil
         }
     }
 }

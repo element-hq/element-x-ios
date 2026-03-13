@@ -299,8 +299,16 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "LocationMarkerView_Previews")
     }
 
+    func testLocationPickerSheet() async throws {
+        try await performAccessibilityAudit(named: "LocationPickerSheet_Previews")
+    }
+
     func testLocationRoomTimelineView() async throws {
         try await performAccessibilityAudit(named: "LocationRoomTimelineView_Previews")
+    }
+
+    func testLocationSharingScreen() async throws {
+        try await performAccessibilityAudit(named: "LocationSharingScreen_Previews")
     }
 
     func testLoginScreen() async throws {
@@ -409,6 +417,10 @@ extension AccessibilityTests {
 
     func testPlaceholderScreen() async throws {
         try await performAccessibilityAudit(named: "PlaceholderScreen_Previews")
+    }
+
+    func testPlaybackSpeedButton() async throws {
+        try await performAccessibilityAudit(named: "PlaybackSpeedButton_Previews")
     }
 
     func testPollFormScreen() async throws {
@@ -691,8 +703,8 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "StateRoomTimelineView_Previews")
     }
 
-    func testStaticLocationScreenViewer() async throws {
-        try await performAccessibilityAudit(named: "StaticLocationScreenViewer_Previews")
+    func testStaticLocationSheet() async throws {
+        try await performAccessibilityAudit(named: "StaticLocationSheet_Previews")
     }
 
     func testStickerRoomTimelineView() async throws {

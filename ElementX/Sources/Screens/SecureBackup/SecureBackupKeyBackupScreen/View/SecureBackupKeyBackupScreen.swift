@@ -90,7 +90,7 @@ struct SecureBackupKeyBackupScreen_Previews: PreviewProvider, TestablePreview {
     static let setupViewModel = viewModel(keyBackupState: .enabled)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupKeyBackupScreen(context: setupViewModel.context)
         }
         .previewDisplayName("Set up")

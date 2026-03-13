@@ -16,7 +16,7 @@ struct LocationRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             mainContent
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel(accessibilityLabel)
+                .accessibilityLabel(L10n.commonSharedLocation)
                 .onTapGesture {
                     guard context.viewState.mapTilerConfiguration.isEnabled else { return }
                     context.send(viewAction: .mediaTapped(itemID: timelineItem.id))
@@ -27,41 +27,21 @@ struct LocationRoomTimelineView: View {
     @ViewBuilder
     private var mainContent: some View {
         if let geoURI = timelineItem.content.geoURI {
-            VStack(alignment: .leading, spacing: 0) {
-                descriptionView
-                    .frame(maxWidth: mapAspectRatio * mapMaxHeight, alignment: .leading)
-                
-                MapLibreStaticMapView(geoURI: geoURI,
-                                      mapURLBuilder: context.viewState.mapTilerConfiguration,
-                                      mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
-                    LocationMarkerView()
-                }
-                .frame(maxHeight: mapMaxHeight)
-                .aspectRatio(mapAspectRatio, contentMode: .fit)
-                .clipped()
+            MapLibreStaticMapView(geoURI: geoURI,
+                                  mapURLBuilder: context.viewState.mapTilerConfiguration,
+                                  mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
+                LocationMarkerView(userProfile: timelineItem.content.kind == .sender ? .init(sender: timelineItem.sender) : nil,
+                                   mediaProvider: context.mediaProvider)
             }
+            .frame(maxHeight: mapMaxHeight)
+            .aspectRatio(mapAspectRatio, contentMode: .fit)
+            .clipped()
         } else {
             FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
         }
     }
 
     // MARK: - Private
-    
-    private var accessibilityLabel: String {
-        if let description = timelineItem.content.description {
-            return "\(L10n.commonSharedLocation), \(description)"
-        }
-        
-        return L10n.commonSharedLocation
-    }
-
-    @ViewBuilder
-    private var descriptionView: some View {
-        if let description = timelineItem.content.description, !description.isEmpty {
-            FormattedBodyText(text: description)
-                .padding(8)
-        }
-    }
 
     private let mapAspectRatio: Double = 3 / 2
     private let mapMaxHeight: Double = 300
@@ -107,9 +87,9 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
-                                                     sender: .init(id: "Bob"),
+                                                     sender: .init(id: "@bob:matrix.org", displayName: "Bob", avatarURL: .mockMXCUserAvatar),
                                                      content: .init(body: "Fallback geo uri description",
-                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description")))
+                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366))))
         LocationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                      timestamp: .mock,
                                                      isOutgoing: false,
@@ -117,7 +97,8 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      canBeRepliedTo: true,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
-                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description"),
+                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366),
+                                                                    kind: .pin),
                                                      properties: .init(replyDetails: .loaded(sender: .init(id: "Someone"),
                                                                                              eventID: "123",
                                                                                              eventContent: .message(.text(.init(body: "The thread content goes 'ere.")))),

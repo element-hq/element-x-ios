@@ -128,6 +128,7 @@ struct RoomMembersListScreen: View {
     }
 }
 
+@MainActor
 private enum MembersSection {
     case joined
     case invited
@@ -173,7 +174,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
     static let emptyBannedViewModel = makeViewModel(withBanned: false, isAdmin: false, initialMode: .members)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             RoomMembersListScreen(context: viewModel.context)
         }
         .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
@@ -181,7 +182,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Member")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomMembersListScreen(context: invitesViewModel.context)
         }
         .snapshotPreferences(expect: invitesViewModel.context.$viewState.map { state in
@@ -189,7 +190,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Invites")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomMembersListScreen(context: adminViewModel.context)
         }
         .snapshotPreferences(expect: adminViewModel.context.$viewState.map { state in
@@ -197,7 +198,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Admin: Members")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomMembersListScreen(context: bannedViewModel.context)
         }
         .snapshotPreferences(expect: bannedViewModel.context.$viewState.map { state in
@@ -205,7 +206,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Admin: Banned")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomMembersListScreen(context: emptyBannedViewModel.context)
                 .onAppear { emptyBannedViewModel.context.searchQuery = "Dan" }
         }

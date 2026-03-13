@@ -1,5 +1,6 @@
 "Notification" = "Notification";
 "a11y_add_reaction" = "Add reaction: %1$@";
+"a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Minimize message text field";
 "a11y_delete" = "Delete";
@@ -18,10 +19,13 @@
 "a11y_pause" = "Pause";
 "a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "PIN field";
+"a11y_pinned_location" = "Pinned location";
 "a11y_play" = "Play";
+"a11y_playback_speed" = "Playback speed";
 "a11y_poll_end" = "Ended poll";
 "a11y_polls_will_remove_selection" = "Will remove previous selection";
 "a11y_polls_winning_answer" = "This is the winning answer";
+"a11y_qr_code" = "QR Code";
 "a11y_react_with" = "React with %1$@";
 "a11y_react_with_other_emojis" = "React with other emojis";
 "a11y_read_receipts_multiple" = "Read by %1$@ and %2$@";
@@ -30,9 +34,11 @@
 "a11y_remove_reaction" = "Remove reaction: %1$@";
 "a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Send files";
+"a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "Show password";
 "a11y_start_call" = "Start a call";
+"a11y_start_voice_call" = "Start a voice call";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "User menu";
 "a11y_view_avatar" = "View avatar";
@@ -145,6 +151,7 @@
 "action_send_voice_message" = "Send voice message";
 "action_share" = "Share";
 "action_share_link" = "Share link";
+"action_share_live_location" = "Share live location";
 "action_show" = "Show";
 "action_sign_in_again" = "Sign in again";
 "action_signout" = "Sign out";
@@ -258,6 +265,7 @@
 "common_open_source_licenses" = "Open source licenses";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "or";
+"common_other_options" = "Other options";
 "common_password" = "Password";
 "common_people" = "People";
 "common_permalink" = "Permalink";
@@ -386,12 +394,13 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@’s identity was reset.";
 "crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ identity was reset. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
+"dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
 "dialog_confirm_link_title" = "Double-check this link";
 "dialog_file_too_large_to_upload_title" = "The file size is too large to upload";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
 "dialog_permission_generic" = "Please grant the permission in the system settings.";
-"dialog_permission_location_description_ios" = "Grant access in Settings -> Location.";
+"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
 "dialog_permission_location_title_ios" = "%1$@ does not have access to your location.";
 "dialog_permission_microphone" = "In order to let the application use the microphone, please grant the permission in the system settings.";
 "dialog_permission_microphone_description_ios" = "Grant access so you can record and send messages with audio.";
@@ -453,6 +462,7 @@
 "notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Silent notifications";
 "notification_fallback_content" = "You have new messages.";
+"notification_incoming_audio_call" = "📞 Incoming call";
 "notification_incoming_call" = "📹 Incoming call";
 "notification_inline_reply_failed" = "** Failed to send - please open room";
 "notification_invite_body" = "Invited you to chat";
@@ -660,6 +670,7 @@
 "screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimize image quality";
 "screen_media_upload_preview_processing" = "Processing...";
+"screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_push_history_title" = "Push history";
@@ -737,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Security & privacy";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "View members";
@@ -762,6 +774,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Matching room found";
 "screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
 "screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Shared %1$@";
+"screen_static_location_sheet_title" = "On the map";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
@@ -1082,7 +1096,7 @@
 "screen_room_attachment_source_camera_video" = "Record video";
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
-"screen_room_attachment_source_location" = "Location";
+"screen_room_attachment_source_location" = "Share location";
 "screen_room_attachment_source_poll" = "Poll";
 "screen_room_attachment_text_formatting" = "Text Formatting";
 "screen_room_change_permissions_administrators" = "Admin";
@@ -1262,7 +1276,7 @@
 "screen_share_open_apple_maps" = "Open in Apple Maps";
 "screen_share_open_google_maps" = "Open in Google Maps";
 "screen_share_open_osm_maps" = "Open in OpenStreetMap";
-"screen_share_this_location_action" = "Share this location";
+"screen_share_this_location_action" = "Share selected location";
 "screen_signed_out_reason_1" = "You’ve changed your password on another session";
 "screen_signed_out_reason_2" = "You have deleted the session from another session";
 "screen_signed_out_reason_3" = "Your server’s administrator has invalidated your access";

@@ -135,7 +135,7 @@ private struct OldBloomModifier: ViewModifier {
 
 struct BloomModifier_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             mockScreen
                 .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
                 .searchable(text: .constant(""), placement: .navigationBarDrawer(displayMode: .always))
@@ -143,7 +143,7 @@ struct BloomModifier_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Chats")
         
-        NavigationStack {
+        ElementNavigationStack {
             mockScreen
                 .navigationTitle(L10n.screenSpaceListTitle)
                 .toolbarBloom(hasSearchBar: false)

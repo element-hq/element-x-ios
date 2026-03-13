@@ -36,7 +36,6 @@ struct SpaceScreenViewState: BindableState {
     var canEditRolesAndPermissions = false
     var canEditSecurityAndPrivacy = false
     var canEditChildren = false
-    var canCreateRoom = false
     
     var editMode: EditMode = .inactive
     var editModeSelectedIDs: Set<String> = []

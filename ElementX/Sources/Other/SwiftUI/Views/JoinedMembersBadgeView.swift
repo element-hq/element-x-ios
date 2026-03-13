@@ -11,6 +11,7 @@ import SwiftUI
 
 struct JoinedMembersBadgeView: View {
     let heroes: [UserProfileProxy]
+    var shouldHideAvatars = false
     let joinedCount: Int
     
     let mediaProvider: MediaProviderProtocol?
@@ -43,7 +44,7 @@ struct JoinedMembersBadgeView: View {
     var heroesFacePile: some View {
         HStack(spacing: -8) {
             ForEach(heroes.prefix(3).reversed()) { hero in
-                LoadableAvatarImage(url: hero.avatarURL,
+                LoadableAvatarImage(url: shouldHideAvatars ? nil : hero.avatarURL,
                                     name: hero.displayName,
                                     contentID: hero.userID,
                                     avatarSize: .user(on: .spaceHeader),

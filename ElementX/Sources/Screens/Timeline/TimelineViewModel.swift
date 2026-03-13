@@ -370,6 +370,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await timelineInteractionHandler.playPauseAudio(for: itemID) }
         case .seek(let itemID, let progress):
             Task { await timelineInteractionHandler.seekAudio(for: itemID, progress: progress) }
+        case .changePlaybackSpeed(let itemID):
+            timelineInteractionHandler.changePlaybackSpeed(for: itemID)
         }
     }
     
@@ -653,8 +655,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             
             let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind)
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
-        case .displayLocation(let body, let geoURI, let description):
-            actionsSubject.send(.displayLocation(body: body, geoURI: geoURI, description: description))
+        case .displayLocation(let location):
+            actionsSubject.send(.displayLocation(location))
         case .none:
             break
         }

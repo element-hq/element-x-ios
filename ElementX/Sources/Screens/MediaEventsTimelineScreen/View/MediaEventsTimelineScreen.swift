@@ -272,22 +272,22 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let emptyFilesViewModel = makeViewModel(empty: true, screenMode: .files)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             MediaEventsTimelineScreen(context: mediaViewModel.context)
         }
         .previewDisplayName("Media")
         
-        NavigationStack {
+        ElementNavigationStack {
             MediaEventsTimelineScreen(context: filesViewModel.context)
         }
         .previewDisplayName("Files")
         
-        NavigationStack {
+        ElementNavigationStack {
             MediaEventsTimelineScreen(context: emptyMediaViewModel.context)
         }
         .previewDisplayName("Empty Media")
         
-        NavigationStack {
+        ElementNavigationStack {
             MediaEventsTimelineScreen(context: emptyFilesViewModel.context)
         }
         .previewDisplayName("Empty Files")

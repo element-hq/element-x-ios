@@ -1,7 +1,7 @@
 // swiftlint:disable all
 // swiftformat:disable all
 
-import XCTest
+import Testing
 @testable import ElementX
 {% if argument.mainTarget %}
 @testable import {{ argument.mainTarget }}
@@ -26,7 +26,8 @@ extension PreviewTests {
     // MARK: - PreviewProvider
 
     {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" %}
-    func test{{ type.name|replace:"_Previews", "" }}() async throws {
+    @Test
+    func {{ type.name|replace:"_Previews", ""| lowerFirstLetter }}() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in {{ type.name }}._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

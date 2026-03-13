@@ -10,15 +10,14 @@ import Compound
 import SwiftUI
 
 extension View {
-    func highlight(gradient: Gradient, borderColor: Color, backgroundColor: Color = .clear) -> some View {
-        modifier(HorizontalHighlightGradient(gradient: gradient, borderColor: borderColor, backgroundColor: backgroundColor))
+    func highlight(gradient: Gradient, borderColor: Color) -> some View {
+        modifier(HorizontalHighlightGradient(gradient: gradient, borderColor: borderColor))
     }
 }
 
 struct HorizontalHighlightGradient: ViewModifier {
     let gradient: Gradient
     let borderColor: Color
-    let backgroundColor: Color
     
     func body(content: Content) -> some View {
         ZStack(alignment: .top) {
@@ -28,7 +27,6 @@ struct HorizontalHighlightGradient: ViewModifier {
                 LinearGradient(gradient: gradient,
                                startPoint: .top,
                                endPoint: .bottom)
-                    .background(backgroundColor)
             }
             content
                 .layoutPriority(1)

@@ -76,6 +76,10 @@ struct DeveloperOptionsScreen: View {
                     Text("Can leak the device IP address when loading link metadata.")
                         .foregroundStyle(.compound.textCriticalPrimary)
                 }
+                
+                Toggle(isOn: $context.liveLocationSharingEnabled) {
+                    Text("Live location sharing")
+                }
             }
                         
             Section("Join rules") {
@@ -215,7 +219,7 @@ struct DeveloperOptionsScreen_Previews: PreviewProvider {
                                                            appHooks: AppHooks(),
                                                            clientProxy: ClientProxyMock(.init()))
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             DeveloperOptionsScreen(context: viewModel.context)
         }
     }

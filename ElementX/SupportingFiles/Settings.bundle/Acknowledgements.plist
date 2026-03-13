@@ -268,6 +268,14 @@
 		</dict>
 		<dict>
 			<key>File</key>
+			<string>Packages/Flow</string>
+			<key>Title</key>
+			<string>Flow</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
 			<string>Packages/swiftui-introspect</string>
 			<key>Title</key>
 			<string>swiftui-introspect</string>

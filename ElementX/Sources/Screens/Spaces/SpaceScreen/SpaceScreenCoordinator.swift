@@ -16,7 +16,6 @@ struct SpaceScreenCoordinatorParameters {
     let spaceServiceProxy: SpaceServiceProxyProtocol
     let selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>
     let userSession: UserSessionProtocol
-    let appSettings: AppSettings
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -51,7 +50,6 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
                                          spaceServiceProxy: parameters.spaceServiceProxy,
                                          selectedSpaceRoomPublisher: parameters.selectedSpaceRoomPublisher,
                                          userSession: parameters.userSession,
-                                         appSettings: parameters.appSettings,
                                          userIndicatorController: parameters.userIndicatorController)
     }
     

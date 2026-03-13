@@ -14,6 +14,8 @@ internal enum L10n {
   internal static func a11yAddReaction(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_add_reaction", String(describing: p1))
   }
+  /// Address
+  internal static var a11yAddress: String { return L10n.tr("Localizable", "a11y_address") }
   /// Avatar
   internal static var a11yAvatar: String { return L10n.tr("Localizable", "a11y_avatar") }
   /// Minimise message text field
@@ -60,8 +62,12 @@ internal enum L10n {
   }
   /// PIN field
   internal static var a11yPinField: String { return L10n.tr("Localizable", "a11y_pin_field") }
+  /// Pinned location
+  internal static var a11yPinnedLocation: String { return L10n.tr("Localizable", "a11y_pinned_location") }
   /// Play
   internal static var a11yPlay: String { return L10n.tr("Localizable", "a11y_play") }
+  /// Playback speed
+  internal static var a11yPlaybackSpeed: String { return L10n.tr("Localizable", "a11y_playback_speed") }
   /// Poll
   internal static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
   /// Ended poll
@@ -74,6 +80,8 @@ internal enum L10n {
   internal static var a11yPollsWillRemoveSelection: String { return L10n.tr("Localizable", "a11y_polls_will_remove_selection") }
   /// This is the winning answer
   internal static var a11yPollsWinningAnswer: String { return L10n.tr("Localizable", "a11y_polls_winning_answer") }
+  /// QR Code
+  internal static var a11yQrCode: String { return L10n.tr("Localizable", "a11y_qr_code") }
   /// React with %1$@
   internal static func a11yReactWith(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_react_with", String(describing: p1))
@@ -104,12 +112,16 @@ internal enum L10n {
   }
   /// Send files
   internal static var a11ySendFiles: String { return L10n.tr("Localizable", "a11y_send_files") }
+  /// Sender location
+  internal static var a11ySenderLocation: String { return L10n.tr("Localizable", "a11y_sender_location") }
   /// Time limited action required, you have one minute to verify
   internal static var a11ySessionVerificationTimeLimitedActionRequired: String { return L10n.tr("Localizable", "a11y_session_verification_time_limited_action_required") }
   /// Show password
   internal static var a11yShowPassword: String { return L10n.tr("Localizable", "a11y_show_password") }
   /// Start a call
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
+  /// Start a voice call
+  internal static var a11yStartVoiceCall: String { return L10n.tr("Localizable", "a11y_start_voice_call") }
   /// Tombstoned room
   internal static var a11yTombstonedRoom: String { return L10n.tr("Localizable", "a11y_tombstoned_room") }
   /// User menu
@@ -328,6 +340,8 @@ internal enum L10n {
   internal static var actionShare: String { return L10n.tr("Localizable", "action_share") }
   /// Share link
   internal static var actionShareLink: String { return L10n.tr("Localizable", "action_share_link") }
+  /// Share live location
+  internal static var actionShareLiveLocation: String { return L10n.tr("Localizable", "action_share_live_location") }
   /// Show
   internal static var actionShow: String { return L10n.tr("Localizable", "action_show") }
   /// Sign in again
@@ -576,6 +590,8 @@ internal enum L10n {
   internal static var commonOpticIdIos: String { return L10n.tr("Localizable", "common_optic_id_ios") }
   /// or
   internal static var commonOr: String { return L10n.tr("Localizable", "common_or") }
+  /// Other options
+  internal static var commonOtherOptions: String { return L10n.tr("Localizable", "common_other_options") }
   /// Password
   internal static var commonPassword: String { return L10n.tr("Localizable", "common_password") }
   /// People
@@ -876,6 +892,8 @@ internal enum L10n {
   }
   /// Withdraw verification
   internal static var cryptoIdentityChangeWithdrawVerificationAction: String { return L10n.tr("Localizable", "crypto_identity_change_withdraw_verification_action") }
+  /// Allow access
+  internal static var dialogAllowAccess: String { return L10n.tr("Localizable", "dialog_allow_access") }
   /// The link %1$@ is taking you to another site %2$@
   /// 
   /// Are you sure you want to continue?
@@ -898,8 +916,10 @@ internal enum L10n {
   internal static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
   /// Please grant the permission in the system settings.
   internal static var dialogPermissionGeneric: String { return L10n.tr("Localizable", "dialog_permission_generic") }
-  /// Grant access in Settings -> Location.
-  internal static var dialogPermissionLocationDescriptionIos: String { return L10n.tr("Localizable", "dialog_permission_location_description_ios") }
+  /// To share your current location, %1$@ needs location access. Go to Settings > Location.
+  internal static func dialogPermissionLocationDescriptionIos(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_permission_location_description_ios", String(describing: p1))
+  }
   /// %1$@ does not have access to your location.
   internal static func dialogPermissionLocationTitleIos(_ p1: Any) -> String {
     return L10n.tr("Localizable", "dialog_permission_location_title_ios", String(describing: p1))
@@ -1048,6 +1068,12 @@ internal enum L10n {
   }
   /// You have new messages.
   internal static var notificationFallbackContent: String { return L10n.tr("Localizable", "notification_fallback_content") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func notificationFallbackNContent(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "notification_fallback_n_content", p1)
+  }
+  /// 📞 Incoming call
+  internal static var notificationIncomingAudioCall: String { return L10n.tr("Localizable", "notification_incoming_audio_call") }
   /// 📹 Incoming call
   internal static var notificationIncomingCall: String { return L10n.tr("Localizable", "notification_incoming_call") }
   /// ** Failed to send - please open room
@@ -2224,6 +2250,8 @@ internal enum L10n {
   internal static var screenOnboardingSignInWithQrCode: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_with_qr_code") }
   /// Create account
   internal static var screenOnboardingSignUp: String { return L10n.tr("Localizable", "screen_onboarding_sign_up") }
+  /// Welcome back
+  internal static var screenOnboardingWelcomeBack: String { return L10n.tr("Localizable", "screen_onboarding_welcome_back") }
   /// Welcome to the fastest %1$@ ever. Supercharged for speed and simplicity.
   internal static func screenOnboardingWelcomeMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_message", String(describing: p1))
@@ -2488,7 +2516,7 @@ internal enum L10n {
   internal static var screenRoomAttachmentSourceFiles: String { return L10n.tr("Localizable", "screen_room_attachment_source_files") }
   /// Photo & Video Library
   internal static var screenRoomAttachmentSourceGallery: String { return L10n.tr("Localizable", "screen_room_attachment_source_gallery") }
-  /// Location
+  /// Share location
   internal static var screenRoomAttachmentSourceLocation: String { return L10n.tr("Localizable", "screen_room_attachment_source_location") }
   /// Poll
   internal static var screenRoomAttachmentSourcePoll: String { return L10n.tr("Localizable", "screen_room_attachment_source_poll") }
@@ -3143,8 +3171,10 @@ internal enum L10n {
   internal static var screenShareOpenGoogleMaps: String { return L10n.tr("Localizable", "screen_share_open_google_maps") }
   /// Open in OpenStreetMap
   internal static var screenShareOpenOsmMaps: String { return L10n.tr("Localizable", "screen_share_open_osm_maps") }
-  /// Share this location
+  /// Share selected location
   internal static var screenShareThisLocationAction: String { return L10n.tr("Localizable", "screen_share_this_location_action") }
+  /// Sharing options
+  internal static var screenSharingLocationOptionSheetTitle: String { return L10n.tr("Localizable", "screen_sharing_location_option_sheet_title") }
   /// You’ve changed your password on another session
   internal static var screenSignedOutReason1: String { return L10n.tr("Localizable", "screen_signed_out_reason_1") }
   /// You have deleted the session from another session
@@ -3255,6 +3285,12 @@ internal enum L10n {
   internal static var screenStartChatJoinRoomByAddressRoomNotFound: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_room_not_found") }
   /// e.g. #room-name:matrix.org
   internal static var screenStartChatJoinRoomByAddressSupportingText: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_supporting_text") }
+  /// Shared %1$@
+  internal static func screenStaticLocationSheetTimestampDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_static_location_sheet_timestamp_description", String(describing: p1))
+  }
+  /// On the map
+  internal static var screenStaticLocationSheetTitle: String { return L10n.tr("Localizable", "screen_static_location_sheet_title") }
   /// Message not sent because %1$@’s verified identity was reset.
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))

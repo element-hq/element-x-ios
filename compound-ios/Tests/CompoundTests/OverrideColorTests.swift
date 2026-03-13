@@ -8,31 +8,32 @@
 
 @testable import Compound
 import Foundation
-import XCTest
+import Testing
 
-@MainActor
-class OverrideColorTests: XCTestCase {
-    func testSwiftUI() {
+struct OverrideColorTests {
+    @Test("SwiftUI color override")
+    func swiftUI() {
         let colors = CompoundColors()
         let tokens = CompoundColorTokens()
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+        #expect(colors.textPrimary == tokens.textPrimary)
         
         colors.override(\.textPrimary, with: .pink)
-        XCTAssertEqual(colors.textPrimary, .pink)
+        #expect(colors.textPrimary == .pink)
         
         colors.override(\.textPrimary, with: nil)
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+        #expect(colors.textPrimary == tokens.textPrimary)
     }
     
-    func testUIKit() {
+    @Test("UIKit color override")
+    func uiKit() {
         let colors = CompoundUIColors()
         let tokens = CompoundUIColorTokens()
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+        #expect(colors.textPrimary == tokens.textPrimary)
         
         colors.override(\.textPrimary, with: .systemPink)
-        XCTAssertEqual(colors.textPrimary, .systemPink)
+        #expect(colors.textPrimary == .systemPink)
         
         colors.override(\.textPrimary, with: nil)
-        XCTAssertEqual(colors.textPrimary, tokens.textPrimary)
+        #expect(colors.textPrimary == tokens.textPrimary)
     }
 }

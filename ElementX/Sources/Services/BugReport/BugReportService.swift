@@ -16,7 +16,6 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private var rageshakeURL: RageshakeConfiguration
     private let applicationID: String
     private let sdkGitSHA: String
-    private let maxUploadSize: Int
     private let session: URLSession
     private let appHooks: AppHooks
     
@@ -32,13 +31,11 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     init(rageshakeURLPublisher: CurrentValuePublisher<RageshakeConfiguration, Never>,
          applicationID: String,
          sdkGitSHA: String,
-         maxUploadSize: Int,
          session: URLSession = .shared,
          appHooks: AppHooks) {
         rageshakeURL = rageshakeURLPublisher.value
         self.applicationID = applicationID
         self.sdkGitSHA = sdkGitSHA
-        self.maxUploadSize = maxUploadSize
         self.session = session
         self.appHooks = appHooks
         
@@ -210,7 +207,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private func zipFiles(_ logFiles: [URL]) async -> Logs {
         MXLog.info("zipFiles")
         
-        var compressedLogs = Logs(maxFileSize: maxUploadSize)
+        var compressedLogs = Logs()
         
         for url in logFiles {
             do {
@@ -228,15 +225,6 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     
     /// Zips a file creating chunks based on 10MB inputs.
     private func attachFile(at url: URL, to zippedFiles: inout Logs) throws {
-        // We check the compressed size to determine whether or not to attach the files.
-        // **However:** given our gzip library compresses in memory it is possible to OOM
-        // on files that will obviously be thrown away, so check the uncompressed size too.
-        let uncompressedSizeThreshold = maxUploadSize * 5
-        if try FileManager.default.sizeForItem(at: url) > uncompressedSizeThreshold {
-            MXLog.error("Uncompressed logs too large, skipping attachment: \(url.lastPathComponent)")
-            return
-        }
-        
         let fileHandle = try FileHandle(forReadingFrom: url)
         
         while let data = try fileHandle.readToEnd() {
@@ -254,9 +242,6 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     
     /// A collection of logs to be uploaded to the bug report service.
     struct Logs {
-        /// The maximum total size of all the files.
-        let maxFileSize: Int
-        
         /// The files included.
         private(set) var files: [URL] = []
         /// The total size of the files after compression.
@@ -265,10 +250,6 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         private(set) var originalSize = 0
         
         mutating func appendFile(at url: URL, zippedSize: Int, originalSize: Int) {
-            guard self.zippedSize + zippedSize < maxFileSize else {
-                MXLog.error("Logs too large, skipping attachment: \(url.lastPathComponent)")
-                return
-            }
             files.append(url)
             self.originalSize += originalSize
             self.zippedSize += zippedSize

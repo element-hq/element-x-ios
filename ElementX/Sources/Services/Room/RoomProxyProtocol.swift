@@ -196,13 +196,20 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
 
 extension JoinedRoomProxyProtocol {
     var details: RoomDetails {
-        RoomDetails(id: id,
-                    name: infoPublisher.value.displayName,
-                    avatar: infoPublisher.value.avatar,
-                    canonicalAlias: infoPublisher.value.canonicalAlias,
-                    isEncrypted: infoPublisher.value.isEncrypted,
-                    isPublic: !(infoPublisher.value.isPrivate ?? false),
-                    isDirect: infoPublisher.value.isDirect)
+        let historySharingState: RoomHistorySharingState? = if infoPublisher.value.isEncrypted {
+            infoPublisher.value.historySharingState
+        } else {
+            nil
+        }
+        
+        return RoomDetails(id: id,
+                           name: infoPublisher.value.displayName,
+                           avatar: infoPublisher.value.avatar,
+                           canonicalAlias: infoPublisher.value.canonicalAlias,
+                           isEncrypted: infoPublisher.value.isEncrypted,
+                           isPublic: !(infoPublisher.value.isPrivate ?? false),
+                           isDirect: infoPublisher.value.isDirect,
+                           historySharingState: historySharingState)
     }
     
     var isDirectOneToOneRoom: Bool {

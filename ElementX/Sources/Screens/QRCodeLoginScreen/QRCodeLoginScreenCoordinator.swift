@@ -17,19 +17,26 @@ struct QRCodeLoginScreenCoordinatorParameters {
 }
 
 enum QRCodeLoginScreenCoordinatorAction: CustomStringConvertible {
-    case dismiss
+    /// Restart the flow.
+    ///
+    /// This action should only be sent when linking a new device. When logging in it
+    /// is handled internally within the screen.
+    case startOver
     case signInManually
     case signedIn(userSession: UserSessionProtocol)
     case requestOIDCAuthorisation(URL, OIDCAccountSettingsPresenter.Continuation)
     case linkedDevice
+    /// Cancel the flow (dismiss the modal).
+    case cancel
     
     var description: String {
         switch self {
-        case .dismiss: "dismiss"
+        case .startOver: "startOver"
         case .signInManually: "signInManually"
         case .signedIn: "signedIn"
         case .requestOIDCAuthorisation: "requestOIDCAuthorisation"
         case .linkedDevice: "linkedDevice"
+        case .cancel: "cancel"
         }
     }
 }
@@ -60,14 +67,16 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .signInManually:
                 actionsSubject.send(.signInManually)
-            case .dismiss:
-                actionsSubject.send(.dismiss)
+            case .startOver:
+                actionsSubject.send(.startOver)
             case .signedIn(let userSession):
                 actionsSubject.send(.signedIn(userSession: userSession))
             case .requestOIDCAuthorisation(let url, let continuation):
                 actionsSubject.send(.requestOIDCAuthorisation(url, continuation))
             case .linkedDevice:
                 actionsSubject.send(.linkedDevice)
+            case .cancel:
+                actionsSubject.send(.cancel)
             }
         }
         .store(in: &cancellables)

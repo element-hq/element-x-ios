@@ -182,7 +182,7 @@ class UserFlowTests: XCTestCase {
     
     private func checkRoomDetails() {
         // Open the room details
-        let roomHeader = app.staticTexts[A11yIdentifiers.roomScreen.name]
+        let roomHeader = app.buttons[A11yIdentifiers.roomScreen.name]
         XCTAssertTrue(roomHeader.waitForExistence(timeout: 10.0))
         roomHeader.tap(.center)
         

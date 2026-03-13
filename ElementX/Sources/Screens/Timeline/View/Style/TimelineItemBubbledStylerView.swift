@@ -238,6 +238,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
 }
 
+@MainActor
 private extension EventBasedTimelineItemProtocol {
     var bubbleBackgroundColor: Color? {
         let defaultColor: Color = isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
@@ -704,20 +705,7 @@ private struct MockTimelineContent: View {
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782,
-                                                                                  longitude: 12.496366),
-                                                                    description: "Location description description description description description description description description"),
-                                                     properties: .init(replyDetails: replyDetails,
-                                                                       isThreaded: isThreaded,
-                                                                       threadSummary: threadSummary)))
-        
-        LocationRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
-                                                     timestamp: .mock,
-                                                     isOutgoing: false,
-                                                     isEditable: false,
-                                                     canBeRepliedTo: true,
-                                                     sender: .init(id: "Bob"),
-                                                     content: .init(body: "Fallback geo uri description",
-                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
+                                                                                  longitude: 12.496366)),
                                                      properties: .init(replyDetails: replyDetails,
                                                                        isThreaded: isThreaded,
                                                                        threadSummary: threadSummary)))

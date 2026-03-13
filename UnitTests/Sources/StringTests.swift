@@ -7,79 +7,89 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
-class StringTests: XCTestCase {
-    func testEmptyIsAscii() {
-        XCTAssertTrue("".isASCII)
+struct StringTests {
+    @Test
+    func emptyIsAscii() {
+        #expect("".isASCII)
     }
     
-    func testSpaceIsAscii() {
-        XCTAssertTrue("".isASCII)
+    @Test
+    func spaceIsAscii() {
+        #expect("".isASCII)
     }
 
-    func testJohnnyIsAscii() {
-        XCTAssertTrue("johnny".isASCII)
+    @Test
+    func johnnyIsAscii() {
+        #expect("johnny".isASCII)
     }
     
-    func testJöhnnyIsNotAscii() {
-        XCTAssertFalse("jöhnny".isASCII)
+    @Test
+    func jöhnnyIsNotAscii() {
+        #expect(!"jöhnny".isASCII)
     }
     
-    func testJ🅾️hnnyIsNotAscii() {
-        XCTAssertFalse("j🅾️hnny".isASCII)
+    @Test
+    func jEmojiHnnyIsNotAscii() {
+        #expect(!"j🅾️hnny".isASCII)
     }
     
-    func testAsciifiedMethod() {
+    @Test
+    func asciifiedMethod() {
         // ASCII strings return themselves unchanged
-        XCTAssertEqual("johnny".asciified(), "johnny")
-        XCTAssertEqual("hello".asciified(), "hello")
-        XCTAssertEqual("abc123".asciified(), "abc123")
-        XCTAssertEqual("".asciified(), "")
-        XCTAssertEqual(" ".asciified(), " ")
+        #expect("johnny".asciified() == "johnny")
+        #expect("hello".asciified() == "hello")
+        #expect("abc123".asciified() == "abc123")
+        #expect("".asciified() == "")
+        #expect(" ".asciified() == " ")
         
         // Non-ASCII strings get converted or stripped
-        XCTAssertEqual("jöhnny".asciified(), "johnny", "ö should become o")
-        XCTAssertEqual("jåhnny".asciified(), "jahnny", "å should become a")
-        XCTAssertEqual("café".asciified(), "cafe")
-        XCTAssertEqual("naïve".asciified(), "naive")
-        XCTAssertEqual("résumé".asciified(), "resume")
-        XCTAssertEqual("🚀".asciified(), "")
-        XCTAssertEqual("Heartbreak Hotel 🏩".asciified(), "Heartbreak Hotel", "The emoji should be stripped.")
-        XCTAssertEqual("1️⃣2️⃣3️⃣".asciified(), "123", "The emoji should be converted to ASCII.")
+        #expect("jöhnny".asciified() == "johnny", "ö should become o")
+        #expect("jåhnny".asciified() == "jahnny", "å should become a")
+        #expect("café".asciified() == "cafe")
+        #expect("naïve".asciified() == "naive")
+        #expect("résumé".asciified() == "resume")
+        #expect("🚀".asciified() == "")
+        #expect("Heartbreak Hotel 🏩".asciified() == "Heartbreak Hotel", "The emoji should be stripped.")
+        #expect("1️⃣2️⃣3️⃣".asciified() == "123", "The emoji should be converted to ASCII.")
     }
 
-    func testGenerateBreakableWhitespaceEnd() {
+    @Test
+    func generateBreakableWhitespaceEnd() {
         var count = 5
         var result = "\u{2066}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
-        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight), result)
+        #expect(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight) == result)
 
         count = 3
         result = "\u{2066}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
-        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight), result)
+        #expect(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight) == result)
 
         count = 0
         result = ""
-        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight), result)
+        #expect(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight) == result)
 
         count = 4
         result = "\u{2067}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
-        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .rightToLeft), result)
+        #expect(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .rightToLeft) == result)
 
         count = 0
         result = ""
-        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .rightToLeft), result)
+        #expect(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .rightToLeft) == result)
     }
     
-    func testEllipsizeWorks() {
-        XCTAssertEqual("ellipsize".ellipsize(length: 5), "ellip…")
+    @Test
+    func ellipsizeWorks() {
+        #expect("ellipsize".ellipsize(length: 5) == "ellip…")
     }
     
-    func testEllipsizeNotNeeded() {
-        XCTAssertEqual("ellipsize".ellipsize(length: 15), "ellipsize")
+    @Test
+    func ellipsizeNotNeeded() {
+        #expect("ellipsize".ellipsize(length: 15) == "ellipsize")
     }
     
-    func testReplaceBreakOccurrences() {
+    @Test
+    func replaceBreakOccurrences() {
         let input0 = "</p><p>"
         let input1 = "</p>\n<p>"
         let input2 = "</p>\n\n<p>"
@@ -94,11 +104,11 @@ class StringTests: XCTestCase {
         let expectedOutput4 = "<p>a<br><br>b</p>"
         let expectedOutput5 = input5
         
-        XCTAssertEqual(input0.replacingHtmlBreaksOccurrences(), expectedOutput0)
-        XCTAssertEqual(input1.replacingHtmlBreaksOccurrences(), expectedOutput1)
-        XCTAssertEqual(input2.replacingHtmlBreaksOccurrences(), expectedOutput2)
-        XCTAssertEqual(input3.replacingHtmlBreaksOccurrences(), expectedOutput3)
-        XCTAssertEqual(input4.replacingHtmlBreaksOccurrences(), expectedOutput4)
-        XCTAssertEqual(input5.replacingHtmlBreaksOccurrences(), expectedOutput5)
+        #expect(input0.replacingHtmlBreaksOccurrences() == expectedOutput0)
+        #expect(input1.replacingHtmlBreaksOccurrences() == expectedOutput1)
+        #expect(input2.replacingHtmlBreaksOccurrences() == expectedOutput2)
+        #expect(input3.replacingHtmlBreaksOccurrences() == expectedOutput3)
+        #expect(input4.replacingHtmlBreaksOccurrences() == expectedOutput4)
+        #expect(input5.replacingHtmlBreaksOccurrences() == expectedOutput5)
     }
 }

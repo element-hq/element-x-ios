@@ -306,7 +306,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.reportContent(eventId: eventID, score: nil, reason: reason)
+            try await room.reportContent(eventId: eventID, reason: reason)
             return .success(())
         } catch {
             MXLog.error("Failed reporting eventID: \(eventID) with error: \(error)")

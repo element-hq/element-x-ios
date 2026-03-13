@@ -16,10 +16,10 @@ extension View {
     ///   - color: self explanatory, defaults to subtle secondary
     func bubbleBackground(isOutgoing: Bool = true,
                           insets: EdgeInsets = .init(top: 8, leading: 12, bottom: 8, trailing: 12),
-                          color: Color? = .compound.bgSubtleSecondary) -> some View {
+                          color: @autoclosure @MainActor () -> Color? = .compound.bgSubtleSecondary) -> some View {
         modifier(TimelineItemBubbleBackgroundModifier(isOutgoing: isOutgoing,
                                                       insets: insets,
-                                                      color: color))
+                                                      color: color()))
     }
 }
 

@@ -16,6 +16,7 @@ import SwiftUI
 /// Common settings between app and NSE
 protocol CommonSettingsProtocol: AnyObject {
     var lastNotificationBootTime: TimeInterval? { get set }
+    var notificationSoundName: RemotePreference<UNNotificationSoundName> { get }
     
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
@@ -64,6 +65,8 @@ final class AppSettings {
         
         case elementCallBaseURLOverride
         
+        case voiceMessagePlaybackSpeed
+        
         // Feature flags
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
@@ -76,11 +79,7 @@ final class AppSettings {
         case linkPreviewsEnabled
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
-        
-        // Spaces
-        case spaceFiltersEnabled
-        case spaceSettingsEnabled
-        case createSpaceEnabled
+        case liveLocationSharingEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -309,6 +308,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.lastNotificationBootTime, storageType: .userDefaults(store))
     var lastNotificationBootTime: TimeInterval?
     
+    /// The name of sound played when delivering noisy notifications.
+    var notificationSoundName: RemotePreference<UNNotificationSoundName> = .init(.init("message.caf"))
+    
     // MARK: - Logging
         
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: LogLevel.info, storageType: .userDefaults(store))
@@ -324,8 +326,6 @@ final class AppSettings {
     let bugReportSentryRustURL: URL? = Secrets.sentryRustDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server
     private(set) var bugReportApplicationID = "ucmeet-ios" // TODO: UCMeet — confirm app ID for bug reports
-    /// The maximum size of the upload request. Default value is just below CloudFlare's max request size.
-    let bugReportMaxUploadSize = 50 * 1024 * 1024
     
     // MARK: - Analytics
     
@@ -369,7 +369,10 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: true, storageType: .userDefaults(store))
     var optimizeMediaUploads
-    
+
+    @UserPreference(key: UserDefaultsKeys.voiceMessagePlaybackSpeed, defaultValue: AudioPlaybackSpeed.default, storageType: .userDefaults(store))
+    var voiceMessagePlaybackSpeed: AudioPlaybackSpeed
+
     /// Whether or not to show a warning on the media caption composer so the user knows
     /// that captions might not be visible to users who are using other Matrix clients.
     let shouldShowMediaCaptionWarning = true
@@ -409,16 +412,6 @@ final class AppSettings {
     
     // MARK: - Feature Flags
     
-    /// Spaces
-    @UserPreference(key: UserDefaultsKeys.spaceSettingsEnabled, defaultValue: true, storageType: .volatile)
-    var spaceSettingsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.createSpaceEnabled, defaultValue: true, storageType: .volatile)
-    var createSpaceEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.spaceFiltersEnabled, defaultValue: true, storageType: .volatile)
-    var spaceFiltersEnabled
-    
     /// Others
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var publicSearchEnabled
@@ -451,6 +444,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.linkNewDeviceEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkNewDeviceEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.liveLocationSharingEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var liveLocationSharingEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType == .debug, storageType: .userDefaults(store))
     var developerOptionsEnabled

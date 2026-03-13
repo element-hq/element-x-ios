@@ -18,12 +18,12 @@ final class ShareToMapsAppActivity: UIActivity {
 
     private let type: MapsAppType
     private let location: CLLocationCoordinate2D
-    private let locationDescription: String?
+    private let senderName: String?
 
-    init(type: MapsAppType, location: CLLocationCoordinate2D, locationDescription: String?) {
+    init(type: MapsAppType, location: CLLocationCoordinate2D, senderName: String?) {
         self.type = type
         self.location = location
-        self.locationDescription = locationDescription
+        self.senderName = senderName
         super.init()
     }
 
@@ -44,20 +44,20 @@ final class ShareToMapsAppActivity: UIActivity {
     }
 
     override func prepare(withActivityItems activityItems: [Any]) {
-        UIApplication.shared.open(type.activityURL(for: location, locationDescription: locationDescription), options: [:]) { [weak self] result in
+        UIApplication.shared.open(type.activityURL(for: location, senderName: senderName), options: [:]) { [weak self] result in
             self?.activityDidFinish(result)
         }
     }
 }
 
 extension ShareToMapsAppActivity.MapsAppType {
-    func activityURL(for location: CLLocationCoordinate2D, locationDescription: String?) -> URL {
+    func activityURL(for location: CLLocationCoordinate2D, senderName: String?) -> URL {
         switch self {
         case .apple:
             var url: URL = "https://maps.apple.com/"
             url.append(queryItems: [
                 .init(name: "ll", value: "\(location.latitude),\(location.longitude)"),
-                .init(name: "q", value: locationDescription ?? "Pin")
+                .init(name: "q", value: senderName ?? "Pin") // We need to provide a value or no marker is displayed.
             ])
             return url
         case .google:

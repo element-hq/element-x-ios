@@ -36,12 +36,13 @@ class AudioPlayerState: ObservableObject, Identifiable {
     /// It's similar to `playbackState`, with the a difference: `.loading`
     /// updates are delayed by a fixed amount of time
     @Published private(set) var playerButtonPlaybackState: AudioPlayerPlaybackState
-
+    @Published private(set) var playbackSpeed: AudioPlaybackSpeed
+    
     private weak var audioPlayer: AudioPlayerProtocol?
     private var audioPlayerSubscription: AnyCancellable?
     private var playbackStateSubscription: AnyCancellable?
     private var displayLink: CADisplayLink?
-
+    
     /// The file url that the last player attached to this object has loaded.
     /// The file url persists even if the AudioPlayer will be detached later.
     private(set) var fileURL: URL?
@@ -57,15 +58,22 @@ class AudioPlayerState: ObservableObject, Identifiable {
     var isPublishingProgress: Bool {
         displayLink != nil
     }
-
-    init(id: AudioPlayerStateIdentifier, title: String, duration: Double, waveform: EstimatedWaveform? = nil, progress: Double = 0.0) {
+    
+    init(id: AudioPlayerStateIdentifier, title: String,
+         duration: Double,
+         waveform: EstimatedWaveform? = nil,
+         progress: Double = 0.0,
+         playbackSpeed: AudioPlaybackSpeed = .default,
+         playbackSpeedPublisher: AnyPublisher<AudioPlaybackSpeed, Never>? = nil) {
         self.id = id
         self.title = title
         self.duration = duration
         self.waveform = waveform ?? EstimatedWaveform(data: [])
         self.progress = progress
+        self.playbackSpeed = playbackSpeed
         playbackState = .stopped
         playerButtonPlaybackState = .stopped
+        playbackSpeedPublisher?.assign(to: &$playbackSpeed)
         setupPlaybackStateSubscription()
     }
     
@@ -97,6 +105,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
         playbackState = .loading
         self.audioPlayer = audioPlayer
         subscribeToAudioPlayer(audioPlayer: audioPlayer)
+        setPlaybackSpeed(playbackSpeed)
     }
     
     func detachAudioPlayer() {
@@ -111,6 +120,11 @@ class AudioPlayerState: ObservableObject, Identifiable {
         playbackState = .error
     }
     
+    func setPlaybackSpeed(_ speed: AudioPlaybackSpeed) {
+        playbackSpeed = speed
+        audioPlayer?.setPlaybackSpeed(speed.rawValue)
+    }
+
     // MARK: - Private
     
     private func subscribeToAudioPlayer(audioPlayer: AudioPlayerProtocol) {

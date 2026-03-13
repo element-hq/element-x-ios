@@ -61,7 +61,7 @@ struct BlockedUsersScreen_Previews: PreviewProvider, TestablePreview {
                                                        userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             BlockedUsersScreen(context: viewModel.context)
         }
     }

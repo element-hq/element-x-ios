@@ -133,9 +133,7 @@ struct RoomScreen: View {
         .padding(.top, 16)
         .padding(.horizontal, 16)
         .padding(.bottom, 12)
-        .highlight(gradient: .compound.info,
-                   borderColor: .compound.borderInfoSubtle,
-                   backgroundColor: .compound.bgCanvasDefault)
+        .highlight(gradient: .compound.info, borderColor: .compound.borderInfoSubtle)
     }
     
     @ViewBuilder
@@ -201,14 +199,14 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let tombstonedViewModels = makeViewModels(hasSuccessor: true)
 
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             RoomScreen(context: viewModels.room.context,
                        timelineContext: viewModels.timeline.context,
                        composerToolbar: ComposerToolbar.mock())
         }
         .previewDisplayName("Normal")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomScreen(context: readOnlyViewModels.room.context,
                        timelineContext: readOnlyViewModels.timeline.context,
                        composerToolbar: ComposerToolbar.mock())
@@ -216,7 +214,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Read-only")
         .snapshotPreferences(expect: readOnlyViewModels.room.context.$viewState.map { !$0.canSendMessage })
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomScreen(context: tombstonedViewModels.room.context,
                        timelineContext: tombstonedViewModels.timeline.context,
                        composerToolbar: ComposerToolbar.mock())

@@ -262,7 +262,7 @@ private extension HumanQrLoginError {
         case .Expired, .NotFound: // The most likely cause of a .NotFound is that the rendezvous session expired on the server side
             .qrCodeError(.expired)
         case .SlidingSyncNotAvailable:
-            .qrCodeError(.deviceNotSupported)
+            .qrCodeError(.slidingSyncNotAvailable)
         case .OtherDeviceNotSignedIn:
             .qrCodeError(.deviceNotSignedIn)
         case .Unknown, .OidcMetadataInvalid, .CheckCodeAlreadySent, .CheckCodeCannotBeSent:

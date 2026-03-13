@@ -8,37 +8,45 @@
 
 import CoreLocation
 import Foundation
+import MatrixRustSDK
 
 enum LocationSharingViewError: Error, Hashable {
     case missingAuthorization
     case mapError(MapLibreError)
 }
 
-enum StaticLocationScreenViewModelAction {
+enum LocationSharingScreenViewModelAction {
     case close
     case openSystemSettings
 }
 
-enum StaticLocationInteractionMode: Hashable {
+enum LocationSharingInteractionMode: Hashable {
     case picker
-    case viewOnly(geoURI: GeoURI, description: String? = nil)
+    case viewStatic(StaticLocationData)
 }
 
-struct StaticLocationScreenViewState: BindableState {
-    init(interactionMode: StaticLocationInteractionMode, mapURLBuilder: MapTilerURLBuilderProtocol) {
+struct LocationSharingScreenViewState: BindableState {
+    init(interactionMode: LocationSharingInteractionMode,
+         mapURLBuilder: MapTilerURLBuilderProtocol,
+         showLiveLocationSharingButton: Bool,
+         ownUserID: String) {
         self.interactionMode = interactionMode
         self.mapURLBuilder = mapURLBuilder
+        self.showLiveLocationSharingButton = showLiveLocationSharingButton
+        self.ownUserID = ownUserID
         
         bindings.showsUserLocationMode = switch interactionMode {
         case .picker: .showAndFollow
-        case .viewOnly: .show
+        case .viewStatic: .show
         }
     }
 
-    let interactionMode: StaticLocationInteractionMode
+    let interactionMode: LocationSharingInteractionMode
     let mapURLBuilder: MapTilerURLBuilderProtocol
+    let showLiveLocationSharingButton: Bool
+    let ownUserID: String
     
-    var bindings = StaticLocationScreenBindings(showsUserLocationMode: .hide)
+    var bindings = LocationSharingScreenBindings(showsUserLocationMode: .hide)
  
     /// Indicates whether the user is sharing his current location
     var isSharingUserLocation: Bool {
@@ -49,32 +57,25 @@ struct StaticLocationScreenViewState: BindableState {
         switch interactionMode {
         case .picker:
             // middle point in Europe, to be used if the users location is not yet known
-            return .init(latitude: 49.843, longitude: 9.902056)
-        case .viewOnly(let geoURI, _):
-            return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
+            .init(latitude: 49.843, longitude: 9.902056)
+        case .viewStatic(let location):
+            .init(latitude: location.geoURI.latitude, longitude: location.geoURI.longitude)
         }
     }
 
     var isLocationPickerMode: Bool {
-        interactionMode == .picker
-    }
-
-    var navigationTitle: String {
         switch interactionMode {
         case .picker:
-            return L10n.screenShareLocationTitle
-        case .viewOnly:
-            return L10n.screenViewLocationTitle
+            true
+        default:
+            false
         }
     }
-
-    var showShareAction: Bool {
-        switch interactionMode {
-        case .picker:
-            return false
-        case .viewOnly:
-            return true
-        }
+    
+    /// Returns true if the user's location has not yet been determined, while location permissions are given or not yet set
+    /// Does not work as intended on simulator.
+    var isLocationLoading: Bool {
+        !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized != false
     }
 
     var zoomLevel: Double {
@@ -85,27 +86,28 @@ struct StaticLocationScreenViewState: BindableState {
         switch interactionMode {
         case .picker:
             return 2.7
-        case .viewOnly:
+        case .viewStatic:
             return 15.0
         }
     }
-
-    var locationDescription: String? {
+    
+    var userProfile: UserProfileProxy?
+    
+    var locationMarkerUserProfile: UserProfileProxy? {
         switch interactionMode {
         case .picker:
-            return nil
-        case .viewOnly(_, let description):
-            return description
+            isSharingUserLocation ? userProfile : nil
+        case .viewStatic(let location):
+            location.kind == .sender ? userProfile : nil
         }
     }
 }
 
-struct StaticLocationScreenBindings {
+struct LocationSharingScreenBindings {
     var mapCenterLocation: CLLocationCoordinate2D?
     var geolocationUncertainty: CLLocationAccuracy?
-
     var showsUserLocationMode: ShowUserLocationMode
-    
+    var hasLoadedUserLocation = false
     var isLocationAuthorized: Bool?
     
     /// Information describing the currently displayed alert.
@@ -127,7 +129,7 @@ struct StaticLocationScreenBindings {
     var showShareSheet = false
 }
 
-enum StaticLocationScreenViewAction {
+enum LocationSharingScreenViewAction {
     case close
     case selectLocation
     case centerToUser
@@ -141,20 +143,18 @@ extension AlertInfo where T == LocationSharingViewError {
         switch error {
         case .missingAuthorization:
             self.init(id: error,
-                      title: L10n.dialogPermissionLocationTitleIos(InfoPlistReader.main.bundleDisplayName),
-                      message: L10n.dialogPermissionLocationDescriptionIos,
+                      title: L10n.dialogAllowAccess,
+                      message: L10n.dialogPermissionLocationDescriptionIos(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
         case .mapError(.failedLoadingMap):
             self.init(id: error,
-                      title: "",
-                      message: L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName),
+                      title: L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
         case .mapError(.failedLocatingUser):
             self.init(id: error,
-                      title: "",
-                      message: L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName),
+                      title: L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
         }

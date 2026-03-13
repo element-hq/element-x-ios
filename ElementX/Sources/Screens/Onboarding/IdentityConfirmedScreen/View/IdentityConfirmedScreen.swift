@@ -58,7 +58,7 @@ struct IdentityConfirmedScreen: View {
 struct IdentityConfirmedScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = IdentityConfirmedScreenViewModel()
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             IdentityConfirmedScreen(context: viewModel.context)
         }
     }

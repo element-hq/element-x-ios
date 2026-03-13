@@ -308,13 +308,14 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 return
             }
             switch action {
+            case .startOver:
+                fatalError("QR code login shouldn't request to start over as it's handled within the screen.")
+            case .requestOIDCAuthorisation, .linkedDevice:
+                fatalError("QR code login shouldn't request an OIDC flow or link a device.")
             case .signInManually:
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.cancelledLoginWithQR)
                 stateMachine.tryEvent(.confirmServer(.login))
-            case .dismiss:
-                navigationStackCoordinator.setSheetCoordinator(nil)
-                stateMachine.tryEvent(.cancelledLoginWithQR)
             case .signedIn(let userSession):
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 // Since the qr code login flow includes verification
@@ -322,8 +323,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 DispatchQueue.main.async {
                     self.stateMachine.tryEvent(.signedIn, userInfo: userSession)
                 }
-            case .requestOIDCAuthorisation, .linkedDevice:
-                fatalError("QR code login shouldn't request an OIDC flow or link a device.")
+            case .cancel:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                stateMachine.tryEvent(.cancelledLoginWithQR)
             }
         }
         .store(in: &cancellables)

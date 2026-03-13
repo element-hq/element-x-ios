@@ -128,12 +128,12 @@ struct RoomRolesAndPermissionsScreen_Previews: PreviewProvider, TestablePreview 
                                                                          userIndicatorController: UserIndicatorControllerMock(),
                                                                          analytics: ServiceLocator.shared.analytics)
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             RoomRolesAndPermissionsScreen(context: viewModel.context)
         }
         .previewDisplayName("Admin")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomRolesAndPermissionsScreen(context: creatorViewModel.context)
         }
         .previewDisplayName("Creator")

@@ -5,11 +5,13 @@ on:
 
   schedule:
     - cron:  '0 2 * * 1-5'
-    
+
+permissions: {}
+
 jobs:
   tests:
     name: Tests
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 150
 
     concurrency:
@@ -19,30 +21,20 @@ jobs:
 
     steps:
       - uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 #v1.2.3
-
-      - uses: actions/cache@v5
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
+          persist-credentials: false
 
       - name: Setup environment
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
 
       - name: Run tests
-        run: bundle exec fastlane accessibility_tests
-
-      - name: Zip results # for faster upload
-        if: failure()
-        working-directory: fastlane/test_output
-        run: zip -r AccessibilityTests.xcresult.zip AccessibilityTests.xcresult
+        run: swift run -q tools ci accessibility-tests
 
       - name: Archive artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         if: failure()
         with:
           name: Results
-          path: fastlane/test_output/AccessibilityTests.xcresult.zip
+          path: test_output/AccessibilityTests.xcresult.zip
           retention-days: 7
           if-no-files-found: ignore

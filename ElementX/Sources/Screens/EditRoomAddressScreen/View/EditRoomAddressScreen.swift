@@ -86,17 +86,17 @@ struct EditRoomAddressScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             EditRoomAddressScreen(context: noAliasviewModel.context)
         }
         .previewDisplayName("No alias")
         
-        NavigationStack {
+        ElementNavigationStack {
             EditRoomAddressScreen(context: aliasviewModel.context)
         }
         .previewDisplayName("With alias")
         
-        NavigationStack {
+        ElementNavigationStack {
             EditRoomAddressScreen(context: invalidSymbolsViewModel.context)
         }
         .snapshotPreferences(expect: invalidSymbolsViewModel.context.$viewState.map { state in
@@ -104,7 +104,7 @@ struct EditRoomAddressScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Invalid symbols")
         
-        NavigationStack {
+        ElementNavigationStack {
             EditRoomAddressScreen(context: alreadyExistingViewModel.context)
         }
         .snapshotPreferences(expect: alreadyExistingViewModel.context.$viewState.map { state in

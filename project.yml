@@ -51,7 +51,7 @@ settings:
   ENABLE_BITCODE: false
   APP_NAME: ElementX
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 26.02.2
+  MARKETING_VERSION: 26.03.4
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
   SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: false
@@ -74,7 +74,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 26.02.10
+    exactVersion: 26.03.10
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
@@ -84,7 +84,7 @@ packages:
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.16.3
+    exactVersion: 0.17.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     minorVersion: 1.5.0
@@ -155,6 +155,9 @@ packages:
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.18.7
+  SwiftFlow:
+    url: https://github.com/tevelee/SwiftUI-Flow.git
+    minorVersion: 3.1.1
   SwiftSoup:
     url: https://github.com/scinfu/SwiftSoup.git
     minorVersion: 2.11.2

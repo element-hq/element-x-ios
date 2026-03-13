@@ -30,7 +30,7 @@ struct RoomScreenFooterView: View {
         case .pinViolation:
             .compound.info
         case .verificationViolation:
-            Gradient(colors: [.compound.bgCriticalSubtle, .clear])
+            .compound.critical
         case .none:
             Gradient(colors: [.clear])
         }
@@ -39,9 +39,7 @@ struct RoomScreenFooterView: View {
     var body: some View {
         if let details {
             detailsView(details)
-                .highlight(gradient: gradient,
-                           borderColor: borderColor,
-                           backgroundColor: .compound.bgCanvasDefault)
+                .highlight(gradient: gradient, borderColor: borderColor)
                 .padding(.top, 8)
                 .fixedSize(horizontal: false, vertical: true)
         }

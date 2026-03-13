@@ -417,7 +417,13 @@ class TimelineInteractionHandler {
     }
     
     // MARK: Audio Playback
-    
+
+    func changePlaybackSpeed(for itemID: TimelineItemIdentifier) {
+        let nextSpeed = appSettings.voiceMessagePlaybackSpeed.next
+        appSettings.voiceMessagePlaybackSpeed = nextSpeed
+        audioPlayerState(for: itemID)?.setPlaybackSpeed(nextSpeed)
+    }
+
     func playPauseAudio(for itemID: TimelineItemIdentifier) async {
         MXLog.info("Toggle play/pause audio for itemID \(itemID)")
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
@@ -503,7 +509,9 @@ class TimelineInteractionHandler {
         let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
                                            title: L10n.commonVoiceMessage,
                                            duration: voiceMessageRoomTimelineItem.content.duration,
-                                           waveform: voiceMessageRoomTimelineItem.content.waveform)
+                                           waveform: voiceMessageRoomTimelineItem.content.waveform,
+                                           playbackSpeed: appSettings.voiceMessagePlaybackSpeed,
+                                           playbackSpeedPublisher: appSettings.$voiceMessagePlaybackSpeed)
         mediaPlayerProvider.register(audioPlayerState: playerState)
         return playerState
     }
@@ -528,7 +536,10 @@ class TimelineInteractionHandler {
         switch timelineItem {
         case let item as LocationRoomTimelineItem:
             guard let geoURI = item.content.geoURI else { return .none }
-            return .displayLocation(body: item.content.body, geoURI: geoURI, description: item.content.description)
+            return .displayLocation(.init(sender: item.sender,
+                                          geoURI: geoURI,
+                                          kind: item.content.kind,
+                                          timestamp: item.timestamp))
         case is ImageRoomTimelineItem,
              is VideoRoomTimelineItem:
             return await mediaPreviewAction(for: timelineItem, messageTypes: [.image, .video])

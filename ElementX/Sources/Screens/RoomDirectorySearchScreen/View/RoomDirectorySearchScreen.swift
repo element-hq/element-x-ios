@@ -13,7 +13,7 @@ struct RoomDirectorySearchScreen: View {
     @ObservedObject var context: RoomDirectorySearchScreenViewModel.Context
     
     var body: some View {
-        NavigationStack {
+        ElementNavigationStack {
             List {
                 Section {
                     ForEach(context.viewState.rooms) { room in

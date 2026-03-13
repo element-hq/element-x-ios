@@ -199,8 +199,8 @@ extension SDKListener: KnockRequestsListener where T == [KnockRequest] {
 
 // MARK: TimelineProxy
 
-extension SDKListener: PaginationStatusListener where T == RoomPaginationStatus {
-    func onUpdate(status: RoomPaginationStatus) {
+extension SDKListener: PaginationStatusListener where T == PaginationStatus {
+    func onUpdate(status: PaginationStatus) {
         onUpdateClosure(status)
     }
 }

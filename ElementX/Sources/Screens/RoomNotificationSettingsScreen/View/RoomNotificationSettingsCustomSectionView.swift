@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct RoomNotificationSettingsCustomSectionView: View {
-    @ObservedObject var context: RoomNotificationSettingsScreenViewModel.Context
+    @Bindable var context: RoomNotificationSettingsScreenViewModel.Context
     
     var body: some View {
         Section {

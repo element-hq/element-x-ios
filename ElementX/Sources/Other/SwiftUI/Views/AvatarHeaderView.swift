@@ -7,6 +7,7 @@
 //
 
 import Compound
+import Flow
 import SwiftUI
 
 struct AvatarHeaderView<Footer: View>: View {
@@ -17,6 +18,7 @@ struct AvatarHeaderView<Footer: View>: View {
     
     private enum Badge: Hashable {
         case encrypted(Bool)
+        case historySharingState(RoomHistorySharingState)
         case `public`
         case verified
     }
@@ -56,6 +58,9 @@ struct AvatarHeaderView<Footer: View>: View {
         badges.append(.encrypted(room.isEncrypted))
         if room.isPublic {
             badges.append(.public)
+        }
+        if let state = room.historySharingState {
+            badges.append(.historySharingState(state))
         }
         self.badges = badges
     }
@@ -129,7 +134,10 @@ struct AvatarHeaderView<Footer: View>: View {
     }
     
     private var badgesStack: some View {
-        HStack(spacing: 8) {
+        HFlow(horizontalAlignment: .center,
+              verticalAlignment: .top,
+              horizontalSpacing: 8.0,
+              verticalSpacing: 8.0) {
             ForEach(badges, id: \.self) { badge in
                 switch badge {
                 case .encrypted(true):
@@ -148,6 +156,18 @@ struct AvatarHeaderView<Footer: View>: View {
                     BadgeLabel(title: L10n.commonVerified,
                                icon: \.verified,
                                style: .accent)
+                case .historySharingState(.hidden):
+                    BadgeLabel(title: L10n.cryptoHistorySharingRoomInfoHiddenBadgeContent,
+                               icon: \.visibilityOff,
+                               style: .info)
+                case .historySharingState(.shared):
+                    BadgeLabel(title: L10n.cryptoHistorySharingRoomInfoSharedBadgeContent,
+                               icon: \.history,
+                               style: .info)
+                case .historySharingState(.worldReadable):
+                    BadgeLabel(title: L10n.cryptoHistorySharingRoomInfoWorldReadableBadgeContent,
+                               icon: \.userProfileSolid,
+                               style: .info)
                 }
             }
         }
@@ -233,7 +253,8 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                                          canonicalAlias: "#test:matrix.org",
                                          isEncrypted: true,
                                          isPublic: true,
-                                         isDirect: false),
+                                         isDirect: false,
+                                         historySharingState: nil),
                              avatarSize: .room(on: .details),
                              mediaProvider: MediaProviderMock(configuration: .init())) {
                 HStack(spacing: 32) {
@@ -279,5 +300,34 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
         .background(Color.compound.bgSubtleSecondaryLevel0)
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Members")
+        
+        makeHistorySharingPreview(state: .hidden).previewDisplayName("History Sharing - Hidden")
+        makeHistorySharingPreview(state: .shared).previewDisplayName("History Sharing - Shared")
+        makeHistorySharingPreview(state: .worldReadable).previewDisplayName("History Sharing - World Readable")
+    }
+    
+    private static func makeHistorySharingPreview(state: RoomHistorySharingState) -> some View {
+        Form {
+            AvatarHeaderView(room: .init(id: "@test:matrix.org",
+                                         name: "Test Room",
+                                         avatar: .room(id: "@test:matrix.org",
+                                                       name: "Test Room",
+                                                       avatarURL: .mockMXCAvatar),
+                                         canonicalAlias: "#test:matrix.org",
+                                         isEncrypted: true,
+                                         isPublic: true,
+                                         isDirect: false,
+                                         historySharingState: state),
+                             avatarSize: .room(on: .details),
+                             mediaProvider: MediaProviderMock(configuration: .init())) {
+                HStack(spacing: 32) {
+                    ShareLink(item: "test") {
+                        CompoundIcon(\.shareIos)
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: "Test"))
+                }
+                .padding(.top, 32)
+            }
+        }
     }
 }

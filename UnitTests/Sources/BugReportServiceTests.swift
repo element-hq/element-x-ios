@@ -9,13 +9,13 @@
 import Combine
 @testable import ElementX
 import Foundation
-import XCTest
+import Testing
 
-class BugReportServiceTests: XCTestCase {
+final class BugReportServiceTests {
     var appSettings: AppSettings!
     var bugReportService: BugReportServiceProtocol!
-
-    override func setUpWithError() throws {
+    
+    init() throws {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         appSettings.bugReportRageshakeURL.reset()
@@ -26,15 +26,17 @@ class BugReportServiceTests: XCTestCase {
         bugReportService = bugReportServiceMock
     }
     
-    override func tearDown() {
+    deinit {
         appSettings.bugReportRageshakeURL.reset()
     }
-
-    func testInitialStateWithMockService() {
-        XCTAssertFalse(bugReportService.crashedLastRun)
+    
+    @Test
+    func initialStateWithMockService() {
+        #expect(!bugReportService.crashedLastRun)
     }
-
-    func testSubmitBugReportWithMockService() async throws {
+    
+    @Test
+    func submitBugReportWithMockService() async throws {
         let bugReport = BugReport(userID: "@mock:client.com",
                                   deviceID: nil,
                                   ed25519: nil,
@@ -46,43 +48,44 @@ class BugReportServiceTests: XCTestCase {
                                   files: [])
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)
         let response = try await bugReportService.submitBugReport(bugReport, progressListener: progressSubject).get()
-        let reportURL = try XCTUnwrap(response.reportURL)
-        XCTAssertFalse(reportURL.isEmpty)
+        let reportURL = try #require(response.reportURL)
+        #expect(!reportURL.isEmpty)
     }
     
-    func testInitialStateWithRealService() {
+    @Test
+    @MainActor
+    func initialStateWithRealService() {
         let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.url("https://example.com/submit"))
         let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
-                                       maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
                                        session: .mock,
                                        appHooks: AppHooks())
-        XCTAssertTrue(service.isEnabled)
-        XCTAssertFalse(service.crashedLastRun)
+        #expect(service.isEnabled)
+        #expect(!service.crashedLastRun)
     }
     
-    func testInitialStateWithRealServiceAndDisabled() {
+    @Test
+    func initialStateWithRealServiceAndDisabled() {
         let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.disabled)
         let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
-                                       maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
                                        session: .mock,
                                        appHooks: AppHooks())
-        XCTAssertFalse(service.isEnabled)
-        XCTAssertFalse(service.crashedLastRun)
+        #expect(!service.isEnabled)
+        #expect(!service.crashedLastRun)
     }
     
-    @MainActor func testSubmitBugReportWithRealService() async throws {
+    @Test @MainActor
+    func submitBugReportWithRealService() async throws {
         let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.url("https://example.com/submit"))
         let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
-                                       maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
                                        session: .mock,
                                        appHooks: AppHooks())
-
+        
         let bugReport = BugReport(userID: "@mock:client.com",
                                   deviceID: nil,
                                   ed25519: nil,
@@ -95,29 +98,30 @@ class BugReportServiceTests: XCTestCase {
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)
         let response = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
         
-        XCTAssertEqual(response.reportURL, "https://example.com/123")
+        #expect(response.reportURL == "https://example.com/123")
     }
     
-    @MainActor func testConfigurations() async throws {
+    @Test
+    @MainActor
+    func configurations() async throws {
         guard case let .url(initialURL) = appSettings.bugReportRageshakeURL.publisher.value else {
-            XCTFail("Unexpected initial configuration.")
+            Issue.record("Unexpected initial configuration.")
             return
         }
         
         let service = BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
-                                       maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
                                        session: .mock,
                                        appHooks: AppHooks())
-        XCTAssertTrue(service.isEnabled)
+        #expect(service.isEnabled)
         
         appSettings.bugReportRageshakeURL.applyRemoteValue(.disabled)
-        XCTAssertFalse(service.isEnabled)
+        #expect(!service.isEnabled)
         
         appSettings.bugReportRageshakeURL.applyRemoteValue(.url("https://bugs.server.net/submit"))
-        XCTAssertTrue(service.isEnabled)
-
+        #expect(service.isEnabled)
+        
         let bugReport = BugReport(userID: "@mock:client.com",
                                   deviceID: nil,
                                   ed25519: nil,
@@ -130,39 +134,14 @@ class BugReportServiceTests: XCTestCase {
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)
         let customConfigurationResponse = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
         
-        XCTAssertEqual(customConfigurationResponse.reportURL, "https://bugs.server.net/123")
+        #expect(customConfigurationResponse.reportURL == "https://bugs.server.net/123")
         
         appSettings.bugReportRageshakeURL.reset()
-        XCTAssertTrue(service.isEnabled)
+        #expect(service.isEnabled)
         
         let defaultConfigurationResponse = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
         
-        XCTAssertEqual(defaultConfigurationResponse.reportURL, initialURL.absoluteString.replacingOccurrences(of: "submit", with: "123"))
-    }
-    
-    func testLogsMaxSize() {
-        // Given a new set of logs
-        var logs = BugReportService.Logs(maxFileSize: 1000)
-        XCTAssertEqual(logs.zippedSize, 0)
-        XCTAssertEqual(logs.originalSize, 0)
-        XCTAssertTrue(logs.files.isEmpty)
-        
-        // When adding new files within the size limit
-        logs.appendFile(at: .homeDirectory, zippedSize: 250, originalSize: 1000)
-        logs.appendFile(at: .picturesDirectory, zippedSize: 500, originalSize: 2000)
-        
-        // Then the logs should be included
-        XCTAssertEqual(logs.zippedSize, 750)
-        XCTAssertEqual(logs.originalSize, 3000)
-        XCTAssertEqual(logs.files, [.homeDirectory, .picturesDirectory])
-        
-        // When adding a new file larger that will exceed the size limit
-        logs.appendFile(at: .homeDirectory, zippedSize: 500, originalSize: 2000)
-        
-        // Then the files shouldn't be included.
-        XCTAssertEqual(logs.zippedSize, 750)
-        XCTAssertEqual(logs.originalSize, 3000)
-        XCTAssertEqual(logs.files, [.homeDirectory, .picturesDirectory])
+        #expect(defaultConfigurationResponse.reportURL == initialURL.absoluteString.replacingOccurrences(of: "submit", with: "123"))
     }
 }
 
@@ -179,15 +158,15 @@ private class MockURLProtocol: URLProtocol {
             client?.urlProtocolDidFinishLoading(self)
         }
     }
-
+    
     override func stopLoading() {
         //  no-op
     }
-
+    
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         request
     }
-
+    
     override class func canInit(with request: URLRequest) -> Bool {
         true
     }

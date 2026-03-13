@@ -123,25 +123,25 @@ struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
     static let recoveryIncompleteViewModel = viewModel(keyBackupState: .enabled, recoveryState: .incomplete)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupScreen(context: bothSetupViewModel.context)
         }
         .snapshotPreferences(expect: bothSetupViewModel.context.observe(\.viewState.keyBackupState).map { $0 == .enabled })
         .previewDisplayName("Both setup")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupScreen(context: onlyKeyBackupSetUpViewModel.context)
         }
         .snapshotPreferences(expect: onlyKeyBackupSetUpViewModel.context.observe(\.viewState.keyBackupState).map { $0 == .enabled })
         .previewDisplayName("Only key backup setup")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupScreen(context: keyBackupDisabledViewModel.context)
         }
         .snapshotPreferences(expect: keyBackupDisabledViewModel.context.observe(\.viewState.keyBackupState).map { $0 == .unknown })
         .previewDisplayName("Key backup disabled")
         
-        NavigationStack {
+        ElementNavigationStack {
             SecureBackupScreen(context: recoveryIncompleteViewModel.context)
         }
         .snapshotPreferences(expect: recoveryIncompleteViewModel.context.observe(\.viewState.recoveryState).map { $0 == .incomplete })

@@ -25,7 +25,6 @@ import SwiftUI
         let icon: KeyPath<CompoundIcons, Image>
         let selectedIcon: KeyPath<CompoundIcons, Image>
         var badgeCount = 0
-        var barVisibilityOverride: Visibility?
         
         /// Provide the tab's split coordinator in here to have the tab bar automatically hidden
         /// when pushing a child into the split view's details on iPhone/compact iPad.
@@ -39,9 +38,7 @@ import SwiftUI
         }
         
         func barVisibility(in horizontalSizeClass: UserInterfaceSizeClass?) -> Visibility {
-            if let barVisibilityOverride {
-                barVisibilityOverride
-            } else if horizontalSizeClass == .compact, navigationSplitCoordinator?.detailCoordinator != nil {
+            if horizontalSizeClass == .compact, navigationSplitCoordinator?.detailCoordinator != nil {
                 // Whilst we support pushing screens on the stack in the sidebarCoordinator, in practice
                 // we never do that, so simply checking that the detailCoordinator exists is enough.
                 .hidden

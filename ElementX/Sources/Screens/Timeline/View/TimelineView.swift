@@ -156,7 +156,7 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
                                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
 
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             RoomScreen(context: roomViewModel.context,
                        timelineContext: timelineViewModel.context,
                        composerToolbar: ComposerToolbar.mock())

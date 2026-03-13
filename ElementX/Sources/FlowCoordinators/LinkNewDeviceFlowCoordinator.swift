@@ -43,7 +43,8 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentLinkNewDeviceScreen() {
-        let coordinator = LinkNewDeviceScreenCoordinator(parameters: .init(clientProxy: flowParameters.userSession.clientProxy))
+        let coordinator = LinkNewDeviceScreenCoordinator(parameters: .init(clientProxy: flowParameters.userSession.clientProxy,
+                                                                           orientationManager: flowParameters.appMediator.windowManager))
         coordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
@@ -74,11 +75,13 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .signInManually, .signedIn:
                     fatalError("QR linking shouldn't send sign-in actions.")
-                case .dismiss:
-                    navigationStackCoordinator.pop()
+                case .startOver:
+                    navigationStackCoordinator.pop() // Pops back to the LinkNewDeviceScreen.
                 case .requestOIDCAuthorisation(let url, let continuation):
                     actionsSubject.send(.requestOIDCAuthorisation(url, continuation))
                 case .linkedDevice:
+                    actionsSubject.send(.dismiss)
+                case .cancel:
                     actionsSubject.send(.dismiss)
                 }
             }

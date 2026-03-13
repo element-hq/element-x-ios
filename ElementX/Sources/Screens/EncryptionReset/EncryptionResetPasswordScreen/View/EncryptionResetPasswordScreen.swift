@@ -73,7 +73,7 @@ struct EncryptionResetPasswordScreen_Previews: PreviewProvider, TestablePreview 
     static let passwordPublisher = PassthroughSubject<String, Never>()
     static let viewModel = EncryptionResetPasswordScreenViewModel(passwordPublisher: passwordPublisher)
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             EncryptionResetPasswordScreen(context: viewModel.context)
         }
     }

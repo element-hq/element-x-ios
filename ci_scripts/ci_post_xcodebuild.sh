@@ -9,7 +9,7 @@ fetch_unshallow_repository
 
 # Upload dsyms no matter the workflow
 # Perform this step before releasing to github in case it fails.
-bundle exec fastlane upload_dsyms_to_sentry dsym_path:"$CI_ARCHIVE_PATH/dSYMs"
+swift run -q tools ci upload-dsyms --dsym-path "$CI_ARCHIVE_PATH/dSYMs"
 
 generate_what_to_test_notes
 
@@ -17,5 +17,5 @@ if [ "$CI_WORKFLOW" = "Release" ]; then
     bundle exec fastlane release_to_github
     bundle exec fastlane prepare_next_release
 elif [ "$CI_WORKFLOW" = "Nightly" ]; then
-    bundle exec fastlane tag_nightly build_number:"$CI_BUILD_NUMBER"
+    swift run -q tools ci tag-nightly --build-number "$CI_BUILD_NUMBER"
 fi

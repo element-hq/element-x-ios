@@ -7,25 +7,21 @@
 //
 
 @testable import ElementX
-import XCTest
+import Testing
 
 @MainActor
-class KnockRequestsListScreenViewModelTests: XCTestCase {
-    var viewModel: KnockRequestsListScreenViewModelProtocol!
-    
-    var context: KnockRequestsListScreenViewModelType.Context {
-        viewModel.context
-    }
-    
-    override func setUpWithError() throws {
+struct KnockRequestsListScreenViewModelTests {
+    init() {
         AppSettings.resetAllSettings()
     }
     
-    func testLoadingState() async throws {
+    @Test
+    func loadingState() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loading, joinRule: .knock))
-        viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
-                                                     userIndicatorController: UserIndicatorControllerMock())
+        let viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
+                                                         mediaProvider: MediaProviderMock(),
+                                                         userIndicatorController: UserIndicatorControllerMock())
+        let context = viewModel.context
         
         let deferred = deferFulfillment(context.$viewState) { state in
             !state.shouldDisplayRequests &&
@@ -39,11 +35,13 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testEmptyState() async throws {
+    @Test
+    func emptyState() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([]), joinRule: .knock))
-        viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
-                                                     userIndicatorController: UserIndicatorControllerMock())
+        let viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
+                                                         mediaProvider: MediaProviderMock(),
+                                                         userIndicatorController: UserIndicatorControllerMock())
+        let context = viewModel.context
         
         let deferred = deferFulfillment(context.$viewState) { state in
             !state.shouldDisplayRequests &&
@@ -57,7 +55,8 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testLoadedState() async throws {
+    @Test
+    func loadedState() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(members: [.mockAdmin],
                                                       knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org")),
                                                                                    KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org")),
@@ -65,9 +64,10 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
                                                                                    KnockRequestProxyMock(.init(eventID: "4", userID: "@dan:matrix.org"))]),
                                                       ownUserID: RoomMemberProxyMock.mockAdmin.userID,
                                                       joinRule: .knock))
-        viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
-                                                     userIndicatorController: UserIndicatorControllerMock())
+        let viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
+                                                         mediaProvider: MediaProviderMock(),
+                                                         userIndicatorController: UserIndicatorControllerMock())
+        let context = viewModel.context
         
         var deferred = deferFulfillment(context.$viewState) { state in
             state.shouldDisplayRequests &&
@@ -99,10 +99,7 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
         context.send(viewAction: .declineRequest(eventID: "2"))
         try await deferred.fulfill()
         
-        guard let declineAlertInfo = context.alertInfo else {
-            XCTFail("Can't be nil")
-            return
-        }
+        let declineAlertInfo = try #require(context.alertInfo)
         deferred = deferFulfillment(context.$viewState) { state in
             state.shouldDisplayRequests &&
                 state.handledEventIDs == ["1", "2"] &&
@@ -119,10 +116,7 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
         context.send(viewAction: .ban(eventID: "3"))
         try await deferred.fulfill()
         
-        guard let banAlertInfo = context.alertInfo else {
-            XCTFail("Can't be nil")
-            return
-        }
+        let banAlertInfo = try #require(context.alertInfo)
         deferred = deferFulfillment(context.$viewState) { state in
             state.shouldDisplayRequests &&
                 state.handledEventIDs == ["1", "2", "3"] &&
@@ -134,15 +128,17 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testAcceptAll() async throws {
+    @Test
+    func acceptAll() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org")),
                                                                                    KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org")),
                                                                                    KnockRequestProxyMock(.init(eventID: "3", userID: "@charlie:matrix.org")),
                                                                                    KnockRequestProxyMock(.init(eventID: "4", userID: "@dan:matrix.org"))]),
                                                       joinRule: .knock))
-        viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
-                                                     userIndicatorController: UserIndicatorControllerMock())
+        let viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
+                                                         mediaProvider: MediaProviderMock(),
+                                                         userIndicatorController: UserIndicatorControllerMock())
+        let context = viewModel.context
         
         var deferred = deferFulfillment(context.$viewState) { state in
             state.shouldDisplayRequests &&
@@ -164,10 +160,7 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
         context.send(viewAction: .acceptAllRequests)
         try await deferred.fulfill()
         
-        guard let alertInfo = context.alertInfo else {
-            XCTFail("Can't be nil")
-            return
-        }
+        let alertInfo = try #require(context.alertInfo)
         
         deferred = deferFulfillment(context.$viewState) { state in
             !state.shouldDisplayRequests &&
@@ -179,7 +172,8 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testLoadedStateBecomesEmptyIfTheJoinRuleIsNotKnocking() async throws {
+    @Test
+    func loadedStateBecomesEmptyIfTheJoinRuleIsNotKnocking() async throws {
         // If there is a sudden change in the rule, but the requests are still published, we want to hide all of them and show the empty view
         let roomProxyMock = JoinedRoomProxyMock(.init(members: [.mockAdmin],
                                                       knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org")),
@@ -188,9 +182,10 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
                                                                                    KnockRequestProxyMock(.init(eventID: "4", userID: "@dan:matrix.org"))]),
                                                       ownUserID: RoomMemberProxyMock.mockAdmin.userID,
                                                       joinRule: .invite))
-        viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
-                                                     userIndicatorController: UserIndicatorControllerMock())
+        let viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
+                                                         mediaProvider: MediaProviderMock(),
+                                                         userIndicatorController: UserIndicatorControllerMock())
+        let context = viewModel.context
         
         let deferred = deferFulfillment(context.$viewState) { state in
             !state.shouldDisplayRequests &&
@@ -201,7 +196,8 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testLoadedStateBecomesEmptyIfPermissionsAreRemoved() async throws {
+    @Test
+    func loadedStateBecomesEmptyIfPermissionsAreRemoved() async throws {
         // If there is a sudden change in permissions, and the user can't do any other action, we hide all the requests and shoe the empty view
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org")),
                                                                                    KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org")),
@@ -209,9 +205,10 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
                                                                                    KnockRequestProxyMock(.init(eventID: "4", userID: "@dan:matrix.org"))]),
                                                       joinRule: .knock,
                                                       powerLevelsConfiguration: .init(canUserInvite: false)))
-        viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
-                                                     userIndicatorController: UserIndicatorControllerMock())
+        let viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
+                                                         mediaProvider: MediaProviderMock(),
+                                                         userIndicatorController: UserIndicatorControllerMock())
+        let context = viewModel.context
         
         let deferred = deferFulfillment(context.$viewState) { state in
             !state.shouldDisplayRequests &&

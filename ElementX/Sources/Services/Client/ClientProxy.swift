@@ -516,7 +516,8 @@ class ClientProxy: ClientProxyProtocol {
                                                   preset: .trustedPrivateChat,
                                                   invite: [userID],
                                                   avatar: nil,
-                                                  powerLevelContentOverride: Self.roomCreationPowerLevelOverrides)
+                                                  powerLevelContentOverride: Self.roomCreationPowerLevelOverrides,
+                                                  historyVisibilityOverride: .invited)
             let roomID = try await client.createRoom(request: parameters)
             
             await waitForRoomToSync(roomID: roomID)
@@ -1324,7 +1325,6 @@ private struct ClientProxyServices {
          appSettings: AppSettings) async throws {
         let syncService = try await client
             .syncService()
-            .withCrossProcessLock()
             .withOfflineMode()
             .withSharePos(enable: true)
             .finish()

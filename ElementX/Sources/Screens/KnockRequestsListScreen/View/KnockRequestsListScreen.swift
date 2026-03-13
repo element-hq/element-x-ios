@@ -125,14 +125,14 @@ struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
     ]))
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             KnockRequestsListScreen(context: viewModel.context)
         }
         .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
             state.shouldDisplayRequests == true
         })
         
-        NavigationStack {
+        ElementNavigationStack {
             KnockRequestsListScreen(context: singleRequestViewModel.context)
         }
         .snapshotPreferences(expect: singleRequestViewModel.context.$viewState.map { state in
@@ -140,7 +140,7 @@ struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Single Request")
         
-        NavigationStack {
+        ElementNavigationStack {
             KnockRequestsListScreen(context: emptyViewModel.context)
         }
         .snapshotPreferences(expect: emptyViewModel.context.$viewState.map { state in
@@ -148,7 +148,7 @@ struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
         })
         .previewDisplayName("Empty state")
         
-        NavigationStack {
+        ElementNavigationStack {
             KnockRequestsListScreen(context: loadingViewModel.context)
         }
         .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in

@@ -12,7 +12,7 @@ struct ChatsSpaceFiltersScreen: View {
     @Bindable var context: ChatsSpaceFiltersScreenViewModel.Context
     
     var body: some View {
-        NavigationStack {
+        ElementNavigationStack {
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(context.viewState.visibleFilters) { filter in

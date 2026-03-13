@@ -98,7 +98,7 @@ struct RoomSelectionScreen_Previews: PreviewProvider, TestablePreview {
         let viewModel = RoomSelectionScreenViewModel(userSession: UserSessionMock(.init()),
                                                      roomSummaryProvider: summaryProvider)
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomSelectionScreen(context: viewModel.context)
         }
     }

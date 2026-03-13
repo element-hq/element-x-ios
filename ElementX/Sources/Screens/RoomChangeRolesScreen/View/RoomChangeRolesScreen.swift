@@ -118,22 +118,22 @@ struct RoomChangeRolesScreen_Previews: PreviewProvider, TestablePreview {
     static let moderatorViewModel = makeViewModel(mode: .moderator, ownRole: .administrator)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             RoomChangeRolesScreen(context: ownerViewModel.context)
         }
         .previewDisplayName("Owners")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomChangeRolesScreen(context: administratorOrOwnerViewModel.context)
         }
         .previewDisplayName("Administrator or Owners")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomChangeRolesScreen(context: administratorViewModel.context)
         }
         .previewDisplayName("Administrators")
         
-        NavigationStack {
+        ElementNavigationStack {
             RoomChangeRolesScreen(context: moderatorViewModel.context)
         }
         .previewDisplayName("Moderators")

@@ -109,6 +109,9 @@ final class NSEUserSession: NSEUserSessionProtocol {
             case .eventFilteredOut:
                 MXLog.warning("Notification event filtered out - roomID: \(roomID) eventID: \(eventID)")
                 return nil
+            case .eventRedacted:
+                MXLog.warning("Notification event redacted - roomID: \(roomID) eventID: \(eventID)")
+                return nil
             }
         } catch {
             MXLog.error("Could not get notification's content creating an empty notification instead, error: \(error)")
