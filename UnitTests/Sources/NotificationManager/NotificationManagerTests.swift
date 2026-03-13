@@ -243,59 +243,61 @@ final class NotificationManagerTests {
 
     // MARK: - FCM Token Registration
 
-    func test_whenRegisteredWithFCMToken_pusherIsCalled() async {
+    @Test
+    func whenRegisteredWithFCMToken_pusherIsCalled() async {
         _ = await notificationManager.registerWithFCMToken("test-fcm-token")
-        XCTAssertTrue(clientProxy.setPusherWithCalled)
+        #expect(clientProxy.setPusherWithCalled)
     }
 
-    func test_whenRegisteredWithFCMTokenSuccess_returnsTrue() async {
+    @Test
+    func whenRegisteredWithFCMTokenSuccess_returnsTrue() async {
         let success = await notificationManager.registerWithFCMToken("test-fcm-token")
-        XCTAssertTrue(success)
+        #expect(success)
     }
 
-    func test_whenRegisteredWithFCMTokenAndPusherThrows_returnsFalse() async {
+    @Test
+    func whenRegisteredWithFCMTokenAndPusherThrows_returnsFalse() async {
         enum TestError: Error {
             case someError
         }
 
         clientProxy.setPusherWithThrowableError = TestError.someError
         let success = await notificationManager.registerWithFCMToken("test-fcm-token")
-        XCTAssertFalse(success)
+        #expect(!success)
     }
 
-    func test_whenRegisteredWithFCMToken_pusherHasCorrectValues() async throws {
+    @Test
+    func whenRegisteredWithFCMToken_pusherHasCorrectValues() async throws {
         let fcmToken = "test-fcm-registration-token-1234"
         _ = await notificationManager.registerWithFCMToken(fcmToken)
 
-        guard let configuration = clientProxy.setPusherWithReceivedInvocations.first else {
-            XCTFail("Invalid pusher configuration sent")
-            return
-        }
+        let configuration = try #require(clientProxy.setPusherWithReceivedInvocations.first)
 
         // FCM pushkey is the raw token string, NOT base64-encoded
-        XCTAssertEqual(configuration.identifiers.pushkey, fcmToken)
-        XCTAssertEqual(configuration.identifiers.appId, appSettings.pusherAppID)
-        XCTAssertEqual(configuration.appDisplayName, "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
-        XCTAssertEqual(configuration.deviceDisplayName, UIDevice.current.name)
-        XCTAssertNotNil(configuration.profileTag)
-        XCTAssertEqual(configuration.lang, Bundle.app.preferredLocalizations.first)
+        #expect(configuration.identifiers.pushkey == fcmToken)
+        #expect(configuration.identifiers.appId == appSettings.pusherAppID)
+        #expect(configuration.appDisplayName == "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
+        #expect(configuration.deviceDisplayName == UIDevice.current.name)
+        #expect(configuration.profileTag != nil)
+        #expect(configuration.lang == Bundle.app.preferredLocalizations.first)
         guard case let .http(data) = configuration.kind else {
-            XCTFail("Http kind expected")
+            Issue.record("Http kind expected")
             return
         }
-        XCTAssertEqual(data.url, appSettings.pushGatewayNotifyEndpoint.absoluteString)
-        XCTAssertEqual(data.format, .eventIdOnly)
+        #expect(data.url == appSettings.pushGatewayNotifyEndpoint.absoluteString)
+        #expect(data.format == .eventIdOnly)
         let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
                                                       alert: APSAlert(locKey: "Notification",
                                                                       locArgs: [])),
                                          pusherNotificationClientIdentifier: nil)
-        XCTAssertEqual(data.defaultPayload, try defaultPayload.toJsonString())
+        #expect(try data.defaultPayload == defaultPayload.toJsonString())
     }
 
-    func test_whenRegisteredWithFCMTokenWithoutSession_returnsFalse() async {
+    @Test
+    func whenRegisteredWithFCMTokenWithoutSession_returnsFalse() async {
         notificationManager.setUserSession(nil)
         let success = await notificationManager.registerWithFCMToken("test-fcm-token")
-        XCTAssertFalse(success)
+        #expect(!success)
     }
 }
 
