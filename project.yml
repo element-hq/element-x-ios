@@ -2,7 +2,8 @@
 name: ElementX
 attributes:
   ORGANIZATIONNAME: Element
-
+  LastUpgradeCheck: "1620"
+  
 fileGroups:
 - project.yml
 - app.yml
