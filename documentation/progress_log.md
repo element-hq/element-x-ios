@@ -1,0 +1,21 @@
+# Progress Log
+
+Detailed daily progress log moved from CLAUDE.md to reduce file size.
+
+| Date | What was done |
+|------|---------------|
+| 2026-02-08 | Phase 0 complete: all documentation created, codebase audited, 12 decisions tracked |
+| 2026-02-09 | Phase 1 partial: fork, build env, first build, change map, git structure, slash commands |
+| 2026-02-10 | Build re-verified. Customer outreach docs finalized. Ready for customer engagement. |
+| 2026-02-10 | Firebase FCM integration on `feature/firebase-fcm-integration`. Firebase SDK v11.8.x, FirebaseNotificationService, conditional APNs/FCM, placeholder GoogleService-Info.plist. Deployment target 18.0. |
+| 2026-02-11 | Firebase FCM unit tests (14 tests, 3 files). Pre-rebranding audits (5 docs, 97 identifiers). Automation scripts: `rebrand.sh` (712 lines) + `rebrand_strings.sh` (560 lines). Additional audits (Element Call, privacy manifests, upstream sync). Privacy manifest gaps fixed. Upstream sync (18 commits, SDK v26.02.10). Build verified. |
+| 2026-02-12 | App Store preparation templates: export compliance, privacy labels, review notes, age rating, 4.3 differentiation. |
+| 2026-02-16 | Created 6 Claude Code commands. Updated permissions. Build re-verified. |
+| 2026-02-17 | **Major unblock: customer responded.** 5 decisions resolved. Server connectivity verified (matrix.ucmeet.org). AppSettings updated. App icon replaced. OIDC login working (3 issues fixed). Calls configured (URL scheme, knownHosts, LiveKit). Localization trimmed 37→3 locales. Associated domains cleaned. String rebranding (30 replacements). Swift source cleanup (10 refs in 8 files). Unit test fixes (16 assertions in 5 files). Display name "UCMeet". Branding audit: zero user-visible Element branding. Checkpoint `branding-complete`. Handover guide written. |
+| 2026-02-18 | Platform restriction (no Mac/Vision Pro). Push gateway → `push.ucmeet.org`. NSE notification ID → dynamic bundle ID. |
+| 2026-02-20 | Customer "Forking Data.doc" applied. Bundle ID `org.ucmeet.UCMeetChat` cascaded through 22 files. Display name `UCMeet.Chat`. 962 tests: 899 passed, 0 new failures. |
+| 2026-03-01 | Bundle ID casing fix. New logos (square + circular 3D). Accent color #003B5D. Sprint docs. D-008 resolved. |
+| 2026-03-02 | Apple Developer Portal: Bundle IDs registered, App Group created, capabilities enabled. APNs key received (XZANH7CD3Z). Access issue: ASC Admin ≠ Developer Program member. |
+| 2026-03-03 | Xcode signing resolved (customer's Apple ID). OIDC redirect → custom URL scheme `org.ucmeet.UCMeetChat:/callback`. Logo sizing fix (330×330px @3x). Real Firebase GoogleService-Info.plist. |
+| 2026-03-07 | MapLibre API key configured in Secrets.swift. Styles set to `basic-v2`/`basic-v2-dark`. Interactive map works. Static map previews return 403 (key needs Static Maps API permission on MapTiler). |
+| 2026-03-11 | APNs key uploaded to Firebase Console. Firebase service account JSON generated. Customer appeal sent (`sprint3_customer_appeal.md`) with detailed Sygnal config: both app IDs (`.ios.dev` + `.ios.prod`), `fcm_v1` type, project ID `matrix-8c24a`. All developer-side push work complete. Upstream divergence noted: 46 ahead / 92 behind — sync planned before TestFlight. CLAUDE.md compacted from 42.4k to ~7k chars. |

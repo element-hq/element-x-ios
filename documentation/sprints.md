@@ -66,41 +66,52 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-## Sprint 3: Push + OIDC + Associated Domains (Days 15-21) — PARTIAL
+## Sprint 3: Push + OIDC + Associated Domains (Days 15-21) — BLOCKED ON CUSTOMER
 
 **Goal:** Full push notification and OIDC setup.
 
 ### Push Notifications
-- [x] Create Firebase project for `org.ucmeet.UCMeetChat`
+- [x] Create Firebase project for `org.ucmeet.UCMeetChat` (project ID: `matrix-8c24a`)
 - [x] Add real `GoogleService-Info.plist` (replaced placeholder 2026-03-03)
-- [x] Configure APNs key in Firebase (code ready)
+- [x] Upload APNs key to Firebase Console (2026-03-11)
 - [x] Integrate Firebase SDK (FirebaseMessaging via SPM)
 - [x] Implement FCM token registration
 - [x] Configure Sygnal integration (`https://push.ucmeet.org`)
-- [ ] Upload APNs key to Firebase Console
-- [ ] Verify push: app active
+- [x] Generate Firebase service account JSON for customer's Sygnal
+- [x] Send customer appeal with Sygnal config instructions (2026-03-11)
+- [ ] **BLOCKED — Customer:** Configure Sygnal with Firebase credentials for both app IDs (`org.ucmeet.UCMeetChat.ios.prod` + `.ios.dev`)
+- [ ] **BLOCKED — Customer:** Confirm Sygnal URL (currently assuming `https://push.ucmeet.org`)
+- [ ] Verify push: app active (needs physical device + Sygnal)
 - [ ] Verify push: app in background
 - [ ] Verify push: app terminated
 - [ ] Badge count
 - [ ] Open correct chat on push tap
+- [ ] Inline reply from notification
 
 ### OIDC / MAS
 - [x] OIDC login working (tested on simulator)
 - [x] OIDC redirect URI: custom URL scheme `org.ucmeet.UCMeetChat:/callback` (2026-03-03)
 - [x] OIDC metadata URIs moved to ucmeet.org (MAS same-host policy)
-- [ ] Register `org.ucmeet.UCMeetChat` as OIDC client in MAS (currently using DCR)
+- [ ] Register `org.ucmeet.UCMeetChat` as OIDC client in MAS (currently using DCR — works, but static registration is more robust)
 - [ ] Verify full OIDC flow with registered client
 
 ### Associated Domains
 - [x] Added Associated Domains capability
 - [x] Removed `webcredentials:*.element.io` (no longer needed after custom URL scheme)
-- [ ] Host AASA file on `ucmeet.info` (for universal links, not required for auth)
+- [ ] **POST-LAUNCH:** Remove `applinks:matrix.to` from entitlements — non-functional (matrix.to AASA doesn't list our Bundle ID). Harmless but dead weight.
+- [ ] **POST-LAUNCH:** Optionally add `applinks:ucmeet.info` + host AASA file on `ucmeet.info` — would enable universal links (room invites, user profiles open directly in app). Requires customer to set up `ucmeet.info/.well-known/apple-app-site-association` with Bundle ID `org.ucmeet.UCMeetChat`.
 
 **Result:**
-- [ ] Fully working push notifications (blocked on Sygnal URL + APNs key upload to Firebase Console)
+- [ ] Fully working push notifications — **blocked on customer Sygnal configuration**
 - [x] Working authentication via MAS (custom URL scheme, no element.io dependency)
 
-**Blocking:** Sygnal URL from customer, APNs key upload to Firebase Console.
+**Blocking:** Customer must configure Sygnal with Firebase service account JSON (sent 2026-03-11).
+
+**Updates (2026-03-11):**
+- APNs key uploaded to Firebase Console
+- Firebase service account JSON generated and sent to customer
+- Customer appeal sent with detailed Sygnal config instructions (both `.ios.dev` and `.ios.prod` app IDs)
+- All developer-side push work complete — waiting on customer
 
 ---
 
@@ -163,4 +174,4 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-*Last updated: 2026-03-07. Converted from Спринт 5Element.docx with progress tracking.*
+*Last updated: 2026-03-11. Customer appeal sent with Sygnal config instructions.*
