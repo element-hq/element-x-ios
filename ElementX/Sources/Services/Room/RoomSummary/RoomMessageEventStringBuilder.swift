@@ -78,6 +78,23 @@ struct RoomMessageEventStringBuilder {
         }
     }
     
+    /// May get moved in the base function later if we decide to make LLS a message like content
+    /// since it kinda behaves like one.
+    func buildAttributedStringForLiveLocation(senderDisplayName: String, isOutgoing: Bool) -> AttributedString {
+        // TODO: The attribured string should probably be localised differently depending on the sender
+        // since in the designs it doesn't use the X: Y pattern but the X did y
+        var message = AttributedString(L10n.commonSharedLocation)
+        if destination == .pinnedEvent {
+            message.bold()
+        }
+        
+        if destination == .roomList {
+            return prefix(message, with: isOutgoing ? L10n.commonYou : senderDisplayName)
+        } else {
+            return message
+        }
+    }
+    
     private func buildMessage(for destination: Destination, caption: String?, type: String) -> AttributedString {
         guard let caption else {
             return AttributedString(type)

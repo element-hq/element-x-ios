@@ -41,6 +41,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildRedactedTimelineItem(eventItemProxy, messageLikeContent, isOutgoing)
             case .unableToDecrypt(let encryptedMessage):
                 return buildEncryptedTimelineItem(eventItemProxy, messageLikeContent, encryptedMessage, isOutgoing)
+            case .liveLocation(let content):
+                return buildLiveLocationTimelineItem(eventItemProxy, messageLikeContent, content, isOutgoing)
             case .other:
                 return nil // We shouldn't receive these without asking for custom event types.
             case .liveLocation:
@@ -431,6 +433,28 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                       orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                       encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                       encryptionForwarder: eventItemProxy.forwarder))
+    }
+    
+    private func buildLiveLocationTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
+                                               _ messageLikeContent: MsgLikeContent,
+                                               _ liveLocationContent: LiveLocationContent,
+                                               _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        LiveLocationTimelineItem(id: eventItemProxy.id,
+                                 timestamp: eventItemProxy.timestamp,
+                                 isOutgoing: isOutgoing,
+                                 isEditable: eventItemProxy.isEditable,
+                                 canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                 sender: eventItemProxy.sender,
+                                 content: .init(from: liveLocationContent, timestamp: eventItemProxy.timestamp),
+                                 properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
+                                                   isThreaded: messageLikeContent.threadRoot != nil,
+                                                   threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
+                                                   isEdited: false, // Can never be edited
+                                                   reactions: buildAggregatedReactions(messageLikeContent.reactions),
+                                                   deliveryStatus: eventItemProxy.deliveryStatus,
+                                                   orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
+                                                   encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                   encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildRedactedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
