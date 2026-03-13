@@ -133,19 +133,29 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-## Sprint 5: Finalization & Release Prep (Days 29-35) — NOT STARTED
+## Sprint 5: Finalization & Release Prep (Days 29-35) — IN PROGRESS
 
 **Goal:** Release-ready build.
 
 **Tasks:**
 - [ ] Switch build to Release configuration
-- [ ] Set version: 1.0.0 (Build 1)
-- [ ] Verify Info.plist (Camera, Mic, Notifications permissions)
-- [ ] Remove debug logs
+- [x] Set version: 1.0.0 (Build 1) (2026-03-13)
+- [x] Verify Info.plist (Camera, Mic, Notifications permissions) — all 5 strings use `$(APP_DISPLAY_NAME)`, en + ru localized (2026-03-13)
+- [x] Debug log audit — zero `print()` in production code, all logging via MXLog framework (2026-03-13)
 - [ ] Optimize: memory, energy, launch time
-- [ ] Verify minimum iOS 18
-- [ ] Verify Distribution signing
-- [ ] License block: written confirmation from Element or publish fork (AGPL compliance), remove Element trademarks, add NOTICE/attribution
+- [x] Verify minimum iOS 18 — confirmed `18.0` in project.yml (2026-03-13)
+- [ ] Verify Distribution signing (requires Archive build with customer's Apple ID)
+- [x] NOTICE/attribution — already correct, credits Element X + AGPL-3.0 (2026-03-13)
+- [ ] **DECISION NEEDED:** `ITSAppUsesNonExemptEncryption` — currently `false`, but Matrix uses E2EE (Vodozemac). May require `true` + exemption filing.
+- [ ] **BLOCKED — Customer:** Written confirmation of AGPL license covering Element X fork
+
+**Updates (2026-03-13):**
+- Version set to 1.0.0 (Build 1) — changed from upstream calendar version `26.03.4`
+- Upstream sync completed (89 commits merged, SDK v26.03.10, Element Call v0.17.0)
+- Info.plist permissions verified in en + ru, all reference UCMeet.Chat
+- Debug log audit clean — no fork-specific print() statements
+- `aps-environment` is `development` in source; Xcode auto-overrides to `production` on Archive
+- Build verified on iPhone 17 Pro simulator
 
 **Result:**
 - [ ] Release build ready for TestFlight
