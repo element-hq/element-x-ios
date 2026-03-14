@@ -15,7 +15,10 @@ struct RoomScreen: View {
     @ObservedObject private var timelineContext: TimelineViewModelType.Context
     let composerToolbar: ComposerToolbar
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
-
+    
+    // Добавляем observable ссылку на глобальный плеер
+    @ObservedObject private var audioPlayer = AudioPlaybackService.shared
+    
     init(context: RoomScreenViewModelType.Context,
          timelineContext: TimelineViewModelType.Context,
          composerToolbar: ComposerToolbar) {
@@ -23,9 +26,15 @@ struct RoomScreen: View {
         self.timelineContext = timelineContext
         self.composerToolbar = composerToolbar
     }
-
+    
     var body: some View {
         TimelineView(timelineContext: timelineContext)
+            .overlay(alignment: .top) {  // ← сверху, как мини-плеер в Telegram
+                TopAudioControlPanel()
+                    .opacity(audioPlayer.state.isActive ? 1 : 0)
+                    .animation(.easeInOut(duration: 0.25), value: audioPlayer.state.isActive)
+                    .zIndex(10)  // чтобы был поверх других оверлеев
+            }
             .overlay(alignment: .bottomTrailing) {
                 TimelineScrollToBottomButton(isVisible: isAtBottomAndLive) {
                     timelineContext.send(viewAction: .scrollToBottom)
@@ -34,13 +43,8 @@ struct RoomScreen: View {
             }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .topBanner(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled)
-            // This can overlay on top of the pinnedItemsBanner
             .topBanner(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
             .safeAreaInset(edge: .top) {
-                // When VoiceOver is enabled, the table view isn't reversed and the scroll gestures
-                // don't trigger meaning the banner never hides itself and so the .overlay layout
-                // above permanently obscures the top of the timeline. So whenever VoiceOver is
-                // enabled we use a safe area inset to vertically stack it above the timeline.
                 if context.viewState.shouldShowPinnedEventsBanner, isVoiceOverEnabled {
                     pinnedItemsBanner
                 }
@@ -57,20 +61,25 @@ struct RoomScreen: View {
                         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                         .environmentObject(timelineContext)
                         .environment(\.timelineContext, timelineContext)
-                        // Make sure the reply header honours the hideTimelineMedia setting too.
                         .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
                 }
             }
             .toolbarRole(RoomHeaderView.toolbarRole)
-            .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
+            .navigationTitle(L10n.screenRoomTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
-            .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
+            .toolbarBackground(.visible, for: .navigationBar)
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo)
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .track(screen: .Room)
             .sentryTrace("\(Self.self)")
+            // Реагируем на появление/исчезновение плеера (можно добавить логику, если нужно)
+            .onChange(of: audioPlayer.state.isActive) { isActive in
+                if !isActive {
+                    // Опционально: сбросить что-то в VM, если плеер закрылся
+                }
+            }
     }
     
     private var pinnedItemsBanner: some View {

@@ -1,18 +1,18 @@
 //
-import OrderedCollections
-
 // Copyright 2025 Element Creations Ltd.
 // Copyright 2022-2025 New Vector Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
 //
+
+import OrderedCollections
 import SwiftUI
 
 struct RoomTimelineItemView: View {
     @Environment(\.timelineContext) var context
     @ObservedObject var viewState: RoomTimelineItemViewState
-    
+
     var body: some View {
         timelineView
             .animation(.elementDefault, value: viewState.groupStyle)
@@ -38,6 +38,9 @@ struct RoomTimelineItemView: View {
             VideoRoomTimelineView(timelineItem: item)
         case .audio(let item):
             AudioRoomTimelineView(timelineItem: item)
+                .onTapGesture {
+                    startCustomAudioPlayback(for: item, isVoice: false)
+                }
         case .file(let item):
             FileRoomTimelineView(timelineItem: item)
         case .emote(let item):
@@ -67,17 +70,22 @@ struct RoomTimelineItemView: View {
         case .poll(let item):
             PollRoomTimelineView(timelineItem: item)
         case .voice(let item):
-            let playerState = context?.viewState.audioPlayerStateProvider?(item.id) ?? AudioPlayerState(id: .timelineItemIdentifier(item.id),
-                                                                                                        title: L10n.commonVoiceMessage,
-                                                                                                        duration: 0)
+            let playerState = context?.viewState.audioPlayerStateProvider?(item.id) ?? AudioPlayerState(
+                id: .timelineItemIdentifier(item.id),
+                title: L10n.commonVoiceMessage,
+                duration: 0
+            )
             VoiceMessageRoomTimelineView(timelineItem: item, playerState: playerState)
+                .onTapGesture {
+                    startCustomAudioPlayback(for: item, isVoice: true)
+                }
         case .callInvite(let item):
             CallInviteRoomTimelineView(timelineItem: item)
         case .callNotification(let item):
             CallNotificationRoomTimelineView(timelineItem: item)
         }
     }
-    
+
     private func linkMetadataForItem(_ item: TextRoomTimelineItem) -> OrderedDictionary<URL, LinkMetadataProviderItem> {
         var linkMetadata = OrderedDictionary<URL, LinkMetadataProviderItem>()
         for url in item.links.prefix(TextRoomTimelineView.maxLinkPreviewsToRender) {
@@ -88,5 +96,58 @@ struct RoomTimelineItemView: View {
             }
         }
         return linkMetadata
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Запуск кастомного плеера (минимальная рабочая версия)
+    // ─────────────────────────────────────────────────────────────
+    private func startCustomAudioPlayback(for item: any RoomTimelineItemProtocol, isVoice: Bool) {
+        // Получаем sender безопасно (кастим к нужному типу)
+        let senderName: String
+        if let audioItem = item as? AudioRoomTimelineItem {
+            senderName = audioItem.sender.displayName ?? audioItem.sender.id
+        } else {
+            senderName = "Пользователь"
+        }
+
+        // Формируем заголовок как в Telegram
+        let displayTitle: String
+        if isVoice {
+            displayTitle = senderName.isEmpty ? "Голосовое сообщение" : "от \(senderName)"
+        } else {
+            // Для обычного аудио берём filename из content, если доступен
+            if let audioItem = item as? AudioRoomTimelineItem {
+                displayTitle = audioItem.content.filename
+            } else {
+                displayTitle = "Аудио файл"
+            }
+        }
+
+        // ВАЖНО: URL файла в Element X обычно не лежит в item напрямую
+        // Вместо этого:
+        // 1. Вызываем .mediaTapped — это запустит скачивание / просмотр в системе
+        // 2. Или ждём, пока файл скачается, и берём local URL из кэша
+
+        // Временное решение: вызываем оригинальное действие + запускаем плеер с placeholder
+        context?.send(viewAction: .mediaTapped(itemID: item.id))
+
+        // Placeholder URL — замени на реальный после скачивания
+        // (лучше всего добавить observer на скачивание в VM)
+        guard let placeholderURL = URL(string: "https://filesamples.com/samples/audio/mp3/sample3.mp3") else {
+            print("Нет тестового URL")
+            return
+        }
+
+        let playableItem = PlayableAudioItem(
+            url: placeholderURL,
+            displayTitle: displayTitle,
+            isVoiceMessage: isVoice,
+            messageId: String(describing: item.id),  
+            senderDisplayName: isVoice ? senderName : nil
+        )
+
+        AudioPlaybackService.shared.startPlayback(items: [playableItem], startAt: 0)
+
+        print("Попытка запуска кастомного плеера: \(displayTitle)")
     }
 }

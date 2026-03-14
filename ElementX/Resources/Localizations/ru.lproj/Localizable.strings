@@ -181,7 +181,7 @@
 "banner_new_sound_title" = "Мы обновили ваши звуки";
 "banner_set_up_recovery_content" = "Создайте новый ключ восстановления, который можно использовать для восстановления зашифрованной истории сообщений в случае потери доступа к своим устройствам.";
 "banner_set_up_recovery_title" = "Настройте восстановления для защиты вашей учетной записи";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call не поддерживает использование устройств Bluetooth в данной версии Android. Пожалуйста, выберите другое устройство.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Setka Call не поддерживает использование устройств Bluetooth в данной версии Android. Пожалуйста, выберите другое устройство.";
 "common_about" = "О приложении";
 "common_acceptable_use_policy" = "Политика допустимого использования";
 "common_add_account" = "Добавить аккаунт";
@@ -513,8 +513,8 @@
 "rich_text_editor_url_placeholder" = "Ссылка";
 "rich_text_editor_a11y_add_attachment" = "Прикрепить файл";
 "rich_text_editor_composer_caption_placeholder" = "Добавить подпись (опционально)";
-"screen_advanced_settings_element_call_base_url" = "URL сервера Element Call";
-"screen_advanced_settings_element_call_base_url_description" = "Укажите собственный сервер Element Call.";
+"screen_advanced_settings_element_call_base_url" = "URL сервера Setka Call";
+"screen_advanced_settings_element_call_base_url_description" = "Укажите собственный сервер Setka Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Скрывать аватары в приглашениях";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Скрывать предпросмотр медиа в истории сообщений";
@@ -1008,7 +1008,7 @@
 "screen_onboarding_sign_up" = "Создать аккаунт";
 "screen_onboarding_welcome_message" = "Добро пожаловать в быстрый и простой %1$@.";
 "screen_onboarding_welcome_subtitle" = "Добро пожаловать в быстрый и простой %1$@.";
-"screen_onboarding_welcome_title" = "Элементарно.";
+"screen_onboarding_welcome_title" = "Веблементарно.";
 "screen_polls_history_empty_ongoing" = "Не найдено текущих опросов.";
 "screen_polls_history_empty_past" = "Не найдено прошлых опросов.";
 "screen_polls_history_filter_ongoing" = "Текущие";
@@ -1198,7 +1198,7 @@
 "screen_room_timeline_add_reaction" = "Добавить реакцию";
 "screen_room_timeline_beginning_of_room" = "Это начало %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Это начало беседы.";
-"screen_room_timeline_legacy_call" = "Звонок не поддерживается. Собеседник должен использовать новое приложение Element X.";
+"screen_room_timeline_legacy_call" = "Звонок не поддерживается. Собеседник должен использовать новое приложение Сетки.";
 "screen_room_timeline_less_reactions" = "Показать меньше";
 "screen_room_timeline_message_copied" = "Сообщение скопировано";
 "screen_room_timeline_no_permission_to_post" = "Вы не можете писать сообщения в этой комнате";
@@ -1230,7 +1230,7 @@
 "screen_roomlist_main_space_title" = "Чаты";
 "screen_roomlist_mark_as_read" = "Пометить как прочитанное";
 "screen_roomlist_mark_as_unread" = "Отметить как непрочитанное";
-"screen_server_confirmation_message_login_element_dot_io" = "Частный сервер для сотрудников Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "Частный сервер для сотрудников Сетки.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix — это открытая сеть для безопасной децентрализованной связи.";
 "screen_server_confirmation_message_register" = "Здесь будут храниться ваши разговоры — точно так же, как вы используете электронную почту для хранения писем.";
 "screen_server_confirmation_title_login" = "Вы собираетесь войти в %1$@";
