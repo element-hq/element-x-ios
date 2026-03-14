@@ -16,36 +16,30 @@ struct AuthenticationStartScreen: View {
     @Bindable var context: AuthenticationStartScreenViewModel.Context
     
     var body: some View {
+        // This view uses a GeometryReader instead of FullscreenDialog so its content takes the full
+        // height available (after taking the buttons out of the equation) in order for the logo
+        // and title to appear vertically centred and equally spaced within this content area.
         GeometryReader { geometry in
-            VStack(alignment: .leading, spacing: 0) {
-                Spacer()
-                    .frame(height: UIConstants.spacerHeight(in: geometry))
-                
-                content
-                    .frame(width: geometry.size.width)
-                    .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.hidden)
-                
-                buttons
-                    .frame(width: geometry.size.width)
-                    .padding(.bottom, UIConstants.actionButtonBottomPadding)
-                    .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
-                    .padding(.top, 8)
-                
-                Spacer()
-                    .frame(height: UIConstants.spacerHeight(in: geometry))
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    Spacer()
+                        .frame(height: UIConstants.spacerHeight(in: geometry))
+                    
+                    content
+                        .frame(width: geometry.size.width)
+                        .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.hidden)
+                    
+                    buttons
+                        .frame(width: geometry.size.width)
+                        .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
+                        .padding(.top, 8)
+                    
+                    Spacer()
+                        .frame(height: UIConstants.spacerHeight(in: geometry))
+                }
+                .frame(minHeight: geometry.size.height)
             }
-            .frame(maxHeight: .infinity)
-            .safeAreaInset(edge: .bottom) {
-                versionText
-                    .font(.compound.bodySM)
-                    .foregroundColor(.compound.textSecondary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom)
-                    .onTapGesture(count: 7) {
-                        context.send(viewAction: .reportProblem)
-                    }
-                    .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.appVersion)
-            }
+            .scrollBounceBehavior(.basedOnSize)
         }
         .navigationBarHidden(true)
         .background {
@@ -64,7 +58,8 @@ struct AuthenticationStartScreen: View {
             if verticalSizeClass == .regular {
                 Spacer()
                 
-                AuthenticationStartLogo(hideBrandChrome: context.viewState.hideBrandChrome)
+                AuthenticationStartLogo(hideBrandChrome: context.viewState.hideBrandChrome,
+                                        isOnGradient: !context.viewState.hideBrandChrome)
             }
             
             Spacer()
@@ -77,7 +72,7 @@ struct AuthenticationStartScreen: View {
                         .multilineTextAlignment(.center)
                     Text(L10n.screenOnboardingWelcomeMessage(InfoPlistReader.main.productionAppName))
                         .font(.compound.bodyLG)
-                        .foregroundColor(.compound.textSecondary)
+                        .foregroundColor(.compound.textPrimary)
                         .multilineTextAlignment(.center)
                 }
                 .padding()
@@ -114,6 +109,16 @@ struct AuthenticationStartScreen: View {
                 }
                 .buttonStyle(.compound(.tertiary))
             }
+            
+            versionText
+                .font(.compound.bodySM)
+                .foregroundColor(.compound.textSecondary)
+                .frame(maxWidth: .infinity)
+                .padding(.top, 16)
+                .onTapGesture(count: 7) {
+                    context.send(viewAction: .reportProblem)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.appVersion)
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()
