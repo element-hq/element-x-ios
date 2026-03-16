@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Osoitteiden avulla voit löytää ja liittyä huoneisiin ja tiloihin. Tämä varmistaa myös, että voit helposti jakaa ne muiden kanssa.";
 "screen_security_and_privacy_room_visibility_section_header" = "Näkyvyys";
 "screen_security_and_privacy_title" = "Turvallisuus ja yksityisyys";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Huone";
 "screen_space_empty_state_title" = "Lisää ensimmäinen huoneesi";
 "screen_space_menu_action_members" = "Näytä jäsenet";

@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adressen ermöglichen es, Gruppen und Spaces zu finden und zu betreten. Dadurch wird auch sichergestellt, dass diese problemlos mit anderen geteilt werden können.";
 "screen_security_and_privacy_room_visibility_section_header" = "Sichtbarkeit";
 "screen_security_and_privacy_title" = "Sicherheit & Datenschutz";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Chat";
 "screen_space_empty_state_title" = "Füge deinen ersten Chat hinzu";
 "screen_space_menu_action_members" = "Mitglieder anzeigen";

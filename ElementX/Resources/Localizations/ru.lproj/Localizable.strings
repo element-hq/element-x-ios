@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Адреса комнат позволяют находить комнаты и присоединяться к ним. Также вы сможете делиться комнатой с другими пользователями.";
 "screen_security_and_privacy_room_visibility_section_header" = "Видимость";
 "screen_security_and_privacy_title" = "Безопасность и конфиденциальность";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Комната";
 "screen_space_empty_state_title" = "Добавьте свою первую комнату";
 "screen_space_menu_action_members" = "Просмотреть участников";

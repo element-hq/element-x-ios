@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Gli indirizzi sono un modo per trovare e accedere a stanze e spazi. Questo ti consente anche di condividerli facilmente con altri.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilità";
 "screen_security_and_privacy_title" = "Sicurezza e privacy";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "Visualizza membri";

@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adrese služe za pronalaženje soba i prostora te pristup njima. Tako ih ujedno možete jednostavno dijeliti s drugima.";
 "screen_security_and_privacy_room_visibility_section_header" = "Vidljivost";
 "screen_security_and_privacy_title" = "Sigurnost i privatnost";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "Prikaži članove";

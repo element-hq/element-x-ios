@@ -400,7 +400,7 @@
 "dialog_file_too_large_to_upload_title" = "Soubor je pro nahrání příliš velký.";
 "dialog_permission_camera" = "Aby mohla aplikace používat fotoaparát, udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_generic" = "Udělte prosím oprávnění v nastavení systému.";
-"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
+"dialog_permission_location_description_ios" = "Aby bylo možné sdílet vaši aktuální polohu, aplikace %1$@ potřebuje přístup k poloze. Přejděte do Nastavení &gt; Poloha.";
 "dialog_permission_location_title_ios" = "%1$@ nemá přístup k vaší poloze.";
 "dialog_permission_microphone" = "Aby aplikace mohla používat mikrofon, udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_microphone_description_ios" = "Udělte přístup, abyste mohli nahrávat a odesílat zprávy se zvukem.";
@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresy slouží k vyhledávání a přístupu do místností a prostorů. Díky tomu je také můžete snadno sdílet s ostatními.";
 "screen_security_and_privacy_room_visibility_section_header" = "Viditelnost";
 "screen_security_and_privacy_title" = "Zabezpečení a soukromí";
+"screen_sharing_location_option_sheet_title" = "Možnosti sdílení";
 "screen_space_add_room_action" = "Místnost";
 "screen_space_empty_state_title" = "Přidejte svou první místnost";
 "screen_space_menu_action_members" = "Zobrazit členy";
@@ -1095,7 +1096,7 @@
 "screen_room_attachment_source_camera_video" = "Natočit video";
 "screen_room_attachment_source_files" = "Příloha";
 "screen_room_attachment_source_gallery" = "Knihovna fotografií a videí";
-"screen_room_attachment_source_location" = "Poloha";
+"screen_room_attachment_source_location" = "Sdílejte polohu";
 "screen_room_attachment_source_poll" = "Hlasování";
 "screen_room_attachment_text_formatting" = "Formátování textu";
 "screen_room_change_permissions_administrators" = "Správce";

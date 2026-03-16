@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Manzillar xona va maydonlarni topish va ularga kirish usulidir. Bu, shuningdek, ularni boshqalar bilan osongina bo‘lishishingizni ta’minlaydi.";
 "screen_security_and_privacy_room_visibility_section_header" = "Ko‘rinish";
 "screen_security_and_privacy_title" = "Xavfsizlik va maxfiylik";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "A’zolarni ko‘rish";

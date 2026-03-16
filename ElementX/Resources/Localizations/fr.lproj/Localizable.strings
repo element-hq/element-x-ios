@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Les adresses permettent de trouver et d'accéder aux salons et aux espaces. Elles facilitent également leur partage avec d'autres personnes.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilité";
 "screen_security_and_privacy_title" = "Sécurité & confidentialité";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Salon";
 "screen_space_empty_state_title" = "Ajoutez votre premier salon";
 "screen_space_menu_action_members" = "Voir les membres";

@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Aadressid on mugav viis jututubade ja kogukondade leidmiseks ning tagab mugava võimaluse nende jagamiseks.";
 "screen_security_and_privacy_room_visibility_section_header" = "Nähtavus";
 "screen_security_and_privacy_title" = "Turvalisus ja privaatsus";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Jututuba";
 "screen_space_empty_state_title" = "Lisa oma esimene jututuba";
 "screen_space_menu_action_members" = "Vaata liikmeid";

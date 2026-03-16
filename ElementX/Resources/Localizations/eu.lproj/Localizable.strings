@@ -179,8 +179,8 @@
 "banner_migrate_to_native_sliding_sync_title" = "Bertsio-berritzea eskuragarri";
 "banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
-"banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
-"banner_set_up_recovery_title" = "Set up recovery to protect your account";
+"banner_set_up_recovery_content" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
+"banner_set_up_recovery_title" = "Back up your chats";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Honi buruz";
 "common_acceptable_use_policy" = "Acceptable use policy";
@@ -681,7 +681,7 @@
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Withdraw verification and send";
 "screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
-"screen_resolve_send_failure_changed_identity_title" = "Your message was not sent because %1$@’s verified identity was reset";
+"screen_resolve_send_failure_changed_identity_title" = "Your message was not sent because %1$@’s verified digital identity was reset";
 "screen_resolve_send_failure_unsigned_device_primary_button_title" = "Bidali mezua hala ere";
 "screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.";
 "screen_resolve_send_failure_unsigned_device_title" = "Your message was not sent because %1$@ has not verified all devices";
@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Gelaren ikusgarritasuna";
 "screen_security_and_privacy_title" = "Segurtasuna eta pribatutasuna";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "View members";
@@ -775,7 +776,7 @@
 "screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_static_location_sheet_timestamp_description" = "Shared %1$@";
 "screen_static_location_sheet_title" = "On the map";
-"screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified digital identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
 "screen_account_provider_form_hint" = "Zerbitzariaren helbidea";
@@ -865,11 +866,11 @@
 "screen_chat_backup_key_backup_action_enable" = "Aktibatu babeskopia";
 "screen_chat_backup_key_backup_description" = "Gorde zure identitate-kriptografikoa eta mezuen gakoak modu seguruan zerbitzarian. Horrek zure mezuen historia edozein gailu berritan ikusteko aukera emango dizu. %1$@.";
 "screen_chat_backup_key_backup_title" = "Gakoen biltegiratzea";
-"screen_chat_backup_key_storage_disabled_error" = "Key storage must be turned on to set up recovery.";
+"screen_chat_backup_key_storage_disabled_error" = "Key storage must be turned on to back up your chats.";
 "screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
 "screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Aldatu berreskuratze-gakoa";
-"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
+"screen_chat_backup_recovery_action_change_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_chat_backup_recovery_action_confirm_description" = "Zure giltzen-biltegiratzea gaur-gaurkoz sinkronizatu gabe dago.";
 "screen_chat_backup_recovery_action_setup_description" = "Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.";
 "screen_create_new_recovery_key_list_item_1" = "Ireki %1$@ mahaigaineko gailu batean";
@@ -914,7 +915,7 @@
 "screen_encryption_reset_bullet_1" = "Zure kontuaren xehetasunak, kontaktuak, hobespenak eta txat-zerrenda gordeko dira";
 "screen_encryption_reset_bullet_2" = "Zerbitzarian soilik gordeta dagoen mezuen historia galduko duzu";
 "screen_encryption_reset_bullet_3" = "Zure gailu eta kontaktu guztiak berriro egiaztatu beharko dituzu";
-"screen_encryption_reset_footer" = "Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key.";
+"screen_encryption_reset_footer" = "Only reset your digital identity if you don't have access to another verified device and you don't have your recovery key.";
 "screen_encryption_reset_title" = "Ezin duzu baieztatu? Zure identitatea berrezarri beharko duzu.";
 "screen_identity_confirmation_cannot_confirm" = "Ezin duzu baieztatu?";
 "screen_identity_confirmation_create_new_recovery_key" = "Sortu berreskuratze-gako berria";
@@ -1088,8 +1089,8 @@
 "screen_reset_encryption_confirmation_alert_title" = "Ziur zure identitatea berrezarri nahi duzula?";
 "screen_reset_encryption_password_subtitle" = "Berretsi zure identitatea berrezarri nahi duzula.";
 "screen_reset_encryption_password_title" = "Idatzi kontuaren pasahitza aurrera egiteko";
-"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
-"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your digital identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your digital identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Grabatu bideoa";
@@ -1243,7 +1244,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Egiaztatu beheko zenbakiak zure beste saioan erakutsitakoekin bat datozela.";
 "screen_session_verification_compare_numbers_title" = "Konparatu zenbakiak";
 "screen_session_verification_complete_subtitle" = "Saio berria egiaztatu da. Zifratutako mezu guztiak atzitu ditzake, eta gainerako erabiltzaileek fidagarritzat izango dute.";
-"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the digital identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Sartu berreskuratze-gakoa";
 "screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Frogatu zeu zarela zifratutako mezuen historia atzitzeko.";
@@ -1373,7 +1374,7 @@
 "timeline_decryption_failure_historical_event_no_key_backup" = "Iraganeko mezuak ez daude gailu honetan eskuragarri";
 "timeline_decryption_failure_historical_event_unverified_device" = "You need to verify this device for access to historical messages";
 "timeline_decryption_failure_unable_to_decrypt" = "Ezin da mezua deszifratu";
-"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
+"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your digital identity.";
 "troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
 "troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
 "troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";

@@ -369,7 +369,7 @@
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Jij";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
-"common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified digital identity was reset";
 "confirm_recovery_key_banner_message" = "Bevestig je herstelsleutel om toegang te houden tot je sleutelopslag en berichtengeschiedenis.";
 "confirm_recovery_key_banner_primary_button_title" = "Enter your recovery key";
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
@@ -391,8 +391,8 @@
 "crypto_identity_change_pin_violation" = "%1$@'s identiteit lijkt te zijn gewijzigd. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@'s %2$@ identiteit lijkt te zijn gewijzigd. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_profile_pin_violation" = "%1$@’s identity was reset.";
-"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ identity was reset. %3$@";
+"crypto_identity_change_profile_pin_violation" = "%1$@’s digital identity was reset.";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ digital identity was reset. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Security & privacy";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "View members";
@@ -865,11 +866,11 @@
 "screen_chat_backup_key_backup_action_enable" = "Back-up inschakelen";
 "screen_chat_backup_key_backup_description" = "Sla je cryptografische identiteit en berichtsleutels veilig op de server op. Zo kun je je berichtgeschiedenis bekijken op nieuwe apparaten. %1$@.";
 "screen_chat_backup_key_backup_title" = "Sleutelopslag";
-"screen_chat_backup_key_storage_disabled_error" = "Key storage must be turned on to set up recovery.";
+"screen_chat_backup_key_storage_disabled_error" = "Key storage must be turned on to back up your chats.";
 "screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
 "screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Herstelsleutel wijzigen";
-"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
+"screen_chat_backup_recovery_action_change_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_chat_backup_recovery_action_confirm_description" = "Je sleutelopslag is momenteel niet gesynchroniseerd.";
 "screen_chat_backup_recovery_action_setup_description" = "Krijg toegang tot je versleutelde berichten als je al je apparaten kwijtraakt of overal uit %1$@ bent uitgelogd.";
 "screen_create_new_recovery_key_list_item_1" = "Open %1$@ op een desktopapparaat";
@@ -1243,7 +1244,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Bevestig dat de onderstaande cijfers overeenkomen met de cijfers die worden weergegeven in je andere sessie.";
 "screen_session_verification_compare_numbers_title" = "Vergelijk getallen";
 "screen_session_verification_complete_subtitle" = "Je nieuwe sessie is nu geverifieerd. Het heeft toegang tot je versleutelde berichten en andere gebruikers zullen het als vertrouwd beschouwen.";
-"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the digital identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Voer herstelsleutel in";
 "screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Bewijs dat jij het bent om toegang te krijgen tot je versleutelde berichtgeschiedenis.";
@@ -1263,7 +1264,7 @@
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
 "screen_session_verification_user_initiator_title" = "Verify this user?";
-"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your digital identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
 "screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
@@ -1373,7 +1374,7 @@
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
 "timeline_decryption_failure_historical_event_unverified_device" = "You need to verify this device for access to historical messages";
 "timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
-"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
+"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your digital identity.";
 "troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
 "troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
 "troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";

@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresler, oda ve alanları bulmak ve erişmek için kullanılır. Ayrıca bunları başkalarıyla kolayca paylaşabilmenizi sağlar.";
 "screen_security_and_privacy_room_visibility_section_header" = "Oda görünürlüğü";
 "screen_security_and_privacy_title" = "Güvenlik ve gizlilik";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "Üyeleri görüntüle";

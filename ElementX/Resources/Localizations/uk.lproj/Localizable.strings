@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Видимість";
 "screen_security_and_privacy_title" = "Безпека й приватність";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Кімната";
 "screen_space_empty_state_title" = "Додайте свою першу кімнату";
 "screen_space_menu_action_members" = "Переглянути учасників";

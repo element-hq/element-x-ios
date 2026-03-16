@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Os endereços são uma forma de encontrar e aceder a salas e espaços. Também te permitem partilhá-los facilmente com outras pessoas.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilidade";
 "screen_security_and_privacy_title" = "Segurança e privacidade";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "Ver participantes";

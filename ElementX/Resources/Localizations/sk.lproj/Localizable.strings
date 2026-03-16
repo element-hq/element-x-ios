@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresy sú spôsob, ako nájsť a získať prístup do miestností a priestorov. To tiež zabezpečuje, že ich môžete jednoducho zdieľať s ostatnými.";
 "screen_security_and_privacy_room_visibility_section_header" = "Viditeľnosť";
 "screen_security_and_privacy_title" = "Bezpečnosť a súkromie";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Miestnosť";
 "screen_space_empty_state_title" = "Pridajte svoju prvú miestnosť";
 "screen_space_menu_action_members" = "Zobraziť členov";

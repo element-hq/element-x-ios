@@ -369,7 +369,7 @@
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Вы";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
-"common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified digital identity was reset";
 "confirm_recovery_key_banner_message" = "Пацвердзіце свой ключ аднаўлення, каб захаваць доступ да сховішча ключоў і гісторыі паведамленняў.";
 "confirm_recovery_key_banner_primary_button_title" = "Enter your recovery key";
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
@@ -388,11 +388,11 @@
 "crypto_history_sharing_room_info_shared_badge_content" = "New members see history";
 "crypto_history_sharing_room_info_world_readable_badge_content" = "Anyone can see history";
 "crypto_history_visible" = "This room has been configured so that new members can read history. %1$@";
-"crypto_identity_change_pin_violation" = "%1$@'s identity was reset. %2$@";
-"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity was reset. %3$@";
+"crypto_identity_change_pin_violation" = "%1$@'s digital identity was reset. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ digital identity was reset. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_profile_pin_violation" = "%1$@’s identity was reset.";
-"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ identity was reset. %3$@";
+"crypto_identity_change_profile_pin_violation" = "%1$@’s digital identity was reset.";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ digital identity was reset. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_allow_access" = "Allow access";
 "dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
@@ -681,7 +681,7 @@
 "screen_reset_encryption_password_error" = "Адбылася невядомая памылка. Калі ласка, праверце правільнасць пароля вашага ўліковага запісу і паўтарыце спробу.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Адклікаць праверку і адправіць";
 "screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
-"screen_resolve_send_failure_changed_identity_title" = "Your message was not sent because %1$@’s verified identity was reset";
+"screen_resolve_send_failure_changed_identity_title" = "Your message was not sent because %1$@’s verified digital identity was reset";
 "screen_resolve_send_failure_unsigned_device_primary_button_title" = "Усё роўна адправіць паведамленне";
 "screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@выкарыстоўвае адну або некалькі неправераных прылад. Вы можаце адправіць паведамленне ў любым выпадку, або вы можаце адмяніць зараз і паўтарыць спробу пазней, калі %2$@ праверыць усе свае прылады.";
 "screen_resolve_send_failure_unsigned_device_title" = "Ваша паведамленне не было адпраўлена, таму што%1$@ не праверыў усе прылады";
@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Security & privacy";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_menu_action_members" = "View members";
@@ -775,7 +776,7 @@
 "screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_static_location_sheet_timestamp_description" = "Shared %1$@";
 "screen_static_location_sheet_title" = "On the map";
-"screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified digital identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Паведамленне не адпраўлена таму што%1$@ не праверыў усе прылады.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
 "screen_account_provider_form_hint" = "Адрас хатняга сервера";
@@ -865,11 +866,11 @@
 "screen_chat_backup_key_backup_action_enable" = "Уключыце рэзервовае капіраванне";
 "screen_chat_backup_key_backup_description" = "Надзейна захоўвайце вашу крыптаграфічную ідэнтыфікацыю і ключы паведамленняў на серверы. Гэта дазволіць вам праглядаць гісторыю паведамленняў на любых новых прыладах.%1$@ .";
 "screen_chat_backup_key_backup_title" = "Сховішча ключоў";
-"screen_chat_backup_key_storage_disabled_error" = "Key storage must be turned on to set up recovery.";
+"screen_chat_backup_key_storage_disabled_error" = "Key storage must be turned on to back up your chats.";
 "screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
 "screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Змяніць ключ аднаўлення";
-"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
+"screen_chat_backup_recovery_action_change_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_chat_backup_recovery_action_confirm_description" = "Ваша сховішча ключоў зараз не сінхранізавана.";
 "screen_chat_backup_recovery_action_setup_description" = "Атрымайце доступ да зашыфраваных паведамленняў, калі вы страціце ўсе свае прылады або выйдзеце з сістэмы %1$@ усюды.";
 "screen_create_new_recovery_key_list_item_1" = "Адкрыйце %1$@ на настольнай прыладзе";
@@ -1088,8 +1089,8 @@
 "screen_reset_encryption_confirmation_alert_title" = "Вы ўпэўнены, што хочаце скінуць шыфраванне?";
 "screen_reset_encryption_password_subtitle" = "Пацвердзіце, што вы хочаце скінуць шыфраванне";
 "screen_reset_encryption_password_title" = "Каб працягнуць, увядзіце пароль уліковага запісу";
-"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
-"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your digital identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your digital identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Не ўдалося разабрацца з псеўданімам пакоя.";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Запісаць відэа";
@@ -1243,7 +1244,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Пераканайцеся, што прыведзеныя ніжэй лічбы супадаюць з лічбамі, паказанымі ў іншым сеансе.";
 "screen_session_verification_compare_numbers_title" = "Параўнайце лічбы";
 "screen_session_verification_complete_subtitle" = "Ваш новы сеанс пацверджаны. Ён мае доступ да вашых зашыфраваных паведамленняў, і іншыя карыстальнікі будуць лічыць яго давераным.";
-"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the digital identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Увядзіце ключ аднаўлення";
 "screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Дакажыце, што гэта вы, каб атрымаць доступ да вашай зашыфраванай гісторыі паведамленняў.";
@@ -1263,7 +1264,7 @@
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
 "screen_session_verification_user_initiator_title" = "Verify this user?";
-"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your digital identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
 "screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
@@ -1373,7 +1374,7 @@
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
 "timeline_decryption_failure_historical_event_unverified_device" = "You need to verify this device for access to historical messages";
 "timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
-"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
+"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your digital identity.";
 "troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
 "troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
 "troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";

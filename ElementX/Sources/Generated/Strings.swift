@@ -398,11 +398,11 @@ internal enum L10n {
   internal static var bannerNewSoundMessage: String { return L10n.tr("Localizable", "banner_new_sound_message") }
   /// We’ve refreshed your sounds
   internal static var bannerNewSoundTitle: String { return L10n.tr("Localizable", "banner_new_sound_title") }
-  /// Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.
+  /// Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.
   internal static var bannerSetUpRecoveryContent: String { return L10n.tr("Localizable", "banner_set_up_recovery_content") }
-  /// Set up recovery
+  /// Get recovery key
   internal static var bannerSetUpRecoverySubmit: String { return L10n.tr("Localizable", "banner_set_up_recovery_submit") }
-  /// Set up recovery to protect your account
+  /// Back up your chats
   internal static var bannerSetUpRecoveryTitle: String { return L10n.tr("Localizable", "banner_set_up_recovery_title") }
   /// Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.
   internal static var callInvalidAudioDeviceBluetoothDevicesDisabled: String { return L10n.tr("Localizable", "call_invalid_audio_device_bluetooth_devices_disabled") }
@@ -772,7 +772,7 @@ internal enum L10n {
   internal static var commonUnableToDecryptInsecureDevice: String { return L10n.tr("Localizable", "common_unable_to_decrypt_insecure_device") }
   /// You don't have access to this message
   internal static var commonUnableToDecryptNoAccess: String { return L10n.tr("Localizable", "common_unable_to_decrypt_no_access") }
-  /// Sender's verified identity was reset
+  /// Sender's verified digital identity was reset
   internal static var commonUnableToDecryptVerificationViolation: String { return L10n.tr("Localizable", "common_unable_to_decrypt_verification_violation") }
   /// Invites couldn't be sent to one or more users.
   internal static var commonUnableToInviteMessage: String { return L10n.tr("Localizable", "common_unable_to_invite_message") }
@@ -870,11 +870,11 @@ internal enum L10n {
   internal static func cryptoHistoryVisible(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_history_visible", String(describing: p1))
   }
-  /// %1$@'s identity was reset. %2$@
+  /// %1$@'s digital identity was reset. %2$@
   internal static func cryptoIdentityChangePinViolation(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation", String(describing: p1), String(describing: p2))
   }
-  /// %1$@’s %2$@ identity was reset. %3$@
+  /// %1$@’s %2$@ digital identity was reset. %3$@
   internal static func cryptoIdentityChangePinViolationNew(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation_new", String(describing: p1), String(describing: p2), String(describing: p3))
   }
@@ -882,11 +882,11 @@ internal enum L10n {
   internal static func cryptoIdentityChangePinViolationNewUserId(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation_new_user_id", String(describing: p1))
   }
-  /// %1$@’s identity was reset.
+  /// %1$@’s digital identity was reset.
   internal static func cryptoIdentityChangeProfilePinViolation(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_profile_pin_violation", String(describing: p1))
   }
-  /// %1$@’s %2$@ identity was reset. %3$@
+  /// %1$@’s %2$@ digital identity was reset. %3$@
   internal static func cryptoIdentityChangeVerificationViolationNew(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_verification_violation_new", String(describing: p1), String(describing: p2), String(describing: p3))
   }
@@ -1551,13 +1551,13 @@ internal enum L10n {
   internal static var screenChatBackupKeyBackupActionDisable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_disable") }
   /// Turn on backup
   internal static var screenChatBackupKeyBackupActionEnable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_enable") }
-  /// Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. %1$@.
+  /// This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity. %1$@.
   internal static func screenChatBackupKeyBackupDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_chat_backup_key_backup_description", String(describing: p1))
   }
   /// Key storage
   internal static var screenChatBackupKeyBackupTitle: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_title") }
-  /// Key storage must be turned on to set up recovery.
+  /// Key storage must be turned on to back up your chats.
   internal static var screenChatBackupKeyStorageDisabledError: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_disabled_error") }
   /// Upload keys from this device
   internal static var screenChatBackupKeyStorageToggleDescription: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_toggle_description") }
@@ -1565,13 +1565,13 @@ internal enum L10n {
   internal static var screenChatBackupKeyStorageToggleTitle: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_toggle_title") }
   /// Change recovery key
   internal static var screenChatBackupRecoveryActionChange: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_change") }
-  /// Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
+  /// Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.
   internal static var screenChatBackupRecoveryActionChangeDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_change_description") }
   /// Enter recovery key
   internal static var screenChatBackupRecoveryActionConfirm: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm") }
   /// Your key storage is currently out of sync.
   internal static var screenChatBackupRecoveryActionConfirmDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm_description") }
-  /// Set up recovery
+  /// Get recovery key
   internal static var screenChatBackupRecoveryActionSetup: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup") }
   /// Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.
   internal static func screenChatBackupRecoveryActionSetupDescription(_ p1: Any) -> String {
@@ -1780,9 +1780,9 @@ internal enum L10n {
   internal static var screenEncryptionResetBullet2: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_2") }
   /// You will need to verify all your existing devices and contacts again
   internal static var screenEncryptionResetBullet3: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_3") }
-  /// Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key.
+  /// Only reset your digital identity if you don't have access to another verified device and you don't have your recovery key.
   internal static var screenEncryptionResetFooter: String { return L10n.tr("Localizable", "screen_encryption_reset_footer") }
-  /// Can't confirm? You’ll need to reset your identity.
+  /// Can't confirm? You’ll need to reset your digital identity.
   internal static var screenEncryptionResetTitle: String { return L10n.tr("Localizable", "screen_encryption_reset_title") }
   /// Chats
   internal static var screenHomeTabChats: String { return L10n.tr("Localizable", "screen_home_tab_chats") }
@@ -1792,9 +1792,9 @@ internal enum L10n {
   internal static var screenIdentityConfirmationCannotConfirm: String { return L10n.tr("Localizable", "screen_identity_confirmation_cannot_confirm") }
   /// Create a new recovery key
   internal static var screenIdentityConfirmationCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_identity_confirmation_create_new_recovery_key") }
-  /// Verify this device to set up secure messaging.
+  /// Choose how to verify to set up secure messaging.
   internal static var screenIdentityConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_subtitle") }
-  /// Confirm your identity
+  /// Confirm your digital identity
   internal static var screenIdentityConfirmationTitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_title") }
   /// Use another device
   internal static var screenIdentityConfirmationUseAnotherDevice: String { return L10n.tr("Localizable", "screen_identity_confirmation_use_another_device") }
@@ -1908,7 +1908,7 @@ internal enum L10n {
   internal static var screenKeyBackupDisableConfirmationDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_description") }
   /// Are you sure you want to turn off backup?
   internal static var screenKeyBackupDisableConfirmationTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_title") }
-  /// Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:
+  /// Deleting key storage will remove your digital identity and message keys from the server and turn off the following security features:
   internal static var screenKeyBackupDisableDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_description") }
   /// You will not have encrypted message history on new devices
   internal static var screenKeyBackupDisableDescriptionPoint1: String { return L10n.tr("Localizable", "screen_key_backup_disable_description_point_1") }
@@ -2440,7 +2440,7 @@ internal enum L10n {
   internal static var screenRecoveryKeySetupGenerateKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_generate_key_description") }
   /// Recovery setup successful
   internal static var screenRecoveryKeySetupSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_setup_success") }
-  /// Set up recovery
+  /// Get recovery key
   internal static var screenRecoveryKeySetupTitle: String { return L10n.tr("Localizable", "screen_recovery_key_setup_title") }
   /// Block user
   internal static var screenReportContentBlockUser: String { return L10n.tr("Localizable", "screen_report_content_block_user") }
@@ -2464,21 +2464,21 @@ internal enum L10n {
   internal static var screenResetEncryptionConfirmationAlertAction: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_action") }
   /// This process is irreversible.
   internal static var screenResetEncryptionConfirmationAlertSubtitle: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_subtitle") }
-  /// Are you sure you want to reset your identity?
+  /// Are you sure you want to reset your digital identity?
   internal static var screenResetEncryptionConfirmationAlertTitle: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_title") }
   /// An unknown error happened. Please check your account password is correct and try again.
   internal static var screenResetEncryptionPasswordError: String { return L10n.tr("Localizable", "screen_reset_encryption_password_error") }
   /// Enter…
   internal static var screenResetEncryptionPasswordPlaceholder: String { return L10n.tr("Localizable", "screen_reset_encryption_password_placeholder") }
-  /// Confirm that you want to reset your identity.
+  /// Confirm that you want to reset your digital identity.
   internal static var screenResetEncryptionPasswordSubtitle: String { return L10n.tr("Localizable", "screen_reset_encryption_password_subtitle") }
   /// Enter your account password to continue
   internal static var screenResetEncryptionPasswordTitle: String { return L10n.tr("Localizable", "screen_reset_encryption_password_title") }
-  /// You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.
+  /// You're about to go to your %1$@ account to reset your digital identity. Afterwards you'll be taken back to the app.
   internal static func screenResetIdentityConfirmationSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_reset_identity_confirmation_subtitle", String(describing: p1))
   }
-  /// Can't confirm? Go to your account to reset your identity.
+  /// Can't confirm? Go to your account to reset your digital identity.
   internal static var screenResetIdentityConfirmationTitle: String { return L10n.tr("Localizable", "screen_reset_identity_confirmation_title") }
   /// Withdraw verification and send
   internal static var screenResolveSendFailureChangedIdentityPrimaryButtonTitle: String { return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_primary_button_title") }
@@ -2486,7 +2486,7 @@ internal enum L10n {
   internal static func screenResolveSendFailureChangedIdentitySubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_subtitle", String(describing: p1))
   }
-  /// Your message was not sent because %1$@’s verified identity was reset
+  /// Your message was not sent because %1$@’s verified digital identity was reset
   internal static func screenResolveSendFailureChangedIdentityTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_title", String(describing: p1))
   }
@@ -3095,7 +3095,7 @@ internal enum L10n {
   internal static var screenSessionVerificationCompareNumbersTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_title") }
   /// Now you can read or send messages securely on your other device.
   internal static var screenSessionVerificationCompleteSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_subtitle") }
-  /// Now you can trust the identity of this user when sending or receiving messages.
+  /// Now you can trust the digital identity of this user when sending or receiving messages.
   internal static var screenSessionVerificationCompleteUserSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_user_subtitle") }
   /// Device verified
   internal static var screenSessionVerificationDeviceVerified: String { return L10n.tr("Localizable", "screen_session_verification_device_verified") }
@@ -3145,7 +3145,7 @@ internal enum L10n {
   internal static var screenSessionVerificationUserInitiatorSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_user_initiator_subtitle") }
   /// Verify this user?
   internal static var screenSessionVerificationUserInitiatorTitle: String { return L10n.tr("Localizable", "screen_session_verification_user_initiator_title") }
-  /// For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.
+  /// For extra security, another user wants to verify your digital identity. You’ll be shown a set of emojis to compare.
   internal static var screenSessionVerificationUserResponderSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_user_responder_subtitle") }
   /// You should see a popup on the other device. Start the verification from there now.
   internal static var screenSessionVerificationWaitingAnotherDeviceSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_subtitle") }
@@ -3291,7 +3291,7 @@ internal enum L10n {
   }
   /// On the map
   internal static var screenStaticLocationSheetTitle: String { return L10n.tr("Localizable", "screen_static_location_sheet_title") }
-  /// Message not sent because %1$@’s verified identity was reset.
+  /// Message not sent because %1$@’s verified digital identity was reset.
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))
   }
@@ -3573,7 +3573,7 @@ internal enum L10n {
   internal static var timelineDecryptionFailureHistoricalEventUserNotJoined: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_user_not_joined") }
   /// Unable to decrypt message
   internal static var timelineDecryptionFailureUnableToDecrypt: String { return L10n.tr("Localizable", "timeline_decryption_failure_unable_to_decrypt") }
-  /// This message was blocked either because you did not verify your device or because the sender needs to verify your identity.
+  /// This message was blocked either because you did not verify your device or because the sender needs to verify your digital identity.
   internal static var timelineDecryptionFailureWithheldUnverified: String { return L10n.tr("Localizable", "timeline_decryption_failure_withheld_unverified") }
   /// Push history
   internal static var troubleshootNotificationsEntryPointPushHistoryTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_entry_point_push_history_title") }

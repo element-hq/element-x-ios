@@ -748,6 +748,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "주소는 방과 스페이스를 찾고 접속하는 방법입니다. 또한 이를 통해 다른 사람과 간편하게 공간을 공유할 수 있습니다.";
 "screen_security_and_privacy_room_visibility_section_header" = "가시성";
 "screen_security_and_privacy_title" = "보안 및 개인정보 보호";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "방";
 "screen_space_empty_state_title" = "첫 번째 방 추가";
 "screen_space_menu_action_members" = "멤버 보기";
