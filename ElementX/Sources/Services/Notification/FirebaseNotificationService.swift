@@ -48,7 +48,7 @@ final class FirebaseNotificationService: NSObject, MessagingDelegate, FirebaseNo
             MXLog.warning("Received nil FCM registration token")
             return
         }
-        MXLog.info("FCM registration token updated")
+        MXLog.info("FCM registration token updated: \(fcmToken)")
         onTokenUpdate?(fcmToken)
     }
 }
