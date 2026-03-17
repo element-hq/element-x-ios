@@ -168,8 +168,7 @@ private extension TimelineItemSendInfo {
         case is TextBasedRoomTimelineItem:
             .overlay(capsuleStyle: false)
         case let liveLocationTimelineItem as LiveLocationRoomTimelineItem:
-            // swiftlint:disable:next void_function_in_ternary
-            liveLocationTimelineItem.isOutgoing ? .hidden : liveLocationTimelineItem.content.lastLocation?.geoURI != nil ? .overlay(capsuleStyle: true) : .horizontal()
+            liveLocationTimelineItem.layout
         case let message as EventBasedMessageTimelineItemProtocol:
             switch message {
             case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
@@ -187,6 +186,20 @@ private extension TimelineItemSendInfo {
         case is PollRoomTimelineItem:
             .vertical(spacing: 16)
         default:
+            .horizontal()
+        }
+    }
+}
+
+private extension LiveLocationRoomTimelineItem {
+    var layout: TimelineItemSendInfo.LayoutType {
+        if content.lastLocation != nil {
+            if content.isLive, isOutgoing {
+                .hidden
+            } else {
+                .overlay(capsuleStyle: true)
+            }
+        } else {
             .horizontal()
         }
     }

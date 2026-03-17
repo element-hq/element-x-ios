@@ -540,10 +540,6 @@ internal enum L10n {
   }
   /// This Matrix ID can't be found, so the invite might not be received.
   internal static var commonInviteUnknownProfile: String { return L10n.tr("Localizable", "common_invite_unknown_profile") }
-  /// Ends %1$@
-  internal static func commonIosExpirationTime(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "common_ios_expiration_time", String(describing: p1))
-  }
   /// Leaving room
   internal static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
   /// Leaving space

@@ -45,9 +45,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildLiveLocationTimelineItem(eventItemProxy, messageLikeContent, content, isOutgoing)
             case .other:
                 return nil // We shouldn't receive these without asking for custom event types.
-            case .liveLocation:
-                // TODO: Implement
-                return nil
             }
         case .failedToParseMessageLike(let eventType, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)

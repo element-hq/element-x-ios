@@ -6,21 +6,6 @@
 
 import Foundation
 
-open class BackupSecretsSDKMock: MatrixRustSDK.BackupSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-}
 open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -8014,21 +7999,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return usernameUsernameReturnValue
         }
     }
-}
-open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
 }
 open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     public init() {
@@ -22162,21 +22132,6 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
             return ownMembershipDetailsReturnValue
         }
     }
-}
-open class SecretsBundleSDKMock: MatrixRustSDK.SecretsBundle, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
 }
 open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle, @unchecked Sendable {
     public init() {

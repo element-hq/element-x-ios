@@ -119,7 +119,7 @@ struct LiveLocationRoomTimelineView: View {
                     .font(.compound.bodySMSemibold)
                 
                 if timelineItem.content.isLive {
-                    Text(L10n.commonIosExpirationTime(timelineItem.content.timeoutDate.formatted(.relative(presentation: .numeric))))
+                    Text(L10n.commonEndsInTimeIos(timelineItem.content.timeoutDate.formatted(.relative(presentation: .numeric))))
                         .foregroundStyle(.compound.textPrimary)
                         .font(.compound.bodySM)
                 }
@@ -128,7 +128,7 @@ struct LiveLocationRoomTimelineView: View {
             
             Spacer()
             
-            if timelineItem.isOutgoing {
+            if timelineItem.content.isLive, timelineItem.isOutgoing {
                 Button { } label: {
                     CompoundIcon(\.stop, size: .small, relativeTo: .compound.bodySMSemibold)
                         .foregroundStyle(.compound.iconOnSolidPrimary)
