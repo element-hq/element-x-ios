@@ -737,8 +737,9 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Адреса позволяют находить и получать доступ к комнатам и пространствам. Это также гарантирует, что вы сможете легко поделиться ими с другими.";
 "screen_security_and_privacy_room_visibility_section_header" = "Видимость";
 "screen_security_and_privacy_title" = "Безопасность и конфиденциальность";
-"screen_space_add_room_action" = "Room";
-"screen_space_empty_state_title" = "Add your first room";
+"screen_sharing_location_option_sheet_title" = "Sharing options";
+"screen_space_add_room_action" = "Комната";
+"screen_space_empty_state_title" = "Добавьте свою первую комнату";
 "screen_space_menu_action_members" = "Просмотреть участников";
 "screen_space_remove_rooms_confirmation_content" = "Удаление комнаты не повлияет на доступ к ней. Чтобы изменить доступ, перейдите в раздел «Информация о комнате > Конфиденциальность и безопасность.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Удалить комнаты из %1$@?";

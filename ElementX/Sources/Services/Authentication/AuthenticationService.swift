@@ -15,8 +15,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private var sessionDirectories: SessionDirectories
     private let passphrase: String
     
-    private let clientFactory: AuthenticationClientFactoryProtocol
     private let userSessionStore: UserSessionStoreProtocol
+    private let classicAppManager: ClassicAppManagerProtocol?
+    private let clientFactory: AuthenticationClientFactoryProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
     
@@ -29,15 +30,30 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     init(userSessionStore: UserSessionStoreProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
+         classicAppManager: ClassicAppManagerProtocol?,
          clientFactory: AuthenticationClientFactoryProtocol = AuthenticationClientFactory(),
          appSettings: AppSettings,
          appHooks: AppHooks) {
         sessionDirectories = .init()
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
-        self.clientFactory = clientFactory
+        
         self.userSessionStore = userSessionStore
+        self.classicAppManager = classicAppManager
+        self.clientFactory = clientFactory
         self.appSettings = appSettings
         self.appHooks = appHooks
+        
+        do {
+            if let classicAppManager {
+                // Just let the app manager log the detected account for now.
+                _ = try classicAppManager.loadAccounts()
+            } else {
+                MXLog.info("Classic App not configured, skipping loadAccounts.")
+            }
+        } catch {
+            // This should show an alert: "We have detected an older version of Element Classic, but no bueno!"
+            MXLog.error("Failed loading accounts from the Classic app: \(error)")
+        }
         
         // When updating these, don't forget to update the reset method too.
         homeserverSubject = .init(LoginHomeserver(address: appSettings.accountProviders[0], loginMode: .unknown))
@@ -277,6 +293,7 @@ extension AuthenticationService {
     static var mock: AuthenticationService {
         AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
+                              classicAppManager: nil,
                               clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
                               appSettings: ServiceLocator.shared.settings,
                               appHooks: AppHooks())

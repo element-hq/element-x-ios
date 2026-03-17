@@ -1,5 +1,5 @@
 {
-  "originHash" : "8eb9025bb2afabd4f0794636164b32d8b7ed94d2c00e6d7016184f2cdecd87b2",
+  "originHash" : "a97d26c5b5aac5e92d97cbb42e7ba513569e19f708e6b4401666bb06cda76677",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "a3dedba504bd1a3d04ce2a62eef00b9eef799ec4",
-        "version" : "6.10.1"
+        "revision" : "6df728f0abe575e915c866a38a6e227f6dd38852",
+        "version" : "7.0.0"
       }
     },
     {

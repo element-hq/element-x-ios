@@ -1,5 +1,4 @@
 import ArgumentParser
-import CommandLineTools
 import Foundation
 import Yams
 
@@ -14,38 +13,13 @@ struct TagNightly: AsyncParsableCommand {
             throw ValidationError("Invalid build number.")
         }
         
-        guard let apiToken = ProcessInfo.processInfo.environment["GITHUB_TOKEN"],
-              !apiToken.isEmpty else {
-            throw ValidationError("Invalid GitHub API token. Please set the GITHUB_TOKEN environment variable.")
-        }
-        
-        let repoURL = try getRepoURL()
-
-        try await CI.run(.name("git"), ["config", "--global", "user.name", "Element CI"])
-        try await CI.run(.name("git"), ["config", "--global", "user.email", "ci@element.io"])
+        try await CI.gitConfigureGlobals()
 
         let currentVersion = try CI.readMarketingVersion()
         let tagName = "nightly/\(currentVersion).\(buildNumber)"
-        try await CI.run(.name("git"), ["tag", tagName])
         
-        try await CI.run(.name("git"), ["push", "https://\(apiToken)@\(repoURL)", tagName])
+        try await CI.gitPush(tagName: tagName)
 
         logger.info("\n🚀 Successfully tagged nightly: \(tagName)\n")
-    }
-
-    // MARK: - Private
-
-    private func getRepoURL() throws -> String {
-        guard let rawURL = try Zsh.run(command: "git ls-remote --get-url origin") else {
-            throw ValidationError("Could not determine the git remote URL.")
-        }
-
-        return
-            rawURL
-                .replacingOccurrences(of: "http://", with: "")
-                .replacingOccurrences(of: "https://", with: "")
-                .replacingOccurrences(of: "git@", with: "")
-                .replacingOccurrences(of: ".git", with: "")
-                .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

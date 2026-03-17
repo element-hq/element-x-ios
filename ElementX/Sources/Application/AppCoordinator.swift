@@ -608,8 +608,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func startAuthentication() {
         let encryptionKeyProvider = EncryptionKeyProvider()
+        let classicAppManager = ClassicAppManager()
         let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
                                                           encryptionKeyProvider: encryptionKeyProvider,
+                                                          classicAppManager: classicAppManager,
                                                           appSettings: appSettings,
                                                           appHooks: appHooks)
         
@@ -663,6 +665,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             
             let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
                                                               encryptionKeyProvider: EncryptionKeyProvider(),
+                                                              classicAppManager: ClassicAppManager(),
                                                               appSettings: appSettings,
                                                               appHooks: appHooks)
             _ = await authenticationService.configure(for: userSession.clientProxy.homeserver, flow: .login)

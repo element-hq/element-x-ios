@@ -147,7 +147,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
         do {
             MXLog.info("Confirming recovery key")
-            try await encryption.recover(recoveryKey: key)
+            try await encryption.recoverAndFixBackup(recoveryKey: key)
             return .success(())
         } catch {
             MXLog.info("Failed confirming recovery key with error: \(error)")

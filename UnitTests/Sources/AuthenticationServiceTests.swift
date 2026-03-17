@@ -96,6 +96,7 @@ class AuthenticationServiceTests: XCTestCase {
         
         service = AuthenticationService(userSessionStore: userSessionStore,
                                         encryptionKeyProvider: encryptionKeyProvider,
+                                        classicAppManager: nil,
                                         clientFactory: clientFactory,
                                         appSettings: ServiceLocator.shared.settings,
                                         appHooks: AppHooks())
