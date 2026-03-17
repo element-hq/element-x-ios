@@ -23,9 +23,9 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 **Developer:** Saidakhror Murzaliev (solo, 20h/week, AI-assisted)
 **Customer:** Russian-speaking, existing Matrix infrastructure
 
-## Current State (as of 2026-03-11)
+## Current State (as of 2026-03-17)
 
-**Code changes are feature-complete.** Zero user-visible Element branding. Currently in Sprint 3 (push notifications), blocked on customer-side Sygnal configuration. Customer appeal sent 2026-03-11 with Firebase service account JSON + Sygnal config instructions.
+**Code changes are feature-complete.** Zero user-visible Element branding. Sprint 5 (release prep) in progress. Push E2E testing attempted — FCM pusher registration succeeds on device but ntfy server rejects FCM token. Blocked on customer checking ntfy server logs.
 
 ### Configuration Applied
 
@@ -33,10 +33,10 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 |---------|-------|
 | Bundle ID | `org.ucmeet.UCMeetChat` (cascaded through 22 files, registered in Apple Developer Portal) |
 | App Group | `group.org.ucmeet` |
-| Team ID | `26UC01GH` |
+| Team ID | `6HRG779SDK` |
 | Display Name | `UCMeet.Chat` |
 | Homeserver | `matrix.ucmeet.org` |
-| Push Gateway | `push.ucmeet.org` (awaiting customer confirmation) |
+| Push Gateway | `https://push.ucmeet.org` (ntfy with Matrix gateway API — confirmed reachable, FCM token rejected by ntfy) |
 | OIDC | Custom URL scheme `org.ucmeet.UCMeetChat:/callback` — login verified working |
 | Calls | URL scheme `org.ucmeet.call`, LiveKit via `.well-known` |
 | Locales | en, en-US, ru (trimmed from 37) |
@@ -45,11 +45,12 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 | Firebase | Real GoogleService-Info.plist installed (project `matrix-8c24a`), APNs key uploaded |
 | MapLibre | API key configured, interactive maps work. Static map previews need Static Maps API permission on MapTiler |
 | Pusher App IDs | `org.ucmeet.UCMeetChat.ios.prod` (release) / `.ios.dev` (debug) |
-| Upstream | 92 commits behind `element-hq/element-x-ios:develop` — sync planned before TestFlight |
+| NSE Entitlement | `com.apple.developer.usernotifications.filtering` removed (requires Apple approval, not available for our bundle ID) |
+| Upstream | Synced with `element-hq/element-x-ios:develop` (59 ahead, 0 behind) |
 
 ### Remaining Blockers
 
-1. **Push E2E testing** — customer must configure Sygnal with Firebase service account JSON (sent 2026-03-11). Needs both app IDs: `.ios.dev` + `.ios.prod`
+1. **Push E2E testing** — ntfy server at `push.ucmeet.org` rejects FCM tokens (`"rejected"` response). Customer must check ntfy server logs for FCM forwarding errors. Firebase service account JSON was sent 2026-03-11
 2. **MapLibre static maps** — MapTiler key needs "Static Maps" permission enabled (interactive maps already work)
 3. **AGPL v3 licensing** — need written confirmation it covers Element X (blocks App Store only)
 
@@ -159,9 +160,9 @@ All docs in `documentation/` folder:
 |--------|--------|-------|
 | 1: Environment Setup & Fork | **DONE** | |
 | 2: Branding & Basic Functionality | **DONE** | MapLibre interactive maps work, static previews need MapTiler permission |
-| 3: Push + OIDC + Associated Domains | **BLOCKED** | All dev-side work done. Waiting on customer Sygnal config (appeal sent 2026-03-11) |
+| 3: Push + OIDC + Associated Domains | **BLOCKED** | Push gateway URL confirmed (`https://push.ucmeet.org`), E2E test attempted, FCM token rejected by ntfy. Customer must check ntfy logs |
 | 4: Calls & UCMeet Call | **DONE** | |
-| 5: Finalization & Release Prep | NOT STARTED | Depends on Sprint 3 completion |
+| 5: Finalization & Release Prep | **IN PROGRESS** | NSE entitlement fix, upstream sync, version set to 1.0.0 (Build 1) |
 | 6: TestFlight & Publication | NOT STARTED | Depends on Sprint 5 |
 
 ### Summary Metrics
@@ -174,8 +175,8 @@ All docs in `documentation/` folder:
 | Decisions resolved | 7/12 |
 | Unit tests | 962 run, 899 passed, 63 pre-existing failures, 0 new |
 | User-visible Element branding | **0** |
-| Upstream divergence | 46 ahead, 92 behind element-hq/element-x-ios |
+| Upstream divergence | 59 ahead, 0 behind element-hq/element-x-ios |
 
 ---
 
-*Last updated: 2026-03-11. See `documentation/progress_log.md` for detailed daily log.*
+*Last updated: 2026-03-17. See `documentation/progress_log.md` for detailed daily log.*

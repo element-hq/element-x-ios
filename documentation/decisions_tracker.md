@@ -3,7 +3,7 @@
 
 **Назначение:** Живой документ для отслеживания всех открытых решений, блокеров и их статусов. Обновляется по мере продвижения проекта.
 
-**Последнее обновление:** 3 марта 2026 г.
+**Последнее обновление:** 17 марта 2026 г.
 
 ---
 
@@ -64,7 +64,7 @@ Element X iOS лицензирован под AGPL v3. Условия AGPL v3 ю
 | **Дедлайн решения** | До начала тестирования push-уведомлений |
 | **Фазы, которые блокирует** | Фаза 5 (тестирование Push-уведомлений) |
 | **Дата создания** | 2026-02-08 |
-| **Дата последнего обновления** | 2026-03-02 |
+| **Дата последнего обновления** | 2026-03-17 |
 
 **Описание:**
 FCM реализован полностью согласно ТЗ. Код написан, протестирован (14 unit-тестов), сборка проверена.
@@ -80,20 +80,27 @@ FCM реализован полностью согласно ТЗ. Код нап
 - Условная логика в `AppCoordinator` — FCM или APNs в зависимости от настройки
 - `NotificationManager.registerWithFCMToken()` — регистрация pusher с FCM-токеном (raw string, не base64)
 - 14 unit-тестов: 5 NotificationManager FCM, 5 FirebaseIntegration, 4 PushProvider — все проходят
-- Заглушка `GoogleService-Info.plist` с TODO-значениями
 - ✅ Получен APNs Authentication Key: `AuthKey_XZANH7CD3Z.p8` (Key ID: `XZANH7CD3Z`)
+
+**Что сделано (обновление 17.03.2026):**
+- ✅ APNs-ключ загружен в Firebase Console (dev + prod, Key ID: `XZANH7CD3Z`, Team ID: `6HRG779SDK`)
+- ✅ Push gateway URL подтверждён: `https://push.ucmeet.org` (ntfy с поддержкой Matrix Gateway API)
+- ✅ Firebase-проект `matrix-8c24a` — GoogleService-Info.plist установлен, service account JSON отправлен заказчику
+- ✅ NSE filtering entitlement удалён (`com.apple.developer.usernotifications.filtering` — требует одобрения Apple, не нужен для push)
+- ✅ E2E push-тест проведён — FCM pusher регистрация успешна на устройстве, gateway доступен
+- ❌ ntfy сервер отклоняет FCM-токен (ответ `"rejected"`) — заказчик должен проверить логи ntfy для ошибок FCM
 
 **Что осталось:**
 - ✅ ~~Решение APNs vs FCM~~ — FCM подтверждён
 - ✅ ~~APNs-ключ (.p8)~~ — получен от заказчика (`AuthKey_XZANH7CD3Z.p8`)
 - ✅ ~~Создать Firebase-проект в Google Console~~ — создан (03.03.2026)
 - ✅ ~~Скачать реальный `GoogleService-Info.plist`~~ — установлен в проект (03.03.2026)
-- 🔲 Загрузить APNs-ключ в Firebase Console (**разработчик**)
-- 🔲 Получить URL Sygnal от заказчика
-- 🔲 Заказчик настраивает Sygnal для FCM (предоставить им FCM Server Key)
-- 🔲 Сквозное тестирование push-уведомлений
+- ✅ ~~Загрузить APNs-ключ в Firebase Console~~ — загружен (17.03.2026)
+- ✅ ~~Получить URL push gateway от заказчика~~ — `https://push.ucmeet.org` (ntfy)
+- ❌ **Заказчик:** проверить логи ntfy — FCM-токен отклоняется при пересылке в Firebase
+- 🔲 Сквозное тестирование push-уведомлений (после исправления ntfy)
 
-**Решение:** FCM. Firebase-проект создан, реальный GoogleService-Info.plist установлен. Необходимо: загрузить APNs ключ в Firebase Console и получить Sygnal URL от заказчика.
+**Решение:** FCM. Вся инфраструктура со стороны разработчика готова. Блокер: ntfy сервер заказчика отклоняет FCM-токены — необходима диагностика на стороне сервера.
 
 ---
 
@@ -213,11 +220,11 @@ FCM реализован полностью согласно ТЗ. Код нап
 
 **Решение (18.02.2026):** Заказчик добавил разработчика как **Administrator** в свой App Store Connect аккаунт. Разработчик имеет полный доступ для создания приложений, регистрации Bundle ID, управления провижинингом и публикации в App Store.
 
-**Обновление 20.02.2026:** Заказчик предоставил документ «Forking Data.doc» с конфигурацией: Bundle ID `org.ucmeet.ucmeetchat`, App Group `group.org.ucmeet`, Team ID `26UC01GH`, Display Name `UCMeet.Chat`. Все значения применены в коде.
+**Обновление 20.02.2026:** Заказчик предоставил документ «Forking Data.doc» с конфигурацией: Bundle ID `org.ucmeet.ucmeetchat`, App Group `group.org.ucmeet`, Team ID `6HRG779SDK`, Display Name `UCMeet.Chat`. Все значения применены в коде.
 
 **Обновление 01.03.2026:** Bundle ID исправлен на `org.ucmeet.UCMeetChat` (корректный регистр из «Форкинг.doc»). Создано руководство по регистрации: `documentation/appstore_connect_guide.md`.
 
-**Обновление 02.03.2026:** Bundle ID и все расширения зарегистрированы в Apple Developer Portal. App Group `group.org.ucmeet` создан. Capabilities включены. Однако обнаружена проблема: разработчик добавлен только в App Store Connect, но **не имеет доступа к Apple Developer Program team** (Team ID `26UC01GH`). Команда заказчика не отображается в Xcode — доступны только Personal Team и другие команды разработчика. Возможно, аккаунт заказчика — **Individual** (не Organization), что не позволяет добавлять участников. **Решение:** добавить Apple ID заказчика в Xcode Accounts.
+**Обновление 02.03.2026:** Bundle ID и все расширения зарегистрированы в Apple Developer Portal. App Group `group.org.ucmeet` создан. Capabilities включены. Однако обнаружена проблема: разработчик добавлен только в App Store Connect, но **не имеет доступа к Apple Developer Program team** (Team ID `6HRG779SDK`). Команда заказчика не отображается в Xcode — доступны только Personal Team и другие команды разработчика. Возможно, аккаунт заказчика — **Individual** (не Organization), что не позволяет добавлять участников. **Решение:** добавить Apple ID заказчика в Xcode Accounts.
 
 Заказчик также предоставил 2 ключа .p8:
 - `ApiKey_QVGWLXJNNMOZ.p8` — App Store Connect API Key (для загрузки в TestFlight/App Store)
@@ -356,7 +363,7 @@ FCM реализован полностью согласно ТЗ. Код нап
 | ID | Описание | Критичность | Статус | Владелец | Дедлайн |
 |----|----------|-------------|--------|----------|---------|
 | D-001 | Лицензирование AGPL v3 | 🚨 Блокер | 🟡 В процессе | Заказчик | До публикации |
-| D-002 | Push: FCM конфигурация | 🚨 Блокер | 🟡 В процессе | Разработчик + Заказчик | До тестирования |
+| D-002 | Push: FCM конфигурация | 🚨 Блокер | 🟡 В процессе | Заказчик (ntfy диагностика) | До тестирования |
 | D-003 | Минимальная версия iOS (18.0+) | 🚨 Блокер | 🟢 Решён | — | — |
 | D-004 | Инфраструктура звонков (UCMeet Call) | 🚨 Блокер | 🟢 Решён | — | — |
 | D-005 | Готовность серверов | ⚠️ Высокая | 🟢 Решён | — | — |
@@ -411,7 +418,7 @@ FCM реализован полностью согласно ТЗ. Код нап
 | | ✅ App Group `group.org.ucmeet` создан и привязан ко всем 3 Bundle ID. |
 | | ✅ Capabilities включены: Push Notifications, Associated Domains, App Groups. |
 | | ⚠️ Keychain Sharing — отсутствует в Developer Portal как отдельная capability, настраивается через entitlements (уже в проекте). |
-| | ❌ Команда заказчика (Team ID `26UC01GH`) не отображается в Xcode. Разработчик добавлен в App Store Connect, но не в Apple Developer Program team. |
+| | ❌ Команда заказчика (Team ID `6HRG779SDK`) не отображается в Xcode. Разработчик добавлен в App Store Connect, но не в Apple Developer Program team. |
 | | ❌ Возможно, аккаунт заказчика — Individual (не Organization), что не позволяет добавлять участников. |
 | | 🔑 Получены 2 ключа .p8: ApiKey (App Store Connect API) + AuthKey (APNs, Key ID: `XZANH7CD3Z`). |
 | | D-002 обновлён: APNs ключ получен. |
@@ -422,6 +429,11 @@ FCM реализован полностью согласно ТЗ. Код нап
 | | ✅ Размер in-app логотипа исправлен: 330x330px @3x (было 1024px — рендерился на весь экран). |
 | | ✅ Firebase GoogleService-Info.plist заменён реальной конфигурацией Firebase-проекта. |
 | | D-002 обновлён: Firebase-проект создан, GoogleService-Info.plist установлен. Осталось загрузить APNs ключ в Firebase Console + получить Sygnal URL. |
+| 2026-03-17 | **Push E2E тестирование и upstream sync:** |
+| | D-002: APNs ключ загружен в Firebase Console (dev + prod). Push gateway подтверждён: `https://push.ucmeet.org` (ntfy). E2E тест проведён — FCM pusher регистрация успешна, но ntfy отклоняет FCM-токен. Заказчик должен проверить логи ntfy. |
+| | NSE entitlement `com.apple.developer.usernotifications.filtering` удалён (требует одобрения Apple, не доступен для нашего Bundle ID). |
+| | Upstream sync: 13 коммитов из element-hq/element-x-ios:develop (translations, compound-design-tokens v6-v7, Classic accounts, key backup fix). Upstream divergence: 59 ahead, 0 behind. |
+| | Team ID исправлен в документации: `26UC01GH` → `6HRG779SDK`. |
 
 ---
 
