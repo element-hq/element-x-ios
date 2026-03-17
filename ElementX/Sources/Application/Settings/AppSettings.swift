@@ -333,7 +333,7 @@ final class AppSettings {
     let analyticsConfiguration: AnalyticsConfiguration? = AppSettings.makeAnalyticsConfiguration()
     /// The URL to open with more information about analytics terms. When this is `nil` the "Learn more" link will be hidden.
     // UCMeet: analytics disabled, no cookie policy needed
-    private(set) var analyticsTermsURL: URL? = nil
+    private(set) var analyticsTermsURL: URL?
     /// Whether or not there the app is able ask for user consent to enable analytics or sentry reporting.
     var canPromptForAnalytics: Bool {
         analyticsConfiguration != nil || bugReportSentryURL != nil
