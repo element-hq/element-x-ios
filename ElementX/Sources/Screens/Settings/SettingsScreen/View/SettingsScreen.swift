@@ -247,7 +247,7 @@ struct SettingsScreen: View {
     
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.actionDone) { context.send(viewAction: .close) }
+            ToolbarButton(role: .close) { context.send(viewAction: .close) }
                 .accessibilityIdentifier(A11yIdentifiers.settingsScreen.done)
         }
     }
