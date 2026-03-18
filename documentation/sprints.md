@@ -133,7 +133,7 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-## Sprint 5: Finalization & Release Prep (Days 29-35) — IN PROGRESS
+## Sprint 5: Finalization & Release Prep (Days 29-35) — DONE
 
 **Goal:** Release-ready build.
 
@@ -146,8 +146,9 @@ Timeline: 6 sprints / 45 days.
 - [x] Verify minimum iOS 18 — confirmed `18.0` in project.yml (2026-03-13)
 - [x] Verify Distribution signing — Archive build succeeded with customer's Apple ID (2026-03-18)
 - [x] NOTICE/attribution — already correct, credits Element X + AGPL-3.0 (2026-03-13)
-- [x] **DECIDED:** `ITSAppUsesNonExemptEncryption` set to `true` — Matrix uses E2EE (Olm/Megolm via Vodozemac). Qualifies for mass market exemption EAR §740.17(b)(1). Customer should file BIS self-classification report before release. (2026-03-18)
+- [x] **DECIDED:** Export compliance handled via Xcode upload wizard (encryption questions answered interactively). `ITSAppUsesNonExemptEncryption` removed from Info.plist to avoid compliance code mismatch. Matrix E2EE qualifies for mass market exemption EAR §740.17(b)(1). (2026-03-18)
 - [x] CI/CD trimmed for fork — removed 7 Element-specific workflows, all tests manual-only (2026-03-18)
+- [x] Upload to TestFlight — build uploaded successfully (2026-03-18)
 - [ ] Revert temporary debug logging before App Store release (commit `4c2e98746`)
 - [ ] **BLOCKED — Customer:** Written confirmation of AGPL license covering Element X fork
 
@@ -175,12 +176,14 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-## Sprint 6: TestFlight & Publication (Days 36-45) — NOT STARTED
+## Sprint 6: TestFlight & Publication (Days 36-45) — IN PROGRESS
 
 **Goal:** App Store publication.
 
 **Tasks:**
-- [ ] Upload to TestFlight
+- [x] Upload to TestFlight (2026-03-18)
+- [x] App created in App Store Connect (Apple ID: 6759875787) (2026-03-18)
+- [x] App Store customer guide (RU) prepared and sent (2026-03-18)
 - [ ] Customer testing
 - [ ] Fix bugs
 - [ ] Prepare test account + instructions for App Review
@@ -196,4 +199,4 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-*Last updated: 2026-03-18. Sprint 5 dev-side complete. Blocked on customer for push server fix + AGPL confirmation.*
+*Last updated: 2026-03-18. Sprint 5 done. Sprint 6 started — build uploaded to TestFlight, App Store Connect created. Blocked on customer for push server fix + AGPL confirmation + App Store listing details.*
