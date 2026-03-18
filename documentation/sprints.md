@@ -138,15 +138,17 @@ Timeline: 6 sprints / 45 days.
 **Goal:** Release-ready build.
 
 **Tasks:**
-- [ ] Switch build to Release configuration
+- [x] Switch build to Release configuration — Archive build succeeded (2026-03-18)
 - [x] Set version: 1.0.0 (Build 1) (2026-03-13)
 - [x] Verify Info.plist (Camera, Mic, Notifications permissions) — all 5 strings use `$(APP_DISPLAY_NAME)`, en + ru localized (2026-03-13)
 - [x] Debug log audit — zero `print()` in production code, all logging via MXLog framework (2026-03-13)
 - [x] Optimize: memory, energy, launch time — N/A, upstream-maintained (no new code, rebrand only) (2026-03-18)
 - [x] Verify minimum iOS 18 — confirmed `18.0` in project.yml (2026-03-13)
-- [ ] Verify Distribution signing (Archive build in progress)
+- [x] Verify Distribution signing — Archive build succeeded with customer's Apple ID (2026-03-18)
 - [x] NOTICE/attribution — already correct, credits Element X + AGPL-3.0 (2026-03-13)
 - [x] **DECIDED:** `ITSAppUsesNonExemptEncryption` set to `true` — Matrix uses E2EE (Olm/Megolm via Vodozemac). Qualifies for mass market exemption EAR §740.17(b)(1). Customer should file BIS self-classification report before release. (2026-03-18)
+- [x] CI/CD trimmed for fork — removed 7 Element-specific workflows, all tests manual-only (2026-03-18)
+- [ ] Revert temporary debug logging before App Store release (commit `4c2e98746`)
 - [ ] **BLOCKED — Customer:** Written confirmation of AGPL license covering Element X fork
 
 **Updates (2026-03-13):**
@@ -164,11 +166,12 @@ Timeline: 6 sprints / 45 days.
 - Push E2E test: app-side confirmed working (FCM token, pusher 200 OK, message sent). Server-side break identified (Synapse → ntfy)
 - SwiftFormat lint fix: redundant nil init in AppSettings.swift
 - `ITSAppUsesNonExemptEncryption` changed from `false` to `true`
-- Archive build testing in progress
+- Archive build succeeded — distribution signing confirmed (2026-03-18)
+- CI/CD trimmed: removed 7 broken Element workflows, all macOS test workflows manual-only (2026-03-18)
 
 **Result:**
-- [ ] Release build ready for TestFlight
-- [ ] Legal risks resolved
+- [x] Release build ready for TestFlight (Archive succeeds, signing works)
+- [ ] Legal risks resolved (AGPL confirmation still pending from customer)
 
 ---
 
@@ -193,4 +196,4 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-*Last updated: 2026-03-11. Customer appeal sent with Sygnal config instructions.*
+*Last updated: 2026-03-18. Sprint 5 dev-side complete. Blocked on customer for push server fix + AGPL confirmation.*
