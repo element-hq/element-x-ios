@@ -117,7 +117,7 @@ final class RoomSummaryProviderTests {
         let dynamicAdaptersResult = RoomListEntriesWithDynamicAdaptersResultSDKMock()
         dynamicAdaptersResult.controllerReturnValue = dynamicEntriesController
         roomList = RoomListSDKMock()
-        roomList.entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReturnValue = dynamicAdaptersResult
+        roomList.entriesWithDynamicAdaptersPageSizeListenerReturnValue = dynamicAdaptersResult
         roomList.loadingStateListenerReturnValue = .some(.init(state: .notLoaded, stateStream: .init(noHandle: .init())))
         roomSummaryProvider.setRoomList(roomList)
     }

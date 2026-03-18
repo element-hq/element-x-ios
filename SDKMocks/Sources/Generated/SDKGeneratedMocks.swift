@@ -15207,81 +15207,6 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         try await leaveClosure?()
     }
 
-    //MARK: - listThreads
-
-    open var listThreadsOptsThrowableError: Error?
-    open var listThreadsOptsUnderlyingCallsCount = 0
-    open var listThreadsOptsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return listThreadsOptsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = listThreadsOptsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                listThreadsOptsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    listThreadsOptsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var listThreadsOptsCalled: Bool {
-        return listThreadsOptsCallsCount > 0
-    }
-    open var listThreadsOptsReceivedOpts: ListThreadsOptions?
-    open var listThreadsOptsReceivedInvocations: [ListThreadsOptions] = []
-
-    open var listThreadsOptsUnderlyingReturnValue: ThreadRoots!
-    open var listThreadsOptsReturnValue: ThreadRoots! {
-        get {
-            if Thread.isMainThread {
-                return listThreadsOptsUnderlyingReturnValue
-            } else {
-                var returnValue: ThreadRoots? = nil
-                DispatchQueue.main.sync {
-                    returnValue = listThreadsOptsUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                listThreadsOptsUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    listThreadsOptsUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var listThreadsOptsClosure: ((ListThreadsOptions) async throws -> ThreadRoots)?
-
-    open override func listThreads(opts: ListThreadsOptions) async throws -> ThreadRoots {
-        if let error = listThreadsOptsThrowableError {
-            throw error
-        }
-        listThreadsOptsCallsCount += 1
-        listThreadsOptsReceivedOpts = opts
-        DispatchQueue.main.async {
-            self.listThreadsOptsReceivedInvocations.append(opts)
-        }
-        if let listThreadsOptsClosure = listThreadsOptsClosure {
-            return try await listThreadsOptsClosure(opts)
-        } else {
-            return listThreadsOptsReturnValue
-        }
-    }
-
     //MARK: - loadComposerDraft
 
     open var loadComposerDraftThreadRootThrowableError: Error?
@@ -15429,6 +15354,81 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return try await loadOrFetchEventEventIdClosure(eventId)
         } else {
             return loadOrFetchEventEventIdReturnValue
+        }
+    }
+
+    //MARK: - loadThreadList
+
+    open var loadThreadListOptsThrowableError: Error?
+    open var loadThreadListOptsUnderlyingCallsCount = 0
+    open var loadThreadListOptsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadThreadListOptsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadThreadListOptsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadThreadListOptsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadThreadListOptsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loadThreadListOptsCalled: Bool {
+        return loadThreadListOptsCallsCount > 0
+    }
+    open var loadThreadListOptsReceivedOpts: ListThreadsOptions?
+    open var loadThreadListOptsReceivedInvocations: [ListThreadsOptions] = []
+
+    open var loadThreadListOptsUnderlyingReturnValue: ThreadList!
+    open var loadThreadListOptsReturnValue: ThreadList! {
+        get {
+            if Thread.isMainThread {
+                return loadThreadListOptsUnderlyingReturnValue
+            } else {
+                var returnValue: ThreadList? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadThreadListOptsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadThreadListOptsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadThreadListOptsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var loadThreadListOptsClosure: ((ListThreadsOptions) async throws -> ThreadList)?
+
+    open override func loadThreadList(opts: ListThreadsOptions) async throws -> ThreadList {
+        if let error = loadThreadListOptsThrowableError {
+            throw error
+        }
+        loadThreadListOptsCallsCount += 1
+        loadThreadListOptsReceivedOpts = opts
+        DispatchQueue.main.async {
+            self.loadThreadListOptsReceivedInvocations.append(opts)
+        }
+        if let loadThreadListOptsClosure = loadThreadListOptsClosure {
+            return try await loadThreadListOptsClosure(opts)
+        } else {
+            return loadThreadListOptsReturnValue
         }
     }
 
@@ -19191,77 +19191,6 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
             return entriesWithDynamicAdaptersPageSizeListenerClosure(pageSize, listener)
         } else {
             return entriesWithDynamicAdaptersPageSizeListenerReturnValue
-        }
-    }
-
-    //MARK: - entriesWithDynamicAdaptersWith
-
-    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount = 0
-    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerCalled: Bool {
-        return entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerCallsCount > 0
-    }
-    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReceivedArguments: (pageSize: UInt32, enableLatestEventSorter: Bool, listener: RoomListEntriesListener)?
-    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReceivedInvocations: [(pageSize: UInt32, enableLatestEventSorter: Bool, listener: RoomListEntriesListener)] = []
-
-    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue: RoomListEntriesWithDynamicAdaptersResult!
-    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReturnValue: RoomListEntriesWithDynamicAdaptersResult! {
-        get {
-            if Thread.isMainThread {
-                return entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue
-            } else {
-                var returnValue: RoomListEntriesWithDynamicAdaptersResult? = nil
-                DispatchQueue.main.sync {
-                    returnValue = entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerClosure: ((UInt32, Bool, RoomListEntriesListener) -> RoomListEntriesWithDynamicAdaptersResult)?
-
-    open override func entriesWithDynamicAdaptersWith(pageSize: UInt32, enableLatestEventSorter: Bool, listener: RoomListEntriesListener) -> RoomListEntriesWithDynamicAdaptersResult {
-        entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerCallsCount += 1
-        entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReceivedArguments = (pageSize: pageSize, enableLatestEventSorter: enableLatestEventSorter, listener: listener)
-        DispatchQueue.main.async {
-            self.entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReceivedInvocations.append((pageSize: pageSize, enableLatestEventSorter: enableLatestEventSorter, listener: listener))
-        }
-        if let entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerClosure = entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerClosure {
-            return entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerClosure(pageSize, enableLatestEventSorter, listener)
-        } else {
-            return entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReturnValue
         }
     }
 
@@ -25396,21 +25325,6 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
             return isFinishedReturnValue
         }
     }
-}
-open class ThreadRootsSDKMock: MatrixRustSDK.ThreadRoots, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
 }
 open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendable {
     public init() {

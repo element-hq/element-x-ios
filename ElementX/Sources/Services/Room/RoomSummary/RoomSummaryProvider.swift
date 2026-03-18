@@ -90,12 +90,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.roomList = roomList
         
         do {
-            listUpdatesSubscriptionResult = roomList.entriesWithDynamicAdaptersWith(pageSize: UInt32(roomListPageSize),
-                                                                                    enableLatestEventSorter: true,
-                                                                                    listener: SDKListener { [weak self] updates in
-                                                                                        guard let self else { return }
-                                                                                        diffsPublisher.send(updates)
-                                                                                    })
+            listUpdatesSubscriptionResult = roomList.entriesWithDynamicAdapters(pageSize: UInt32(roomListPageSize),
+                                                                                listener: SDKListener { [weak self] updates in
+                                                                                    guard let self else { return }
+                                                                                    diffsPublisher.send(updates)
+                                                                                })
             
             // Forces the listener above to be called with the current state
             setFilter(.all(filters: []))
