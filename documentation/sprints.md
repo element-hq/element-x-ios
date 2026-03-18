@@ -142,11 +142,11 @@ Timeline: 6 sprints / 45 days.
 - [x] Set version: 1.0.0 (Build 1) (2026-03-13)
 - [x] Verify Info.plist (Camera, Mic, Notifications permissions) — all 5 strings use `$(APP_DISPLAY_NAME)`, en + ru localized (2026-03-13)
 - [x] Debug log audit — zero `print()` in production code, all logging via MXLog framework (2026-03-13)
-- [ ] Optimize: memory, energy, launch time
+- [x] Optimize: memory, energy, launch time — N/A, upstream-maintained (no new code, rebrand only) (2026-03-18)
 - [x] Verify minimum iOS 18 — confirmed `18.0` in project.yml (2026-03-13)
-- [ ] Verify Distribution signing (requires Archive build with customer's Apple ID)
+- [ ] Verify Distribution signing (Archive build in progress)
 - [x] NOTICE/attribution — already correct, credits Element X + AGPL-3.0 (2026-03-13)
-- [ ] **DECISION NEEDED:** `ITSAppUsesNonExemptEncryption` — currently `false`, but Matrix uses E2EE (Vodozemac). May require `true` + exemption filing.
+- [x] **DECIDED:** `ITSAppUsesNonExemptEncryption` set to `true` — Matrix uses E2EE (Olm/Megolm via Vodozemac). Qualifies for mass market exemption EAR §740.17(b)(1). Customer should file BIS self-classification report before release. (2026-03-18)
 - [ ] **BLOCKED — Customer:** Written confirmation of AGPL license covering Element X fork
 
 **Updates (2026-03-13):**
@@ -156,6 +156,15 @@ Timeline: 6 sprints / 45 days.
 - Debug log audit clean — no fork-specific print() statements
 - `aps-environment` is `development` in source; Xcode auto-overrides to `production` on Archive
 - Build verified on iPhone 17 Pro simulator
+
+**Updates (2026-03-17/18):**
+- NSE entitlement `com.apple.developer.usernotifications.filtering` removed (requires Apple approval)
+- Second upstream sync: 13 commits merged (translations, compound-design-tokens, Classic accounts, key backup fix)
+- Element Classic `group.im.vector` App Group removed (not registered in our Apple Developer account)
+- Push E2E test: app-side confirmed working (FCM token, pusher 200 OK, message sent). Server-side break identified (Synapse → ntfy)
+- SwiftFormat lint fix: redundant nil init in AppSettings.swift
+- `ITSAppUsesNonExemptEncryption` changed from `false` to `true`
+- Archive build testing in progress
 
 **Result:**
 - [ ] Release build ready for TestFlight
