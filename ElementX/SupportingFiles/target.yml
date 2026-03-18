@@ -110,9 +110,7 @@ targets:
       path: ElementX.entitlements
       properties:
         aps-environment: development
-        com.apple.developer.associated-domains:
-        - applinks:matrix.to
-        # webcredentials not needed — OIDC uses custom URL scheme (no AASA required)
+        # Associated domains removed — matrix.to AASA doesn't list our Bundle ID, OIDC uses custom URL scheme
         com.apple.developer.usernotifications.communication: true
         com.apple.security.app-sandbox: true
         com.apple.security.application-groups:
