@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Подготовка к публикации UCMeet.Chat в App Store</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 18mm 20mm 18mm;
+  }
+  body {
+    font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1a1a1a;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    text-align: center;
+    color: #1a3a5c;
+    font-size: 22pt;
+    margin-bottom: 4px;
+    margin-top: 30px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #555;
+    font-style: italic;
+    font-size: 11pt;
+    margin-bottom: 20px;
+  }
+  .purpose {
+    background: #f0f4f8;
+    border-left: 4px solid #1a3a5c;
+    padding: 12px 16px;
+    margin: 16px 0 24px 0;
+    font-size: 10.5pt;
+  }
+  .purpose strong { color: #1a3a5c; }
+  h2 {
+    color: #1a3a5c;
+    font-size: 15pt;
+    border-bottom: 2px solid #1a3a5c;
+    padding-bottom: 4px;
+    margin-top: 28px;
+    margin-bottom: 12px;
+    page-break-after: avoid;
+  }
+  h3 {
+    color: #2c5f8a;
+    font-size: 12pt;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 10pt;
+    page-break-inside: avoid;
+  }
+  th {
+    background: #1a3a5c;
+    color: white;
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 7px 10px;
+    border: 1px solid #d0d0d0;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f7f9fb; }
+  tr:nth-child(odd) td { background: #ffffff; }
+  .note {
+    background: #fff8e1;
+    border: 1px solid #f0d060;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 10px 0 14px 0;
+    font-size: 10pt;
+    page-break-inside: avoid;
+  }
+  .note strong { color: #8a6d00; }
+  .note-action {
+    background: #e8f5e9;
+    border: 1px solid #81c784;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 10px 0 14px 0;
+    font-size: 10pt;
+    page-break-inside: avoid;
+  }
+  .note-action strong { color: #2e7d32; }
+  .note-blocker {
+    background: #fce4ec;
+    border: 1px solid #ef9a9a;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 10px 0 14px 0;
+    font-size: 10pt;
+    page-break-inside: avoid;
+  }
+  .note-blocker strong { color: #c62828; }
+  .code-block {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-family: 'SF Mono', 'Menlo', 'Monaco', monospace;
+    font-size: 9.5pt;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin: 8px 0 12px 0;
+  }
+  ul, ol {
+    margin: 6px 0 10px 0;
+    padding-left: 24px;
+  }
+  li { margin-bottom: 4px; }
+  .overview-table th { font-size: 10pt; }
+  .overview-table td { font-size: 10pt; }
+  .checklist td:first-child { width: 30px; text-align: center; }
+  .checklist td:nth-child(2) { width: 36px; text-align: center; }
+  code {
+    background: #eef2f7;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 9.5pt;
+  }
+  .page-break { page-break-before: always; }
+  .footer {
+    margin-top: 30px;
+    text-align: center;
+    color: #888;
+    font-size: 9pt;
+    font-style: italic;
+  }
+  .prereq {
+    margin: 12px 0;
+  }
+  .prereq li { margin-bottom: 3px; }
+  .section-intro {
+    margin-bottom: 12px;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+
+<h1>Подготовка к публикации<br>UCMeet.Chat в App Store</h1>
+<div class="subtitle">Инструкция для заказчика</div>
+
+<div class="purpose">
+  <strong>Цель документа:</strong> собрать от заказчика всю информацию, необходимую для публикации приложения UCMeet.Chat в Apple App Store. Все технические настройки приложения выполнены. После предоставления данных по пунктам ниже публикация займёт 1–2 рабочих дня, плюс проверка Apple (обычно 1–3 дня).
+</div>
+
+<h3>Что понадобится</h3>
+<ul class="prereq">
+  <li>тексты описания приложения на русском и английском;</li>
+  <li>рабочие URL-адреса (политика конфиденциальности, поддержка);</li>
+  <li>контактная информация для Apple Review.</li>
+</ul>
+
+<h3>Краткая схема процесса</h3>
+<table class="overview-table">
+  <tr><th>Этап</th><th>Что сделать</th><th>Результат</th></tr>
+  <tr><td>1</td><td>Подтвердить информацию о приложении</td><td>Название, категория, рейтинг зафиксированы</td></tr>
+  <tr><td>2</td><td>Утвердить описания (RU + EN)</td><td>Тексты для страницы App Store готовы</td></tr>
+  <tr><td>3</td><td>Одобрить скриншоты</td><td>Визуальная часть страницы готова</td></tr>
+  <tr><td>4</td><td>Предоставить URL-адреса</td><td>Правовые ссылки на месте</td></tr>
+  <tr><td>5</td><td>Выбрать регионы и подтвердить цену</td><td>География публикации определена</td></tr>
+  <tr><td>6</td><td>Подготовить тестовый аккаунт</td><td>Apple сможет протестировать приложение</td></tr>
+  <tr><td>7</td><td>Решить юридические вопросы</td><td>AGPL лицензия подтверждена, шифрование декларировано</td></tr>
+</table>
+
+<!-- ============ STEP 1 ============ -->
+<h2>Шаг 1. Информация о приложении</h2>
+
+<p class="section-intro">Ниже — данные, которые будут указаны в App Store Connect. Пожалуйста, проверьте и подтвердите или предложите изменения.</p>
+
+<table>
+  <tr><th>Поле</th><th>Значение</th><th>Ваше действие</th></tr>
+  <tr><td>Название приложения</td><td><strong>UCMeet.Chat</strong></td><td>Подтвердите или предложите другое (до 30 символов)</td></tr>
+  <tr><td>Подзаголовок</td><td><strong>Безопасный мессенджер Matrix</strong></td><td>Подтвердите или предложите другой (до 30 символов)</td></tr>
+  <tr><td>Bundle ID</td><td><code>org.ucmeet.UCMeetChat</code></td><td>Изменить нельзя — зафиксирован</td></tr>
+  <tr><td>Основной язык</td><td>Русский</td><td>Подтвердите</td></tr>
+  <tr><td>Категория</td><td>Социальные сети</td><td>Подтвердите</td></tr>
+  <tr><td>Доп. категория</td><td>Производительность</td><td>Подтвердите или уберите</td></tr>
+  <tr><td>Возрастной рейтинг</td><td>12+</td><td>Рекомендуем (пользовательский контент). Подтвердите</td></tr>
+  <tr><td>Версия</td><td>1.0.0</td><td>Подтвердите</td></tr>
+  <tr><td>Цена</td><td>Бесплатно</td><td>Подтвердите</td></tr>
+</table>
+
+<div class="note">
+  <strong>Примечание:</strong> Возрастной рейтинг 12+ рекомендуется, так как приложение поддерживает обмен пользовательским контентом (чат-сообщения, медиафайлы). Это стандартный рейтинг для мессенджеров.
+</div>
+
+<!-- ============ STEP 2 ============ -->
+<h2>Шаг 2. Описание приложения</h2>
+
+<h3>2.1. Полное описание (русский) — до 4000 символов</h3>
+<p>Будет отображаться на странице приложения в App Store:</p>
+
+<div class="code-block">UCMeet.Chat — защищённый мессенджер для безопасного общения вашей организации.
+
+Общайтесь с коллегами, используя сквозное шифрование сообщений, голосовые и видеозвонки, обмен файлами и медиа.
+
+ВОЗМОЖНОСТИ:
+• Сквозное шифрование всех сообщений (протокол Matrix)
+• Голосовые и видеозвонки
+• Обмен фото, видео, файлами и геолокацией
+• Групповые чаты и пространства (Spaces)
+• Синхронизация сообщений между устройствами
+• Блокировка приложения по Face ID / Touch ID
+
+БЕЗОПАСНОСТЬ:
+Все сообщения защищены сквозным шифрованием по протоколу Matrix (Olm/Megolm). Только вы и ваши собеседники можете прочитать переписку.
+
+ТРЕБОВАНИЯ:
+Для использования приложения необходима учётная запись UCMeet. Обратитесь к администратору вашей организации для получения доступа.
+
+Построено на открытом протоколе Matrix.</div>
+
+<div class="note-action">
+  <strong>Нужно ваше действие:</strong> Прочитайте, при необходимости отредактируйте и подтвердите текст описания.
+</div>
+
+<h3>2.2. Рекламный текст (русский) — до 170 символов</h3>
+<p>Отображается над описанием, может обновляться без повторной проверки Apple:</p>
+
+<div class="code-block">Защищённый корпоративный мессенджер со сквозным шифрованием. Звонки, чаты и файлы — всё в одном приложении.</div>
+
+<div class="note-action">
+  <strong>Нужно ваше действие:</strong> Подтвердите или предложите свой вариант.
+</div>
+
+<h3>2.3. Ключевые слова (русский) — до 100 символов</h3>
+<p>Помогают при поиске в App Store, через запятую:</p>
+
+<div class="code-block">мессенджер,чат,matrix,шифрование,безопасность,звонки,корпоративный,приватный,UCMeet</div>
+
+<div class="note-action">
+  <strong>Нужно ваше действие:</strong> Подтвердите или добавьте свои ключевые слова.
+</div>
+
+<h3>2.4. Полное описание (английский) — до 4000 символов</h3>
+<p>Для англоязычного App Store (en-US):</p>
+
+<div class="code-block">UCMeet.Chat — secure messenger for your organization's private communications.
+
+Communicate with colleagues using end-to-end encrypted messaging, voice and video calls, and file sharing.
+
+FEATURES:
+• End-to-end encrypted messaging (Matrix protocol)
+• Voice and video calls
+• Photo, video, file, and location sharing
+• Group conversations and Spaces
+• Cross-device message sync
+• Biometric app lock (Face ID / Touch ID)
+
+SECURITY:
+All messages are protected with end-to-end encryption using the Matrix protocol (Olm/Megolm). Only you and your intended recipients can read your messages.
+
+REQUIREMENTS:
+A UCMeet account is required. Contact your organization's administrator for access.
+
+Built on the open Matrix communication protocol.</div>
+
+<h3>2.5. Рекламный текст (английский) — до 170 символов</h3>
+<div class="code-block">Secure enterprise messenger with end-to-end encryption. Calls, chats, and files — all in one app.</div>
+
+<h3>2.6. Ключевые слова (английский) — до 100 символов</h3>
+<div class="code-block">messenger,chat,matrix,encryption,secure,calls,enterprise,private,UCMeet</div>
+
+<div class="note-action">
+  <strong>Нужно ваше действие:</strong> Подтвердите или отредактируйте английские тексты (пп. 2.4–2.6).
+</div>
+
+<!-- ============ STEP 3 ============ -->
+<h2>Шаг 3. Скриншоты</h2>
+
+<p>Apple требует скриншоты приложения для каждого размера экрана. Мы можем сделать их на симуляторе — вам останется только проверить и одобрить.</p>
+
+<h3>Требуемые размеры</h3>
+<table>
+  <tr><th>Устройство</th><th>Размер (пиксели)</th><th>Минимум</th><th>Рекомендуем</th></tr>
+  <tr><td>iPhone 6.7" (iPhone 15 Pro Max и новее)</td><td>1290 × 2796</td><td>3</td><td>5–6</td></tr>
+  <tr><td>iPhone 5.5" (iPhone 8 Plus и старше)</td><td>1242 × 2208</td><td>3</td><td>5–6</td></tr>
+</table>
+
+<h3>Рекомендуемые экраны для скриншотов</h3>
+<ol>
+  <li>Экран входа (логин через OIDC)</li>
+  <li>Список чатов</li>
+  <li>Экран разговора (переписка)</li>
+  <li>Голосовой/видеозвонок</li>
+  <li>Настройки профиля</li>
+</ol>
+
+<div class="note-action">
+  <strong>Нужно ваше действие:</strong> Подтвердите набор экранов. Если хотите видеть определённый контент на скриншотах (конкретные чаты, имена) — сообщите.
+</div>
+
+<div class="page-break"></div>
+
+<!-- ============ STEP 4 ============ -->
+<h2>Шаг 4. URL-адреса</h2>
+
+<p>Apple требует рабочие ссылки. Без политики конфиденциальности публикация <strong>невозможна</strong>.</p>
+
+<table>
+  <tr><th>URL</th><th>Текущее значение</th><th>Статус</th><th>Ваше действие</th></tr>
+  <tr><td>Политика конфиденциальности</td><td><code>https://www.ucmeet.info/policy-152</code></td><td>Настроена</td><td>Подтвердите, что страница актуальна</td></tr>
+  <tr><td>Страница поддержки</td><td><code>https://www.ucmeet.info</code></td><td>Базовый сайт</td><td>Укажите URL или email для поддержки</td></tr>
+  <tr><td>Маркетинговый сайт</td><td>—</td><td>Необязательно</td><td>Укажите, если есть</td></tr>
+  <tr><td>Условия использования</td><td>—</td><td>Не указан</td><td>Укажите URL (нужен для OIDC)</td></tr>
+</table>
+
+<div class="note-action">
+  <strong>Нужно ваше действие:</strong><br>
+  1. Убедитесь, что <code>https://www.ucmeet.info/policy-152</code> доступна и содержит актуальную политику конфиденциальности<br>
+  2. Укажите URL страницы поддержки (или email для обращений)<br>
+  3. Укажите URL условий использования (или подтвердите, что policy-152 покрывает и условия)
+</div>
+
+<!-- ============ STEP 5 ============ -->
+<h2>Шаг 5. Регионы публикации</h2>
+
+<p>Решите, в каких странах приложение будет доступно:</p>
+
+<table>
+  <tr><th>Вариант</th><th>Описание</th></tr>
+  <tr><td><strong>Все страны</strong></td><td>Приложение доступно во всех странах App Store</td></tr>
+  <tr><td><strong>Отдельные страны</strong></td><td>Только выбранные вами страны (например, Россия, страны СНГ)</td></tr>
+</table>
+
+<div class="note-action">
+  <strong>Нужно ваше действие:</strong> Укажите один из вариантов. Если выбираете отдельные страны — перечислите их.
+</div>
+
+<!-- ============ STEP 6 ============ -->
+<h2>Шаг 6. Контактная информация для Apple Review</h2>
+
+<p>При проверке приложения Apple может войти в приложение с тестовым аккаунтом и позвонить по указанному номеру для уточнений.</p>
+
+<h3>Тестовый аккаунт</h3>
+
+<p>У нас есть подготовленные тестовые аккаунты:</p>
+
+<table>
+  <tr><th>Поле</th><th>Значение</th></tr>
+  <tr><td>Сервер</td><td><code>matrix.ucmeet.org</code></td></tr>
+  <tr><td>Логин</td><td><code>apple_support</code></td></tr>
+  <tr><td>Пароль</td><td><code>pvINTqBvwBR2</code></td></tr>
+</table>
+
+<div class="note-action">
+  <strong>Нужно ваше действие:</strong><br>
+  1. Убедитесь, что аккаунт <code>apple_support</code> работает и в нём есть тестовые переписки (минимум 2–3 чата с сообщениями)<br>
+  2. Укажите контактный телефон для Apple (международный формат, например +7 XXX XXX XXXX)
+</div>
+
+<h3>Примечание для проверяющих Apple</h3>
+<p>Будет отправлено вместе с приложением (на английском):</p>
+
+<div class="code-block">UCMeet.Chat is a secure messaging application for an organization's
+internal communications. It connects to a dedicated private Matrix
+homeserver operated by the organization.
+
+Authentication uses OIDC. After launching, enter the test credentials
+on the login page. The test account has pre-configured conversations.
+
+This app connects exclusively to a private Matrix server and cannot
+be used with public servers. It is not a duplicate of Element X —
+it has different branding, server infrastructure, and user base.</div>
+
+<div class="note-action">
+  <strong>Нужно ваше действие:</strong> Прочитайте и подтвердите текст примечания.
+</div>
+
+<!-- ============ STEP 7 ============ -->
+<h2>Шаг 7. Юридические вопросы</h2>
+
+<h3>7.1. Лицензия AGPL v3</h3>
+
+<p>Приложение основано на открытом коде Element X iOS (лицензия AGPL v3). Для публикации в App Store необходимо <strong>письменное подтверждение</strong>, что лицензия AGPL v3 покрывает этот форк.</p>
+
+<div class="note-blocker">
+  <strong>БЛОКИРУЮЩИЙ ВОПРОС:</strong> Без письменного подтверждения лицензии AGPL v3 мы не можем отправить приложение на ревью Apple. Предоставьте подтверждение в виде email или документа.
+</div>
+
+<h3>7.2. Декларация шифрования</h3>
+
+<p>Приложение использует сквозное шифрование (E2EE) через Matrix SDK. По правилам BIS (Bureau of Industry and Security, США) требуется ежегодная самоклассификация.</p>
+
+<table>
+  <tr><th>Параметр</th><th>Значение</th></tr>
+  <tr><td>Использует шифрование</td><td>Да</td></tr>
+  <tr><td>Тип</td><td>Сквозное (Olm/Megolm через Matrix Rust SDK)</td></tr>
+  <tr><td>Классификация ECCN</td><td>5D002</td></tr>
+  <tr><td>Исключение</td><td>Массовое распространение (EAR §740.17(b)(1))</td></tr>
+  <tr><td>Настройка в приложении</td><td><code>ITSAppUsesNonExemptEncryption = true</code> (готово)</td></tr>
+</table>
+
+<p>Для подачи самоклассификации потребуются данные вашего юридического лица:</p>
+
+<div class="code-block">Название продукта: UCMeet.Chat
+Версия: 1.0.0
+ECCN: 5D002
+Тип: Программное обеспечение
+Подавшая сторона: [ЗАПОЛНИТЬ — название юридического лица]
+Производитель: [ЗАПОЛНИТЬ — название юридического лица]
+Описание: Мобильный мессенджер на протоколе Matrix со сквозным
+  шифрованием (Olm/Megolm) через Matrix Rust SDK.
+Тип авторизации: Mass Market (EAR §740.17(b)(1))</div>
+
+<div class="note-action">
+  <strong>Нужно ваше действие:</strong> Укажите официальное название юридического лица для подачи самоклассификации.
+</div>
+
+<h3>7.3. Конфиденциальность (Privacy Manifest)</h3>
+
+<p>Privacy Manifest уже настроен в приложении. В приложении <strong>нет рекламных трекеров</strong>. Аналитика (PostHog, Sentry) — только по согласию пользователя.</p>
+
+<div class="note">
+  <strong>Примечание:</strong> Действий от вас не требуется — информация для справки.
+</div>
+
+<div class="page-break"></div>
+
+<!-- ============ CHECKLIST ============ -->
+<h2>Чек-лист</h2>
+
+<p>Отметьте статус каждого пункта и отправьте нам заполненный список:</p>
+
+<table class="checklist">
+  <tr><th>✓</th><th>№</th><th>Пункт</th></tr>
+  <tr><td>☐</td><td>1</td><td>Название приложения <code>UCMeet.Chat</code> — подтверждено</td></tr>
+  <tr><td>☐</td><td>2</td><td>Подзаголовок подтверждён или предложена альтернатива</td></tr>
+  <tr><td>☐</td><td>3</td><td>Возрастной рейтинг 12+ подтверждён</td></tr>
+  <tr><td>☐</td><td>4</td><td>Описание (русский) проверено и одобрено</td></tr>
+  <tr><td>☐</td><td>5</td><td>Рекламный текст (русский) подтверждён</td></tr>
+  <tr><td>☐</td><td>6</td><td>Ключевые слова (русский) подтверждены</td></tr>
+  <tr><td>☐</td><td>7</td><td>Описание (английский) проверено и одобрено</td></tr>
+  <tr><td>☐</td><td>8</td><td>Рекламный текст (английский) подтверждён</td></tr>
+  <tr><td>☐</td><td>9</td><td>Ключевые слова (английский) подтверждены</td></tr>
+  <tr><td>☐</td><td>10</td><td>Скриншоты — набор экранов одобрен</td></tr>
+  <tr><td>☐</td><td>11</td><td>Политика конфиденциальности — URL подтверждён и работает</td></tr>
+  <tr><td>☐</td><td>12</td><td>Страница поддержки — URL предоставлен</td></tr>
+  <tr><td>☐</td><td>13</td><td>Условия использования — URL предоставлен</td></tr>
+  <tr><td>☐</td><td>14</td><td>Регионы публикации выбраны</td></tr>
+  <tr><td>☐</td><td>15</td><td>Цена: бесплатно — подтверждено</td></tr>
+  <tr><td>☐</td><td>16</td><td>Тестовый аккаунт <code>apple_support</code> работает, есть тестовые чаты</td></tr>
+  <tr><td>☐</td><td>17</td><td>Контактный телефон для Apple предоставлен</td></tr>
+  <tr><td>☐</td><td>18</td><td>Примечание для Apple Review одобрено</td></tr>
+  <tr><td>☐</td><td>19</td><td><strong>AGPL v3 — письменное подтверждение лицензии предоставлено</strong></td></tr>
+  <tr><td>☐</td><td>20</td><td>Название юридического лица для декларации шифрования указано</td></tr>
+</table>
+
+<!-- ============ HOW TO RESPOND ============ -->
+<h2>Как отправить ответы</h2>
+
+<p>Удобнее всего — скопировать чек-лист выше и заполнить статус каждого пункта. Если нужно внести изменения в тексты — отправьте исправленную версию.</p>
+
+<p>Формат ответа не важен — подойдёт email, сообщение в чате или документ.</p>
+
+<div class="note">
+  <strong>После получения всех подтверждений мы:</strong><br>
+  1. Сделаем скриншоты и отправим вам на одобрение<br>
+  2. Заполним все поля в App Store Connect<br>
+  3. Загрузим сборку через Xcode<br>
+  4. Отправим на ревью Apple<br><br>
+  Ожидаемый срок проверки Apple: 1–3 рабочих дня.
+</div>
+
+<div class="footer">
+  Документ подготовлен: 18.03.2026
+</div>
+
+</body>
+</html>
