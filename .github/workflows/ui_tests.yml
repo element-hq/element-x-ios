@@ -7,9 +7,6 @@ on:
         description: 'If a test name is provided, only that test will be run. Otherwise, all tests will be run. Use the format "ClassName/testName" to run a single test.'
         required: false
 
-  schedule:
-    - cron:  '0 2 * * 1-5'
-
 permissions: {}
 
 jobs:
