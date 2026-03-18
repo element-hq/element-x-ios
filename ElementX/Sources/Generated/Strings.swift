@@ -500,6 +500,10 @@ internal enum L10n {
   internal static var commonEncryption: String { return L10n.tr("Localizable", "common_encryption") }
   /// Encryption enabled
   internal static var commonEncryptionEnabled: String { return L10n.tr("Localizable", "common_encryption_enabled") }
+  /// Ends %1$@
+  internal static func commonEndsInTimeIos(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_ends_in_time_ios", String(describing: p1))
+  }
   /// Enter your PIN
   internal static var commonEnterYourPin: String { return L10n.tr("Localizable", "common_enter_your_pin") }
   /// Error
@@ -534,10 +538,6 @@ internal enum L10n {
   }
   /// This Matrix ID can't be found, so the invite might not be received.
   internal static var commonInviteUnknownProfile: String { return L10n.tr("Localizable", "common_invite_unknown_profile") }
-  /// Ends %1$@
-  internal static func commonIosExpirationTime(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "common_ios_expiration_time", String(describing: p1))
-  }
   /// Leaving room
   internal static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
   /// Leaving space
