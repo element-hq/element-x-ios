@@ -281,7 +281,7 @@ private extension HumanQrLoginError {
             .qrCodeError(.slidingSyncNotAvailable)
         case .OtherDeviceNotSignedIn:
             .qrCodeError(.deviceNotSignedIn)
-        case .Unknown, .OidcMetadataInvalid, .CheckCodeAlreadySent, .CheckCodeCannotBeSent:
+        case .Unknown, .OidcMetadataInvalid, .CheckCodeAlreadySent, .CheckCodeCannotBeSent, .UnsupportedQrCodeType:
             .qrCodeError(.unknown)
         }
     }

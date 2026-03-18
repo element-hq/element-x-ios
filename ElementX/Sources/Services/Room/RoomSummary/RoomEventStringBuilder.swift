@@ -62,6 +62,9 @@ struct RoomEventStringBuilder {
                 return prefix(errorMessage, with: displayName, isOutgoing: isOutgoing)
             case .other:
                 return nil // We shouldn't receive these without asking for custom event types.
+            case .liveLocation:
+                // TODO: Implement
+                return nil
             }
         case .failedToParseMessageLike, .failedToParseState:
             return prefix(L10n.commonUnsupportedEvent, with: displayName, isOutgoing: isOutgoing)
@@ -86,9 +89,6 @@ struct RoomEventStringBuilder {
             return prefix(L10n.commonUnsupportedCall, with: displayName, isOutgoing: isOutgoing)
         case .rtcNotification:
             return prefix(L10n.commonCallStarted, with: displayName, isOutgoing: isOutgoing)
-        case .liveLocation:
-            // TODO: Implement
-            return nil
         }
     }
     

@@ -43,6 +43,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildEncryptedTimelineItem(eventItemProxy, messageLikeContent, encryptedMessage, isOutgoing)
             case .other:
                 return nil // We shouldn't receive these without asking for custom event types.
+            case .liveLocation:
+                // TODO: Implement
+                return nil
             }
         case .failedToParseMessageLike(let eventType, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
@@ -69,9 +72,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return buildCallInviteTimelineItem(for: eventItemProxy)
         case .rtcNotification:
             return buildCallNotificationTimelineItem(for: eventItemProxy)
-        case .liveLocation:
-            // TODO: Implement
-            return nil
         }
     }
     

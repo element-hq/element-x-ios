@@ -85,4 +85,14 @@ extension ProcessInfo {
         false
         #endif
     }
+    
+    var platform: String {
+        if #available(iOS 26.1, *), ProcessInfo.processInfo.isiOSAppOnVision {
+            "visionOS"
+        } else if ProcessInfo.processInfo.isiOSAppOnMac {
+            "macOS"
+        } else {
+            "iOS"
+        }
+    }
 }

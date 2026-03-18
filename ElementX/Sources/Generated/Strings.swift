@@ -346,9 +346,9 @@ internal enum L10n {
   internal static var actionShow: String { return L10n.tr("Localizable", "action_show") }
   /// Sign in again
   internal static var actionSignInAgain: String { return L10n.tr("Localizable", "action_sign_in_again") }
-  /// Sign out
+  /// Remove this device
   internal static var actionSignout: String { return L10n.tr("Localizable", "action_signout") }
-  /// Sign out anyway
+  /// Remove this device anyway
   internal static var actionSignoutAnyway: String { return L10n.tr("Localizable", "action_signout_anyway") }
   /// Skip
   internal static var actionSkip: String { return L10n.tr("Localizable", "action_skip") }
@@ -362,6 +362,8 @@ internal enum L10n {
   internal static var actionStartVerification: String { return L10n.tr("Localizable", "action_start_verification") }
   /// Tap to load map
   internal static var actionStaticMapLoad: String { return L10n.tr("Localizable", "action_static_map_load") }
+  /// Stop
+  internal static var actionStop: String { return L10n.tr("Localizable", "action_stop") }
   /// Take photo
   internal static var actionTakePhoto: String { return L10n.tr("Localizable", "action_take_photo") }
   /// Tap for options
@@ -422,6 +424,8 @@ internal enum L10n {
   internal static var commonAnImage: String { return L10n.tr("Localizable", "common_an_image") }
   /// Analytics
   internal static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
+  /// Syncing notifications...
+  internal static var commonAndroidFetchingNotificationsTitle: String { return L10n.tr("Localizable", "common_android_fetching_notifications_title") }
   /// You left the room
   internal static var commonAndroidShortcutsRemoveReasonLeftRoom: String { return L10n.tr("Localizable", "common_android_shortcuts_remove_reason_left_room") }
   /// You were logged out of the session
@@ -530,6 +534,10 @@ internal enum L10n {
   }
   /// This Matrix ID can't be found, so the invite might not be received.
   internal static var commonInviteUnknownProfile: String { return L10n.tr("Localizable", "common_invite_unknown_profile") }
+  /// Ends %1$@
+  internal static func commonIosExpirationTime(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_ios_expiration_time", String(describing: p1))
+  }
   /// Leaving room
   internal static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
   /// Leaving space
@@ -542,6 +550,10 @@ internal enum L10n {
   internal static var commonLinkCopiedToClipboard: String { return L10n.tr("Localizable", "common_link_copied_to_clipboard") }
   /// Link new device
   internal static var commonLinkNewDevice: String { return L10n.tr("Localizable", "common_link_new_device") }
+  /// Live location
+  internal static var commonLiveLocation: String { return L10n.tr("Localizable", "common_live_location") }
+  /// Live location ended
+  internal static var commonLiveLocationEnded: String { return L10n.tr("Localizable", "common_live_location_ended") }
   /// Loading…
   internal static var commonLoading: String { return L10n.tr("Localizable", "common_loading") }
   /// Loading more…
@@ -720,11 +732,13 @@ internal enum L10n {
   internal static var commonShareSpace: String { return L10n.tr("Localizable", "common_share_space") }
   /// New members see history
   internal static var commonSharedHistory: String { return L10n.tr("Localizable", "common_shared_history") }
+  /// Shared live location
+  internal static var commonSharedLiveLocation: String { return L10n.tr("Localizable", "common_shared_live_location") }
   /// Shared location
   internal static var commonSharedLocation: String { return L10n.tr("Localizable", "common_shared_location") }
   /// Shared space
   internal static var commonSharedSpace: String { return L10n.tr("Localizable", "common_shared_space") }
-  /// Signing out
+  /// Removing device
   internal static var commonSigningOut: String { return L10n.tr("Localizable", "common_signing_out") }
   /// Something went wrong
   internal static var commonSomethingWentWrong: String { return L10n.tr("Localizable", "common_something_went_wrong") }
@@ -822,6 +836,8 @@ internal enum L10n {
   internal static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
   /// Waiting for this message
   internal static var commonWaitingForDecryptionKey: String { return L10n.tr("Localizable", "common_waiting_for_decryption_key") }
+  /// Waiting for live location…
+  internal static var commonWaitingLiveLocation: String { return L10n.tr("Localizable", "common_waiting_live_location") }
   /// Anyone can see history
   internal static var commonWorldReadableHistory: String { return L10n.tr("Localizable", "common_world_readable_history") }
   /// You
@@ -1390,7 +1406,7 @@ internal enum L10n {
   internal static var screenAppLockSetupPinMismatchDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_mismatch_dialog_title") }
   /// You’ll need to re-login and create a new PIN to proceed
   internal static var screenAppLockSignoutAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_message") }
-  /// You are being signed out
+  /// This device is being removed
   internal static var screenAppLockSignoutAlertTitle: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_title") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenAppLockSubtitle(_ p1: Int) -> String {
@@ -1573,10 +1589,8 @@ internal enum L10n {
   internal static var screenChatBackupRecoveryActionConfirmDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm_description") }
   /// Get recovery key
   internal static var screenChatBackupRecoveryActionSetup: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup") }
-  /// Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.
-  internal static func screenChatBackupRecoveryActionSetupDescription(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup_description", String(describing: p1))
-  }
+  /// Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.
+  internal static var screenChatBackupRecoveryActionSetupDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup_description") }
   /// Create account
   internal static var screenCreateAccountTitle: String { return L10n.tr("Localizable", "screen_create_account_title") }
   /// Open %1$@ in a desktop device
@@ -1902,11 +1916,11 @@ internal enum L10n {
   internal static var screenJoinRoomTitleKnock: String { return L10n.tr("Localizable", "screen_join_room_title_knock") }
   /// Preview is not available
   internal static var screenJoinRoomTitleNoPreview: String { return L10n.tr("Localizable", "screen_join_room_title_no_preview") }
-  /// Turn off
+  /// Delete
   internal static var screenKeyBackupDisableConfirmationActionTurnOff: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_action_turn_off") }
-  /// You will lose your encrypted messages if you are signed out of all devices.
+  /// You will lose your encrypted chat history and need to reset your digital identity if you remove all your devices.
   internal static var screenKeyBackupDisableConfirmationDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_description") }
-  /// Are you sure you want to turn off backup?
+  /// Are you sure you want to delete key storage?
   internal static var screenKeyBackupDisableConfirmationTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_title") }
   /// Deleting key storage will remove your digital identity and message keys from the server and turn off the following security features:
   internal static var screenKeyBackupDisableDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_description") }
@@ -3187,35 +3201,35 @@ internal enum L10n {
   }
   /// You’re signed out
   internal static var screenSignedOutTitle: String { return L10n.tr("Localizable", "screen_signed_out_title") }
-  /// Are you sure you want to sign out?
+  /// Are you sure you want to remove this device?
   internal static var screenSignoutConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_content") }
-  /// Sign out
+  /// Remove this device
   internal static var screenSignoutConfirmationDialogSubmit: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_submit") }
-  /// Sign out
+  /// Remove this device
   internal static var screenSignoutConfirmationDialogTitle: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_title") }
-  /// Signing out…
+  /// Removing device…
   internal static var screenSignoutInProgressDialogContent: String { return L10n.tr("Localizable", "screen_signout_in_progress_dialog_content") }
-  /// You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.
+  /// This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
   internal static var screenSignoutKeyBackupDisabledSubtitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_disabled_subtitle") }
-  /// You have turned off backup
+  /// You’re about to lose access to your encrypted chats
   internal static var screenSignoutKeyBackupDisabledTitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_disabled_title") }
-  /// Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before signing out.
+  /// Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before you remove this device.
   internal static var screenSignoutKeyBackupOfflineSubtitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_offline_subtitle") }
   /// Your keys are still being backed up
   internal static var screenSignoutKeyBackupOfflineTitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_offline_title") }
-  /// Please wait for this to complete before signing out.
+  /// Please wait for this to complete before removing this device.
   internal static var screenSignoutKeyBackupOngoingSubtitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_ongoing_subtitle") }
   /// Your keys are still being backed up
   internal static var screenSignoutKeyBackupOngoingTitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_ongoing_title") }
-  /// Sign out
+  /// Remove this device
   internal static var screenSignoutPreferenceItem: String { return L10n.tr("Localizable", "screen_signout_preference_item") }
-  /// You are about to sign out of your last session. If you sign out now, you'll lose access to your encrypted messages.
+  /// This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
   internal static var screenSignoutRecoveryDisabledSubtitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_subtitle") }
-  /// Recovery not set up
+  /// You’re about to lose access to your encrypted chats
   internal static var screenSignoutRecoveryDisabledTitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_title") }
-  /// You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.
+  /// This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
   internal static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
-  /// Have you saved your recovery key?
+  /// Make sure you have access to your recovery key before removing this device
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
   /// Room
   internal static var screenSpaceAddRoomAction: String { return L10n.tr("Localizable", "screen_space_add_room_action") }
