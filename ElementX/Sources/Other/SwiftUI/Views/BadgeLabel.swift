@@ -55,6 +55,13 @@ struct BadgeLabel: View {
             }
         }
         
+        var borderColor: Color {
+            switch style {
+            case .default: .compound.borderInteractiveSecondary
+            default: .clear
+            }
+        }
+        
         func makeBody(configuration: Configuration) -> some View {
             HStack(spacing: 4) {
                 configuration.icon
@@ -66,7 +73,11 @@ struct BadgeLabel: View {
             .padding(.leading, 8)
             .padding(.trailing, 12)
             .padding(.vertical, 4)
-            .background(Capsule().fill(backgroundColor))
+            .background {
+                Capsule().fill(backgroundColor).overlay {
+                    Capsule().stroke(borderColor)
+                }
+            }
         }
     }
 }
