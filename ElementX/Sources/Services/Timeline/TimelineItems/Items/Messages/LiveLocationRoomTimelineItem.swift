@@ -29,25 +29,13 @@ struct LiveLocationRoomTimelineItemContent: Equatable {
     let isLive: Bool
     let timeoutDate: Date
     
-    let lastLocation: BeaconInfo?
+    let lastGeoURI: GeoURI?
 }
 
 extension LiveLocationRoomTimelineItemContent {
     init(from content: MatrixRustSDK.LiveLocationContent, timestamp: Date) {
         isLive = content.isLive
         timeoutDate = timestamp.addingTimeInterval(Double(content.timeoutMs) / 1000)
-        lastLocation = content.locations.last.map { BeaconInfo(from: $0) }
-    }
-}
-
-struct BeaconInfo: Equatable {
-    let timestamp: Date
-    let geoURI: GeoURI?
-}
-
-extension BeaconInfo {
-    init(from beaconInfo: MatrixRustSDK.BeaconInfo) {
-        timestamp = Date(timeIntervalSince1970: Double(beaconInfo.ts) / 1000)
-        geoURI = GeoURI(string: beaconInfo.geoUri)
+        lastGeoURI = content.locations.last.flatMap { GeoURI(string: $0.geoUri) }
     }
 }

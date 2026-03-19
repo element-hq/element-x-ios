@@ -272,8 +272,7 @@ private extension EventBasedTimelineItemProtocol {
                 properties.replyDetails != nil ||
                 properties.isThreaded ? defaultInsets : .zero
         case let liveLocationTimelineItem as LiveLocationRoomTimelineItem:
-            return liveLocationTimelineItem.content.lastLocation?.geoURI == nil ||
-                properties.replyDetails != nil ||
+            return properties.replyDetails != nil ||
                 properties.isThreaded ? defaultInsets : .zero
         default:
             return defaultInsets

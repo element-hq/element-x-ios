@@ -9,90 +9,10 @@
 import Compound
 import SwiftUI
 
-enum LocationMarkerKind {
-    case pin
-    case staticUser(UserProfileProxy)
-    case liveUser(UserProfileProxy)
-    case placeholder
-    
-    var id: String {
-        switch self {
-        case .pin, .placeholder:
-            UUID().uuidString
-        case .staticUser(let profile), .liveUser(let profile):
-            profile.userID
-        }
-    }
-    
-    var displayName: String? {
-        switch self {
-        case .pin, .placeholder:
-            nil
-        case .staticUser(let profile), .liveUser(let profile):
-            profile.displayName
-        }
-    }
-    
-    var userProfile: UserProfileProxy? {
-        switch self {
-        case .pin, .placeholder:
-            nil
-        case .staticUser(let profile), .liveUser(let profile):
-            profile
-        }
-    }
-}
-
 struct LocationMarkerView: View {
     var kind: LocationMarkerKind
-    
-    var fillColor: Color {
-        switch kind {
-        case .pin, .staticUser:
-            .compound.bgCanvasDefault
-        case .liveUser:
-            .compound.iconAccentPrimary
-        case .placeholder:
-            .compound.bgSubtleSecondary
-        }
-    }
-    
-    var externalStrokeColor: Color {
-        switch kind {
-        case .pin, .staticUser:
-            .compound.iconSecondaryAlpha
-        case .liveUser:
-            .compound.iconAccentPrimary
-        case .placeholder:
-            .compound.iconDisabled
-        }
-    }
-    
-    var internalStrokeColor: Color {
-        switch kind {
-        case .pin, .staticUser:
-            .compound.iconSecondaryAlpha
-        case .liveUser:
-            .compound.bgCanvasDefault
-        case .placeholder:
-            .compound.iconDisabled
-        }
-    }
-    
-    var dotColor: Color {
-        switch kind {
-        case .placeholder:
-            .compound.iconDisabled
-        default:
-            .compound.iconPrimary
-        }
-    }
-    
     @ScaledMetric var size: CGFloat = 42
     var mediaProvider: MediaProviderProtocol?
-    
-    private let circleCenter = CGPoint(x: 21, y: 21) // in SVG space
-    private let circleRadius: CGFloat = 6 // in SVG space
     
     var body: some View {
         // Generated from the SVG
@@ -161,6 +81,51 @@ struct LocationMarkerView: View {
         .frame(width: size, height: size * 50 / 42)
         .alignmentGuide(VerticalAlignment.center) { dimensions in
             dimensions[.bottom]
+        }
+    }
+    
+    private let circleCenter = CGPoint(x: 21, y: 21) // in SVG space
+    private let circleRadius: CGFloat = 6 // in SVG space
+    
+    private var fillColor: Color {
+        switch kind {
+        case .pin, .staticUser:
+            .compound.bgCanvasDefault
+        case .liveUser:
+            .compound.iconAccentPrimary
+        case .placeholder:
+            .compound.bgSubtleSecondary
+        }
+    }
+    
+    private var externalStrokeColor: Color {
+        switch kind {
+        case .pin, .staticUser:
+            .compound.iconSecondaryAlpha
+        case .liveUser:
+            .compound.iconAccentPrimary
+        case .placeholder:
+            .compound.iconDisabled
+        }
+    }
+    
+    private var internalStrokeColor: Color {
+        switch kind {
+        case .pin, .staticUser:
+            .compound.iconSecondaryAlpha
+        case .liveUser:
+            .compound.bgCanvasDefault
+        case .placeholder:
+            .compound.iconDisabled
+        }
+    }
+    
+    private var dotColor: Color {
+        switch kind {
+        case .placeholder:
+            .compound.iconDisabled
+        default:
+            .compound.iconPrimary
         }
     }
 }

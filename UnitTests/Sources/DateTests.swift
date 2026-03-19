@@ -43,6 +43,25 @@ struct DateTests {
     }
     
     @Test
+    func expirationDateFormatting() throws {
+        // Within 24 hours → show time only
+        let in23Hours = try #require(calendar.date(byAdding: .hour, value: 23, to: .now))
+        #expect(in23Hours.formattedExpiration() == in23Hours.formatted(date: .omitted, time: .shortened))
+        
+        // Just over the 24h boundary → show day and month
+        let in25Hours = try #require(calendar.date(byAdding: .hour, value: 25, to: .now))
+        #expect(in25Hours.formattedExpiration() == in25Hours.formatted(.dateTime.day().month()))
+        
+        // Several months away → show day and month
+        let inSixMonths = try #require(calendar.date(byAdding: .month, value: 6, to: .now))
+        #expect(inSixMonths.formattedExpiration() == inSixMonths.formatted(.dateTime.day().month()))
+        
+        // More than a year away → show year only
+        let inTwoYears = try #require(calendar.date(byAdding: .year, value: 2, to: .now))
+        #expect(inTwoYears.formattedExpiration() == inTwoYears.formatted(.dateTime.year()))
+    }
+    
+    @Test
     func dateSeparatorFormatting() throws {
         let today = try #require(calendar.date(byAdding: DateComponents(hour: 9, minute: 30), to: startOfToday))
         #expect(today.formattedDateSeparator() == "Today")

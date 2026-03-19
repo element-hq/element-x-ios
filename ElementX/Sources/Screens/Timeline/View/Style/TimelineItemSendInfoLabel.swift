@@ -193,14 +193,10 @@ private extension TimelineItemSendInfo {
 
 private extension LiveLocationRoomTimelineItem {
     var layout: TimelineItemSendInfo.LayoutType {
-        if content.lastLocation != nil {
-            if content.isLive, isOutgoing {
-                .hidden
-            } else {
-                .overlay(capsuleStyle: true)
-            }
+        if content.isLive, isOutgoing {
+            .hidden
         } else {
-            .horizontal()
+            .overlay(capsuleStyle: true)
         }
     }
 }

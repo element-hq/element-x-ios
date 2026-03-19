@@ -18,53 +18,48 @@ struct LiveLocationRoomTimelineView: View {
         }
     }
     
-    @ViewBuilder
     private var mainContent: some View {
-        if let geoURI = timelineItem.content.lastLocation?.geoURI {
-            ZStack(alignment: .bottom) {
-                mapView(geoURI: geoURI)
-                    .clipped()
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(L10n.commonSharedLiveLocation)
-                
-                liveLocationInfoView
+        ZStack(alignment: .bottom) {
+            mapView
+                .clipped()
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(L10n.commonSharedLiveLocation)
+            
+            liveLocationInfoView
+        }
+        .frame(maxHeight: mapMaxHeight)
+        .aspectRatio(mapAspectRatio, contentMode: .fit)
+        .overlay {
+            if !timelineItem.content.isLive {
+                RoundedRectangle(cornerRadius: 12)
+                    .inset(by: 0.5)
+                    .stroke(Color.compound.borderDisabled)
             }
-            .frame(maxHeight: mapMaxHeight)
-            .aspectRatio(mapAspectRatio, contentMode: .fit)
-            .overlay {
-                if !timelineItem.content.isLive {
-                    RoundedRectangle(cornerRadius: 12)
-                        .inset(by: 0.5)
-                        .stroke(Color.compound.borderDisabled)
-                }
+        }
+        .onTapGesture {
+            guard context.viewState.mapTilerConfiguration.isEnabled,
+                  timelineItem.content.lastGeoURI != nil,
+                  timelineItem.content.isLive else {
+                return
             }
-            .onTapGesture {
-                guard context.viewState.mapTilerConfiguration.isEnabled,
-                      timelineItem.content.isLive else {
-                    return
-                }
-                context.send(viewAction: .mediaTapped(itemID: timelineItem.id))
-            }
-        } else {
-            // The live location is loading
-            Label(L10n.commonWaitingLiveLocation,
-                  icon: \.time,
-                  iconSize: .small,
-                  relativeTo: .compound.bodyLG)
-                .labelStyle(RoomTimelineViewPlaceholderLabelStyle())
-                .font(.compound.bodyLG)
+            context.send(viewAction: .mediaTapped(itemID: timelineItem.id))
         }
     }
     
     @ViewBuilder
-    private func mapView(geoURI: GeoURI) -> some View {
+    private var mapView: some View {
         if timelineItem.content.isLive {
-            MapLibreStaticMapView(geoURI: geoURI,
-                                  mapURLBuilder: context.viewState.mapTilerConfiguration,
-                                  attributionPlacement: .topLeft,
-                                  mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
-                LocationMarkerView(kind: .liveUser(.init(sender: timelineItem.sender)),
-                                   mediaProvider: context.mediaProvider)
+            if let geoURI = timelineItem.content.lastGeoURI {
+                MapLibreStaticMapView(geoURI: geoURI,
+                                      mapURLBuilder: context.viewState.mapTilerConfiguration,
+                                      attributionPlacement: .topLeft,
+                                      mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
+                    LocationMarkerView(kind: .liveUser(.init(sender: timelineItem.sender)),
+                                       mediaProvider: context.mediaProvider)
+                }
+            } else {
+                Image(asset: Asset.Images.mapBlurred)
+                    .resizable()
             }
         } else {
             ZStack {
@@ -84,7 +79,11 @@ struct LiveLocationRoomTimelineView: View {
     }
     
     private var liveLocationIconColor: Color {
-        timelineItem.content.isLive ? .compound.iconAccentPrimary : .compound.iconDisabled
+        if timelineItem.content.isLive {
+            timelineItem.content.lastGeoURI != nil ? .compound.iconAccentPrimary : .compound.iconSecondary
+        } else {
+            .compound.iconDisabled
+        }
     }
     
     private var liveLocationBackgroundColor: Color {
@@ -97,9 +96,17 @@ struct LiveLocationRoomTimelineView: View {
             .background(.ultraThinMaterial)
     }
     
+    private var infoIcon: KeyPath<CompoundIcons, Image> {
+        if timelineItem.content.lastGeoURI != nil || !timelineItem.content.isLive {
+            \.locationPinSolid
+        } else {
+            \.spinner
+        }
+    }
+    
     private var liveLocationInfoView: some View {
         HStack(spacing: 8) {
-            CompoundIcon(\.locationPinSolid, size: .medium, relativeTo: .compound.bodySMSemibold)
+            CompoundIcon(infoIcon, size: .medium, relativeTo: .compound.bodySMSemibold)
                 .foregroundStyle(liveLocationIconColor)
                 .padding(4)
                 .background(liveLocationBackgroundColor)
@@ -119,7 +126,7 @@ struct LiveLocationRoomTimelineView: View {
                     .font(.compound.bodySMSemibold)
                 
                 if timelineItem.content.isLive {
-                    Text(L10n.commonEndsInTimeIos(timelineItem.content.timeoutDate.formatted(.relative(presentation: .numeric))))
+                    Text(L10n.commonEndsAt(timelineItem.content.timeoutDate.formattedExpiration()))
                         .foregroundStyle(.compound.textPrimary)
                         .font(.compound.bodySM)
                 }
@@ -174,8 +181,8 @@ struct LiveLocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                          canBeRepliedTo: true,
                                                          sender: .init(id: "@bob:matrix.org", displayName: "Bob"),
                                                          content: .init(isLive: true,
-                                                                        timeoutDate: .inOneMinute,
-                                                                        lastLocation: nil)))
+                                                                        timeoutDate: .mockToday420,
+                                                                        lastGeoURI: nil)))
         
         // With a known location
         LiveLocationRoomTimelineView(timelineItem: .init(id: .randomEvent,
@@ -185,9 +192,8 @@ struct LiveLocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                          canBeRepliedTo: true,
                                                          sender: .init(id: "@bob:matrix.org", displayName: "Bob", avatarURL: .mockMXCUserAvatar),
                                                          content: .init(isLive: true,
-                                                                        timeoutDate: .inOneMinute,
-                                                                        lastLocation: .init(timestamp: .mock,
-                                                                                            geoURI: .init(latitude: 41.902782, longitude: 12.496366)))))
+                                                                        timeoutDate: .mockToday420,
+                                                                        lastGeoURI: .init(latitude: 41.902782, longitude: 12.496366))))
         // Expired live location
         LiveLocationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                          timestamp: .mock,
@@ -196,9 +202,8 @@ struct LiveLocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                          canBeRepliedTo: true,
                                                          sender: .init(id: "@bob:matrix.org", displayName: "Bob", avatarURL: .mockMXCUserAvatar),
                                                          content: .init(isLive: false,
-                                                                        timeoutDate: .inOneMinute,
-                                                                        lastLocation: .init(timestamp: .mock,
-                                                                                            geoURI: .init(latitude: 41.902782, longitude: 12.496366)))))
+                                                                        timeoutDate: .mockToday420,
+                                                                        lastGeoURI: .init(latitude: 41.902782, longitude: 12.496366))))
         
         // Replying to a live location
         LiveLocationRoomTimelineView(timelineItem: .init(id: .randomEvent,
@@ -208,9 +213,8 @@ struct LiveLocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                          canBeRepliedTo: true,
                                                          sender: .init(id: "@bob:matrix.org", displayName: "Bob", avatarURL: .mockMXCUserAvatar),
                                                          content: .init(isLive: true,
-                                                                        timeoutDate: .inOneMinute,
-                                                                        lastLocation: .init(timestamp: .mock,
-                                                                                            geoURI: .init(latitude: 41.902782, longitude: 12.496366))),
+                                                                        timeoutDate: .mockToday420,
+                                                                        lastGeoURI: .init(latitude: 41.902782, longitude: 12.496366)),
                                                          properties: .init(replyDetails: .loaded(sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
                                                                                                  eventID: "123",
                                                                                                  eventContent: .liveLocation))))
@@ -223,9 +227,8 @@ struct LiveLocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                          canBeRepliedTo: true,
                                                          sender: .init(id: "@bob:matrix.org", displayName: "Bob", avatarURL: .mockMXCUserAvatar),
                                                          content: .init(isLive: false,
-                                                                        timeoutDate: .inOneMinute,
-                                                                        lastLocation: .init(timestamp: .mock,
-                                                                                            geoURI: .init(latitude: 41.902782, longitude: 12.496366))),
+                                                                        timeoutDate: .mockToday420,
+                                                                        lastGeoURI: .init(latitude: 41.902782, longitude: 12.496366)),
                                                          properties: .init(replyDetails: .loaded(sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
                                                                                                  eventID: "123",
                                                                                                  eventContent: .liveLocation))))

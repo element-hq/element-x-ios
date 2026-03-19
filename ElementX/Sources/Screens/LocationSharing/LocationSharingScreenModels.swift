@@ -34,6 +34,7 @@ struct LocationSharingScreenViewState: BindableState {
         self.mapURLBuilder = mapURLBuilder
         self.showLiveLocationSharingButton = showLiveLocationSharingButton
         self.ownUserID = ownUserID
+        
         userProfile = switch interactionMode {
         case .viewStatic(let locationData):
             .init(sender: locationData.sender)
@@ -51,6 +52,7 @@ struct LocationSharingScreenViewState: BindableState {
     let mapURLBuilder: MapTilerURLBuilderProtocol
     let showLiveLocationSharingButton: Bool
     let ownUserID: String
+    var userProfile: UserProfileProxy
     
     var isOwnUser: Bool {
         userProfile.userID == ownUserID
@@ -100,8 +102,6 @@ struct LocationSharingScreenViewState: BindableState {
             return 15.0
         }
     }
-    
-    var userProfile: UserProfileProxy
     
     var locationMarkerKind: LocationMarkerKind {
         switch interactionMode {
@@ -167,6 +167,40 @@ extension AlertInfo where T == LocationSharingViewError {
                       title: L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
+        }
+    }
+}
+
+enum LocationMarkerKind {
+    case pin
+    case staticUser(UserProfileProxy)
+    case liveUser(UserProfileProxy)
+    case placeholder
+    
+    var id: String {
+        switch self {
+        case .pin, .placeholder:
+            UUID().uuidString
+        case .staticUser(let profile), .liveUser(let profile):
+            profile.userID
+        }
+    }
+    
+    var displayName: String? {
+        switch self {
+        case .pin, .placeholder:
+            nil
+        case .staticUser(let profile), .liveUser(let profile):
+            profile.displayName
+        }
+    }
+    
+    var userProfile: UserProfileProxy? {
+        switch self {
+        case .pin, .placeholder:
+            nil
+        case .staticUser(let profile), .liveUser(let profile):
+            profile
         }
     }
 }
