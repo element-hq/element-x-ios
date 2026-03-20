@@ -15,8 +15,8 @@ struct SettingsScreen: View {
     
     private var shouldHideManageAccountSection: Bool {
         context.viewState.accountProfileURL == nil &&
-            context.viewState.accountSessionsListURL == nil &&
-            !context.viewState.showBlockedUsers
+            !context.viewState.showBlockedUsers &&
+            !context.viewState.showLinkNewDeviceButton
     }
     
     var body: some View {
@@ -108,16 +108,8 @@ struct SettingsScreen: View {
     
     private var manageAccountSection: some View {
         Section {
-            if context.viewState.showLinkNewDeviceButton {
-                ListRow(label: .default(title: L10n.commonLinkNewDevice,
-                                        icon: \.devices),
-                        kind: .navigationLink {
-                            context.send(viewAction: .linkNewDevice)
-                        })
-            }
-            
             if let url = context.viewState.accountProfileURL {
-                ListRow(label: .default(title: L10n.actionManageAccount,
+                ListRow(label: .default(title: L10n.actionManageAccountAndDevices,
                                         icon: \.userProfile),
                         kind: .button {
                             context.send(viewAction: .manageAccount(url: url))
@@ -125,11 +117,11 @@ struct SettingsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.account)
             }
             
-            if let url = context.viewState.accountSessionsListURL {
-                ListRow(label: .default(title: L10n.actionManageDevices,
+            if context.viewState.showLinkNewDeviceButton {
+                ListRow(label: .default(title: L10n.commonLinkNewDevice,
                                         icon: \.devices),
-                        kind: .button {
-                            context.send(viewAction: .manageAccount(url: url))
+                        kind: .navigationLink {
+                            context.send(viewAction: .linkNewDevice)
                         })
             }
             
@@ -270,13 +262,13 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
         ElementNavigationStack {
             SettingsScreen(context: viewModel.context)
         }
-        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil })
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
         .previewDisplayName("Default")
         
         ElementNavigationStack {
             SettingsScreen(context: bugReportDisabledViewModel.context)
         }
-        .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil })
+        .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
         .previewDisplayName("Bug report disabled")
     }
     

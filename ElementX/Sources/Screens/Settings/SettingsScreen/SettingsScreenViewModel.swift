@@ -88,7 +88,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             await userSession.clientProxy.loadUserAvatarURL()
             await userSession.clientProxy.loadUserDisplayName()
             await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile)
-            await state.accountSessionsListURL = userSession.clientProxy.accountURL(action: .devicesList)
         }
     }
     

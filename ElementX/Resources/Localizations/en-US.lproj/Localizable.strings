@@ -112,6 +112,7 @@
 "action_leave_space" = "Leave space";
 "action_load_more" = "Load more";
 "action_manage_account" = "Manage account";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Manage devices";
 "action_manage_rooms" = "Manage rooms";
 "action_message" = "Message";

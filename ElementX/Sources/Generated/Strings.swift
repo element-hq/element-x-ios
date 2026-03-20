@@ -262,6 +262,8 @@ internal enum L10n {
   internal static var actionLoadMore: String { return L10n.tr("Localizable", "action_load_more") }
   /// Manage account
   internal static var actionManageAccount: String { return L10n.tr("Localizable", "action_manage_account") }
+  /// Manage account & devices
+  internal static var actionManageAccountAndDevices: String { return L10n.tr("Localizable", "action_manage_account_and_devices") }
   /// Manage devices
   internal static var actionManageDevices: String { return L10n.tr("Localizable", "action_manage_devices") }
   /// Manage rooms

@@ -38,7 +38,6 @@ struct SettingsScreenViewState: BindableState {
     var userID: String
     var showLinkNewDeviceButton: Bool
     var accountProfileURL: URL?
-    var accountSessionsListURL: URL?
     var showAccountDeactivation: Bool
     var userAvatarURL: URL?
     var userDisplayName: String?
