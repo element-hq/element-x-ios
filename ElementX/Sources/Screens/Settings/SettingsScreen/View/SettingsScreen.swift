@@ -23,11 +23,11 @@ struct SettingsScreen: View {
         Form {
             userSection
             
-            manageMyAppSection
-            
             if !shouldHideManageAccountSection {
                 manageAccountSection
             }
+            
+            manageMyAppSection
             
             generalSection
             
