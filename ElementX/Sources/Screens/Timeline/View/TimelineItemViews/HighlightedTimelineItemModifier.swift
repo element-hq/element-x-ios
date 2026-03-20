@@ -88,6 +88,7 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
     static let roomProxyMock = JoinedRoomProxyMock(.init(name: "Preview room"))
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let focussedEventID = "RoomTimelineItemFixtures.default.5"
+    static let composerViewModel = ComposerToolbarViewModel.mock()
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                      focussedEventID: focussedEventID,
                                                      timelineController: MockTimelineController(),
@@ -105,7 +106,7 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
         ElementNavigationStack {
             RoomScreen(context: roomViewModel.context,
                        timelineContext: timelineViewModel.context,
-                       composerToolbar: ComposerToolbar.mock())
+                       composerToolbar: ComposerToolbar(context: composerViewModel.context))
         }
         .previewDisplayName("Timeline")
     }

@@ -797,6 +797,69 @@ private final class ComposerMentionReplacer: MentionReplacer {
     }
 }
 
+// MARK: - Mocks
+
+extension ComposerToolbarViewModel {
+    enum MockMode { case editing, recordVoiceMessage, previewVoiceMessage(isUploading: Bool), reply(isLoading: Bool) }
+    
+    static func mock(focused: Bool = false,
+                     message: String = "",
+                     mockMode: MockMode? = nil,
+                     hasSuggestions: Bool = false,
+                     canSend: Bool = true) -> ComposerToolbarViewModel {
+        let suggestions: [SuggestionItem] = if hasSuggestions {
+            [.init(suggestionType: .user(.init(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)), range: .init(), rawSuggestionText: ""),
+             .init(suggestionType: .user(.init(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar)), range: .init(), rawSuggestionText: "")]
+        } else {
+            []
+        }
+        
+        let roomProxy = JoinedRoomProxyMock(.init())
+        
+        if !canSend {
+            roomProxy.identityStatusChangesPublisher = .init([.init(userId: RoomMemberProxyMock.mockAlice.userID, changedTo: .verificationViolation)])
+        }
+        
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        let viewModel = ComposerToolbarViewModel(roomProxy: roomProxy,
+                                                 wysiwygViewModel: wysiwygViewModel,
+                                                 completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
+                                                 mediaProvider: MediaProviderMock(configuration: .init()),
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 appSettings: ServiceLocator.shared.settings,
+                                                 analyticsService: ServiceLocator.shared.analytics,
+                                                 composerDraftService: ComposerDraftServiceMock(.init()))
+        viewModel.state.bindings.composerFocused = focused
+        viewModel.state.bindings.plainComposerText = NSAttributedString(string: message)
+        
+        switch mockMode {
+        case .editing:
+            viewModel.state.composerMode = .edit(originalEventOrTransactionID: .eventID(""), type: .default)
+        case .recordVoiceMessage:
+            viewModel.state.composerMode = .recordVoiceMessage(state: AudioRecorderState())
+        case .previewVoiceMessage(let isUploading):
+            viewModel.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview,
+                                                                                        title: L10n.commonVoiceMessage,
+                                                                                        duration: 10.0),
+                                                                waveform: .data(Array(repeating: 1.0, count: 1000)),
+                                                                isUploading: isUploading)
+        case .reply(let isLoading):
+            let replyDetails: TimelineItemReplyDetails = if isLoading {
+                .loading(eventID: "")
+            } else {
+                .loaded(sender: .init(id: "", displayName: "Test"),
+                        eventID: "",
+                        eventContent: .message(.text(.init(body: "Hello World!"))))
+            }
+            viewModel.state.composerMode = .reply(eventID: UUID().uuidString, replyDetails: replyDetails, isThread: false)
+        case nil:
+            break
+        }
+        
+        return viewModel
+    }
+}
+
 private struct PlainComposerContent {
     let text: String
     let mentionedUserIDs: Set<String>

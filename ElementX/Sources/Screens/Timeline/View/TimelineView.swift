@@ -143,6 +143,7 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
     static let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
                                                          name: "Preview room"))
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
+    static let composerViewModel = ComposerToolbarViewModel.mock()
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                      timelineController: MockTimelineController(),
                                                      userSession: UserSessionMock(.init()),
@@ -159,7 +160,7 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
         ElementNavigationStack {
             RoomScreen(context: roomViewModel.context,
                        timelineContext: timelineViewModel.context,
-                       composerToolbar: ComposerToolbar.mock())
+                       composerToolbar: ComposerToolbar(context: composerViewModel.context))
         }
     }
 }

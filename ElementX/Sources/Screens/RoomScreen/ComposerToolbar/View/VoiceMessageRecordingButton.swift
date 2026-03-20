@@ -37,13 +37,13 @@ struct VoiceMessageRecordingButton: View {
             case .idle:
                 CompoundIcon(\.micOn, size: .medium, relativeTo: .compound.headingLG)
                     .foregroundColor(isEnabled ? .compound.iconSecondary : .compound.iconDisabled)
-                    .scaledPadding(10, relativeTo: .compound.headingLG)
-            case .recording:
-                CompoundIcon(asset: Asset.Images.stopRecording, size: .medium, relativeTo: .compound.headingLG)
-                    .foregroundColor(.compound.iconOnSolidPrimary)
                     .scaledPadding(6, relativeTo: .compound.headingLG)
+            case .recording:
+                CompoundIcon(\.stopSolid, size: .small, relativeTo: .compound.headingLG)
+                    .foregroundColor(.compound.iconOnSolidPrimary)
+                    .scaledPadding(8, relativeTo: .compound.headingLG)
                     .background(.compound.bgActionPrimaryRest, in: Circle())
-                    .scaledPadding(4, relativeTo: .compound.headingLG)
+                    .compositingGroup()
             }
         }
         .buttonStyle(VoiceMessageRecordingButtonStyle())
@@ -62,7 +62,6 @@ struct VoiceMessageRecordingButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HStack(spacing: 8) {
             VoiceMessageRecordingButton(mode: .idle)
-            
             VoiceMessageRecordingButton(mode: .recording)
         }
     }

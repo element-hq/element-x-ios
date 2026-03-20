@@ -20,6 +20,10 @@ public struct SendButton: View {
         return colorScheme == .light ? .compound.iconOnSolidPrimary : .compound.iconPrimary
     }
     
+    private var backgroundColor: Color {
+        isEnabled ? .compound.bgAccentRest : .clear
+    }
+    
     /// Creates a send button that performs the provided action.
     public init(action: @escaping () -> Void) {
         self.action = action
@@ -30,16 +34,9 @@ public struct SendButton: View {
             CompoundIcon(\.sendSolid, size: .medium, relativeTo: .compound.headingLG)
                 .foregroundStyle(iconColor)
                 .scaledPadding(6, relativeTo: .compound.headingLG)
-                .background { buttonShape }
+                .background(backgroundColor, in: .circle)
                 .compositingGroup()
         }
-    }
-    
-    var buttonShape: some View {
-        Circle()
-            .fill(isEnabled
-                ? Color.compound.bgAccentRest
-                : Color.clear)
     }
 }
 
