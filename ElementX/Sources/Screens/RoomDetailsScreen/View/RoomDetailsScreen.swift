@@ -20,13 +20,13 @@ struct RoomDetailsScreen: View {
 
             topicSection
             
+            aboutSection
+            
             configurationSection
             
             if context.viewState.dmRecipientInfo == nil {
                 peopleSection
             }
-
-            aboutSection
 
             securitySection
 
@@ -136,6 +136,11 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section {
+            ListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapMediaEvents)
+                    })
+            
             ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle, icon: \.pin),
                     details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
                     kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
@@ -148,11 +153,6 @@ struct RoomDetailsScreen: View {
                         context.send(viewAction: .processTapPolls)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
-            
-            ListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
-                    kind: .navigationLink {
-                        context.send(viewAction: .processTapMediaEvents)
-                    })
         }
     }
     
