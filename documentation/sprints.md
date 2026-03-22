@@ -189,10 +189,16 @@ Timeline: 6 sprints / 45 days.
 - [x] Build 2 uploaded to TestFlight (2026-03-22)
 - [x] Encryption compliance document uploaded to ASC (2026-03-22)
 - [x] Customer added as external TestFlight tester (2026-03-22)
+- [x] App Store listing filled: RU/EN descriptions, promotional text, keywords, copyright, URLs (2026-03-22)
+- [x] Review credentials + notes entered in ASC (2026-03-22)
+- [x] Age rating set to 14+ (2026-03-22)
+- [x] Subtitle set: "Мессенджер на протоколе Matrix" (2026-03-22)
+- [x] Regions: all countries (2026-03-22)
+- [ ] Privacy Nutrition Labels questionnaire (ASC)
+- [ ] Screenshots: 6.7" + 5.5" with device frames (customer to provide from TestFlight)
+- [ ] Review contact: first name, last name, email (need from customer)
 - [ ] Customer testing
 - [ ] Fix bugs
-- [ ] Prepare test account + instructions for App Review
-- [ ] App Store listing: RU/EN descriptions, keywords, screenshots (6.7" and 5.5"), privacy URL, support URL, age rating
 - [ ] Submit to App Store
 - [ ] Respond to review questions
 - [ ] Release
@@ -204,4 +210,4 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-*Last updated: 2026-03-22. Sprint 5 done. Sprint 6 in progress — Build 2 uploaded, customer URLs updated, privacy manifests fixed, encryption compliance uploaded. Blocked on customer for push server fix + AGPL confirmation + App Store subtitle (30-char limit).*
+*Last updated: 2026-03-22. Sprint 6 in progress — ASC listing filled (RU+EN), Build 2 on TestFlight, review info entered. Remaining: Privacy Nutrition Labels, screenshots from customer, review contact details. Blocked on customer for push server fix + AGPL confirmation.*

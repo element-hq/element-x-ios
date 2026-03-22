@@ -54,14 +54,17 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 1. **Push E2E testing** — ntfy server at `push.ucmeet.org` rejects FCM tokens (`"rejected"` response). Customer must check ntfy server logs for FCM forwarding errors. Firebase service account JSON was sent 2026-03-11
 2. **MapLibre static maps** — MapTiler key needs "Static Maps" permission enabled (interactive maps already work)
 3. **AGPL v3 licensing** — need written confirmation it covers Element X (blocks App Store only)
-4. **App Store subtitle** — "Безопасный мессенджер на протоколе Matrix" exceeds 30-char limit, alternatives sent to customer
+4. **Screenshots** — customer needs to provide device-framed screenshots from TestFlight (6.7" + 5.5")
+5. **Privacy Nutrition Labels** — questionnaire not yet completed in ASC
+6. **Review contact details** — need first name, last name, email from customer
 
 ### Next Actions (waiting on customer)
 
 1. Customer: configure Sygnal with provided Firebase credentials + confirm Sygnal URL
 2. Customer/Dev: enable Static Maps permission on MapTiler key
 3. Customer: written AGPL license confirmation
-4. Customer: choose App Store subtitle (30-char limit)
+4. Customer: provide screenshots from TestFlight with device frames
+5. Customer: provide review contact name + email
 
 > See `decisions_tracker.md` for all 12 tracked decisions: 7 resolved, 3 in progress, 2 open.
 
@@ -165,15 +168,15 @@ All docs in `documentation/` folder:
 | 3: Push + OIDC + Associated Domains | **BLOCKED** | Push gateway URL confirmed (`https://push.ucmeet.org`), E2E test attempted, FCM token rejected by ntfy. Customer must check ntfy logs |
 | 4: Calls & UCMeet Call | **DONE** | |
 | 5: Finalization & Release Prep | **DONE** | NSE entitlement fix, upstream sync, version set to 1.0.0 (Build 2) |
-| 6: TestFlight & Publication | **IN PROGRESS** | Build 2 uploaded, customer URLs updated, privacy manifests fixed, encryption compliance uploaded, customer added as tester |
+| 6: TestFlight & Publication | **IN PROGRESS** | Build 2 on TestFlight, ASC listing filled (RU+EN), review info entered. Remaining: screenshots, Privacy Nutrition Labels, review contact |
 
 ### Summary Metrics
 
 | Metric | Value |
 |--------|-------|
-| Plan completion | ~95% code, blocked on customer for push E2E + subtitle |
-| Hours invested | ~85–88h of ~120h budget |
-| Hours remaining | ~15–22h (push testing, App Store listing, release) |
+| Plan completion | ~97% code + listing, blocked on customer for screenshots + push E2E |
+| Hours invested | ~88–90h of ~120h budget |
+| Hours remaining | ~12–18h (screenshots, privacy labels, push testing, release) |
 | Decisions resolved | 7/12 |
 | Unit tests | 962 run, 899 passed, 63 pre-existing failures, 0 new |
 | User-visible Element branding | **0** |
