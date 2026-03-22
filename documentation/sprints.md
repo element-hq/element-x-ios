@@ -184,6 +184,11 @@ Timeline: 6 sprints / 45 days.
 - [x] Upload to TestFlight (2026-03-18)
 - [x] App created in App Store Connect (Apple ID: 6759875787) (2026-03-18)
 - [x] App Store customer guide (RU) prepared and sent (2026-03-18)
+- [x] Customer URLs updated in AppSettings (privacy, terms, support) (2026-03-22)
+- [x] Privacy manifests fixed — ITMS-91054 (2026-03-22)
+- [x] Build 2 uploaded to TestFlight (2026-03-22)
+- [x] Encryption compliance document uploaded to ASC (2026-03-22)
+- [x] Customer added as external TestFlight tester (2026-03-22)
 - [ ] Customer testing
 - [ ] Fix bugs
 - [ ] Prepare test account + instructions for App Review
@@ -199,4 +204,4 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-*Last updated: 2026-03-18. Sprint 5 done. Sprint 6 started — build uploaded to TestFlight, App Store Connect created. Blocked on customer for push server fix + AGPL confirmation + App Store listing details.*
+*Last updated: 2026-03-22. Sprint 5 done. Sprint 6 in progress — Build 2 uploaded, customer URLs updated, privacy manifests fixed, encryption compliance uploaded. Blocked on customer for push server fix + AGPL confirmation + App Store subtitle (30-char limit).*

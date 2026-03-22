@@ -118,5 +118,7 @@
 	<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
 	<key>productionAppName</key>
 	<string>$(PRODUCTION_APP_NAME)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<true/>
 </dict>
 </plist>

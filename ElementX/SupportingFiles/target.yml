@@ -50,6 +50,7 @@ targets:
         CFBundleDisplayName: $(APP_DISPLAY_NAME)
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSAppUsesNonExemptEncryption: true
         CFBundleURLTypes: [
           {
             CFBundleTypeRole: Editor,
