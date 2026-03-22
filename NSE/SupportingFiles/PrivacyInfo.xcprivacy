@@ -36,14 +36,6 @@
 				<string>8FFB.1</string>
 			</array>
 		</dict>
-		<dict>
-			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategoryNetworkInformation</string>
-			<key>NSPrivacyAccessedAPITypeReasons</key>
-			<array>
-				<string>55BD.1</string>
-			</array>
-		</dict>
 	</array>
 </dict>
 </plist>

@@ -208,21 +208,21 @@ final class AppSettings {
     /// A URL that contains the app's logo that may be used when showing content in a web view.
     private(set) var logoURL: URL = "https://www.ucmeet.info/mobile-icon.png" // TODO: UCMeet — provide real logo URL
     /// A URL that contains that app's copyright notice.
-    private(set) var copyrightURL: URL = "https://www.ucmeet.info/policy-152" // TODO: UCMeet — provide copyright URL if different from privacy
+    private(set) var copyrightURL: URL = "https://www.ucmeet.info/privacy-security"
     /// A URL that contains the app's Terms of use.
-    private(set) var acceptableUseURL: URL = "https://www.ucmeet.info/policy-152" // TODO: UCMeet — provide separate ToS URL if available
+    private(set) var acceptableUseURL: URL = "https://www.ucmeet.info/ucmeetchat-terms-of-use"
     /// A URL that contains the app's Privacy Policy.
-    private(set) var privacyURL: URL = "https://www.ucmeet.info/policy-152"
+    private(set) var privacyURL: URL = "https://www.ucmeet.info/privacy-security"
     /// A URL where users can go read more about encryption in general.
-    private(set) var encryptionURL: URL = "https://www.ucmeet.info/policy-152" // TODO: UCMeet — provide encryption help URL
+    private(set) var encryptionURL: URL = "https://www.ucmeet.info/privacy-security"
     /// A URL where users can go read more about device verification..
-    private(set) var deviceVerificationURL: URL = "https://www.ucmeet.info/policy-152" // TODO: UCMeet — provide device verification help URL
+    private(set) var deviceVerificationURL: URL = "https://www.ucmeet.info/support"
     /// A URL where users can go read more about the chat backup.
-    private(set) var chatBackupDetailsURL: URL = "https://www.ucmeet.info/policy-152" // TODO: UCMeet — provide chat backup help URL
+    private(set) var chatBackupDetailsURL: URL = "https://www.ucmeet.info/support"
     /// A URL where users can go read more about identity pinning violations
-    private(set) var identityPinningViolationDetailsURL: URL = "https://www.ucmeet.info/policy-152" // TODO: UCMeet — provide identity pinning help URL
+    private(set) var identityPinningViolationDetailsURL: URL = "https://www.ucmeet.info/support"
     /// A URL describing how history sharing works
-    private(set) var historySharingDetailsURL: URL = "https://www.ucmeet.info/policy-152" // TODO: UCMeet — provide history sharing help URL
+    private(set) var historySharingDetailsURL: URL = "https://www.ucmeet.info/support"
 
     /// Any domains that the web app may be hosted on - used for handling links.
     private(set) var elementWebHosts: [String] = [] // UCMeet: no web client hosted

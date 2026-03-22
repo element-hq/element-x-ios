@@ -213,7 +213,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                                                               profileTag: pusherProfileTag(),
                                                               lang: Bundle.app.preferredLocalizations.first ?? "en")
             try await clientProxy.setPusher(with: configuration)
-            MXLog.info("Set FCM pusher succeeded — appId: \(appSettings.pusherAppID), url: \(appSettings.pushGatewayNotifyEndpoint.absoluteString), pushkey prefix: \(String(fcmToken.prefix(20)))...")
+            MXLog.info("Set FCM pusher succeeded")
             return true
         } catch {
             MXLog.error("Set FCM pusher failed: \(error)")
