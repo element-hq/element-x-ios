@@ -194,11 +194,14 @@ Timeline: 6 sprints / 45 days.
 - [x] Age rating set to 14+ (2026-03-22)
 - [x] Subtitle set: "Мессенджер на протоколе Matrix" (2026-03-22)
 - [x] Regions: all countries (2026-03-22)
-- [ ] Privacy Nutrition Labels questionnaire (ASC)
-- [ ] Screenshots: 6.7" + 5.5" with device frames (customer to provide from TestFlight)
-- [ ] Review contact: first name, last name, email (need from customer)
+- [x] Version decision: release as 1.0.0 (Build 2), updates start from 1.0.1+ (2026-03-22)
+- [ ] **CUSTOMER:** Screenshots: 6.7" + 5.5" with device frames (from TestFlight)
+- [ ] **CUSTOMER:** Privacy Nutrition Labels questionnaire (ASC)
+- [ ] **CUSTOMER:** Review contact: first name, last name, email
+- [ ] **CUSTOMER:** Fix ntfy push server (FCM token rejection)
+- [ ] **CUSTOMER:** Written AGPL confirmation
 - [ ] Customer testing
-- [ ] Fix bugs
+- [ ] Fix bugs (if any)
 - [ ] Submit to App Store
 - [ ] Respond to review questions
 - [ ] Release
@@ -210,4 +213,4 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-*Last updated: 2026-03-22. Sprint 6 in progress — ASC listing filled (RU+EN), Build 2 on TestFlight, review info entered. Remaining: Privacy Nutrition Labels, screenshots from customer, review contact details. Blocked on customer for push server fix + AGPL confirmation.*
+*Last updated: 2026-03-22. Sprint 6 in progress — all developer-side work complete. ASC listing filled (RU+EN), Build 2 on TestFlight, review info entered. All remaining items on customer side: screenshots, Privacy Nutrition Labels, review contact, ntfy push fix, AGPL confirmation.*
