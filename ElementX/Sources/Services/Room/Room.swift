@@ -16,5 +16,5 @@ extension RoomProtocol {
         case (false, true): voiceOnly ? .startCallDmVoice : .startCallDm
         case (false, false): .startCall
         }
-     }
+    }
 }
