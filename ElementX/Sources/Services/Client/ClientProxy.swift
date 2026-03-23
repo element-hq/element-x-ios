@@ -1332,7 +1332,8 @@ private struct ClientProxyServices {
         let roomListService = syncService.roomListService()
         
         let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
-                                                                                                                           mentionBuilder: PlainMentionBuilder()), destination: .roomList)
+                                                                                                                           mentionBuilder: PlainMentionBuilder()),
+                                                                          style: .senderPrefixed)
         let eventStringBuilder = try RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: client.userId(), shouldDisambiguateDisplayNames: false),
                                                             messageEventStringBuilder: roomMessageEventStringBuilder,
                                                             shouldDisambiguateDisplayNames: false,

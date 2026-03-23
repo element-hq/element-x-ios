@@ -34,14 +34,14 @@ struct RoomEventStringBuilder {
             case .message(let messageContent):
                 return messageEventStringBuilder.buildAttributedString(for: messageContent.msgType, senderDisplayName: displayName, isOutgoing: isOutgoing)
             case .sticker:
-                if messageEventStringBuilder.destination == .pinnedEvent {
+                if messageEventStringBuilder.style == .typeBolded {
                     var string = AttributedString(L10n.commonSticker)
                     string.bold()
                     return string
                 }
                 return prefix(L10n.commonSticker, with: displayName, isOutgoing: isOutgoing)
             case .poll(let question, _, _, _, _, _, _):
-                if messageEventStringBuilder.destination == .pinnedEvent {
+                if messageEventStringBuilder.style == .typeBolded {
                     let questionPlaceholder = "{question}"
                     var finalString = AttributedString(L10n.commonPollSummary(questionPlaceholder))
                     finalString.bold()
@@ -106,10 +106,19 @@ struct RoomEventStringBuilder {
     
     static func pinnedEventStringBuilder(userID: String) -> Self {
         RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID,
-                                                              shouldDisambiguateDisplayNames: false),
+                                                              shouldDisambiguateDisplayNames: true),
                                messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "pinnedEvents", mentionBuilder: PlainMentionBuilder()),
-                                                                destination: .pinnedEvent),
-                               shouldDisambiguateDisplayNames: false,
+                                                                style: .typeBolded),
+                               shouldDisambiguateDisplayNames: true,
+                               shouldPrefixSenderName: false)
+    }
+    
+    static func threadListEventStringBuilder(userID: String) -> Self {
+        RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID,
+                                                              shouldDisambiguateDisplayNames: true),
+                               messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "threadList", mentionBuilder: PlainMentionBuilder()),
+                                                                style: .plain),
+                               shouldDisambiguateDisplayNames: true,
                                shouldPrefixSenderName: false)
     }
 }

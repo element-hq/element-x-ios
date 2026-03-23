@@ -34,7 +34,7 @@ class NotificationHandler {
         self.tag = tag
         
         let eventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()),
-                                                               destination: .notification)
+                                                               style: .plain)
         
         notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: eventStringBuilder,
                                                                 notificationSoundName: settings.notificationSoundName.publisher.value,

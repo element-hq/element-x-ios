@@ -102,7 +102,7 @@ final class RoomSummaryProviderTests {
         let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
         let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: stateEventStringBuilder,
                                                         messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: attributedStringBuilder,
-                                                                                                                 destination: .roomList),
+                                                                                                                 style: .senderPrefixed),
                                                         shouldDisambiguateDisplayNames: true,
                                                         shouldPrefixSenderName: true)
 
