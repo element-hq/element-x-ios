@@ -112,6 +112,7 @@
 "action_leave_space" = "Leave space";
 "action_load_more" = "Daha fazla yükle";
 "action_manage_account" = "Hesabı yönet";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Cihazları yönet";
 "action_manage_rooms" = "Odaları yönet";
 "action_message" = "Mesaj";
@@ -162,6 +163,7 @@
 "action_start_over" = "Yeniden Başla";
 "action_start_verification" = "Doğrulamayı başlat";
 "action_static_map_load" = "Haritayı yüklemek için dokunun";
+"action_stop" = "Stop";
 "action_take_photo" = "Fotoğraf çek";
 "action_tap_for_options" = "Seçenekler için dokunun";
 "action_translate" = "Çeviri";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Gelişmiş Ayarlar";
 "common_an_image" = "an image";
 "common_analytics" = "Analizler";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Görünüm";
 "common_audio" = "Ses";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Boş dosya";
 "common_encryption" = "Şifreleme";
 "common_encryption_enabled" = "Şifreleme etkin";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "PIN'inizi girin";
 "common_error" = "Hata";
 "common_everyone" = "Herkes";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Metin panoya kopyalandı";
 "common_link_copied_to_clipboard" = "Bağlantı panoya kopyalandı";
 "common_link_new_device" = "Link new device";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Yükleniyor...";
 "common_loading_more" = "Daha fazla yükleniyor...";
 "common_message" = "Mesaj";
@@ -319,6 +325,7 @@
 "common_settings" = "Ayarlar";
 "common_share_space" = "Share space";
 "common_shared_history" = "New members see history";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Paylaşılan konum";
 "common_shared_space" = "Shared space";
 "common_signing_out" = "Oturumu kapatma";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Sesli Mesaj";
 "common_waiting" = "Bekleniyor…";
 "common_waiting_for_decryption_key" = "Bu mesajı bekliyorum";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Sen";
 "common_unable_to_decrypt_insecure_device" = "Güvenli olmayan bir cihazdan gönderildi";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresler, oda ve alanları bulmak ve erişmek için kullanılır. Ayrıca bunları başkalarıyla kolayca paylaşabilmenizi sağlar.";
 "screen_security_and_privacy_room_visibility_section_header" = "Oda görünürlüğü";
 "screen_security_and_privacy_title" = "Güvenlik ve gizlilik";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Kurtarma anahtarını değiştir";
 "screen_chat_backup_recovery_action_change_description" = "Mevcut tüm cihazlarınızı kaybettiyseniz, kurtarma anahtarıyla şifreleme kimliğinizi ve mesaj geçmişinizi kurtarın.";
 "screen_chat_backup_recovery_action_confirm_description" = "Anahtar depolama alanınız şu anda senkronize değil.";
-"screen_chat_backup_recovery_action_setup_description" = "Tüm cihazlarınızı kaybettiğinizde veya %1$@ adresinden çıkış yaptığınızda şifrelenmiş mesajlarınıza her yerden erişin.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Masaüstü cihazında aç %1$@";
 "screen_create_new_recovery_key_list_item_2" = "Hesabınızda tekrar oturum açın";
 "screen_create_new_recovery_key_list_item_3" = "Cihazınızı doğrulamanız istendiğinde %1$@ öğesini seçin";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Son oturumunuzdan çıkmak üzeresiniz. Şimdi çıkış yaparsanız şifrelenmiş mesajlarınıza erişiminizi kaybedersiniz.";
 "screen_signout_recovery_disabled_title" = "Kurtarma ayarlanmadı";
 "screen_signout_save_recovery_key_subtitle" = "Son oturumunuzdan çıkmak üzeresiniz. Şimdi oturumu kapatırsanız şifrelenmiş mesajlarınıza erişiminizi kaybedebilirsiniz.";
+"screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_start_chat_error_starting_chat" = "Sohbet başlatmaya çalışırken bir hata oluştu";
 "screen_view_location_title" = "Konum";
 "session_verification_banner_message" = "Görünüşe göre yeni bir cihaz kullanıyorsunuz. Şifrelenmiş mesajlarınıza erişmek için başka bir cihazla doğrulayın.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Oturumu kapat";
 "screen_signout_key_backup_offline_title" = "Anahtarlarınız hala yedekleniyor";
 "screen_signout_preference_item" = "Oturumu kapat";
-"screen_signout_save_recovery_key_title" = "Kurtarma anahtarınızı kaydettiniz mi?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Bu mesaja erişiminiz yok";
 "troubleshoot_notifications_test_blocked_users_title" = "Engellenen kullanıcılar";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push history";

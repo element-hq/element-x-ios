@@ -112,6 +112,7 @@
 "action_leave_space" = "Napusti prostor";
 "action_load_more" = "Učitaj više";
 "action_manage_account" = "Upravljanje računom";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Upravljanje uređajima";
 "action_manage_rooms" = "Upravljaj sobama";
 "action_message" = "Poruka";
@@ -162,6 +163,7 @@
 "action_start_over" = "Kreni ispočetka";
 "action_start_verification" = "Započni provjeru";
 "action_static_map_load" = "Dodirnite za učitavanje karte";
+"action_stop" = "Stop";
 "action_take_photo" = "Uslikaj";
 "action_tap_for_options" = "Dodirnite za mogućnosti";
 "action_translate" = "Prevedi";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Napredne postavke";
 "common_an_image" = "slika";
 "common_analytics" = "Analitika";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Odjavljeni ste iz sesije";
 "common_appearance" = "Izgled";
 "common_audio" = "Audiozapis";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Prazna datoteka";
 "common_encryption" = "Šifriranje";
 "common_encryption_enabled" = "Šifriranje je omogućeno";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Unesite svoj PIN";
 "common_error" = "Pogreška";
 "common_everyone" = "Svi";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Redak je kopiran u međuspremnik";
 "common_link_copied_to_clipboard" = "Poveznica je kopirana u međuspremnik.";
 "common_link_new_device" = "Poveži novi uređaj";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Učitavanje…";
 "common_loading_more" = "Učitava se još...";
 "common_message" = "Poruka";
@@ -319,6 +325,7 @@
 "common_settings" = "Postavke";
 "common_share_space" = "Podijeli prostor";
 "common_shared_history" = "New members see history";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Podijeljena lokacija";
 "common_shared_space" = "Zajednički prostor";
 "common_signing_out" = "Odjava je u tijeku";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Glasovna poruka";
 "common_waiting" = "Čekanje...";
 "common_waiting_for_decryption_key" = "Čekam ovu poruku";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Vi";
 "common_unable_to_decrypt_insecure_device" = "Poslano s nesigurnog uređaja";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adrese služe za pronalaženje soba i prostora te pristup njima. Tako ih ujedno možete jednostavno dijeliti s drugima.";
 "screen_security_and_privacy_room_visibility_section_header" = "Vidljivost";
 "screen_security_and_privacy_title" = "Sigurnost i privatnost";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Promjena ključa za oporavak";
 "screen_chat_backup_recovery_action_change_description" = "Ako ste izgubili sve postojeće uređaje, oporavite svoj kriptografski identitet i povijest poruka pomoću ključa za oporavak.";
 "screen_chat_backup_recovery_action_confirm_description" = "Vaša pohrana ključeva trenutačno nije sinkronizirana.";
-"screen_chat_backup_recovery_action_setup_description" = "Pristupite svojim šifriranim porukama ako se odjavite iz aplikacije s%1$@ sa svih uređaja ili ih izgubite.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Otvorite %1$@ na stolnom uređaju";
 "screen_create_new_recovery_key_list_item_2" = "Ponovno se prijavite na svoj račun";
 "screen_create_new_recovery_key_list_item_3" = "Kada se od vas zatraži da potvrdite svoj uređaj, odaberite %1$@";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Odjavit ćete se iz svoje posljednje sesije. Ako se sada odjavite, nećete moći pristupiti svojim šifriranim porukama.";
 "screen_signout_recovery_disabled_title" = "Oporavak nije postavljen";
 "screen_signout_save_recovery_key_subtitle" = "Odjavit ćete se iz svoje posljednje sesije. Ako se sada odjavite, možda nećete moći pristupiti svojim šifriranim porukama.";
+"screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_start_chat_error_starting_chat" = "Došlo je do pogreške prilikom pokretanja razgovora";
 "screen_view_location_title" = "Lokacija";
 "session_verification_banner_message" = "Izgleda da koristite novi uređaj. Izvršite provjeru drugim uređajem da biste pristupili svojim šifriranim porukama.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Odjava";
 "screen_signout_key_backup_offline_title" = "Vaši se ključevi još uvijek sigurnosno kopiraju";
 "screen_signout_preference_item" = "Odjava";
-"screen_signout_save_recovery_key_title" = "Jeste li spremili svoj ključ za oporavak?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nemate pristup ovoj poruci";
 "troubleshoot_notifications_test_blocked_users_title" = "Blokirani korisnici";
 "troubleshoot_notifications_entry_point_push_history_title" = "Povijest push obavijesti";

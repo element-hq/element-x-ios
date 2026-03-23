@@ -112,6 +112,7 @@
 "action_leave_space" = "Opustiť priestor";
 "action_load_more" = "Načítať viac";
 "action_manage_account" = "Spravovať účet";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Spravovať zariadenia";
 "action_manage_rooms" = "Spravovať miestnosti";
 "action_message" = "Poslať správu";
@@ -162,6 +163,7 @@
 "action_start_over" = "Začať odznova";
 "action_start_verification" = "Spustiť overovanie";
 "action_static_map_load" = "Ťuknutím načítate mapu";
+"action_stop" = "Stop";
 "action_take_photo" = "Urobiť fotku";
 "action_tap_for_options" = "Klepnutím získate možnosti";
 "action_translate" = "Preložiť";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Pokročilé nastavenia";
 "common_an_image" = "obrázok";
 "common_analytics" = "Analytika";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Boli ste odhlásení zo relácie.";
 "common_appearance" = "Vzhľad";
 "common_audio" = "Zvuk";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Prázdny súbor";
 "common_encryption" = "Šifrovanie";
 "common_encryption_enabled" = "Šifrovanie zapnuté";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Zadajte svoj PIN";
 "common_error" = "Chyba";
 "common_everyone" = "Všetci";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Riadok skopírovaný do schránky";
 "common_link_copied_to_clipboard" = "Odkaz bol skopírovaný do schránky";
 "common_link_new_device" = "Prepojiť nové zariadenie";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Načítava sa…";
 "common_loading_more" = "Načítava sa viac...";
 "common_message" = "Správa";
@@ -319,6 +325,7 @@
 "common_settings" = "Nastavenia";
 "common_share_space" = "Zdieľať priestor";
 "common_shared_history" = "New members see history";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Zdieľaná poloha";
 "common_shared_space" = "Zdieľaný priestor";
 "common_signing_out" = "Odhlasovanie";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Hlasová správa";
 "common_waiting" = "Čaká sa…";
 "common_waiting_for_decryption_key" = "Čaká sa na dešifrovací kľúč";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Vy";
 "common_unable_to_decrypt_insecure_device" = "Odoslané z nezabezpečeného zariadenia";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresy sú spôsob, ako nájsť a získať prístup do miestností a priestorov. To tiež zabezpečuje, že ich môžete jednoducho zdieľať s ostatnými.";
 "screen_security_and_privacy_room_visibility_section_header" = "Viditeľnosť";
 "screen_security_and_privacy_title" = "Bezpečnosť a súkromie";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Miestnosť";
 "screen_space_empty_state_title" = "Pridajte svoju prvú miestnosť";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Zmeniť kľúč na obnovenie";
 "screen_chat_backup_recovery_action_change_description" = "Obnovte svoju kryptografickú totožnosť a históriu správ pomocou kľúča na obnovenie, ak ste stratili všetky svoje existujúce zariadenia.";
 "screen_chat_backup_recovery_action_confirm_description" = "Vaše úložisko kľúčov nie je momentálne synchronizované.";
-"screen_chat_backup_recovery_action_setup_description" = "Získajte prístup k vašim šifrovaným správam aj keď stratíte všetky svoje zariadenia alebo sa odhlásite zo všetkých %1$@ zariadení.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Otvoriť %1$@ v stolnom počítači";
 "screen_create_new_recovery_key_list_item_2" = "Znova sa prihláste do svojho účtu";
 "screen_create_new_recovery_key_list_item_3" = "Keď sa zobrazí výzva na overenie vášho zariadenia, vyberte %1$@";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Chystáte sa odhlásiť z vašej poslednej relácie. Ak sa teraz odhlásite, stratíte prístup k svojim šifrovaným správam.";
 "screen_signout_recovery_disabled_title" = "Obnovenie nie je nastavené";
 "screen_signout_save_recovery_key_subtitle" = "Chystáte sa odhlásiť z vašej poslednej relácie. Ak sa teraz odhlásite, môžete stratiť prístup k svojim šifrovaným správam.";
+"screen_signout_save_recovery_key_title" = "Uložili ste si kľúč na obnovenie?";
 "screen_start_chat_error_starting_chat" = "Pri pokuse o spustenie konverzácie sa vyskytla chyba";
 "screen_view_location_title" = "Poloha";
 "session_verification_banner_message" = "Vyzerá to tak, že používate nové zariadenie. Overte svoj prístup k zašifrovaným správam pomocou vášho druhého zariadenia.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Odhlásiť sa";
 "screen_signout_key_backup_offline_title" = "Vaše kľúče sa ešte stále zálohujú";
 "screen_signout_preference_item" = "Odhlásiť sa";
-"screen_signout_save_recovery_key_title" = "Uložili ste kľúč na obnovenie?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nemáte prístup k tejto správe";
 "troubleshoot_notifications_test_blocked_users_title" = "Blokovaní používatelia";
 "troubleshoot_notifications_entry_point_push_history_title" = "História push oznámení";

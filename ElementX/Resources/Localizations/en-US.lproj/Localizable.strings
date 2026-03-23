@@ -227,7 +227,7 @@
 "common_empty_file" = "Empty file";
 "common_encryption" = "Encryption";
 "common_encryption_enabled" = "Encryption enabled";
-"common_ends_in_time_ios" = "Ends %1$@";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Enter your PIN";
 "common_error" = "Error";
 "common_everyone" = "Everyone";
@@ -756,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Security & privacy";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";

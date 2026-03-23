@@ -112,6 +112,7 @@
 "action_leave_space" = "Forlad klynge";
 "action_load_more" = "Indlæs mere";
 "action_manage_account" = "Administrer konto";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Administrer enheder";
 "action_manage_rooms" = "Administrer rum";
 "action_message" = "Besked";
@@ -162,6 +163,7 @@
 "action_start_over" = "Begynd forfra";
 "action_start_verification" = "Begynd verifikation";
 "action_static_map_load" = "Tryk for at indlæse kort";
+"action_stop" = "Stop";
 "action_take_photo" = "Tag billede";
 "action_tap_for_options" = "Tryk for indstillinger";
 "action_translate" = "Oversæt";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Avancerede indstillinger";
 "common_an_image" = "et billede";
 "common_analytics" = "Analyse-værktøj";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du blev logget ud af sessionen";
 "common_appearance" = "Udseende";
 "common_audio" = "Lyd";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Tom fil";
 "common_encryption" = "Kryptering";
 "common_encryption_enabled" = "Kryptering aktiveret";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Indtast din PIN-kode";
 "common_error" = "Fejl";
 "common_everyone" = "Alle";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Linje kopieret til udklipsholder";
 "common_link_copied_to_clipboard" = "Linket er kopieret til udklipsholderen";
 "common_link_new_device" = "Forbind ny enhed";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Indlæser...";
 "common_loading_more" = "Indlæser flere...";
 "common_message" = "Besked";
@@ -319,6 +325,7 @@
 "common_settings" = "Indstillinger";
 "common_share_space" = "Del klynge";
 "common_shared_history" = "Nye medlemmer ser historik";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Delt placering";
 "common_shared_space" = "Delt klynge";
 "common_signing_out" = "Logger ud";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Talebesked";
 "common_waiting" = "Venter...";
 "common_waiting_for_decryption_key" = "Venter på denne besked";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Alle kan se historikken";
 "common_you" = "Dig";
 "common_unable_to_decrypt_insecure_device" = "Sendt fra en usikker enhed";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresser er en måde at finde og få adgang til rum og klynger. Dette sikrer også, at du nemt kan dele dem med andre.";
 "screen_security_and_privacy_room_visibility_section_header" = "Synlighed";
 "screen_security_and_privacy_title" = "Sikkerhed og privatliv";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Indstillinger for deling";
 "screen_space_add_room_action" = "Rum";
 "screen_space_empty_state_title" = "Tilføj dit første rum";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Skift gendannelsesnøgle";
 "screen_chat_backup_recovery_action_change_description" = "Gendan din kryptografiske identitet og beskedhistorik med en gendannelsesnøgle, hvis du har mistet alle dine eksisterende enheder.";
 "screen_chat_backup_recovery_action_confirm_description" = "Din nøglelagring er i øjeblikket ikke synkroniseret.";
-"screen_chat_backup_recovery_action_setup_description" = "Få adgang til dine krypterede meddelelser, hvis du mister alle dine enheder eller er logget ud af %1$@ overalt.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Åbn %1$@ på en stationær enhed";
 "screen_create_new_recovery_key_list_item_2" = "Log ind på din konto igen";
 "screen_create_new_recovery_key_list_item_3" = "Når du bliver bedt om at verificere din enhed, skal du vælge %1$@";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Du er ved at logge ud af din sidste session. Hvis du logger af nu, mister du adgangen til dine krypterede meddelelser.";
 "screen_signout_recovery_disabled_title" = "Gendannelse er ikke konfigureret";
 "screen_signout_save_recovery_key_subtitle" = "Du er ved at logge ud af din sidste session. Hvis du logger af nu, kan du miste adgangen til dine krypterede meddelelser.";
+"screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_start_chat_error_starting_chat" = "Der opstod en fejl under forsøget på at starte en samtale";
 "screen_view_location_title" = "Lokation";
 "session_verification_banner_message" = "Det ser ud til, at du bruger en ny enhed. Bekræft med en anden enhed for at få adgang til dine krypterede meddelelser.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Log ud";
 "screen_signout_key_backup_offline_title" = "Dine nøgler bliver stadig sikkerhedskopieret";
 "screen_signout_preference_item" = "Log ud";
-"screen_signout_save_recovery_key_title" = "Har du gemt din gendannelsesnøgle?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Du har ikke adgang til denne meddelelse";
 "troubleshoot_notifications_test_blocked_users_title" = "Blokerede brugere";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push-historik";

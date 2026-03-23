@@ -112,6 +112,7 @@
 "action_leave_space" = "Maydondan chiqish";
 "action_load_more" = "Ko'proq yuklash";
 "action_manage_account" = "Hisobni boshqarish";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Qurilmalarni boshqarish";
 "action_manage_rooms" = "Xonalarni boshqarish";
 "action_message" = "Xabar";
@@ -162,6 +163,7 @@
 "action_start_over" = "Qaytadan boshlang";
 "action_start_verification" = "Tasdiqlashni boshlang";
 "action_static_map_load" = "Xaritani yuklash uchun bosing";
+"action_stop" = "Stop";
 "action_take_photo" = "Rasmga olmoq";
 "action_tap_for_options" = "Variantlar uchun bosing";
 "action_translate" = "Translate";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Kengaytirilgan sozlamalar";
 "common_an_image" = "rasm";
 "common_analytics" = "Analitika";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Siz sessiyadan chiqdingiz";
 "common_appearance" = "Ko'rinish";
 "common_audio" = "Audio";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Bo'sh fayl";
 "common_encryption" = "Shifrlash";
 "common_encryption_enabled" = "Shifrlash yoqilgan";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "PIN kodini kiriting";
 "common_error" = "Xato";
 "common_everyone" = "Har kim";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Satr vaqtinchalik xotiraga nusxalandi";
 "common_link_copied_to_clipboard" = "Havola vaqtinchalik xotiraga nusxalandi";
 "common_link_new_device" = "Yangi qurilmani ulang";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Yuklanmoqda…";
 "common_loading_more" = "Batafsil yuklanmoqda…";
 "common_message" = "Xabar";
@@ -319,6 +325,7 @@
 "common_settings" = "Sozlamalar";
 "common_share_space" = "Maydonni ulashish";
 "common_shared_history" = "New members see history";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Joylashuvi ulashildi";
 "common_shared_space" = "Umumiy maydon";
 "common_signing_out" = "Chiqish";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Ovozli xabar";
 "common_waiting" = "Kutilmoqda…";
 "common_waiting_for_decryption_key" = "Ushbu xabarni kutilmoqda";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Siz";
 "common_unable_to_decrypt_insecure_device" = "Xavfsiz boʻlmagan qurilmadan yuborilgan";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Manzillar xona va maydonlarni topish va ularga kirish usulidir. Bu, shuningdek, ularni boshqalar bilan osongina bo‘lishishingizni ta’minlaydi.";
 "screen_security_and_privacy_room_visibility_section_header" = "Ko‘rinish";
 "screen_security_and_privacy_title" = "Xavfsizlik va maxfiylik";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
@@ -797,11 +806,11 @@
 "screen_advanced_settings_view_source_description" = "Xabar manbasini vaqt jadvalida ko‘rish imkoniyatini yoqing.";
 "screen_analytics_prompt_data_usage" = "Biz hech qanday shaxsiy ma'lumotlarni yozmaymiz yoki profilga kiritmaymiz";
 "screen_analytics_prompt_help_us_improve" = "Muammolarni aniqlashda yordam berish uchun anonim foydalanish maʼlumotlarini baham koʻring.";
-"screen_analytics_prompt_read_terms" = "Siz bizning barcha shartlarimizni o'qishingiz mumkin%1$@.";
-"screen_analytics_prompt_read_terms_content_link" = "Bu yerga";
+"screen_analytics_prompt_read_terms" = "Barcha shartlar bilan %1$@ tanishib chiqishingiz mumkin.";
+"screen_analytics_prompt_read_terms_content_link" = "bu yerda";
 "screen_analytics_prompt_settings" = "Buni istalgan vaqtda oʻchirib qoʻyishingiz mumkin";
 "screen_analytics_prompt_third_party_sharing" = "Biz sizning ma'lumotlaringizni uchinchi tomonlar bilan baham ko'rmaymiz";
-"screen_analytics_prompt_title" = "Yaxshilashga yordam bering%1$@";
+"screen_analytics_prompt_title" = "%1$@ʼni yaxshilashga yordam bering";
 "screen_analytics_settings_share_data" = "Analitik ma'lumotlarni ulashish";
 "screen_app_lock_biometric_authentication" = "biometrik autentifikatsiya";
 "screen_app_lock_biometric_unlock" = "biometrik qulf ochish";
@@ -826,7 +835,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Iltimos, bir xil PIN kodni ikkita marta kiriting";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN kodlar bir-biriga mos kelmadi";
 "screen_app_lock_signout_alert_message" = "Davom etish uchun qayta kirishingiz va yangi PIN yaratishingiz kerak boʻladi.";
-"screen_app_lock_signout_alert_title" = "Siz tizimdan chiqmoqdasiz";
+"screen_app_lock_signout_alert_title" = "Bu qurilma olib tashlanmoqda";
 "screen_blocked_users_empty" = "Sizda bloklangan foydalanuvchi yo‘q";
 "screen_blocked_users_unblocking" = "Blokdan chiqarilmoqda…";
 "screen_bug_report_attach_screenshot" = "Ekran tasvirini biriktirish";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Qayta tiklash kalitini o'zgartiring";
 "screen_chat_backup_recovery_action_change_description" = "Agar barcha mavjud qurilmalaringizni yoʻqotgan boʻlsangiz, tiklash kaliti yordamida kriptografik shaxsingizni va xabarlar tarixingizni qayta tiklang.";
 "screen_chat_backup_recovery_action_confirm_description" = "Kalit xotirasi hozirda sinxronlanmagan.";
-"screen_chat_backup_recovery_action_setup_description" = "Agar barcha qurilmalaringizni yo‘qotib qo‘ysangiz yoki tizimdan chiqqan bo‘lsangiz, shifrlangan xabarlaringizga ruxsat oling%1$@ hamma joyda.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "%1$@ ni kompyuterda oching";
 "screen_create_new_recovery_key_list_item_2" = "Hisobingizga qaytadan kiring";
 "screen_create_new_recovery_key_list_item_3" = "Qurilmangizni tasdiqlash soʻralganda, %1$@ ni tanlang";
@@ -1007,8 +1016,8 @@
 "screen_onboarding_sign_in_manually" = "Qo'lda tizimga kiring";
 "screen_onboarding_sign_in_with_qr_code" = "QR kod bilan tizimga kiring";
 "screen_onboarding_sign_up" = "Hisob yaratish";
-"screen_onboarding_welcome_message" = "Eng tezkor %1$@ga xush kelibsiz. Tezlik va oddylik uchun super zaryadlangan.";
-"screen_onboarding_welcome_subtitle" = "%1$@ga Xush kelibsiz. Tezlik va oddylik uchun o'ta zaryadlangan.";
+"screen_onboarding_welcome_message" = "Eng tezkor %1$@ga xush kelibsiz. Tezlik va oddiylik uchun super zaryadlangan.";
+"screen_onboarding_welcome_subtitle" = "%1$@ga Xush kelibsiz. Tezlik va oddiylik uchun o'ta zaryadlangan.";
 "screen_onboarding_welcome_title" = "Elementingizda bo'ling";
 "screen_polls_history_empty_ongoing" = "Davom etayotgan soʻrovlar topilmadi.";
 "screen_polls_history_empty_past" = "Avvalgi soʻrovnomalar topilmadi.";
@@ -1234,7 +1243,7 @@
 "screen_server_confirmation_message_login_element_dot_io" = "Element xodimlari uchun shaxsiy server.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix xavfsiz, markazlashmagan aloqa uchun ochiq tarmoqdir.";
 "screen_server_confirmation_message_register" = "Bu sizning suhbatlaringiz yashaydigan joy - xuddi siz elektron pochta xabarlaringizni saqlash uchun elektron pochta provayderidan foydalanganingiz kabi.";
-"screen_server_confirmation_title_login" = "Siz tizimga kirmoqchisiz%1$@";
+"screen_server_confirmation_title_login" = "%1$@ hisobiga kirmoqchisiz";
 "screen_server_confirmation_title_picker_mode" = "Hisob provayderini tanlang";
 "screen_server_confirmation_title_register" = "Hisob yaratmoqchisiz%1$@";
 "screen_session_verification_cancelled_subtitle" = "Nimadir noto‘g‘ri ko‘rinadi. Yoki so‘rov muddati tugadi yoki so‘rov rad etildi.";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Siz oxirgi sessiyangizdan chiqmoqdasiz. Agar hozir chiqib ketsangiz, shifrlangan xabarlaringizga kira olmaysiz.";
 "screen_signout_recovery_disabled_title" = "Qayta tiklash sozlanmagan";
 "screen_signout_save_recovery_key_subtitle" = "Siz oxirgi sessiyangizdan chiqmoqdasiz. Agar hozir chiqib ketsangiz, shifrlangan xabarlaringizga kira olmay qolishingiz mumkin.";
+"screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_start_chat_error_starting_chat" = "Suhbatni boshlashda xatolik yuz berdi";
 "screen_view_location_title" = "Joylashuv";
 "session_verification_banner_message" = "Siz yangi qurilmadan foydalanayotganga o‘xshaysiz. Shifrlangan xabarlaringizga kirish uchun boshqa qurilma bilan tasdiqlang.";
@@ -1482,8 +1492,8 @@
 "screen_account_provider_signin_subtitle" = "Bu sizning suhbatlaringiz yashaydigan joy - xuddi siz elektron pochta xabarlaringizni saqlash uchun elektron pochta provayderidan foydalanganingiz kabi.";
 "screen_account_provider_signup_subtitle" = "Bu sizning suhbatlaringiz yashaydigan joy - xuddi siz elektron pochta xabarlaringizni saqlash uchun elektron pochta provayderidan foydalanganingiz kabi.";
 "screen_analytics_settings_help_us_improve" = "Muammolarni aniqlashda yordam berish uchun anonim foydalanish maʼlumotlarini baham koʻring.";
-"screen_analytics_settings_read_terms" = "Siz bizning barcha shartlarimizni o'qishingiz mumkin%1$@.";
-"screen_analytics_settings_read_terms_content_link" = "Bu yerga";
+"screen_analytics_settings_read_terms" = "Barcha shartlar bilan %1$@ tanishib chiqishingiz mumkin.";
+"screen_analytics_settings_read_terms_content_link" = "bu yerda";
 "screen_blocked_users_unblock_alert_action" = "Blokdan chiqarish";
 "screen_blocked_users_unblock_alert_description" = "Ulardan kelgan barcha xabarlarni yana koʻrishingiz mumkin boʻladi.";
 "screen_blocked_users_unblock_alert_title" = "Foydalanuvchini blokdan chiqarish";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Tizimdan chiqish";
 "screen_signout_key_backup_offline_title" = "Kalitlaringiz hamon zaxiralanmoqda";
 "screen_signout_preference_item" = "Tizimdan chiqish";
-"screen_signout_save_recovery_key_title" = "Zaxira kalitingizni saqladingizmi?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Sizni ushbu xabarga ruxsatingiz yoʻq";
 "troubleshoot_notifications_test_blocked_users_title" = "Bloklangan foydalanuvchilar";
 "troubleshoot_notifications_entry_point_push_history_title" = "Bildirishnoma tarixi";

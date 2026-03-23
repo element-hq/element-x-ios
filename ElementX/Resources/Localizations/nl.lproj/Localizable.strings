@@ -112,6 +112,7 @@
 "action_leave_space" = "Leave space";
 "action_load_more" = "Meer laden";
 "action_manage_account" = "Account beheren";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Apparaten beheren";
 "action_manage_rooms" = "Manage rooms";
 "action_message" = "Bericht";
@@ -162,6 +163,7 @@
 "action_start_over" = "Opnieuw beginnen";
 "action_start_verification" = "Verificatie starten";
 "action_static_map_load" = "Tik om kaart te laden";
+"action_stop" = "Stop";
 "action_take_photo" = "Foto maken";
 "action_tap_for_options" = "Tik voor opties";
 "action_translate" = "Translate";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Geavanceerde instellingen";
 "common_an_image" = "an image";
 "common_analytics" = "Gebruiksgegevens";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Weergave";
 "common_audio" = "Geluid";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Empty file";
 "common_encryption" = "Encryption";
 "common_encryption_enabled" = "Encryptie ingeschakeld";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Voer je pincode in";
 "common_error" = "Fout";
 "common_everyone" = "Iedereen";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Line copied to clipboard";
 "common_link_copied_to_clipboard" = "Link gekopieerd naar klembord";
 "common_link_new_device" = "Link new device";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Laden...";
 "common_loading_more" = "Loading more…";
 "common_message" = "Bericht";
@@ -319,6 +325,7 @@
 "common_settings" = "Instellingen";
 "common_share_space" = "Share space";
 "common_shared_history" = "New members see history";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Gedeelde locatie";
 "common_shared_space" = "Shared space";
 "common_signing_out" = "Uitloggen";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Spraakbericht";
 "common_waiting" = "Wachten…";
 "common_waiting_for_decryption_key" = "Wachten op dit bericht";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Jij";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Security & privacy";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Herstelsleutel wijzigen";
 "screen_chat_backup_recovery_action_change_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_chat_backup_recovery_action_confirm_description" = "Je sleutelopslag is momenteel niet gesynchroniseerd.";
-"screen_chat_backup_recovery_action_setup_description" = "Krijg toegang tot je versleutelde berichten als je al je apparaten kwijtraakt of overal uit %1$@ bent uitgelogd.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Open %1$@ op een desktopapparaat";
 "screen_create_new_recovery_key_list_item_2" = "Log opnieuw in op je account";
 "screen_create_new_recovery_key_list_item_3" = "Wanneer je wordt gevraagd om je apparaat te verifiëren, selecteer %1$@";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, verlies je de toegang tot je versleutelde berichten.";
 "screen_signout_recovery_disabled_title" = "Herstelmogelijkheid niet ingesteld";
 "screen_signout_save_recovery_key_subtitle" = "Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, kan het dat je de toegang tot je versleutelde berichten verliest.";
+"screen_signout_save_recovery_key_title" = "Heb je je herstelsleutel opgeslagen?";
 "screen_start_chat_error_starting_chat" = "Er is een fout opgetreden bij het starten van een chat";
 "screen_view_location_title" = "Locatie";
 "session_verification_banner_message" = "Het lijkt erop dat je een nieuw apparaat gebruikt. Verifieer met een ander apparaat om toegang te krijgen tot je versleutelde berichten.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Uitloggen";
 "screen_signout_key_backup_offline_title" = "De backup van je sleutels is nog bezig";
 "screen_signout_preference_item" = "Uitloggen";
-"screen_signout_save_recovery_key_title" = "Heb je je herstelsleutel opgeslagen?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Je hebt geen toegang tot dit bericht";
 "troubleshoot_notifications_test_blocked_users_title" = "Geblokkeerde gebruikers";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push history";

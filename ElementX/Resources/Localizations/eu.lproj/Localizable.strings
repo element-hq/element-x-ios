@@ -112,6 +112,7 @@
 "action_leave_space" = "Leave space";
 "action_load_more" = "Kargatu gehiago";
 "action_manage_account" = "Kudeatu kontua";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Kudeatu gailuak";
 "action_manage_rooms" = "Manage rooms";
 "action_message" = "Bidali mezua";
@@ -162,6 +163,7 @@
 "action_start_over" = "Hasi berriro";
 "action_start_verification" = "Hasi egiaztapena";
 "action_static_map_load" = "Sakatu mapa kargatzeko";
+"action_stop" = "Stop";
 "action_take_photo" = "Egin argazkia";
 "action_tap_for_options" = "Sakatu aukerak ikusteko";
 "action_translate" = "Translate";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Ezarpen aurreratuak";
 "common_an_image" = "irudia";
 "common_analytics" = "Estatistikak";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Itxura";
 "common_audio" = "Audioa";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Fitxategia hutsik dago";
 "common_encryption" = "Zifratzea";
 "common_encryption_enabled" = "Zifratzea gaituta";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Sartu zure PINa";
 "common_error" = "Errorea";
 "common_everyone" = "Guztiak";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Lerroa arbelean kopiatu da";
 "common_link_copied_to_clipboard" = "Esteka arbelean kopiatu da";
 "common_link_new_device" = "Link new device";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Kargatzen…";
 "common_loading_more" = "Gehiago kargatzen…";
 "common_message" = "Mezua";
@@ -319,6 +325,7 @@
 "common_settings" = "Ezarpenak";
 "common_share_space" = "Share space";
 "common_shared_history" = "New members see history";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Partekatutako kokapena";
 "common_shared_space" = "Shared space";
 "common_signing_out" = "Saioa amaitzen";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Ahots-mezua";
 "common_waiting" = "Zain…";
 "common_waiting_for_decryption_key" = "Mezu honen zain";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Zeu";
 "common_unable_to_decrypt_insecure_device" = "Egiaztatu gabeko gailu batetik bidalia";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Gelaren ikusgarritasuna";
 "screen_security_and_privacy_title" = "Segurtasuna eta pribatutasuna";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Aldatu berreskuratze-gakoa";
 "screen_chat_backup_recovery_action_change_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_chat_backup_recovery_action_confirm_description" = "Zure giltzen-biltegiratzea gaur-gaurkoz sinkronizatu gabe dago.";
-"screen_chat_backup_recovery_action_setup_description" = "Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Ireki %1$@ mahaigaineko gailu batean";
 "screen_create_new_recovery_key_list_item_2" = "Hasi saioa berriro zure kontuan";
 "screen_create_new_recovery_key_list_item_3" = "Gailua egiaztatzeko eskatzen zaizunean, hautatu %1$@";
@@ -1284,14 +1293,15 @@
 "screen_signed_out_title" = "Saioa amaitu duzu";
 "screen_signout_confirmation_dialog_content" = "Ziur saioa amaitu nahi duzula?";
 "screen_signout_in_progress_dialog_content" = "Saioa amaitzen…";
-"screen_signout_key_backup_disabled_subtitle" = "You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.";
+"screen_signout_key_backup_disabled_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
 "screen_signout_key_backup_disabled_title" = "Babeskopia desaktibatu duzu";
-"screen_signout_key_backup_offline_subtitle" = "Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before signing out.";
+"screen_signout_key_backup_offline_subtitle" = "Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before you remove this device.";
 "screen_signout_key_backup_ongoing_subtitle" = "Itxaron eragiketa amaitu arte saioa amaitu baino lehen.";
 "screen_signout_key_backup_ongoing_title" = "Your keys are still being backed up";
-"screen_signout_recovery_disabled_subtitle" = "You are about to sign out of your last session. If you sign out now, you'll lose access to your encrypted messages.";
+"screen_signout_recovery_disabled_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
 "screen_signout_recovery_disabled_title" = "Berreskuratzea ez da konfiguratu";
-"screen_signout_save_recovery_key_subtitle" = "You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.";
+"screen_signout_save_recovery_key_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
+"screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_start_chat_error_starting_chat" = "Errorea gertatu da txata hasten saiatzean";
 "screen_view_location_title" = "Kokapena";
 "session_verification_banner_message" = "Gailu berri bat erabiltzen ari zarela dirudi. Egiaztatu beste gailu batekin enkriptatutako mezuak atzitzeko.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Amaitu saioa";
 "screen_signout_key_backup_offline_title" = "Your keys are still being backed up";
 "screen_signout_preference_item" = "Amaitu saioa";
-"screen_signout_save_recovery_key_title" = "Gorde al duzu berreskuratze-gakoa?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "You don't have access to this message";
 "troubleshoot_notifications_test_blocked_users_title" = "Blokeatutako erabiltzaileak";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push history";

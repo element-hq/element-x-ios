@@ -112,6 +112,7 @@
 "action_leave_space" = "Lämna utrymmet";
 "action_load_more" = "Ladda mer";
 "action_manage_account" = "Hantera konto";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Hantera enheter";
 "action_manage_rooms" = "Manage rooms";
 "action_message" = "Meddela";
@@ -162,6 +163,7 @@
 "action_start_over" = "Börja om";
 "action_start_verification" = "Starta verifiering";
 "action_static_map_load" = "Tryck för att ladda kartan";
+"action_stop" = "Stop";
 "action_take_photo" = "Ta ett foto";
 "action_tap_for_options" = "Tryck för alternativ";
 "action_translate" = "Translate";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Avancerade inställningar";
 "common_an_image" = "en bild";
 "common_analytics" = "Analysdata";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du loggades ut ur sessionen";
 "common_appearance" = "Utseende";
 "common_audio" = "Ljud";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Tom fil";
 "common_encryption" = "Kryptering";
 "common_encryption_enabled" = "Kryptering aktiverad";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Ange din PIN-kod";
 "common_error" = "Fel";
 "common_everyone" = "Alla";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Rad kopierad till klippbordet";
 "common_link_copied_to_clipboard" = "Länk kopierad till klippbordet";
 "common_link_new_device" = "Link new device";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Laddar …";
 "common_loading_more" = "Laddar mer …";
 "common_message" = "Meddelande";
@@ -319,6 +325,7 @@
 "common_settings" = "Inställningar";
 "common_share_space" = "Share space";
 "common_shared_history" = "New members see history";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Delade plats";
 "common_shared_space" = "Shared space";
 "common_signing_out" = "Loggar ut";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Röstmeddelande";
 "common_waiting" = "Väntar …";
 "common_waiting_for_decryption_key" = "Väntar på detta meddelande";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Du";
 "common_unable_to_decrypt_insecure_device" = "Skickad från en osäker enhet";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Synlighet";
 "screen_security_and_privacy_title" = "Säkerhet och sekretess";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Byt återställningsnyckel";
 "screen_chat_backup_recovery_action_change_description" = "Återställ din kryptografiska identitet och meddelandehistorik med en återställningsnyckel om du har tappat bort alla dina befintliga enheter.";
 "screen_chat_backup_recovery_action_confirm_description" = "Din nyckellagring är för närvarande osynkroniserad.";
-"screen_chat_backup_recovery_action_setup_description" = "Få tillgång till dina krypterade meddelanden om du tappar bort alla dina enheter eller blir utloggad ur %1$@ överallt.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Öppna %1$@ på en skrivbordsenhet";
 "screen_create_new_recovery_key_list_item_2" = "Logga in på ditt konto igen";
 "screen_create_new_recovery_key_list_item_3" = "När du ombeds att verifiera din enhet, välj %1$@";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Du är på väg att logga ut ur din sista session. Om du loggar ut nu förlorar du åtkomsten till dina krypterade meddelanden.";
 "screen_signout_recovery_disabled_title" = "Återställning inte inställd";
 "screen_signout_save_recovery_key_subtitle" = "Du är på väg att logga ut från din senaste session. Om du loggar ut nu kan du förlora åtkomsten till dina krypterade meddelanden.";
+"screen_signout_save_recovery_key_title" = "Har du sparat din återställningsnyckel?";
 "screen_start_chat_error_starting_chat" = "Ett fel uppstod när du försökte starta en chatt";
 "screen_view_location_title" = "Plats";
 "session_verification_banner_message" = "Det verkar som om du använder en ny enhet. Verifiera med en annan enhet för att komma åt dina krypterade meddelanden.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Logga ut";
 "screen_signout_key_backup_offline_title" = "Dina nycklar säkerhetskopieras fortfarande";
 "screen_signout_preference_item" = "Logga ut";
-"screen_signout_save_recovery_key_title" = "Har du sparat din återställningsnyckel?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Du har inte tillgång till det här meddelandet";
 "troubleshoot_notifications_test_blocked_users_title" = "Blockerade användare";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push-historik";

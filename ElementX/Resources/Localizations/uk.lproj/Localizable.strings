@@ -112,6 +112,7 @@
 "action_leave_space" = "Вийти з простору";
 "action_load_more" = "Завантажити ще";
 "action_manage_account" = "Керування обліковим записом";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Керування пристроями";
 "action_manage_rooms" = "Керувати кімнатами";
 "action_message" = "Написати";
@@ -162,6 +163,7 @@
 "action_start_over" = "Почати спочатку";
 "action_start_verification" = "Почати верифікацію";
 "action_static_map_load" = "Натисніть, щоб завантажити мапу";
+"action_stop" = "Stop";
 "action_take_photo" = "Зробити фото";
 "action_tap_for_options" = "Торкніться, щоб переглянути параметри";
 "action_translate" = "Перекласти";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Додаткові налаштування";
 "common_an_image" = "зображення";
 "common_analytics" = "Аналітика";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Ви вийшли з сеансу";
 "common_appearance" = "Тема";
 "common_audio" = "Аудіо";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Порожній файл";
 "common_encryption" = "Шифрування";
 "common_encryption_enabled" = "Шифрування ввімкнено";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Введіть свій PIN-код";
 "common_error" = "Помилка";
 "common_everyone" = "Усі";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Рядок скопійовано до буфера обміну";
 "common_link_copied_to_clipboard" = "Посилання скопійовано в буфер обміну";
 "common_link_new_device" = "Під'єднати новий пристрій";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Завантаження";
 "common_loading_more" = "Завантаження наступних…";
 "common_message" = "Повідомлення";
@@ -319,6 +325,7 @@
 "common_settings" = "Налаштування";
 "common_share_space" = "Share space";
 "common_shared_history" = "Нові учасники бачать історію";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Поширене розташування";
 "common_shared_space" = "Shared space";
 "common_signing_out" = "Вихід";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Голосове повідомлення";
 "common_waiting" = "Очікування...";
 "common_waiting_for_decryption_key" = "Чекаємо на це повідомлення";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Будь-хто може переглянути історію";
 "common_you" = "Ви";
 "common_unable_to_decrypt_insecure_device" = "Надіслано з незахищеного пристрою";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Видимість";
 "screen_security_and_privacy_title" = "Безпека й приватність";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Кімната";
 "screen_space_empty_state_title" = "Додайте свою першу кімнату";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Змінити ключ відновлення";
 "screen_chat_backup_recovery_action_change_description" = "Відновіть криптографічну ідентичність та історію повідомлень за допомогою ключа відновлення, якщо ви втратили всі наявні пристрої.";
 "screen_chat_backup_recovery_action_confirm_description" = "Сховище ключів наразі не синхронізовано.";
-"screen_chat_backup_recovery_action_setup_description" = "Отримайте доступ до своїх зашифрованих повідомлень, якщо ви втратите всі свої пристрої або вийшли з %1$@ на всіх пристроях.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Відкрийте %1$@ на комп'ютері";
 "screen_create_new_recovery_key_list_item_2" = "Увійдіть до вашого облікового запису знову";
 "screen_create_new_recovery_key_list_item_3" = "Коли вас попросять підтвердити пристрій, виберіть %1$@";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Ви збираєтеся вийти зі свого останнього сеансу. Якщо ви вийдете зараз, ви втратите доступ до своїх зашифрованих повідомлень.";
 "screen_signout_recovery_disabled_title" = "Відновлення не налаштовано";
 "screen_signout_save_recovery_key_subtitle" = "Ви збираєтеся вийти зі свого останнього сеансу. Якщо вийти зараз, ви можете втратити доступ до зашифрованих повідомлень.";
+"screen_signout_save_recovery_key_title" = "Ви зберегли ключ відновлення?";
 "screen_start_chat_error_starting_chat" = "Під час спроби почати бесіду сталася помилка";
 "screen_view_location_title" = "Розташування";
 "session_verification_banner_message" = "Схоже, ви використовуєте новий пристрій. Щоб отримати доступ до зашифрованих повідомлень, підтвердьте особу за допомогою іншого пристрою.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Вийти";
 "screen_signout_key_backup_offline_title" = "Резервне копіювання ваших ключів ще триває";
 "screen_signout_preference_item" = "Вийти";
-"screen_signout_save_recovery_key_title" = "Ви зберегли ключ відновлення?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Ви не маєте доступу до цього повідомлення";
 "troubleshoot_notifications_test_blocked_users_title" = "Заблоковані користувачі";
 "troubleshoot_notifications_entry_point_push_history_title" = "Історія push-сповіщень";

@@ -95,9 +95,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d vote</string>
+			<string>%d balsas</string>
+			<key>few</key>
+			<string>%d balsai</string>
 			<key>other</key>
-			<string>%d votes</string>
+			<string>%d balsų</string>
 		</dict>
 	</dict>
 	<key>common_replies</key>

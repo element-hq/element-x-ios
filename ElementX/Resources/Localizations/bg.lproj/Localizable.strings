@@ -112,6 +112,7 @@
 "action_leave_space" = "Напускане на пространството";
 "action_load_more" = "Зареждане на още";
 "action_manage_account" = "Управление на профила";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Управление на устройствата";
 "action_manage_rooms" = "Manage rooms";
 "action_message" = "Съобщение";
@@ -162,6 +163,7 @@
 "action_start_over" = "Start over";
 "action_start_verification" = "Започване на потвърждаването";
 "action_static_map_load" = "Докоснете за зареждане на карта";
+"action_stop" = "Stop";
 "action_take_photo" = "Снимка";
 "action_tap_for_options" = "Докоснете за опции";
 "action_translate" = "Translate";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Разширени настройки";
 "common_an_image" = "изображение";
 "common_analytics" = "Статистика";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Облик";
 "common_audio" = "Аудио";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Празен файл";
 "common_encryption" = "Шифроване";
 "common_encryption_enabled" = "Шифроването е включено";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Въведете своя PIN";
 "common_error" = "Грешка";
 "common_everyone" = "Всеки";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Line copied to clipboard";
 "common_link_copied_to_clipboard" = "Връзката е копирана в клипборда";
 "common_link_new_device" = "Link new device";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Зарежда се…";
 "common_loading_more" = "Зарежда се още…";
 "common_message" = "Съобщение";
@@ -319,6 +325,7 @@
 "common_settings" = "Настройки";
 "common_share_space" = "Споделяне на пространството";
 "common_shared_history" = "New members see history";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Споделено местоположение";
 "common_shared_space" = "Shared space";
 "common_signing_out" = "Излизате";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Гласово съобщение";
 "common_waiting" = "Изчаква се…";
 "common_waiting_for_decryption_key" = "В очакване на това съобщение";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Вие";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Защита и поверителност";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
@@ -826,7 +835,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Моля, въведете един и същ PIN два пъти";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PINs не съвпадат";
 "screen_app_lock_signout_alert_message" = "You’ll need to re-login and create a new PIN to proceed";
-"screen_app_lock_signout_alert_title" = "You are being signed out";
+"screen_app_lock_signout_alert_title" = "This device is being removed";
 "screen_blocked_users_empty" = "You have no blocked users";
 "screen_blocked_users_unblocking" = "Unblocking…";
 "screen_bug_report_attach_screenshot" = "Прикачване на екранна снимка";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Промяна на ключа за възстановяване";
 "screen_chat_backup_recovery_action_change_description" = "Възстановете криптографската си самоличност и историята на съобщенията с ключ за възстановяване, ако сте загубили всичките си съществуващи устройства.";
 "screen_chat_backup_recovery_action_confirm_description" = "Хранилището ви за ключове в момента не е синхронизирано.";
-"screen_chat_backup_recovery_action_setup_description" = "Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Open %1$@ in a desktop device";
 "screen_create_new_recovery_key_list_item_2" = "Sign into your account again";
 "screen_create_new_recovery_key_list_item_3" = "When asked to verify your device, select %1$@";
@@ -948,8 +957,8 @@
 "screen_join_room_title_knock" = "Want to join this room?";
 "screen_join_room_title_no_preview" = "Preview is not available";
 "screen_key_backup_disable_confirmation_action_turn_off" = "Изключване";
-"screen_key_backup_disable_confirmation_description" = "You will lose your encrypted messages if you are signed out of all devices.";
-"screen_key_backup_disable_confirmation_title" = "Are you sure you want to turn off backup?";
+"screen_key_backup_disable_confirmation_description" = "You will lose your encrypted chat history and need to reset your digital identity if you remove all your devices.";
+"screen_key_backup_disable_confirmation_title" = "Are you sure you want to delete key storage?";
 "screen_key_backup_disable_description" = "Изтриването на хранилището за ключове ще премахне вашата криптографска самоличност и ключове за съобщения от сървъра и ще изключи следните функции за сигурност:";
 "screen_key_backup_disable_description_point_1" = "You will not have encrypted message history on new devices";
 "screen_key_backup_disable_description_point_2" = "You will lose access to your encrypted messages if you are signed out of %1$@ everywhere";
@@ -1284,14 +1293,15 @@
 "screen_signed_out_title" = "Излезли сте";
 "screen_signout_confirmation_dialog_content" = "Сигурни ли сте, че искате да излезете?";
 "screen_signout_in_progress_dialog_content" = "Излизане…";
-"screen_signout_key_backup_disabled_subtitle" = "You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.";
-"screen_signout_key_backup_disabled_title" = "You have turned off backup";
-"screen_signout_key_backup_offline_subtitle" = "Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before signing out.";
-"screen_signout_key_backup_ongoing_subtitle" = "Please wait for this to complete before signing out.";
+"screen_signout_key_backup_disabled_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
+"screen_signout_key_backup_disabled_title" = "You’re about to lose access to your encrypted chats";
+"screen_signout_key_backup_offline_subtitle" = "Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before you remove this device.";
+"screen_signout_key_backup_ongoing_subtitle" = "Please wait for this to complete before removing this device.";
 "screen_signout_key_backup_ongoing_title" = "Your keys are still being backed up";
-"screen_signout_recovery_disabled_subtitle" = "You are about to sign out of your last session. If you sign out now, you'll lose access to your encrypted messages.";
-"screen_signout_recovery_disabled_title" = "Recovery not set up";
-"screen_signout_save_recovery_key_subtitle" = "You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.";
+"screen_signout_recovery_disabled_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
+"screen_signout_recovery_disabled_title" = "You’re about to lose access to your encrypted chats";
+"screen_signout_save_recovery_key_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
+"screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_start_chat_error_starting_chat" = "Възникна грешка при опита за започване на чат";
 "screen_view_location_title" = "Местоположение";
 "session_verification_banner_message" = "Изглежда, че използвате ново устройство. Потвърдете с друго устройство за достъп до вашите шифровани съобщения.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Изход";
 "screen_signout_key_backup_offline_title" = "Your keys are still being backed up";
 "screen_signout_preference_item" = "Изход";
-"screen_signout_save_recovery_key_title" = "Have you saved your recovery key?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Нямате достъп до това съобщение";
 "troubleshoot_notifications_test_blocked_users_title" = "Блокирани потребители";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push history";

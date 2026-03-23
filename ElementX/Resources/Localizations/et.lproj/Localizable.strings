@@ -112,6 +112,7 @@
 "action_leave_space" = "Lahku kogukonnast";
 "action_load_more" = "Näita veel";
 "action_manage_account" = "Halda kasutajakontot";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Halda seadmeid";
 "action_manage_rooms" = "Halda jututuba";
 "action_message" = "Saada sõnum";
@@ -162,6 +163,7 @@
 "action_start_over" = "Alusta uuesti";
 "action_start_verification" = "Alusta verifitseerimist";
 "action_static_map_load" = "Kaardi laadimiseks klõpsa";
+"action_stop" = "Stop";
 "action_take_photo" = "Pildista";
 "action_tap_for_options" = "Valikuteks klõpsa";
 "action_translate" = "Tõlgi";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Täiendavad seadistused";
 "common_an_image" = "pilt";
 "common_analytics" = "Analüütika";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Sa olid sessioonist väljaloginud";
 "common_appearance" = "Välimus";
 "common_audio" = "Heli";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Tühi fail";
 "common_encryption" = "Krüptimine";
 "common_encryption_enabled" = "Krüptimine on kasutusel";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Sisesta oma PIN-kood";
 "common_error" = "Viga";
 "common_everyone" = "Kõik";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Rida on kopeeritud lõikelauale";
 "common_link_copied_to_clipboard" = "Link on kopeeritud lõikelauale";
 "common_link_new_device" = "Seo uus seade";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Laadime…";
 "common_loading_more" = "Laadime veel...";
 "common_message" = "Sõnum";
@@ -319,6 +325,7 @@
 "common_settings" = "Seadistused";
 "common_share_space" = "Jaga kogukonda";
 "common_shared_history" = "Uued liikmed näevad ajalugu";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Jagatud asukoht";
 "common_shared_space" = "Jagatud kogukond";
 "common_signing_out" = "Logime välja";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Häälsõnum";
 "common_waiting" = "Ootame…";
 "common_waiting_for_decryption_key" = "Ootame selle sõnumi dekrüptimisvõtit";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Kõik võivad ajalugu näha";
 "common_you" = "Sina";
 "common_unable_to_decrypt_insecure_device" = "Saadetud ebaturvalisest seadmest";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Aadressid on mugav viis jututubade ja kogukondade leidmiseks ning tagab mugava võimaluse nende jagamiseks.";
 "screen_security_and_privacy_room_visibility_section_header" = "Nähtavus";
 "screen_security_and_privacy_title" = "Turvalisus ja privaatsus";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Jututuba";
 "screen_space_empty_state_title" = "Lisa oma esimene jututuba";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Muuda taastevõtit";
 "screen_chat_backup_recovery_action_change_description" = "Kui sa oled kaotanud ligipääsu kõikidele oma olemasolevatele seadmetele, siis sa saad taastevõtme abil taastada ligipääsu oma krüptoidentiteedile ja sõnumite ajaloole.";
 "screen_chat_backup_recovery_action_confirm_description" = "Sinu krüptovõtmete varundus pole hetkel enam sünkroonis.";
-"screen_chat_backup_recovery_action_setup_description" = "Säilita ligipääs oma krüptitud sõnumitele ka siis, kui sa kaotad kõik oma seadmed ja/või logid kõikjal välja rakendusest %1$@.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Ava %1$@ töölauaga seadmes";
 "screen_create_new_recovery_key_list_item_2" = "Logi uuesti sisse oma kasutajakontole";
 "screen_create_new_recovery_key_list_item_3" = "Kui sul palutakse seadet verifitseerida, vali %1$@";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Sa oled logimas välja oma viimasest sessioonist. Kui teed seda nüüd, siis kaotad ligipääsu oma krüptitud sõnumitele.";
 "screen_signout_recovery_disabled_title" = "Andmete taastamine on seadistamata";
 "screen_signout_save_recovery_key_subtitle" = "Sa oled logimas välja oma viimasest sessioonist. Kui teed seda nüüd, siis ilmselt kaotad ligipääsu oma krüptitud sõnumitele.";
+"screen_signout_save_recovery_key_title" = "Kas sa oled oma taastevõtme salvestanud?";
 "screen_start_chat_error_starting_chat" = "Vestluse alustamisel tekkis viga";
 "screen_view_location_title" = "Asukoht";
 "session_verification_banner_message" = "Tundub, et kasutad uut seadet. Oma krüptitud sõnumite lugemiseks verifitseeri ta mõne muu oma seadmega.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Logi välja";
 "screen_signout_key_backup_offline_title" = "Sinu krüptovõtmed on veel varundamisel";
 "screen_signout_preference_item" = "Logi välja";
-"screen_signout_save_recovery_key_title" = "Kas sa oled oma taastevõtme talletanud?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Sul pole ligipääsu antud sõnumile";
 "troubleshoot_notifications_test_blocked_users_title" = "Blokeeritud kasutajad";
 "troubleshoot_notifications_entry_point_push_history_title" = "Tõuketeadete ajalugu";

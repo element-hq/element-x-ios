@@ -112,6 +112,7 @@
 "action_leave_space" = "Quitter l’espace";
 "action_load_more" = "Voir plus";
 "action_manage_account" = "Gérer le compte";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Gérez les sessions";
 "action_manage_rooms" = "Gérer les salons";
 "action_message" = "Message";
@@ -162,6 +163,7 @@
 "action_start_over" = "Recommencer";
 "action_start_verification" = "Commencer la vérification";
 "action_static_map_load" = "Cliquez pour charger la carte";
+"action_stop" = "Stop";
 "action_take_photo" = "Prendre une photo";
 "action_tap_for_options" = "Appuyez pour afficher les options";
 "action_translate" = "Traduire";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Paramètres avancés";
 "common_an_image" = "une image";
 "common_analytics" = "Statistiques d’utilisation";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Vous avez été déconnecté de la session";
 "common_appearance" = "Apparence";
 "common_audio" = "Audio";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Fichier vide";
 "common_encryption" = "Chiffrement";
 "common_encryption_enabled" = "Chiffrement activé";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Saisissez votre code PIN";
 "common_error" = "Erreur";
 "common_everyone" = "Tout le monde";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Ligne copiée dans le presse-papiers";
 "common_link_copied_to_clipboard" = "Lien copié dans le presse-papiers";
 "common_link_new_device" = "Associer un nouvel appareil";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Chargement…";
 "common_loading_more" = "Chargement…";
 "common_message" = "Message";
@@ -319,6 +325,7 @@
 "common_settings" = "Paramètres";
 "common_share_space" = "Partager l'espace";
 "common_shared_history" = "Les nouveaux membres voient les anciens messages";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Position partagée";
 "common_shared_space" = "Espace partagé";
 "common_signing_out" = "Déconnexion";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Message vocal";
 "common_waiting" = "En attente…";
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Tout le monde peut voir les anciens messages";
 "common_you" = "Vous";
 "common_unable_to_decrypt_insecure_device" = "Envoyé depuis un appareil non sécurisé";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Les adresses permettent de trouver et d'accéder aux salons et aux espaces. Elles facilitent également leur partage avec d'autres personnes.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilité";
 "screen_security_and_privacy_title" = "Sécurité & confidentialité";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Salon";
 "screen_space_empty_state_title" = "Ajoutez votre premier salon";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Changer la clé de récupération";
 "screen_chat_backup_recovery_action_change_description" = "Récupérez votre identité cryptographique et l'historique de vos messages à l'aide d'une clé de récupération si vous avez perdu tous vos appareils existants.";
 "screen_chat_backup_recovery_action_confirm_description" = "Le stockage de vos clés est actuellement désynchronisé.";
-"screen_chat_backup_recovery_action_setup_description" = "Accédez à vos messages chiffrés si vous perdez tous vos appareils ou que vous êtes déconnecté de %1$@ partout.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Ouvrez %1$@ sur un ordinateur";
 "screen_create_new_recovery_key_list_item_2" = "Connectez-vous à nouveau à votre compte";
 "screen_create_new_recovery_key_list_item_3" = "Lorsque vous devrez vérifier la session, choisissez %1$@";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Vous êtes sur le point de vous déconnecter de votre dernier appareil. Si vous le faites maintenant, vous perdrez l’accès à l’historique de vos messages.";
 "screen_signout_recovery_disabled_title" = "La récupération n’est pas configurée.";
 "screen_signout_save_recovery_key_subtitle" = "Vous êtes sur le point de vous déconnecter de votre dernière session. Si vous le faites maintenant, vous perdrez l’accès à l’historique de vos discussions chiffrées.";
+"screen_signout_save_recovery_key_title" = "Avez-vous sauvegardé votre clé de récupération?";
 "screen_start_chat_error_starting_chat" = "Une erreur s’est produite lors de la tentative de création de la discussion";
 "screen_view_location_title" = "Position";
 "session_verification_banner_message" = "Il semblerait que vous utilisiez un nouvel appareil. Vérifiez la session avec un autre de vos appareils pour accéder à vos messages chiffrés.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Se déconnecter";
 "screen_signout_key_backup_offline_title" = "Vos clés sont en cours de sauvegarde";
 "screen_signout_preference_item" = "Se déconnecter";
-"screen_signout_save_recovery_key_title" = "Avez-vous sauvegardé votre clé de récupération ?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Vous ne pouvez pas voir ce message";
 "troubleshoot_notifications_test_blocked_users_title" = "Utilisateurs bloqués";
 "troubleshoot_notifications_entry_point_push_history_title" = "Historique des Push";

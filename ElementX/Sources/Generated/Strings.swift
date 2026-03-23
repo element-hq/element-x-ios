@@ -502,9 +502,9 @@ internal enum L10n {
   internal static var commonEncryption: String { return L10n.tr("Localizable", "common_encryption") }
   /// Encryption enabled
   internal static var commonEncryptionEnabled: String { return L10n.tr("Localizable", "common_encryption_enabled") }
-  /// Ends %1$@
-  internal static func commonEndsInTimeIos(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "common_ends_in_time_ios", String(describing: p1))
+  /// Ends at %1$@
+  internal static func commonEndsAt(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_ends_at", String(describing: p1))
   }
   /// Enter your PIN
   internal static var commonEnterYourPin: String { return L10n.tr("Localizable", "common_enter_your_pin") }
@@ -3177,6 +3177,8 @@ internal enum L10n {
   internal static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
   internal static var screenSessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_title") }
+  /// Choose how long to share your live location.
+  internal static var screenShareLocationLiveLocationDurationPickerTitle: String { return L10n.tr("Localizable", "screen_share_location_live_location_duration_picker_title") }
   /// Share location
   internal static var screenShareLocationTitle: String { return L10n.tr("Localizable", "screen_share_location_title") }
   /// Share my location

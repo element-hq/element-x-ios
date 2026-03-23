@@ -112,6 +112,7 @@
 "action_leave_space" = "離開空間";
 "action_load_more" = "載入更多";
 "action_manage_account" = "管理帳號";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "管理裝置";
 "action_manage_rooms" = "管理聊天室";
 "action_message" = "聊天";
@@ -162,6 +163,7 @@
 "action_start_over" = "重新開始";
 "action_start_verification" = "開始驗證";
 "action_static_map_load" = "點擊以載入地圖";
+"action_stop" = "Stop";
 "action_take_photo" = "拍照";
 "action_tap_for_options" = "點擊以查看選項";
 "action_translate" = "翻譯";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "進階設定";
 "common_an_image" = "影像";
 "common_analytics" = "分析";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "您已登出工作階段";
 "common_appearance" = "外觀";
 "common_audio" = "音訊";
@@ -224,6 +227,7 @@
 "common_empty_file" = "空檔案";
 "common_encryption" = "加密";
 "common_encryption_enabled" = "已啟用加密";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "輸入您的 PIN 碼";
 "common_error" = "錯誤";
 "common_everyone" = "所有人";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "行已複製到剪貼簿";
 "common_link_copied_to_clipboard" = "連結已複製到剪貼簿";
 "common_link_new_device" = "Link new device";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "載入中...";
 "common_loading_more" = "載入更多……";
 "common_message" = "訊息";
@@ -319,6 +325,7 @@
 "common_settings" = "設定";
 "common_share_space" = "分享空間";
 "common_shared_history" = "New members see history";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "位置分享";
 "common_shared_space" = "共享空間";
 "common_signing_out" = "正在登出";
@@ -366,6 +373,7 @@
 "common_voice_message" = "語音訊息";
 "common_waiting" = "等待中...";
 "common_waiting_for_decryption_key" = "等待此則訊息";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "您";
 "common_unable_to_decrypt_insecure_device" = "從不安全的裝置傳送";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "能見度";
 "screen_security_and_privacy_title" = "安全與隱私";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "變更復原金鑰";
 "screen_chat_backup_recovery_action_change_description" = "若您遺失了您現有的所有裝置，請使用復原金鑰來還原您的密碼學身份與訊息歷史紀錄。";
 "screen_chat_backup_recovery_action_confirm_description" = "您的金鑰儲存空間目前並未同步。";
-"screen_chat_backup_recovery_action_setup_description" = "若您遺失所有裝置，或是徹底登出了 %1$@，就可以存取您的加密訊息。";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "在桌上型裝置中開啟 %1$@";
 "screen_create_new_recovery_key_list_item_2" = "再次登入您的帳號";
 "screen_create_new_recovery_key_list_item_3" = "當要求驗證您的裝置時，請選取 %1$@";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "您將要登出上一次作業階段。若您現在登出，將會失去對加密訊息的存取權。";
 "screen_signout_recovery_disabled_title" = "未設定復原金鑰";
 "screen_signout_save_recovery_key_subtitle" = "您將要登出上一次作業階段。若您現在登出，將會失去對加密訊息的存取權。";
+"screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_start_chat_error_starting_chat" = "嘗試開始聊天時發生錯誤";
 "screen_view_location_title" = "位置";
 "session_verification_banner_message" = "您似乎正在使用新的裝置。請使用另一個裝置進行驗證，以存取您的加密訊息。";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "登出";
 "screen_signout_key_backup_offline_title" = "您的金鑰仍在備份中";
 "screen_signout_preference_item" = "登出";
-"screen_signout_save_recovery_key_title" = "您儲存復原金鑰了嗎？";
 "timeline_decryption_failure_historical_event_user_not_joined" = "您無法存取此則訊息";
 "troubleshoot_notifications_test_blocked_users_title" = "封鎖的使用者";
 "troubleshoot_notifications_entry_point_push_history_title" = "推播通知歷史紀錄";

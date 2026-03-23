@@ -112,6 +112,7 @@
 "action_leave_space" = "Tinggalkan space";
 "action_load_more" = "Muat lainnya";
 "action_manage_account" = "Kelola akun";
+"action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Kelola perangkat";
 "action_manage_rooms" = "Manage rooms";
 "action_message" = "Kirim pesan";
@@ -162,6 +163,7 @@
 "action_start_over" = "Mulai dari awal";
 "action_start_verification" = "Mulai verifikasi";
 "action_static_map_load" = "Ketuk untuk memuat peta";
+"action_stop" = "Stop";
 "action_take_photo" = "Ambil foto";
 "action_tap_for_options" = "Ketuk untuk opsi";
 "action_translate" = "Translate";
@@ -190,6 +192,7 @@
 "common_advanced_settings" = "Pengaturan tingkat lanjut";
 "common_an_image" = "sebuah gambar";
 "common_analytics" = "Analitik";
+"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Anda telah keluar dari sesi.";
 "common_appearance" = "Penampilan";
 "common_audio" = "Audio";
@@ -224,6 +227,7 @@
 "common_empty_file" = "Berkas kosong";
 "common_encryption" = "Enkripsi";
 "common_encryption_enabled" = "Enkripsi diaktifkan";
+"common_ends_at" = "Ends at %1$@";
 "common_enter_your_pin" = "Masukkan PIN Anda";
 "common_error" = "Eror";
 "common_everyone" = "Semua orang";
@@ -246,6 +250,8 @@
 "common_line_copied_to_clipboard" = "Baris disalin ke papan klip";
 "common_link_copied_to_clipboard" = "Tautan disalin ke papan klip";
 "common_link_new_device" = "Link new device";
+"common_live_location" = "Live location";
+"common_live_location_ended" = "Live location ended";
 "common_loading" = "Memuat…";
 "common_loading_more" = "Memuat lebih banyak...";
 "common_message" = "Pesan";
@@ -319,6 +325,7 @@
 "common_settings" = "Pengaturan";
 "common_share_space" = "Share space";
 "common_shared_history" = "New members see history";
+"common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Lokasi terbagi";
 "common_shared_space" = "Shared space";
 "common_signing_out" = "Mengeluarkan dari akun";
@@ -366,6 +373,7 @@
 "common_voice_message" = "Pesan suara";
 "common_waiting" = "Menunggu…";
 "common_waiting_for_decryption_key" = "Menunggu pesan ini";
+"common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Anda";
 "common_unable_to_decrypt_insecure_device" = "Dikirim dari perangkat yang tidak aman";
@@ -748,6 +756,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilitas";
 "screen_security_and_privacy_title" = "Keamanan & privasi";
+"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";
 "screen_space_empty_state_title" = "Add your first room";
@@ -872,7 +881,7 @@
 "screen_chat_backup_recovery_action_change" = "Ubah kunci pemulihan";
 "screen_chat_backup_recovery_action_change_description" = "Pulihkan identitas kriptografi dan riwayat pesan Anda dengan kunci pemulihan jika Anda kehilangan semua perangkat yang ada.";
 "screen_chat_backup_recovery_action_confirm_description" = "Penyimpanan kunci Anda saat ini tidak sinkron.";
-"screen_chat_backup_recovery_action_setup_description" = "Dapatkan akses ke pesan terenkripsi Anda jika Anda kehilangan semua perangkat Anda atau keluar dari %1$@ di mana pun.";
+"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_new_recovery_key_list_item_1" = "Buka %1$@ di perangkat desktop";
 "screen_create_new_recovery_key_list_item_2" = "Masuk ke akun Anda lagi";
 "screen_create_new_recovery_key_list_item_3" = "Saat diminta untuk memverifikasi perangkat Anda, pilih %1$@";
@@ -1292,6 +1301,7 @@
 "screen_signout_recovery_disabled_subtitle" = "Anda akan keluar dari sesi Anda yang terakhir. Jika Anda keluar sekarang, Anda akan kehilangan akses ke pesan terenkripsi Anda.";
 "screen_signout_recovery_disabled_title" = "Pemulihan belum disiapkan";
 "screen_signout_save_recovery_key_subtitle" = "Anda akan keluar dari sesi terakhir Anda. Jika Anda keluar sekarang, Anda mungkin kehilangan akses ke pesan terenkripsi Anda.";
+"screen_signout_save_recovery_key_title" = "Apakah Anda sudah menyimpan kunci pemulihan Anda?";
 "screen_start_chat_error_starting_chat" = "Terjadi kesalahan saat mencoba memulai obrolan";
 "screen_view_location_title" = "Lokasi";
 "session_verification_banner_message" = "Sepertinya Anda menggunakan perangkat baru. Verifikasi dengan perangkat lain untuk mengakses pesan terenkripsi Anda selanjutnya.";
@@ -1555,7 +1565,6 @@
 "screen_signout_confirmation_dialog_title" = "Keluar dari akun";
 "screen_signout_key_backup_offline_title" = "Kunci Anda masih dicadangkan";
 "screen_signout_preference_item" = "Keluar dari akun";
-"screen_signout_save_recovery_key_title" = "Apakah Anda sudah menyimpan kunci pemulihan Anda?";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Anda tidak memiliki akses ke pesan ini";
 "troubleshoot_notifications_test_blocked_users_title" = "Pengguna yang diblokir";
 "troubleshoot_notifications_entry_point_push_history_title" = "Riwayat dorongan";
