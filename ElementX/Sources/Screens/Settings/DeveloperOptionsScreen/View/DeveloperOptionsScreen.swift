@@ -69,7 +69,11 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Timeline") {
+            Section("Room") {
+                Toggle(isOn: $context.roomThreadListEnabled) {
+                    Text("Room thread list")
+                }
+                
                 Toggle(isOn: $context.linkPreviewsEnabled) {
                     Text("Link previews")
                     Text("Follows the timeline media visibility settings.")
@@ -80,14 +84,12 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.liveLocationSharingEnabled) {
                     Text("Live location sharing")
                 }
-                
+
                 Toggle(isOn: $context.floatingTimelineDateEnabled) {
                     Text("Floating timeline date")
                     Text("Shows a floating date badge while scrolling the timeline.")
                 }
-            }
-                        
-            Section("Join rules") {
+                
                 Toggle(isOn: $context.knockingEnabled) {
                     Text("Knocking")
                     Text("Ask to join rooms")

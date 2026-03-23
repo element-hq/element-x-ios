@@ -179,6 +179,8 @@ struct RoomScreen: View {
                 }
             }
         }
+        
+        if context.viewState.roomThreadListEnabled {
             if #available(iOS 26, *) {
                 ToolbarSpacer(.fixed, placement: .primaryAction)
             }
@@ -190,6 +192,7 @@ struct RoomScreen: View {
                     CompoundIcon(\.threads)
                 }
             }
+        }
     }
     
     @ViewBuilder

@@ -62,6 +62,7 @@ struct RoomScreenViewState: BindableState {
         isCallingEnabled && !isParticipatingInOngoingCall // Hide the join call button when already in the call
     }
     
+    var roomThreadListEnabled = false
     var isKnockingEnabled = false
     var isKnockableRoom = false
     var canAcceptKnocks = false

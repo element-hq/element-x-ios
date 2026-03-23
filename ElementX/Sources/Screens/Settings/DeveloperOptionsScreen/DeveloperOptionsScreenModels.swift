@@ -71,6 +71,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var liveLocationSharingEnabled: Bool { get set }
     
     var floatingTimelineDateEnabled: Bool { get set }
+    
+    var roomThreadListEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
