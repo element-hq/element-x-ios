@@ -16,6 +16,7 @@ extension RoomThreadListServiceProxyMock {
         self.init()
         
         itemsPublisher = CurrentValueSubject(configuration.items).asCurrentValuePublisher()
+        paginationStatePublisher = CurrentValueSubject(.idle(endReached: true)).asCurrentValuePublisher()
         
         paginateReturnValue = .success(())
     }
