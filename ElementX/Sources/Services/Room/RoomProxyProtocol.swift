@@ -98,6 +98,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     func threadTimeline(eventID: String) async -> Result<TimelineProxyProtocol, RoomProxyError>
     
+    func threadListService() async -> RoomThreadListServiceProxyProtocol
+    
     func loadOrFetchEventDetails(for eventID: String) async -> Result<TimelineEvent, RoomProxyError>
     
     func messageFilteredTimeline(focus: TimelineFocus,

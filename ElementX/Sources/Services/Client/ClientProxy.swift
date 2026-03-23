@@ -64,6 +64,8 @@ class ClientProxy: ClientProxyProtocol {
     
     let spaceService: SpaceServiceProxyProtocol
     
+    let eventStringBuilder: RoomEventStringBuilder
+    
     private static var roomCreationPowerLevelOverrides: PowerLevels {
         .init(usersDefault: nil,
               eventsDefault: nil,
@@ -216,6 +218,7 @@ class ClientProxy: ClientProxyProtocol {
         roomSummaryProvider = configuredAppService.roomSummaryProvider
         alternateRoomSummaryProvider = configuredAppService.alternateRoomSummaryProvider
         staticRoomSummaryProvider = configuredAppService.staticRoomSummaryProvider
+        eventStringBuilder = configuredAppService.eventStringBuilder
         
         syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
         roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
@@ -1169,7 +1172,8 @@ class ClientProxy: ClientProxyProtocol {
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           room: room,
                                                           appSettings: appSettings,
-                                                          analyticsService: analyticsService)
+                                                          analyticsService: analyticsService,
+                                                          eventStringBuilder: eventStringBuilder)
                 
                 return .joined(roomProxy)
             case .left:
@@ -1318,6 +1322,7 @@ private struct ClientProxyServices {
     let roomSummaryProvider: RoomSummaryProviderProtocol
     let alternateRoomSummaryProvider: RoomSummaryProviderProtocol
     let staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol
+    let eventStringBuilder: RoomEventStringBuilder
     
     init(client: ClientProtocol,
          actionsSubject: PassthroughSubject<ClientProxyAction, Never>,
@@ -1334,10 +1339,11 @@ private struct ClientProxyServices {
         let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
                                                                                                                            mentionBuilder: PlainMentionBuilder()),
                                                                           style: .senderPrefixed)
-        let eventStringBuilder = try RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: client.userId(), shouldDisambiguateDisplayNames: false),
-                                                            messageEventStringBuilder: roomMessageEventStringBuilder,
-                                                            shouldDisambiguateDisplayNames: false,
-                                                            shouldPrefixSenderName: true)
+        
+        eventStringBuilder = try RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: client.userId(), shouldDisambiguateDisplayNames: false),
+                                                        messageEventStringBuilder: roomMessageEventStringBuilder,
+                                                        shouldDisambiguateDisplayNames: false,
+                                                        shouldPrefixSenderName: true)
         
         roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                   eventStringBuilder: eventStringBuilder,

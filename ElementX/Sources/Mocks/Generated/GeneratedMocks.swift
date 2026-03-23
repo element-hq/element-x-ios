@@ -6930,6 +6930,70 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return threadTimelineEventIDReturnValue
         }
     }
+    //MARK: - threadListService
+
+    var threadListServiceUnderlyingCallsCount = 0
+    var threadListServiceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return threadListServiceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = threadListServiceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                threadListServiceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    threadListServiceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var threadListServiceCalled: Bool {
+        return threadListServiceCallsCount > 0
+    }
+
+    var threadListServiceUnderlyingReturnValue: RoomThreadListServiceProxyProtocol!
+    var threadListServiceReturnValue: RoomThreadListServiceProxyProtocol! {
+        get {
+            if Thread.isMainThread {
+                return threadListServiceUnderlyingReturnValue
+            } else {
+                var returnValue: RoomThreadListServiceProxyProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = threadListServiceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                threadListServiceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    threadListServiceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var threadListServiceClosure: (() async -> RoomThreadListServiceProxyProtocol)?
+
+    func threadListService() async -> RoomThreadListServiceProxyProtocol {
+        threadListServiceCallsCount += 1
+        if let threadListServiceClosure = threadListServiceClosure {
+            return await threadListServiceClosure()
+        } else {
+            return threadListServiceReturnValue
+        }
+    }
     //MARK: - loadOrFetchEventDetails
 
     var loadOrFetchEventDetailsForUnderlyingCallsCount = 0
@@ -15955,6 +16019,83 @@ class RoomSummaryProviderMock: RoomSummaryProviderProtocol, @unchecked Sendable 
             self.setRoomListReceivedInvocations.append(roomList)
         }
         setRoomListClosure?(roomList)
+    }
+}
+class RoomThreadListServiceProxyMock: RoomThreadListServiceProxyProtocol, @unchecked Sendable {
+    var itemsPublisher: CurrentValuePublisher<[RoomThreadListItem], Never> {
+        get { return underlyingItemsPublisher }
+        set(value) { underlyingItemsPublisher = value }
+    }
+    var underlyingItemsPublisher: CurrentValuePublisher<[RoomThreadListItem], Never>!
+    var paginationStatePublisher: CurrentValuePublisher<RoomThreadListPaginationState, Never> {
+        get { return underlyingPaginationStatePublisher }
+        set(value) { underlyingPaginationStatePublisher = value }
+    }
+    var underlyingPaginationStatePublisher: CurrentValuePublisher<RoomThreadListPaginationState, Never>!
+
+    //MARK: - paginate
+
+    var paginateUnderlyingCallsCount = 0
+    var paginateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return paginateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var paginateCalled: Bool {
+        return paginateCallsCount > 0
+    }
+
+    var paginateUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var paginateReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return paginateUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var paginateClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func paginate() async -> Result<Void, RoomProxyError> {
+        paginateCallsCount += 1
+        if let paginateClosure = paginateClosure {
+            return await paginateClosure()
+        } else {
+            return paginateReturnValue
+        }
     }
 }
 class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sendable {

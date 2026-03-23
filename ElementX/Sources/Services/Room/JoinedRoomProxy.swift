@@ -16,6 +16,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let room: RoomProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
+    private let eventStringBuilder: RoomEventStringBuilder
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
@@ -78,11 +79,13 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     init(roomListService: RoomListServiceProtocol,
          room: RoomProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService) async throws {
+         analyticsService: AnalyticsService,
+         eventStringBuilder: RoomEventStringBuilder) async throws {
         self.roomListService = roomListService
         self.room = room
         self.appSettings = appSettings
         self.analyticsService = analyticsService
+        self.eventStringBuilder = eventStringBuilder
         
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))
         
@@ -198,6 +201,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             MXLog.error("Unexpected error: \(error)")
             return .failure(.sdkError(error))
         }
+    }
+    
+    func threadListService() async -> RoomThreadListServiceProxyProtocol {
+        await RoomThreadListProxy(threadListService: room.threadListService(), eventStringBuilder: eventStringBuilder)
     }
     
     func loadOrFetchEventDetails(for eventID: String) async -> Result<TimelineEvent, RoomProxyError> {
