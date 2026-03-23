@@ -126,8 +126,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.showSettingsScreen)
             }
             settingsFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-        case .call(let roomID):
-            Task { await presentCallScreen(roomID: roomID) }
+        case .call(let roomID, let isVoiceCall):
+            Task { await presentCallScreen(roomID: roomID, isVoiceCall: isVoiceCall) }
         case .genericCallLink(let url):
             presentCallScreen(genericCallLink: url)
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
@@ -204,7 +204,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .sessionVerification(let flow):
                     presentSessionVerificationScreen(flow: flow)
                 case .showCallScreen(let roomProxy):
-                    presentCallScreen(roomProxy: roomProxy)
+                    presentCallScreen(roomProxy: roomProxy, voiceOnly: false)
                 case .hideCallScreenOverlay:
                     hideCallScreenOverlay()
                 case .logout:
@@ -218,7 +218,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .presentCallScreen(let roomProxy):
-                    presentCallScreen(roomProxy: roomProxy)
+                    presentCallScreen(roomProxy: roomProxy, voiceOnly: false)
                 case .verifyUser(let userID):
                     presentSessionVerificationScreen(flow: .userInitiator(userID: userID))
                 case .showSettings:
@@ -394,21 +394,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         presentCallScreen(configuration: .init(genericCallLink: url))
     }
     
-    private func presentCallScreen(roomID: String) async {
+    private func presentCallScreen(roomID: String, isVoiceCall: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             return
         }
         
-        presentCallScreen(roomProxy: roomProxy)
+        presentCallScreen(roomProxy: roomProxy, voiceOnly: isVoiceCall)
     }
     
-    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol) {
+    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol, voiceOnly: Bool) {
         let colorScheme: ColorScheme = flowParameters.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         presentCallScreen(configuration: .init(roomProxy: roomProxy,
                                                clientProxy: userSession.clientProxy,
                                                clientID: InfoPlistReader.main.bundleIdentifier,
                                                elementCallBaseURL: flowParameters.appSettings.elementCallBaseURL,
                                                elementCallBaseURLOverride: flowParameters.appSettings.elementCallBaseURLOverride,
+                                               voiceOnly: voiceOnly,
                                                colorScheme: colorScheme))
     }
     

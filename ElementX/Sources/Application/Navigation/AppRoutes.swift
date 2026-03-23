@@ -40,7 +40,7 @@ enum AppRoute: Hashable {
     /// The profile of a matrix user (outside of a room).
     case userProfile(userID: String)
     /// An Element Call running in a particular room
-    case call(roomID: String)
+    case call(roomID: String, isVoiceCall: Bool)
     /// An Element Call link generated outside of a chat room.
     case genericCallLink(url: URL)
     /// The settings screen.

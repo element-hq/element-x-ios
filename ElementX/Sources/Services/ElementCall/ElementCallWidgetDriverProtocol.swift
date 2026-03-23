@@ -33,6 +33,7 @@ protocol ElementCallWidgetDriverProtocol {
     func start(baseURL: URL,
                clientID: String,
                colorScheme: ColorScheme,
+               voiceOnly: Bool,
                rageshakeURL: String?,
                analyticsConfiguration: ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError>
     

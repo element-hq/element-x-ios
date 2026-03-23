@@ -126,13 +126,14 @@ class NotificationHandler {
                 }
                 
                 return .processedShouldDiscard
-            case .rtcNotification(let notificationType, let expirationTimestamp, _):
+            case .rtcNotification(let notificationType, let expirationTimestamp, let callIntent):
                 return await handleCallNotification(notificationType: notificationType,
                                                     rtcNotifyEventID: event.eventId(),
                                                     timestamp: event.timestamp(),
                                                     expirationTimestamp: expirationTimestamp,
                                                     roomID: itemProxy.roomID,
-                                                    roomDisplayName: itemProxy.roomDisplayName)
+                                                    roomDisplayName: itemProxy.roomDisplayName,
+                                                    callIntent: callIntent)
             case .callAnswer,
                  .callInvite,
                  .callHangup,
@@ -161,7 +162,7 @@ class NotificationHandler {
                                         timestamp: Timestamp,
                                         expirationTimestamp: Timestamp,
                                         roomID: String,
-                                        roomDisplayName: String) async -> NotificationProcessingResult {
+                                        roomDisplayName: String, callIntent: RtcCallIntent?) async -> NotificationProcessingResult {
         // Handle incoming VoIP calls, show the native OS call screen
         // https://developer.apple.com/documentation/callkit/sending-end-to-end-encrypted-voip-calls
         //
@@ -215,7 +216,8 @@ class NotificationHandler {
         let payload = [ElementCallServiceNotificationKey.roomID.rawValue: roomID,
                        ElementCallServiceNotificationKey.roomDisplayName.rawValue: roomDisplayName,
                        ElementCallServiceNotificationKey.expirationDate.rawValue: expirationDate,
-                       ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue: rtcNotifyEventID] as [String: Any]
+                       ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue: rtcNotifyEventID,
+                       ElementCallServiceNotificationKey.isVoiceCall.rawValue: callIntent == RtcCallIntent.audio] as [String: Any]
         
         do {
             try await CXProvider.reportNewIncomingVoIPPushPayload(payload)

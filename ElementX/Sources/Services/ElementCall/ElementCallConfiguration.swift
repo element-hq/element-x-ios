@@ -20,6 +20,7 @@ struct ElementCallConfiguration {
         case roomCall(roomProxy: JoinedRoomProxyProtocol,
                       clientProxy: ClientProxyProtocol,
                       clientID: String,
+                      voiceOnly: Bool,
                       elementCallBaseURL: URL,
                       elementCallBaseURLOverride: URL?,
                       colorScheme: ColorScheme)
@@ -59,10 +60,12 @@ struct ElementCallConfiguration {
          clientID: String,
          elementCallBaseURL: URL,
          elementCallBaseURLOverride: URL?,
+         voiceOnly: Bool,
          colorScheme: ColorScheme) {
         kind = .roomCall(roomProxy: roomProxy,
                          clientProxy: clientProxy,
                          clientID: clientID,
+                         voiceOnly: voiceOnly,
                          elementCallBaseURL: elementCallBaseURL,
                          elementCallBaseURLOverride: elementCallBaseURLOverride,
                          colorScheme: colorScheme)
@@ -73,7 +76,7 @@ struct ElementCallConfiguration {
         switch kind {
         case .genericCallLink(let url):
             url.absoluteString
-        case .roomCall(let roomProxy, _, _, _, _, _):
+        case .roomCall(let roomProxy, _, _, _, _, _, _):
             roomProxy.id
         }
     }
