@@ -1180,6 +1180,14 @@ extension PreviewTests {
     }
 
     @Test
+    func roomThreadListScreen() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in RoomThreadListScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func sFNumberedListView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SFNumberedListView_Previews._allPreviews.enumerated() {

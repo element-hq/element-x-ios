@@ -83,6 +83,7 @@ enum UserAvatarSizeOnScreen {
     case mediaPreviewDetails
     case sendInviteConfirmation
     case sessionVerification
+    case threadList
     case threadSummary
     case map
 
@@ -106,7 +107,7 @@ enum UserAvatarSizeOnScreen {
         case .roomDetails:
             44
         case .inviteUsers, .knockingUserList, .sessionVerification,
-             .settings:
+             .settings, .threadList:
             52
         case .roomChangeRoles:
             56

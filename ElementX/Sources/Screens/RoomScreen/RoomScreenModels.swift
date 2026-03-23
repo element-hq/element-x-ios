@@ -12,6 +12,7 @@ import OrderedCollections
 
 enum RoomScreenViewModelAction: Equatable {
     case focusEvent(eventID: String)
+    case displayThreadList
     case displayThread(threadRootEventID: String, focussedEventID: String)
     case displayPinnedEventsTimeline
     case displayRoomDetails
@@ -32,6 +33,7 @@ enum RoomScreenViewAction {
     case dismissKnockRequests
     case viewKnockRequests
     case displaySuccessorRoom
+    case displayThreadList
 }
 
 struct RoomScreenViewState: BindableState {

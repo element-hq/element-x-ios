@@ -155,6 +155,7 @@ enum TestablePreviewsDictionary {
         "RoomScreenFooterView_Previews" : RoomScreenFooterView_Previews.self,
         "RoomScreen_Previews" : RoomScreen_Previews.self,
         "RoomSelectionScreen_Previews" : RoomSelectionScreen_Previews.self,
+        "RoomThreadListScreen_Previews" : RoomThreadListScreen_Previews.self,
         "SFNumberedListView_Previews" : SFNumberedListView_Previews.self,
         "SecureBackupKeyBackupScreen_Previews" : SecureBackupKeyBackupScreen_Previews.self,
         "SecureBackupLogoutConfirmationScreen_Previews" : SecureBackupLogoutConfirmationScreen_Previews.self,
