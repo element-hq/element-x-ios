@@ -41,6 +41,7 @@ targets:
       base:
         PRODUCT_NAME: PreviewTests
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.preview.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/$(APP_NAME).app/$(APP_NAME)"
       debug:
       release:
 
