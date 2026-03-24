@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if DEBUG
 /// Only use in Previews! This useful scroll view allows you to still have a scroll view when previewing in Xcode
 /// but ignores it when running the tests, which allows you to still use it's content directly in preview tests
 /// and render the preview with `sizeThatFits` layout.
@@ -23,3 +24,4 @@ struct PreviewScrollView<Content: View>: View {
         }
     }
 }
+#endif
