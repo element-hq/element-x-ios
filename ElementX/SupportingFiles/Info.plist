@@ -120,5 +120,7 @@
 	<string>$(PRODUCTION_APP_NAME)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<true/>
+	<key>ITSEncryptionExportComplianceCode</key>
+	<string>e52cf654-fc2a-4e14-adc8-ece87e6cfd6f</string>
 </dict>
 </plist>

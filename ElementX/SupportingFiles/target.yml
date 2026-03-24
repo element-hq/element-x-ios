@@ -51,6 +51,7 @@ targets:
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         ITSAppUsesNonExemptEncryption: true
+        ITSEncryptionExportComplianceCode: e52cf654-fc2a-4e14-adc8-ece87e6cfd6f
         CFBundleURLTypes: [
           {
             CFBundleTypeRole: Editor,
