@@ -188,6 +188,7 @@
 		1C6B2A1A5A9699DD4C9755B3 /* BootDetectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F054DE7D47849687662C9D9 /* BootDetectionManager.swift */; };
 		1C8BC70A18060677E295A846 /* ShareToMapsAppActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4481799F455B3DA243BDA2AC /* ShareToMapsAppActivity.swift */; };
 		1C9BB74711E5F24C77B7FED0 /* RoomMembersListScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA0B743847CFA5B3C38EE4 /* RoomMembersListScreenCoordinator.swift */; };
+		1CA094038D4D036A6F0A1314 /* VoiceMessageTrashButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF84AA68B2B7584D9275769 /* VoiceMessageTrashButton.swift */; };
 		1D5DC685CED904386C89B7DA /* NSRegularExpresion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BAC0F6C9644336E9567EE6 /* NSRegularExpresion.swift */; };
 		1D623953F970D11F6F38499C /* AppLockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851B95BB98649B8E773D6790 /* AppLockService.swift */; };
 		1D69E31913DF66426985909B /* EmojiPickerScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11151E78D6BB2B04A8FBD389 /* EmojiPickerScreenViewModelProtocol.swift */; };
@@ -2504,6 +2505,7 @@
 		AB26D5444A4A7E095222DE8B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		AB389C38BD41EB3E47092CFB /* AccessibilityTests.xctestplan */ = {isa = PBXFileReference; path = AccessibilityTests.xctestplan; sourceTree = "<group>"; };
 		ABA4CF2F5B4F68D02E412004 /* ServerConfirmationScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfirmationScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		ABF84AA68B2B7584D9275769 /* VoiceMessageTrashButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessageTrashButton.swift; sourceTree = "<group>"; };
 		AC0275CEE9CA078B34028BDF /* AppLockScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockScreenViewModelTests.swift; sourceTree = "<group>"; };
 		AC1DA29A5A041CC0BACA7CB0 /* MockImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockImageCache.swift; sourceTree = "<group>"; };
 		AC43313F21511C853D34544E /* SoftLogoutScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftLogoutScreenViewModelTests.swift; sourceTree = "<group>"; };
@@ -5307,6 +5309,7 @@
 				46A2AD86F7E618F468F6FAF5 /* VoiceMessageRecordingButton.swift */,
 				73A5C3F7C9C1DA10CAEC6A98 /* VoiceMessageRecordingComposer.swift */,
 				5E9CBF577B9711CFBB4FA40D /* VoiceMessageRecordingView.swift */,
+				ABF84AA68B2B7584D9275769 /* VoiceMessageTrashButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8919,6 +8922,7 @@
 				55DF6DEEF2CEEF40F84B53B0 /* VoiceMessageRoomPlaybackView.swift in Sources */,
 				024E70451A7CD9E4E034D8A9 /* VoiceMessageRoomTimelineItem.swift in Sources */,
 				1224084B7E289E0830BA2C54 /* VoiceMessageRoomTimelineView.swift in Sources */,
+				1CA094038D4D036A6F0A1314 /* VoiceMessageTrashButton.swift in Sources */,
 				CA12AE0DCD57D49CD96C699A /* WaveformCursorView.swift in Sources */,
 				63CDC201A5980F304F6D0A1C /* WaveformInteractionModifier.swift in Sources */,
 				B773ACD8881DB18E876D950C /* WaveformSource.swift in Sources */,

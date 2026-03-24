@@ -36,14 +36,6 @@ public struct SendButton: View {
         isEnabled ? .compound.bgAccentRest : .clear
     }
     
-    private var padding: CGFloat {
-        if #available(iOS 26, *) {
-            10
-        } else {
-            6
-        }
-    }
-    
     /// Creates a send button that performs the provided action.
     public init(mode: Mode = .send, action: @escaping () -> Void) {
         self.mode = mode
@@ -71,7 +63,7 @@ public struct SendButton: View {
     var baseIcon: some View {
         CompoundIcon(icon, size: .medium, relativeTo: .compound.headingLG)
             .foregroundStyle(iconColor)
-            .scaledPadding(padding, relativeTo: .compound.headingLG)
+            .scaledPadding(Compound.supportsGlass ? 10 : 6, relativeTo: .compound.headingLG)
     }
 }
 

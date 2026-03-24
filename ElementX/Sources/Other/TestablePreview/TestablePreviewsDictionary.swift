@@ -224,6 +224,7 @@ enum TestablePreviewsDictionary {
         "VoiceMessageRecordingView_Previews" : VoiceMessageRecordingView_Previews.self,
         "VoiceMessageRoomPlaybackView_Previews" : VoiceMessageRoomPlaybackView_Previews.self,
         "VoiceMessageRoomTimelineView_Previews" : VoiceMessageRoomTimelineView_Previews.self,
+        "VoiceMessageTrashButton_Previews" : VoiceMessageTrashButton_Previews.self,
         "WaveformCursorView_Previews" : WaveformCursorView_Previews.self,
     ]
  }

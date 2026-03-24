@@ -19,7 +19,9 @@ struct RoomAttachmentPicker: View {
         Menu {
             menuContent
         } label: {
-            CompoundIcon(\.plus, size: .small, relativeTo: .compound.headingLG)
+            CompoundIcon(\.plus,
+                         size: Compound.supportsGlass ? .medium : .small,
+                         relativeTo: .compound.headingLG)
         }
         .buttonStyle(ComposerToolbarButtonStyle())
         .accessibilityLabel(L10n.actionAddToTimeline)

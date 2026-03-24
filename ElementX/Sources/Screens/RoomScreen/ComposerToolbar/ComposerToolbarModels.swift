@@ -109,6 +109,14 @@ struct ComposerToolbarViewState: BindableState {
         }
     }
     
+    var sendButtonMode: SendButton.Mode {
+        composerMode.isEdit ? .edit : .send
+    }
+    
+    var sendButtonAccessibilityLabel: String {
+        composerMode.isEdit ? L10n.actionConfirm : L10n.actionSend
+    }
+    
     var sendButtonDisabled: Bool {
         if !canSend {
             return true

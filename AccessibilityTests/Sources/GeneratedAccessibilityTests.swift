@@ -867,6 +867,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "VoiceMessageRoomTimelineView_Previews")
     }
 
+    func testVoiceMessageTrashButton() async throws {
+        try await performAccessibilityAudit(named: "VoiceMessageTrashButton_Previews")
+    }
+
     func testWaveformCursorView() async throws {
         try await performAccessibilityAudit(named: "WaveformCursorView_Previews")
     }

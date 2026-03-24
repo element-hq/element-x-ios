@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import DSWaveformImage
 import DSWaveformImageViews
 import Foundation
@@ -52,14 +53,12 @@ struct VoiceMessagePreviewComposer: View {
         .onChange(of: isDragging) { _, newValue in
             onScrubbing(newValue)
         }
-        .padding(.vertical, 4.0)
-        .padding(.horizontal, 6.0)
+        .padding(.vertical, Compound.supportsGlass ? 7 : 4)
+        .padding(.horizontal, Compound.supportsGlass ? 8 : 6)
+        .padding(.trailing, Compound.supportsGlass ? 8 : 0)
         .background {
-            let roundedRectangle = RoundedRectangle(cornerRadius: 12)
-            ZStack {
-                roundedRectangle
-                    .fill(Color.compound.bgSubtleSecondary)
-            }
+            RoundedRectangle(cornerRadius: Compound.supportsGlass ? 21 : 12)
+                .fill(.compound.bgSubtleSecondary)
         }
     }
     
@@ -95,6 +94,8 @@ private extension DateFormatter {
         return dateFormatter
     }()
 }
+
+// MARK: - Previews
 
 struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {
     static let playerState = AudioPlayerState(id: .recorderPreview,

@@ -202,28 +202,44 @@ extension View {
 }
 
 private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
-    private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
+    @Environment(\.isEnabled) private var isEnabled
     
     let header: Header
     
+    private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
+    
     func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            if isEnabled {
+                mainContent(content: content)
+                    .glassEffect(in: composerShape)
+            } else {
+                mainContent(content: content)
+                    .background(.compound.bgSubtlePrimary, in: composerShape)
+            }
+        } else {
+            mainContent(content: content)
+                .background {
+                    ZStack {
+                        composerShape
+                            .fill(Color.compound.bgSubtleSecondary)
+                        composerShape
+                            .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
+                    }
+                }
+        }
+    }
+    
+    func mainContent(content: Content) -> some View {
         VStack(alignment: .leading, spacing: -6) {
             header
             
             content
                 .tint(.compound.iconAccentTertiary)
-                .padding(.vertical, 10)
+                .padding(.vertical, Compound.supportsGlass ? 11 : 10)
         }
-        .padding(.horizontal, 12.0)
+        .padding(.horizontal, Compound.supportsGlass ? 16 : 12)
         .clipShape(composerShape)
-        .background {
-            ZStack {
-                composerShape
-                    .fill(Color.compound.bgSubtleSecondary)
-                composerShape
-                    .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
-            }
-        }
     }
 }
 

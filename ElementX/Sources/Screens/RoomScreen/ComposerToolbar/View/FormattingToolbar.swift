@@ -27,7 +27,7 @@ struct FormattingToolbar: View {
                             .padding(8)
                             .background(item.backgroundColor)
                             .cornerRadius(8)
-                            .padding(.vertical, 3)
+                            .padding(.vertical, Compound.supportsGlass ? 10 : 3)
                     }
                     .disabled(item.state == .disabled)
                     .accessibilityIdentifier(item.accessibilityIdentifier)

@@ -1732,6 +1732,14 @@ extension PreviewTests {
     }
 
     @Test
+    func voiceMessageTrashButton() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in VoiceMessageTrashButton_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func waveformCursorView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in WaveformCursorView_Previews._allPreviews.enumerated() {

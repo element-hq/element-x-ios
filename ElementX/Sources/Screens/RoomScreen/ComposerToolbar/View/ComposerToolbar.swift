@@ -13,10 +13,27 @@ import SwiftUI
 import WysiwygComposer
 
 struct ComposerToolbar: View {
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    
     @ObservedObject var context: ComposerToolbarViewModel.Context
+    
     @FocusState private var composerFocused: Bool
     @State private var frame: CGRect = .zero
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    
+    /// - When Liquid Glass is available, the buttons and composer are all 44pt x 44pt.
+    /// - On iOS 18 and below, the main buttons are 30pt x 30pt and the composer is 42pt high, so some
+    ///   additional padding is required to centre the buttons vertically when there's a single line of text,
+    ///   but preserve their position (using bottom alignment) when there's 2 or more lines of text.
+    private var buttonVerticalPadding: CGFloat {
+        Compound.supportsGlass ? 0 : 6
+    }
+    
+    /// - When Liquid Glass is available, the buttons and composer are all 44pt x 44pt.
+    /// - On iOS 18 and below, the trailing button is 36pt x 36pt and the composer is 42pt high, so some
+    ///   additional padding is required to centre the button (and maintain alignment as described above).
+    private var trailingButtonVerticalPadding: CGFloat {
+        Compound.supportsGlass ? 0 : 3
+    }
     
     var body: some View {
         VStack(spacing: 8) {
@@ -83,14 +100,14 @@ struct ComposerToolbar: View {
             if !context.composerFormattingEnabled {
                 if context.viewState.isUploading {
                     ProgressView()
-                        .scaledFrame(size: 36, relativeTo: .compound.headingLG)
-                        .scaledPadding(.vertical, 3, relativeTo: .compound.headingLG)
+                        .scaledFrame(size: Compound.supportsGlass ? 44 : 36, relativeTo: .compound.headingLG)
+                        .scaledPadding(.vertical, trailingButtonVerticalPadding, relativeTo: .compound.headingLG)
                 } else if context.viewState.showSendButton {
                     sendButton
-                        .scaledPadding(.vertical, 3, relativeTo: .compound.headingLG)
+                        .scaledPadding(.vertical, trailingButtonVerticalPadding, relativeTo: .compound.headingLG)
                 } else {
                     voiceMessageRecordingButton(mode: context.viewState.isVoiceMessageModeActivated ? .recording : .idle)
-                        .scaledPadding(.vertical, 3, relativeTo: .compound.headingLG)
+                        .scaledPadding(.vertical, trailingButtonVerticalPadding, relativeTo: .compound.headingLG)
                 }
             }
         }
@@ -119,7 +136,7 @@ struct ComposerToolbar: View {
             topBarLayout {
                 if !context.composerFormattingEnabled {
                     RoomAttachmentPicker(context: context)
-                        .scaledPadding(.vertical, 6, relativeTo: .compound.headingLG)
+                        .scaledPadding(.vertical, buttonVerticalPadding, relativeTo: .compound.headingLG)
                 }
                 messageComposer
             }
@@ -137,7 +154,9 @@ struct ComposerToolbar: View {
             context.composerFormattingEnabled = false
             context.composerExpanded = false
         } label: {
-            CompoundIcon(\.close, size: .small, relativeTo: .compound.headingLG)
+            CompoundIcon(\.close,
+                         size: Compound.supportsGlass ? .medium : .small,
+                         relativeTo: .compound.headingLG)
         }
         .buttonStyle(ComposerToolbarButtonStyle())
         .accessibilityLabel(L10n.richTextEditorCloseFormattingOptions)
@@ -145,25 +164,12 @@ struct ComposerToolbar: View {
     }
     
     private var sendButton: some View {
-        Group {
-            if context.viewState.composerMode.isEdit {
-                Button(action: sendMessage) {
-                    CompoundIcon(\.check, size: .medium, relativeTo: .compound.headingLG)
-                        .foregroundColor(.white)
-                        .scaledPadding(6, relativeTo: .compound.headingLG)
-                        .background(.compound.bgAccentRest, in: .circle)
-                        .compositingGroup()
-                }
-                .accessibilityLabel(L10n.actionConfirm)
-            } else {
-                SendButton(action: sendMessage)
-                    .accessibilityLabel(L10n.actionSend)
-            }
-        }
-        .disabled(context.viewState.sendButtonDisabled)
-        .animation(.linear(duration: 0.1).disabledDuringTests(), value: context.viewState.sendButtonDisabled)
-        .keyboardShortcut(.return, modifiers: [.command])
-        .accessibilityIdentifier(A11yIdentifiers.roomScreen.sendButton)
+        SendButton(mode: context.viewState.sendButtonMode, action: sendMessage)
+            .accessibilityLabel(context.viewState.sendButtonAccessibilityLabel)
+            .disabled(context.viewState.sendButtonDisabled)
+            .animation(.linear(duration: 0.1).disabledDuringTests(), value: context.viewState.sendButtonDisabled)
+            .keyboardShortcut(.return, modifiers: [.command])
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.sendButton)
     }
     
     private var messageComposer: some View {
@@ -274,13 +280,13 @@ struct ComposerToolbar: View {
         case .recordVoiceMessage(let state):
             topBarLayout {
                 voiceMessageTrashButton
-                    .scaledPadding(.vertical, 6, relativeTo: .compound.headingLG)
+                    .scaledPadding(.vertical, buttonVerticalPadding, relativeTo: .compound.headingLG)
                 VoiceMessageRecordingComposer(recorderState: state)
             }
         case .previewVoiceMessage(let state, let waveform, let isUploading):
             topBarLayout {
                 voiceMessageTrashButton
-                    .scaledPadding(.vertical, 6, relativeTo: .compound.headingLG)
+                    .scaledPadding(.vertical, buttonVerticalPadding, relativeTo: .compound.headingLG)
                 voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
             }
             .disabled(isUploading)
@@ -298,14 +304,9 @@ struct ComposerToolbar: View {
     }
     
     private var voiceMessageTrashButton: some View {
-        Button(role: .destructive) {
+        VoiceMessageTrashButton {
             context.send(viewAction: .voiceMessage(.deleteRecording))
-        } label: {
-            CompoundIcon(\.delete)
-                .scaledToFit()
-                .scaledFrame(size: 30, relativeTo: .compound.headingLG)
         }
-        .buttonStyle(.compound(.textLink))
         .accessibilityLabel(L10n.a11yDelete)
     }
     
@@ -323,18 +324,53 @@ struct ComposerToolbar: View {
 }
 
 struct ComposerToolbarButtonStyle: ButtonStyle {
-    @Environment(\.isEnabled) private var isEnabled
-    
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundStyle(.compound.iconOnSolidPrimary)
-            .scaledPadding(5, relativeTo: .compound.headingLG)
-            .background(backgroundColor(isPressed: configuration.isPressed), in: .circle)
+        if #available(iOS 26, *) {
+            configuration.label
+                .modifier(GlassStyle())
+        } else {
+            configuration.label
+                .modifier(FlatStyle(isPressed: configuration.isPressed))
+        }
     }
     
-    func backgroundColor(isPressed: Bool) -> Color {
-        guard isEnabled else { return .compound.bgActionPrimaryDisabled }
-        return isPressed ? .compound.bgActionPrimaryPressed : .compound.bgActionPrimaryRest
+    @available(iOS 26, *)
+    private struct GlassStyle: ViewModifier {
+        @Environment(\.isEnabled) private var isEnabled
+        
+        func body(content: Content) -> some View {
+            if isEnabled {
+                label(content: content)
+                    .glassEffect(.regular.interactive(), in: .circle)
+            } else {
+                label(content: content)
+                    .background(.compound.bgSubtlePrimary, in: .circle)
+            }
+        }
+        
+        func label(content: Content) -> some View {
+            content
+                .foregroundStyle(isEnabled ? .compound.iconPrimary : .compound.iconDisabled)
+                .scaledPadding(10, relativeTo: .compound.headingLG)
+        }
+    }
+    
+    private struct FlatStyle: ViewModifier {
+        @Environment(\.isEnabled) private var isEnabled
+        
+        let isPressed: Bool
+        
+        func body(content: Content) -> some View {
+            content
+                .foregroundStyle(.compound.iconOnSolidPrimary)
+                .scaledPadding(5, relativeTo: .compound.headingLG)
+                .background(backgroundColor(isPressed: isPressed), in: .circle)
+        }
+        
+        private func backgroundColor(isPressed: Bool) -> Color {
+            guard isEnabled else { return .compound.bgActionPrimaryDisabled }
+            return isPressed ? .compound.bgActionPrimaryPressed : .compound.bgActionPrimaryRest
+        }
     }
 }
 
