@@ -35,7 +35,9 @@ struct VoiceMessageTrashButton: View {
         func body(content: Content) -> some View {
             if isEnabled {
                 label(content: content)
-                    .glassEffect(.regular.tint(.compound.bgCriticalPrimary).interactive(), in: .circle)
+                    .snapshotableGlassEffect(.regular.tint(.compound.bgCriticalPrimary).interactive(),
+                                             snapshotBackground: .compound.bgCriticalPrimary,
+                                             in: .circle)
             } else {
                 label(content: content)
                     .background(.compound.bgSubtlePrimary, in: .circle)

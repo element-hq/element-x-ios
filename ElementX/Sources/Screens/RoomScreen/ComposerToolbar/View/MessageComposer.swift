@@ -140,7 +140,7 @@ private struct MessageComposerReplyHeader: View {
     let action: () -> Void
     
     var body: some View {
-        TimelineReplyView(placement: .composer, timelineItemReplyDetails: replyDetails)
+        TimelineReplyView(placement: .composer, timelineItemReplyDetails: replyDetails, maxWidth: .infinity)
             .overlay(alignment: .topTrailing) {
                 Button(action: action) {
                     CompoundIcon(\.close, size: .small, relativeTo: .compound.bodySMSemibold)
@@ -212,7 +212,9 @@ private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
         if #available(iOS 26, *) {
             if isEnabled {
                 mainContent(content: content)
-                    .glassEffect(in: composerShape)
+                    .snapshotableGlassEffect(.regular.interactive(), // Doesn't need to be interactive but Apple does it 🤷‍♂️
+                                             snapshotBackground: .compound.bgSubtleSecondary,
+                                             in: composerShape)
             } else {
                 mainContent(content: content)
                     .background(.compound.bgSubtlePrimary, in: composerShape)

@@ -197,7 +197,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 // The rendered reply bubble with a greedy width. The custom layout prevents
                 // the infinite width from increasing the overall width of the view.
                 
-                TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
+                TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails, maxWidth: .infinity)
                     .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
                     .onTapGesture {
                         if context.viewState.timelineKind != .pinned {

@@ -17,13 +17,14 @@ enum TimelineReplyViewPlacement {
 struct TimelineReplyView: View {
     let placement: TimelineReplyViewPlacement
     let timelineItemReplyDetails: TimelineItemReplyDetails?
+    var maxWidth: CGFloat?
     
-    let backgroundShape = RoundedRectangle(cornerRadius: 6)
+    private let backgroundShape = RoundedRectangle(cornerRadius: 6)
     
     var body: some View {
         content
             .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: maxWidth, alignment: .leading)
             .padding(4.0)
             .background {
                 ZStack {
