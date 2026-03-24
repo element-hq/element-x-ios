@@ -9,7 +9,7 @@
 import MatrixRustSDK
 
 extension RoomProtocol {
-    func joinCallIntent(voiceOnly: Bool) async -> Intent {
+    func joinCallIntent(voiceOnly: Bool = false) async -> Intent {
         switch await (hasActiveRoomCall(), isDirect()) {
         case (true, true): voiceOnly ? .joinExistingDmVoice : .joinExistingDm
         case (true, false): .joinExisting
