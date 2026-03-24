@@ -23,6 +23,14 @@ final class FirebaseNotificationService: NSObject, MessagingDelegate, FirebaseNo
     func configure(onTokenUpdate: @escaping (String) -> Void) {
         self.onTokenUpdate = onTokenUpdate
 
+        // Firebase can only be configured once per app lifecycle.
+        // On re-login, skip initialization but keep the updated callback.
+        guard FirebaseApp.app() == nil else {
+            MXLog.info("Firebase already configured, skipping re-initialization")
+            Messaging.messaging().delegate = self
+            return
+        }
+
         // Skip Firebase initialization if GoogleService-Info.plist has placeholder values.
         // This prevents a crash when the customer hasn't provided real Firebase credentials yet.
         guard let options = FirebaseOptions.defaultOptions(),
