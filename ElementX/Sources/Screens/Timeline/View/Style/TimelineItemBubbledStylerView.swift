@@ -198,11 +198,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 // the infinite width from increasing the overall width of the view.
                 
                 TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(4.0)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.compound.bgCanvasDefault)
-                    .cornerRadius(8)
                     .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
                     .onTapGesture {
                         if context.viewState.timelineKind != .pinned {
@@ -212,8 +207,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 
                 // Add a fixed width reply bubble that is used for layout calculations but won't be rendered.
                 TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(4.0)
                     .timelineBubbleLayoutSize(.bubbleWidth(mode: .layout))
                     .hidden()
             }
