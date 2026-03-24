@@ -175,7 +175,7 @@ struct TimelineReplyView: View {
                         .aspectRatio(contentMode: .fit)
                         .padding(8.0)
                 case .icon(let keyPath):
-                    CompoundIcon(keyPath, size: .small, relativeTo: .body)
+                    CompoundIcon(keyPath, size: .medium, relativeTo: .body)
                 }
             }
         }
