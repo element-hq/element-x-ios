@@ -3,7 +3,7 @@
 
 **Назначение:** Живой документ для отслеживания всех открытых решений, блокеров и их статусов. Обновляется по мере продвижения проекта.
 
-**Последнее обновление:** 22 марта 2026 г.
+**Последнее обновление:** 24 марта 2026 г.
 
 ---
 
@@ -64,12 +64,14 @@ Element X iOS лицензирован под AGPL v3. Условия AGPL v3 ю
 | **Дедлайн решения** | До начала тестирования push-уведомлений |
 | **Фазы, которые блокирует** | Фаза 5 (тестирование Push-уведомлений) |
 | **Дата создания** | 2026-02-08 |
-| **Дата последнего обновления** | 2026-03-17 |
+| **Дата последнего обновления** | 2026-03-24 |
 
 **Описание:**
 FCM реализован полностью согласно ТЗ. Код написан, протестирован (14 unit-тестов), сборка проверена.
 
 **Изменение от 17.02.2026:** Заказчик сообщил, что Firebase НЕ настроен для данного сервера. Просит разработчика самостоятельно создать Firebase-проект и настроить FCM через панель Google. Sygnal есть, данные предоставят позже.
+
+**Изменение от 24.03.2026:** Заказчик переходит с ntfy на Sygnal для push-шлюза. Все необходимые данные переданы разработчику заказчика: APNs .p8 ключ (Key ID: `XZANH7CD3Z`, Team ID: `6HRG779SDK`), Firebase service account JSON (отправлен 11.03), Pusher App ID `org.ucmeet.UCMeetChat.ios.prod` / `.ios.dev`, Bundle ID `org.ucmeet.UCMeetChat`. Ожидаем URL нового Sygnal-шлюза.
 
 **Что сделано:**
 - Firebase SDK (v11.8.x) добавлен через SPM
@@ -97,10 +99,12 @@ FCM реализован полностью согласно ТЗ. Код нап
 - ✅ ~~Скачать реальный `GoogleService-Info.plist`~~ — установлен в проект (03.03.2026)
 - ✅ ~~Загрузить APNs-ключ в Firebase Console~~ — загружен (17.03.2026)
 - ✅ ~~Получить URL push gateway от заказчика~~ — `https://push.ucmeet.org` (ntfy)
-- ❌ **Заказчик:** проверить логи ntfy — FCM-токен отклоняется при пересылке в Firebase
-- 🔲 Сквозное тестирование push-уведомлений (после исправления ntfy)
+- ✅ ~~Заказчик: проверить логи ntfy~~ — заказчик решил перейти с ntfy на Sygnal
+- ❌ **Заказчик:** настроить Sygnal с предоставленными credentials и сообщить URL Sygnal-шлюза
+- 🔲 Обновить push gateway URL в AppSettings.swift после получения Sygnal URL
+- 🔲 Сквозное тестирование push-уведомлений (после настройки Sygnal)
 
-**Решение:** FCM. Вся инфраструктура со стороны разработчика готова. Блокер: ntfy сервер заказчика отклоняет FCM-токены — необходима диагностика на стороне сервера.
+**Решение:** FCM через Sygnal. Вся инфраструктура со стороны разработчика готова. Блокер: заказчик настраивает Sygnal — ожидаем URL нового push-шлюза.
 
 ---
 
@@ -168,7 +172,7 @@ FCM реализован полностью согласно ТЗ. Код нап
 | Sliding Sync | Настроен (нативный) | 🟢 Подтверждён |
 | Доступ из интернета | Публичный | 🟢 Подтверждён |
 | OIDC-провайдер | MAS (Matrix Authentication Service) | 🟢 Получен |
-| Sygnal Push Gateway | Есть, данные предоставят | 🟡 Ожидаем URL |
+| Sygnal Push Gateway | Переход с ntfy на Sygnal. Credentials переданы | 🟡 Ожидаем URL Sygnal |
 | Element Call / UCMeet Call | `https://call.ucmeet.org` | 🟢 Получен |
 | LiveKit SFU | `https://matrix.ucmeet.org/livekit-jwt-service` (из `.well-known`) | 🟢 Подтверждён |
 | TURN/STUN серверы | Через LiveKit SFU (не требует отдельной настройки) | 🟢 Решено |
@@ -448,6 +452,10 @@ FCM реализован полностью согласно ТЗ. Код нап
 | | NSE entitlement `com.apple.developer.usernotifications.filtering` удалён (требует одобрения Apple, не доступен для нашего Bundle ID). |
 | | Upstream sync: 13 коммитов из element-hq/element-x-ios:develop (translations, compound-design-tokens v6-v7, Classic accounts, key backup fix). Upstream divergence: 59 ahead, 0 behind. |
 | | Team ID исправлен в документации: `26UC01GH` → `6HRG779SDK`. |
+| 2026-03-24 | **Исправления по замечаниям заказчика (Build 2 → Build 3):** |
+| | D-002 обновлён: заказчик переходит с ntfy на Sygnal. Все credentials для Sygnal переданы (APNs key, Firebase JSON, pusher app IDs). Ожидаем Sygnal URL. |
+| | 6 исправлений: OIDC `APP_NAME` ElementX→UCMeet.Chat, аналитика/rageshake отключены (nil), MapTiler ключ `iKPA4bK9zgtadTEw8neu` настроен, 13 русских переводов добавлены + 1 исправлен, Compound color tokens green→navy blue (#003B5D) через CompoundHook overrides. |
+| | Статические превью карт показывают «Invalid key» — бесплатный тариф MapTiler не включает Static Maps API. Ожидаем решение заказчика. |
 
 ---
 

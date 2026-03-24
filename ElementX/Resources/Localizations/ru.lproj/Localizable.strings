@@ -1,5 +1,6 @@
 "Notification" = "Уведомление";
 "a11y_add_reaction" = "Добавить реакцию: %1$@";
+"a11y_address" = "Адрес";
 "a11y_avatar" = "Аватар";
 "a11y_collapse_message_text_field" = "Свернуть поле текста сообщения";
 "a11y_delete" = "Удалить";
@@ -18,10 +19,13 @@
 "a11y_pause" = "Приостановить";
 "a11y_paused_voice_message" = "Голосовое сообщение, длительность: %1$@, текущая позиция: %2$@";
 "a11y_pin_field" = "Поле PIN-кода";
+"a11y_pinned_location" = "Закреплённое местоположение";
 "a11y_play" = "Воспроизвести";
+"a11y_playback_speed" = "Скорость воспроизведения";
 "a11y_poll_end" = "Завершённый опрос";
 "a11y_polls_will_remove_selection" = "Удалить предыдущий ответ";
 "a11y_polls_winning_answer" = "Это лучший ответ";
+"a11y_qr_code" = "QR-код";
 "a11y_react_with" = "Реагировать вместе с %1$@";
 "a11y_react_with_other_emojis" = "Реакция с помощью эмодзи";
 "a11y_read_receipts_multiple" = "Прочитано %1$@ и %2$@";
@@ -30,9 +34,11 @@
 "a11y_remove_reaction" = "Удалить реакцию с %1$@";
 "a11y_remove_reaction_with" = "Удалить реакцию %1$@";
 "a11y_send_files" = "Отправить файлы";
+"a11y_sender_location" = "Местоположение отправителя";
 "a11y_session_verification_time_limited_action_required" = "Требуется действие, на которое есть ограничение по времени, у вас есть одна минута для проверки";
 "a11y_show_password" = "Показать пароль";
 "a11y_start_call" = "Начать звонок";
+"a11y_start_voice_call" = "Начать голосовой звонок";
 "a11y_tombstoned_room" = "Брошенная комната";
 "a11y_user_menu" = "Меню пользователя";
 "a11y_view_avatar" = "Просмотреть аватар";
@@ -145,6 +151,7 @@
 "action_send_voice_message" = "Отправить голосовое сообщение";
 "action_share" = "Поделиться";
 "action_share_link" = "Поделиться ссылкой";
+"action_share_live_location" = "Поделиться геопозицией";
 "action_show" = "Показать";
 "action_sign_in_again" = "Повторите вход";
 "action_signout" = "Выйти";
@@ -258,6 +265,7 @@
 "common_open_source_licenses" = "Лицензии с открытым исходным кодом";
 "common_optic_id_ios" = "Оптический идентификатор";
 "common_or" = "или";
+"common_other_options" = "Другие варианты";
 "common_password" = "Пароль";
 "common_people" = "Пользователи";
 "common_permalink" = "Постоянная ссылка";
@@ -386,6 +394,7 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@ была сброшена.";
 "crypto_identity_change_verification_violation_new" = "Пользователь %1$@ сменил имя на %2$@. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Вывод верификации";
+"dialog_allow_access" = "Разрешить доступ";
 "dialog_confirm_link_message" = "Ссылка %1$@ ведет вас на другой сайт %2$@\n\nВы действительно хотите продолжить?";
 "dialog_confirm_link_title" = "Перепроверьте эту ссылку";
 "dialog_file_too_large_to_upload_title" = "Размер файла слишком большой для загрузки.";
@@ -453,6 +462,7 @@
 "notification_channel_ringing_calls" = "Звонки";
 "notification_channel_silent" = "Бесшумные уведомления";
 "notification_fallback_content" = "У вас есть новые сообщения.";
+"notification_incoming_audio_call" = "📞 Входящий звонок";
 "notification_incoming_call" = "📹 Входящий вызов";
 "notification_inline_reply_failed" = "** Не удалось отправить - пожалуйста, откройте комнату";
 "notification_invite_body" = "Пригласил вас в чат";
@@ -703,7 +713,7 @@
 "screen_room_timeline_reactions_show_reactions_summary" = "Показать сводку реакций";
 "screen_roomlist_clear_filters" = "Очистить фильтры";
 "screen_roomlist_tombstoned_room_description" = "Эта комната была обновлена";
-"screen_roomlist_your_spaces" = "Your spaces";
+"screen_roomlist_your_spaces" = "Ваши пространства";
 "screen_security_and_privacy_add_room_address_action" = "Добавить адрес";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Любой, кто находится в авторизованных пространствах, может присоединиться, а все остальным необходимо запрашивать доступ.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Каждый должен запросить доступ.";
@@ -763,6 +773,8 @@
 "screen_start_chat_join_room_by_address_room_found" = "Соответствующая комната найдена";
 "screen_start_chat_join_room_by_address_room_not_found" = "Комната не найдена";
 "screen_start_chat_join_room_by_address_supporting_text" = "прим. #room-name:matrix.org";
+"screen_static_location_sheet_timestamp_description" = "Отправлено %1$@";
+"screen_static_location_sheet_title" = "На карте";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Сообщение не отправлено, потому что подтвержденная личность %1$@ была сброшена.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Сообщение не отправлено, потому что %1$@ не проверил одно или несколько устройств.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Сообщение не отправлено, поскольку вы не подтвердили одно или несколько своих устройств.";
@@ -994,6 +1006,7 @@
 "screen_onboarding_sign_in_manually" = "Войти вручную";
 "screen_onboarding_sign_in_with_qr_code" = "Войти QR-кодом";
 "screen_onboarding_sign_up" = "Создать учетную запись";
+"screen_onboarding_welcome_back" = "С возвращением";
 "screen_onboarding_welcome_message" = "Добро пожаловать в самый быстрый клиент %1$@. Ориентирован на скорость и простоту.";
 "screen_onboarding_welcome_subtitle" = "Добро пожаловать в %1$@. Ориентирован на скорость и простоту.";
 "screen_onboarding_welcome_title" = "Добро пожаловать в UCMeet.Chat";

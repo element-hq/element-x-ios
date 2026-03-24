@@ -23,9 +23,9 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 **Developer:** Saidakhror Murzaliev (solo, 20h/week, AI-assisted)
 **Customer:** Russian-speaking, existing Matrix infrastructure
 
-## Current State (as of 2026-03-22)
+## Current State (as of 2026-03-24)
 
-**Code changes are feature-complete.** Zero user-visible Element branding. Sprint 6 (TestFlight & Publication) in progress. Build 2 uploaded to TestFlight. Push E2E testing blocked on customer's ntfy server. Customer added as external TestFlight tester.
+**Build 3 in preparation.** Customer tested Build 2 and reported 6 issues — all fixed. Sprint 6 (TestFlight & Publication) in progress. Customer switching from ntfy to Sygnal for push gateway.
 
 ### Configuration Applied
 
@@ -36,23 +36,34 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 | Team ID | `6HRG779SDK` |
 | Display Name | `UCMeet.Chat` |
 | Homeserver | `matrix.ucmeet.org` |
-| Push Gateway | `https://push.ucmeet.org` (ntfy with Matrix gateway API — confirmed reachable, FCM token rejected by ntfy) |
+| Push Gateway | Customer switching from ntfy to Sygnal. Sygnal credentials provided (APNs key, pusher app IDs, Firebase JSON). Awaiting Sygnal URL |
 | OIDC | Custom URL scheme `org.ucmeet.UCMeetChat:/callback` — login verified working |
 | Calls | URL scheme `org.ucmeet.call`, LiveKit via `.well-known` |
 | Locales | en, en-US, ru (trimmed from 37) |
-| Accent Color | Dark navy blue #003B5D |
+| Accent Color | Dark navy blue #003B5D (Compound design tokens overridden — all green→navy blue) |
 | Xcode Signing | Resolved — customer's Apple ID in Xcode, automatic signing works |
 | Firebase | Real GoogleService-Info.plist installed (project `matrix-8c24a`), APNs key uploaded |
-| MapLibre | API key configured, interactive maps work. Static map previews need Static Maps API permission on MapTiler |
+| MapLibre | API key `iKPA4bK9zgtadTEw8neu` configured. Interactive maps work. Static map previews show "Invalid key" — free MapTiler plan doesn't include Static Maps API |
 | Pusher App IDs | `org.ucmeet.UCMeetChat.ios.prod` (release) / `.ios.dev` (debug) |
 | NSE Entitlement | `com.apple.developer.usernotifications.filtering` removed (requires Apple approval, not available for our bundle ID) |
 | Encryption | `ITSAppUsesNonExemptEncryption = YES` in plist, encryption compliance document uploaded to ASC |
+| Analytics | Disabled (PostHog, Sentry, rageshake all set to `nil`) |
+| APP_NAME | `UCMeet.Chat` (was `ElementX` — fixed OIDC system dialog) |
 | Upstream | Synced with `element-hq/element-x-ios:develop` (60 ahead, 0 behind) |
+
+### Build 2 → Build 3 Changes (2026-03-24)
+
+1. **OIDC dialog fix** — `APP_NAME: ElementX` → `UCMeet.Chat` in `project.yml`
+2. **Analytics disabled** — PostHog, Sentry set to `nil` in Secrets.swift
+3. **Bug reports disabled** — rageshake URL set to `nil`
+4. **MapTiler key configured** — `iKPA4bK9zgtadTEw8neu` (static previews need paid plan)
+5. **Russian translations** — 13 keys added, 1 fixed (`screen_roomlist_your_spaces`)
+6. **Navy blue color overrides** — 20 SwiftUI + 19 UIKit Compound tokens overridden in CompoundHook.swift
 
 ### Remaining Blockers
 
-1. **Push E2E testing** — ntfy server at `push.ucmeet.org` rejects FCM tokens (`"rejected"` response). Customer must check ntfy server logs for FCM forwarding errors. Firebase service account JSON was sent 2026-03-11
-2. **MapLibre static maps** — MapTiler key needs "Static Maps" permission enabled (interactive maps already work)
+1. **Push E2E testing** — customer switching from ntfy to Sygnal. Credentials provided (APNs key, pusher app IDs, Firebase JSON). Awaiting Sygnal URL
+2. **MapTiler static maps** — free plan shows "Invalid key" on static previews. Customer deciding: upgrade to paid plan ($25/mo) or leave as-is
 3. **AGPL v3 licensing** — need written confirmation it covers Element X (blocks App Store only)
 4. **Screenshots** — customer needs to provide device-framed screenshots from TestFlight (6.7" + 5.5")
 5. **Privacy Nutrition Labels** — questionnaire not yet completed in ASC
@@ -60,8 +71,8 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 
 ### Next Actions (waiting on customer)
 
-1. Customer: configure Sygnal with provided Firebase credentials + confirm Sygnal URL
-2. Customer/Dev: enable Static Maps permission on MapTiler key
+1. Customer: configure Sygnal with provided credentials + confirm Sygnal URL
+2. Customer: decide on MapTiler paid plan for static map previews
 3. Customer: written AGPL license confirmation
 4. Customer: provide screenshots from TestFlight with device frames
 5. Customer: provide review contact name + email
@@ -168,15 +179,15 @@ All docs in `documentation/` folder:
 | 3: Push + OIDC + Associated Domains | **BLOCKED** | Push gateway URL confirmed (`https://push.ucmeet.org`), E2E test attempted, FCM token rejected by ntfy. Customer must check ntfy logs |
 | 4: Calls & UCMeet Call | **DONE** | |
 | 5: Finalization & Release Prep | **DONE** | NSE entitlement fix, upstream sync, version set to 1.0.0 (Build 2) |
-| 6: TestFlight & Publication | **IN PROGRESS** | Build 2 on TestFlight, ASC listing filled (RU+EN), review info entered. Remaining: screenshots, Privacy Nutrition Labels, review contact |
+| 6: TestFlight & Publication | **IN PROGRESS** | Build 3 prep: 6 customer issues fixed (OIDC name, analytics, bug reports, maps, translations, colors). Remaining: screenshots, Privacy Nutrition Labels, review contact, push E2E |
 
 ### Summary Metrics
 
 | Metric | Value |
 |--------|-------|
-| Plan completion | ~97% code + listing, blocked on customer for screenshots + push E2E |
-| Hours invested | ~88–90h of ~120h budget |
-| Hours remaining | ~12–18h (screenshots, privacy labels, push testing, release) |
+| Plan completion | ~98% code + listing, blocked on customer for screenshots + push E2E + MapTiler decision |
+| Hours invested | ~92h of ~120h budget |
+| Hours remaining | ~10–15h (Build 3 upload, push testing, privacy labels, release) |
 | Decisions resolved | 7/12 |
 | Unit tests | 962 run, 899 passed, 63 pre-existing failures, 0 new |
 | User-visible Element branding | **0** |
@@ -184,4 +195,4 @@ All docs in `documentation/` folder:
 
 ---
 
-*Last updated: 2026-03-22. See `documentation/progress_log.md` for detailed daily log.*
+*Last updated: 2026-03-24. See `documentation/progress_log.md` for detailed daily log.*
