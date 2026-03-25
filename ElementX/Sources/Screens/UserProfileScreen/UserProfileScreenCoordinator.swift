@@ -19,7 +19,7 @@ struct UserProfileScreenCoordinatorParameters {
 
 enum UserProfileScreenCoordinatorAction {
     case openDirectChat(roomID: String)
-    case startCall(roomProxy: JoinedRoomProxyProtocol)
+    case startCall(roomProxy: JoinedRoomProxyProtocol, voiceCall: Bool)
     case dismiss
 }
 
@@ -48,8 +48,8 @@ final class UserProfileScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .openDirectChat(let roomID):
                 actionsSubject.send(.openDirectChat(roomID: roomID))
-            case .startCall(let roomProxy):
-                actionsSubject.send(.startCall(roomProxy: roomProxy))
+            case .startCall(let roomProxy, let voiceCall):
+                actionsSubject.send(.startCall(roomProxy: roomProxy, voiceCall: voiceCall))
             case .dismiss:
                 actionsSubject.send(.dismiss)
             }

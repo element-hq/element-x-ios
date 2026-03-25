@@ -207,8 +207,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     handleAppRoute(.chatBackupSettings, animated: true)
                 case .sessionVerification(let flow):
                     presentSessionVerificationScreen(flow: flow)
-                case .showCallScreen(let roomProxy):
-                    presentCallScreen(roomProxy: roomProxy, voiceOnly: false)
+                case .showCallScreen(let roomProxy, let voiceCall):
+                    presentCallScreen(roomProxy: roomProxy, voiceOnly: voiceCall)
                 case .hideCallScreenOverlay:
                     hideCallScreenOverlay()
                 case .logout:

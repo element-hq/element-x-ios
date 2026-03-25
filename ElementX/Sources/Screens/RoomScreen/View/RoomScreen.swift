@@ -172,11 +172,8 @@ struct RoomScreen: View {
         }
         
         if !ProcessInfo.processInfo.isiOSAppOnMac {
-            ToolbarItem(placement: .primaryAction) {
-                if context.viewState.shouldShowCallButton {
-                    callButton
-                        .disabled(!context.viewState.canJoinCall)
-                }
+            if context.viewState.shouldShowCallButton {
+                callControls
             }
         }
         
@@ -195,21 +192,41 @@ struct RoomScreen: View {
         }
     }
     
-    @ViewBuilder
-    private var callButton: some View {
+    @ToolbarContentBuilder
+    private var callControls: some ToolbarContent {
         if context.viewState.hasOngoingCall {
-            JoinCallButton {
-                context.send(viewAction: .displayCall)
+            // XXX: Future work: get the active call
+            // intent to switch between voice and audio
+            ToolbarItem(placement: .primaryAction) {
+                JoinCallButton {
+                    context.send(viewAction: .displayCall)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
+                .disabled(!context.viewState.canJoinCall)
             }
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         } else {
-            Button {
-                context.send(viewAction: .displayCall)
-            } label: {
-                CompoundIcon(\.videoCallSolid)
+            if context.viewState.isDirectOneToOneRoom {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        context.send(viewAction: .displayVoiceCall)
+                    } label: {
+                        CompoundIcon(\.voiceCallSolid)
+                    }
+                    .accessibilityLabel(L10n.a11yStartVoiceCall)
+                    .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVoiceCall)
+                    .disabled(!context.viewState.canJoinCall)
+                }
             }
-            .accessibilityLabel(L10n.a11yStartCall)
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    context.send(viewAction: .displayCall)
+                } label: {
+                    CompoundIcon(\.videoCallSolid)
+                }
+                .accessibilityLabel(L10n.a11yStartCall)
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.startCall)
+                .disabled(!context.viewState.canJoinCall)
+            }
         }
     }
 }
@@ -250,7 +267,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false) -> ViewModels {
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
                                                       name: "Preview room",
-                                                      hasOngoingCall: true,
+                                                      hasOngoingCall: false,
                                                       successor: hasSuccessor ? .init(roomId: UUID().uuidString, reason: nil) : nil,
                                                       powerLevelsConfiguration: .init(canUserSendMessage: canSendMessage)))
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)

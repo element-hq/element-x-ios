@@ -10,7 +10,7 @@ import Foundation
 
 enum UserProfileScreenViewModelAction {
     case openDirectChat(roomID: String)
-    case startCall(roomProxy: JoinedRoomProxyProtocol)
+    case startCall(roomProxy: JoinedRoomProxyProtocol, voiceCall: Bool)
     case dismiss
 }
 

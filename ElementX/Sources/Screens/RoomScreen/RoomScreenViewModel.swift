@@ -76,6 +76,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
+                                            isDirectOneToOneRoom: roomProxy.isDirectOneToOneRoom,
                                             hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
                                             roomHistorySharingState: roomHistorySharingState)
         super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
@@ -99,7 +100,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .displayRoomDetails:
             actionsSubject.send(.displayRoomDetails)
         case .displayCall:
-            actionsSubject.send(.displayCall)
+            actionsSubject.send(.displayCall(voiceCall: false))
+            actionsSubject.send(.removeComposerFocus)
+            analyticsService.trackInteraction(name: .MobileRoomCallButton)
+        case .displayVoiceCall:
+            actionsSubject.send(.displayCall(voiceCall: true))
             actionsSubject.send(.removeComposerFocus)
             analyticsService.trackInteraction(name: .MobileRoomCallButton)
         case .footerViewAction(let action):

@@ -149,7 +149,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             showErrorIndicator()
             return
         }
-        actionsSubject.send(.startCall(roomProxy: roomProxy))
+        actionsSubject.send(.startCall(roomProxy: roomProxy, voiceCall: false))
     }
     
     // MARK: User Indicators
