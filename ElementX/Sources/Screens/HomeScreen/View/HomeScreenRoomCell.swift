@@ -74,7 +74,7 @@ struct HomeScreenRoomCell: View {
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
-                .font(.compound.bodyLGSemibold)
+                .font(room.hasUnreads ? .compound.bodyLGSemibold : .compound.bodyLG)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -157,6 +157,7 @@ struct HomeScreenRoomCell: View {
     private var lastMessage: some View {
         if let displayedLastMessage = room.displayedLastMessage {
             Text(displayedLastMessage)
+                .font(room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD)
                 .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
         }
     }
@@ -175,8 +176,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 
 private extension View {
     func lastMessageFormatting(hasFailed: Bool) -> some View {
-        font(.compound.bodyMD)
-            .foregroundColor(hasFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
+        foregroundColor(hasFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
     }

@@ -197,6 +197,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
         let callBadgeType: CallBadgeType
     }
     
+    var hasUnreads = false
+    
     let name: String
     
     let isDirect: Bool
@@ -253,7 +255,7 @@ extension HomeScreenRoom {
         let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
         let isUnseenInvite = summary.joinRequestType?.isInvite == true && !seenInvites.contains(roomID)
 
-        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
+        let isDotShown = (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.isMarkedUnread || isUnseenInvite
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
         let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || isUnseenInvite
@@ -275,6 +277,7 @@ extension HomeScreenRoom {
                                 isMentionShown: isMentionShown,
                                 isMuteShown: isMuteShown,
                                 callBadgeType: callBadge),
+                  hasUnreads: hasUnreadMessages,
                   name: summary.name,
                   isDirect: summary.isDirect,
                   isHighlighted: isHighlighted,
