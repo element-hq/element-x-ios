@@ -18,6 +18,8 @@ class WindowManager: SecureWindowManagerProtocol {
     private(set) var overlayWindow: UIWindow!
     private(set) var globalSearchWindow: UIWindow!
     private(set) var alternateWindow: UIWindow!
+    
+    private(set) var openWindowAction: OpenWindowAction!
         
     var windows: [UIWindow] {
         [mainWindow, overlayWindow, globalSearchWindow, alternateWindow]
@@ -28,6 +30,8 @@ class WindowManager: SecureWindowManagerProtocol {
     @CancellableTask private var switchTask: Task<Void, Error>?
     /// A duration that allows window switching to wait a couple of frames to avoid a transition through black.
     private let windowHideDelay = Duration.milliseconds(33)
+    
+    private var coordinators: [WindowManagerWindowType: (coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?)] = [:]
     
     init(appDelegate: AppDelegate) {
         self.appDelegate = appDelegate
@@ -52,6 +56,29 @@ class WindowManager: SecureWindowManagerProtocol {
         alternateWindow.tintColor = .compound.textActionPrimary
         
         delegate?.windowManagerDidConfigureWindows(self)
+    }
+    
+    func configure(with openWindowAction: OpenWindowAction) {
+        self.openWindowAction = openWindowAction
+    }
+    
+    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType) {
+        coordinators[type] = (coordinator, flowCoordinator)
+        openWindowAction(value: type)
+    }
+    
+    func windowForType(_ type: WindowManagerWindowType) -> AnyView? {
+        guard let coordinator = coordinators[type]?.coordinator else {
+            return nil
+        }
+        
+        return coordinator.toPresentable()
+    }
+    
+    func handleRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType) {
+        if let flowCoordinator = coordinators[windowType]?.flowCoordinator {
+            flowCoordinator.handleAppRoute(appRoute, animated: true)
+        }
     }
     
     func switchToMain() {

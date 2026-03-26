@@ -8,6 +8,11 @@
 
 import SwiftUI
 
+enum WindowManagerWindowType: Hashable, Codable {
+    case room(roomID: String)
+    case settings
+}
+
 protocol SecureWindowManagerDelegate: AnyObject {
     /// The window manager has configured its windows.
     func windowManagerDidConfigureWindows(_ windowManager: SecureWindowManagerProtocol)
@@ -19,6 +24,12 @@ protocol SecureWindowManagerProtocol: WindowManagerProtocol {
     
     /// Configures the window manager to operate on the supplied scene.
     func configure(with windowScene: UIWindowScene)
+    
+    func configure(with openWindowAction: OpenWindowAction)
+    
+    func handleRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType)
+    
+    func windowForType(_ type: WindowManagerWindowType) -> AnyView?
     
     /// Shows the main and overlay window combo, hiding the alternate window.
     func switchToMain()
@@ -42,6 +53,8 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     
     /// All the windows being managed
     var windows: [UIWindow] { get }
+    
+    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType)
     
     /// Makes the global search window key. Used to get automatic text field focus.
     func showGlobalSearch()

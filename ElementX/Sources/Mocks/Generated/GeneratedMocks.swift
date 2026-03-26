@@ -21217,6 +21217,47 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
     var alternateWindow: UIWindow!
     var windows: [UIWindow] = []
 
+    //MARK: - registerCoordinator
+
+    var registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingCallsCount = 0
+    var registerCoordinatorFlowCoordinatorForWindowTypeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var registerCoordinatorFlowCoordinatorForWindowTypeCalled: Bool {
+        return registerCoordinatorFlowCoordinatorForWindowTypeCallsCount > 0
+    }
+    var registerCoordinatorFlowCoordinatorForWindowTypeReceivedArguments: (coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, type: WindowManagerWindowType)?
+    var registerCoordinatorFlowCoordinatorForWindowTypeReceivedInvocations: [(coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, type: WindowManagerWindowType)] = []
+    var registerCoordinatorFlowCoordinatorForWindowTypeClosure: ((CoordinatorProtocol, FlowCoordinatorProtocol?, WindowManagerWindowType) -> Void)?
+
+    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType) {
+        registerCoordinatorFlowCoordinatorForWindowTypeCallsCount += 1
+        registerCoordinatorFlowCoordinatorForWindowTypeReceivedArguments = (coordinator: coordinator, flowCoordinator: flowCoordinator, type: type)
+        DispatchQueue.main.async {
+            self.registerCoordinatorFlowCoordinatorForWindowTypeReceivedInvocations.append((coordinator: coordinator, flowCoordinator: flowCoordinator, type: type))
+        }
+        registerCoordinatorFlowCoordinatorForWindowTypeClosure?(coordinator, flowCoordinator, type)
+    }
     //MARK: - showGlobalSearch
 
     var showGlobalSearchUnderlyingCallsCount = 0

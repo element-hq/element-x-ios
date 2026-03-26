@@ -12,6 +12,7 @@ import SwiftUI
 struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.openURL) private var openURL
+    @Environment(\.openWindow) private var openWindow
     
     private var appCoordinator: AppCoordinatorProtocol!
 
@@ -39,19 +40,7 @@ struct Application: App {
                         Divider().ignoresSafeArea()
                     }
                 }
-                .environment(\.openURL, OpenURLAction { url in
-                    if appCoordinator.handleDeepLink(url, isExternalURL: false) {
-                        return .handled
-                    }
-                    
-                    if appCoordinator.handlePotentialPhishingAttempt(url: url, openURLAction: { url in
-                        openURL(url, isExternalURL: false)
-                    }) {
-                        return .handled
-                    }
-
-                    return .systemAction
-                })
+                .environment(\.openURL, openURLAction(appCoordinator: appCoordinator, windowType: nil))
                 .onOpenURL { url in
                     openURL(url, isExternalURL: true)
                 }
@@ -62,14 +51,42 @@ struct Application: App {
                 }
                 .task {
                     appCoordinator.start()
+                    appCoordinator.windowManager.configure(with: openWindow)
                 }
+        }
+        .handlesExternalEvents(matching: ["*"])
+        
+        // This is invoked in response of the WindowManager receiving a register
+        // coordinator request and invoking the `OpenWindowAction` with which
+        // it's configured in the task above.
+        WindowGroup(for: WindowManagerWindowType.self) { $type in
+            if let type {
+                appCoordinator.windowManager.windowForType(type)
+                    .environment(\.openURL, openURLAction(appCoordinator: appCoordinator, windowType: type))
+            }
+        }
+    }
+    
+    private func openURLAction(appCoordinator: AppCoordinatorProtocol, windowType: WindowManagerWindowType?) -> OpenURLAction {
+        .init { url in
+            if appCoordinator.handleDeepLink(url, isExternalURL: false, windowType: windowType) {
+                return .handled
+            }
+            
+            if appCoordinator.handlePotentialPhishingAttempt(url: url, openURLAction: { url in
+                openURL(url, isExternalURL: false)
+            }) {
+                return .handled
+            }
+            
+            return .systemAction
         }
     }
     
     // MARK: - Private
     
     private func openURL(_ url: URL, isExternalURL: Bool) {
-        if !appCoordinator.handleDeepLink(url, isExternalURL: isExternalURL) {
+        if !appCoordinator.handleDeepLink(url, isExternalURL: isExternalURL, windowType: nil) {
             openURLInSystemBrowser(url)
         }
     }

@@ -176,7 +176,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .sink { [weak self] action in
                 switch action {
                 case .startCall(let roomID, let isVoiceCall):
-                    self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall))
+                    self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
                 case .receivedIncomingCallRequest:
                     // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`
                     // the UIApplication states don't change and syncing is neither started nor ran on
@@ -233,14 +233,41 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                     secondaryButton: .init(title: L10n.actionContinue) { openURLAction(confirmationParameters.internalURL) })
         return true
     }
+    
+    func handleAppRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType?) {
+        if let windowType {
+            windowManager.handleRoute(appRoute, windowType: windowType)
+            return
+        }
+        
+        var handled = false
+        
+        switch appRoute {
+        case .accountProvisioningLink:
+            if let authenticationFlowCoordinator {
+                authenticationFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
+                handled = true
+            }
+        default:
+            if let userSessionFlowCoordinator {
+                userSessionFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
+                handled = true
+            }
+        }
+        
+        if !handled {
+            storedAppRoute = appRoute
+        }
+    }
 
-    func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
+    func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: WindowManagerWindowType?) -> Bool {
         // Parse into an AppRoute to redirect these in a type safe way.
         
         if let route = appRouteURLParser.route(from: url) {
             switch route {
             case .accountProvisioningLink:
-                handleAppRoute(route)
+                handleAppRoute(route,
+                               windowType: windowType)
             case .genericCallLink(let url):
                 if let userSessionFlowCoordinator {
                     userSessionFlowCoordinator.handleAppRoute(route, animated: true)
@@ -249,33 +276,43 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 }
             case .userProfile(let userID):
                 if isExternalURL {
-                    handleAppRoute(route)
+                    handleAppRoute(route,
+                                   windowType: windowType)
                 } else {
-                    handleAppRoute(.roomMemberDetails(userID: userID))
+                    handleAppRoute(.roomMemberDetails(userID: userID),
+                                   windowType: windowType)
                 }
             case .room(let roomID, let via):
                 if isExternalURL {
-                    handleAppRoute(route)
+                    handleAppRoute(route,
+                                   windowType: windowType)
                 } else {
-                    handleAppRoute(.childRoom(roomID: roomID, via: via))
+                    handleAppRoute(.childRoom(roomID: roomID, via: via),
+                                   windowType: windowType)
                 }
             case .roomAlias(let alias):
                 if isExternalURL {
-                    handleAppRoute(route)
+                    handleAppRoute(route,
+                                   windowType: windowType)
                 } else {
-                    handleAppRoute(.childRoomAlias(alias))
+                    handleAppRoute(.childRoomAlias(alias),
+                                   windowType: windowType)
                 }
             case .event(let eventID, let roomID, let via):
                 if isExternalURL {
-                    handleAppRoute(route)
+                    handleAppRoute(route,
+                                   windowType: windowType)
                 } else {
-                    handleAppRoute(.childEvent(eventID: eventID, roomID: roomID, via: via))
+                    handleAppRoute(.childEvent(eventID: eventID, roomID: roomID, via: via),
+                                   windowType: windowType)
                 }
             case .eventOnRoomAlias(let eventID, let alias):
                 if isExternalURL {
-                    handleAppRoute(route)
+                    handleAppRoute(route,
+                                   windowType: windowType)
                 } else {
-                    handleAppRoute(.childEventOnRoomAlias(eventID: eventID, alias: alias))
+                    handleAppRoute(.childEventOnRoomAlias(eventID: eventID, alias: alias),
+                                   windowType: windowType)
                 }
             case .share(let payload):
                 guard isExternalURL else {
@@ -284,7 +321,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 }
                 
                 do {
-                    try handleAppRoute(.share(payload.withDefaultTemporaryDirectory()))
+                    try handleAppRoute(.share(payload.withDefaultTemporaryDirectory()),
+                                       windowType: windowType)
                 } catch {
                     MXLog.error("Failed moving payload out of the app group container: \(error)")
                 }
@@ -309,7 +347,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         MXLog.info("Starting call in room: \(roomIdentifier)")
-        handleAppRoute(AppRoute.call(roomID: roomIdentifier, isVoiceCall: false))
+        handleAppRoute(AppRoute.call(roomID: roomIdentifier, isVoiceCall: false), windowType: nil)
     }
     
     // MARK: - AuthenticationFlowCoordinatorDelegate
@@ -363,15 +401,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             } else {
                 storedRoomsToAwait = [roomID]
             }
-            handleAppRoute(.room(roomID: roomID, via: []))
+            handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
         } else if appSettings.threadsEnabled, let threadRootEventID = content.threadRootEventID {
-            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID))
+            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID), windowType: nil)
         } else if let eventID {
             // Only track main timeline event deeplinking
             ServiceLocator.shared.analytics.signpost.startTransaction(.notificationToMessage)
-            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []))
+            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []), windowType: nil)
         } else {
-            handleAppRoute(.room(roomID: roomID, via: []))
+            handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
         }
     }
     
@@ -904,27 +942,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
         }
         .store(in: &cancellables)
-    }
-    
-    private func handleAppRoute(_ appRoute: AppRoute) {
-        var handled = false
-        
-        switch appRoute {
-        case .accountProvisioningLink:
-            if let authenticationFlowCoordinator {
-                authenticationFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
-                handled = true
-            }
-        default:
-            if let userSessionFlowCoordinator {
-                userSessionFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
-                handled = true
-            }
-        }
-        
-        if !handled {
-            storedAppRoute = appRoute
-        }
     }
     
     private func clearCache() {

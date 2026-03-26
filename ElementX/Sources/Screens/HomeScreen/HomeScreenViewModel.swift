@@ -173,6 +173,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch viewAction {
         case .selectRoom(let roomIdentifier):
             actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
+        case .detachRoom(let roomIdentifier):
+            actionsSubject.send(.detachRoom(roomIdentifier: roomIdentifier))
         case .showRoomDetails(let roomIdentifier):
             actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
         case .leaveRoom(let roomIdentifier):

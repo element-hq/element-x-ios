@@ -321,7 +321,11 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             if case .space = detailState {
                 dismissRoomFlow(animated: animated)
             }
-            startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated)
+            startRoomFlow(roomID: roomID,
+                          via: via,
+                          entryPoint: entryPoint,
+                          detached: false,
+                          animated: animated)
         }
         actionsSubject.send(.hideCallScreenOverlay) // Turn any active call into a PiP so that navigation from a notification is visible to the user.
     }
@@ -393,6 +397,8 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .presentRoom(let roomID):
                     handleAppRoute(.room(roomID: roomID, via: []), animated: true)
+                case .detachRoom(let roomID):
+                    startRoomFlow(roomID: roomID, via: [], entryPoint: .room, detached: true, animated: true)
                 case .presentRoomDetails(let roomID):
                     handleAppRoute(.roomDetails(roomID: roomID), animated: true)
                 case .presentReportRoom(let roomID):
@@ -516,8 +522,10 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     private func startRoomFlow(roomID: String,
                                via: [String],
                                entryPoint: RoomFlowCoordinatorEntryPoint,
+                               detached: Bool,
                                animated: Bool) {
-        let navigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
+        let navigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: detached ? nil : navigationSplitCoordinator)
+        
         let coordinator = RoomFlowCoordinator(roomID: roomID,
                                               isChildFlow: false,
                                               navigationStackCoordinator: navigationStackCoordinator,
@@ -539,9 +547,14 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        roomFlowCoordinator = coordinator
-        
-        navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator, animated: animated)
+        if detached {
+            flowParameters.windowManager.registerCoordinator(navigationStackCoordinator,
+                                                             flowCoordinator: coordinator,
+                                                             forWindowType: .room(roomID: roomID))
+        } else {
+            roomFlowCoordinator = coordinator
+            navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator, animated: animated)
+        }
         
         switch entryPoint {
         case .room:

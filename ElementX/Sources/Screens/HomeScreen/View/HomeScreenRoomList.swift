@@ -34,7 +34,18 @@ struct HomeScreenRoomList: View {
                 let isSelected = context.viewState.selectedRoomID == room.id
                 
                 HomeScreenRoomCell(room: room, isSelected: isSelected, mediaProvider: context.mediaProvider, action: context.send)
+                    .simultaneousGesture(TapGesture(count: 2).onEnded {
+                        context.send(viewAction: .detachRoom(roomIdentifier: room.id))
+                    })
                     .contextMenu {
+                        if !UIDevice.current.isPhone {
+                            Button {
+                                context.send(viewAction: .detachRoom(roomIdentifier: room.id))
+                            } label: {
+                                Label("Open in new window", icon: \.popOut)
+                            }
+                        }
+                        
                         if room.badges.isDotShown {
                             Button {
                                 context.send(viewAction: .markRoomAsRead(roomIdentifier: room.id))
