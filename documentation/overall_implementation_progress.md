@@ -8,9 +8,9 @@
 
 ---
 
-## Latest Analysis: 2026-03-03
+## Latest Analysis: 2026-03-27
 
-**Calendar day:** ~33 since project start (Feb 8)
+**Calendar day:** ~47 since project start (Feb 8)
 
 ---
 
@@ -21,13 +21,13 @@
 | TOR Section | Requirement | Status | Notes |
 |-------------|-------------|--------|-------|
 | **3.1** Source code adaptation | Bundle ID, identifiers, build scheme, libraries | **DONE** | Server config applied, Element refs cleaned, associated domains updated, Bundle ID fully cascaded, Xcode signing works. |
-| **3.2** Branding | Icon, name, colors | **DONE** | Display name "UCMeet.Chat" applied, new 3D logos installed (square + circular), accent color #003B5D (dark navy blue). Zero Element branding visible. |
-| **3.3** FCM push integration | Firebase SDK, Sygnal, APNs key, testing | **80% DONE** | Code + 14 tests complete. Real GoogleService-Info.plist added. Awaiting Sygnal URL + APNs key upload to Firebase Console for E2E testing. |
-| **3.4** Server configuration | Homeserver URL, identity server, .well-known, Scalar, Jitsi | **DONE** | `matrix.ucmeet.org` configured, `.well-known` verified, legal URLs → ucmeet.info. Scalar N/A. |
+| **3.2** Branding | Icon, name, colors | **DONE** | Display name "UCMeet.Chat" applied, new 3D logos installed (square + circular), accent color #003B5D (dark navy blue). 24 SwiftUI + 23 UIKit Compound token overrides. Zero Element branding visible. |
+| **3.3** Push integration | APNs through Sygnal | **CODE 100% DONE** | Switched from FCM to direct APNs registration (Mar 26). Firebase SDK retained but unused for push. E2E testing blocked on customer configuring Sygnal with `type: apns`. |
+| **3.4** Server configuration | Homeserver URL, identity server, .well-known, Scalar, Jitsi | **DONE** | `matrix.ucmeet.org` configured, `.well-known` verified, legal URLs → ucmeet.org. Scalar N/A. |
 | **3.5** Calls support | 1:1 + group calls | **DONE** | URL scheme → `org.ucmeet.call`, LiveKit confirmed in `.well-known`, embedded Element Call bundle. |
-| **3.6** Testing | Full test cycle across devices/iOS versions | **IN PROGRESS** | OIDC login verified on simulator. 16 rebrand-affected unit tests fixed and passing. Full test cycle needs more device coverage. |
-| **3.7** Release build | Version, signing, validation | **READY** | Xcode signing works (D-007 resolved). Blocked only on D-001 (licensing) for publication. |
-| **3.8** App Store publication | Listing, TestFlight, review, release | **TEMPLATES READY** | App Store prep templates created. Xcode signing works. Blocked on D-001 (licensing). |
+| **3.6** Testing | Full test cycle across devices/iOS versions | **IN PROGRESS** | 962 tests run, 899 passed, 63 pre-existing failures, 0 new. Build 4 on TestFlight. Customer testing in progress. |
+| **3.7** Release build | Version, signing, validation | **DONE** | Archive build succeeded. Distribution signing works. Version 1.0.0 (Build 4 on TestFlight, Build 5 in prep). |
+| **3.8** App Store publication | Listing, TestFlight, review, release | **IN PROGRESS** | App created in ASC (Apple ID: 6759875787). Listing filled (RU+EN). Encryption compliance uploaded. Blocked on customer items (screenshots, Privacy Labels, AGPL). |
 
 ### Functionality (TOR Section 4)
 
@@ -36,35 +36,35 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | Feature | TOR Section | Element X Status | Fork Verification |
 |---------|-------------|-----------------|-------------------|
 | Registration | 4.1 | Works | Needs server test |
-| Login/OIDC | 4.2 | Works | **VERIFIED** — OIDC login working on simulator |
+| Login/OIDC | 4.2 | Works | **VERIFIED** — OIDC login working on simulator + device |
 | Sliding Sync | 4.3 | Works | **VERIFIED** — room list loads via Sliding Sync |
-| Messaging (text, media, reactions, read receipts) | 4.4 | Works | Needs deeper testing |
-| Room management | 4.5 | Works | Needs server test |
-| User profile | 4.6 | Works | Needs server test |
-| 1:1 calls | 4.7 | Works (MatrixRTC) | Needs server test |
-| Group calls | 4.7 | Works (Element Call) | LiveKit confirmed in `.well-known`, needs call test |
-| Push notifications | 4.8 | FCM code ready | Needs real config (D-002) |
+| Messaging (text, media, reactions, read receipts) | 4.4 | Works | **VERIFIED** — customer testing Build 2-4 |
+| Room management | 4.5 | Works | **VERIFIED** — customer testing |
+| User profile | 4.6 | Works | **VERIFIED** — customer testing |
+| 1:1 calls | 4.7 | Works (MatrixRTC) | LiveKit confirmed in `.well-known` |
+| Group calls | 4.7 | Works (Element Call) | LiveKit confirmed, needs call test |
+| Push notifications | 4.8 | APNs code done | E2E blocked on customer Sygnal `type: apns` config (D-002) |
 | Background updates | 4.9 | Works | Needs server test |
-| Settings | 4.10 | Works | Needs server test |
+| Settings | 4.10 | Works | Analytics/bug reports disabled per customer request |
 | E2EE, Keychain, PIN/biometric | 4.11 | Works | Needs server test |
 
 ### Results (TOR Section 7)
 
 | Requirement | Status | Gap |
 |-------------|--------|-----|
-| 7.1 App in App Store | **NOT DONE** | Blocked on D-001 (licensing). D-007 (Apple account) resolved. |
-| 7.2 All functionality works | **PARTIALLY VERIFIED** | OIDC login + Sliding Sync verified. Calls, push, E2EE need testing. |
-| 7.3 Stability/quality | **NOT VERIFIED** | Needs full testing cycle |
-| 7.4 Apple compliance | **TEMPLATES READY** | Privacy labels mapped, export compliance analyzed |
-| 7.5 Branding matches customer | **DONE** | Display name "UCMeet.Chat", new 3D logos installed, accent color #003B5D, zero Element branding visible. |
-| 7.6 Source code + build docs | **DONE** | 22+ docs + build & handover guide (`build_and_handover_guide.md`) |
+| 7.1 App in App Store | **IN PROGRESS** | App in ASC, Build 4 on TestFlight, listing filled. Blocked on customer: screenshots, Privacy Labels, AGPL, push E2E. |
+| 7.2 All functionality works | **MOSTLY VERIFIED** | OIDC, Sliding Sync, messaging, rooms, profiles verified via customer testing. Push E2E and calls need testing. |
+| 7.3 Stability/quality | **IN PROGRESS** | 962 tests, 0 new failures. Customer testing Builds 2-4. 6 customer-reported issues fixed. |
+| 7.4 Apple compliance | **MOSTLY DONE** | Encryption compliance uploaded. ASC listing complete. Age rating set. Privacy Nutrition Labels pending (customer). |
+| 7.5 Branding matches customer | **DONE** | Display name "UCMeet.Chat", new 3D logos, accent color #003B5D, 47 Compound token overrides, zero Element branding visible. |
+| 7.6 Source code + build docs | **DONE** | 30+ docs + build & handover guide (`build_and_handover_guide.md`) |
 | 7.7 Maintenance guidance | **DONE** | Upstream sync documented in handover guide, `/upstream-sync` command available |
 
 ---
 
 ## 2. Hours: Invested vs. Remaining
 
-### Hours Invested (as of 2026-03-01)
+### Hours Invested (as of 2026-03-27)
 
 | Category | Hours | Deliverables |
 |----------|-------|-------------|
@@ -73,41 +73,38 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | Firebase FCM implementation | ~8h | Full code + 14 unit tests + protocol extraction |
 | Automation scripts | ~6h | `rebrand.sh` (712 lines) + `rebrand_strings.sh` (560 lines) |
 | Privacy manifest fixes | ~1h | 3 targets with complete manifests |
-| Upstream sync | ~2h | 18 commits merged, SDK v26.02.10 |
-| Customer documents | ~3h | Briefing + questionnaire (Russian) |
-| App Store prep templates | ~3h | 5-section submission guide, 481 lines |
-| Documentation overhead | ~4h | Plans, overview, misc |
+| Upstream syncs (3 total) | ~6h | 120+ commits merged, SDK v26.03.10 |
+| Customer documents | ~3h | Briefing + questionnaire + App Store guide (Russian) |
+| App Store prep + ASC listing | ~7h | Templates, listing filled, encryption compliance, review info |
+| Documentation overhead | ~6h | Plans, overview, progress tracking, sprints |
 | Claude Code commands | ~1h | 6 project-specific slash commands |
 | Server config + OIDC login | ~4h | AppSettings configured, OIDC login working, Firebase crash fix |
 | Calls + localization + cleanup | ~3h | URL scheme, knownHosts, 34 locales removed, domains cleaned |
 | String rebranding + Swift cleanup | ~3h | 30 string replacements (en, en-US, ru), 10 Swift source refs cleaned |
-| Unit test fixes | ~1h | 16 test assertions updated across 5 test files to match rebrand |
-| App display name + branding audit | ~1h | APP_DISPLAY_NAME → UCMeet, full branding audit, NSE/ShareExtension audit |
-| Launch screen + checkpoint + handover guide | ~2h | Launch screen verified, checkpoint/branding-complete tag, 10-section build guide |
+| Unit test fixes | ~2h | 16 test assertions updated, PRODUCT_MODULE_NAME + TEST_HOST fix |
+| App display name + branding audit | ~1h | APP_DISPLAY_NAME → UCMeet, full branding audit |
+| Launch screen + checkpoint + handover guide | ~2h | Launch screen verified, checkpoint tag, 10-section build guide |
 | Platform restrictions + push hardening | ~1h | Mac/Vision Pro disabled, push gateway URL, dynamic NSE notification ID |
-| Bundle ID application (Forking Data.doc) | ~3h | 22 files updated, display name UCMeet.Chat, all dispatch queue labels migrated |
-| Bundle ID casing fix + new logos + accent color | ~3h | 20 files corrected, 2 logos processed, accent color extracted and applied |
-| Sprint docs + App Store Connect guide | ~2h | 3 new documentation files (sprints.md, dev_plan.md, appstore_connect_guide.md) |
-| Apple Developer Portal registration | ~3h | 3 Bundle IDs registered, App Group created, capabilities enabled |
-| Xcode signing + OIDC fix + logo sizing + Firebase config | ~4h | Signing resolved, custom URL scheme redirect, logo @3x fix, real GoogleService-Info.plist |
-| **Total invested** | **~76-79h** | |
+| Bundle ID application + casing fix | ~6h | 22 files updated, display name, dispatch queue labels, casing corrections |
+| New logos + accent color + Compound overrides | ~5h | 2 logos, 24 SwiftUI + 23 UIKit token overrides, send button gradient |
+| Apple Developer Portal + Xcode signing | ~7h | 3 Bundle IDs, App Group, signing resolved, OIDC redirect fix |
+| Sprint 5 release prep | ~3h | Version 1.0.0, CI/CD trim, Archive build, NSE entitlement fix |
+| TestFlight uploads (Builds 1-4) | ~3h | 4 builds uploaded, compliance wizard, customer testing |
+| Customer issue fixes (Builds 3-4) | ~3h | OIDC name, analytics, bug reports, MapTiler, 17 translations, color overrides |
+| Push E2E debugging + APNs switch | ~3h | ntfy diagnosis, FCM v1 diagnosis, APNs switch, Sygnal instructions |
+| **Total invested** | **~96h** | |
 
-### Remaining Work Estimate (by phase)
+### Remaining Work Estimate
 
-| Phase | Original Est. | Work Done | Remaining | Savings From |
-|-------|--------------|-----------|-----------|-------------|
-| Licensing (parallel) | 4-8h | ~1h | 3-7h | Mostly waiting, not labor |
-| Branding | 8-14h | ~10h | **0.5-1h** | Strings rebranded, temp icon applied. Only final icon/color swap when assets arrive. |
-| Server Config + OIDC | 10-16h | ~7h | **1-2h** | Server configured, OIDC working. Only AASA migration left. |
-| Push Notifications | 9-12h | ~8h | **4-5h** | FCM code complete, needs real config |
-| Calls | 6-10h | ~5h | **0-1h** | ✅ Configuration complete, LiveKit confirmed |
-| Testing | 12-18h | ~2h | 10-16h | Login verified; full test cycle still needed |
-| App Store Prep | 10-14h | ~6h | **5-8h** | Templates pre-filled |
-| Release + Submission | 8-14h | 0h | 8-14h | Review cycles unpredictable |
-| Docs + Handover | 6-10h | ~5h | **2-4h** | 21+ docs already exist |
-| **Total** | **73-116h** | **~41h** | **34-60h** | |
-
-**Expected remaining: ~42h** (midpoint with AI assistance)
+| Task | Est. Hours | Blocker |
+|------|-----------|---------|
+| Push E2E testing (after customer Sygnal config) | ~2h | Customer |
+| Build 5 upload to TestFlight | ~1h | None |
+| Privacy Nutrition Labels guidance | ~1h | Customer must fill in ASC |
+| Fix bugs from customer testing (if any) | ~2-4h | Customer feedback |
+| App Store submission + review response | ~2-4h | All customer items resolved |
+| Final handover documentation | ~2h | None |
+| **Total remaining** | **~10-15h** | |
 
 ### Project Totals
 
@@ -115,56 +112,56 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 |--------|-------|
 | Original estimate (with AI) | 60-95h, expected ~80h |
 | Original estimate (without AI) | 85-132h, expected ~120h |
-| Hours invested so far | ~76-79h |
-| Hours remaining (estimated) | 20-40h, expected ~28h |
-| **Projected total** | **~100-107h** |
-| Budget position | Slightly above AI-assisted range (60-95h), within non-AI range (85-132h) |
-| Budget consumed | ~78% of hours, ~77% of $2,200 fixed price |
+| Hours invested so far | ~96h |
+| Hours remaining (estimated) | ~10-15h |
+| **Projected total** | **~106-111h** |
+| Budget position | Above AI-assisted range (60-95h), within non-AI range (85-132h) |
+| Budget consumed | ~80% of hours |
 
-> Project is tracking well within budget. String rebranding and source cleanup further reduced remaining work. Main cost centers left: testing (~10-16h) and App Store submission (~8-14h).
+> Over-run vs AI-assisted estimate driven by: extensive push debugging (ntfy → FCM → APNs, 3 E2E test cycles), 3 upstream syncs (120+ conflicts), 6 customer-reported issue rounds, 30+ documentation files. Core dev work was on-estimate; iteration with customer and server-side issues added ~20h.
 
 ---
 
 ## 3. Critical Path
 
-### Dependency Chain (Updated 2026-03-03)
+### Dependency Chain (Updated 2026-03-27)
 
 ```
-✅ Xcode signing resolved (Mar 3) — customer's Apple ID in Xcode
+✅ All developer-side code work DONE
     |
     |---> D-001 licensing → 🟡 Customer claims resolved, need written confirmation
     |
-    |---> ✅ D-005 server URLs → DONE (matrix.ucmeet.org configured)
+    |---> D-002 Push E2E → 🟡 Customer must configure Sygnal `type: apns` + .p8 key
     |       |
-    |       |---> ✅ D-006 OIDC → DONE (custom URL scheme, MAS login verified)
-    |       |---> D-002 Firebase push E2E → Needs Sygnal URL + APNs key in Firebase Console
-    |       +---> ✅ D-004 calls → DONE (LiveKit confirmed, URL scheme updated)
+    |       +---> Push E2E test on two real devices
     |
-    |---> ✅ D-008 design assets → DONE (logos + accent color applied)
+    |---> Customer items for ASC:
+    |       |---> Screenshots (6.7" + 5.5" with device frames)
+    |       |---> Privacy Nutrition Labels questionnaire
+    |       +---> Review contact (first name, last name, email)
     |
-    +---> ✅ D-007 Apple Developer account → DONE (signing works, provisioning auto)
-            |
-            +---> Push E2E testing → TestFlight → App Review
+    +---> All above resolved → Submit to App Store → Review → Release
 ```
 
-**The critical path is now:**
-APNs key upload to Firebase Console + Sygnal URL → Push E2E testing → Full test cycle → TestFlight → App Review → Release
+**The critical path is now entirely on the customer side:**
+Customer Sygnal config + screenshots + Privacy Labels + AGPL confirmation → App Store submission → Review → Release
 
-**Licensing (D-001) runs in parallel** but must be resolved before App Store submission.
+**Licensing (D-001) runs in parallel** but must be resolved before submission.
 
 ### Remaining Actions
 
-| Action | Blocker | Time to complete |
-|--------|---------|-----------------|
-| Upload APNs key to Firebase Console | None (key available locally) | 0.5h |
-| Push E2E testing | Sygnal URL from customer | 1-2 days |
-| MapLibre configuration | API key from customer | 0.5 day |
-| Full test cycle | Push working | 2-3 days |
-| App Store prep (fill templates) | D-009 (listing details from customer) | 1-2 days |
-| TestFlight + customer approval | — | 2-3 days |
-| **Active dev total** | | **~7-11 working days** |
-
-At 20h/week (4h/day), this is **2-3 weeks of active development** once Sygnal URL is provided.
+| Action | Owner | Blocker | Time to complete |
+|--------|-------|---------|-----------------|
+| Configure Sygnal `type: apns` with .p8 key | Customer | None — instructions provided | Customer action |
+| Push E2E test on two real devices | Developer + Customer | Sygnal config | ~2h |
+| Upload Build 5 to TestFlight | Developer | None | ~1h |
+| Provide screenshots (6.7" + 5.5") | Customer | TestFlight build | Customer action |
+| Complete Privacy Nutrition Labels | Customer | None — questionnaire in ASC | Customer action |
+| Provide review contact (name + email) | Customer | None | Customer action |
+| Written AGPL confirmation | Customer | None | Customer action |
+| Confirm ucmatrix.org operational | Customer | None | Customer action |
+| Submit to App Store | Developer | All above | ~1h |
+| **Active developer time remaining** | | | **~10-15h** |
 
 ---
 
@@ -173,19 +170,19 @@ At 20h/week (4h/day), this is **2-3 weeks of active development** once Sygnal UR
 | Decision | Best Case | Worst Case | Impact | Status |
 |----------|-----------|------------|--------|--------|
 | **D-001 Licensing** | Customer has commercial license | License doesn't cover Element X | **PROJECT KILLER** for App Store | 🟡 Customer claims resolved |
-| **D-002 Push/FCM** | Dev creates Firebase project, customer configures Sygnal | Sygnal not FCM-compatible | +1-2 days | 🟡 Needs Bundle ID first |
+| **D-002 Push/APNs** | Customer configures Sygnal, push works | Sygnal incompatible with APNs | +1-2 days debugging | 🟡 Awaiting customer Sygnal `type: apns` config |
 | **D-003 iOS 18.0+** | ~~Customer accepts~~ | ~~Customer insists on iOS 16~~ | ~~N/A~~ | ✅ Resolved |
 | **D-004 Calls** | ~~LiveKit deployed~~ | ~~No LiveKit~~ | ~~N/A~~ | ✅ Resolved + configured |
 | **D-005 Servers** | ~~All ready~~ | ~~Not set up~~ | ~~N/A~~ | ✅ Resolved + configured |
 | **D-006 OIDC** | ~~MAS works~~ | ~~No OIDC~~ | ~~N/A~~ | ✅ Resolved + login verified |
-| **D-007 Apple Account** | Developer's account ready | No account, need to register | +2-3 days | ✅ Resolved (Administrator access) |
-| **D-008 Design** | Assets arrive this week | Design delayed | Can proceed with temp icon | ✅ Resolved — new logos + accent color applied |
+| **D-007 Apple Account** | ~~Developer's account ready~~ | ~~No account~~ | ~~N/A~~ | ✅ Resolved (Administrator access) |
+| **D-008 Design** | ~~Assets arrive~~ | ~~Design delayed~~ | ~~N/A~~ | ✅ Resolved — logos + accent color applied |
 
 ### Kill Scenarios (project cannot complete)
 
 1. **Element refuses commercial license AND customer won't open-source AND customer won't accept legal risk** — No path to App Store.
-2. **Customer insists on iOS 16** — Technically impossible with Element X. Would require entirely different codebase.
-3. **Customer's server doesn't support Sliding Sync** — Element X requires it. No fallback.
+2. ~~**Customer insists on iOS 16**~~ — Resolved (iOS 18.0+ accepted).
+3. ~~**Customer's server doesn't support Sliding Sync**~~ — Resolved (Sliding Sync confirmed).
 
 ---
 
@@ -194,92 +191,82 @@ At 20h/week (4h/day), this is **2-3 weeks of active development** once Sygnal UR
 | # | TOR Requirement | Reality | Resolution Path | Status |
 |---|----------------|---------|----------------|--------|
 | 1 | iOS 16+ | iOS 18.0+ | ✅ Customer accepted | Resolved |
-| 2 | FCM push | FCM code done, needs config | Dev creates Firebase project (needs Bundle ID) | ~4h remaining |
+| 2 | FCM push | APNs direct (FCM abandoned due to Sygnal GCM pushkin incompatibility) | App registers APNs token, Sygnal uses `type: apns` | Code done, E2E blocked on customer |
 | 3 | Jitsi for calls | Element Call (LiveKit) | ✅ LiveKit confirmed + configured | Resolved |
 | 4 | Scalar integration | Not in Element X | ✅ Dropped — Scalar is legacy | Resolved |
-| 5 | OIDC not mentioned | OIDC is primary auth | ✅ MAS login working on simulator | Resolved |
+| 5 | OIDC not mentioned | OIDC is primary auth | ✅ MAS login working on simulator + device | Resolved |
 | 6 | AGPL v3 awareness | AGPL conflicts with App Store | Customer claims resolved — need written confirmation | In progress |
 
 ---
 
-## 6. Timeline Projections
+## 6. Timeline Projections (from 2026-03-27)
 
-### Scenario A: Best Case (3 weeks remaining)
+### Scenario A: Best Case (1-2 weeks)
 
-- Bundle ID + Apple account resolved this week
-- Design assets arrive via email this week
-- Firebase project created, push tested
+- Customer configures Sygnal this week
+- Screenshots + Privacy Labels completed within days
 - App Store approved on first submission
 
 ```
-Week 4 (current): Bundle ID received, final branding, Firebase project
-Week 5: Push testing, full test cycle, App Store prep
-Week 6: TestFlight, App Review, release
-Total project: ~6 weeks (Feb 8 - Mar 21)
+Week 8 (current): Customer provides all items, Build 5 uploaded, push E2E verified
+Week 9: Submit to App Store, approval, release
+Total project: ~9 weeks (Feb 8 - Apr 11)
 ```
 
-### Scenario B: Expected Case (4-5 weeks remaining)
+### Scenario B: Expected Case (2-3 weeks)
 
-- Bundle ID + Apple account resolved within 1 week
-- Design assets arrive within 1 week
-- Push testing takes 1-2 days
-- App Store requires 1 revision (Guideline 4.3)
+- Customer items take ~1 week
+- App Store requires 1 revision (Guideline 4.3 differentiation)
 
 ```
-Week 4 (current): Waiting for Bundle ID + assets
-Week 5: Bundle ID received, final branding, Firebase project, push testing
-Week 6: Full test cycle, App Store prep, TestFlight
-Week 7: First submission, Guideline 4.3 rejection
-Week 8: Resubmit with differentiation, approval
-Total project: ~8 weeks (Feb 8 - Apr 4)
+Week 8 (current): Customer configures Sygnal, provides screenshots
+Week 9: Push E2E test, Build 5, Privacy Labels, submit
+Week 10: Guideline 4.3 revision, resubmit, approval
+Total project: ~10 weeks (Feb 8 - Apr 18)
 ```
 
-### Scenario C: Worst Case (8+ weeks remaining)
+### Scenario C: Worst Case (4+ weeks)
 
-- Bundle ID / Apple account delayed 2+ weeks
-- Licensing confirmation delayed
+- Customer delays on Sygnal/screenshots/labels
 - Multiple App Store rejections
-- Push testing reveals Sygnal issues
+- AGPL confirmation stalls
 
 ```
-Week 4-5: Waiting for customer decisions
-Week 6: Bundle ID + assets received, rapid configuration
-Week 7: Testing + App Store prep
-Week 8-9: App Review cycles
-Week 10+: Final resolution
-Total project: 10+ weeks (Feb 8 - Apr 18+)
+Week 8-9: Waiting for customer items
+Week 10: Customer items arrive, rapid submission
+Week 11-12: App Review cycles
+Total project: 12+ weeks (Feb 8 - May 2+)
 ```
 
 ### Summary
 
 | Scenario | Total Project Duration | Active Dev Hours | Calendar End |
 |----------|----------------------|-----------------|-------------|
-| Best | 6 weeks | ~90h | Late March |
-| Expected | 8 weeks | ~98h | Early April |
-| Worst | 10+ weeks | ~110h+ | Mid-April+ |
-| Customer's expectation (from TOR) | 4-6 weeks | — | Mid-March |
+| Best | 9 weeks | ~106h | Mid-April |
+| Expected | 10 weeks | ~108h | Late April |
+| Worst | 12+ weeks | ~111h+ | May+ |
 
-**The customer's 4-6 week expectation is tight but achievable** for best-case scenario. Key dependency: Bundle ID and Apple Developer account must be resolved this week.
+**Developer-side work is essentially complete.** Timeline now depends entirely on customer response speed and App Store review cycles.
 
 ---
 
 ## 7. Risk Register
 
-| # | Risk | Probability | Impact | Status vs. Feb 12 | Mitigation Done |
-|---|------|-------------|--------|---------------------|-----------------|
-| 1 | **AGPL/App Store conflict** | Medium | Critical | **REDUCED** — customer claims resolved | Need written confirmation covering Element X specifically |
+| # | Risk | Probability | Impact | Status vs. Mar 3 | Mitigation Done |
+|---|------|-------------|--------|-------------------|-----------------|
+| 1 | **AGPL/App Store conflict** | Medium | Critical | **UNCHANGED** | Need written confirmation covering Element X specifically |
 | 2 | **Guideline 4.3 rejection** | Medium | High | **UNCHANGED** | Differentiation strategy + rejection response template prepared |
-| 3 | **FCM complications** | Low | Medium | **UNCHANGED** | Code complete, 14 tests passing. Needs real config. |
-| 4 | **Backend not ready** | Low | High | **RESOLVED** | ✅ Server verified, login working, `.well-known` confirmed |
-| 5 | **OIDC complexity** | Low | Low | **RESOLVED** | ✅ OIDC login working on simulator via MAS |
-| 6 | **SDK incompatibilities** | Low | High | **UNCHANGED** | Upstream synced to v26.02.10 |
-| 7 | **LiveKit unavailable** | Low | Medium | **RESOLVED** | ✅ LiveKit confirmed in `.well-known`, URL scheme configured |
-| 8 | **Multiple review cycles** | High | Medium | **UNCHANGED** | App Store templates pre-answer compliance |
-| 9 | **Late design assets** | Medium | Low | **UNCHANGED** | Temp icon applied, scripts ready for final assets |
-| 10 | **XcodeGen/SPM failures** | Low | Medium | **UNCHANGED** | Build verified 5+ times after changes |
-| ~~11~~ | ~~**Customer engagement delay**~~ | ~~Low~~ | ~~Critical~~ | **RESOLVED** | ✅ Customer responded Feb 16, 5 decisions resolved |
-| 12 | **Export control/sanctions** | Low | High | **UNCHANGED** | Identified in encryption analysis. Russian customer + US encryption export rules. |
-| **13** | **Bundle ID delay** | **Medium** | **High** | **NEW** | **Bundle ID blocks Firebase project, provisioning, OIDC migration, and App Store. Must resolve ASAP.** |
+| ~~3~~ | ~~**FCM complications**~~ | ~~N/A~~ | ~~N/A~~ | **RESOLVED** | ✅ FCM abandoned, switched to direct APNs (Mar 26) |
+| ~~4~~ | ~~**Backend not ready**~~ | ~~N/A~~ | ~~N/A~~ | **RESOLVED** | ✅ Server verified, login working, `.well-known` confirmed |
+| ~~5~~ | ~~**OIDC complexity**~~ | ~~N/A~~ | ~~N/A~~ | **RESOLVED** | ✅ OIDC login working via MAS, custom URL scheme |
+| 6 | **SDK incompatibilities** | Low | High | **UNCHANGED** | Upstream synced to v26.03.10 (20 commits behind, sync planned) |
+| ~~7~~ | ~~**LiveKit unavailable**~~ | ~~N/A~~ | ~~N/A~~ | **RESOLVED** | ✅ LiveKit confirmed in `.well-known`, URL scheme configured |
+| 8 | **Multiple review cycles** | High | Medium | **UNCHANGED** | App Store listing pre-filled, review notes and credentials entered |
+| ~~9~~ | ~~**Late design assets**~~ | ~~N/A~~ | ~~N/A~~ | **RESOLVED** | ✅ New 3D logos + accent color applied |
+| 10 | **XcodeGen/SPM failures** | Low | Medium | **UNCHANGED** | Build verified 10+ times after changes |
+| ~~11~~ | ~~**Customer engagement delay**~~ | ~~N/A~~ | ~~N/A~~ | **RESOLVED** | ✅ Customer responded Feb 16 |
+| 12 | **Export control/sanctions** | Low | High | **REDUCED** | Encryption compliance document uploaded to ASC, `ITSAppUsesNonExemptEncryption=YES` |
+| ~~13~~ | ~~**Bundle ID delay**~~ | ~~N/A~~ | ~~N/A~~ | **RESOLVED** | ✅ Bundle ID registered, cascaded, signing works |
 
 ---
 
@@ -289,39 +276,49 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 |--------|-------|
 | Total Swift files | ~1,260 |
 | Test files | 162 |
-| Documentation files | 24+ |
+| Tests run | 962 (899 passed, 63 pre-existing failures, 0 new) |
+| Documentation files | 30+ |
 | Automation scripts | 2 (1,272 lines total) |
 | Localization locales | 3 (en, en-US, ru) — trimmed from 37 |
-| Localization files | ~13 (was ~130 before trim) |
-| Associated domains | 2 (matrix.to + webcredentials:*.element.io) — trimmed from 9 |
+| Associated domains | 0 — all removed (matrix.to non-functional, webcredentials not needed) |
 | Remaining `element.io` in production Swift | ~10 (OIDC URLs intentional, Compound library previews) |
 | Remaining `io.element.elementx` identifiers | 0 — all migrated to `org.ucmeet.UCMeetChat` |
+| User-visible Element branding | 0 |
+| Upstream divergence | 60 ahead, 0 behind (as of Mar 17 sync; 20 new upstream commits since) |
+| TestFlight builds | 4 uploaded (1.0.0 Builds 1-4) |
 | Git tags (fork-specific) | 3 (`checkpoint/unmodified-build`, `backup/pre-upstream-sync-20260211`, `checkpoint/branding-complete`) |
 
 ---
 
-## 9. Conclusions (2026-03-03)
+## 9. Conclusions (2026-03-27)
 
-**The project is feature-complete for all code changes. Xcode signing resolved. Only push E2E testing and App Store submission remain.**
+**The project is ~99% code-complete. All developer-side work is done. Remaining items are on the customer side.**
 
-1. **All branding work is done.** New 3D logos installed (sizing fixed to 110pt @3x), accent color #003B5D, display name "UCMeet.Chat", Bundle ID `org.ucmeet.UCMeetChat` correctly cased and cascaded through all files. Zero user-visible Element branding remains.
+1. **All branding work is done.** New 3D logos, accent color #003B5D, display name "UCMeet.Chat", 47 Compound token overrides (24 SwiftUI + 23 UIKit), send button gradient navy blue. Zero user-visible Element branding.
 
-2. **7 of 12 decisions resolved** (D-003, D-004, D-005, D-006, D-007, D-008, D-011). Xcode signing fully resolved — customer's Apple ID in Xcode, automatic provisioning works for all 3 targets.
+2. **Push switched from Firebase to APNs (Mar 26).** After 3 E2E test cycles (ntfy rejection, FCM v1 payload incompatibility), app now registers APNs device token directly. Sygnal must use `type: apns` with .p8 key. Firebase SDK retained but unused for push delivery.
 
-3. **OIDC is fully independent of element.io.** Custom URL scheme `org.ucmeet.UCMeetChat:/callback` replaces HTTPS callback. All OIDC metadata URIs on ucmeet.org. No webcredentials entitlement needed.
+3. **App Store Connect fully prepared.** App created (Apple ID: 6759875787), listing filled (RU+EN descriptions, keywords, copyright, URLs), encryption compliance uploaded, review credentials entered, age rating 14+, all countries enabled.
 
-4. **Firebase project configured.** Real GoogleService-Info.plist in place. APNs key available locally (`AuthKey_XZANH7CD3Z.p8`). Need to upload APNs key to Firebase Console and get Sygnal URL from customer for E2E testing.
+4. **7 of 12 decisions resolved** (D-003, D-004, D-005, D-006, D-007, D-008, D-011). 3 in progress (D-001 licensing, D-002 push E2E, D-009 listing details). 2 open (D-010, D-012).
 
-5. **Hours tracking:** ~76-79h invested vs 60-95h estimated. Projected total ~100-107h, within the non-AI range (85-132h). Extensive documentation and automation created (24+ docs, 2 scripts) beyond original scope.
+5. **Hours tracking:** ~96h invested vs 60-95h AI-assisted estimate. Projected total ~106-111h. Over-run driven by push debugging iterations, 3 upstream syncs, and 6 rounds of customer issue fixes — not core development.
 
-6. **Two blockers remain for push E2E:** (a) Upload APNs key to Firebase Console, (b) Sygnal URL from customer. **One blocker for App Store:** AGPL licensing written confirmation. **One blocker for location sharing:** MapLibre API key.
+6. **All remaining blockers are on customer side:**
+   - Sygnal `type: apns` configuration + push E2E test
+   - Screenshots (6.7" + 5.5" with device frames)
+   - Privacy Nutrition Labels questionnaire in ASC
+   - Review contact (first name, last name, email)
+   - Written AGPL confirmation
+   - ucmatrix.org confirmation (for permalink redirect)
+   - MapTiler paid plan decision (for static map previews)
 
-**Recommended immediate actions:**
-1. Upload APNs key (`AuthKey_XZANH7CD3Z.p8`) to Firebase Console.
-2. Request Sygnal URL from customer for push E2E testing.
-3. Request MapLibre API key from customer.
-4. Get written AGPL licensing confirmation.
-5. Create app in App Store Connect (signing now works).
+**Recommended immediate actions (all customer):**
+1. Configure Sygnal iOS with `type: apns`, install .p8 key, restart, re-login, test push on two devices.
+2. Provide 6.7" + 5.5" device-framed screenshots from TestFlight.
+3. Complete Privacy Nutrition Labels in App Store Connect.
+4. Provide review contact name + email.
+5. Send written AGPL v3 licensing confirmation.
 
 ---
 
@@ -339,7 +336,13 @@ Total project: 10+ weeks (Feb 8 - Apr 18+)
 | 2026-03-01 | Sprint planning docs + new logos + Bundle ID casing fix + accent color. Bundle ID corrected to `org.ucmeet.UCMeetChat` (20 files). New 3D logos installed (square AppIcon + circular in-app). Accent color → #003B5D (dark navy blue from logo). 3 new docs: sprints.md, dev_plan.md, appstore_connect_guide.md. D-008 resolved. 7/12 decisions now resolved. BUILD SUCCEEDED. ~69-72h invested (~72% budget). |
 | 2026-03-02 | Apple Developer Portal: 3 Bundle IDs registered, App Group created, capabilities enabled. Access issue found — developer in ASC only, not Developer Program. APNs key + ASC API key received. ~72-75h invested (~75% budget). |
 | 2026-03-03 | **Major unblocks:** (1) Xcode signing resolved — customer's Apple ID added to Xcode, automatic signing works for all 3 targets. (2) OIDC redirect URI fixed — custom URL scheme `org.ucmeet.UCMeetChat:/callback`, all OIDC metadata on ucmeet.org, removed webcredentials entitlement. (3) In-app logo sizing fixed — 330x330px @3x (was 1024px full-screen). (4) Firebase GoogleService-Info.plist replaced with real config. Login verified on simulator. ~76-79h invested (~78% budget). |
+| 2026-03-13 | Upstream sync (89 commits, SDK v26.03.10). Sprint 5 release prep: version 1.0.0, Info.plist verified, debug log audit clean. ~82-85h invested. |
+| 2026-03-17/18 | NSE entitlement removed. Push E2E tests (FCM pusher works, ntfy rejects). Second upstream sync (13 commits). Archive build succeeded. TestFlight Build 1 uploaded. App in ASC. Encryption compliance set. ~88-91h invested. |
+| 2026-03-22 | Build 2 uploaded. ASC listing fully filled (RU+EN). Privacy manifests fixed. Encryption compliance uploaded. Customer added to TestFlight. ~91-93h invested. |
+| 2026-03-24 | Build 3: 6 customer issues fixed (OIDC name, analytics, bug reports, maps, 13 translations, color overrides). Test infra fixed (PRODUCT_MODULE_NAME + TEST_HOST). ~94h invested. |
+| 2026-03-25/26 | Push E2E #3: Sygnal GCM pushkin incompatible with FCM v1 payload format. **Switched from Firebase to direct APNs.** Build 4 uploaded. 4 more translations, send button gradient navy blue. ~96h invested (~80% budget). |
+| 2026-03-27 | Documentation update: sprints.md, decisions_tracker.md, overall_implementation_progress.md refreshed to reflect APNs switch and Build 5 prep state. All developer-side work complete. ~96h invested. |
 
 ---
 
-*This document is updated after each significant milestone, customer interaction, or periodic review. Next update: after push E2E testing or App Store Connect app creation.*
+*This document is updated after each significant milestone, customer interaction, or periodic review. Next update: after Build 5 upload or App Store submission.*

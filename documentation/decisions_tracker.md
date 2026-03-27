@@ -3,7 +3,7 @@
 
 **Назначение:** Живой документ для отслеживания всех открытых решений, блокеров и их статусов. Обновляется по мере продвижения проекта.
 
-**Последнее обновление:** 24 марта 2026 г.
+**Последнее обновление:** 27 марта 2026 г.
 
 ---
 
@@ -54,57 +54,55 @@ Element X iOS лицензирован под AGPL v3. Условия AGPL v3 ю
 
 ---
 
-### D-002: Push-уведомления — FCM конфигурация
+### D-002: Push-уведомления — APNs через Sygnal
 
 | Поле | Значение |
 |------|----------|
 | **Статус** | 🟡 В процессе |
 | **Критичность** | 🚨 Блокер |
-| **Владелец** | **Разработчик** (создание Firebase-проекта) + Заказчик (Sygnal URL) |
+| **Владелец** | Заказчик (настройка Sygnal `type: apns`) |
 | **Дедлайн решения** | До начала тестирования push-уведомлений |
 | **Фазы, которые блокирует** | Фаза 5 (тестирование Push-уведомлений) |
 | **Дата создания** | 2026-02-08 |
-| **Дата последнего обновления** | 2026-03-24 |
+| **Дата последнего обновления** | 2026-03-27 |
 
 **Описание:**
-FCM реализован полностью согласно ТЗ. Код написан, протестирован (14 unit-тестов), сборка проверена.
+Push-уведомления реализованы через прямую регистрацию APNs-токена. Приложение отправляет APNs device token в Sygnal, который доставляет уведомления напрямую через Apple Push Notification service.
 
-**Изменение от 17.02.2026:** Заказчик сообщил, что Firebase НЕ настроен для данного сервера. Просит разработчика самостоятельно создать Firebase-проект и настроить FCM через панель Google. Sygnal есть, данные предоставят позже.
+**История изменений:**
 
-**Изменение от 24.03.2026:** Заказчик переходит с ntfy на Sygnal для push-шлюза. Все необходимые данные переданы разработчику заказчика: APNs .p8 ключ (Key ID: `XZANH7CD3Z`, Team ID: `6HRG779SDK`), Firebase service account JSON (отправлен 11.03), Pusher App ID `org.ucmeet.UCMeetChat.ios.prod` / `.ios.dev`, Bundle ID `org.ucmeet.UCMeetChat`. Ожидаем URL нового Sygnal-шлюза.
+**17.02.2026:** Заказчик сообщил, что Firebase НЕ настроен для данного сервера. Просит разработчика самостоятельно создать Firebase-проект и настроить FCM через панель Google. Sygnal есть, данные предоставят позже.
 
-**Что сделано:**
-- Firebase SDK (v11.8.x) добавлен через SPM
-- `FirebaseNotificationService` — инициализация Firebase, управление FCM-токеном
-- `FirebaseNotificationServiceProtocol` — протокол для тестируемости, mock для unit-тестов
-- Инъекция протокола в `AppCoordinator` через конструктор
-- Настройка `PushProvider` в `AppSettings` (по умолчанию `.firebase`)
-- Условная логика в `AppCoordinator` — FCM или APNs в зависимости от настройки
-- `NotificationManager.registerWithFCMToken()` — регистрация pusher с FCM-токеном (raw string, не base64)
-- 14 unit-тестов: 5 NotificationManager FCM, 5 FirebaseIntegration, 4 PushProvider — все проходят
-- ✅ Получен APNs Authentication Key: `AuthKey_XZANH7CD3Z.p8` (Key ID: `XZANH7CD3Z`)
+**24.03.2026:** Заказчик переходит с ntfy на Sygnal для push-шлюза. Все необходимые данные переданы разработчику заказчика: APNs .p8 ключ (Key ID: `XZANH7CD3Z`, Team ID: `6HRG779SDK`), Firebase service account JSON (отправлен 11.03), Pusher App ID `org.ucmeet.UCMeetChat.ios.prod` / `.ios.dev`, Bundle ID `org.ucmeet.UCMeetChat`.
 
-**Что сделано (обновление 17.03.2026):**
-- ✅ APNs-ключ загружен в Firebase Console (dev + prod, Key ID: `XZANH7CD3Z`, Team ID: `6HRG779SDK`)
-- ✅ Push gateway URL подтверждён: `https://push.ucmeet.org` (ntfy с поддержкой Matrix Gateway API)
-- ✅ Firebase-проект `matrix-8c24a` — GoogleService-Info.plist установлен, service account JSON отправлен заказчику
-- ✅ NSE filtering entitlement удалён (`com.apple.developer.usernotifications.filtering` — требует одобрения Apple, не нужен для push)
-- ✅ E2E push-тест проведён — FCM pusher регистрация успешна на устройстве, gateway доступен
-- ❌ ntfy сервер отклоняет FCM-токен (ответ `"rejected"`) — заказчик должен проверить логи ntfy для ошибок FCM
+**25.03.2026:** Заказчик настроил Sygnal с `type: gcm` — Sygnal обратился к FCM, но получил ошибку 400: "Invalid JSON payload — Unknown name alert/mutable-content". Причина: GCM pushkin Sygnal помещает APNs-формат `default_payload` (с `alert`, `mutable-content`) в поле FCM `data`, но FCM v1 принимает только flat strings в `data`.
+
+**26.03.2026:** **Решение: переход на прямые APNs.** Push provider переключён с `.firebase` на `.apns` в AppSettings.swift. Приложение теперь регистрирует APNs device token напрямую (не FCM-токен). Sygnal должен использовать `type: apns` с .p8 ключом. Firebase SDK остаётся в проекте, но не используется для доставки push.
+
+**Что сделано (разработчик — всё завершено):**
+- Firebase SDK (v11.8.x) добавлен через SPM *(остаётся в проекте, но не используется для push)*
+- `FirebaseNotificationService` — инициализация Firebase, управление FCM-токеном *(legacy, superseded)*
+- `PushProvider` enum в `AppSettings` — по умолчанию `.apns` (было `.firebase`)
+- Приложение регистрирует APNs device token напрямую через стандартный iOS push flow
+- Pusher App IDs: `org.ucmeet.UCMeetChat.ios.prod` (release) / `.ios.dev` (debug)
+- 14 unit-тестов: все проходят
+- ✅ APNs Authentication Key получен: `AuthKey_XZANH7CD3Z.p8` (Key ID: `XZANH7CD3Z`)
+- ✅ APNs-ключ загружен в Firebase Console (dev + prod)
+- ✅ Firebase-проект `matrix-8c24a` — GoogleService-Info.plist установлен
+- ✅ NSE filtering entitlement удалён (требует одобрения Apple)
+- ✅ Множественные E2E push-тесты проведены (ntfy → FCM → APNs)
+- ✅ Диагностика: ntfy отклоняет FCM-токен, FCM v1 отклоняет APNs payload формат, переход на APNs
 
 **Что осталось:**
-- ✅ ~~Решение APNs vs FCM~~ — FCM подтверждён
-- ✅ ~~APNs-ключ (.p8)~~ — получен от заказчика (`AuthKey_XZANH7CD3Z.p8`)
-- ✅ ~~Создать Firebase-проект в Google Console~~ — создан (03.03.2026)
-- ✅ ~~Скачать реальный `GoogleService-Info.plist`~~ — установлен в проект (03.03.2026)
-- ✅ ~~Загрузить APNs-ключ в Firebase Console~~ — загружен (17.03.2026)
-- ✅ ~~Получить URL push gateway от заказчика~~ — `https://push.ucmeet.org` (ntfy)
-- ✅ ~~Заказчик: проверить логи ntfy~~ — заказчик решил перейти с ntfy на Sygnal
-- ❌ **Заказчик:** настроить Sygnal с предоставленными credentials и сообщить URL Sygnal-шлюза
-- 🔲 Обновить push gateway URL в AppSettings.swift после получения Sygnal URL
-- 🔲 Сквозное тестирование push-уведомлений (после настройки Sygnal)
+- ✅ ~~Решение APNs vs FCM~~ — APNs напрямую через Sygnal (`type: apns`)
+- ✅ ~~APNs-ключ (.p8)~~ — получен от заказчика
+- ✅ ~~Firebase-проект~~ — создан, credentials переданы
+- ✅ ~~Диагностика FCM v1 incompatibility~~ — решено переходом на APNs
+- ❌ **Заказчик:** настроить Sygnal iOS с `type: apns`, установить .p8 ключ (Key ID: `XZANH7CD3Z`, Team ID: `6HRG779SDK`), перезапустить
+- 🔲 Обновить push gateway URL в AppSettings.swift если URL изменится
+- 🔲 Сквозное тестирование push-уведомлений на двух реальных устройствах
 
-**Решение:** FCM через Sygnal. Вся инфраструктура со стороны разработчика готова. Блокер: заказчик настраивает Sygnal — ожидаем URL нового push-шлюза.
+**Решение:** APNs через Sygnal (`type: apns`). Вся инфраструктура со стороны разработчика готова. Блокер: заказчик должен настроить Sygnal с `type: apns` и .p8 ключом, затем E2E тест.
 
 ---
 
@@ -380,7 +378,7 @@ FCM реализован полностью согласно ТЗ. Код нап
 | ID | Описание | Критичность | Статус | Владелец | Дедлайн |
 |----|----------|-------------|--------|----------|---------|
 | D-001 | Лицензирование AGPL v3 | 🚨 Блокер | 🟡 В процессе | Заказчик | До публикации |
-| D-002 | Push: FCM конфигурация | 🚨 Блокер | 🟡 В процессе | Заказчик (ntfy диагностика) | До тестирования |
+| D-002 | Push: APNs через Sygnal | 🚨 Блокер | 🟡 В процессе | Заказчик (Sygnal `type: apns`) | До тестирования |
 | D-003 | Минимальная версия iOS (18.0+) | 🚨 Блокер | 🟢 Решён | — | — |
 | D-004 | Инфраструктура звонков (UCMeet Call) | 🚨 Блокер | 🟢 Решён | — | — |
 | D-005 | Готовность серверов | ⚠️ Высокая | 🟢 Решён | — | — |
@@ -456,6 +454,9 @@ FCM реализован полностью согласно ТЗ. Код нап
 | | D-002 обновлён: заказчик переходит с ntfy на Sygnal. Все credentials для Sygnal переданы (APNs key, Firebase JSON, pusher app IDs). Ожидаем Sygnal URL. |
 | | 6 исправлений: OIDC `APP_NAME` ElementX→UCMeet.Chat, аналитика/rageshake отключены (nil), MapTiler ключ `iKPA4bK9zgtadTEw8neu` настроен, 13 русских переводов добавлены + 1 исправлен, Compound color tokens green→navy blue (#003B5D) через CompoundHook overrides. |
 | | Статические превью карт показывают «Invalid key» — бесплатный тариф MapTiler не включает Static Maps API. Ожидаем решение заказчика. |
+| 2026-03-25 | D-002: Push E2E тест #3. Заказчик настроил Sygnal с `type: gcm` — ошибка 400 от FCM: "Invalid JSON payload — Unknown name alert/mutable-content". Причина: GCM pushkin Sygnal помещает APNs-формат payload в FCM data field. Build 4 загружен в TestFlight. |
+| 2026-03-26 | **D-002: Push переключён с Firebase на APNs.** PushProvider default `.firebase` → `.apns` в AppSettings.swift. Приложение регистрирует APNs device token напрямую. Sygnal должен использовать `type: apns` с .p8 ключом. Firebase SDK остаётся в проекте. |
+| | 4 дополнительных русских перевода. Градиент кнопки отправки переопределён на navy blue. Заказчик запросил matrix.to → ucmatrix.org (ожидаем подтверждение). |
 
 ---
 

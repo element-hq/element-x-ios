@@ -74,12 +74,14 @@ Timeline: 6 sprints / 45 days.
 - [x] Create Firebase project for `org.ucmeet.UCMeetChat` (project ID: `matrix-8c24a`)
 - [x] Add real `GoogleService-Info.plist` (replaced placeholder 2026-03-03)
 - [x] Upload APNs key to Firebase Console (2026-03-11)
-- [x] Integrate Firebase SDK (FirebaseMessaging via SPM)
-- [x] Implement FCM token registration
+- [x] Integrate Firebase SDK (FirebaseMessaging via SPM) *(retained but no longer used for push)*
+- [x] ~~Implement FCM token registration~~ *(superseded — app switched to direct APNs registration, 2026-03-26)*
 - [x] Configure Sygnal integration (`https://push.ucmeet.org`)
 - [x] Generate Firebase service account JSON for customer's Sygnal
 - [x] Send customer appeal with Sygnal config instructions (2026-03-11)
-- [ ] **BLOCKED — Customer:** Configure Sygnal with Firebase credentials for both app IDs (`org.ucmeet.UCMeetChat.ios.prod` + `.ios.dev`)
+- [x] Diagnose FCM v1 payload incompatibility with Sygnal GCM pushkin (2026-03-25)
+- [x] Switch push provider from `.firebase` to `.apns` — app registers APNs device token directly (2026-03-26)
+- [ ] **BLOCKED — Customer:** Configure Sygnal with `type: apns` using .p8 key (Key ID: `XZANH7CD3Z`, Team ID: `6HRG779SDK`) for both app IDs (`org.ucmeet.UCMeetChat.ios.prod` + `.ios.dev`)
 - [ ] **BLOCKED — Customer:** Confirm Sygnal URL (currently assuming `https://push.ucmeet.org`)
 - [ ] Verify push: app active (needs physical device + Sygnal)
 - [ ] Verify push: app in background
@@ -105,13 +107,25 @@ Timeline: 6 sprints / 45 days.
 - [ ] Fully working push notifications — **blocked on customer Sygnal configuration**
 - [x] Working authentication via MAS (custom URL scheme, no element.io dependency)
 
-**Blocking:** Customer must configure Sygnal with Firebase service account JSON (sent 2026-03-11).
+**Blocking:** Customer must configure Sygnal with `type: apns` using .p8 key, then E2E test on two real devices.
 
 **Updates (2026-03-11):**
 - APNs key uploaded to Firebase Console
 - Firebase service account JSON generated and sent to customer
 - Customer appeal sent with detailed Sygnal config instructions (both `.ios.dev` and `.ios.prod` app IDs)
 - All developer-side push work complete — waiting on customer
+
+**Updates (2026-03-17/18):**
+- NSE entitlement `com.apple.developer.usernotifications.filtering` removed (requires Apple approval)
+- Push E2E test on real device: FCM pusher registration succeeds, gateway reachable, but ntfy rejects FCM token
+- Customer decided to switch from ntfy to Sygnal
+
+**Updates (2026-03-25/26):**
+- Customer tested Sygnal with `type: gcm` — Sygnal reached FCM but got 400 error: "Invalid JSON payload — Unknown name alert/mutable-content"
+- Root cause: Sygnal's GCM pushkin puts APNs-format `default_payload` (with `alert`, `mutable-content`) into FCM `data` field, but FCM v1 only accepts flat strings in `data`
+- **Solution:** Switched app push provider from `.firebase` to `.apns` in AppSettings.swift. App now registers APNs device token directly instead of FCM token. Sygnal must use `type: apns` with .p8 key.
+- Firebase SDK remains in project but is not used for push delivery
+- Customer's Sygnal config instructions updated: `type: apns`, .p8 key, Key ID `XZANH7CD3Z`, Team ID `6HRG779SDK`
 
 ---
 
@@ -195,11 +209,20 @@ Timeline: 6 sprints / 45 days.
 - [x] Subtitle set: "Мессенджер на протоколе Matrix" (2026-03-22)
 - [x] Regions: all countries (2026-03-22)
 - [x] Version decision: release as 1.0.0 (Build 2), updates start from 1.0.1+ (2026-03-22)
+- [x] Build 3: 6 customer-reported issues fixed — OIDC dialog name, analytics disabled, bug reports disabled, MapTiler key, 13 Russian translations, green→navy blue color overrides (2026-03-24)
+- [x] Test infrastructure fixed — PRODUCT_MODULE_NAME + TEST_HOST for renamed APP_NAME (2026-03-24)
+- [x] Push debugging with customer: diagnosed Sygnal app IDs, FCM v1 API shutdown, APNs token mismatch (2026-03-25)
+- [x] Build 4 uploaded to TestFlight (2026-03-25)
+- [x] Push provider switched from Firebase to direct APNs (2026-03-26)
+- [x] 4 more Russian translations added (2026-03-26)
+- [x] Send button gradient overridden to navy blue (2026-03-26)
+- [ ] Build 5 upload (pending — includes APNs switch)
 - [ ] **CUSTOMER:** Screenshots: 6.7" + 5.5" with device frames (from TestFlight)
 - [ ] **CUSTOMER:** Privacy Nutrition Labels questionnaire (ASC)
 - [ ] **CUSTOMER:** Review contact: first name, last name, email
-- [ ] **CUSTOMER:** Fix ntfy push server (FCM token rejection)
+- [ ] **CUSTOMER:** Configure Sygnal with `type: apns` for iOS, restart, test push on two real devices
 - [ ] **CUSTOMER:** Written AGPL confirmation
+- [ ] **CUSTOMER:** Confirm ucmatrix.org is operational (for matrix.to permalink redirect)
 - [ ] Customer testing
 - [ ] Fix bugs (if any)
 - [ ] Submit to App Store
@@ -213,4 +236,4 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-*Last updated: 2026-03-22. Sprint 6 in progress — all developer-side work complete. ASC listing filled (RU+EN), Build 2 on TestFlight, review info entered. All remaining items on customer side: screenshots, Privacy Nutrition Labels, review contact, ntfy push fix, AGPL confirmation.*
+*Last updated: 2026-03-27. Sprint 6 in progress — all developer-side work complete. Push switched from Firebase to direct APNs (Mar 26). Builds 1-4 on TestFlight, Build 5 in preparation. ASC listing filled (RU+EN), review info entered. ~96h invested of ~120h budget. All remaining items on customer side: Sygnal `type: apns` config, screenshots, Privacy Nutrition Labels, review contact, AGPL confirmation.*
