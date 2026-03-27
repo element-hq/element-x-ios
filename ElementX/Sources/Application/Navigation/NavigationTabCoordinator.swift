@@ -305,6 +305,71 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @State private var standardAppearance = UITabBarAppearance()
     
     var body: some View {
+        tabView
+            .sheet(item: $navigationTabCoordinator.sheetModule) { module in
+                module.coordinator?.toPresentable()
+                    .id(module.id)
+            }
+            .fullScreenCover(item: $navigationTabCoordinator.fullScreenCoverModule) { module in
+                module.coordinator?.toPresentable()
+                    .id(module.id)
+            }
+            .accessibilityHidden(navigationTabCoordinator.overlayModule?.coordinator != nil && navigationTabCoordinator.overlayPresentationMode == .fullScreen)
+            .overlay {
+                Group {
+                    if let coordinator = navigationTabCoordinator.overlayModule?.coordinator {
+                        coordinator.toPresentable()
+                            .opacity(navigationTabCoordinator.overlayPresentationMode == .minimized ? 0 : 1)
+                            .transition(.opacity)
+                    }
+                }
+                .animation(.elementDefault, value: navigationTabCoordinator.overlayPresentationMode)
+                .animation(.elementDefault, value: navigationTabCoordinator.overlayModule)
+            }
+    }
+    
+    @ViewBuilder
+    var tabView: some View {
+        if horizontalSizeClass == .regular {
+            tabRailLayout
+        } else {
+            tabViewLayout
+        }
+    }
+    
+    /// The column visibility of the split coordinator for the currently selected tab, if any.
+    private var selectedTabSplitColumnVisibility: NavigationSplitViewVisibility {
+        let selectedTabDetails = navigationTabCoordinator.tabModules
+            .first { $0.details.tag == navigationTabCoordinator.selectedTab }?.details
+        return selectedTabDetails?.navigationSplitCoordinator?.columnVisibility ?? .all
+    }
+    
+    private var isRailVisible: Bool {
+        selectedTabSplitColumnVisibility != .detailOnly
+    }
+    
+    var tabRailLayout: some View {
+        HStack(spacing: 0) {
+            if isRailVisible {
+                TabRailView(navigationTabCoordinator: navigationTabCoordinator)
+                    .background {
+                        Color.compound.bgCanvasDefault
+                            .overlay(alignment: .trailing) {
+                                Divider()
+                            }
+                            .ignoresSafeArea()
+                    }
+                    .zIndex(1)
+            }
+            
+            if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == navigationTabCoordinator.selectedTab }) {
+                module.coordinator?.toPresentable()
+                    .id(module.id)
+            }
+        }
+    }
+    
+    var tabViewLayout: some View {
         TabView(selection: $navigationTabCoordinator.selectedTab) {
             ForEach(navigationTabCoordinator.tabModules) { module in
                 Tab(value: module.details.tag, role: module.details.isSearch ? .search : nil) {
@@ -323,26 +388,6 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         }
         .backportTabBarMinimizeBehaviorOnScrollDown()
         .introspect(.tabView, on: .supportedVersions, customize: configureAppearance)
-        .sheet(item: $navigationTabCoordinator.sheetModule) { module in
-            module.coordinator?.toPresentable()
-                .id(module.id)
-        }
-        .fullScreenCover(item: $navigationTabCoordinator.fullScreenCoverModule) { module in
-            module.coordinator?.toPresentable()
-                .id(module.id)
-        }
-        .accessibilityHidden(navigationTabCoordinator.overlayModule?.coordinator != nil && navigationTabCoordinator.overlayPresentationMode == .fullScreen)
-        .overlay {
-            Group {
-                if let coordinator = navigationTabCoordinator.overlayModule?.coordinator {
-                    coordinator.toPresentable()
-                        .opacity(navigationTabCoordinator.overlayPresentationMode == .minimized ? 0 : 1)
-                        .transition(.opacity)
-                }
-            }
-            .animation(.elementDefault, value: navigationTabCoordinator.overlayPresentationMode)
-            .animation(.elementDefault, value: navigationTabCoordinator.overlayModule)
-        }
     }
     
     private func configureAppearance(_ tabBarController: UITabBarController) {
@@ -351,5 +396,47 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         standardAppearance.compactInlineLayoutAppearance.normal.badgeBackgroundColor = .compound.iconAccentPrimary // iPhone Landscape
         standardAppearance.inlineLayoutAppearance.normal.badgeBackgroundColor = .compound.iconAccentPrimary // iPadOS 17 (doesn't work for 18+)
         tabBarController.tabBar.standardAppearance = standardAppearance
+    }
+}
+
+struct TabRailView<Tag: Hashable>: View {
+    let navigationTabCoordinator: NavigationTabCoordinator<Tag>
+    
+    @State private var width: CGFloat = .zero
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 12) {
+                ForEach(navigationTabCoordinator.tabModules) { module in
+                    let isSelected = module.details.tag == navigationTabCoordinator.selectedTab
+                    Button {
+                        navigationTabCoordinator.selectedTab = module.details.tag
+                    } label: {
+                        Label {
+                            Text(module.details.title)
+                        } icon: {
+                            CompoundIcon(isSelected ? module.details.selectedIcon : module.details.icon)
+                        }
+                        .foregroundStyle(.compound.iconPrimary)
+                        .padding(8)
+                        .background {
+                            ZStack {
+                                let shape = RoundedRectangle(cornerRadius: 12)
+                                shape.fill(.compound.bgSubtlePrimary)
+                                shape.stroke(isSelected ? .compound.bgActionPrimaryRest : .clear, lineWidth: 2)
+                            }
+                        }
+                    }
+                    .labelStyle(.iconOnly)
+                    .badge(10) // TODO: Check if this works.
+                }
+            }
+            .padding(.horizontal, ProcessInfo.processInfo.isiOSAppOnMac ? 16 : 12)
+            .padding(.top, ProcessInfo.processInfo.isiOSAppOnMac ? 0 : 40) // FIXME: Properly avoid the traffic lights safe area?
+            .padding(.bottom)
+            .readWidth($width)
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .frame(width: width)
     }
 }
