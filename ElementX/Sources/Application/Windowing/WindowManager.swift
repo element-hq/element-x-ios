@@ -20,6 +20,7 @@ class WindowManager: SecureWindowManagerProtocol {
     private(set) var alternateWindow: UIWindow!
     
     private(set) var openWindowAction: OpenWindowAction!
+    private(set) var dismissWindowAction: DismissWindowAction!
         
     var windows: [UIWindow] {
         [mainWindow, overlayWindow, globalSearchWindow, alternateWindow]
@@ -58,13 +59,23 @@ class WindowManager: SecureWindowManagerProtocol {
         delegate?.windowManagerDidConfigureWindows(self)
     }
     
-    func configure(with openWindowAction: OpenWindowAction) {
+    func configure(withOpenWinddowAction openWindowAction: OpenWindowAction,
+                   dismissWindowAction: DismissWindowAction) {
         self.openWindowAction = openWindowAction
+        self.dismissWindowAction = dismissWindowAction
     }
     
     func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType) {
         coordinators[type] = (coordinator, flowCoordinator)
         openWindowAction(value: type)
+    }
+    
+    func closeAllAuxiliaryWindows() {
+        for key in coordinators.keys {
+            dismissWindowAction(value: key)
+        }
+        
+        coordinators.removeAll()
     }
     
     func windowForType(_ type: WindowManagerWindowType) -> AnyView {

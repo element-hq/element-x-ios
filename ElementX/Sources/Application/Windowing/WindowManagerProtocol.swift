@@ -25,7 +25,7 @@ protocol SecureWindowManagerProtocol: WindowManagerProtocol {
     /// Configures the window manager to operate on the supplied scene.
     func configure(with windowScene: UIWindowScene)
     
-    func configure(with openWindowAction: OpenWindowAction)
+    func configure(withOpenWinddowAction openWindowAction: OpenWindowAction, dismissWindowAction: DismissWindowAction)
     
     func handleRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType)
     
@@ -55,6 +55,8 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     var windows: [UIWindow] { get }
     
     func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType)
+    
+    func closeAllAuxiliaryWindows()
     
     /// Makes the global search window key. Used to get automatic text field focus.
     func showGlobalSearch()

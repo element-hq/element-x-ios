@@ -13,6 +13,7 @@ struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.openURL) private var openURL
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
     
     private var appCoordinator: AppCoordinatorProtocol!
 
@@ -51,7 +52,8 @@ struct Application: App {
                 }
                 .task {
                     appCoordinator.start()
-                    appCoordinator.windowManager.configure(with: openWindow)
+                    appCoordinator.windowManager.configure(withOpenWinddowAction: openWindow,
+                                                           dismissWindowAction: dismissWindow)
                 }
         }
         .handlesExternalEvents(matching: ["*"])

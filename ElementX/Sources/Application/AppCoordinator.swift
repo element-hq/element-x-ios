@@ -793,6 +793,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
+        windowManager.closeAllAuxiliaryWindows()
+        
         showLoadingIndicator()
         
         stopSync(isBackgroundTask: false)

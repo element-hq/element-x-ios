@@ -21258,6 +21258,41 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
         }
         registerCoordinatorFlowCoordinatorForWindowTypeClosure?(coordinator, flowCoordinator, type)
     }
+    //MARK: - closeAllAuxiliaryWindows
+
+    var closeAllAuxiliaryWindowsUnderlyingCallsCount = 0
+    var closeAllAuxiliaryWindowsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return closeAllAuxiliaryWindowsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = closeAllAuxiliaryWindowsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                closeAllAuxiliaryWindowsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    closeAllAuxiliaryWindowsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var closeAllAuxiliaryWindowsCalled: Bool {
+        return closeAllAuxiliaryWindowsCallsCount > 0
+    }
+    var closeAllAuxiliaryWindowsClosure: (() -> Void)?
+
+    func closeAllAuxiliaryWindows() {
+        closeAllAuxiliaryWindowsCallsCount += 1
+        closeAllAuxiliaryWindowsClosure?()
+    }
     //MARK: - showGlobalSearch
 
     var showGlobalSearchUnderlyingCallsCount = 0
