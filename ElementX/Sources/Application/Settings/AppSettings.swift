@@ -79,6 +79,7 @@ final class AppSettings {
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
         case liveLocationSharingEnabled
+        case floatingTimelineDateEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -435,6 +436,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.liveLocationSharingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var liveLocationSharingEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.floatingTimelineDateEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var floatingTimelineDateEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType == .debug, storageType: .userDefaults(store))
     var developerOptionsEnabled

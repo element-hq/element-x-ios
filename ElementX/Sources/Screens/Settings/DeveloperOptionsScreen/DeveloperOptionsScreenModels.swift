@@ -69,6 +69,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var linkNewDeviceEnabled: Bool { get set }
     
     var liveLocationSharingEnabled: Bool { get set }
+    
+    var floatingTimelineDateEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
