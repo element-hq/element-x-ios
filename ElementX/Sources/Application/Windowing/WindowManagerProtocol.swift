@@ -29,7 +29,7 @@ protocol SecureWindowManagerProtocol: WindowManagerProtocol {
     
     func handleRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType)
     
-    func windowForType(_ type: WindowManagerWindowType) -> AnyView?
+    func windowForType(_ type: WindowManagerWindowType) -> AnyView
     
     /// Shows the main and overlay window combo, hiding the alternate window.
     func switchToMain()

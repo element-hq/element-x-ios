@@ -67,9 +67,9 @@ class WindowManager: SecureWindowManagerProtocol {
         openWindowAction(value: type)
     }
     
-    func windowForType(_ type: WindowManagerWindowType) -> AnyView? {
+    func windowForType(_ type: WindowManagerWindowType) -> AnyView {
         guard let coordinator = coordinators[type]?.coordinator else {
-            return nil
+            return AnyView(InstantlyDismissingWindow())
         }
         
         return coordinator.toPresentable()
@@ -177,5 +177,18 @@ private class PassthroughWindow: UIWindow {
             // If the returned view is the `UIHostingController`'s view, ignore.
             return rootViewController.view == hitView ? nil : hitView
         }
+    }
+}
+
+/// Whenever restoring an app SwiftUI tries to restore its windows as well
+/// which we're generally not prepared for so use this to just close them instead
+private struct InstantlyDismissingWindow: View {
+    @Environment(\.dismissWindow) var dismissWindow
+    
+    var body: some View {
+        Rectangle()
+            .task {
+                dismissWindow()
+            }
     }
 }
