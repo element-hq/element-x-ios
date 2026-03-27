@@ -73,6 +73,8 @@ struct Application: App {
                     .environment(\.openURL, openURLAction(appCoordinator: appCoordinator, windowType: type))
             }
         }
+        .defaultSize(width: 400, height: 800)
+        .windowResizability(.contentSize)
     }
     
     private func openURLAction(appCoordinator: AppCoordinatorProtocol, windowType: WindowManagerWindowType?) -> OpenURLAction {
