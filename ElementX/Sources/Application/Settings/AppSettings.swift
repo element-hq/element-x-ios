@@ -274,8 +274,9 @@ final class AppSettings {
     // MARK: - Notifications
 
     /// The push notification provider to use for delivering remote notifications.
-    /// `.firebase` routes through FCM (requires GoogleService-Info.plist), `.apns` uses APNs directly.
-    @UserPreference(key: UserDefaultsKeys.pushProvider, defaultValue: PushProvider.firebase, storageType: .userDefaults(store))
+    /// `.apns` sends APNs device token directly to Sygnal (type: apns). `.firebase` routes through FCM (type: gcm).
+    /// UCMeet uses `.apns` because Sygnal's GCM pushkin doesn't support APNs-format payloads in FCM v1 data messages.
+    @UserPreference(key: UserDefaultsKeys.pushProvider, defaultValue: PushProvider.apns, storageType: .userDefaults(store))
     var pushProvider: PushProvider
 
     var pusherAppID: String {

@@ -61,6 +61,12 @@ struct DefaultCompoundHook: CompoundHookProtocol {
         colors.override(\.bgSuccessSubtle, with: Self.navy900.opacity(0.10))
         colors.override(\.borderSuccessSubtle, with: Self.navy700)
 
+        // Action gradient (send button)
+        colors.override(\.gradientActionStop1, with: Self.navy800)
+        colors.override(\.gradientActionStop2, with: Self.navy900)
+        colors.override(\.gradientActionStop3, with: Self.navy1000)
+        colors.override(\.gradientActionStop4, with: Self.navy1100)
+
         // Gradient stops (home screen gradient)
         colors.override(\.gradientSubtleStop1, with: Self.navy900.opacity(0.33))
         colors.override(\.gradientSubtleStop2, with: Self.navy900.opacity(0.27))
@@ -84,6 +90,10 @@ struct DefaultCompoundHook: CompoundHookProtocol {
         uiColors.override(\.textSuccessPrimary, with: Self.navy900UI)
         uiColors.override(\.bgSuccessSubtle, with: Self.navy900UI.withAlphaComponent(0.10))
         uiColors.override(\.borderSuccessSubtle, with: Self.navy700UI)
+        uiColors.override(\.gradientActionStop1, with: Self.navy800UI)
+        uiColors.override(\.gradientActionStop2, with: Self.navy900UI)
+        uiColors.override(\.gradientActionStop3, with: Self.navy1000UI)
+        uiColors.override(\.gradientActionStop4, with: Self.navy1100UI)
         uiColors.override(\.gradientSubtleStop1, with: Self.navy900UI.withAlphaComponent(0.33))
         uiColors.override(\.gradientSubtleStop2, with: Self.navy900UI.withAlphaComponent(0.27))
         uiColors.override(\.gradientSubtleStop3, with: Self.navy900UI.withAlphaComponent(0.20))

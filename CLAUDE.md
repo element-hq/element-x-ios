@@ -23,9 +23,9 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 **Developer:** Saidakhror Murzaliev (solo, 20h/week, AI-assisted)
 **Customer:** Russian-speaking, existing Matrix infrastructure
 
-## Current State (as of 2026-03-24)
+## Current State (as of 2026-03-27)
 
-**Build 3 in preparation.** Customer tested Build 2 and reported 6 issues — all fixed. Sprint 6 (TestFlight & Publication) in progress. Customer switching from ntfy to Sygnal for push gateway.
+**Build 5 in preparation.** All customer-reported bugs fixed. Push switched from Firebase to direct APNs (Sygnal compatibility). Sprint 6 (TestFlight & Publication) in progress.
 
 ### Configuration Applied
 
@@ -36,7 +36,8 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 | Team ID | `6HRG779SDK` |
 | Display Name | `UCMeet.Chat` |
 | Homeserver | `matrix.ucmeet.org` |
-| Push Gateway | Customer switching from ntfy to Sygnal. Sygnal credentials provided (APNs key, pusher app IDs, Firebase JSON). Awaiting Sygnal URL |
+| Push Gateway | `https://push.ucmeet.org` (Sygnal, `type: apns`). App uses direct APNs tokens (not Firebase) |
+| Push Provider | `.apns` (switched from `.firebase` — Sygnal's GCM pushkin incompatible with APNs payload format) |
 | OIDC | Custom URL scheme `org.ucmeet.UCMeetChat:/callback` — login verified working |
 | Calls | URL scheme `org.ucmeet.call`, LiveKit via `.well-known` |
 | Locales | en, en-US, ru (trimmed from 37) |
@@ -51,31 +52,39 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 | APP_NAME | `UCMeet.Chat` (was `ElementX` — fixed OIDC system dialog) |
 | Upstream | Synced with `element-hq/element-x-ios:develop` (60 ahead, 0 behind) |
 
-### Build 2 → Build 3 Changes (2026-03-24)
+### Build 4 → Build 5 Changes (2026-03-27)
 
-1. **OIDC dialog fix** — `APP_NAME: ElementX` → `UCMeet.Chat` in `project.yml`
-2. **Analytics disabled** — PostHog, Sentry set to `nil` in Secrets.swift
-3. **Bug reports disabled** — rageshake URL set to `nil`
-4. **MapTiler key configured** — `iKPA4bK9zgtadTEw8neu` (static previews need paid plan)
-5. **Russian translations** — 13 keys added, 1 fixed (`screen_roomlist_your_spaces`)
-6. **Navy blue color overrides** — 20 SwiftUI + 19 UIKit Compound tokens overridden in CompoundHook.swift
+1. **Push: Firebase → APNs** — `pushProvider` default changed from `.firebase` to `.apns` in AppSettings.swift. App registers APNs device token directly instead of FCM token. Sygnal uses `type: apns` with .p8 key. Firebase SDK stays in project.
+2. **Send button gradient** — `gradientActionStop1-4` overridden to navy blue in CompoundHook.swift (was green)
+3. **4 more Russian translations** — "Sharing options", "No space selected", "Do not add to a space", "Add to space"
+
+### Previous Build Changes (Build 2 → Build 4)
+
+- OIDC dialog: `APP_NAME: ElementX` → `UCMeet.Chat`
+- Analytics/bug reports disabled (PostHog, Sentry, rageshake all `nil`)
+- MapTiler key configured, location sharing enabled
+- 14 Russian translations added/fixed
+- Navy blue color overrides (24 SwiftUI + 23 UIKit tokens)
+- Test infrastructure: `PRODUCT_MODULE_NAME`, `TEST_HOST` fixes
 
 ### Remaining Blockers
 
-1. **Push E2E testing** — customer switching from ntfy to Sygnal. Credentials provided (APNs key, pusher app IDs, Firebase JSON). Awaiting Sygnal URL
-2. **MapTiler static maps** — free plan shows "Invalid key" on static previews. Customer deciding: upgrade to paid plan ($25/mo) or leave as-is
-3. **AGPL v3 licensing** — need written confirmation it covers Element X (blocks App Store only)
-4. **Screenshots** — customer needs to provide device-framed screenshots from TestFlight (6.7" + 5.5")
-5. **Privacy Nutrition Labels** — questionnaire not yet completed in ASC
-6. **Review contact details** — need first name, last name, email from customer
+1. **Push E2E testing** — customer must set Sygnal to `type: apns` for iOS and restart. Then re-login + test on two real devices
+2. **matrix.to → ucmatrix.org** — waiting for customer to confirm ucmatrix.org is operational
+3. **MapTiler static maps** — free plan shows "Invalid key" on static previews
+4. **AGPL v3 licensing** — need written confirmation (blocks App Store only)
+5. **Screenshots** — customer needs to provide device-framed screenshots from TestFlight (6.7" + 5.5")
+6. **Privacy Nutrition Labels** — questionnaire not yet completed in ASC
+7. **Review contact details** — need first name, last name, email from customer
 
 ### Next Actions (waiting on customer)
 
-1. Customer: configure Sygnal with provided credentials + confirm Sygnal URL
-2. Customer: decide on MapTiler paid plan for static map previews
-3. Customer: written AGPL license confirmation
-4. Customer: provide screenshots from TestFlight with device frames
-5. Customer: provide review contact name + email
+1. Customer: set Sygnal iOS to `type: apns` + restart + test push on two devices
+2. Customer: confirm ucmatrix.org is operational (for permalink redirect)
+3. Customer: decide on MapTiler paid plan for static map previews
+4. Customer: written AGPL license confirmation
+5. Customer: provide screenshots from TestFlight with device frames
+6. Customer: provide review contact name + email
 
 > See `decisions_tracker.md` for all 12 tracked decisions: 7 resolved, 3 in progress, 2 open.
 
@@ -176,7 +185,7 @@ All docs in `documentation/` folder:
 |--------|--------|-------|
 | 1: Environment Setup & Fork | **DONE** | |
 | 2: Branding & Basic Functionality | **DONE** | MapLibre interactive maps work, static previews need MapTiler permission |
-| 3: Push + OIDC + Associated Domains | **BLOCKED** | Push gateway URL confirmed (`https://push.ucmeet.org`), E2E test attempted, FCM token rejected by ntfy. Customer must check ntfy logs |
+| 3: Push + OIDC + Associated Domains | **IN PROGRESS** | App switched to APNs (from Firebase). Sygnal config provided. Awaiting customer to set `type: apns` + E2E test |
 | 4: Calls & UCMeet Call | **DONE** | |
 | 5: Finalization & Release Prep | **DONE** | NSE entitlement fix, upstream sync, version set to 1.0.0 (Build 2) |
 | 6: TestFlight & Publication | **IN PROGRESS** | Build 3 prep: 6 customer issues fixed (OIDC name, analytics, bug reports, maps, translations, colors). Remaining: screenshots, Privacy Nutrition Labels, review contact, push E2E |
@@ -185,8 +194,8 @@ All docs in `documentation/` folder:
 
 | Metric | Value |
 |--------|-------|
-| Plan completion | ~98% code + listing, blocked on customer for screenshots + push E2E + MapTiler decision |
-| Hours invested | ~92h of ~120h budget |
+| Plan completion | ~99% code, blocked on customer for push E2E, screenshots, privacy labels |
+| Hours invested | ~96h of ~120h budget |
 | Hours remaining | ~10–15h (Build 3 upload, push testing, privacy labels, release) |
 | Decisions resolved | 7/12 |
 | Unit tests | 962 run, 899 passed, 63 pre-existing failures, 0 new |
@@ -195,4 +204,4 @@ All docs in `documentation/` folder:
 
 ---
 
-*Last updated: 2026-03-24. See `documentation/progress_log.md` for detailed daily log.*
+*Last updated: 2026-03-27. See `documentation/progress_log.md` for detailed daily log.*
