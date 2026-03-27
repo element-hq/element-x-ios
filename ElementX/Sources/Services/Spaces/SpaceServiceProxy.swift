@@ -25,6 +25,8 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         spaceFilterSubject.asCurrentValuePublisher()
     }
     
+    let selectedSpaceFilterSubject = CurrentValueSubject<SpaceServiceFilter?, Never>(nil)
+    
     init(spaceService: SpaceServiceProtocol) {
         self.spaceService = spaceService
         

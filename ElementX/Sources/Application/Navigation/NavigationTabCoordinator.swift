@@ -48,6 +48,16 @@ import SwiftUI
         }
     }
     
+    struct TabActionItem: Identifiable {
+        /// A unique tab that identifies the tab for selection.
+        let tag: Tag
+        let title: String
+        let avatar: RoomAvatar
+        let action: () -> Void
+        
+        var id: Tag { tag }
+    }
+    
     // MARK: Tabs
     
     fileprivate struct TabModule: Identifiable {
@@ -98,6 +108,19 @@ import SwiftUI
     
     /// The currently selected tab's tag.
     var selectedTab: Tag?
+    
+    // MARK: Action Items
+    
+    private(set) var actionItems = [TabActionItem]()
+    
+    func setActionItems(_ items: [TabActionItem], animated: Bool = true) {
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+        
+        withTransaction(transaction) {
+            actionItems = items
+        }
+    }
     
     // MARK: Sheets
     
@@ -269,11 +292,17 @@ import SwiftUI
         AnyView(NavigationTabCoordinatorView(navigationTabCoordinator: self))
     }
     
-    // MARK: - CustomStringConvertible
+    // MARK: - General
+    
+    let mediaProvider: MediaProviderProtocol
     
     var description: String {
         guard !tabModules.isEmpty else { return "NavigationTabCoordinator(Empty)" }
         return "NavigationTabCoordinator(\(tabCoordinators)"
+    }
+    
+    init(mediaProvider: MediaProviderProtocol) {
+        self.mediaProvider = mediaProvider
     }
     
     // MARK: - Private
@@ -285,6 +314,12 @@ import SwiftUI
     }
 }
 
+extension EnvironmentValues {
+    // TODO: Maybe this should live on the NavigationSplitView instead 🤔
+    /// The horizontal size class of the tab coordinator's container, unaffected by NavigationSplitView overrides.
+    @Entry var tabCoordinatorHorizontalSizeClass: UserInterfaceSizeClass?
+}
+
 private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
@@ -293,6 +328,53 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @State private var standardAppearance = UITabBarAppearance()
     
     var body: some View {
+        tabView
+            .environment(\.tabCoordinatorHorizontalSizeClass, horizontalSizeClass)
+            .sheet(item: $navigationTabCoordinator.sheetModule) { module in
+                module.coordinator?.toPresentable()
+                    .id(module.id)
+            }
+            .fullScreenCover(item: $navigationTabCoordinator.fullScreenCoverModule) { module in
+                module.coordinator?.toPresentable()
+                    .id(module.id)
+            }
+            .accessibilityHidden(navigationTabCoordinator.overlayModule?.coordinator != nil && navigationTabCoordinator.overlayPresentationMode == .fullScreen)
+            .overlay {
+                Group {
+                    if let coordinator = navigationTabCoordinator.overlayModule?.coordinator {
+                        coordinator.toPresentable()
+                            .opacity(navigationTabCoordinator.overlayPresentationMode == .minimized ? 0 : 1)
+                            .transition(.opacity)
+                    }
+                }
+                .animation(.elementDefault, value: navigationTabCoordinator.overlayPresentationMode)
+                .animation(.elementDefault, value: navigationTabCoordinator.overlayModule)
+            }
+    }
+    
+    @ViewBuilder
+    var tabView: some View {
+        if horizontalSizeClass == .regular {
+            regularLayout
+        } else {
+            compactLayout
+        }
+    }
+    
+    var regularLayout: some View {
+        HStack(spacing: 0) {
+            TabRailView(navigationTabCoordinator: navigationTabCoordinator)
+                .background(LinearGradient(colors: [.compound.bgCanvasDefault, .clear], startPoint: .leading, endPoint: .trailing))
+                .zIndex(1)
+            
+            if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == navigationTabCoordinator.selectedTab }) {
+                module.coordinator?.toPresentable()
+                    .id(module.id)
+            }
+        }
+    }
+    
+    var compactLayout: some View {
         TabView(selection: $navigationTabCoordinator.selectedTab) {
             ForEach(navigationTabCoordinator.tabModules) { module in
                 module.coordinator?.toPresentable()
@@ -306,31 +388,11 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
                     }
                     .tag(module.details.tag)
                     .badge(module.details.badgeCount)
-                    .toolbar(module.details.barVisibility(in: horizontalSizeClass), for: .tabBar)
+                    .toolbar(module.details.barVisibility(in: horizontalSizeClass), for: .tabBar) // TODO: Remove this?!
             }
         }
         .backportTabBarMinimizeBehaviorOnScrollDown()
         .introspect(.tabView, on: .supportedVersions, customize: configureAppearance)
-        .sheet(item: $navigationTabCoordinator.sheetModule) { module in
-            module.coordinator?.toPresentable()
-                .id(module.id)
-        }
-        .fullScreenCover(item: $navigationTabCoordinator.fullScreenCoverModule) { module in
-            module.coordinator?.toPresentable()
-                .id(module.id)
-        }
-        .accessibilityHidden(navigationTabCoordinator.overlayModule?.coordinator != nil && navigationTabCoordinator.overlayPresentationMode == .fullScreen)
-        .overlay {
-            Group {
-                if let coordinator = navigationTabCoordinator.overlayModule?.coordinator {
-                    coordinator.toPresentable()
-                        .opacity(navigationTabCoordinator.overlayPresentationMode == .minimized ? 0 : 1)
-                        .transition(.opacity)
-                }
-            }
-            .animation(.elementDefault, value: navigationTabCoordinator.overlayPresentationMode)
-            .animation(.elementDefault, value: navigationTabCoordinator.overlayModule)
-        }
     }
     
     private func configureAppearance(_ tabBarController: UITabBarController) {
@@ -339,5 +401,61 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         standardAppearance.compactInlineLayoutAppearance.normal.badgeBackgroundColor = .compound.iconAccentPrimary // iPhone Landscape
         standardAppearance.inlineLayoutAppearance.normal.badgeBackgroundColor = .compound.iconAccentPrimary // iPadOS 17 (doesn't work for 18+)
         tabBarController.tabBar.standardAppearance = standardAppearance
+    }
+}
+
+struct TabRailView<Tag: Hashable>: View {
+    let navigationTabCoordinator: NavigationTabCoordinator<Tag>
+    
+    var body: some View {
+        ScrollView {
+            LazyVStack(spacing: 12) {
+                ForEach(navigationTabCoordinator.tabModules) { module in
+                    let isSelected = module.details.tag == navigationTabCoordinator.selectedTab
+                    Button { navigationTabCoordinator.selectedTab = module.details.tag } label: {
+                        Label {
+                            Text(module.details.title)
+                        } icon: {
+                            CompoundIcon(isSelected ? module.details.selectedIcon : module.details.icon)
+                        }
+                        .foregroundStyle(.compound.iconPrimary)
+                        .padding(8)
+                        .background {
+                            ZStack {
+                                let shape = RoundedRectangle(cornerRadius: 12)
+                                shape.fill(.compound.bgSubtlePrimary)
+                                shape.stroke(isSelected ? .compound.bgActionPrimaryRest : .clear, lineWidth: 2)
+                            }
+                        }
+                    }
+                    .labelStyle(.iconOnly)
+                    .badge(module.details.badgeCount) // TODO: Check if this works.
+                }
+                
+                ForEach(navigationTabCoordinator.actionItems) { item in
+                    let isSelected = item.tag == navigationTabCoordinator.selectedTab
+                    Button(action: item.action) {
+                        Label {
+                            Text(item.title)
+                        } icon: {
+                            RoomAvatarImage(avatar: item.avatar,
+                                            avatarSize: .custom(40),
+                                            mediaProvider: navigationTabCoordinator.mediaProvider)
+                        }
+                        .foregroundStyle(.compound.iconPrimary)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(isSelected ? .compound.bgActionPrimaryRest : .clear, lineWidth: 2)
+                        }
+                    }
+                    .labelStyle(.iconOnly)
+                    // TODO: .badge(module.details.badgeCount)
+                }
+            }
+            .padding(.leading, 10)
+            .padding(.top, 40) // FIXME: Properly avoid the traffic lights safe area?
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .frame(width: 56) // FIXME: Dynamic Type support.
     }
 }

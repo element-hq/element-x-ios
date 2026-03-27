@@ -16865,6 +16865,11 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
         set(value) { underlyingSpaceFilterPublisher = value }
     }
     var underlyingSpaceFilterPublisher: CurrentValuePublisher<[SpaceServiceFilter], Never>!
+    var selectedSpaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never> {
+        get { return underlyingSelectedSpaceFilterSubject }
+        set(value) { underlyingSelectedSpaceFilterSubject = value }
+    }
+    var underlyingSelectedSpaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>!
 
     //MARK: - spaceRoomList
 

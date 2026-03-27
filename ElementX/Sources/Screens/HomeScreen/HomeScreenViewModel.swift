@@ -15,7 +15,7 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let spaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>
+    private let selectedSpaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
     private let notificationManager: NotificationManagerProtocol
@@ -41,7 +41,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
         
-        spaceFilterSubject = CurrentValueSubject<SpaceServiceFilter?, Never>(nil)
+        selectedSpaceFilterSubject = userSession.clientProxy.spaceService.selectedSpaceFilterSubject
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
@@ -102,10 +102,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 state.shouldShowSpaceFilters = !filters.isEmpty
                 
-                if let selectedSpaceFilter = spaceFilterSubject.value,
+                if let selectedSpaceFilter = selectedSpaceFilterSubject.value,
                    !filters.contains(selectedSpaceFilter) {
                     // Clear the spaces filter if the space has been left.
-                    spaceFilterSubject.send(nil)
+                    selectedSpaceFilterSubject.send(nil)
                 }
             }
             .store(in: &cancellables)
@@ -137,7 +137,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.hideInviteAvatars, on: self)
             .store(in: &cancellables)
         
-        spaceFilterSubject
+        selectedSpaceFilterSubject
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.selectedSpaceFilter, on: self)
             .store(in: &cancellables)
@@ -150,7 +150,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
         isSearchFieldFocused
-            .combineLatest(searchQuery, activeFilters, spaceFilterSubject)
+            .combineLatest(searchQuery, activeFilters, selectedSpaceFilterSubject)
             .removeDuplicates { $0 == $1 }
             .sink { [weak self] isSearchFieldFocused, _, _, _ in
                 guard let self else { return }
@@ -200,8 +200,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .globalSearch:
             actionsSubject.send(.presentGlobalSearch)
         case .spaceFilters:
-            if spaceFilterSubject.value != nil {
-                spaceFilterSubject.send(nil)
+            if selectedSpaceFilterSubject.value != nil {
+                selectedSpaceFilterSubject.send(nil)
             } else {
                 state.bindings.spaceFiltersViewModel = ChatsSpaceFiltersScreenViewModel(spaceService: userSession.clientProxy.spaceService,
                                                                                         mediaProvider: userSession.mediaProvider)
@@ -211,7 +211,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     
                     switch action {
                     case .confirm(let spaceServiceFilter):
-                        spaceFilterSubject.send(spaceServiceFilter)
+                        selectedSpaceFilterSubject.send(spaceServiceFilter)
                         state.bindings.spaceFiltersViewModel = nil
                     case .cancel:
                         state.bindings.spaceFiltersViewModel = nil
@@ -286,7 +286,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             if state.bindings.isSearchFieldFocused {
                 roomSummaryProvider?.setFilter(.search(query: state.bindings.searchQuery))
             } else {
-                if let spaceFilter = spaceFilterSubject.value {
+                if let spaceFilter = selectedSpaceFilterSubject.value {
                     roomSummaryProvider?.setFilter(.rooms(roomsIDs: spaceFilter.descendants,
                                                           filters: state.bindings.filtersState.activeFilters.set))
                 } else {

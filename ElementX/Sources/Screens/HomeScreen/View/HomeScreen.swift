@@ -14,6 +14,8 @@ import SwiftUI
 struct HomeScreen: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     
+    @Environment(\.tabCoordinatorHorizontalSizeClass) private var tabCoordinatorHorizontalSizeClass
+    
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
     @Namespace private var navigationTransitionNamespace
@@ -66,7 +68,7 @@ struct HomeScreen: View {
             }
         }
         
-        if context.viewState.shouldShowSpaceFilters {
+        if context.viewState.shouldShowSpaceFilters, tabCoordinatorHorizontalSizeClass != .regular {
             if #available(iOS 26, *) {
                 ToolbarSpacer(.fixed, placement: .primaryAction)
             }

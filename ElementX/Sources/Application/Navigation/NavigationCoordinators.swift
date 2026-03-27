@@ -360,7 +360,8 @@ private struct NavigationSplitCoordinatorView: View {
                 columnVisibility = oldValue
             }
         }
-        .ignoresSafeArea() // Necessary when embedded in a TabView on iPadOS otherwise there's a gap at the top (as of 18.5).
+        // Seems unnecessary now with the HStack. There must be more to this story than first visible?!
+        // .ignoresSafeArea() // Necessary when embedded in a TabView on iPadOS otherwise there's a gap at the top (as of 18.5).
     }
     
     /// The NavigationStack that will be used in compact layouts

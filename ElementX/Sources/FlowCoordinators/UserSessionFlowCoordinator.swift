@@ -20,7 +20,7 @@ enum UserSessionFlowCoordinatorAction {
 }
 
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
-    enum HomeTab: Hashable { case chats, spaces }
+    enum HomeTab: Hashable { case chats, spaces, spaceFilter(String) }
     
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationTabCoordinator: NavigationTabCoordinator<HomeTab>
@@ -76,7 +76,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.appLockService = appLockService
         self.flowParameters = flowParameters
         
-        navigationTabCoordinator = NavigationTabCoordinator()
+        navigationTabCoordinator = NavigationTabCoordinator(mediaProvider: flowParameters.userSession.mediaProvider)
         navigationRootCoordinator.setRootCoordinator(navigationTabCoordinator)
         
         let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.appSettings.hideBrandChrome))
@@ -190,6 +190,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    // HACKATHON, I ain't got time for this crap
+    // swiftlint:disable:next function_body_length
     private func setupObservers() {
         chatsTabFlowCoordinator.actionsPublisher
             .sink { [weak self] action in
@@ -224,6 +226,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .showSettings:
                     stateMachine.tryEvent(.showSettingsScreen)
                 }
+            }
+            .store(in: &cancellables)
+        
+        let spaceService = flowParameters.userSession.clientProxy.spaceService
+        let selectedSpaceFilterSubject = spaceService.selectedSpaceFilterSubject
+        spaceService.spaceFilterPublisher
+            .sink { [weak self] filters in
+                guard let self else { return }
+                let actionItems = filters.map { filter in
+                    NavigationTabCoordinator<HomeTab>.TabActionItem(tag: .spaceFilter(filter.id),
+                                                                    title: filter.room.name,
+                                                                    avatar: filter.room.avatar) {
+                        selectedSpaceFilterSubject.send(filter)
+                    }
+                }
+                navigationTabCoordinator.setActionItems(actionItems)
             }
             .store(in: &cancellables)
         

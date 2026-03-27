@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
 
@@ -44,7 +45,10 @@ struct SpaceServiceFilter: Identifiable, Equatable {
 // sourcery: AutoMockable
 protocol SpaceServiceProxyProtocol {
     var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoom], Never> { get }
+    /// All of the available space filters that can be applied to the room list.
     var spaceFilterPublisher: CurrentValuePublisher<[SpaceServiceFilter], Never> { get }
+    /// The currently selected space filter being applied to the room list.
+    var selectedSpaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never> { get }
     
     func spaceRoomList(spaceID: String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>
     /// Returns a joined space given its identifier
