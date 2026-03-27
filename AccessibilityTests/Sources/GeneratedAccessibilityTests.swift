@@ -159,6 +159,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "FileRoomTimelineView_Previews")
     }
 
+    func testFloatingDateBadge() async throws {
+        try await performAccessibilityAudit(named: "FloatingDateBadge_Previews")
+    }
+
     func testFormButtonStyles() async throws {
         try await performAccessibilityAudit(named: "FormButtonStyles_Previews")
     }

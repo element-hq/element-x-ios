@@ -47,6 +47,7 @@ enum TestablePreviewsDictionary {
         "EstimatedWaveformView_Previews" : EstimatedWaveformView_Previews.self,
         "FileMediaEventsTimelineView_Previews" : FileMediaEventsTimelineView_Previews.self,
         "FileRoomTimelineView_Previews" : FileRoomTimelineView_Previews.self,
+        "FloatingDateBadge_Previews" : FloatingDateBadge_Previews.self,
         "FormButtonStyles_Previews" : FormButtonStyles_Previews.self,
         "FormattedBodyText_Previews" : FormattedBodyText_Previews.self,
         "FormattingToolbar_Previews" : FormattingToolbar_Previews.self,

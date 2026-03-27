@@ -31,6 +31,12 @@ struct ThreadTimelineScreen: View {
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
+            .overlay(alignment: .top) {
+                if timelineContext.viewState.floatingTimelineDateEnabled {
+                    FloatingDateBadge(dateText: timelineContext.floatingDateText)
+                        .padding(.top, 13)
+                }
+            }
             .overlay(alignment: .bottomTrailing) {
                 TimelineScrollToBottomButton(isVisible: isAtBottomAndLive) {
                     timelineContext.send(viewAction: .scrollToBottom)

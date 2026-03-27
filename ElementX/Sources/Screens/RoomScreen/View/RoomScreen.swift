@@ -33,9 +33,11 @@ struct RoomScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
             }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .topBanner(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled)
-            // This can overlay on top of the pinnedItemsBanner
-            .topBanner(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
+            .topBanners([
+                TopBannerItem(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled),
+                // This can overlay on top of the pinnedItemsBanner
+                TopBannerItem(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
+            ], footer: dateBadge)
             .safeAreaInset(edge: .top) {
                 // When VoiceOver is enabled, the table view isn't reversed and the scroll gestures
                 // don't trigger meaning the banner never hides itself and so the .overlay layout
@@ -86,6 +88,13 @@ struct RoomScreen: View {
                                 onViewAll: onViewAllKnockRequests,
                                 mediaProvider: context.mediaProvider)
             .padding(.top, 16)
+    }
+    
+    @ViewBuilder
+    private var dateBadge: some View {
+        if timelineContext.viewState.floatingTimelineDateEnabled, !isVoiceOverEnabled {
+            FloatingDateBadge(dateText: timelineContext.floatingDateText)
+        }
     }
     
     private func dismissKnockRequestsBanner() {
