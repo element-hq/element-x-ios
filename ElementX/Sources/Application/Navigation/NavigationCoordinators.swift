@@ -7,6 +7,7 @@
 //
 
 import Combine
+import Compound
 import SwiftUI
 
 /// Class responsible for displaying 2 coordinators side by side and collapsing them
@@ -153,6 +154,9 @@ import SwiftUI
     var compactLayoutStackCoordinators: [any CoordinatorProtocol] {
         compactLayoutStackModules.compactMap(\.coordinator)
     }
+    
+    /// Tracks the current column visibility of the split view. Only meaningful in regular (non-compact) layouts.
+    var columnVisibility = NavigationSplitViewVisibility.all
     
     /// Default NavigationSplitCoordinator initialiser
     /// - Parameter placeholderCoordinator: coordinator to use if no siderbar or detail is set
@@ -331,8 +335,6 @@ extension EnvironmentValues {
 }
 
 private struct NavigationSplitCoordinatorView: View {
-    @State private var columnVisibility = NavigationSplitViewVisibility.all
-    
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.scenePhase) private var scenePhase
     
@@ -358,13 +360,13 @@ private struct NavigationSplitCoordinatorView: View {
             module.coordinator?.toPresentable()
                 .id(module.id)
         }
-        .onChange(of: columnVisibility) { oldValue, _ in
+        .onChange(of: navigationSplitCoordinator.columnVisibility) { oldValue, _ in
             // Preserve the current column visibility when backgrounding the app
             if scenePhase == .background {
-                columnVisibility = oldValue
+                navigationSplitCoordinator.columnVisibility = oldValue
             }
         }
-        .ignoresSafeArea() // Necessary when embedded in a TabView on iPadOS otherwise there's a gap at the top (as of 18.5).
+        .ignoresSafeArea(edges: Compound.supportsGlass ? [] : .all) // When embedded in a TabView on iPadOS 18 there's a gap at the top.
     }
     
     /// The NavigationStack that will be used in compact layouts
@@ -382,7 +384,7 @@ private struct NavigationSplitCoordinatorView: View {
     
     /// The NavigationSplitView that will be used in non-compact layouts
     var navigationSplitView: some View {
-        NavigationSplitView(columnVisibility: $columnVisibility) {
+        NavigationSplitView(columnVisibility: $navigationSplitCoordinator.columnVisibility) {
             if let sidebarModule = navigationSplitCoordinator.sidebarModule {
                 sidebarModule.coordinator?.toPresentable()
                     .environment(\.isInSidebar, true)
