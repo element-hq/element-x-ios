@@ -75,7 +75,35 @@ extension XCUIApplication {
         XCTAssertTrue(webAuthenticationView.waitForExistence(timeout: 10.0))
         webAuthenticationView.tap(.top) // Tap the web view to properly focus the app again.
         
-        let webUsernameTextField = textFields["Username or Email"]
+        // The user may already be authenticated on MAS; sign them out.
+        // The button label varies by MAS version: "Sign out" or "Use another account".
+        let masLogoutPredicate = NSPredicate(format: "label == 'Sign out' OR label == 'Use another account'")
+        let masLogoutButton = webAuthenticationView.buttons.matching(masLogoutPredicate).firstMatch
+        if masLogoutButton.waitForExistence(timeout: 2.0) {
+            masLogoutButton.tap(.center)
+        }
+        
+        // Detect whether the server uses a Keycloak identity provider.
+        let keycloakLoginLink = webAuthenticationView.links["Continue with Keycloak"]
+        let usernameFieldLabel: String
+        let submitButtonLabel: String
+        if keycloakLoginLink.waitForExistence(timeout: 5.0) {
+            keycloakLoginLink.tap(.center)
+            
+            // Keycloak may also insist on an already-authenticated user; sign out if so.
+            let keycloakLogoutButton = webAuthenticationView.buttons.matching(masLogoutPredicate).firstMatch
+            if keycloakLogoutButton.waitForExistence(timeout: 2.0) {
+                keycloakLogoutButton.tap(.center)
+            }
+            
+            usernameFieldLabel = "Username or email"
+            submitButtonLabel = "Sign In"
+        } else {
+            usernameFieldLabel = "Username or Email"
+            submitButtonLabel = "Continue"
+        }
+        
+        let webUsernameTextField = textFields[usernameFieldLabel]
         XCTAssertTrue(webUsernameTextField.waitForExistence(timeout: 10.0))
         webUsernameTextField.clearAndTypeText(username, app: self)
         webAuthenticationView.buttons["Done"].firstMatch.tap() // Dismiss the keyboard so that the password text field is fully hittable.
@@ -83,9 +111,9 @@ extension XCUIApplication {
         let webPasswordTextField = secureTextFields["Password"]
         XCTAssertTrue(webPasswordTextField.waitForExistence(timeout: 10.0))
         webPasswordTextField.clearAndTypeText(password, app: self)
-        webAuthenticationView.buttons["Done"].firstMatch.tap() // Dismiss the keyboard so that the continue button is fully hittable.
+        webAuthenticationView.buttons["Done"].firstMatch.tap() // Dismiss the keyboard so that the submit button is fully hittable.
         
-        let webLoginButton = webAuthenticationView.buttons["Continue"]
+        let webLoginButton = webAuthenticationView.buttons[submitButtonLabel]
         XCTAssertTrue(webLoginButton.waitForExistence(timeout: 10.0))
         webLoginButton.tap(.center)
         

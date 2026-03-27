@@ -69,3 +69,52 @@ jobs:
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: integrationtests
+
+  server_login_tests:
+    name: Server Login Tests (${{ matrix.server }})
+    runs-on: macos-26
+    timeout-minutes: 45
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - server: lts
+            host_secret: INTEGRATION_TESTS_LTS_HOST
+            username_secret: INTEGRATION_TESTS_LTS_USERNAME
+            password_secret: INTEGRATION_TESTS_LTS_PASSWORD
+          - server: lts-1
+            host_secret: INTEGRATION_TESTS_LTS_1_HOST
+            username_secret: INTEGRATION_TESTS_LTS_1_USERNAME
+            password_secret: INTEGRATION_TESTS_LTS_1_PASSWORD
+
+    concurrency:
+      # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: server-login-tests-${{ matrix.server }}-${{ github.head_ref }}
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup environment
+        run:
+          source ci_scripts/ci_common.sh && setup_github_actions_environment
+
+      - name: Run tests
+        run: swift run -q tools ci server-login-tests
+        env:
+          INTEGRATION_TESTS_HOST: ${{ secrets[matrix.host_secret] }}
+          INTEGRATION_TESTS_USERNAME: ${{ secrets[matrix.username_secret] }}
+          INTEGRATION_TESTS_PASSWORD: ${{ secrets[matrix.password_secret] }}
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        # We only care about artefacts if the tests fail
+        if: failure()
+        with:
+          name: Results (${{ matrix.server }})
+          path: test_output/IntegrationTests.xcresult.zip
+          retention-days: 7
+          if-no-files-found: ignore

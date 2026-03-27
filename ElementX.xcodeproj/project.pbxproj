@@ -312,6 +312,7 @@
 		3467FEE8210D301FF1B77001 /* UserIndicatorControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7893780A1FD6E3F38B3E9049 /* UserIndicatorControllerMock.swift */; };
 		34ADC506C929D10B138EBA51 /* AdvancedSettingsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C58159916ABD7F454CE689 /* AdvancedSettingsScreenCoordinator.swift */; };
 		34C752A73717C691582DC6C7 /* UnsupportedRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B8500C152BC59445647DA8 /* UnsupportedRoomTimelineItem.swift */; };
+		34DBE24749DF3FA946C2EE11 /* ServerLoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503C375DC6A10DC236E8CC16 /* ServerLoginTests.swift */; };
 		34F1261CEF6D6A00D559B520 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFD5EB0B0EEA4549FB49784 /* SettingsScreen.swift */; };
 		352C439BE0F75E101EF11FB1 /* RoomScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886615BEBAE33A0AA4D5F8 /* RoomScreenModels.swift */; };
 		355B11D08CE0CEF97A813236 /* AppRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A9E3FBE8A66B5A17AD7F74 /* AppRoutes.swift */; };
@@ -2037,6 +2038,7 @@
 		4FCB2126C091EEF2454B4D56 /* RoomFlowCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFlowCoordinatorTests.swift; sourceTree = "<group>"; };
 		4FDD775CFD72DD2D3C8A8390 /* NotificationSettingsProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsProxyProtocol.swift; sourceTree = "<group>"; };
 		502F986D57158674172C58E3 /* AppLockSetupSettingsScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockSetupSettingsScreenModels.swift; sourceTree = "<group>"; };
+		503C375DC6A10DC236E8CC16 /* ServerLoginTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginTests.swift; sourceTree = "<group>"; };
 		505208F28007C0FEC14E1FF0 /* HomeScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewModelTests.swift; sourceTree = "<group>"; };
 		505ADA084C0B38A0C4AD2574 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5098DA7799946A61E34A2373 /* FileRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRoomTimelineItem.swift; sourceTree = "<group>"; };
@@ -4371,6 +4373,7 @@
 			children = (
 				D33116993D54FADC0C721C1F /* Application.swift */,
 				D1BC84BA0AF11C2128D58ABD /* Common.swift */,
+				503C375DC6A10DC236E8CC16 /* ServerLoginTests.swift */,
 				21DD8599815136EFF5B73F38 /* UserFlowTests.swift */,
 			);
 			path = Sources;
@@ -9051,6 +9054,7 @@
 				1702981A8085BE4FB0EC001B /* Application.swift in Sources */,
 				388D39ED9FE1122EA6D76BF2 /* Common.swift in Sources */,
 				A439B456D0761D6541745CC3 /* NSRegularExpresion.swift in Sources */,
+				34DBE24749DF3FA946C2EE11 /* ServerLoginTests.swift in Sources */,
 				32B7891D937377A59606EDFC /* UserFlowTests.swift in Sources */,
 				B444F9C184A377C1B481F07F /* XCUIElement.swift in Sources */,
 			);
