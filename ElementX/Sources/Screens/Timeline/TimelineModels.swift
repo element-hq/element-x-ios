@@ -142,11 +142,16 @@ struct TimelineViewState: BindableState {
 
     var enableKeyShareOnInvite: Bool
     
+    var floatingTimelineDateEnabled: Bool
+    
     var bindings: TimelineViewStateBindings
 }
 
 struct TimelineViewStateBindings {
     var isScrolledToBottom = true
+    
+    /// The formatted date text for the floating date badge shown while scrolling.
+    var floatingDateText: String?
     
     /// The state of wether reactions listed on the timeline are expanded/collapsed.
     /// Key is itemID, value is the collapsed state.

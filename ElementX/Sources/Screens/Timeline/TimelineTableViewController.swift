@@ -145,6 +145,10 @@ class TimelineTableViewController: UIViewController {
     }
     
     @Binding private var isScrolledToBottom: Bool
+    @Binding private var floatingDateText: String?
+    
+    /// A work item used to auto-hide the floating date badge after scrolling stops.
+    private var floatingDateHideWorkItem: DispatchWorkItem?
 
     private var timelineItemsIDs: [TimelineItemIdentifier.UniqueID] {
         timelineItemsDictionary.keys.elements.reversed()
@@ -175,9 +179,11 @@ class TimelineTableViewController: UIViewController {
     
     init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
+         floatingDateText: Binding<String?>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>) {
         self.coordinator = coordinator
         _isScrolledToBottom = isScrolledToBottom
+        _floatingDateText = floatingDateText
         
         super.init(nibName: nil, bundle: nil)
         
@@ -461,6 +467,10 @@ extension TimelineTableViewController: UITableViewDelegate {
             if self.isScrolledToBottom != isScrolledToBottom {
                 self.isScrolledToBottom = isScrolledToBottom
             }
+            
+            if !isScrolledToBottom {
+                updateFloatingDate()
+            }
         }
 
         // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
@@ -502,6 +512,63 @@ extension TimelineTableViewController: UITableViewDelegate {
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         sendLastVisibleItemReadReceipt()
+    }
+}
+
+// MARK: - Floating Date Badge
+
+extension TimelineTableViewController {
+    /// Computes the formatted date text for the topmost visible timeline item
+    /// and updates the floating date binding.
+    func updateFloatingDate() {
+        guard let dateText = topmostVisibleDateText() else {
+            return
+        }
+        
+        // Before updating it already schedule it's removal or the future
+        scheduleFloatingDateHide()
+        
+        // Only update on changes to avoid needless SwiftUI recomputation.
+        if floatingDateText != dateText {
+            floatingDateText = dateText
+        }
+    }
+    
+    /// Schedules the floating date badge to be hidden after a delay.
+    func scheduleFloatingDateHide() {
+        floatingDateHideWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.floatingDateText = nil
+        }
+        floatingDateHideWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+    }
+    
+    /// Returns the formatted date text for the topmost visible timeline item.
+    ///
+    /// The table view is flipped (unless VoiceOver is running), so the "topmost"
+    /// visible cell on screen is actually the *last* index path in `indexPathsForVisibleRows`
+    /// when the table is flipped, or the *first* when it is not.
+    private func topmostVisibleDateText() -> String? {
+        guard let visibleIndexPaths = tableView.indexPathsForVisibleRows,
+              !visibleIndexPaths.isEmpty else {
+            return nil
+        }
+        
+        // In a flipped table view the last index path is the topmost item on screen;
+        // when VoiceOver is active the table is not flipped so the first is topmost.
+        let isFlipped = scaleY == -1
+        let orderedPaths = isFlipped ? visibleIndexPaths.reversed() : visibleIndexPaths
+        
+        // Walk from topmost downward and return the date of the first item that has one.
+        for indexPath in orderedPaths {
+            if let uniqueID = dataSource?.itemIdentifier(for: indexPath),
+               let timestamp = timelineItemsDictionary[uniqueID]?.timestamp {
+                return timestamp.formattedDateSeparator()
+            }
+        }
+        
+        return nil
     }
 }
 
