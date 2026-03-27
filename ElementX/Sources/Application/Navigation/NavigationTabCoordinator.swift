@@ -303,8 +303,84 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @Bindable var navigationTabCoordinator: NavigationTabCoordinator<Tag>
     
     @State private var standardAppearance = UITabBarAppearance()
+    @State private var window: UIWindow?
+    @State private var isFullScreen = true
     
     var body: some View {
+        tabView
+            .sheet(item: $navigationTabCoordinator.sheetModule) { module in
+                module.coordinator?.toPresentable()
+                    .id(module.id)
+            }
+            .fullScreenCover(item: $navigationTabCoordinator.fullScreenCoverModule) { module in
+                module.coordinator?.toPresentable()
+                    .id(module.id)
+            }
+            .accessibilityHidden(navigationTabCoordinator.overlayModule?.coordinator != nil && navigationTabCoordinator.overlayPresentationMode == .fullScreen)
+            .overlay {
+                Group {
+                    if let coordinator = navigationTabCoordinator.overlayModule?.coordinator {
+                        coordinator.toPresentable()
+                            .opacity(navigationTabCoordinator.overlayPresentationMode == .minimized ? 0 : 1)
+                            .transition(.opacity)
+                    }
+                }
+                .animation(.elementDefault, value: navigationTabCoordinator.overlayPresentationMode)
+                .animation(.elementDefault, value: navigationTabCoordinator.overlayModule)
+            }
+    }
+    
+    @ViewBuilder
+    var tabView: some View {
+        if horizontalSizeClass == .regular, #available(iOS 26, *) {
+            tabRailLayout
+        } else {
+            tabViewLayout
+        }
+    }
+    
+    /// The column visibility of the split coordinator for the currently selected tab, if any.
+    private var selectedTabSplitColumnVisibility: NavigationSplitViewVisibility {
+        let selectedTabDetails = navigationTabCoordinator.tabModules
+            .first { $0.details.tag == navigationTabCoordinator.selectedTab }?.details
+        return selectedTabDetails?.navigationSplitCoordinator?.columnVisibility ?? .all
+    }
+    
+    private var isRailVisible: Bool {
+        selectedTabSplitColumnVisibility != .detailOnly
+    }
+    
+    var tabRailLayout: some View {
+        HStack(spacing: 0) {
+            if isRailVisible {
+                TabRailView(navigationTabCoordinator: navigationTabCoordinator, isFullScreen: isFullScreen)
+            }
+            
+            if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == navigationTabCoordinator.selectedTab }) {
+                module.coordinator?.toPresentable()
+                    .id(module.id)
+            }
+        }
+        .introspect(.window, on: .supportedVersions) { window in
+            guard self.window !== window else { return }
+            
+            DispatchQueue.main.async {
+                self.window = window
+                isFullScreen = window.isFullScreen
+            }
+        }
+        .onGeometryChange(for: CGSize.self) { geometry in
+            geometry.size // We don't need the size, but it's a signal to re-compute.
+        } action: { _ in
+            guard let newValue = window?.isFullScreen else { return }
+            
+            if newValue != isFullScreen {
+                isFullScreen = newValue
+            }
+        }
+    }
+    
+    var tabViewLayout: some View {
         TabView(selection: $navigationTabCoordinator.selectedTab) {
             ForEach(navigationTabCoordinator.tabModules) { module in
                 Tab(value: module.details.tag, role: module.details.isSearch ? .search : nil) {
@@ -323,26 +399,6 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         }
         .backportTabBarMinimizeBehaviorOnScrollDown()
         .introspect(.tabView, on: .supportedVersions, customize: configureAppearance)
-        .sheet(item: $navigationTabCoordinator.sheetModule) { module in
-            module.coordinator?.toPresentable()
-                .id(module.id)
-        }
-        .fullScreenCover(item: $navigationTabCoordinator.fullScreenCoverModule) { module in
-            module.coordinator?.toPresentable()
-                .id(module.id)
-        }
-        .accessibilityHidden(navigationTabCoordinator.overlayModule?.coordinator != nil && navigationTabCoordinator.overlayPresentationMode == .fullScreen)
-        .overlay {
-            Group {
-                if let coordinator = navigationTabCoordinator.overlayModule?.coordinator {
-                    coordinator.toPresentable()
-                        .opacity(navigationTabCoordinator.overlayPresentationMode == .minimized ? 0 : 1)
-                        .transition(.opacity)
-                }
-            }
-            .animation(.elementDefault, value: navigationTabCoordinator.overlayPresentationMode)
-            .animation(.elementDefault, value: navigationTabCoordinator.overlayModule)
-        }
     }
     
     private func configureAppearance(_ tabBarController: UITabBarController) {
@@ -351,5 +407,74 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         standardAppearance.compactInlineLayoutAppearance.normal.badgeBackgroundColor = .compound.iconAccentPrimary // iPhone Landscape
         standardAppearance.inlineLayoutAppearance.normal.badgeBackgroundColor = .compound.iconAccentPrimary // iPadOS 17 (doesn't work for 18+)
         tabBarController.tabBar.standardAppearance = standardAppearance
+    }
+}
+
+struct TabRailView<Tag: Hashable>: View {
+    let navigationTabCoordinator: NavigationTabCoordinator<Tag>
+    let isFullScreen: Bool
+    
+    var topPadding: CGFloat {
+        // Add additional top padding on iPad when the traffic light buttons are shown.
+        isFullScreen || ProcessInfo.processInfo.isiOSAppOnMac ? 0 : 48
+    }
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                ForEach(navigationTabCoordinator.tabModules) { module in
+                    let isSelected = module.details.tag == navigationTabCoordinator.selectedTab
+                    Button {
+                        navigationTabCoordinator.selectedTab = module.details.tag
+                    } label: {
+                        Label {
+                            Text(module.details.title)
+                        } icon: {
+                            CompoundIcon(isSelected ? module.details.selectedIcon : module.details.icon)
+                        }
+                    }
+                    .buttonStyle(TabButtonStyle(isSelected: isSelected))
+                    .accessibilityAddTraits(isSelected ? .isSelected : [])
+                    .badge(10) // TODO: Check if this works.
+                }
+            }
+            .padding(.leading, 8)
+            .padding(.top, topPadding)
+            .padding(.bottom)
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .fixedSize(horizontal: true, vertical: false)
+        .accessibilityElement(children: .contain)
+        .accessibilityAddTraits(.isTabBar)
+    }
+    
+    struct TabButtonStyle: ButtonStyle {
+        let isSelected: Bool
+        
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .labelStyle(.iconOnly)
+                .foregroundStyle(.compound.iconPrimary)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(capsuleColor(isPressed: configuration.isPressed), in: .capsule)
+                .contentShape(.capsule)
+        }
+        
+        func capsuleColor(isPressed: Bool) -> Color {
+            if isSelected {
+                .compound.bgSubtleSecondary
+            } else if isPressed {
+                .compound.bgSubtleSecondary.opacity(0.5)
+            } else {
+                .clear
+            }
+        }
+    }
+}
+
+private extension UIWindow {
+    var isFullScreen: Bool {
+        frame.size == windowScene?.screen.bounds.size
     }
 }
