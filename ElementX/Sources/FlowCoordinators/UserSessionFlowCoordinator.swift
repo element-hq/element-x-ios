@@ -136,7 +136,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
              .share, .transferOwnership, .thread:
             clearPresentedSheets(animated: animated) // Make sure the presented route is visible.
             chatsTabFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-            if navigationTabCoordinator.selectedTab != .chats {
+            if navigationTabCoordinator.effectiveContentTab != .chats {
                 navigationTabCoordinator.selectedTab = .chats
             }
         }
@@ -163,7 +163,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
-        guard navigationTabCoordinator.selectedTab == .chats else { return false }
+        guard navigationTabCoordinator.effectiveContentTab == .chats else { return false }
         return chatsTabFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID)
     }
     
@@ -231,17 +231,21 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let spaceService = flowParameters.userSession.clientProxy.spaceService
         let selectedSpaceFilterSubject = spaceService.selectedSpaceFilterSubject
+        
+        chatsTabDetails.onSelect = {
+            selectedSpaceFilterSubject.send(nil)
+        }
+        
         spaceService.spaceFilterPublisher
-            .sink { [weak self] filters in
-                guard let self else { return }
-                let actionItems = filters.map { filter in
+            .sink { [chatsTabDetails] filters in
+                chatsTabDetails.actionItems = filters.map { filter in
                     NavigationTabCoordinator<HomeTab>.TabActionItem(tag: .spaceFilter(filter.id),
                                                                     title: filter.room.name,
-                                                                    avatar: filter.room.avatar) {
+                                                                    avatar: filter.room.avatar,
+                                                                    level: filter.level) {
                         selectedSpaceFilterSubject.send(filter)
                     }
                 }
-                navigationTabCoordinator.setActionItems(actionItems)
             }
             .store(in: &cancellables)
         

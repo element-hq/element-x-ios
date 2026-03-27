@@ -25,6 +25,9 @@ import SwiftUI
         let icon: KeyPath<CompoundIcons, Image>
         let selectedIcon: KeyPath<CompoundIcons, Image>
         var badgeCount = 0
+        var actionItems = [NavigationTabCoordinator.TabActionItem]()
+        /// Called when the tab is directly selected, including when re-selecting it while an action item is active.
+        var onSelect: (() -> Void)?
         
         /// Provide the tab's split coordinator in here to have the tab bar automatically hidden
         /// when pushing a child into the split view's details on iPhone/compact iPad.
@@ -49,13 +52,16 @@ import SwiftUI
     }
     
     struct TabActionItem: Identifiable {
-        /// A unique tab that identifies the tab for selection.
+        /// A unique identifier for this action item.
         let tag: Tag
         let title: String
         let avatar: RoomAvatar
+        let level: UInt
         let action: () -> Void
         
-        var id: Tag { tag }
+        var id: Tag {
+            tag
+        }
     }
     
     // MARK: Tabs
@@ -106,20 +112,16 @@ import SwiftUI
         selectedTab = tabModules.first?.details.tag
     }
     
-    /// The currently selected tab's tag.
+    /// The currently selected tab or action item tag.
     var selectedTab: Tag?
     
-    // MARK: Action Items
-    
-    private(set) var actionItems = [TabActionItem]()
-    
-    func setActionItems(_ items: [TabActionItem], animated: Bool = true) {
-        var transaction = Transaction()
-        transaction.disablesAnimations = !animated
-        
-        withTransaction(transaction) {
-            actionItems = items
+    /// The tag of the tab whose content should be displayed. If an action item is selected,
+    /// this returns the tag of the tab that owns it; otherwise it matches `selectedTab` directly.
+    var effectiveContentTab: Tag? {
+        for module in tabModules where module.details.actionItems.contains(where: { $0.tag == selectedTab }) {
+            return module.details.tag
         }
+        return selectedTab
     }
     
     // MARK: Sheets
@@ -361,13 +363,32 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         }
     }
     
+    /// The column visibility of the split coordinator for the currently selected tab, if any.
+    private var selectedTabSplitColumnVisibility: NavigationSplitViewVisibility {
+        let selectedTabDetails = navigationTabCoordinator.tabModules
+            .first { $0.details.tag == navigationTabCoordinator.effectiveContentTab }?.details
+        return selectedTabDetails?.navigationSplitCoordinator?.columnVisibility ?? .all
+    }
+    
+    private var isRailVisible: Bool {
+        selectedTabSplitColumnVisibility != .detailOnly
+    }
+    
     var regularLayout: some View {
         HStack(spacing: 0) {
-            TabRailView(navigationTabCoordinator: navigationTabCoordinator)
-                .background(LinearGradient(colors: [.compound.bgCanvasDefault, .clear], startPoint: .leading, endPoint: .trailing))
-                .zIndex(1)
+            if isRailVisible {
+                TabRailView(navigationTabCoordinator: navigationTabCoordinator)
+                    .background {
+                        Color.compound.bgCanvasDefault
+                            .overlay(alignment: .trailing) {
+                                Divider()
+                            }
+                            .ignoresSafeArea()
+                    }
+                    .zIndex(1)
+            }
             
-            if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == navigationTabCoordinator.selectedTab }) {
+            if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == navigationTabCoordinator.effectiveContentTab }) {
                 module.coordinator?.toPresentable()
                     .id(module.id)
             }
@@ -391,6 +412,11 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
                     .toolbar(module.details.barVisibility(in: horizontalSizeClass), for: .tabBar) // TODO: Remove this?!
             }
         }
+        .onChange(of: navigationTabCoordinator.selectedTab) { _, newTab in
+            if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == newTab }) {
+                module.details.onSelect?()
+            }
+        }
         .backportTabBarMinimizeBehaviorOnScrollDown()
         .introspect(.tabView, on: .supportedVersions, customize: configureAppearance)
     }
@@ -407,12 +433,17 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
 struct TabRailView<Tag: Hashable>: View {
     let navigationTabCoordinator: NavigationTabCoordinator<Tag>
     
+    @State private var width: CGFloat = .zero
+    
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 12) {
+            VStack(spacing: 12) {
                 ForEach(navigationTabCoordinator.tabModules) { module in
                     let isSelected = module.details.tag == navigationTabCoordinator.selectedTab
-                    Button { navigationTabCoordinator.selectedTab = module.details.tag } label: {
+                    Button {
+                        navigationTabCoordinator.selectedTab = module.details.tag
+                        module.details.onSelect?()
+                    } label: {
                         Label {
                             Text(module.details.title)
                         } icon: {
@@ -429,33 +460,39 @@ struct TabRailView<Tag: Hashable>: View {
                         }
                     }
                     .labelStyle(.iconOnly)
-                    .badge(module.details.badgeCount) // TODO: Check if this works.
-                }
-                
-                ForEach(navigationTabCoordinator.actionItems) { item in
-                    let isSelected = item.tag == navigationTabCoordinator.selectedTab
-                    Button(action: item.action) {
-                        Label {
-                            Text(item.title)
-                        } icon: {
-                            RoomAvatarImage(avatar: item.avatar,
-                                            avatarSize: .custom(40),
-                                            mediaProvider: navigationTabCoordinator.mediaProvider)
+                    .badge(10) // TODO: Check if this works.
+                    
+                    ForEach(module.details.actionItems) { item in
+                        let isSelected = item.tag == navigationTabCoordinator.selectedTab
+                        Button {
+                            navigationTabCoordinator.selectedTab = item.tag
+                            item.action()
+                        } label: {
+                            Label {
+                                Text(item.title)
+                            } icon: {
+                                RoomAvatarImage(avatar: item.avatar,
+                                                avatarSize: .custom(item.level == 0 ? 40 : 32),
+                                                mediaProvider: navigationTabCoordinator.mediaProvider)
+                            }
+                            .foregroundStyle(.compound.iconPrimary)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(isSelected ? .compound.bgActionPrimaryRest : .clear, lineWidth: 2)
+                            }
                         }
-                        .foregroundStyle(.compound.iconPrimary)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(isSelected ? .compound.bgActionPrimaryRest : .clear, lineWidth: 2)
-                        }
+                        .labelStyle(.iconOnly)
+                        .padding(.leading, item.level == 0 ? 0 : 8)
+                        // TODO: .badge(item.badgeCount)
                     }
-                    .labelStyle(.iconOnly)
-                    // TODO: .badge(module.details.badgeCount)
                 }
             }
-            .padding(.leading, 10)
-            .padding(.top, 40) // FIXME: Properly avoid the traffic lights safe area?
+            .padding(.horizontal, ProcessInfo.processInfo.isiOSAppOnMac ? 16 : 12)
+            .padding(.top, ProcessInfo.processInfo.isiOSAppOnMac ? 0 : 40) // FIXME: Properly avoid the traffic lights safe area?
+            .padding(.bottom)
+            .readWidth($width)
         }
         .scrollBounceBehavior(.basedOnSize)
-        .frame(width: 56) // FIXME: Dynamic Type support.
+        .frame(width: width)
     }
 }
