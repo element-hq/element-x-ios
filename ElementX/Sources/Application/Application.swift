@@ -55,6 +55,14 @@ struct Application: App {
                 }
         }
         .handlesExternalEvents(matching: ["*"])
+        .commands {
+            CommandGroup(replacing: .appSettings) {
+                Button(L10n.commonSettings) {
+                    appCoordinator.handleAppRoute(.settings, windowType: nil)
+                }
+                .keyboardShortcut(",", modifiers: .command)
+            }
+        }
         
         // This is invoked in response of the WindowManager receiving a register
         // coordinator request and invoking the `OpenWindowAction` with which

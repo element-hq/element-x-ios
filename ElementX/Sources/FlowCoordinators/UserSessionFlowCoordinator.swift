@@ -122,10 +122,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .accountProvisioningLink:
             break // We always ignore this flow when logged in.
         case .settings, .chatBackupSettings:
-            if stateMachine.state != .settingsScreen {
-                stateMachine.tryEvent(.showSettingsScreen)
+            if ProcessInfo.processInfo.isiOSAppOnMac {
+                startSettingsFlow(detached: true)
+            } else {
+                if stateMachine.state != .settingsScreen {
+                    stateMachine.tryEvent(.showSettingsScreen)
+                }
+                settingsFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             }
-            settingsFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
         case .call(let roomID, let isVoiceCall):
             Task { await presentCallScreen(roomID: roomID, isVoiceCall: isVoiceCall) }
         case .genericCallLink(let url):
@@ -179,7 +183,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         stateMachine.addRoutes(event: .showSettingsScreen, transitions: [.tabBar => .settingsScreen]) { [weak self] _ in
-            self?.startSettingsFlow()
+            self?.startSettingsFlow(detached: false)
         }
         stateMachine.addRoutes(event: .dismissedSettingsScreen, transitions: [.settingsScreen => .tabBar]) { [weak self] _ in
             self?.settingsFlowCoordinator = nil
@@ -303,7 +307,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Settings
     
-    private func startSettingsFlow() {
+    private func startSettingsFlow(detached: Bool) {
         let navigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = SettingsFlowCoordinator(appLockService: appLockService,
                                                   navigationStackCoordinator: navigationStackCoordinator,
@@ -331,11 +335,18 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        settingsFlowCoordinator = coordinator
         coordinator.handleAppRoute(.settings, animated: false)
         
-        navigationTabCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissedSettingsScreen)
+        if detached {
+            flowParameters.windowManager.registerCoordinator(navigationStackCoordinator,
+                                                             flowCoordinator: coordinator,
+                                                             forWindowType: .settings)
+        } else {
+            settingsFlowCoordinator = coordinator
+            
+            navigationTabCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+                self?.stateMachine.tryEvent(.dismissedSettingsScreen)
+            }
         }
     }
     
