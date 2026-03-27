@@ -79,6 +79,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - server: default
+            host_secret: INTEGRATION_TESTS_HOST
+            username_secret: INTEGRATION_TESTS_USERNAME
+            password_secret: INTEGRATION_TESTS_PASSWORD
           - server: lts
             host_secret: INTEGRATION_TESTS_LTS_HOST
             username_secret: INTEGRATION_TESTS_LTS_USERNAME
