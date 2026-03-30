@@ -1,5 +1,6 @@
 "NSCameraUsageDescription" = "Pildistamiseks ja videote salvestamiseks sõnumite saatmise kontekstis vajab Element X ligipääsu kaamerale.";
 "NSFaceIDUsageDescription" = "Ligipääsuks sinu rakendusele on kasutusel Face ID";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X  needs location access when the app is in the background.";
 "NSLocationWhenInUseUsageDescription" = "Oma asukoha jagamisel luba rakendusel Element X tuvastada sinu asukohta.";
 "NSMicrophoneUsageDescription" = "Heli salvestamiseks sõnumite saatmise kontekstis vajab Element X ligipääsu mikrofonile.";
 "NSPhotoLibraryUsageDescription" = "Võimaldab salvestada fotosid ja videoid nutiseadme meediapanka.";

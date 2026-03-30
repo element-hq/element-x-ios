@@ -344,6 +344,7 @@
 "common_text" = "Text";
 "common_third_party_notices" = "Oznámenia tretích strán";
 "common_thread" = "Vlákno";
+"common_threads" = "Threads";
 "common_topic" = "Téma";
 "common_topic_placeholder" = "O čom je táto miestnosť?";
 "common_touch_id_ios" = "Touch ID";

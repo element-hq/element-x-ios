@@ -344,6 +344,7 @@
 "common_text" = "文字";
 "common_third_party_notices" = "第三方通知";
 "common_thread" = "討論串";
+"common_threads" = "Threads";
 "common_topic" = "主題";
 "common_topic_placeholder" = "這個聊天室是做什麼用的？";
 "common_touch_id_ios" = "Touch ID";

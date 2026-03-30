@@ -344,6 +344,7 @@
 "common_text" = "Tekst";
 "common_third_party_notices" = "Informacje stron trzecich";
 "common_thread" = "Wątek";
+"common_threads" = "Threads";
 "common_topic" = "Temat";
 "common_topic_placeholder" = "O czym jest ten pokój?";
 "common_touch_id_ios" = "Touch ID";

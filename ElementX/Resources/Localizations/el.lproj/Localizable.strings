@@ -344,6 +344,7 @@
 "common_text" = "Κείμενο";
 "common_third_party_notices" = "Ειδοποιήσεις τρίτων";
 "common_thread" = "Νήμα";
+"common_threads" = "Threads";
 "common_topic" = "Θέμα";
 "common_topic_placeholder" = "Τι αφορά αυτή η αίθουσα;";
 "common_touch_id_ios" = "Touch ID";
