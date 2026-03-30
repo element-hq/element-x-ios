@@ -82,7 +82,7 @@ struct Application: App {
                     .environment(\.openURL, openURLAction(appCoordinator: appCoordinator, windowType: type))
             }
         }
-        .defaultSize(width: 400, height: 800)
+        .defaultSize(width: ProcessInfo.processInfo.isiOSAppOnMac ? 600 : 400, height: 800)
         .windowResizability(.contentSize)
     }
     
