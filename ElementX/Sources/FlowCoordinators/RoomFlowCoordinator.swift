@@ -199,7 +199,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
         case .roomAlias, .childRoomAlias, .eventOnRoomAlias, .childEventOnRoomAlias:
             break // These are converted to a room ID route one level above.
-        case .accountProvisioningLink, .roomList, .userProfile, .call, .genericCallLink, .settings, .chatBackupSettings:
+        case .accountProvisioningLink, .roomList, .userProfile, .call, .genericCallLink, .settings, .chatBackupSettings, .globalSearch:
             break // These routes can't be handled.
         case .transferOwnership(let roomID):
             guard self.roomID == roomID else { fatalError("Navigation route doesn't belong to this room flow.") }

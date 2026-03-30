@@ -199,8 +199,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:
             actionsSubject.send(.presentStartChatScreen)
-        case .globalSearch:
-            actionsSubject.send(.presentGlobalSearch)
         case .spaceFilters:
             if spaceFilterSubject.value != nil {
                 spaceFilterSubject.send(nil)

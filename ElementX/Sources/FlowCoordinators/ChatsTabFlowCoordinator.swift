@@ -170,6 +170,8 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.processEvent(.presentTransferOwnershipScreen(roomID: roomID))
             }
+        case .globalSearch:
+            presentGlobalSearch()
         case .accountProvisioningLink, .settings, .chatBackupSettings, .call, .genericCallLink:
             break // These routes cannot be handled.
         }
@@ -422,8 +424,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.startEncryptionResetFlow)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.startStartChatFlow)
-                case .presentGlobalSearch:
-                    presentGlobalSearch()
                 case .logout:
                     actionsSubject.send(.logout)
                 case .presentDeclineAndBlock(let userID, let roomID):

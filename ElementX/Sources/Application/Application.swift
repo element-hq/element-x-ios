@@ -64,6 +64,13 @@ struct Application: App {
                 }
                 .keyboardShortcut(",", modifiers: .command)
             }
+            
+            CommandGroup(after: .windowArrangement) {
+                Button("Global Search") {
+                    appCoordinator.handleAppRoute(.globalSearch, windowType: nil)
+                }
+                .keyboardShortcut("k", modifiers: [.command])
+            }
         }
         
         // This is invoked in response of the WindowManager receiving a register

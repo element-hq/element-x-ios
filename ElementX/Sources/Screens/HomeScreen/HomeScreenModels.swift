@@ -25,7 +25,6 @@ enum HomeScreenViewModelAction {
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentStartChatScreen
-    case presentGlobalSearch
     case logout
 }
 
@@ -44,7 +43,6 @@ enum HomeScreenViewAction {
     case skipRecoveryKeyConfirmation
     case dismissNewSoundBanner
     case updateVisibleItemRange(Range<Int>)
-    case globalSearch
     case spaceFilters
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
