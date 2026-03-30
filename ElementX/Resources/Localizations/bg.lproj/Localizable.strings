@@ -344,6 +344,7 @@
 "common_text" = "Текст";
 "common_third_party_notices" = "Уведомления от трети страни";
 "common_thread" = "Нишка";
+"common_threads" = "Threads";
 "common_topic" = "Тема";
 "common_topic_placeholder" = "За какво е тази стая?";
 "common_touch_id_ios" = "Touch ID";

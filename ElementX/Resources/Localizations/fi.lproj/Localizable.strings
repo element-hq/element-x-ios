@@ -344,6 +344,7 @@
 "common_text" = "Teksti";
 "common_third_party_notices" = "Kolmannen osapuolen ilmoitukset";
 "common_thread" = "Viestiketju";
+"common_threads" = "Threads";
 "common_topic" = "Aihe";
 "common_topic_placeholder" = "Mistä tässä huoneessa on kyse?";
 "common_touch_id_ios" = "Touch ID";

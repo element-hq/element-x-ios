@@ -344,6 +344,7 @@
 "common_text" = "글자";
 "common_third_party_notices" = "제3자 고지";
 "common_thread" = "스레드";
+"common_threads" = "Threads";
 "common_topic" = "주제";
 "common_topic_placeholder" = "이 방은 어떤 곳인가요?";
 "common_touch_id_ios" = "Touch ID";

@@ -776,6 +776,8 @@ internal enum L10n {
   internal static var commonThirdPartyNotices: String { return L10n.tr("Localizable", "common_third_party_notices") }
   /// Thread
   internal static var commonThread: String { return L10n.tr("Localizable", "common_thread") }
+  /// Threads
+  internal static var commonThreads: String { return L10n.tr("Localizable", "common_threads") }
   /// Topic
   internal static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
   /// What is this room about?

@@ -344,6 +344,7 @@
 "common_text" = "Text";
 "common_third_party_notices" = "Hinweise von Drittanbietern";
 "common_thread" = "Thread";
+"common_threads" = "Threads";
 "common_topic" = "Thema";
 "common_topic_placeholder" = "Worum geht is in diesem Chat?";
 "common_touch_id_ios" = "Touch ID";

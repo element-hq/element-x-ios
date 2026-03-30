@@ -344,6 +344,7 @@
 "common_text" = "Szöveg";
 "common_third_party_notices" = "Harmadik felek nyilatkozatai";
 "common_thread" = "Üzenetszál";
+"common_threads" = "Threads";
 "common_topic" = "Téma";
 "common_topic_placeholder" = "Miről szól ez a szoba?";
 "common_touch_id_ios" = "Touch ID";
