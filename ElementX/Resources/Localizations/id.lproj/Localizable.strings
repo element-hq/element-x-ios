@@ -344,6 +344,7 @@
 "common_text" = "Teks";
 "common_third_party_notices" = "Pemberitahuan pihak ketiga";
 "common_thread" = "Utas";
+"common_threads" = "Threads";
 "common_topic" = "Topik";
 "common_topic_placeholder" = "Apa yang dibahas di room ini?";
 "common_touch_id_ios" = "Touch ID";

@@ -344,6 +344,7 @@
 "common_text" = "Matn";
 "common_third_party_notices" = "Uchinchi tomon bildirishnomalari";
 "common_thread" = "Ip";
+"common_threads" = "Threads";
 "common_topic" = "Mavzu";
 "common_topic_placeholder" = "Bu xona nima haqida?";
 "common_touch_id_ios" = "Touch ID";

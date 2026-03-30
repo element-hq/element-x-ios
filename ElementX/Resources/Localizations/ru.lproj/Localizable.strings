@@ -112,7 +112,7 @@
 "action_leave_space" = "Покинуть пространство";
 "action_load_more" = "Загрузить еще";
 "action_manage_account" = "Настройки аккаунта";
-"action_manage_account_and_devices" = "Manage account & devices";
+"action_manage_account_and_devices" = "Управление учетной записью и устройствами";
 "action_manage_devices" = "Управление устройствами";
 "action_manage_rooms" = "Управление комнатами";
 "action_message" = "Написать";
@@ -163,7 +163,7 @@
 "action_start_over" = "Начать заново";
 "action_start_verification" = "Начать подтверждение";
 "action_static_map_load" = "Нажмите, чтобы загрузить карту";
-"action_stop" = "Stop";
+"action_stop" = "Остановить";
 "action_take_photo" = "Сделать фото";
 "action_tap_for_options" = "Нажмите для просмотра вариантов";
 "action_translate" = "Перевести";
@@ -227,7 +227,7 @@
 "common_empty_file" = "Пустой файл";
 "common_encryption" = "Шифрование";
 "common_encryption_enabled" = "Шифрование включено";
-"common_ends_at" = "Ends at %1$@";
+"common_ends_at" = "Время завершения: %1$@";
 "common_enter_your_pin" = "Введите свой PIN-код";
 "common_error" = "Ошибка";
 "common_everyone" = "Все";
@@ -344,6 +344,7 @@
 "common_text" = "Текст";
 "common_third_party_notices" = "Уведомления о третьих лицах";
 "common_thread" = "Ветка";
+"common_threads" = "Threads";
 "common_topic" = "Тема";
 "common_topic_placeholder" = "О чем эта комната?";
 "common_touch_id_ios" = "Touch ID";
@@ -881,7 +882,7 @@
 "screen_chat_backup_recovery_action_change" = "Изменить ключ восстановления";
 "screen_chat_backup_recovery_action_change_description" = "Если вы потеряли доступ к другим устройствам, то сможете восстановить свою идентификацию и историю сообщений с помощью ключа восстановления.";
 "screen_chat_backup_recovery_action_confirm_description" = "В настоящее время резервная копия ваших чатов не синхронизирована.";
-"screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
+"screen_chat_backup_recovery_action_setup_description" = "Ваши чаты автоматически резервируются с использованием сквозного шифрования. Для восстановления этой резервной копии и сохранения вашей цифровой личности в случае потери доступа ко всем вашим устройствам вам потребуется ключ восстановления.";
 "screen_create_new_recovery_key_list_item_1" = "Откройте %1$@ на компьютере";
 "screen_create_new_recovery_key_list_item_2" = "Войдите в свой аккаунт еще раз";
 "screen_create_new_recovery_key_list_item_3" = "Когда потребуется подтвердить устройство, выберите %1$@";
@@ -956,7 +957,7 @@
 "screen_join_room_subtitle_no_preview" = "Вы должны быть участником этой комнаты, чтобы просмотреть историю сообщений.";
 "screen_join_room_title_knock" = "Хотите присоединиться к этой комнате?";
 "screen_join_room_title_no_preview" = "Предпросмотр недоступен";
-"screen_key_backup_disable_confirmation_action_turn_off" = "Выключить";
+"screen_key_backup_disable_confirmation_action_turn_off" = "Удалить";
 "screen_key_backup_disable_confirmation_description" = "Вы потеряете зашифрованные сообщения, если выйдете из всех устройств.";
 "screen_key_backup_disable_confirmation_title" = "Вы действительно хотите отключить резервное копирование?";
 "screen_key_backup_disable_description" = "Удаление хранилища ключей приведёт к удалению вашей криптографической личности и ключей сообщений с сервера, а также отключению следующих функций безопасности:";

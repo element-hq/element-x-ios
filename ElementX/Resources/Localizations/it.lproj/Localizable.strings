@@ -344,6 +344,7 @@
 "common_text" = "Testo";
 "common_third_party_notices" = "Comunicazioni di terze parti";
 "common_thread" = "Discussione";
+"common_threads" = "Threads";
 "common_topic" = "Argomento";
 "common_topic_placeholder" = "Di cosa parla questa stanza?";
 "common_touch_id_ios" = "Touch ID";

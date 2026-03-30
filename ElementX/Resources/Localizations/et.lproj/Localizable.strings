@@ -344,6 +344,7 @@
 "common_text" = "Tekst";
 "common_third_party_notices" = "Kolmandate osapoolte teatised";
 "common_thread" = "Jutulõng";
+"common_threads" = "Threads";
 "common_topic" = "Teema";
 "common_topic_placeholder" = "Mis on selle jututoa mõte?";
 "common_touch_id_ios" = "Touch ID";

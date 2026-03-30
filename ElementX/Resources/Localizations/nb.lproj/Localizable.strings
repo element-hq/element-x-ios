@@ -344,6 +344,7 @@
 "common_text" = "Tekst";
 "common_third_party_notices" = "Varsler fra tredjeparter";
 "common_thread" = "Tråd";
+"common_threads" = "Threads";
 "common_topic" = "Emne";
 "common_topic_placeholder" = "Hva er dette rommet for?";
 "common_touch_id_ios" = "Berørings-ID";

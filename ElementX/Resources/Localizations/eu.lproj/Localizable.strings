@@ -344,6 +344,7 @@
 "common_text" = "Testua";
 "common_third_party_notices" = "Hirugarrenei buruzko oharrak";
 "common_thread" = "Haria";
+"common_threads" = "Threads";
 "common_topic" = "Gaia";
 "common_topic_placeholder" = "Zeri buruzko gela da?";
 "common_touch_id_ios" = "Touch IDa";
