@@ -33,8 +33,7 @@ struct FloatingDateBadge: View {
                     .foregroundColor(.compound.textPrimary)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
-                    .background(Capsule()
-                        .fill(backgroundColor))
+                    .background(backgroundColor, in: .capsule)
                     .shadow(color: Color(red: 0.11, green: 0.11, blue: 0.13).opacity(0.1), radius: 12, x: 0, y: 4)
                     .transition(.opacity)
             }

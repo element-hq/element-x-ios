@@ -521,11 +521,13 @@ extension TimelineTableViewController {
     /// Computes the formatted date text for the topmost visible timeline item
     /// and updates the floating date binding.
     func updateFloatingDate() {
-        guard let dateText = topmostVisibleDateText() else {
+        guard let dateText = newestVisibleDateText() else {
             return
         }
         
-        // Before updating it already schedule it's removal or the future
+        // Before updating it already schedule it's removal or the future.
+        // The schedule needs to happen regardless of a value change
+        // to extend the display duration of the floating date.
         scheduleFloatingDateHide()
         
         // Only update on changes to avoid needless SwiftUI recomputation.
@@ -544,12 +546,12 @@ extension TimelineTableViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
     }
     
-    /// Returns the formatted date text for the topmost visible timeline item.
+    /// Returns the formatted date text for the newest visible timeline item.
     ///
-    /// The table view is flipped (unless VoiceOver is running), so the "topmost"
+    /// The table view is flipped (unless VoiceOver is running), so the "newest"
     /// visible cell on screen is actually the *last* index path in `indexPathsForVisibleRows`
     /// when the table is flipped, or the *first* when it is not.
-    private func topmostVisibleDateText() -> String? {
+    private func newestVisibleDateText() -> String? {
         guard let visibleIndexPaths = tableView.indexPathsForVisibleRows,
               !visibleIndexPaths.isEmpty else {
             return nil
