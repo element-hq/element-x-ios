@@ -60,6 +60,8 @@ enum CallScreenJavaScriptMessageName: String, CaseIterable {
     case onOutputDeviceSelect
     /// Used to handle the webview back button
     case onBackButtonPressed
+    /// Forward logs to the native side for debugging purposes.
+    case forwardLogs
     
     private var postMessageScript: String {
         switch self {
@@ -96,6 +98,25 @@ enum CallScreenJavaScriptMessageName: String, CaseIterable {
             window.controls.\(rawValue) = () => {
                 window.webkit.messageHandlers.\(rawValue).postMessage("");
             }
+            """
+        case .forwardLogs:
+            """
+            (function() {
+                function forwardLog(level, args) {
+                    const message = Array.from(args).map(a => {
+                        try { return typeof a === 'object' ? JSON.stringify(a) : String(a); }
+                        catch(e) { return String(a); }
+                    }).join(' ');
+                    window.webkit.messageHandlers.\(rawValue).postMessage({ level: level, message: message });
+                }
+                ['log', 'debug', 'info', 'warn', 'error'].forEach(function(level) {
+                    const original = console[level].bind(console);
+                    console[level] = function(...args) {
+                        original(...args);
+                        forwardLog(level, args);
+                    };
+                });
+            })();
             """
         }
     }

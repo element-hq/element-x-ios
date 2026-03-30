@@ -194,6 +194,23 @@ private struct CallView: UIViewRepresentable {
                 viewModelContext?.send(viewAction: .outputDeviceSelected(deviceID: deviceID))
             case .onBackButtonPressed:
                 viewModelContext?.send(viewAction: .navigateBack)
+            case .forwardLogs:
+                guard let body = message.body as? [String: String],
+                      let level = body["level"],
+                      let logMessage = body["message"] else { return }
+
+                switch level {
+                case "debug":
+                    MXLog.debug("[ElementCall]: \(logMessage)")
+                case "info":
+                    MXLog.info("[ElementCall]: \(logMessage)")
+                case "warn":
+                    MXLog.warning("[ElementCall]: \(logMessage)")
+                case "error":
+                    MXLog.error("[ElementCall]: \(logMessage)")
+                default:
+                    break
+                }
             }
         }
         
