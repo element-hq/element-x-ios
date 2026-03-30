@@ -200,7 +200,7 @@ private struct CallView: UIViewRepresentable {
                       let logMessage = body["message"] else { return }
 
                 switch level {
-                case "debug":
+                case "log", "debug":
                     MXLog.debug("[ElementCall]: \(logMessage)")
                 case "info":
                     MXLog.info("[ElementCall]: \(logMessage)")
