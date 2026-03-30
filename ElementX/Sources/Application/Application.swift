@@ -58,6 +58,11 @@ struct Application: App {
         }
         .handlesExternalEvents(matching: ["*"])
         .commands {
+            CommandGroup(replacing: .newItem) {
+                Button(L10n.actionStartChat) { }
+                    .disabled(true)
+            }
+            
             CommandGroup(replacing: .appSettings) {
                 Button(L10n.commonSettings) {
                     appCoordinator.handleAppRoute(.settings, windowType: nil)
