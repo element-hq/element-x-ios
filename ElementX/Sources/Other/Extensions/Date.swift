@@ -79,12 +79,6 @@ extension Date {
         formatted(date: .omitted, time: .shortened)
     }
     
-    /// A fixed date representing today at 4:20 AM, used for mocks and previews.
-    static var mockToday420: Date {
-        // swiftlint:disable:next force_unwrap
-        Calendar.current.date(bySettingHour: 4, minute: 20, second: 0, of: .now)!
-    }
-    
     /// A fixed date used for mocks, previews etc.
     static var mock: Date {
         DateComponents(calendar: .current, year: 2007, month: 1, day: 9, hour: 9, minute: 41).date ?? .now
