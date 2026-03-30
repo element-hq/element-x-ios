@@ -21216,6 +21216,11 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
     var globalSearchWindow: UIWindow!
     var alternateWindow: UIWindow!
     var windows: [UIWindow] = []
+    var auxiliaryWindowsEnabled: Bool {
+        get { return underlyingAuxiliaryWindowsEnabled }
+        set(value) { underlyingAuxiliaryWindowsEnabled = value }
+    }
+    var underlyingAuxiliaryWindowsEnabled: Bool!
 
     //MARK: - showGlobalSearch
 

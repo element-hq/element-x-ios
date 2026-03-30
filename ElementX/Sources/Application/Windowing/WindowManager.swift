@@ -22,6 +22,14 @@ class WindowManager: SecureWindowManagerProtocol {
     
     private(set) var openWindowAction: OpenWindowAction!
     private(set) var dismissWindowAction: DismissWindowAction!
+    
+    var auxiliaryWindowsEnabled = true {
+        didSet {
+            if auxiliaryWindowsEnabled == false {
+                closeAllAuxiliaryWindows()
+            }
+        }
+    }
         
     var windows: [UIWindow] {
         [mainWindow, overlayWindow, globalSearchWindow, alternateWindow]
@@ -167,6 +175,11 @@ class WindowManager: SecureWindowManagerProtocol {
     }
     
     func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType) {
+        if auxiliaryWindowsEnabled == false {
+            MXLog.error("Cannot register coordinator, auxiliary windows are disabled.")
+            return
+        }
+        
         coordinators[type] = (coordinator, flowCoordinator)
         openWindowAction(value: type)
     }

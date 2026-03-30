@@ -64,6 +64,8 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     
     // MARK: - Auxiliary window support
     
+    var auxiliaryWindowsEnabled: Bool { get set }
+    
     /// Register a coordinator and it's respective flow (if any) within the WindowManager which in turn
     /// invokes the Application's `OpenWindowAction`
     func registerCoordinator(_ coordinator: CoordinatorProtocol,

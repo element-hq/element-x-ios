@@ -188,6 +188,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 }
             }
             .store(in: &cancellables)
+        
+        windowManager.auxiliaryWindowsEnabled = !appLockService.isEnabled
+        appLockService.isEnabledPublisher.sink { [weak windowManager] appLockEnabled in
+            windowManager?.auxiliaryWindowsEnabled = !appLockEnabled
+        }
+        .store(in: &cancellables)
     }
     
     func start() {
