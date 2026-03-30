@@ -62,6 +62,9 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     func showGlobalSearch()
     
     func hideGlobalSearch()
+    
+    /// Closes a previously opened window for the given type.
+    func closeAuxiliaryWindow(forType type: WindowManagerWindowType)
 }
 
 // sourcery: AutoMockable

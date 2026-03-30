@@ -174,6 +174,10 @@ class WindowManager: SecureWindowManagerProtocol {
     func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
         appDelegate.orientationLock = orientation
     }
+    
+    func closeAuxiliaryWindow(forType type: WindowManagerWindowType) {
+        dismissWindowAction(value: type)
+    }
 }
 
 private class PassthroughWindow: UIWindow {
