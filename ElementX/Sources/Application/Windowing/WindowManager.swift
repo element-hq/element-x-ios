@@ -11,7 +11,8 @@ import SwiftUI
 
 class WindowManager: SecureWindowManagerProtocol {
     private let appDelegate: AppDelegate
-    weak var windowScene: UIWindowScene?
+    weak var mainScene: UIWindowScene?
+    weak var mainSession: UISceneSession?
     weak var delegate: SecureWindowManagerDelegate?
     
     private(set) var mainWindow: UIWindow!
@@ -38,28 +39,30 @@ class WindowManager: SecureWindowManagerProtocol {
         self.appDelegate = appDelegate
     }
     
-    func configure(with windowScene: UIWindowScene) {
+    func configure(withScene scene: UIWindowScene, session: UISceneSession) {
         // This gets called for all opened windows, we're only interested in the
         // first call, for the main window (works with state restoration too).
         guard mainWindow == nil else {
             return
         }
         
-        self.windowScene = windowScene
-        mainWindow = windowScene.keyWindow
+        mainScene = scene
+        mainSession = session
+        
+        mainWindow = scene.keyWindow
         mainWindow.tintColor = .compound.textActionPrimary
         
-        overlayWindow = PassthroughWindow(windowScene: windowScene)
+        overlayWindow = PassthroughWindow(windowScene: scene)
         overlayWindow.tintColor = .compound.textActionPrimary
         overlayWindow.backgroundColor = .clear
         overlayWindow.isHidden = false
         
-        globalSearchWindow = UIWindow(windowScene: windowScene)
+        globalSearchWindow = UIWindow(windowScene: scene)
         globalSearchWindow.tintColor = .compound.textActionPrimary
         globalSearchWindow.backgroundColor = .clear
         globalSearchWindow.isHidden = true
         
-        alternateWindow = UIWindow(windowScene: windowScene)
+        alternateWindow = UIWindow(windowScene: scene)
         alternateWindow.tintColor = .compound.textActionPrimary
         
         delegate?.windowManagerDidConfigureWindows(self)
@@ -144,8 +147,15 @@ class WindowManager: SecureWindowManagerProtocol {
             return
         }
         
+        if let mainSession {
+            let request = UISceneSessionActivationRequest(session: mainSession)
+            UIApplication.shared.activateSceneSession(for: request) { error in
+                MXLog.error("Failed to focus window with error: \(error)")
+            }
+        }
+        
         globalSearchWindow.isHidden = false
-        globalSearchWindow.makeKey()
+        globalSearchWindow.makeKeyAndVisible()
     }
     
     func hideGlobalSearch() {
@@ -158,7 +168,7 @@ class WindowManager: SecureWindowManagerProtocol {
     }
     
     func setOrientation(_ orientation: UIInterfaceOrientationMask) {
-        windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
+        mainScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
     }
     
     func lockOrientation(_ orientation: UIInterfaceOrientationMask) {

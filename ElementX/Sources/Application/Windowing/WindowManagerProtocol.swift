@@ -23,7 +23,7 @@ protocol SecureWindowManagerProtocol: WindowManagerProtocol {
     var delegate: SecureWindowManagerDelegate? { get set }
     
     /// Configures the window manager to operate on the supplied scene.
-    func configure(with windowScene: UIWindowScene)
+    func configure(withScene scene: UIWindowScene, session: UISceneSession)
     
     func configure(withOpenWinddowAction openWindowAction: OpenWindowAction, dismissWindowAction: DismissWindowAction)
     
