@@ -39,6 +39,12 @@ class WindowManager: SecureWindowManagerProtocol {
     }
     
     func configure(with windowScene: UIWindowScene) {
+        // This gets called for all opened windows, we're only interested in the
+        // first call, for the main window (works with state restoration too).
+        guard mainWindow == nil else {
+            return
+        }
+        
         self.windowScene = windowScene
         mainWindow = windowScene.keyWindow
         mainWindow.tintColor = .compound.textActionPrimary
