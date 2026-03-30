@@ -65,6 +65,8 @@ class LinkNewDeviceService: LinkNewDeviceServiceProtocol {
             do {
                 // Note: The SDK doesn't provide us with a way to cancel the grant if the user hit the cancel button 🤷‍♂️
                 try await grantLoginHandler.generate(progressListener: listener) // The success state is handled by the listener.
+                // We send the .done progress in case the listener didn't get a chance to pass it on from the SDK before being deallocated
+                progressSubject.send(LinkMobileProgress.done)
             } catch let error as HumanQrGrantLoginError {
                 MXLog.error("QR code reciprocate error: \(error)")
                 progressSubject.send(completion: .failure(.init(rustError: error)))
@@ -105,6 +107,8 @@ class LinkNewDeviceService: LinkNewDeviceServiceProtocol {
             do {
                 // Note: The SDK doesn't provide us with a way to cancel the grant if the user hit the cancel button 🤷‍♂️
                 try await grantLoginHandler.scan(qrCodeData: qrCodeData, progressListener: listener) // The success state is handled by the listener.
+                // We send the .done progress in case the listener didn't get a chance to pass it on from the SDK before being deallocated
+                progressSubject.send(LinkDesktopProgress.done)
             } catch let error as HumanQrGrantLoginError {
                 MXLog.error("QR code reciprocate error: \(error)")
                 progressSubject.send(completion: .failure(.init(rustError: error)))

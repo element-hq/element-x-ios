@@ -224,12 +224,10 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 case .waitingForAuthorisation(let url):
                     requestOIDCAuthorization(url: url)
                 case .syncingSecrets:
-                    // break // Nothing to do.
-                    // .done is rarely received at the moment, so lets consider linking to be done here.
+                    break // Nothing to do.
+                case .done:
                     MXLog.info("Link with QR code completed.")
                     actionsSubject.send(.linkedDevice)
-                case .done:
-                    break // Not necessary right now with the workaround above in place.
                 }
             }
     }
