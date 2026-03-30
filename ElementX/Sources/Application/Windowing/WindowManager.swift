@@ -89,7 +89,11 @@ class WindowManager: SecureWindowManagerProtocol {
             return AnyView(InstantlyDismissingWindow())
         }
         
-        return coordinator.toPresentable()
+        // This behaves strangely and gets called late but cleans up enough
+        // and is self contained enough to be just good .. enough
+        return AnyView(coordinator.toPresentable().onDisappear { [weak self] in
+            self?.coordinators[type] = nil
+        })
     }
     
     func handleRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType) {
