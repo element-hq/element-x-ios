@@ -29,13 +29,16 @@ protocol SecureWindowManagerProtocol: WindowManagerProtocol {
     
     func handleRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType)
     
-    func windowForType(_ type: WindowManagerWindowType) -> AnyView
-    
     /// Shows the main and overlay window combo, hiding the alternate window.
     func switchToMain()
     
     /// Shows the alternate window, hiding the main and overlay combo.
     func switchToAlternate()
+    
+    // MARK: - Auxiliary window support
+    
+    /// Used by the Application to retrieve the root view for an auxiliary window
+    func windowForType(_ type: WindowManagerWindowType) -> AnyView
 }
 
 /// A window manager that supports switching between a main app window with an overlay and
@@ -54,14 +57,21 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     /// All the windows being managed
     var windows: [UIWindow] { get }
     
-    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType)
-    
-    func closeAllAuxiliaryWindows()
-    
     /// Makes the global search window key. Used to get automatic text field focus.
     func showGlobalSearch()
     
     func hideGlobalSearch()
+    
+    // MARK: - Auxiliary window support
+    
+    /// Register a coordinator and it's respective flow (if any) within the WindowManager which in turn
+    /// invokes the Application's `OpenWindowAction`
+    func registerCoordinator(_ coordinator: CoordinatorProtocol,
+                             flowCoordinator: FlowCoordinatorProtocol?,
+                             forWindowType type: WindowManagerWindowType)
+    
+    /// Closes any window previously opened by registering a coordinator
+    func closeAllAuxiliaryWindows()
     
     /// Closes a previously opened window for the given type.
     func closeAuxiliaryWindow(forType type: WindowManagerWindowType)

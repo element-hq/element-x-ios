@@ -74,31 +74,6 @@ class WindowManager: SecureWindowManagerProtocol {
         self.dismissWindowAction = dismissWindowAction
     }
     
-    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType) {
-        coordinators[type] = (coordinator, flowCoordinator)
-        openWindowAction(value: type)
-    }
-    
-    func closeAllAuxiliaryWindows() {
-        for key in coordinators.keys {
-            dismissWindowAction(value: key)
-        }
-        
-        coordinators.removeAll()
-    }
-    
-    func windowForType(_ type: WindowManagerWindowType) -> AnyView {
-        guard let coordinator = coordinators[type]?.coordinator else {
-            return AnyView(InstantlyDismissingWindow())
-        }
-        
-        // This behaves strangely and gets called late but cleans up enough
-        // and is self contained enough to be just good .. enough
-        return AnyView(coordinator.toPresentable().onDisappear { [weak self] in
-            self?.coordinators[type] = nil
-        })
-    }
-    
     func handleRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType) {
         if let flowCoordinator = coordinators[windowType]?.flowCoordinator {
             flowCoordinator.handleAppRoute(appRoute, animated: true)
@@ -167,6 +142,8 @@ class WindowManager: SecureWindowManagerProtocol {
         mainWindow.makeKey()
     }
     
+    // MARK: - OrientationManager
+    
     func setOrientation(_ orientation: UIInterfaceOrientationMask) {
         mainScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
     }
@@ -175,8 +152,35 @@ class WindowManager: SecureWindowManagerProtocol {
         appDelegate.orientationLock = orientation
     }
     
+    // MARK: - Auxiliary window support
+    
+    func windowForType(_ type: WindowManagerWindowType) -> AnyView {
+        guard let coordinator = coordinators[type]?.coordinator else {
+            return AnyView(InstantlyDismissingWindow())
+        }
+        
+        // This behaves strangely and gets called late but cleans up enough
+        // and is self contained enough to be just good .. enough
+        return AnyView(coordinator.toPresentable().onDisappear { [weak self] in
+            self?.coordinators[type] = nil
+        })
+    }
+    
+    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType) {
+        coordinators[type] = (coordinator, flowCoordinator)
+        openWindowAction(value: type)
+    }
+    
     func closeAuxiliaryWindow(forType type: WindowManagerWindowType) {
         dismissWindowAction(value: type)
+    }
+    
+    func closeAllAuxiliaryWindows() {
+        for key in coordinators.keys {
+            dismissWindowAction(value: key)
+        }
+        
+        coordinators.removeAll()
     }
 }
 

@@ -21217,6 +21217,76 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
     var alternateWindow: UIWindow!
     var windows: [UIWindow] = []
 
+    //MARK: - showGlobalSearch
+
+    var showGlobalSearchUnderlyingCallsCount = 0
+    var showGlobalSearchCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return showGlobalSearchUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = showGlobalSearchUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                showGlobalSearchUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    showGlobalSearchUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var showGlobalSearchCalled: Bool {
+        return showGlobalSearchCallsCount > 0
+    }
+    var showGlobalSearchClosure: (() -> Void)?
+
+    func showGlobalSearch() {
+        showGlobalSearchCallsCount += 1
+        showGlobalSearchClosure?()
+    }
+    //MARK: - hideGlobalSearch
+
+    var hideGlobalSearchUnderlyingCallsCount = 0
+    var hideGlobalSearchCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return hideGlobalSearchUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = hideGlobalSearchUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                hideGlobalSearchUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    hideGlobalSearchUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var hideGlobalSearchCalled: Bool {
+        return hideGlobalSearchCallsCount > 0
+    }
+    var hideGlobalSearchClosure: (() -> Void)?
+
+    func hideGlobalSearch() {
+        hideGlobalSearchCallsCount += 1
+        hideGlobalSearchClosure?()
+    }
     //MARK: - registerCoordinator
 
     var registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingCallsCount = 0
@@ -21293,17 +21363,17 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
         closeAllAuxiliaryWindowsCallsCount += 1
         closeAllAuxiliaryWindowsClosure?()
     }
-    //MARK: - showGlobalSearch
+    //MARK: - closeAuxiliaryWindow
 
-    var showGlobalSearchUnderlyingCallsCount = 0
-    var showGlobalSearchCallsCount: Int {
+    var closeAuxiliaryWindowForTypeUnderlyingCallsCount = 0
+    var closeAuxiliaryWindowForTypeCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return showGlobalSearchUnderlyingCallsCount
+                return closeAuxiliaryWindowForTypeUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = showGlobalSearchUnderlyingCallsCount
+                    returnValue = closeAuxiliaryWindowForTypeUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -21311,62 +21381,28 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                showGlobalSearchUnderlyingCallsCount = newValue
+                closeAuxiliaryWindowForTypeUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    showGlobalSearchUnderlyingCallsCount = newValue
+                    closeAuxiliaryWindowForTypeUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var showGlobalSearchCalled: Bool {
-        return showGlobalSearchCallsCount > 0
     var closeAuxiliaryWindowForTypeCalled: Bool {
         return closeAuxiliaryWindowForTypeCallsCount > 0
     }
-    var showGlobalSearchClosure: (() -> Void)?
     var closeAuxiliaryWindowForTypeReceivedType: WindowManagerWindowType?
     var closeAuxiliaryWindowForTypeReceivedInvocations: [WindowManagerWindowType] = []
     var closeAuxiliaryWindowForTypeClosure: ((WindowManagerWindowType) -> Void)?
 
-    func showGlobalSearch() {
-        showGlobalSearchCallsCount += 1
-        showGlobalSearchClosure?()
-    }
-    //MARK: - hideGlobalSearch
-
-    var hideGlobalSearchUnderlyingCallsCount = 0
-    var hideGlobalSearchCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return hideGlobalSearchUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = hideGlobalSearchUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
+    func closeAuxiliaryWindow(forType type: WindowManagerWindowType) {
+        closeAuxiliaryWindowForTypeCallsCount += 1
+        closeAuxiliaryWindowForTypeReceivedType = type
+        DispatchQueue.main.async {
+            self.closeAuxiliaryWindowForTypeReceivedInvocations.append(type)
         }
-        set {
-            if Thread.isMainThread {
-                hideGlobalSearchUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    hideGlobalSearchUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var hideGlobalSearchCalled: Bool {
-        return hideGlobalSearchCallsCount > 0
-    }
-    var hideGlobalSearchClosure: (() -> Void)?
-
-    func hideGlobalSearch() {
-        hideGlobalSearchCallsCount += 1
-        hideGlobalSearchClosure?()
+        closeAuxiliaryWindowForTypeClosure?(type)
     }
     //MARK: - setOrientation
 
