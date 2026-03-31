@@ -851,6 +851,7 @@
 		9219640F4D980CFC5FE855AD /* target.yml in Resources */ = {isa = PBXBuildFile; fileRef = 536E72DCBEEC4A1FE66CFDCE /* target.yml */; };
 		92720AB0DA9AB5EEF1DAF56B /* SecureBackupLogoutConfirmationScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC017C3CB6B0F7C63F460F2 /* SecureBackupLogoutConfirmationScreenViewModel.swift */; };
 		9278EC51D24E57445B290521 /* AudioSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB284643AF7AB131E307DCE0 /* AudioSessionProtocol.swift */; };
+		92919B6522B26B2681232EAC /* LiveLocationManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5DF0E888F66652F8C4CEC5 /* LiveLocationManagerMock.swift */; };
 		9295F1F5E04484E10780BCE8 /* CharacterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8C01DEEA83903D45069BBD /* CharacterSet.swift */; };
 		92A0309B6F490B86C10B603B /* accountsV2 in Resources */ = {isa = PBXBuildFile; fileRef = 2A7BE2B89310058659E6F459 /* accountsV2 */; };
 		92D9088B901CEBB1A99ECA4E /* RoomMemberProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FD673E24FBFCFDF398716A /* RoomMemberProxyMock.swift */; };
@@ -1636,6 +1637,7 @@
 		0AE4B7AD74E402BBC46A801A /* LeaveSpaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaveSpaceView.swift; sourceTree = "<group>"; };
 		0B0E0B55E2EE75AF67029924 /* SwipeToReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToReplyView.swift; sourceTree = "<group>"; };
 		0B32BBA8887BD7A5C4ECF16F /* RoomModerationRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModerationRole.swift; sourceTree = "<group>"; };
+		0B5DF0E888F66652F8C4CEC5 /* LiveLocationManagerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveLocationManagerMock.swift; sourceTree = "<group>"; };
 		0B987FC3FDBAA0E1C5AA235C /* PaginationIndicatorRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationIndicatorRoomTimelineItem.swift; sourceTree = "<group>"; };
 		0BA7D6C94A50428463D09AF0 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0BB05221D7D941CC82DC8480 /* LogViewerScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewerScreenViewModel.swift; sourceTree = "<group>"; };
@@ -3697,6 +3699,7 @@
 				9E8F4D7D61B80EBD5CB92F8A /* KnockedRoomProxyMock.swift */,
 				7F957320D0EB7D7B4E30C79D /* KnockRequestProxyMock.swift */,
 				BA257D747DD7E6FFA5C2BE2D /* LinkNewDeviceServiceMock.swift */,
+				0B5DF0E888F66652F8C4CEC5 /* LiveLocationManagerMock.swift */,
 				6F65E4BB9E82EB8373207CF8 /* MediaProviderMock.swift */,
 				8DA1E8F287680C8ED25EDBAC /* NetworkMonitorMock.swift */,
 				840182D7A61402D5947DE094 /* NotificationItemProxyMock.swift */,
@@ -8308,6 +8311,7 @@
 				74DF5BC17DE9F51E077FD457 /* LinkNewDeviceServiceMock.swift in Sources */,
 				866FA35E7A2339EF8B6D91CA /* LinkPreviewView.swift in Sources */,
 				03364DE2568860586A713472 /* LiveLocationManager.swift in Sources */,
+				92919B6522B26B2681232EAC /* LiveLocationManagerMock.swift in Sources */,
 				CD077E14FAADC444C5A80068 /* LiveLocationManagerProtocol.swift in Sources */,
 				C8D0AC22E03F652118A2BB73 /* LiveLocationRoomTimelineItem.swift in Sources */,
 				F7977C53B2B1D73030C69761 /* LiveLocationRoomTimelineView.swift in Sources */,
