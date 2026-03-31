@@ -887,7 +887,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             // iPhone the compact module diffs call the dismissal callback and we present a blank space flow 🙈
             if spaceRoomListProxy == nil {
                 navigationStackCoordinator.setRootCoordinator(nil, animated: false)
-                flowParameters.windowManager.closeAuxiliaryWindow(forType: .room(roomID: roomID))
+                flowParameters.windowManager.closeSecondaryWindow(forType: .room(roomID: roomID))
             }
         }
         

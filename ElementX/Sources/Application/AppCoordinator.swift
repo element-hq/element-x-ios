@@ -189,9 +189,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
             .store(in: &cancellables)
         
-        windowManager.auxiliaryWindowsEnabled = !appLockService.isEnabled
+        windowManager.secondaryWindowsEnabled = !appLockService.isEnabled
         appLockService.isEnabledPublisher.sink { [weak windowManager] appLockEnabled in
-            windowManager?.auxiliaryWindowsEnabled = !appLockEnabled
+            windowManager?.secondaryWindowsEnabled = !appLockEnabled
         }
         .store(in: &cancellables)
     }
@@ -240,7 +240,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         return true
     }
     
-    func handleAppRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType?) {
+    func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) {
         if let windowType {
             windowManager.handleRoute(appRoute, windowType: windowType)
             return
@@ -266,7 +266,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
 
-    func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: WindowManagerWindowType?) -> Bool {
+    func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: SecondaryWindowType?) -> Bool {
         // Parse into an AppRoute to redirect these in a type safe way.
         
         if let route = appRouteURLParser.route(from: url) {
@@ -799,7 +799,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        windowManager.closeAllAuxiliaryWindows()
+        windowManager.closeAllSecondaryWindows()
         
         showLoadingIndicator()
         

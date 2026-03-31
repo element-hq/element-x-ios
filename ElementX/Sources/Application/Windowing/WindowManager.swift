@@ -23,10 +23,10 @@ class WindowManager: SecureWindowManagerProtocol {
     private(set) var openWindowAction: OpenWindowAction!
     private(set) var dismissWindowAction: DismissWindowAction!
     
-    var auxiliaryWindowsEnabled = true {
+    var secondaryWindowsEnabled = true {
         didSet {
-            if auxiliaryWindowsEnabled == false {
-                closeAllAuxiliaryWindows()
+            if secondaryWindowsEnabled == false {
+                closeAllSecondaryWindows()
             }
         }
     }
@@ -41,7 +41,7 @@ class WindowManager: SecureWindowManagerProtocol {
     /// A duration that allows window switching to wait a couple of frames to avoid a transition through black.
     private let windowHideDelay = Duration.milliseconds(33)
     
-    private var coordinators: [WindowManagerWindowType: (coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?)] = [:]
+    private var coordinators: [SecondaryWindowType: (coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?)] = [:]
     
     init(appDelegate: AppDelegate) {
         self.appDelegate = appDelegate
@@ -82,7 +82,7 @@ class WindowManager: SecureWindowManagerProtocol {
         self.dismissWindowAction = dismissWindowAction
     }
     
-    func handleRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType) {
+    func handleRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType) {
         if let flowCoordinator = coordinators[windowType]?.flowCoordinator {
             flowCoordinator.handleAppRoute(appRoute, animated: true)
         }
@@ -160,9 +160,9 @@ class WindowManager: SecureWindowManagerProtocol {
         appDelegate.orientationLock = orientation
     }
     
-    // MARK: - Auxiliary window support
+    // MARK: - Secondary window support
     
-    func windowForType(_ type: WindowManagerWindowType) -> AnyView {
+    func windowForType(_ type: SecondaryWindowType) -> AnyView {
         guard let coordinator = coordinators[type]?.coordinator else {
             return AnyView(InstantlyDismissingWindow())
         }
@@ -174,9 +174,9 @@ class WindowManager: SecureWindowManagerProtocol {
         })
     }
     
-    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType) {
-        if auxiliaryWindowsEnabled == false {
-            MXLog.error("Cannot register coordinator, auxiliary windows are disabled.")
+    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: SecondaryWindowType) {
+        if secondaryWindowsEnabled == false {
+            MXLog.error("Cannot register coordinator, secondary windows are disabled.")
             return
         }
         
@@ -184,11 +184,11 @@ class WindowManager: SecureWindowManagerProtocol {
         openWindowAction(value: type)
     }
     
-    func closeAuxiliaryWindow(forType type: WindowManagerWindowType) {
+    func closeSecondaryWindow(forType type: SecondaryWindowType) {
         dismissWindowAction(value: type)
     }
     
-    func closeAllAuxiliaryWindows() {
+    func closeAllSecondaryWindows() {
         for key in coordinators.keys {
             dismissWindowAction(value: key)
         }

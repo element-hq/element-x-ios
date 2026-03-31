@@ -50,11 +50,11 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
         fatalError("Not implemented.")
     }
     
-    func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: WindowManagerWindowType?) -> Bool {
+    func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: SecondaryWindowType?) -> Bool {
         fatalError("Not implemented.")
     }
     
-    func handleAppRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType?) {
+    func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) {
         fatalError("Not implemented.")
     }
     

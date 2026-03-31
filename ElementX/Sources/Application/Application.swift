@@ -81,7 +81,7 @@ struct Application: App {
         // This is invoked in response of the WindowManager receiving a register
         // coordinator request and invoking the `OpenWindowAction` with which
         // it's configured in the task above.
-        WindowGroup(for: WindowManagerWindowType.self) { $type in
+        WindowGroup(for: SecondaryWindowType.self) { $type in
             if let type {
                 appCoordinator.windowManager.windowForType(type)
                     .environment(\.openURL, openURLAction(appCoordinator: appCoordinator, windowType: type))
@@ -91,7 +91,7 @@ struct Application: App {
         .windowResizability(.contentSize)
     }
     
-    private func openURLAction(appCoordinator: AppCoordinatorProtocol, windowType: WindowManagerWindowType?) -> OpenURLAction {
+    private func openURLAction(appCoordinator: AppCoordinatorProtocol, windowType: SecondaryWindowType?) -> OpenURLAction {
         .init { url in
             if appCoordinator.handleDeepLink(url, isExternalURL: false, windowType: windowType) {
                 return .handled

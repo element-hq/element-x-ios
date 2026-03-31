@@ -17,8 +17,8 @@ extension AppMediatorMock {
         mock.underlyingNetworkMonitor = NetworkMonitorMock.default
         
         let windowManagerMock = WindowManagerMock()
-        windowManagerMock.closeAllAuxiliaryWindowsClosure = { }
-        windowManagerMock.closeAuxiliaryWindowForTypeClosure = { _ in }
+        windowManagerMock.closeAllSecondaryWindowsClosure = { }
+        windowManagerMock.closeSecondaryWindowForTypeClosure = { _ in }
         mock.underlyingWindowManager = windowManagerMock
         
         return mock

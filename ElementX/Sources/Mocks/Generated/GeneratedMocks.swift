@@ -21216,11 +21216,11 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
     var globalSearchWindow: UIWindow!
     var alternateWindow: UIWindow!
     var windows: [UIWindow] = []
-    var auxiliaryWindowsEnabled: Bool {
-        get { return underlyingAuxiliaryWindowsEnabled }
-        set(value) { underlyingAuxiliaryWindowsEnabled = value }
+    var secondaryWindowsEnabled: Bool {
+        get { return underlyingSecondaryWindowsEnabled }
+        set(value) { underlyingSecondaryWindowsEnabled = value }
     }
-    var underlyingAuxiliaryWindowsEnabled: Bool!
+    var underlyingSecondaryWindowsEnabled: Bool!
 
     //MARK: - showGlobalSearch
 
@@ -21321,11 +21321,11 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
     var registerCoordinatorFlowCoordinatorForWindowTypeCalled: Bool {
         return registerCoordinatorFlowCoordinatorForWindowTypeCallsCount > 0
     }
-    var registerCoordinatorFlowCoordinatorForWindowTypeReceivedArguments: (coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, type: WindowManagerWindowType)?
-    var registerCoordinatorFlowCoordinatorForWindowTypeReceivedInvocations: [(coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, type: WindowManagerWindowType)] = []
-    var registerCoordinatorFlowCoordinatorForWindowTypeClosure: ((CoordinatorProtocol, FlowCoordinatorProtocol?, WindowManagerWindowType) -> Void)?
+    var registerCoordinatorFlowCoordinatorForWindowTypeReceivedArguments: (coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, type: SecondaryWindowType)?
+    var registerCoordinatorFlowCoordinatorForWindowTypeReceivedInvocations: [(coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, type: SecondaryWindowType)] = []
+    var registerCoordinatorFlowCoordinatorForWindowTypeClosure: ((CoordinatorProtocol, FlowCoordinatorProtocol?, SecondaryWindowType) -> Void)?
 
-    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: WindowManagerWindowType) {
+    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: SecondaryWindowType) {
         registerCoordinatorFlowCoordinatorForWindowTypeCallsCount += 1
         registerCoordinatorFlowCoordinatorForWindowTypeReceivedArguments = (coordinator: coordinator, flowCoordinator: flowCoordinator, type: type)
         DispatchQueue.main.async {
@@ -21333,17 +21333,17 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
         }
         registerCoordinatorFlowCoordinatorForWindowTypeClosure?(coordinator, flowCoordinator, type)
     }
-    //MARK: - closeAllAuxiliaryWindows
+    //MARK: - closeAllSecondaryWindows
 
-    var closeAllAuxiliaryWindowsUnderlyingCallsCount = 0
-    var closeAllAuxiliaryWindowsCallsCount: Int {
+    var closeAllSecondaryWindowsUnderlyingCallsCount = 0
+    var closeAllSecondaryWindowsCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return closeAllAuxiliaryWindowsUnderlyingCallsCount
+                return closeAllSecondaryWindowsUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = closeAllAuxiliaryWindowsUnderlyingCallsCount
+                    returnValue = closeAllSecondaryWindowsUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -21351,34 +21351,34 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                closeAllAuxiliaryWindowsUnderlyingCallsCount = newValue
+                closeAllSecondaryWindowsUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    closeAllAuxiliaryWindowsUnderlyingCallsCount = newValue
+                    closeAllSecondaryWindowsUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var closeAllAuxiliaryWindowsCalled: Bool {
-        return closeAllAuxiliaryWindowsCallsCount > 0
+    var closeAllSecondaryWindowsCalled: Bool {
+        return closeAllSecondaryWindowsCallsCount > 0
     }
-    var closeAllAuxiliaryWindowsClosure: (() -> Void)?
+    var closeAllSecondaryWindowsClosure: (() -> Void)?
 
-    func closeAllAuxiliaryWindows() {
-        closeAllAuxiliaryWindowsCallsCount += 1
-        closeAllAuxiliaryWindowsClosure?()
+    func closeAllSecondaryWindows() {
+        closeAllSecondaryWindowsCallsCount += 1
+        closeAllSecondaryWindowsClosure?()
     }
-    //MARK: - closeAuxiliaryWindow
+    //MARK: - closeSecondaryWindow
 
-    var closeAuxiliaryWindowForTypeUnderlyingCallsCount = 0
-    var closeAuxiliaryWindowForTypeCallsCount: Int {
+    var closeSecondaryWindowForTypeUnderlyingCallsCount = 0
+    var closeSecondaryWindowForTypeCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return closeAuxiliaryWindowForTypeUnderlyingCallsCount
+                return closeSecondaryWindowForTypeUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = closeAuxiliaryWindowForTypeUnderlyingCallsCount
+                    returnValue = closeSecondaryWindowForTypeUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -21386,28 +21386,28 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                closeAuxiliaryWindowForTypeUnderlyingCallsCount = newValue
+                closeSecondaryWindowForTypeUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    closeAuxiliaryWindowForTypeUnderlyingCallsCount = newValue
+                    closeSecondaryWindowForTypeUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var closeAuxiliaryWindowForTypeCalled: Bool {
-        return closeAuxiliaryWindowForTypeCallsCount > 0
+    var closeSecondaryWindowForTypeCalled: Bool {
+        return closeSecondaryWindowForTypeCallsCount > 0
     }
-    var closeAuxiliaryWindowForTypeReceivedType: WindowManagerWindowType?
-    var closeAuxiliaryWindowForTypeReceivedInvocations: [WindowManagerWindowType] = []
-    var closeAuxiliaryWindowForTypeClosure: ((WindowManagerWindowType) -> Void)?
+    var closeSecondaryWindowForTypeReceivedType: SecondaryWindowType?
+    var closeSecondaryWindowForTypeReceivedInvocations: [SecondaryWindowType] = []
+    var closeSecondaryWindowForTypeClosure: ((SecondaryWindowType) -> Void)?
 
-    func closeAuxiliaryWindow(forType type: WindowManagerWindowType) {
-        closeAuxiliaryWindowForTypeCallsCount += 1
-        closeAuxiliaryWindowForTypeReceivedType = type
+    func closeSecondaryWindow(forType type: SecondaryWindowType) {
+        closeSecondaryWindowForTypeCallsCount += 1
+        closeSecondaryWindowForTypeReceivedType = type
         DispatchQueue.main.async {
-            self.closeAuxiliaryWindowForTypeReceivedInvocations.append(type)
+            self.closeSecondaryWindowForTypeReceivedInvocations.append(type)
         }
-        closeAuxiliaryWindowForTypeClosure?(type)
+        closeSecondaryWindowForTypeClosure?(type)
     }
     //MARK: - setOrientation
 

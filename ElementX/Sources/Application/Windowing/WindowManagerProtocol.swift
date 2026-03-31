@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-enum WindowManagerWindowType: Hashable, Codable {
+enum SecondaryWindowType: Hashable, Codable {
     case room(roomID: String)
     case settings
 }
@@ -27,7 +27,7 @@ protocol SecureWindowManagerProtocol: WindowManagerProtocol {
     
     func configure(withOpenWinddowAction openWindowAction: OpenWindowAction, dismissWindowAction: DismissWindowAction)
     
-    func handleRoute(_ appRoute: AppRoute, windowType: WindowManagerWindowType)
+    func handleRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType)
     
     /// Shows the main and overlay window combo, hiding the alternate window.
     func switchToMain()
@@ -35,10 +35,10 @@ protocol SecureWindowManagerProtocol: WindowManagerProtocol {
     /// Shows the alternate window, hiding the main and overlay combo.
     func switchToAlternate()
     
-    // MARK: - Auxiliary window support
+    // MARK: - Secondary window support
     
-    /// Used by the Application to retrieve the root view for an auxiliary window
-    func windowForType(_ type: WindowManagerWindowType) -> AnyView
+    /// Used by the Application to retrieve the root view for an secondary window
+    func windowForType(_ type: SecondaryWindowType) -> AnyView
 }
 
 /// A window manager that supports switching between a main app window with an overlay and
@@ -62,21 +62,21 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     
     func hideGlobalSearch()
     
-    // MARK: - Auxiliary window support
+    // MARK: - Secondary window support
     
-    var auxiliaryWindowsEnabled: Bool { get set }
+    var secondaryWindowsEnabled: Bool { get set }
     
     /// Register a coordinator and it's respective flow (if any) within the WindowManager which in turn
     /// invokes the Application's `OpenWindowAction`
     func registerCoordinator(_ coordinator: CoordinatorProtocol,
                              flowCoordinator: FlowCoordinatorProtocol?,
-                             forWindowType type: WindowManagerWindowType)
+                             forWindowType type: SecondaryWindowType)
     
     /// Closes any window previously opened by registering a coordinator
-    func closeAllAuxiliaryWindows()
+    func closeAllSecondaryWindows()
     
     /// Closes a previously opened window for the given type.
-    func closeAuxiliaryWindow(forType type: WindowManagerWindowType)
+    func closeSecondaryWindow(forType type: SecondaryWindowType)
 }
 
 // sourcery: AutoMockable
