@@ -40,14 +40,6 @@ struct HomeScreenRoomList: View {
                         context.send(viewAction: .detachRoom(roomIdentifier: room.id))
                     })
                     .contextMenu {
-                        if supportsMultipleWindows {
-                            Button {
-                                context.send(viewAction: .detachRoom(roomIdentifier: room.id))
-                            } label: {
-                                Label("Open in new window", icon: \.popOut)
-                            }
-                        }
-                        
                         if room.badges.isDotShown {
                             Button {
                                 context.send(viewAction: .markRoomAsRead(roomIdentifier: room.id))
@@ -59,6 +51,14 @@ struct HomeScreenRoomList: View {
                                 context.send(viewAction: .markRoomAsUnread(roomIdentifier: room.id))
                             } label: {
                                 Label(L10n.screenRoomlistMarkAsUnread, icon: \.markAsUnread)
+                            }
+                        }
+                        
+                        if supportsMultipleWindows {
+                            Button {
+                                context.send(viewAction: .detachRoom(roomIdentifier: room.id))
+                            } label: {
+                                Label("Open in new window", icon: \.spotlight)
                             }
                         }
                         
