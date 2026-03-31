@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct HomeScreenRoomList: View {
+    @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
+    
     @ObservedObject var context: HomeScreenViewModel.Context
     
     var body: some View {
@@ -38,7 +40,7 @@ struct HomeScreenRoomList: View {
                         context.send(viewAction: .detachRoom(roomIdentifier: room.id))
                     })
                     .contextMenu {
-                        if !UIDevice.current.isPhone {
+                        if supportsMultipleWindows {
                             Button {
                                 context.send(viewAction: .detachRoom(roomIdentifier: room.id))
                             } label: {
