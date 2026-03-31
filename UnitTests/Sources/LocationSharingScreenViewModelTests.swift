@@ -25,6 +25,7 @@ struct LocationSharingScreenViewModelTests {
                                                        liveLocationSharingEnabled: true,
                                                        roomProxy: JoinedRoomProxyMock(.init()),
                                                        timelineController: MockTimelineController(timelineProxy: timelineProxy),
+                                                       liveLocationManager: LiveLocationManagerMock(),
                                                        analytics: ServiceLocator.shared.analytics,
                                                        userIndicatorController: UserIndicatorControllerMock(),
                                                        mediaProvider: MediaProviderMock(configuration: .init()))

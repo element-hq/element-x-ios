@@ -8,32 +8,41 @@
 
 import Combine
 import Foundation
+import UIKit
 
 typealias LocationSharingScreenViewModelType = StateStoreViewModelV2<LocationSharingScreenViewState, LocationSharingScreenViewAction>
 
 class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, LocationSharingScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol
+    private let liveLocationManager: LiveLocationManagerProtocol
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let notificationCenter: NotificationCenter
     
     private let actionsSubject: PassthroughSubject<LocationSharingScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<LocationSharingScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private var authorizationStatusSubscription: AnyCancellable?
+    
     init(interactionMode: LocationSharingInteractionMode,
          mapURLBuilder: MapTilerURLBuilderProtocol,
          liveLocationSharingEnabled: Bool,
          roomProxy: JoinedRoomProxyProtocol,
          timelineController: TimelineControllerProtocol,
+         liveLocationManager: LiveLocationManagerProtocol,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         mediaProvider: MediaProviderProtocol) {
+         mediaProvider: MediaProviderProtocol,
+         notificationCenter: NotificationCenter = .default) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
+        self.liveLocationManager = liveLocationManager
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
+        self.notificationCenter = notificationCenter
         
         super.init(initialViewState: .init(interactionMode: interactionMode,
                                            mapURLBuilder: mapURLBuilder,
@@ -49,6 +58,8 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         switch viewAction {
         case .close:
             actionsSubject.send(.close)
+        case .startLiveLocation:
+            startLiveLocationSharing()
         case .selectLocation:
             guard let coordinate = state.bindings.mapCenterLocation else { return }
             let uncertainty = state.isSharingUserLocation ? context.geolocationUncertainty : nil
@@ -75,6 +86,13 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             self?.updateShownUserProfile(members: members)
         }
         .store(in: &cancellables)
+        
+        notificationCenter.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .sink { [weak self] _ in
+                // Let's remove the subscription if the user backgrounds the app (maybe to change their location settings)
+                self?.authorizationStatusSubscription = nil
+            }
+            .store(in: &cancellables)
     }
     
     private func updateShownUserProfile(members: [RoomMemberProxyProtocol]) {
@@ -92,6 +110,49 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                 state.userProfile = .init(sender: location.sender)
             }
         }
+    }
+    
+    private func startLiveLocationSharing() {
+        authorizationStatusSubscription = nil
+        let authStatus = liveLocationManager.authorizationStatus.value
+        switch authStatus {
+        case .authorizedAlways:
+            // TODO: Start sending live location updates to the room
+            break
+        case .notDetermined:
+            // This is to solve a race condition with map libre which always tries first
+            // to request the when in use permission, we wait for it and then try again
+            authorizationStatusSubscription = liveLocationManager.authorizationStatus
+                .filter { $0 != authStatus } // skip current status
+                .first() // this publisher only fires when there is an actual change, and if the user is done with permissions
+                .sink { [weak self] newValue in
+                    guard newValue == .authorizedWhenInUse else { return }
+                    self?.startLiveLocationSharing()
+                }
+        case .authorizedWhenInUse:
+            guard liveLocationManager.requestAlwaysAuthorizationIfPossible() else {
+                // Already requested before — iOS won't show the prompt again.
+                showMissingAlwaysAuthorizedAlert()
+                break
+            }
+            
+            authorizationStatusSubscription = liveLocationManager.authorizationStatus
+                .filter { $0 != authStatus } // skip current status
+                .first() // this publisher only fires when there is an actual change, and if the user is done with permissions
+                .sink { newValue in
+                    guard newValue == .authorizedAlways else { return }
+                    // TODO: Start sending live location updates to the room
+                }
+        default:
+            showMissingAlwaysAuthorizedAlert()
+        }
+    }
+    
+    private func showMissingAlwaysAuthorizedAlert() {
+        let action: () -> Void = { [weak self] in self?.actionsSubject.send(.openSystemSettings) }
+        state.bindings.alertInfo = .init(locationSharingViewError: .missingAlwaysAuthorization,
+                                         primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
+                                         secondaryButton: .init(title: L10n.commonSettings, action: action))
     }
     
     private func sendLocation(_ geoURI: GeoURI, isUserLocation: Bool) async {
@@ -157,6 +218,7 @@ extension LocationSharingScreenViewModel {
                                               liveLocationSharingEnabled: liveLocationSharingEnabled,
                                               roomProxy: JoinedRoomProxyMock(.init()),
                                               timelineController: MockTimelineController(),
+                                              liveLocationManager: LiveLocationManagerMock(),
                                               analytics: ServiceLocator.shared.analytics,
                                               userIndicatorController: UserIndicatorControllerMock(),
                                               mediaProvider: MediaProviderMock(configuration: .init()))

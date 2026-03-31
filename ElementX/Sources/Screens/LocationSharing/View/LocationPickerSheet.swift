@@ -40,7 +40,9 @@ struct LocationPickerSheet: View {
                 }
             }
             if context.viewState.showLiveLocationSharingButton {
-                Button { } label: {
+                Button {
+                    context.send(viewAction: .startLiveLocation)
+                } label: {
                     LocationPickerLabel(text: L10n.actionShareLiveLocation,
                                         icon: \.locationPinSolid,
                                         iconColor: .compound.iconAccentPrimary)

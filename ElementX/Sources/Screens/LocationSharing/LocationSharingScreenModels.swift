@@ -12,6 +12,7 @@ import MatrixRustSDK
 
 enum LocationSharingViewError: Error, Hashable {
     case missingAuthorization
+    case missingAlwaysAuthorization
     case mapError(MapLibreError)
 }
 
@@ -142,6 +143,7 @@ struct LocationSharingScreenBindings {
 enum LocationSharingScreenViewAction {
     case close
     case selectLocation
+    case startLiveLocation
     case centerToUser
     case userDidPan
 }
@@ -155,6 +157,12 @@ extension AlertInfo where T == LocationSharingViewError {
             self.init(id: error,
                       title: L10n.dialogAllowAccess,
                       message: L10n.dialogPermissionLocationDescriptionIos(InfoPlistReader.main.bundleDisplayName),
+                      primaryButton: primaryButton,
+                      secondaryButton: secondaryButton)
+        case .missingAlwaysAuthorization:
+            self.init(id: error,
+                      title: L10n.dialogAllowAccess,
+                      message: L10n.dialogPermissionLiveLocationDescriptionIos(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
         case .mapError(.failedLoadingMap):

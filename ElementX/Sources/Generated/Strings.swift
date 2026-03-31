@@ -936,6 +936,10 @@ internal enum L10n {
   internal static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
   /// Please grant the permission in the system settings.
   internal static var dialogPermissionGeneric: String { return L10n.tr("Localizable", "dialog_permission_generic") }
+  /// To share your live location, %1$@ needs location access when the app is in the background. Go to Settings > Location and select Always
+  internal static func dialogPermissionLiveLocationDescriptionIos(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_permission_live_location_description_ios", String(describing: p1))
+  }
   /// To share your current location, %1$@ needs location access. Go to Settings > Location.
   internal static func dialogPermissionLocationDescriptionIos(_ p1: Any) -> String {
     return L10n.tr("Localizable", "dialog_permission_location_description_ios", String(describing: p1))

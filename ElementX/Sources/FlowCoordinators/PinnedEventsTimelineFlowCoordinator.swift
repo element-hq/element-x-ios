@@ -108,6 +108,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                 liveLocationSharingEnabled: flowParameters.appSettings.liveLocationSharingEnabled,
                                                                 roomProxy: roomProxy,
                                                                 timelineController: timelineController,
+                                                                liveLocationManager: flowParameters.userSession.liveLocationManager,
                                                                 appMediator: flowParameters.appMediator,
                                                                 analytics: flowParameters.analytics,
                                                                 userIndicatorController: flowParameters.userIndicatorController,
