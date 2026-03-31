@@ -39,8 +39,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     
     @discardableResult
     func requestAlwaysAuthorizationIfPossible() -> Bool {
-        guard !appSettings.hasRequestedAlwaysLocationAuthorization else { return false }
-        appSettings.hasRequestedAlwaysLocationAuthorization = true
+        guard !appSettings.hasRequestedLocationAlwaysLocationAuthorization else { return false }
+        appSettings.hasRequestedLocationAlwaysLocationAuthorization = true
         locationManager.requestAlwaysAuthorization()
         return true
     }
@@ -51,14 +51,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         // If the system resets authorization to notDetermined (e.g. after app reinstall or
         // settings reset), clear the flag so we can request again.
         if manager.authorizationStatus == .notDetermined {
-            appSettings.hasRequestedAlwaysLocationAuthorization = false
+            appSettings.hasRequestedLocationAlwaysLocationAuthorization = false
         }
         authorizationStatusSubject.send(manager.authorizationStatus)
     }
-    
-    // MARK: - Private
-    
-    // TODO: Add CLLocationManager location update handling to forward updates to rooms
-    // TODO: Track which rooms are currently sharing live location
-    // TODO: Send location updates to all active rooms via clientProxy
 }

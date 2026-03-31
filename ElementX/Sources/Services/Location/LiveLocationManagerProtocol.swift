@@ -11,7 +11,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol LiveLocationManagerProtocol: AnyObject {
-    /// Publishes the current "Always" location authorization status.
+    /// Publishes the current location authorization status.
     var authorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never> { get }
 
     /// Requests "Always" location authorization from the user if the system allows it.

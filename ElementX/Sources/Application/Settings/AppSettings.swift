@@ -48,7 +48,7 @@ final class AppSettings {
         case analyticsConsentState
         case hasRunNotificationPermissionsOnboarding
         case hasRunIdentityConfirmationOnboarding
-        case hasRequestedAlwaysLocationAuthorization
+        case hasRequestedLocationAlwaysLocationAuthorization
         
         case frequentlyUsedSystemEmojis
         
@@ -344,8 +344,8 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: false, storageType: .userDefaults(store))
     var hasRunIdentityConfirmationOnboarding
     
-    @UserPreference(key: UserDefaultsKeys.hasRequestedAlwaysLocationAuthorization, defaultValue: false, storageType: .userDefaults(store))
-    var hasRequestedAlwaysLocationAuthorization
+    @UserPreference(key: UserDefaultsKeys.hasRequestedLocationAlwaysLocationAuthorization, defaultValue: false, storageType: .userDefaults(store))
+    var hasRequestedLocationAlwaysLocationAuthorization
     
     @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
     var frequentlyUsedSystemEmojis

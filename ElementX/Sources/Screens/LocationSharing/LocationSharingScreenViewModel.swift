@@ -8,7 +8,7 @@
 
 import Combine
 import Foundation
-import UIKit
+import SwiftUI
 
 typealias LocationSharingScreenViewModelType = StateStoreViewModelV2<LocationSharingScreenViewState, LocationSharingScreenViewAction>
 
@@ -114,8 +114,8 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     
     private func startLiveLocationSharing() {
         authorizationStatusSubscription = nil
-        let authStatus = liveLocationManager.authorizationStatus.value
-        switch authStatus {
+        let authorizationStatus = liveLocationManager.authorizationStatus.value
+        switch authorizationStatus {
         case .authorizedAlways:
             // TODO: Start sending live location updates to the room
             break
@@ -123,7 +123,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             // This is to solve a race condition with map libre which always tries first
             // to request the when in use permission, we wait for it and then try again
             authorizationStatusSubscription = liveLocationManager.authorizationStatus
-                .filter { $0 != authStatus } // skip current status
+                .filter { $0 != authorizationStatus } // skip current status
                 .first() // this publisher only fires when there is an actual change, and if the user is done with permissions
                 .sink { [weak self] newValue in
                     guard newValue == .authorizedWhenInUse else { return }
@@ -137,7 +137,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             }
             
             authorizationStatusSubscription = liveLocationManager.authorizationStatus
-                .filter { $0 != authStatus } // skip current status
+                .filter { $0 != authorizationStatus } // skip current status
                 .first() // this publisher only fires when there is an actual change, and if the user is done with permissions
                 .sink { newValue in
                     guard newValue == .authorizedAlways else { return }
@@ -149,10 +149,9 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     }
     
     private func showMissingAlwaysAuthorizedAlert() {
-        let action: () -> Void = { [weak self] in self?.actionsSubject.send(.openSystemSettings) }
         state.bindings.alertInfo = .init(locationSharingViewError: .missingAlwaysAuthorization,
                                          primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
-                                         secondaryButton: .init(title: L10n.commonSettings, action: action))
+                                         secondaryButton: .init(title: L10n.commonSettings) { [weak self] in self?.actionsSubject.send(.openSystemSettings) })
     }
     
     private func sendLocation(_ geoURI: GeoURI, isUserLocation: Bool) async {
