@@ -14,8 +14,12 @@ extension AppMediatorMock {
         
         mock.underlyingAppState = .active
         mock.requestAuthorizationIfNeededUnderlyingReturnValue = true
-        mock.underlyingWindowManager = WindowManagerMock()
         mock.underlyingNetworkMonitor = NetworkMonitorMock.default
+        
+        let windowManagerMock = WindowManagerMock()
+        windowManagerMock.closeAllAuxiliaryWindowsClosure = { }
+        windowManagerMock.closeAuxiliaryWindowForTypeClosure = { _ in }
+        mock.underlyingWindowManager = windowManagerMock
         
         return mock
     }
