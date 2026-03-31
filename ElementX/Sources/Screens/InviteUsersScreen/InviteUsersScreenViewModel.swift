@@ -13,6 +13,7 @@ import SwiftUI
 typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreenViewState, InviteUsersScreenViewAction>
 
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
+    private let clientProxy: ClientProxyProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -31,6 +32,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
          userDiscoveryService: UserDiscoveryServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
+        clientProxy = userSession.clientProxy
         self.roomProxy = roomProxy
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
@@ -59,6 +61,14 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .cancel:
             actionsSubject.send(.dismiss)
         case .proceed:
+            presentInviteConfirmation()
+        case .recheck:
+            state.bindings.presentConfirmationDialog = false
+            state.selectedUsers.removeAll { lhs in state.usersToConfirm.contains { rhs in lhs.userID == rhs.userID } }
+            state.usersToConfirm = []
+        case .confirm:
+            state.bindings.presentConfirmationDialog = false
+            state.usersToConfirm = []
             inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
         case .toggleUser(let user):
             toggleUser(user)
@@ -67,12 +77,37 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
 
     // MARK: - Private
     
+    private func presentInviteConfirmation() {
+        guard appSettings.enableKeyShareOnInvite,
+              roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
+              !state.usersToConfirm.isEmpty,
+              !state.isSkippable else {
+            return inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
+        }
+        state.bindings.presentConfirmationDialog = true
+    }
+    
     private func toggleUser(_ user: UserProfileProxy) {
         if state.selectedUsers.contains(user) {
             state.selectedUsers.removeAll { $0.userID == user.userID }
         } else {
             state.selectedUsers.append(user)
             withElementAnimation(.easeInOut) { state.bindings.selectedUsersPosition = user.userID }
+            Task.detached {
+                // Attempt to fetch the cached user identity.
+                guard case let .success(identity) = await self.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) else {
+                    MXLog.error("Failed to get cached user identity for \(user.userID)")
+                    return
+                }
+                guard identity == nil else {
+                    // If we have it cached, we implicity trust the user that this was intentional.
+                    return
+                }
+                Task { @MainActor in
+                    // If we do not, we will prompt the user to confirm they meant to invite them.
+                    self.state.usersToConfirm.append(user)
+                }
+            }
         }
     }
     

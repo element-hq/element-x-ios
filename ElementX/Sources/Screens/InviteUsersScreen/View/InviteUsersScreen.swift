@@ -31,6 +31,9 @@ struct InviteUsersScreen: View {
                               disablesInteractiveDismiss: true,
                               accessibilityFocusOnStart: true)
             .compoundSearchField()
+            .sheet(isPresented: $context.presentConfirmationDialog) {
+                ConfirmInviteUsersSheetView(context: context)
+            }
             .alert(item: $context.alertInfo)
             .navigationBarBackButtonHidden(context.viewState.isSkippable)
     }
@@ -149,6 +152,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let searchingViewModel = makeViewModel(searchQuery: "Alice")
     static let selectedViewModel = makeViewModel(hasSelection: true)
+    static let confirmSelectedViewModel = makeViewModel(isConfirm: true)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -172,7 +176,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         .snapshotPreferences(expect: selectedViewModel.context.$viewState.map { !$0.selectedUsers.isEmpty })
     }
     
-    static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false) -> InviteUsersScreenViewModel {
+    static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false, isConfirm: Bool = false) -> InviteUsersScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentConversationCounterpartsReturnValue = [.mockAlice, .mockBob, .mockCharlie, .mockDan, .mockVerbose]
         
@@ -192,6 +196,11 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         
         if hasSelection {
             viewModel.state.selectedUsers = [.mockAlice]
+        }
+        
+        if isConfirm {
+            viewModel.state.usersToConfirm = [.mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice]
+            viewModel.state.bindings.presentConfirmationDialog = true
         }
         
         return viewModel
