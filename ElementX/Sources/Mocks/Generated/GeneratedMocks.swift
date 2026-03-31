@@ -11100,6 +11100,79 @@ class LinkNewDeviceServiceMock: LinkNewDeviceServiceProtocol, @unchecked Sendabl
         }
     }
 }
+class LiveLocationManagerMock: LiveLocationManagerProtocol, @unchecked Sendable {
+    var authorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never> {
+        get { return underlyingAuthorizationStatus }
+        set(value) { underlyingAuthorizationStatus = value }
+    }
+    var underlyingAuthorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never>!
+
+    //MARK: - requestAlwaysAuthorizationIfPossible
+
+    var requestAlwaysAuthorizationIfPossibleUnderlyingCallsCount = 0
+    var requestAlwaysAuthorizationIfPossibleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return requestAlwaysAuthorizationIfPossibleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestAlwaysAuthorizationIfPossibleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestAlwaysAuthorizationIfPossibleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestAlwaysAuthorizationIfPossibleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var requestAlwaysAuthorizationIfPossibleCalled: Bool {
+        return requestAlwaysAuthorizationIfPossibleCallsCount > 0
+    }
+
+    var requestAlwaysAuthorizationIfPossibleUnderlyingReturnValue: Bool!
+    var requestAlwaysAuthorizationIfPossibleReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return requestAlwaysAuthorizationIfPossibleUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestAlwaysAuthorizationIfPossibleUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestAlwaysAuthorizationIfPossibleUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestAlwaysAuthorizationIfPossibleUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var requestAlwaysAuthorizationIfPossibleClosure: (() -> Bool)?
+
+    @discardableResult
+    func requestAlwaysAuthorizationIfPossible() -> Bool {
+        requestAlwaysAuthorizationIfPossibleCallsCount += 1
+        if let requestAlwaysAuthorizationIfPossibleClosure = requestAlwaysAuthorizationIfPossibleClosure {
+            return requestAlwaysAuthorizationIfPossibleClosure()
+        } else {
+            return requestAlwaysAuthorizationIfPossibleReturnValue
+        }
+    }
+}
 class MediaLoaderMock: MediaLoaderProtocol, @unchecked Sendable {
 
     //MARK: - loadMediaContentForSource
@@ -20236,6 +20309,11 @@ class UserSessionMock: UserSessionProtocol, @unchecked Sendable {
         set(value) { underlyingVoiceMessageMediaManager = value }
     }
     var underlyingVoiceMessageMediaManager: VoiceMessageMediaManagerProtocol!
+    var liveLocationManager: LiveLocationManagerProtocol {
+        get { return underlyingLiveLocationManager }
+        set(value) { underlyingLiveLocationManager = value }
+    }
+    var underlyingLiveLocationManager: LiveLocationManagerProtocol!
     var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> {
         get { return underlyingSessionSecurityStatePublisher }
         set(value) { underlyingSessionSecurityStatePublisher = value }
