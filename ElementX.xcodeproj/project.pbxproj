@@ -358,7 +358,6 @@
 		3BEBDCB42BABFA3B456FECA7 /* MapTilerURLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D262A26713C18BB70C82CA5 /* MapTilerURLBuilderTests.swift */; };
 		3C312A3AEDE58BB1C9BBB07C /* preview_avatar_room.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 12FD5280AF55AB7F50F8E47D /* preview_avatar_room.jpg */; };
 		3C31E1A65EEB61E72E1113B4 /* AudioRecorderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEC57C204D77908E355EF42 /* AudioRecorderProtocol.swift */; };
-		3C549A0BF39F8A854D45D9FD /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 020597E28A4BC8E1BE8EDF6E /* KeychainAccess */; };
 		3C73442084BF8A6939F0F80B /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5445FCE0CE15E634FDC1A2E2 /* AnalyticsService.swift */; };
 		3CB9EC9B670C90618B839D1B /* RemotePreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A05E85E4872C3221C5C287 /* RemotePreference.swift */; };
 		3CE4C5071B6D2576E2473989 /* OrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B07B296D7A9D2F09120853 /* OrderedSet.swift */; };
@@ -490,7 +489,6 @@
 		53A55748D5F587C9061F98BF /* ServerConfigurationScreenViewStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277C20CDD5B64510401B6D0D /* ServerConfigurationScreenViewStateTests.swift */; };
 		53A59720F4729D9BBFFB7CAB /* NotificationSettingsEditScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9CB3B9DFA353AB2B7CD9F8 /* NotificationSettingsEditScreenCoordinator.swift */; };
 		53C1E7F6A7D6409D89F36ED7 /* AggregatedReactionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CB8242D69B7E4D0B32E18D /* AggregatedReactionMock.swift */; };
-		53DEF39F0C4DE02E3FC56D91 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 800631D7250B7F93195035F1 /* KeychainAccess */; };
 		53F1196F9C69512306A2693F /* TextRoomTimelineItemContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C19F54A0C4FC9AB7ABD583 /* TextRoomTimelineItemContent.swift */; };
 		5415236FA271AF7885D4995E /* NotificationItemProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AB32690C6CE5C62A86D6FA /* NotificationItemProxy.swift */; };
 		5470E62F65AE1803BBF3D528 /* CXProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E1BAA7232081635662A83F /* CXProviderMock.swift */; };
@@ -891,7 +889,6 @@
 		964B9D2EC38C488C360CE0C9 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B902EA6CD3296B0E10EE432B /* HomeScreen.swift */; };
 		9696ECAFB4F0C079C5C2A526 /* AppLockSetupPINScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF8C2226A57B9AB7446B31 /* AppLockSetupPINScreenCoordinator.swift */; };
 		96B3606E30F824095B1DD022 /* NetworkMonitorMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA1E8F287680C8ED25EDBAC /* NetworkMonitorMock.swift */; };
-		97189E495F0E47805D1868DB /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 2B43F2AF7456567FE37270A7 /* KeychainAccess */; };
 		973C48F9E4EFB808F61BE401 /* LocationRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED49073BB1C1FC649DAC2CCD /* LocationRoomTimelineView.swift */; };
 		978BB24F2A5D31EE59EEC249 /* UserSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4134FEFE4EB55759017408 /* UserSessionProtocol.swift */; };
 		97969EF0B9C412CD38E5CA93 /* AppLockScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4005D82E9D27BAF006A8FE1 /* AppLockScreenViewModel.swift */; };
@@ -1184,7 +1181,6 @@
 		CA2BFC5504AD91A028CFA45B /* AnalyticsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2397174D0DC3918A7A8A7B /* AnalyticsConfiguration.swift */; };
 		CB07184D37D5D65327A5A693 /* AuthenticationFlowCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F46CC4FD89ECF4CF26391A /* AuthenticationFlowCoordinatorTests.swift */; };
 		CB137BFB3E083C33E398A6CB /* EmbeddedElementCall in Frameworks */ = {isa = PBXBuildFile; productRef = 424B603C07AEA6FCA7C8E7C9 /* EmbeddedElementCall */; };
-		CB498F4E27AA0545DCEF0F6F /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 78A5A8DE1E2B09C978C7F3B0 /* KeychainAccess */; };
 		CB6956565D858C523E3E3B16 /* ComposerDraftServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E37072597F67C4DD8CC2DB /* ComposerDraftServiceProtocol.swift */; };
 		CB6BCBF28E4B76EA08C2926D /* StateRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16048D30F0438731C41F775 /* StateRoomTimelineItem.swift */; };
 		CB99B0FA38A4AC596F38CC13 /* KeychainControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E94DCFEE803E5ABAE8ACCE /* KeychainControllerProtocol.swift */; };
@@ -1396,7 +1392,6 @@
 		F06CE9132855E81EBB6DDC32 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 940C605265DD82DA0C655E23 /* Kingfisher */; };
 		F07D88421A9BC4D03D4A5055 /* VideoRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F348B5F2C12F9D4F4B4D3884 /* VideoRoomTimelineItem.swift */; };
 		F08F7BC07CA9AEF5CD157918 /* Snapshotting.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF17EA323AD0205A6AB621AA /* Snapshotting.swift */; };
-		F0A027BB2369606DBDE3BDAD /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 32B8F4CD937AA9C1F8FC3CBC /* KeychainAccess */; };
 		F0A26CD502C3A5868353B0FA /* ServerConfirmationScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DEE0682C95F897B6C7CB0D /* ServerConfirmationScreenViewModel.swift */; };
 		F0DACC95F24128A54CD537E4 /* GlobalSearchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B8177BD2AF45A286F5DA31 /* GlobalSearchScreen.swift */; };
 		F0F82C3C848C865C3098AA52 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = BA93CD75CCE486660C9040BD /* Collections */; };
@@ -2994,7 +2989,6 @@
 			files = (
 				AAF0BBED840DF4A53EE85E77 /* MatrixRustSDK in Frameworks */,
 				E481C8FDCB6C089963C95344 /* DeviceKit in Frameworks */,
-				97189E495F0E47805D1868DB /* KeychainAccess in Frameworks */,
 				FCD3F2B82CAB29A07887A127 /* Kingfisher in Frameworks */,
 				F99FB21EFC6D99D247FE7CBE /* SwiftState in Frameworks */,
 				308BD9343B95657FAA583FB7 /* GZIP in Frameworks */,
@@ -3010,7 +3004,6 @@
 				F66BBBE51B258BBB0B918C68 /* MatrixRustSDK in Frameworks */,
 				FDE47D4686BA0F86BB584633 /* Compound in Frameworks */,
 				558F37B1A8F2C4CC9B1ACEDA /* Collections in Frameworks */,
-				F0A027BB2369606DBDE3BDAD /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3030,7 +3023,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				09713669577CDA8D012EE380 /* MatrixRustSDK in Frameworks */,
-				53DEF39F0C4DE02E3FC56D91 /* KeychainAccess in Frameworks */,
 				F06CE9132855E81EBB6DDC32 /* Kingfisher in Frameworks */,
 				67D6E0700A9C1E676F6231F8 /* Collections in Frameworks */,
 				D63974A88CF2BC721F109C77 /* Compound in Frameworks */,
@@ -3057,7 +3049,6 @@
 				2BAA5B222856068158D0B3C6 /* MatrixRustSDK in Frameworks */,
 				99ED42B8F8D6BFB1DBCF4C45 /* AnalyticsEvents in Frameworks */,
 				0E8C480700870BB34A2A360F /* DeviceKit in Frameworks */,
-				CB498F4E27AA0545DCEF0F6F /* KeychainAccess in Frameworks */,
 				6832733838C57A7D3FE8FEB5 /* Kingfisher in Frameworks */,
 				2BA59D0AEFB4B82A2EC2A326 /* KZFileWatchers in Frameworks */,
 				B245583C63F8F90357B87FAE /* PostHog in Frameworks */,
@@ -3091,7 +3082,6 @@
 				93BA4A81B6D893271101F9F0 /* Collections in Frameworks */,
 				9AC5F8142413862A9E3A2D98 /* DeviceKit in Frameworks */,
 				CB137BFB3E083C33E398A6CB /* EmbeddedElementCall in Frameworks */,
-				3C549A0BF39F8A854D45D9FD /* KeychainAccess in Frameworks */,
 				41DFDD212D1BE57CA50D783B /* Kingfisher in Frameworks */,
 				6298AB0906DDD3525CD78C6B /* KZFileWatchers in Frameworks */,
 				407DCE030E0F9B7C9861D38A /* LoremSwiftum in Frameworks */,
@@ -7007,7 +6997,6 @@
 				B1E8B697DF78FE7F61FC6CA4 /* MatrixRustSDK */,
 				D661CAB418C075A94306A792 /* AnalyticsEvents */,
 				4003BC24B24C9E63D3304177 /* DeviceKit */,
-				78A5A8DE1E2B09C978C7F3B0 /* KeychainAccess */,
 				50009897F60FAE7D63EF5E5B /* Kingfisher */,
 				A2AE110B053B55E38F8D10C7 /* KZFileWatchers */,
 				CCE5BF78B125320CBF3BB834 /* PostHog */,
@@ -7039,7 +7028,6 @@
 				C79D91A7F9F378CECEF64B5A /* MatrixRustSDK */,
 				3262F08E1C3483C22A7A319F /* Compound */,
 				CAA3B9DF998B397C9EE64E8B /* Collections */,
-				32B8F4CD937AA9C1F8FC3CBC /* KeychainAccess */,
 			);
 			productName = ShareExtension;
 			productReference = 3D8BEEFCA07BEA43F4F4BF77 /* ShareExtension.appex */;
@@ -7165,7 +7153,6 @@
 				9C73F37731C9FDED1BB24C1C /* Collections */,
 				A7CA6F33C553805035C3B114 /* DeviceKit */,
 				424B603C07AEA6FCA7C8E7C9 /* EmbeddedElementCall */,
-				020597E28A4BC8E1BE8EDF6E /* KeychainAccess */,
 				0DD568A494247444A4B56031 /* Kingfisher */,
 				81DB3AB6CE996AB3954F4F03 /* KZFileWatchers */,
 				1A6B622CCFDEFB92D9CF1CA5 /* LoremSwiftum */,
@@ -7205,7 +7192,6 @@
 			packageProductDependencies = (
 				C2C69B8BA5A9702E7A8BC08F /* MatrixRustSDK */,
 				BC01130651CB23340B899032 /* DeviceKit */,
-				2B43F2AF7456567FE37270A7 /* KeychainAccess */,
 				DE8DC9B3FBA402117DC4C49F /* Kingfisher */,
 				19CD5B074D7DD44AF4C58BB6 /* SwiftState */,
 				2B788C81F6369D164ADEB917 /* GZIP */,
@@ -7231,7 +7217,6 @@
 			name = NSE;
 			packageProductDependencies = (
 				6647C55D93508C7CE9D954A5 /* MatrixRustSDK */,
-				800631D7250B7F93195035F1 /* KeychainAccess */,
 				940C605265DD82DA0C655E23 /* Kingfisher */,
 				AD544C0FA48DFFB080920061 /* Collections */,
 				DCA3C4A997AD28E6918D4CE5 /* Compound */,
@@ -7348,7 +7333,6 @@
 				821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */,
 				701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */,
 				395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */,
-				61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				D283517192CAC3E2E6920765 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				CCD235515AFCEE6D2005B705 /* XCRemoteSwiftPackageReference "LRUCache" */,
 				4BDA7F6042968E8422470F3F /* XCRemoteSwiftPackageReference "LoremSwiftum" */,
@@ -9974,14 +9958,6 @@
 				version = 14.2.2;
 			};
 		};
-		61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
-			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 4.2.2;
-			};
-		};
 		6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactKit/SwiftState";
@@ -10153,11 +10129,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		020597E28A4BC8E1BE8EDF6E /* KeychainAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
-		};
 		07FEEEDB11543A7DED420F04 /* Compound */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Compound;
@@ -10207,11 +10178,6 @@
 			package = 4C34425923978C97409A3EF2 /* XCRemoteSwiftPackageReference "DSWaveformImage" */;
 			productName = DSWaveformImageViews;
 		};
-		2B43F2AF7456567FE37270A7 /* KeychainAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
-		};
 		2B788C81F6369D164ADEB917 /* GZIP */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */;
@@ -10225,11 +10191,6 @@
 		3262F08E1C3483C22A7A319F /* Compound */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Compound;
-		};
-		32B8F4CD937AA9C1F8FC3CBC /* KeychainAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
 		};
 		3853B78FB8531B83936C5DA6 /* SwiftState */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -10311,11 +10272,6 @@
 			package = A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
-		78A5A8DE1E2B09C978C7F3B0 /* KeychainAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
-		};
 		78B28D75FF7AF8E6146DEE2A /* LRUCache */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CCD235515AFCEE6D2005B705 /* XCRemoteSwiftPackageReference "LRUCache" */;
@@ -10325,11 +10281,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E9C4F3A12AA1F65C13A8C8EB /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
 			productName = SnapshotTesting;
-		};
-		800631D7250B7F93195035F1 /* KeychainAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
 		};
 		81DB3AB6CE996AB3954F4F03 /* KZFileWatchers */ = {
 			isa = XCSwiftPackageProductDependency;

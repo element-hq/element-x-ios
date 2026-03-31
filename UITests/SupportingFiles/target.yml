@@ -30,7 +30,6 @@ targets:
     - package: MatrixRustSDK
     - package: AnalyticsEvents
     - package: DeviceKit
-    - package: KeychainAccess
     - package: Kingfisher
     - package: KZFileWatchers
     - package: PostHog

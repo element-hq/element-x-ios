@@ -35,7 +35,6 @@ targets:
       - package: MatrixRustSDK
       - package: Compound
       - package: Collections
-      - package: KeychainAccess
 
     info:
       path: Info.plist
@@ -89,6 +88,7 @@ targets:
     - path: ../../ElementX/Sources/Application/TargetConfiguration.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
+    - path: ../../ElementX/Sources/Services/Keychain/KeychainWrapper.swift
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
     - path: ../../ElementX/Sources/Services/UserSession/SessionDirectories.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift

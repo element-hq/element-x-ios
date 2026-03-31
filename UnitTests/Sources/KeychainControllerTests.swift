@@ -8,7 +8,6 @@
 
 @testable import ElementX
 import Foundation
-import KeychainAccess
 import Testing
 
 struct KeychainControllerTests {
@@ -128,11 +127,11 @@ struct KeychainControllerTests {
     @Test
     func unsupportedRestorationToken() throws {
         // Given a keychain with an unsupported restoration token with a sliding sync proxy URL value.
-        let underlyingKeychain = Keychain(service: KeychainControllerService.tests.restorationTokenID,
-                                          accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+        let underlyingKeychain = KeychainWrapper(service: KeychainControllerService.tests.restorationTokenID,
+                                                 accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
         // Note: We assert with this underlying keychain's keys as keychain.restorationTokens() triggers the deletion that we're testing.
-        #expect(underlyingKeychain.allKeys().isEmpty, "The keychain should be empty to begin with.")
-        
+        #expect(try underlyingKeychain.allKeys().isEmpty, "The keychain should be empty to begin with.")
+
         let unsupportedToken = RestorationTokenV4(session: SessionV1(accessToken: "1234",
                                                                      refreshToken: nil,
                                                                      userId: "@test:example.com",
@@ -145,14 +144,14 @@ struct KeychainControllerTests {
                                                   pusherNotificationClientIdentifier: "pusherClientID")
         let tokenData = try JSONEncoder().encode(unsupportedToken)
         try underlyingKeychain.set(tokenData, key: "@test:example.com")
-        #expect(underlyingKeychain.allKeys().count == 1)
-        
+        #expect(try underlyingKeychain.allKeys().count == 1)
+
         // When attempting to retrieve the unsupported token.
         let retrievedToken = keychain.restorationTokenForUsername("@test:example.com")
         
         // Then nothing should be returned and the restoration token should be automatically removed.
         #expect(retrievedToken == nil, "The token should not be decoded.")
-        #expect(underlyingKeychain.allKeys().isEmpty, "The keychain should be empty again.")
+        #expect(try underlyingKeychain.allKeys().isEmpty, "The keychain should be empty again.")
     }
     
     @Test

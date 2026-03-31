@@ -240,7 +240,6 @@ targets:
     - package: Collections
     - package: DeviceKit
     - package: EmbeddedElementCall
-    - package: KeychainAccess
     - package: Kingfisher
     - package: KZFileWatchers
     - package: LoremSwiftum

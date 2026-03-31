@@ -7,7 +7,6 @@
 //
 
 import Foundation
-@preconcurrency import KeychainAccess
 import MatrixRustSDK
 
 enum KeychainControllerService: String {
@@ -25,9 +24,9 @@ enum KeychainControllerService: String {
 
 final class KeychainController: KeychainControllerProtocol {
     /// The keychain responsible for storing account restoration tokens (keyed by userID).
-    private let restorationTokenKeychain: Keychain
+    private let restorationTokenKeychain: KeychainWrapper
     /// The keychain responsible for storing all other secrets in the app (keyed by `Key`s).
-    private let mainKeychain: Keychain
+    private let mainKeychain: KeychainWrapper
     
     private enum Key: String {
         case appLockPINCode
@@ -35,8 +34,8 @@ final class KeychainController: KeychainControllerProtocol {
     }
 
     init(service: KeychainControllerService, accessGroup: String) {
-        restorationTokenKeychain = Keychain(service: service.restorationTokenID, accessGroup: accessGroup)
-        mainKeychain = Keychain(service: service.mainID, accessGroup: accessGroup)
+        restorationTokenKeychain = KeychainWrapper(service: service.restorationTokenID, accessGroup: accessGroup)
+        mainKeychain = KeychainWrapper(service: service.mainID, accessGroup: accessGroup)
     }
     
     // MARK: - Restoration Tokens
@@ -68,12 +67,17 @@ final class KeychainController: KeychainControllerProtocol {
     }
 
     func restorationTokens() -> [KeychainCredentials] {
-        restorationTokenKeychain.allKeys().compactMap { username in
-            guard let restorationToken = restorationTokenForUsername(username) else {
-                return nil
+        do {
+            let usernames = try restorationTokenKeychain.allKeys()
+            return usernames.compactMap { username in
+                guard let restorationToken = restorationTokenForUsername(username) else {
+                    return nil
+                }
+                return KeychainCredentials(userID: username, restorationToken: restorationToken)
             }
-
-            return KeychainCredentials(userID: username, restorationToken: restorationToken)
+        } catch {
+            MXLog.error("Failed retrieving all restoration tokens: \(error)")
+            return []
         }
     }
 

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import KeychainAccess
 import MatrixRustSDK
 
 protocol ClassicAppManagerProtocol {
@@ -28,7 +27,7 @@ final class ClassicAppManager: ClassicAppManagerProtocol {
     }
     
     private let classicAppGroupIdentifier: String
-    private let keychain: Keychain
+    private let keychain: KeychainWrapper
     
     /// Creates an instance using the Classic app identifiers specified in the `Info.plist` file.
     /// Returns `nil` when a Classic app has not been configured in the project.
@@ -41,7 +40,7 @@ final class ClassicAppManager: ClassicAppManagerProtocol {
         }
         
         self.classicAppGroupIdentifier = classicAppGroupIdentifier
-        keychain = Keychain(service: classicAppKeychainServiceIdentifier, accessGroup: classicAppKeychainAccessGroupIdentifier)
+        keychain = KeychainWrapper(service: classicAppKeychainServiceIdentifier, accessGroup: classicAppKeychainAccessGroupIdentifier)
     }
     
     /// Loads all of the active accounts from the Classic app.
