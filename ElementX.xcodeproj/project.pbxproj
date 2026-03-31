@@ -9927,7 +9927,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 26.03.24;
+				version = 26.03.31;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
@@ -9958,8 +9958,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/matrix-org/emojibase-bindings";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 1.5.0;
+				kind = revision;
+				revision = 60bc01f2e3b31445dc723f5af1a777b63d18e6c2;
 			};
 		};
 		869B65C34E469FC879A9F116 /* XCRemoteSwiftPackageReference "swift-clocks" */ = {

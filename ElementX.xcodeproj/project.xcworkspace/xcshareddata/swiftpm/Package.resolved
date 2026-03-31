@@ -1,5 +1,5 @@
 {
-  "originHash" : "d9904c66e7b06420245ef7c884120bd51d33b079ea3e97b5db8114e46b6c120c",
+  "originHash" : "3a17e06ab03ebf268e7a2e03765338ae8145f1ae223a1faa32bca9f5be6b1f11",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -69,8 +69,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/emojibase-bindings",
       "state" : {
-        "revision" : "d1ed54c3bf63caa8fb48a30e16e465ac148f26f6",
-        "version" : "1.5.0"
+        "revision" : "60bc01f2e3b31445dc723f5af1a777b63d18e6c2"
       }
     },
     {
@@ -159,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "bbada6cf27679824bf6e775f2562de8d7d6b3756",
-        "version" : "26.3.24"
+        "revision" : "46b8d14c92b46f7e14febc0320b39ff3e2483e67",
+        "version" : "26.3.31"
       }
     },
     {

@@ -6,6 +6,21 @@
 
 import Foundation
 
+open class BackupSecretsSDKMock: MatrixRustSDK.BackupSecrets, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+}
 open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -5565,6 +5580,81 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - syncOnceV2
+
+    open var syncOnceV2SettingsThrowableError: Error?
+    open var syncOnceV2SettingsUnderlyingCallsCount = 0
+    open var syncOnceV2SettingsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return syncOnceV2SettingsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = syncOnceV2SettingsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                syncOnceV2SettingsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    syncOnceV2SettingsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var syncOnceV2SettingsCalled: Bool {
+        return syncOnceV2SettingsCallsCount > 0
+    }
+    open var syncOnceV2SettingsReceivedSettings: SyncSettingsV2?
+    open var syncOnceV2SettingsReceivedInvocations: [SyncSettingsV2] = []
+
+    open var syncOnceV2SettingsUnderlyingReturnValue: SyncResponseV2!
+    open var syncOnceV2SettingsReturnValue: SyncResponseV2! {
+        get {
+            if Thread.isMainThread {
+                return syncOnceV2SettingsUnderlyingReturnValue
+            } else {
+                var returnValue: SyncResponseV2? = nil
+                DispatchQueue.main.sync {
+                    returnValue = syncOnceV2SettingsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                syncOnceV2SettingsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    syncOnceV2SettingsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var syncOnceV2SettingsClosure: ((SyncSettingsV2) async throws -> SyncResponseV2)?
+
+    open override func syncOnceV2(settings: SyncSettingsV2) async throws -> SyncResponseV2 {
+        if let error = syncOnceV2SettingsThrowableError {
+            throw error
+        }
+        syncOnceV2SettingsCallsCount += 1
+        syncOnceV2SettingsReceivedSettings = settings
+        DispatchQueue.main.async {
+            self.syncOnceV2SettingsReceivedInvocations.append(settings)
+        }
+        if let syncOnceV2SettingsClosure = syncOnceV2SettingsClosure {
+            return try await syncOnceV2SettingsClosure(settings)
+        } else {
+            return syncOnceV2SettingsReturnValue
+        }
+    }
+
     //MARK: - syncService
 
     open var syncServiceUnderlyingCallsCount = 0
@@ -5627,6 +5717,77 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return syncServiceClosure()
         } else {
             return syncServiceReturnValue
+        }
+    }
+
+    //MARK: - syncV2
+
+    open var syncV2SettingsListenerUnderlyingCallsCount = 0
+    open var syncV2SettingsListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return syncV2SettingsListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = syncV2SettingsListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                syncV2SettingsListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    syncV2SettingsListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var syncV2SettingsListenerCalled: Bool {
+        return syncV2SettingsListenerCallsCount > 0
+    }
+    open var syncV2SettingsListenerReceivedArguments: (settings: SyncSettingsV2, listener: SyncListenerV2)?
+    open var syncV2SettingsListenerReceivedInvocations: [(settings: SyncSettingsV2, listener: SyncListenerV2)] = []
+
+    open var syncV2SettingsListenerUnderlyingReturnValue: TaskHandle!
+    open var syncV2SettingsListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return syncV2SettingsListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = syncV2SettingsListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                syncV2SettingsListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    syncV2SettingsListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var syncV2SettingsListenerClosure: ((SyncSettingsV2, SyncListenerV2) -> TaskHandle)?
+
+    open override func syncV2(settings: SyncSettingsV2, listener: SyncListenerV2) -> TaskHandle {
+        syncV2SettingsListenerCallsCount += 1
+        syncV2SettingsListenerReceivedArguments = (settings: settings, listener: listener)
+        DispatchQueue.main.async {
+            self.syncV2SettingsListenerReceivedInvocations.append((settings: settings, listener: listener))
+        }
+        if let syncV2SettingsListenerClosure = syncV2SettingsListenerClosure {
+            return syncV2SettingsListenerClosure(settings, listener)
+        } else {
+            return syncV2SettingsListenerReturnValue
         }
     }
 
@@ -7999,6 +8160,21 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return usernameUsernameReturnValue
         }
     }
+}
+open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 }
 open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     public init() {
@@ -15487,81 +15663,6 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
-    //MARK: - loadThreadList
-
-    open var loadThreadListOptsThrowableError: Error?
-    open var loadThreadListOptsUnderlyingCallsCount = 0
-    open var loadThreadListOptsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loadThreadListOptsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loadThreadListOptsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loadThreadListOptsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loadThreadListOptsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var loadThreadListOptsCalled: Bool {
-        return loadThreadListOptsCallsCount > 0
-    }
-    open var loadThreadListOptsReceivedOpts: ListThreadsOptions?
-    open var loadThreadListOptsReceivedInvocations: [ListThreadsOptions] = []
-
-    open var loadThreadListOptsUnderlyingReturnValue: ThreadList!
-    open var loadThreadListOptsReturnValue: ThreadList! {
-        get {
-            if Thread.isMainThread {
-                return loadThreadListOptsUnderlyingReturnValue
-            } else {
-                var returnValue: ThreadList? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loadThreadListOptsUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loadThreadListOptsUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loadThreadListOptsUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var loadThreadListOptsClosure: ((ListThreadsOptions) async throws -> ThreadList)?
-
-    open override func loadThreadList(opts: ListThreadsOptions) async throws -> ThreadList {
-        if let error = loadThreadListOptsThrowableError {
-            throw error
-        }
-        loadThreadListOptsCallsCount += 1
-        loadThreadListOptsReceivedOpts = opts
-        DispatchQueue.main.async {
-            self.loadThreadListOptsReceivedInvocations.append(opts)
-        }
-        if let loadThreadListOptsClosure = loadThreadListOptsClosure {
-            return try await loadThreadListOptsClosure(opts)
-        } else {
-            return loadThreadListOptsReturnValue
-        }
-    }
-
     //MARK: - markAsFullyReadUnchecked
 
     open var markAsFullyReadUncheckedEventIdThrowableError: Error?
@@ -17244,6 +17345,81 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         try await sendRawEventTypeContentClosure?(eventType, content)
     }
 
+    //MARK: - sendStateEventRaw
+
+    open var sendStateEventRawEventTypeStateKeyContentThrowableError: Error?
+    open var sendStateEventRawEventTypeStateKeyContentUnderlyingCallsCount = 0
+    open var sendStateEventRawEventTypeStateKeyContentCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendStateEventRawEventTypeStateKeyContentUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendStateEventRawEventTypeStateKeyContentUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendStateEventRawEventTypeStateKeyContentUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendStateEventRawEventTypeStateKeyContentUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sendStateEventRawEventTypeStateKeyContentCalled: Bool {
+        return sendStateEventRawEventTypeStateKeyContentCallsCount > 0
+    }
+    open var sendStateEventRawEventTypeStateKeyContentReceivedArguments: (eventType: String, stateKey: String, content: String)?
+    open var sendStateEventRawEventTypeStateKeyContentReceivedInvocations: [(eventType: String, stateKey: String, content: String)] = []
+
+    open var sendStateEventRawEventTypeStateKeyContentUnderlyingReturnValue: String!
+    open var sendStateEventRawEventTypeStateKeyContentReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return sendStateEventRawEventTypeStateKeyContentUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendStateEventRawEventTypeStateKeyContentUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendStateEventRawEventTypeStateKeyContentUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendStateEventRawEventTypeStateKeyContentUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var sendStateEventRawEventTypeStateKeyContentClosure: ((String, String, String) async throws -> String)?
+
+    open override func sendStateEventRaw(eventType: String, stateKey: String, content: String) async throws -> String {
+        if let error = sendStateEventRawEventTypeStateKeyContentThrowableError {
+            throw error
+        }
+        sendStateEventRawEventTypeStateKeyContentCallsCount += 1
+        sendStateEventRawEventTypeStateKeyContentReceivedArguments = (eventType: eventType, stateKey: stateKey, content: content)
+        DispatchQueue.main.async {
+            self.sendStateEventRawEventTypeStateKeyContentReceivedInvocations.append((eventType: eventType, stateKey: stateKey, content: content))
+        }
+        if let sendStateEventRawEventTypeStateKeyContentClosure = sendStateEventRawEventTypeStateKeyContentClosure {
+            return try await sendStateEventRawEventTypeStateKeyContentClosure(eventType, stateKey, content)
+        } else {
+            return sendStateEventRawEventTypeStateKeyContentReturnValue
+        }
+    }
+
     //MARK: - setIsFavourite
 
     open var setIsFavouriteIsFavouriteTagOrderThrowableError: Error?
@@ -18302,6 +18478,71 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return try await suggestedRoleForUserUserIdClosure(userId)
         } else {
             return suggestedRoleForUserUserIdReturnValue
+        }
+    }
+
+    //MARK: - threadListService
+
+    open var threadListServiceUnderlyingCallsCount = 0
+    open var threadListServiceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return threadListServiceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = threadListServiceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                threadListServiceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    threadListServiceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var threadListServiceCalled: Bool {
+        return threadListServiceCallsCount > 0
+    }
+
+    open var threadListServiceUnderlyingReturnValue: ThreadListService!
+    open var threadListServiceReturnValue: ThreadListService! {
+        get {
+            if Thread.isMainThread {
+                return threadListServiceUnderlyingReturnValue
+            } else {
+                var returnValue: ThreadListService? = nil
+                DispatchQueue.main.sync {
+                    returnValue = threadListServiceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                threadListServiceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    threadListServiceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var threadListServiceClosure: (() -> ThreadListService)?
+
+    open override func threadListService() -> ThreadListService {
+        threadListServiceCallsCount += 1
+        if let threadListServiceClosure = threadListServiceClosure {
+            return threadListServiceClosure()
+        } else {
+            return threadListServiceReturnValue
         }
     }
 
@@ -22133,6 +22374,21 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
         }
     }
 }
+open class SecretsBundleSDKMock: MatrixRustSDK.SecretsBundle, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+}
 open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -25453,6 +25709,369 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
             return isFinishedClosure()
         } else {
             return isFinishedReturnValue
+        }
+    }
+}
+open class ThreadListServiceSDKMock: MatrixRustSDK.ThreadListService, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+
+    //MARK: - items
+
+    open var itemsUnderlyingCallsCount = 0
+    open var itemsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return itemsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = itemsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                itemsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    itemsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var itemsCalled: Bool {
+        return itemsCallsCount > 0
+    }
+
+    open var itemsUnderlyingReturnValue: [ThreadListItem]!
+    open var itemsReturnValue: [ThreadListItem]! {
+        get {
+            if Thread.isMainThread {
+                return itemsUnderlyingReturnValue
+            } else {
+                var returnValue: [ThreadListItem]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = itemsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                itemsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    itemsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var itemsClosure: (() -> [ThreadListItem])?
+
+    open override func items() -> [ThreadListItem] {
+        itemsCallsCount += 1
+        if let itemsClosure = itemsClosure {
+            return itemsClosure()
+        } else {
+            return itemsReturnValue
+        }
+    }
+
+    //MARK: - paginate
+
+    open var paginateThrowableError: Error?
+    open var paginateUnderlyingCallsCount = 0
+    open var paginateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return paginateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var paginateCalled: Bool {
+        return paginateCallsCount > 0
+    }
+    open var paginateClosure: (() async throws -> Void)?
+
+    open override func paginate() async throws {
+        if let error = paginateThrowableError {
+            throw error
+        }
+        paginateCallsCount += 1
+        try await paginateClosure?()
+    }
+
+    //MARK: - paginationState
+
+    open var paginationStateUnderlyingCallsCount = 0
+    open var paginationStateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return paginationStateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginationStateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginationStateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginationStateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var paginationStateCalled: Bool {
+        return paginationStateCallsCount > 0
+    }
+
+    open var paginationStateUnderlyingReturnValue: ThreadListPaginationState!
+    open var paginationStateReturnValue: ThreadListPaginationState! {
+        get {
+            if Thread.isMainThread {
+                return paginationStateUnderlyingReturnValue
+            } else {
+                var returnValue: ThreadListPaginationState? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginationStateUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginationStateUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginationStateUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var paginationStateClosure: (() -> ThreadListPaginationState)?
+
+    open override func paginationState() -> ThreadListPaginationState {
+        paginationStateCallsCount += 1
+        if let paginationStateClosure = paginationStateClosure {
+            return paginationStateClosure()
+        } else {
+            return paginationStateReturnValue
+        }
+    }
+
+    //MARK: - reset
+
+    open var resetUnderlyingCallsCount = 0
+    open var resetCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    open var resetClosure: (() async -> Void)?
+
+    open override func reset() async {
+        resetCallsCount += 1
+        await resetClosure?()
+    }
+
+    //MARK: - subscribeToItemsUpdates
+
+    open var subscribeToItemsUpdatesListenerUnderlyingCallsCount = 0
+    open var subscribeToItemsUpdatesListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToItemsUpdatesListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToItemsUpdatesListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToItemsUpdatesListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToItemsUpdatesListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToItemsUpdatesListenerCalled: Bool {
+        return subscribeToItemsUpdatesListenerCallsCount > 0
+    }
+    open var subscribeToItemsUpdatesListenerReceivedListener: ThreadListEntriesListener?
+    open var subscribeToItemsUpdatesListenerReceivedInvocations: [ThreadListEntriesListener] = []
+
+    open var subscribeToItemsUpdatesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToItemsUpdatesListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToItemsUpdatesListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToItemsUpdatesListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToItemsUpdatesListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToItemsUpdatesListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToItemsUpdatesListenerClosure: ((ThreadListEntriesListener) -> TaskHandle)?
+
+    open override func subscribeToItemsUpdates(listener: ThreadListEntriesListener) -> TaskHandle {
+        subscribeToItemsUpdatesListenerCallsCount += 1
+        subscribeToItemsUpdatesListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToItemsUpdatesListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToItemsUpdatesListenerClosure = subscribeToItemsUpdatesListenerClosure {
+            return subscribeToItemsUpdatesListenerClosure(listener)
+        } else {
+            return subscribeToItemsUpdatesListenerReturnValue
+        }
+    }
+
+    //MARK: - subscribeToPaginationStateUpdates
+
+    open var subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount = 0
+    open var subscribeToPaginationStateUpdatesListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToPaginationStateUpdatesListenerCalled: Bool {
+        return subscribeToPaginationStateUpdatesListenerCallsCount > 0
+    }
+    open var subscribeToPaginationStateUpdatesListenerReceivedListener: ThreadListPaginationStateListener?
+    open var subscribeToPaginationStateUpdatesListenerReceivedInvocations: [ThreadListPaginationStateListener] = []
+
+    open var subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToPaginationStateUpdatesListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToPaginationStateUpdatesListenerClosure: ((ThreadListPaginationStateListener) -> TaskHandle)?
+
+    open override func subscribeToPaginationStateUpdates(listener: ThreadListPaginationStateListener) -> TaskHandle {
+        subscribeToPaginationStateUpdatesListenerCallsCount += 1
+        subscribeToPaginationStateUpdatesListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToPaginationStateUpdatesListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToPaginationStateUpdatesListenerClosure = subscribeToPaginationStateUpdatesListenerClosure {
+            return subscribeToPaginationStateUpdatesListenerClosure(listener)
+        } else {
+            return subscribeToPaginationStateUpdatesListenerReturnValue
         }
     }
 }
