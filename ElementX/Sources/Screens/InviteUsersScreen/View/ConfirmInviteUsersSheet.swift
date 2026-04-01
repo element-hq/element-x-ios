@@ -47,3 +47,25 @@ struct ConfirmInviteUsersSheetView: View {
         .interactiveDismissDisabled()
     }
 }
+
+struct ConfirmInviteUsersSheetView_Previews: PreviewProvider, TestablePreview {
+    static var viewModel = makeViewModel()
+    
+    static var previews: some View {
+        ConfirmInviteUsersSheetView(context: viewModel.context)
+            .previewDisplayName("Default")
+    }
+    
+    static func makeViewModel() -> InviteUsersScreenViewModel {
+        let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init()))),
+                                                   roomProxy: JoinedRoomProxyMock(.init(members: [])),
+                                                   isSkippable: true,
+                                                   userDiscoveryService: UserDiscoveryServiceMock(),
+                                                   userIndicatorController: UserIndicatorControllerMock(),
+                                                   appSettings: ServiceLocator.shared.settings)
+        
+        viewModel.state.usersToConfirm = [.mockAlice, .mockCharlie, .mockBob, .mockDan]
+        
+        return viewModel
+    }
+}
