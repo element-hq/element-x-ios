@@ -85,6 +85,38 @@ struct StartChatScreenViewModelTests {
         try await deferred.fulfill()
     }
     
+    // MARK: - History Sharing
+    
+    @Test
+    func inviteConfirmationFetchesIdentity() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        clientProxy.directRoomForUserIDReturnValue = .success(nil)
+        clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init(verificationState: .notVerified)))
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
+            viewState.bindings.selectedUserIdentityKnown
+        }
+        context.send(viewAction: .selectUser(.mockBob))
+        try await deferred.fulfill()
+        
+        #expect(clientProxy.userIdentityForFallBackToServerCalled)
+    }
+    
+    @Test
+    func inviteConfirmationFallsBackToUnknownIdentityOnFailure() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        clientProxy.directRoomForUserIDReturnValue = .success(nil)
+        clientProxy.userIdentityForFallBackToServerReturnValue = .failure(.forbiddenAccess)
+        
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: .seconds(5)) { viewState in
+            viewState.bindings.selectedUserIdentityKnown
+        }
+        context.send(viewAction: .selectUser(.mockBob))
+        try await deferred.fulfill()
+        
+        #expect(clientProxy.userIdentityForFallBackToServerCalled)
+    }
+    
     // MARK: - Private
     
     private func assertSearchResults(toBe count: Int) {
