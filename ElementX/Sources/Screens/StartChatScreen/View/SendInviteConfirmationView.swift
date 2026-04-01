@@ -11,6 +11,7 @@ import SwiftUI
 
 struct SendInviteConfirmationView: View {
     let userToInvite: UserProfileProxy
+    let userIdentityKnown: Bool
     let mediaProvider: MediaProviderProtocol?
     let onInvite: () -> Void
     
@@ -19,6 +20,14 @@ struct SendInviteConfirmationView: View {
     @State private var sheetHeight: CGFloat = .zero
     private let topPadding: CGFloat = 24
     
+    private var title: String {
+        return if userIdentityKnown {
+            L10n.screenBottomSheetCreateDmTitle
+        } else {
+            UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogTitle
+        }
+    }
+    
     private var subtitle: String {
         let string: String
         if let displayName = userToInvite.displayName {
@@ -26,7 +35,11 @@ struct SendInviteConfirmationView: View {
         } else {
             string = userToInvite.userID
         }
-        return L10n.screenBottomSheetCreateDmMessage(string)
+        return if userIdentityKnown {
+            L10n.screenBottomSheetCreateDmMessage(string)
+        } else {
+            UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogContent
+        }
     }
     
     var body: some View {
@@ -52,7 +65,7 @@ struct SendInviteConfirmationView: View {
                                 avatarSize: .user(on: .sendInviteConfirmation),
                                 mediaProvider: mediaProvider)
             VStack(spacing: 8) {
-                Text(L10n.screenBottomSheetCreateDmTitle)
+                Text(title)
                     .multilineTextAlignment(.center)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
@@ -92,6 +105,13 @@ struct SendInviteConfirmationView: View {
 struct SendInviteConfirmationView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         SendInviteConfirmationView(userToInvite: .mockBob,
+                                   userIdentityKnown: true,
                                    mediaProvider: nil) { }
+            .previewDisplayName("With Identity")
+        
+        SendInviteConfirmationView(userToInvite: .mockBob,
+                                   userIdentityKnown: false,
+                                   mediaProvider: nil) { }
+            .previewDisplayName("Without Identity")
     }
 }

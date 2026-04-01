@@ -92,8 +92,10 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         }
         
         if case let .success(.some(identity)) = await identityResult {
+            state.isIdentityKnown = true
             state.isVerified = identity.verificationState == .verified
         } else {
+            state.isIdentityKnown = false
             MXLog.error("Failed to find the user's identity.")
         }
     }

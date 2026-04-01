@@ -11,3 +11,5 @@
 
 "crypto_history_sharing_confirm_invite_dialog_title" = "Invite new contacts to this room?";
 "crypto_history_sharing_confirm_invite_dialog_content" = "You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.";
+"crypto_history_sharing_confirm_start_chat_dialog_title" = "Start a chat with this new contact?";
+"crypto_history_sharing_confirm_start_chat_dialog_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";

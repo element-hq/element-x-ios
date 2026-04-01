@@ -30,6 +30,8 @@ struct RoomMemberDetailsScreen: View {
         .alert(item: $context.alertInfo)
         .sheet(item: $context.inviteConfirmationUser) { user in
             SendInviteConfirmationView(userToInvite: user,
+                                       userIdentityKnown: context.inviteConfirmationUserIdentityKnown,
+                                       
                                        mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .createDirectChat)
             }
@@ -240,6 +242,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                 roomProxy: roomProxyMock,
                                                 userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                analytics: ServiceLocator.shared.analytics)
+                                                analytics: ServiceLocator.shared.analytics,
+                                                appSettings: ServiceLocator.shared.settings)
     }
 }
