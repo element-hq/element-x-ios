@@ -5,8 +5,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-// periphery:ignore:all - this is just a roomThreadList remove this comment once generating the final file
-
 import Combine
 import SwiftUI
 

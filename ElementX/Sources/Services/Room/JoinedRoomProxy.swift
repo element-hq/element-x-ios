@@ -204,7 +204,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     func threadListService() async -> RoomThreadListServiceProxyProtocol {
-        await RoomThreadListProxy(threadListService: room.threadListService(), eventStringBuilder: eventStringBuilder)
+        RoomThreadListProxy(threadListService: room.threadListService(), eventStringBuilder: eventStringBuilder)
     }
     
     func loadOrFetchEventDetails(for eventID: String) async -> Result<TimelineEvent, RoomProxyError> {
