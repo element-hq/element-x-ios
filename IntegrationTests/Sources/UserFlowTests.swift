@@ -43,7 +43,11 @@ class UserFlowTests: XCTestCase {
         
         // And open it
         let firstRoom = app.buttons.matching(NSPredicate(format: "identifier CONTAINS %@", Self.integrationTestsRoomName)).firstMatch
-        XCTAssertTrue(firstRoom.waitForExistence(timeout: 10.0))
+        
+        // The backend is sometimes really slow and having a longer timeout
+        // beats having to rerun the whole suite again.
+        XCTAssertTrue(firstRoom.waitForExistence(timeout: 100.0))
+        
         firstRoom.tap(.center)
         
         sendMessages()
