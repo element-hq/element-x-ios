@@ -7,7 +7,9 @@
 
 import Foundation
 
-enum RoomThreadListScreenViewModelAction { }
+enum RoomThreadListScreenViewModelAction {
+    case presentThread(threadRootEventID: String)
+}
 
 struct RoomThreadListScreenViewState: BindableState {
     var items = [RoomThreadListItem]()
@@ -22,4 +24,5 @@ struct RoomThreadListScreenViewStateBindings { }
 enum RoomThreadListScreenViewAction {
     case oldestItemDidAppear
     case oldestItemDidDisappear
+    case tappedThread(threadRootEventID: String)
 }

@@ -394,6 +394,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.room, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
                 startPinnedEventsTimelineFlow()
                 
+            // Thread List
+
+            case (.room, .presentThreadList, .threadList):
+                Task { await self.presentThreadList(animated: animated) }
+
             // Thread
                 
             case (_, .presentThread(let threadRootEventID, let focusEventID), .thread):
@@ -721,9 +726,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentKnockRequestsList:
                     stateMachine.tryEvent(.presentKnockRequestsListScreen)
                 case .presentThreadList:
-                    Task {
-                        await self.presentThreadList(animated: true)
-                    }
+                    stateMachine.tryEvent(.presentThreadList, userInfo: EventUserInfo(animated: animated))
                 case .presentThread(let threadRootEventID, let focussedEventID):
                     stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focussedEventID))
                 case .presentRoom(let roomID, let via):
@@ -738,12 +741,21 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentThreadList(animated: Bool) async {
-        let coordinator = await RoomThreadListScreenCoordinator(parameters: .init(threadListServiceProxy: roomProxy.threadListService(),
-                                                                                  mediaProvider: userSession.mediaProvider))
+        let coordinator = RoomThreadListScreenCoordinator(parameters: .init(threadListServiceProxy: roomProxy.threadListService(),
+                                                                            mediaProvider: userSession.mediaProvider))
         
-        coordinator.actionsPublisher.sink { [weak self] _ in }.store(in: &cancellables)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .presentThread(let threadRootEventID):
+                stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: nil))
+            }
+        }.store(in: &cancellables)
         
-        navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in }
+        navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
+            guard let self else { return }
+            stateMachine.tryEvent(.dismissThreadList)
+        }
     }
     
     private func presentThread(threadRootEventID: String, focusEventID: String?, animated: Bool) async {

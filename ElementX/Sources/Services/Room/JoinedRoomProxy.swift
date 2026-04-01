@@ -203,7 +203,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    func threadListService() async -> RoomThreadListServiceProxyProtocol {
+    func threadListService() -> RoomThreadListServiceProxyProtocol {
         RoomThreadListProxy(threadListService: room.threadListService(), eventStringBuilder: eventStringBuilder)
     }
     

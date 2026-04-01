@@ -6984,12 +6984,12 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var threadListServiceClosure: (() async -> RoomThreadListServiceProxyProtocol)?
+    var threadListServiceClosure: (() -> RoomThreadListServiceProxyProtocol)?
 
-    func threadListService() async -> RoomThreadListServiceProxyProtocol {
+    func threadListService() -> RoomThreadListServiceProxyProtocol {
         threadListServiceCallsCount += 1
         if let threadListServiceClosure = threadListServiceClosure {
-            return await threadListServiceClosure()
+            return threadListServiceClosure()
         } else {
             return threadListServiceReturnValue
         }
