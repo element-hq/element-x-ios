@@ -1,4 +1,4 @@
-name: Close stale issues that are missing info.
+name: Close stale issues and pull requests.
 
 on:
   schedule:
