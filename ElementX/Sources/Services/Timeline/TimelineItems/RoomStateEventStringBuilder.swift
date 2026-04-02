@@ -11,7 +11,6 @@ import UIKit
 
 struct RoomStateEventStringBuilder {
     let userID: String
-    var shouldDisambiguateDisplayNames = true
     
     func buildString(for change: MembershipChange?,
                      reason: String?,
@@ -27,11 +26,7 @@ struct RoomStateEventStringBuilder {
         let senderIsYou = isOutgoing
         let memberIsYou = memberUserID == userID
         let member = memberDisplayName ?? memberUserID
-        let senderDisplayName = if shouldDisambiguateDisplayNames {
-            sender.disambiguatedDisplayName ?? sender.id
-        } else {
-            sender.displayName ?? sender.id
-        }
+        let senderDisplayName = sender.disambiguatedDisplayName ?? sender.id
         
         switch change {
         case .joined:
@@ -138,11 +133,7 @@ struct RoomStateEventStringBuilder {
     }
     
     func buildString(for state: OtherState, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
-        let displayName = if shouldDisambiguateDisplayNames {
-            sender.disambiguatedDisplayName ?? sender.id
-        } else {
-            sender.displayName ?? sender.id
-        }
+        let displayName = sender.disambiguatedDisplayName ?? sender.id
         
         switch state {
         case .roomAvatar(let url):
