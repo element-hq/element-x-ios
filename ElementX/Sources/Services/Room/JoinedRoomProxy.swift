@@ -751,6 +751,38 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    // MARK: - Live Location
+    
+    func startLiveLocationShare(durationMillis: UInt64) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.startLiveLocationShare(durationMillis: durationMillis)
+            return .success(())
+        } catch {
+            MXLog.error("Failed starting live location share with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func sendLiveLocation(geoURI: GeoURI) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.sendLiveLocation(geoUri: geoURI.string)
+            return .success(())
+        } catch {
+            MXLog.error("Failed sending live location with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func stopLiveLocationShare() async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.stopLiveLocationShare()
+            return .success(())
+        } catch {
+            MXLog.error("Failed stopping live location share with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
 
     // MARK: - Private
     

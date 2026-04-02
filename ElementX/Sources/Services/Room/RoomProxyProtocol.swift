@@ -194,6 +194,12 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     func saveDraft(_ draft: ComposerDraft, threadRootEventID: String?) async -> Result<Void, RoomProxyError>
     func loadDraft(threadRootEventID: String?) async -> Result<ComposerDraft?, RoomProxyError>
     func clearDraft(threadRootEventID: String?) async -> Result<Void, RoomProxyError>
+    
+    // MARK: - Live Location
+    
+    func startLiveLocationShare(durationMillis: UInt64) async -> Result<Void, RoomProxyError>
+    func sendLiveLocation(geoURI: GeoURI) async -> Result<Void, RoomProxyError>
+    func stopLiveLocationShare() async -> Result<Void, RoomProxyError>
 }
 
 extension JoinedRoomProxyProtocol {

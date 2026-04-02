@@ -9,6 +9,11 @@ import Combine
 import CoreLocation
 import Foundation
 
+enum LiveLocationManagerError: Error {
+    case roomNotJoined
+    case startFailed
+}
+
 // sourcery: AutoMockable
 protocol LiveLocationManagerProtocol: AnyObject {
     /// Publishes the current location authorization status.
@@ -20,4 +25,18 @@ protocol LiveLocationManagerProtocol: AnyObject {
     ///            `false` if the request was already made before and iOS would silently ignore it.
     @discardableResult
     func requestAlwaysAuthorizationIfPossible() -> Bool
+    
+    /// Starts sharing live location in a room.
+    ///
+    /// - Parameters:
+    ///   - roomID: The identifier of the room to share live location in.
+    ///   - durationMillis: The duration in milliseconds for how long the live location should be shared.
+    func startLiveLocation(roomID: String, durationMillis: UInt64) async -> Result<Void, LiveLocationManagerError>
+    
+    /// Stops sharing live location in a room.
+    ///
+    /// Sends a stop event to the room (best effort) and removes it from the tracked sessions.
+    /// Can also be used to stop a live location share started by another device.
+    /// - Parameter roomID: The identifier of the room to stop sharing live location in.
+    func stopLiveLocation(roomID: String) async
 }

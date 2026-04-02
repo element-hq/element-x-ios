@@ -10062,6 +10062,210 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return clearDraftThreadRootEventIDReturnValue
         }
     }
+    //MARK: - startLiveLocationShare
+
+    var startLiveLocationShareDurationMillisUnderlyingCallsCount = 0
+    var startLiveLocationShareDurationMillisCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return startLiveLocationShareDurationMillisUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = startLiveLocationShareDurationMillisUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                startLiveLocationShareDurationMillisUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    startLiveLocationShareDurationMillisUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var startLiveLocationShareDurationMillisCalled: Bool {
+        return startLiveLocationShareDurationMillisCallsCount > 0
+    }
+    var startLiveLocationShareDurationMillisReceivedDurationMillis: UInt64?
+    var startLiveLocationShareDurationMillisReceivedInvocations: [UInt64] = []
+
+    var startLiveLocationShareDurationMillisUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var startLiveLocationShareDurationMillisReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return startLiveLocationShareDurationMillisUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = startLiveLocationShareDurationMillisUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                startLiveLocationShareDurationMillisUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    startLiveLocationShareDurationMillisUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var startLiveLocationShareDurationMillisClosure: ((UInt64) async -> Result<Void, RoomProxyError>)?
+
+    func startLiveLocationShare(durationMillis: UInt64) async -> Result<Void, RoomProxyError> {
+        startLiveLocationShareDurationMillisCallsCount += 1
+        startLiveLocationShareDurationMillisReceivedDurationMillis = durationMillis
+        DispatchQueue.main.async {
+            self.startLiveLocationShareDurationMillisReceivedInvocations.append(durationMillis)
+        }
+        if let startLiveLocationShareDurationMillisClosure = startLiveLocationShareDurationMillisClosure {
+            return await startLiveLocationShareDurationMillisClosure(durationMillis)
+        } else {
+            return startLiveLocationShareDurationMillisReturnValue
+        }
+    }
+    //MARK: - sendLiveLocation
+
+    var sendLiveLocationGeoURIUnderlyingCallsCount = 0
+    var sendLiveLocationGeoURICallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendLiveLocationGeoURIUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendLiveLocationGeoURIUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendLiveLocationGeoURIUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendLiveLocationGeoURIUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendLiveLocationGeoURICalled: Bool {
+        return sendLiveLocationGeoURICallsCount > 0
+    }
+    var sendLiveLocationGeoURIReceivedGeoURI: GeoURI?
+    var sendLiveLocationGeoURIReceivedInvocations: [GeoURI] = []
+
+    var sendLiveLocationGeoURIUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var sendLiveLocationGeoURIReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return sendLiveLocationGeoURIUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendLiveLocationGeoURIUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendLiveLocationGeoURIUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendLiveLocationGeoURIUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendLiveLocationGeoURIClosure: ((GeoURI) async -> Result<Void, RoomProxyError>)?
+
+    func sendLiveLocation(geoURI: GeoURI) async -> Result<Void, RoomProxyError> {
+        sendLiveLocationGeoURICallsCount += 1
+        sendLiveLocationGeoURIReceivedGeoURI = geoURI
+        DispatchQueue.main.async {
+            self.sendLiveLocationGeoURIReceivedInvocations.append(geoURI)
+        }
+        if let sendLiveLocationGeoURIClosure = sendLiveLocationGeoURIClosure {
+            return await sendLiveLocationGeoURIClosure(geoURI)
+        } else {
+            return sendLiveLocationGeoURIReturnValue
+        }
+    }
+    //MARK: - stopLiveLocationShare
+
+    var stopLiveLocationShareUnderlyingCallsCount = 0
+    var stopLiveLocationShareCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return stopLiveLocationShareUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = stopLiveLocationShareUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                stopLiveLocationShareUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    stopLiveLocationShareUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var stopLiveLocationShareCalled: Bool {
+        return stopLiveLocationShareCallsCount > 0
+    }
+
+    var stopLiveLocationShareUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var stopLiveLocationShareReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return stopLiveLocationShareUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = stopLiveLocationShareUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                stopLiveLocationShareUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    stopLiveLocationShareUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var stopLiveLocationShareClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func stopLiveLocationShare() async -> Result<Void, RoomProxyError> {
+        stopLiveLocationShareCallsCount += 1
+        if let stopLiveLocationShareClosure = stopLiveLocationShareClosure {
+            return await stopLiveLocationShareClosure()
+        } else {
+            return stopLiveLocationShareReturnValue
+        }
+    }
 }
 class KeychainControllerMock: KeychainControllerProtocol, @unchecked Sendable {
 
@@ -11235,6 +11439,117 @@ class LiveLocationManagerMock: LiveLocationManagerProtocol, @unchecked Sendable 
         } else {
             return requestAlwaysAuthorizationIfPossibleReturnValue
         }
+    }
+    //MARK: - startLiveLocation
+
+    var startLiveLocationRoomIDDurationMillisUnderlyingCallsCount = 0
+    var startLiveLocationRoomIDDurationMillisCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return startLiveLocationRoomIDDurationMillisUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = startLiveLocationRoomIDDurationMillisUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                startLiveLocationRoomIDDurationMillisUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    startLiveLocationRoomIDDurationMillisUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var startLiveLocationRoomIDDurationMillisCalled: Bool {
+        return startLiveLocationRoomIDDurationMillisCallsCount > 0
+    }
+    var startLiveLocationRoomIDDurationMillisReceivedArguments: (roomID: String, durationMillis: UInt64)?
+    var startLiveLocationRoomIDDurationMillisReceivedInvocations: [(roomID: String, durationMillis: UInt64)] = []
+
+    var startLiveLocationRoomIDDurationMillisUnderlyingReturnValue: Result<Void, LiveLocationManagerError>!
+    var startLiveLocationRoomIDDurationMillisReturnValue: Result<Void, LiveLocationManagerError>! {
+        get {
+            if Thread.isMainThread {
+                return startLiveLocationRoomIDDurationMillisUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, LiveLocationManagerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = startLiveLocationRoomIDDurationMillisUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                startLiveLocationRoomIDDurationMillisUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    startLiveLocationRoomIDDurationMillisUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var startLiveLocationRoomIDDurationMillisClosure: ((String, UInt64) async -> Result<Void, LiveLocationManagerError>)?
+
+    func startLiveLocation(roomID: String, durationMillis: UInt64) async -> Result<Void, LiveLocationManagerError> {
+        startLiveLocationRoomIDDurationMillisCallsCount += 1
+        startLiveLocationRoomIDDurationMillisReceivedArguments = (roomID: roomID, durationMillis: durationMillis)
+        DispatchQueue.main.async {
+            self.startLiveLocationRoomIDDurationMillisReceivedInvocations.append((roomID: roomID, durationMillis: durationMillis))
+        }
+        if let startLiveLocationRoomIDDurationMillisClosure = startLiveLocationRoomIDDurationMillisClosure {
+            return await startLiveLocationRoomIDDurationMillisClosure(roomID, durationMillis)
+        } else {
+            return startLiveLocationRoomIDDurationMillisReturnValue
+        }
+    }
+    //MARK: - stopLiveLocation
+
+    var stopLiveLocationRoomIDUnderlyingCallsCount = 0
+    var stopLiveLocationRoomIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return stopLiveLocationRoomIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = stopLiveLocationRoomIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                stopLiveLocationRoomIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    stopLiveLocationRoomIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var stopLiveLocationRoomIDCalled: Bool {
+        return stopLiveLocationRoomIDCallsCount > 0
+    }
+    var stopLiveLocationRoomIDReceivedRoomID: String?
+    var stopLiveLocationRoomIDReceivedInvocations: [String] = []
+    var stopLiveLocationRoomIDClosure: ((String) async -> Void)?
+
+    func stopLiveLocation(roomID: String) async {
+        stopLiveLocationRoomIDCallsCount += 1
+        stopLiveLocationRoomIDReceivedRoomID = roomID
+        DispatchQueue.main.async {
+            self.stopLiveLocationRoomIDReceivedInvocations.append(roomID)
+        }
+        await stopLiveLocationRoomIDClosure?(roomID)
     }
 }
 class MediaLoaderMock: MediaLoaderProtocol, @unchecked Sendable {
