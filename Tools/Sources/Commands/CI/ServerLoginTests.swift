@@ -58,9 +58,6 @@ struct ServerLoginTests: AsyncParsableCommand {
         await CI.zipResults(bundles: ["IntegrationTests.xcresult"],
                             outputName: "IntegrationTests.xcresult.zip")
         
-        await CI.collectCoverage(resultBundle: "IntegrationTests.xcresult", outputName: "server-login-cobertura.xml")
-        await CI.collectTestResults(resultBundle: "IntegrationTests.xcresult", outputName: "server-login-junit.xml")
-        
         if testsFailed {
             throw ExitCode.failure
         }

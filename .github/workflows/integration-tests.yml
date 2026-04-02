@@ -70,10 +70,56 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: integrationtests
 
+  build_server_login_tests:
+    name: Build for Server Login Tests
+    runs-on: macos-26
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Cache Swift tools build
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: tools-${{ runner.os }}-${{ hashFiles('Package.resolved') }}
+          restore-keys: tools-${{ runner.os }}-
+
+      - name: Setup environment
+        run:
+          source ci_scripts/ci_common.sh && setup_github_actions_environment
+
+      - name: Build tests
+        run: |
+          set -o pipefail
+          xcodebuild build-for-testing \
+            -scheme IntegrationTests \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
+            -derivedDataPath DerivedData \
+            -enableCodeCoverage NO \
+            | xcbeautify
+
+      - name: Archive build products
+        run: |
+          cd DerivedData/Build/Products
+          tar -czf build-products.tar.gz *.xctestrun Debug-iphonesimulator/
+
+      - name: Upload build products
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: server-login-build-products
+          path: DerivedData/Build/Products/build-products.tar.gz
+          retention-days: 1
+
   server_login_tests:
     name: Server Login Tests (${{ matrix.server }})
     runs-on: macos-26
-    timeout-minutes: 45
+    timeout-minutes: 30
+    needs: build_server_login_tests
 
     strategy:
       fail-fast: false
@@ -101,17 +147,60 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+          fetch-depth: 1
+
+      - name: Cache Swift tools build
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: tools-${{ runner.os }}-${{ hashFiles('Package.resolved') }}
+          restore-keys: tools-${{ runner.os }}-
 
       - name: Setup environment
         run:
           source ci_scripts/ci_common.sh && setup_github_actions_environment
 
+      - name: Download build products
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: server-login-build-products
+          path: DerivedData/Build/Products
+
+      - name: Extract build products
+        run: |
+          cd DerivedData/Build/Products
+          tar -xzf build-products.tar.gz
+
+      - name: Delete old log files
+        run: find '/Users/Shared' -name 'console*' -delete 2>/dev/null || true
+
       - name: Run tests
-        run: swift run -q tools ci server-login-tests
+        run: |
+          set -o pipefail
+          xcodebuild test-without-building \
+            -xctestrun DerivedData/Build/Products/*.xctestrun \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
+            -only-testing:IntegrationTests/ServerLoginTests \
+            -resultBundlePath test_output/IntegrationTests.xcresult \
+            | xcbeautify
         env:
           INTEGRATION_TESTS_HOST: ${{ secrets[matrix.host_secret] }}
           INTEGRATION_TESTS_USERNAME: ${{ secrets[matrix.username_secret] }}
           INTEGRATION_TESTS_PASSWORD: ${{ secrets[matrix.password_secret] }}
+
+      - name: Check logs are set to trace level
+        run: |
+          if ! grep ' TRACE ' /Users/Shared -qR 2>/dev/null; then
+            echo "❌ Logs are not set to the trace level."
+            exit 1
+          fi
+          echo "✅ Trace level logging verified."
+
+      - name: Zip test results
+        if: always()
+        run: |
+          cd test_output
+          zip -r IntegrationTests.xcresult.zip IntegrationTests.xcresult
 
       - name: Archive artifacts
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
