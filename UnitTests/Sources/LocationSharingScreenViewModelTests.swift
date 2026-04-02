@@ -71,11 +71,11 @@ final class LocationSharingScreenViewModelTests {
     @Test
     func errorMapping() {
         setupViewModel()
-        let mapError = AlertInfo(locationSharingViewError: .mapError(.failedLoadingMap))
+        let mapError = AlertInfo(alertID: .mapError(.failedLoadingMap))
         #expect(mapError.title == L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName))
-        let locationError = AlertInfo(locationSharingViewError: .mapError(.failedLocatingUser))
+        let locationError = AlertInfo(alertID: .mapError(.failedLocatingUser))
         #expect(locationError.title == L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName))
-        let AuthorizationError = AlertInfo(locationSharingViewError: .missingAuthorization)
+        let AuthorizationError = AlertInfo(alertID: .missingAuthorization)
         #expect(AuthorizationError.message == L10n.dialogPermissionLocationDescriptionIos(InfoPlistReader.main.bundleDisplayName))
     }
 
@@ -141,13 +141,6 @@ final class LocationSharingScreenViewModelTests {
     }
     
     @Test
-    func startLiveLocationWithAlwaysAuthorization() {
-        setupViewModel(liveLocationManagerConfiguration: .init(authorizationStatus: .authorizedAlways))
-        context.send(viewAction: .startLiveLocation)
-        #expect(context.alertInfo == nil)
-    }
-    
-    @Test
     func startLiveLocationWithWhenInUseAuthorizationAlreadyRequested() {
         setupViewModel(liveLocationManagerConfiguration: .init(authorizationStatus: .authorizedWhenInUse,
                                                                requestAlwaysAuthorizationIfPossibleReturnValue: false))
@@ -191,8 +184,81 @@ final class LocationSharingScreenViewModelTests {
         #expect(context.alertInfo == nil)
     }
     
+    // MARK: - Live Location Start Flow Tests
+
+    @Test
+    func startLiveLocationShowsDisclaimer() {
+        setupViewModel(liveLocationManagerConfiguration: .init(authorizationStatus: .authorizedAlways))
+        context.send(viewAction: .startLiveLocation)
+        #expect(context.alertInfo?.id == .liveLocationDisclaimer)
+    }
+
+    @Test
+    func startLiveLocationDisclaimerDeclineSkipsStart() {
+        let liveLocationManagerMock = LiveLocationManagerMock(.init(authorizationStatus: .authorizedAlways))
+        setupViewModel(liveLocationManagerMock: liveLocationManagerMock)
+        context.send(viewAction: .startLiveLocation)
+        context.alertInfo?.primaryButton.action?()
+        #expect(!liveLocationManagerMock.startLiveLocationRoomIDDurationCalled)
+    }
+
+    @Test
+    func startLiveLocationDisclaimerAcceptShowsDurationPicker() async throws {
+        setupViewModel(liveLocationManagerConfiguration: .init(authorizationStatus: .authorizedAlways))
+        context.send(viewAction: .startLiveLocation)
+        #expect(context.alertInfo?.id == .liveLocationDisclaimer)
+        let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0?.id == .liveLocationDurationSelection }
+        context.alertInfo?.secondaryButton?.action?()
+        try await deferred.fulfill()
+    }
+
+    @Test
+    func startLiveLocationDurationPickerCancelSkipsStart() async throws {
+        let liveLocationManagerMock = LiveLocationManagerMock(.init(authorizationStatus: .authorizedAlways))
+        setupViewModel(liveLocationManagerMock: liveLocationManagerMock)
+        context.send(viewAction: .startLiveLocation)
+        let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0?.id == .liveLocationDurationSelection }
+        context.alertInfo?.secondaryButton?.action?()
+        try await deferred.fulfill()
+        context.alertInfo?.primaryButton.action?()
+        #expect(!liveLocationManagerMock.startLiveLocationRoomIDDurationCalled)
+    }
+
+    @Test
+    func startLiveLocationSuccess() async throws {
+        let liveLocationManagerMock = LiveLocationManagerMock(.init(authorizationStatus: .authorizedAlways))
+        setupViewModel(liveLocationManagerMock: liveLocationManagerMock)
+        context.send(viewAction: .startLiveLocation)
+        let durationPicker = deferFulfillment(context.observe(\.alertInfo)) { $0?.id == .liveLocationDurationSelection }
+        context.alertInfo?.secondaryButton?.action?()
+        try await durationPicker.fulfill()
+
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
+        context.alertInfo?.verticalButtons?.first?.action?()
+        try await deferred.fulfill()
+
+        #expect(liveLocationManagerMock.startLiveLocationRoomIDDurationCalled)
+        let arguments = try #require(liveLocationManagerMock.startLiveLocationRoomIDDurationReceivedArguments)
+        #expect(arguments.duration == .seconds(60 * 15))
+    }
+
+    @Test
+    func startLiveLocationFailureDoesNotClose() async throws {
+        let liveLocationManagerMock = LiveLocationManagerMock(.init(authorizationStatus: .authorizedAlways))
+        liveLocationManagerMock.startLiveLocationRoomIDDurationReturnValue = .failure(.startFailed)
+        setupViewModel(liveLocationManagerMock: liveLocationManagerMock)
+        context.send(viewAction: .startLiveLocation)
+        let durationPicker = deferFulfillment(context.observe(\.alertInfo)) { $0?.id == .liveLocationDurationSelection }
+        context.alertInfo?.secondaryButton?.action?()
+        try await durationPicker.fulfill()
+
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1)) { $0 == .close }
+        context.alertInfo?.verticalButtons?.first?.action?()
+        try await deferredFailure.fulfill()
+    }
+
     // MARK: - Private
-    
+
     private func setupViewModel(liveLocationManagerConfiguration: LiveLocationManagerMock.Configuration = .init()) {
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker,

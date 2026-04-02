@@ -59,7 +59,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         case .close:
             actionsSubject.send(.close)
         case .startLiveLocation:
-            startLiveLocationSharing()
+            checkAlwaysShareLocationPermission()
         case .selectLocation:
             guard let coordinate = state.bindings.mapCenterLocation else { return }
             let uncertainty = state.isSharingUserLocation ? context.geolocationUncertainty : nil
@@ -118,12 +118,8 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         formatter.allowedUnits = [.hour, .minute]
         return formatter
     }()
-    
-    private func startLiveLocationSharing() {
-        requestAlwaysLocationPermission()
-    }
-    
-    private func requestAlwaysLocationPermission() {
+        
+    private func checkAlwaysShareLocationPermission() {
         authorizationStatusSubscription = nil
         let authorizationStatus = liveLocationManager.authorizationStatus.value
         switch authorizationStatus {
@@ -137,7 +133,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                 .first() // this publisher only fires when there is an actual change, and if the user is done with permissions
                 .sink { [weak self] newValue in
                     guard newValue == .authorizedWhenInUse else { return }
-                    self?.requestAlwaysLocationPermission()
+                    self?.checkAlwaysShareLocationPermission()
                 }
         case .authorizedWhenInUse:
             guard liveLocationManager.requestAlwaysAuthorizationIfPossible() else {
@@ -171,14 +167,14 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     }
     
     private func showLiveLocationDurationPicker() {
-        let durations: [TimeInterval] = [15 * 60, // 15 minutes
-                                         60 * 60, // 1 hour
-                                         8 * 60 * 60] // 8 hours
+        let durations: [Duration] = [.seconds(15 * 60), // 15 minutes
+                                     .seconds(60 * 60), // 1 hour
+                                     .seconds(60 * 60 * 8)] // 8 hours
         
         let durationButtons: [AlertInfo<LocationSharingViewAlert>.AlertButton] = durations.compactMap { duration in
-            guard let title = Self.durationFormatter.string(from: duration) else { return nil }
+            guard let title = Self.durationFormatter.string(from: duration.seconds) else { return nil }
             return .init(title: title) { [weak self] in
-                Task { [weak self] in await self?.startLiveLocationSharingInRoom(durationMillis: UInt64(duration * 1000)) }
+                Task { [weak self] in await self?.startLiveLocationSharingInRoom(duration: duration) }
             }
         }
         
@@ -187,9 +183,9 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                                          verticalButtons: durationButtons)
     }
     
-    private func startLiveLocationSharingInRoom(durationMillis: UInt64) async {
+    private func startLiveLocationSharingInRoom(duration: Duration) async {
         let result = await liveLocationManager.startLiveLocation(roomID: roomProxy.id,
-                                                                 durationMillis: durationMillis)
+                                                                 duration: duration)
         
         switch result {
         case .success:
