@@ -80,6 +80,7 @@ final class AppSettings {
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
         case liveLocationSharingEnabled
+        case liveLocationSharingTimeoutDatesByRoomID
         case floatingTimelineDateEnabled
         
         // Doug's tweaks 🔧
@@ -348,6 +349,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hasRequestedLocationAlwaysLocationAuthorization, defaultValue: false, storageType: .userDefaults(store))
     var hasRequestedLocationAlwaysLocationAuthorization
+    
+    @UserPreference(key: UserDefaultsKeys.liveLocationSharingTimeoutDatesByRoomID, defaultValue: [String: Date](), storageType: .userDefaults(store))
+    var liveLocationSharingTimeoutDatesByRoomID
     
     @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
     var frequentlyUsedSystemEmojis
