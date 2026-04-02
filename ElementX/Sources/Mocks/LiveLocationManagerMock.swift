@@ -21,5 +21,6 @@ extension LiveLocationManagerMock {
         underlyingAuthorizationStatus = .init(authorizationStatusSubject)
         
         requestAlwaysAuthorizationIfPossibleReturnValue = configuration.requestAlwaysAuthorizationIfPossibleReturnValue
+        startLiveLocationRoomIDDurationMillisReturnValue = .success(())
     }
 }
