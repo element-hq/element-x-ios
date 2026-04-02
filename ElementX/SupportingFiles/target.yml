@@ -98,7 +98,8 @@ targets:
           audio,
           fetch,
           processing,
-          voip
+          voip,
+          location
         ]
         BGTaskSchedulerPermittedIdentifiers: [
           io.element.elementx.background.refresh
