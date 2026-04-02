@@ -1,12 +1,22 @@
 {
+  "color-space-for-untagged-svg-colors" : "display-p3",
   "fill" : "automatic",
   "groups" : [
     {
       "layers" : [
         {
-          "glass" : false,
-          "image-name" : "AppIcon.png",
-          "name" : "AppIcon"
+          "blend-mode" : "normal",
+          "fill" : "automatic",
+          "glass" : true,
+          "image-name" : "AppIcon.svg",
+          "name" : "AppIcon",
+          "position" : {
+            "scale" : 1.01,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
         }
       ],
       "name" : "Background",
