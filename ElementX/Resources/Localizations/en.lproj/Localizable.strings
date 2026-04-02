@@ -680,6 +680,13 @@
 "screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
 "screen_media_upload_preview_processing" = "Processing...";
+"screen_missing_key_backup_open_element_classic" = "Open Element Classic";
+"screen_missing_key_backup_step_1" = "Open Element Classic on your device";
+"screen_missing_key_backup_step_2" = "Go to \"Settings\" > \"Security &Privacy\"";
+"screen_missing_key_backup_step_3" = "In the section \"Cryptography Keys Management\", click on \"Encrypted Messages Recovery\"";
+"screen_missing_key_backup_step_4" = "Follow instructions";
+"screen_missing_key_backup_step_5" = "Done!";
+"screen_missing_key_backup_title" = "We need you to enable your key storage before processing to %1$@";
 "screen_onboarding_welcome_back" = "Welcome back";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
@@ -758,6 +765,7 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Addresses are a way to find and access rooms and spaces. This also ensures you can easily share them with others.";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Security & privacy";
+"screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_space_add_room_action" = "Room";

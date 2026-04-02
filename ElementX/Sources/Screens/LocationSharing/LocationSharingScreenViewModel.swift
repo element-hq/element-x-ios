@@ -72,7 +72,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                 state.bindings.showsUserLocationMode = .showAndFollow
             case .some(false):
                 let action: () -> Void = { [weak self] in self?.actionsSubject.send(.openSystemSettings) }
-                state.bindings.alertInfo = .init(locationSharingViewError: .missingAuthorization,
+                state.bindings.alertInfo = .init(alertID: .missingAuthorization,
                                                  primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
                                                  secondaryButton: .init(title: L10n.commonSettings, action: action))
             }
@@ -112,13 +112,23 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         }
     }
     
+    private static let durationFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .full
+        formatter.allowedUnits = [.hour, .minute]
+        return formatter
+    }()
+    
     private func startLiveLocationSharing() {
+        requestAlwaysLocationPermission()
+    }
+    
+    private func requestAlwaysLocationPermission() {
         authorizationStatusSubscription = nil
         let authorizationStatus = liveLocationManager.authorizationStatus.value
         switch authorizationStatus {
         case .authorizedAlways:
-            // TODO: Start sending live location updates to the room
-            break
+            showLiveLocationDisclaimer()
         case .notDetermined:
             // This is to solve a race condition with map libre which always tries first
             // to request the when in use permission, we wait for it and then try again
@@ -127,7 +137,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                 .first() // this publisher only fires when there is an actual change, and if the user is done with permissions
                 .sink { [weak self] newValue in
                     guard newValue == .authorizedWhenInUse else { return }
-                    self?.startLiveLocationSharing()
+                    self?.requestAlwaysLocationPermission()
                 }
         case .authorizedWhenInUse:
             guard liveLocationManager.requestAlwaysAuthorizationIfPossible() else {
@@ -139,17 +149,59 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             authorizationStatusSubscription = liveLocationManager.authorizationStatus
                 .filter { $0 != authorizationStatus } // skip current status
                 .first() // this publisher only fires when there is an actual change, and if the user is done with permissions
-                .sink { newValue in
+                .sink { [weak self] newValue in
                     guard newValue == .authorizedAlways else { return }
-                    // TODO: Start sending live location updates to the room
+                    self?.showLiveLocationDisclaimer()
                 }
         default:
             showMissingAlwaysAuthorizedAlert()
         }
     }
     
+    private func showLiveLocationDisclaimer() {
+        state.bindings.alertInfo = .init(alertID: .liveLocationDisclaimer,
+                                         primaryButton: .init(title: L10n.actionDecline, role: .cancel, action: nil),
+                                         secondaryButton: .init(title: L10n.actionAccept) { [weak self] in
+                                             // Delay so SwiftUI finishes dismissing the current alert
+                                             // before presenting the next one.
+                                             DispatchQueue.main.async {
+                                                 self?.showLiveLocationDurationPicker()
+                                             }
+                                         })
+    }
+    
+    private func showLiveLocationDurationPicker() {
+        let durations: [TimeInterval] = [15 * 60, // 15 minutes
+                                         60 * 60, // 1 hour
+                                         8 * 60 * 60] // 8 hours
+        
+        let durationButtons: [AlertInfo<LocationSharingViewAlert>.AlertButton] = durations.compactMap { duration in
+            guard let title = Self.durationFormatter.string(from: duration) else { return nil }
+            return .init(title: title) { [weak self] in
+                Task { [weak self] in await self?.startLiveLocationSharingInRoom(durationMillis: UInt64(duration * 1000)) }
+            }
+        }
+        
+        state.bindings.alertInfo = .init(alertID: .liveLocationDurationSelection,
+                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                         verticalButtons: durationButtons)
+    }
+    
+    private func startLiveLocationSharingInRoom(durationMillis: UInt64) async {
+        let result = await liveLocationManager.startLiveLocation(roomID: roomProxy.id,
+                                                                 durationMillis: durationMillis)
+        
+        switch result {
+        case .success:
+            actionsSubject.send(.close)
+        case .failure(let error):
+            MXLog.error("Failed to start live location sharing: \(error)")
+            showErrorIndicator()
+        }
+    }
+    
     private func showMissingAlwaysAuthorizedAlert() {
-        state.bindings.alertInfo = .init(locationSharingViewError: .missingAlwaysAuthorization,
+        state.bindings.alertInfo = .init(alertID: .missingAlwaysAuthorization,
                                          primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
                                          secondaryButton: .init(title: L10n.commonSettings) { [weak self] in self?.actionsSubject.send(.openSystemSettings) })
     }

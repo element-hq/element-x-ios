@@ -10,9 +10,11 @@ import CoreLocation
 import Foundation
 import MatrixRustSDK
 
-enum LocationSharingViewError: Error, Hashable {
+enum LocationSharingViewAlert: Hashable {
     case missingAuthorization
     case missingAlwaysAuthorization
+    case liveLocationDisclaimer
+    case liveLocationDurationSelection
     case mapError(MapLibreError)
 }
 
@@ -130,12 +132,12 @@ struct LocationSharingScreenBindings {
             return nil
         }
         set {
-            alertInfo = newValue.map { AlertInfo(locationSharingViewError: .mapError($0)) }
+            alertInfo = newValue.map { AlertInfo(alertID: .mapError($0)) }
         }
     }
     
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<LocationSharingViewError>?
+    var alertInfo: AlertInfo<LocationSharingViewAlert>?
 
     var showShareSheet = false
 }
@@ -148,30 +150,42 @@ enum LocationSharingScreenViewAction {
     case userDidPan
 }
 
-extension AlertInfo where T == LocationSharingViewError {
-    init(locationSharingViewError error: LocationSharingViewError,
+extension AlertInfo where T == LocationSharingViewAlert {
+    init(alertID: LocationSharingViewAlert,
          primaryButton: AlertButton = AlertButton(title: L10n.actionOk, action: nil),
-         secondaryButton: AlertButton? = nil) {
-        switch error {
+         secondaryButton: AlertButton? = nil,
+         verticalButtons: [AlertButton]? = nil) {
+        switch alertID {
         case .missingAuthorization:
-            self.init(id: error,
+            self.init(id: alertID,
                       title: L10n.dialogAllowAccess,
                       message: L10n.dialogPermissionLocationDescriptionIos(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
         case .missingAlwaysAuthorization:
-            self.init(id: error,
+            self.init(id: alertID,
                       title: L10n.dialogAllowAccess,
                       message: L10n.dialogPermissionLiveLocationDescriptionIos(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
+        case .liveLocationDisclaimer:
+            self.init(id: alertID,
+                      title: L10n.screenShareLocationLiveLocationDisclaimerTitle,
+                      primaryButton: primaryButton,
+                      secondaryButton: secondaryButton)
+        case .liveLocationDurationSelection:
+            self.init(id: alertID,
+                      title: L10n.screenShareLocationLiveLocationDurationPickerTitle,
+                      primaryButton: primaryButton,
+                      secondaryButton: nil,
+                      verticalButtons: verticalButtons)
         case .mapError(.failedLoadingMap):
-            self.init(id: error,
+            self.init(id: alertID,
                       title: L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
         case .mapError(.failedLocatingUser):
-            self.init(id: error,
+            self.init(id: alertID,
                       title: L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)

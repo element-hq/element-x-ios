@@ -2200,6 +2200,22 @@ internal enum L10n {
   internal static var screenMigrationMessage: String { return L10n.tr("Localizable", "screen_migration_message") }
   /// Setting up your account.
   internal static var screenMigrationTitle: String { return L10n.tr("Localizable", "screen_migration_title") }
+  /// Open Element Classic
+  internal static var screenMissingKeyBackupOpenElementClassic: String { return L10n.tr("Localizable", "screen_missing_key_backup_open_element_classic") }
+  /// Open Element Classic on your device
+  internal static var screenMissingKeyBackupStep1: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_1") }
+  /// Go to "Settings" > "Security &Privacy"
+  internal static var screenMissingKeyBackupStep2: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_2") }
+  /// In the section "Cryptography Keys Management", click on "Encrypted Messages Recovery"
+  internal static var screenMissingKeyBackupStep3: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_3") }
+  /// Follow instructions
+  internal static var screenMissingKeyBackupStep4: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_4") }
+  /// Done!
+  internal static var screenMissingKeyBackupStep5: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_5") }
+  /// We need you to enable your key storage before processing to %1$@
+  internal static func screenMissingKeyBackupTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_missing_key_backup_title", String(describing: p1))
+  }
   /// You can change your settings later.
   internal static var screenNotificationOptinSubtitle: String { return L10n.tr("Localizable", "screen_notification_optin_subtitle") }
   /// Allow notifications and never miss a message
@@ -3183,6 +3199,8 @@ internal enum L10n {
   internal static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
   internal static var screenSessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_title") }
+  /// Your live location history will be stored in the room and visible to members after the session ends.
+  internal static var screenShareLocationLiveLocationDisclaimerTitle: String { return L10n.tr("Localizable", "screen_share_location_live_location_disclaimer_title") }
   /// Choose how long to share your live location.
   internal static var screenShareLocationLiveLocationDurationPickerTitle: String { return L10n.tr("Localizable", "screen_share_location_live_location_duration_picker_title") }
   /// Share location
