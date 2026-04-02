@@ -82,7 +82,7 @@ jobs:
           fetch-depth: 1
 
       - name: Cache Swift tools build
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: .build
           key: tools-${{ runner.os }}-${{ hashFiles('Package.resolved') }}
@@ -118,6 +118,7 @@ jobs:
   server_login_tests:
     name: Server Login Tests (${{ matrix.server }})
     runs-on: macos-26
+    environment: integration-tests
     timeout-minutes: 30
     needs: build_server_login_tests
 
@@ -150,7 +151,7 @@ jobs:
           fetch-depth: 1
 
       - name: Cache Swift tools build
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: .build
           key: tools-${{ runner.os }}-${{ hashFiles('Package.resolved') }}
