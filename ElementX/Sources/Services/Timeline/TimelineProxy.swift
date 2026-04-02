@@ -53,9 +53,6 @@ final class TimelineProxy: TimelineProxyProtocol {
         await subscribeToPagination()
         
         let provider = await TimelineItemProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
-        // Make sure the existing items are built so that we have content in the timeline before
-        // determining whether or not the timeline should paginate to load more items.
-        await provider.waitForInitialItems()
         
         innerTimelineItemProvider = provider
         
