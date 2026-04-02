@@ -41,6 +41,7 @@ build
 
 ## Editors
 .nova
+.vscode
 
 ## Project specific
 test_output
