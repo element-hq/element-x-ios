@@ -12,7 +12,6 @@ import MatrixRustSDK
 struct RoomEventStringBuilder {
     let stateEventStringBuilder: RoomStateEventStringBuilder
     let messageEventStringBuilder: RoomMessageEventStringBuilder
-    let shouldDisambiguateDisplayNames: Bool
     let shouldPrefixSenderName: Bool
     
     func buildAttributedString(for eventItemProxy: EventTimelineItemProxy) -> AttributedString? {
@@ -22,11 +21,7 @@ struct RoomEventStringBuilder {
     }
     
     func buildAttributedString(for content: TimelineItemContent, sender: TimelineItemSender, isOutgoing: Bool) -> AttributedString? {
-        let displayName = if shouldDisambiguateDisplayNames {
-            sender.disambiguatedDisplayName ?? sender.id
-        } else {
-            sender.displayName ?? sender.id
-        }
+        let displayName = sender.disambiguatedDisplayName ?? sender.id
         
         switch content {
         case .msgLike(let messageLikeContent):
@@ -105,20 +100,16 @@ struct RoomEventStringBuilder {
     }
     
     static func pinnedEventStringBuilder(userID: String) -> Self {
-        RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID,
-                                                              shouldDisambiguateDisplayNames: true),
+        RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID),
                                messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "pinnedEvents", mentionBuilder: PlainMentionBuilder()),
                                                                 style: .typeBolded),
-                               shouldDisambiguateDisplayNames: true,
                                shouldPrefixSenderName: false)
     }
     
     static func threadListEventStringBuilder(userID: String) -> Self {
-        RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID,
-                                                              shouldDisambiguateDisplayNames: true),
+        RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID),
                                messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "threadList", mentionBuilder: PlainMentionBuilder()),
                                                                 style: .plain),
-                               shouldDisambiguateDisplayNames: true,
                                shouldPrefixSenderName: false)
     }
 }

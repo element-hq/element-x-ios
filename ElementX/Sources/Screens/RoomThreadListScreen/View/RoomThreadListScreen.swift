@@ -15,9 +15,14 @@ struct RoomThreadListScreen: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 ForEach(context.viewState.items) { item in
-                    RoomThreadListCell(item: item, mediaProvider: context.mediaProvider)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
+                    Button {
+                        context.send(viewAction: .tappedThread(threadRootEventID: item.id))
+                    } label: {
+                        RoomThreadListCell(item: item, mediaProvider: context.mediaProvider)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                    }
+                    .buttonStyle(ThreadCellButtonStyle())
                 }
                 
                 footer
@@ -134,6 +139,14 @@ private struct RoomThreadListCell: View {
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textSecondary)
         }
+    }
+}
+
+private struct ThreadCellButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(configuration.isPressed ? Color.compound.bgSubtleSecondary : Color.compound.bgCanvasDefault)
+            .contentShape(Rectangle())
     }
 }
 

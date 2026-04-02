@@ -19,7 +19,7 @@ struct TimelineReplyView: View {
     let timelineItemReplyDetails: TimelineItemReplyDetails?
     var maxWidth: CGFloat?
     
-    private let backgroundShape = RoundedRectangle(cornerRadius: 6)
+    private let backgroundShape = RoundedRectangle(cornerRadius: 8)
     
     var body: some View {
         content
@@ -29,7 +29,7 @@ struct TimelineReplyView: View {
             .background {
                 ZStack {
                     backgroundShape.fill(.compound.bgCanvasDefault)
-                    backgroundShape.stroke(.compound.borderInteractiveSecondary)
+                    backgroundShape.stroke(.compound.separatorPrimary)
                 }
             }
     }

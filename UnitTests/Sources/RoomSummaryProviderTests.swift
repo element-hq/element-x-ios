@@ -103,7 +103,6 @@ final class RoomSummaryProviderTests {
         let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: stateEventStringBuilder,
                                                         messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: attributedStringBuilder,
                                                                                                                  style: .senderPrefixed),
-                                                        shouldDisambiguateDisplayNames: true,
                                                         shouldPrefixSenderName: true)
 
         roomSummaryProvider = RoomSummaryProvider(roomListService: RoomListServiceSDKMock(),

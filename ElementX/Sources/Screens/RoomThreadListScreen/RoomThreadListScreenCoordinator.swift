@@ -5,8 +5,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-// periphery:ignore:all - this is just a roomThreadList remove this comment once generating the final file
-
 import Combine
 import SwiftUI
 
@@ -15,7 +13,9 @@ struct RoomThreadListScreenCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
 }
 
-enum RoomThreadListScreenCoordinatorAction { }
+enum RoomThreadListScreenCoordinatorAction {
+    case presentThread(threadRootEventID: String)
+}
 
 final class RoomThreadListScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomThreadListScreenCoordinatorParameters
@@ -37,7 +37,13 @@ final class RoomThreadListScreenCoordinator: CoordinatorProtocol {
     
     func start() {
         viewModel.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
             MXLog.info("Coordinator: received view model action: \(action)")
+
+            switch action {
+            case .presentThread(let threadRootEventID):
+                actionsSubject.send(.presentThread(threadRootEventID: threadRootEventID))
+            }
         }
         .store(in: &cancellables)
     }

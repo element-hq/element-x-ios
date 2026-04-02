@@ -58,6 +58,8 @@ class RoomThreadListScreenViewModel: RoomThreadListScreenViewModelType, RoomThre
             }
         case .oldestItemDidDisappear:
             isOldestItemVisible = false
+        case .tappedThread(let threadRootEventID):
+            actionsSubject.send(.presentThread(threadRootEventID: threadRootEventID))
         }
     }
     

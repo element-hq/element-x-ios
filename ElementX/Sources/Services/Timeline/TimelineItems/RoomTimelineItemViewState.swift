@@ -198,7 +198,7 @@ enum RoomTimelineItemType: Equatable {
         case .liveLocation(let item):
             return item.timestamp
         case .group(let item):
-            return (item.items.first(where: { $0 is EventBasedTimelineItemProtocol }) as? EventBasedTimelineItemProtocol)?.timestamp
+            return (item.items.first { $0 is EventBasedTimelineItemProtocol } as? EventBasedTimelineItemProtocol)?.timestamp
         case .readMarker, .paginationIndicator, .timelineStart:
             return nil
         }

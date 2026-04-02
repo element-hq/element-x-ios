@@ -1340,9 +1340,8 @@ private struct ClientProxyServices {
                                                                                                                            mentionBuilder: PlainMentionBuilder()),
                                                                           style: .senderPrefixed)
         
-        eventStringBuilder = try RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: client.userId(), shouldDisambiguateDisplayNames: false),
+        eventStringBuilder = try RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: client.userId()),
                                                         messageEventStringBuilder: roomMessageEventStringBuilder,
-                                                        shouldDisambiguateDisplayNames: false,
                                                         shouldPrefixSenderName: true)
         
         roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,

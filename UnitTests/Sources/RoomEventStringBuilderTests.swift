@@ -22,7 +22,6 @@ struct RoomEventStringBuilderTests {
         stringBuilder = RoomEventStringBuilder(stateEventStringBuilder: stateEventStringBuilder,
                                                messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: attributedStringBuilder,
                                                                                                         style: .senderPrefixed),
-                                               shouldDisambiguateDisplayNames: true,
                                                shouldPrefixSenderName: true)
     }
     
