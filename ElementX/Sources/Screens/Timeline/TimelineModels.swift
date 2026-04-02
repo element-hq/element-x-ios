@@ -70,6 +70,8 @@ enum TimelineViewAction {
     case handlePollAction(TimelineViewPollAction)
     case handleAudioPlayerAction(TimelineAudioPlayerAction)
     
+    case stopLiveLocationSharing
+    
     /// Focus the timeline onto the specified event ID (switching to a detached timeline if needed).
     case focusOnEventID(String)
     /// Switch back to a live timeline (from a detached one).

@@ -173,7 +173,9 @@ struct LiveLocationRoomTimelineView: View {
             Spacer()
             
             if isLive, timelineItem.isOutgoing {
-                Button { } label: {
+                Button {
+                    context?.send(viewAction: .stopLiveLocationSharing)
+                } label: {
                     CompoundIcon(\.stop, size: .small, relativeTo: .compound.bodySMSemibold)
                         .foregroundStyle(.compound.iconOnSolidPrimary)
                         .padding(5)
