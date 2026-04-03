@@ -14,8 +14,11 @@ struct RunTests: AsyncParsableCommand {
                                                         --create-simulator-type com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation
                                                     """)
     
-    @Option(help: "The Xcode scheme to test.")
-    var scheme: String
+    @Option(help: "The Xcode scheme to test. Required unless --xctestrun-path is provided.")
+    var scheme: String?
+    
+    @Option(help: "Path to a .xctestrun file. When provided, the build step is skipped (test-without-building).")
+    var xctestrunPath: String?
     
     @Option(help: "The simulator device name to run tests on (e.g. 'iPhone 17').")
     var device = "iPhone 17"
@@ -40,7 +43,7 @@ struct RunTests: AsyncParsableCommand {
     }
     
     private var resultBundlePath: String {
-        "test_output/\(scheme).xcresult"
+        "test_output/\(scheme ?? "IntegrationTests").xcresult"
     }
     
     private var formatter: String {
@@ -52,6 +55,10 @@ struct RunTests: AsyncParsableCommand {
     }
     
     func run() async throws {
+        guard scheme != nil || xctestrunPath != nil else {
+            throw ValidationError("Either --scheme or --xctestrun-path must be provided.")
+        }
+        
         if let createName = createSimulatorName {
             guard let createType = createSimulatorType else {
                 throw ValidationError("--create-simulator-type must be provided when --create-simulator-name is set.")
@@ -121,27 +128,44 @@ struct RunTests: AsyncParsableCommand {
     // MARK: - Test Running
     
     private func executeXcodeBuild() async throws {
-        var command = "set -o pipefail && xcodebuild test"
-        command += " -scheme \(scheme)"
-        command += " -sdk iphonesimulator"
-        command += " -destination 'platform=iOS Simulator,name=\(device),OS=\(osVersion),arch=arm64'"
-        command += " -resultBundlePath \(resultBundlePath)"
-        command += " -skipPackagePluginValidation"
-        
-        // Use xcodebuild's native retry support to re-run only failing tests
-        // instead of re-running the entire suite. retries=0 means no retries (single run).
-        if retries > 0 {
-            // -test-iterations is the total number of attempts (initial + retries)
-            command += " -retry-tests-on-failure"
-            command += " -test-iterations \(retries + 1)"
-        }
-        
-        if let testName {
-            command += " -only-testing:\(scheme)/\(testName)"
-        }
+        if let xctestrunPath {
+            var command = "set -o pipefail && xcodebuild test-without-building"
+            command += " -xctestrun \(xctestrunPath)"
+            command += " -destination 'platform=iOS Simulator,name=\(device),OS=\(osVersion),arch=arm64'"
+            command += " -resultBundlePath \(resultBundlePath)"
+            
+            if retries > 0 {
+                command += " -retry-tests-on-failure"
+                command += " -test-iterations \(retries + 1)"
+            }
+            
+            if let testName, let scheme {
+                command += " -only-testing:\(scheme)/\(testName)"
+            }
+            
+            command += " | \(formatter)"
+            try await CI.run(.path("/bin/zsh"), ["-cu", command])
+        } else {
+            guard let scheme else { return }
+            
+            var command = "set -o pipefail && xcodebuild test"
+            command += " -scheme \(scheme)"
+            command += " -sdk iphonesimulator"
+            command += " -destination 'platform=iOS Simulator,name=\(device),OS=\(osVersion),arch=arm64'"
+            command += " -resultBundlePath \(resultBundlePath)"
+            command += " -skipPackagePluginValidation"
+            
+            if retries > 0 {
+                command += " -retry-tests-on-failure"
+                command += " -test-iterations \(retries + 1)"
+            }
+            
+            if let testName {
+                command += " -only-testing:\(scheme)/\(testName)"
+            }
 
-        command += " | \(formatter)"
-
-        try await CI.run(.path("/bin/zsh"), ["-cu", command])
+            command += " | \(formatter)"
+            try await CI.run(.path("/bin/zsh"), ["-cu", command])
+        }
     }
 }

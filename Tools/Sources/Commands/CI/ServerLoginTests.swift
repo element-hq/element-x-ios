@@ -23,6 +23,9 @@ struct ServerLoginTests: AsyncParsableCommand {
     @Option(help: "iOS version for the simulator.")
     var osVersion = "26.1"
     
+    @Option(help: "Path to a .xctestrun file produced by build-for-testing. When provided, the build step is skipped.")
+    var xctestrunPath: String?
+    
     func run() async throws {
         // Delete old log files
         logger.info("🗑️ Deleting old log files…")
@@ -31,13 +34,17 @@ struct ServerLoginTests: AsyncParsableCommand {
         var testsFailed = false
         do {
             logger.info("\n🧪 Running server login integration tests…\n")
-            try await RunTests.parse([
+            var args = [
                 "--scheme", "IntegrationTests",
                 "--device", device,
                 "--os-version", osVersion,
                 "--retries", "0",
                 "--test-name", "ServerLoginTests"
-            ]).run()
+            ]
+            if let xctestrunPath {
+                args += ["--xctestrun-path", xctestrunPath]
+            }
+            try await RunTests.parse(args).run()
         } catch {
             testsFailed = true
             logger.error("\n❌ Server login integration tests failed.\n")

@@ -9,6 +9,7 @@ struct CI: ParsableCommand {
                                                         AccessibilityTests.self,
                                                         UnitTests.self,
                                                         UITests.self,
+                                                        Build.self,
                                                         IntegrationTests.self,
                                                         ServerLoginTests.self,
                                                         RunTests.self,
