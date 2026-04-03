@@ -56,6 +56,7 @@ enum TimelineViewAction {
     case paginateBackwards
     case paginateForwards
     case scrollToBottom
+    case scrollToFirstItemForCurrentDate
     
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
@@ -247,6 +248,7 @@ struct TimelineState {
     
     /// These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
+    var scrollToFirstItemForDatePublisher = PassthroughSubject<Void, Never>()
     
     var itemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
     

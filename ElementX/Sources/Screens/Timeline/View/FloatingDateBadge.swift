@@ -13,6 +13,7 @@ import SwiftUI
 /// fades out shortly after scrolling stops.
 struct FloatingDateBadge: View {
     let dateText: String?
+    var onTap: (() -> Void)?
     
     @Environment(\.colorScheme) private var colorScheme: ColorScheme
     
@@ -28,14 +29,18 @@ struct FloatingDateBadge: View {
     var body: some View {
         ZStack {
             if let dateText {
-                Text(dateText)
-                    .font(.compound.bodySMSemibold)
-                    .foregroundColor(.compound.textPrimary)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(backgroundColor, in: .capsule)
-                    .shadow(color: Color(red: 0.11, green: 0.11, blue: 0.13).opacity(0.1), radius: 12, x: 0, y: 4)
-                    .transition(.opacity)
+                Button { onTap?() } label: {
+                    Text(dateText)
+                        .font(.compound.bodySMSemibold)
+                        .foregroundColor(.compound.textPrimary)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(backgroundColor, in: .capsule)
+                        .shadow(color: Color(red: 0.11, green: 0.11, blue: 0.13).opacity(0.1), radius: 12, x: 0, y: 4)
+                }
+                .buttonStyle(.plain)
+                .disabled(onTap == nil)
+                .transition(.opacity)
             }
         }
         .animation(.easeInOut(duration: 0.15).disabledDuringTests(), value: dateText)

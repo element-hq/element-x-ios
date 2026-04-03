@@ -178,6 +178,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             paginateForwards()
         case .scrollToBottom:
             scrollToBottom()
+        case .scrollToFirstItemForCurrentDate:
+            state.timelineState.scrollToFirstItemForDatePublisher.send()
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):

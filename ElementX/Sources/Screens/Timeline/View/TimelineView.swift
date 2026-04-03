@@ -84,7 +84,8 @@ struct TimelineViewRepresentable: UIViewControllerRepresentable {
         TimelineTableViewController(coordinator: context.coordinator,
                                     isScrolledToBottom: $viewModelContext.isScrolledToBottom,
                                     floatingDateText: $viewModelContext.floatingDateText,
-                                    scrollToBottomPublisher: viewModelContext.viewState.timelineState.scrollToBottomPublisher)
+                                    scrollToBottomPublisher: viewModelContext.viewState.timelineState.scrollToBottomPublisher,
+                                    scrollToFirstItemForDatePublisher: viewModelContext.viewState.timelineState.scrollToFirstItemForDatePublisher)
     }
     
     func updateUIViewController(_ uiViewController: TimelineTableViewController, context: Context) {

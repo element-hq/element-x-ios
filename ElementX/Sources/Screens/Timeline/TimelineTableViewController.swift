@@ -180,7 +180,8 @@ class TimelineTableViewController: UIViewController {
     init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
          floatingDateText: Binding<String?>,
-         scrollToBottomPublisher: PassthroughSubject<Void, Never>) {
+         scrollToBottomPublisher: PassthroughSubject<Void, Never>,
+         scrollToFirstItemForDatePublisher: PassthroughSubject<Void, Never>) {
         self.coordinator = coordinator
         _isScrolledToBottom = isScrolledToBottom
         _floatingDateText = floatingDateText
@@ -206,6 +207,12 @@ class TimelineTableViewController: UIViewController {
         scrollToBottomPublisher
             .sink { [weak self] _ in
                 self?.scrollToNewestItem(animated: true)
+            }
+            .store(in: &cancellables)
+        
+        scrollToFirstItemForDatePublisher
+            .sink { [weak self] _ in
+                self?.scrollToFirstItemForCurrentDate()
             }
             .store(in: &cancellables)
         
@@ -544,6 +551,21 @@ extension TimelineTableViewController {
         }
         floatingDateHideWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+    }
+    
+    /// Scrolls to the first (oldest) item whose formatted date matches the current floating date.
+    private func scrollToFirstItemForCurrentDate() {
+        guard let dateText = floatingDateText else { return }
+        // timelineItemsDictionary is ordered oldest-first; the first match is the earliest item for that day.
+        for uniqueID in timelineItemsDictionary.keys {
+            if let timestamp = timelineItemsDictionary[uniqueID]?.timestamp,
+               timestamp.formattedDateSeparator() == dateText,
+               let indexPath = dataSource?.indexPath(for: uniqueID) {
+                // The table view is flipped, so .bottom aligns the cell to the visual top.
+                tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                return
+            }
+        }
     }
     
     /// Returns the formatted date text for the newest visible timeline item.
