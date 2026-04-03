@@ -145,7 +145,7 @@ class UserFlowTests: XCTestCase {
         
         allowLocationPermissionOnce()
         
-        tapOnButton("Cancel", waitForDisappearance: true)
+        tapOnButton("Close", waitForDisappearance: true)
     }
     
     private func allowLocationPermissionOnce() {
@@ -189,6 +189,9 @@ class UserFlowTests: XCTestCase {
         let roomHeader = app.buttons[A11yIdentifiers.roomScreen.name]
         XCTAssertTrue(roomHeader.waitForExistence(timeout: 10.0))
         roomHeader.tap(.center)
+        
+        // Make the People item visible
+        app.swipeUp()
         
         // Open the room member details
         tapOnButton(A11yIdentifiers.roomDetailsScreen.people)
