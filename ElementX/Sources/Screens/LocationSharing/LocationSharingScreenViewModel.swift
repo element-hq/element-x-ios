@@ -184,6 +184,11 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     }
     
     private func startLiveLocationSharingInRoom(duration: Duration) async {
+        showLoader()
+        defer {
+            hideLoader()
+        }
+        
         let result = await liveLocationManager.startLiveLocation(roomID: roomProxy.id,
                                                                  duration: duration)
         
@@ -222,15 +227,28 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     }
     
     private func showErrorIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.statusIndicatorID,
                                                               type: .toast,
                                                               title: L10n.errorUnknown,
                                                               iconName: "xmark"))
     }
     
-    private var statusIndicatorID: String {
-        "\(Self.self)-Status"
+    private func showLoader() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorID,
+                                                              type: .modal(progress: .indeterminate,
+                                                                           interactiveDismissDisabled: true,
+                                                                           allowsInteraction: false),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
     }
+    
+    private func hideLoader() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
+    }
+    
+    private static let loadingIndicatorID = "\(LocationSharingScreenViewModel.self)-Loading"
+    
+    private static let statusIndicatorID = "\(LocationSharingScreenViewModel.self)-Status"
 }
 
 extension LocationSharingScreenViewModel {
