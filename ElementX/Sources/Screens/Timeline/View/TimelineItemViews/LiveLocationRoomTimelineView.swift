@@ -174,7 +174,7 @@ struct LiveLocationRoomTimelineView: View {
             
             if isLive, timelineItem.isOutgoing {
                 Button {
-                    context?.send(viewAction: .stopLiveLocationSharing)
+                    stop()
                 } label: {
                     CompoundIcon(\.stop, size: .small, relativeTo: .compound.bodySMSemibold)
                         .foregroundStyle(.compound.iconOnSolidPrimary)
@@ -189,7 +189,12 @@ struct LiveLocationRoomTimelineView: View {
         .background(blurBackground)
     }
     
-    // MARK: - Private
+    private func stop() {
+        hasExpired = true
+        context?.send(viewAction: .stopLiveLocationSharing)
+    }
+    
+    // MARK: - Constants
     
     private let mapAspectRatio: Double = 3 / 2
     private let mapMaxHeight: Double = 300
