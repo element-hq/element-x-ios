@@ -10064,15 +10064,15 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
     }
     //MARK: - startLiveLocationShare
 
-    var startLiveLocationShareDurationMillisUnderlyingCallsCount = 0
-    var startLiveLocationShareDurationMillisCallsCount: Int {
+    var startLiveLocationShareDurationUnderlyingCallsCount = 0
+    var startLiveLocationShareDurationCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return startLiveLocationShareDurationMillisUnderlyingCallsCount
+                return startLiveLocationShareDurationUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = startLiveLocationShareDurationMillisUnderlyingCallsCount
+                    returnValue = startLiveLocationShareDurationUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -10080,29 +10080,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                startLiveLocationShareDurationMillisUnderlyingCallsCount = newValue
+                startLiveLocationShareDurationUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    startLiveLocationShareDurationMillisUnderlyingCallsCount = newValue
+                    startLiveLocationShareDurationUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var startLiveLocationShareDurationMillisCalled: Bool {
-        return startLiveLocationShareDurationMillisCallsCount > 0
+    var startLiveLocationShareDurationCalled: Bool {
+        return startLiveLocationShareDurationCallsCount > 0
     }
-    var startLiveLocationShareDurationMillisReceivedDurationMillis: UInt64?
-    var startLiveLocationShareDurationMillisReceivedInvocations: [UInt64] = []
+    var startLiveLocationShareDurationReceivedDuration: Duration?
+    var startLiveLocationShareDurationReceivedInvocations: [Duration] = []
 
-    var startLiveLocationShareDurationMillisUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var startLiveLocationShareDurationMillisReturnValue: Result<Void, RoomProxyError>! {
+    var startLiveLocationShareDurationUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var startLiveLocationShareDurationReturnValue: Result<Void, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return startLiveLocationShareDurationMillisUnderlyingReturnValue
+                return startLiveLocationShareDurationUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = startLiveLocationShareDurationMillisUnderlyingReturnValue
+                    returnValue = startLiveLocationShareDurationUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -10110,26 +10110,26 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                startLiveLocationShareDurationMillisUnderlyingReturnValue = newValue
+                startLiveLocationShareDurationUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    startLiveLocationShareDurationMillisUnderlyingReturnValue = newValue
+                    startLiveLocationShareDurationUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var startLiveLocationShareDurationMillisClosure: ((UInt64) async -> Result<Void, RoomProxyError>)?
+    var startLiveLocationShareDurationClosure: ((Duration) async -> Result<Void, RoomProxyError>)?
 
-    func startLiveLocationShare(durationMillis: UInt64) async -> Result<Void, RoomProxyError> {
-        startLiveLocationShareDurationMillisCallsCount += 1
-        startLiveLocationShareDurationMillisReceivedDurationMillis = durationMillis
+    func startLiveLocationShare(duration: Duration) async -> Result<Void, RoomProxyError> {
+        startLiveLocationShareDurationCallsCount += 1
+        startLiveLocationShareDurationReceivedDuration = duration
         DispatchQueue.main.async {
-            self.startLiveLocationShareDurationMillisReceivedInvocations.append(durationMillis)
+            self.startLiveLocationShareDurationReceivedInvocations.append(duration)
         }
-        if let startLiveLocationShareDurationMillisClosure = startLiveLocationShareDurationMillisClosure {
-            return await startLiveLocationShareDurationMillisClosure(durationMillis)
+        if let startLiveLocationShareDurationClosure = startLiveLocationShareDurationClosure {
+            return await startLiveLocationShareDurationClosure(duration)
         } else {
-            return startLiveLocationShareDurationMillisReturnValue
+            return startLiveLocationShareDurationReturnValue
         }
     }
     //MARK: - sendLiveLocation
@@ -11442,15 +11442,15 @@ class LiveLocationManagerMock: LiveLocationManagerProtocol, @unchecked Sendable 
     }
     //MARK: - startLiveLocation
 
-    var startLiveLocationRoomIDDurationMillisUnderlyingCallsCount = 0
-    var startLiveLocationRoomIDDurationMillisCallsCount: Int {
+    var startLiveLocationRoomIDDurationUnderlyingCallsCount = 0
+    var startLiveLocationRoomIDDurationCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return startLiveLocationRoomIDDurationMillisUnderlyingCallsCount
+                return startLiveLocationRoomIDDurationUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = startLiveLocationRoomIDDurationMillisUnderlyingCallsCount
+                    returnValue = startLiveLocationRoomIDDurationUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -11458,29 +11458,29 @@ class LiveLocationManagerMock: LiveLocationManagerProtocol, @unchecked Sendable 
         }
         set {
             if Thread.isMainThread {
-                startLiveLocationRoomIDDurationMillisUnderlyingCallsCount = newValue
+                startLiveLocationRoomIDDurationUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    startLiveLocationRoomIDDurationMillisUnderlyingCallsCount = newValue
+                    startLiveLocationRoomIDDurationUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var startLiveLocationRoomIDDurationMillisCalled: Bool {
-        return startLiveLocationRoomIDDurationMillisCallsCount > 0
+    var startLiveLocationRoomIDDurationCalled: Bool {
+        return startLiveLocationRoomIDDurationCallsCount > 0
     }
-    var startLiveLocationRoomIDDurationMillisReceivedArguments: (roomID: String, durationMillis: UInt64)?
-    var startLiveLocationRoomIDDurationMillisReceivedInvocations: [(roomID: String, durationMillis: UInt64)] = []
+    var startLiveLocationRoomIDDurationReceivedArguments: (roomID: String, duration: Duration)?
+    var startLiveLocationRoomIDDurationReceivedInvocations: [(roomID: String, duration: Duration)] = []
 
-    var startLiveLocationRoomIDDurationMillisUnderlyingReturnValue: Result<Void, LiveLocationManagerError>!
-    var startLiveLocationRoomIDDurationMillisReturnValue: Result<Void, LiveLocationManagerError>! {
+    var startLiveLocationRoomIDDurationUnderlyingReturnValue: Result<Void, LiveLocationManagerError>!
+    var startLiveLocationRoomIDDurationReturnValue: Result<Void, LiveLocationManagerError>! {
         get {
             if Thread.isMainThread {
-                return startLiveLocationRoomIDDurationMillisUnderlyingReturnValue
+                return startLiveLocationRoomIDDurationUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, LiveLocationManagerError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = startLiveLocationRoomIDDurationMillisUnderlyingReturnValue
+                    returnValue = startLiveLocationRoomIDDurationUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -11488,26 +11488,26 @@ class LiveLocationManagerMock: LiveLocationManagerProtocol, @unchecked Sendable 
         }
         set {
             if Thread.isMainThread {
-                startLiveLocationRoomIDDurationMillisUnderlyingReturnValue = newValue
+                startLiveLocationRoomIDDurationUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    startLiveLocationRoomIDDurationMillisUnderlyingReturnValue = newValue
+                    startLiveLocationRoomIDDurationUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var startLiveLocationRoomIDDurationMillisClosure: ((String, UInt64) async -> Result<Void, LiveLocationManagerError>)?
+    var startLiveLocationRoomIDDurationClosure: ((String, Duration) async -> Result<Void, LiveLocationManagerError>)?
 
-    func startLiveLocation(roomID: String, durationMillis: UInt64) async -> Result<Void, LiveLocationManagerError> {
-        startLiveLocationRoomIDDurationMillisCallsCount += 1
-        startLiveLocationRoomIDDurationMillisReceivedArguments = (roomID: roomID, durationMillis: durationMillis)
+    func startLiveLocation(roomID: String, duration: Duration) async -> Result<Void, LiveLocationManagerError> {
+        startLiveLocationRoomIDDurationCallsCount += 1
+        startLiveLocationRoomIDDurationReceivedArguments = (roomID: roomID, duration: duration)
         DispatchQueue.main.async {
-            self.startLiveLocationRoomIDDurationMillisReceivedInvocations.append((roomID: roomID, durationMillis: durationMillis))
+            self.startLiveLocationRoomIDDurationReceivedInvocations.append((roomID: roomID, duration: duration))
         }
-        if let startLiveLocationRoomIDDurationMillisClosure = startLiveLocationRoomIDDurationMillisClosure {
-            return await startLiveLocationRoomIDDurationMillisClosure(roomID, durationMillis)
+        if let startLiveLocationRoomIDDurationClosure = startLiveLocationRoomIDDurationClosure {
+            return await startLiveLocationRoomIDDurationClosure(roomID, duration)
         } else {
-            return startLiveLocationRoomIDDurationMillisReturnValue
+            return startLiveLocationRoomIDDurationReturnValue
         }
     }
     //MARK: - stopLiveLocation

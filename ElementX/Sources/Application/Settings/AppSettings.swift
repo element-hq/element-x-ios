@@ -66,6 +66,7 @@ final class AppSettings {
         case elementCallBaseURLOverride
         
         case voiceMessagePlaybackSpeed
+        case liveLocationSharingTimeoutDatesByRoomID
         
         // Feature flags
         case publicSearchEnabled
@@ -80,7 +81,6 @@ final class AppSettings {
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
         case liveLocationSharingEnabled
-        case liveLocationSharingTimeoutDatesByRoomID
         case floatingTimelineDateEnabled
         
         // Doug's tweaks 🔧

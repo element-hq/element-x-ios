@@ -30,8 +30,8 @@ protocol LiveLocationManagerProtocol: AnyObject {
     ///
     /// - Parameters:
     ///   - roomID: The identifier of the room to share live location in.
-    ///   - durationMillis: The duration in milliseconds for how long the live location should be shared.
-    func startLiveLocation(roomID: String, durationMillis: UInt64) async -> Result<Void, LiveLocationManagerError>
+    ///   - duration: How long the live location should be shared.
+    func startLiveLocation(roomID: String, duration: Duration) async -> Result<Void, LiveLocationManagerError>
     
     /// Stops sharing live location in a room.
     ///
