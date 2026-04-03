@@ -32,7 +32,7 @@ struct ThreadTimelineScreen: View {
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .overlay(alignment: .top) {
-                FloatingDateBadge(dateText: timelineContext.floatingDateText) {
+                FloatingDateBadge(dateText: timelineContext.floatingDate?.formattedDateSeparator()) {
                     timelineContext.send(viewAction: .scrollToFirstItemForCurrentDate)
                 }
                 .padding(.top, 13)
