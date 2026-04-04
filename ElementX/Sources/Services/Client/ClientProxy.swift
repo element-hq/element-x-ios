@@ -147,6 +147,9 @@ class ClientProxy: ClientProxyProtocol {
     /// before the client is released which ends up running in a loop. This is a workaround until the sync service
     /// can tell us *what* error occurred so we can handle restarts more gracefully.
     private var hasEncounteredAuthError = false
+
+    /// Tracks consecutive sync failures so we can slow down retries if the same persisted sync state keeps failing.
+    private var consecutiveSyncFailureCount = 0
     
     deinit {
         stopSync { [delegateHandle] in
@@ -451,12 +454,16 @@ class ClientProxy: ClientProxyProtocol {
     
     func restartSync() {
         guard restartTask == nil else { return }
+
+        let failureCount = min(consecutiveSyncFailureCount + 1, 5)
+        let restartDelay = Self.syncRestartDelay(forFailureCount: failureCount)
+        consecutiveSyncFailureCount = failureCount
+
+        MXLog.warning("Scheduling sync restart in \(restartDelay) after sync failure #\(failureCount).")
         
         restartTask = Task { [weak self] in
             do {
-                // Until the SDK can tell us the failure, we add a small
-                // delay to avoid generating multi-gigabyte log files.
-                try await Task.sleep(for: .milliseconds(250))
+                try await Task.sleep(for: restartDelay)
                 self?.startSync()
             } catch {
                 MXLog.error("Restart cancelled.")
@@ -471,6 +478,8 @@ class ClientProxy: ClientProxyProtocol {
     
     func stopSync(completion: (() -> Void)?) {
         MXLog.info("Stopping sync")
+
+        consecutiveSyncFailureCount = 0
         
         if restartTask != nil {
             MXLog.warning("Removing the sync service restart task.")
@@ -1089,7 +1098,11 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.info("Received sync service update: \(state)")
             
             switch state {
-            case .running, .terminated, .idle:
+            case .running:
+                consecutiveSyncFailureCount = 0
+                restartTask = nil
+                homeserverReachabilitySubject.send(.reachable)
+            case .terminated, .idle:
                 homeserverReachabilitySubject.send(.reachable)
             case .offline:
                 homeserverReachabilitySubject.send(.unreachable)
@@ -1097,6 +1110,21 @@ class ClientProxy: ClientProxyProtocol {
                 restartSync()
             }
         })
+    }
+
+    private static func syncRestartDelay(forFailureCount failureCount: Int) -> Duration {
+        switch failureCount {
+        case 1:
+            .milliseconds(250)
+        case 2:
+            .seconds(1)
+        case 3:
+            .seconds(3)
+        case 4:
+            .seconds(10)
+        default:
+            .seconds(30)
+        }
     }
     
     private func createMediaPreviewConfigObserver() async -> TaskHandle? {
