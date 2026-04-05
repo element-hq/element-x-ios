@@ -8,9 +8,9 @@
 
 ---
 
-## Latest Analysis: 2026-03-27
+## Latest Analysis: 2026-04-05
 
-**Calendar day:** ~47 since project start (Feb 8)
+**Calendar day:** ~56 since project start (Feb 8)
 
 ---
 
@@ -22,12 +22,12 @@
 |-------------|-------------|--------|-------|
 | **3.1** Source code adaptation | Bundle ID, identifiers, build scheme, libraries | **DONE** | Server config applied, Element refs cleaned, associated domains updated, Bundle ID fully cascaded, Xcode signing works. |
 | **3.2** Branding | Icon, name, colors | **DONE** | Display name "UCMeet.Chat" applied, new 3D logos installed (square + circular), accent color #003B5D (dark navy blue). 24 SwiftUI + 23 UIKit Compound token overrides. Zero Element branding visible. |
-| **3.3** Push integration | APNs through Sygnal | **CODE 100% DONE** | Switched from FCM to direct APNs registration (Mar 26). Firebase SDK retained but unused for push. E2E testing blocked on customer configuring Sygnal with `type: apns`. |
+| **3.3** Push integration | APNs through Sygnal | **DONE — E2E VERIFIED** | Switched from FCM to direct APNs (Mar 26). Push E2E verified on TestFlight build (Mar 28). Firebase SDK retained but unused for push. |
 | **3.4** Server configuration | Homeserver URL, identity server, .well-known, Scalar, Jitsi | **DONE** | `matrix.ucmeet.org` configured, `.well-known` verified, legal URLs → ucmeet.org. Scalar N/A. |
 | **3.5** Calls support | 1:1 + group calls | **DONE** | URL scheme → `org.ucmeet.call`, LiveKit confirmed in `.well-known`, embedded Element Call bundle. |
-| **3.6** Testing | Full test cycle across devices/iOS versions | **IN PROGRESS** | 962 tests run, 899 passed, 63 pre-existing failures, 0 new. Build 4 on TestFlight. Customer testing in progress. |
-| **3.7** Release build | Version, signing, validation | **DONE** | Archive build succeeded. Distribution signing works. Version 1.0.0 (Build 4 on TestFlight, Build 5 in prep). |
-| **3.8** App Store publication | Listing, TestFlight, review, release | **IN PROGRESS** | App created in ASC (Apple ID: 6759875787). Listing filled (RU+EN). Encryption compliance uploaded. Blocked on customer items (screenshots, Privacy Labels, AGPL). |
+| **3.6** Testing | Full test cycle across devices/iOS versions | **IN PROGRESS** | 962 tests run, 899 passed, 63 pre-existing failures, 0 new. Builds 1-4 on TestFlight. Push E2E verified. CallKit deferred (Element Call widget issue). |
+| **3.7** Release build | Version, signing, validation | **DONE** | Archive build succeeded. Distribution signing works. Version 1.0.0 (Build 5 ready). |
+| **3.8** App Store publication | Listing, TestFlight, review, release | **IN PROGRESS** | ASC listing nearly complete. Pricing, privacy policy, support URL, review notes, encryption compliance all done. Only screenshots remaining (customer). AGPL confirmation expected. |
 
 ### Functionality (TOR Section 4)
 
@@ -52,10 +52,10 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 
 | Requirement | Status | Gap |
 |-------------|--------|-----|
-| 7.1 App in App Store | **IN PROGRESS** | App in ASC, Build 4 on TestFlight, listing filled. Blocked on customer: screenshots, Privacy Labels, AGPL, push E2E. |
-| 7.2 All functionality works | **MOSTLY VERIFIED** | OIDC, Sliding Sync, messaging, rooms, profiles verified via customer testing. Push E2E and calls need testing. |
+| 7.1 App in App Store | **IN PROGRESS** | ASC nearly complete. Only screenshots remaining. AGPL confirmation expected. |
+| 7.2 All functionality works | **MOSTLY VERIFIED** | OIDC, Sliding Sync, messaging, rooms, profiles, push all verified. CallKit deferred to next sprint (Element Call widget issue). |
 | 7.3 Stability/quality | **IN PROGRESS** | 962 tests, 0 new failures. Customer testing Builds 2-4. 6 customer-reported issues fixed. |
-| 7.4 Apple compliance | **MOSTLY DONE** | Encryption compliance uploaded. ASC listing complete. Age rating set. Privacy Nutrition Labels pending (customer). |
+| 7.4 Apple compliance | **DONE** | Encryption compliance uploaded. ASC listing complete. Age rating set. Privacy Nutrition Labels completed. Pricing set. |
 | 7.5 Branding matches customer | **DONE** | Display name "UCMeet.Chat", new 3D logos, accent color #003B5D, 47 Compound token overrides, zero Element branding visible. |
 | 7.6 Source code + build docs | **DONE** | 30+ docs + build & handover guide (`build_and_handover_guide.md`) |
 | 7.7 Maintenance guidance | **DONE** | Upstream sync documented in handover guide, `/upstream-sync` command available |
@@ -92,19 +92,20 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 | TestFlight uploads (Builds 1-4) | ~3h | 4 builds uploaded, compliance wizard, customer testing |
 | Customer issue fixes (Builds 3-4) | ~3h | OIDC name, analytics, bug reports, MapTiler, 17 translations, color overrides |
 | Push E2E debugging + APNs switch | ~3h | ntfy diagnosis, FCM v1 diagnosis, APNs switch, Sygnal instructions |
-| **Total invested** | **~96h** | |
+| CallKit investigation + MSC4075 research | ~4h | Full push/CallKit code audit, API event query, MSC4075 is client-side discovery |
+| ASC finalization + Android migration guide | ~4h | Review notes, pricing, privacy labels, Android fork guide (1000+ lines) |
+| **Total invested** | **~104h** | |
 
 ### Remaining Work Estimate
 
 | Task | Est. Hours | Blocker |
 |------|-----------|---------|
-| Push E2E testing (after customer Sygnal config) | ~2h | Customer |
 | Build 5 upload to TestFlight | ~1h | None |
-| Privacy Nutrition Labels guidance | ~1h | Customer must fill in ASC |
+| AGPL source code link in app (after confirmation) | ~1h | Customer AGPL call |
 | Fix bugs from customer testing (if any) | ~2-4h | Customer feedback |
-| App Store submission + review response | ~2-4h | All customer items resolved |
-| Final handover documentation | ~2h | None |
-| **Total remaining** | **~10-15h** | |
+| App Store submission + review response | ~2-4h | Screenshots from customer |
+| Final handover documentation | ~1h | None |
+| **Total remaining** | **~6-10h** | |
 
 ### Project Totals
 
@@ -112,11 +113,11 @@ All items 4.1-4.11 are **inherited from Element X and already functional**. No c
 |--------|-------|
 | Original estimate (with AI) | 60-95h, expected ~80h |
 | Original estimate (without AI) | 85-132h, expected ~120h |
-| Hours invested so far | ~96h |
-| Hours remaining (estimated) | ~10-15h |
-| **Projected total** | **~106-111h** |
+| Hours invested so far | ~104h |
+| Hours remaining (estimated) | ~6-10h |
+| **Projected total** | **~110-114h** |
 | Budget position | Above AI-assisted range (60-95h), within non-AI range (85-132h) |
-| Budget consumed | ~80% of hours |
+| Budget consumed | ~87% of hours |
 
 > Over-run vs AI-assisted estimate driven by: extensive push debugging (ntfy → FCM → APNs, 3 E2E test cycles), 3 upstream syncs (120+ conflicts), 6 customer-reported issue rounds, 30+ documentation files. Core dev work was on-estimate; iteration with customer and server-side issues added ~20h.
 
@@ -152,16 +153,12 @@ Customer Sygnal config + screenshots + Privacy Labels + AGPL confirmation → Ap
 
 | Action | Owner | Blocker | Time to complete |
 |--------|-------|---------|-----------------|
-| Configure Sygnal `type: apns` with .p8 key | Customer | None — instructions provided | Customer action |
-| Push E2E test on two real devices | Developer + Customer | Sygnal config | ~2h |
 | Upload Build 5 to TestFlight | Developer | None | ~1h |
-| Provide screenshots (6.7" + 5.5") | Customer | TestFlight build | Customer action |
-| Complete Privacy Nutrition Labels | Customer | None — questionnaire in ASC | Customer action |
-| Provide review contact (name + email) | Customer | None | Customer action |
-| Written AGPL confirmation | Customer | None | Customer action |
-| Confirm ucmatrix.org operational | Customer | None | Customer action |
-| Submit to App Store | Developer | All above | ~1h |
-| **Active developer time remaining** | | | **~10-15h** |
+| Add AGPL source code link in app | Developer | AGPL confirmation call | ~1h |
+| Provide screenshots (6.5" iPhone + 13" iPad) | Customer | None — expected in coming days | Customer action |
+| Written AGPL confirmation | Customer | Upcoming call | Customer action |
+| Submit to App Store | Developer | Screenshots + AGPL | ~1h |
+| **Active developer time remaining** | | | **~6-10h** |
 
 ---
 
@@ -199,54 +196,53 @@ Customer Sygnal config + screenshots + Privacy Labels + AGPL confirmation → Ap
 
 ---
 
-## 6. Timeline Projections (from 2026-03-27)
+## 6. Timeline Projections (from 2026-04-05)
 
-### Scenario A: Best Case (1-2 weeks)
+### Scenario A: Best Case (1 week)
 
-- Customer configures Sygnal this week
-- Screenshots + Privacy Labels completed within days
+- Customer provides screenshots this week
+- AGPL confirmed after call
 - App Store approved on first submission
 
 ```
-Week 8 (current): Customer provides all items, Build 5 uploaded, push E2E verified
-Week 9: Submit to App Store, approval, release
-Total project: ~9 weeks (Feb 8 - Apr 11)
+Week 9 (current): Screenshots arrive, AGPL confirmed, Build 5 uploaded, submit
+Week 10: Approval, release
+Total project: ~9-10 weeks (Feb 8 - Apr 14)
 ```
 
-### Scenario B: Expected Case (2-3 weeks)
+### Scenario B: Expected Case (2 weeks)
 
-- Customer items take ~1 week
+- Screenshots arrive within days
 - App Store requires 1 revision (Guideline 4.3 differentiation)
 
 ```
-Week 8 (current): Customer configures Sygnal, provides screenshots
-Week 9: Push E2E test, Build 5, Privacy Labels, submit
+Week 9 (current): Screenshots arrive, AGPL confirmed, submit
 Week 10: Guideline 4.3 revision, resubmit, approval
-Total project: ~10 weeks (Feb 8 - Apr 18)
+Total project: ~10-11 weeks (Feb 8 - Apr 21)
 ```
 
-### Scenario C: Worst Case (4+ weeks)
+### Scenario C: Worst Case (3+ weeks)
 
-- Customer delays on Sygnal/screenshots/labels
+- Customer delays on screenshots
 - Multiple App Store rejections
 - AGPL confirmation stalls
 
 ```
-Week 8-9: Waiting for customer items
-Week 10: Customer items arrive, rapid submission
-Week 11-12: App Review cycles
-Total project: 12+ weeks (Feb 8 - May 2+)
+Week 9-10: Waiting for customer items
+Week 11: Submit, review cycles
+Week 12: Approval
+Total project: 12+ weeks (Feb 8 - May+)
 ```
 
 ### Summary
 
 | Scenario | Total Project Duration | Active Dev Hours | Calendar End |
 |----------|----------------------|-----------------|-------------|
-| Best | 9 weeks | ~106h | Mid-April |
-| Expected | 10 weeks | ~108h | Late April |
-| Worst | 12+ weeks | ~111h+ | May+ |
+| Best | 9-10 weeks | ~110h | Mid-April |
+| Expected | 10-11 weeks | ~112h | Late April |
+| Worst | 12+ weeks | ~114h+ | May+ |
 
-**Developer-side work is essentially complete.** Timeline now depends entirely on customer response speed and App Store review cycles.
+**Developer-side work is essentially complete.** Only 2 blockers remain: screenshots (customer) and AGPL confirmation (upcoming call). CallKit deferred to next sprint. ASC listing is ready to submit once screenshots are uploaded.
 
 ---
 

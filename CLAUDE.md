@@ -23,9 +23,9 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 **Developer:** Saidakhror Murzaliev (solo, 20h/week, AI-assisted)
 **Customer:** Russian-speaking, existing Matrix infrastructure
 
-## Current State (as of 2026-03-27)
+## Current State (as of 2026-04-05)
 
-**Build 5 in preparation.** All customer-reported bugs fixed. Push switched from Firebase to direct APNs (Sygnal compatibility). Sprint 6 (TestFlight & Publication) in progress.
+**App Store submission imminent.** ASC listing complete except screenshots (expected from customer). Push E2E verified on TestFlight. CallKit deferred to next sprint (Element Call widget issue). AGPL confirmation expected after upcoming call. Sprint 6 (TestFlight & Publication) in progress.
 
 ### Configuration Applied
 
@@ -69,24 +69,25 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 
 ### Remaining Blockers
 
-1. **Push E2E testing** — customer must set Sygnal to `type: apns` for iOS and restart. Then re-login + test on two real devices
-2. **matrix.to → ucmatrix.org** — waiting for customer to confirm ucmatrix.org is operational
-3. **MapTiler static maps** — free plan shows "Invalid key" on static previews
-4. **AGPL v3 licensing** — need written confirmation (blocks App Store only)
-5. **Screenshots** — customer needs to provide device-framed screenshots from TestFlight (6.7" + 5.5")
-6. **Privacy Nutrition Labels** — questionnaire not yet completed in ASC
-7. **Review contact details** — need first name, last name, email from customer
+1. **Screenshots** — customer needs to provide screenshots (6.5" iPhone + 13" iPad) — expected in coming days
+2. **AGPL v3 licensing** — need written confirmation (expected after upcoming call). Then add source code link in app.
+3. **CallKit** — DEFERRED to next sprint. Element Call widget not sending `m.rtc.notification` events. App-side code is ready. Requires Element Call update.
 
-### Next Actions (waiting on customer)
+### Resolved Since Last Update
 
-1. Customer: set Sygnal iOS to `type: apns` + restart + test push on two devices
-2. Customer: confirm ucmatrix.org is operational (for permalink redirect)
-3. Customer: decide on MapTiler paid plan for static map previews
-4. Customer: written AGPL license confirmation
-5. Customer: provide screenshots from TestFlight with device frames
-6. Customer: provide review contact name + email
+- ~~Push E2E testing~~ — **VERIFIED** on TestFlight build (2026-03-28)
+- ~~Privacy Nutrition Labels~~ — **COMPLETED** in ASC (2026-04-03)
+- ~~Review contact details~~ — **ENTERED** in ASC (2026-04-03)
+- ~~Pricing~~ — **Set to Free** in ASC (2026-04-03)
+- ~~Privacy policy + support URLs~~ — **ENTERED** in ASC (2026-04-03)
 
-> See `decisions_tracker.md` for all 12 tracked decisions: 7 resolved, 3 in progress, 2 open.
+### Post-Launch Tasks
+
+1. **ucmatrix.org** — permalink redirect (2 code lines: `AppRoutes.swift:211`, `ComposerToolbarViewModel.swift:638`)
+2. **CallKit** — update Element Call widget to send `m.rtc.notification` events
+3. **MapTiler** — customer decision on paid plan for static map previews
+
+> See `decisions_tracker.md` for all 12 tracked decisions: 9 resolved, 1 in progress, 2 deferred.
 
 ---
 
@@ -185,23 +186,23 @@ All docs in `documentation/` folder:
 |--------|--------|-------|
 | 1: Environment Setup & Fork | **DONE** | |
 | 2: Branding & Basic Functionality | **DONE** | MapLibre interactive maps work, static previews need MapTiler permission |
-| 3: Push + OIDC + Associated Domains | **IN PROGRESS** | App switched to APNs (from Firebase). Sygnal config provided. Awaiting customer to set `type: apns` + E2E test |
+| 3: Push + OIDC + Associated Domains | **DONE** | APNs via Sygnal working. Push E2E verified on TestFlight. CallKit deferred (Element Call widget issue) |
 | 4: Calls & UCMeet Call | **DONE** | |
 | 5: Finalization & Release Prep | **DONE** | NSE entitlement fix, upstream sync, version set to 1.0.0 (Build 2) |
-| 6: TestFlight & Publication | **IN PROGRESS** | Build 3 prep: 6 customer issues fixed (OIDC name, analytics, bug reports, maps, translations, colors). Remaining: screenshots, Privacy Nutrition Labels, review contact, push E2E |
+| 6: TestFlight & Publication | **IN PROGRESS** | ASC listing complete except screenshots. Privacy Labels done. Review notes updated. Pricing set. Waiting: screenshots + AGPL confirmation |
 
 ### Summary Metrics
 
 | Metric | Value |
 |--------|-------|
-| Plan completion | ~99% code, blocked on customer for push E2E, screenshots, privacy labels |
-| Hours invested | ~96h of ~120h budget |
-| Hours remaining | ~10–15h (Build 3 upload, push testing, privacy labels, release) |
-| Decisions resolved | 7/12 |
+| Plan completion | ~99% code, waiting for screenshots + AGPL confirmation |
+| Hours invested | ~104h of ~120h budget |
+| Hours remaining | ~6–10h (Build 5 upload, AGPL link, submission, review response) |
+| Decisions resolved | 9/12 |
 | Unit tests | 962 run, 899 passed, 63 pre-existing failures, 0 new |
 | User-visible Element branding | **0** |
 | Upstream divergence | 60 ahead, 0 behind element-hq/element-x-ios |
 
 ---
 
-*Last updated: 2026-03-27. See `documentation/progress_log.md` for detailed daily log.*
+*Last updated: 2026-04-05. See `documentation/progress_log.md` for detailed daily log.*

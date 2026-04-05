@@ -216,19 +216,33 @@ Timeline: 6 sprints / 45 days.
 - [x] Push provider switched from Firebase to direct APNs (2026-03-26)
 - [x] 4 more Russian translations added (2026-03-26)
 - [x] Send button gradient overridden to navy blue (2026-03-26)
-- [ ] Build 5 upload (pending — includes APNs switch)
-- [ ] **CUSTOMER:** Screenshots: 6.7" + 5.5" with device frames (from TestFlight)
-- [ ] **CUSTOMER:** Privacy Nutrition Labels questionnaire (ASC)
-- [ ] **CUSTOMER:** Review contact: first name, last name, email
-- [ ] **CUSTOMER:** Configure Sygnal with `type: apns` for iOS, restart, test push on two real devices
-- [ ] **CUSTOMER:** Written AGPL confirmation
-- [ ] **CUSTOMER:** Confirm ucmatrix.org is operational (for matrix.to permalink redirect)
-- [ ] Customer testing
-- [ ] Fix bugs (if any)
+- [x] Build number bumped to 5 in project.yml (2026-03-27)
+- [x] Push notifications E2E verified working on TestFlight build (2026-03-28)
+- [x] CallKit investigation: confirmed app-side code correct, issue is Element Call widget not sending `m.rtc.notification` events (2026-03-28–04-03)
+- [x] ASC listing finalized: review notes updated with security key instructions, pricing set to Free, privacy policy + support URLs entered (2026-04-03)
+- [x] Privacy Nutrition Labels completed in ASC (2026-04-03)
+- [x] Review contact entered in ASC (2026-04-03)
+- [x] PushProviderTests fix: test expectation updated from `.firebase` to `.apns` (2026-04-03)
+- [x] Android migration guide prepared (`documentation/android-migration-guide.md`) (2026-03-31)
+- [ ] Build 5 upload to TestFlight (pending)
+- [ ] **CUSTOMER:** Screenshots: 6.5" iPhone + 13" iPad (from TestFlight) — expected in coming days
+- [ ] **CUSTOMER:** Written AGPL confirmation — expected after upcoming call
+- [ ] **DEFERRED TO NEXT SPRINT:** CallKit native call screen — requires Element Call update to send `m.rtc.notification` events. App-side code is ready.
+- [ ] **POST-LAUNCH:** ucmatrix.org permalink redirect (2 code lines to change)
 - [ ] Submit to App Store
 - [ ] Respond to review questions
 - [ ] Release
 - [ ] Handover: source code, build instructions, update documentation
+
+**CallKit Investigation Summary (2026-03-28–04-03):**
+- MSC4075 (`m.rtc.notification`) is a CLIENT-SIDE protocol, not a Synapse feature
+- `msc4075_enabled: true` in Synapse config does nothing (no such code in Synapse)
+- The Element Call widget must send `m.rtc.notification` with `notification_type: ring`
+- API query confirmed zero `m.rtc.notification` events in room history across all test calls
+- Only `org.matrix.msc3401.call.member` (join/leave) events present
+- App-side NSE → CallKit bridge is fully implemented and correct
+- Fix requires updating Element Call widget (both hosted at `call.ucmeet.org` and embedded v0.17.0)
+- Deferred to next sprint — not blocking App Store publication
 
 **Result:**
 - [ ] App published on App Store
@@ -236,4 +250,4 @@ Timeline: 6 sprints / 45 days.
 
 ---
 
-*Last updated: 2026-03-27. Sprint 6 in progress — all developer-side work complete. Push switched from Firebase to direct APNs (Mar 26). Builds 1-4 on TestFlight, Build 5 in preparation. ASC listing filled (RU+EN), review info entered. ~96h invested of ~120h budget. All remaining items on customer side: Sygnal `type: apns` config, screenshots, Privacy Nutrition Labels, review contact, AGPL confirmation.*
+*Last updated: 2026-04-05. Sprint 6 in progress — ASC listing nearly complete, only screenshots remaining (expected from customer). Push notifications verified working on TestFlight. CallKit deferred to next sprint (Element Call widget issue). AGPL confirmation expected after upcoming call. ~100h invested. Android migration guide prepared for next project phase.*

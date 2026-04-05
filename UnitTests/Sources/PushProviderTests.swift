@@ -31,8 +31,8 @@ final class PushProviderTests: XCTestCase {
         XCTAssertEqual(decoded, original)
     }
 
-    func test_pushProvider_defaultIsFirebase() {
-        XCTAssertEqual(appSettings.pushProvider, .firebase)
+    func test_pushProvider_defaultIsApns() {
+        XCTAssertEqual(appSettings.pushProvider, .apns)
     }
 
     func test_pushProvider_persistsAfterChange() {
