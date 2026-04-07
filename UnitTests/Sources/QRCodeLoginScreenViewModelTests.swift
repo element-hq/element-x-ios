@@ -189,18 +189,17 @@ struct QRCodeLoginScreenViewModelTests {
         linkMobileProgressSubject.send(.waitingForAuthorisation(verificationURL: .homeDirectory))
         try await deferredAction.fulfill()
         
-        // Note: The SDK rarely sends the done action, so this test has been updated for the workaround of finishing early.
+        let currentState = context.viewState.state
+        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.state != currentState }
+        linkMobileProgressSubject.send(.syncingSecrets)
+        try await deferredFailure.fulfill()
+
         deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
             guard case .linkedDevice = action else { return false }
             return true
         }
-        linkMobileProgressSubject.send(.syncingSecrets)
-        try await deferredAction.fulfill()
-        
-        let currentState = context.viewState.state
-        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.state != currentState }
         linkMobileProgressSubject.send(.done)
-        try await deferredFailure.fulfill()
+        try await deferredAction.fulfill()
     }
     
     // MARK: - Helpers
