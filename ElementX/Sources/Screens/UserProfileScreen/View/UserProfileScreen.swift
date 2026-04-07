@@ -23,7 +23,7 @@ struct UserProfileScreen: View {
         .alert(item: $context.alertInfo)
         .sheet(item: $context.inviteConfirmationUser) { user in
             SendInviteConfirmationView(userToInvite: user,
-                                       userIdentityKnown: context.viewState.isIdentityKnown,
+                                       isUserIdentityKnown: context.viewState.isIdentityKnown,
                                        mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .createDirectChat)
             }

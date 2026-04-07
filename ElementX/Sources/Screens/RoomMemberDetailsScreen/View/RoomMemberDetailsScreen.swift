@@ -30,7 +30,7 @@ struct RoomMemberDetailsScreen: View {
         .alert(item: $context.alertInfo)
         .sheet(item: $context.inviteConfirmationUser) { user in
             SendInviteConfirmationView(userToInvite: user,
-                                       userIdentityKnown: context.inviteConfirmationUserIdentityKnown,
+                                       isUserIdentityKnown: context.inviteConfirmationUserIdentityKnown,
                                        
                                        mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .createDirectChat)

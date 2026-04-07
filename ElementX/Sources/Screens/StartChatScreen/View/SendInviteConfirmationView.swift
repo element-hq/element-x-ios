@@ -11,7 +11,7 @@ import SwiftUI
 
 struct SendInviteConfirmationView: View {
     let userToInvite: UserProfileProxy
-    let userIdentityKnown: Bool
+    let isUserIdentityKnown: Bool
     let mediaProvider: MediaProviderProtocol?
     let onInvite: () -> Void
     
@@ -21,7 +21,7 @@ struct SendInviteConfirmationView: View {
     private let topPadding: CGFloat = 24
     
     private var title: String {
-        return if userIdentityKnown {
+        return if isUserIdentityKnown {
             L10n.screenBottomSheetCreateDmTitle
         } else {
             UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogTitle
@@ -35,7 +35,7 @@ struct SendInviteConfirmationView: View {
         } else {
             string = userToInvite.userID
         }
-        return if userIdentityKnown {
+        return if isUserIdentityKnown {
             L10n.screenBottomSheetCreateDmMessage(string)
         } else {
             UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogContent
@@ -105,12 +105,12 @@ struct SendInviteConfirmationView: View {
 struct SendInviteConfirmationView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         SendInviteConfirmationView(userToInvite: .mockBob,
-                                   userIdentityKnown: true,
+                                   isUserIdentityKnown: true,
                                    mediaProvider: nil) { }
             .previewDisplayName("With Identity")
         
         SendInviteConfirmationView(userToInvite: .mockBob,
-                                   userIdentityKnown: false,
+                                   isUserIdentityKnown: false,
                                    mediaProvider: nil) { }
             .previewDisplayName("Without Identity")
     }
