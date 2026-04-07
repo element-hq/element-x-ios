@@ -72,7 +72,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                         hideLoadingIndicator()
                         self.state.bindings.selectedUserToInvite = user
                         // If an error occured while fetching the identity, assume they are unknown.
-                        self.state.bindings.selectedUserIdentityUnknown = if case .success(let identity) = await self.userSession.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) {
+                        self.state.selectedUserIdentityUnknown = if case .success(let identity) = await self.userSession.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) {
                             identity == nil
                         } else {
                             true
@@ -81,7 +81,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 } else {
                     hideLoadingIndicator()
                     state.bindings.selectedUserToInvite = user
-                    state.bindings.selectedUserIdentityUnknown = false
+                    state.selectedUserIdentityUnknown = false
                 }
             case .failure:
                 hideLoadingIndicator()

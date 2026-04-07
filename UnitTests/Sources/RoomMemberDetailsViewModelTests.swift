@@ -169,7 +169,7 @@ struct RoomMemberDetailsViewModelTests {
         
         // The user identity becomes known, i.e. not unknown.
         let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
-            !viewState.bindings.inviteConfirmationUserIdentityUnknown
+            !viewState.inviteConfirmationUserIdentityUnknown
         }
         context.send(viewAction: .openDirectChat)
         try await deferred.fulfill()
@@ -191,7 +191,7 @@ struct RoomMemberDetailsViewModelTests {
         
         // The user identity is always unknown, i.e. never not unknown.
         let deferred = deferFailure(viewModel.context.$viewState, timeout: .seconds(5)) { viewState in
-            !viewState.bindings.inviteConfirmationUserIdentityUnknown
+            !viewState.inviteConfirmationUserIdentityUnknown
         }
         context.send(viewAction: .openDirectChat)
         try await deferred.fulfill()
