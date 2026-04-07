@@ -1,6 +1,6 @@
-"NSCameraUsageDescription" = "Rasmlar yoki videolar olish va ularni xabar Element X sifatida yuborish uchun kameraga ruxsat kerak boʻladi.";
 "NSFaceIDUsageDescription" = "Face ID ilovangizdan foydalanish uchun ishlatiladi.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X  needs location access when the app is in the background.";
 "NSLocationWhenInUseUsageDescription" = "Element X joylashuvingizni ulashishi uchun joylashuv axborotiga ruxsat bering.";
+"NSCameraUsageDescription" = "Rasmlar yoki videolar olish va ularni xabar Element X sifatida yuborish uchun kameraga ruxsat kerak boʻladi.";
 "NSMicrophoneUsageDescription" = "Audio xabarlarni yozib olish va yuborish uchun Element X mikrofondan foydalanishga ruxsat olishi kerak.";
 "NSPhotoLibraryUsageDescription" = "Bu sizga rasm va videolarni fotosuratlar kutubxonangizga saqlash imkonini beradi.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X needs location access when the app is in the background.";

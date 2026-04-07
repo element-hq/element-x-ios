@@ -1,6 +1,6 @@
-"NSCameraUsageDescription" = "Parar tirar fotos ou gravar vídeos e enviá-los como mensagem, o Element X precisa de acesso à câmera.";
 "NSFaceIDUsageDescription" = "O Face ID é usado para acessar o seu app.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X  needs location access when the app is in the background.";
 "NSLocationWhenInUseUsageDescription" = "Conceda o acesso à localização para que o Element X possa compartilhar a sua localização.";
+"NSCameraUsageDescription" = "Parar tirar fotos ou gravar vídeos e enviá-los como mensagem, o Element X precisa de acesso à câmera.";
 "NSMicrophoneUsageDescription" = "Para gravar e enviar mensagens de aúdio, o Element X precisa de acesso ao microfone.";
 "NSPhotoLibraryUsageDescription" = "Permite salvar fotos e vídeos para sua galeria.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X needs location access when the app is in the background.";

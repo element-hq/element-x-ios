@@ -2204,15 +2204,17 @@ internal enum L10n {
   internal static var screenMissingKeyBackupOpenElementClassic: String { return L10n.tr("Localizable", "screen_missing_key_backup_open_element_classic") }
   /// Open Element Classic on your device
   internal static var screenMissingKeyBackupStep1: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_1") }
-  /// Go to "Settings" > "Security &Privacy"
-  internal static var screenMissingKeyBackupStep2: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_2") }
-  /// In the section "Cryptography Keys Management", click on "Encrypted Messages Recovery"
-  internal static var screenMissingKeyBackupStep3: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_3") }
-  /// Follow instructions
+  /// Go to User settings > Security
+  internal static var screenMissingKeyBackupStep2Ios: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_2_ios") }
+  /// Scroll down to Secure Backup and tap on Set up
+  internal static var screenMissingKeyBackupStep3Ios: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_3_ios") }
+  /// Follow the instructions to enable your key storage
   internal static var screenMissingKeyBackupStep4: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_4") }
-  /// Done!
-  internal static var screenMissingKeyBackupStep5: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_5") }
-  /// We need you to enable your key storage before processing to %1$@
+  /// Come back to %1$@
+  internal static func screenMissingKeyBackupStep5(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_missing_key_backup_step_5", String(describing: p1))
+  }
+  /// Enable your key storage before proceeding to %1$@
   internal static func screenMissingKeyBackupTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_missing_key_backup_title", String(describing: p1))
   }
