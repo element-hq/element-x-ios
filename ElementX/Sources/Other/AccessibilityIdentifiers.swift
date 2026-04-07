@@ -158,7 +158,7 @@ enum A11yIdentifiers {
         let timelineItemActionMenu = "room-timeline_item_action_menu"
         let joinCall = "room-join_call"
         let startCall = "room-start_call"
-        let startVoiceCall = "room-start_call"
+        let startVoiceCall = "room-start_voice_call"
         let scrollToBottom = "room-scroll_to_bottom"
         
         let messageComposer = "room-message_composer"

@@ -221,8 +221,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .presentCallScreen(let roomProxy):
-                    presentCallScreen(roomProxy: roomProxy, voiceOnly: false)
+                case .presentCallScreen(let roomProxy, let isVoiceCall):
+                    presentCallScreen(roomProxy: roomProxy, voiceOnly: isVoiceCall)
                 case .verifyUser(let userID):
                     presentSessionVerificationScreen(flow: .userInitiator(userID: userID))
                 case .showSettings:

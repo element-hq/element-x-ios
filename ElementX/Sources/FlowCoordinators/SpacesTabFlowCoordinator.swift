@@ -12,7 +12,7 @@ import SwiftState
 
 enum SpacesTabFlowCoordinatorAction {
     case showSettings
-    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
+    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)
     case verifyUser(userID: String)
 }
 
@@ -179,7 +179,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .presentCallScreen(let roomProxy, let isVoiceCall):
-                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
                 case .verifyUser(let userID):
                     actionsSubject.send(.verifyUser(userID: userID))
                 case .finished:
