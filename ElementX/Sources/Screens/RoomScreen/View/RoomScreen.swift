@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Compound
 import SwiftUI
 import WysiwygComposer
@@ -235,6 +236,7 @@ struct RoomScreen: View {
 
 struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModels = makeViewModels()
+    static let viewModelNoActiveCall = makeViewModels(hasOngoingCall: false, isDirect: true)
     static let readOnlyViewModels = makeViewModels(canSendMessage: false)
     static let tombstonedViewModels = makeViewModels(hasSuccessor: true)
     static let composerViewModel = ComposerToolbarViewModel.mock()
@@ -262,14 +264,31 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Tombstoned")
         .snapshotPreferences(expect: tombstonedViewModels.room.context.$viewState.map(\.hasSuccessor))
+        
+        ElementNavigationStack {
+            RoomScreen(context: viewModelNoActiveCall.room.context,
+                       timelineContext: viewModelNoActiveCall.timeline.context,
+                       composerToolbar: ComposerToolbar(context: composerViewModel.context))
+        }
+        .previewDisplayName("DM - No active call")
     }
     
-    static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false) -> ViewModels {
+    static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false, hasOngoingCall: Bool = true, isDirect: Bool = false) -> ViewModels {
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
-                                                      name: "Preview room",
-                                                      hasOngoingCall: false,
                                                       successor: hasSuccessor ? .init(roomId: UUID().uuidString, reason: nil) : nil,
                                                       powerLevelsConfiguration: .init(canUserSendMessage: canSendMessage)))
+        
+        let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob]
+        
+        let configuration = JoinedRoomProxyMockConfiguration(id: roomProxyMock.id,
+                                                             name: "Preview room",
+                                                             isDirect: isDirect,
+                                                             hasOngoingCall: hasOngoingCall,
+                                                             members: mockedMembers)
+      
+        let info = RoomInfoProxyMock(configuration)
+        roomProxyMock.infoPublisher = CurrentValueSubject(info).asCurrentValuePublisher()
+        
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
         let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                   timelineController: MockTimelineController(),
