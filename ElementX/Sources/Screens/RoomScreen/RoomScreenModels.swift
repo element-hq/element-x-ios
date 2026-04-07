@@ -16,7 +16,7 @@ enum RoomScreenViewModelAction: Equatable {
     case displayThread(threadRootEventID: String, focussedEventID: String)
     case displayPinnedEventsTimeline
     case displayRoomDetails
-    case displayCall(voiceCall: Bool)
+    case displayCall(isVoiceCall: Bool)
     case removeComposerFocus
     case displayKnockRequests
     case displayRoom(roomID: String, via: [String])

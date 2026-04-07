@@ -100,11 +100,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .displayRoomDetails:
             actionsSubject.send(.displayRoomDetails)
         case .displayCall:
-            actionsSubject.send(.displayCall(voiceCall: false))
+            actionsSubject.send(.displayCall(isVoiceCall: false))
             actionsSubject.send(.removeComposerFocus)
             analyticsService.trackInteraction(name: .MobileRoomCallButton)
         case .displayVoiceCall:
-            actionsSubject.send(.displayCall(voiceCall: true))
+            actionsSubject.send(.displayCall(isVoiceCall: true))
             actionsSubject.send(.removeComposerFocus)
             analyticsService.trackInteraction(name: .MobileRoomCallButton)
         case .footerViewAction(let action):

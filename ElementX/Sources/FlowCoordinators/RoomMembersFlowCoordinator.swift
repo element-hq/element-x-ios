@@ -11,7 +11,7 @@ import SwiftUI
 
 enum RoomMembersFlowCoordinatorAction {
     case finished
-    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol, voiceCall: Bool)
+    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)
     case verifyUser(userID: String)
 }
 
@@ -236,9 +236,9 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: [], eventID: nil))
             case .startCall(let roomProxy):
-                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, voiceCall: false))
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: false))
             case .startVoiceCall(let roomProxy):
-                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, voiceCall: true))
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: true))
             case .verifyUser(let userID):
                 actionsSubject.send(.verifyUser(userID: userID))
             }
@@ -296,8 +296,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: [], eventID: nil))
-            case .startCall(let roomProxy, let voiceCall):
-                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, voiceCall: voiceCall))
+            case .startCall(let roomProxy, let isVoiceCall):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
             case .dismiss:
                 break // Not supported when pushed.
             }
@@ -324,8 +324,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .presentCallScreen(let roomProxy, let voiceCall):
-                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, voiceCall: voiceCall))
+                case .presentCallScreen(let roomProxy, let isVoiceCall):
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
                 case .verifyUser(let userID):
                     actionsSubject.send(.verifyUser(userID: userID))
                 case .continueWithSpaceFlow:
