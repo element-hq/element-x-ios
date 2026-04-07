@@ -61,7 +61,13 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .cancel:
             actionsSubject.send(.dismiss)
         case .proceed:
-            presentInviteConfirmation()
+            guard appSettings.enableKeyShareOnInvite,
+                  roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
+                  !state.usersToConfirm.isEmpty,
+                  !state.isSkippable else {
+                return inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
+            }
+            state.bindings.presentConfirmationDialog = true
         case .recheck:
             state.bindings.presentConfirmationDialog = false
             state.selectedUsers.removeAll { lhs in state.usersToConfirm.contains { rhs in lhs.userID == rhs.userID } }
@@ -76,16 +82,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
 
     // MARK: - Private
-    
-    private func presentInviteConfirmation() {
-        guard appSettings.enableKeyShareOnInvite,
-              roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
-              !state.usersToConfirm.isEmpty,
-              !state.isSkippable else {
-            return inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
-        }
-        state.bindings.presentConfirmationDialog = true
-    }
     
     private func toggleUser(_ user: UserProfileProxy) {
         if state.selectedUsers.contains(user) {
