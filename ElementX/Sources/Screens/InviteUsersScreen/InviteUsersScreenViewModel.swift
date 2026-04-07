@@ -89,9 +89,9 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         } else {
             state.selectedUsers.append(user)
             withElementAnimation(.easeInOut) { state.bindings.selectedUsersPosition = user.userID }
-            Task.detached {
+            Task {
                 // Attempt to fetch the cached user identity.
-                guard case let .success(identity) = await self.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) else {
+                guard case let .success(identity) = await clientProxy.userIdentity(for: user.userID, fallBackToServer: false) else {
                     MXLog.error("Failed to get cached user identity for \(user.userID)")
                     return
                 }
@@ -99,10 +99,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                     // If we have it cached, we implicity trust the user that this was intentional.
                     return
                 }
-                Task { @MainActor in
-                    // If we do not, we will prompt the user to confirm they meant to invite them.
-                    self.state.usersToConfirm.append(user)
-                }
+                // If we do not, we will prompt the user to confirm they meant to invite them.
+                state.usersToConfirm.append(user)
             }
         }
     }

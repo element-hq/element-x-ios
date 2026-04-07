@@ -68,16 +68,14 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 actionsSubject.send(.showRoom(roomID: roomId))
             case .success:
                 if appSettings.enableKeyShareOnInvite {
-                    Task.detached {
+                    Task {
                         let identity = await self.userSession.clientProxy.userIdentity(for: user.userID, fallBackToServer: false)
-                        Task { @MainActor in
-                            self.hideLoadingIndicator()
-                            self.state.bindings.selectedUserToInvite = user
-                            // If an error occured while fetching the identity, assume they are unknown.
-                            self.state.bindings.selectedUserIdentityKnown = switch identity {
-                            case .success(let identity): identity != nil
-                            default: false
-                            }
+                        hideLoadingIndicator()
+                        self.state.bindings.selectedUserToInvite = user
+                        // If an error occured while fetching the identity, assume they are unknown.
+                        self.state.bindings.selectedUserIdentityKnown = switch identity {
+                        case .success(let identity): identity != nil
+                        default: false
                         }
                     }
                 } else {
