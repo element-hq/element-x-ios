@@ -63,7 +63,7 @@ struct RoomScreenViewState: BindableState {
         isCallingEnabled && !isParticipatingInOngoingCall // Hide the join call button when already in the call
     }
     
-    /// Wheter the current room is a DM
+    /// Whether the current room is a DM
     var isDirectOneToOneRoom: Bool
     
     var roomThreadListEnabled = false
