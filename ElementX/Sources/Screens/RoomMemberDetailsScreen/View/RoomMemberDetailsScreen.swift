@@ -103,14 +103,14 @@ struct RoomMemberDetailsScreen: View {
             
             if let roomID = context.viewState.dmRoomID {
                 Button {
-                    context.send(viewAction: .startVoiceCall(roomID: roomID))
+                    context.send(viewAction: .startCall(roomID: roomID, isVoiceCall: true))
                 } label: {
                     CompoundIcon(\.voiceCall)
                 }
                 .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
                 
                 Button {
-                    context.send(viewAction: .startCall(roomID: roomID))
+                    context.send(viewAction: .startCall(roomID: roomID, isVoiceCall: false))
                 } label: {
                     CompoundIcon(\.videoCall)
                 }
