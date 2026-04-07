@@ -204,14 +204,15 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                 Task {
                     let identity = await self.userSession.clientProxy.userIdentity(for: roomMemberProxy.userID, fallBackToServer: false)
                     self.state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
-                    self.state.bindings.inviteConfirmationUserIdentityKnown = switch identity {
-                    case .success(let identity): identity != nil
-                    default: false
+                    self.state.bindings.inviteConfirmationUserIdentityUnknown = if case .success(let identity) = identity {
+                        identity == nil
+                    } else {
+                        true
                     }
                 }
             } else {
                 state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
-                state.bindings.inviteConfirmationUserIdentityKnown = true
+                state.bindings.inviteConfirmationUserIdentityUnknown = false
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)

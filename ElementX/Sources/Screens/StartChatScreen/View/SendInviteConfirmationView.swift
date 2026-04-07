@@ -11,7 +11,7 @@ import SwiftUI
 
 struct SendInviteConfirmationView: View {
     let userToInvite: UserProfileProxy
-    let isUserIdentityKnown: Bool
+    let isUserIdentityUnknown: Bool
     let mediaProvider: MediaProviderProtocol?
     let onInvite: () -> Void
     
@@ -21,10 +21,10 @@ struct SendInviteConfirmationView: View {
     private let topPadding: CGFloat = 24
     
     private var title: String {
-        return if isUserIdentityKnown {
-            L10n.screenBottomSheetCreateDmTitle
-        } else {
+        return if isUserIdentityUnknown {
             UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogTitle
+        } else {
+            L10n.screenBottomSheetCreateDmTitle
         }
     }
     
@@ -35,10 +35,10 @@ struct SendInviteConfirmationView: View {
         } else {
             string = userToInvite.userID
         }
-        return if isUserIdentityKnown {
-            L10n.screenBottomSheetCreateDmMessage(string)
-        } else {
+        return if isUserIdentityUnknown {
             UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogContent
+        } else {
+            L10n.screenBottomSheetCreateDmMessage(string)
         }
     }
     
@@ -105,13 +105,13 @@ struct SendInviteConfirmationView: View {
 struct SendInviteConfirmationView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         SendInviteConfirmationView(userToInvite: .mockBob,
-                                   isUserIdentityKnown: true,
+                                   isUserIdentityUnknown: false,
                                    mediaProvider: nil) { }
-            .previewDisplayName("With Identity")
+            .previewDisplayName("With Known Identity")
         
         SendInviteConfirmationView(userToInvite: .mockBob,
-                                   isUserIdentityKnown: false,
+                                   isUserIdentityUnknown: true,
                                    mediaProvider: nil) { }
-            .previewDisplayName("Without Identity")
+            .previewDisplayName("With Unknown Identity")
     }
 }

@@ -45,7 +45,7 @@ struct StartChatScreenViewStateBindings {
     var alertInfo: AlertInfo<StartChatScreenErrorType>?
     
     var selectedUserToInvite: UserProfileProxy?
-    var selectedUserIdentityKnown = false
+    var selectedUserIdentityUnknown = true
     var isJoinRoomByAddressSheetPresented = false
 }
 
