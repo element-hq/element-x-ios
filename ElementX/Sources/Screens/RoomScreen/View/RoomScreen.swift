@@ -199,7 +199,7 @@ struct RoomScreen: View {
             // intent to switch between voice and audio
             ToolbarItem(placement: .primaryAction) {
                 JoinCallButton {
-                    context.send(viewAction: .displayCall)
+                    context.send(viewAction: .displayCall(isVoiceCall: false))
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
                 .disabled(!context.viewState.canJoinCall)
@@ -208,7 +208,7 @@ struct RoomScreen: View {
             if context.viewState.isDirectOneToOneRoom {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        context.send(viewAction: .displayVoiceCall)
+                        context.send(viewAction: .displayCall(isVoiceCall: true))
                     } label: {
                         CompoundIcon(\.voiceCallSolid)
                     }
@@ -219,7 +219,7 @@ struct RoomScreen: View {
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    context.send(viewAction: .displayCall)
+                    context.send(viewAction: .displayCall(isVoiceCall: false))
                 } label: {
                     CompoundIcon(\.videoCallSolid)
                 }

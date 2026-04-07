@@ -27,8 +27,7 @@ enum RoomScreenViewAction {
     case tappedPinnedEventsBanner
     case viewAllPins
     case displayRoomDetails
-    case displayCall
-    case displayVoiceCall
+    case displayCall(isVoiceCall: Bool)
     case footerViewAction(RoomScreenFooterViewAction)
     case acceptKnock(eventID: String)
     case dismissKnockRequests
