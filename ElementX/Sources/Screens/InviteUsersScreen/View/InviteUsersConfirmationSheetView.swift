@@ -8,7 +8,7 @@
 import Compound
 import SwiftUI
 
-struct ConfirmInviteUsersSheetView: View {
+struct InviteUsersConfirmationSheetView: View {
     @ObservedObject var context: InviteUsersScreenViewModel.Context
     
     var body: some View {
@@ -48,11 +48,11 @@ struct ConfirmInviteUsersSheetView: View {
     }
 }
 
-struct ConfirmInviteUsersSheetView_Previews: PreviewProvider, TestablePreview {
+struct InviteUsersConfirmationSheetView_Previews: PreviewProvider, TestablePreview {
     static var viewModel = makeViewModel()
     
     static var previews: some View {
-        ConfirmInviteUsersSheetView(context: viewModel.context)
+        InviteUsersConfirmationSheetView(context: viewModel.context)
             .previewDisplayName("Default")
     }
     

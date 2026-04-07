@@ -99,10 +99,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ComposerToolbar_Previews")
     }
 
-    func testConfirmInviteUsersSheetView() async throws {
-        try await performAccessibilityAudit(named: "ConfirmInviteUsersSheetView_Previews")
-    }
-
     func testCopyTextButton() async throws {
         try await performAccessibilityAudit(named: "CopyTextButton_Previews")
     }
@@ -241,6 +237,10 @@ extension AccessibilityTests {
 
     func testImageRoomTimelineView() async throws {
         try await performAccessibilityAudit(named: "ImageRoomTimelineView_Previews")
+    }
+
+    func testInviteUsersConfirmationSheetView() async throws {
+        try await performAccessibilityAudit(named: "InviteUsersConfirmationSheetView_Previews")
     }
 
     func testInviteUsersScreenSelectedItem() async throws {

@@ -32,7 +32,7 @@ struct InviteUsersScreen: View {
                               accessibilityFocusOnStart: true)
             .compoundSearchField()
             .sheet(isPresented: $context.presentConfirmationDialog) {
-                ConfirmInviteUsersSheetView(context: context)
+                InviteUsersConfirmationSheetView(context: context)
             }
             .alert(item: $context.alertInfo)
             .navigationBarBackButtonHidden(context.viewState.isSkippable)
