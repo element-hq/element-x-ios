@@ -174,6 +174,11 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Selected")
         .snapshotPreferences(expect: selectedViewModel.context.$viewState.map { !$0.selectedUsers.isEmpty })
+        
+        ElementNavigationStack {
+            InviteUsersScreen(context: confirmSelectedViewModel.context)
+        }
+        .previewDisplayName("Confirm Selected")
     }
     
     static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false, shouldConfirm: Bool = false) -> InviteUsersScreenViewModel {
