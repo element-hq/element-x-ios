@@ -43,7 +43,7 @@ enum UserProfileScreenViewAction {
     case displayAvatar(URL)
     case openDirectChat
     case createDirectChat
-    case startCall(roomID: String)
+    case startCall(roomID: String, isVoiceCall: Bool)
     case dismiss
 }
 
