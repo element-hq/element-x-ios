@@ -68,11 +68,11 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                 return inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
             }
             state.bindings.presentConfirmationDialog = true
-        case .recheck:
+        case .removeUnknownUsers:
             state.bindings.presentConfirmationDialog = false
             state.selectedUsers.removeAll { lhs in state.usersToConfirm.contains { rhs in lhs.userID == rhs.userID } }
             state.usersToConfirm = []
-        case .confirm:
+        case .confirmUnknownUsers:
             state.bindings.presentConfirmationDialog = false
             state.usersToConfirm = []
             inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)

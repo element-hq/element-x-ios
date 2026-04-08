@@ -130,7 +130,7 @@ final class InviteUsersScreenViewModelTests {
             }
         }
         
-        context.send(viewAction: .confirm)
+        context.send(viewAction: .confirmUnknownUsers)
         
         try await deferredAction.fulfill()
         #expect(roomProxy.inviteUserIDReceivedInvocations == [RoomMemberProxyMock.mockAlice.userID])
@@ -162,7 +162,7 @@ final class InviteUsersScreenViewModelTests {
             !state.usersToConfirm.contains(.mockAlice) && !state.selectedUsers.contains(.mockAlice)
         }
         
-        context.send(viewAction: .recheck)
+        context.send(viewAction: .removeUnknownUsers)
         try await deferredState.fulfill()
     }
     

@@ -32,12 +32,12 @@ struct InviteUsersConfirmationSheetView: View {
         } bottomContent: {
             HStack(spacing: 16) {
                 Button(L10n.actionRemove, role: .cancel) {
-                    context.send(viewAction: .recheck)
+                    context.send(viewAction: .removeUnknownUsers)
                 }
                 .buttonStyle(.compound(.secondary))
                 
                 Button(L10n.actionInvite) {
-                    context.send(viewAction: .confirm)
+                    context.send(viewAction: .confirmUnknownUsers)
                 }
                 .buttonStyle(.compound(.primary))
             }

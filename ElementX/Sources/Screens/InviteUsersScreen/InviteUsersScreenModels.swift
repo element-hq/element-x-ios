@@ -80,7 +80,7 @@ struct InviteUsersScreenViewStateBindings {
 enum InviteUsersScreenViewAction {
     case cancel
     case proceed
-    case recheck
-    case confirm
+    case removeUnknownUsers
+    case confirmUnknownUsers
     case toggleUser(UserProfileProxy)
 }
