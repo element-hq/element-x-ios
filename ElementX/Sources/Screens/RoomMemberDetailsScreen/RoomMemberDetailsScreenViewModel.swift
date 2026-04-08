@@ -200,7 +200,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         case .success(let roomID):
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
-            } else if appSettings.enableKeyShareOnInvite {
+            } else if appSettings.enableKeyShareOnInvite, roomProxy.details.historySharingState != RoomHistorySharingState.hidden {
                 Task {
                     let identity = await self.userSession.clientProxy.userIdentity(for: roomMemberProxy.userID, fallBackToServer: false)
                     self.state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
