@@ -44,7 +44,7 @@ class UserFlowTests: XCTestCase {
         // beats having to rerun the whole suite again.
         XCTAssertTrue(firstRoom.waitForExistence(timeout: 100.0))
         
-        firstRoom.tap(.center)
+        firstRoom.tap()
         
         sendMessages()
         
@@ -64,7 +64,7 @@ class UserFlowTests: XCTestCase {
         // Cancel initial the room search
         let searchCancelButton = app.buttons["Close"].firstMatch
         XCTAssertTrue(searchCancelButton.waitForExistence(timeout: 10.0))
-        searchCancelButton.tap(.center)
+        searchCancelButton.tap()
     }
     
     private func sendMessages() {
@@ -74,7 +74,7 @@ class UserFlowTests: XCTestCase {
         
         var sendButton = app.buttons[A11yIdentifiers.roomScreen.sendButton].firstMatch
         XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
-        sendButton.tap(.center)
+        sendButton.tap()
         
         sleep(10) // Wait for the message to be sent
         
@@ -88,12 +88,12 @@ class UserFlowTests: XCTestCase {
         
         sendButton = app.buttons[A11yIdentifiers.roomScreen.sendButton].firstMatch
         XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
-        sendButton.tap(.center)
+        sendButton.tap()
         
         sleep(5) // Wait for the message to be sent
         
         // Close the formatting options
-        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions].tap(.center)
+        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions].tap()
     }
         
     private func checkPhotoSharing() {
@@ -105,7 +105,7 @@ class UserFlowTests: XCTestCase {
         // Tap on the second image. First one is always broken on simulators.
         let secondImage = app.scrollViews.images.element(boundBy: 1)
         XCTAssertTrue(secondImage.waitForExistence(timeout: 20.0)) // Photo library takes a bit to load
-        secondImage.tap(.center)
+        secondImage.tap()
         
         // Wait for the image to be processed and the new screen to appear
         sleep(10)
@@ -136,7 +136,7 @@ class UserFlowTests: XCTestCase {
         // Handle map loading errors (missing credentials)
         let alertOkButton = app.alerts.firstMatch.buttons["OK"].firstMatch
         if alertOkButton.waitForExistence(timeout: 10.0) {
-            alertOkButton.tap(.center)
+            alertOkButton.tap()
         }
         
         allowLocationPermissionOnce()
@@ -148,7 +148,7 @@ class UserFlowTests: XCTestCase {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let notificationAlertAllowButton = springboard.buttons["Allow Once"].firstMatch
         if notificationAlertAllowButton.waitForExistence(timeout: 10.0) {
-            notificationAlertAllowButton.tap(.center)
+            notificationAlertAllowButton.tap()
         }
     }
     
@@ -184,7 +184,7 @@ class UserFlowTests: XCTestCase {
         // Open the room details
         let roomHeader = app.buttons[A11yIdentifiers.roomScreen.name]
         XCTAssertTrue(roomHeader.waitForExistence(timeout: 10.0))
-        roomHeader.tap(.center)
+        roomHeader.tap()
         
         // Swipe until the People button is hittable
         let peopleButton = app.buttons[A11yIdentifiers.roomDetailsScreen.people]
@@ -202,7 +202,7 @@ class UserFlowTests: XCTestCase {
         // Open the first member's details. Loading members for big rooms can take a while.
         let firstRoomMember = app.scrollViews.buttons.firstMatch
         XCTAssertTrue(firstRoomMember.waitForExistence(timeout: 1000.0))
-        firstRoomMember.tap(.center)
+        firstRoomMember.tap()
         
         // Open the profile from the bottom sheet
         let viewProfileButton = app.buttons[A11yIdentifiers.manageRoomMemberSheet.viewProfile]
@@ -227,7 +227,7 @@ class UserFlowTests: XCTestCase {
         let profileButton = app.buttons[A11yIdentifiers.homeScreen.userAvatar]
         
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
-        profileButton.tap(.center)
+        profileButton.tap()
         
         // Open analytics
         tapOnButton(A11yIdentifiers.settingsScreen.analytics)
@@ -254,7 +254,7 @@ class UserFlowTests: XCTestCase {
     private func tapOnButton(_ identifier: String, waitForDisappearance: Bool = false) {
         let button = app.buttons[identifier]
         XCTAssertTrue(button.waitForExistence(timeout: 10.0))
-        button.tap(.center)
+        button.tap()
         
         if waitForDisappearance {
             let doesNotExistPredicate = NSPredicate(format: "exists == 0")
@@ -270,6 +270,6 @@ class UserFlowTests: XCTestCase {
     private func tapOnBackButton(_ label: String = "Back") {
         let button = app.buttons.matching(NSPredicate(format: "label == %@ && identifier == 'BackButton'", label)).firstMatch
         XCTAssertTrue(button.waitForExistence(timeout: 10.0))
-        button.tap(.center)
+        button.tap()
     }
 }
