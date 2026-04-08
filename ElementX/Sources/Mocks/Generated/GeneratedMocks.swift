@@ -1946,6 +1946,80 @@ class AuthenticationClientFactoryMock: AuthenticationClientFactoryProtocol, @unc
             return makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReturnValue
         }
     }
+    //MARK: - makeInMemoryClient
+
+    var makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksThrowableError: Error?
+    var makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = 0
+    var makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksCalled: Bool {
+        return makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksCallsCount > 0
+    }
+    var makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksReceivedArguments: (homeserverAddress: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)?
+    var makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksReceivedInvocations: [(homeserverAddress: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)] = []
+
+    var makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue: ClientProtocol!
+    var makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksReturnValue: ClientProtocol! {
+        get {
+            if Thread.isMainThread {
+                return makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue
+            } else {
+                var returnValue: ClientProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksClosure: ((String, ClientSessionDelegate, AppSettings, AppHooks) async throws -> ClientProtocol)?
+
+    func makeInMemoryClient(homeserverAddress: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks) async throws -> ClientProtocol {
+        if let error = makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksThrowableError {
+            throw error
+        }
+        makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksCallsCount += 1
+        makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksReceivedArguments = (homeserverAddress: homeserverAddress, clientSessionDelegate: clientSessionDelegate, appSettings: appSettings, appHooks: appHooks)
+        DispatchQueue.main.async {
+            self.makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksReceivedInvocations.append((homeserverAddress: homeserverAddress, clientSessionDelegate: clientSessionDelegate, appSettings: appSettings, appHooks: appHooks))
+        }
+        if let makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksClosure = makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksClosure {
+            return try await makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksClosure(homeserverAddress, clientSessionDelegate, appSettings, appHooks)
+        } else {
+            return makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksReturnValue
+        }
+    }
 }
 class BannedRoomProxyMock: BannedRoomProxyProtocol, @unchecked Sendable {
     var info: BaseRoomInfoProxyProtocol {
@@ -2307,6 +2381,154 @@ class ClassicAppManagerMock: ClassicAppManagerProtocol, @unchecked Sendable {
             return try loadAccountsClosure()
         } else {
             return loadAccountsReturnValue
+        }
+    }
+    //MARK: - availableSecrets
+
+    var availableSecretsForThrowableError: Error?
+    var availableSecretsForUnderlyingCallsCount = 0
+    var availableSecretsForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return availableSecretsForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = availableSecretsForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                availableSecretsForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    availableSecretsForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var availableSecretsForCalled: Bool {
+        return availableSecretsForCallsCount > 0
+    }
+    var availableSecretsForReceivedAccount: ClassicAppAccount?
+    var availableSecretsForReceivedInvocations: [ClassicAppAccount] = []
+
+    var availableSecretsForUnderlyingReturnValue: ClassicAppAccount.AvailableSecrets!
+    var availableSecretsForReturnValue: ClassicAppAccount.AvailableSecrets! {
+        get {
+            if Thread.isMainThread {
+                return availableSecretsForUnderlyingReturnValue
+            } else {
+                var returnValue: ClassicAppAccount.AvailableSecrets? = nil
+                DispatchQueue.main.sync {
+                    returnValue = availableSecretsForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                availableSecretsForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    availableSecretsForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var availableSecretsForClosure: ((ClassicAppAccount) async throws -> ClassicAppAccount.AvailableSecrets)?
+
+    func availableSecrets(for account: ClassicAppAccount) async throws -> ClassicAppAccount.AvailableSecrets {
+        if let error = availableSecretsForThrowableError {
+            throw error
+        }
+        availableSecretsForCallsCount += 1
+        availableSecretsForReceivedAccount = account
+        DispatchQueue.main.async {
+            self.availableSecretsForReceivedInvocations.append(account)
+        }
+        if let availableSecretsForClosure = availableSecretsForClosure {
+            return try await availableSecretsForClosure(account)
+        } else {
+            return availableSecretsForReturnValue
+        }
+    }
+    //MARK: - secretsBundle
+
+    var secretsBundleForThrowableError: Error?
+    var secretsBundleForUnderlyingCallsCount = 0
+    var secretsBundleForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return secretsBundleForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = secretsBundleForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                secretsBundleForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    secretsBundleForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var secretsBundleForCalled: Bool {
+        return secretsBundleForCallsCount > 0
+    }
+    var secretsBundleForReceivedAccount: ClassicAppAccount?
+    var secretsBundleForReceivedInvocations: [ClassicAppAccount] = []
+
+    var secretsBundleForUnderlyingReturnValue: SecretsBundleWithUserId!
+    var secretsBundleForReturnValue: SecretsBundleWithUserId! {
+        get {
+            if Thread.isMainThread {
+                return secretsBundleForUnderlyingReturnValue
+            } else {
+                var returnValue: SecretsBundleWithUserId? = nil
+                DispatchQueue.main.sync {
+                    returnValue = secretsBundleForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                secretsBundleForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    secretsBundleForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var secretsBundleForClosure: ((ClassicAppAccount) async throws -> SecretsBundleWithUserId)?
+
+    func secretsBundle(for account: ClassicAppAccount) async throws -> SecretsBundleWithUserId {
+        if let error = secretsBundleForThrowableError {
+            throw error
+        }
+        secretsBundleForCallsCount += 1
+        secretsBundleForReceivedAccount = account
+        DispatchQueue.main.async {
+            self.secretsBundleForReceivedInvocations.append(account)
+        }
+        if let secretsBundleForClosure = secretsBundleForClosure {
+            return try await secretsBundleForClosure(account)
+        } else {
+            return secretsBundleForReturnValue
         }
     }
 }

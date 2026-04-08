@@ -9,10 +9,18 @@ import Foundation
 import MatrixRustSDK
 
 extension ClassicAppManagerMock {
-    struct Configuration { }
+    struct Configuration {
+        var accounts: [ClassicAppAccount]
+        var availableSecrets: ClassicAppAccount.AvailableSecrets = .complete
+        var secretsBundle: SecretsBundleWithUserId?
+    }
     
     convenience init(_ configuration: Configuration) {
         self.init()
+        
+        loadAccountsClosure = { configuration.accounts }
+        availableSecretsForReturnValue = configuration.availableSecrets
+        secretsBundleForReturnValue = configuration.secretsBundle
     }
 }
 
@@ -22,7 +30,7 @@ extension ClassicAppAccount {
                           displayName: "Alice",
                           avatarURL: nil,
                           serverName: "matrix.org",
-                          homeserverURL: "https://matrix-client.matrix.org/",
+                          homeserverURL: "https://matrix-client.matrix.org",
                           cryptoStoreURL: .cachesDirectory,
                           cryptoStorePassphrase: "1234567890",
                           accessToken: "accessToken")
@@ -33,7 +41,7 @@ extension ClassicAppAccount {
                           displayName: "Dan",
                           avatarURL: .mockMXCUserAvatar,
                           serverName: "matrix.org",
-                          homeserverURL: "https://matrix-client.matrix.org/",
+                          homeserverURL: "https://matrix-client.matrix.org",
                           cryptoStoreURL: .cachesDirectory,
                           cryptoStorePassphrase: "1234567890",
                           accessToken: "accessToken")

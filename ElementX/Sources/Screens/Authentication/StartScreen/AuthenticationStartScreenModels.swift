@@ -26,6 +26,9 @@ struct AuthenticationStartScreenViewState: BindableState {
     let showCreateAccountButton: Bool
     let showQRCodeLoginButton: Bool
     
+    enum ClassicAppMode { case welcomeBack(ClassicAppAccount), otherOptions(ClassicAppAccount) }
+    var classicAppMode: ClassicAppMode?
+    
     let hideBrandChrome: Bool
     
     var bindings = AuthenticationStartScreenViewStateBindings()

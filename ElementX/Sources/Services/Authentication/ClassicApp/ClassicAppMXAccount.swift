@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Observation
 
 struct ClassicAppAccount: Equatable, CustomStringConvertible {
     let userID: String
@@ -24,6 +25,22 @@ struct ClassicAppAccount: Equatable, CustomStringConvertible {
     var description: String {
         "ClassicAppAccount(userID: \(userID), homeserverURL: \(homeserverURL))"
     }
+    
+    enum AvailableSecrets { case complete, requiresBackup, unavailable }
+    
+    @Observable
+    class State: Equatable {
+        static func == (lhs: State, rhs: State) -> Bool {
+            lhs.isServerSupported == rhs.isServerSupported && lhs.availableSecrets == rhs.availableSecrets
+        }
+        
+        /// Whether or not the account's server is supported by Element X (or `nil` whilst determining support).
+        var isServerSupported: Bool?
+        /// Information about the secrets available from Element X (or `nil` whilst determining availability).
+        var availableSecrets: AvailableSecrets?
+    }
+    
+    let state = State()
 }
 
 // MARK: NSCoding Types

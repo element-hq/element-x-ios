@@ -13,6 +13,10 @@ struct AuthenticationClassicAppAccountView: View {
     
     let classicAppAccount: ClassicAppAccount
     
+    var isLoadingAccount: Bool {
+        classicAppAccount.state.isServerSupported == nil || classicAppAccount.state.availableSecrets == nil
+    }
+    
     var body: some View {
         FullscreenDialog(topPadding: 25, background: .gradient) {
             VStack(spacing: 38) {
@@ -28,6 +32,9 @@ struct AuthenticationClassicAppAccountView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
+        .sheet(isPresented: $context.showClassicAppBackupInstructions) {
+            AuthenticationClassicAppBackupInstructionsView(classicAppAccount: classicAppAccount)
+        }
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
         }
@@ -73,15 +80,30 @@ struct AuthenticationClassicAppAccountView: View {
     
     var buttons: some View {
         VStack(spacing: 16) {
-            Button(L10n.actionContinue) {
-                context.send(viewAction: .continueWithClassic(classicAppAccount))
+            if isLoadingAccount {
+                Button {
+                    context.send(viewAction: .continueWithClassic(classicAppAccount))
+                } label: {
+                    Label {
+                        Text(L10n.screenOnboardingCheckingAccount)
+                    } icon: {
+                        ProgressView()
+                            .tint(.compound.iconOnSolidPrimary)
+                    }
+                }
+                .buttonStyle(.compound(.primary))
+                .disabled(true)
+            } else {
+                Button(L10n.actionContinue) {
+                    context.send(viewAction: .continueWithClassic(classicAppAccount))
+                }
+                .buttonStyle(.compound(.primary))
+                
+                Button(L10n.commonOtherOptions) {
+                    context.send(viewAction: .otherOptions(classicAppAccount))
+                }
+                .buttonStyle(.compound(.secondary))
             }
-            .buttonStyle(.compound(.primary))
-            
-            Button(L10n.commonOtherOptions) {
-                context.send(viewAction: .otherOptions(classicAppAccount))
-            }
-            .buttonStyle(.compound(.secondary))
         }
     }
 }

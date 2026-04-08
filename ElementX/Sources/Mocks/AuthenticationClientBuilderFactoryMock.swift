@@ -14,6 +14,7 @@ extension AuthenticationClientFactoryMock {
     struct Configuration {
         var homeserverClients = [
             "matrix.org": ClientSDKMock(configuration: .init()),
+            "https://matrix-client.matrix.org": ClientSDKMock(configuration: .init()),
             "example.com": ClientSDKMock(configuration: .init(serverAddress: "example.com",
                                                               homeserverURL: "https://matrix.example.com",
                                                               slidingSyncVersion: .native,
@@ -46,6 +47,13 @@ extension AuthenticationClientFactoryMock {
         self.init()
         
         makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure = { address, _, _, _, _, _ in
+            guard let client = configuration.homeserverClients[address] else {
+                throw ClientBuildError.ServerUnreachable(message: "Not a known homeserver.")
+            }
+            return client
+        }
+        
+        makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksClosure = { address, _, _, _ in
             guard let client = configuration.homeserverClients[address] else {
                 throw ClientBuildError.ServerUnreachable(message: "Not a known homeserver.")
             }
