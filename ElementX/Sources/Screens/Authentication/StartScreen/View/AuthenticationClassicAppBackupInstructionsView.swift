@@ -69,6 +69,7 @@ struct AuthenticationClassicAppBackupInstructionsView_Previews: PreviewProvider,
                                            provisioningParameters: nil,
                                            isBugReportServiceEnabled: false,
                                            appSettings: ServiceLocator.shared.settings,
+                                           mediaProvider: MediaProviderMock(configuration: .init()),
                                            userIndicatorController: UserIndicatorControllerMock())
     }
 }

@@ -68,10 +68,12 @@ class ClassicAppAccountManager {
         
         return ClassicAppAccount(userID: userID,
                                  displayName: user?.displayName,
-                                 avatarURL: user?.avatarURL.flatMap(URL.init(string:)),
+                                 avatarURL: user?.avatarURL,
                                  serverName: serverName,
+                                 homeserverURL: mxAccount.homeserverURL,
                                  cryptoStoreURL: cryptoStoreURL(for: userID),
-                                 cryptoStorePassphrase: cryptoStorePassphrase)
+                                 cryptoStorePassphrase: cryptoStorePassphrase.base64EncodedString(),
+                                 accessToken: mxAccount.accessToken)
     }
     
     private func loadUser(for mxAccount: ClassicAppMXAccount) -> ClassicAppMXUser? {

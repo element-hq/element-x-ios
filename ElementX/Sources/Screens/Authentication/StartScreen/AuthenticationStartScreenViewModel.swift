@@ -24,11 +24,12 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     var actions: AnyPublisher<AuthenticationStartScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(authenticationService: AuthenticationServiceProtocol,
          provisioningParameters: AccountProvisioningParameters?,
          isBugReportServiceEnabled: Bool,
          appSettings: AppSettings,
+         mediaProvider: MediaProviderProtocol?,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.provisioningParameters = provisioningParameters
@@ -59,9 +60,9 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
                                                hideBrandChrome: appSettings.hideBrandChrome)
         }
         
-        super.init(initialViewState: initialViewState)
+        super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
     }
-
+    
     override func process(viewAction: AuthenticationStartScreenViewAction) {
         switch viewAction {
         case .updateWindow(let window):
@@ -77,6 +78,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             if canReportProblem {
                 actionsSubject.send(.reportProblem)
             }
+        case .continueWithClassic, .otherOptions, .closeOtherOptions:
+            break // To follow.
         }
     }
     

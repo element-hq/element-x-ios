@@ -14,7 +14,18 @@ struct AuthenticationStartScreenParameters {
     let provisioningParameters: AccountProvisioningParameters?
     let isBugReportServiceEnabled: Bool
     let appSettings: AppSettings
+    let mediaProvider: MediaProviderProtocol?
     let userIndicatorController: UserIndicatorControllerProtocol
+}
+
+enum AuthenticationStartScreenCoordinatorAction {
+    case loginWithQR
+    case login
+    case register
+    case reportProblem
+    
+    case loginDirectlyWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
+    case loginDirectlyWithPassword(loginHint: String?)
 }
 
 final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
@@ -31,6 +42,7 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
                                                        provisioningParameters: parameters.provisioningParameters,
                                                        isBugReportServiceEnabled: parameters.isBugReportServiceEnabled,
                                                        appSettings: parameters.appSettings,
+                                                       mediaProvider: parameters.mediaProvider,
                                                        userIndicatorController: parameters.userIndicatorController)
     }
     

@@ -2239,6 +2239,77 @@ class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
         reportCallWithEndedAtReasonClosure?(uuid, endedAt, reason)
     }
 }
+class ClassicAppManagerMock: ClassicAppManagerProtocol, @unchecked Sendable {
+
+    //MARK: - loadAccounts
+
+    var loadAccountsThrowableError: Error?
+    var loadAccountsUnderlyingCallsCount = 0
+    var loadAccountsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadAccountsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadAccountsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadAccountsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadAccountsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadAccountsCalled: Bool {
+        return loadAccountsCallsCount > 0
+    }
+
+    var loadAccountsUnderlyingReturnValue: [ClassicAppAccount]!
+    var loadAccountsReturnValue: [ClassicAppAccount]! {
+        get {
+            if Thread.isMainThread {
+                return loadAccountsUnderlyingReturnValue
+            } else {
+                var returnValue: [ClassicAppAccount]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadAccountsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadAccountsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadAccountsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadAccountsClosure: (() throws -> [ClassicAppAccount])?
+
+    func loadAccounts() throws -> [ClassicAppAccount] {
+        if let error = loadAccountsThrowableError {
+            throw error
+        }
+        loadAccountsCallsCount += 1
+        if let loadAccountsClosure = loadAccountsClosure {
+            return try loadAccountsClosure()
+        } else {
+            return loadAccountsReturnValue
+        }
+    }
+}
 class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> {
         get { return underlyingActionsPublisher }

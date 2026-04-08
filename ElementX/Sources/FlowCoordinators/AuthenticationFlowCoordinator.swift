@@ -263,6 +263,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                                                              provisioningParameters: provisioningParameters,
                                                              isBugReportServiceEnabled: bugReportService.isEnabled,
                                                              appSettings: appSettings,
+                                                             mediaProvider: nil, // Currently unused.
                                                              userIndicatorController: userIndicatorController)
         let coordinator = AuthenticationStartScreenCoordinator(parameters: parameters)
         

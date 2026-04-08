@@ -10,6 +10,9 @@ import Foundation
 
 enum MediaLoaderError: Error {
     case missingClient
+    case notSupported
+    case invalidURL
+    case unexpectedResponse
 }
 
 // sourcery: AutoMockable

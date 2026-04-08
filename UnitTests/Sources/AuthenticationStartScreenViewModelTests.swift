@@ -160,6 +160,7 @@ final class AuthenticationStartScreenViewModelTests {
                                                        provisioningParameters: provisioningParameters,
                                                        isBugReportServiceEnabled: true,
                                                        appSettings: appSettings,
+                                                       mediaProvider: MediaProviderMock(configuration: .init()),
                                                        userIndicatorController: UserIndicatorControllerMock())
         
         // Add a fake window in order for the OIDC flow to continue

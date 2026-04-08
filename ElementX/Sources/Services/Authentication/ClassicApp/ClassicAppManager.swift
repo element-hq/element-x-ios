@@ -9,6 +9,7 @@ import Foundation
 import KeychainAccess
 import MatrixRustSDK
 
+// sourcery: AutoMockable
 protocol ClassicAppManagerProtocol {
     func loadAccounts() throws -> [ClassicAppAccount]
 }

@@ -86,6 +86,7 @@ enum UserAvatarSizeOnScreen {
     case threadList
     case threadSummary
     case map
+    case classicAppAccount
 
     var value: CGFloat {
         switch self {
@@ -115,7 +116,7 @@ enum UserAvatarSizeOnScreen {
             64
         case .dmDetails:
             75
-        case .memberDetails, .editUserDetails:
+        case .memberDetails, .editUserDetails, .classicAppAccount:
             96
         }
     }
