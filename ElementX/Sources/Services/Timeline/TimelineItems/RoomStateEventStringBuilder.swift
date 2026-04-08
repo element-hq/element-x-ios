@@ -197,7 +197,7 @@ struct RoomStateEventStringBuilder {
             break
         case .policyRuleRoom, .policyRuleServer, .policyRuleUser: // No strings available.
             break
-        case .roomAliases, .roomCanonicalAlias: // Doesn't provide the alias.
+        case .roomCanonicalAlias: // Doesn't provide the alias.
             break
         case .roomGuestAccess, .roomHistoryVisibility: // Doesn't provide information about the change.
             break

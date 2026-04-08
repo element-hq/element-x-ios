@@ -832,8 +832,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     private static func excludedEventsFilter(appSettings: AppSettings) -> TimelineEventFilter {
-        var stateEventFilters: [StateEventType] = [.roomAliases,
-                                                   .roomCanonicalAlias,
+        var stateEventFilters: [StateEventType] = [.roomCanonicalAlias,
                                                    .roomGuestAccess,
                                                    .roomHistoryVisibility,
                                                    .roomJoinRules,
