@@ -32,13 +32,9 @@ class UserFlowTests: XCTestCase {
     
     /// Assumes app is on the home screen
     private func checkRoomFlows() {
-        // Wait for the room list to paginate and correctly compute the room display names otherwise the test room
-        // won't be found
-        // Remove once https://github.com/element-hq/element-x-ios/issues/3365 gets sorted
-        sleep(30)
-        
         // Search for the special test room
         let searchField = app.searchFields.firstMatch
+        XCTAssertTrue(searchField.waitForExistence(timeout: 10.0))
         searchField.clearAndTypeText(Self.integrationTestsRoomName, app: app)
         
         // And open it
