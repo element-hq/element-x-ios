@@ -269,14 +269,13 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
             RoomScreen(context: viewModelNoActiveCall.room.context,
                        timelineContext: viewModelNoActiveCall.timeline.context,
                        composerToolbar: ComposerToolbar(context: composerViewModel.context))
+                .snapshotPreferences(expect: viewModelNoActiveCall.room.context.$viewState.map { $0.isDirectOneToOneRoom && !$0.hasOngoingCall && $0.shouldShowCallButton && $0.shouldShowCallButton })
         }
         .previewDisplayName("DM - No active call")
     }
     
     static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false, hasOngoingCall: Bool = true, isDirect: Bool = false) -> ViewModels {
-        let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
-                                                      successor: hasSuccessor ? .init(roomId: UUID().uuidString, reason: nil) : nil,
-                                                      powerLevelsConfiguration: .init(canUserSendMessage: canSendMessage)))
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id"))
         
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob]
         
@@ -284,7 +283,9 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                              name: "Preview room",
                                                              isDirect: isDirect,
                                                              hasOngoingCall: hasOngoingCall,
-                                                             members: mockedMembers)
+                                                             members: mockedMembers,
+                                                             successor: hasSuccessor ? .init(roomId: UUID().uuidString, reason: nil) : nil,
+                                                             powerLevelsConfiguration: .init(canUserSendMessage: canSendMessage))
       
         let info = RoomInfoProxyMock(configuration)
         roomProxyMock.infoPublisher = CurrentValueSubject(info).asCurrentValuePublisher()
