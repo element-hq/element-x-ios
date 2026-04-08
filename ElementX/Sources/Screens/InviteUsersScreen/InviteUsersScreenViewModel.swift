@@ -93,7 +93,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             state.selectedUsers.append(user)
             withElementAnimation(.easeInOut) { state.bindings.selectedUsersPosition = user.userID }
             Task {
-                let identityUnknown = if case .success(let identity) = await self.clientProxy.userIdentity(for: user.userID, fallBackToServer: true) {
+                let identityUnknown = if case .success(let identity) = await self.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) {
                     identity == nil
                 } else {
                     true
