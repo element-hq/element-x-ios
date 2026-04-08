@@ -84,11 +84,6 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.liveLocationSharingEnabled) {
                     Text("Live location sharing")
                 }
-
-                Toggle(isOn: $context.floatingTimelineDateEnabled) {
-                    Text("Floating timeline date")
-                    Text("Shows a floating date badge while scrolling the timeline.")
-                }
                 
                 Toggle(isOn: $context.knockingEnabled) {
                     Text("Knocking")

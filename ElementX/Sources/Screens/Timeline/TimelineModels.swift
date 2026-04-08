@@ -143,9 +143,7 @@ struct TimelineViewState: BindableState {
     var mapTilerConfiguration: MapTilerConfiguration
 
     var enableKeyShareOnInvite: Bool
-    
-    var floatingTimelineDateEnabled: Bool
-    
+        
     var bindings: TimelineViewStateBindings
 }
 

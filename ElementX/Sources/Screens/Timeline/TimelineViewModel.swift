@@ -108,7 +108,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        linkMetadataProvider: hideTimelineMedia ? nil : linkMetadataProvider,
                                                        mapTilerConfiguration: appSettings.mapTilerConfiguration,
                                                        enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite,
-                                                       floatingTimelineDateEnabled: appSettings.floatingTimelineDateEnabled,
                                                        bindings: .init(reactionsCollapsed: [:])),
                    mediaProvider: userSession.mediaProvider)
         

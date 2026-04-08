@@ -92,7 +92,7 @@ struct RoomScreen: View {
     
     @ViewBuilder
     private var dateBadge: some View {
-        if timelineContext.viewState.floatingTimelineDateEnabled, !isVoiceOverEnabled {
+        if !isVoiceOverEnabled {
             FloatingDateBadge(dateText: timelineContext.floatingDateText)
         }
     }

@@ -69,9 +69,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var linkNewDeviceEnabled: Bool { get set }
     
     var liveLocationSharingEnabled: Bool { get set }
-    
-    var floatingTimelineDateEnabled: Bool { get set }
-    
+        
     var roomThreadListEnabled: Bool { get set }
 }
 
