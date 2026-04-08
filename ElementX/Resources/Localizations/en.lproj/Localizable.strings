@@ -1576,6 +1576,7 @@
 "screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_create_room_room_access_section_private_option_title" = "Private";
 "screen_security_and_privacy_room_access_space_members_option_title" = "Space members";
+"a11y_start_video_call" = "Start a video call";
 "screen_chat_backup_recovery_action_setup" = "Get recovery key";
 "screen_signout_confirmation_dialog_submit" = "Remove this device";
 "screen_signout_confirmation_dialog_title" = "Remove this device";

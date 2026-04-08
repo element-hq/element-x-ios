@@ -120,6 +120,8 @@ internal enum L10n {
   internal static var a11yShowPassword: String { return L10n.tr("Localizable", "a11y_show_password") }
   /// Start a call
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
+  /// Start a video call
+  internal static var a11yStartVideoCall: String { return L10n.tr("Localizable", "a11y_start_video_call") }
   /// Start a voice call
   internal static var a11yStartVoiceCall: String { return L10n.tr("Localizable", "a11y_start_voice_call") }
   /// Tombstoned room

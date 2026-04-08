@@ -224,8 +224,8 @@ struct RoomScreen: View {
                 } label: {
                     CompoundIcon(\.videoCallSolid)
                 }
-                .accessibilityLabel(L10n.a11yStartCall)
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.startCall)
+                .accessibilityLabel(L10n.a11yStartVideoCall)
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVideoCall)
                 .disabled(!context.viewState.canJoinCall)
             }
         }

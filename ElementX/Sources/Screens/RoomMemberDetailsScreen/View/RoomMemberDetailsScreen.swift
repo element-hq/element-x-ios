@@ -107,6 +107,7 @@ struct RoomMemberDetailsScreen: View {
                 } label: {
                     CompoundIcon(\.voiceCall)
                 }
+                .accessibilityLabel(L10n.a11yStartVoiceCall)
                 .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
                 
                 Button {
@@ -114,6 +115,7 @@ struct RoomMemberDetailsScreen: View {
                 } label: {
                     CompoundIcon(\.videoCall)
                 }
+                .accessibilityLabel(L10n.a11yStartVideoCall)
                 .buttonStyle(FormActionButtonStyle(title: L10n.commonVideo))
             }
             
