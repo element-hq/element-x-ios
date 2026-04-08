@@ -13,24 +13,24 @@ struct InviteUsersConfirmationSheetView: View {
     
     var body: some View {
         FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
-            TitleAndIcon(title: UntranslatedL10n.cryptoHistorySharingConfirmInviteDialogTitle,
-                         subtitle: UntranslatedL10n.cryptoHistorySharingConfirmInviteDialogContent,
-                         icon: \.userAddSolid,
-                         iconStyle: .default)
-            ScrollView {
+            VStack(spacing: 32) {
+                TitleAndIcon(title: UntranslatedL10n.cryptoHistorySharingConfirmInviteDialogTitle,
+                             subtitle: UntranslatedL10n.cryptoHistorySharingConfirmInviteDialogContent,
+                             icon: \.userAddSolid,
+                             iconStyle: .defaultSolid)
                 VStack(spacing: 0) {
                     ForEach(context.viewState.usersToConfirm, id: \.userID) { user in
-                        Divider()
                         UserProfileListRow(user: user,
                                            membership: nil,
                                            mediaProvider: context.mediaProvider,
                                            kind: .label)
+                            .rowDivider(alignment: .top)
                             .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.userProfile)
                     }
                 }
             }
         } bottomContent: {
-            HStack(spacing: 16) {
+            HStack(spacing: 32) {
                 Button(L10n.actionRemove, role: .cancel) {
                     context.send(viewAction: .removeUnknownUsers)
                 }
