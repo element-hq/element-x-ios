@@ -8960,6 +8960,76 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return flagAsFavouriteReturnValue
         }
     }
+    //MARK: - flagAsLowPriority
+
+    var flagAsLowPriorityUnderlyingCallsCount = 0
+    var flagAsLowPriorityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return flagAsLowPriorityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = flagAsLowPriorityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                flagAsLowPriorityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    flagAsLowPriorityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var flagAsLowPriorityCalled: Bool {
+        return flagAsLowPriorityCallsCount > 0
+    }
+    var flagAsLowPriorityReceivedIsLowPriority: Bool?
+    var flagAsLowPriorityReceivedInvocations: [Bool] = []
+
+    var flagAsLowPriorityUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var flagAsLowPriorityReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return flagAsLowPriorityUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = flagAsLowPriorityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                flagAsLowPriorityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    flagAsLowPriorityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var flagAsLowPriorityClosure: ((Bool) async -> Result<Void, RoomProxyError>)?
+
+    func flagAsLowPriority(_ isLowPriority: Bool) async -> Result<Void, RoomProxyError> {
+        flagAsLowPriorityCallsCount += 1
+        flagAsLowPriorityReceivedIsLowPriority = isLowPriority
+        DispatchQueue.main.async {
+            self.flagAsLowPriorityReceivedInvocations.append(isLowPriority)
+        }
+        if let flagAsLowPriorityClosure = flagAsLowPriorityClosure {
+            return await flagAsLowPriorityClosure(isLowPriority)
+        } else {
+            return flagAsLowPriorityReturnValue
+        }
+    }
     //MARK: - powerLevels
 
     var powerLevelsUnderlyingCallsCount = 0
@@ -14612,6 +14682,11 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingIsFavourite = value }
     }
     var underlyingIsFavourite: Bool!
+    var isLowPriority: Bool {
+        get { return underlyingIsLowPriority }
+        set(value) { underlyingIsLowPriority = value }
+    }
+    var underlyingIsLowPriority: Bool!
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var membership: Membership {

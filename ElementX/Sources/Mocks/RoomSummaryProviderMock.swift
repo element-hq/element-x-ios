@@ -94,6 +94,7 @@ extension RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false)
     }
 }
@@ -121,6 +122,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "2",
@@ -143,6 +145,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "3",
@@ -165,6 +168,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "4",
@@ -187,6 +191,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "5",
@@ -209,6 +214,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: true,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "6",
@@ -231,6 +237,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: true,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "7",
@@ -253,6 +260,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: true),
         RoomSummary(room: RoomSDKMock(),
                     id: "0",
@@ -275,6 +283,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false)
     ]
     
@@ -330,6 +339,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "someAwesomeRoomId2",
@@ -352,6 +362,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false)
     ]
     
@@ -377,6 +388,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "!space2:matrix.org",
@@ -399,6 +411,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: false)
     ]
 }

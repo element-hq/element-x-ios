@@ -579,6 +579,16 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func flagAsLowPriority(_ isLowPriority: Bool) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.setIsLowPriority(isLowPriority: isLowPriority, tagOrder: nil)
+            return .success(())
+        } catch {
+            MXLog.error("Failed flagging room \(id) as low priority with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Power Levels
     
     func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError> {

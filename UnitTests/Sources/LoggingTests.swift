@@ -93,6 +93,7 @@ final class LoggingTests {
                                       hasOngoingCall: false,
                                       isMarkedUnread: false,
                                       isFavourite: false,
+                                      isLowPriority: false,
                                       isTombstoned: false)
         
         // When logging that value

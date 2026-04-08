@@ -76,6 +76,22 @@ struct HomeScreenRoomList: View {
                             }
                         }
                         
+                        if context.viewState.lowPriorityEnabled {
+                            if room.isLowPriority {
+                                Button {
+                                    context.send(viewAction: .markRoomAsLowPriority(roomIdentifier: room.id, isLowPriority: false))
+                                } label: {
+                                    Label(UntranslatedL10n.commonLowPrioritised, icon: \.arrowDown)
+                                }
+                            } else {
+                                Button {
+                                    context.send(viewAction: .markRoomAsLowPriority(roomIdentifier: room.id, isLowPriority: true))
+                                } label: {
+                                    Label(UntranslatedL10n.commonLowPriority, icon: \.arrowDown)
+                                }
+                            }
+                        }
+                        
                         Button {
                             context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
                         } label: {

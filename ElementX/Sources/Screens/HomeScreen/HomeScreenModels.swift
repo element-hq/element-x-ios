@@ -47,6 +47,7 @@ enum HomeScreenViewAction {
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
     case markRoomAsFavourite(roomIdentifier: String, isFavourite: Bool)
+    case markRoomAsLowPriority(roomIdentifier: String, isLowPriority: Bool)
     
     case acceptInvite(roomIdentifier: String)
     case declineInvite(roomIdentifier: String)
@@ -109,6 +110,8 @@ struct HomeScreenViewState: BindableState {
     var hideInviteAvatars = false
     
     var reportRoomEnabled = false
+    
+    var lowPriorityEnabled = false
         
     var shouldShowSpaceFilters = false
     var selectedSpaceFilter: SpaceServiceFilter?
@@ -201,6 +204,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let isFavourite: Bool
     
+    let isLowPriority: Bool
+    
     let timestamp: String?
     
     let lastMessage: AttributedString?
@@ -233,6 +238,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        isDirect: false,
                        isHighlighted: false,
                        isFavourite: false,
+                       isLowPriority: false,
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
                        lastMessageState: nil,
@@ -272,6 +278,7 @@ extension HomeScreenRoom {
                   isDirect: summary.isDirect,
                   isHighlighted: isHighlighted,
                   isFavourite: summary.isFavourite,
+                  isLowPriority: summary.isLowPriority,
                   timestamp: summary.lastMessageDate?.formattedMinimal(),
                   lastMessage: summary.lastMessage,
                   lastMessageState: summary.homeScreenLastMessageState,

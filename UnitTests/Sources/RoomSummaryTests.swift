@@ -116,6 +116,7 @@ struct RoomSummaryTests {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false,
+                    isLowPriority: false,
                     isTombstoned: isTombstoned)
     }
 }

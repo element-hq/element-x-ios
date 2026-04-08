@@ -255,6 +255,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                   hasOngoingCall: false,
                                   isMarkedUnread: false,
                                   isFavourite: false,
+                                  isLowPriority: false,
                                   isTombstoned: false)
         
         return .init(summary: summary, hideUnreadMessagesBadge: false)

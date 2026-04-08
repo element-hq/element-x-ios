@@ -41,6 +41,7 @@ struct HomeScreenRoomTests {
                                   hasOngoingCall: hasOngoingCall,
                                   isMarkedUnread: isMarkedUnread,
                                   isFavourite: false,
+                                  isLowPriority: false,
                                   isTombstoned: false)
     }
     

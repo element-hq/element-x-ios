@@ -164,6 +164,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     func flagAsFavourite(_ isFavourite: Bool) async -> Result<Void, RoomProxyError>
     
+    func flagAsLowPriority(_ isLowPriority: Bool) async -> Result<Void, RoomProxyError>
+    
     // MARK: - Power Levels
     
     func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError>

@@ -146,6 +146,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             state.reportRoomEnabled = await userSession.clientProxy.isReportRoomSupported
         }
         
+        state.lowPriorityEnabled = appSettings.lowPriorityFilterEnabled
+        
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
@@ -254,6 +256,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .markRoomAsFavourite(let roomIdentifier, let isFavourite):
             Task {
                 await markRoomAsFavourite(roomIdentifier, isFavourite: isFavourite)
+            }
+        case .markRoomAsLowPriority(let roomIdentifier, let isLowPriority):
+            Task {
+                await markRoomAsLowPriority(roomIdentifier, isLowPriority: isLowPriority)
             }
         case .acceptInvite(let roomIdentifier):
             Task {
@@ -377,11 +383,37 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
+        if isFavourite, let room = state.rooms.first(where: { $0.roomID == roomID }), room.isLowPriority {
+            if case .failure(let error) = await roomProxy.flagAsLowPriority(false) {
+                MXLog.error("Failed removing low priority when marking room \(roomID) as favourite with error: \(error)")
+            }
+        }
+        
         switch await roomProxy.flagAsFavourite(isFavourite) {
         case .success:
             analyticsService.trackInteraction(name: .MobileRoomListRoomContextMenuFavouriteToggle)
         case .failure(let error):
             MXLog.error("Failed marking room \(roomID) as favourite: \(isFavourite) with error: \(error)")
+        }
+    }
+    
+    private func markRoomAsLowPriority(_ roomID: String, isLowPriority: Bool) async {
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            MXLog.error("Failed retrieving room for identifier: \(roomID)")
+            return
+        }
+        
+        if isLowPriority, let room = state.rooms.first(where: { $0.roomID == roomID }), room.isFavourite {
+            if case .failure(let error) = await roomProxy.flagAsFavourite(false) {
+                MXLog.error("Failed removing favourite when marking room \(roomID) as low priority with error: \(error)")
+            }
+        }
+        
+        switch await roomProxy.flagAsLowPriority(isLowPriority) {
+        case .success:
+            break
+        case .failure(let error):
+            MXLog.error("Failed marking room \(roomID) as low priority: \(isLowPriority) with error: \(error)")
         }
     }
     

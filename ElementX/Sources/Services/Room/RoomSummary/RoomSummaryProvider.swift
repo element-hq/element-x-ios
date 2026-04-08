@@ -334,6 +334,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            hasOngoingCall: roomInfo.hasRoomCall,
                            isMarkedUnread: roomInfo.isMarkedUnread,
                            isFavourite: roomInfo.isFavourite,
+                           isLowPriority: roomInfo.isLowPriority,
                            isTombstoned: roomInfo.successorRoom != nil)
     }
     

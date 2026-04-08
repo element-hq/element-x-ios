@@ -60,6 +60,7 @@ struct RoomSummary {
     
     let isMarkedUnread: Bool
     let isFavourite: Bool
+    let isLowPriority: Bool
     let isTombstoned: Bool
     
     var hasUnreadMessages: Bool {
@@ -144,6 +145,7 @@ extension RoomSummary {
         joinRequestType = nil
         isMarkedUnread = false
         isFavourite = false
+        isLowPriority = false
         isTombstoned = false
     }
     

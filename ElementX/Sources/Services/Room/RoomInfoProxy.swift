@@ -62,6 +62,10 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
         roomInfo.isFavourite
     }
 
+    var isLowPriority: Bool {
+        roomInfo.isLowPriority
+    }
+
     var canonicalAlias: String? {
         roomInfo.canonicalAlias
     }

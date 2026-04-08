@@ -38,6 +38,7 @@ protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var isDirect: Bool { get }
     var isSpace: Bool { get }
     var isFavourite: Bool { get }
+    var isLowPriority: Bool { get }
     
     var canonicalAlias: String? { get }
     var alternativeAliases: [String] { get }
