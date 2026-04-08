@@ -65,12 +65,15 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                   roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
                   !state.usersToConfirm.isEmpty,
                   !state.isSkippable else {
-                return inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
+                inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
+                return
             }
             state.bindings.presentConfirmationDialog = true
         case .removeUnknownUsers:
             state.bindings.presentConfirmationDialog = false
-            state.selectedUsers.removeAll { lhs in state.usersToConfirm.contains { rhs in lhs.userID == rhs.userID } }
+            state.selectedUsers.removeAll { user in
+                state.usersToConfirm.contains { $0.userID == user.userID }
+            }
             state.usersToConfirm = []
         case .confirmUnknownUsers:
             state.bindings.presentConfirmationDialog = false

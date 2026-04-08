@@ -21,7 +21,7 @@ struct SendInviteConfirmationView: View {
     private let topPadding: CGFloat = 24
     
     private var title: String {
-        return if isUserIdentityUnknown {
+        if isUserIdentityUnknown {
             UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogTitle
         } else {
             L10n.screenBottomSheetCreateDmTitle
