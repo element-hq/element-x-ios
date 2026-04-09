@@ -60,6 +60,10 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     }
     
     func startLiveLocation(roomID: String, duration: Duration) async -> Result<Void, LiveLocationManagerError> {
+        if appSettings.liveLocationSharingTimeoutDatesByRoomID[roomID] != nil {
+            await stopLiveLocation(roomID: roomID)
+        }
+        
         guard case .joined(let roomProxy) = await clientProxy.roomForIdentifier(roomID) else {
             MXLog.error("Failed to resolve joined room for identifier: \(roomID)")
             return .failure(.roomNotJoined)
