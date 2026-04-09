@@ -30,9 +30,9 @@ struct SendInviteConfirmationView: View {
     private var subtitle: String {
         let string: String
         if let displayName = userToInvite.displayName {
-            string = L10n.commonNameAndId(displayName, userToInvite.userID)
+            string = L10n.commonNameAndId(displayName, userToInvite.id)
         } else {
-            string = userToInvite.userID
+            string = userToInvite.id
         }
         return if userToInvite.isUnknown {
             UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogContent
@@ -60,7 +60,7 @@ struct SendInviteConfirmationView: View {
         VStack(spacing: 16) {
             LoadableAvatarImage(url: userToInvite.avatarURL,
                                 name: userToInvite.displayName,
-                                contentID: userToInvite.userID,
+                                contentID: userToInvite.id,
                                 avatarSize: .user(on: .sendInviteConfirmation),
                                 mediaProvider: mediaProvider)
             VStack(spacing: 8) {
