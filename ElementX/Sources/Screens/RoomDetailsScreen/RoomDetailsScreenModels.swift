@@ -22,7 +22,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case requestEditDetailsPresentation
     case requestPollsHistoryPresentation
     case requestRolesAndPermissionsPresentation
-    case startCall
+    case startCall(isVoiceCall: Bool)
     case displayPinnedEventsTimeline
     case displayMediaEventsTimeline
     case displayKnockingRequests
@@ -94,7 +94,10 @@ struct RoomDetailsScreenViewState: BindableState {
     var shortcuts: [RoomDetailsScreenViewShortcut] {
         var shortcuts: [RoomDetailsScreenViewShortcut] = [.mute]
         if !ProcessInfo.processInfo.isiOSAppOnMac, canJoinCall {
-            shortcuts.append(.call)
+            if isDirect {
+                shortcuts.append(.voiceCall)
+            }
+            shortcuts.append(.videoCall)
         }
         if dmRecipientInfo == nil, canInviteUsers {
             shortcuts.append(.invite)
@@ -223,7 +226,7 @@ enum RoomDetailsScreenViewAction {
     case toggleFavourite(isFavourite: Bool)
     case processTapRolesAndPermissions
     case processTapSecurityAndPrivacy
-    case processTapCall
+    case processTapCall(isVoiceCall: Bool)
     case processTapPinnedEvents
     case processTapMediaEvents
     case processTapRequestsToJoin
@@ -233,7 +236,8 @@ enum RoomDetailsScreenViewAction {
 enum RoomDetailsScreenViewShortcut {
     case share(link: URL)
     case mute
-    case call
+    case videoCall
+    case voiceCall
     case invite
 }
 

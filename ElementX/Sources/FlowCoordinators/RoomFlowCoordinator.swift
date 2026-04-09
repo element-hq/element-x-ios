@@ -952,8 +952,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentPollsHistory)
             case .presentRolesAndPermissionsScreen:
                 stateMachine.tryEvent(.presentRolesAndPermissionsScreen)
-            case .presentCall:
-                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: false))
+            case .presentCall(isVoiceCall: let isVoiceCall):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
             case .presentPinnedEventsTimeline:
                 stateMachine.tryEvent(.presentPinnedEventsTimeline)
             case .presentKnockingRequestsListScreen:

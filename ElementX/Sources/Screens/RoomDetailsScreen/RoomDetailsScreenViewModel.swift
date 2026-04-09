@@ -151,8 +151,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             Task { await toggleFavourite(isFavourite) }
         case .processTapRolesAndPermissions:
             actionsSubject.send(.requestRolesAndPermissionsPresentation)
-        case .processTapCall:
-            actionsSubject.send(.startCall)
+        case .processTapCall(let isVoiceCall):
+            actionsSubject.send(.startCall(isVoiceCall: isVoiceCall))
         case .processTapPinnedEvents:
             analyticsService.trackInteraction(name: .PinnedMessageRoomInfoButton)
             actionsSubject.send(.displayPinnedEventsTimeline)

@@ -85,13 +85,22 @@ struct RoomDetailsScreen: View {
                         CompoundIcon(\.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
-                case .call:
+                case .voiceCall:
                     Button {
-                        context.send(viewAction: .processTapCall)
+                        context.send(viewAction: .processTapCall(isVoiceCall: true))
+                    } label: {
+                        CompoundIcon(\.voiceCall)
+                    }
+                    .accessibilityLabel(L10n.a11yStartVoiceCall)
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
+                case .videoCall:
+                    Button {
+                        context.send(viewAction: .processTapCall(isVoiceCall: false))
                     } label: {
                         CompoundIcon(\.videoCall)
                     }
-                    .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
+                    .accessibilityLabel(L10n.a11yStartVideoCall)
+                    .buttonStyle(FormActionButtonStyle(title: L10n.commonVideo))
                 case .invite:
                     Button {
                         context.send(viewAction: .processTapInvite)
