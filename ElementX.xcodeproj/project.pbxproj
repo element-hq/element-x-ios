@@ -1192,6 +1192,7 @@
 		CB498F4E27AA0545DCEF0F6F /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 78A5A8DE1E2B09C978C7F3B0 /* KeychainAccess */; };
 		CB6956565D858C523E3E3B16 /* ComposerDraftServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E37072597F67C4DD8CC2DB /* ComposerDraftServiceProtocol.swift */; };
 		CB6BCBF28E4B76EA08C2926D /* StateRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16048D30F0438731C41F775 /* StateRoomTimelineItem.swift */; };
+		CB6FBAF32B1305F914CF4225 /* LiveLocationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CB64E711E86270B722FAF7 /* LiveLocationManagerTests.swift */; };
 		CB99B0FA38A4AC596F38CC13 /* KeychainControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E94DCFEE803E5ABAE8ACCE /* KeychainControllerProtocol.swift */; };
 		CB9FB2BEF313072C705AC9B5 /* SecurityAndPrivacyScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0315C328FF40F84276364E66 /* SecurityAndPrivacyScreenViewModelTests.swift */; };
 		CBBBE597BE74A2DF68DE2209 /* NotificationItemProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDB7A9BB466C56614BB589D /* NotificationItemProxyProtocol.swift */; };
@@ -2696,6 +2697,7 @@
 		C55D7E514F9DE4E3D72FDCAD /* SessionVerificationControllerProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationControllerProxy.swift; sourceTree = "<group>"; };
 		C57DB49B8426AA721BF85D83 /* SpaceServiceProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceServiceProxyProtocol.swift; sourceTree = "<group>"; };
 		C5AEB5907E24092D741718AF /* ResolveVerifiedUserSendFailureScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolveVerifiedUserSendFailureScreenCoordinator.swift; sourceTree = "<group>"; };
+		C5CB64E711E86270B722FAF7 /* LiveLocationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveLocationManagerTests.swift; sourceTree = "<group>"; };
 		C5F06F2F09B2EDD067DC2174 /* NotificationSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsScreen.swift; sourceTree = "<group>"; };
 		C687844F60BFF532D49A994C /* AnalyticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsTests.swift; sourceTree = "<group>"; };
 		C6A9F49B3EE59147AF2F70BB /* SeparatorRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorRoomTimelineItem.swift; sourceTree = "<group>"; };
@@ -4869,6 +4871,7 @@
 				DE5127D6EA05B2E45D0A7D59 /* JoinRoomScreenViewModelTests.swift */,
 				FDB9C37196A4C79F24CE80C6 /* KeychainControllerTests.swift */,
 				C9AC2CC94FA06F728883B694 /* KnockRequestsListScreenViewModelTests.swift */,
+				C5CB64E711E86270B722FAF7 /* LiveLocationManagerTests.swift */,
 				C070FD43DC6BF4E50217965A /* LocalizationTests.swift */,
 				EED6D8956E554CEDFD4FE00D /* LocationSharingScreenViewModelTests.swift */,
 				3DC1943ADE6A62ED5129D7C8 /* LoggingTests.swift */,
@@ -7808,6 +7811,7 @@
 				EEC40663922856C65D1E0DF5 /* KeychainControllerTests.swift in Sources */,
 				BA48D6AFF6421D199148C0A1 /* KnockRequestsListScreenViewModelTests.swift in Sources */,
 				CC961529F9F1854BEC3272C9 /* LayoutMocks.swift in Sources */,
+				CB6FBAF32B1305F914CF4225 /* LiveLocationManagerTests.swift in Sources */,
 				0033481EE363E4914295F188 /* LocalizationTests.swift in Sources */,
 				F6D07D834279BE17D18A33E9 /* LocationSharingScreenViewModelTests.swift in Sources */,
 				149D1942DC005D0485FB8D93 /* LoggingTests.swift in Sources */,
