@@ -10,8 +10,7 @@ import Compound
 import SwiftUI
 
 struct SendInviteConfirmationView: View {
-    let userToInvite: UserProfileProxy
-    let isUserIdentityUnknown: Bool
+    let userToInvite: UserToInvite
     let mediaProvider: MediaProviderProtocol?
     let onInvite: () -> Void
     
@@ -21,7 +20,7 @@ struct SendInviteConfirmationView: View {
     private let topPadding: CGFloat = 24
     
     private var title: String {
-        if isUserIdentityUnknown {
+        if userToInvite.isUnknown {
             UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogTitle
         } else {
             L10n.screenBottomSheetCreateDmTitle
@@ -35,7 +34,7 @@ struct SendInviteConfirmationView: View {
         } else {
             string = userToInvite.userID
         }
-        return if isUserIdentityUnknown {
+        return if userToInvite.isUnknown {
             UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogContent
         } else {
             L10n.screenBottomSheetCreateDmMessage(string)
@@ -104,14 +103,22 @@ struct SendInviteConfirmationView: View {
 
 struct SendInviteConfirmationView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        SendInviteConfirmationView(userToInvite: .mockBob,
-                                   isUserIdentityUnknown: false,
+        SendInviteConfirmationView(userToInvite: .mockKnownBob,
                                    mediaProvider: nil) { }
             .previewDisplayName("With Known Identity")
         
-        SendInviteConfirmationView(userToInvite: .mockBob,
-                                   isUserIdentityUnknown: true,
+        SendInviteConfirmationView(userToInvite: .mockUnknownBob,
                                    mediaProvider: nil) { }
             .previewDisplayName("With Unknown Identity")
+    }
+}
+
+private extension UserToInvite {
+    static var mockKnownBob: Self {
+        .init(user: .mockBob, isUnknown: false)
+    }
+    
+    static var mockUnknownBob: Self {
+        .init(user: .mockBob, isUnknown: true)
     }
 }

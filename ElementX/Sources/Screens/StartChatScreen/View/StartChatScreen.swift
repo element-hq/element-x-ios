@@ -32,11 +32,10 @@ struct StartChatScreen: View {
                           disablesInteractiveDismiss: true)
         .compoundSearchField()
         .alert(item: $context.alertInfo)
-        .sheet(item: $context.selectedUserToInvite) { user in
-            SendInviteConfirmationView(userToInvite: user,
-                                       isUserIdentityUnknown: context.viewState.selectedUserIdentityUnknown,
+        .sheet(item: $context.selectedUserToInvite) { userToInvite in
+            SendInviteConfirmationView(userToInvite: userToInvite,
                                        mediaProvider: context.mediaProvider) {
-                context.send(viewAction: .createDM(user: user))
+                context.send(viewAction: .createDM(user: userToInvite.user))
             }
         }
         .sheet(isPresented: $context.isJoinRoomByAddressSheetPresented) {

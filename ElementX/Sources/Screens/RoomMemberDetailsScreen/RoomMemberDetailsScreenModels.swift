@@ -25,8 +25,6 @@ struct RoomMemberDetailsScreenViewState: BindableState {
 
     var bindings: RoomMemberDetailsScreenViewStateBindings
     
-    var inviteConfirmationUserIdentityUnknown = true
-    
     var showVerifiedBadge: Bool {
         verificationState == .verified // We purposely show the badge on your own account for consistency with Web.
     }
@@ -81,7 +79,7 @@ struct RoomMemberDetailsScreenViewStateBindings {
     
     var ignoreUserAlert: IgnoreUserAlertItem?
     var alertInfo: AlertInfo<RoomMemberDetailsScreenAlertType>?
-    var inviteConfirmationUser: UserProfileProxy?
+    var inviteConfirmationUser: UserToInvite?
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?

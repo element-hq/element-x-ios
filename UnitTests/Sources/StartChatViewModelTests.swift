@@ -95,7 +95,10 @@ struct StartChatScreenViewModelTests {
         
         // User identity becomes known, i.e. not unknown
         let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
-            !viewState.selectedUserIdentityUnknown
+            guard case let .some(isUnknown) = viewState.bindings.selectedUserToInvite.map(\.isUnknown) else {
+                return false
+            }
+            return !isUnknown
         }
         context.send(viewAction: .selectUser(.mockBob))
         try await deferred.fulfill()
@@ -111,7 +114,10 @@ struct StartChatScreenViewModelTests {
         
         // User identity never becomes known, i.e. is never not unknown
         let deferred = deferFailure(viewModel.context.$viewState, timeout: .seconds(5)) { viewState in
-            !viewState.selectedUserIdentityUnknown
+            guard case let .some(isUnknown) = viewState.bindings.selectedUserToInvite.map(\.isUnknown) else {
+                return false
+            }
+            return !isUnknown
         }
         context.send(viewAction: .selectUser(.mockBob))
         try await deferred.fulfill()

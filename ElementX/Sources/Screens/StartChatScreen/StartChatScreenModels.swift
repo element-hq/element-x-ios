@@ -35,8 +35,6 @@ struct StartChatScreenViewState: BindableState {
     }
     
     var joinByAddressState: JoinByAddressState = .example
-    
-    var selectedUserIdentityUnknown = true
 }
 
 struct StartChatScreenViewStateBindings {
@@ -46,7 +44,7 @@ struct StartChatScreenViewStateBindings {
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<StartChatScreenErrorType>?
     
-    var selectedUserToInvite: UserProfileProxy?
+    var selectedUserToInvite: UserToInvite?
     var isJoinRoomByAddressSheetPresented = false
 }
 

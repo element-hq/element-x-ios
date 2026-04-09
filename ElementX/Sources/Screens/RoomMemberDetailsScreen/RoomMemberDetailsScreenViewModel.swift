@@ -203,16 +203,16 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             } else if appSettings.enableKeyShareOnInvite, roomProxy.details.historySharingState != RoomHistorySharingState.hidden {
                 Task {
                     let identity = await self.userSession.clientProxy.userIdentity(for: roomMemberProxy.userID, fallBackToServer: false)
-                    self.state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
-                    self.state.inviteConfirmationUserIdentityUnknown = if case .success(let identity) = identity {
+                    let user: UserProfileProxy = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
+                    let isUnknown = if case .success(let identity) = identity {
                         identity == nil
                     } else {
                         true
                     }
+                    self.state.bindings.inviteConfirmationUser = .init(user: user, isUnknown: isUnknown)
                 }
             } else {
-                state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
-                state.inviteConfirmationUserIdentityUnknown = false
+                state.bindings.inviteConfirmationUser = .init(user: .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL), isUnknown: false)
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)

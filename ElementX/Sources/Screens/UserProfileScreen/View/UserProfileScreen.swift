@@ -21,9 +21,8 @@ struct UserProfileScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
-        .sheet(item: $context.inviteConfirmationUser) { user in
-            SendInviteConfirmationView(userToInvite: user,
-                                       isUserIdentityUnknown: context.viewState.isIdentityKnown,
+        .sheet(item: $context.inviteConfirmationUser) { userToInvite in
+            SendInviteConfirmationView(userToInvite: userToInvite,
                                        mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .createDirectChat)
             }
