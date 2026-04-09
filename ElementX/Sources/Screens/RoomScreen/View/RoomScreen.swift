@@ -35,17 +35,27 @@ struct RoomScreen: View {
             }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .topBanners([
-                TopBannerItem(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled),
-                // This can overlay on top of the pinnedItemsBanner
-                TopBannerItem(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
+                ZBannerItem(verticalBanners: [
+                    VerticalBannerItem(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled),
+                    VerticalBannerItem(liveLocationBanner, isVisible: context.viewState.isSharingLiveLocation && !isVoiceOverEnabled)
+                ]),
+                // This can overlay on top of the stacked banners
+                ZBannerItem(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
             ], footer: dateBadge)
             .safeAreaInset(edge: .top) {
                 // When VoiceOver is enabled, the table view isn't reversed and the scroll gestures
                 // don't trigger meaning the banner never hides itself and so the .overlay layout
                 // above permanently obscures the top of the timeline. So whenever VoiceOver is
                 // enabled we use a safe area inset to vertically stack it above the timeline.
-                if context.viewState.shouldShowPinnedEventsBanner, isVoiceOverEnabled {
-                    pinnedItemsBanner
+                if context.viewState.shouldShowPinnedEventsBanner || context.viewState.isSharingLiveLocation, isVoiceOverEnabled {
+                    VStack(spacing: 0) {
+                        if context.viewState.shouldShowPinnedEventsBanner {
+                            pinnedItemsBanner
+                        }
+                        if context.viewState.isSharingLiveLocation {
+                            liveLocationBanner
+                        }
+                    }
                 }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -74,6 +84,12 @@ struct RoomScreen: View {
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .track(screen: .Room)
             .sentryTrace("\(Self.self)")
+    }
+    
+    private var liveLocationBanner: some View {
+        LiveLocationSharingBannerView {
+            context.send(viewAction: .tappedStopLiveLocation)
+        }
     }
     
     private var pinnedItemsBanner: some View {

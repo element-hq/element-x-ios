@@ -604,6 +604,14 @@ extension PreviewTests {
     }
 
     @Test
+    func liveLocationSharingBannerView() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in LiveLocationSharingBannerView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func loadableImage() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LoadableImage_Previews._allPreviews.enumerated() {

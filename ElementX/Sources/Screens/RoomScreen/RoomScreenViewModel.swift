@@ -122,6 +122,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.displayRoom(roomID: successorID, via: Array(serverNames)))
         case .displayThreadList:
             actionsSubject.send(.displayThreadList)
+        case .tappedStopLiveLocation:
+            actionsSubject.send(.stopLiveLocationSharing)
         }
     }
     
@@ -171,6 +173,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         appSettings.$knockingEnabled
             .weakAssign(to: \.state.isKnockingEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$liveLocationSharingEnabled
+            .combineLatest(appSettings.$liveLocationSharingTimeoutDatesByRoomID)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnabled, timeoutDatesByRoomID in
+                guard let self else { return }
+                state.isSharingLiveLocation = isEnabled && timeoutDatesByRoomID.keys.contains(roomProxy.id)
+            }
             .store(in: &cancellables)
                 
         roomProxy.infoPublisher

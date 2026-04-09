@@ -83,6 +83,7 @@ enum TestablePreviewsDictionary {
         "LegalInformationScreen_Previews" : LegalInformationScreen_Previews.self,
         "LinkNewDeviceScreen_Previews" : LinkNewDeviceScreen_Previews.self,
         "LiveLocationRoomTimelineView_Previews" : LiveLocationRoomTimelineView_Previews.self,
+        "LiveLocationSharingBannerView_Previews" : LiveLocationSharingBannerView_Previews.self,
         "LoadableImage_Previews" : LoadableImage_Previews.self,
         "LocationMarkerView_Previews" : LocationMarkerView_Previews.self,
         "LocationPickerSheet_Previews" : LocationPickerSheet_Previews.self,

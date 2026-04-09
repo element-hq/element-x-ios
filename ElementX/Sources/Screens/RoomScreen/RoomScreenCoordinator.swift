@@ -192,6 +192,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentThreadList)
                 case .displayThread(let threadRootEventID, let focussedEventID):
                     actionsSubject.send(.presentThread(threadRootEventID: threadRootEventID, focussedEventID: focussedEventID))
+                case .stopLiveLocationSharing:
+                    Task { [weak self] in await self?.timelineViewModel.stopLiveLocationSharing() }
                 }
             }
             .store(in: &cancellables)

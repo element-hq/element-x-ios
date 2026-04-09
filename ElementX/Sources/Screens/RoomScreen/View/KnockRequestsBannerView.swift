@@ -28,9 +28,6 @@ struct KnockRequestsBannerView: View {
         mainContent
             .padding(16)
             .background(.compound.bgCanvasDefaultLevel1, in: RoundedRectangle(cornerRadius: 12))
-            .compositingGroup()
-            .shadow(color: Color(red: 0.11, green: 0.11, blue: 0.13).opacity(0.1), radius: 12, x: 0, y: 4)
-            .padding(.bottom, 28)
             .padding(.horizontal, 16)
     }
     
@@ -202,6 +199,14 @@ struct KnockRequestsBannerView_Previews: PreviewProvider, TestablePreview {
     ]
     
     static var previews: some View {
+        allPreviews
+            .padding()
+            .background(.gray)
+            .previewLayout(.sizeThatFits)
+    }
+    
+    @ViewBuilder
+    static var allPreviews: some View {
         KnockRequestsBannerView(requests: singleRequest) { } onAccept: { _ in } onViewAll: { }
             .previewDisplayName("Single Request")
         // swiftlint:disable:next trailing_closure

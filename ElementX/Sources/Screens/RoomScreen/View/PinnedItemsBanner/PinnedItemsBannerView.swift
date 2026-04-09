@@ -23,9 +23,6 @@ struct PinnedItemsBannerView: View {
         .padding(.vertical, 16)
         .padding(.leading, 16)
         .background(Color.compound.bgCanvasDefault)
-        .shadow(color: Color(red: 0.11, green: 0.11, blue: 0.13).opacity(0.1), radius: 12, x: 0, y: 4)
-        // To include the shadow in the size
-        .padding(.bottom, 28)
     }
     
     private var mainButton: some View {
@@ -111,5 +108,8 @@ struct PinnedItemsBannerView_Previews: PreviewProvider, TestablePreview {
                                   onMainButtonTap: { },
                                   onViewAllButtonTap: { })
         }
+        .padding()
+        .background(.gray)
+        .previewLayout(.sizeThatFits)
     }
 }

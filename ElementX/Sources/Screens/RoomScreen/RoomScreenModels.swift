@@ -21,6 +21,7 @@ enum RoomScreenViewModelAction: Equatable {
     case displayKnockRequests
     case displayRoom(roomID: String, via: [String])
     case displayMessageForwarding(MessageForwardingItem)
+    case stopLiveLocationSharing
 }
 
 enum RoomScreenViewAction {
@@ -34,6 +35,7 @@ enum RoomScreenViewAction {
     case viewKnockRequests
     case displaySuccessorRoom
     case displayThreadList
+    case tappedStopLiveLocation
 }
 
 struct RoomScreenViewState: BindableState {
@@ -47,6 +49,8 @@ struct RoomScreenViewState: BindableState {
     var shouldShowPinnedEventsBanner: Bool {
         !pinnedEventsBannerState.isEmpty && lastScrollDirection != .top
     }
+    
+    var isSharingLiveLocation = false
     
     var canSendMessage = true
     
