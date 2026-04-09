@@ -79,17 +79,23 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     }
     
     func stopLiveLocation(roomID: String) async {
-        // Best effort: send the stop event to the room regardless of tracking state.
-        if let roomProxy = await resolveRoomProxy(for: roomID) {
+        var roomProxy: JoinedRoomProxyProtocol?
+        let cachedRoomProxy = activeRoomProxies[roomID]
+        appSettings.liveLocationSharingTimeoutDatesByRoomID.removeValue(forKey: roomID)
+        
+        if let cachedRoomProxy {
+            roomProxy = cachedRoomProxy
+            // Best effort: send the stop event to the room regardless of tracking state.
+        } else if case let .joined(fetchedRoomProxy) = await clientProxy.roomForIdentifier(roomID) {
+            roomProxy = fetchedRoomProxy
+        }
+        
+        if let roomProxy {
             let result = await roomProxy.stopLiveLocationShare()
             if case .failure(let error) = result {
                 MXLog.error("Failed to stop live location share in room \(roomID): \(error)")
             }
         }
-        
-        // Always clean up locally.
-        appSettings.liveLocationSharingTimeoutDatesByRoomID.removeValue(forKey: roomID)
-        activeRoomProxies.removeValue(forKey: roomID)
     }
     
     // MARK: - CLLocationManagerDelegate

@@ -198,8 +198,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             handlePollAction(pollAction)
         case .handleAudioPlayerAction(let audioPlayerAction):
             handleAudioPlayerAction(audioPlayerAction)
-        case .stopLiveLocationSharing:
-            Task { await userSession.liveLocationManager.stopLiveLocation(roomID: state.roomID) }
+        case .stopLiveLocationSharing(let id):
+            state.stoppedLiveLocationIDs.insert(id)
+            Task { await stopLiveLocationSharing() }
         case .focusOnEventID(let eventID):
             Task { await focusOnEvent(eventID: eventID) }
         case .focusLive:
@@ -274,6 +275,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 displayErrorToast(L10n.commonFailed)
             }
         }
+    }
+    
+    func stopLiveLocationSharing() async {
+        await userSession.liveLocationManager.stopLiveLocation(roomID: roomProxy.id)
     }
     
     func makeForwardingItem(for itemID: TimelineItemIdentifier) async -> MessageForwardingItem? {

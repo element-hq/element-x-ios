@@ -70,7 +70,7 @@ enum TimelineViewAction {
     case handlePollAction(TimelineViewPollAction)
     case handleAudioPlayerAction(TimelineAudioPlayerAction)
     
-    case stopLiveLocationSharing
+    case stopLiveLocationSharing(TimelineItemIdentifier)
     
     /// Focus the timeline onto the specified event ID (switching to a detached timeline if needed).
     case focusOnEventID(String)
@@ -143,6 +143,8 @@ struct TimelineViewState: BindableState {
     var mapTilerConfiguration: MapTilerConfiguration
 
     var enableKeyShareOnInvite: Bool
+    
+    var stoppedLiveLocationIDs: Set<TimelineItemIdentifier> = []
         
     var bindings: TimelineViewStateBindings
 }

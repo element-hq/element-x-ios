@@ -303,6 +303,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "LiveLocationRoomTimelineView_Previews")
     }
 
+    func testLiveLocationSharingBannerView() async throws {
+        try await performAccessibilityAudit(named: "LiveLocationSharingBannerView_Previews")
+    }
+
     func testLoadableImage() async throws {
         try await performAccessibilityAudit(named: "LoadableImage_Previews")
     }

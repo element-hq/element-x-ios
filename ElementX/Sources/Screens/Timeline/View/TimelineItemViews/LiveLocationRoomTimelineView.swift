@@ -15,10 +15,10 @@ struct LiveLocationRoomTimelineView: View {
     let timelineItem: LiveLocationRoomTimelineItem
     private let currentDate: Date
     
-    init(currentDate: Date = .now, timelineItem: LiveLocationRoomTimelineItem) {
+    init(currentDate: Date = .now, timelineItem: LiveLocationRoomTimelineItem, isStopped: Bool = false) {
         self.currentDate = currentDate
         self.timelineItem = timelineItem
-        _hasExpired = State(initialValue: currentDate >= timelineItem.content.timeoutDate)
+        _hasExpired = State(initialValue: isStopped || currentDate >= timelineItem.content.timeoutDate)
     }
     
     /// A publisher that fires once when the timeoutDate is reached, setting `hasExpired` to true.
@@ -191,7 +191,7 @@ struct LiveLocationRoomTimelineView: View {
     
     private func stop() {
         hasExpired = true
-        context?.send(viewAction: .stopLiveLocationSharing)
+        context?.send(viewAction: .stopLiveLocationSharing(timelineItem.id))
     }
     
     // MARK: - Constants

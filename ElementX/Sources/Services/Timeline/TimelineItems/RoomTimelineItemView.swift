@@ -76,7 +76,7 @@ struct RoomTimelineItemView: View {
         case .callNotification(let item):
             CallNotificationRoomTimelineView(timelineItem: item)
         case .liveLocation(let item):
-            LiveLocationRoomTimelineView(timelineItem: item)
+            LiveLocationRoomTimelineView(timelineItem: item, isStopped: context?.viewState.stoppedLiveLocationIDs.contains(item.id) ?? false)
         }
     }
     
