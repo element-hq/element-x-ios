@@ -11525,17 +11525,17 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
         }
     }
 
-    //MARK: - latestContentRaw
+    //MARK: - latestJson
 
-    open var latestContentRawUnderlyingCallsCount = 0
-    open var latestContentRawCallsCount: Int {
+    open var latestJsonUnderlyingCallsCount = 0
+    open var latestJsonCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return latestContentRawUnderlyingCallsCount
+                return latestJsonUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = latestContentRawUnderlyingCallsCount
+                    returnValue = latestJsonUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -11543,27 +11543,27 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
         }
         set {
             if Thread.isMainThread {
-                latestContentRawUnderlyingCallsCount = newValue
+                latestJsonUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    latestContentRawUnderlyingCallsCount = newValue
+                    latestJsonUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var latestContentRawCalled: Bool {
-        return latestContentRawCallsCount > 0
+    open var latestJsonCalled: Bool {
+        return latestJsonCallsCount > 0
     }
 
-    open var latestContentRawUnderlyingReturnValue: String?
-    open var latestContentRawReturnValue: String? {
+    open var latestJsonUnderlyingReturnValue: String?
+    open var latestJsonReturnValue: String? {
         get {
             if Thread.isMainThread {
-                return latestContentRawUnderlyingReturnValue
+                return latestJsonUnderlyingReturnValue
             } else {
                 var returnValue: String?? = nil
                 DispatchQueue.main.sync {
-                    returnValue = latestContentRawUnderlyingReturnValue
+                    returnValue = latestJsonUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -11571,22 +11571,22 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
         }
         set {
             if Thread.isMainThread {
-                latestContentRawUnderlyingReturnValue = newValue
+                latestJsonUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    latestContentRawUnderlyingReturnValue = newValue
+                    latestJsonUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var latestContentRawClosure: (() -> String?)?
+    open var latestJsonClosure: (() -> String?)?
 
-    open override func latestContentRaw() -> String? {
-        latestContentRawCallsCount += 1
-        if let latestContentRawClosure = latestContentRawClosure {
-            return latestContentRawClosure()
+    open override func latestJson() -> String? {
+        latestJsonCallsCount += 1
+        if let latestJsonClosure = latestJsonClosure {
+            return latestJsonClosure()
         } else {
-            return latestContentRawReturnValue
+            return latestJsonReturnValue
         }
     }
 }
