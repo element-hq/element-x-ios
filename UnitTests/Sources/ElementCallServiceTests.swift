@@ -73,7 +73,9 @@ final class ElementCallServiceTests {
         #expect(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         // Verify the provider was called with a CXCallUpdate that has video enabled
         if let args = callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments {
-            #expect(args.update.hasVideo == false)
+            // Due to a limitation on Callkit and Webviews, we currently have to report voice calls as having video,
+            // even if they are voice calls :/ If not the webview is not started and the call is not shown to the user.
+            #expect(args.update.hasVideo == true)
         } else {
             Issue.record("Expected reportNewIncomingCallWithUpdateCompletionReceivedArguments to be captured")
         }
