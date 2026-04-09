@@ -168,11 +168,8 @@ struct RoomMemberDetailsViewModelTests {
         clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init(verificationState: .notVerified)))
         
         // The user identity becomes known, i.e. not unknown.
-        let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
-            guard case let .some(isUnknown) = viewState.bindings.inviteConfirmationUser.map(\.isUnknown) else {
-                return false
-            }
-            return !isUnknown
+        let deferred = deferFulfillment(viewModel.context.$viewState.compactMap(\.bindings.inviteConfirmationUser)) {
+            !$0.isUnknown
         }
         context.send(viewAction: .openDirectChat)
         try await deferred.fulfill()
@@ -193,11 +190,8 @@ struct RoomMemberDetailsViewModelTests {
         clientProxy.userIdentityForFallBackToServerReturnValue = .failure(.forbiddenAccess)
         
         // The user identity is always unknown, i.e. never not unknown.
-        let deferred = deferFailure(viewModel.context.$viewState, timeout: .seconds(5)) { viewState in
-            guard case let .some(isUnknown) = viewState.bindings.inviteConfirmationUser.map(\.isUnknown) else {
-                return false
-            }
-            return !isUnknown
+        let deferred = deferFailure(viewModel.context.$viewState.compactMap(\.bindings.inviteConfirmationUser), timeout: .seconds(5)) {
+            !$0.isUnknown
         }
         context.send(viewAction: .openDirectChat)
         try await deferred.fulfill()

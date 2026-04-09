@@ -94,11 +94,8 @@ struct StartChatScreenViewModelTests {
         clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init(verificationState: .notVerified)))
         
         // User identity becomes known, i.e. not unknown
-        let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
-            guard case let .some(isUnknown) = viewState.bindings.selectedUserToInvite.map(\.isUnknown) else {
-                return false
-            }
-            return !isUnknown
+        let deferred = deferFulfillment(viewModel.context.$viewState.compactMap(\.bindings.selectedUserToInvite)) {
+            !$0.isUnknown
         }
         context.send(viewAction: .selectUser(.mockBob))
         try await deferred.fulfill()
@@ -113,11 +110,8 @@ struct StartChatScreenViewModelTests {
         clientProxy.userIdentityForFallBackToServerReturnValue = .failure(.forbiddenAccess)
         
         // User identity never becomes known, i.e. is never not unknown
-        let deferred = deferFailure(viewModel.context.$viewState, timeout: .seconds(5)) { viewState in
-            guard case let .some(isUnknown) = viewState.bindings.selectedUserToInvite.map(\.isUnknown) else {
-                return false
-            }
-            return !isUnknown
+        let deferred = deferFailure(viewModel.context.$viewState.compactMap(\.bindings.selectedUserToInvite), timeout: .seconds(5)) {
+            !$0.isUnknown
         }
         context.send(viewAction: .selectUser(.mockBob))
         try await deferred.fulfill()
