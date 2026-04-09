@@ -202,7 +202,11 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let roomDisplayName = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
         
         let update = CXCallUpdate()
-        update.hasVideo = !isVoiceCall
+        // Work Around: Always set video to true! https://github.com/element-hq/element-x-ios/issues/5335
+        // If not for audio call the app will not be put to foreground and the webview won't be able to handle the call...
+        // Consequence: The call will be presented to the user as a video call in CallKit UI,
+        // but once Element Call is launched it will correctly route to a voice-only call.
+        update.hasVideo = true
         update.localizedCallerName = roomDisplayName
         // https://stackoverflow.com/a/41230020/730924
         update.remoteHandle = .init(type: .generic, value: roomID)
