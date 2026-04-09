@@ -70,7 +70,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 if appSettings.enableKeyShareOnInvite {
                     Task {
                         // If an error occured while fetching the identity, assume they are unknown.
-                        var isUnknown = if case .success(let identity) = await self.userSession.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) {
+                        let isUnknown = if case .success(let identity) = await self.userSession.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) {
                             identity == nil
                         } else {
                             true

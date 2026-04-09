@@ -8,10 +8,6 @@
 import Foundation
 
 struct UserToInvite: Identifiable {
-    static func == (lhs: UserToInvite, rhs: UserToInvite) -> Bool {
-        lhs.user == rhs.user
-    }
-    
     /// The profile of the user being invited.
     var user: UserProfileProxy
     
