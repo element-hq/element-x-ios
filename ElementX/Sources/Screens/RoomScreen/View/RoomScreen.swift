@@ -194,44 +194,6 @@ struct RoomScreen: View {
             }
         }
     }
-    
-    @ToolbarContentBuilder
-    private var callControls: some ToolbarContent {
-        if context.viewState.hasOngoingCall {
-            // XXX: Future work: get the active call
-            // intent to switch between voice and audio
-            ToolbarItem(placement: .primaryAction) {
-                JoinCallButton {
-                    context.send(viewAction: .displayCall(isVoiceCall: false))
-                }
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
-                .disabled(!context.viewState.canJoinCall)
-            }
-        } else {
-            if context.viewState.isDirectOneToOneRoom {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        context.send(viewAction: .displayCall(isVoiceCall: true))
-                    } label: {
-                        CompoundIcon(\.voiceCallSolid)
-                    }
-                    .accessibilityLabel(L10n.a11yStartVoiceCall)
-                    .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVoiceCall)
-                    .disabled(!context.viewState.canJoinCall)
-                }
-            }
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    context.send(viewAction: .displayCall(isVoiceCall: false))
-                } label: {
-                    CompoundIcon(\.videoCallSolid)
-                }
-                .accessibilityLabel(L10n.a11yStartVideoCall)
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVideoCall)
-                .disabled(!context.viewState.canJoinCall)
-            }
-        }
-    }
 }
 
 // MARK: - Previews
