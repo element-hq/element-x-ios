@@ -126,8 +126,18 @@ class UserFlowTests: XCTestCase {
         XCTAssertTrue(secondImage.waitForExistence(timeout: 30.0)) // Photo library takes a bit to load
         secondImage.tap(.center)
         
-        // Wait for the image to be processed and the upload cancellation button to appear.
-        tapOnButton("Cancel", waitForDisappearance: true, timeout: 30.0)
+        // PHPickerViewController dismisses as soon as a photo is selected. Its "Cancel" nav button
+        // lingers briefly in the accessibility tree during the dismiss animation with isHittable == false.
+        // Tapping at that point causes "Timed out while evaluating UI query". Wait until a hittable
+        // Cancel appears, which signals the media upload preview sheet has fully replaced the picker.
+        let cancelButton = app.buttons["Cancel"].firstMatch
+        expectation(for: NSPredicate(format: "isHittable == true"), evaluatedWith: cancelButton)
+        waitForExpectations(timeout: 30.0)
+        cancelButton.tap(.center)
+        
+        // Wait for the upload preview to dismiss before continuing.
+        expectation(for: NSPredicate(format: "exists == 0"), evaluatedWith: cancelButton)
+        waitForExpectations(timeout: 30.0)
     }
     
     private func checkDocumentSharing() {
