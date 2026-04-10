@@ -11,6 +11,9 @@ import SwiftUI
 struct InviteUsersConfirmationSheetView: View {
     @ObservedObject var context: InviteUsersScreenViewModel.Context
     
+    /// The users whose identities we wish the user to confirm.
+    var users: [UserProfileProxy]
+    
     var body: some View {
         FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
             VStack(spacing: 32) {
@@ -19,7 +22,7 @@ struct InviteUsersConfirmationSheetView: View {
                              icon: \.userAddSolid,
                              iconStyle: .defaultSolid)
                 VStack(spacing: 0) {
-                    ForEach(context.viewState.usersToConfirm, id: \.userID) { user in
+                    ForEach(users, id: \.userID) { user in
                         UserProfileListRow(user: user,
                                            membership: nil,
                                            mediaProvider: context.mediaProvider,
@@ -52,7 +55,7 @@ struct InviteUsersConfirmationSheetView_Previews: PreviewProvider, TestablePrevi
     static var viewModel = makeViewModel()
     
     static var previews: some View {
-        InviteUsersConfirmationSheetView(context: viewModel.context)
+        InviteUsersConfirmationSheetView(context: viewModel.context, users: [.mockAlice, .mockCharlie, .mockBob, .mockDan])
             .previewDisplayName("Default")
     }
     
