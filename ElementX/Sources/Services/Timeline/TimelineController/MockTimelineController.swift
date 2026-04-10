@@ -258,16 +258,16 @@ class MockTimelineController: TimelineControllerProtocol {
     
     // MARK: - Polls
     
-    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+    func createPoll(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
         if let timelineProxy {
-            _ = await timelineProxy.createPoll(question: question, answers: answers, pollKind: pollKind)
+            _ = await timelineProxy.createPoll(question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
         }
         return .success(())
     }
     
-    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+    func editPoll(original eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
         if let timelineProxy {
-            _ = await timelineProxy.editPoll(original: eventID, question: question, answers: answers, pollKind: pollKind)
+            _ = await timelineProxy.editPoll(original: eventID, question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
         }
         return .success(())
     }

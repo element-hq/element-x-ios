@@ -11,13 +11,14 @@ import Foundation
 extension Poll {
     static func mock(question: String,
                      pollKind: Poll.Kind = .disclosed,
+                     maxSelections: Int = 1,
                      options: [Poll.Option],
                      votes: [String: [String]] = [:],
                      ended: Bool = false,
                      createdByAccountOwner: Bool = false) -> Self {
         .init(question: question,
               kind: pollKind,
-              maxSelections: 1,
+              maxSelections: maxSelections,
               options: options,
               votes: votes,
               endDate: ended ? Date() : nil,
@@ -66,6 +67,16 @@ extension Poll {
              options: [.mock(text: "Italy 🇮🇹", votes: 0, allVotes: 0),
                        .mock(text: "China 🇨🇳", votes: 0, allVotes: 0),
                        .mock(text: "USA 🇺🇸", votes: 0, allVotes: 0)],
+             createdByAccountOwner: true)
+    }
+    
+    static var multiSelect: Self {
+        mock(question: "Pick your favorites",
+             pollKind: .disclosed,
+             maxSelections: 2,
+             options: [.mock(text: "Red", votes: 0, allVotes: 0),
+                       .mock(text: "Green", votes: 0, allVotes: 0),
+                       .mock(text: "Blue", votes: 0, allVotes: 0)],
              createdByAccountOwner: true)
     }
 }

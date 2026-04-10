@@ -20089,6 +20089,75 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             return createPollQuestionAnswersPollKindReturnValue
         }
     }
+
+    var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = 0
+    var createPollQuestionAnswersMaxSelectionsPollKindCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var createPollQuestionAnswersMaxSelectionsPollKindCalled: Bool {
+        return createPollQuestionAnswersMaxSelectionsPollKindCallsCount > 0
+    }
+    var createPollQuestionAnswersMaxSelectionsPollKindReceivedArguments: (question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)?
+    var createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocations: [(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)] = []
+
+    var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var createPollQuestionAnswersMaxSelectionsPollKindReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var createPollQuestionAnswersMaxSelectionsPollKindClosure: ((String, [String], Int, Poll.Kind) async -> Result<Void, TimelineProxyError>)?
+
+    func createPoll(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
+        createPollQuestionAnswersMaxSelectionsPollKindCallsCount += 1
+        createPollQuestionAnswersMaxSelectionsPollKindReceivedArguments = (question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
+        DispatchQueue.main.async {
+            self.createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocations.append((question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind))
+        }
+        if let createPollQuestionAnswersMaxSelectionsPollKindClosure = createPollQuestionAnswersMaxSelectionsPollKindClosure {
+            return await createPollQuestionAnswersMaxSelectionsPollKindClosure(question, answers, maxSelections, pollKind)
+        } else {
+            return createPollQuestionAnswersMaxSelectionsPollKindReturnValue
+        }
+    }
     //MARK: - editPoll
 
     var editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount = 0
@@ -20157,6 +20226,75 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             return await editPollOriginalQuestionAnswersPollKindClosure(eventID, question, answers, pollKind)
         } else {
             return editPollOriginalQuestionAnswersPollKindReturnValue
+        }
+    }
+
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = 0
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindCalled: Bool {
+        return editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCount > 0
+    }
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArguments: (eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)?
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)] = []
+
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure: ((String, String, [String], Int, Poll.Kind) async -> Result<Void, TimelineProxyError>)?
+
+    func editPoll(original eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
+        editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCount += 1
+        editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
+        DispatchQueue.main.async {
+            self.editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocations.append((eventID: eventID, question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind))
+        }
+        if let editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure = editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure {
+            return await editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure(eventID, question, answers, maxSelections, pollKind)
+        } else {
+            return editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValue
         }
     }
     //MARK: - sendPollResponse

@@ -79,6 +79,7 @@ struct PollFormScreenViewStateBindings: Equatable {
     var question = ""
     var options: [Option] = [.init(), .init()]
     var isUndisclosed = false
+    var maxSelections = 1
 
     struct Option: Identifiable, Equatable {
         let id = UUID()
@@ -89,10 +90,19 @@ struct PollFormScreenViewStateBindings: Equatable {
         !question.isEmpty && options.count >= 2 && options.allSatisfy { !$0.text.isEmpty }
     }
 
+    var maxSelectionsRange: ClosedRange<Int> {
+        1...max(1, options.count)
+    }
+    
+    mutating func validateMaxSelections() {
+        maxSelections = max(maxSelections, 1)
+        maxSelections = min(maxSelections, max(1, options.count))
+    }
+
     var alertInfo: AlertInfo<UUID>?
     
     static func == (lhs: PollFormScreenViewStateBindings, rhs: PollFormScreenViewStateBindings) -> Bool {
-        lhs.question == rhs.question && lhs.options.map(\.text) == rhs.options.map(\.text) && lhs.isUndisclosed == rhs.isUndisclosed
+        lhs.question == rhs.question && lhs.options.map(\.text) == rhs.options.map(\.text) && lhs.isUndisclosed == rhs.isUndisclosed && lhs.maxSelections == rhs.maxSelections
     }
 }
 
@@ -100,7 +110,8 @@ extension PollFormScreenViewStateBindings {
     init(poll: Poll) {
         self.init(question: poll.question,
                   options: poll.options.map { .init(text: $0.text) },
-                  isUndisclosed: poll.kind == .undisclosed)
+                  isUndisclosed: poll.kind == .undisclosed,
+                  maxSelections: poll.maxSelections)
     }
 }
 

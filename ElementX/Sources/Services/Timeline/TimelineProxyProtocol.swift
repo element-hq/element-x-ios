@@ -124,11 +124,12 @@ protocol TimelineProxyProtocol {
     
     func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async -> Result<Void, TimelineProxyError>
     
-    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
+    func createPoll(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
     
     func editPoll(original eventID: String,
                   question: String,
                   answers: [String],
+                  maxSelections: Int,
                   pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
     
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError>

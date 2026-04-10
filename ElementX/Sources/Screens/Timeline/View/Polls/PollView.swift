@@ -103,10 +103,18 @@ struct PollView: View {
         !poll.hasEnded && poll.hasMaxSelections && !option.isSelected
     }
     
+    private var canSelectMoreOptions: Bool {
+        let selectedCount = poll.options.filter(\.isSelected).count
+        return selectedCount < poll.maxSelections
+    }
+    
     private func pollOption(option: Poll.Option) -> some View {
         Button {
-            guard !option.isSelected else { return }
-            actionHandler(.selectOption(optionID: option.id))
+            if option.isSelected {
+                actionHandler(.selectOption(optionID: option.id))
+            } else if canSelectMoreOptions {
+                actionHandler(.selectOption(optionID: option.id))
+            }
             feedbackGenerator.impactOccurred()
         } label: {
             PollOptionView(pollOption: option,
@@ -114,7 +122,7 @@ struct PollView: View {
                            isFinalResult: poll.hasEnded)
                 .foregroundColor(progressBarColor(for: option))
         }
-        .disabled(poll.hasEnded)
+        .disabled(poll.hasEnded || (!option.isSelected && !canSelectMoreOptions))
     }
 
     @ViewBuilder

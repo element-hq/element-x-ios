@@ -474,12 +474,12 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     // MARK: - Polls
 
-    func createPoll(question: String, answers: [String],
+    func createPoll(question: String, answers: [String], maxSelections: Int,
                     pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Creating poll")
         
         do {
-            try await timeline.createPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind))
+            try await timeline.createPoll(question: question, answers: answers, maxSelections: UInt8(maxSelections), pollKind: .init(pollKind: pollKind))
             
             MXLog.info("Finished creating poll")
             
@@ -493,6 +493,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     func editPoll(original eventID: String,
                   question: String,
                   answers: [String],
+                  maxSelections: Int,
                   pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Editing poll with eventID: \(eventID)")
         
@@ -502,7 +503,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             try await timeline.edit(eventOrTransactionId: originalEvent.eventOrTransactionId,
                                     newContent: .pollStart(pollData: .init(question: question,
                                                                            answers: answers,
-                                                                           maxSelections: 1,
+                                                                           maxSelections: UInt8(maxSelections),
                                                                            pollKind: .init(pollKind: pollKind))))
             
             MXLog.info("Finished editing poll with eventID: \(eventID)")

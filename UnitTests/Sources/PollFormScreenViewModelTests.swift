@@ -28,6 +28,7 @@ struct PollFormScreenViewModelTests {
         #expect(context.question.isEmpty)
         #expect(context.viewState.isSubmitButtonDisabled)
         #expect(!context.viewState.bindings.isUndisclosed)
+        #expect(context.viewState.bindings.maxSelections == 1)
         
         // Cancellation should work without confirmation
         let deferred = deferFulfillment(viewModel.actions) { _ in true }
@@ -46,6 +47,7 @@ struct PollFormScreenViewModelTests {
         #expect(!context.question.isEmpty)
         #expect(context.viewState.isSubmitButtonDisabled)
         #expect(!context.viewState.bindings.isUndisclosed)
+        #expect(context.viewState.bindings.maxSelections == 1)
         
         // Cancellation should work without confirmation
         let deferred = deferFulfillment(viewModel.actions) { _ in true }
@@ -53,6 +55,14 @@ struct PollFormScreenViewModelTests {
         let action = try await deferred.fulfill()
         #expect(context.alertInfo == nil)
         #expect(action == .close)
+    }
+    
+    @Test
+    mutating func editPollInitialStateMultiSelect() async throws {
+        setupViewModel(mode: .edit(eventID: "foo", poll: .multiSelect))
+        
+        #expect(context.options.count == 3)
+        #expect(context.viewState.bindings.maxSelections == 2)
     }
     
     @Test
@@ -101,11 +111,39 @@ struct PollFormScreenViewModelTests {
         let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
         try await confirmation { confirmation in
-            timelineProxy.createPollQuestionAnswersPollKindClosure = { question, options, kind in
+            timelineProxy.createPollQuestionAnswersMaxSelectionsPollKindClosure = { question, options, maxSelections, kind in
                 #expect(question == "foo")
                 #expect(options.count == 2)
                 #expect(options[0] == "bla1")
                 #expect(options[1] == "bla2")
+                #expect(maxSelections == 1)
+                #expect(kind == .disclosed)
+                confirmation()
+                return .success(())
+            }
+            context.send(viewAction: .submit)
+            
+            try await deferred.fulfill()
+        }
+    }
+
+    @Test
+    mutating func newPollSubmitWithMaxSelections() async throws {
+        setupViewModel()
+        context.question = "foo"
+        context.options[0].text = "bla1"
+        context.options[1].text = "bla2"
+        context.options[2].text = "bla3"
+        context.bindings.maxSelections = 2
+        #expect(!context.viewState.isSubmitButtonDisabled)
+
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
+        
+        try await confirmation { confirmation in
+            timelineProxy.createPollQuestionAnswersMaxSelectionsPollKindClosure = { question, options, maxSelections, kind in
+                #expect(question == "foo")
+                #expect(options.count == 3)
+                #expect(maxSelections == 2)
                 #expect(kind == .disclosed)
                 confirmation()
                 return .success(())
@@ -127,7 +165,7 @@ struct PollFormScreenViewModelTests {
         let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
         try await confirmation { confirmation in
-            timelineProxy.editPollOriginalQuestionAnswersPollKindClosure = { eventID, question, options, kind in
+            timelineProxy.editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure = { eventID, question, options, maxSelections, kind in
                 #expect(eventID == "foo")
                 #expect(question == "What is your favorite country?")
                 #expect(options.count == 4)
@@ -135,6 +173,7 @@ struct PollFormScreenViewModelTests {
                 #expect(options[1] == "China 🇨🇳")
                 #expect(options[2] == "USA 🇺🇸")
                 #expect(options[3] == "France 🇫🇷")
+                #expect(maxSelections == 1)
                 #expect(kind == .disclosed)
                 confirmation()
                 return .success(())
@@ -143,6 +182,83 @@ struct PollFormScreenViewModelTests {
             
             try await deferred.fulfill()
         }
+    }
+    
+    @Test
+    mutating func editPollSubmitWithMaxSelections() async throws {
+        setupViewModel(mode: .edit(eventID: "foo", poll: .multiSelect))
+        
+        context.bindings.maxSelections = 2
+        #expect(!context.viewState.isSubmitButtonDisabled)
+
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
+        
+        try await confirmation { confirmation in
+            timelineProxy.editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure = { eventID, question, options, maxSelections, kind in
+                #expect(eventID == "foo")
+                #expect(maxSelections == 2)
+                #expect(kind == .disclosed)
+                confirmation()
+                return .success(())
+            }
+            context.send(viewAction: .submit)
+            
+            try await deferred.fulfill()
+        }
+    }
+
+    @Test
+    mutating func newPollSubmitWithMaxSelections() async throws {
+        setupViewModel()
+        context.question = "foo"
+        context.options[0].text = "bla1"
+        context.options[1].text = "bla2"
+        context.options[2].text = "bla3"
+        context.bindings.maxSelections = 2
+        #expect(!context.viewState.isSubmitButtonDisabled)
+
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
+        
+        context.send(viewAction: .submit)
+        
+        try await deferred.fulfill()
+        
+        #expect(timelineProxy.createPollQuestionAnswersMaxSelectionsPollKindCallsCount == 1)
+        #expect(timelineProxy.createPollQuestionAnswersMaxSelectionsPollKindReceivedArguments?.maxSelections == 2)
+    }
+
+    @Test
+    mutating func editPollSubmit() async throws {
+        setupViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
+        
+        context.question = "What is your favorite country?"
+        context.options.append(.init(text: "France 🇫🇷"))
+        #expect(!context.viewState.isSubmitButtonDisabled)
+
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
+        
+        context.send(viewAction: .submit)
+        
+        try await deferred.fulfill()
+        
+        #expect(timelineProxy.editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCount == 1)
+    }
+    
+    @Test
+    mutating func editPollSubmitWithMaxSelections() async throws {
+        setupViewModel(mode: .edit(eventID: "foo", poll: .multiSelect))
+        
+        context.bindings.maxSelections = 2
+        #expect(!context.viewState.isSubmitButtonDisabled)
+
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
+        
+        context.send(viewAction: .submit)
+        
+        try await deferred.fulfill()
+        
+        #expect(timelineProxy.editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCount == 1)
+        #expect(timelineProxy.editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArguments?.maxSelections == 2)
     }
     
     @Test
@@ -172,6 +288,48 @@ struct PollFormScreenViewModelTests {
             context.alertInfo?.secondaryButton?.action?()
         }
         try await deferred.fulfill()
+    }
+    
+    @Test
+    mutating func maxSelectionsCannotExceedOptions() {
+        setupViewModel()
+        context.question = "foo"
+        context.options[0].text = "a"
+        context.options[1].text = "b"
+        context.options[2].text = "c"
+        context.options[3].text = "d"
+        
+        #expect(context.bindings.maxSelections == 1)
+        
+        context.bindings.maxSelections = 3
+        #expect(context.bindings.maxSelections == 3)
+        
+        context.send(viewAction: .deleteOption(index: 3))
+        
+        #expect(context.bindings.maxSelections == 3)
+        
+        context.send(viewAction: .deleteOption(index: 2))
+        
+        #expect(context.bindings.maxSelections == 2)
+    }
+    
+    @Test
+    mutating func maxSelectionsMinimumIsOne() {
+        setupViewModel()
+        context.question = "foo"
+        context.options[0].text = "a"
+        context.options[1].text = "b"
+        
+        #expect(context.bindings.maxSelections == 1)
+        
+        context.send(viewAction: .deleteOption(index: 1))
+        
+        #expect(context.bindings.maxSelections == 1)
+        #expect(context.options.count == 1)
+        
+        context.send(viewAction: .addOption)
+        
+        #expect(context.bindings.maxSelections == 1)
     }
     
     // MARK: - Helpers

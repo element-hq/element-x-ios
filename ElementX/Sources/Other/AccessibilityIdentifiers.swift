@@ -287,6 +287,7 @@ enum A11yIdentifiers {
 
     struct PollFormScreen {
         let addOption = "poll_form-add_option"
+        let maxSelections = "poll_form-max_selections"
         let pollKind = "poll_form-kind"
         let question = "poll_form-question"
         let submit = "poll_form-submit"

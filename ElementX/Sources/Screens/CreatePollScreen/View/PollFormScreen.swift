@@ -110,6 +110,15 @@ struct PollFormScreen: View {
             ListRow(label: .plain(title: L10n.screenCreatePollAnonymousDesc),
                     kind: .toggle($context.isUndisclosed))
                 .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.pollKind)
+            
+            ListRow(label: .plain(title: L10n.screenCreatePollMaxSelectionsLabel),
+                    kind: .custom {
+                        Stepper(value: $context.bindings.maxSelections, in: context.bindings.maxSelectionsRange) {
+                            Text(L10n.screenCreatePollMaxSelectionsValue(context.bindings.maxSelections))
+                                .compound(.bodyMD)
+                        }
+                    })
+                .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.maxSelections)
         } header: {
             Text(L10n.screenCreatePollSettingsSectionTitle)
                 .compoundListSectionHeader()
@@ -200,6 +209,7 @@ private struct PollFormOptionRow: View {
 struct PollFormScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(mode: .new)
     static let editViewModel = makeViewModel(mode: .edit(eventID: "1234", poll: poll))
+    static let editViewModelMultiSelect = makeViewModel(mode: .edit(eventID: "5678", poll: pollMultiSelect))
     static let poll = Poll(question: "Cats or Dogs?",
                            kind: .disclosed,
                            maxSelections: 1,
@@ -211,6 +221,17 @@ struct PollFormScreen_Previews: PreviewProvider, TestablePreview {
                            votes: [:],
                            endDate: nil,
                            createdByAccountOwner: true)
+    static let pollMultiSelect = Poll(question: "Pick your favorites",
+                                  kind: .disclosed,
+                                  maxSelections: 2,
+                                  options: [
+                                      .init(id: "0", text: "Red", votes: 0, allVotes: 0, isSelected: false, isWinning: false),
+                                      .init(id: "1", text: "Green", votes: 0, allVotes: 0, isSelected: false, isWinning: false),
+                                      .init(id: "2", text: "Blue", votes: 0, allVotes: 0, isSelected: false, isWinning: false)
+                                  ],
+                                  votes: [:],
+                                  endDate: nil,
+                                  createdByAccountOwner: true)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -222,6 +243,11 @@ struct PollFormScreen_Previews: PreviewProvider, TestablePreview {
             PollFormScreen(context: editViewModel.context)
         }
         .previewDisplayName("Edit")
+        
+        ElementNavigationStack {
+            PollFormScreen(context: editViewModelMultiSelect.context)
+        }
+        .previewDisplayName("Edit Multi-Select")
     }
     
     static func makeViewModel(mode: PollFormMode) -> PollFormScreenViewModel {

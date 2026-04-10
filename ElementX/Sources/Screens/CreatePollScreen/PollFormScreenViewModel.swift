@@ -41,13 +41,14 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
             let question = state.bindings.question
             let options = state.bindings.options.map(\.text)
             let pollKind = state.bindings.isUndisclosed ? Poll.Kind.undisclosed : .disclosed
+            let maxSelections = state.bindings.maxSelections
             
             Task {
                 switch state.mode {
                 case .new:
-                    await createPoll(question: question, options: options, pollKind: pollKind)
+                    await createPoll(question: question, options: options, maxSelections: maxSelections, pollKind: pollKind)
                 case .edit(let eventID, _):
-                    await editPoll(pollStartID: eventID, question: question, options: options, pollKind: pollKind)
+                    await editPoll(pollStartID: eventID, question: question, options: options, maxSelections: maxSelections, pollKind: pollKind)
                 }
             }
         case .delete:
@@ -74,19 +75,21 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
                     return
                 }
                 state.bindings.options.remove(at: index)
+                state.bindings.validateMaxSelections()
             }
         case .addOption:
             guard state.bindings.options.count < state.maxNumberOfOptions else {
                 return
             }
             state.bindings.options.append(.init())
+            state.bindings.validateMaxSelections()
         }
     }
     
     // MARK: - Private
     
-    private func createPoll(question: String, options: [String], pollKind: Poll.Kind) async {
-        guard case .success = await timelineController.createPoll(question: question, answers: options, pollKind: pollKind) else {
+    private func createPoll(question: String, options: [String], maxSelections: Int, pollKind: Poll.Kind) async {
+        guard case .success = await timelineController.createPoll(question: question, answers: options, maxSelections: maxSelections, pollKind: pollKind) else {
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             return
         }
@@ -102,8 +105,8 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
         analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)
     }
     
-    private func editPoll(pollStartID: String, question: String, options: [String], pollKind: Poll.Kind) async {
-        switch await timelineController.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind) {
+    private func editPoll(pollStartID: String, question: String, options: [String], maxSelections: Int, pollKind: Poll.Kind) async {
+        switch await timelineController.editPoll(original: pollStartID, question: question, answers: options, maxSelections: maxSelections, pollKind: pollKind) {
         case .success:
             actionsSubject.send(.close)
         case .failure:
