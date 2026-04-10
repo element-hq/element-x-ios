@@ -1,6 +1,6 @@
+"NSCameraUsageDescription" = "Afin de prendre des photos et d'enregistrer des vidéos pour les envoyer, Element X a besoin d’utiliser la caméra.";
 "NSFaceIDUsageDescription" = "Face ID est utilisé pour accéder à l’application.";
 "NSLocationWhenInUseUsageDescription" = "Autoriser l’accès à votre position afin de la partager avec Element X.";
-"NSCameraUsageDescription" = "Afin de prendre des photos et d'enregistrer des vidéos pour les envoyer, Element X a besoin d’utiliser la caméra.";
 "NSMicrophoneUsageDescription" = "Afin d’enregistrer et d’envoyer des messages vocaux, Element X a besoin d’utiliser le microphone.";
 "NSPhotoLibraryUsageDescription" = "Cela vous permet d'enregistrer des images et des vidéos dans les photos de votre appareil.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Pour partager votre position en direct, Element X a besoin d'accéder à votre position même lorsque l'application fonctionne en arrière-plan.";

@@ -12,10 +12,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d cifra inserita</string>
 			<key>other</key>
-			<string>%1$d cifre inserite</string>
+			<string>Đã nhập %1$d chữ số</string>
 		</dict>
 	</dict>
 	<key>a11y_polls_percent_of_total</key>
@@ -29,9 +27,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d percento dei voti totali</string>
+			<string>%1$d percent of total votes</string>
 			<key>other</key>
-			<string>%1$d percento dei voti totali</string>
+			<string>%1$d percents of total votes</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -44,10 +42,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Visualizzato da %1$@ e %2$d altro</string>
 			<key>other</key>
-			<string>Visualizzato da %1$@ e altri %2$d</string>
+			<string>%1$@ và %2$d người khác đã đọc.</string>
 		</dict>
 	</dict>
 	<key>common_many_members</key>
@@ -60,10 +56,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d altro</string>
 			<key>other</key>
-			<string>altri %d</string>
+			<string>%d người khác</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -76,10 +70,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Membro</string>
 			<key>other</key>
-			<string>%1$d Membri</string>
+			<string>%1$d số thành viên</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -92,10 +84,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d voto</string>
 			<key>other</key>
-			<string>%d voti</string>
+			<string>%d lượt bình chọn</string>
 		</dict>
 	</dict>
 	<key>common_replies</key>
@@ -109,9 +99,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d risposta</string>
+			<string>%1$d reply</string>
 			<key>other</key>
-			<string>%1$d risposte</string>
+			<string>%1$d replies</string>
 		</dict>
 	</dict>
 	<key>common_rooms</key>
@@ -125,9 +115,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Stanza</string>
+			<string>%1$d Room</string>
 			<key>other</key>
-			<string>%1$d Stanze</string>
+			<string>%1$d Rooms</string>
 		</dict>
 	</dict>
 	<key>common_selected_count</key>
@@ -141,9 +131,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d selezionato</string>
+			<string>%1$d selected</string>
 			<key>other</key>
-			<string>%1$d selezionati</string>
+			<string>%1$d selected</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -157,9 +147,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Spazio</string>
+			<string>%1$d Space</string>
 			<key>other</key>
-			<string>%1$d Spazi</string>
+			<string>%1$d Spaces</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -172,10 +162,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@: %2$d messaggio</string>
 			<key>other</key>
-			<string>%1$@: %2$d messaggi</string>
+			<string>%1$@:%2$d tin nhắn</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -188,10 +176,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d notifica</string>
 			<key>other</key>
-			<string>%d notifiche</string>
+			<string>%d thông báo</string>
 		</dict>
 	</dict>
 	<key>notification_fallback_n_content</key>
@@ -205,9 +191,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Hai %d nuovo messaggio.</string>
+			<string>You have %d new message.</string>
 			<key>other</key>
-			<string>Hai %d nuovi messaggi.</string>
+			<string>You have %d new messages.</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -220,10 +206,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d invito</string>
 			<key>other</key>
-			<string>%d inviti</string>
+			<string>%d lời mời</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -236,10 +220,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d nuovo messaggio</string>
 			<key>other</key>
-			<string>%d nuovi messaggi</string>
+			<string>%dtin nhắn mới</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -252,10 +234,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d messaggio notificato non letto</string>
 			<key>other</key>
-			<string>%d messaggi notificati non letti</string>
+			<string>%dtin nhắn chưa đọc đã thông báo</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -268,10 +248,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d stanza</string>
 			<key>other</key>
-			<string>%d stanze</string>
+			<string>%d phòng</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -284,10 +262,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Hai %1$d tentativo di sblocco</string>
 			<key>other</key>
-			<string>Hai %1$d tentativi di sblocco</string>
+			<string>Bạn còn %1$d lần thử để mở khóa</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -300,10 +276,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>PIN sbagliato. Hai %1$d altro tentativo</string>
 			<key>other</key>
-			<string>PIN sbagliato. Hai altri %1$d tentativi</string>
+			<string>PIN không đúng. Còn %1$d lần thử</string>
 		</dict>
 	</dict>
 	<key>screen_leave_space_submit</key>
@@ -317,9 +291,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Lascia %1$d stanza e spazio</string>
+			<string>Leave %1$d room and space</string>
 			<key>other</key>
-			<string>Lascia %1$d stanze e spazi</string>
+			<string>Leave %1$d rooms and space</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -333,9 +307,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Messaggio fissato</string>
+			<string>%1$d Pinned message</string>
 			<key>other</key>
-			<string>%1$d Messaggi fissati</string>
+			<string>%1$d Pinned messages</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_banned_header_title</key>
@@ -349,9 +323,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Bannato</string>
+			<string>%1$d Banned</string>
 			<key>other</key>
-			<string>%1$d Bannati</string>
+			<string>%1$d Banned</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -364,10 +338,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Persona</string>
 			<key>other</key>
-			<string>%1$d Persone</string>
+			<string>%1$d người</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_pending_header_title</key>
@@ -381,9 +353,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Invitato</string>
+			<string>%1$d Invited</string>
 			<key>other</key>
-			<string>%1$d Invitati</string>
+			<string>%1$d Invited</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -397,9 +369,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ +%2$d vogliono entrare in questa stanza</string>
+			<string>%1$@ +%2$d other want to join this room</string>
 			<key>other</key>
-			<string>%1$@ +%2$d vogliono entrare in questa stanza</string>
+			<string>%1$@ +%2$d others want to join this room</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
@@ -413,9 +385,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>un membro ha reagito con %2$@</string>
+			<string>%1$d member reacted with %2$@</string>
 			<key>other</key>
-			<string>%1$d membri hanno reagito con %2$@</string>
+			<string>%1$d members reacted with %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_including_you_a11y</key>
@@ -429,9 +401,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Tu e un altro membro avete reagito con %2$@</string>
+			<string>You and %1$d member reacted with %2$@</string>
 			<key>other</key>
-			<string>Tu e %1$d altri membri avete reagito con %2$@</string>
+			<string>You and %1$d members reacted with %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -444,10 +416,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d modifica alla stanza</string>
 			<key>other</key>
-			<string>%1$d modifiche alla stanza</string>
+			<string>%1$d số lượng phòng thay đổi</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
@@ -460,10 +430,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@, %2$@ e %3$d altro</string>
 			<key>other</key>
-			<string>%1$@, %2$@ e altri %3$d</string>
+			<string>%1$@,%2$@ và %3$d người khác</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -476,10 +444,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@ sta scrivendo</string>
 			<key>other</key>
-			<string>%1$@ stanno scrivendo</string>
+			<string>%1$@ đang gõ</string>
 		</dict>
 	</dict>
 	<key>screen_space_remove_rooms_confirmation_title</key>
@@ -493,9 +459,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Rimuovi %1$d stanza da %2$@</string>
+			<string>Remove %1$d room from %2$@</string>
 			<key>other</key>
-			<string>Rimuovi %1$d stanze da %2$@</string>
+			<string>Remove %1$d rooms from %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>
@@ -509,9 +475,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Hai bloccato%1$d utente. Non riceverai notifiche da questo utente.</string>
+			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
 			<key>other</key>
-			<string>Hai bloccato%1$d utenti. Non riceverai notifiche da questi utenti.</string>
+			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
@@ -524,10 +490,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Provider %1$d push trovato: %2$@</string>
 			<key>other</key>
-			<string>Provider %1$d push trovati: %2$@</string>
+			<string>Đã tìm thấy %1$d nhà cung cấp thông báo đẩy: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -541,9 +505,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d distributore trovato: %2$@.</string>
+			<string>%1$d distributor found: %2$@.</string>
 			<key>other</key>
-			<string>%1$d distributori trovati: %2$@.</string>
+			<string>%1$d distributors found: %2$@.</string>
 		</dict>
 	</dict>
 </dict>

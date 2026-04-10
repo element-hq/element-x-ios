@@ -1,6 +1,6 @@
+"NSCameraUsageDescription" = "Om foto's of video's te maken en deze als bericht te verzenden, heeft Element X toegang tot de camera nodig.";
 "NSFaceIDUsageDescription" = "Face ID wordt gebruikt om toegang te krijgen tot je app.";
 "NSLocationWhenInUseUsageDescription" = "Geef toegang tot je locatie, zodat Element X je locatie kan delen.";
-"NSCameraUsageDescription" = "Om foto's of video's te maken en deze als bericht te verzenden, heeft Element X toegang tot de camera nodig.";
 "NSMicrophoneUsageDescription" = "Om berichten met audio op te nemen en te verzenden, heeft Element X toegang tot de microfoon nodig.";
 "NSPhotoLibraryUsageDescription" = "Maakt het mogelijk om foto's en video's op te slaan in je bibliotheek.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X needs location access when the app is in the background.";

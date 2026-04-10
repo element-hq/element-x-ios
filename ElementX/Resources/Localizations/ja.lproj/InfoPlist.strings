@@ -1,0 +1,6 @@
+"NSCameraUsageDescription" = "Element X 上で写真や動画を撮影して送信するには、カメラへのアクセス権限が必要です。";
+"NSFaceIDUsageDescription" = "アプリのアクセスにFace IDを使用します。";
+"NSLocationWhenInUseUsageDescription" = "Element X が現在地を共有できるよう、位置情報へのアクセスを許可してください。";
+"NSMicrophoneUsageDescription" = "音声メッセージを録音し、送信するためには、Element X がマイクへのアクセスを許可されている必要があります。";
+"NSPhotoLibraryUsageDescription" = "端末のライブラリに画像と動画を保存することができるようになります。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "ライブ位置情報を共有するには、Element X にバックグランドでの位置情報へのアクセスを許可してください。";
