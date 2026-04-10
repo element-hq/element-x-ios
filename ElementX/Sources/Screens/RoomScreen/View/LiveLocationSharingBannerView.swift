@@ -20,17 +20,14 @@ struct LiveLocationSharingBannerView: View {
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.compound.textPrimary)
             Spacer()
-            Button(L10n.actionStop, role: .destructive) {
-                onStop()
-            }
-            .buttonStyle(.compound(.primary, size: .small))
+            Button(L10n.actionStop, role: .destructive, action: onStop)
+                .buttonStyle(.compound(.primary, size: .small))
         }
         .padding(.vertical, 16)
         .padding(.horizontal, 15)
         .background(Color.compound.bgCanvasDefault)
-        .overlay(Rectangle()
-            .inset(by: 0.5)
-            .stroke(.compound.separatorPrimary))
+        .overlay(alignment: .top) { Color.compound.separatorPrimary.frame(height: 1) }
+        .overlay(alignment: .bottom) { Color.compound.separatorPrimary.frame(height: 1) }
     }
 }
 

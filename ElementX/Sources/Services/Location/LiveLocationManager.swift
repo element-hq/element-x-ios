@@ -60,6 +60,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     }
     
     func startLiveLocation(roomID: String, duration: Duration) async -> Result<Void, LiveLocationManagerError> {
+        // Stop any existing session for this room first (e.g. one started from a different device)
+        // before starting a new one.
         if appSettings.liveLocationSharingTimeoutDatesByRoomID[roomID] != nil {
             await stopLiveLocation(roomID: roomID)
         }

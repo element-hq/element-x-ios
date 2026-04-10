@@ -35,12 +35,12 @@ struct RoomScreen: View {
             }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .topBanners([
-                ZBannerItem(verticalBanners: [
-                    VerticalBannerItem(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled),
-                    VerticalBannerItem(liveLocationBanner, isVisible: context.viewState.isSharingLiveLocation && !isVoiceOverEnabled)
+                TopBannerLayer(verticalBanners: [
+                    TopBannerItem(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled),
+                    TopBannerItem(liveLocationBanner, isVisible: context.viewState.isSharingLiveLocation && !isVoiceOverEnabled)
                 ]),
                 // This can overlay on top of the stacked banners
-                ZBannerItem(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
+                TopBannerLayer(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
             ], footer: dateBadge)
             .safeAreaInset(edge: .top) {
                 // When VoiceOver is enabled, the table view isn't reversed and the scroll gestures

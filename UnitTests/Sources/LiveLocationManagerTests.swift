@@ -14,14 +14,13 @@ final class LiveLocationManagerTests {
     private var clientProxy: ClientProxyMock!
     private var manager: LiveLocationManager!
     
-    private var appSettings: AppSettings {
-        ServiceLocator.shared.settings
-    }
+    private let appSettings: AppSettings
     
     init() {
         AppSettings.resetAllSettings()
+        appSettings = AppSettings()
         clientProxy = ClientProxyMock(.init())
-        manager = LiveLocationManager(clientProxy: clientProxy, appSettings: ServiceLocator.shared.settings)
+        manager = LiveLocationManager(clientProxy: clientProxy, appSettings: appSettings)
     }
     
     deinit {
@@ -31,23 +30,20 @@ final class LiveLocationManagerTests {
     // MARK: - startLiveLocation
     
     @Test
-    func startLiveLocationWithNoExistingSession() async {
+    func startLiveLocationWithNoExistingSession() async throws {
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         
-        guard case .success = result else {
-            Issue.record("Expected success but got \(result)")
-            return
-        }
+        try result.get()
         #expect(roomProxy.startLiveLocationShareDurationCalled)
         #expect(!roomProxy.stopLiveLocationShareCalled)
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] != nil)
     }
     
     @Test
-    func startLiveLocationWithExistingSessionStopsItFirst() async {
+    func startLiveLocationWithExistingSessionStopsItFirst() async throws {
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] = Date().addingTimeInterval(300)
@@ -64,10 +60,7 @@ final class LiveLocationManagerTests {
         
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(600))
         
-        guard case .success = result else {
-            Issue.record("Expected success but got \(result)")
-            return
-        }
+        try result.get()
         #expect(callOrder == ["stop", "start"])
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] != nil)
     }
@@ -91,10 +84,7 @@ final class LiveLocationManagerTests {
         
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         
-        guard case .failure(.roomNotJoined) = result else {
-            Issue.record("Expected roomNotJoined failure but got \(result)")
-            return
-        }
+        #expect(throws: LiveLocationManagerError.roomNotJoined) { try result.get() }
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] == nil)
     }
     
@@ -106,10 +96,7 @@ final class LiveLocationManagerTests {
         
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         
-        guard case .failure(.startFailed) = result else {
-            Issue.record("Expected startFailed failure but got \(result)")
-            return
-        }
+        #expect(throws: LiveLocationManagerError.startFailed) { try result.get() }
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] == nil)
     }
     
@@ -127,9 +114,7 @@ final class LiveLocationManagerTests {
         let expectedMinTimeout = beforeStart.addingTimeInterval(TimeInterval(duration.seconds))
         let expectedMaxTimeout = afterStart.addingTimeInterval(TimeInterval(duration.seconds))
         
-        #expect(storedTimeout != nil)
-        #expect(try #require(storedTimeout) >= expectedMinTimeout)
-        #expect(try #require(storedTimeout) <= expectedMaxTimeout)
+        try #expect((expectedMinTimeout...expectedMaxTimeout).contains(#require(storedTimeout)))
     }
     
     // MARK: - stopLiveLocation
