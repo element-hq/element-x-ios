@@ -28,8 +28,15 @@ struct DownloadStrings: ParsableCommand {
             return
         }
         
-        for case let fileURL as URL in enumerator where fileURL.pathExtension == "strings" {
-            try sortStringsFile(at: fileURL)
+        for case let fileURL as URL in enumerator {
+            switch fileURL.pathExtension {
+            case "strings":
+                try sortStringsFile(at: fileURL)
+            case "stringsdict":
+                try sortStringsdictFile(at: fileURL)
+            default:
+                break
+            }
         }
     }
     
@@ -37,23 +44,13 @@ struct DownloadStrings: ParsableCommand {
         let content = try String(contentsOf: url, encoding: .utf8)
         let lines = content.components(separatedBy: .newlines)
         
-        // Separate key-value lines from other lines (comments, empty lines)
-        let keyValuePattern = #"^\s*"(.+)"\s*=\s*".*";\s*$"#
-        let regex = try NSRegularExpression(pattern: keyValuePattern)
+        let keyValueRegex = /^\s*".+"\s*=\s*".*";\s*$/
         
-        var keyValueLines = [String]()
-        
-        for line in lines {
-            let range = NSRange(line.startIndex..., in: line)
-            if regex.firstMatch(in: line, range: range) != nil {
-                keyValueLines.append(line)
-            }
-        }
+        let keyValueLines = lines.filter { $0.wholeMatch(of: keyValueRegex) != nil }
         
         guard !keyValueLines.isEmpty else { return }
         
         let sortedLines = keyValueLines.sorted { lhs, rhs in
-            // Extract keys for comparison
             guard let lhsKey = extractKey(from: lhs),
                   let rhsKey = extractKey(from: rhs) else {
                 return lhs < rhs
@@ -63,6 +60,13 @@ struct DownloadStrings: ParsableCommand {
         
         let sortedContent = sortedLines.joined(separator: "\n") + "\n"
         try sortedContent.write(to: url, atomically: true, encoding: .utf8)
+    }
+    
+    private func sortStringsdictFile(at url: URL) throws {
+        let data = try Data(contentsOf: url)
+        let plist = try PropertyListSerialization.propertyList(from: data, format: nil)
+        let xmlData = try PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0)
+        try xmlData.write(to: url)
     }
     
     private func extractKey(from line: String) -> String? {

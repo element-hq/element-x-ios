@@ -4,8 +4,6 @@
 <dict>
 	<key>a11y_digits_entered</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -17,11 +15,11 @@
 			<key>other</key>
 			<string>%1$d digits entered</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>a11y_polls_percent_of_total</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -33,11 +31,11 @@
 			<key>other</key>
 			<string>%1$d percents of total votes</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -49,11 +47,11 @@
 			<key>other</key>
 			<string>Read by %1$@ and %2$d others</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>common_many_members</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -65,47 +63,47 @@
 			<key>other</key>
 			<string>%d others</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>common_member_count</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d narys</string>
 			<key>few</key>
 			<string>%1$d nariai</string>
+			<key>one</key>
+			<string>%1$d narys</string>
 			<key>other</key>
 			<string>%1$d narių</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>common_poll_votes_count</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d balsas</string>
 			<key>few</key>
 			<string>%d balsai</string>
+			<key>one</key>
+			<string>%d balsas</string>
 			<key>other</key>
 			<string>%d balsų</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>common_replies</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -117,11 +115,11 @@
 			<key>other</key>
 			<string>%1$d replies</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>common_rooms</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -133,11 +131,11 @@
 			<key>other</key>
 			<string>%1$d Rooms</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>common_selected_count</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -149,11 +147,11 @@
 			<key>other</key>
 			<string>%1$d selected</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>common_spaces</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -165,47 +163,47 @@
 			<key>other</key>
 			<string>%1$d Spaces</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@: %2$d žinutė</string>
 			<key>few</key>
 			<string>%1$@: %2$d žinutės</string>
+			<key>one</key>
+			<string>%1$@: %2$d žinutė</string>
 			<key>other</key>
 			<string>%1$@: %2$d žinučių</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>notification_compat_summary_title</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d pranešimas</string>
 			<key>few</key>
 			<string>%d pranešimai</string>
+			<key>one</key>
+			<string>%d pranešimas</string>
 			<key>other</key>
 			<string>%d pranešimų</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>notification_fallback_n_content</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -217,83 +215,83 @@
 			<key>other</key>
 			<string>You have %d new messages.</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>notification_invitations</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d kvietimas</string>
 			<key>few</key>
 			<string>%d kvietimai</string>
+			<key>one</key>
+			<string>%d kvietimas</string>
 			<key>other</key>
 			<string>%d kvietimų</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>notification_new_messages_for_room</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d nauja žinutė</string>
 			<key>few</key>
 			<string>%d naujos žinutės</string>
+			<key>one</key>
+			<string>%d nauja žinutė</string>
 			<key>other</key>
 			<string>%d naujų žinučių</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>notification_unread_notified_messages</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d neperskaityta žinutė</string>
 			<key>few</key>
 			<string>%d neperskaitytos žinutės</string>
+			<key>one</key>
+			<string>%d neperskaityta žinutė</string>
 			<key>other</key>
 			<string>%d neperskaitytų žinučių</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d kambaryje</string>
 			<key>few</key>
 			<string>%d kambariuose</string>
+			<key>one</key>
+			<string>%d kambaryje</string>
 			<key>other</key>
 			<string>%d kambarių</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -305,11 +303,11 @@
 			<key>other</key>
 			<string>You have %1$d attempts to unlock</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -321,11 +319,11 @@
 			<key>other</key>
 			<string>Wrong PIN. You have %1$d more chances</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_leave_space_submit</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -337,11 +335,11 @@
 			<key>other</key>
 			<string>Leave %1$d rooms and space</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -353,11 +351,11 @@
 			<key>other</key>
 			<string>%1$d Pinned messages</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_room_member_list_banned_header_title</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -369,29 +367,29 @@
 			<key>other</key>
 			<string>%1$d Banned</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d asmuo</string>
 			<key>few</key>
 			<string>%1$d asmenys</string>
+			<key>one</key>
+			<string>%1$d asmuo</string>
 			<key>other</key>
 			<string>%1$d asmenų</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_room_member_list_pending_header_title</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -403,11 +401,11 @@
 			<key>other</key>
 			<string>%1$d Invited</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -419,11 +417,11 @@
 			<key>other</key>
 			<string>%1$@ +%2$d others want to join this room</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -435,11 +433,11 @@
 			<key>other</key>
 			<string>%1$d members reacted with %2$@</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_room_timeline_reaction_including_you_a11y</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -451,29 +449,29 @@
 			<key>other</key>
 			<string>You and %1$d members reacted with %2$@</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d kambario pakeitimas</string>
 			<key>few</key>
 			<string>%1$d kambario pakeitimai</string>
+			<key>one</key>
+			<string>%1$d kambario pakeitimas</string>
 			<key>other</key>
 			<string>%1$d kambario pakeitimų</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_room_typing_many_members</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -485,11 +483,11 @@
 			<key>other</key>
 			<string>%1$@, %2$@ and %3$d others</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_room_typing_notification</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -501,11 +499,11 @@
 			<key>other</key>
 			<string>%1$@ are typing</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>screen_space_remove_rooms_confirmation_title</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -517,11 +515,11 @@
 			<key>other</key>
 			<string>Remove %1$d rooms from %2$@</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>troubleshoot_notifications_test_blocked_users_result_some</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -533,11 +531,11 @@
 			<key>other</key>
 			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -549,11 +547,11 @@
 			<key>other</key>
 			<string>Found %1$d push providers: %2$@</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
 	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
 		<key>COUNT</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -565,6 +563,8 @@
 			<key>other</key>
 			<string>%1$d distributors found: %2$@.</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
 	</dict>
 </dict>
 </plist>
