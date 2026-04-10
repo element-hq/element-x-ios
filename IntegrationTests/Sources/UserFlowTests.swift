@@ -113,8 +113,10 @@ class UserFlowTests: XCTestCase {
         XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
         sendButton.tap(.center)
         
-        // Close the formatting options
-        tapOnButton(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
+        // Close the formatting options and wait for the formatting bar to fully disappear before
+        // proceeding. Without this, the subsequent openComposeOptions tap can arrive while the
+        // accessibility tree is still mid-animation, causing an IPC timeout on slow CI runners.
+        tapOnButton(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions, waitForDisappearance: true)
     }
         
     private func checkPhotoSharing() {
@@ -261,20 +263,22 @@ class UserFlowTests: XCTestCase {
         // Open analytics
         tapOnButton(A11yIdentifiers.settingsScreen.analytics)
         
-        // Go back to settings
-        tapOnBackButton("Settings")
+        // Wait for the analytics screen to fully load before going back. The navigation push
+        // animation can be slow on CI, leaving the back button invisible within the default timeout.
+        XCTAssertTrue(app.switches.firstMatch.waitForExistence(timeout: 30.0))
+        tapOnBackButton("Settings", timeout: 30.0)
         
         // Open report a bug
         tapOnButton(A11yIdentifiers.settingsScreen.reportBug)
         
         // Go back to settings
-        tapOnBackButton("Settings")
+        tapOnBackButton("Settings", timeout: 30.0)
         
         // Open about
         tapOnButton(A11yIdentifiers.settingsScreen.about)
         
         // Go back to settings
-        tapOnBackButton("Settings")
+        tapOnBackButton("Settings", timeout: 30.0)
         
         // Close the settings
         tapOnButton(A11yIdentifiers.settingsScreen.done)
