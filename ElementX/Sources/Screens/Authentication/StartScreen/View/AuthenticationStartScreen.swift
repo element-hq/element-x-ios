@@ -172,7 +172,11 @@ struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(provisionedServerName: String? = nil, hasClassicAppAccount: Bool = false) -> AuthenticationStartScreenViewModel {
-        let classicAppManager: ClassicAppManagerMock? = hasClassicAppAccount ? .init(.init(accounts: [.mockDan])) : nil
+        let classicAppAccount = ClassicAppAccount.mockDan
+        classicAppAccount.state.isServerSupported = true
+        classicAppAccount.state.availableSecrets = .complete
+        let classicAppManager: ClassicAppManagerMock? = hasClassicAppAccount ? .init(.init(accounts: [classicAppAccount])) : nil
+        
         return AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock(classicAppManager: classicAppManager),
                                                   provisioningParameters: provisionedServerName.map { .init(accountProvider: $0, loginHint: nil) },
                                                   isBugReportServiceEnabled: true,
