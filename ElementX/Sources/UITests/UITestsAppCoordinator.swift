@@ -591,7 +591,6 @@ class MockScreen: Identifiable {
             appSettings.hasRunIdentityConfirmationOnboarding = true
             appSettings.hasRunNotificationPermissionsOnboarding = true
             appSettings.analyticsConsentState = .optedOut
-            appSettings.hasSeenSpacesAnnouncement = true
             
             let roomSummaries: [RoomSummary] = if id == .userSessionSpacesFlow {
                 [[RoomSummary].mockSpaceInvites[0]] + .mockRooms

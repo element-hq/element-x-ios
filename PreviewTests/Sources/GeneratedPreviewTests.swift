@@ -1396,14 +1396,6 @@ extension PreviewTests {
     }
 
     @Test
-    func spacesAnnouncementSheetView() async throws {
-        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
-        for (index, preview) in SpacesAnnouncementSheetView_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
     func spacesScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpacesScreen_Previews._allPreviews.enumerated() {
