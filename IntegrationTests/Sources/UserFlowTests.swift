@@ -185,7 +185,8 @@ class UserFlowTests: XCTestCase {
         // Don't create the room, it will make the test account very noisy.
         // The UI tests already test this flow with mocked data.
         
-        tapOnBackButton("Start chat")
+        // Navigation animations may be slow on CI — use a longer timeout.
+        tapOnBackButton("Start chat", timeout: 30.0)
         
         tapOnButton("Cancel", waitForDisappearance: true)
     }

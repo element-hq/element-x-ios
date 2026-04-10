@@ -11,20 +11,20 @@ import XCTest
 
 extension XCUIElement {
     func clearAndTypeText(_ text: String, app: XCUIApplication) {
-        tap(.center)
+        // Read the current value before tap() while the element is in its stable (unfocused) state.
+        // After tap(), iOS 26.3 changes the search field's accessibility label from its placeholder
+        // to an empty string, which causes XCUITest's snapshot-based element re-find to fail.
+        let currentValue = (value as? String) ?? ""
+        tap()
         
         app.showKeyboardIfNeeded()
         
-        guard let currentValue = value as? String else {
-            XCTFail("Tried to clear and type text into a non string value")
-            return
-        }
-        
+        // Use app.typeText instead of self.typeText to avoid any post-tap element re-lookup.
         let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count)
-        typeText(deleteString)
+        app.typeText(deleteString)
         
         // Note: In the past, we had to type chars one by one to avoid CI flakiness
-        typeText(text)
+        app.typeText(text)
     }
     
     func tap(_ point: UnitPoint) {
