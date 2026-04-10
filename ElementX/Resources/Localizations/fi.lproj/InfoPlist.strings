@@ -1,6 +1,6 @@
 "NSCameraUsageDescription" = "Ottaakseen kuvia tai videoita ja lähettääkseen ne viestinä, Element X tarvitsee luvan kameraan.";
 "NSFaceIDUsageDescription" = "Face ID:tä käytetään sovelluksesi avaamiseen.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Jotta voit jakaa reaaliaikaisen sijaintisi, Element X tarvitsee luvan sijaintiisi, kun sovellus on taustalla.";
 "NSLocationWhenInUseUsageDescription" = "Myönnä lupa sijaintiisi, jotta Element X voi jakaa sen.";
 "NSMicrophoneUsageDescription" = "Ääniviestien tallentamiseen ja lähettämiseen Element X:n on päästävä käsiksi mikrofoniin.";
 "NSPhotoLibraryUsageDescription" = "Tämän avulla voit tallentaa kuvia ja videoita valokuvakirjastoosi.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Jotta voit jakaa reaaliaikaisen sijaintisi, Element X tarvitsee luvan sijaintiisi, kun sovellus on taustalla.";

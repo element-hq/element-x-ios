@@ -1,6 +1,6 @@
 "NSCameraUsageDescription" = "Element X cần quyền truy cập camera để chụp ảnh hoặc quay video gửi tin nhắn.";
 "NSFaceIDUsageDescription" = "Sử dụng Face ID để truy cập ứng dụng.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X needs location access when the app is in the background.";
 "NSLocationWhenInUseUsageDescription" = "Cấp quyền truy cập vị trí để Element X có thể chia sẻ vị trí của bạn.";
 "NSMicrophoneUsageDescription" = "Element X cần quyền truy cập micro để ghi và gửi tin nhắn âm thanh.";
 "NSPhotoLibraryUsageDescription" = "Tính năng này cho phép bạn lưu hình ảnh và video vào thư viện ảnh của mình.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X needs location access when the app is in the background.";
