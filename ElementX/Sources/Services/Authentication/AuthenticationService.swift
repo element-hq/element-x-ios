@@ -276,6 +276,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     // MARK: - Classic App
     
+    /// Populates the Classic app account's state by checking whether the account's homeserver is supported
+    /// (has Sliding Sync and OIDC or password login) and whether all of the required secrets are available.
     private func setupClassicAppAccountState() async {
         guard let classicAppAccount else { return }
         MXLog.info("Checking Classic app account: \(classicAppAccount)")
@@ -297,6 +299,14 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
+    /// Checks which encryption secrets are currently available from the Classic app and updates the account's state accordingly. We will handle the
+    /// Classic account differently, depending on which secrets are available:
+    /// - When they're `.complete` (the session is verified and has a key backup) we can automatically verify the account once signed in.
+    /// - When they're `.requiresBackup` we prompt the user to enable a key backup before signing in so that their messages can be decrypted.
+    /// - When they're `.unavailable` (an unverified session without secret storage) we simply show the Classic account to help the user sign in
+    /// faster but they will need to reset their identity and verify the Classic account themselves.
+    ///
+    /// This should be called whenever the user has potentially updated their secrets in the Classic app.
     func refreshClassicAppAccountState() async {
         guard let classicAppManager, let classicAppAccount else { return }
         
@@ -313,6 +323,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
+    /// Imports the Classic app's encryption secrets into the signed-in client, automatically verifying the session. This will no-op if
+    /// the user signed in with a different account or when the Classic app doesn't have a complete set of secrets (meaning either
+    /// key backup is disabled or the session hasn't been verified).
     private func verifyClientIfPossible(client: ClientProtocol) async {
         guard let classicAppManager, let classicAppAccount else { return }
         

@@ -62,7 +62,7 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     
     /// Account details discovered from the Classic app that is used for automatic verification when the same account is authenticated.
     var classicAppAccount: ClassicAppAccount? { get }
-    
+    /// This can be called whenever the user has potentially updated their secrets in the Classic app.
     func refreshClassicAppAccountState() async
 }
 

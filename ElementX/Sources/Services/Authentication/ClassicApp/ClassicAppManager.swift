@@ -51,7 +51,6 @@ final class ClassicAppManager: ClassicAppManagerProtocol {
         keychain = Keychain(service: classicAppKeychainServiceIdentifier, accessGroup: classicAppKeychainAccessGroupIdentifier)
     }
     
-    /// Loads all of the active accounts from the Classic app.
     func loadAccounts() throws -> [ClassicAppAccount] {
         // The account data is stored in the App Group container.
         guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: classicAppGroupIdentifier) else {
@@ -96,6 +95,8 @@ final class ClassicAppManager: ClassicAppManagerProtocol {
                                                               backupInfo: keyBackupVersion)
     }
     
+    /// Fetches the current key backup version from the homeserver. This is needed to determine whether
+    /// the backup key from the crypto store is for the backup currently being used by the account.
     private func keyBackupVersion(for account: ClassicAppAccount) async throws -> String? {
         let url = account.homeserverURL.appending(path: "_matrix/client/v3/room_keys/version")
         var request = URLRequest(url: url)

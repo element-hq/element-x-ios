@@ -162,9 +162,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             guard !Task.isCancelled else { return }
             
             if let availableSecrets = classicAppAccount.state.availableSecrets, availableSecrets != .requiresBackup {
-                Task { // The sheet doesn't dismiss unless we call this on the next loop 🤷‍♂️
-                    self?.state.bindings.showClassicAppBackupInstructions = false
-                }
+                await MainActor.run { self?.state.bindings.showClassicAppBackupInstructions = false }
             }
         }
     }

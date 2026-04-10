@@ -254,11 +254,8 @@ final class AuthenticationStartScreenViewModelTests {
             Issue.record("Expected classicAppMode to be .welcomeBack")
             return
         }
-        
-        if account.state.availableSecrets != .requiresBackup {
-            let deferredSecrets = deferFulfillment(account.state.observe(\.availableSecrets)) { $0 == .requiresBackup }
-            try await deferredSecrets.fulfill()
-        }
+        let deferredSecrets = deferFulfillment(account.state.observe(\.availableSecrets)) { $0 == .requiresBackup }
+        try await deferredSecrets.fulfill()
         
         // When continuing with the Classic account while backup is required.
         var deferred = deferFulfillment(context.observe(\.viewState.bindings.showClassicAppBackupInstructions)) { $0 }

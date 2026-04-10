@@ -48,12 +48,7 @@ struct AuthenticationServiceTests {
     mutating func configureLoginWithOIDC() async throws {
         try await setup()
         
-        switch await service.configure(for: "matrix.org", flow: .login) {
-        case .success:
-            break
-        case .failure(let error):
-            Issue.record("Unexpected failure: \(error)")
-        }
+        try await service.configure(for: "matrix.org", flow: .login).get()
         
         #expect(service.flow == .login)
         #expect(service.homeserver.value == .mockMatrixDotOrg)
@@ -63,12 +58,7 @@ struct AuthenticationServiceTests {
     mutating func configureRegisterWithOIDC() async throws {
         try await setup()
         
-        switch await service.configure(for: "matrix.org", flow: .register) {
-        case .success:
-            break
-        case .failure(let error):
-            Issue.record("Unexpected failure: \(error)")
-        }
+        try await service.configure(for: "matrix.org", flow: .register).get()
         
         #expect(service.flow == .register)
         #expect(service.homeserver.value == .mockMatrixDotOrg)
@@ -80,11 +70,8 @@ struct AuthenticationServiceTests {
         let homeserverAddress = "example.com"
         try await setup(serverAddress: homeserverAddress)
         
-        switch await service.configure(for: homeserverAddress, flow: .register) {
-        case .success:
-            Issue.record("Configuration should have failed")
-        case .failure(let error):
-            #expect(error == .registrationNotSupported)
+        try await #require(throws: AuthenticationServiceError.registrationNotSupported) {
+            try await service.configure(for: homeserverAddress, flow: .register).get()
         }
         
         #expect(service.flow == .login)
@@ -96,18 +83,12 @@ struct AuthenticationServiceTests {
     mutating func classicAppAccountSecretsBundleIsUsed() async throws {
         // Given an authentication service with an Element Classic account for Alice.
         try await setup(classicAppAccounts: [.mockAlice])
-        guard case .success = await service.configure(for: "matrix.org", flow: .login) else {
-            Issue.record("The service should be configured successfully.")
-            return
-        }
+        try await service.configure(for: "matrix.org", flow: .login).get()
         #expect(service.flow == .login)
         #expect(service.classicAppAccount?.state.availableSecrets == .complete)
         
         // When logging in as Alice.
-        guard case .success = await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil) else {
-            Issue.record("The account should login successfully.")
-            return
-        }
+        _ = try await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil).get()
         #expect(client.loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount == 1)
         
         // Then Alice's secrets from Element Classic should be imported.
@@ -120,18 +101,12 @@ struct AuthenticationServiceTests {
         // Given an authentication service with an Element Classic account for Alice
         // which isn't configured with any available secrets.
         try await setup(classicAppAccounts: [.mockAlice], availableSecrets: .unavailable)
-        guard case .success = await service.configure(for: "matrix.org", flow: .login) else {
-            Issue.record("The service should be configured successfully.")
-            return
-        }
+        try await service.configure(for: "matrix.org", flow: .login).get()
         #expect(service.flow == .login)
         #expect(service.classicAppAccount?.state.availableSecrets == .unavailable)
         
         // When logging in as Alice.
-        guard case .success = await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil) else {
-            Issue.record("The account should login successfully.")
-            return
-        }
+        _ = try await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil).get()
         #expect(client.loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount == 1)
         
         // Then an attempt to import Alice's secrets from Element Classic must not be made.
@@ -143,18 +118,12 @@ struct AuthenticationServiceTests {
     mutating func classicAppAccountSecretsBundleIsIgnoredForDifferentUser() async throws {
         // Given an authentication service with an Element Classic account for Dan.
         try await setup(classicAppAccounts: [.mockDan])
-        guard case .success = await service.configure(for: "matrix.org", flow: .login) else {
-            Issue.record("The service should be configured successfully.")
-            return
-        }
+        try await service.configure(for: "matrix.org", flow: .login).get()
         #expect(service.flow == .login)
         #expect(service.classicAppAccount?.state.availableSecrets == .complete)
         
         // When logging in as Alice
-        guard case .success = await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil) else {
-            Issue.record("The account should login successfully.")
-            return
-        }
+        _ = try await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil).get()
         #expect(client.loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount == 1)
         
         // Then Dan's secrets from Element Calssic should not be imported into Alice's client.
@@ -188,15 +157,11 @@ struct AuthenticationServiceTests {
                                         appHooks: AppHooks())
         
         if let classicAppAccount = service.classicAppAccount {
-            if classicAppAccount.state.isServerSupported != true {
-                let deferredSupport = deferFulfillment(classicAppAccount.state.observe(\.isServerSupported)) { $0 == true }
-                try await deferredSupport.fulfill()
-            }
+            let deferredSupport = deferFulfillment(classicAppAccount.state.observe(\.isServerSupported)) { $0 == true }
+            try await deferredSupport.fulfill()
             
-            if classicAppAccount.state.availableSecrets != availableSecrets {
-                let deferredSecrets = deferFulfillment(classicAppAccount.state.observe(\.availableSecrets)) { $0 == availableSecrets }
-                try await deferredSecrets.fulfill()
-            }
+            let deferredSecrets = deferFulfillment(classicAppAccount.state.observe(\.availableSecrets)) { $0 == availableSecrets }
+            try await deferredSecrets.fulfill()
         }
     }
 }
