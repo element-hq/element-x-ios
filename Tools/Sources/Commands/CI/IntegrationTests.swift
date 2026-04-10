@@ -13,7 +13,7 @@ struct IntegrationTests: AsyncParsableCommand {
     var device = "iPhone 17"
     
     @Option(help: "iOS version for the simulator.")
-    var osVersion = "26.1"
+    var osVersion = "26.4"
     
     func run() async throws {
         // Delete old log files
