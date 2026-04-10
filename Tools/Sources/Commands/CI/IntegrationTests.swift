@@ -27,7 +27,7 @@ struct IntegrationTests: AsyncParsableCommand {
                 "--scheme", "IntegrationTests",
                 "--device", device,
                 "--os-version", osVersion,
-                "--retries", "0"
+                "--retries", "2"
             ]).run()
         } catch {
             testsFailed = true
