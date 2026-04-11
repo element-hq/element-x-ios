@@ -316,22 +316,74 @@ private struct CaptionView: View {
     private var currentItem: TimelineMediaPreviewItem {
         context.viewState.currentItem
     }
-    
+
+    private let maxCaptionHeight: CGFloat = 120
+
     var body: some View {
-        if case let .media(mediaItem) = currentItem, let caption = mediaItem.caption {
+        if case let .media(mediaItem) = currentItem, mediaItem.caption != nil {
+            CaptionScrollView(mediaItem: mediaItem, maxHeight: maxCaptionHeight)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+        }
+    }
+}
+
+private struct CaptionScrollView: View {
+    let mediaItem: TimelineMediaPreviewItem.Media
+    let maxHeight: CGFloat
+
+    @State private var contentHeight: CGFloat = 0
+    @State private var isScrollable: Bool = false
+
+    private var shouldShowFade: Bool {
+        contentHeight > maxHeight
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ScrollView(.vertical, showsIndicators: false) {
+                captionContent
+                    .background(SizePreferenceKey())
+            }
+            .onPreferenceChange(SizePreferenceKey.self) { size in
+                contentHeight = size.height
+                isScrollable = size.height > maxHeight
+            }
+            .frame(height: maxHeight)
+            .clipped()
+
+            if shouldShowFade {
+                LinearGradient(stops: [.init(color: .clear, location: 0.0),
+                                     .init(color: .black.opacity(0.5), location: 1.0)],
+                                startPoint: .top,
+                                endPoint: .bottom)
+                .frame(height: 40)
+                .allowsHitTesting(false)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background {
+            BlurEffectView(style: .systemChromeMaterial)
+                .ignoresSafeArea()
+        }
+    }
+
+    @ViewBuilder
+    private var captionContent: some View {
+        if let formattedCaption = mediaItem.formattedCaption {
+            FormattedBodyText(attributedString: formattedCaption)
+        } else if let caption = mediaItem.caption {
             Text(caption)
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textPrimary)
-                .lineLimit(5)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(16)
-                .background {
-                    BlurEffectView(style: .systemChromeMaterial) // Darkest material available, matches the bottom bar when content is beneath.
-                        .ignoresSafeArea()
-                }
-                .transition(.move(edge: .bottom).combined(with: .opacity))
         }
+    }
+}
+
+private struct SizePreferenceKey: PreferenceKey {
+    static var defaultValue: CGSize = .zero
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+        value = nextValue()
     }
 }
 
