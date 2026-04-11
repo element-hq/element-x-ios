@@ -272,7 +272,22 @@ enum TimelineMediaPreviewItem: Equatable {
         var caption: String? {
             timelineItem.mediaCaption
         }
-        
+
+        var formattedCaption: AttributedString? {
+            switch timelineItem {
+            case let audioItem as AudioRoomTimelineItem:
+                audioItem.content.formattedCaption
+            case let fileItem as FileRoomTimelineItem:
+                fileItem.content.formattedCaption
+            case let imageItem as ImageRoomTimelineItem:
+                imageItem.content.formattedCaption
+            case let videoItem as VideoRoomTimelineItem:
+                videoItem.content.formattedCaption
+            default:
+                nil
+            }
+        }
+
         var contentType: String? {
             switch timelineItem {
             case let audioItem as AudioRoomTimelineItem:
