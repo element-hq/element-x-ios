@@ -1444,6 +1444,10 @@ internal enum L10n {
   }
   /// Send invite?
   internal static var screenBottomSheetCreateDmTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_title") }
+  /// You currently don’t have any chats with this person. Confirm inviting them before continuing.
+  internal static var screenBottomSheetCreateDmUnknownUserContent: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_unknown_user_content") }
+  /// Start a chat with this new contact?
+  internal static var screenBottomSheetCreateDmUnknownUserTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_unknown_user_title") }
   /// Ban user
   internal static var screenBottomSheetManageRoomMemberBan: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_ban") }
   /// Ban
@@ -1836,6 +1840,14 @@ internal enum L10n {
   internal static var screenInviteUsersAlreadyAMember: String { return L10n.tr("Localizable", "screen_invite_users_already_a_member") }
   /// Already invited
   internal static var screenInviteUsersAlreadyInvited: String { return L10n.tr("Localizable", "screen_invite_users_already_invited") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenInviteUsersConfirmDialogSubtitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_invite_users_confirm_dialog_subtitle", p1)
+  }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenInviteUsersConfirmDialogTitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_invite_users_confirm_dialog_title", p1)
+  }
   /// Are you sure you want to decline the invitation to join %1$@?
   internal static func screenInvitesDeclineChatMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_decline_chat_message", String(describing: p1))
