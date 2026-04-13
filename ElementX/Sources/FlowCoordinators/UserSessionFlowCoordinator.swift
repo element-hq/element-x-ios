@@ -121,8 +121,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         MXLog.info("Handling app route: \(appRoute)")
         
         switch appRoute {
-        case .accountProvisioningLink:
-            break // We always ignore this flow when logged in.
+        case .accountProvisioningLink, .oidcCallback:
+            break // We always ignore these flows when logged in.
         case .settings, .chatBackupSettings:
             if ProcessInfo.processInfo.isiOSAppOnMac, flowParameters.windowManager.secondaryWindowsEnabled {
                 startSettingsFlow(detached: true)
