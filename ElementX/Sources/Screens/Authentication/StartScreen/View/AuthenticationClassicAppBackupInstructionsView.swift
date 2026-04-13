@@ -12,6 +12,7 @@ struct AuthenticationClassicAppBackupInstructionsView: View {
     @Environment(\.dismiss) private var dismiss
     
     let classicAppAccount: ClassicAppAccount
+    let openClassicAppAction: () -> Void
     
     private var isRefreshingSecrets: Bool {
         classicAppAccount.state.availableSecrets == nil
@@ -53,9 +54,7 @@ struct AuthenticationClassicAppBackupInstructionsView: View {
     }
     
     var buttons: some View {
-        Button {
-            UIApplication.shared.open("element://open")
-        } label: {
+        Button(action: openClassicAppAction) {
             Label {
                 Text(buttonTitle)
             } icon: {
@@ -84,10 +83,10 @@ struct AuthenticationClassicAppBackupInstructionsView_Previews: PreviewProvider,
     }()
     
     static var previews: some View {
-        AuthenticationClassicAppBackupInstructionsView(classicAppAccount: loadedAccount)
+        AuthenticationClassicAppBackupInstructionsView(classicAppAccount: loadedAccount) { }
             .previewDisplayName("Initial")
         
-        AuthenticationClassicAppBackupInstructionsView(classicAppAccount: .mockAlice)
+        AuthenticationClassicAppBackupInstructionsView(classicAppAccount: .mockAlice) { }
             .previewDisplayName("Refreshing")
     }
 }

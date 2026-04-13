@@ -268,6 +268,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = AuthenticationStartScreenParameters(authenticationService: authenticationService,
                                                              provisioningParameters: provisioningParameters,
                                                              isBugReportServiceEnabled: bugReportService.isEnabled,
+                                                             appMediator: appMediator,
                                                              appSettings: appSettings,
                                                              mediaProvider: mediaProvider,
                                                              userIndicatorController: userIndicatorController)

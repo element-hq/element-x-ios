@@ -180,6 +180,7 @@ struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
         return AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock(classicAppManager: classicAppManager),
                                                   provisioningParameters: provisionedServerName.map { .init(accountProvider: $0, loginHint: nil) },
                                                   isBugReportServiceEnabled: true,
+                                                  appMediator: AppMediatorMock(),
                                                   appSettings: ServiceLocator.shared.settings,
                                                   mediaProvider: MediaProviderMock(configuration: .init()),
                                                   userIndicatorController: UserIndicatorControllerMock())

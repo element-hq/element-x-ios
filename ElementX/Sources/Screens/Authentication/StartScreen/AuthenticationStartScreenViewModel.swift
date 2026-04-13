@@ -14,6 +14,7 @@ typealias AuthenticationStartScreenViewModelType = StateStoreViewModelV2<Authent
 class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType, AuthenticationStartScreenViewModelProtocol {
     private let authenticationService: AuthenticationServiceProtocol
     private let provisioningParameters: AccountProvisioningParameters?
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -28,12 +29,14 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     init(authenticationService: AuthenticationServiceProtocol,
          provisioningParameters: AccountProvisioningParameters?,
          isBugReportServiceEnabled: Bool,
+         appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          mediaProvider: MediaProviderProtocol?,
          notificationCenter: NotificationCenter = .default,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.provisioningParameters = provisioningParameters
+        self.appMediator = appMediator
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         canReportProblem = isBugReportServiceEnabled
@@ -96,6 +99,9 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             state.classicAppMode = .otherOptions(account)
         case .closeOtherOptions(let account):
             state.classicAppMode = .welcomeBack(account)
+        case .openClassicApp:
+            guard let classicAppDeepLinkURL = InfoPlistReader.main.classicAppDeepLinkURL else { return }
+            appMediator.open(classicAppDeepLinkURL)
         }
     }
     

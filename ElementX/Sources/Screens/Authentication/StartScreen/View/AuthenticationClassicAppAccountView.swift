@@ -33,7 +33,9 @@ struct AuthenticationClassicAppAccountView: View {
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
         .sheet(isPresented: $context.showClassicAppBackupInstructions) {
-            AuthenticationClassicAppBackupInstructionsView(classicAppAccount: classicAppAccount)
+            AuthenticationClassicAppBackupInstructionsView(classicAppAccount: classicAppAccount) {
+                context.send(viewAction: .openClassicApp)
+            }
         }
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
@@ -147,6 +149,7 @@ struct AuthenticationClassicAppAccountView_Previews: PreviewProvider { // Not Te
         AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock,
                                            provisioningParameters: nil,
                                            isBugReportServiceEnabled: false,
+                                           appMediator: AppMediatorMock(),
                                            appSettings: ServiceLocator.shared.settings,
                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                            userIndicatorController: UserIndicatorControllerMock())

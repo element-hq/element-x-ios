@@ -10,3 +10,4 @@ settings:
   CLASSIC_APP_GROUP_IDENTIFIER: group.im.vector
   CLASSIC_APP_KEYCHAIN_SERVICE_IDENTIFIER: im.vector.app.encryption-manager-service
   CLASSIC_APP_KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).im.vector.app.keychain.shared"
+  CLASSIC_APP_DEEP_LINK_URL: "element://open"

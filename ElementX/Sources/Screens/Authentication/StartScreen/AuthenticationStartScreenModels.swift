@@ -65,4 +65,5 @@ enum AuthenticationStartScreenViewAction {
     case continueWithClassic(ClassicAppAccount)
     case otherOptions(ClassicAppAccount)
     case closeOtherOptions(ClassicAppAccount)
+    case openClassicApp
 }
