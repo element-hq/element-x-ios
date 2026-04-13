@@ -386,7 +386,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
             case .roomAlias(let alias):
                 if let urlString = try? matrixToRoomAliasPermalink(roomAlias: alias),
-                   let url = URL(string: urlString) {
+                   let url = URL(string: urlString)?.replacingMatrixToHost() {
                     attributedString.addAttribute(.link, value: url, range: match.range)
                 }
             case .matrixURI(let uri):

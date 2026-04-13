@@ -707,7 +707,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                 return .failure(.invalidURL)
             }
             
-            return .success(url)
+            return .success(url.replacingMatrixToHost())
         } catch {
             MXLog.error("Failed creating permalink for eventID: \(eventID) with error: \(error)")
             return .failure(.sdkError(error))

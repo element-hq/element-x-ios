@@ -532,7 +532,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 state.bindings.selectedRange = newSelectedRange
             }
         case let .room(room):
-            guard let url = try? URL(string: matrixToRoomAliasPermalink(roomAlias: room.canonicalAlias)) else {
+            guard let url = (try? URL(string: matrixToRoomAliasPermalink(roomAlias: room.canonicalAlias)))?.replacingMatrixToHost() else {
                 MXLog.error("Could not build alias permalink")
                 return
             }
