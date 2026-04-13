@@ -2187,6 +2187,65 @@ class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sendable {
         }
     }
 }
+class CLLocationManagerMock: CLLocationManagerProtocol, @unchecked Sendable {
+    weak var delegate: CLLocationManagerDelegate?
+    var allowsBackgroundLocationUpdates: Bool {
+        get { return underlyingAllowsBackgroundLocationUpdates }
+        set(value) { underlyingAllowsBackgroundLocationUpdates = value }
+    }
+    var underlyingAllowsBackgroundLocationUpdates: Bool!
+    var desiredAccuracy: CLLocationAccuracy {
+        get { return underlyingDesiredAccuracy }
+        set(value) { underlyingDesiredAccuracy = value }
+    }
+    var underlyingDesiredAccuracy: CLLocationAccuracy!
+    var pausesLocationUpdatesAutomatically: Bool {
+        get { return underlyingPausesLocationUpdatesAutomatically }
+        set(value) { underlyingPausesLocationUpdatesAutomatically = value }
+    }
+    var underlyingPausesLocationUpdatesAutomatically: Bool!
+    var authorizationStatus: CLAuthorizationStatus {
+        get { return underlyingAuthorizationStatus }
+        set(value) { underlyingAuthorizationStatus = value }
+    }
+    var underlyingAuthorizationStatus: CLAuthorizationStatus!
+
+    //MARK: - requestAlwaysAuthorization
+
+    var requestAlwaysAuthorizationUnderlyingCallsCount = 0
+    var requestAlwaysAuthorizationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return requestAlwaysAuthorizationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestAlwaysAuthorizationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestAlwaysAuthorizationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestAlwaysAuthorizationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var requestAlwaysAuthorizationCalled: Bool {
+        return requestAlwaysAuthorizationCallsCount > 0
+    }
+    var requestAlwaysAuthorizationClosure: (() -> Void)?
+
+    func requestAlwaysAuthorization() {
+        requestAlwaysAuthorizationCallsCount += 1
+        requestAlwaysAuthorizationClosure?()
+    }
+}
 class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
 
     //MARK: - setDelegate

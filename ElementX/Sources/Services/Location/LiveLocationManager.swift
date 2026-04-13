@@ -10,7 +10,7 @@ import CoreLocation
 
 class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationManagerDelegate {
     private let clientProxy: ClientProxyProtocol
-    private let locationManager: CLLocationManager
+    private let locationManager: CLLocationManagerProtocol
     private let appSettings: AppSettings
     
     private let authorizationStatusSubject: CurrentValueSubject<CLAuthorizationStatus, Never>
@@ -30,21 +30,22 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     
     @MainActor
     init(clientProxy: ClientProxyProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         locationManager: @autoclosure @MainActor () -> CLLocationManagerProtocol = CLLocationManager()) {
         self.clientProxy = clientProxy
         self.appSettings = appSettings
         // Very important, the CLLocationManager needs to be initialised on the main thread
         // or the delegate functions won't be handled!
         // https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate
-        locationManager = CLLocationManager()
-        authorizationStatusSubject = CurrentValueSubject(locationManager.authorizationStatus)
+        self.locationManager = locationManager()
+        authorizationStatusSubject = CurrentValueSubject(self.locationManager.authorizationStatus)
         
         super.init()
         
-        locationManager.delegate = self
-        locationManager.allowsBackgroundLocationUpdates = true
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.pausesLocationUpdatesAutomatically = false
+        self.locationManager.delegate = self
+        self.locationManager.allowsBackgroundLocationUpdates = true
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        self.locationManager.pausesLocationUpdatesAutomatically = false
         
         setupSubscriptions()
     }
