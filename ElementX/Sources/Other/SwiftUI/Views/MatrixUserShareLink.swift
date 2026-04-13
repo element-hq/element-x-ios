@@ -15,7 +15,7 @@ struct MatrixUserShareLink<Label: View>: View {
     
     init(userID: String, @ViewBuilder label: () -> Label) {
         self.label = label()
-        permalink = try? URL(string: matrixToUserPermalink(userId: userID))
+        permalink = (try? URL(string: matrixToUserPermalink(userId: userID)))?.replacingMatrixToHost()
     }
     
     var body: some View {

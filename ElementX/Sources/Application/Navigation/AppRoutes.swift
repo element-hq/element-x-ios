@@ -80,6 +80,7 @@ struct AppRouteURLParser {
     init(appSettings: AppSettings) {
         urlParsers = [
             AppGroupURLParser(),
+            UCMatrixPermalinkParser(),
             MatrixPermalinkParser(),
             ElementWebURLParser(domains: appSettings.elementWebHosts),
             AccountProvisioningURLParser(domain: appSettings.accountProvisioningHost),
@@ -169,6 +170,21 @@ private struct ElementCallURLParser: URLParser {
         }
         
         return .genericCallLink(url: url)
+    }
+}
+
+/// Converts `ucmatrix.org` permalinks to `matrix.to` format for SDK parsing.
+private struct UCMatrixPermalinkParser: URLParser {
+    private let permalinkParser = MatrixPermalinkParser()
+
+    func route(from url: URL) -> AppRoute? {
+        guard url.host == "ucmatrix.org",
+              var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return nil
+        }
+        components.host = "matrix.to"
+        guard let matrixToURL = components.url else { return nil }
+        return permalinkParser.route(from: matrixToURL)
     }
 }
 

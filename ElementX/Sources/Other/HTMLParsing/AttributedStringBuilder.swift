@@ -492,7 +492,7 @@ private struct TextParsingMatch {
     var link: URL? {
         switch type {
         case .userID(let identifier):
-            return try? URL(string: matrixToUserPermalink(userId: identifier))
+            return (try? URL(string: matrixToUserPermalink(userId: identifier)))?.replacingMatrixToHost()
         case .link(let urlString):
             return URL(string: urlString)
         default:

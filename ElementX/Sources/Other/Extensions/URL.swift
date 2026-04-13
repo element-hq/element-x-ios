@@ -8,6 +8,21 @@
 
 import Foundation
 
+// MARK: - UCMeet Permalinks
+
+extension URL {
+    /// Replaces the `matrix.to` host with `ucmatrix.org` for user-visible permalinks.
+    /// The `matrix.to` domain is blocked in Russia; `ucmatrix.org` serves as an alternative.
+    func replacingMatrixToHost() -> URL {
+        guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+              components.host == "matrix.to" else {
+            return self
+        }
+        components.host = "ucmatrix.org"
+        return components.url ?? self
+    }
+}
+
 // MARK: - Custom URLs
 
 extension URL {

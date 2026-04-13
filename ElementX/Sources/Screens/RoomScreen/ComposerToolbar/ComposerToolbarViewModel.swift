@@ -505,7 +505,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func handleSuggestion(_ suggestion: SuggestionItem) {
         switch suggestion.suggestionType {
         case let .user(user):
-            guard let url = try? URL(string: matrixToUserPermalink(userId: user.id)) else {
+            guard let url = (try? URL(string: matrixToUserPermalink(userId: user.id)))?.replacingMatrixToHost() else {
                 MXLog.error("Could not build user permalink")
                 return
             }
@@ -635,7 +635,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             let fullRange = match.range(at: 0)
             
             let userID = nsText.substring(with: userIDRange)
-            let fullURLString = "https://matrix.to/#/\(userID)"
+            let fullURLString = "https://ucmatrix.org/#/\(userID)"
             
             if let url = URL(string: fullURLString) {
                 callback(fullRange, url)

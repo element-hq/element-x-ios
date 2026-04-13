@@ -34,7 +34,7 @@ extension RoomMemberProxyProtocol {
     }
     
     var permalink: URL? {
-        try? URL(string: matrixToUserPermalink(userId: userID))
+        (try? URL(string: matrixToUserPermalink(userId: userID)))?.replacingMatrixToHost()
     }
     
     /// The name used for sorting the member alphabetically. This will be the displayname if,

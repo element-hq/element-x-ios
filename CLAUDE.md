@@ -50,6 +50,7 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 | Encryption | `ITSAppUsesNonExemptEncryption = YES` in plist, encryption compliance document uploaded to ASC |
 | Analytics | Disabled (PostHog, Sentry, rageshake all set to `nil`) |
 | APP_NAME | `UCMeet.Chat` (was `ElementX` — fixed OIDC system dialog) |
+| Permalinks | `ucmatrix.org` (replaced `matrix.to` — blocked in Russia). Outgoing links, mentions, share URLs all use `ucmatrix.org`. Incoming `ucmatrix.org` links parsed via `UCMatrixPermalinkParser` |
 | Upstream | Synced with `element-hq/element-x-ios:develop` (60 ahead, 0 behind) |
 
 ### Build 4 → Build 5 Changes (2026-03-27)
@@ -83,7 +84,7 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 
 ### Post-Launch Tasks
 
-1. **ucmatrix.org** — permalink redirect (2 code lines: `AppRoutes.swift:211`, `ComposerToolbarViewModel.swift:638`)
+1. ~~**ucmatrix.org**~~ — **DONE** (2026-04-13). Replaced `matrix.to` → `ucmatrix.org` in 7 files: URL helper, AppRoutes (incoming parser), JoinedRoomProxy, MatrixUserShareLink, RoomMemberProxyProtocol, UserProfileScreenViewModel, ComposerToolbarViewModel, AttributedStringBuilder
 2. **CallKit** — update Element Call widget to send `m.rtc.notification` events
 3. **MapTiler** — customer decision on paid plan for static map previews
 
@@ -205,4 +206,4 @@ All docs in `documentation/` folder:
 
 ---
 
-*Last updated: 2026-04-05. See `documentation/progress_log.md` for detailed daily log.*
+*Last updated: 2026-04-13. See `documentation/progress_log.md` for detailed daily log.*
