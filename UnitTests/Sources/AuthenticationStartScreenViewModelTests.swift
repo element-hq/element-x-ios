@@ -39,7 +39,7 @@ final class AuthenticationStartScreenViewModelTests {
     @Test
     func initialState() async throws {
         // Given a view model that has no provisioning parameters.
-        setupViewModel()
+        await setupViewModel()
         #expect(authenticationService.homeserver.value.loginMode == .unknown)
         #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
@@ -66,7 +66,7 @@ final class AuthenticationStartScreenViewModelTests {
     @Test
     func provisionedOIDCState() async throws {
         // Given a view model that has been provisioned with a server that supports OIDC.
-        setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"))
+        await setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"))
         #expect(authenticationService.homeserver.value.loginMode == .unknown)
         #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
@@ -86,7 +86,7 @@ final class AuthenticationStartScreenViewModelTests {
     @Test
     func provisionedPasswordState() async throws {
         // Given a view model that has been provisioned with a server that does not support OIDC.
-        setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"), supportsOIDC: false)
+        await setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"), supportsOIDC: false)
         #expect(authenticationService.homeserver.value.loginMode == .unknown)
         #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
@@ -105,7 +105,7 @@ final class AuthenticationStartScreenViewModelTests {
     func singleProviderOIDCState() async throws {
         // Given a view model that for an app that only allows the use of a single provider that supports OIDC.
         setAllowedAccountProviders(["company.com"])
-        setupViewModel()
+        await setupViewModel()
         #expect(authenticationService.homeserver.value.loginMode == .unknown)
         #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
@@ -126,7 +126,7 @@ final class AuthenticationStartScreenViewModelTests {
     func singleProviderPasswordState() async throws {
         // Given a view model that for an app that only allows the use of a single provider that does not support OIDC.
         setAllowedAccountProviders(["company.com"])
-        setupViewModel(supportsOIDC: false)
+        await setupViewModel(supportsOIDC: false)
         #expect(authenticationService.homeserver.value.loginMode == .unknown)
         #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
@@ -147,7 +147,7 @@ final class AuthenticationStartScreenViewModelTests {
     func classicAppAccount() async throws {
         // Given a view model with a Classic app account whose server name resolves successfully.
         let classicAppAccount = makeClassicAppAccount()
-        setupViewModel(classicAppAccount: classicAppAccount)
+        await setupViewModel(classicAppAccount: classicAppAccount)
         guard case .welcomeBack(let account) = context.viewState.classicAppMode else {
             Issue.record("Expected classicAppMode to be .welcomeBack")
             return
@@ -171,7 +171,7 @@ final class AuthenticationStartScreenViewModelTests {
         // Given a view model where the Classic app account's server name has no well-known file.
         let classicAppAccount = makeClassicAppAccount(serverName: "unknown-server.org",
                                                       homeserverURL: "https://matrix.company.com")
-        setupViewModel(classicAppAccount: classicAppAccount)
+        await setupViewModel(classicAppAccount: classicAppAccount)
         guard case .welcomeBack(let account) = context.viewState.classicAppMode else {
             Issue.record("Expected classicAppMode to be .welcomeBack")
             return
@@ -191,10 +191,10 @@ final class AuthenticationStartScreenViewModelTests {
     }
     
     @Test
-    func classicAppAccountOnUnsupportedServer() async throws {
+    func classicAppAccountOnUnsupportedServer() async {
         // Given a view model with a Classic app account whose server supports neither OIDC nor password login.
         let classicAppAccount = makeClassicAppAccount()
-        setupViewModel(classicAppAccount: classicAppAccount, supportsOIDC: false, supportsPasswordLogin: false)
+        await setupViewModel(classicAppAccount: classicAppAccount, supportsOIDC: false, supportsPasswordLogin: false)
         guard case .welcomeBack(let account) = context.viewState.classicAppMode else {
             Issue.record("Expected classicAppMode to be .welcomeBack")
             return
@@ -202,28 +202,27 @@ final class AuthenticationStartScreenViewModelTests {
         #expect(account == classicAppAccount)
         
         // Then the Classic app account should indicate that it isn't supported (so the view falls back to the standard content).
-        let deferred = deferFulfillment(account.state.observe(\.isServerSupported)) { $0 == false }
-        try await deferred.fulfill()
+        #expect(account.state.isServerSupported == false)
     }
     
     @Test
-    func classicAppAccountWithProvisioningLink() {
+    func classicAppAccountWithProvisioningLink() async {
         // Given a view model that has been provisioned with a provisioning link (and a classic account exists).
         let classicAppAccount = makeClassicAppAccount()
-        setupViewModel(classicAppAccount: classicAppAccount,
-                       provisioningParameters: .init(accountProvider: "company.com", loginHint: nil))
+        await setupViewModel(classicAppAccount: classicAppAccount,
+                             provisioningParameters: .init(accountProvider: "company.com", loginHint: nil))
         
         // Then the Classic app account should not be shown — provisioning takes precedence.
         #expect(context.viewState.classicAppMode == nil)
     }
     
     @Test
-    func singleProviderWithMatchingClassicAppAccount() {
+    func singleProviderWithMatchingClassicAppAccount() async {
         // Given a view model for an app that only allows a single provider that matches the Classic account's server.
         let classicAppAccount = makeClassicAppAccount(serverName: "company.com",
                                                       homeserverURL: "https://matrix.company.com")
         setAllowedAccountProviders(["company.com"])
-        setupViewModel(classicAppAccount: classicAppAccount)
+        await setupViewModel(classicAppAccount: classicAppAccount)
         
         // Then the Classic app account should be shown as a welcome-back option.
         guard case .welcomeBack(let account) = context.viewState.classicAppMode else {
@@ -234,12 +233,12 @@ final class AuthenticationStartScreenViewModelTests {
     }
     
     @Test
-    func singleProviderWithDisallowedClassicAppAccount() {
+    func singleProviderWithDisallowedClassicAppAccount() async {
         // Given a view model for an app that only allows a single provider that does NOT match the Classic account's server.
         let classicAppAccount = makeClassicAppAccount(serverName: "other-server.org",
                                                       homeserverURL: "https://matrix.other-server.org")
         setAllowedAccountProviders(["company.com"])
-        setupViewModel(classicAppAccount: classicAppAccount)
+        await setupViewModel(classicAppAccount: classicAppAccount)
         
         // Then the Classic app account should not be shown since the server is not in the allowed providers.
         #expect(context.viewState.classicAppMode == nil)
@@ -249,13 +248,12 @@ final class AuthenticationStartScreenViewModelTests {
     func classicAppAccountRequiresBackup() async throws {
         // Given a view model with a Classic app account that requires backup before signing in.
         let classicAppAccount = makeClassicAppAccount()
-        setupViewModel(classicAppAccount: classicAppAccount, availableSecrets: .requiresBackup)
+        await setupViewModel(classicAppAccount: classicAppAccount, availableSecrets: .requiresBackup)
         guard case .welcomeBack(let account) = context.viewState.classicAppMode else {
             Issue.record("Expected classicAppMode to be .welcomeBack")
             return
         }
-        let deferredSecrets = deferFulfillment(account.state.observe(\.availableSecrets)) { $0 == .requiresBackup }
-        try await deferredSecrets.fulfill()
+        #expect(account.state.availableSecrets == .requiresBackup)
         
         // When continuing with the Classic account while backup is required.
         var deferred = deferFulfillment(context.observe(\.viewState.bindings.showClassicAppBackupInstructions)) { $0 }
@@ -286,7 +284,7 @@ final class AuthenticationStartScreenViewModelTests {
                                 provisioningParameters: AccountProvisioningParameters? = nil,
                                 supportsOIDC: Bool = true,
                                 supportsPasswordLogin: Bool = true,
-                                availableSecrets: ClassicAppAccount.AvailableSecrets = .complete) {
+                                availableSecrets: ClassicAppAccount.AvailableSecrets = .complete) async {
         // Manually create a configuration as the default homeserver address setting is immutable.
         client = ClientSDKMock(configuration: .init(oidcLoginURL: supportsOIDC ? "https://account.company.com/authorize" : nil,
                                                     supportsOIDCCreatePrompt: false,
@@ -311,6 +309,8 @@ final class AuthenticationStartScreenViewModelTests {
                                                       clientFactory: clientFactory,
                                                       appSettings: appSettings,
                                                       appHooks: AppHooks())
+        
+        await authenticationService.setupClassicAppAccountState()
         
         viewModel = AuthenticationStartScreenViewModel(authenticationService: authenticationService,
                                                        provisioningParameters: provisioningParameters,

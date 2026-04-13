@@ -157,11 +157,9 @@ struct AuthenticationServiceTests {
                                         appHooks: AppHooks())
         
         if let classicAppAccount = service.classicAppAccount {
-            let deferredSupport = deferFulfillment(classicAppAccount.state.observe(\.isServerSupported)) { $0 == true }
-            try await deferredSupport.fulfill()
-            
-            let deferredSecrets = deferFulfillment(classicAppAccount.state.observe(\.availableSecrets)) { $0 == availableSecrets }
-            try await deferredSecrets.fulfill()
+            await service.setupClassicAppAccountState()
+            try #require(classicAppAccount.state.isServerSupported == true)
+            try #require(classicAppAccount.state.availableSecrets == availableSecrets)
         }
     }
 }

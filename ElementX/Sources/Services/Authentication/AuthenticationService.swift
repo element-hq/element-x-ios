@@ -61,10 +61,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
         // When updating these, don't forget to update the reset method too.
         homeserverSubject = .init(LoginHomeserver(address: appSettings.accountProviders[0], loginMode: .unknown))
         flow = .login
-        
-        if classicAppAccount != nil {
-            Task { await self.setupClassicAppAccountState() }
-        }
     }
     
     // MARK: - Public
@@ -278,8 +274,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     /// Populates the Classic app account's state by checking whether the account's homeserver is supported
     /// (has Sliding Sync and OIDC or password login) and whether all of the required secrets are available.
-    private func setupClassicAppAccountState() async {
-        guard let classicAppAccount else { return }
+    func setupClassicAppAccountState() async {
+        guard let classicAppAccount, classicAppAccount.state.isServerSupported == nil else { return }
         MXLog.info("Checking Classic app account: \(classicAppAccount)")
         
         do {
@@ -308,7 +304,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     ///
     /// This should be called whenever the user has potentially updated their secrets in the Classic app.
     func refreshClassicAppAccountState() async {
-        guard let classicAppManager, let classicAppAccount else { return }
+        guard let classicAppManager, let classicAppAccount, classicAppAccount.state.isServerSupported != nil else { return }
         
         classicAppAccount.state.availableSecrets = nil
         
