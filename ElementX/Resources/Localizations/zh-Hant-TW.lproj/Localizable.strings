@@ -616,6 +616,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "傳送邀請";
 "screen_bottom_sheet_create_dm_message" = "您想要開始與 %1$@ 聊天嗎？";
 "screen_bottom_sheet_create_dm_title" = "傳送邀請？";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
 "screen_bottom_sheet_manage_room_member_ban" = "踢出並加入黑名單";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "加入黑名單";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "即使收到邀請，他們仍然無法加入聊天室。";

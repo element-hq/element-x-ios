@@ -616,6 +616,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Kirim undangan";
 "screen_bottom_sheet_create_dm_message" = "Apakah Anda ingin memulai obrolan dengan %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Kirim undangan?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
 "screen_bottom_sheet_manage_room_member_ban" = "Keluarkan dan cekal anggota";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Cekal";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Mereka tidak akan dapat bergabung ke ruangan ini lagi jika diundang.";

@@ -616,6 +616,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Invia invito";
 "screen_bottom_sheet_create_dm_message" = "Vuoi iniziare una conversazione con%1$@?";
 "screen_bottom_sheet_create_dm_title" = "Inviare invito?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
 "screen_bottom_sheet_manage_room_member_ban" = "Rimuovi ed escludi";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Escludi";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Non potrà entrare nuovamente in questa stanza se invitato.";

@@ -616,6 +616,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Wyślij zaproszenie";
 "screen_bottom_sheet_create_dm_message" = "Czy chcesz rozpocząć czat z %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Wysłać zaproszenie?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
 "screen_bottom_sheet_manage_room_member_ban" = "Usuń i zbanuj członka";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Zbanuj";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nie będą mogli ponownie dołączyć do tego pokoju, jeśli zostaną zaproszeni.";

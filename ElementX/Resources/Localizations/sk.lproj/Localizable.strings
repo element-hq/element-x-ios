@@ -616,6 +616,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Odoslať pozvánku";
 "screen_bottom_sheet_create_dm_message" = "Chceli by ste začať rozhovor s používateľom %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Poslať pozvánku?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
 "screen_bottom_sheet_manage_room_member_ban" = "Odstrániť a zakázať člena";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Zakázať";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nebudú sa môcť pripojiť k tejto miestnosti znova ani ak budú pozvaní.";
