@@ -21,7 +21,7 @@ struct SendInviteConfirmationView: View {
     
     private var title: String {
         if userToInvite.isUnknown {
-            UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogTitle
+            L10n.screenBottomSheetCreateDmUnknownUserTitle
         } else {
             L10n.screenBottomSheetCreateDmTitle
         }
@@ -35,7 +35,7 @@ struct SendInviteConfirmationView: View {
             string = userToInvite.id
         }
         return if userToInvite.isUnknown {
-            UntranslatedL10n.cryptoHistorySharingConfirmStartChatDialogContent
+            L10n.screenBottomSheetCreateDmUnknownUserContent
         } else {
             L10n.screenBottomSheetCreateDmMessage(string)
         }
