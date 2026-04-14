@@ -7,6 +7,7 @@
 //
 
 import Combine
+import CoreLocation
 import Foundation
 import SwiftUI
 
@@ -26,6 +27,8 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     }
     
     private var authorizationStatusSubscription: AnyCancellable?
+    // periphery:ignore - keep alive to keep receiving updates.
+    private var liveLocationService: RoomLiveLocationServiceProtocol?
     
     init(interactionMode: LocationSharingInteractionMode,
          mapURLBuilder: MapTilerURLBuilderProtocol,
@@ -50,8 +53,12 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                                            ownUserID: roomProxy.ownUserID),
                    mediaProvider: mediaProvider)
         
-        updateShownUserProfile(members: roomProxy.membersPublisher.value)
+        updateUserProfiles(members: roomProxy.membersPublisher.value)
         setupSubscriptions()
+        
+        if case .viewLive = interactionMode {
+            Task { await setupLiveLocationSubscription() }
+        }
     }
     
     override func process(viewAction: LocationSharingScreenViewAction) {
@@ -81,9 +88,23 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     
     // MARK: - Private
     
+    private func setupLiveLocationSubscription() async {
+        let liveLocationService = await roomProxy.makeLiveLocationService()
+        self.liveLocationService = liveLocationService
+        
+        liveLocationService.liveLocationsPublisher
+            .sink { [weak self] liveLocationsShares in
+                guard let self else { return }
+                MXLog.info("Received live location shares update: \(liveLocationsShares.count) share(s)")
+                state.liveLocationShares = liveLocationsShares
+                updateUserProfiles(members: roomProxy.membersPublisher.value)
+            }
+            .store(in: &cancellables)
+    }
+    
     private func setupSubscriptions() {
         roomProxy.membersPublisher.sink { [weak self] members in
-            self?.updateShownUserProfile(members: members)
+            self?.updateUserProfiles(members: members)
         }
         .store(in: &cancellables)
         
@@ -95,19 +116,23 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             .store(in: &cancellables)
     }
     
-    private func updateShownUserProfile(members: [RoomMemberProxyProtocol]) {
+    private func updateUserProfiles(members: [RoomMemberProxyProtocol]) {
         switch state.interactionMode {
         case .picker:
-            if let ownUser = members.first(where: { $0.userID == roomProxy.ownUserID }).map(UserProfileProxy.init) {
-                state.userProfile = ownUser
-            } else {
-                state.userProfile = .init(userID: roomProxy.ownUserID)
-            }
+            let ownUser = members.first(where: { $0.userID == roomProxy.ownUserID }).map(UserProfileProxy.init) ?? .init(userID: roomProxy.ownUserID)
+            state.userProfiles = [ownUser.userID: ownUser]
         case .viewStatic(let location):
-            if let sender = members.first(where: { $0.userID == location.sender.id }).map(UserProfileProxy.init) {
-                state.userProfile = sender
-            } else {
-                state.userProfile = .init(sender: location.sender)
+            let sender = members.first(where: { $0.userID == location.sender.id }).map(UserProfileProxy.init) ?? .init(sender: location.sender)
+            state.userProfiles = [sender.userID: sender]
+        case .viewLive(let sender, _):
+            var userIDs = Set(state.liveLocationShares.map(\.userID))
+            userIDs.insert(sender.id)
+            state.userProfiles = userIDs.reduce(into: [:]) { dict, userID in
+                if let member = members.first(where: { $0.userID == userID }) {
+                    dict[userID] = UserProfileProxy(member: member)
+                } else {
+                    dict[userID] = UserProfileProxy(userID: userID)
+                }
             }
         }
     }
