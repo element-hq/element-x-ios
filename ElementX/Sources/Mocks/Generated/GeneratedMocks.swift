@@ -10414,17 +10414,17 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return clearDraftThreadRootEventIDReturnValue
         }
     }
-    //MARK: - getLiveLocationSharesService
+    //MARK: - makeLiveLocationService
 
-    var getLiveLocationSharesServiceUnderlyingCallsCount = 0
-    var getLiveLocationSharesServiceCallsCount: Int {
+    var makeLiveLocationServiceUnderlyingCallsCount = 0
+    var makeLiveLocationServiceCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getLiveLocationSharesServiceUnderlyingCallsCount
+                return makeLiveLocationServiceUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getLiveLocationSharesServiceUnderlyingCallsCount
+                    returnValue = makeLiveLocationServiceUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -10432,27 +10432,27 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getLiveLocationSharesServiceUnderlyingCallsCount = newValue
+                makeLiveLocationServiceUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getLiveLocationSharesServiceUnderlyingCallsCount = newValue
+                    makeLiveLocationServiceUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getLiveLocationSharesServiceCalled: Bool {
-        return getLiveLocationSharesServiceCallsCount > 0
+    var makeLiveLocationServiceCalled: Bool {
+        return makeLiveLocationServiceCallsCount > 0
     }
 
-    var getLiveLocationSharesServiceUnderlyingReturnValue: LiveLocationSharesServiceProtocol!
-    var getLiveLocationSharesServiceReturnValue: LiveLocationSharesServiceProtocol! {
+    var makeLiveLocationServiceUnderlyingReturnValue: RoomLiveLocationServiceProtocol!
+    var makeLiveLocationServiceReturnValue: RoomLiveLocationServiceProtocol! {
         get {
             if Thread.isMainThread {
-                return getLiveLocationSharesServiceUnderlyingReturnValue
+                return makeLiveLocationServiceUnderlyingReturnValue
             } else {
-                var returnValue: LiveLocationSharesServiceProtocol? = nil
+                var returnValue: RoomLiveLocationServiceProtocol? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getLiveLocationSharesServiceUnderlyingReturnValue
+                    returnValue = makeLiveLocationServiceUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -10460,22 +10460,22 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getLiveLocationSharesServiceUnderlyingReturnValue = newValue
+                makeLiveLocationServiceUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getLiveLocationSharesServiceUnderlyingReturnValue = newValue
+                    makeLiveLocationServiceUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getLiveLocationSharesServiceClosure: (() async -> LiveLocationSharesServiceProtocol)?
+    var makeLiveLocationServiceClosure: (() async -> RoomLiveLocationServiceProtocol)?
 
-    func getLiveLocationSharesService() async -> LiveLocationSharesServiceProtocol {
-        getLiveLocationSharesServiceCallsCount += 1
-        if let getLiveLocationSharesServiceClosure = getLiveLocationSharesServiceClosure {
-            return await getLiveLocationSharesServiceClosure()
+    func makeLiveLocationService() async -> RoomLiveLocationServiceProtocol {
+        makeLiveLocationServiceCallsCount += 1
+        if let makeLiveLocationServiceClosure = makeLiveLocationServiceClosure {
+            return await makeLiveLocationServiceClosure()
         } else {
-            return getLiveLocationSharesServiceReturnValue
+            return makeLiveLocationServiceReturnValue
         }
     }
     //MARK: - startLiveLocationShare
@@ -11967,14 +11967,6 @@ class LiveLocationManagerMock: LiveLocationManagerProtocol, @unchecked Sendable 
         }
         await stopLiveLocationRoomIDClosure?(roomID)
     }
-}
-class LiveLocationSharesServiceMock: LiveLocationSharesServiceProtocol, @unchecked Sendable {
-    var liveLocationSharesPublisher: AnyPublisher<[LiveLocationShareProxy], Never> {
-        get { return underlyingLiveLocationSharesPublisher }
-        set(value) { underlyingLiveLocationSharesPublisher = value }
-    }
-    var underlyingLiveLocationSharesPublisher: AnyPublisher<[LiveLocationShareProxy], Never>!
-
 }
 class MediaLoaderMock: MediaLoaderProtocol, @unchecked Sendable {
 
@@ -15110,6 +15102,14 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
     var powerLevels: RoomPowerLevelsProxyProtocol?
     var successor: SuccessorRoom?
     var heroes: [RoomHero] = []
+
+}
+class RoomLiveLocationServiceMock: RoomLiveLocationServiceProtocol, @unchecked Sendable {
+    var liveLocationsPublisher: AnyPublisher<[LiveLocationShare], Never> {
+        get { return underlyingLiveLocationsPublisher }
+        set(value) { underlyingLiveLocationsPublisher = value }
+    }
+    var underlyingLiveLocationsPublisher: AnyPublisher<[LiveLocationShare], Never>!
 
 }
 class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
