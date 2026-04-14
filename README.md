@@ -201,5 +201,3 @@ xcodebuild archive \
 
 Форк Element X iOS. Лицензия — [AGPL v3](LICENSE).
 
-Copyright (c) 2025 Element Creations Ltd.
-Copyright (c) 2022–2025 New Vector Ltd.
