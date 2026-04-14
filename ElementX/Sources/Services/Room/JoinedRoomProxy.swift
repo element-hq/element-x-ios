@@ -754,6 +754,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     // MARK: - Live Location
     
+    func getLiveLocationSharesService() async -> LiveLocationSharesServiceProtocol {
+        await LiveLocationSharesService(liveLocationShares: room.liveLocationShares())
+    }
+    
     func startLiveLocationShare(duration: Duration) async -> Result<Void, RoomProxyError> {
         do {
             try await room.startLiveLocationShare(durationMillis: UInt64(duration.seconds * 1000))

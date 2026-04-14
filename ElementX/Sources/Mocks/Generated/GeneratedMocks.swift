@@ -10414,6 +10414,70 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return clearDraftThreadRootEventIDReturnValue
         }
     }
+    //MARK: - getLiveLocationSharesService
+
+    var getLiveLocationSharesServiceUnderlyingCallsCount = 0
+    var getLiveLocationSharesServiceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getLiveLocationSharesServiceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getLiveLocationSharesServiceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getLiveLocationSharesServiceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getLiveLocationSharesServiceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getLiveLocationSharesServiceCalled: Bool {
+        return getLiveLocationSharesServiceCallsCount > 0
+    }
+
+    var getLiveLocationSharesServiceUnderlyingReturnValue: LiveLocationSharesServiceProtocol!
+    var getLiveLocationSharesServiceReturnValue: LiveLocationSharesServiceProtocol! {
+        get {
+            if Thread.isMainThread {
+                return getLiveLocationSharesServiceUnderlyingReturnValue
+            } else {
+                var returnValue: LiveLocationSharesServiceProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getLiveLocationSharesServiceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getLiveLocationSharesServiceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getLiveLocationSharesServiceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getLiveLocationSharesServiceClosure: (() async -> LiveLocationSharesServiceProtocol)?
+
+    func getLiveLocationSharesService() async -> LiveLocationSharesServiceProtocol {
+        getLiveLocationSharesServiceCallsCount += 1
+        if let getLiveLocationSharesServiceClosure = getLiveLocationSharesServiceClosure {
+            return await getLiveLocationSharesServiceClosure()
+        } else {
+            return getLiveLocationSharesServiceReturnValue
+        }
+    }
     //MARK: - startLiveLocationShare
 
     var startLiveLocationShareDurationUnderlyingCallsCount = 0
@@ -11903,6 +11967,14 @@ class LiveLocationManagerMock: LiveLocationManagerProtocol, @unchecked Sendable 
         }
         await stopLiveLocationRoomIDClosure?(roomID)
     }
+}
+class LiveLocationSharesServiceMock: LiveLocationSharesServiceProtocol, @unchecked Sendable {
+    var liveLocationSharesPublisher: AnyPublisher<[LiveLocationShareProxy], Never> {
+        get { return underlyingLiveLocationSharesPublisher }
+        set(value) { underlyingLiveLocationSharesPublisher = value }
+    }
+    var underlyingLiveLocationSharesPublisher: AnyPublisher<[LiveLocationShareProxy], Never>!
+
 }
 class MediaLoaderMock: MediaLoaderProtocol, @unchecked Sendable {
 

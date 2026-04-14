@@ -68,6 +68,8 @@ extension JoinedRoomProxyMock {
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         identityStatusChangesPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
 
+        getLiveLocationSharesServiceReturnValue = LiveLocationSharesServiceMock(.init())
+        
         updateMembersClosure = { }
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
