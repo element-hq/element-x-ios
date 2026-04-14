@@ -26,7 +26,7 @@ struct LocationSharingScreen: View {
                     StaticLocationSheet(context: context)
                         .alert(item: $context.alertInfo)
                         .popover(item: $context.sharedAnnotation) { annotation in
-                            shareSheet(for: annotation)
+                            LocationShareSheet(annotation: annotation)
                         }
                 }
         case .viewLive:
@@ -118,26 +118,6 @@ struct LocationSharingScreen: View {
         .disabled(context.viewState.isLocationLoading)
         .dynamicTypeSize(.large)
         .padding(13)
-    }
-    
-    @ViewBuilder
-    private func shareSheet(for annotation: LocationAnnotation) -> some View {
-        let location = annotation.coordinate
-        let senderName = annotation.kind.displayName ?? annotation.kind.userProfile?.userID
-        AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location, senderName: senderName)],
-                        applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location, senderName: senderName) })
-            .ignoresSafeArea(edges: .bottom)
-            .presentationDetents([.medium, .large])
-            .presentationCompactAdaptation(shareSheetCompactPresentation)
-            .presentationDragIndicator(.hidden)
-    }
-    
-    private var shareSheetCompactPresentation: PresentationAdaptation {
-        if #available(iOS 26.0, *) {
-            .none // ShareLinks use a popover presentation on iOS 26, let it match that.
-        } else {
-            .sheet
-        }
     }
 }
 

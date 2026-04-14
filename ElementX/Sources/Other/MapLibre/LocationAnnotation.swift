@@ -13,7 +13,7 @@ import SwiftUI
 
 final class LocationAnnotation: NSObject, MLNAnnotation, Identifiable {
     let id: String
-    dynamic var coordinate: CLLocationCoordinate2D
+    var coordinate: CLLocationCoordinate2D
     var kind: LocationMarkerKind
     
     // MARK: - Setup

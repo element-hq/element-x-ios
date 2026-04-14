@@ -24,7 +24,7 @@ enum TimelineViewModelAction {
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayMediaPreview(TimelineMediaPreviewViewModel)
     case displayLocation(StaticLocationData)
-    case displayLiveLocation(sender: TimelineItemSender, liveLocationShare: LiveLocationShare)
+    case displayLiveLocation(sender: TimelineItemSender, initialLiveLocationShare: LiveLocationShare)
     case displayResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case displayThread(itemID: TimelineItemIdentifier)
     case composer(action: TimelineComposerAction)

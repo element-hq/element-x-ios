@@ -712,8 +712,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewStatic(location)),
                                           userInfo: EventUserInfo(animated: animated,
                                                                   timelineController: timelineController))
-                case .presentLiveLocationViewer(let sender, let liveLocationShare):
-                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewLive(sender: sender, liveLocationShare: liveLocationShare)),
+                case .presentLiveLocationViewer(let sender, let initialLiveLocationShare):
+                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewLive(sender: sender, initialLiveLocationShare: initialLiveLocationShare)),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .presentRoomMemberDetails(userID: let userID):
                     stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
@@ -814,8 +814,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .presentLocationPicker:
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-            case .presentLiveLocationViewer(let sender, let liveLocationShare):
-                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewLive(sender: sender, liveLocationShare: liveLocationShare)),
+            case .presentLiveLocationViewer(let sender, let initialLiveLocationShare):
+                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewLive(sender: sender, initialLiveLocationShare: initialLiveLocationShare)),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
             case .presentPollForm(let mode):
                 stateMachine.tryEvent(.presentPollForm(mode: mode),

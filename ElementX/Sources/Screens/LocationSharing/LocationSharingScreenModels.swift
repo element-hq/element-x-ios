@@ -26,7 +26,7 @@ enum LocationSharingScreenViewModelAction {
 enum LocationSharingInteractionMode: Hashable {
     case picker
     case viewStatic(StaticLocationData)
-    case viewLive(sender: TimelineItemSender, liveLocationShare: LiveLocationShare)
+    case viewLive(sender: TimelineItemSender, initialLiveLocationShare: LiveLocationShare)
 }
 
 struct LocationSharingScreenViewState: BindableState {
@@ -49,8 +49,8 @@ struct LocationSharingScreenViewState: BindableState {
         }
         userProfiles = [initialProfile.userID: initialProfile]
         
-        if case .viewLive(_, let liveLocationShare) = interactionMode {
-            liveLocationShares = [liveLocationShare]
+        if case .viewLive(_, let initialLiveLocationShare) = interactionMode {
+            liveLocationShares = [initialLiveLocationShare]
         }
         
         bindings.showsUserLocationMode = switch interactionMode {
@@ -108,9 +108,9 @@ struct LocationSharingScreenViewState: BindableState {
             .init(latitude: 49.843, longitude: 9.902056)
         case .viewStatic(let location):
             .init(latitude: location.geoURI.latitude, longitude: location.geoURI.longitude)
-        case .viewLive(_, let liveLocationShare):
-            .init(latitude: liveLocationShare.geoURI?.latitude ?? 0,
-                  longitude: liveLocationShare.geoURI?.longitude ?? 0)
+        case .viewLive(_, let initialLiveLocationShare):
+            .init(latitude: initialLiveLocationShare.geoURI?.latitude ?? 0,
+                  longitude: initialLiveLocationShare.geoURI?.longitude ?? 0)
         }
     }
     

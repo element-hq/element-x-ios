@@ -666,8 +666,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
         case .displayLocation(let location):
             actionsSubject.send(.displayLocation(location))
-        case .displayLiveLocation(let sender, let liveLocationShare):
-            actionsSubject.send(.displayLiveLocation(sender: sender, liveLocationShare: liveLocationShare))
+        case .displayLiveLocation(let sender, let initialLiveLocationShare):
+            actionsSubject.send(.displayLiveLocation(sender: sender, initialLiveLocationShare: initialLiveLocationShare))
         case .none:
             break
         }

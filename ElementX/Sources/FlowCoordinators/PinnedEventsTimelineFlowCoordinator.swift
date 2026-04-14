@@ -88,8 +88,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentLocationViewer(let location):
                     presentMapNavigator(interactionMode: .viewStatic(location),
                                         timelineController: timelineController)
-                case .presentLiveLocationViewer(let sender, let liveLocationShare):
-                    presentMapNavigator(interactionMode: .viewLive(sender: sender, liveLocationShare: liveLocationShare),
+                case .presentLiveLocationViewer(let sender, let initialLiveLocationShare):
+                    presentMapNavigator(interactionMode: .viewLive(sender: sender, initialLiveLocationShare: initialLiveLocationShare),
                                         timelineController: timelineController)
                 case .displayMessageForwarding(let forwardingItem):
                     presentMessageForwarding(with: forwardingItem)

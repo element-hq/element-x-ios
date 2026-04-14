@@ -363,7 +363,7 @@ final class LocationSharingScreenViewModelTests {
         let roomProxyMock = JoinedRoomProxyMock(.init(members: members))
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
 
-        viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: sender, liveLocationShare: initialShare),
+        viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: sender, initialLiveLocationShare: initialShare),
                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
                                                    liveLocationSharingEnabled: true,
                                                    roomProxy: roomProxyMock,

@@ -542,11 +542,11 @@ class TimelineInteractionHandler {
                                           timestamp: item.timestamp))
         case let item as LiveLocationRoomTimelineItem:
             guard let geoURI = item.content.lastGeoURI else { return .none }
-            let liveLocationShare = LiveLocationShare(userID: item.sender.id,
-                                                      geoURI: geoURI,
-                                                      timestamp: item.timestamp,
-                                                      timeoutDate: item.content.timeoutDate)
-            return .displayLiveLocation(sender: item.sender, liveLocationShare: liveLocationShare)
+            let initialLiveLocationShare = LiveLocationShare(userID: item.sender.id,
+                                                             geoURI: geoURI,
+                                                             timestamp: item.timestamp,
+                                                             timeoutDate: item.content.timeoutDate)
+            return .displayLiveLocation(sender: item.sender, initialLiveLocationShare: initialLiveLocationShare)
         case let item as ImageRoomTimelineItem:
             return await mediaPreviewAction(for: item, messageTypes: [.image, .video])
         case let item as VideoRoomTimelineItem:

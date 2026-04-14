@@ -34,7 +34,7 @@ enum ThreadTimelineScreenCoordinatorAction {
     case presentMediaUploadPreviewScreen(mediaURLs: [URL])
     case presentLocationPicker
     case presentLocationViewer(StaticLocationData)
-    case presentLiveLocationViewer(sender: TimelineItemSender, liveLocationShare: LiveLocationShare)
+    case presentLiveLocationViewer(sender: TimelineItemSender, initialLiveLocationShare: LiveLocationShare)
     case presentPollForm(mode: PollFormMode)
     case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case presentRoomMemberDetails(userID: String)
@@ -121,8 +121,8 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentLocationPicker)
                 case .displayLocation(let location):
                     actionsSubject.send(.presentLocationViewer(location))
-                case .displayLiveLocation(let sender, let liveLocationShare):
-                    actionsSubject.send(.presentLiveLocationViewer(sender: sender, liveLocationShare: liveLocationShare))
+                case .displayLiveLocation(let sender, let initialLiveLocationShare):
+                    actionsSubject.send(.presentLiveLocationViewer(sender: sender, initialLiveLocationShare: initialLiveLocationShare))
                 case .displayPollForm(let mode):
                     actionsSubject.send(.presentPollForm(mode: mode))
                 case .displayMediaUploadPreviewScreen(let mediaURLs):
