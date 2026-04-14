@@ -4,7 +4,8 @@
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      runPostActionsOnFailure = "NO">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -15,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-               BuildableName = "UCMeet.Chat.app"
+               BuildableName = "ElementX.app"
                BlueprintName = "ElementX"
                ReferencedContainer = "container:ElementX.xcodeproj">
             </BuildableReference>
@@ -29,30 +30,34 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES"
       onlyGenerateCoverageForSpecifiedTargets = "YES">
+      <TestPlans>
+         <TestPlanReference
+            default = "YES"
+            reference = "container:UnitTests/SupportingFiles/UnitTests.xctestplan">
+         </TestPlanReference>
+      </TestPlans>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-            BuildableName = "UCMeet.Chat.app"
+            BuildableName = "ElementX.app"
             BlueprintName = "ElementX"
             ReferencedContainer = "container:ElementX.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <Testables>
+      </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-            BuildableName = "UCMeet.Chat.app"
+            BuildableName = "ElementX.app"
             BlueprintName = "ElementX"
             ReferencedContainer = "container:ElementX.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
-      <TestPlans>
-         <TestPlanReference
-            reference = "container:UnitTests/SupportingFiles/UnitTests.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-      </TestPlans>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -69,11 +74,13 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-            BuildableName = "UCMeet.Chat.app"
+            BuildableName = "ElementX.app"
             BlueprintName = "ElementX"
             ReferencedContainer = "container:ElementX.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+      </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "HTTPS_PROXY"
@@ -103,11 +110,13 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-            BuildableName = "UCMeet.Chat.app"
+            BuildableName = "ElementX.app"
             BlueprintName = "ElementX"
             ReferencedContainer = "container:ElementX.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

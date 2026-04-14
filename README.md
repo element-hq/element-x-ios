@@ -1,57 +1,205 @@
-[![Element iOS Matrix room #element-x-ios:matrix.org](https://img.shields.io/matrix/element-x-ios:matrix.org.svg?label=%23element-x-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-ios:matrix.org)
-![GitHub](https://img.shields.io/github/license/element-hq/element-x-ios)
+# UCMeet.Chat — iOS
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/element-hq/element-x-ios/unit_tests.yml?style=flat-square)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/element-hq/element-x-ios)
+Мессенджер на базе протокола [Matrix](https://matrix.org/), форк [Element X iOS](https://github.com/element-hq/element-x-ios). Брендированная версия для инфраструктуры UCMeet.
 
-[![codecov](https://codecov.io/gh/element-hq/element-x-ios/branch/develop/graph/badge.svg?token=AVIJB2MJU2)](https://codecov.io/gh/element-hq/element-x-ios)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
+## Основные характеристики
 
-# Element X iOS
+| Параметр | Значение |
+|----------|----------|
+| Bundle ID | `org.ucmeet.UCMeetChat` |
+| Минимальная iOS | 18.0 |
+| Язык | Swift, SwiftUI |
+| Архитектура | Coordinator + MVVM |
+| Ядро | Matrix Rust SDK (бинарный пакет, не модифицируется) |
+| Система сборки | XcodeGen + SPM |
+| Лицензия | AGPL v3 |
 
-Element X iOS is the next-generation [Matrix](https://matrix.org/) client provided by [Element](https://element.io/).
+## Требования для разработки
 
-Compared to the previous-generation [Element Classic](https://github.com/element-hq/element-ios), it is a total rewrite using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running iOS 17+.
+| Инструмент | Версия |
+|------------|--------|
+| macOS | 15+ (Sequoia) |
+| Xcode | 16.2+ |
+| XcodeGen | 2.44+ |
+| git-lfs | обязателен |
 
-## Rust SDK
+### Установка зависимостей
 
-Element X leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) through an FFI layer exposed as a [swift package](https://github.com/matrix-org/matrix-rust-components-swift) that the final client can directly import and use. We're doing this as a way to share code between platforms, with [Element X Android](https://github.com/element-hq/element-x-android) using the same SDK.
+```bash
+# Homebrew (если не установлен)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-## Status
+# XcodeGen и git-lfs
+brew install xcodegen git-lfs
 
-This project is actively developed and supported. New users are recommended to use Element X instead of the previous-generation app.
+# Инициализация git-lfs
+git lfs install
+```
 
-## Contributing
+## Развёртывание проекта
 
-Please see our [contribution guide](CONTRIBUTING.md).
+```bash
+# 1. Клонировать репозиторий
+git clone https://github.com/smurzaliev/ucmeet-chat-ios.git
+cd ucmeet-chat-ios
 
-Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-x-ios:matrix.org).
+# 2. Скачать LFS-файлы (бинарники Rust SDK)
+git lfs pull
 
-## Build instructions
+# 3. Сгенерировать .xcodeproj
+xcodegen generate
 
-Please refer to the [setting up a development environment](CONTRIBUTING.md#setting-up-a-development-environment) section from the [contribution guide](CONTRIBUTING.md).
+# 4. Открыть проект
+open ElementX.xcodeproj
+```
 
-## Support
+После открытия Xcode автоматически загрузит SPM-зависимости (первый запуск может занять несколько минут).
 
-When you are experiencing an issue on Element X iOS, please first search in [GitHub issues](https://github.com/element-hq/element-x-ios/issues)
-and then in [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org).
-If after your research you still have a question, ask at [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting (Rageshake) from the Element application by going to the application settings. This is especially recommended when you encounter a crash.
+## Конфигурация
 
-## Forking
+### Основные файлы конфигурации
 
-Please read our [forking guide](docs/FORKING.md).
+| Файл | Назначение |
+|------|------------|
+| `project.yml` | Версия, номер сборки, глобальные build settings |
+| `app.yml` | Bundle ID, Team ID, App Group, display name |
+| `ElementX/SupportingFiles/target.yml` | Entitlements, associated domains |
+| `ElementX/Sources/Services/Client/AppSettings.swift` | Homeserver, push gateway, OIDC, фичи |
+| `ElementX/Sources/Other/Extensions/CompoundHook.swift` | Цветовая тема (акцентный цвет) |
+| `ElementX/SupportingFiles/Info.plist` | Разрешения, background modes, экспортное шифрование |
+| `GoogleService-Info.plist` | Firebase конфигурация |
+| `ElementX/Sources/Assets.xcassets` | Иконка приложения |
 
-## Copyright & License
+### Что заменять при смене окружения
+
+- **Homeserver:** `AppSettings.swift` → `defaultHomeserverAddress`
+- **Push gateway:** `AppSettings.swift` → `pusherAppId`, `pushGatewayBaseURL`
+- **OIDC callback:** `AppSettings.swift` → OIDC redirect URI
+- **Team ID / Bundle ID:** `app.yml`
+- **Firebase:** заменить `GoogleService-Info.plist`
+- **MapTiler ключ:** `AppSettings.swift` → `mapTilerAPIKey`
+
+## Сборка
+
+### Debug (симулятор)
+
+```bash
+xcodegen generate
+xcodebuild build \
+  -scheme ElementX \
+  -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
+  -configuration Debug
+```
+
+### Release (устройство / архив)
+
+```bash
+xcodegen generate
+xcodebuild archive \
+  -scheme ElementX \
+  -archivePath ./build/UCMeetChat.xcarchive \
+  -configuration Release \
+  -destination 'generic/platform=iOS'
+```
+
+Или через Xcode: **Product → Archive**.
+
+### Загрузка в TestFlight
+
+1. В Xcode: **Product → Archive**
+2. В Organizer: **Distribute App → App Store Connect**
+3. Сборка появится в TestFlight через 10–30 минут после обработки
+
+## Структура проекта
+
+```
+├── project.yml                    # XcodeGen: версия, build settings
+├── app.yml                        # XcodeGen: Bundle ID, Team ID
+├── ElementX/
+│   ├── Sources/
+│   │   ├── Application/           # AppCoordinator, навигация, роутинг
+│   │   ├── Screens/               # Экраны (SwiftUI views + view models)
+│   │   ├── Services/              # Бизнес-логика, SDK обёртки
+│   │   └── Other/                 # Расширения, утилиты, HTML парсинг
+│   ├── SupportingFiles/
+│   │   ├── Info.plist
+│   │   ├── target.yml             # Entitlements, build settings
+│   │   └── Localizable/           # Локализация (en, ru)
+│   └── Assets.xcassets            # Иконки, цвета
+├── NSE/                           # Notification Service Extension
+├── ShareExtension/                # Share Extension
+├── UnitTests/                     # Юнит-тесты
+└── documentation/                 # Проектная документация
+```
+
+## Особенности
+
+### Перманентные ссылки (Permalinks)
+
+Все ссылки на пользователей, чаты и сообщения используют домен `ucmatrix.org` вместо стандартного `matrix.to` (заблокирован в РФ). Замена происходит на уровне приложения через метод `URL.replacingMatrixToHost()`. Входящие ссылки `ucmatrix.org` обрабатываются парсером `UCMatrixPermalinkParser`.
+
+### Push-уведомления
+
+Приложение использует прямые APNs-токены (не Firebase Cloud Messaging). Firebase SDK присутствует в проекте, но push доставляется через Sygnal с типом `apns`. Конфигурация push gateway: `https://push.ucmeet.org`.
+
+### Локализация
+
+Поддерживаются 3 локали: `en`, `en-US`, `ru`. Остальные 34 языка из upstream удалены. Файлы локализации: `ElementX/SupportingFiles/Localizable/`.
+
+### Аналитика
+
+Вся аналитика отключена: PostHog, Sentry, rageshake — значения установлены в `nil` в `AppSettings.swift`.
+
+### Matrix Rust SDK
+
+Ядро приложения — бинарный Swift-пакет Matrix Rust SDK. Его **нельзя модифицировать**. Обновление SDK: изменить версию в `Package.swift` → `xcodegen generate`.
+
+### Карты
+
+Интерактивные карты работают через MapLibre + MapTiler. Статические превью карт требуют платный план MapTiler.
+
+## Доступы и ключи
+
+Учётные данные и ключи передаются отдельно в защищённом виде (не хранятся в репозитории).
+
+### Firebase
+
+| Параметр | Значение |
+|----------|----------|
+| Проект | `matrix-8c24a` |
+| Конфигурация | `GoogleService-Info.plist` (в репозитории) |
+| Консоль | [Firebase Console](https://console.firebase.google.com/project/matrix-8c24a) |
+| APNs ключ | `.p8` файл загружен в Firebase Console |
+
+### MapTiler
+
+| Параметр | Значение |
+|----------|----------|
+| API ключ | Указан в `AppSettings.swift` → `mapTilerAPIKey` |
+| Консоль | [MapTiler Cloud](https://cloud.maptiler.com/) |
+| План | Free (статические превью недоступны) |
+
+### Apple Developer
+
+| Параметр | Значение |
+|----------|----------|
+| Team ID | `6HRG779SDK` |
+| Bundle ID | `org.ucmeet.UCMeetChat` |
+| App Group | `group.org.ucmeet` |
+| Консоль | [App Store Connect](https://appstoreconnect.apple.com/) |
+
+### Серверная инфраструктура
+
+| Сервис | URL |
+|--------|-----|
+| Homeserver | `matrix.ucmeet.org` |
+| Push Gateway (Sygnal) | `https://push.ucmeet.org` |
+| OIDC (MAS) | через `.well-known` на homeserver |
+| Element Call | через `.well-known` на homeserver |
+
+## Лицензия
+
+Форк Element X iOS. Лицензия — [AGPL v3](LICENSE).
 
 Copyright (c) 2025 Element Creations Ltd.
-Copyright (c) 2022 - 2025 New Vector Ltd.
-
-This software is dual licensed by Element Creations Ltd (Element). It can be used either:
-
-(1) for free under the terms of the GNU Affero General Public License (as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version); OR
-
-(2) under the terms of a paid-for Element Commercial License agreement between you and Element (the terms of which may vary depending on what you and Element have agreed to). 
-
-Unless required by applicable law or agreed to in writing, software distributed under the Licenses is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the Licenses for the specific language governing permissions and limitations under the Licenses.
+Copyright (c) 2022–2025 New Vector Ltd.

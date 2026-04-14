@@ -61,6 +61,10 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<true/>
+	<key>ITSEncryptionExportComplianceCode</key>
+	<string>e52cf654-fc2a-4e14-adc8-ece87e6cfd6f</string>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<false/>
 	<key>NSCameraUsageDescription</key>
@@ -83,7 +87,6 @@
 		<string>audio</string>
 		<string>fetch</string>
 		<string>processing</string>
-		<string>voip</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict>
@@ -118,9 +121,5 @@
 	<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
 	<key>productionAppName</key>
 	<string>$(PRODUCTION_APP_NAME)</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<true/>
-	<key>ITSEncryptionExportComplianceCode</key>
-	<string>e52cf654-fc2a-4e14-adc8-ece87e6cfd6f</string>
 </dict>
 </plist>

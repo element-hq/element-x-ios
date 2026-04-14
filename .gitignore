@@ -53,6 +53,11 @@ reports/
 ## Project specific
 test_output
 
+## Temporary logs and debug files
+docs/matrix-log.txt
+documentation/temp/
+documentation/logs*
+
 # Only commit Pkl packages (there may be other caches in here).
 Secrets/vendor/*
 !Secrets/vendor/package-2
