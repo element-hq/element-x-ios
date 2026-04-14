@@ -53,6 +53,10 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 | Permalinks | `ucmatrix.org` (replaced `matrix.to` — blocked in Russia). Outgoing links, mentions, share URLs all use `ucmatrix.org`. Incoming `ucmatrix.org` links parsed via `UCMatrixPermalinkParser` |
 | Upstream | Synced with `element-hq/element-x-ios:develop` (60 ahead, 0 behind) |
 
+### Version 1.0.1 Build 1 Changes (2026-04-13)
+
+1. **Permalinks: matrix.to → ucmatrix.org** — All outgoing permalinks (room shares, user profiles, mentions, event/message links, room aliases, "Copy link") now use `ucmatrix.org` instead of `matrix.to` (blocked in Russia). Added `URL.replacingMatrixToHost()` helper. Added `UCMatrixPermalinkParser` for incoming `ucmatrix.org` link handling. Files changed: URL.swift, AppRoutes.swift, JoinedRoomProxy.swift, MatrixUserShareLink.swift, RoomMemberProxyProtocol.swift, UserProfileScreenViewModel.swift, ComposerToolbarViewModel.swift, AttributedStringBuilder.swift
+
 ### Build 4 → Build 5 Changes (2026-03-27)
 
 1. **Push: Firebase → APNs** — `pushProvider` default changed from `.firebase` to `.apns` in AppSettings.swift. App registers APNs device token directly instead of FCM token. Sygnal uses `type: apns` with .p8 key. Firebase SDK stays in project.
