@@ -131,33 +131,18 @@ struct HomeScreen: View {
         var action: () -> Void
         
         var body: some View {
-            if #available(iOS 26, *) {
-                if selected {
-                    content
-                        .backportButtonStyleGlassProminent()
-                        .tint(.compound.bgActionPrimaryRest)
-                } else {
-                    content
-                }
-            } else {
-                if selected {
-                    content
-                        .buttonStyle(.compound(.primary, size: .toolbarIcon))
-                } else {
-                    content
-                        .buttonStyle(.compound(.tertiary, size: .toolbarIcon))
-                }
-            }
-        }
-        
-        private var content: some View {
-            Button {
-                action()
-            } label: {
+            // Use a Toggle to let the system handle the selection style for both the Liquid Glass
+            // button on iPhone, along with the plain button used in the sidebar on iPad/Mac.
+            Toggle(isOn: .constant(selected)) {
                 CompoundIcon(\.filter)
+                    .foregroundStyle(selected ? .compound.iconOnSolidPrimary : .compound.iconPrimary)
+            }
+            .overlay {
+                // The tap gesture is ignored when applied to the toggle so apply it to an overlay instead.
+                Color.black.opacity(0.001)
+                    .onTapGesture(perform: action)
             }
             .accessibilityLabel(L10n.screenRoomlistYourSpaces)
-            .accessibilityAddTraits(selected ? .isSelected : [])
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.spaceFilters)
         }
     }
