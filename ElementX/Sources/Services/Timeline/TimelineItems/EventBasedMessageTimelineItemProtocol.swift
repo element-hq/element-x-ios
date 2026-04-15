@@ -34,6 +34,10 @@ extension EventBasedMessageTimelineItemProtocol {
         }
     }
     
+    var hasMediaCaption: Bool {
+        mediaCaption != nil
+    }
+    
     var mediaCaption: String? {
         switch contentType {
         case .audio(let content):
@@ -49,7 +53,18 @@ extension EventBasedMessageTimelineItemProtocol {
         }
     }
     
-    var hasMediaCaption: Bool {
-        mediaCaption != nil
+    var formattedMediaCaption: AttributedString? {
+        switch contentType {
+        case .audio(let content):
+            content.formattedCaption
+        case .file(let content):
+            content.formattedCaption
+        case .image(let content):
+            content.formattedCaption
+        case .video(let content):
+            content.formattedCaption
+        case .emote, .notice, .text, .location, .voice:
+            nil
+        }
     }
 }

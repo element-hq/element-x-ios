@@ -317,51 +317,46 @@ private struct CaptionView: View {
         context.viewState.currentItem
     }
 
-    private let maxCaptionHeight: CGFloat = 120
-
     var body: some View {
-        if case let .media(mediaItem) = currentItem, mediaItem.caption != nil {
-            CaptionScrollView(mediaItem: mediaItem, maxHeight: maxCaptionHeight)
+        if case let .media(mediaItem) = currentItem, mediaItem.hasCaption {
+            CaptionScrollView(mediaItem: mediaItem)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         }
     }
 }
 
 private struct CaptionScrollView: View {
+    private let maxHeight: CGFloat = 120
+    
     let mediaItem: TimelineMediaPreviewItem.Media
-    let maxHeight: CGFloat
-
-    @State private var contentHeight: CGFloat = 0
-    @State private var isScrollable: Bool = false
-
-    private var shouldShowFade: Bool {
-        contentHeight > maxHeight
-    }
-
+    
+    @State private var shouldShowFade = false
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ScrollView(.vertical, showsIndicators: false) {
+        ZStack(alignment: .bottom) {
+            ScrollView(.vertical) {
                 captionContent
-                    .background(SizePreferenceKey())
+                    .background {
+                        GeometryReader { geometry in
+                            DispatchQueue.main.async {
+                                shouldShowFade = geometry.size.height > maxHeight
+                            }
+                            return Color.clear
+                        }
+                    }
             }
-            .onPreferenceChange(SizePreferenceKey.self) { size in
-                contentHeight = size.height
-                isScrollable = size.height > maxHeight
-            }
-            .frame(height: maxHeight)
-            .clipped()
-
+            .frame(maxHeight: maxHeight)
+            .padding(16)
+            
             if shouldShowFade {
                 LinearGradient(stops: [.init(color: .clear, location: 0.0),
-                                     .init(color: .black.opacity(0.5), location: 1.0)],
-                                startPoint: .top,
-                                endPoint: .bottom)
-                .frame(height: 40)
-                .allowsHitTesting(false)
+                                       .init(color: .black.opacity(0.5), location: 1.0)],
+                               startPoint: .top,
+                               endPoint: .bottom)
+                    .frame(height: 40)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
         .background {
             BlurEffectView(style: .systemChromeMaterial)
                 .ignoresSafeArea()
@@ -373,17 +368,8 @@ private struct CaptionScrollView: View {
         if let formattedCaption = mediaItem.formattedCaption {
             FormattedBodyText(attributedString: formattedCaption)
         } else if let caption = mediaItem.caption {
-            Text(caption)
-                .font(.compound.bodyLG)
-                .foregroundStyle(.compound.textPrimary)
+            FormattedBodyText(text: caption)
         }
-    }
-}
-
-private struct SizePreferenceKey: PreferenceKey {
-    static var defaultValue: CGSize = .zero
-    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
-        value = nextValue()
     }
 }
 
