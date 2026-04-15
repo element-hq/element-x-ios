@@ -313,6 +313,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         default: nil
         }
         
+        let activeCallIntent: RtcCallIntent? = switch roomInfo.activeRoomCallConsensusIntent {
+        case .full(let intent):
+            intent
+        case .partial(intent: let intent, _, _):
+            intent
+        case .none:
+            nil
+        }
+        
         return RoomSummary(room: room,
                            id: roomInfo.id,
                            joinRequestType: joinRequestType,
@@ -332,6 +341,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            canonicalAlias: roomInfo.canonicalAlias,
                            alternativeAliases: .init(roomInfo.alternativeAliases),
                            hasOngoingCall: roomInfo.hasRoomCall,
+                           activeCallIntent: activeCallIntent,
                            isMarkedUnread: roomInfo.isMarkedUnread,
                            isFavourite: roomInfo.isFavourite,
                            isTombstoned: roomInfo.successorRoom != nil)

@@ -110,6 +110,17 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
         roomInfo.hasRoomCall
     }
 
+    var activeRoomCallIntent: RtcCallIntent? {
+        switch roomInfo.activeRoomCallConsensusIntent {
+        case .full(let intent):
+            return intent
+        case .partial(intent: let intent, _, _):
+            return intent
+        case .none:
+            return nil
+        }
+    }
+    
     var activeRoomCallParticipants: [String] {
         roomInfo.activeRoomCallParticipants
     }

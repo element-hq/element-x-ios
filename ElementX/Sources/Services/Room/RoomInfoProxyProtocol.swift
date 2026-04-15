@@ -51,6 +51,7 @@ protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var notificationCount: Int { get }
     var cachedUserDefinedNotificationMode: RoomNotificationMode? { get }
     var hasRoomCall: Bool { get }
+    var activeRoomCallIntent: RtcCallIntent? { get }
     var activeRoomCallParticipants: [String] { get }
     var isMarkedUnread: Bool { get }
     var unreadMessagesCount: UInt { get }

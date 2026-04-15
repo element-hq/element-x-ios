@@ -190,7 +190,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
         let isDotShown: Bool
         let isMentionShown: Bool
         let isMuteShown: Bool
-        let isCallShown: Bool
+        let isVoiceCallShown: Bool
+        let isVideoCallShown: Bool
     }
     
     let name: String
@@ -228,7 +229,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
         HomeScreenRoom(id: UUID().uuidString,
                        roomID: nil,
                        type: .placeholder,
-                       badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, isCallShown: false),
+                       badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, isVoiceCallShown: false, isVideoCallShown: false),
                        name: "Placeholder room name",
                        isDirect: false,
                        isHighlighted: false,
@@ -252,7 +253,8 @@ extension HomeScreenRoom {
         let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
-        let isCallShown = summary.hasOngoingCall
+        let isVideoCallShown = summary.hasOngoingCall && summary.activeCallIntent != .audio
+        let isVoiceCallShown = summary.hasOngoingCall && summary.activeCallIntent == .audio
         let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || isUnseenInvite
         
         let type: HomeScreenRoom.RoomType = switch summary.joinRequestType {
@@ -267,7 +269,8 @@ extension HomeScreenRoom {
                   badges: .init(isDotShown: isDotShown,
                                 isMentionShown: isMentionShown,
                                 isMuteShown: isMuteShown,
-                                isCallShown: isCallShown),
+                                isVoiceCallShown: isVoiceCallShown,
+                                isVideoCallShown: isVideoCallShown),
                   name: summary.name,
                   isDirect: summary.isDirect,
                   isHighlighted: isHighlighted,

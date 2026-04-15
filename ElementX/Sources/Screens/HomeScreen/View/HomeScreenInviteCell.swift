@@ -235,6 +235,7 @@ private extension HomeScreenRoom {
                                   canonicalAlias: "#footest:somewhere.org",
                                   alternativeAliases: [],
                                   hasOngoingCall: false,
+                                  activeCallIntent: nil,
                                   isMarkedUnread: false,
                                   isFavourite: false,
                                   isTombstoned: false)
@@ -270,6 +271,7 @@ private extension HomeScreenRoom {
                                   canonicalAlias: alias,
                                   alternativeAliases: [],
                                   hasOngoingCall: false,
+                                  activeCallIntent: nil,
                                   isMarkedUnread: false,
                                   isFavourite: false,
                                   isTombstoned: false)

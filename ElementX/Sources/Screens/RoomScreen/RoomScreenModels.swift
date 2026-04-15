@@ -60,6 +60,8 @@ struct RoomScreenViewState: BindableState {
     var canJoinCall = false
     /// Whether or not this room currently has a call in progress.
     var hasOngoingCall: Bool
+    /// The ongoing call nature (audio or video), null if not advertised by the participants
+    var activeRoomCallIntent: RtcCallIntent?
     /// Whether or not the user is already part of a call in another room.
     var isParticipatingInOngoingCall = false
     var shouldShowCallButton: Bool {
