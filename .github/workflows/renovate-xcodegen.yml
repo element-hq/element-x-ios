@@ -1,0 +1,54 @@
+name: Update project following Renovate-XcodeGen update
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - project.yml
+
+permissions: {}
+
+jobs:
+  update-project:
+    name: Update Xcode project
+    runs-on: macos-15
+    timeout-minutes: 20
+    permissions:
+      contents: write
+
+    # Only run for Renovate PRs originating from this repository (not forks)
+    if: github.event.pull_request.user.login == 'renovate[bot]' && github.event.pull_request.head.repo.full_name == github.repository
+
+    concurrency:
+      group: renovate-xcodegen-${{ github.head_ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          # We need to push any changes to the project.
+          persist-credentials: true
+
+      - name: Install XcodeGen
+        run: |
+          unset HOMEBREW_NO_INSTALL_FROM_API
+          export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+          brew install xcodegen
+
+      - name: Run XcodeGen
+        run: xcodegen
+
+      - name: Resolve package dependencies
+        run: xcodebuild -resolvePackageDependencies -project ElementX.xcodeproj
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "ElementRobot"
+          git config user.email "releases@riot.im"
+          git add ElementX.xcodeproj/project.pbxproj
+          git add ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+          git diff --staged --quiet || git commit -m "Run XcodeGen and update Package.resolved"
+          git push
