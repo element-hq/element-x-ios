@@ -33,6 +33,12 @@ extension AnalyticsEvent {
             nil
         }
         
-        return UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: nil, numFavouriteRooms: nil, numSpaces: nil, recoveryState: analyticsRecoveryState, verificationState: analyticsVerificationState)
+        return UserProperties(URLPreviewsEnabled: nil,
+                              allChatsActiveFilter: nil,
+                              ftueUseCaseSelection: nil,
+                              numFavouriteRooms: nil,
+                              numSpaces: nil,
+                              recoveryState: analyticsRecoveryState,
+                              verificationState: analyticsVerificationState)
     }
 }
