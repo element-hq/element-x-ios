@@ -138,7 +138,7 @@ packages:
     minorVersion: 2.2.3
   LRUCache:
     url: https://github.com/nicklockwood/LRUCache
-    minorVersion: 1.2.0
+    minorVersion: 1.2.1
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
     minorVersion: 6.22.1
