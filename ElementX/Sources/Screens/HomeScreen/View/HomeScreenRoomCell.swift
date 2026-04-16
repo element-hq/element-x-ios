@@ -122,8 +122,7 @@ struct HomeScreenRoomCell: View {
                 if room.badges.isVideoCallShown {
                     CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
                         .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
-                }
-                if room.badges.isVoiceCallShown {
+                } else if room.badges.isVoiceCallShown {
                     CompoundIcon(\.voiceCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
                         .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
                 }
