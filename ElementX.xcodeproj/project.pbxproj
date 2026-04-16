@@ -102,7 +102,6 @@
 		0E8C480700870BB34A2A360F /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4003BC24B24C9E63D3304177 /* DeviceKit */; };
 		0EA6537A07E2DC882AEA5962 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 187853A7E643995EE49FAD43 /* Localizable.stringsdict */; };
 		0EBF0A411E1C46D4BFA2B087 /* ManageAuthorizedSpacesScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9CD3A0A39BC063438E12D4 /* ManageAuthorizedSpacesScreenCoordinator.swift */; };
-		0EE5EBA18BA1FE10254BB489 /* UIFont+AttributedStringBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = E8CA187FE656EE5A3F6C7DE5 /* UIFont+AttributedStringBuilder.m */; };
 		0EEC614342F823E5BF966C2C /* AppLockTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5B4CD611DE7E94F5BA87B2 /* AppLockTimerTests.swift */; };
 		0F6C8033FA60CFD36F7CA205 /* AppLockSetupPINScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A019A12C866D64CF072024B9 /* AppLockSetupPINScreenViewModel.swift */; };
 		0F81DEE3E02A6549B20DF09A /* DeactivateAccountScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633924B26ACCD29C18BEF4E8 /* DeactivateAccountScreenViewModelProtocol.swift */; };
@@ -1296,7 +1295,6 @@
 		DC77E9DB2CFBE84A2BDF20C5 /* RoomRolesAndPermissionsFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0833F51229E166BCA141D004 /* RoomRolesAndPermissionsFlowCoordinator.swift */; };
 		DCFE7CB3B9A104330BBB96AD /* AnalyticsPromptScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B67DF223EEB8DCAF178A1D4 /* AnalyticsPromptScreenCoordinator.swift */; };
 		DD21CE51DF9BD04FC8155972 /* LeaveSpaceHandleSDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580BDCD23DD02481AB5FFB47 /* LeaveSpaceHandleSDKMock.swift */; };
-		DDB47D29C6865669288BF87C /* UIFont+AttributedStringBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = E8CA187FE656EE5A3F6C7DE5 /* UIFont+AttributedStringBuilder.m */; };
 		DDE7B4771452300C103B1EB8 /* RoomDirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6210134203BE1F2DD5C679 /* RoomDirectoryCell.swift */; };
 		DDFBDEE1DC32BDD5488F898C /* ClientProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F96CCBEAAA7F2185BFA354 /* ClientProxyMock.swift */; };
 		DE3BF0ED68E56BF625591D49 /* LinkNewDeviceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C4A2D279386A811BDC6DAE /* LinkNewDeviceScreen.swift */; };
@@ -2516,7 +2514,6 @@
 		A40F1985065500F0E7F61A27 /* PollFormScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollFormScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		A4216C12C0369A8AB059EDE9 /* TimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineController.swift; sourceTree = "<group>"; };
 		A433BE28B40D418237BE37B5 /* ReportContentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportContentScreen.swift; sourceTree = "<group>"; };
-		A436057DBEA1A23CA8CB1FD7 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
 		A443FAE2EE820A5790C35C8D /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A4D09290C6791D6EF04F569E /* LinkNewDeviceScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkNewDeviceScreenModels.swift; sourceTree = "<group>"; };
 		A4D9DF4F2DF3507F99B5B97B /* LabsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabsScreenViewModel.swift; sourceTree = "<group>"; };
@@ -2901,7 +2898,6 @@
 		E8495F37D6245AD0CFA1F60B /* AppLockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockTests.swift; sourceTree = "<group>"; };
 		E8A1F98AE670377B20679FF5 /* MediaPlayerProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerProvider.swift; sourceTree = "<group>"; };
 		E8AE4B3273BA189FDCD4055C /* UserIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicator.swift; sourceTree = "<group>"; };
-		E8CA187FE656EE5A3F6C7DE5 /* UIFont+AttributedStringBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIFont+AttributedStringBuilder.m"; sourceTree = "<group>"; };
 		E8D354D4232DED9649FD0FF4 /* OIDCConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDCConfiguration.swift; sourceTree = "<group>"; };
 		E944F717FC10A428D027074D /* RoomPowerLevelsProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPowerLevelsProxyMock.swift; sourceTree = "<group>"; };
 		E96ED747FF90332EA1333C22 /* RoomTimelineItemFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemFixtures.swift; sourceTree = "<group>"; };
@@ -5441,8 +5437,6 @@
 				C024C151639C4E1B91FCC68B /* ElementXAttributeScope.swift */,
 				27A5FBB74981BF8EFFDAE90D /* HTMLFixtures.swift */,
 				AB07F03461023BC39C730922 /* PhishingDetector.swift */,
-				A436057DBEA1A23CA8CB1FD7 /* UIFont+AttributedStringBuilder.h */,
-				E8CA187FE656EE5A3F6C7DE5 /* UIFont+AttributedStringBuilder.m */,
 			);
 			path = HTMLParsing;
 			sourceTree = "<group>";
@@ -7783,7 +7777,6 @@
 				AC3C3D6D4AD31F13EE987390 /* TraceLogPack.swift in Sources */,
 				B81840E45D8746A4692DA774 /* Tracing.swift in Sources */,
 				2D45A04699BB6BA3B3A0CB9A /* TracingHook.swift in Sources */,
-				DDB47D29C6865669288BF87C /* UIFont+AttributedStringBuilder.m in Sources */,
 				45D6DC594816288983627484 /* UITestsScreenIdentifier.swift in Sources */,
 				281BED345D59A9A6A99E9D98 /* UNNotificationContent.swift in Sources */,
 				06B55882911B4BF5B14E9851 /* URL.swift in Sources */,
@@ -8998,7 +8991,6 @@
 				298F9EC30E918F12AB7F1EE8 /* TypingIndicatorView.swift in Sources */,
 				36AC963F2F04069B7FF1AA0C /* UIConstants.swift in Sources */,
 				A37EED79941AD3B7140B3822 /* UIDevice.swift in Sources */,
-				0EE5EBA18BA1FE10254BB489 /* UIFont+AttributedStringBuilder.m in Sources */,
 				E96005321849DBD7C72A28F2 /* UITestsAppCoordinator.swift in Sources */,
 				384D6B9A7DFD7260139D6852 /* UITestsNotificationCenter.swift in Sources */,
 				22882C710BC99EC34A5024A0 /* UITestsScreenIdentifier.swift in Sources */,
