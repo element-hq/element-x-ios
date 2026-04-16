@@ -55,7 +55,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)
@@ -73,7 +73,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .allMessages,
                          hasOngoingCall: true)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
@@ -106,7 +106,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(!room.isHighlighted)
         #expect(room.badges.isDotShown)
@@ -124,7 +124,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
@@ -142,7 +142,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
@@ -160,7 +160,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .allMessages,
                          hasOngoingCall: true)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)
@@ -178,7 +178,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .mentionsAndKeywordsOnly,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(!room.isHighlighted)
         #expect(room.badges.isDotShown)
@@ -196,7 +196,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .mentionsAndKeywordsOnly,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: true)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)
@@ -216,7 +216,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
@@ -234,7 +234,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
@@ -252,7 +252,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .mute,
                          hasOngoingCall: true)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)

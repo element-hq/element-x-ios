@@ -57,7 +57,7 @@ struct DeveloperOptionsScreen: View {
                 }
                 
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
-                    Text("Hide grey dots")
+                    Text("Hide unread messages badge")
                 }
                 
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {

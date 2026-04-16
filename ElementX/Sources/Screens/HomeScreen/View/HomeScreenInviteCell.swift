@@ -240,7 +240,7 @@ private extension HomeScreenRoom {
                                   isFavourite: false,
                                   isTombstoned: false)
         
-        return .init(summary: summary, hideUnreadMessagesBadge: false)
+        return .init(summary: summary)
     }
     
     static func invite(name: String = "Awesome Room",
@@ -276,6 +276,6 @@ private extension HomeScreenRoom {
                                   isFavourite: false,
                                   isTombstoned: false)
         
-        return .init(summary: summary, hideUnreadMessagesBadge: false)
+        return .init(summary: summary)
     }
 }

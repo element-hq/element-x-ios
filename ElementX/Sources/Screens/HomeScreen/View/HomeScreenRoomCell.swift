@@ -15,6 +15,7 @@ struct HomeScreenRoomCell: View {
     @Environment(\.redactionReasons) private var redactionReasons
     
     let room: HomeScreenRoom
+    var hideUnreadMessagesBadge = false
     let isSelected: Bool
     let mediaProvider: MediaProviderProtocol!
     let action: (HomeScreenViewAction) -> Void
@@ -74,7 +75,7 @@ struct HomeScreenRoomCell: View {
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
-                .font(room.hasUnreads ? .compound.bodyLGSemibold : .compound.bodyLG)
+                .font(hideUnreadMessagesBadge ? (room.hasUnreads ? .compound.bodyLGSemibold : .compound.bodyLG) : .compound.bodyLGSemibold)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -157,7 +158,7 @@ struct HomeScreenRoomCell: View {
     private var lastMessage: some View {
         if let displayedLastMessage = room.displayedLastMessage {
             Text(displayedLastMessage)
-                .font(room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD)
+                .font(hideUnreadMessagesBadge ? room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD : .compound.bodyMD)
                 .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
         }
     }
@@ -224,7 +225,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     }
     
     static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
-        HomeScreenRoom(summary: summary, hideUnreadMessagesBadge: false)
+        HomeScreenRoom(summary: summary)
     }
     
     static func makeViewModel(roomSummaryProvider: RoomSummaryProviderProtocol) -> HomeScreenViewModel {
@@ -263,6 +264,6 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                   isFavourite: false,
                                   isTombstoned: false)
         
-        return .init(summary: summary, hideUnreadMessagesBadge: false)
+        return .init(summary: summary)
     }
 }

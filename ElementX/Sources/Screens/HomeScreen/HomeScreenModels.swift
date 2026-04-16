@@ -108,6 +108,8 @@ struct HomeScreenViewState: BindableState {
     
     var hideInviteAvatars = false
     
+    var hideUnreadMessagesBadge = false
+    
     var reportRoomEnabled = false
         
     var shouldShowSpaceFilters = false
@@ -249,13 +251,19 @@ struct HomeScreenRoom: Identifiable, Equatable {
 }
 
 extension HomeScreenRoom {
-    init(summary: RoomSummary, hideUnreadMessagesBadge: Bool, seenInvites: Set<String> = []) {
+    init(summary: RoomSummary,
+         hideUnreadMessagesBadge: Bool = false,
+         seenInvites: Set<String> = []) {
         let roomID = summary.id
         
-        let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
         let isUnseenInvite = summary.joinRequestType?.isInvite == true && !seenInvites.contains(roomID)
-
-        let isDotShown = (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.isMarkedUnread || isUnseenInvite
+        
+        let isDotShown = if hideUnreadMessagesBadge {
+            (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.isMarkedUnread || isUnseenInvite
+        } else {
+            summary.hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
+        }
+        
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
         let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || isUnseenInvite
@@ -277,7 +285,7 @@ extension HomeScreenRoom {
                                 isMentionShown: isMentionShown,
                                 isMuteShown: isMuteShown,
                                 callBadgeType: callBadge),
-                  hasUnreads: hasUnreadMessages,
+                  hasUnreads: summary.hasUnreadMessages,
                   name: summary.name,
                   isDirect: summary.isDirect,
                   isHighlighted: isHighlighted,

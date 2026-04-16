@@ -115,7 +115,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         appSettings.$hideUnreadMessagesBadge
-            .sink { [weak self] _ in self?.updateRooms() }
+            .sink { [weak self] value in
+                self?.state.hideUnreadMessagesBadge = value
+                self?.updateRooms()
+            }
             .store(in: &cancellables)
         
         appSettings.$seenInvites
