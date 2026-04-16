@@ -20,7 +20,7 @@ struct UITests: AsyncParsableCommand {
     var deviceType: DeviceType
 
     @Option(help: "iOS version for the simulator.")
-    var osVersion = "26.1"
+    var osVersion = "26.4"
 
     @Option(help: "Run only a specific test (format: 'ClassName/testName').")
     var testName: String?
