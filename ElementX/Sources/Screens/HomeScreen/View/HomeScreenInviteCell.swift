@@ -58,9 +58,9 @@ struct HomeScreenInviteCell: View {
     }
     
     // MARK: - Private
-
+    
     private var mainContent: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .firstTextBaseline, spacing: 16) {
                     textualContent
@@ -74,12 +74,14 @@ struct HomeScreenInviteCell: View {
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityElement(children: .combine)
             
-            buttons
-                .padding(.top, 14)
-                .padding(.trailing, 22)
+            ViewThatFits {
+                HStack(spacing: 12) { buttons }
+                VStack(spacing: 16) { Group(subviews: buttons) { ForEach($0.reversed()) { $0 } } }
+            }
+            .padding(.trailing, 22)
         }
     }
-
+    
     @ViewBuilder
     private var inviterView: some View {
         if let inviter = room.inviter,
@@ -108,24 +110,23 @@ struct HomeScreenInviteCell: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     
+    @ViewBuilder
     private var buttons: some View {
-        HStack(spacing: 12) {
-            Button {
-                context.send(viewAction: .declineInvite(roomIdentifier: room.id))
-            } label: {
-                Text(L10n.actionDecline)
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.compound(.secondary, size: .medium))
-            
-            Button {
-                context.send(viewAction: .acceptInvite(roomIdentifier: room.id))
-            } label: {
-                Text(L10n.actionAccept)
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.compound(.primary, size: .medium))
+        Button {
+            context.send(viewAction: .declineInvite(roomIdentifier: room.id))
+        } label: {
+            Text(L10n.actionDecline)
+                .frame(maxWidth: .infinity)
         }
+        .buttonStyle(.compound(.secondary, size: .medium))
+        
+        Button {
+            context.send(viewAction: .acceptInvite(roomIdentifier: room.id))
+        } label: {
+            Text(L10n.actionAccept)
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.compound(.primary, size: .medium))
     }
     
     private var separator: some View {
