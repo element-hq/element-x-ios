@@ -76,10 +76,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     /// Do not use the default HTML renderer of NSAttributedString because this method
     /// runs on the UI thread which we want to avoid because renderHTMLString is called
     /// most of the time from a background thread.
-    /// Use DTCoreText HTML renderer instead.
-    /// Using DTCoreText, which renders static string, helps to avoid code injection attacks
-    /// that could happen with the default HTML renderer of NSAttributedString which is a
-    /// webview.
     func fromHTML(_ htmlString: String?) -> AttributedString? {
         guard let originalHTMLString = htmlString else {
             return nil
