@@ -395,7 +395,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .finished:
                 stateMachine.tryEvent(.stopMembersListFlow)
-            case .presentCallScreen(let roomProxy, let isVoiceCall):
+            case .presentCallScreen(let roomProxy, _):
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .verifyUser(let userID):
                 actionsSubject.send(.verifyUser(userID: userID))

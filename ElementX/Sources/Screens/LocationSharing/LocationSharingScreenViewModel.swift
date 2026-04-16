@@ -119,10 +119,10 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     private func updateUserProfiles(members: [RoomMemberProxyProtocol]) {
         switch state.interactionMode {
         case .picker:
-            let ownUser = members.first(where: { $0.userID == roomProxy.ownUserID }).map(UserProfileProxy.init) ?? .init(userID: roomProxy.ownUserID)
+            let ownUser = members.first { $0.userID == roomProxy.ownUserID }.map(UserProfileProxy.init) ?? .init(userID: roomProxy.ownUserID)
             state.userProfiles = [ownUser.userID: ownUser]
         case .viewStatic(let location):
-            let sender = members.first(where: { $0.userID == location.sender.id }).map(UserProfileProxy.init) ?? .init(sender: location.sender)
+            let sender = members.first { $0.userID == location.sender.id }.map(UserProfileProxy.init) ?? .init(sender: location.sender)
             state.userProfiles = [sender.userID: sender]
         case .viewLive(let sender, _):
             var userIDs = Set(state.liveLocationShares.map(\.userID))
