@@ -445,6 +445,8 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.liveLocationSharingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var liveLocationSharingEnabled
     
+    let verifyWithClassicEnabled = appBuildType != .release
+    
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType == .debug, storageType: .userDefaults(store))
     var developerOptionsEnabled
 }
