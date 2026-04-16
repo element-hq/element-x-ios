@@ -159,7 +159,7 @@ packages:
     minorVersion: 2.11.2
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
-    minorVersion: 6.0.0
+    minorVersion: 6.0.1
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.2.0
