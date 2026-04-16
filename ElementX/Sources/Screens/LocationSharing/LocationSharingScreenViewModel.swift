@@ -83,10 +83,20 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                                                  primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
                                                  secondaryButton: .init(title: L10n.commonSettings, action: action))
             }
+        case .stopLiveLocation:
+            stopLiveLocation()
         }
     }
     
     // MARK: - Private
+    
+    private func stopLiveLocation() {
+        state.isStoppingLiveLocation = true
+        if let index = state.liveLocationShares.firstIndex(where: { $0.userID == roomProxy.ownUserID }) {
+            state.liveLocationShares.remove(at: index)
+        }
+        Task { await liveLocationManager.stopLiveLocation(roomID: roomProxy.id) }
+    }
     
     private func setupLiveLocationSubscription() async {
         let liveLocationService = await roomProxy.makeLiveLocationService()
@@ -96,7 +106,15 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             .sink { [weak self] liveLocationsShares in
                 guard let self else { return }
                 MXLog.info("Received live location shares update: \(liveLocationsShares.count) share(s)")
+                let ownUserID = roomProxy.ownUserID
+                let isStoppingLiveLocation = state.isStoppingLiveLocation
                 state.liveLocationShares = liveLocationsShares
+                    .filter { !(isStoppingLiveLocation && ownUserID == $0.userID) }
+                    .sorted { lhs, rhs in
+                        if lhs.userID == ownUserID { return true }
+                        if rhs.userID == ownUserID { return false }
+                        return lhs.timestamp > rhs.timestamp
+                    }
                 updateUserProfiles(members: roomProxy.membersPublisher.value)
             }
             .store(in: &cancellables)
@@ -281,6 +299,8 @@ extension LocationSharingScreenViewModel {
         case picker
         case staticSenderLocation
         case staticPinLocation
+        case viewLive
+        case viewLiveEmpty
     }
     
     static func mock(type: MockType,
@@ -301,12 +321,41 @@ extension LocationSharingScreenViewModel {
                                             longitude: 12.4963655),
                               kind: .sender,
                               timestamp: .mock))
+        case .viewLive, .viewLiveEmpty:
+            .viewLive(sender: .init(id: senderID, displayName: "Me"),
+                      initialLiveLocationShare: LiveLocationShare(userID: senderID,
+                                                                  geoURI: .init(latitude: 41.9027835, longitude: 12.4963655),
+                                                                  timestamp: .mock,
+                                                                  timeoutDate: .distantFuture))
         }
+        
+        let liveLocationShares: [LiveLocationShare] = if type == .viewLive {
+            [
+                LiveLocationShare(userID: RoomMemberProxyMock.mockMe.userID,
+                                  geoURI: .init(latitude: 41.9027835, longitude: 12.4963655),
+                                  timestamp: .mock,
+                                  timeoutDate: .distantFuture),
+                LiveLocationShare(userID: RoomMemberProxyMock.mockAlice.userID,
+                                  geoURI: .init(latitude: 48.8566, longitude: 2.3522),
+                                  timestamp: .mock,
+                                  timeoutDate: .distantFuture),
+                LiveLocationShare(userID: RoomMemberProxyMock.mockBob.userID,
+                                  geoURI: .init(latitude: 51.5074, longitude: -0.1278),
+                                  timestamp: .mock,
+                                  timeoutDate: .distantFuture)
+            ]
+        } else {
+            []
+        }
+        
+        let liveLocationServiceMock = RoomLiveLocationServiceMock(.init(shares: liveLocationShares))
+        let roomProxy = JoinedRoomProxyMock(.init(members: .allMembers, ownUserID: RoomMemberProxyMock.mockMe.userID))
+        roomProxy.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
                                               mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
                                               liveLocationSharingEnabled: liveLocationSharingEnabled,
-                                              roomProxy: JoinedRoomProxyMock(.init()),
+                                              roomProxy: roomProxy,
                                               timelineController: MockTimelineController(),
                                               liveLocationManager: LiveLocationManagerMock(),
                                               analytics: ServiceLocator.shared.analytics,

@@ -65,6 +65,7 @@ struct LocationSharingScreenViewState: BindableState {
     let ownUserID: String
     var userProfiles: [String: UserProfileProxy]
     var liveLocationShares: [LiveLocationShare] = []
+    var isStoppingLiveLocation = false
     
     var annotations: [LocationAnnotation] {
         switch interactionMode {
@@ -80,6 +81,8 @@ struct LocationSharingScreenViewState: BindableState {
         case .viewLive:
             return liveLocationShares.compactMap { share in
                 guard let geoURI = share.geoURI else { return nil }
+                if share.userID == ownUserID, isStoppingLiveLocation { return nil }
+                
                 let profile = userProfiles[share.userID] ?? UserProfileProxy(userID: share.userID)
                 let kind = LocationMarkerKind.liveUser(profile)
                 let coordinate = CLLocationCoordinate2D(latitude: geoURI.latitude, longitude: geoURI.longitude)
@@ -175,6 +178,7 @@ enum LocationSharingScreenViewAction {
     case startLiveLocation
     case centerToUser
     case userDidPan
+    case stopLiveLocation
 }
 
 extension AlertInfo where T == LocationSharingViewAlert {

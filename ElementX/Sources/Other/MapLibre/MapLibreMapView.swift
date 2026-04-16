@@ -73,12 +73,24 @@ struct MapLibreMapView: UIViewRepresentable {
             mapView.styleURL = dynamicMapURL
         }
         
+        // If the center coordinate was updated externally (not by the map itself), move the map.
+        if let newCenter = mapCenterCoordinate,
+           !coordinatesAreEqual(newCenter, context.coordinator.lastReportedCenter) {
+            context.coordinator.lastReportedCenter = newCenter
+            mapView.setCenter(newCenter, animated: true)
+        }
+        
         // Update existing annotation views with fresh SwiftUI content.
         // This handles the case where the annotation's view data changes after
         // the annotation was initially placed (e.g. user avatar loads asynchronously).
         updateAnnotations(in: mapView)
         
         showUserLocation(in: mapView)
+    }
+    
+    private func coordinatesAreEqual(_ lhs: CLLocationCoordinate2D, _ rhs: CLLocationCoordinate2D?) -> Bool {
+        guard let rhs else { return false }
+        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
     
     func makeCoordinator() -> Coordinator {
@@ -169,6 +181,9 @@ extension MapLibreMapView {
         var mapLibreView: MapLibreMapView
         
         private var previousUserLocation: MLNUserLocation?
+        /// Tracks the last center coordinate reported by the map (or set programmatically),
+        /// so that `updateUIView` can tell apart external binding changes from internal ones.
+        var lastReportedCenter: CLLocationCoordinate2D?
 
         // MARK: - Setup
 
@@ -220,8 +235,10 @@ extension MapLibreMapView {
         
         func mapView(_ mapView: MLNMapView, regionDidChangeAnimated animated: Bool) {
             // Avoid `Publishing changes from within view update` warnings
-            DispatchQueue.main.async { [mapLibreView] in
-                mapLibreView.mapCenterCoordinate = mapView.centerCoordinate
+            DispatchQueue.main.async { [mapLibreView, weak self] in
+                let center = mapView.centerCoordinate
+                self?.lastReportedCenter = center
+                mapLibreView.mapCenterCoordinate = center
             }
         }
 
