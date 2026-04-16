@@ -14,18 +14,18 @@
       "groupName" : "GitHub Actions"
     },
     {
-      "matchManagers": ["swift", "cocoapods"],
-      "groupName" : "Swift"
+      "matchManagers": ["xcodegen"],
+      "groupName": "XcodeGen"
+    },
+    {
+      "matchManagers": ["swift"],
+      "groupName" : "Tools"
     },
     {
       "managers": ["swift", "cocoapods"],
       "matchPaths": ["compound-ios/Package.swift"],
       "groupName": "Compound"
     },
-    {
-      "matchManagers": ["bundler"],
-      "groupName" : "Ruby"
-    }
   ]
 }
 
