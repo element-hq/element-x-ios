@@ -117,7 +117,7 @@ packages:
     minorVersion: 5.8.0
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
-    exactVersion: 14.2.2
+    exactVersion: 14.3.0
   Dynamic:
     url: https://github.com/mhdhejazi/Dynamic
     exactVersion: 1.2
