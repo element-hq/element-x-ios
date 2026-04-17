@@ -68,6 +68,7 @@ open ElementX.xcodeproj
 | `ElementX/Sources/Other/Extensions/CompoundHook.swift` | Цветовая тема (акцентный цвет) |
 | `ElementX/SupportingFiles/Info.plist` | Разрешения, background modes, экспортное шифрование |
 | `GoogleService-Info.plist` | Firebase конфигурация |
+| `Secrets/Secrets.swift` | API-ключи (MapTiler, Sentry, PostHog, rageshake) |
 | `ElementX/Sources/Assets.xcassets` | Иконка приложения |
 
 ### Что заменять при смене окружения
@@ -77,7 +78,7 @@ open ElementX.xcodeproj
 - **OIDC callback:** `AppSettings.swift` → OIDC redirect URI
 - **Team ID / Bundle ID:** `app.yml`
 - **Firebase:** заменить `GoogleService-Info.plist`
-- **MapTiler ключ:** `AppSettings.swift` → `mapTilerAPIKey`
+- **API-ключи:** `Secrets/Secrets.swift` — MapTiler (`mapLibreAPIKey`), аналитика (Sentry, PostHog — сейчас `nil`)
 
 ## Сборка
 
