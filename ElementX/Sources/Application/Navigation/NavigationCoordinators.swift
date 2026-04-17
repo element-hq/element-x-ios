@@ -326,6 +326,11 @@ import SwiftUI
     }
 }
 
+extension EnvironmentValues {
+    /// Whether or not the current view is part of the sidebar module of a `NavigationSplitCoordinator`.
+    @Entry var isInSidebar = false
+}
+
 private struct NavigationSplitCoordinatorView: View {
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     
@@ -381,9 +386,11 @@ private struct NavigationSplitCoordinatorView: View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             if let sidebarModule = navigationSplitCoordinator.sidebarModule {
                 sidebarModule.coordinator?.toPresentable()
+                    .environment(\.isInSidebar, true)
                     .id(sidebarModule.id)
             } else {
                 navigationSplitCoordinator.placeholderModule.coordinator?.toPresentable()
+                    .environment(\.isInSidebar, true)
                     .id(navigationSplitCoordinator.placeholderModule.id)
             }
         } detail: {

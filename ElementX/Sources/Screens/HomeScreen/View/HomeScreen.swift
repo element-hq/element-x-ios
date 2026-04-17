@@ -127,22 +127,46 @@ struct HomeScreen: View {
     }
     
     private struct SpaceFiltersButton: View {
+        @Environment(\.isInSidebar) private var isInSidebar
+        
         var selected = false
         var action: () -> Void
         
+        /// Design prefers the custom style over the system's styling of a Toggle within a toolbar,
+        /// however Glass isn't supported for toolbar buttons in the sidebar on iPadOS 26 (likely due
+        /// to glass on glass being discouraged by Apple), so we need to handle our styling accordingly.
+        var shouldUseGlassButtonStyle: Bool {
+            !isInSidebar
+        }
+        
         var body: some View {
-            // Use a Toggle to let the system handle the selection style for both the Liquid Glass
-            // button on iPhone, along with the plain button used in the sidebar on iPad/Mac.
-            Toggle(isOn: .constant(selected)) {
-                CompoundIcon(\.filter)
-                    .foregroundStyle(selected ? .compound.iconOnSolidPrimary : .compound.iconPrimary)
+            if #available(iOS 26, *), shouldUseGlassButtonStyle {
+                if selected {
+                    content
+                        .backportButtonStyleGlassProminent()
+                        .tint(.compound.bgActionPrimaryRest)
+                } else {
+                    content
+                }
+            } else {
+                if selected {
+                    content
+                        .buttonStyle(.compound(.primary, size: .toolbarIcon))
+                } else {
+                    content
+                        .buttonStyle(.compound(.tertiary, size: .toolbarIcon))
+                }
             }
-            .overlay {
-                // The tap gesture is ignored when applied to the toggle so apply it to an overlay instead.
-                Color.black.opacity(0.001)
-                    .onTapGesture(perform: action)
+        }
+        
+        private var content: some View {
+            Button {
+                action()
+            } label: {
+                CompoundIcon(\.filter)
             }
             .accessibilityLabel(L10n.screenRoomlistYourSpaces)
+            .accessibilityAddTraits(selected ? .isSelected : [])
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.spaceFilters)
         }
     }
