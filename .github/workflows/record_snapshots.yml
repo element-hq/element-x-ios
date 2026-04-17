@@ -1,0 +1,63 @@
+name: Record Snapshots
+
+on:
+  # Triggered when a maintainer adds the "record-snapshots" label to a PR.
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
+    types: [labeled]
+
+permissions: {}
+
+jobs:
+  record-snapshots:
+    name: Record Preview Snapshots
+    runs-on: macos-26
+    timeout-minutes: 45
+
+    if: >
+      contains(github.event.issue.labels.*.name, 'record-snapshots') &&
+      github.event.pull_request.head.repo.full_name == github.repository 
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    concurrency:
+      group: record-snapshots-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Remove label
+        run: gh pr edit "${{ github.event.pull_request.number }}" --remove-label 'record-snapshots'
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Checkout PR
+        uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
+        with:
+          # Check out the PR head commit (not the base branch).
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: true
+
+      - name: Setup environment
+        run: source ci_scripts/ci_common.sh && setup_github_actions_environment
+
+      - name: Run preview tests in recording mode
+        run: swift run -q tools ci preview-tests --record
+
+      - name: Commit and push updated snapshots
+        run: |
+          git config user.name "ElementRobot"
+          git config user.email "releases@riot.im"
+
+          # Stage only snapshot changes.
+          git add PreviewTests/Sources/__Snapshots__/
+
+          if git diff --cached --quiet; then
+            echo "✅ No snapshot changes detected."
+          else
+            git commit -m "Record preview snapshots"
+            git push origin HEAD:refs/heads/${GITHUB_EVENT_PULL_REQUEST_HEAD_REF}
+            echo "✅ Snapshots recorded and pushed."
+          fi
+        env:
+          GITHUB_EVENT_PULL_REQUEST_HEAD_REF: ${{ github.event.pull_request.head.ref }}
