@@ -27,6 +27,15 @@
       "matchPaths": ["compound-ios/Package.swift"],
       "groupName": "Compound"
     },
+    {
+      // PostHog iOS uses continuous integration so limit upgrades to one PR per month
+      "matchPackageNames": [
+        "posthog-ios",
+      ],
+      "schedule": [
+          "* * 1 * *",
+      ]
+    },
   ]
 }
 
