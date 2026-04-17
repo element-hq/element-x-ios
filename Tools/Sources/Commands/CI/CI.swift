@@ -6,6 +6,7 @@ import Yams
 struct CI: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "CI workflow commands that can be run both locally and in CI environments.",
                                                     subcommands: [
+                                                        PreviewTests.self,
                                                         AccessibilityTests.self,
                                                         UnitTests.self,
                                                         UITests.self,
