@@ -32,11 +32,11 @@ jobs:
           # We need to push any changes to the project.
           persist-credentials: true
 
-      - name: Install XcodeGen
+      - name: Install dependencies
         run: |
           unset HOMEBREW_NO_INSTALL_FROM_API
           export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
-          brew install xcodegen
+          brew install xcodegen FelixHerrmann/tap/swift-package-list
 
       - name: Run XcodeGen
         run: xcodegen
@@ -44,11 +44,15 @@ jobs:
       - name: Resolve package dependencies
         run: xcodebuild -resolvePackageDependencies -project ElementX.xcodeproj
 
+      - name: Update Acknowledgements
+        run: swift-package-list ElementX.xcodeproj --requires-license --ignore-package compound-ios --ignore-package compound-design-tokens --ignore-package matrix-rich-text-editor-swift --ignore-package element-call-swift --output-type settings-bundle --output-path ElementX/SupportingFiles
+
       - name: Commit and push changes
         run: |
           git config user.name "ElementRobot"
           git config user.email "releases@riot.im"
           git add ElementX.xcodeproj/project.pbxproj
           git add ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
-          git diff --staged --quiet || git commit -m "Run XcodeGen and update Package.resolved"
+          git add ElementX/SupportingFiles/Settings.bundle
+          git diff --staged --quiet || git commit -m "Run XcodeGen, update Package.resolved and Settings.bundle"
           git push
