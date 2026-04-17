@@ -46,7 +46,7 @@ jobs:
       run: sourcery --config Tools/Sourcery/PreviewTestsConfig.yml
 
     - name: Create simulator
-      run: xcrun simctl create "Snapshots" "iPhone SE (3rd generation)" "com.apple.CoreSimulator.SimRuntime.iOS-26-1"
+      run: xcrun simctl create "Snapshots" "iPhone SE (3rd generation)" "com.apple.CoreSimulator.SimRuntime.iOS-26-4"
 
     - name: Run tests
       working-directory: compound-ios
