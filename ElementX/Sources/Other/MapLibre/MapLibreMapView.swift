@@ -129,7 +129,9 @@ struct MapLibreMapView: UIViewRepresentable {
                   let updatedAnnotation = updatedByID[id] else {
                 continue
             }
-            existingAnnotation.coordinate = updatedAnnotation.coordinate
+            CoordinateAnimator.animate(annotation: existingAnnotation,
+                                       to: updatedAnnotation.coordinate,
+                                       duration: 1.0)
             if let annotationView = mapView.view(for: existingAnnotation) as? LocationAnnotationView {
                 annotationView.updateContent(with: updatedAnnotation.kind, mediaProvider: mediaProvider)
             }

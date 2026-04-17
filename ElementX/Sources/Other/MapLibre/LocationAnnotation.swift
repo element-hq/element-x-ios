@@ -13,7 +13,8 @@ import SwiftUI
 
 final class LocationAnnotation: NSObject, MLNAnnotation, Identifiable {
     let id: String
-    var coordinate: CLLocationCoordinate2D
+    // @objc dynamic is required to make animations work
+    @objc dynamic var coordinate: CLLocationCoordinate2D
     var kind: LocationMarkerKind
     
     // MARK: - Setup
