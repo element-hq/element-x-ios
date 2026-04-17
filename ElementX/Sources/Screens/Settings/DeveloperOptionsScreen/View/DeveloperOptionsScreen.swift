@@ -83,6 +83,7 @@ struct DeveloperOptionsScreen: View {
                 
                 Toggle(isOn: $context.liveLocationSharingEnabled) {
                     Text("Live location sharing")
+                    Text("Requires app reboot")
                 }
                 
                 Toggle(isOn: $context.knockingEnabled) {

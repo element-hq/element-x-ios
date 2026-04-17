@@ -8,11 +8,15 @@
 import Foundation
 import MatrixRustSDK
 
-struct LiveLocationShare: Hashable {
+struct LiveLocationShare: Hashable, Identifiable {
     let userID: String
     let geoURI: GeoURI?
     let timestamp: Date
     let timeoutDate: Date
+    
+    var id: String {
+        userID
+    }
     
     init(userID: String, geoURI: GeoURI?, timestamp: Date, timeoutDate: Date) {
         self.userID = userID

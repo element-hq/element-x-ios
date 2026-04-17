@@ -25,12 +25,13 @@ struct LocationSharingScreen: View {
                 .sheet(isPresented: .constant(true)) {
                     StaticLocationSheet(context: context)
                         .alert(item: $context.alertInfo)
-                        .popover(item: $context.sharedAnnotation) { annotation in
-                            LocationShareSheet(annotation: annotation)
-                        }
                 }
         case .viewLive:
             mainContent
+                .sheet(isPresented: .constant(true)) {
+                    LiveLocationSheet(context: context)
+                        .alert(item: $context.alertInfo)
+                }
         }
     }
     

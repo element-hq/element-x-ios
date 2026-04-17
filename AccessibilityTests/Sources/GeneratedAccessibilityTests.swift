@@ -311,6 +311,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "LiveLocationSharingBannerView_Previews")
     }
 
+    func testLiveLocationSheet() async throws {
+        try await performAccessibilityAudit(named: "LiveLocationSheet_Previews")
+    }
+
     func testLoadableImage() async throws {
         try await performAccessibilityAudit(named: "LoadableImage_Previews")
     }
@@ -825,6 +829,10 @@ extension AccessibilityTests {
 
     func testUserIndicatorToastView() async throws {
         try await performAccessibilityAudit(named: "UserIndicatorToastView_Previews")
+    }
+
+    func testUserLocationCell() async throws {
+        try await performAccessibilityAudit(named: "UserLocationCell_Previews")
     }
 
     func testUserProfileCell() async throws {
