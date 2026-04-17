@@ -124,6 +124,8 @@
 	<string>$(APP_GROUP_IDENTIFIER)</string>
 	<key>baseBundleIdentifier</key>
 	<string>$(BASE_BUNDLE_IDENTIFIER)</string>
+	<key>classicAppDeepLinkURL</key>
+	<string>$(CLASSIC_APP_DEEP_LINK_URL)</string>
 	<key>classicAppGroupIdentifier</key>
 	<string>$(CLASSIC_APP_GROUP_IDENTIFIER)</string>
 	<key>classicAppKeychainAccessGroupIdentifier</key>

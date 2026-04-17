@@ -616,6 +616,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Anfon gwahoddiad";
 "screen_bottom_sheet_create_dm_message" = "Hoffech chi ddechrau sgwrs gyda %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Anfon gwahoddiad?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
 "screen_bottom_sheet_manage_room_member_ban" = "Gwahardd o ystafell";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Atal";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Fyddan nhw ddim yn gallu ymuno â'r ystafell hon eto os cân nhw wahoddiad.";

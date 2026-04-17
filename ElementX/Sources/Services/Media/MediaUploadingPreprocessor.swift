@@ -350,9 +350,10 @@ struct MediaUploadingPreprocessor {
             throw .failedGeneratingImageThumbnail(error)
         }
         
-        guard let thumbnail = try? UIImage(contentsOf: thumbnailURL, cachePolicy: .useProtocolCachePolicy) else {
+        guard let thumbnail = UIImage(contentsOfFile: thumbnailURL.path(percentEncoded: false)) else {
             throw .failedGeneratingImageThumbnail(nil)
         }
+        
         let blurhash = thumbnail.blurHash(numberOfComponents: (3, 3))
         
         return .init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash)

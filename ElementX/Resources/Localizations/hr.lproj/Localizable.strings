@@ -616,6 +616,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Pošalji pozivnicu";
 "screen_bottom_sheet_create_dm_message" = "Želite li započeti razgovor s korisnikom %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Želite li poslati pozivnicu?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
 "screen_bottom_sheet_manage_room_member_ban" = "Zabrani korisnika";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Zabrani";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Neće se moći ponovno pridružiti ako budu pozvani.";

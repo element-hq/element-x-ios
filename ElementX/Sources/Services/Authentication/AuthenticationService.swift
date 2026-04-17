@@ -28,6 +28,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
 
     private(set) var flow: AuthenticationFlow
     
+    let classicAppAccount: ClassicAppAccount?
+    
     init(userSessionStore: UserSessionStoreProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
          classicAppManager: ClassicAppManagerProtocol?,
@@ -44,15 +46,16 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.appHooks = appHooks
         
         do {
-            if let classicAppManager {
-                // Just let the app manager log the detected account for now.
-                _ = try classicAppManager.loadAccounts()
+            if let classicAppManager, appSettings.verifyWithClassicEnabled {
+                classicAppAccount = try classicAppManager.loadAccounts().first
             } else {
                 MXLog.info("Classic App not configured, skipping loadAccounts.")
+                classicAppAccount = nil
             }
         } catch {
-            // This should show an alert: "We have detected an older version of Element Classic, but no bueno!"
+            // No need to alert the user of the failure, just log it. They can still sign in manually.
             MXLog.error("Failed loading accounts from the Classic app: \(error)")
+            classicAppAccount = nil
         }
         
         // When updating these, don't forget to update the reset method too.
@@ -129,6 +132,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         guard let client else { return .failure(.failedLoggingIn) }
         do {
             try await client.loginWithOidcCallback(callbackUrl: callbackURL.absoluteString)
+            await verifyClientIfPossible(client: client)
             return await userSession(for: client)
         } catch OidcError.Cancelled {
             return .failure(.oidcError(.userCancellation))
@@ -149,6 +153,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 _ = try? await client.logout()
                 return .failure(.sessionTokenRefreshNotSupported)
             }
+            
+            await verifyClientIfPossible(client: client)
             
             return await userSession(for: client)
         } catch let ClientError.MatrixApi(errorKind, _, _, _) {
@@ -202,6 +208,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 let client = try await makeClient(homeserverAddress: scannedServerNameOrBaseUrl)
                 let qrCodeHandler = client.newLoginWithQrCodeHandler(oidcConfiguration: appSettings.oidcConfiguration.rustValue)
                 try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener)
+                
+                // Since the QR code login flow includes verification.
+                appSettings.hasRunIdentityConfirmationOnboarding = true
                 
                 switch await userSession(for: client) {
                 case .success(let userSession):
@@ -260,6 +269,86 @@ class AuthenticationService: AuthenticationServiceProtocol {
             return .failure(.failedLoggingIn)
         }
     }
+    
+    // MARK: - Classic App
+    
+    /// Populates the Classic app account's state by checking whether the account's homeserver is supported
+    /// (has Sliding Sync and OIDC or password login) and whether all of the required secrets are available.
+    func setupClassicAppAccountState() async {
+        guard let classicAppAccount, classicAppAccount.state.isServerSupported == nil else { return }
+        MXLog.info("Checking Classic app account: \(classicAppAccount)")
+        
+        do {
+            let client = try await clientFactory.makeInMemoryClient(homeserverAddress: classicAppAccount.homeserverURL.absoluteString,
+                                                                    clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                                                    appSettings: appSettings,
+                                                                    appHooks: appHooks)
+            let loginDetails = await client.homeserverLoginDetails()
+            let isServerSupported = loginDetails.supportsOidcLogin() || loginDetails.supportsPasswordLogin()
+            MXLog.info("Classic app homeserver supported: \(isServerSupported)")
+            classicAppAccount.state.isServerSupported = isServerSupported
+            
+            await refreshClassicAppAccountState()
+        } catch {
+            MXLog.info("Classic app account support check failed: \(error)")
+            classicAppAccount.state.isServerSupported = false
+        }
+    }
+    
+    /// Checks which encryption secrets are currently available from the Classic app and updates the account's state accordingly. We will handle the
+    /// Classic account differently, depending on which secrets are available:
+    /// - When they're `.complete` (the session is verified and has a key backup) we can automatically verify the account once signed in.
+    /// - When they're `.requiresBackup` we prompt the user to enable a key backup before signing in so that their messages can be decrypted.
+    /// - When they're `.unavailable` (an unverified session without secret storage) we simply show the Classic account to help the user sign in
+    /// faster but they will need to reset their identity and verify the Classic account themselves.
+    ///
+    /// This should be called whenever the user has potentially updated their secrets in the Classic app.
+    func refreshClassicAppAccountState() async {
+        guard let classicAppManager, let classicAppAccount, classicAppAccount.state.isServerSupported != nil else { return }
+        
+        classicAppAccount.state.availableSecrets = nil
+        
+        do {
+            let availableSecrets = try await classicAppManager.availableSecrets(for: classicAppAccount)
+            guard !Task.isCancelled else { return }
+            MXLog.info("Classic app secrets: \(availableSecrets)")
+            classicAppAccount.state.availableSecrets = availableSecrets
+        } catch {
+            MXLog.info("Failed to refresh Classic app account secrets: \(error)")
+            classicAppAccount.state.availableSecrets = .unavailable
+        }
+    }
+    
+    /// Imports the Classic app's encryption secrets into the signed-in client, automatically verifying the session. This will no-op if
+    /// the user signed in with a different account or when the Classic app doesn't have a complete set of secrets (meaning either
+    /// key backup is disabled or the session hasn't been verified).
+    private func verifyClientIfPossible(client: ClientProtocol) async {
+        guard let classicAppManager, let classicAppAccount else { return }
+        
+        // Technically the SDK makes sure the secrets are for the correct account, but as
+        // we want to verify the classic account regardless which flow was used, it seems
+        // sane to avoid loading the secrets when we know that they're not relevant.
+        guard classicAppAccount.userID == (try? client.userId()) else { return }
+        
+        guard classicAppAccount.state.availableSecrets == .complete else {
+            MXLog.info("The matching Classic app account is missing secrets, ignoring.")
+            return
+        }
+        
+        MXLog.info("Found matching Classic app account, importing secrets.")
+        
+        do {
+            let secrets = try await classicAppManager.secretsBundle(for: classicAppAccount)
+            try await client.encryption().importSecretsBundle(secretsBundle: secrets)
+            
+            MXLog.info("Classic app account secrets imported.")
+            
+            // Importing the secrets automatically verifies the session.
+            appSettings.hasRunIdentityConfirmationOnboarding = true
+        } catch {
+            MXLog.error("Failed to import secrets for Classic app account: \(error)")
+        }
+    }
 }
 
 private extension HumanQrLoginError {
@@ -291,9 +380,13 @@ private extension HumanQrLoginError {
 
 extension AuthenticationService {
     static var mock: AuthenticationService {
+        mock(classicAppManager: nil)
+    }
+    
+    static func mock(classicAppManager: ClassicAppManagerProtocol?) -> AuthenticationService {
         AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
-                              classicAppManager: nil,
+                              classicAppManager: classicAppManager,
                               clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
                               appSettings: ServiceLocator.shared.settings,
                               appHooks: AppHooks())

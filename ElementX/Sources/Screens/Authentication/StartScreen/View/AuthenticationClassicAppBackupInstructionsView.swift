@@ -9,9 +9,18 @@ import Compound
 import SwiftUI
 
 struct AuthenticationClassicAppBackupInstructionsView: View {
-    let context: AuthenticationStartScreenViewModel.Context
-    
     @Environment(\.dismiss) private var dismiss
+    
+    let classicAppAccount: ClassicAppAccount
+    let openClassicAppAction: () -> Void
+    
+    private var isRefreshingSecrets: Bool {
+        classicAppAccount.state.availableSecrets == nil
+    }
+    
+    private var buttonTitle: String {
+        isRefreshingSecrets ? L10n.screenOnboardingCheckingAccount : L10n.screenMissingKeyBackupOpenElementClassic
+    }
     
     var body: some View {
         ElementNavigationStack {
@@ -32,6 +41,7 @@ struct AuthenticationClassicAppBackupInstructionsView: View {
             TitleAndIcon(title: L10n.screenMissingKeyBackupTitle(InfoPlistReader.main.bundleDisplayName),
                          icon: \.keySolid,
                          iconStyle: .default)
+                .frame(maxWidth: .infinity)
             
             SFNumberedListView(items: [
                 AttributedString(L10n.screenMissingKeyBackupStep1),
@@ -44,10 +54,18 @@ struct AuthenticationClassicAppBackupInstructionsView: View {
     }
     
     var buttons: some View {
-        Button(L10n.screenMissingKeyBackupOpenElementClassic) {
-            UIApplication.shared.open("element://open")
+        Button(action: openClassicAppAction) {
+            Label {
+                Text(buttonTitle)
+            } icon: {
+                if isRefreshingSecrets {
+                    ProgressView()
+                        .tint(.compound.iconOnSolidPrimary)
+                }
+            }
         }
         .buttonStyle(.compound(.primary))
+        .disabled(isRefreshingSecrets)
     }
     
     var toolbar: some ToolbarContent {
@@ -58,18 +76,17 @@ struct AuthenticationClassicAppBackupInstructionsView: View {
 }
 
 struct AuthenticationClassicAppBackupInstructionsView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = makeViewModel()
+    static let loadedAccount = {
+        let account = ClassicAppAccount.mockDan
+        account.state.availableSecrets = .requiresBackup
+        return account
+    }()
     
     static var previews: some View {
-        AuthenticationClassicAppBackupInstructionsView(context: viewModel.context)
-    }
-    
-    static func makeViewModel() -> AuthenticationStartScreenViewModel {
-        AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock,
-                                           provisioningParameters: nil,
-                                           isBugReportServiceEnabled: false,
-                                           appSettings: ServiceLocator.shared.settings,
-                                           mediaProvider: MediaProviderMock(configuration: .init()),
-                                           userIndicatorController: UserIndicatorControllerMock())
+        AuthenticationClassicAppBackupInstructionsView(classicAppAccount: loadedAccount) { }
+            .previewDisplayName("Initial")
+        
+        AuthenticationClassicAppBackupInstructionsView(classicAppAccount: .mockAlice) { }
+            .previewDisplayName("Refreshing")
     }
 }

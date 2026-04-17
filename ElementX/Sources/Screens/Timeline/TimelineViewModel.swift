@@ -178,6 +178,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             paginateForwards()
         case .scrollToBottom:
             scrollToBottom()
+        case .scrollToFirstItemForCurrentDate:
+            state.timelineState.scrollToFirstItemForDatePublisher.send()
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
@@ -664,6 +666,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
         case .displayLocation(let location):
             actionsSubject.send(.displayLocation(location))
+        case .displayLiveLocation(let sender, let initialLiveLocationShare):
+            actionsSubject.send(.displayLiveLocation(sender: sender, initialLiveLocationShare: initialLiveLocationShare))
         case .none:
             break
         }

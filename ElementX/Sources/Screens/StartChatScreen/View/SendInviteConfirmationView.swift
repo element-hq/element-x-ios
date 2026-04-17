@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct SendInviteConfirmationView: View {
-    let userToInvite: UserProfileProxy
+    let userToInvite: UserToInvite
     let mediaProvider: MediaProviderProtocol?
     let onInvite: () -> Void
     
@@ -19,14 +19,26 @@ struct SendInviteConfirmationView: View {
     @State private var sheetHeight: CGFloat = .zero
     private let topPadding: CGFloat = 24
     
+    private var title: String {
+        if userToInvite.isUnknown {
+            L10n.screenBottomSheetCreateDmUnknownUserTitle
+        } else {
+            L10n.screenBottomSheetCreateDmTitle
+        }
+    }
+    
     private var subtitle: String {
         let string: String
         if let displayName = userToInvite.displayName {
-            string = L10n.commonNameAndId(displayName, userToInvite.userID)
+            string = L10n.commonNameAndId(displayName, userToInvite.id)
         } else {
-            string = userToInvite.userID
+            string = userToInvite.id
         }
-        return L10n.screenBottomSheetCreateDmMessage(string)
+        return if userToInvite.isUnknown {
+            L10n.screenBottomSheetCreateDmUnknownUserContent
+        } else {
+            L10n.screenBottomSheetCreateDmMessage(string)
+        }
     }
     
     var body: some View {
@@ -48,11 +60,11 @@ struct SendInviteConfirmationView: View {
         VStack(spacing: 16) {
             LoadableAvatarImage(url: userToInvite.avatarURL,
                                 name: userToInvite.displayName,
-                                contentID: userToInvite.userID,
+                                contentID: userToInvite.id,
                                 avatarSize: .user(on: .sendInviteConfirmation),
                                 mediaProvider: mediaProvider)
             VStack(spacing: 8) {
-                Text(L10n.screenBottomSheetCreateDmTitle)
+                Text(title)
                     .multilineTextAlignment(.center)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
@@ -91,7 +103,22 @@ struct SendInviteConfirmationView: View {
 
 struct SendInviteConfirmationView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        SendInviteConfirmationView(userToInvite: .mockBob,
+        SendInviteConfirmationView(userToInvite: .mockKnownBob,
                                    mediaProvider: nil) { }
+            .previewDisplayName("With Known Identity")
+        
+        SendInviteConfirmationView(userToInvite: .mockUnknownBob,
+                                   mediaProvider: nil) { }
+            .previewDisplayName("With Unknown Identity")
+    }
+}
+
+private extension UserToInvite {
+    static var mockKnownBob: Self {
+        .init(user: .mockBob, isUnknown: false)
+    }
+    
+    static var mockUnknownBob: Self {
+        .init(user: .mockBob, isUnknown: true)
     }
 }

@@ -79,7 +79,7 @@ struct RoomMemberDetailsScreenViewStateBindings {
     
     var ignoreUserAlert: IgnoreUserAlertItem?
     var alertInfo: AlertInfo<RoomMemberDetailsScreenAlertType>?
-    var inviteConfirmationUser: UserProfileProxy?
+    var inviteConfirmationUser: UserToInvite?
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?

@@ -6,21 +6,6 @@
 
 import Foundation
 
-open class BackupSecretsSDKMock: MatrixRustSDK.BackupSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-}
 open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -8262,21 +8247,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 }
-open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-}
 open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -11713,6 +11683,92 @@ open class LeaveSpaceHandleSDKMock: MatrixRustSDK.LeaveSpaceHandle, @unchecked S
             return roomsClosure()
         } else {
             return roomsReturnValue
+        }
+    }
+}
+open class LiveLocationSharesSDKMock: MatrixRustSDK.LiveLocationShares, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+
+    //MARK: - subscribe
+
+    open var subscribeListenerUnderlyingCallsCount = 0
+    open var subscribeListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeListenerCalled: Bool {
+        return subscribeListenerCallsCount > 0
+    }
+    open var subscribeListenerReceivedListener: LiveLocationShareListener?
+    open var subscribeListenerReceivedInvocations: [LiveLocationShareListener] = []
+
+    open var subscribeListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeListenerClosure: ((LiveLocationShareListener) -> TaskHandle)?
+
+    open override func subscribe(listener: LiveLocationShareListener) -> TaskHandle {
+        subscribeListenerCallsCount += 1
+        subscribeListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeListenerClosure = subscribeListenerClosure {
+            return subscribeListenerClosure(listener)
+        } else {
+            return subscribeListenerReturnValue
         }
     }
 }
@@ -16263,6 +16319,71 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         try await leaveClosure?()
     }
 
+    //MARK: - liveLocationShares
+
+    open var liveLocationSharesUnderlyingCallsCount = 0
+    open var liveLocationSharesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return liveLocationSharesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = liveLocationSharesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                liveLocationSharesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    liveLocationSharesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var liveLocationSharesCalled: Bool {
+        return liveLocationSharesCallsCount > 0
+    }
+
+    open var liveLocationSharesUnderlyingReturnValue: LiveLocationShares!
+    open var liveLocationSharesReturnValue: LiveLocationShares! {
+        get {
+            if Thread.isMainThread {
+                return liveLocationSharesUnderlyingReturnValue
+            } else {
+                var returnValue: LiveLocationShares? = nil
+                DispatchQueue.main.sync {
+                    returnValue = liveLocationSharesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                liveLocationSharesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    liveLocationSharesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var liveLocationSharesClosure: (() async -> LiveLocationShares)?
+
+    open override func liveLocationShares() async -> LiveLocationShares {
+        liveLocationSharesCallsCount += 1
+        if let liveLocationSharesClosure = liveLocationSharesClosure {
+            return await liveLocationSharesClosure()
+        } else {
+            return liveLocationSharesReturnValue
+        }
+    }
+
     //MARK: - loadComposerDraft
 
     open var loadComposerDraftThreadRootThrowableError: Error?
@@ -18800,77 +18921,6 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return try await subscribeToKnockRequestsListenerClosure(listener)
         } else {
             return subscribeToKnockRequestsListenerReturnValue
-        }
-    }
-
-    //MARK: - subscribeToLiveLocationShares
-
-    open var subscribeToLiveLocationSharesListenerUnderlyingCallsCount = 0
-    open var subscribeToLiveLocationSharesListenerCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return subscribeToLiveLocationSharesListenerUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = subscribeToLiveLocationSharesListenerUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                subscribeToLiveLocationSharesListenerUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    subscribeToLiveLocationSharesListenerUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var subscribeToLiveLocationSharesListenerCalled: Bool {
-        return subscribeToLiveLocationSharesListenerCallsCount > 0
-    }
-    open var subscribeToLiveLocationSharesListenerReceivedListener: LiveLocationShareListener?
-    open var subscribeToLiveLocationSharesListenerReceivedInvocations: [LiveLocationShareListener] = []
-
-    open var subscribeToLiveLocationSharesListenerUnderlyingReturnValue: TaskHandle!
-    open var subscribeToLiveLocationSharesListenerReturnValue: TaskHandle! {
-        get {
-            if Thread.isMainThread {
-                return subscribeToLiveLocationSharesListenerUnderlyingReturnValue
-            } else {
-                var returnValue: TaskHandle? = nil
-                DispatchQueue.main.sync {
-                    returnValue = subscribeToLiveLocationSharesListenerUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                subscribeToLiveLocationSharesListenerUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    subscribeToLiveLocationSharesListenerUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var subscribeToLiveLocationSharesListenerClosure: ((LiveLocationShareListener) -> TaskHandle)?
-
-    open override func subscribeToLiveLocationShares(listener: LiveLocationShareListener) -> TaskHandle {
-        subscribeToLiveLocationSharesListenerCallsCount += 1
-        subscribeToLiveLocationSharesListenerReceivedListener = listener
-        DispatchQueue.main.async {
-            self.subscribeToLiveLocationSharesListenerReceivedInvocations.append(listener)
-        }
-        if let subscribeToLiveLocationSharesListenerClosure = subscribeToLiveLocationSharesListenerClosure {
-            return subscribeToLiveLocationSharesListenerClosure(listener)
-        } else {
-            return subscribeToLiveLocationSharesListenerReturnValue
         }
     }
 
@@ -23123,21 +23173,6 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
             return ownMembershipDetailsReturnValue
         }
     }
-}
-open class SecretsBundleSDKMock: MatrixRustSDK.SecretsBundle, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
 }
 open class SecretsBundleWithUserIdSDKMock: MatrixRustSDK.SecretsBundleWithUserId, @unchecked Sendable {
     public init() {

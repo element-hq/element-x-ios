@@ -15,6 +15,7 @@ struct RoomMemberDetailsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
+    let appSettings: AppSettings
 }
 
 enum RoomMemberDetailsScreenCoordinatorAction {
@@ -39,7 +40,8 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
                                                      roomProxy: parameters.roomProxy,
                                                      userSession: parameters.userSession,
                                                      userIndicatorController: parameters.userIndicatorController,
-                                                     analytics: parameters.analytics)
+                                                     analytics: parameters.analytics,
+                                                     appSettings: parameters.appSettings)
     }
     
     func start() {

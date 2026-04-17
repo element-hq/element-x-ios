@@ -64,6 +64,9 @@ class ClientProxy: ClientProxyProtocol {
     
     let spaceService: SpaceServiceProxyProtocol
     
+    let capabilities: HomeserverCapabilitiesProxyProtocol
+    private var capabilitiesRefreshTask: Task<Void, Never>?
+    
     let eventStringBuilder: RoomEventStringBuilder
     
     private static var roomCreationPowerLevelOverrides: PowerLevels {
@@ -208,6 +211,8 @@ class ClientProxy: ClientProxyProtocol {
         
         spaceService = await SpaceServiceProxy(spaceService: client.spaceService())
         
+        capabilities = HomeserverCapabilitiesProxy(underlyingCapabilities: client.homeserverCapabilities())
+        
         let configuredAppService = try await ClientProxyServices(client: client,
                                                                  actionsSubject: actionsSubject,
                                                                  notificationSettings: notificationSettings,
@@ -231,10 +236,7 @@ class ClientProxy: ClientProxyProtocol {
             switch error {
             case .panic(let message, let backtrace):
                 MXLog.error("Received background task panic: \(message ?? "Missing message")\nBacktrace:\n\(backtrace ?? "Missing backtrace")")
-                
-                if AppSettings.appBuildType == .debug || AppSettings.appBuildType == .nightly {
-                    fatalError(message ?? "")
-                }
+                fatalError(message ?? "")
             case .error(let error):
                 MXLog.error("Received background task error: \(error)")
             case .earlyTermination:
@@ -1125,17 +1127,25 @@ class ClientProxy: ClientProxyProtocol {
             
             MXLog.info("Received room list update: \(state)")
             
-            guard state != .error,
-                  state != .terminated else {
-                // The sync service is responsible of handling error and termination
-                return
-            }
-            
-            // Hide the sync spinner as soon as we get any update back
-            actionsSubject.send(.receivedSyncUpdate)
-            
-            if ignoredUsersSubject.value == nil {
-                updateIgnoredUsers()
+            switch state {
+            case .initial, .settingUp, .recovering:
+                break // Don't do anything until we're actually running.
+            case .running:
+                // Hide the sync spinner as soon as we get any update back
+                actionsSubject.send(.receivedSyncUpdate)
+                
+                if ignoredUsersSubject.value == nil {
+                    updateIgnoredUsers()
+                }
+                
+                if capabilitiesRefreshTask == nil {
+                    capabilitiesRefreshTask = Task { [weak self] in
+                        await self?.capabilities.refresh()
+                        self?.capabilitiesRefreshTask = nil
+                    }
+                }
+            case .error, .terminated:
+                break // The sync service is responsible for handling error and termination
             }
         })
     }

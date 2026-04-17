@@ -616,6 +616,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "招待を送信";
 "screen_bottom_sheet_create_dm_message" = "%1$@ とチャットを始めますか？";
 "screen_bottom_sheet_create_dm_title" = "招待を送信しますか？";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "この人物とのチャットがありません。続行する前に、まず招待してください。";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "この新しい連絡先と新規にチャットを開始しますか？";
 "screen_bottom_sheet_manage_room_member_ban" = "ユーザーを追放";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "追放";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "招待されても再度参加することはできません。";
@@ -981,7 +983,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "システムで通知がオフです";
 "screen_notification_settings_title" = "通知";
 "screen_onboarding_app_version" = "バージョン %1$@";
-"screen_onboarding_checking_account" = "Checking account";
+"screen_onboarding_checking_account" = "アカウントを確認中";
 "screen_onboarding_sign_in_manually" = "手動で指定してサインイン";
 "screen_onboarding_sign_in_to" = "%1$@ にサインイン";
 "screen_onboarding_sign_in_with_qr_code" = "QRコードでサインイン";

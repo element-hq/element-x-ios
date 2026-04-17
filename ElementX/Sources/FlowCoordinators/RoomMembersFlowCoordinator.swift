@@ -225,7 +225,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                                                                   roomProxy: roomProxy,
                                                                   userSession: flowParameters.userSession,
                                                                   userIndicatorController: flowParameters.userIndicatorController,
-                                                                  analytics: flowParameters.analytics)
+                                                                  analytics: flowParameters.analytics,
+                                                                  appSettings: flowParameters.appSettings)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
@@ -286,7 +287,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                                                                 isPresentedModally: false,
                                                                 userSession: flowParameters.userSession,
                                                                 userIndicatorController: flowParameters.userIndicatorController,
-                                                                analytics: flowParameters.analytics)
+                                                                analytics: flowParameters.analytics,
+                                                                appSettings: flowParameters.appSettings)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

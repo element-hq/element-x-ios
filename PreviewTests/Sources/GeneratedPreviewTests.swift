@@ -476,6 +476,14 @@ extension PreviewTests {
     }
 
     @Test
+    func inviteUsersConfirmationSheetView() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in InviteUsersConfirmationSheetView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func inviteUsersScreenSelectedItem() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in InviteUsersScreenSelectedItem_Previews._allPreviews.enumerated() {
@@ -607,6 +615,14 @@ extension PreviewTests {
     func liveLocationSharingBannerView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LiveLocationSharingBannerView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
+    func liveLocationSheet() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in LiveLocationSheet_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
@@ -1396,14 +1412,6 @@ extension PreviewTests {
     }
 
     @Test
-    func spacesAnnouncementSheetView() async throws {
-        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
-        for (index, preview) in SpacesAnnouncementSheetView_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
     func spacesScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpacesScreen_Previews._allPreviews.enumerated() {
@@ -1647,6 +1655,14 @@ extension PreviewTests {
     func userIndicatorToastView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in UserIndicatorToastView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
+    func userLocationCell() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in UserLocationCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }

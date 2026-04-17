@@ -12,6 +12,7 @@ import Testing
 @MainActor
 final class LiveLocationManagerTests {
     private var clientProxy: ClientProxyMock!
+    private var locationManagerMock: CLLocationManagerMock!
     private var manager: LiveLocationManager!
     
     private let appSettings: AppSettings
@@ -20,7 +21,8 @@ final class LiveLocationManagerTests {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         clientProxy = ClientProxyMock(.init())
-        manager = LiveLocationManager(clientProxy: clientProxy, appSettings: appSettings)
+        locationManagerMock = CLLocationManagerMock(.init())
+        manager = LiveLocationManager(clientProxy: clientProxy, appSettings: appSettings, locationManager: locationManagerMock)
     }
     
     deinit {

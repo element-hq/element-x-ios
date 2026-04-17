@@ -30,8 +30,7 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SpacesScreenViewState(userID: userSession.clientProxy.userID,
-                                                           topLevelSpaces: spaceServiceProxy.topLevelSpacesPublisher.value,
-                                                           bindings: .init()),
+                                                           topLevelSpaces: spaceServiceProxy.topLevelSpacesPublisher.value),
                    mediaProvider: userSession.mediaProvider)
         
         spaceServiceProxy.topLevelSpacesPublisher
@@ -66,13 +65,6 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
             fatalError("There shouldn't be any unjoined spaces in the joined spaces list.")
         case .showSettings:
             actionsSubject.send(.showSettings)
-        case .screenAppeared:
-            if !appSettings.hasSeenSpacesAnnouncement {
-                // Use a task otherwise the presentation isn't animated.
-                Task { state.bindings.isPresentingFeatureAnnouncement = true }
-            }
-        case .featureAnnouncementAppeared:
-            appSettings.hasSeenSpacesAnnouncement = true
         case .createSpace:
             actionsSubject.send(.showCreateSpace)
         }

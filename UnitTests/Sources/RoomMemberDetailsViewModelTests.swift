@@ -11,6 +11,7 @@ import Testing
 
 @MainActor
 struct RoomMemberDetailsViewModelTests {
+    var clientProxy: ClientProxy!
     var viewModel: RoomMemberDetailsScreenViewModelProtocol!
     var roomProxyMock: JoinedRoomProxyMock!
     var roomMemberProxyMock: RoomMemberProxyMock!
@@ -151,6 +152,52 @@ struct RoomMemberDetailsViewModelTests {
         #expect(context.ignoreUserAlert == nil)
         #expect(context.alertInfo == nil)
     }
+    
+    // MARK: - History Sharing
+
+    @Test
+    mutating func inviteConfirmationFetchesIdentity() async throws {
+        let clientProxy = ClientProxyMock(.init())
+        setup(roomMemberProxyMock: .mockBob, clientProxy: clientProxy)
+        
+        let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
+        try await waitForMemberToLoad.fulfill()
+        
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        clientProxy.directRoomForUserIDReturnValue = .success(nil)
+        clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init(verificationState: .notVerified)))
+        
+        // The user identity becomes known, i.e. not unknown.
+        let deferred = deferFulfillment(viewModel.context.$viewState.compactMap(\.bindings.inviteConfirmationUser)) {
+            !$0.isUnknown
+        }
+        context.send(viewAction: .openDirectChat)
+        try await deferred.fulfill()
+        
+        #expect(clientProxy.userIdentityForFallBackToServerCalled)
+    }
+    
+    @Test
+    mutating func inviteConfirmationFallsBackToUnknownIdentityOnFailure() async throws {
+        let clientProxy = ClientProxyMock(.init())
+        setup(roomMemberProxyMock: .mockBob, clientProxy: clientProxy)
+        
+        let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
+        try await waitForMemberToLoad.fulfill()
+        
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        clientProxy.directRoomForUserIDReturnValue = .success(nil)
+        clientProxy.userIdentityForFallBackToServerReturnValue = .failure(.forbiddenAccess)
+        
+        // The user identity is always unknown, i.e. never not unknown.
+        let deferred = deferFailure(viewModel.context.$viewState.compactMap(\.bindings.inviteConfirmationUser), timeout: .seconds(5)) {
+            !$0.isUnknown
+        }
+        context.send(viewAction: .openDirectChat)
+        try await deferred.fulfill()
+        
+        #expect(clientProxy.userIdentityForFallBackToServerCalled)
+    }
 
     // MARK: - Helpers
 
@@ -166,6 +213,7 @@ struct RoomMemberDetailsViewModelTests {
                                                      roomProxy: roomProxyMock,
                                                      userSession: userSession,
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                     analytics: ServiceLocator.shared.analytics)
+                                                     analytics: ServiceLocator.shared.analytics,
+                                                     appSettings: ServiceLocator.shared.settings)
     }
 }

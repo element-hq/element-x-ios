@@ -182,7 +182,7 @@ struct SettingsScreen: View {
     private var signOutSection: some View {
         Section {
             ListRow(label: .action(title: L10n.screenSignoutPreferenceItem,
-                                   icon: \.signOut,
+                                   icon: \.close,
                                    role: .destructive),
                     kind: .button {
                         context.send(viewAction: .logout)

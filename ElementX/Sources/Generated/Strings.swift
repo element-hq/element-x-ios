@@ -418,7 +418,7 @@ internal enum L10n {
   internal static var commonAcceptableUsePolicy: String { return L10n.tr("Localizable", "common_acceptable_use_policy") }
   /// Add an account
   internal static var commonAddAccount: String { return L10n.tr("Localizable", "common_add_account") }
-  /// Add another account
+  /// Add account
   internal static var commonAddAnotherAccount: String { return L10n.tr("Localizable", "common_add_another_account") }
   /// Adding caption
   internal static var commonAddingCaption: String { return L10n.tr("Localizable", "common_adding_caption") }
@@ -1444,6 +1444,10 @@ internal enum L10n {
   }
   /// Send invite?
   internal static var screenBottomSheetCreateDmTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_title") }
+  /// You currently don’t have any chats with this person. Confirm inviting them before continuing.
+  internal static var screenBottomSheetCreateDmUnknownUserContent: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_unknown_user_content") }
+  /// Start a chat with this new contact?
+  internal static var screenBottomSheetCreateDmUnknownUserTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_unknown_user_title") }
   /// Ban user
   internal static var screenBottomSheetManageRoomMemberBan: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_ban") }
   /// Ban
@@ -1836,6 +1840,14 @@ internal enum L10n {
   internal static var screenInviteUsersAlreadyAMember: String { return L10n.tr("Localizable", "screen_invite_users_already_a_member") }
   /// Already invited
   internal static var screenInviteUsersAlreadyInvited: String { return L10n.tr("Localizable", "screen_invite_users_already_invited") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenInviteUsersConfirmDialogSubtitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_invite_users_confirm_dialog_subtitle", p1)
+  }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenInviteUsersConfirmDialogTitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_invite_users_confirm_dialog_title", p1)
+  }
   /// Are you sure you want to decline the invitation to join %1$@?
   internal static func screenInvitesDeclineChatMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_decline_chat_message", String(describing: p1))
@@ -2106,6 +2118,16 @@ internal enum L10n {
   internal static var screenLinkNewDeviceWrongNumberSubtitle: String { return L10n.tr("Localizable", "screen_link_new_device_wrong_number_subtitle") }
   /// The numbers don’t match
   internal static var screenLinkNewDeviceWrongNumberTitle: String { return L10n.tr("Localizable", "screen_link_new_device_wrong_number_title") }
+  /// Nobody is sharing their location
+  internal static var screenLiveLocationSheetNobodySharing: String { return L10n.tr("Localizable", "screen_live_location_sheet_nobody_sharing") }
+  /// Sharing live location
+  internal static var screenLiveLocationSheetSharingLiveLocation: String { return L10n.tr("Localizable", "screen_live_location_sheet_sharing_live_location") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenLiveLocationSheetSubtitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_live_location_sheet_subtitle", p1)
+  }
+  /// On the map
+  internal static var screenLiveLocationSheetTitle: String { return L10n.tr("Localizable", "screen_live_location_sheet_title") }
   /// This account has been deactivated.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password
@@ -3271,22 +3293,6 @@ internal enum L10n {
   internal static var screenSpaceAddRoomAction: String { return L10n.tr("Localizable", "screen_space_add_room_action") }
   /// Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.
   internal static var screenSpaceAddRoomsRoomAccessDescription: String { return L10n.tr("Localizable", "screen_space_add_rooms_room_access_description") }
-  /// View spaces you've created or joined
-  internal static var screenSpaceAnnouncementItem1: String { return L10n.tr("Localizable", "screen_space_announcement_item1") }
-  /// Accept or decline invites to spaces
-  internal static var screenSpaceAnnouncementItem2: String { return L10n.tr("Localizable", "screen_space_announcement_item2") }
-  /// Discover any rooms you can join in your spaces
-  internal static var screenSpaceAnnouncementItem3: String { return L10n.tr("Localizable", "screen_space_announcement_item3") }
-  /// Join public spaces
-  internal static var screenSpaceAnnouncementItem4: String { return L10n.tr("Localizable", "screen_space_announcement_item4") }
-  /// Leave any spaces you’ve joined
-  internal static var screenSpaceAnnouncementItem5: String { return L10n.tr("Localizable", "screen_space_announcement_item5") }
-  /// Filtering, creating and managing spaces is coming soon.
-  internal static var screenSpaceAnnouncementNotice: String { return L10n.tr("Localizable", "screen_space_announcement_notice") }
-  /// Welcome to the beta version of Spaces! With this first version you can:
-  internal static var screenSpaceAnnouncementSubtitle: String { return L10n.tr("Localizable", "screen_space_announcement_subtitle") }
-  /// Introducing Spaces
-  internal static var screenSpaceAnnouncementTitle: String { return L10n.tr("Localizable", "screen_space_announcement_title") }
   /// Add your first room
   internal static var screenSpaceEmptyStateTitle: String { return L10n.tr("Localizable", "screen_space_empty_state_title") }
   /// Spaces you have created or joined.

@@ -19,10 +19,6 @@ struct SpacesScreen: View {
             .toolbar { toolbar }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .toolbarBloom(hasSearchBar: false)
-            .onAppear { context.send(viewAction: .screenAppeared) }
-            .sheet(isPresented: $context.isPresentingFeatureAnnouncement) {
-                SpacesAnnouncementSheetView(context: context)
-            }
     }
     
     @ViewBuilder
@@ -150,7 +146,6 @@ struct SpacesScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(isEmpty: Bool = false) -> SpacesScreenViewModel {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
-        appSettings.hasSeenSpacesAnnouncement = true
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.spaceService = SpaceServiceProxyMock(.init(topLevelSpaces: isEmpty ? [] : .mockJoinedSpaces))

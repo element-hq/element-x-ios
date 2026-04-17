@@ -83,6 +83,8 @@ Please read the [Android docs](https://github.com/element-hq/element-x-android/b
 
 Please do **not** manually edit the `Localizable.strings`, `Localizable.stringsdict` or `InfoPlist.strings` files! If your PR requires new strings to be added, add the `en` values to `Untranslated.strings`/`Untranslated.stringsdict` and one of the team will transfer them over to Localazy for you.
 
+Once the strings have been added to Localazy, they can be downloaded by running `swift run tools download-strings`.
+
 ### Continuous Integration
 
 Element X uses a suite of Swift command line tools for running actions on the CI and tries to keep the configuration confined to [Tools/Sources](Tools/Sources) alongside the project's [xcodegen](project.yml) configuration.

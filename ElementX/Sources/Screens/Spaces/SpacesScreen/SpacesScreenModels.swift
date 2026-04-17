@@ -21,18 +21,10 @@ struct SpacesScreenViewState: BindableState {
     
     var topLevelSpaces: [SpaceServiceRoom]
     var selectedSpaceID: String?
-        
-    var bindings: SpacesScreenViewStateBindings
-}
-
-struct SpacesScreenViewStateBindings {
-    var isPresentingFeatureAnnouncement = false
 }
 
 enum SpacesScreenViewAction {
     case spaceAction(SpaceRoomCell.Action)
     case showSettings
-    case screenAppeared
-    case featureAnnouncementAppeared
     case createSpace
 }

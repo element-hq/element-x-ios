@@ -58,6 +58,8 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         Task {
             await self.clientProxy.loadUserAvatarURL()
             await self.clientProxy.loadUserDisplayName()
+            state.canEditAvatar = await clientProxy.capabilities.canChangeAvatar()
+            state.canEditDisplayName = await clientProxy.capabilities.canChangeDisplayName()
         }
     }
     

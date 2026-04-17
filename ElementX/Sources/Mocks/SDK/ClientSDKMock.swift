@@ -46,10 +46,15 @@ extension ClientSDKMock {
         serverReturnValue = "https://\(configuration.serverAddress)"
         homeserverReturnValue = configuration.homeserverURL
         urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReturnValue = OAuthAuthorizationDataSDKMock(configuration: configuration)
-        loginUsernamePasswordInitialDeviceNameDeviceIdClosure = { username, password, _, _ in
+        loginUsernamePasswordInitialDeviceNameDeviceIdClosure = { [weak self] username, password, _, _ in
             guard username == configuration.validCredentials.username,
                   password == configuration.validCredentials.password else {
                 throw MockError.generic // use the matrix error
+            }
+            if username.hasPrefix("@"), username.contains(":") {
+                self?.userIdReturnValue = username
+            } else {
+                self?.userIdReturnValue = "@\(username):\(configuration.serverAddress)"
             }
         }
         

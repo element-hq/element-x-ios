@@ -13,6 +13,7 @@ import SwiftUI
 typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreenViewState, InviteUsersScreenViewAction>
 
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
+    private let clientProxy: ClientProxyProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -31,6 +32,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
          userDiscoveryService: UserDiscoveryServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
+        clientProxy = userSession.clientProxy
         self.roomProxy = roomProxy
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
@@ -59,6 +61,23 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .cancel:
             actionsSubject.send(.dismiss)
         case .proceed:
+            guard appSettings.enableKeyShareOnInvite,
+                  roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
+                  !state.usersToConfirm.isEmpty,
+                  !state.isSkippable else {
+                inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
+                return
+            }
+            state.bindings.presentConfirmationDialog = true
+        case .removeUnknownUsers:
+            state.bindings.presentConfirmationDialog = false
+            state.selectedUsers.removeAll { user in
+                state.usersToConfirm.contains { $0.userID == user.userID }
+            }
+            state.usersToConfirm = []
+        case .confirmUnknownUsers:
+            state.bindings.presentConfirmationDialog = false
+            state.usersToConfirm = []
             inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
         case .toggleUser(let user):
             toggleUser(user)
@@ -73,6 +92,17 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         } else {
             state.selectedUsers.append(user)
             withElementAnimation(.easeInOut) { state.bindings.selectedUsersPosition = user.userID }
+            Task {
+                let identityUnknown = if case .success(let identity) = await self.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) {
+                    identity == nil
+                } else {
+                    true
+                }
+                if identityUnknown {
+                    // If we do not have the identity cached, we will prompt the user to confirm they meant to invite them.
+                    self.state.usersToConfirm.append(user)
+                }
+            }
         }
     }
     

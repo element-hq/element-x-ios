@@ -239,6 +239,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ImageRoomTimelineView_Previews")
     }
 
+    func testInviteUsersConfirmationSheetView() async throws {
+        try await performAccessibilityAudit(named: "InviteUsersConfirmationSheetView_Previews")
+    }
+
     func testInviteUsersScreenSelectedItem() async throws {
         try await performAccessibilityAudit(named: "InviteUsersScreenSelectedItem_Previews")
     }
@@ -305,6 +309,10 @@ extension AccessibilityTests {
 
     func testLiveLocationSharingBannerView() async throws {
         try await performAccessibilityAudit(named: "LiveLocationSharingBannerView_Previews")
+    }
+
+    func testLiveLocationSheet() async throws {
+        try await performAccessibilityAudit(named: "LiveLocationSheet_Previews")
     }
 
     func testLoadableImage() async throws {
@@ -699,10 +707,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "SpaceSettingsScreen_Previews")
     }
 
-    func testSpacesAnnouncementSheetView() async throws {
-        try await performAccessibilityAudit(named: "SpacesAnnouncementSheetView_Previews")
-    }
-
     func testSpacesScreen() async throws {
         try await performAccessibilityAudit(named: "SpacesScreen_Previews")
     }
@@ -825,6 +829,10 @@ extension AccessibilityTests {
 
     func testUserIndicatorToastView() async throws {
         try await performAccessibilityAudit(named: "UserIndicatorToastView_Previews")
+    }
+
+    func testUserLocationCell() async throws {
+        try await performAccessibilityAudit(named: "UserLocationCell_Previews")
     }
 
     func testUserProfileCell() async throws {

@@ -8,14 +8,19 @@
     "pr-misc"
   ],
   "ignoreDeps": ["pointfreeco/swift-snapshot-testing"],
+  "minimumReleaseAge": "7 days",
   "packageRules" : [
     {
       "matchManagers": ["github-actions"],
       "groupName" : "GitHub Actions"
     },
     {
-      "matchManagers": ["swift", "cocoapods"],
-      "groupName" : "Swift"
+      "matchManagers": ["xcodegen"],
+      "groupName": "XcodeGen"
+    },
+    {
+      "matchManagers": ["swift"],
+      "groupName" : "Tools"
     },
     {
       "managers": ["swift", "cocoapods"],
@@ -23,9 +28,14 @@
       "groupName": "Compound"
     },
     {
-      "matchManagers": ["bundler"],
-      "groupName" : "Ruby"
-    }
+      // PostHog iOS uses continuous integration so limit upgrades to one PR per month
+      "matchPackageNames": [
+        "posthog-ios",
+      ],
+      "schedule": [
+          "* * 1 * *",
+      ]
+    },
   ]
 }
 

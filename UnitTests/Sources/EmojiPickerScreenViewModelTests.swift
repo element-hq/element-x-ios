@@ -25,7 +25,7 @@ struct EmojiPickerScreenViewModelTests {
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         
-        try await waitForConfirmation(timeout: .seconds(5)) { confirmation in
+        await waitForConfirmation(timeout: .seconds(5)) { confirmation in
             timelineProxy.toggleReactionToClosure = { toggledReaction, _ in
                 defer { confirmation() }
                 #expect(toggledReaction == reaction)

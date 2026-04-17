@@ -20,6 +20,7 @@ struct UserProfileScreenViewState: BindableState {
     let isPresentedModally: Bool
     
     var userProfile: UserProfileProxy?
+    var isIdentityKnown = false
     var isVerified: Bool?
     var permalink: URL?
     var dmRoomID: String?
@@ -33,7 +34,7 @@ struct UserProfileScreenViewState: BindableState {
 
 struct UserProfileScreenViewStateBindings {
     var alertInfo: AlertInfo<UserProfileScreenAlertType>?
-    var inviteConfirmationUser: UserProfileProxy?
+    var inviteConfirmationUser: UserToInvite?
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?

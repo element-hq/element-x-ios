@@ -57,6 +57,17 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     
     /// Resets the current configuration requiring `configure(for:flow:)` to be called again.
     func reset()
+    
+    // MARK: - Classic App
+    
+    /// Account details discovered from the Classic app that is used for automatic verification when the same account is authenticated.
+    var classicAppAccount: ClassicAppAccount? { get }
+    /// Populates the Classic app account's state by checking if the homeserver is supported and which secrets are available.
+    ///
+    /// **Note:** This is no longer automatic purely for testing purposes. It needs to have been called before using ``classicAppAccount``.
+    func setupClassicAppAccountState() async
+    /// This can be called whenever the user has potentially updated their secrets in the Classic app.
+    func refreshClassicAppAccountState() async
 }
 
 // MARK: - OIDC

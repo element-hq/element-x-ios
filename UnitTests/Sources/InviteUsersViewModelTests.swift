@@ -11,16 +11,28 @@ import Combine
 import Testing
 
 @MainActor
-struct InviteUsersScreenViewModelTests {
+final class InviteUsersScreenViewModelTests {
     var viewModel: InviteUsersScreenViewModelProtocol!
     var userDiscoveryService: UserDiscoveryServiceMock!
+    var clientProxy: ClientProxyMock!
+    var appSettings: AppSettings!
+
+    init() {
+        AppSettings.resetAllSettings()
+        appSettings = AppSettings()
+        ServiceLocator.shared.register(appSettings: appSettings)
+    }
+    
+    deinit {
+        AppSettings.resetAllSettings()
+    }
     
     var context: InviteUsersScreenViewModel.Context {
         viewModel.context
     }
     
     @Test
-    mutating func selectUser() {
+    func selectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
         setupViewModel(roomProxy: roomProxy, isSkippable: true)
@@ -32,21 +44,7 @@ struct InviteUsersScreenViewModelTests {
     }
     
     @Test
-    mutating func reselectUser() {
-        let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
-        roomProxy.inviteUserIDReturnValue = .success(())
-        setupViewModel(roomProxy: roomProxy, isSkippable: true)
-        
-        #expect(context.viewState.selectedUsers.isEmpty)
-        context.send(viewAction: .toggleUser(.mockAlice))
-        #expect(context.viewState.selectedUsers.count == 1)
-        #expect(context.viewState.selectedUsers.first?.userID == UserProfileProxy.mockAlice.userID)
-        context.send(viewAction: .toggleUser(.mockAlice))
-        #expect(context.viewState.selectedUsers.isEmpty)
-    }
-    
-    @Test
-    mutating func deselectUser() {
+    func reselectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
         setupViewModel(roomProxy: roomProxy, isSkippable: true)
@@ -60,7 +58,21 @@ struct InviteUsersScreenViewModelTests {
     }
     
     @Test
-    mutating func inviteButton() async throws {
+    func deselectUser() {
+        let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
+        roomProxy.inviteUserIDReturnValue = .success(())
+        setupViewModel(roomProxy: roomProxy, isSkippable: true)
+        
+        #expect(context.viewState.selectedUsers.isEmpty)
+        context.send(viewAction: .toggleUser(.mockAlice))
+        #expect(context.viewState.selectedUsers.count == 1)
+        #expect(context.viewState.selectedUsers.first?.userID == UserProfileProxy.mockAlice.userID)
+        context.send(viewAction: .toggleUser(.mockAlice))
+        #expect(context.viewState.selectedUsers.isEmpty)
+    }
+    
+    @Test
+    func inviteButton() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
         let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: mockedMembers))
         roomProxy.inviteUserIDReturnValue = .success(())
@@ -87,10 +99,82 @@ struct InviteUsersScreenViewModelTests {
         #expect(roomProxy.inviteUserIDReceivedInvocations == [RoomMemberProxyMock.mockAlice.userID])
     }
     
-    private mutating func setupViewModel(roomProxy: JoinedRoomProxyProtocol, isSkippable: Bool) {
+    // MARK: - History Sharing
+    
+    @Test
+    func invitingUnknownUsersOpensConfirmationDialog() async throws {
+        appSettings.enableKeyShareOnInvite = true
+        
+        let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
+        let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: mockedMembers))
+        roomProxy.inviteUserIDReturnValue = .success(())
+        setupViewModel(roomProxy: roomProxy, isSkippable: false)
+        
+        // Mock the lack of cached user identity
+        clientProxy.userIdentityForFallBackToServerReturnValue = .success(nil)
+        
+        let deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+            state.isUserSelected(.mockAlice) && state.usersToConfirm.contains(.mockAlice)
+        }
+        
+        context.send(viewAction: .toggleUser(.mockAlice))
+        try await deferredState.fulfill()
+
+        context.send(viewAction: .proceed)
+        #expect(context.presentConfirmationDialog)
+        
+        let deferredAction = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .dismiss:
+                return true
+            }
+        }
+        
+        context.send(viewAction: .confirmUnknownUsers)
+        
+        try await deferredAction.fulfill()
+        #expect(roomProxy.inviteUserIDReceivedInvocations == [RoomMemberProxyMock.mockAlice.userID])
+    }
+    
+    @Test
+    func removeButtonRemovesUnknownUsers() async throws {
+        appSettings.enableKeyShareOnInvite = true
+        
+        let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
+        let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: mockedMembers))
+        roomProxy.inviteUserIDReturnValue = .success(())
+        setupViewModel(roomProxy: roomProxy, isSkippable: false)
+        
+        // Mock the lack of cached user identity
+        clientProxy.userIdentityForFallBackToServerReturnValue = .success(nil)
+        
+        var deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+            state.isUserSelected(.mockAlice) && state.usersToConfirm.contains(.mockAlice)
+        }
+        
+        context.send(viewAction: .toggleUser(.mockAlice))
+        try await deferredState.fulfill()
+        
+        context.send(viewAction: .proceed)
+        #expect(context.presentConfirmationDialog)
+        
+        deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+            !state.usersToConfirm.contains(.mockAlice) && !state.selectedUsers.contains(.mockAlice)
+        }
+        
+        context.send(viewAction: .removeUnknownUsers)
+        try await deferredState.fulfill()
+    }
+    
+    // MARK: - Helpers
+    
+    private func setupViewModel(roomProxy: JoinedRoomProxyProtocol, isSkippable: Bool) {
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
-        let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init()),
+        
+        clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
+        
+        let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                    roomProxy: roomProxy,
                                                    isSkippable: isSkippable,
                                                    userDiscoveryService: userDiscoveryService,

@@ -13,6 +13,7 @@ struct AuthenticationStartScreenParameters {
     let authenticationService: AuthenticationServiceProtocol
     let provisioningParameters: AccountProvisioningParameters?
     let isBugReportServiceEnabled: Bool
+    let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let mediaProvider: MediaProviderProtocol?
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -41,6 +42,7 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
         viewModel = AuthenticationStartScreenViewModel(authenticationService: parameters.authenticationService,
                                                        provisioningParameters: parameters.provisioningParameters,
                                                        isBugReportServiceEnabled: parameters.isBugReportServiceEnabled,
+                                                       appMediator: parameters.appMediator,
                                                        appSettings: parameters.appSettings,
                                                        mediaProvider: parameters.mediaProvider,
                                                        userIndicatorController: parameters.userIndicatorController)

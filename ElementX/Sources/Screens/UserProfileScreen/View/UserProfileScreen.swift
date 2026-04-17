@@ -21,8 +21,8 @@ struct UserProfileScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
-        .sheet(item: $context.inviteConfirmationUser) { user in
-            SendInviteConfirmationView(userToInvite: user,
+        .sheet(item: $context.inviteConfirmationUser) { userToInvite in
+            SendInviteConfirmationView(userToInvite: userToInvite,
                                        mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .createDirectChat)
             }
@@ -147,6 +147,7 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
                                           isPresentedModally: false,
                                           userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          analytics: ServiceLocator.shared.analytics)
+                                          analytics: ServiceLocator.shared.analytics,
+                                          appSettings: ServiceLocator.shared.settings)
     }
 }

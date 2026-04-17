@@ -16,6 +16,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     private let userSession: UserSessionProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
+    private let appSettings: AppSettings
     
     private var actionsSubject: PassthroughSubject<RoomMemberDetailsScreenViewModelAction, Never> = .init()
     
@@ -29,11 +30,13 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
          roomProxy: JoinedRoomProxyProtocol,
          userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         analytics: AnalyticsService) {
+         analytics: AnalyticsService,
+         appSettings: AppSettings) {
         self.roomProxy = roomProxy
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
+        self.appSettings = appSettings
         
         let initialViewState = RoomMemberDetailsScreenViewState(userID: userID, bindings: .init())
         
@@ -197,8 +200,19 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         case .success(let roomID):
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
+            } else if appSettings.enableKeyShareOnInvite, roomProxy.details.historySharingState != RoomHistorySharingState.hidden {
+                Task {
+                    let identity = await self.userSession.clientProxy.userIdentity(for: roomMemberProxy.userID, fallBackToServer: false)
+                    let user: UserProfileProxy = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
+                    let isUnknown = if case .success(let identity) = identity {
+                        identity == nil
+                    } else {
+                        true
+                    }
+                    self.state.bindings.inviteConfirmationUser = .init(user: user, isUnknown: isUnknown)
+                }
             } else {
-                state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
+                state.bindings.inviteConfirmationUser = .init(user: .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL), isUnknown: false)
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)

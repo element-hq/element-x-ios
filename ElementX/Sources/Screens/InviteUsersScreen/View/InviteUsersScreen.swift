@@ -31,6 +31,9 @@ struct InviteUsersScreen: View {
                               disablesInteractiveDismiss: true,
                               accessibilityFocusOnStart: true)
             .compoundSearchField()
+            .sheet(isPresented: $context.presentConfirmationDialog) {
+                InviteUsersConfirmationSheetView(context: context, users: context.viewState.usersToConfirm)
+            }
             .alert(item: $context.alertInfo)
             .navigationBarBackButtonHidden(context.viewState.isSkippable)
     }
@@ -149,6 +152,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let searchingViewModel = makeViewModel(searchQuery: "Alice")
     static let selectedViewModel = makeViewModel(hasSelection: true)
+    static let confirmSelectedViewModel = makeViewModel(shouldConfirm: true)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -170,9 +174,14 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Selected")
         .snapshotPreferences(expect: selectedViewModel.context.$viewState.map { !$0.selectedUsers.isEmpty })
+        
+        ElementNavigationStack {
+            InviteUsersScreen(context: confirmSelectedViewModel.context)
+        }
+        .previewDisplayName("Confirm Selected")
     }
     
-    static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false) -> InviteUsersScreenViewModel {
+    static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false, shouldConfirm: Bool = false) -> InviteUsersScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentConversationCounterpartsReturnValue = [.mockAlice, .mockBob, .mockCharlie, .mockDan, .mockVerbose]
         
@@ -192,6 +201,11 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         
         if hasSelection {
             viewModel.state.selectedUsers = [.mockAlice]
+        }
+        
+        if shouldConfirm {
+            viewModel.state.usersToConfirm = [.mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice]
+            viewModel.state.bindings.presentConfirmationDialog = true
         }
         
         return viewModel

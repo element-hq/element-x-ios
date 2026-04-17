@@ -40,6 +40,7 @@ enum RoomScreenCoordinatorAction {
     case presentLocationPicker
     case presentPollForm(mode: PollFormMode)
     case presentLocationViewer(StaticLocationData)
+    case presentLiveLocationViewer(sender: TimelineItemSender, initialLiveLocationShare: LiveLocationShare)
     case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case presentRoomMemberDetails(userID: String)
     case presentMessageForwarding(forwardingItem: MessageForwardingItem)
@@ -140,6 +141,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
                 case .displayLocation(let location):
                     actionsSubject.send(.presentLocationViewer(location))
+                case .displayLiveLocation(let sender, let initialLiveLocationShare):
+                    actionsSubject.send(.presentLiveLocationViewer(sender: sender, initialLiveLocationShare: initialLiveLocationShare))
                 case .displayResolveSendFailure(let failure, let sendHandle):
                     actionsSubject.send(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
                 case .displayThread(let itemID):

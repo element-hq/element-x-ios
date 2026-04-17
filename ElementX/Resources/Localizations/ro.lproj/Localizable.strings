@@ -616,6 +616,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Trimiteți invitația";
 "screen_bottom_sheet_create_dm_message" = "Doriți să începeți o discuție cu %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Trimiteți invitația?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
 "screen_bottom_sheet_manage_room_member_ban" = "Îndepărtați și interziceți membrul";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Interzicere";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nu se vor putea alătura din nou acestei camere dacă sunt invitați.";

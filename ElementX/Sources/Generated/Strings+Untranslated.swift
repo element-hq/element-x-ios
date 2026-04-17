@@ -10,6 +10,14 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum UntranslatedL10n {
+  /// You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.
+  internal static var cryptoHistorySharingConfirmInviteDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_invite_dialog_content") }
+  /// Invite new contacts to this room?
+  internal static var cryptoHistorySharingConfirmInviteDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_invite_dialog_title") }
+  /// You currently don’t have any chats with this person. Confirm inviting them before continuing.
+  internal static var cryptoHistorySharingConfirmStartChatDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_content") }
+  /// Start a chat with this new contact?
+  internal static var cryptoHistorySharingConfirmStartChatDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_title") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

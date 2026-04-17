@@ -145,7 +145,7 @@ class TimelineTableViewController: UIViewController {
     }
     
     @Binding private var isScrolledToBottom: Bool
-    @Binding private var floatingDateText: String?
+    @Binding private var floatingDate: Date?
     
     /// A work item used to auto-hide the floating date badge after scrolling stops.
     private var floatingDateHideWorkItem: DispatchWorkItem?
@@ -179,11 +179,12 @@ class TimelineTableViewController: UIViewController {
     
     init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
-         floatingDateText: Binding<String?>,
-         scrollToBottomPublisher: PassthroughSubject<Void, Never>) {
+         floatingDate: Binding<Date?>,
+         scrollToBottomPublisher: PassthroughSubject<Void, Never>,
+         scrollToFirstItemForDatePublisher: PassthroughSubject<Void, Never>) {
         self.coordinator = coordinator
         _isScrolledToBottom = isScrolledToBottom
-        _floatingDateText = floatingDateText
+        _floatingDate = floatingDate
         
         super.init(nibName: nil, bundle: nil)
         
@@ -206,6 +207,12 @@ class TimelineTableViewController: UIViewController {
         scrollToBottomPublisher
             .sink { [weak self] _ in
                 self?.scrollToNewestItem(animated: true)
+            }
+            .store(in: &cancellables)
+        
+        scrollToFirstItemForDatePublisher
+            .sink { [weak self] _ in
+                self?.scrollToFirstItemForCurrentDate()
             }
             .store(in: &cancellables)
         
@@ -518,10 +525,10 @@ extension TimelineTableViewController: UITableViewDelegate {
 // MARK: - Floating Date Badge
 
 extension TimelineTableViewController {
-    /// Computes the formatted date text for the topmost visible timeline item
+    /// Computes the timestamp for the topmost visible timeline item
     /// and updates the floating date binding.
     func updateFloatingDate() {
-        guard let dateText = newestVisibleDateText() else {
+        guard let date = newestVisibleDate() else {
             return
         }
         
@@ -530,9 +537,9 @@ extension TimelineTableViewController {
         // to extend the display duration of the floating date.
         scheduleFloatingDateHide()
         
-        // Only update on changes to avoid needless SwiftUI recomputation.
-        if floatingDateText != dateText {
-            floatingDateText = dateText
+        // Only update when the calendar day changes to avoid needless SwiftUI recomputation.
+        if floatingDate.map({ !Calendar.current.isDate($0, inSameDayAs: date) }) ?? true {
+            floatingDate = date
         }
     }
     
@@ -540,18 +547,33 @@ extension TimelineTableViewController {
     func scheduleFloatingDateHide() {
         floatingDateHideWorkItem?.cancel()
         let workItem = DispatchWorkItem { [weak self] in
-            self?.floatingDateText = nil
+            self?.floatingDate = nil
         }
         floatingDateHideWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
     }
     
-    /// Returns the formatted date text for the newest visible timeline item.
+    /// Scrolls to the first (oldest) item on the same calendar day as the current floating date.
+    private func scrollToFirstItemForCurrentDate() {
+        guard let floatingDate else { return }
+        // timelineItemsDictionary is ordered oldest-first; the first match is the earliest item for that day.
+        for uniqueID in timelineItemsDictionary.keys {
+            if let timestamp = timelineItemsDictionary[uniqueID]?.timestamp,
+               Calendar.current.isDate(timestamp, inSameDayAs: floatingDate),
+               let indexPath = dataSource?.indexPath(for: uniqueID) {
+                // The table view is flipped, so .bottom aligns the cell to the visual top.
+                tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                return
+            }
+        }
+    }
+    
+    /// Returns the timestamp of the newest visible timeline item.
     ///
     /// The table view is flipped (unless VoiceOver is running), so the "newest"
     /// visible cell on screen is actually the *last* index path in `indexPathsForVisibleRows`
     /// when the table is flipped, or the *first* when it is not.
-    private func newestVisibleDateText() -> String? {
+    private func newestVisibleDate() -> Date? {
         guard let visibleIndexPaths = tableView.indexPathsForVisibleRows,
               !visibleIndexPaths.isEmpty else {
             return nil
@@ -562,11 +584,11 @@ extension TimelineTableViewController {
         let isFlipped = scaleY == -1
         let orderedPaths = isFlipped ? visibleIndexPaths.reversed() : visibleIndexPaths
         
-        // Walk from topmost downward and return the date of the first item that has one.
+        // Walk from topmost downward and return the timestamp of the first item that has one.
         for indexPath in orderedPaths {
             if let uniqueID = dataSource?.itemIdentifier(for: indexPath),
                let timestamp = timelineItemsDictionary[uniqueID]?.timestamp {
-                return timestamp.formattedDateSeparator()
+                return timestamp
             }
         }
         
