@@ -134,10 +134,12 @@ enum RoomAvatarSizeOnScreen {
     case globalSearch
     case roomSelection
     case details
+    case editRoomDetails
     case notificationSettings
     case roomDirectorySearch
     case joinRoom
     case spaceHeader
+    case editSpaceDetails
     case spaceAddRooms
     case spaceAddRoomsSelected
     case completionSuggestions
@@ -157,9 +159,9 @@ enum RoomAvatarSizeOnScreen {
         case .chats, .spaces, .spaceSettings,
              .spaceAddRoomsSelected:
             52
-        case .joinRoom, .spaceHeader:
+        case .joinRoom, .spaceHeader, .editSpaceDetails:
             64
-        case .details:
+        case .details, .editRoomDetails:
             96
         }
     }

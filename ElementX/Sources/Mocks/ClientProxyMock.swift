@@ -29,6 +29,9 @@ struct ClientProxyMockConfiguration {
     var timelineMediaVisibility = TimelineMediaVisibility.always
     var hideInviteAvatars = false
     
+    var canChangeAvatar = true
+    var canChangeDisplayName = true
+    
     var maxMediaUploadSize: UInt = 100 * 1024 * 1024
     
     class Overrides {
@@ -108,6 +111,11 @@ extension ClientProxyMock {
         
         spaceService = SpaceServiceProxyMock(configuration.spaceServiceConfiguration)
         linkNewDeviceServiceReturnValue = LinkNewDeviceServiceMock(.init())
+        
+        let capabilities = HomeserverCapabilitiesProxyMock()
+        capabilities.canChangeAvatarReturnValue = configuration.canChangeAvatar
+        capabilities.canChangeDisplayNameReturnValue = configuration.canChangeDisplayName
+        self.capabilities = capabilities
         
         roomForIdentifierClosure = { [weak self] identifier in
             if let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) {

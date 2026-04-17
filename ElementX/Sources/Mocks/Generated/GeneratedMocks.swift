@@ -2696,6 +2696,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingSpaceService = value }
     }
     var underlyingSpaceService: SpaceServiceProxyProtocol!
+    var capabilities: HomeserverCapabilitiesProxyProtocol {
+        get { return underlyingCapabilities }
+        set(value) { underlyingCapabilities = value }
+    }
+    var underlyingCapabilities: HomeserverCapabilitiesProxyProtocol!
     var isReportRoomSupportedCallsCount = 0
     var isReportRoomSupportedCalled: Bool {
         return isReportRoomSupportedCallsCount > 0
@@ -6942,6 +6947,172 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol, @unchecked S
             return await handleMessageClosure(message)
         } else {
             return handleMessageReturnValue
+        }
+    }
+}
+class HomeserverCapabilitiesProxyMock: HomeserverCapabilitiesProxyProtocol, @unchecked Sendable {
+
+    //MARK: - refresh
+
+    var refreshUnderlyingCallsCount = 0
+    var refreshCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return refreshUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = refreshUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                refreshUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    refreshUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var refreshCalled: Bool {
+        return refreshCallsCount > 0
+    }
+    var refreshClosure: (() async -> Void)?
+
+    func refresh() async {
+        refreshCallsCount += 1
+        await refreshClosure?()
+    }
+    //MARK: - canChangeAvatar
+
+    var canChangeAvatarUnderlyingCallsCount = 0
+    var canChangeAvatarCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canChangeAvatarUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canChangeAvatarUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canChangeAvatarUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canChangeAvatarUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var canChangeAvatarCalled: Bool {
+        return canChangeAvatarCallsCount > 0
+    }
+
+    var canChangeAvatarUnderlyingReturnValue: Bool!
+    var canChangeAvatarReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return canChangeAvatarUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canChangeAvatarUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canChangeAvatarUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canChangeAvatarUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var canChangeAvatarClosure: (() async -> Bool)?
+
+    func canChangeAvatar() async -> Bool {
+        canChangeAvatarCallsCount += 1
+        if let canChangeAvatarClosure = canChangeAvatarClosure {
+            return await canChangeAvatarClosure()
+        } else {
+            return canChangeAvatarReturnValue
+        }
+    }
+    //MARK: - canChangeDisplayName
+
+    var canChangeDisplayNameUnderlyingCallsCount = 0
+    var canChangeDisplayNameCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canChangeDisplayNameUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canChangeDisplayNameUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canChangeDisplayNameUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canChangeDisplayNameUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var canChangeDisplayNameCalled: Bool {
+        return canChangeDisplayNameCallsCount > 0
+    }
+
+    var canChangeDisplayNameUnderlyingReturnValue: Bool!
+    var canChangeDisplayNameReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return canChangeDisplayNameUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canChangeDisplayNameUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canChangeDisplayNameUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canChangeDisplayNameUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var canChangeDisplayNameClosure: (() async -> Bool)?
+
+    func canChangeDisplayName() async -> Bool {
+        canChangeDisplayNameCallsCount += 1
+        if let canChangeDisplayNameClosure = canChangeDisplayNameClosure {
+            return await canChangeDisplayNameClosure()
+        } else {
+            return canChangeDisplayNameReturnValue
         }
     }
 }

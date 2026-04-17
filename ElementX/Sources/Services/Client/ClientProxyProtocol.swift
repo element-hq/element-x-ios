@@ -145,6 +145,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     var spaceService: SpaceServiceProxyProtocol { get }
     
+    var capabilities: HomeserverCapabilitiesProxyProtocol { get }
+    
     var isReportRoomSupported: Bool { get async }
     
     var isLiveKitRTCSupported: Bool { get async }
