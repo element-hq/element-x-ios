@@ -8,6 +8,7 @@
     "pr-misc"
   ],
   "ignoreDeps": ["pointfreeco/swift-snapshot-testing"],
+  "minimumReleaseAge": "7 days",
   "packageRules" : [
     {
       "matchManagers": ["github-actions"],
