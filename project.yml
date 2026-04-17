@@ -141,7 +141,7 @@ packages:
     minorVersion: 1.2.1
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
-    minorVersion: 6.22.1
+    minorVersion: 6.25.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     minorVersion: 3.37.1
