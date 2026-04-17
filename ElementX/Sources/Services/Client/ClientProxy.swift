@@ -231,10 +231,7 @@ class ClientProxy: ClientProxyProtocol {
             switch error {
             case .panic(let message, let backtrace):
                 MXLog.error("Received background task panic: \(message ?? "Missing message")\nBacktrace:\n\(backtrace ?? "Missing backtrace")")
-                
-                if AppSettings.appBuildType == .debug || AppSettings.appBuildType == .nightly {
-                    fatalError(message ?? "")
-                }
+                fatalError(message ?? "")
             case .error(let error):
                 MXLog.error("Received background task error: \(error)")
             case .earlyTermination:
