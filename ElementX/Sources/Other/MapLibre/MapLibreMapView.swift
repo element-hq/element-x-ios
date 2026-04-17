@@ -75,7 +75,7 @@ struct MapLibreMapView: UIViewRepresentable {
         
         // If the center coordinate was updated externally (not by the map itself), move the map.
         if let newCenter = mapCenterCoordinate,
-           !coordinatesAreEqual(newCenter, context.coordinator.lastReportedCenter) {
+           newCenter != context.coordinator.lastReportedCenter {
             context.coordinator.lastReportedCenter = newCenter
             mapView.setCenter(newCenter, animated: true)
         }
@@ -86,11 +86,6 @@ struct MapLibreMapView: UIViewRepresentable {
         updateAnnotations(in: mapView)
         
         showUserLocation(in: mapView)
-    }
-    
-    private func coordinatesAreEqual(_ lhs: CLLocationCoordinate2D, _ rhs: CLLocationCoordinate2D?) -> Bool {
-        guard let rhs else { return false }
-        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
     
     func makeCoordinator() -> Coordinator {
