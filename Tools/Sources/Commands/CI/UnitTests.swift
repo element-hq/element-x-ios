@@ -34,19 +34,10 @@ struct UnitTests: AsyncParsableCommand {
         }
         
         if !skipPreviews {
-            // Run preview tests on a smaller device
             do {
-                logger.info("\n🧪 Running preview tests…\n")
-                try await RunTests.parse([
-                    "--scheme", "PreviewTests",
-                    "--device", "iPhone SE (3rd generation)",
-                    "--os-version", osVersion,
-                    "--create-simulator-name", "iPhone SE (3rd generation)",
-                    "--create-simulator-type", "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
-                ]).run()
+                try await PreviewTests.parse(["--os-version", osVersion]).run()
             } catch {
                 failures.append("Preview tests failed: \(error)")
-                logger.error("\n❌ Preview tests failed.\n")
             }
         }
         
@@ -54,13 +45,9 @@ struct UnitTests: AsyncParsableCommand {
         await CI.zipResults(bundles: ["UnitTests.xcresult", "PreviewTests.xcresult"],
                             outputName: "UnitTests.zip")
         
-        // Collect coverage reports
+        // Collect coverage and JUnit results for unit tests
         await CI.collectCoverage(resultBundle: "UnitTests.xcresult", outputName: "unit-cobertura.xml")
-        await CI.collectCoverage(resultBundle: "PreviewTests.xcresult", outputName: "preview-cobertura.xml")
-        
-        // Collect JUnit test results
         await CI.collectTestResults(resultBundle: "UnitTests.xcresult", outputName: "unit-junit.xml")
-        await CI.collectTestResults(resultBundle: "PreviewTests.xcresult", outputName: "preview-junit.xml")
         
         if !failures.isEmpty {
             logger.error("\n❌ \(failures.count) test suite(s) failed.\n")
