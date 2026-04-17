@@ -85,6 +85,9 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             }
         case .stopLiveLocation:
             stopLiveLocation()
+        case .setMapCenter(let coordinate):
+            state.bindings.showsUserLocationMode = .show
+            state.bindings.mapCenterLocation = coordinate
         }
     }
     

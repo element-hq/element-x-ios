@@ -67,13 +67,15 @@ struct LiveLocationSheet: View {
                     if let profile = context.viewState.userProfiles[liveLocationShare.userID] {
                         Button {
                             guard let geoURI = liveLocationShare.geoURI else { return }
-                            context.mapCenterLocation = .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
+                            context.send(viewAction: .setMapCenter(.init(latitude: geoURI.latitude, longitude: geoURI.longitude)))
                         } label: {
                             UserLocationCell(profile: profile,
                                              isOwnUser: context.viewState.isOwnUser(liveLocationShare.userID),
                                              kind: .live,
                                              mediaProvider: context.mediaProvider,
-                                             onShare: { context.sharedAnnotation = context.viewState.annotations.first { $0.id == liveLocationShare.id }},
+                                             onShare: {
+                                                 context.sharedAnnotation = context.viewState.annotations.first { $0.id == liveLocationShare.id }
+                                             },
                                              onStop: { context.send(viewAction: .stopLiveLocation) })
                         }
                     }
