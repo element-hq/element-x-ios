@@ -150,7 +150,7 @@ packages:
     minorVersion: 9.10.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    minorVersion: 1.18.7
+    minorVersion: 1.19.2
   SwiftFlow:
     url: https://github.com/tevelee/SwiftUI-Flow.git
     minorVersion: 3.1.1
