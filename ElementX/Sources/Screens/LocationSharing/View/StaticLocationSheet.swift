@@ -37,8 +37,8 @@ struct StaticLocationSheet: View {
             if case let .viewStatic(location) = context.viewState.interactionMode,
                let profile = context.viewState.userProfiles.values.first {
                 Button {
-                    context.mapCenterLocation = .init(latitude: location.geoURI.latitude,
-                                                      longitude: location.geoURI.longitude)
+                    context.send(viewAction: .setMapCenter(.init(latitude: location.geoURI.latitude,
+                                                                 longitude: location.geoURI.longitude)))
                 } label: {
                     UserLocationCell(profile: profile,
                                      isOwnUser: context.viewState.isOwnUser(profile.userID),
@@ -47,12 +47,13 @@ struct StaticLocationSheet: View {
                                      mediaProvider: context.mediaProvider,
                                      onShare: {
                                          context.sharedAnnotation = context.viewState.annotations.first
-                                     })
-                }
-                .popover(item: $context.sharedAnnotation) { annotation in
-                    LocationShareSheet(annotation: annotation)
+                                     },
+                                     onStop: nil)
                 }
             }
+        }
+        .popover(item: $context.sharedAnnotation) { annotation in
+            LocationShareSheet(annotation: annotation)
         }
     }
 }

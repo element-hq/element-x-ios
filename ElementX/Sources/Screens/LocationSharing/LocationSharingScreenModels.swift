@@ -179,6 +179,7 @@ enum LocationSharingScreenViewAction {
     case centerToUser
     case userDidPan
     case stopLiveLocation
+    case setMapCenter(CLLocationCoordinate2D)
 }
 
 extension AlertInfo where T == LocationSharingViewAlert {
