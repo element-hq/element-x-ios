@@ -38,6 +38,12 @@ struct HomeScreen: View {
                     .navigationTransition(.zoom(sourceID: NavigationTransitionSourceID.spaceFilters,
                                                 in: navigationTransitionNamespace))
             }
+            .overlay {
+                Circle().foregroundStyle(.red)
+                    .overlay {
+                        Text("Big red button")
+                    }
+            }
     }
     
     // MARK: - Private
