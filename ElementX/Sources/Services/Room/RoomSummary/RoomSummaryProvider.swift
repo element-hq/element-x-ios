@@ -341,7 +341,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            canonicalAlias: roomInfo.canonicalAlias,
                            alternativeAliases: .init(roomInfo.alternativeAliases),
                            hasOngoingCall: roomInfo.hasRoomCall,
-                           activeCallIntent: activeCallIntent,
+                           activeCallIntent: activeCallIntent.map { .init(rustCallIntent: $0) },
                            isMarkedUnread: roomInfo.isMarkedUnread,
                            isFavourite: roomInfo.isFavourite,
                            isTombstoned: roomInfo.successorRoom != nil)

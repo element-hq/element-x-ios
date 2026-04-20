@@ -57,7 +57,7 @@ struct RoomSummary {
     let alternativeAliases: Set<String>
     
     let hasOngoingCall: Bool
-    let activeCallIntent: RtcCallIntent?
+    let activeCallIntent: CallIntent?
     
     let isMarkedUnread: Bool
     let isFavourite: Bool

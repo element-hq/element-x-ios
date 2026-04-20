@@ -6,7 +6,6 @@
 //
 
 import Compound
-import MatrixRustSDK
 import SwiftUI
 
 struct RoomCallControlsToolbar: ToolbarContent {
@@ -71,7 +70,7 @@ struct RoomCallControlsToolbar_Previews: PreviewProvider {
 }
 
 private extension RoomScreenViewState {
-    static func mock(hasOngoingCall: Bool, isDirectOneToOneRoom: Bool = false, canJoinCall: Bool = true, activeRoomCallIntent: RtcCallIntent? = nil) -> RoomScreenViewState {
+    static func mock(hasOngoingCall: Bool, isDirectOneToOneRoom: Bool = false, canJoinCall: Bool = true, activeRoomCallIntent: CallIntent? = nil) -> RoomScreenViewState {
         RoomScreenViewState(roomAvatar: .room(id: "mock", name: "Mock Room", avatarURL: nil),
                             canJoinCall: canJoinCall,
                             hasOngoingCall: hasOngoingCall,

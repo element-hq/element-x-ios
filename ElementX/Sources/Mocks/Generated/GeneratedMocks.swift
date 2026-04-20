@@ -15238,7 +15238,7 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingHasRoomCall = value }
     }
     var underlyingHasRoomCall: Bool!
-    var activeRoomCallIntent: RtcCallIntent?
+    var activeRoomCallIntent: CallIntent?
     var activeRoomCallParticipants: [String] = []
     var isMarkedUnread: Bool {
         get { return underlyingIsMarkedUnread }

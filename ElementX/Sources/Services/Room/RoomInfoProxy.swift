@@ -110,12 +110,12 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
         roomInfo.hasRoomCall
     }
 
-    var activeRoomCallIntent: RtcCallIntent? {
+    var activeRoomCallIntent: CallIntent? {
         switch roomInfo.activeRoomCallConsensusIntent {
         case .full(let intent):
-            return intent
+            return .init(rustCallIntent: intent)
         case .partial(intent: let intent, _, _):
-            return intent
+            return .init(rustCallIntent: intent)
         case .none:
             return nil
         }
