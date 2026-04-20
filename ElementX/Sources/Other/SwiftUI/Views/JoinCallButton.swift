@@ -12,15 +12,7 @@ import SwiftUI
 struct JoinCallButton: View {
     let isVoiceCall: Bool
     let action: () -> Void
-    
-    var icon: KeyPath<CompoundIcons, Image> {
-        if isVoiceCall {
-            return \.voiceCallSolid
-        } else {
-            return \.videoCallSolid
-        }
-    }
-    
+
     var body: some View {
         if #available(iOS 26, *) {
             glassButton
@@ -34,7 +26,7 @@ struct JoinCallButton: View {
             // Use an HStack on iOS 26 as .labelStyle(.titleAndIcon) doesn't
             // seem to have any effect on a label in the navigation bar 🤷‍♂️
             HStack(spacing: 6) {
-                CompoundIcon(icon)
+                CompoundIcon(isVoiceCall ? \.voiceCallSolid : \.videoCallSolid)
                 Text(L10n.actionJoin)
                     .padding(.trailing, 4)
             }
@@ -78,7 +70,9 @@ struct JoinCallButton_Previews: PreviewProvider {
                         JoinCallButton(isVoiceCall: false) { }
                     }
                 }
-        }.previewDisplayName("Join Video Call")
+        }
+        .previewDisplayName("Join Video Call")
+        
         ElementNavigationStack {
             Color.clear
                 .toolbar {
@@ -86,6 +80,7 @@ struct JoinCallButton_Previews: PreviewProvider {
                         JoinCallButton(isVoiceCall: true) { }
                     }
                 }
-        }.previewDisplayName("Join Audio Call")
+        }
+        .previewDisplayName("Join Audio Call")
     }
 }
