@@ -27,9 +27,10 @@ jobs:
 
     steps:
       - name: Remove label
-        run: gh pr edit "${{ github.event.pull_request.number }}" --remove-label 'record-snapshots'
-        env:
-          GH_TOKEN: ${{ github.token }}
+        if: github.event.label.name == 'record-snapshots'
+        uses: actions-ecosystem/action-remove-labels@2ce5d41b4b6aa8503e285553f75ed56e0a40bae0 #v1.3.0
+        with:
+          labels: record-snapshots
 
       - name: Checkout PR
         uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
