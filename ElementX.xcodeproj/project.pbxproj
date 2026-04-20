@@ -619,6 +619,7 @@
 		6851B077B4C913CC12DB6E77 /* AppLockFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE93F0CBF0D96B77111C413 /* AppLockFlowCoordinator.swift */; };
 		6885C3D26FC1026E07408D3C /* RoomListActivityVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DA892E8643240C7BC41900 /* RoomListActivityVisibility.swift */; };
 		68B2DD307C57ECFABBB05323 /* DeclineAndBlockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127D1947BA9C6CA62E3D03EC /* DeclineAndBlockScreen.swift */; };
+		68B7308BA24EC3DC5FD87B61 /* OAuthPresenterHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CAC77224E949D8E758E2E3 /* OAuthPresenterHook.swift */; };
 		68C3AF257678F6E7BB238C3F /* AppAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD22AEFFA20065494ED2333 /* AppAppearance.swift */; };
 		695825D20A761C678809345D /* MessageForwardingScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52135BD9E0E7A091688F627A /* MessageForwardingScreenModels.swift */; };
 		695BE6A2337A634F48B5DBC8 /* RoomMembersFlowCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC666DAE98245269775329B2 /* RoomMembersFlowCoordinatorTests.swift */; };
@@ -1642,6 +1643,7 @@
 		046C0D3F53B0B5EF0A1F5BEA /* RoomSummaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryTests.swift; sourceTree = "<group>"; };
 		048A21188AB19349D026BECD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		04BB8DDE245ED86C489BA983 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
+		04CAC77224E949D8E758E2E3 /* OAuthPresenterHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthPresenterHook.swift; sourceTree = "<group>"; };
 		04DF593C3F7AF4B2FBAEB05D /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		04EB6035C1F33F25F1EBFB7D /* RoomThreadListServiceProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomThreadListServiceProxyProtocol.swift; sourceTree = "<group>"; };
 		0516C69708D5CBDE1A8E77EC /* RoomDirectorySearchProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDirectorySearchProxyProtocol.swift; sourceTree = "<group>"; };
@@ -3711,6 +3713,7 @@
 				7AC0CD1CAFD3F8B057F9AEA5 /* ClientBuilderHook.swift */,
 				8B89D6C760E8CAE29CA28FB1 /* CompoundHook.swift */,
 				0F60FDB3AEFC60830BD289FE /* DeveloperOptionsScreenHook.swift */,
+				04CAC77224E949D8E758E2E3 /* OAuthPresenterHook.swift */,
 				D5D186A6DB8FAC5C9D0E4D61 /* RemoteSettingsHook.swift */,
 				B343C5255FB408DDE853CFDF /* RoomScreenHook.swift */,
 				2A95C9B8299A36A6495DECA6 /* TracingHook.swift */,
@@ -8605,6 +8608,7 @@
 				6AC798F52571BE495E6AA1CE /* OAuthAccountSettingsPresenter.swift in Sources */,
 				E32E71A1AF5E5E69E8363B26 /* OAuthAuthenticationPresenter.swift in Sources */,
 				C525F6C2892CB0640E776B3D /* OAuthConfiguration.swift in Sources */,
+				68B7308BA24EC3DC5FD87B61 /* OAuthPresenterHook.swift in Sources */,
 				FD573B5D665824EB79EABF06 /* Observable.swift in Sources */,
 				11A6B8E3CBDBF0A4107FF4CE /* OnboardingFlowCoordinator.swift in Sources */,
 				3CE4C5071B6D2576E2473989 /* OrderedSet.swift in Sources */,

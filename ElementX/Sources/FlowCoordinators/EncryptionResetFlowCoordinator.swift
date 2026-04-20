@@ -21,6 +21,7 @@ struct EncryptionResetFlowCoordinatorParameters {
     let userSession: UserSessionProtocol
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
+    let appHooks: AppHooks
     let userIndicatorController: UserIndicatorControllerProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
     let windowManger: WindowManagerProtocol
@@ -30,6 +31,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
+    private let appHooks: AppHooks
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let navigationStackCoordinator: NavigationStackCoordinator
@@ -66,6 +68,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
         userSession = parameters.userSession
         appMediator = parameters.appMediator
         appSettings = parameters.appSettings
+        appHooks = parameters.appHooks
         userIndicatorController = parameters.userIndicatorController
         navigationStackCoordinator = parameters.navigationStackCoordinator
         windowManager = parameters.windowManger
@@ -162,7 +165,8 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
         accountSettingsPresenter = OAuthAccountSettingsPresenter(accountURL: url,
                                                                  presentationAnchor: windowManager.mainWindow,
                                                                  appMediator: appMediator,
-                                                                 appSettings: appSettings)
+                                                                 appSettings: appSettings,
+                                                                 appHooks: appHooks)
         accountSettingsPresenter?.start()
     }
 }

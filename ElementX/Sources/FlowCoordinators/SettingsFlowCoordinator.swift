@@ -305,6 +305,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                  presentationAnchor: flowParameters.windowManager.mainWindow,
                                                                  appMediator: flowParameters.appMediator,
                                                                  appSettings: flowParameters.appSettings,
+                                                                 appHooks: flowParameters.appHooks,
                                                                  continuation: continuation)
         accountSettingsPresenter?.start()
     }
