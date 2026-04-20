@@ -80,6 +80,7 @@ final class AppSettings {
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
         case liveLocationSharingEnabled
+        case automaticBackPaginationEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -446,6 +447,9 @@ final class AppSettings {
     var liveLocationSharingEnabled
     
     let verifyWithClassicEnabled = appBuildType != .release
+    
+    @UserPreference(key: UserDefaultsKeys.automaticBackPaginationEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var automaticBackPaginationEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType == .debug, storageType: .userDefaults(store))
     var developerOptionsEnabled
