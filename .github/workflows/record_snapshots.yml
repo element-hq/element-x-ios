@@ -2,7 +2,7 @@ name: Record Snapshots
 
 on:
   # Triggered when a maintainer adds the "record-snapshots" label to a PR.
-  pull_request_target: # zizmor: ignore[dangerous-triggers]
+  pull_request: # zizmor: ignore[dangerous-triggers]
     types: [labeled]
 
 permissions: {}
