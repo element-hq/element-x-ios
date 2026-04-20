@@ -18,12 +18,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     /// Cached joined room proxies keyed by room ID, kept in sync with the active sessions dictionary.
     private var activeRoomProxies = [String: JoinedRoomProxyProtocol]()
     
-    /// The running task that iterates over live location updates.
-    @CancellableTask
-    private var locationUpdatesTask: Task<Void, Never>?
-    
     /// Subject used to pipe location updates through Combine's throttle operator.
-    private let locationUpdateSubject = PassthroughSubject<CLLocationUpdate, Never>()
+    private let locationUpdateSubject = PassthroughSubject<CLLocationCoordinate2D, Never>()
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -45,10 +41,11 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         
         super.init()
         
+        // Configure CLLocationManager for continuous background tracking.
         self.locationManager.delegate = self
         self.locationManager.allowsBackgroundLocationUpdates = true
-        self.locationManager.pausesLocationUpdatesAutomatically = false
-        setupMinumDistance(appSettings.liveLocationMinimumDistanceUpdate)
+        self.locationManager.showsBackgroundLocationIndicator = true
+        setupMinimumDistance(appSettings.liveLocationMinimumDistanceUpdate)
         setupSubscriptions()
     }
 
@@ -124,6 +121,18 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         authorizationStatusSubject.send(manager.authorizationStatus)
     }
     
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        
+        MXLog.verbose("Received location update via delegate, sending to rooms")
+        locationUpdateSubject.send(location.coordinate)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        MXLog.error("Location manager failed with error: \(error)")
+        stopAllSessions()
+    }
+    
     // MARK: - Private
     
     private func setupSubscriptions() {
@@ -145,9 +154,9 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
                 syncActiveRoomProxies(with: sessions)
                 
                 if sessions.isEmpty {
-                    locationUpdatesTask = nil
+                    self.stopUpdatingLocation()
                 } else {
-                    startLocationUpdatesIfNeeded()
+                    self.startUpdatingLocation()
                 }
             }
             .store(in: &cancellables)
@@ -158,7 +167,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
                 guard let self else { return }
                 appSettings.liveLocationSharingTimeoutDatesByRoomID.removeAll()
                 activeRoomProxies.removeAll()
-                locationUpdatesTask = nil
+                self.stopUpdatingLocation()
             }
             .store(in: &cancellables)
         
@@ -166,13 +175,21 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             .removeDuplicates()
             .debounce(for: .seconds(3), scheduler: DispatchQueue.main)
             .sink { [weak self] minimumDistance in
-                self?.setupMinumDistance(minimumDistance)
+                self?.setupMinimumDistance(minimumDistance)
             }
             .store(in: &cancellables)
     }
     
-    /// Sets up the distance filter and the most optimal accuracy given the minimum distance to save battery,
-    private func setupMinumDistance(_ minimumDistance: Int) {
+    private func syncActiveRoomProxies(with sessions: [String: Date]) {
+        // Remove proxies for rooms no longer in the dictionary.
+        let activeRoomIDs = Set(sessions.keys)
+        for roomID in activeRoomProxies.keys where !activeRoomIDs.contains(roomID) {
+            activeRoomProxies.removeValue(forKey: roomID)
+        }
+    }
+    
+    /// Sets up the distance filter and the most optimal accuracy given the minimum distance to save battery.
+    private func setupMinimumDistance(_ minimumDistance: Int) {
         switch minimumDistance {
         case 0..<10:
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -184,34 +201,27 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         locationManager.distanceFilter = CLLocationDistance(minimumDistance)
     }
     
-    private func syncActiveRoomProxies(with sessions: [String: Date]) {
-        // Remove proxies for rooms no longer in the dictionary.
-        let activeRoomIDs = Set(sessions.keys)
-        for roomID in activeRoomProxies.keys where !activeRoomIDs.contains(roomID) {
-            activeRoomProxies.removeValue(forKey: roomID)
-        }
-    }
+    private var isUpdating = false
     
-    private func startLocationUpdatesIfNeeded() {
-        guard locationUpdatesTask == nil else { return }
+    private func startUpdatingLocation() {
+        guard !isUpdating else { return }
+        isUpdating = true
         
-        locationUpdatesTask = Task { [weak self] in
-            do {
-                for try await update in CLLocationUpdate.liveUpdates() {
-                    guard let self, !Task.isCancelled else { break }
-                    
-                    self.locationUpdateSubject.send(update)
-                }
-            } catch {
-                MXLog.error("Live location updates failed with error: \(error)")
-                self?.stopAllSessions()
-            }
-        }
+        MXLog.info("Starting live location updates via delegate")
+        locationManager.startUpdatingLocation()
     }
     
-    private func sendLocationToActiveRooms(_ update: CLLocationUpdate) async {
+    private func stopUpdatingLocation() {
+        guard isUpdating else { return }
+        isUpdating = false
+        
+        MXLog.info("Stopping live location updates")
+        locationManager.stopUpdatingLocation()
+    }
+    
+    private func sendLocationToActiveRooms(_ coordinate: CLLocationCoordinate2D) async {
         let sessions = appSettings.liveLocationSharingTimeoutDatesByRoomID
-        let geoURI = update.location.map { GeoURI(coordinate: $0.coordinate, uncertainty: $0.horizontalAccuracy) }
+        let geoURI = GeoURI(coordinate: coordinate, uncertainty: nil)
         
         for (roomID, timeoutDate) in sessions {
             if Date() >= timeoutDate {
@@ -220,16 +230,16 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
                 continue
             }
             
-            guard let geoURI else { continue }
-            
             let roomProxy = await resolveRoomProxy(for: roomID)
             guard let roomProxy else {
                 MXLog.error("Failed to resolve room proxy for live location update in room: \(roomID)")
                 continue
             }
             
-            let result = await roomProxy.sendLiveLocation(geoURI: geoURI)
-            if case .failure(let error) = result {
+            switch await roomProxy.sendLiveLocation(geoURI: geoURI) {
+            case .success:
+                MXLog.debug("Sent live location to room: \(roomID)")
+            case .failure(let error):
                 MXLog.error("Failed to send live location update to room \(roomID): \(error)")
             }
         }

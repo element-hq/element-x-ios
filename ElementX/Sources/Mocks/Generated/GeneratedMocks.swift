@@ -2194,6 +2194,11 @@ class CLLocationManagerMock: CLLocationManagerProtocol, @unchecked Sendable {
         set(value) { underlyingAllowsBackgroundLocationUpdates = value }
     }
     var underlyingAllowsBackgroundLocationUpdates: Bool!
+    var showsBackgroundLocationIndicator: Bool {
+        get { return underlyingShowsBackgroundLocationIndicator }
+        set(value) { underlyingShowsBackgroundLocationIndicator = value }
+    }
+    var underlyingShowsBackgroundLocationIndicator: Bool!
     var desiredAccuracy: CLLocationAccuracy {
         get { return underlyingDesiredAccuracy }
         set(value) { underlyingDesiredAccuracy = value }
@@ -2204,11 +2209,6 @@ class CLLocationManagerMock: CLLocationManagerProtocol, @unchecked Sendable {
         set(value) { underlyingDistanceFilter = value }
     }
     var underlyingDistanceFilter: CLLocationDistance!
-    var pausesLocationUpdatesAutomatically: Bool {
-        get { return underlyingPausesLocationUpdatesAutomatically }
-        set(value) { underlyingPausesLocationUpdatesAutomatically = value }
-    }
-    var underlyingPausesLocationUpdatesAutomatically: Bool!
     var authorizationStatus: CLAuthorizationStatus {
         get { return underlyingAuthorizationStatus }
         set(value) { underlyingAuthorizationStatus = value }
@@ -2249,6 +2249,76 @@ class CLLocationManagerMock: CLLocationManagerProtocol, @unchecked Sendable {
     func requestAlwaysAuthorization() {
         requestAlwaysAuthorizationCallsCount += 1
         requestAlwaysAuthorizationClosure?()
+    }
+    //MARK: - startUpdatingLocation
+
+    var startUpdatingLocationUnderlyingCallsCount = 0
+    var startUpdatingLocationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return startUpdatingLocationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = startUpdatingLocationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                startUpdatingLocationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    startUpdatingLocationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var startUpdatingLocationCalled: Bool {
+        return startUpdatingLocationCallsCount > 0
+    }
+    var startUpdatingLocationClosure: (() -> Void)?
+
+    func startUpdatingLocation() {
+        startUpdatingLocationCallsCount += 1
+        startUpdatingLocationClosure?()
+    }
+    //MARK: - stopUpdatingLocation
+
+    var stopUpdatingLocationUnderlyingCallsCount = 0
+    var stopUpdatingLocationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return stopUpdatingLocationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = stopUpdatingLocationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                stopUpdatingLocationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    stopUpdatingLocationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var stopUpdatingLocationCalled: Bool {
+        return stopUpdatingLocationCallsCount > 0
+    }
+    var stopUpdatingLocationClosure: (() -> Void)?
+
+    func stopUpdatingLocation() {
+        stopUpdatingLocationCallsCount += 1
+        stopUpdatingLocationClosure?()
     }
 }
 class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
