@@ -47,9 +47,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         
         self.locationManager.delegate = self
         self.locationManager.allowsBackgroundLocationUpdates = true
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         self.locationManager.pausesLocationUpdatesAutomatically = false
-        
+        setupMinumDistance(appSettings.liveLocationMinimumDistanceUpdate)
         setupSubscriptions()
     }
 
@@ -162,6 +161,27 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
                 locationUpdatesTask = nil
             }
             .store(in: &cancellables)
+        
+        appSettings.$liveLocationMinimumDistanceUpdate
+            .removeDuplicates()
+            .debounce(for: .seconds(3), scheduler: DispatchQueue.main)
+            .sink { [weak self] minimumDistance in
+                self?.setupMinumDistance(minimumDistance)
+            }
+            .store(in: &cancellables)
+    }
+    
+    /// Sets up the distance filter and the most optimal accuracy given the minimum distance to save battery,
+    private func setupMinumDistance(_ minimumDistance: Int) {
+        switch minimumDistance {
+        case 0..<10:
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        case 10..<100:
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        default:
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        }
+        locationManager.distanceFilter = CLLocationDistance(minimumDistance)
     }
     
     private func syncActiveRoomProxies(with sessions: [String: Date]) {

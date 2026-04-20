@@ -12,6 +12,7 @@ protocol CLLocationManagerProtocol: AnyObject {
     var delegate: CLLocationManagerDelegate? { get set }
     var allowsBackgroundLocationUpdates: Bool { get set }
     var desiredAccuracy: CLLocationAccuracy { get set }
+    var distanceFilter: CLLocationDistance { get set }
     var pausesLocationUpdatesAutomatically: Bool { get set }
     var authorizationStatus: CLAuthorizationStatus { get }
     

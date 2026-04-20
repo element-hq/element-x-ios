@@ -2199,6 +2199,11 @@ class CLLocationManagerMock: CLLocationManagerProtocol, @unchecked Sendable {
         set(value) { underlyingDesiredAccuracy = value }
     }
     var underlyingDesiredAccuracy: CLLocationAccuracy!
+    var distanceFilter: CLLocationDistance {
+        get { return underlyingDistanceFilter }
+        set(value) { underlyingDistanceFilter = value }
+    }
+    var underlyingDistanceFilter: CLLocationDistance!
     var pausesLocationUpdatesAutomatically: Bool {
         get { return underlyingPausesLocationUpdatesAutomatically }
         set(value) { underlyingPausesLocationUpdatesAutomatically = value }
