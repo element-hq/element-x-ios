@@ -10,11 +10,13 @@ import CoreLocation
 extension CLLocationManagerMock {
     struct Configuration {
         var authorizationStatus: CLAuthorizationStatus = .authorizedAlways
+        var accuracyAuthorization: CLAccuracyAuthorization = .fullAccuracy
     }
     
     convenience init(_ configuration: Configuration) {
         self.init()
         
         underlyingAuthorizationStatus = configuration.authorizationStatus
+        underlyingAccuracyAuthorization = configuration.accuracyAuthorization
     }
 }
