@@ -1290,6 +1290,20 @@ internal enum L10n {
   internal static var screenAdvancedSettingsHideTimelineMediaToggleTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_hide_timeline_media_toggle_title") }
   /// Labs
   internal static var screenAdvancedSettingsLabs: String { return L10n.tr("Localizable", "screen_advanced_settings_labs") }
+  /// The distance you have to move to trigger an update.
+  internal static var screenAdvancedSettingsLiveLocationSectionDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_live_location_section_description") }
+  /// Make sure "Precise Location” is enabled for this app. To change the permission go to %1$@.
+  internal static func screenAdvancedSettingsLiveLocationSectionFooter(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_advanced_settings_live_location_section_footer", String(describing: p1))
+  }
+  /// App Settings
+  internal static var screenAdvancedSettingsLiveLocationSectionFooterLink: String { return L10n.tr("Localizable", "screen_advanced_settings_live_location_section_footer_link") }
+  /// Live location updates
+  internal static var screenAdvancedSettingsLiveLocationSectionTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_live_location_section_title") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenAdvancedSettingsLiveLocationUpdateDistance(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_advanced_settings_live_location_update_distance", p1)
+  }
   /// Upload photos and videos faster and reduce data usage
   internal static var screenAdvancedSettingsMediaCompressionDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_media_compression_description") }
   /// Optimise media quality
@@ -1840,14 +1854,14 @@ internal enum L10n {
   internal static var screenInviteUsersAlreadyAMember: String { return L10n.tr("Localizable", "screen_invite_users_already_a_member") }
   /// Already invited
   internal static var screenInviteUsersAlreadyInvited: String { return L10n.tr("Localizable", "screen_invite_users_already_invited") }
-  /// Plural format key: "%#@COUNT@"
-  internal static func screenInviteUsersConfirmDialogSubtitle(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "screen_invite_users_confirm_dialog_subtitle", p1)
-  }
-  /// Plural format key: "%#@COUNT@"
-  internal static func screenInviteUsersConfirmDialogTitle(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "screen_invite_users_confirm_dialog_title", p1)
-  }
+  /// You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.
+  internal static var screenInviteUsersConfirmDialogSubtitleMultipleUsers: String { return L10n.tr("Localizable", "screen_invite_users_confirm_dialog_subtitle_multiple_users") }
+  /// You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.
+  internal static var screenInviteUsersConfirmDialogSubtitleOneUser: String { return L10n.tr("Localizable", "screen_invite_users_confirm_dialog_subtitle_one_user") }
+  /// Invite new contacts to this room?
+  internal static var screenInviteUsersConfirmDialogTitleMutipleUsers: String { return L10n.tr("Localizable", "screen_invite_users_confirm_dialog_title_mutiple_users") }
+  /// Invite new contact to this room?
+  internal static var screenInviteUsersConfirmDialogTitleOneUser: String { return L10n.tr("Localizable", "screen_invite_users_confirm_dialog_title_one_user") }
   /// Are you sure you want to decline the invitation to join %1$@?
   internal static func screenInvitesDeclineChatMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_decline_chat_message", String(describing: p1))

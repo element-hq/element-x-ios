@@ -17,8 +17,8 @@ struct InviteUsersConfirmationSheetView: View {
     var body: some View {
         FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
             VStack(spacing: 32) {
-                TitleAndIcon(title: L10n.screenInviteUsersConfirmDialogTitle(users.count),
-                             subtitle: L10n.screenInviteUsersConfirmDialogSubtitle(users.count),
+                TitleAndIcon(title: users.count == 1 ? L10n.screenInviteUsersConfirmDialogTitleOneUser : L10n.screenInviteUsersConfirmDialogTitleMutipleUsers,
+                             subtitle: users.count == 1 ? L10n.screenInviteUsersConfirmDialogSubtitleOneUser : L10n.screenInviteUsersConfirmDialogSubtitleMultipleUsers,
                              icon: \.userAddSolid,
                              iconStyle: .defaultSolid)
                 VStack(spacing: 0) {
