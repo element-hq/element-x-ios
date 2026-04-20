@@ -38,7 +38,7 @@
 "a11y_session_verification_time_limited_action_required" = "限时操作，您有一分钟的时间来验证";
 "a11y_show_password" = "显示密码";
 "a11y_start_call" = "开始通话";
-"a11y_start_video_call" = "Start a video call";
+"a11y_start_video_call" = "开始视频通话";
 "a11y_start_voice_call" = "发起语音通话";
 "a11y_tombstoned_room" = "已封存的聊天室";
 "a11y_user_menu" = "用户菜单";
@@ -113,7 +113,7 @@
 "action_leave_space" = "离开空间";
 "action_load_more" = "载入更多";
 "action_manage_account" = "管理账户";
-"action_manage_account_and_devices" = "Manage account & devices";
+"action_manage_account_and_devices" = "管理账户与设备";
 "action_manage_devices" = "管理设备";
 "action_manage_rooms" = "管理聊天室";
 "action_message" = "发送消息给";
@@ -164,7 +164,7 @@
 "action_start_over" = "重新开始";
 "action_start_verification" = "开始验证";
 "action_static_map_load" = "点击以加载地图";
-"action_stop" = "Stop";
+"action_stop" = "停止";
 "action_take_photo" = "拍摄照片";
 "action_tap_for_options" = "点按查看选项";
 "action_translate" = "翻译";
@@ -184,7 +184,7 @@
 "banner_new_sound_title" = "我们已更新您的声音";
 "banner_set_up_recovery_content" = "生成新的恢复密钥，该密钥可用于在您无法访问设备时恢复加密的消息历史记录。";
 "banner_set_up_recovery_submit" = "获取恢复密钥";
-"banner_set_up_recovery_title" = "设置恢复";
+"banner_set_up_recovery_title" = "备份聊天";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call 不支持在此 Android 版本中使用蓝牙音频设备。请选择其他音频设备。";
 "common_about" = "关于";
 "common_acceptable_use_policy" = "可接受的使用政策";
@@ -194,7 +194,7 @@
 "common_advanced_settings" = "高级设置";
 "common_an_image" = "一张图片";
 "common_analytics" = "分析";
-"common_android_fetching_notifications_title" = "Syncing notifications...";
+"common_android_fetching_notifications_title" = "正在同步通知…";
 "common_android_shortcuts_remove_reason_left_room" = "你离开了聊天室";
 "common_android_shortcuts_remove_reason_session_logged_out" = "您已退出会话";
 "common_appearance" = "外观";
@@ -253,8 +253,8 @@
 "common_line_copied_to_clipboard" = "链接已复制到剪贴板";
 "common_link_copied_to_clipboard" = "链接已复制到剪贴板";
 "common_link_new_device" = "关联新设备";
-"common_live_location" = "Live location";
-"common_live_location_ended" = "Live location ended";
+"common_live_location" = "实时位置";
+"common_live_location_ended" = "实时位置已结束";
 "common_loading" = "正在加载...";
 "common_loading_more" = "正在加载更多……";
 "common_message" = "消息";
@@ -328,10 +328,10 @@
 "common_settings" = "设置";
 "common_share_space" = "共享空间";
 "common_shared_history" = "新成员可见历史记录";
-"common_shared_live_location" = "Shared live location";
+"common_shared_live_location" = "共享实时位置";
 "common_shared_location" = "共享位置";
 "common_shared_space" = "共享空间";
-"common_signing_out" = "正在登出";
+"common_signing_out" = "正在移除设备";
 "common_something_went_wrong" = "发生了一些错误";
 "common_something_went_wrong_message" = "我们遇到了一个问题。请重试。";
 "common_space" = "空间";
@@ -347,7 +347,7 @@
 "common_text" = "文本";
 "common_third_party_notices" = "第三方通知";
 "common_thread" = "消息列";
-"common_threads" = "Threads";
+"common_threads" = "消息列";
 "common_topic" = "主题";
 "common_topic_placeholder" = "该聊天室的主题是什么？";
 "common_touch_id_ios" = "触控 ID";
@@ -379,7 +379,7 @@
 "common_voice_message" = "语音消息";
 "common_waiting" = "等待...";
 "common_waiting_for_decryption_key" = "正在等待解密密钥";
-"common_waiting_live_location" = "Waiting for live location…";
+"common_waiting_live_location" = "正在等待实时位置…";
 "common_world_readable_history" = "任何人都可查看历史记录";
 "common_you" = "您";
 "confirm_recovery_key_banner_message" = "确认恢复密钥，以保持对密钥存储和消息历史的访问。";
@@ -607,7 +607,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "请输入两次相同的 PIN 码";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN 码不匹配";
 "screen_app_lock_signout_alert_message" = "您需要重新登录并创建新的 PIN 才能继续";
-"screen_app_lock_signout_alert_title" = "您正在登出";
+"screen_app_lock_signout_alert_title" = "正在被移除该设备";
 "screen_blocked_users_empty" = "您没有屏蔽用户";
 "screen_blocked_users_unblock_alert_action" = "解除屏蔽";
 "screen_blocked_users_unblock_alert_description" = "可以重新接收他们的消息。";
@@ -617,7 +617,7 @@
 "screen_bottom_sheet_create_dm_message" = "您想与%1$@ 开始聊天吗？";
 "screen_bottom_sheet_create_dm_title" = "发送邀请？";
 "screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
-"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "是否与新联系人开始聊天？";
 "screen_bottom_sheet_manage_room_member_ban" = "移除并封禁成员";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "封禁";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "即使受到邀请，他们也无法再次加入聊天室。";
@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "您想连接哪种类型的设备？";
 "screen_link_new_device_wrong_number_subtitle" = "请重试，并确保您已正确输入两位验证码。如果验证码仍然不匹配，请联系您的账户提供商。";
 "screen_link_new_device_wrong_number_title" = "数字不匹配";
+"screen_live_location_sheet_nobody_sharing" = "目前无人分享其位置";
+"screen_live_location_sheet_sharing_live_location" = "共享实时位置";
+"screen_live_location_sheet_title" = "在地图上";
 "screen_login_error_deactivated_account" = "该账户已被停用。";
 "screen_login_error_invalid_credentials" = "错误的用户名和/或密码";
 "screen_login_error_invalid_user_id" = "这不是合法的用户 ID。期望格式：‘@user:homeserver.org’。";
@@ -948,9 +951,9 @@
 "screen_media_upload_preview_processing" = "处理中…";
 "screen_migration_message" = "这是一个一次性的过程，感谢您的等待。";
 "screen_migration_title" = "设置您的账户。";
-"screen_missing_key_backup_open_element_classic" = "Open Element Classic";
-"screen_missing_key_backup_step_1" = "Open Element Classic on your device";
-"screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
+"screen_missing_key_backup_open_element_classic" = "打开 Element Classic";
+"screen_missing_key_backup_step_1" = "在你的设备上打开 Element Classic";
+"screen_missing_key_backup_step_2_ios" = "前往“用户设置” > “安全”";
 "screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "您保存了恢复密钥吗？";
 "screen_space_add_room_action" = "聊天室";
 "screen_space_add_rooms_room_access_description" = "添加聊天室不会影响其访问权限。如需更改访问权限，请前往“聊天室设置” > “安全与隐私”。";
-"screen_space_announcement_item1" = "查看您创建或加入的空间";
-"screen_space_announcement_item2" = "接受或拒绝空间邀请";
-"screen_space_announcement_item3" = "发现您可以加入空间的所有房间";
-"screen_space_announcement_item4" = "加入公共空间";
-"screen_space_announcement_item5" = "离开你加入的所有空间";
-"screen_space_announcement_notice" = "筛选、创建及管理空间功能即将上线。";
-"screen_space_announcement_subtitle" = "欢迎使用空间测试版！使用首个版本，您可以：";
-"screen_space_announcement_title" = "空间简介";
 "screen_space_empty_state_title" = "添加您的第一个聊天室";
 "screen_space_list_description" = "您创建或加入的空间。";
 "screen_space_list_details" = "%1$@ • %2$@";

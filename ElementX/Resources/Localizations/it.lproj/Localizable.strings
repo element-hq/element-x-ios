@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "Che tipo di dispositivo desideri collegare?";
 "screen_link_new_device_wrong_number_subtitle" = "Prova di nuovo e assicurati di aver inserito correttamente il codice a 2 cifre. Se i numeri continuano a non corrispondere, contatta il gestore del tuo account.";
 "screen_link_new_device_wrong_number_title" = "I numeri non corrispondono";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Questo account è stato disattivato.";
 "screen_login_error_invalid_credentials" = "Nome utente e/o password errati";
 "screen_login_error_invalid_user_id" = "Questo non è un identità utente valida. il formato atteso é: '@user:homeserver.org'";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "Assicurati di avere accesso alla tua chiave di recupero prima di rimuovere questo dispositivo";
 "screen_space_add_room_action" = "Stanza";
 "screen_space_add_rooms_room_access_description" = "L'aggiunta di una stanza non influirà sull'accesso alla stessa. Per modificare l'accesso, vai su Impostazioni stanza > Sicurezza & privacy.";
-"screen_space_announcement_item1" = "Visualizza gli spazi che hai creato o a cui partecipi";
-"screen_space_announcement_item2" = "Accetta o rifiuta gli inviti agli spazi";
-"screen_space_announcement_item3" = "Scopri tutte le stanze a cui puoi partecipare nei tuoi spazi";
-"screen_space_announcement_item4" = "Unisciti agli spazi pubblici";
-"screen_space_announcement_item5" = "Lascia tutti gli spazi a cui ti sei unito";
-"screen_space_announcement_notice" = "A breve saranno disponibili le funzionalità di filtraggio, creazione e gestione degli spazi.";
-"screen_space_announcement_subtitle" = "Benvenuti alla versione beta degli Spazi! Con questa prima versione potrete:";
-"screen_space_announcement_title" = "Ti presentiamo gli Spazi";
 "screen_space_empty_state_title" = "Aggiungi la tua prima stanza";
 "screen_space_list_description" = "Spazi che hai creato o a cui hai aderito.";
 "screen_space_list_details" = "%1$@ • %2$@";

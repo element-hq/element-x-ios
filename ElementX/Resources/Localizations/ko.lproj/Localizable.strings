@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "어떤 종류의 기기를 연결하시겠습니까?";
 "screen_link_new_device_wrong_number_subtitle" = "다시 시도해 주세요. 입력하신 2자리 숫자가 정확한지 확인하시기 바랍니다. 이후에도 숫자가 일치하지 않으면 계정 서비스 제공업체에 문의하세요.";
 "screen_link_new_device_wrong_number_title" = "숫자가 일치하지 않습니다";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "계정이 비활성화되었습니다.";
 "screen_login_error_invalid_credentials" = "잘못된 아이디/비밀번호";
 "screen_login_error_invalid_user_id" = "이 사용자 ID는 유효하지 않습니다. 예상 형식: ‘@user:homeserver.org’";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "이 기기를 제거하기 전에 복구 키를 사용할 수 있는지 확인해 주세요";
 "screen_space_add_room_action" = "방";
 "screen_space_add_rooms_room_access_description" = "방을 추가해도 해당 방의 액세스 권한은 변경되지 않습니다. 권한을 변경하려면 방 설정 > 보안 및 개인정보 보호로 이동하세요.";
-"screen_space_announcement_item1" = "직접 만들거나 참여 중인 스페이스 보기";
-"screen_space_announcement_item2" = "스페이스 초대 수락 또는 거절";
-"screen_space_announcement_item3" = "참여 가능한 스페이스 내 모든 방 탐색";
-"screen_space_announcement_item4" = "공개 스페이스 참여";
-"screen_space_announcement_item5" = "참여 중인 스페이스 나가기";
-"screen_space_announcement_notice" = "스페이스 필터링, 생성 및 관리 기능이 곧 추가될 예정입니다.";
-"screen_space_announcement_subtitle" = "스페이스 베타 버전에 오신 것을 환영합니다! 이번 첫 번째 버전에서는 다음과 같은 기능을 이용하실 수 있습니다.:";
-"screen_space_announcement_title" = "스페이스 소개";
 "screen_space_empty_state_title" = "첫 번째 방 추가";
 "screen_space_list_description" = "당신이 스페이스를 만들거나 가입했습니다.";
 "screen_space_list_details" = "%1$@•%2$@";

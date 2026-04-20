@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "Hvilken type enhet ønsker du å koble til?";
 "screen_link_new_device_wrong_number_subtitle" = "Prøv igjen og påse at du har tastet inn den tosifrede koden riktig. Hvis tallene fortsatt ikke stemmer, må du kontakte kontoleverandøren din.";
 "screen_link_new_device_wrong_number_title" = "Tallene stemmer ikke overens";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Denne kontoen er deaktivert.";
 "screen_login_error_invalid_credentials" = "Feil brukernavn og/eller passord";
 "screen_login_error_invalid_user_id" = "Dette er ikke en gyldig brukeridentifikator. Forventet format: '@bruker:homeserver.org'";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "Sørg for at du har tilgang til gjenopprettingsnøkkelen din før du fjerner denne enheten";
 "screen_space_add_room_action" = "Rom";
 "screen_space_add_rooms_room_access_description" = "Hvis du legger til et rom, vil det ikke påvirke tilgangen til rommet. For å endre tilgangen, gå til Rominnstillinger > Sikkerhet og personvern.";
-"screen_space_announcement_item1" = "Se områder du har opprettet eller blitt med i";
-"screen_space_announcement_item2" = "Godta eller avslå invitasjoner til områder";
-"screen_space_announcement_item3" = "Oppdag alle rom du kan bli med i i dine områder";
-"screen_space_announcement_item4" = "Bli med i offentlige områder";
-"screen_space_announcement_item5" = "Forlat områder du har blitt med i";
-"screen_space_announcement_notice" = "Oppretting, filtrering og administrasjon av områder kommer snart.";
-"screen_space_announcement_subtitle" = "Velkommen til betaversjonen av Områder! Med denne første versjonen kan du:";
-"screen_space_announcement_title" = "Vi introduserer Områder";
 "screen_space_empty_state_title" = "Legg til ditt første rom";
 "screen_space_list_description" = "Områder du har opprettet eller blitt med i.";
 "screen_space_list_details" = "%1$@ • %2$@";

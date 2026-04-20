@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "Jaký typ zařízení chcete propojit?";
 "screen_link_new_device_wrong_number_subtitle" = "Zkuste to prosím znovu a ujistěte se, že jste zadali dvoumístný kód správně. Pokud se čísla stále neshodují, kontaktujte poskytovatele účtu.";
 "screen_link_new_device_wrong_number_title" = "Čísla se neshodují";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Tento účet byl deaktivován.";
 "screen_login_error_invalid_credentials" = "Nesprávné uživatelské jméno nebo heslo";
 "screen_login_error_invalid_user_id" = "Toto není platný identifikátor uživatele. Očekávaný formát: '@user:homeserver.org'";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "Před odebráním tohoto zařízení se ujistěte, že máte přístup ke klíči pro obnovení";
 "screen_space_add_room_action" = "Místnost";
 "screen_space_add_rooms_room_access_description" = "Přidání místnosti neovlivní přístup k místnosti. Chcete-li přístup změnit, přejděte do Nastavení místnosti > Zabezpečení a soukromí.";
-"screen_space_announcement_item1" = "Zobrazit prostory, které jste vytvořili nebo ke kterým jste se připojili";
-"screen_space_announcement_item2" = "Přijmout nebo odmítnout pozvánky do prostorů";
-"screen_space_announcement_item3" = "Objevte všechny místnosti, do kterých můžete vstoupit ve svých prostorech";
-"screen_space_announcement_item4" = "Připojit se k veřejným prostorům";
-"screen_space_announcement_item5" = "Opustit všechny prostory, ke kterým jste se připojili";
-"screen_space_announcement_notice" = "Filtrování, vytváření a správa prostorů bude brzy k dispozici.";
-"screen_space_announcement_subtitle" = "Vítejte v beta verzi prostorů! S touto první verzí můžete:";
-"screen_space_announcement_title" = "Představujeme prostory";
 "screen_space_empty_state_title" = "Přidejte svou první místnost";
 "screen_space_list_description" = "Prostory, které jste vytvořili nebo se k nim připojili.";
 "screen_space_list_details" = "%1$@ • %2$@";

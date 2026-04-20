@@ -315,9 +315,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.</string>
+			<string>Vous n'avez actuellement aucune conversation avec ce contact. Veuillez confirmer son invitation à rejoindre ce salon avant de continuer.</string>
 			<key>other</key>
-			<string>You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.</string>
+			<string>Vous n'avez actuellement aucune conversation avec ces contacts. Veuillez confirmer leur invitation à rejoindre ce salon avant de continuer.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -331,9 +331,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Invite a new contact to this room?</string>
+			<string>Inviter un nouveau contact dans ce salon ?</string>
 			<key>other</key>
-			<string>Invite new contacts to this room?</string>
+			<string>Inviter de nouveaux contacts dans ce salon ?</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -350,6 +350,22 @@
 			<string>Quitter %1$d salon et l'espace</string>
 			<key>other</key>
 			<string>Quitter %1$d salons et l'espace</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_live_location_sheet_subtitle</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d personne</string>
+			<key>other</key>
+			<string>%1$d personnes</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

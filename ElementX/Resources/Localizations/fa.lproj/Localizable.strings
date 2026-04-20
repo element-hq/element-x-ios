@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "What type of device do you want to link?";
 "screen_link_new_device_wrong_number_subtitle" = "Please try again and make sure that you’ve entered the 2-digit code correctly. If the numbers still don’t match then contact your account provider.";
 "screen_link_new_device_wrong_number_title" = "The numbers don’t match";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "این حساب از کار افتاده است.";
 "screen_login_error_invalid_credentials" = "نام کاربری یا گذرواژه نامعتبر است";
 "screen_login_error_invalid_user_id" = "این یک شناسه کاربری معتبر نیست. قالب صحیح: ‪«@user:homeserver.or";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "کلید بازیابیتان را ذخیره کرده‌اید؟";
 "screen_space_add_room_action" = "Room";
 "screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
-"screen_space_announcement_item1" = "دیدن فضاهایی که ساخته یا پیوسته‌اید";
-"screen_space_announcement_item2" = "پذیرش یا رد دعوت‌ها به فضاها";
-"screen_space_announcement_item3" = "کشف تمامی اتاق‌هایی که می‌توانید در فضاهایتان بپیوندید";
-"screen_space_announcement_item4" = "پیوستن به فضاهای عمومی";
-"screen_space_announcement_item5" = "ترک هر فضایی که پیوسته‌اید";
-"screen_space_announcement_notice" = "پالایش، ایجاد و مدیریت کردن فضاها به زودی.";
-"screen_space_announcement_subtitle" = "به نگارش آزمایشی فضاها خوش آمدید! در این نگارش می‌توانید:";
-"screen_space_announcement_title" = "معرّفی فضاها";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_list_description" = "فضاهایی که ساخته یا پیوسته‌اید.";
 "screen_space_list_details" = "%1$@ • %2$@";

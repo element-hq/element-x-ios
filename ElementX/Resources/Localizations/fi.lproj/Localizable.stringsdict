@@ -315,9 +315,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.</string>
+			<string>Sinulla ei ole tällä hetkellä keskusteluja tämän henkilön kanssa. Vahvista kutsu tähän huoneeseen ennen kuin jatkat.</string>
 			<key>other</key>
-			<string>You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.</string>
+			<string>Sinulla ei ole tällä hetkellä keskusteluja näiden henkilöiden kanssa. Vahvista kutsu tähän huoneeseen ennen kuin jatkat.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -331,9 +331,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Invite a new contact to this room?</string>
+			<string>Kutsutaanko uusi kontakti tähän huoneeseen?</string>
 			<key>other</key>
-			<string>Invite new contacts to this room?</string>
+			<string>Kutsutaanko uusia kontakteja tähän huoneeseen?</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -350,6 +350,22 @@
 			<string>Poistu %1$d huoneesta ja tilasta</string>
 			<key>other</key>
 			<string>Poistu %1$d huoneesta ja tilasta</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_live_location_sheet_subtitle</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d henkilö</string>
+			<key>other</key>
+			<string>%1$d henkilöä</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

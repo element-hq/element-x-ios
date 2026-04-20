@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "Hvilken type enhed vil du linke?";
 "screen_link_new_device_wrong_number_subtitle" = "Prøv igen, og sørg for, at du har indtastet den 2-cifrede kode korrekt. Hvis tallene stadig ikke stemmer overens, skal du kontakte din kontoudbyder.";
 "screen_link_new_device_wrong_number_title" = "Tallene stemmer ikke overens";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Denne konto er blevet deaktiveret.";
 "screen_login_error_invalid_credentials" = "Forkert brugernavn og/eller adgangskode";
 "screen_login_error_invalid_user_id" = "Dette er ikke en gyldig brugeridentifikation. Forventet format: '@bruger:hjemmeserver.org'";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "Sørg for, at du har adgang til din gendannelsesnøgle, før du fjerner denne enhed.";
 "screen_space_add_room_action" = "Rum";
 "screen_space_add_rooms_room_access_description" = "Tilføjelse af et rum påvirker ikke adgangen til rummet. For at ændre adgangen, gå til Rumindstillinger > Sikkerhed og privatliv.";
-"screen_space_announcement_item1" = "Se klynger, du har oprettet eller tilmeldt dig";
-"screen_space_announcement_item2" = "Acceptere eller afvise invitationer til klynger";
-"screen_space_announcement_item3" = "Finde alle rum, du kan deltage i, i dine klynger";
-"screen_space_announcement_item4" = "Deltage i offentlige klynger";
-"screen_space_announcement_item5" = "Forlade de klynger, du har tilsluttet dig";
-"screen_space_announcement_notice" = "Filtrering, oprettelse og administration af klynger kommer snart.";
-"screen_space_announcement_subtitle" = "Velkommen til betaversionen af Klynger! Med denne første version kan du:";
-"screen_space_announcement_title" = "Introduktion til Klynger";
 "screen_space_empty_state_title" = "Tilføj dit første rum";
 "screen_space_list_description" = "Klynger, du har oprettet eller deltager i";
 "screen_space_list_details" = "%1$@•%2$@";

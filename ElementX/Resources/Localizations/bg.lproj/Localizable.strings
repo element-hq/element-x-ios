@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "What type of device do you want to link?";
 "screen_link_new_device_wrong_number_subtitle" = "Please try again and make sure that you’ve entered the 2-digit code correctly. If the numbers still don’t match then contact your account provider.";
 "screen_link_new_device_wrong_number_title" = "The numbers don’t match";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Този акаунт бе деактивиран.";
 "screen_login_error_invalid_credentials" = "Неправилно потребителско име и/или парола";
 "screen_login_error_invalid_user_id" = "Това не е валиден потребителски идентификатор. Очакван формат: ‘@user:homeserver.org’";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_space_add_room_action" = "Room";
 "screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
-"screen_space_announcement_item1" = "View spaces you've created or joined";
-"screen_space_announcement_item2" = "Accept or decline invites to spaces";
-"screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
-"screen_space_announcement_item4" = "Присъединете се към обществени пространства";
-"screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
-"screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
-"screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";

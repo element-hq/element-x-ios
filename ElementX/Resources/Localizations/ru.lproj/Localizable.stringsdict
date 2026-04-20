@@ -352,10 +352,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>У Вас нет других чатов с этими контактами. Подтвердите, что это действительно те пользователи, которых Вы хотите пригласить.</string>
+			<key>many</key>
+			<string>У Вас нет других чатов с этими контактами. Подтвердите, что это действительно те пользователи, которых Вы хотите пригласить.</string>
 			<key>one</key>
-			<string>You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.</string>
-			<key>other</key>
-			<string>You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.</string>
+			<string>У Вас нет других чатов с этим контактом. Подтвердите, что это действительно тот пользователь, которого Вы хотите пригласить.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -368,10 +370,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Пригласить новых контактов в эту комнату?</string>
+			<key>many</key>
+			<string>Пригласить новых контактов в эту комнату?</string>
 			<key>one</key>
-			<string>Invite a new contact to this room?</string>
-			<key>other</key>
-			<string>Invite new contacts to this room?</string>
+			<string>Пригласить нового контакта в эту комнату?</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -390,6 +394,24 @@
 			<string>Покинуть %1$d комнат и пространство</string>
 			<key>one</key>
 			<string>Покинуть %1$d комнату и пространство</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_live_location_sheet_subtitle</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d человек</string>
+			<key>many</key>
+			<string>%1$d людей</string>
+			<key>one</key>
+			<string>%1$d человек</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

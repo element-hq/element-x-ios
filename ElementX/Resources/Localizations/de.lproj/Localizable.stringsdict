@@ -203,9 +203,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
+			<string>Du hast %d neue Nachricht.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>Du hast %d neue Nachrichten.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -350,6 +350,22 @@
 			<string>%1$d Chat und Space verlassen</string>
 			<key>other</key>
 			<string>%1$d Chats und Space verlassen</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_live_location_sheet_subtitle</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d person</string>
+			<key>other</key>
+			<string>%1$d people</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

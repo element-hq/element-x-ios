@@ -313,9 +313,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.</string>
+			<string>Még nem beszélgetett ezzel a személlyel. Folytatás előtt erősítse meg a meghívást.</string>
 			<key>other</key>
-			<string>You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.</string>
+			<string>Még nem beszélgetett ezekkel a személyekkel. Folytatás előtt erősítse meg a meghívást.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -329,9 +329,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Invite a new contact to this room?</string>
+			<string>Meghív egy új személyt ebbe a szobába?</string>
 			<key>other</key>
-			<string>Invite new contacts to this room?</string>
+			<string>Meghív új személyeket ebbe a szobába?</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -348,6 +348,22 @@
 			<string>%1$d szoba és tér elhagyása</string>
 			<key>other</key>
 			<string>%1$d szoba és tér elhagyása</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_live_location_sheet_subtitle</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d személy</string>
+			<key>other</key>
+			<string>%1$d személy</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "Aký typ zariadenia chcete prepojiť?";
 "screen_link_new_device_wrong_number_subtitle" = "Skúste to prosím znova a uistite sa, že ste zadali 2-ciferný kód správne. Ak sa čísla stále nezhodujú, kontaktujte poskytovateľa vášho účtu.";
 "screen_link_new_device_wrong_number_title" = "Čísla sa nezhodujú";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Tento účet bol deaktivovaný.";
 "screen_login_error_invalid_credentials" = "Nesprávne používateľské meno a/alebo heslo";
 "screen_login_error_invalid_user_id" = "Toto nie je platný identifikátor používateľa. Očakávaný formát: '@pouzivatel:homeserver.sk'";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "Uložili ste si kľúč na obnovenie?";
 "screen_space_add_room_action" = "Miestnosť";
 "screen_space_add_rooms_room_access_description" = "Pridanie miestnosti neovplyvní prístup k miestnosti. Ak chcete zmeniť prístup, prejdite do časti Nastavenia miestnosti > Zabezpečenie a súkromie.";
-"screen_space_announcement_item1" = "Zobraziť priestory, ktoré ste vytvorili alebo ku ktorým ste sa pripojili";
-"screen_space_announcement_item2" = "Prijímať alebo odmietať pozvánky do priestorov";
-"screen_space_announcement_item3" = "Objaviť všetky miestnosti, do ktorých sa môžete pripojiť vo svojich priestoroch";
-"screen_space_announcement_item4" = "Pripojiť sa k verejnému priestoru";
-"screen_space_announcement_item5" = "Opustiť akékoľvek priestory, ku ktorým ste sa pridali";
-"screen_space_announcement_notice" = "Filtrovanie, vytváranie a správa priestorov bude čoskoro k dispozícii.";
-"screen_space_announcement_subtitle" = "Vitajte v beta verzii priestorov! S touto prvou verziou môžete:";
-"screen_space_announcement_title" = "Predstavujeme priestory";
 "screen_space_empty_state_title" = "Pridajte svoju prvú miestnosť";
 "screen_space_list_description" = "Priestory, ktoré ste vytvorili alebo ku ktorým ste sa pripojili.";
 "screen_space_list_details" = "%1$@ • %2$@";

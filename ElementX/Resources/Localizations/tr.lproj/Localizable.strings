@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "Hangi tür cihazı bağlamak istiyorsunuz?";
 "screen_link_new_device_wrong_number_subtitle" = "Lütfen tekrar deneyin ve 2 haneli kodu doğru girdiğinizden emin olun. Numaralar hâlâ eşleşmiyorsa hesap sağlayıcınızla iletişime geçin.";
 "screen_link_new_device_wrong_number_title" = "Sayılar uyuşmuyor";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Hesap devre dışı bırakıldı.";
 "screen_login_error_invalid_credentials" = "Yanlış kullanıcı adı ve/veya şifre";
 "screen_login_error_invalid_user_id" = "Bu geçerli bir kullanıcı tanımlayıcısı değil. Kullanılması gereken biçim: '@user:homeserver.org'";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_space_add_room_action" = "Room";
 "screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
-"screen_space_announcement_item1" = "Oluşturduğunuz veya katıldığınız alanları görüntüleyin";
-"screen_space_announcement_item2" = "Alan davetlerini kabul edin veya reddedin";
-"screen_space_announcement_item3" = "Alanlarınızdaki katılabileceğiniz odaları keşfedin";
-"screen_space_announcement_item4" = "Herkese açık alanlara katılın";
-"screen_space_announcement_item5" = "Katıldığınız alanlardan ayrılın";
-"screen_space_announcement_notice" = "Alanları filtreleme, oluşturma ve yönetme yakında geliyor.";
-"screen_space_announcement_subtitle" = "Alanlar’ın beta sürümüne hoş geldiniz! Bu ilk sürümle şunları yapabilirsiniz:";
-"screen_space_announcement_title" = "Alanlar ile tanışın";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_list_description" = "Oluşturduğunuz veya katıldığınız alanlar.";
 "screen_space_list_details" = "%1$@ • %2$@";

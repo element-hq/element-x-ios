@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "Ce tip de dispozitiv doriți să conectați?";
 "screen_link_new_device_wrong_number_subtitle" = "Please try again and make sure that you’ve entered the 2-digit code correctly. If the numbers still don’t match then contact your account provider.";
 "screen_link_new_device_wrong_number_title" = "Numerele nu se potrivesc";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Acest cont a fost dezactivat.";
 "screen_login_error_invalid_credentials" = "Utilizator și/sau parolă incorecte";
 "screen_login_error_invalid_user_id" = "Acesta nu este un identificator de utilizator valid. Format așteptat: „@user:homeserver.org”";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "Ați salvat cheia de recuperare?";
 "screen_space_add_room_action" = "Room";
 "screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
-"screen_space_announcement_item1" = "Vizualizați spațiile pe care le-ați creat sau la care v-ați alăturat";
-"screen_space_announcement_item2" = "Acceptați sau refuzați invitațiile la spații";
-"screen_space_announcement_item3" = "Descoperiți toate camerele la care vă puteți alătura în spațiile dumneavoastră.";
-"screen_space_announcement_item4" = "Alăturați-vă spațiilor publice";
-"screen_space_announcement_item5" = "Părăsiți spațiile la care v-ați alăturat.";
-"screen_space_announcement_notice" = "Filtrarea, crearea și gestionarea spațiilor vor fi disponibile în curând.";
-"screen_space_announcement_subtitle" = "Bun venit la versiunea beta a Spațiilor! Cu această primă versiune puteți:";
-"screen_space_announcement_title" = "Vă prezentăm Spații";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_list_description" = "Spații pe care le-ați creat sau la care v-ați alăturat.";
 "screen_space_list_details" = "%1$@ • %2$@";

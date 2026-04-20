@@ -122,10 +122,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d selected</string>
 			<key>other</key>
-			<string>%1$d selected</string>
+			<string>已選取 %1$d 個</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -180,10 +178,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>You have %d new message.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>您有 %d 則新訊息。</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -280,10 +276,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.</string>
 			<key>other</key>
-			<string>You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.</string>
+			<string>您目前與這些聯絡人沒有任何聊天紀錄。請確認邀請他們加入此聊天室後再繼續。</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -296,10 +290,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Invite a new contact to this room?</string>
 			<key>other</key>
-			<string>Invite new contacts to this room?</string>
+			<string>邀請新聯絡人至此聊天室？</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -314,6 +306,22 @@
 			<string>d</string>
 			<key>other</key>
 			<string>離開 %1$d 個聊天室與空間</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_live_location_sheet_subtitle</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d person</string>
+			<key>other</key>
+			<string>%1$d people</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -340,10 +348,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Banned</string>
 			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d 個已封鎖</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -370,10 +376,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Invited</string>
 			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d 個已邀請</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -470,10 +474,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
 			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>從 %2$@ 移除 %1$d 個聊天室</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

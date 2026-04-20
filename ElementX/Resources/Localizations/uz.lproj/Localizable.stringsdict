@@ -139,9 +139,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d selected</string>
+			<string>%1$d ta tanlandi</string>
 			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d ta tanlandi</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -203,9 +203,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
+			<string>Sizda %d ta yangi xabar bor.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>Sizda %d ta yangi xabar bor.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -315,9 +315,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.</string>
+			<string>Hozirda bu kontaktlar bilan hech qanday chatingiz yo‘q. Davom etishdan oldin ularni bu xonaga taklif qilishni tasdiqlang.</string>
 			<key>other</key>
-			<string>You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.</string>
+			<string>Hozirda bu kontaktlar bilan hech qanday chatingiz yo‘q. Davom etishdan oldin ularni bu xonaga taklif qilishni tasdiqlang.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -331,9 +331,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Invite a new contact to this room?</string>
+			<string>Bu xonaga yangi kontaktlar taklif qilinsinmi?</string>
 			<key>other</key>
-			<string>Invite new contacts to this room?</string>
+			<string>Bu xonaga yangi kontaktlar taklif qilinsinmi?</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -350,6 +350,22 @@
 			<string>%1$d xona va maydonni tar etish</string>
 			<key>other</key>
 			<string>%1$d ta xona va maydonni tar etish</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_live_location_sheet_subtitle</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d person</string>
+			<key>other</key>
+			<string>%1$d people</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -523,9 +539,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
+			<string>%1$d ta xonani %2$@dan olib tashlash</string>
 			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>%1$d ta xonani %2$@dan olib tashlash</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

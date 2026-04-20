@@ -276,7 +276,7 @@
 "common_or" = "または";
 "common_other_options" = "他のオプション";
 "common_password" = "パスワード";
-"common_people" = "人";
+"common_people" = "人々";
 "common_permalink" = "固定リンク";
 "common_permission" = "権限";
 "common_pinned" = "ピン留め";
@@ -903,6 +903,9 @@
 "screen_link_new_device_root_title" = "どのような端末を使用してサインインしますか？";
 "screen_link_new_device_wrong_number_subtitle" = "入力した2桁の数字が正しいことを確認し、再度試してください。問題が継続する場合はアカウント提供元に問い合わせてください。";
 "screen_link_new_device_wrong_number_title" = "数字が一致しません";
+"screen_live_location_sheet_nobody_sharing" = "誰も位置情報を共有していません";
+"screen_live_location_sheet_sharing_live_location" = "ライブ位置情報を共有しています";
+"screen_live_location_sheet_title" = "地図上";
 "screen_login_error_deactivated_account" = "このアカウントは無効化されています。";
 "screen_login_error_invalid_credentials" = "ユーザー名またはパスワードが違います";
 "screen_login_error_invalid_user_id" = "無効なユーザーIDです。正しい形式は \"@ユーザー:ホームサーバー\" です。";
@@ -1290,7 +1293,7 @@
 "screen_roomlist_filter_low_priority_empty_state_title" = "低い優先度のチャットはまだありません";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "フィルターを解除して他のチャットを表示できます";
 "screen_roomlist_filter_mixed_empty_state_title" = "この選択中にチャットがありません";
-"screen_roomlist_filter_people" = "人";
+"screen_roomlist_filter_people" = "人々";
 "screen_roomlist_filter_people_empty_state_title" = "まだダイレクトメッセージは届いていません";
 "screen_roomlist_filter_rooms" = "ルーム";
 "screen_roomlist_filter_rooms_empty_state_title" = "まだルームに参加していません";
@@ -1417,14 +1420,6 @@
 "screen_signout_save_recovery_key_title" = "この端末を削除する前に、回復鍵が手元にあることを確認してください。";
 "screen_space_add_room_action" = "ルーム";
 "screen_space_add_rooms_room_access_description" = "ルームの追加はルームへのアクセスに影響しません。アクセスの設定は、ルームの設定 > セキュリティーとプライバシー から変更できます。";
-"screen_space_announcement_item1" = "作成または参加したスペースを表示できます";
-"screen_space_announcement_item2" = "スペースへの招待を受諾または拒否できます";
-"screen_space_announcement_item3" = "スペース内の参加可能なルームを検索できます";
-"screen_space_announcement_item4" = "公開スペースに参加できます";
-"screen_space_announcement_item5" = "参加したスペースを退出できます";
-"screen_space_announcement_notice" = "スペースの作成や管理, フィルター検索は近日実装予定です。";
-"screen_space_announcement_subtitle" = "ベータ版のスペースにようこそ。この最新のバージョンでは:";
-"screen_space_announcement_title" = "スペースの紹介";
 "screen_space_empty_state_title" = "最初のルームを追加しましょう";
 "screen_space_list_description" = "作成または参加したスペースです。";
 "screen_space_list_details" = "%1$@・%2$@";
