@@ -13,7 +13,7 @@ permissions: {}
 # Patch bumps are handled by the release script.
 jobs:
   automatic-calendar-version:
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 15
     
     # Skip in forks
