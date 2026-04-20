@@ -66,6 +66,7 @@ final class AppSettings {
         
         case voiceMessagePlaybackSpeed
         case liveLocationSharingTimeoutDatesByRoomID
+        case liveLocationMinimumDistanceUpdate
         
         // Feature flags
         case publicSearchEnabled
@@ -348,6 +349,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.liveLocationSharingTimeoutDatesByRoomID, defaultValue: [String: Date](), storageType: .userDefaults(store))
     var liveLocationSharingTimeoutDatesByRoomID
+    
+    @UserPreference(key: UserDefaultsKeys.liveLocationMinimumDistanceUpdate, defaultValue: 10, storageType: .userDefaults(store))
+    var liveLocationMinimumDistanceUpdate
     
     @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
     var frequentlyUsedSystemEmojis

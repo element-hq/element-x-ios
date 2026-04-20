@@ -37,6 +37,7 @@ struct AdvancedSettingsScreen: View {
             
             moderationAndSafetySection
             timelineMediaSection
+            liveLocationSection
         }
         .compoundList()
         .navigationTitle(L10n.commonAdvancedSettings)
@@ -81,6 +82,30 @@ struct AdvancedSettingsScreen: View {
                 .compoundListSectionHeader()
         } footer: {
             Text(L10n.screenAdvancedSettingsShowMediaTimelineSubtitle)
+                .compoundListSectionFooter()
+        }
+    }
+    
+    private var liveLocationSection: some View {
+        Section {
+            ListRow(kind: .custom {
+                Stepper(L10n.screenAdvancedSettingsLiveLocationUpdateDistance(context.liveLocationMinimumDistanceUpdate),
+                        value: $context.liveLocationMinimumDistanceUpdate, in: 1...100)
+                    .font(.compound.bodyLG)
+                    .foregroundStyle(.compound.textPrimary)
+                    .padding(.horizontal, ListRowPadding.horizontal)
+                    .padding(.vertical, ListRowPadding.vertical)
+            })
+        } header: {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(L10n.screenAdvancedSettingsLiveLocationSectionTitle)
+                    .compoundListSectionHeader()
+                Text(L10n.screenAdvancedSettingsLiveLocationSectionDescription)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textSecondary)
+            }
+        } footer: {
+            Text(context.viewState.liveLocationUpdateFooterAttributedString)
                 .compoundListSectionFooter()
         }
     }
