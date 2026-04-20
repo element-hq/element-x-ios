@@ -9,11 +9,20 @@ import Combine
 import CoreLocation
 
 class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationManagerDelegate {
+    enum LiveState {
+        case full
+        case limited
+        case off
+    }
+    
     private let clientProxy: ClientProxyProtocol
     private let locationManager: CLLocationManagerProtocol
     private let appSettings: AppSettings
     
     private let authorizationStatusSubject: CurrentValueSubject<CLAuthorizationStatus, Never>
+    var authorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never> {
+        authorizationStatusSubject.asCurrentValuePublisher()
+    }
     
     /// Cached joined room proxies keyed by room ID, kept in sync with the active sessions dictionary.
     private var activeRoomProxies = [String: JoinedRoomProxyProtocol]()
@@ -23,9 +32,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     
     private var cancellables = Set<AnyCancellable>()
     
-    var authorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never> {
-        authorizationStatusSubject.asCurrentValuePublisher()
-    }
+    private var liveState = LiveState.off
     
     @MainActor
     init(clientProxy: ClientProxyProtocol,
@@ -118,6 +125,19 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             stopAllSessions()
         }
         
+        switch (liveState, manager.accuracyAuthorization) {
+        // If accuracy authorization changed while updates are active, start and stop to switch update method.
+        case (.full, .reducedAccuracy), (.limited, .fullAccuracy):
+            stopUpdatingLocation()
+            if manager.accuracyAuthorization == .fullAccuracy {
+                // The system has forced reduced desired accuracy so we need to restore the desired value by the user.
+                setupMinimumDistance(appSettings.liveLocationMinimumDistanceUpdate)
+            }
+            startUpdatingLocation()
+        default:
+            break
+        }
+        
         authorizationStatusSubject.send(manager.authorizationStatus)
     }
     
@@ -201,22 +221,30 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         locationManager.distanceFilter = CLLocationDistance(minimumDistance)
     }
     
-    private var isUpdating = false
-    
     private func startUpdatingLocation() {
-        guard !isUpdating else { return }
-        isUpdating = true
+        guard liveState == .off else { return }
         
-        MXLog.info("Starting live location updates via delegate")
-        locationManager.startUpdatingLocation()
+        if locationManager.accuracyAuthorization == .fullAccuracy {
+            MXLog.info("Starting live location updates with full accuracy")
+            liveState = .full
+            locationManager.startUpdatingLocation()
+        } else {
+            MXLog.info("Starting live location updates with significant changes (reduced accuracy)")
+            liveState = .limited
+            locationManager.startMonitoringSignificantLocationChanges()
+        }
     }
     
     private func stopUpdatingLocation() {
-        guard isUpdating else { return }
-        isUpdating = false
+        if liveState == .full {
+            MXLog.info("Stopping live location updates (full accuracy)")
+            locationManager.stopUpdatingLocation()
+        } else if liveState == .limited {
+            MXLog.info("Stopping live location updates (reduced accuracy)")
+            locationManager.stopMonitoringSignificantLocationChanges()
+        }
         
-        MXLog.info("Stopping live location updates")
-        locationManager.stopUpdatingLocation()
+        liveState = .off
     }
     
     private func sendLocationToActiveRooms(_ coordinate: CLLocationCoordinate2D) async {

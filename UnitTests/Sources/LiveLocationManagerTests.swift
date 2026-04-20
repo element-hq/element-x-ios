@@ -42,6 +42,8 @@ final class LiveLocationManagerTests {
         #expect(roomProxy.startLiveLocationShareDurationCalled)
         #expect(!roomProxy.stopLiveLocationShareCalled)
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] != nil)
+        #expect(locationManagerMock.startUpdatingLocationCalled)
+        #expect(!locationManagerMock.startMonitoringSignificantLocationChangesCalled)
     }
     
     @Test
@@ -131,6 +133,10 @@ final class LiveLocationManagerTests {
         
         #expect(roomProxy.stopLiveLocationShareCalled)
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] == nil)
+        // Setting the timeout date above starts tracking; removing it stops tracking.
+        #expect(locationManagerMock.startUpdatingLocationCalled)
+        #expect(locationManagerMock.stopUpdatingLocationCalled)
+        #expect(!locationManagerMock.stopMonitoringSignificantLocationChangesCalled)
     }
     
     @Test
@@ -154,6 +160,26 @@ final class LiveLocationManagerTests {
         
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room1:matrix.org"] == nil)
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room2:matrix.org"] != nil)
+    }
+    
+    // MARK: - Reduced accuracy
+    
+    @Test
+    func startLiveLocationInReducedAccuracyMode() async throws {
+        locationManagerMock.underlyingAccuracyAuthorization = .reducedAccuracy
+        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
+        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+        
+        let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
+        try result.get()
+        
+        #expect(locationManagerMock.startMonitoringSignificantLocationChangesCalled)
+        #expect(!locationManagerMock.startUpdatingLocationCalled)
+        
+        await manager.stopLiveLocation(roomID: "!room:matrix.org")
+        
+        #expect(locationManagerMock.stopMonitoringSignificantLocationChangesCalled)
+        #expect(!locationManagerMock.stopUpdatingLocationCalled)
     }
     
     // MARK: - Private
