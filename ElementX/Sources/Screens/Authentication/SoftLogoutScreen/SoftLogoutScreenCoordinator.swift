@@ -13,6 +13,7 @@ struct SoftLogoutScreenCoordinatorParameters {
     let authenticationService: AuthenticationServiceProtocol
     let credentials: SoftLogoutScreenCredentials
     let keyBackupNeeded: Bool
+    let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -158,6 +159,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
                 let presenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService,
                                                             oidcRedirectURL: parameters.appSettings.oidcRedirectURL,
                                                             presentationAnchor: presentationAnchor,
+                                                            appMediator: parameters.appMediator,
                                                             userIndicatorController: parameters.userIndicatorController)
                 self.oidcPresenter = presenter
                 switch await presenter.authenticate(using: oidcData) {

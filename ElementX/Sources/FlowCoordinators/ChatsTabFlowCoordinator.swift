@@ -690,6 +690,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     private func startEncryptionResetFlow(animated: Bool) {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let parameters = EncryptionResetFlowCoordinatorParameters(userSession: userSession,
+                                                                  appMediator: flowParameters.appMediator,
                                                                   appSettings: flowParameters.appSettings,
                                                                   userIndicatorController: flowParameters.userIndicatorController,
                                                                   navigationStackCoordinator: sheetNavigationStackCoordinator,

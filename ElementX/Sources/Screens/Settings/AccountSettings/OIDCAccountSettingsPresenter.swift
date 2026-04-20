@@ -17,17 +17,24 @@ import AuthenticationServices
 @MainActor
 class OIDCAccountSettingsPresenter: NSObject {
     private let accountURL: URL
-    private let presentationAnchor: UIWindow
     private let oidcRedirectURL: URL
+    private let presentationAnchor: UIWindow
+    private let appMediator: AppMediatorProtocol
     
     typealias Continuation = AsyncStream<Result<Void, OIDCError>>.Continuation
     private let continuation: Continuation?
     
-    init(accountURL: URL, presentationAnchor: UIWindow, appSettings: AppSettings, continuation: Continuation? = nil) {
+    init(accountURL: URL,
+         presentationAnchor: UIWindow,
+         appMediator: AppMediatorProtocol,
+         appSettings: AppSettings,
+         continuation: Continuation? = nil) {
         self.accountURL = accountURL
-        self.presentationAnchor = presentationAnchor
         oidcRedirectURL = appSettings.oidcRedirectURL
+        self.presentationAnchor = presentationAnchor
+        self.appMediator = appMediator
         self.continuation = continuation
+        
         super.init()
     }
     
@@ -53,7 +60,11 @@ class OIDCAccountSettingsPresenter: NSObject {
             "X-Element-User-Agent": UserAgentBuilder.makeASCIIUserAgent()
         ]
         
-        session.start()
+        if accountURL.scheme == "https" || accountURL.scheme == "http" {
+            session.start()
+        } else {
+            appMediator.open(accountURL)
+        }
     }
 }
 

@@ -437,6 +437,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         let presenter = OIDCAuthenticationPresenter(authenticationService: authenticationService,
                                                     oidcRedirectURL: appSettings.oidcRedirectURL,
                                                     presentationAnchor: presentationAnchor,
+                                                    appMediator: appMediator,
                                                     userIndicatorController: userIndicatorController)
         oidcPresenter = presenter
         

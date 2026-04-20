@@ -14,6 +14,7 @@ class OIDCAuthenticationPresenter: NSObject {
     private let authenticationService: AuthenticationServiceProtocol
     private let oidcRedirectURL: URL
     private let presentationAnchor: UIWindow
+    private let appMediator: AppMediatorProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     /// The data required to complete a request.
@@ -33,10 +34,12 @@ class OIDCAuthenticationPresenter: NSObject {
     init(authenticationService: AuthenticationServiceProtocol,
          oidcRedirectURL: URL,
          presentationAnchor: UIWindow,
+         appMediator: AppMediatorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.oidcRedirectURL = oidcRedirectURL
         self.presentationAnchor = presentationAnchor
+        self.appMediator = appMediator
         self.userIndicatorController = userIndicatorController
         super.init()
     }
@@ -58,7 +61,12 @@ class OIDCAuthenticationPresenter: NSObject {
             ]
             
             activeRequest = Request(session: session, continuation: continuation)
-            session.start()
+            
+            if authenticationURL.scheme == "https" || authenticationURL.scheme == "http" {
+                session.start()
+            } else {
+                appMediator.open(authenticationURL)
+            }
         }
         
         if response.isExternal {

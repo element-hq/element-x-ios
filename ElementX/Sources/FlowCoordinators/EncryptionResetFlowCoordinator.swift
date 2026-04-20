@@ -19,6 +19,7 @@ enum EncryptionResetFlowCoordinatorAction: Equatable {
 
 struct EncryptionResetFlowCoordinatorParameters {
     let userSession: UserSessionProtocol
+    let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let userIndicatorController: UserIndicatorControllerProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
@@ -27,6 +28,7 @@ struct EncryptionResetFlowCoordinatorParameters {
 
 class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -62,6 +64,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     
     init(parameters: EncryptionResetFlowCoordinatorParameters) {
         userSession = parameters.userSession
+        appMediator = parameters.appMediator
         appSettings = parameters.appSettings
         userIndicatorController = parameters.userIndicatorController
         navigationStackCoordinator = parameters.navigationStackCoordinator
@@ -158,6 +161,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
         accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url,
                                                                 presentationAnchor: windowManager.mainWindow,
+                                                                appMediator: appMediator,
                                                                 appSettings: appSettings)
         accountSettingsPresenter?.start()
     }

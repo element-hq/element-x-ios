@@ -303,6 +303,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
         accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url,
                                                                 presentationAnchor: flowParameters.windowManager.mainWindow,
+                                                                appMediator: flowParameters.appMediator,
                                                                 appSettings: flowParameters.appSettings,
                                                                 continuation: continuation)
         accountSettingsPresenter?.start()
