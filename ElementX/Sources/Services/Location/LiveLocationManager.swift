@@ -22,6 +22,9 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     @CancellableTask
     private var locationUpdatesTask: Task<Void, Never>?
     
+    /// Subject used to pipe location updates through Combine's throttle operator.
+    private let locationUpdateSubject = PassthroughSubject<CLLocationUpdate, Never>()
+    
     private var cancellables = Set<AnyCancellable>()
     
     var authorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never> {
@@ -49,7 +52,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         
         setupSubscriptions()
     }
-    
+
     // MARK: - LiveLocationManagerProtocol
     
     @discardableResult
@@ -125,6 +128,17 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     // MARK: - Private
     
     private func setupSubscriptions() {
+        locationUpdateSubject
+            .throttle(for: .seconds(3), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] update in
+                guard let self else { return }
+                guard !appSettings.liveLocationSharingTimeoutDatesByRoomID.isEmpty else { return }
+                Task { [weak self] in
+                    await self?.sendLocationToActiveRooms(update)
+                }
+            }
+            .store(in: &cancellables)
+        
         appSettings.$liveLocationSharingTimeoutDatesByRoomID
             .removeDuplicates()
             .sink { [weak self] sessions in
@@ -166,7 +180,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
                 for try await update in CLLocationUpdate.liveUpdates() {
                     guard let self, !Task.isCancelled else { break }
                     
-                    await self.sendLocationToActiveRooms(update)
+                    self.locationUpdateSubject.send(update)
                 }
             } catch {
                 MXLog.error("Live location updates failed with error: \(error)")
