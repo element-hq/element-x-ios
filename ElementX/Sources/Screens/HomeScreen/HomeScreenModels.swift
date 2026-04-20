@@ -160,6 +160,10 @@ struct HomeScreenViewStateBindings {
     var spaceFiltersViewModel: ChatsSpaceFiltersScreenViewModel?
 }
 
+enum CallBadgeType {
+    case voice, video, none
+}
+
 struct HomeScreenRoom: Identifiable, Equatable {
     enum RoomType: Equatable {
         case placeholder
@@ -190,8 +194,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
         let isDotShown: Bool
         let isMentionShown: Bool
         let isMuteShown: Bool
-        let isVoiceCallShown: Bool
-        let isVideoCallShown: Bool
+        let callBadgeType: CallBadgeType
     }
     
     let name: String
@@ -229,7 +232,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
         HomeScreenRoom(id: UUID().uuidString,
                        roomID: nil,
                        type: .placeholder,
-                       badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, isVoiceCallShown: false, isVideoCallShown: false),
+                       badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, callBadgeType: .none),
                        name: "Placeholder room name",
                        isDirect: false,
                        isHighlighted: false,
@@ -253,9 +256,11 @@ extension HomeScreenRoom {
         let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
-        let isVideoCallShown = summary.hasOngoingCall && summary.activeCallIntent != .audio
-        let isVoiceCallShown = summary.hasOngoingCall && summary.activeCallIntent == .audio
         let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || isUnseenInvite
+        
+        let callBadge = if summary.hasOngoingCall {
+            summary.activeCallIntent == .audio ? CallBadgeType.voice : CallBadgeType.video
+        } else { CallBadgeType.none }
         
         let type: HomeScreenRoom.RoomType = switch summary.joinRequestType {
         case .invite(let inviter): .invite(inviterDetails: inviter.map(RoomInviterDetails.init))
@@ -269,8 +274,7 @@ extension HomeScreenRoom {
                   badges: .init(isDotShown: isDotShown,
                                 isMentionShown: isMentionShown,
                                 isMuteShown: isMuteShown,
-                                isVoiceCallShown: isVoiceCallShown,
-                                isVideoCallShown: isVideoCallShown),
+                                callBadgeType: callBadge),
                   name: summary.name,
                   isDirect: summary.isDirect,
                   isHighlighted: isHighlighted,

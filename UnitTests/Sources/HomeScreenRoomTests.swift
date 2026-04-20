@@ -8,7 +8,6 @@
 
 import Combine
 @testable import ElementX
-import MatrixRustSDK
 import Testing
 
 @MainActor
@@ -21,7 +20,7 @@ struct HomeScreenRoomTests {
                                    unreadNotificationsCount: UInt,
                                    notificationMode: RoomNotificationModeProxy,
                                    hasOngoingCall: Bool,
-                                   activeCallIntent: RtcCallIntent? = nil) {
+                                   activeCallIntent: CallIntent? = nil) {
         roomSummary = RoomSummary(room: .init(noHandle: .init()),
                                   id: "Test room",
                                   joinRequestType: nil,
@@ -60,8 +59,7 @@ struct HomeScreenRoomTests {
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)
-        #expect(!room.badges.isVideoCallShown)
-        #expect(!room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
     }
@@ -79,7 +77,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
-        #expect(room.badges.isVideoCallShown)
+        #expect(room.badges.callBadgeType == .video)
         #expect(!room.badges.isMuteShown)
         #expect(room.badges.isMentionShown)
     }
@@ -96,8 +94,7 @@ struct HomeScreenRoomTests {
         
         let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
-        #expect(!room.badges.isVideoCallShown)
-        #expect(room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .voice)
     }
     
     @Test
@@ -113,8 +110,7 @@ struct HomeScreenRoomTests {
         
         #expect(!room.isHighlighted)
         #expect(room.badges.isDotShown)
-        #expect(!room.badges.isVideoCallShown)
-        #expect(!room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
     }
@@ -132,8 +128,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
-        #expect(!room.badges.isVideoCallShown)
-        #expect(!room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
     }
@@ -151,8 +146,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
-        #expect(!room.badges.isVideoCallShown)
-        #expect(!room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(room.badges.isMentionShown)
     }
@@ -170,8 +164,7 @@ struct HomeScreenRoomTests {
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)
-        #expect(room.badges.isVideoCallShown)
-        #expect(!room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .video)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
     }
@@ -189,8 +182,7 @@ struct HomeScreenRoomTests {
         
         #expect(!room.isHighlighted)
         #expect(room.badges.isDotShown)
-        #expect(!room.badges.isVideoCallShown)
-        #expect(!room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
     }
@@ -208,8 +200,7 @@ struct HomeScreenRoomTests {
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)
-        #expect(!room.badges.isVideoCallShown)
-        #expect(!room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
     }
@@ -229,8 +220,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
-        #expect(!room.badges.isVideoCallShown)
-        #expect(!room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
     }
@@ -248,8 +238,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
-        #expect(!room.badges.isVideoCallShown)
-        #expect(!room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(room.badges.isMentionShown)
     }
@@ -267,8 +256,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
-        #expect(room.badges.isVideoCallShown)
-        #expect(!room.badges.isVoiceCallShown)
+        #expect(room.badges.callBadgeType == .video)
         #expect(room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
     }

@@ -119,14 +119,16 @@ struct HomeScreenRoomCell: View {
             Spacer()
             
             HStack(spacing: 8) {
-                if room.badges.isVideoCallShown {
-                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
-                        .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
-                } else if room.badges.isVoiceCallShown {
+                if room.badges.callBadgeType == .voice {
                     CompoundIcon(\.voiceCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
                         .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
                 }
                 
+                if room.badges.callBadgeType == .video {
+                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                        .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
+                }
+                 
                 if room.badges.isMuteShown {
                     CompoundIcon(\.notificationsOffSolid, size: .custom(15), relativeTo: .compound.bodyMD)
                         .accessibilityLabel(L10n.a11yNotificationsMuted)
