@@ -9,6 +9,10 @@
 import AuthenticationServices
 
 /// Presents a web authentication session for an OIDC request.
+///
+/// In certain instances the URL may require opening an external app instead of using a WAS. Because of this
+/// it is recommended to not encode the OIDC authentication within any state machines, as there is no guarantee
+/// that any cancellations/failures will be communicated upwards.
 @MainActor
 class OIDCAuthenticationPresenter: NSObject {
     private let authenticationService: AuthenticationServiceProtocol
@@ -45,6 +49,10 @@ class OIDCAuthenticationPresenter: NSObject {
     }
     
     /// Presents a web authentication session for the supplied data.
+    ///
+    /// **Note:** The failure case cannot be relied upon as a signal that the authentication has ended.
+    /// In particular if the authentication URL requires opening an external app, then the user may return
+    /// to the app without completing (or cancelling) the authentication.
     func authenticate(using oidcData: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         let response = await withCheckedContinuation { continuation in
             let authenticationURL = oidcData.url
