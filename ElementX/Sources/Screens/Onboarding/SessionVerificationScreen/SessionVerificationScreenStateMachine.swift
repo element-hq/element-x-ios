@@ -46,8 +46,6 @@ class SessionVerificationScreenStateMachine {
         case requestVerification
         /// The current verification request has been accepted
         case didAcceptVerificationRequest
-        /// Start a SaS verification flow
-        case startSasVerification
         /// Started a SaS verification flow
         case didStartSasVerification
         /// Has received emojis
@@ -85,8 +83,6 @@ class SessionVerificationScreenStateMachine {
         
         stateMachine.addRoutes(event: .didAcceptVerificationRequest, transitions: [.acceptingVerificationRequest => .verificationRequestAccepted,
                                                                                    .requestingVerification => .verificationRequestAccepted])
-        
-        stateMachine.addRoutes(event: .startSasVerification, transitions: [.verificationRequestAccepted => .startingSasVerification])
         
         stateMachine.addRoutes(event: .didFail, transitions: [.requestingVerification => .initial,
                                                               .acceptingVerificationRequest => .initial])

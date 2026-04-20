@@ -109,9 +109,9 @@ struct SessionVerificationViewModelTests {
     private mutating func setupChallengeReceived() async throws {
         let actionsPublisher = sessionVerificationController.actions.delay(for: .seconds(0.1), scheduler: DispatchQueue.main)
         let cancellable = actionsPublisher
-            .sink { [context] action in
+            .sink { [sessionVerificationController] action in
                 if case .acceptedVerificationRequest = action {
-                    context?.send(viewAction: .startSasVerification)
+                    Task { await sessionVerificationController?.startSasVerification() }
                 }
             }
         

@@ -201,6 +201,11 @@ class ClientProxy: ClientProxyProtocol {
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         
+        if appSettings.automaticBackPaginationEnabled {
+            // Must be called before creating the sync service, timelines etc.
+            client.enableAutomaticBackpagination()
+        }
+        
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
         mediaLoader = MediaLoader(client: client)

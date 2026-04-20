@@ -67,6 +67,11 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.lowPriorityFilterEnabled) {
                     Text("Low priority filter")
                 }
+                
+                Toggle(isOn: $context.automaticBackPaginationEnabled) {
+                    Text("Automatic back pagination")
+                    Text("Requires app reboot")
+                }
             }
             
             Section("Room") {
@@ -135,6 +140,7 @@ struct DeveloperOptionsScreen: View {
                     Text("Hide quiet alerts")
                     Text("The badge count will still be updated")
                 }
+                
                 Toggle(isOn: $context.focusEventOnNotificationTap) {
                     Text("Focus event on notification tap")
                 }

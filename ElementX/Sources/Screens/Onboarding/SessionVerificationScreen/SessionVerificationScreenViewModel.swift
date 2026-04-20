@@ -87,8 +87,6 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             actionsSubject.send(.finished)
         case .requestVerification:
             stateMachine.processEvent(.requestVerification)
-        case .startSasVerification:
-            stateMachine.processEvent(.startSasVerification)
         case .restart:
             stateMachine.processEvent(.restart)
         case .accept:
@@ -133,7 +131,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
                         self.stateMachine.processEvent(.didFail)
                     }
                 }
-            case (.verificationRequestAccepted, .startSasVerification, .startingSasVerification):
+            case (.acceptingVerificationRequest, .didAcceptVerificationRequest, .verificationRequestAccepted):
                 startSasVerification()
             case (.showingChallenge, .acceptChallenge, .acceptingChallenge):
                 acceptChallenge()
