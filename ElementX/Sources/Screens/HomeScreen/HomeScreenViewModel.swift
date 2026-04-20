@@ -114,9 +114,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        appSettings.$hideUnreadMessagesBadge
+        appSettings.$roomListActivityVisibility
             .sink { [weak self] value in
-                self?.state.hideUnreadMessagesBadge = value
+                self?.state.roomListActivityVisibility = value
                 self?.updateRooms()
             }
             .store(in: &cancellables)
@@ -366,7 +366,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         for summary in roomSummaryProvider.roomListPublisher.value {
             let room = HomeScreenRoom(summary: summary,
-                                      hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge,
+                                      roomListActivityVisibility: appSettings.roomListActivityVisibility,
                                       seenInvites: seenInvites)
             rooms.append(room)
         }

@@ -15,7 +15,7 @@ struct HomeScreenRoomCell: View {
     @Environment(\.redactionReasons) private var redactionReasons
     
     let room: HomeScreenRoom
-    var hideUnreadMessagesBadge = false
+    var roomListActivityVisibility: RoomListActivityVisibility = .current
     let isSelected: Bool
     let mediaProvider: MediaProviderProtocol!
     let action: (HomeScreenViewAction) -> Void
@@ -75,7 +75,7 @@ struct HomeScreenRoomCell: View {
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
-                .font(hideUnreadMessagesBadge ? (room.hasUnreads ? .compound.bodyLGSemibold : .compound.bodyLG) : .compound.bodyLGSemibold)
+                .font(headerFont)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -85,6 +85,17 @@ struct HomeScreenRoomCell: View {
                     .font(room.isHighlighted ? .compound.bodySMSemibold : .compound.bodySM)
                     .foregroundColor(room.isHighlighted ? .compound.textActionAccent : .compound.textSecondary)
             }
+        }
+    }
+    
+    private var headerFont: Font {
+        switch roomListActivityVisibility {
+        case .current:
+            .compound.bodyLGSemibold
+        case .show:
+            room.hasUnreads ? .compound.bodyLGSemibold : .compound.bodyLG
+        case .hide:
+            .compound.bodyLG
         }
     }
     
@@ -158,7 +169,7 @@ struct HomeScreenRoomCell: View {
     private var lastMessage: some View {
         if let displayedLastMessage = room.displayedLastMessage {
             Text(displayedLastMessage)
-                .font(hideUnreadMessagesBadge ? room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD : .compound.bodyMD)
+                .font(roomListActivityVisibility == .show ? (room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD) : .compound.bodyMD)
                 .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
         }
     }

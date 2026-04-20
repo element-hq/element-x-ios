@@ -83,7 +83,7 @@ final class AppSettings {
         case automaticBackPaginationEnabled
         
         // Doug's tweaks 🔧
-        case hideUnreadMessagesBadge
+        case roomListActivityVisibility
         case hideQuietNotificationAlerts
         
         case developerOptionsEnabled
@@ -354,8 +354,8 @@ final class AppSettings {
     
     // MARK: - Home Screen
     
-    @UserPreference(key: UserDefaultsKeys.hideUnreadMessagesBadge, defaultValue: false, storageType: .userDefaults(store))
-    var hideUnreadMessagesBadge
+    @UserPreference(key: UserDefaultsKeys.roomListActivityVisibility, defaultValue: .current, storageType: .userDefaults(store))
+    var roomListActivityVisibility: RoomListActivityVisibility
     
     // MARK: - Room Screen
     

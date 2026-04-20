@@ -83,7 +83,7 @@ struct HomeScreenRoomTests {
     }
     
     @Test
-    mutating func voiceCallBadget() {
+    mutating func voiceCallBadge() {
         setupRoomSummary(isMarkedUnread: true,
                          unreadMessagesCount: 0,
                          unreadMentionsCount: 0,
@@ -92,7 +92,7 @@ struct HomeScreenRoomTests {
                          hasOngoingCall: true,
                          activeCallIntent: .audio)
         
-        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary)
         
         #expect(room.badges.callBadgeType == .voice)
     }
@@ -196,7 +196,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .mentionsAndKeywordsOnly,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary)
+        let room = HomeScreenRoom(summary: roomSummary, roomListActivityVisibility: .show)
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)

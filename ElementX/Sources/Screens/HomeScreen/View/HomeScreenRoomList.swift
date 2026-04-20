@@ -35,7 +35,11 @@ struct HomeScreenRoomList: View {
             case .room:
                 let isSelected = context.viewState.selectedRoomID == room.id
                 
-                HomeScreenRoomCell(room: room, isSelected: isSelected, mediaProvider: context.mediaProvider, action: context.send)
+                HomeScreenRoomCell(room: room,
+                                   roomListActivityVisibility: context.viewState.roomListActivityVisibility,
+                                   isSelected: isSelected,
+                                   mediaProvider: context.mediaProvider,
+                                   action: context.send)
                     .simultaneousGesture(TapGesture(count: 2).onEnded {
                         context.send(viewAction: .detachRoom(roomIdentifier: room.id))
                     })
