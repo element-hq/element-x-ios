@@ -74,6 +74,14 @@ extension XCUIApplication {
         let webAuthenticationView = XCUIApplication(bundleIdentifier: "com.apple.SafariViewService")
         XCTAssertTrue(webAuthenticationView.waitForExistence(timeout: 10.0))
         webAuthenticationView.tap(.top) // Tap the web view to properly focus the app again.
+
+        // The user may already be authenticated on MAS. Sign them out.
+        // The button label varies by MAS version: "Sign out" or "Use another account".
+        let masLogoutPredicate = NSPredicate(format: "label == 'Sign out' OR label == 'Use another account'")
+        let masLogoutButton = webAuthenticationView.buttons.matching(masLogoutPredicate).firstMatch
+        if masLogoutButton.waitForExistence(timeout: 2.0) {
+            masLogoutButton.tap(.center)
+        }
         
         let webUsernameTextField = textFields["Username or Email"]
         XCTAssertTrue(webUsernameTextField.waitForExistence(timeout: 10.0))
