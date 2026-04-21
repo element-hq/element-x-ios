@@ -56,8 +56,11 @@ struct DeveloperOptionsScreen: View {
                     Text("Public search")
                 }
                 
-                Toggle(isOn: $context.hideUnreadMessagesBadge) {
-                    Text("Hide grey dots")
+                Picker("Room list activity visibility", selection: $context.roomListActivityVisibility) {
+                    ForEach(RoomListActivityVisibility.allCases, id: \.self) { visibility in
+                        Text(visibility.rawValue.capitalized)
+                            .tag(visibility)
+                    }
                 }
                 
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {

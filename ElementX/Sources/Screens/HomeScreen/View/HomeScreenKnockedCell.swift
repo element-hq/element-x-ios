@@ -172,7 +172,7 @@ private extension HomeScreenRoom {
                                   isFavourite: false,
                                   isTombstoned: false)
         
-        return .init(summary: summary, hideUnreadMessagesBadge: false)
+        return .init(summary: summary)
     }
     
     static func roomKnocked(alias: String? = nil, avatarURL: URL? = nil) -> HomeScreenRoom {
@@ -205,6 +205,6 @@ private extension HomeScreenRoom {
                                   isFavourite: false,
                                   isTombstoned: false)
         
-        return .init(summary: summary, hideUnreadMessagesBadge: false)
+        return .init(summary: summary)
     }
 }

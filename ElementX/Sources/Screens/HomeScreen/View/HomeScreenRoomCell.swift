@@ -15,6 +15,7 @@ struct HomeScreenRoomCell: View {
     @Environment(\.redactionReasons) private var redactionReasons
     
     let room: HomeScreenRoom
+    var roomListActivityVisibility: RoomListActivityVisibility = .current
     let isSelected: Bool
     let mediaProvider: MediaProviderProtocol!
     let action: (HomeScreenViewAction) -> Void
@@ -74,7 +75,7 @@ struct HomeScreenRoomCell: View {
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
-                .font(.compound.bodyLGSemibold)
+                .font(headerFont)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -84,6 +85,17 @@ struct HomeScreenRoomCell: View {
                     .font(room.isHighlighted ? .compound.bodySMSemibold : .compound.bodySM)
                     .foregroundColor(room.isHighlighted ? .compound.textActionAccent : .compound.textSecondary)
             }
+        }
+    }
+    
+    private var headerFont: Font {
+        switch roomListActivityVisibility {
+        case .current:
+            .compound.bodyLGSemibold
+        case .show:
+            room.hasUnreads ? .compound.bodyLGSemibold : .compound.bodyLG
+        case .hide:
+            .compound.bodyLG
         }
     }
     
@@ -157,6 +169,7 @@ struct HomeScreenRoomCell: View {
     private var lastMessage: some View {
         if let displayedLastMessage = room.displayedLastMessage {
             Text(displayedLastMessage)
+                .font(roomListActivityVisibility == .show ? (room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD) : .compound.bodyMD)
                 .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
         }
     }
@@ -175,8 +188,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 
 private extension View {
     func lastMessageFormatting(hasFailed: Bool) -> some View {
-        font(.compound.bodyMD)
-            .foregroundColor(hasFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
+        foregroundColor(hasFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
     }
@@ -224,7 +236,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     }
     
     static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
-        HomeScreenRoom(summary: summary, hideUnreadMessagesBadge: false)
+        HomeScreenRoom(summary: summary)
     }
     
     static func makeViewModel(roomSummaryProvider: RoomSummaryProviderProtocol) -> HomeScreenViewModel {
@@ -263,6 +275,6 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                   isFavourite: false,
                                   isTombstoned: false)
         
-        return .init(summary: summary, hideUnreadMessagesBadge: false)
+        return .init(summary: summary)
     }
 }

@@ -108,6 +108,8 @@ struct HomeScreenViewState: BindableState {
     
     var hideInviteAvatars = false
     
+    var roomListActivityVisibility: RoomListActivityVisibility = .current
+    
     var reportRoomEnabled = false
         
     var shouldShowSpaceFilters = false
@@ -197,6 +199,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
         let callBadgeType: CallBadgeType
     }
     
+    var hasUnreads = false
+    
     let name: String
     
     let isDirect: Bool
@@ -247,13 +251,20 @@ struct HomeScreenRoom: Identifiable, Equatable {
 }
 
 extension HomeScreenRoom {
-    init(summary: RoomSummary, hideUnreadMessagesBadge: Bool, seenInvites: Set<String> = []) {
+    init(summary: RoomSummary,
+         roomListActivityVisibility: RoomListActivityVisibility = .current,
+         seenInvites: Set<String> = []) {
         let roomID = summary.id
         
-        let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
         let isUnseenInvite = summary.joinRequestType?.isInvite == true && !seenInvites.contains(roomID)
-
-        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
+        
+        let isDotShown = switch roomListActivityVisibility {
+        case .current:
+            summary.hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
+        case .hide, .show:
+            (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.isMarkedUnread || isUnseenInvite
+        }
+        
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
         let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || isUnseenInvite
@@ -275,6 +286,7 @@ extension HomeScreenRoom {
                                 isMentionShown: isMentionShown,
                                 isMuteShown: isMuteShown,
                                 callBadgeType: callBadge),
+                  hasUnreads: summary.hasUnreadMessages,
                   name: summary.name,
                   isDirect: summary.isDirect,
                   isHighlighted: isHighlighted,
