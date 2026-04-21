@@ -1,10 +1,10 @@
-name: Automatic Calendar Version 
+name: Automatic Calendar Version
 on:
   schedule:
     # At 03:00 UTC every Tuesday in preparation for an RC.
     # The tool assumes the release is published in 6-days (the following Monday).
     # Note: Most of these runs will be no-op until the release month changes.
-    - cron: '0 3 * * 2'
+    - cron: "0 3 * * 2"
   workflow_dispatch:
 
 permissions: {}
@@ -15,7 +15,7 @@ jobs:
   automatic-calendar-version:
     runs-on: macos-26
     timeout-minutes: 15
-    
+
     # Skip in forks
     if: github.repository == 'element-hq/element-x-ios'
     steps:
@@ -25,8 +25,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup environment
-        run: 
-          source ci_scripts/ci_common.sh && setup_github_actions_environment
+        run: source ci_scripts/ci_common.sh && setup_github_actions_environment
 
       - name: Bump the CalVer if needed
         run: swift run -q tools bump-calendar-version
