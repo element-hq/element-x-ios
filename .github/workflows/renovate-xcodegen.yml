@@ -49,8 +49,8 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config user.name "ElementRobot"
-          git config user.email "releases@riot.im"
+          git config user.name "Element CI"
+          git config user.email "ci@element.io"
           git add ElementX.xcodeproj/project.pbxproj
           git add ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
           git add ElementX/SupportingFiles/Settings.bundle
