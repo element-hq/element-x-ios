@@ -450,8 +450,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.liveLocationSharingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var liveLocationSharingEnabled
     
-    let verifyWithClassicEnabled = appBuildType != .release
-    
     @UserPreference(key: UserDefaultsKeys.automaticBackPaginationEnabled, defaultValue: false, storageType: .userDefaults(store))
     var automaticBackPaginationEnabled
     

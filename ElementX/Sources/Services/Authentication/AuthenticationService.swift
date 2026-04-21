@@ -46,7 +46,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.appHooks = appHooks
         
         do {
-            if let classicAppManager, appSettings.verifyWithClassicEnabled {
+            if let classicAppManager {
                 classicAppAccount = try classicAppManager.loadAccounts().first
             } else {
                 MXLog.info("Classic App not configured, skipping loadAccounts.")
