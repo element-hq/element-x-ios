@@ -743,10 +743,10 @@
 "screen_create_room_space_selection_sheet_title" = "Add to space";
 "screen_create_room_topic_label" = "موضوع (اختیاری)";
 "screen_create_room_topic_placeholder" = "Add description…";
-"screen_deactivate_account_confirmation_dialog_content" = "Please confirm that you want to deactivate your account. This action cannot be undone.";
+"screen_deactivate_account_confirmation_dialog_content" = "Please confirm that you want to delete your account. This action cannot be undone.";
 "screen_deactivate_account_delete_all_messages" = "حذف همهٔ پیام‌هایم";
 "screen_deactivate_account_delete_all_messages_notice" = "Warning: Future users may see incomplete conversations.";
-"screen_deactivate_account_description" = "Deactivating your account is %1$@, it will:";
+"screen_deactivate_account_description" = "Deleting your account is %1$@, it will:";
 "screen_deactivate_account_description_bold_part" = "بازگشت‌ناپذیر";
 "screen_deactivate_account_list_item_1" = "%1$@ your account (you can't log back in, and your ID can't be reused).";
 "screen_deactivate_account_list_item_1_bold_part" = "از کار انداختن دایمی";

@@ -186,9 +186,9 @@ internal enum L10n {
   internal static var actionCreateRoom: String { return L10n.tr("Localizable", "action_create_room") }
   /// Create space
   internal static var actionCreateSpace: String { return L10n.tr("Localizable", "action_create_space") }
-  /// Deactivate
+  /// Delete
   internal static var actionDeactivate: String { return L10n.tr("Localizable", "action_deactivate") }
-  /// Deactivate account
+  /// Delete account
   internal static var actionDeactivateAccount: String { return L10n.tr("Localizable", "action_deactivate_account") }
   /// Decline
   internal static var actionDecline: String { return L10n.tr("Localizable", "action_decline") }
@@ -1744,13 +1744,13 @@ internal enum L10n {
   internal static var screenCreateRoomTopicLabel: String { return L10n.tr("Localizable", "screen_create_room_topic_label") }
   /// Add description…
   internal static var screenCreateRoomTopicPlaceholder: String { return L10n.tr("Localizable", "screen_create_room_topic_placeholder") }
-  /// Please confirm that you want to deactivate your account. This action cannot be undone.
+  /// Please confirm that you want to delete your account. This action cannot be undone.
   internal static var screenDeactivateAccountConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_deactivate_account_confirmation_dialog_content") }
   /// Delete all my messages
   internal static var screenDeactivateAccountDeleteAllMessages: String { return L10n.tr("Localizable", "screen_deactivate_account_delete_all_messages") }
   /// Warning: Future users may see incomplete conversations.
   internal static var screenDeactivateAccountDeleteAllMessagesNotice: String { return L10n.tr("Localizable", "screen_deactivate_account_delete_all_messages_notice") }
-  /// Deactivating your account is %1$@, it will:
+  /// Deleting your account is %1$@, it will:
   internal static func screenDeactivateAccountDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_deactivate_account_description", String(describing: p1))
   }
@@ -1768,7 +1768,7 @@ internal enum L10n {
   internal static var screenDeactivateAccountListItem3: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_3") }
   /// Your messages will still be visible to registered users but won’t be available to new or unregistered users if you choose to delete them.
   internal static var screenDeactivateAccountListItem4: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_4") }
-  /// Deactivate account
+  /// Delete account
   internal static var screenDeactivateAccountTitle: String { return L10n.tr("Localizable", "screen_deactivate_account_title") }
   /// You will not see any messages or room invites from this user
   internal static var screenDeclineAndBlockBlockUserOptionDescription: String { return L10n.tr("Localizable", "screen_decline_and_block_block_user_option_description") }
@@ -2142,7 +2142,7 @@ internal enum L10n {
   }
   /// On the map
   internal static var screenLiveLocationSheetTitle: String { return L10n.tr("Localizable", "screen_live_location_sheet_title") }
-  /// This account has been deactivated.
+  /// This account has been deleted.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password
   internal static var screenLoginErrorInvalidCredentials: String { return L10n.tr("Localizable", "screen_login_error_invalid_credentials") }

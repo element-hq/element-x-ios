@@ -746,7 +746,7 @@
 "screen_deactivate_account_confirmation_dialog_content" = "Моля, потвърдете, че искате да деактивирате акаунта си. Това действие не може да бъде отменено.";
 "screen_deactivate_account_delete_all_messages" = "Delete all my messages";
 "screen_deactivate_account_delete_all_messages_notice" = "Warning: Future users may see incomplete conversations.";
-"screen_deactivate_account_description" = "Deactivating your account is %1$@, it will:";
+"screen_deactivate_account_description" = "Deleting your account is %1$@, it will:";
 "screen_deactivate_account_description_bold_part" = "irreversible";
 "screen_deactivate_account_list_item_1" = "%1$@ your account (you can't log back in, and your ID can't be reused).";
 "screen_deactivate_account_list_item_1_bold_part" = "Permanently disable";
