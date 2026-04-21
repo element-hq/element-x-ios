@@ -35,7 +35,7 @@ jobs:
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-          author: ElementRobot <releases@riot.im>
+          author: Element CI <ci@element.io>
           commit-message: Bump the calendar version ready for the next release
           title: Bump the calendar version ready for the next release
           body: |
