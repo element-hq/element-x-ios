@@ -552,6 +552,10 @@
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Skjul avatarer i anmodninger om invitation til rum";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Skjul forhåndsvisning af medier i tidslinjen";
 "screen_advanced_settings_labs" = "Laboratorier";
+"screen_advanced_settings_live_location_section_description" = "The distance you have to move to trigger an update.";
+"screen_advanced_settings_live_location_section_footer" = "Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$@.";
+"screen_advanced_settings_live_location_section_footer_link" = "App Settings";
+"screen_advanced_settings_live_location_section_title" = "Live location updates";
 "screen_advanced_settings_media_compression_description" = "Upload fotos og videoer hurtigere, og reducér dataforbrug";
 "screen_advanced_settings_media_compression_title" = "Optimér mediekvaliteten";
 "screen_advanced_settings_moderation_and_safety_section_title" = "Moderation og sikkerhed";
@@ -792,6 +796,10 @@
 "screen_identity_waiting_on_other_device" = "Venter på en anden enhed...";
 "screen_invite_users_already_a_member" = "Allerede medlem";
 "screen_invite_users_already_invited" = "Allerede inviteret";
+"screen_invite_users_confirm_dialog_subtitle_multiple_users" = "You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_subtitle_one_user" = "You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_title_mutiple_users" = "Invite new contacts to this room?";
+"screen_invite_users_confirm_dialog_title_one_user" = "Invite new contact to this room?";
 "screen_invites_decline_chat_message" = "Er du sikker på, at du vil afvise invitationen til at deltage i %1$@?";
 "screen_invites_decline_chat_title" = "Afvis invitation";
 "screen_invites_decline_direct_chat_message" = "Er du sikker på, at du vil afvise denne private samtale med %1$@?";
@@ -903,6 +911,9 @@
 "screen_link_new_device_root_title" = "Hvilken type enhed vil du linke?";
 "screen_link_new_device_wrong_number_subtitle" = "Prøv igen, og sørg for, at du har indtastet den 2-cifrede kode korrekt. Hvis tallene stadig ikke stemmer overens, skal du kontakte din kontoudbyder.";
 "screen_link_new_device_wrong_number_title" = "Tallene stemmer ikke overens";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Denne konto er blevet deaktiveret.";
 "screen_login_error_invalid_credentials" = "Forkert brugernavn og/eller adgangskode";
 "screen_login_error_invalid_user_id" = "Dette er ikke en gyldig brugeridentifikation. Forventet format: '@bruger:hjemmeserver.org'";
@@ -1417,14 +1428,6 @@
 "screen_signout_save_recovery_key_title" = "Sørg for, at du har adgang til din gendannelsesnøgle, før du fjerner denne enhed.";
 "screen_space_add_room_action" = "Rum";
 "screen_space_add_rooms_room_access_description" = "Tilføjelse af et rum påvirker ikke adgangen til rummet. For at ændre adgangen, gå til Rumindstillinger > Sikkerhed og privatliv.";
-"screen_space_announcement_item1" = "Se klynger, du har oprettet eller tilmeldt dig";
-"screen_space_announcement_item2" = "Acceptere eller afvise invitationer til klynger";
-"screen_space_announcement_item3" = "Finde alle rum, du kan deltage i, i dine klynger";
-"screen_space_announcement_item4" = "Deltage i offentlige klynger";
-"screen_space_announcement_item5" = "Forlade de klynger, du har tilsluttet dig";
-"screen_space_announcement_notice" = "Filtrering, oprettelse og administration af klynger kommer snart.";
-"screen_space_announcement_subtitle" = "Velkommen til betaversionen af Klynger! Med denne første version kan du:";
-"screen_space_announcement_title" = "Introduktion til Klynger";
 "screen_space_empty_state_title" = "Tilføj dit første rum";
 "screen_space_list_description" = "Klynger, du har oprettet eller deltager i";
 "screen_space_list_details" = "%1$@•%2$@";

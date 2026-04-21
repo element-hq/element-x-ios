@@ -38,7 +38,7 @@
 "a11y_session_verification_time_limited_action_required" = "Időkorlátos művelet szükséges, egy perce van az ellenőrzésre";
 "a11y_show_password" = "Jelszó megjelenítése";
 "a11y_start_call" = "Hanghívás indítása";
-"a11y_start_video_call" = "Start a video call";
+"a11y_start_video_call" = "Videohívás indítása";
 "a11y_start_voice_call" = "Hanghívás indítása";
 "a11y_tombstoned_room" = "Elévült szoba";
 "a11y_user_menu" = "Felhasználói menü";
@@ -552,6 +552,10 @@
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Profilképek elrejtése a szobameghívókban";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Médiaelőnézetek elrejtése az idővonalon";
 "screen_advanced_settings_labs" = "Kísérletek";
+"screen_advanced_settings_live_location_section_description" = "The distance you have to move to trigger an update.";
+"screen_advanced_settings_live_location_section_footer" = "Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$@.";
+"screen_advanced_settings_live_location_section_footer_link" = "App Settings";
+"screen_advanced_settings_live_location_section_title" = "Live location updates";
 "screen_advanced_settings_media_compression_description" = "Töltse fel gyorsabban a fényképeket és videókat, valamint csökkentse az adatforgalmat";
 "screen_advanced_settings_media_compression_title" = "Média minőségének optimalizálása";
 "screen_advanced_settings_moderation_and_safety_section_title" = "Moderálás és biztonság";
@@ -616,8 +620,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Meghívó küldése";
 "screen_bottom_sheet_create_dm_message" = "Csevegést kezd vele: %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Meghívó küldése?";
-"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
-"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "Még nem beszélgetett ezzel a személlyel. Folytatás előtt erősítse meg a meghívást.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Csevegést kezdeményez ezzel az új felhasználóval?";
 "screen_bottom_sheet_manage_room_member_ban" = "Eltávolítás és a tag kitiltása";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Kitiltás";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Többé nem csatlakozhat ehhez a szobához, akkor sem, ha meghívják.";
@@ -792,6 +796,10 @@
 "screen_identity_waiting_on_other_device" = "Várakozás a másik eszközre…";
 "screen_invite_users_already_a_member" = "Már tag";
 "screen_invite_users_already_invited" = "Már meghívták";
+"screen_invite_users_confirm_dialog_subtitle_multiple_users" = "You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_subtitle_one_user" = "You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_title_mutiple_users" = "Invite new contacts to this room?";
+"screen_invite_users_confirm_dialog_title_one_user" = "Invite new contact to this room?";
 "screen_invites_decline_chat_message" = "Biztos, hogy elutasítja a meghívást, hogy csatlakozzon ehhez: %1$@?";
 "screen_invites_decline_chat_title" = "Meghívás elutasítása";
 "screen_invites_decline_direct_chat_message" = "Biztos, hogy elutasítja ezt a privát csevegést vele: %1$@?";
@@ -903,6 +911,9 @@
 "screen_link_new_device_root_title" = "Milyen típusú eszközt szeretne összekapcsolni?";
 "screen_link_new_device_wrong_number_subtitle" = "Próbálja meg újra, és ellenőrizze, hogy helyesen adta meg a 2 számjegyű kódot. Ha a számok továbbra sem egyeznek, vegye fel a kapcsolatot a fiókszolgáltatójával.";
 "screen_link_new_device_wrong_number_title" = "A számok nem egyeznek";
+"screen_live_location_sheet_nobody_sharing" = "Senki sem osztja meg a tartózkodási helyét";
+"screen_live_location_sheet_sharing_live_location" = "Élő helymegosztás";
+"screen_live_location_sheet_title" = "A térképen";
 "screen_login_error_deactivated_account" = "Ez a fiók deaktiválva lett.";
 "screen_login_error_invalid_credentials" = "Helytelen felhasználónév vagy jelszó";
 "screen_login_error_invalid_user_id" = "Ez nem érvényes felhasználóazonosító. A várt formátum: „@user:homeserver.org”";
@@ -983,7 +994,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "A rendszerértesítések ki vannak kapcsolva";
 "screen_notification_settings_title" = "Értesítések";
 "screen_onboarding_app_version" = "Verzió: %1$@";
-"screen_onboarding_checking_account" = "Checking account";
+"screen_onboarding_checking_account" = "Fiók ellenőrzése";
 "screen_onboarding_sign_in_manually" = "Kézi bejelentkezés";
 "screen_onboarding_sign_in_to" = "Bejelentkezés ide: %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Bejelentkezés QR-kóddal";
@@ -1186,7 +1197,7 @@
 "screen_room_grouped_state_events_reduce" = "Csökkentés";
 "screen_room_invite_again_alert_message" = "Visszahívja?";
 "screen_room_invite_again_alert_title" = "Egyedül van ebben a csevegésben";
-"screen_room_live_location_banner" = "Sharing live location";
+"screen_room_live_location_banner" = "Élő helymegosztás";
 "screen_room_member_details_block_alert_action" = "Letiltás";
 "screen_room_member_details_block_alert_description" = "A letiltott felhasználók nem fognak tudni üzeneteket küldeni, és az összes üzenetük rejtve lesz. Bármikor feloldhatja a letiltásukat.";
 "screen_room_member_details_block_user" = "Felhasználó letiltása";
@@ -1417,14 +1428,6 @@
 "screen_signout_save_recovery_key_title" = "Az eszköz eltávolítása előtt győződjön meg arról, hogy hozzáfér a helyreállítási kulcshoz";
 "screen_space_add_room_action" = "Szoba";
 "screen_space_add_rooms_room_access_description" = "A szoba hozzáadása nem befolyásolja a szobához való hozzáférést. A hozzáférés módosításához lépjen a szoba beállításainak Biztonság és adatvédelem menüpontjához.";
-"screen_space_announcement_item1" = "Az Ön által létrehozott vagy csatlakozott térek megtekintése";
-"screen_space_announcement_item2" = "A meghívások elfogadására vagy elutasítására a terekhez";
-"screen_space_announcement_item3" = "Szobák felfedezése a terekben, amelyekhez csatlakozhat";
-"screen_space_announcement_item4" = "Csatlakozás nyilvános terekhez";
-"screen_space_announcement_item5" = "Terek elhagyása";
-"screen_space_announcement_notice" = "Terek szűrése, készítése és kezelése hamarosan érkezik.";
-"screen_space_announcement_subtitle" = "Üdvözöljük a tér béta verziójában! Ezzel az első verzióval a következőket teheti:";
-"screen_space_announcement_title" = "Bemutatkoznak a terek";
 "screen_space_empty_state_title" = "Első szoba hozzáadása";
 "screen_space_list_description" = "Létrehozott vagy olyan terek, melyekhez csatlakozott.";
 "screen_space_list_details" = "%1$@ • %2$@";

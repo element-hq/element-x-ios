@@ -552,6 +552,10 @@
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Сховати аватари у запитах на запрошення до кімнат";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Сховати попередній перегляд медіа у стрічці";
 "screen_advanced_settings_labs" = "Лабораторії";
+"screen_advanced_settings_live_location_section_description" = "The distance you have to move to trigger an update.";
+"screen_advanced_settings_live_location_section_footer" = "Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$@.";
+"screen_advanced_settings_live_location_section_footer_link" = "App Settings";
+"screen_advanced_settings_live_location_section_title" = "Live location updates";
 "screen_advanced_settings_media_compression_description" = "Швидше завантажуйте фотографії та відео та зменшуйте використання даних";
 "screen_advanced_settings_media_compression_title" = "Оптимізуйте медіаякість";
 "screen_advanced_settings_moderation_and_safety_section_title" = "Модерування й безпека";
@@ -792,6 +796,10 @@
 "screen_identity_waiting_on_other_device" = "Чекає на інше пристрій…";
 "screen_invite_users_already_a_member" = "Уже учасник";
 "screen_invite_users_already_invited" = "Уже запрошені";
+"screen_invite_users_confirm_dialog_subtitle_multiple_users" = "You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_subtitle_one_user" = "You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_title_mutiple_users" = "Invite new contacts to this room?";
+"screen_invite_users_confirm_dialog_title_one_user" = "Invite new contact to this room?";
 "screen_invites_decline_chat_message" = "Ви впевнені, що хочете відхилити запрошення приєднатися до %1$@?";
 "screen_invites_decline_chat_title" = "Відхилити запрошення";
 "screen_invites_decline_direct_chat_message" = "Ви дійсно хочете відмовитися від приватної бесіди з %1$@?";
@@ -903,6 +911,9 @@
 "screen_link_new_device_root_title" = "Який тип пристрою ви хочете під'єднати?";
 "screen_link_new_device_wrong_number_subtitle" = "Please try again and make sure that you’ve entered the 2-digit code correctly. If the numbers still don’t match then contact your account provider.";
 "screen_link_new_device_wrong_number_title" = "Цифри не збігаються";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Цей обліковий запис було деактивовано.";
 "screen_login_error_invalid_credentials" = "Неправильне ім'я користувача та/або пароль";
 "screen_login_error_invalid_user_id" = "Це недійсний ідентифікатор користувача. Очікуваний формат: '@user:homeserver.org'";
@@ -1417,14 +1428,6 @@
 "screen_signout_save_recovery_key_title" = "Ви зберегли ключ відновлення?";
 "screen_space_add_room_action" = "Кімната";
 "screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
-"screen_space_announcement_item1" = "View spaces you've created or joined";
-"screen_space_announcement_item2" = "Accept or decline invites to spaces";
-"screen_space_announcement_item3" = "Знаходьте у своїх просторах кімнати, до яких можна приєднатися";
-"screen_space_announcement_item4" = "Join public spaces";
-"screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Фільтрування, створення та керування просторами стане доступним найближчим часом.";
-"screen_space_announcement_subtitle" = "Ласкаво просимо до бета-версії Просторів! У цій першій версії ви можете:";
-"screen_space_announcement_title" = "Представляємо Простори";
 "screen_space_empty_state_title" = "Додайте свою першу кімнату";
 "screen_space_list_description" = "Простори, які ви створили або до яких приєдналися.";
 "screen_space_list_details" = "%1$@ • %2$@";
