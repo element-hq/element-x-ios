@@ -186,14 +186,18 @@ internal enum L10n {
   internal static var actionCreateRoom: String { return L10n.tr("Localizable", "action_create_room") }
   /// Create space
   internal static var actionCreateSpace: String { return L10n.tr("Localizable", "action_create_space") }
-  /// Delete
+  /// Deactivate
   internal static var actionDeactivate: String { return L10n.tr("Localizable", "action_deactivate") }
-  /// Delete account
+  /// Deactivate account
   internal static var actionDeactivateAccount: String { return L10n.tr("Localizable", "action_deactivate_account") }
   /// Decline
   internal static var actionDecline: String { return L10n.tr("Localizable", "action_decline") }
   /// Decline and block
   internal static var actionDeclineAndBlock: String { return L10n.tr("Localizable", "action_decline_and_block") }
+  /// Delete
+  internal static var actionDelete: String { return L10n.tr("Localizable", "action_delete") }
+  /// Delete account
+  internal static var actionDeleteAccount: String { return L10n.tr("Localizable", "action_delete_account") }
   /// Delete Poll
   internal static var actionDeletePoll: String { return L10n.tr("Localizable", "action_delete_poll") }
   /// Deselect all

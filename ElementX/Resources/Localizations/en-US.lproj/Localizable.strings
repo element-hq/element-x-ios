@@ -76,10 +76,12 @@
 "action_create" = "Create";
 "action_create_room" = "Create room";
 "action_create_space" = "Create space";
-"action_deactivate" = "Delete";
-"action_deactivate_account" = "Delete account";
+"action_deactivate" = "Deactivate";
+"action_deactivate_account" = "Deactivate account";
 "action_decline" = "Decline";
 "action_decline_and_block" = "Decline and block";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Delete Poll";
 "action_deselect_all" = "Deselect all";
 "action_disable" = "Disable";
