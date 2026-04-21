@@ -1039,11 +1039,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("Sentry configured (enabled: \(options.enabled))")
     }
     
-    private func teardownSentry() {
-        SentrySDK.close()
-        MXLog.info("SentrySDK stopped")
-    }
-    
     private func processInlineReply(roomID: String, replyText: String) async {
         guard let userSession else {
             fatalError("User session not setup")
