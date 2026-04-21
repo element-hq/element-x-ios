@@ -552,6 +552,10 @@
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Скрывать аватары в приглашениях";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Скрывать предпросмотр медиа в истории сообщений";
 "screen_advanced_settings_labs" = "Лаборатория";
+"screen_advanced_settings_live_location_section_description" = "The distance you have to move to trigger an update.";
+"screen_advanced_settings_live_location_section_footer" = "Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$@.";
+"screen_advanced_settings_live_location_section_footer_link" = "App Settings";
+"screen_advanced_settings_live_location_section_title" = "Live location updates";
 "screen_advanced_settings_media_compression_description" = "Загружайте фотографии и видео быстрее и сокращайте потребление трафика";
 "screen_advanced_settings_media_compression_title" = "Оптимизировать качество мультимедиа";
 "screen_advanced_settings_moderation_and_safety_section_title" = "Модерация и безопасность";
@@ -616,8 +620,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Отправить приглашение";
 "screen_bottom_sheet_create_dm_message" = "Хотите начать чат с %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Отправить приглашение?";
-"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
-"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "У Вас нет других чатов с этим пользователем. Подтвердите, что это действительно кого Вы хотите пригласить, прежде чем продолжить.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Начать чат с этим новым контактом?";
 "screen_bottom_sheet_manage_room_member_ban" = "Удалить и заблокировать участника";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Заблокировать";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Пользователь не сможет присоединиться, если будет приглашен.";
@@ -692,7 +696,7 @@
 "screen_create_new_recovery_key_list_item_3_reset_all" = "«Сбросить все»";
 "screen_create_new_recovery_key_list_item_4" = "Следуйте инструкциям, чтобы создать новый ключ восстановления";
 "screen_create_new_recovery_key_list_item_5" = "Сохраните новый ключ восстановления в менеджере паролей или зашифрованной заметке";
-"screen_create_new_recovery_key_title" = "Сбросьте шифрование вашего аккаунта, используя другое устройство";
+"screen_create_new_recovery_key_title" = "Сбросьте шифрование Вашего аккаунта, используя другое устройство";
 "screen_create_poll_add_option_btn" = "Добавить вариант";
 "screen_create_poll_anonymous_desc" = "Показывать результаты только после окончания опроса";
 "screen_create_poll_anonymous_headline" = "Скрыть голоса";
@@ -792,6 +796,10 @@
 "screen_identity_waiting_on_other_device" = "Ожидание другого устройства…";
 "screen_invite_users_already_a_member" = "Уже участник";
 "screen_invite_users_already_invited" = "Уже приглашен(а)";
+"screen_invite_users_confirm_dialog_subtitle_multiple_users" = "You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_subtitle_one_user" = "You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_title_mutiple_users" = "Invite new contacts to this room?";
+"screen_invite_users_confirm_dialog_title_one_user" = "Invite new contact to this room?";
 "screen_invites_decline_chat_message" = "Вы уверены, что хотите отклонить приглашение в %1$@?";
 "screen_invites_decline_chat_title" = "Отклонить приглашение";
 "screen_invites_decline_direct_chat_message" = "Вы уверены, что хотите отказаться от личного общения с %1$@?";
@@ -903,6 +911,9 @@
 "screen_link_new_device_root_title" = "Какое устройство вы хотите привязать?";
 "screen_link_new_device_wrong_number_subtitle" = "Пожалуйста, попробуйте еще раз и убедитесь, что вы правильно ввели 2-значный код. Если цифры по-прежнему не совпадают, обратитесь к администратору сервера.";
 "screen_link_new_device_wrong_number_title" = "Цифры не совпадают";
+"screen_live_location_sheet_nobody_sharing" = "Никто не делится своим местоположением";
+"screen_live_location_sheet_sharing_live_location" = "Местоположение отправляется в реальном времени";
+"screen_live_location_sheet_title" = "На карте";
 "screen_login_error_deactivated_account" = "Данная учётная запись была отключена.";
 "screen_login_error_invalid_credentials" = "Неверное имя пользователя и/или пароль";
 "screen_login_error_invalid_user_id" = "Это некорректный идентификатор пользователя. Правильный формат: @user:homeserver.org";
@@ -983,7 +994,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Системные уведомления выключены";
 "screen_notification_settings_title" = "Уведомления";
 "screen_onboarding_app_version" = "Версия %1$@";
-"screen_onboarding_checking_account" = "Checking account";
+"screen_onboarding_checking_account" = "Проверка аккаунта";
 "screen_onboarding_sign_in_manually" = "Войти";
 "screen_onboarding_sign_in_to" = "Войти в %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Войти с QR-кодом";
@@ -1417,14 +1428,6 @@
 "screen_signout_save_recovery_key_title" = "Перед тем как отключить это устройство, убедись, что у тебя есть доступ к ключу восстановления";
 "screen_space_add_room_action" = "Комната";
 "screen_space_add_rooms_room_access_description" = "Добавление комнаты не повлияет на доступ к ней. Чтобы изменить доступ к комнате, перейдите в Настройки > Безопасность и конфиденциальность.";
-"screen_space_announcement_item1" = "Просматривать пространства, которые вы создали или к которым присоединились";
-"screen_space_announcement_item2" = "Принимать или отклонять приглашения в пространства";
-"screen_space_announcement_item3" = "Находить все комнаты, к которым можно присоединиться в ваших пространствах";
-"screen_space_announcement_item4" = "Присоединяться к публичным пространствам";
-"screen_space_announcement_item5" = "Покидать все пространства, к которым вы присоединились";
-"screen_space_announcement_notice" = "Фильтровать, создавать пространства и управлять ими можно будет позже.";
-"screen_space_announcement_subtitle" = "Добро пожаловать в бета-версию пространств! Сейчас вы сможете:";
-"screen_space_announcement_title" = "Представляем пространства";
 "screen_space_empty_state_title" = "Добавьте свою первую комнату";
 "screen_space_list_description" = "Пространства, которые вы создали или к которым присоединились.";
 "screen_space_list_details" = "%1$@ • %2$@";

@@ -552,6 +552,10 @@
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Ukryj awatary w prośbach o dołączenie do pokoju";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Ukryj podglądy multimediów na osi czasu";
 "screen_advanced_settings_labs" = "Laboratoria";
+"screen_advanced_settings_live_location_section_description" = "The distance you have to move to trigger an update.";
+"screen_advanced_settings_live_location_section_footer" = "Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$@.";
+"screen_advanced_settings_live_location_section_footer_link" = "App Settings";
+"screen_advanced_settings_live_location_section_title" = "Live location updates";
 "screen_advanced_settings_media_compression_description" = "Przesyłaj zdjęcia i filmy szybciej, zmniejszając zużycie danych";
 "screen_advanced_settings_media_compression_title" = "Optymalizuj jakość multimediów";
 "screen_advanced_settings_moderation_and_safety_section_title" = "Moderacja i bezpieczeństwo";
@@ -792,6 +796,10 @@
 "screen_identity_waiting_on_other_device" = "Oczekiwanie na inne urządzenie...";
 "screen_invite_users_already_a_member" = "Jest już członkiem";
 "screen_invite_users_already_invited" = "Już zaproszony";
+"screen_invite_users_confirm_dialog_subtitle_multiple_users" = "You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_subtitle_one_user" = "You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_title_mutiple_users" = "Invite new contacts to this room?";
+"screen_invite_users_confirm_dialog_title_one_user" = "Invite new contact to this room?";
 "screen_invites_decline_chat_message" = "Czy na pewno chcesz odrzucić zaproszenie dołączenia do %1$@?";
 "screen_invites_decline_chat_title" = "Odrzuć zaproszenie";
 "screen_invites_decline_direct_chat_message" = "Czy na pewno chcesz odrzucić rozmowę prywatną z %1$@?";
@@ -903,6 +911,9 @@
 "screen_link_new_device_root_title" = "What type of device do you want to link?";
 "screen_link_new_device_wrong_number_subtitle" = "Please try again and make sure that you’ve entered the 2-digit code correctly. If the numbers still don’t match then contact your account provider.";
 "screen_link_new_device_wrong_number_title" = "The numbers don’t match";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "To konto zostało dezaktywowane.";
 "screen_login_error_invalid_credentials" = "Nieprawidłowa nazwa użytkownika i/lub hasło";
 "screen_login_error_invalid_user_id" = "To nie jest prawidłowy identyfikator użytkownika. Oczekiwany format: '@user:homeserver.org'";
@@ -1417,14 +1428,6 @@
 "screen_signout_save_recovery_key_title" = "Czy zapisałeś swój klucz przywracania?";
 "screen_space_add_room_action" = "Room";
 "screen_space_add_rooms_room_access_description" = "Adding a room will not affect the room access. To change the access go to Room settings > Security & privacy.";
-"screen_space_announcement_item1" = "Wyświetlić przestrzenie, które stworzyłeś lub do których dołączyłeś";
-"screen_space_announcement_item2" = "Akceptować lub odrzucać zaproszenia";
-"screen_space_announcement_item3" = "Odkrywać wszystkie pokoje, do których możesz dołączyć w swoich przestrzeniach";
-"screen_space_announcement_item4" = "Dołączać do przestrzeni publicznych";
-"screen_space_announcement_item5" = "Opuszczać jakąkolwiek przestrzeń, do której dołączyłeś";
-"screen_space_announcement_notice" = "Filtrowanie, tworzenie i zarządzanie przestrzeniami pojawi się wkrótce.";
-"screen_space_announcement_subtitle" = "Witamy w wersji beta przestrzeni! W tej wersji możesz:";
-"screen_space_announcement_title" = "Przedstawiamy przestrzenie";
 "screen_space_empty_state_title" = "Add your first room";
 "screen_space_list_description" = "Przestrzenie, które stworzyłeś lub do których dołączyłeś.";
 "screen_space_list_details" = "%1$@ • %2$@";

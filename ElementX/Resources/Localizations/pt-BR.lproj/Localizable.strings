@@ -552,6 +552,10 @@
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Ocultar avatares em solicitações de convite para salas";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Ocultar pré-visualizações de mídia na linha do tempo";
 "screen_advanced_settings_labs" = "Experimentos";
+"screen_advanced_settings_live_location_section_description" = "The distance you have to move to trigger an update.";
+"screen_advanced_settings_live_location_section_footer" = "Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$@.";
+"screen_advanced_settings_live_location_section_footer_link" = "App Settings";
+"screen_advanced_settings_live_location_section_title" = "Live location updates";
 "screen_advanced_settings_media_compression_description" = "Envie fotos e vídeos com mais rapidez e reduza o uso de dados";
 "screen_advanced_settings_media_compression_title" = "Otimizar a qualidade da mídia";
 "screen_advanced_settings_moderation_and_safety_section_title" = "Moderação e segurança";
@@ -792,6 +796,10 @@
 "screen_identity_waiting_on_other_device" = "Aguardando o outro dispositivo…";
 "screen_invite_users_already_a_member" = "Já é membro";
 "screen_invite_users_already_invited" = "Já foi convidado";
+"screen_invite_users_confirm_dialog_subtitle_multiple_users" = "You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_subtitle_one_user" = "You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_title_mutiple_users" = "Invite new contacts to this room?";
+"screen_invite_users_confirm_dialog_title_one_user" = "Invite new contact to this room?";
 "screen_invites_decline_chat_message" = "Tem certeza de que deseja recusar o convite para entrar em %1$@?";
 "screen_invites_decline_chat_title" = "Recusar convite";
 "screen_invites_decline_direct_chat_message" = "Tem certeza de que deseja recusar esse conversa privada com %1$@?";
@@ -903,6 +911,9 @@
 "screen_link_new_device_root_title" = "Que tipo de dispositivo você deseja vincular?";
 "screen_link_new_device_wrong_number_subtitle" = "Tente novamente e certifique-se que digitou o código de 2 dígitos corretamente. Se os números ainda não conferirem, entre em contato com o provedor da sua conta.";
 "screen_link_new_device_wrong_number_title" = "Os números não conferem";
+"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
+"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
+"screen_live_location_sheet_title" = "On the map";
 "screen_login_error_deactivated_account" = "Essa conta foi desativada.";
 "screen_login_error_invalid_credentials" = "Nome de usuário e/ou senha incorretos";
 "screen_login_error_invalid_user_id" = "Esse não é um identificador de usuário válido. Formato esperado: '@usuário:servidor.org'";
@@ -1417,14 +1428,6 @@
 "screen_signout_save_recovery_key_title" = "Você salvou sua chave de recuperação?";
 "screen_space_add_room_action" = "Sala";
 "screen_space_add_rooms_room_access_description" = "Adicionar uma sala não afetará o acesso dela. Para alterar o acesso, vá as Configurações da sala > Segurança e privacidade.";
-"screen_space_announcement_item1" = "Visualizar espaços que criou ou entrou";
-"screen_space_announcement_item2" = "Aceitar ou recusar convites aos espaços";
-"screen_space_announcement_item3" = "Descobrir quaisquer salas que você pode entrar nos espaços";
-"screen_space_announcement_item4" = "Entrar espaços públicos";
-"screen_space_announcement_item5" = "Sair de quaisquer espaços que entrou";
-"screen_space_announcement_notice" = "Filtrar, criar, e gerenciar espaços virão em breve.";
-"screen_space_announcement_subtitle" = "Boas-vindas à versão beta dos Espaços! Com essa primeira versão, você pode:";
-"screen_space_announcement_title" = "Apresentando Espaços";
 "screen_space_empty_state_title" = "Adicione sua primeira sala";
 "screen_space_list_description" = "Os espaços que você criou ou entrou.";
 "screen_space_list_details" = "%1$@ • %2$@";

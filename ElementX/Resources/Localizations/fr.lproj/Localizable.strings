@@ -38,7 +38,7 @@
 "a11y_session_verification_time_limited_action_required" = "Action limitée dans le temps requise, vous avez une minute pour effectuer la vérification";
 "a11y_show_password" = "Afficher le mot de passe";
 "a11y_start_call" = "Démarrer un appel";
-"a11y_start_video_call" = "Start a video call";
+"a11y_start_video_call" = "Passer un appel vidéo";
 "a11y_start_voice_call" = "Lancer un appel vocal";
 "a11y_tombstoned_room" = "Salon clôturé";
 "a11y_user_menu" = "Menu utilisateur";
@@ -552,6 +552,10 @@
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Masquer les avatars des salons dans les invitations";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Masquer les aperçus des médias dans les discussions";
 "screen_advanced_settings_labs" = "Expérimental";
+"screen_advanced_settings_live_location_section_description" = "The distance you have to move to trigger an update.";
+"screen_advanced_settings_live_location_section_footer" = "Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$@.";
+"screen_advanced_settings_live_location_section_footer_link" = "App Settings";
+"screen_advanced_settings_live_location_section_title" = "Live location updates";
 "screen_advanced_settings_media_compression_description" = "Téléchargez des photos et des vidéos plus rapidement et réduisez la consommation de données";
 "screen_advanced_settings_media_compression_title" = "Optimisez la qualité des médias";
 "screen_advanced_settings_moderation_and_safety_section_title" = "Modération et sécurité";
@@ -616,8 +620,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Envoyer l'invitation";
 "screen_bottom_sheet_create_dm_message" = "Voulez-vous entamer une discussion avec %1$@ ?";
 "screen_bottom_sheet_create_dm_title" = "Envoyer l'invitation ?";
-"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
-"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "Vous n'avez actuellement aucune conversation avec cette personne. Confirmez son invitation avant de continuer.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Entamer une conversation avec ce nouveau contact ?";
 "screen_bottom_sheet_manage_room_member_ban" = "Bannir du salon";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Bannir";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Ce compte ne pourra pas rejoindre le salon à nouveau, même si il est invité.";
@@ -792,6 +796,10 @@
 "screen_identity_waiting_on_other_device" = "En attente d’une autre session…";
 "screen_invite_users_already_a_member" = "Déjà membre";
 "screen_invite_users_already_invited" = "Déjà invité(e)";
+"screen_invite_users_confirm_dialog_subtitle_multiple_users" = "You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_subtitle_one_user" = "You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.";
+"screen_invite_users_confirm_dialog_title_mutiple_users" = "Invite new contacts to this room?";
+"screen_invite_users_confirm_dialog_title_one_user" = "Invite new contact to this room?";
 "screen_invites_decline_chat_message" = "Êtes-vous sûr de vouloir décliner l’invitation à rejoindre %1$@ ?";
 "screen_invites_decline_chat_title" = "Refuser l’invitation";
 "screen_invites_decline_direct_chat_message" = "Êtes-vous sûr de vouloir refuser cette discussion privée avec %1$@ ?";
@@ -903,6 +911,9 @@
 "screen_link_new_device_root_title" = "Quel type d'appareil souhaitez-vous associer ?";
 "screen_link_new_device_wrong_number_subtitle" = "Veuillez réessayer et assurez-vous d'avoir saisi correctement le code à 2 chiffres. Si les chiffres ne correspondent toujours pas, veuillez contacter votre fournisseur de compte.";
 "screen_link_new_device_wrong_number_title" = "Les nombres ne correspondent pas";
+"screen_live_location_sheet_nobody_sharing" = "Personne ne partage sa position";
+"screen_live_location_sheet_sharing_live_location" = "Partage de la position en direct";
+"screen_live_location_sheet_title" = "Sur la carte";
 "screen_login_error_deactivated_account" = "Ce compte a été désactivé.";
 "screen_login_error_invalid_credentials" = "Nom d’utilisateur et/ou mot de passe incorrects";
 "screen_login_error_invalid_user_id" = "Il ne s’agit pas d’un identifiant utilisateur valide. Format attendu : « @user:homeserver.org »";
@@ -983,7 +994,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Les notifications du système sont désactivées";
 "screen_notification_settings_title" = "Notifications";
 "screen_onboarding_app_version" = "Version %1$@";
-"screen_onboarding_checking_account" = "Checking account";
+"screen_onboarding_checking_account" = "Vérification du compte";
 "screen_onboarding_sign_in_manually" = "Se connecter manuellement";
 "screen_onboarding_sign_in_to" = "Connectez-vous à %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Se connecter avec un code QR";
@@ -1186,7 +1197,7 @@
 "screen_room_grouped_state_events_reduce" = "Réduire";
 "screen_room_invite_again_alert_message" = "Souhaitez-vous inviter l’ancien membre à revenir ?";
 "screen_room_invite_again_alert_title" = "Vous êtes seul dans cette discussion";
-"screen_room_live_location_banner" = "Sharing live location";
+"screen_room_live_location_banner" = "Partage de la position en direct";
 "screen_room_member_details_block_alert_action" = "Bloquer";
 "screen_room_member_details_block_alert_description" = "Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment.";
 "screen_room_member_details_block_user" = "Bloquer l’utilisateur";
@@ -1417,14 +1428,6 @@
 "screen_signout_save_recovery_key_title" = "Assurez-vous d'avoir accès à votre clé de récupération avant de supprimer cet appareil.";
 "screen_space_add_room_action" = "Salon";
 "screen_space_add_rooms_room_access_description" = "Ajouter un salon ne changera pas l'accès au salon. Pour modifier l'accès, aller dans les paramètres du salon puis dans Sécurité & confidentialité.";
-"screen_space_announcement_item1" = "Voir les espaces que vous avez créés ou rejoints";
-"screen_space_announcement_item2" = "Accepter ou refuser les invitations aux espaces";
-"screen_space_announcement_item3" = "Découvrir les salons que vous pouvez joindre depuis vos espaces";
-"screen_space_announcement_item4" = "Rejoindre les espaces publics";
-"screen_space_announcement_item5" = "Quitter les espaces dont vous êtes membre.";
-"screen_space_announcement_notice" = "Le filtrage, la création et la gestion des espaces seront bientôt disponibles.";
-"screen_space_announcement_subtitle" = "Bienvenue dans la version bêta des espaces! Avec cette première version, vous pourrez :";
-"screen_space_announcement_title" = "Ajout des espaces";
 "screen_space_empty_state_title" = "Ajoutez votre premier salon";
 "screen_space_list_description" = "Espaces que vous avez créés ou rejoints.";
 "screen_space_list_details" = "%1$@ • %2$@";
