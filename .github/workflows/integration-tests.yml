@@ -2,8 +2,8 @@ name: Integration tests
 
 on:
   schedule:
-    - cron:  '0 2 * * 1-5'
-    
+    - cron: "0 2 * * 1-5"
+
   workflow_dispatch:
 
 permissions: {}
@@ -25,8 +25,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup environment
-        run:
-          source ci_scripts/ci_common.sh && setup_github_actions_environment
+        run: source ci_scripts/ci_common.sh && setup_github_actions_environment
 
       - name: Run tests
         run: swift run -q tools ci integration-tests

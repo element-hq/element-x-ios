@@ -2,10 +2,10 @@ name: Unit Tests
 
 on:
   workflow_dispatch:
-  
+
   push:
-    branches: [ develop ]
-  
+    branches: [develop]
+
   pull_request:
 
 permissions: {}

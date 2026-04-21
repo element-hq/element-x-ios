@@ -3,7 +3,7 @@ name: Post-release
 on:
   push:
     tags:
-      - 'release/**'
+      - "release/**"
 
 permissions: {}
 
