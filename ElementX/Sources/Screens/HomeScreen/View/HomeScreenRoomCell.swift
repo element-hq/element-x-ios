@@ -119,11 +119,16 @@ struct HomeScreenRoomCell: View {
             Spacer()
             
             HStack(spacing: 8) {
-                if room.badges.isCallShown {
-                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                if room.badges.callBadgeType == .voice {
+                    CompoundIcon(\.voiceCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
                         .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
                 }
                 
+                if room.badges.callBadgeType == .video {
+                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                        .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
+                }
+                 
                 if room.badges.isMuteShown {
                     CompoundIcon(\.notificationsOffSolid, size: .custom(15), relativeTo: .compound.bodyMD)
                         .accessibilityLabel(L10n.a11yNotificationsMuted)
@@ -253,6 +258,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                   canonicalAlias: "#foundation-and-empire:matrix.org",
                                   alternativeAliases: [],
                                   hasOngoingCall: false,
+                                  activeCallIntent: nil,
                                   isMarkedUnread: false,
                                   isFavourite: false,
                                   isTombstoned: false)

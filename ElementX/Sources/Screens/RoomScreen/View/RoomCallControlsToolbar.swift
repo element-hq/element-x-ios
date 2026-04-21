@@ -15,8 +15,8 @@ struct RoomCallControlsToolbar: ToolbarContent {
     var body: some ToolbarContent {
         if viewState.hasOngoingCall {
             ToolbarItem(placement: .primaryAction) {
-                JoinCallButton {
-                    onCallTap(false)
+                JoinCallButton(isVoiceCall: viewState.activeRoomCallIntent == .audio) {
+                    onCallTap(viewState.activeRoomCallIntent == .audio)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
                 .disabled(!viewState.canJoinCall)
@@ -61,16 +61,21 @@ struct RoomCallControlsToolbar_Previews: PreviewProvider {
             ElementNavigationStack {
                 Color.clear.toolbar { RoomCallControlsToolbar(viewState: .mock(hasOngoingCall: false, canJoinCall: false)) { _ in } }
             }
+            ElementNavigationStack {
+                Color.clear.toolbar { RoomCallControlsToolbar(viewState: .mock(hasOngoingCall: true, activeRoomCallIntent: .audio)) { _ in } }
+            }
         }
         .previewDisplayName("All states")
     }
 }
 
 private extension RoomScreenViewState {
-    static func mock(hasOngoingCall: Bool, isDirectOneToOneRoom: Bool = false, canJoinCall: Bool = true) -> RoomScreenViewState {
+    static func mock(hasOngoingCall: Bool, isDirectOneToOneRoom: Bool = false, canJoinCall: Bool = true, activeRoomCallIntent: CallIntent? = nil) -> RoomScreenViewState {
         RoomScreenViewState(roomAvatar: .room(id: "mock", name: "Mock Room", avatarURL: nil),
                             canJoinCall: canJoinCall,
-                            hasOngoingCall: hasOngoingCall, isDirectOneToOneRoom: isDirectOneToOneRoom,
+                            hasOngoingCall: hasOngoingCall,
+                            activeRoomCallIntent: activeRoomCallIntent,
+                            isDirectOneToOneRoom: isDirectOneToOneRoom,
                             hasSuccessor: false)
     }
 }

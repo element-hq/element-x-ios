@@ -719,8 +719,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
                 case .presentMessageForwarding(let forwardingItem):
                     stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
-                case .presentCallScreen:
-                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: false))
+                case .presentCallScreen(let isVoiceCall):
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
                 case .presentPinnedEventsTimeline:
                     stateMachine.tryEvent(.presentPinnedEventsTimeline)
                 case .presentResolveSendFailure(failure: let failure, sendHandle: let sendHandle):
