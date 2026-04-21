@@ -1033,6 +1033,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             bugReportService.lastCrashEventID = event.eventId.sentryIdString
         }
         
+        // Any ongoing transactions will no longer be valid after calling SentrySDK.start so lets
+        // remove them and start over, otherwise the app will crash if finishTransaction is used.
+        ServiceLocator.shared.analytics.signpost.resetTransactions()
+        
         SentrySDK.start(options: options) // Swift
         enableSentryLogging(enabled: options.enabled) // Rust
         
