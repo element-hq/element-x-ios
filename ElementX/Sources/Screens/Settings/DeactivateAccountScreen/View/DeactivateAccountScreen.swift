@@ -20,7 +20,7 @@ struct DeactivateAccountScreen: View {
         }
         .compoundList()
         .safeAreaInset(edge: .bottom) {
-            Button(L10n.actionDeactivateAccount, role: .destructive) {
+            Button(L10n.actionDeleteAccount, role: .destructive) {
                 context.send(viewAction: .deactivate)
             }
             .buttonStyle(.compound(.primary))
