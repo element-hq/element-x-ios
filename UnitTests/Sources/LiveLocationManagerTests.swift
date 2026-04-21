@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import CoreLocation
 @testable import ElementX
 import Foundation
 import Testing
@@ -14,15 +15,10 @@ final class LiveLocationManagerTests {
     private var clientProxy: ClientProxyMock!
     private var locationManagerMock: CLLocationManagerMock!
     private var manager: LiveLocationManager!
-    
-    private let appSettings: AppSettings
+    private var appSettings: AppSettings!
     
     init() {
         AppSettings.resetAllSettings()
-        appSettings = AppSettings()
-        clientProxy = ClientProxyMock(.init())
-        locationManagerMock = CLLocationManagerMock(.init())
-        manager = LiveLocationManager(clientProxy: clientProxy, appSettings: appSettings, locationManager: locationManagerMock)
     }
     
     deinit {
@@ -33,6 +29,7 @@ final class LiveLocationManagerTests {
     
     @Test
     func startLiveLocationWithNoExistingSession() async throws {
+        setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
@@ -43,11 +40,11 @@ final class LiveLocationManagerTests {
         #expect(!roomProxy.stopLiveLocationShareCalled)
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] != nil)
         #expect(locationManagerMock.startUpdatingLocationCalled)
-        #expect(!locationManagerMock.startMonitoringSignificantLocationChangesCalled)
     }
     
     @Test
     func startLiveLocationWithExistingSessionStopsItFirst() async throws {
+        setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] = Date().addingTimeInterval(300)
@@ -71,6 +68,7 @@ final class LiveLocationManagerTests {
     
     @Test
     func startLiveLocationDoesNotStopSessionForOtherRoom() async {
+        setUp()
         let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
@@ -84,6 +82,7 @@ final class LiveLocationManagerTests {
     
     @Test
     func startLiveLocationWhenRoomNotJoined() async {
+        setUp()
         clientProxy.roomForIdentifierClosure = { _ in nil }
         
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
@@ -94,6 +93,7 @@ final class LiveLocationManagerTests {
     
     @Test
     func startLiveLocationWhenStartShareFails() async {
+        setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         roomProxy.startLiveLocationShareDurationReturnValue = .failure(.sdkError(RoomProxyMockError.generic))
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
@@ -106,6 +106,7 @@ final class LiveLocationManagerTests {
     
     @Test
     func startLiveLocationStoresTimeoutDate() async throws {
+        setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
@@ -125,6 +126,7 @@ final class LiveLocationManagerTests {
     
     @Test
     func stopLiveLocationWhenSessionExists() async {
+        setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] = Date().addingTimeInterval(300)
@@ -136,11 +138,11 @@ final class LiveLocationManagerTests {
         // Setting the timeout date above starts tracking; removing it stops tracking.
         #expect(locationManagerMock.startUpdatingLocationCalled)
         #expect(locationManagerMock.stopUpdatingLocationCalled)
-        #expect(!locationManagerMock.stopMonitoringSignificantLocationChangesCalled)
     }
     
     @Test
     func stopLiveLocationWhenNoSession() async {
+        setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
@@ -151,6 +153,7 @@ final class LiveLocationManagerTests {
     
     @Test
     func stopLiveLocationDoesNotRemoveOtherSessions() async {
+        setUp()
         let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         appSettings.liveLocationSharingTimeoutDatesByRoomID["!room1:matrix.org"] = Date().addingTimeInterval(300)
@@ -166,20 +169,19 @@ final class LiveLocationManagerTests {
     
     @Test
     func startLiveLocationInReducedAccuracyMode() async throws {
-        locationManagerMock.underlyingAccuracyAuthorization = .reducedAccuracy
+        setUp(accuracyAuthorization: .reducedAccuracy)
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         try result.get()
         
-        #expect(locationManagerMock.startMonitoringSignificantLocationChangesCalled)
-        #expect(!locationManagerMock.startUpdatingLocationCalled)
+        #expect(locationManagerMock.startUpdatingLocationCalled)
+        #expect(locationManagerMock.desiredAccuracy == kCLLocationAccuracyReduced)
         
         await manager.stopLiveLocation(roomID: "!room:matrix.org")
         
-        #expect(locationManagerMock.stopMonitoringSignificantLocationChangesCalled)
-        #expect(!locationManagerMock.stopUpdatingLocationCalled)
+        #expect(locationManagerMock.stopUpdatingLocationCalled)
     }
     
     // MARK: - Private
@@ -189,5 +191,12 @@ final class LiveLocationManagerTests {
         roomProxy.startLiveLocationShareDurationReturnValue = .success(())
         roomProxy.stopLiveLocationShareReturnValue = .success(())
         return roomProxy
+    }
+    
+    private func setUp(accuracyAuthorization: CLAccuracyAuthorization = .fullAccuracy) {
+        appSettings = AppSettings()
+        clientProxy = ClientProxyMock(.init())
+        locationManagerMock = CLLocationManagerMock(.init(accuracyAuthorization: accuracyAuthorization))
+        manager = LiveLocationManager(clientProxy: clientProxy, appSettings: appSettings, locationManager: locationManagerMock)
     }
 }
