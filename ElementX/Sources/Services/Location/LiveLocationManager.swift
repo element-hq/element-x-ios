@@ -173,7 +173,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         
         appSettings.$liveLocationMinimumDistanceUpdate
             .removeDuplicates()
-            .debounce(for: .seconds(3), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .sink { [weak self] minimumDistance in
                 self?.setupMinimumDistance(minimumDistance)
             }
