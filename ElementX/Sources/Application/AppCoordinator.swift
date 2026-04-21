@@ -1027,20 +1027,20 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
         // This callback is only executed once during the entire run of the program to avoid
         // multiple callbacks if there are multiple crash events to send (see method documentation)
-        options.onCrashedLastRun = { event in
+        options.onLastRunStatusDetermined = { status, event in
+            guard case .didCrash = status, let event else { return }
             MXLog.error("Sentry detected a crash in the previous run: \(event.eventId.sentryIdString)")
             bugReportService.lastCrashEventID = event.eventId.sentryIdString
         }
+        
+        // Any ongoing transactions will no longer be valid after calling SentrySDK.start so lets
+        // remove them and start over, otherwise the app will crash if finishTransaction is used.
+        ServiceLocator.shared.analytics.signpost.resetTransactions()
         
         SentrySDK.start(options: options) // Swift
         enableSentryLogging(enabled: options.enabled) // Rust
         
         MXLog.info("Sentry configured (enabled: \(options.enabled))")
-    }
-    
-    private func teardownSentry() {
-        SentrySDK.close()
-        MXLog.info("SentrySDK stopped")
     }
     
     private func processInlineReply(roomID: String, replyText: String) async {
