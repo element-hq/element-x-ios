@@ -65,7 +65,6 @@ class ClientProxy: ClientProxyProtocol {
     let spaceService: SpaceServiceProxyProtocol
     
     let capabilities: HomeserverCapabilitiesProxyProtocol
-    private var capabilitiesRefreshTask: Task<Void, Never>?
     
     let eventStringBuilder: RoomEventStringBuilder
     
@@ -301,6 +300,14 @@ class ClientProxy: ClientProxyProtocol {
                         await client.enableAllSendQueues(enable: true)
                     }
                 }
+            }
+            .store(in: &cancellables)
+        
+        actionsPublisher
+            .filter(\.isSyncUpdate)
+            .throttle(for: 86400, scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] _ in
+                Task { await self?.capabilities.refresh() }
             }
             .store(in: &cancellables)
         
@@ -1141,13 +1148,6 @@ class ClientProxy: ClientProxyProtocol {
                 
                 if ignoredUsersSubject.value == nil {
                     updateIgnoredUsers()
-                }
-                
-                if capabilitiesRefreshTask == nil {
-                    capabilitiesRefreshTask = Task { [weak self] in
-                        await self?.capabilities.refresh()
-                        self?.capabilitiesRefreshTask = nil
-                    }
                 }
             case .error, .terminated:
                 break // The sync service is responsible for handling error and termination
