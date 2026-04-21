@@ -529,8 +529,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .presentCallScreen(let roomProxy, _):
-                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: false))
+                case .presentCallScreen(let roomProxy, let isVoiceCall):
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
                 case .verifyUser(let userID):
                     actionsSubject.send(.verifyUser(userID: userID))
                 case .continueWithSpaceFlow(let spaceRoomListProxy):
@@ -557,8 +557,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             switch actions {
             case .finished:
                 stateMachine.tryEvent(.stopMembersFlow)
-            case .presentCallScreen(let roomProxy, _):
-                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: false))
+            case .presentCallScreen(let roomProxy, let isVoiceCall):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
             case .verifyUser(let userID):
                 actionsSubject.send(.verifyUser(userID: userID))
             }
@@ -581,8 +581,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 if leftRoom {
                     stateMachine.tryEvent(.leftSpace)
                 }
-            case .presentCallScreen(let roomProxy):
-                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: false))
+            case .presentCallScreen(let roomProxy, let isVoiceCall):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
             case .verifyUser(userID: let userID):
                 actionsSubject.send(.verifyUser(userID: userID))
             }
