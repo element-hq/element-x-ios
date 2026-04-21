@@ -1,3 +1,75 @@
+## Changes in 26.04.2 (2026-04-21)
+
+### What's Changed
+
+✨ Features
+* Make media captions scrollable by @bxdxnn in https://github.com/element-hq/element-x-ios/pull/5384
+* Support for ongoing voice vs video call + joining by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/5399
+* Enable automatic Verification when already signed in with Element Classic. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5453
+
+🙌 Improvements
+* Tweak the font/icon sizes on the Space visibility label. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5396
+* Update the icon for "Remove this device" on the Settings screen. by @americanrefugee in https://github.com/element-hq/element-x-ios/pull/5415
+* Add support for homeserver capabilities to disable the `UserDetailsEditScreen` UI. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5421
+* Replace the Cancel button with a Close button on the Space Filters screen. by @americanrefugee in https://github.com/element-hq/element-x-ios/pull/5408
+* Update InviteUsersConfirmationSheet strings  by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5448
+
+🐛 Bugfixes
+* Fix the space filters button on iPad. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5402
+* Fix session verification SAS flow not automatically starting by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5446
+* Throttle capabilities updates to once per day (or when the app is next launched). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5454
+* Fix a potential crash caused by using old Sentry transactions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5459
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5452
+
+🧱 Build
+* Manually update project and resolved packages following Renovate XcodeGen update by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5419
+* Update preview snapshots following iOS 26.4 workflow migration. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5431
+* Add a workflow that runs on top of Renovate XcodeGen PRs to update the project and resolved packages. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5416
+* Move the Acknowledgements generation to the post-renovate workflow. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5438
+* Add a new workflow that runs the preview tests and re-records the snapshots by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5439
+* Use macOS 26 for all workflows. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5442
+* Notification Decoration Revised by @amshakal in https://github.com/element-hq/element-x-ios/pull/5312
+* Github workflow tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5457
+
+📄 Documentation
+* Add guidelines for new features and a bit refactoring. by @mxandreas in https://github.com/element-hq/element-x-ios/pull/5436
+
+🚧 In development 🚧
+* Live Location Sharing Sheet implementation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5420
+* Live Location Sharing Map Improvements by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5440
+* Add a feature flag for automatic back pagination. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5445
+* Live Location Sharing update filtering based on time and distance by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5449
+* Handle reduced accuracy authorization case by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5455
+
+Others
+* Update dependency WysiwygComposer to v2.41.3 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5412
+* Update dependency AsyncAlgorithms to v1.1.3 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5409
+* Update dependency LRUCache to v1.2.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5410
+* Update dependency SwiftState to v6.0.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5411
+* Update dependency AnalyticsEvents to v0.33.2 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5413
+* Update dependency Collections to v1.4.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5414
+* Update dependency DeviceKit to v5.8.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5417
+* Update dependency DSWaveformImage to v14.3.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5418
+* Update dependency EmbeddedElementCall to v0.19.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5423
+* Update dependency Kingfisher to v8.8.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5424
+* Update dependency MapLibre to v6.25.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5426
+* Update dependency PostHog to v3.53.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5427
+* Update dependency Sentry to v9.10.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5428
+* Update dependency SwiftSoup to v2.13.4 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5430
+* Remove DTCoreText/Foundation references and warning fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5407
+* Switch to fatalErroring on SDK background task panics in release builds too by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5433
+* Update dependency SnapshotTesting to v1.19.2 - abandoned by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5429
+* Make the well-known version optional. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5447
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5456
+* Update the Deactivate Account strings (and icon) to call it Delete Account. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5458
+
+### New Contributors
+* @bxdxnn made their first contribution in https://github.com/element-hq/element-x-ios/pull/5384
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.04.1...release/26.04.2
+
 ## Changes in 26.04.1 (2026-04-16)
 
 ### What's Changed
