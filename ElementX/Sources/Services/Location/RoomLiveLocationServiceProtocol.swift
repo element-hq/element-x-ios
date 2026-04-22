@@ -10,5 +10,5 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol RoomLiveLocationServiceProtocol {
-    var liveLocationsPublisher: AnyPublisher<[LiveLocationShare], Never> { get }
+    var liveLocationsPublisher: CurrentValuePublisher<[LiveLocationShare], Never> { get }
 }

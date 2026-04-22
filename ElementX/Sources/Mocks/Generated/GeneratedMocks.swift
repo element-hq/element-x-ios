@@ -15362,11 +15362,11 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
 
 }
 class RoomLiveLocationServiceMock: RoomLiveLocationServiceProtocol, @unchecked Sendable {
-    var liveLocationsPublisher: AnyPublisher<[LiveLocationShare], Never> {
+    var liveLocationsPublisher: CurrentValuePublisher<[LiveLocationShare], Never> {
         get { return underlyingLiveLocationsPublisher }
         set(value) { underlyingLiveLocationsPublisher = value }
     }
-    var underlyingLiveLocationsPublisher: AnyPublisher<[LiveLocationShare], Never>!
+    var underlyingLiveLocationsPublisher: CurrentValuePublisher<[LiveLocationShare], Never>!
 
 }
 class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {

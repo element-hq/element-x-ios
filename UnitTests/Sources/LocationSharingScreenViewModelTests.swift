@@ -358,7 +358,7 @@ final class LocationSharingScreenViewModelTests {
                                            liveLocationsSubject: CurrentValueSubject<[LiveLocationShare], Never>,
                                            members: [RoomMemberProxyMock] = .allMembers) {
         let liveLocationServiceMock = RoomLiveLocationServiceMock()
-        liveLocationServiceMock.liveLocationsPublisher = liveLocationsSubject.eraseToAnyPublisher()
+        liveLocationServiceMock.liveLocationsPublisher = liveLocationsSubject.asCurrentValuePublisher()
 
         let roomProxyMock = JoinedRoomProxyMock(.init(members: members))
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock

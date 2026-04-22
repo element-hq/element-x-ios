@@ -15,6 +15,6 @@ struct RoomLiveLocationServiceMockConfiguration {
 extension RoomLiveLocationServiceMock {
     convenience init(_ configuration: RoomLiveLocationServiceMockConfiguration = .init()) {
         self.init()
-        liveLocationsPublisher = CurrentValueSubject(configuration.shares).eraseToAnyPublisher()
+        liveLocationsPublisher = CurrentValueSubject(configuration.shares).asCurrentValuePublisher()
     }
 }
