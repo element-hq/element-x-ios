@@ -190,10 +190,17 @@ class UserFlowTests: XCTestCase {
         XCTAssertTrue(roomHeader.waitForExistence(timeout: 10.0))
         roomHeader.tap(.center)
         
-        // Make the People item visible
-        app.swipeUp()
-        
-        // Open the room member details
+        // Swipe until the People button is hittable
+        let peopleButton = app.buttons[A11yIdentifiers.roomDetailsScreen.people]
+        if !peopleButton.isHittable {
+            var attempts = 0
+            while !peopleButton.isHittable, attempts < 5 {
+                app.swipeUp()
+                attempts += 1
+            }
+        }
+
+        // Open the room members list.
         tapOnButton(A11yIdentifiers.roomDetailsScreen.people)
         
         // Open the first member's details. Loading members for big rooms can take a while.
