@@ -124,6 +124,62 @@ final class LocationSharingScreenViewModelTests {
         }
     }
     
+    // MARK: - isLocationLoading Tests
+
+    @Test
+    func isLocationLoadingInPickerModeWithAuthorizationNotDetermined() {
+        setupViewModel()
+        context.isLocationAuthorized = nil
+        context.hasLoadedUserLocation = false
+        #expect(context.viewState.isLocationLoading)
+    }
+
+    @Test
+    func isLocationLoadingInPickerModeWithAuthorizationGranted() {
+        setupViewModel()
+        context.isLocationAuthorized = true
+        context.hasLoadedUserLocation = false
+        #expect(context.viewState.isLocationLoading)
+    }
+
+    @Test
+    func isLocationNotLoadingInPickerModeWhenLocationLoaded() {
+        setupViewModel()
+        context.isLocationAuthorized = true
+        context.hasLoadedUserLocation = true
+        #expect(!context.viewState.isLocationLoading)
+    }
+
+    @Test
+    func isLocationNotLoadingInPickerModeWhenAuthorizationDenied() {
+        setupViewModel()
+        context.isLocationAuthorized = false
+        context.hasLoadedUserLocation = false
+        #expect(!context.viewState.isLocationLoading)
+    }
+
+    @Test
+    func isLocationNotLoadingInNonPickerModeWithAuthorizationNotDetermined() {
+        let aliceShare = makeLiveLocationShare(userID: "@alice:matrix.org")
+        let sender = TimelineItemSender(id: "@alice:matrix.org", displayName: "Alice")
+        let liveLocationsSubject = CurrentValueSubject<[LiveLocationShare], Never>([aliceShare])
+        setupViewModelForViewLive(sender: sender, initialShare: aliceShare, liveLocationsSubject: liveLocationsSubject)
+        context.isLocationAuthorized = nil
+        context.hasLoadedUserLocation = false
+        #expect(!context.viewState.isLocationLoading)
+    }
+    
+    @Test
+    func isLocationLoadingInNonPickerModeWithAuthorizationGiven() {
+        let aliceShare = makeLiveLocationShare(userID: "@alice:matrix.org")
+        let sender = TimelineItemSender(id: "@alice:matrix.org", displayName: "Alice")
+        let liveLocationsSubject = CurrentValueSubject<[LiveLocationShare], Never>([aliceShare])
+        setupViewModelForViewLive(sender: sender, initialShare: aliceShare, liveLocationsSubject: liveLocationsSubject)
+        context.isLocationAuthorized = true
+        context.hasLoadedUserLocation = false
+        #expect(context.viewState.isLocationLoading)
+    }
+
     // MARK: - Live Location Authorization Tests
     
     @Test

@@ -117,10 +117,18 @@ struct LocationSharingScreenViewState: BindableState {
         }
     }
     
-    /// Returns true if the user's location has not yet been determined, while location permissions are given or not yet set
+    /// Displays a loader if the user's location has not yet been determined
     /// Does not work as intended on simulator.
     var isLocationLoading: Bool {
-        !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized != false
+        if case .picker = interactionMode {
+            // In picker mode permissions are requested immediately so returns true
+            // if the user's location has not yet been determined while location permissions are given or not yet set
+            !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized != false
+        } else {
+            // In other modes permissions are requested only if the center to user button is tapped
+            // So we only display the loader if the user's location has not yet been determined while location permissions are given.
+            !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized == true
+        }
     }
 
     var zoomLevel: Double {
