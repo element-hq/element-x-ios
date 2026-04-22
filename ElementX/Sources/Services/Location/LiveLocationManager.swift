@@ -46,8 +46,12 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         self.locationManager.delegate = self
         self.locationManager.allowsBackgroundLocationUpdates = true
         self.locationManager.showsBackgroundLocationIndicator = true
-        // Since unpausing location updates is not trivial, let's not pause them.
+        
+        // Since unpausing location updates is not trivial, let's always keep the location updates running
+        // The distance filtering will already take care of not sending updates when not required.
+        // https://developer.apple.com/documentation/corelocation/cllocationmanager/pauseslocationupdatesautomatically
         self.locationManager.pausesLocationUpdatesAutomatically = false
+        
         setupMinimumDistanceUpdatesAndAccuracy(minimumDistance: appSettings.liveLocationMinimumDistanceUpdate)
         setupSubscriptions()
     }
@@ -246,7 +250,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             
             switch await roomProxy.sendLiveLocation(geoURI: geoURI) {
             case .success:
-                MXLog.info("Sent live location to room: \(roomID)")
+                MXLog.debug("Sent live location to room: \(roomID)")
             case .failure(let error):
                 MXLog.error("Failed to send live location update to room \(roomID): \(error)")
             }
