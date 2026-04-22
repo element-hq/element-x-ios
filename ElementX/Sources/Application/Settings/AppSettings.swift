@@ -65,8 +65,11 @@ final class AppSettings {
         case elementCallBaseURLOverride
         
         case voiceMessagePlaybackSpeed
+        
+        // Live Location
         case liveLocationSharingTimeoutDatesByRoomID
         case liveLocationMinimumDistanceUpdate
+        case liveLocationDisclaimerDisplayed
         
         // Feature flags
         case publicSearchEnabled
@@ -347,14 +350,19 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hasRequestedLocationAlwaysLocationAuthorization, defaultValue: false, storageType: .userDefaults(store))
     var hasRequestedLocationAlwaysLocationAuthorization
     
+    @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
+    var frequentlyUsedSystemEmojis
+    
+    // MARK: - Live Location
+    
     @UserPreference(key: UserDefaultsKeys.liveLocationSharingTimeoutDatesByRoomID, defaultValue: [String: Date](), storageType: .userDefaults(store))
     var liveLocationSharingTimeoutDatesByRoomID
     
     @UserPreference(key: UserDefaultsKeys.liveLocationMinimumDistanceUpdate, defaultValue: 10, storageType: .userDefaults(store))
     var liveLocationMinimumDistanceUpdate
     
-    @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
-    var frequentlyUsedSystemEmojis
+    @UserPreference(key: UserDefaultsKeys.liveLocationDisclaimerDisplayed, defaultValue: false, storageType: .userDefaults(store))
+    var liveLocationDisclaimerDisplayed
     
     // MARK: - Home Screen
     

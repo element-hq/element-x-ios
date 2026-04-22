@@ -12041,6 +12041,11 @@ class LinkNewDeviceServiceMock: LinkNewDeviceServiceProtocol, @unchecked Sendabl
     }
 }
 class LiveLocationManagerMock: LiveLocationManagerProtocol, @unchecked Sendable {
+    var hasDisplayedLiveLocationDisclaimer: Bool {
+        get { return underlyingHasDisplayedLiveLocationDisclaimer }
+        set(value) { underlyingHasDisplayedLiveLocationDisclaimer = value }
+    }
+    var underlyingHasDisplayedLiveLocationDisclaimer: Bool!
     var authorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never> {
         get { return underlyingAuthorizationStatus }
         set(value) { underlyingAuthorizationStatus = value }
