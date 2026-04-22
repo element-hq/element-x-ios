@@ -15,13 +15,11 @@ final class RoomLiveLocationService: RoomLiveLocationServiceProtocol {
     // periphery:ignore - required for instance retention in the rust codebase
     private var observationToken: TaskHandle?
     
-    private let liveLocationsSubject = PassthroughSubject<[LiveLocationShare], Never>()
-    var liveLocationsPublisher: AnyPublisher<[LiveLocationShare], Never> {
-        liveLocationsSubject.eraseToAnyPublisher()
+    private let liveLocationsSubject = CurrentValueSubject<[LiveLocationShare], Never>([])
+    var liveLocationsPublisher: CurrentValuePublisher<[LiveLocationShare], Never> {
+        liveLocationsSubject.asCurrentValuePublisher()
     }
-    
-    private var previousLiveLocationShares: [LiveLocationShare] = []
-    
+        
     init(liveLocationShares: LiveLocationShares) {
         self.liveLocationShares = liveLocationShares
         observationToken = liveLocationShares
@@ -37,7 +35,7 @@ final class RoomLiveLocationService: RoomLiveLocationServiceProtocol {
     // MARK: - Private
     
     private func handleLiveLocationShareUpdates(_ updates: [LiveLocationShareUpdate]) -> [LiveLocationShare] {
-        var shares = previousLiveLocationShares
+        var shares = liveLocationsSubject.value
         
         for update in updates {
             switch update {
@@ -66,7 +64,6 @@ final class RoomLiveLocationService: RoomLiveLocationServiceProtocol {
             }
         }
         
-        previousLiveLocationShares = shares
         return shares
     }
 }
