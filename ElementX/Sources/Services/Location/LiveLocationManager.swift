@@ -58,6 +58,15 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
 
     // MARK: - LiveLocationManagerProtocol
     
+    var hasDisplayedLiveLocationDisclaimer: Bool {
+        get {
+            appSettings.liveLocationDisclaimerDisplayed
+        }
+        set {
+            appSettings.liveLocationDisclaimerDisplayed = newValue
+        }
+    }
+    
     @discardableResult
     func requestAlwaysAuthorizationIfPossible() -> Bool {
         guard !appSettings.hasRequestedLocationAlwaysLocationAuthorization else { return false }

@@ -12,6 +12,7 @@ extension LiveLocationManagerMock {
     struct Configuration {
         var authorizationStatus: CLAuthorizationStatus = .notDetermined
         var requestAlwaysAuthorizationIfPossibleReturnValue = true
+        var hasDisplayedLiveLocationDisclaimer = false
     }
     
     convenience init(_ configuration: Configuration) {
@@ -22,5 +23,7 @@ extension LiveLocationManagerMock {
         
         requestAlwaysAuthorizationIfPossibleReturnValue = configuration.requestAlwaysAuthorizationIfPossibleReturnValue
         startLiveLocationRoomIDDurationReturnValue = .success(())
+        
+        underlyingHasDisplayedLiveLocationDisclaimer = configuration.hasDisplayedLiveLocationDisclaimer
     }
 }

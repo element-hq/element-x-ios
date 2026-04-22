@@ -170,7 +170,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         let authorizationStatus = liveLocationManager.authorizationStatus.value
         switch authorizationStatus {
         case .authorizedAlways:
-            showLiveLocationDisclaimer()
+            showLiveLocationFlow()
         case .notDetermined:
             // This is to solve a race condition with map libre which always tries first
             // to request the when in use permission, we wait for it and then try again
@@ -193,23 +193,29 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                 .first() // this publisher only fires when there is an actual change, and if the user is done with permissions
                 .sink { [weak self] newValue in
                     guard newValue == .authorizedAlways else { return }
-                    self?.showLiveLocationDisclaimer()
+                    self?.showLiveLocationFlow()
                 }
         default:
             showMissingAlwaysAuthorizedAlert()
         }
     }
     
-    private func showLiveLocationDisclaimer() {
-        state.bindings.alertInfo = .init(alertID: .liveLocationDisclaimer,
-                                         primaryButton: .init(title: L10n.actionDecline, role: .cancel, action: nil),
-                                         secondaryButton: .init(title: L10n.actionAccept) { [weak self] in
-                                             // Delay so SwiftUI finishes dismissing the current alert
-                                             // before presenting the next one.
-                                             DispatchQueue.main.async {
-                                                 self?.showLiveLocationDurationPicker()
-                                             }
-                                         })
+    private func showLiveLocationFlow() {
+        if liveLocationManager.hasDisplayedLiveLocationDisclaimer {
+            showLiveLocationDurationPicker()
+        } else {
+            state.bindings.alertInfo = .init(alertID: .liveLocationDisclaimer,
+                                             primaryButton: .init(title: L10n.actionDecline, role: .cancel, action: nil),
+                                             secondaryButton: .init(title: L10n.actionAccept) { [weak self] in
+                                                 guard let self else { return }
+                                                 liveLocationManager.hasDisplayedLiveLocationDisclaimer = true
+                                                 // Delay so SwiftUI finishes dismissing the current alert
+                                                 // before presenting the next one.
+                                                 DispatchQueue.main.async {
+                                                     self.showLiveLocationDurationPicker()
+                                                 }
+                                             })
+        }
     }
     
     private func showLiveLocationDurationPicker() {
