@@ -169,6 +169,7 @@ final class LocationSharingScreenViewModelTests {
         #expect(!context.viewState.isLocationLoading)
     }
     
+    @Test
     func isLocationLoadingInNonPickerModeWithAuthorizationGiven() {
         let aliceShare = makeLiveLocationShare(userID: "@alice:matrix.org")
         let sender = TimelineItemSender(id: "@alice:matrix.org", displayName: "Alice")
