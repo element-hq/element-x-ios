@@ -133,12 +133,12 @@ extension XCUIApplication {
         // Make the logout button visible
         swipeUp()
         
-        // Remove this device (was "Sign out" before)
+        // Logout
         let logoutButton = buttons[A11yIdentifiers.settingsScreen.logout]
         XCTAssertTrue(logoutButton.waitForExistence(timeout: 10.0))
         logoutButton.tap(.center)
         
-        // Confirm Remove this Device
+        // Confirm logout (Remove this device)
         let alertLogoutButton = alerts.firstMatch.buttons[A11yIdentifiers.alertInfo.primaryButton].firstMatch
         XCTAssertTrue(alertLogoutButton.waitForExistence(timeout: 10.0))
         alertLogoutButton.tap(.center)
