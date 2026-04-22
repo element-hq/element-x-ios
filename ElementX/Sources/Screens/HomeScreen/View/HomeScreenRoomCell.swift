@@ -95,7 +95,7 @@ struct HomeScreenRoomCell: View {
         case .show:
             room.hasUnreads ? .compound.bodyLGSemibold : .compound.bodyLG
         case .hide:
-            .compound.bodyLG
+            room.isHighlighted ? .compound.bodyLGSemibold : .compound.bodyLG
         }
     }
     
@@ -169,8 +169,19 @@ struct HomeScreenRoomCell: View {
     private var lastMessage: some View {
         if let displayedLastMessage = room.displayedLastMessage {
             Text(displayedLastMessage)
-                .font(roomListActivityVisibility == .show ? (room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD) : .compound.bodyMD)
+                .font(lastMessageFont)
                 .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
+        }
+    }
+    
+    private var lastMessageFont: Font {
+        switch roomListActivityVisibility {
+        case .current:
+            .compound.bodyMD
+        case .show:
+            room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD
+        case .hide:
+            room.isHighlighted ? .compound.bodyMDSemibold : .compound.bodyMD
         }
     }
 }
