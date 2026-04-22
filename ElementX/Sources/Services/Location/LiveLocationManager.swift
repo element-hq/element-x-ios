@@ -9,12 +9,6 @@ import Combine
 import CoreLocation
 
 class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationManagerDelegate {
-    enum LiveState {
-        case full
-        case limited
-        case off
-    }
-    
     private let clientProxy: ClientProxyProtocol
     private let locationManager: CLLocationManagerProtocol
     private let appSettings: AppSettings
@@ -32,7 +26,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     
     private var cancellables = Set<AnyCancellable>()
     
-    private var liveState = LiveState.off
+    private var isUpdatingLocation = false
     
     @MainActor
     init(clientProxy: ClientProxyProtocol,
@@ -52,7 +46,13 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         self.locationManager.delegate = self
         self.locationManager.allowsBackgroundLocationUpdates = true
         self.locationManager.showsBackgroundLocationIndicator = true
-        setupMinimumDistance(appSettings.liveLocationMinimumDistanceUpdate)
+        
+        // Since unpausing location updates is not trivial, let's always keep the location updates running
+        // The distance filtering will already take care of not sending updates when not required.
+        // https://developer.apple.com/documentation/corelocation/cllocationmanager/pauseslocationupdatesautomatically
+        self.locationManager.pausesLocationUpdatesAutomatically = false
+        
+        setupMinimumDistanceUpdatesAndAccuracy(minimumDistance: appSettings.liveLocationMinimumDistanceUpdate)
         setupSubscriptions()
     }
 
@@ -125,18 +125,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             stopAllSessions()
         }
         
-        switch (liveState, manager.accuracyAuthorization) {
-        // If accuracy authorization changed while updates are active, start and stop to switch update method.
-        case (.full, .reducedAccuracy), (.limited, .fullAccuracy):
-            stopUpdatingLocation()
-            if manager.accuracyAuthorization == .fullAccuracy {
-                // The system has forced reduced desired accuracy so we need to restore the desired value by the user.
-                setupMinimumDistance(appSettings.liveLocationMinimumDistanceUpdate)
-            }
-            startUpdatingLocation()
-        default:
-            break
-        }
+        // Accuracy authorization may have changed, reapply new accuracy settings.
+        setupMinimumDistanceUpdatesAndAccuracy(minimumDistance: appSettings.liveLocationMinimumDistanceUpdate)
         
         authorizationStatusSubject.send(manager.authorizationStatus)
     }
@@ -194,8 +184,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         appSettings.$liveLocationMinimumDistanceUpdate
             .removeDuplicates()
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
-            .sink { [weak self] minimumDistance in
-                self?.setupMinimumDistance(minimumDistance)
+            .sink { [weak self] newValue in
+                self?.setupMinimumDistanceUpdatesAndAccuracy(minimumDistance: newValue)
             }
             .store(in: &cancellables)
     }
@@ -209,42 +199,36 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     }
     
     /// Sets up the distance filter and the most optimal accuracy given the minimum distance to save battery.
-    private func setupMinimumDistance(_ minimumDistance: Int) {
-        switch minimumDistance {
-        case 0..<10:
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        case 10..<100:
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        default:
-            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+    private func setupMinimumDistanceUpdatesAndAccuracy(minimumDistance: Int) {
+        if locationManager.accuracyAuthorization == .fullAccuracy {
+            switch minimumDistance {
+            case 0..<10:
+                locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            case 10..<100:
+                locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            default:
+                locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+            }
+        } else {
+            locationManager.desiredAccuracy = kCLLocationAccuracyReduced
         }
         locationManager.distanceFilter = CLLocationDistance(minimumDistance)
     }
     
     private func startUpdatingLocation() {
-        guard liveState == .off else { return }
+        guard !isUpdatingLocation else { return }
         
-        if locationManager.accuracyAuthorization == .fullAccuracy {
-            MXLog.info("Starting live location updates with full accuracy")
-            liveState = .full
-            locationManager.startUpdatingLocation()
-        } else {
-            MXLog.info("Starting live location updates with significant changes (reduced accuracy)")
-            liveState = .limited
-            locationManager.startMonitoringSignificantLocationChanges()
-        }
+        MXLog.info("Starting live location updates")
+        isUpdatingLocation = true
+        locationManager.startUpdatingLocation()
     }
     
     private func stopUpdatingLocation() {
-        if liveState == .full {
-            MXLog.info("Stopping live location updates (full accuracy)")
-            locationManager.stopUpdatingLocation()
-        } else if liveState == .limited {
-            MXLog.info("Stopping live location updates (reduced accuracy)")
-            locationManager.stopMonitoringSignificantLocationChanges()
-        }
+        guard isUpdatingLocation else { return }
         
-        liveState = .off
+        MXLog.info("Stopping live location updates")
+        locationManager.stopUpdatingLocation()
+        isUpdatingLocation = false
     }
     
     private func sendLocationToActiveRooms(_ coordinate: CLLocationCoordinate2D) async {

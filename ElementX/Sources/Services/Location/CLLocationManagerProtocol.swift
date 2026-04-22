@@ -15,14 +15,13 @@ protocol CLLocationManagerProtocol: AnyObject {
     var showsBackgroundLocationIndicator: Bool { get set }
     var desiredAccuracy: CLLocationAccuracy { get set }
     var distanceFilter: CLLocationDistance { get set }
+    var pausesLocationUpdatesAutomatically: Bool { get set }
     var authorizationStatus: CLAuthorizationStatus { get }
     var accuracyAuthorization: CLAccuracyAuthorization { get }
     
     func requestAlwaysAuthorization()
     func startUpdatingLocation()
     func stopUpdatingLocation()
-    func startMonitoringSignificantLocationChanges()
-    func stopMonitoringSignificantLocationChanges()
 }
 
 extension CLLocationManager: CLLocationManagerProtocol { }
