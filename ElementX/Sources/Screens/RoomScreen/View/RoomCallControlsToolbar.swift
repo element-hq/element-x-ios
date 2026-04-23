@@ -24,21 +24,38 @@ struct RoomCallControlsToolbar: ToolbarContent {
         } else {
             if viewState.isDirectOneToOneRoom {
                 ToolbarItem(placement: .primaryAction) {
-                    Button { onCallTap(true) } label: {
+                    Menu {
+                        Button(action: { onCallTap(true) }) {
+                            Label("Audio call", systemImage: "phone.fill")
+                        }
+                        .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVoiceCall)
+                        .disabled(!viewState.canJoinCall)
+
+                        Button(action: { onCallTap(false) }) {
+                            Label("Video call", systemImage: "video.fill")
+                        }
+                        .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVideoCall)
+                        .disabled(!viewState.canJoinCall)
+                    } label: {
                         CompoundIcon(\.voiceCallSolid)
+                            .frame(width: 28, height: 28)
+                            .contentShape(Rectangle())
                     }
+                    .menuIndicator(.hidden)
+                    .buttonStyle(.plain)
                     .accessibilityLabel(L10n.a11yStartVoiceCall)
                     .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVoiceCall)
                     .disabled(!viewState.canJoinCall)
                 }
-            }
-            ToolbarItem(placement: .primaryAction) {
-                Button { onCallTap(false) } label: {
-                    CompoundIcon(\.videoCallSolid)
+            } else {
+                ToolbarItem(placement: .primaryAction) {
+                    Button { onCallTap(false) } label: {
+                        CompoundIcon(\.videoCallSolid)
+                    }
+                    .accessibilityLabel(L10n.a11yStartVideoCall)
+                    .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVideoCall)
+                    .disabled(!viewState.canJoinCall)
                 }
-                .accessibilityLabel(L10n.a11yStartVideoCall)
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVideoCall)
-                .disabled(!viewState.canJoinCall)
             }
         }
     }
