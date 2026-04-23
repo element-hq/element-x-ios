@@ -11,7 +11,7 @@ import MatrixRustSDK
 
 final class RoomLiveLocationService: RoomLiveLocationServiceProtocol {
     // periphery:ignore - required for instance retention in the rust codebase
-    private let liveLocationShares: LiveLocationShares
+    private let liveLocationsObserver: LiveLocationsObserver
     // periphery:ignore - required for instance retention in the rust codebase
     private var observationToken: TaskHandle?
     
@@ -20,9 +20,9 @@ final class RoomLiveLocationService: RoomLiveLocationServiceProtocol {
         liveLocationsSubject.asCurrentValuePublisher()
     }
         
-    init(liveLocationShares: LiveLocationShares) {
-        self.liveLocationShares = liveLocationShares
-        observationToken = liveLocationShares
+    init(liveLocationsObserver: LiveLocationsObserver) {
+        self.liveLocationsObserver = liveLocationsObserver
+        observationToken = liveLocationsObserver
             .subscribe(listener: SDKListener { [weak self] updates in
                 guard let self else { return }
                 

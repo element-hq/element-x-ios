@@ -278,7 +278,13 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             case .success:
                 MXLog.debug("Sent live location to room: \(roomID)")
             case .failure(let error):
-                MXLog.error("Failed to send live location update to room \(roomID): \(error)")
+                switch error {
+                case .liveLocationSessionIsNotActive:
+                    MXLog.error("Failed to send live locatio update to room \(roomID): session not active")
+                    await stopLiveLocation(roomID: roomID)
+                default:
+                    MXLog.error("Failed to send live location update to room \(roomID): \(error)")
+                }
             }
         }
     }
