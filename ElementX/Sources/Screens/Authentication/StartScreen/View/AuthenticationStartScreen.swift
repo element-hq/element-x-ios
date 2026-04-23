@@ -123,12 +123,15 @@ struct AuthenticationStartScreen: View {
             versionText
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textSecondary)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 16)
                 .onTapGesture(count: 7) {
                     context.send(viewAction: .reportProblem)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.appVersion)
+                .overlay(alignment: .trailing) {
+                    developerOptionsButton
+                        .scaledOffset(x: 32, y: -0.5, relativeTo: .compound.bodySM)
+                }
+                .padding(.top, 16)
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()
@@ -138,6 +141,17 @@ struct AuthenticationStartScreen: View {
         // Let's not deal with snapshotting a changing version string.
         let shortVersionString = ProcessInfo.isRunningTests ? "0.0.0" : InfoPlistReader.main.bundleShortVersionString
         return Text(L10n.screenOnboardingAppVersion(shortVersionString))
+    }
+    
+    @ViewBuilder
+    var developerOptionsButton: some View {
+        if AppSettings.appBuildType != .release, !ProcessInfo.isRunningTests {
+            Button { context.send(viewAction: .developerOptions) } label: {
+                CompoundIcon(\.code)
+                    .foregroundStyle(.compound.iconSecondary)
+            }
+            .accessibilityLabel(L10n.commonDeveloperOptions)
+        }
     }
     
     @ToolbarContentBuilder

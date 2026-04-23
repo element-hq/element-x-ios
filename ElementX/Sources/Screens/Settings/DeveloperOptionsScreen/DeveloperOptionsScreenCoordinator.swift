@@ -23,7 +23,7 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(appSettings: AppSettings, appHooks: AppHooks, clientProxy: ClientProxyProtocol) {
+    init(appSettings: AppSettings, appHooks: AppHooks, clientProxy: ClientProxyProtocol?) {
         viewModel = DeveloperOptionsScreenViewModel(developerOptions: appSettings,
                                                     elementCallBaseURL: appSettings.elementCallBaseURL,
                                                     appHooks: appHooks,

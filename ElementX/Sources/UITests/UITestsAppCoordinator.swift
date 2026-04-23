@@ -157,6 +157,7 @@ class MockScreen: Identifiable {
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appMediator: AppMediatorMock.default,
                                                                 appSettings: appSettings,
+                                                                appHooks: AppHooks(),
                                                                 analytics: ServiceLocator.shared.analytics,
                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
             flowCoordinator.start()

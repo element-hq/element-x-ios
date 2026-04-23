@@ -83,16 +83,20 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .updateWindow(let window):
             guard state.window != window else { return }
             state.window = window
+        case .reportProblem:
+            if canReportProblem {
+                actionsSubject.send(.reportProblem)
+            }
+        case .developerOptions:
+            actionsSubject.send(.developerOptions)
+        
         case .loginWithQR:
             actionsSubject.send(.loginWithQR)
         case .login:
             Task { await login() }
         case .register:
             actionsSubject.send(.register)
-        case .reportProblem:
-            if canReportProblem {
-                actionsSubject.send(.reportProblem)
-            }
+        
         case .continueWithClassic(let account):
             Task { await login(classicAppAccount: account) }
         case .otherOptions(let account):
