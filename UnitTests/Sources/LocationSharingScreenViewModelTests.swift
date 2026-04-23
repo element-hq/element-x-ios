@@ -379,6 +379,49 @@ final class LocationSharingScreenViewModelTests {
         #expect(annotations.first { $0.id == "@charlie:matrix.org" }?.kind == .liveUser(.init(userID: "@charlie:matrix.org", displayName: "Charlie")))
     }
 
+    @Test
+    func viewLiveFromBannerAwaitsFirstShareThenCentersOnIt() async throws {
+        // Simulates opening from the banner: no sender info and no initial share are available yet.
+        // The VM should wait for the first live location update and then center on the first share,
+        // which is assumed to belong to the own user.
+        let liveLocationsSubject = CurrentValueSubject<[LiveLocationShare], Never>([])
+
+        let liveLocationServiceMock = RoomLiveLocationServiceMock()
+        liveLocationServiceMock.liveLocationsPublisher = liveLocationsSubject.asCurrentValuePublisher()
+
+        let roomProxyMock = JoinedRoomProxyMock(.init(members: .allMembers))
+        roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
+
+        viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: nil, initialLiveLocationShare: nil),
+                                                   mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                                   liveLocationSharingEnabled: true,
+                                                   roomProxy: roomProxyMock,
+                                                   timelineController: MockTimelineController(timelineProxy: TimelineProxyMock(.init())),
+                                                   liveLocationManager: LiveLocationManagerMock(.init()),
+                                                   analytics: ServiceLocator.shared.analytics,
+                                                   userIndicatorController: UserIndicatorControllerMock(),
+                                                   mediaProvider: MediaProviderMock(configuration: .init()))
+
+        // Initially no annotations and no map center since sender and share are both nil.
+        #expect(context.viewState.annotations.isEmpty)
+        #expect(context.mapCenterLocation == nil)
+
+        // Once the first update arrives, the VM populates annotations and centers the map on the first share.
+        let ownUserShare = makeLiveLocationShare(userID: RoomMemberProxyMock.mockMe.userID, latitude: 51.5, longitude: -0.1)
+        let deferred = deferFulfillment(context.observe(\.viewState.annotations)) { !$0.isEmpty }
+        liveLocationsSubject.send([ownUserShare])
+        try await deferred.fulfill()
+
+        #expect(context.viewState.annotations.count == 1)
+        #expect(context.viewState.annotations.first?.id == RoomMemberProxyMock.mockMe.userID)
+        #expect(context.viewState.annotations.first?.coordinate.latitude == 51.5)
+        #expect(context.viewState.annotations.first?.coordinate.longitude == -0.1)
+
+        // The map should have been centered on the first received share's coordinates.
+        #expect(context.mapCenterLocation?.latitude == 51.5)
+        #expect(context.mapCenterLocation?.longitude == -0.1)
+    }
+
     // MARK: - Private
 
     private func setupViewModel(liveLocationManagerConfiguration: LiveLocationManagerMock.Configuration = .init()) {
