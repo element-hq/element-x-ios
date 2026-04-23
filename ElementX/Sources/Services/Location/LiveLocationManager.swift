@@ -28,6 +28,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     
     private var isUpdatingLocation = false
     
+    private var lastLocation: CLLocationCoordinate2D?
+    
     @MainActor
     init(clientProxy: ClientProxyProtocol,
          appSettings: AppSettings,
@@ -76,10 +78,11 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     }
     
     func startLiveLocation(roomID: String, duration: Duration) async -> Result<Void, LiveLocationManagerError> {
-        // Stop any existing session for this room first (e.g. one started from a different device)
-        // before starting a new one.
+        // Stop any existing session for this room first
+        var didAlreadyStopLocalSession = false
         if appSettings.liveLocationSharingTimeoutDatesByRoomID[roomID] != nil {
             await stopLiveLocation(roomID: roomID)
+            didAlreadyStopLocalSession = true
         }
         
         guard case .joined(let roomProxy) = await clientProxy.roomForIdentifier(roomID) else {
@@ -87,6 +90,11 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             return .failure(.roomNotJoined)
         }
         
+        if !didAlreadyStopLocalSession {
+            // In case an existing session has been started from another device, let's try to stop it.
+            // It's a best effort thing, so we don't care if no session is present or if it fails.
+            _ = await roomProxy.stopLiveLocationShare()
+        }
         let result = await roomProxy.startLiveLocationShare(duration: duration)
         
         guard case .success = result else {
@@ -96,6 +104,13 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         
         let timeoutDate = Date().addingTimeInterval(TimeInterval(duration.seconds))
         appSettings.liveLocationSharingTimeoutDatesByRoomID[roomID] = timeoutDate
+        
+        if isUpdatingLocation, let lastLocation {
+            // To make sure the newly started session is in sync with the existing ones,
+            // we re-send the last location received by the manager.
+            // Otherwise we would need to wait a distance filtered update.
+            locationUpdateSubject.send(lastLocation)
+        }
         
         return .success(())
     }
@@ -145,6 +160,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         
         MXLog.verbose("Received location update via delegate, sending to rooms")
         locationUpdateSubject.send(location.coordinate)
+        lastLocation = location.coordinate
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -238,6 +254,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         MXLog.info("Stopping live location updates")
         locationManager.stopUpdatingLocation()
         isUpdatingLocation = false
+        lastLocation = nil
     }
     
     private func sendLocationToActiveRooms(_ coordinate: CLLocationCoordinate2D) async {
