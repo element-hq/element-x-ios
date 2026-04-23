@@ -21,6 +21,7 @@ enum RoomScreenViewModelAction: Equatable {
     case displayRoom(roomID: String, via: [String])
     case displayMessageForwarding(MessageForwardingItem)
     case stopLiveLocationSharing
+    case displayLiveLocation
 }
 
 enum RoomScreenViewAction {
@@ -34,6 +35,7 @@ enum RoomScreenViewAction {
     case viewKnockRequests
     case displaySuccessorRoom
     case displayThreadList
+    case tappedOpenLiveLocation
     case tappedStopLiveLocation
 }
 

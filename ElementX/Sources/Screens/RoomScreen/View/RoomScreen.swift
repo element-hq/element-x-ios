@@ -88,6 +88,8 @@ struct RoomScreen: View {
     
     private var liveLocationBanner: some View {
         LiveLocationSharingBannerView {
+            context.send(viewAction: .tappedOpenLiveLocation)
+        } onStop: {
             context.send(viewAction: .tappedStopLiveLocation)
         }
     }

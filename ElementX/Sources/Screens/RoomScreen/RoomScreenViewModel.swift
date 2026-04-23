@@ -124,6 +124,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.displayThreadList)
         case .tappedStopLiveLocation:
             actionsSubject.send(.stopLiveLocationSharing)
+        case .tappedOpenLiveLocation:
+            actionsSubject.send(.displayLiveLocation)
         }
     }
     

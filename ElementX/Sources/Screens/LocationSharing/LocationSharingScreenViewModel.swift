@@ -29,6 +29,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     private var authorizationStatusSubscription: AnyCancellable?
     // periphery:ignore - keep alive to keep receiving updates.
     private var liveLocationService: RoomLiveLocationServiceProtocol?
+    private var needsCenteringOnFirstLiveLocationUpdate = false
     
     init(interactionMode: LocationSharingInteractionMode,
          mapURLBuilder: MapTilerURLBuilderProtocol,
@@ -56,7 +57,10 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         updateUserProfiles(members: roomProxy.membersPublisher.value)
         setupSubscriptions()
         
-        if case .viewLive = interactionMode {
+        if case .viewLive(_, let initialLiveLocation) = interactionMode {
+            if initialLiveLocation == nil {
+                needsCenteringOnFirstLiveLocationUpdate = true
+            }
             Task { await setupLiveLocationSubscription() }
         }
     }
@@ -109,6 +113,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             .sink { [weak self] liveLocationsShares in
                 guard let self else { return }
                 MXLog.info("Received live location shares update: \(liveLocationsShares.count) share(s)")
+                
                 let ownUserID = roomProxy.ownUserID
                 let isStoppingLiveLocation = state.isStoppingLiveLocation
                 state.liveLocationShares = liveLocationsShares
@@ -118,7 +123,15 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                         if rhs.userID == ownUserID { return false }
                         return lhs.timestamp > rhs.timestamp
                     }
+                
                 updateUserProfiles(members: roomProxy.membersPublisher.value)
+                
+                if needsCenteringOnFirstLiveLocationUpdate,
+                   let liveLocation = state.liveLocationShares.first,
+                   let geoURI = liveLocation.geoURI {
+                    needsCenteringOnFirstLiveLocationUpdate = false
+                    context.send(viewAction: .setMapCenter(.init(latitude: geoURI.latitude, longitude: geoURI.longitude)))
+                }
             }
             .store(in: &cancellables)
     }
@@ -147,7 +160,9 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             state.userProfiles = [sender.userID: sender]
         case .viewLive(let sender, _):
             var userIDs = Set(state.liveLocationShares.map(\.userID))
-            userIDs.insert(sender.id)
+            if let senderID = sender?.id {
+                userIDs.insert(senderID)
+            }
             state.userProfiles = userIDs.reduce(into: [:]) { dict, userID in
                 if let member = members.first(where: { $0.userID == userID }) {
                     dict[userID] = UserProfileProxy(member: member)
