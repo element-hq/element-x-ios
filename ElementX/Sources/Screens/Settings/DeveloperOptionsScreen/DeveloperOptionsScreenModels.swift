@@ -16,6 +16,9 @@ struct DeveloperOptionsScreenViewState: BindableState {
     let elementCallBaseURL: URL
     let appHooks: AppHooks
     var storeSizes: [StoreSize]?
+    let shouldShowClearCache: Bool
+    let isPresentedModally: Bool
+    
     var bindings: DeveloperOptionsScreenViewStateBindings
     
     struct StoreSize: Identifiable {

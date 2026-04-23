@@ -18,13 +18,15 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(developerOptions: DeveloperOptionsProtocol, elementCallBaseURL: URL, appHooks: AppHooks, clientProxy: ClientProxyProtocol) {
+    init(developerOptions: DeveloperOptionsProtocol, elementCallBaseURL: URL, appHooks: AppHooks, clientProxy: ClientProxyProtocol?) {
         super.init(initialViewState: .init(elementCallBaseURL: elementCallBaseURL,
                                            appHooks: appHooks,
+                                           shouldShowClearCache: clientProxy != nil,
+                                           isPresentedModally: clientProxy == nil,
                                            bindings: .init(developerOptions: developerOptions)))
         
         Task {
-            if case let .success(sizes) = await clientProxy.storeSizes() {
+            if case let .success(sizes) = await clientProxy?.storeSizes() {
                 let formatter = ByteCountFormatStyle(style: .file)
                 
                 var components = [DeveloperOptionsScreenViewState.StoreSize]()
