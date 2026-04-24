@@ -13,7 +13,7 @@ import SwiftState
 enum OnboardingFlowCoordinatorAction {
     case requestPresentation(animated: Bool)
     case dismiss
-    case logout
+    case logoutConfirmed
 }
 
 class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
@@ -260,8 +260,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             case .reset:
                 startEncryptionResetFlow()
-            case .logout:
-                actionsSubject.send(.logout)
+            case .logoutConfirmed:
+                actionsSubject.send(.logoutConfirmed)
             }
         }
         .store(in: &cancellables)

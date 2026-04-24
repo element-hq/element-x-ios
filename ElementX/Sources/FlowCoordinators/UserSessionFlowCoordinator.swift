@@ -275,8 +275,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     navigationTabCoordinator.setFullScreenCoverCoordinator(onboardingStackCoordinator, animated: animated)
                 case .dismiss:
                     navigationTabCoordinator.setFullScreenCoverCoordinator(nil)
-                case .logout:
-                    logout()
+                case .logoutConfirmed:
+                    actionsSubject.send(.logout)
                 }
             }
             .store(in: &cancellables)
@@ -494,7 +494,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         guard isLastDevice else {
-            logout()
+            navigationRootCoordinator.alertInfo = .init(id: .init(),
+                                                        title: L10n.screenSignoutConfirmationDialogTitle,
+                                                        message: L10n.screenSignoutConfirmationDialogContent,
+                                                        primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                            self?.actionsSubject.send(.logout)
+                                                        })
             return
         }
         
@@ -523,15 +528,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         presentSecureBackupLogoutConfirmationScreen()
-    }
-    
-    private func logout() {
-        navigationRootCoordinator.alertInfo = .init(id: .init(),
-                                                    title: L10n.screenSignoutConfirmationDialogTitle,
-                                                    message: L10n.screenSignoutConfirmationDialogContent,
-                                                    primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                        self?.actionsSubject.send(.logout)
-                                                    })
     }
     
     private func presentSecureBackupLogoutConfirmationScreen() {
