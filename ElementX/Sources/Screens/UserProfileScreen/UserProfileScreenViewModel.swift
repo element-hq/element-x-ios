@@ -127,17 +127,13 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
-                if appSettings.enableKeyShareOnInvite {
-                    Task {
-                        let isUnknown = if case let .success(identity) = await userSession.clientProxy.userIdentity(for: userProfile.userID, fallBackToServer: false) {
-                            identity == nil
-                        } else {
-                            true
-                        }
-                        state.bindings.inviteConfirmationUser = .init(user: userProfile, isUnknown: isUnknown)
+                Task {
+                    let isUnknown = if case let .success(identity) = await userSession.clientProxy.userIdentity(for: userProfile.userID, fallBackToServer: false) {
+                        identity == nil
+                    } else {
+                        true
                     }
-                } else {
-                    state.bindings.inviteConfirmationUser = .init(user: userProfile, isUnknown: false)
+                    state.bindings.inviteConfirmationUser = .init(user: userProfile, isUnknown: isUnknown)
                 }
             }
         case .failure:
