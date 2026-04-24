@@ -92,7 +92,7 @@ struct RoomScreenViewState: BindableState {
             (canAcceptKnocks || canDeclineKnocks || canBan)
     }
     
-    /// If `enableKeyShareOnInvite` is set, determines the current history sharing state.
+    /// The current history sharing state.
     var roomHistorySharingState: RoomHistorySharingState?
     
     var footerDetails: RoomScreenFooterViewDetails?
