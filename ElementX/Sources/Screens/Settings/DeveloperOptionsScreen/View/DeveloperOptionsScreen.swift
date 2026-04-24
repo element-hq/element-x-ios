@@ -113,16 +113,6 @@ struct DeveloperOptionsScreen: View {
                 Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
             }
 
-            Section {
-                Toggle(isOn: $context.enableKeyShareOnInvite) {
-                    Text("Share encrypted history with new members")
-                    Text("Requires app reboot")
-                }
-            } footer: {
-                Text("When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.")
-                Text("WARNING: this feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.")
-            }
-
             Section("Element Call remote URL override") {
                 TextField("Leave empty to use EC locally", text: $elementCallURLOverrideString)
                     .autocorrectionDisabled(true)
