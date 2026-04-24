@@ -197,7 +197,7 @@ extension SDKListener: KnockRequestsListener where T == [KnockRequest] {
     }
 }
 
-extension SDKListener: LiveLocationShareListener where T == [LiveLocationShareUpdate] {
+extension SDKListener: LiveLocationsListener where T == [LiveLocationShareUpdate] {
     func onUpdate(updates: [LiveLocationShareUpdate]) {
         onUpdateClosure(updates)
     }
