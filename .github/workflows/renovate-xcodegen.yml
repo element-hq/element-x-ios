@@ -41,8 +41,8 @@ jobs:
       - name: Run XcodeGen
         run: xcodegen
 
-      - name: Resolve package dependencies
-        run: xcodebuild -resolvePackageDependencies -project ElementX.xcodeproj
+      - name: Resolve dependencies and build the project
+        run: xcodebuild -scheme ElementX -project ElementX.xcodeproj -destination 'generic/platform=iOS Simulator' build
 
       - name: Update Acknowledgements
         run: swift-package-list ElementX.xcodeproj --requires-license --ignore-package compound-ios --ignore-package compound-design-tokens --ignore-package matrix-rich-text-editor-swift --ignore-package element-call-swift --output-type settings-bundle --output-path ElementX/SupportingFiles

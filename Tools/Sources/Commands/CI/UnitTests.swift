@@ -9,7 +9,7 @@ struct UnitTests: AsyncParsableCommand {
     var device = "iPhone 17"
     
     @Option(help: "iOS version for the simulator.")
-    var osVersion = "26.4"
+    var osVersion = "26.4.1"
     
     @Flag(help: "Skip preview tests")
     var skipPreviews = false

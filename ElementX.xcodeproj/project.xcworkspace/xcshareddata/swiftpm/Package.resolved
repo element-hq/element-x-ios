@@ -1,5 +1,5 @@
 {
-  "originHash" : "307a0af81ae7a463ea2d0c101af1045c15def8948a63c21aa97fc7929759206e",
+  "originHash" : "6eccca91b7f5f7d7d50476c059d00f2944d321851b0e0c1d6afb529416131af2",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "7b99a1d16c62794596fac0b34bf21ceec26578b5",
-        "version" : "26.4.21"
+        "revision" : "cadee968c71d7ddff8f4b04e934b963b6c08c2bd",
+        "version" : "26.4.23"
       }
     },
     {
@@ -194,8 +194,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "07c35c23435160ae20e17201be35772eaf49f6cb",
-        "version" : "3.53.1"
+        "revision" : "b9aa734f24973d5a017da0c18a87af2afcbc0c26",
+        "version" : "3.54.0"
       }
     },
     {

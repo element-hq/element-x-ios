@@ -74,7 +74,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 26.04.21
+    exactVersion: 26.04.23
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
@@ -144,7 +144,7 @@ packages:
     minorVersion: 6.25.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.53.1
+    minorVersion: 3.54.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
     minorVersion: 9.10.0

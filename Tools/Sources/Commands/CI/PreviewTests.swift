@@ -6,7 +6,7 @@ struct PreviewTests: AsyncParsableCommand {
                                                     abstract: "Runs the preview test CI workflow, with optional snapshot recording.")
 
     @Option(help: "iOS version for the simulator.")
-    var osVersion = "26.4"
+    var osVersion = "26.4.1"
 
     @Flag(help: "Re-record snapshots for tests that fail or are missing a reference image.")
     var record = false

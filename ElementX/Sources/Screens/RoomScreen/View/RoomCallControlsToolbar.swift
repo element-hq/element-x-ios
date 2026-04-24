@@ -24,21 +24,32 @@ struct RoomCallControlsToolbar: ToolbarContent {
         } else {
             if viewState.isDirectOneToOneRoom {
                 ToolbarItem(placement: .primaryAction) {
-                    Button { onCallTap(true) } label: {
+                    Menu {
+                        Button {
+                            onCallTap(true)
+                        } label: {
+                            Label(L10n.a11yStartVoiceCall, icon: \.voiceCallSolid)
+                        }
+                        
+                        Button {
+                            onCallTap(false)
+                        } label: {
+                            Label(L10n.a11yStartVideoCall, icon: \.videoCallSolid)
+                        }
+                    } label: {
                         CompoundIcon(\.voiceCallSolid)
                     }
-                    .accessibilityLabel(L10n.a11yStartVoiceCall)
-                    .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVoiceCall)
+                    .accessibilityLabel(L10n.a11yStartCall)
                     .disabled(!viewState.canJoinCall)
                 }
-            }
-            ToolbarItem(placement: .primaryAction) {
-                Button { onCallTap(false) } label: {
-                    CompoundIcon(\.videoCallSolid)
+            } else {
+                ToolbarItem(placement: .primaryAction) {
+                    Button { onCallTap(false) } label: {
+                        CompoundIcon(\.videoCallSolid)
+                    }
+                    .accessibilityLabel(L10n.a11yStartVideoCall)
+                    .disabled(!viewState.canJoinCall)
                 }
-                .accessibilityLabel(L10n.a11yStartVideoCall)
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVideoCall)
-                .disabled(!viewState.canJoinCall)
             }
         }
     }
