@@ -9,19 +9,22 @@ import Compound
 import SwiftUI
 
 struct LiveLocationSharingBannerView: View {
+    var onTap: () -> Void
     var onStop: () -> Void
     
     var body: some View {
-        HStack(spacing: 9) {
-            CompoundIcon(\.locationPinSolid, size: .medium, relativeTo: .compound.bodyMDSemibold)
-                .foregroundColor(Color.compound.iconSuccessPrimary)
-                .accessibilityHidden(true)
-            Text(L10n.screenRoomLiveLocationBanner)
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.compound.textPrimary)
-            Spacer()
-            Button(L10n.actionStop, role: .destructive, action: onStop)
-                .buttonStyle(.compound(.primary, size: .small))
+        Button { onTap() } label: {
+            HStack(spacing: 9) {
+                CompoundIcon(\.locationPinSolid, size: .medium, relativeTo: .compound.bodyMDSemibold)
+                    .foregroundColor(Color.compound.iconSuccessPrimary)
+                    .accessibilityHidden(true)
+                Text(L10n.screenRoomLiveLocationBanner)
+                    .font(.compound.bodyMDSemibold)
+                    .foregroundColor(.compound.textPrimary)
+                Spacer()
+                Button(L10n.actionStop, role: .destructive, action: onStop)
+                    .buttonStyle(.compound(.primary, size: .small))
+            }
         }
         .padding(.vertical, 16)
         .padding(.horizontal, 15)
@@ -33,7 +36,7 @@ struct LiveLocationSharingBannerView: View {
 
 struct LiveLocationSharingBannerView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        LiveLocationSharingBannerView { }
+        LiveLocationSharingBannerView { } onStop: { }
             .previewLayout(.sizeThatFits)
     }
 }

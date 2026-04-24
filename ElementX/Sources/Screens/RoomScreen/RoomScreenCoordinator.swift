@@ -40,7 +40,7 @@ enum RoomScreenCoordinatorAction {
     case presentLocationPicker
     case presentPollForm(mode: PollFormMode)
     case presentLocationViewer(StaticLocationData)
-    case presentLiveLocationViewer(sender: TimelineItemSender, initialLiveLocationShare: LiveLocationShare)
+    case presentLiveLocationViewer(sender: TimelineItemSender?, initialLiveLocationShare: LiveLocationShare?)
     case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case presentRoomMemberDetails(userID: String)
     case presentMessageForwarding(forwardingItem: MessageForwardingItem)
@@ -197,6 +197,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentThread(threadRootEventID: threadRootEventID, focussedEventID: focussedEventID))
                 case .stopLiveLocationSharing:
                     Task { [weak self] in await self?.timelineViewModel.stopLiveLocationSharing() }
+                case .displayLiveLocation:
+                    actionsSubject.send(.presentLiveLocationViewer(sender: nil, initialLiveLocationShare: nil))
                 }
             }
             .store(in: &cancellables)
