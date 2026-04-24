@@ -144,8 +144,6 @@ struct TimelineViewState: BindableState {
     
     var mapTilerConfiguration: MapTilerConfiguration
 
-    var enableKeyShareOnInvite: Bool
-    
     var stoppedLiveLocationIDs: Set<TimelineItemIdentifier> = []
         
     var bindings: TimelineViewStateBindings
