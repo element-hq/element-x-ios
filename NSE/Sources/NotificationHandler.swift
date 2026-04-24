@@ -58,6 +58,11 @@ class NotificationHandler {
         case .processedShouldDiscard, .unsupportedShouldDiscard:
             discardNotification()
         case .shouldDisplay:
+            if settings.hideQuietNotificationAlerts, !notificationItemProxy.isNoisy {
+                discardNotification()
+                return
+            }
+            
             await notificationContentBuilder.process(notificationContent: &notificationContent,
                                                      notificationItem: notificationItemProxy,
                                                      mediaProvider: userSession.mediaProvider)
@@ -91,10 +96,6 @@ class NotificationHandler {
     }
     
     private func preprocessNotification(_ itemProxy: NotificationItemProxyProtocol) async -> NotificationProcessingResult {
-        if settings.hideQuietNotificationAlerts, !itemProxy.isNoisy {
-            return .processedShouldDiscard
-        }
-        
         guard case let .timeline(event) = itemProxy.event else {
             return .shouldDisplay
         }
