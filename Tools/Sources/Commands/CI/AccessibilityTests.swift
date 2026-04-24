@@ -9,7 +9,7 @@ struct AccessibilityTests: AsyncParsableCommand {
     var device = "iPhone 17"
     
     @Option(help: "iOS version for the simulator.")
-    var osVersion = "26.4"
+    var osVersion = "26.4.1"
     
     func run() async throws {
         var testsFailed = false
