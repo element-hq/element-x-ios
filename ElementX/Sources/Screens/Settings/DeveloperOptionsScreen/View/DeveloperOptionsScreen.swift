@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct DeveloperOptionsScreen: View {
+    @Environment(\.dismiss) private var dismiss
+    
     @Bindable var context: DeveloperOptionsScreenViewModel.Context
     
     @State private var showConfetti = false
@@ -121,7 +123,7 @@ struct DeveloperOptionsScreen: View {
                 Text("WARNING: this feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.")
             }
 
-            Section {
+            Section("Element Call remote URL override") {
                 TextField("Leave empty to use EC locally", text: $elementCallURLOverrideString)
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
@@ -134,8 +136,6 @@ struct DeveloperOptionsScreen: View {
                             context.elementCallBaseURLOverride = url
                         }
                     }
-            } header: {
-                Text("Element Call remote URL override")
             }
             
             Section("Notifications") {
@@ -158,19 +158,22 @@ struct DeveloperOptionsScreen: View {
                         .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // Fix separator alignment
                 }
             }
-
-            Section {
-                Button(role: .destructive) {
-                    context.send(viewAction: .clearCache)
-                } label: {
-                    Text("Clear cache")
-                        .frame(maxWidth: .infinity)
+            
+            if context.viewState.shouldShowClearCache {
+                Section {
+                    Button(role: .destructive) {
+                        context.send(viewAction: .clearCache)
+                    } label: {
+                        Text("Clear cache")
+                            .frame(maxWidth: .infinity)
+                    }
                 }
             }
         }
         .overlay(effectsView)
         .navigationTitle(L10n.commonDeveloperOptions)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
     }
 
     @ViewBuilder
@@ -186,6 +189,19 @@ struct DeveloperOptionsScreen: View {
     private func removeConfettiAfterDelay() async {
         try? await Task.sleep(for: .seconds(4))
         showConfetti = false
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        if context.viewState.isPresentedModally {
+            ToolbarItem(placement: .primaryAction) {
+                if #available(iOS 26.0, *) {
+                    Button(role: .close, action: dismiss.callAsFunction)
+                } else {
+                    Button(L10n.actionDone, action: dismiss.callAsFunction)
+                }
+            }
+        }
     }
 }
 

@@ -12,10 +12,12 @@ enum AuthenticationStartScreenViewModelAction: Equatable {
     case loginWithQR
     case login
     case register
-    case reportProblem
     
     case loginDirectlyWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
     case loginDirectlyWithPassword(loginHint: String?)
+    
+    case reportProblem
+    case developerOptions
 }
 
 struct AuthenticationStartScreenViewState: BindableState {
@@ -56,11 +58,12 @@ enum AuthenticationStartScreenAlertType {
 enum AuthenticationStartScreenViewAction {
     /// Updates the window used as the OIDC presentation anchor.
     case updateWindow(UIWindow)
+    case developerOptions
+    case reportProblem
     
     case loginWithQR
     case login
     case register
-    case reportProblem
     
     case continueWithClassic(ClassicAppAccount)
     case otherOptions(ClassicAppAccount)

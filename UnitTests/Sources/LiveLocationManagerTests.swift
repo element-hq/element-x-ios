@@ -28,16 +28,25 @@ final class LiveLocationManagerTests {
     // MARK: - startLiveLocation
     
     @Test
-    func startLiveLocationWithNoExistingSession() async throws {
+    func startLiveLocationWithNoExistingLocalSession() async throws {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
+        var callOrder: [String] = []
+        roomProxy.stopLiveLocationShareClosure = {
+            callOrder.append("stop")
+            return .success(())
+        }
+        roomProxy.startLiveLocationShareDurationClosure = { _ in
+            callOrder.append("start")
+            return .success(())
+        }
+        
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         
         try result.get()
-        #expect(roomProxy.startLiveLocationShareDurationCalled)
-        #expect(!roomProxy.stopLiveLocationShareCalled)
+        #expect(callOrder == ["stop", "start"])
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] != nil)
         #expect(locationManagerMock.startUpdatingLocationCalled)
     }
@@ -76,7 +85,7 @@ final class LiveLocationManagerTests {
         
         _ = await manager.startLiveLocation(roomID: "!room1:matrix.org", duration: .seconds(300))
         
-        #expect(!roomProxy.stopLiveLocationShareCalled)
+        #expect(roomProxy.stopLiveLocationShareCalled)
         #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room2:matrix.org"] != nil)
     }
     

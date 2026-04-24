@@ -461,7 +461,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.automaticBackPaginationEnabled, defaultValue: false, storageType: .userDefaults(store))
     var automaticBackPaginationEnabled
     
-    @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType == .debug, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType != .release, storageType: .userDefaults(store))
     var developerOptionsEnabled
 }
 
