@@ -13,6 +13,7 @@ enum RoomDetailsEditScreenViewModelAction {
     case saveFinished
     case displayCameraPicker
     case displayMediaPicker
+    case displayFilePicker
 }
 
 struct RoomDetailsEditScreenViewState: BindableState {
@@ -81,5 +82,6 @@ enum RoomDetailsEditScreenViewAction {
     case presentMediaSource
     case displayCameraPicker
     case displayMediaPicker
+    case displayFilePicker
     case removeImage
 }

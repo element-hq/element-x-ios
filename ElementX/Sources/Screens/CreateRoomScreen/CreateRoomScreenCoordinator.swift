@@ -54,6 +54,8 @@ final class CreateRoomScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.displayMediaPickerWithMode(.init(source: .camera, selectionType: .single)))
             case .displayMediaPicker:
                 actionsSubject.send(.displayMediaPickerWithMode(.init(source: .photoLibrary, selectionType: .single)))
+            case .displayFilePicker:
+                actionsSubject.send(.displayMediaPickerWithMode(.init(source: .documents(types: [.image]), selectionType: .single)))
             case .dismiss:
                 actionsSubject.send(.dismiss)
             }

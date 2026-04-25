@@ -53,7 +53,7 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
                 case .displayMediaPicker:
                     displayMediaPickerWithMode(.init(source: .photoLibrary, selectionType: .single))
                 case .displayFilePicker:
-                    displayMediaPickerWithMode(.init(source: .documents, selectionType: .single))
+                    displayMediaPickerWithMode(.init(source: .documents(types: [.image]), selectionType: .single))
                 }
             }
             .store(in: &cancellables)

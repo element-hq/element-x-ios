@@ -139,10 +139,16 @@ struct CreateRoomScreen: View {
             Button(L10n.actionTakePhoto) {
                 context.send(viewAction: .displayCameraPicker)
             }
+            
             Button(L10n.actionChoosePhoto) {
                 context.send(viewAction: .displayMediaPicker)
             }
             .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.mediaPicker)
+            
+            Button(L10n.actionChooseFile) {
+                context.send(viewAction: .displayFilePicker)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.filePicker)
             
             if context.viewState.avatarImage != nil {
                 Button(L10n.actionRemove, role: .destructive) {

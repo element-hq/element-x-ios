@@ -160,6 +160,8 @@ internal enum L10n {
   internal static var actionCancel: String { return L10n.tr("Localizable", "action_cancel") }
   /// Cancel for now
   internal static var actionCancelForNow: String { return L10n.tr("Localizable", "action_cancel_for_now") }
+  /// Choose file
+  internal static var actionChooseFile: String { return L10n.tr("Localizable", "action_choose_file") }
   /// Choose photo
   internal static var actionChoosePhoto: String { return L10n.tr("Localizable", "action_choose_photo") }
   /// Clear
