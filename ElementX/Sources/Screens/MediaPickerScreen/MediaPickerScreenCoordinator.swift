@@ -7,16 +7,17 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct MediaPickerScreenMode: Hashable {
     let source: MediaPickerScreenSource
     let selectionType: MediaPickerScreenSelectionType
 }
 
-enum MediaPickerScreenSource {
+enum MediaPickerScreenSource: Hashable {
     case camera
     case photoLibrary
-    case documents
+    case documents(types: [UTType] = [.data])
 }
 
 enum MediaPickerScreenSelectionType {
@@ -79,10 +80,12 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
                     self?.callback(.selectedMediaAtURLs(urls))
                 }
             }
-        case .documents:
+        case .documents(let types):
             // The document picker automatically dismisses everything on selection
             // Strongly retain self in the callback to forward actions correctly
-            DocumentPicker(selectionType: mode.selectionType, userIndicatorController: userIndicatorController) { action in
+            DocumentPicker(selectionType: mode.selectionType,
+                           contentTypes: types,
+                           userIndicatorController: userIndicatorController) { action in
                 switch action {
                 case .cancel:
                     self.callback(.cancel)

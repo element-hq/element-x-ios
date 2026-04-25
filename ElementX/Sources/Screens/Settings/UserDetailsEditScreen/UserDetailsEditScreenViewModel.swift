@@ -77,6 +77,8 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             actionsSubject.send(.displayCameraPicker)
         case .displayMediaPicker:
             actionsSubject.send(.displayMediaPicker)
+        case .displayFilePicker:
+            actionsSubject.send(.displayFilePicker)
         case .removeImage:
             state.localMedia = nil
             state.selectedAvatarURL = nil

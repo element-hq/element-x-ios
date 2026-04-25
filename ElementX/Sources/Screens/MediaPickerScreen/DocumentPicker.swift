@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 enum DocumentPickerAction {
     case selectedMediaAtURLs([URL])
@@ -16,19 +17,22 @@ enum DocumentPickerAction {
 
 struct DocumentPicker: UIViewControllerRepresentable {
     private let selectionType: MediaPickerScreenSelectionType
+    private let contentTypes: [UTType]
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let callback: (DocumentPickerAction) -> Void
     
     init(selectionType: MediaPickerScreenSelectionType,
+         contentTypes: [UTType],
          userIndicatorController: UserIndicatorControllerProtocol,
          callback: @escaping (DocumentPickerAction) -> Void) {
         self.selectionType = selectionType
+        self.contentTypes = contentTypes
         self.userIndicatorController = userIndicatorController
         self.callback = callback
     }
 
     func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.data])
+        let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes)
         documentPicker.delegate = context.coordinator
         
         documentPicker.allowsMultipleSelection = switch selectionType {

@@ -63,6 +63,7 @@
 "action_call" = "Call";
 "action_cancel" = "Cancel";
 "action_cancel_for_now" = "Cancel for now";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Choose photo";
 "action_clear" = "Clear";
 "action_close" = "Close";

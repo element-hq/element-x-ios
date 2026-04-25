@@ -67,5 +67,6 @@ enum UserDetailsEditScreenViewAction {
     case presentMediaSource
     case displayCameraPicker
     case displayMediaPicker
+    case displayFilePicker
     case removeImage
 }
