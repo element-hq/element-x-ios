@@ -59,8 +59,14 @@ class StartChatTests: XCTestCase {
         
         let inviteUsersSearchField = app.searchFields.firstMatch
         inviteUsersSearchField.clearAndTypeText("Bob\n", app: app)
+        
         let cells = app.collectionViews.firstMatch.cells
-        XCTAssertEqual(cells.count, 2)
+        // The update of the cells is not immediate, and may take a bunch of milliseconds
+        // so let's await it.
+        let predicate = NSPredicate(format: "count == 2")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: cells)
+        await fulfillment(of: [expectation], timeout: 5.0)
+        
         try await app.assertScreenshot(step: Step.inviteUsersWithResults)
         
         cells.element(boundBy: 0).tap()
