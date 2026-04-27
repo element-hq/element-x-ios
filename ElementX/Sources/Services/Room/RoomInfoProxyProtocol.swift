@@ -136,8 +136,7 @@ extension RoomInfoProxyProtocol {
         return alternativeAliases.first
     }
     
-    /// If present, the state of history sharing in this room. This *does not* consider the `enableKeyShareOnInvite`
-    /// feature flag, so consumers should be careful to check the flag is true before utilising this property.
+    /// If present, the state of history sharing in this room.
     var historySharingState: RoomHistorySharingState? {
         guard isEncrypted else {
             return nil

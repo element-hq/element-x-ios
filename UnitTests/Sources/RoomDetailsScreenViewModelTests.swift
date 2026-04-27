@@ -791,34 +791,7 @@ struct RoomDetailsScreenViewModelTests {
     // MARK: - History Sharing
     
     @Test
-    mutating func historySharingPillDoesNotAppearIfFeatureFlagNotSet() async throws {
-        ServiceLocator.shared.settings.enableKeyShareOnInvite = false
-        
-        let configuration = JoinedRoomProxyMockConfiguration(historyVisibility: .shared)
-        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
-        let roomProxyMock = JoinedRoomProxyMock(configuration)
-        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
-        
-        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
-                                               userSession: UserSessionMock(.init()),
-                                               analyticsService: ServiceLocator.shared.analytics,
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: notificationSettingsProxyMock,
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: ServiceLocator.shared.settings)
-        
-        let deferredInvisible = deferFailure(context.observe(\.viewState),
-                                             timeout: .seconds(1),
-                                             message: "The pill should not be shown as the feature flag is not set") { state in
-            state.details.historySharingState != nil
-        }
-        try await deferredInvisible.fulfill()
-    }
-    
-    @Test
-    mutating func historySharingPillDisplayedIfHistoryVisibilityShared() async throws {
-        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
-        
+    mutating func historySharingPillDisplayed() async throws {
         let configuration = JoinedRoomProxyMockConfiguration(historyVisibility: .shared)
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
         let roomProxyMock = JoinedRoomProxyMock(configuration)

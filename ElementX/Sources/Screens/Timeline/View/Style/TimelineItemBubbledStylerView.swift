@@ -335,7 +335,6 @@ private extension TimelineItemKeyForwarder {
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel: TimelineViewModel = {
         let appSettings = AppSettings()
-        appSettings.enableKeyShareOnInvite = true
         appSettings.threadsEnabled = true
         
         let roomProxy = JoinedRoomProxyMock(.init())

@@ -15,8 +15,7 @@ extension View {
                               adjustedDeliveryStatus: TimelineItemDeliveryStatus?,
                               context: TimelineViewModel.Context) -> some View {
         modifier(TimelineItemSendInfoModifier(sendInfo: .init(timelineItem: timelineItem,
-                                                              adjustedDeliveryStatus: adjustedDeliveryStatus,
-                                                              enableKeyShareOnInvite: context.viewState.enableKeyShareOnInvite),
+                                                              adjustedDeliveryStatus: adjustedDeliveryStatus),
                                               context: context))
     }
 }
@@ -150,7 +149,7 @@ private struct TimelineItemSendInfo {
 }
 
 private extension TimelineItemSendInfo {
-    init(timelineItem: EventBasedTimelineItemProtocol, adjustedDeliveryStatus: TimelineItemDeliveryStatus?, enableKeyShareOnInvite: Bool) {
+    init(timelineItem: EventBasedTimelineItemProtocol, adjustedDeliveryStatus: TimelineItemDeliveryStatus?) {
         itemID = timelineItem.id
         localizedString = timelineItem.localizedSendInfo
         
@@ -158,7 +157,7 @@ private extension TimelineItemSendInfo {
             .sendingFailed
         } else if let authenticity = timelineItem.properties.encryptionAuthenticity {
             .encryptionAuthenticity(authenticity)
-        } else if enableKeyShareOnInvite, let forwarder = timelineItem.properties.encryptionForwarder {
+        } else if let forwarder = timelineItem.properties.encryptionForwarder {
             .encryptionForwarder(forwarder)
         } else {
             nil

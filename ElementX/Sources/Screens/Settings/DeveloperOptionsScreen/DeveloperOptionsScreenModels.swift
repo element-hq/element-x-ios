@@ -55,7 +55,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var traceLogPacks: Set<TraceLogPack> { get set }
     
     var enableOnlySignedDeviceIsolationMode: Bool { get set }
-    var enableKeyShareOnInvite: Bool { get set }
     var hideQuietNotificationAlerts: Bool { get set }
     var focusEventOnNotificationTap: Bool { get set }
     var automaticBackPaginationEnabled: Bool { get set }

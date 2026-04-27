@@ -67,20 +67,15 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 hideLoadingIndicator()
                 actionsSubject.send(.showRoom(roomID: roomId))
             case .success:
-                if appSettings.enableKeyShareOnInvite {
-                    Task {
-                        // If an error occured while fetching the identity, assume they are unknown.
-                        let isUnknown = if case .success(let identity) = await self.userSession.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) {
-                            identity == nil
-                        } else {
-                            true
-                        }
-                        self.state.bindings.selectedUserToInvite = UserToInvite(user: user, isUnknown: isUnknown)
-                        hideLoadingIndicator()
+                Task {
+                    // If an error occured while fetching the identity, assume they are unknown.
+                    let isUnknown = if case .success(let identity) = await self.userSession.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) {
+                        identity == nil
+                    } else {
+                        true
                     }
-                } else {
+                    self.state.bindings.selectedUserToInvite = UserToInvite(user: user, isUnknown: isUnknown)
                     hideLoadingIndicator()
-                    state.bindings.selectedUserToInvite = UserToInvite(user: user, isUnknown: false)
                 }
             case .failure:
                 hideLoadingIndicator()

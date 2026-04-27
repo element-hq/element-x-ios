@@ -57,8 +57,6 @@ struct UserProfileScreenViewModelTests {
     
     @Test
     func startingDmWithUnknownUserFetchesIdentity() async throws {
-        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
-        
         let profile = UserProfileProxy.mockAlice
         
         let clientProxy = ClientProxyMock(.init())
