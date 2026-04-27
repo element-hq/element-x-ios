@@ -12,7 +12,6 @@ import SwiftUI
 struct LocationSharingScreenCoordinatorParameters {
     let interactionMode: LocationSharingInteractionMode
     let mapURLBuilder: MapTilerURLBuilderProtocol
-    let liveLocationSharingEnabled: Bool
     let roomProxy: JoinedRoomProxyProtocol
     let timelineController: TimelineControllerProtocol
     let liveLocationManager: LiveLocationManagerProtocol
@@ -42,7 +41,6 @@ final class LocationSharingScreenCoordinator: CoordinatorProtocol {
         
         viewModel = LocationSharingScreenViewModel(interactionMode: parameters.interactionMode,
                                                    mapURLBuilder: parameters.mapURLBuilder,
-                                                   liveLocationSharingEnabled: parameters.liveLocationSharingEnabled,
                                                    roomProxy: parameters.roomProxy,
                                                    timelineController: parameters.timelineController,
                                                    liveLocationManager: parameters.liveLocationManager,

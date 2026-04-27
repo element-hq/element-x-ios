@@ -196,16 +196,6 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             }
             .store(in: &cancellables)
         
-        appSettings.$liveLocationSharingEnabled
-            .filter { !$0 }
-            .sink { [weak self] _ in
-                guard let self else { return }
-                appSettings.liveLocationSharingTimeoutDatesByRoomID.removeAll()
-                activeRoomProxies.removeAll()
-                self.stopUpdatingLocation()
-            }
-            .store(in: &cancellables)
-        
         appSettings.$liveLocationMinimumDistanceUpdate
             .removeDuplicates()
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)

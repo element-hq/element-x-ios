@@ -126,9 +126,7 @@ struct LocationSharingScreen: View {
 
 struct LocationSharingScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = LocationSharingScreenViewModel.mock(type: .staticSenderLocation)
-    
-    static let withoutLiveSharingViewModel = LocationSharingScreenViewModel.mock(type: .picker, liveLocationSharingEnabled: false)
-    
+        
     static let pinViewModel = LocationSharingScreenViewModel.mock(type: .staticPinLocation)
     
     static let pickerViewModel = LocationSharingScreenViewModel.mock(type: .picker)
@@ -140,11 +138,6 @@ struct LocationSharingScreen_Previews: PreviewProvider, TestablePreview {
             LocationSharingScreen(context: pickerViewModel.context)
         }
         .previewDisplayName("Picker")
-        
-        ElementNavigationStack {
-            LocationSharingScreen(context: withoutLiveSharingViewModel.context)
-        }
-        .previewDisplayName("Picker without live location sharing")
         
         ElementNavigationStack {
             LocationSharingScreen(context: viewModel.context)

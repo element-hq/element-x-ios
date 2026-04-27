@@ -61,7 +61,6 @@ protocol AdvancedSettingsProtocol: AnyObject {
     var sharePresence: Bool { get set }
     var optimizeMediaUploads: Bool { get set }
     var liveLocationMinimumDistanceUpdate: Int { get set }
-    var liveLocationSharingEnabled: Bool { get set }
 }
 
 extension AppSettings: AdvancedSettingsProtocol { }

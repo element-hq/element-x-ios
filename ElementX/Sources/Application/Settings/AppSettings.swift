@@ -81,7 +81,6 @@ final class AppSettings {
         case linkPreviewsEnabled
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
-        case liveLocationSharingEnabled
         case automaticBackPaginationEnabled
         
         // Doug's tweaks 🔧
@@ -448,9 +447,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.linkNewDeviceEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkNewDeviceEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.liveLocationSharingEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var liveLocationSharingEnabled
     
     @UserPreference(key: UserDefaultsKeys.automaticBackPaginationEnabled, defaultValue: false, storageType: .userDefaults(store))
     var automaticBackPaginationEnabled

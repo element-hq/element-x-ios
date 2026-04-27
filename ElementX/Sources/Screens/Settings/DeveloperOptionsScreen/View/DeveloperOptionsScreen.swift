@@ -91,11 +91,6 @@ struct DeveloperOptionsScreen: View {
                         .foregroundStyle(.compound.textCriticalPrimary)
                 }
                 
-                Toggle(isOn: $context.liveLocationSharingEnabled) {
-                    Text("Live location sharing")
-                    Text("Requires app reboot")
-                }
-                
                 Toggle(isOn: $context.knockingEnabled) {
                     Text("Knocking")
                     Text("Ask to join rooms")
