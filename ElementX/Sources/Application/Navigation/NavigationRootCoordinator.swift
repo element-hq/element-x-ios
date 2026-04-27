@@ -48,25 +48,6 @@ import SwiftUI
         sheetModule?.coordinator
     }
     
-    fileprivate var overlayModule: NavigationModule? {
-        didSet {
-            if let oldValue {
-                logPresentationChange("Remove overlay", oldValue)
-                oldValue.tearDown()
-            }
-            
-            if let overlayModule {
-                logPresentationChange("Set overlay", overlayModule)
-                overlayModule.coordinator?.start()
-            }
-        }
-    }
-    
-    /// The currently displayed overlay coordinator
-    var overlayCoordinator: (any CoordinatorProtocol)? {
-        overlayModule?.coordinator
-    }
-    
     /// The lowest-level `AlertInfo`, directly available to the root of the app.
     var alertInfo: AlertInfo<UUID>?
     
@@ -102,31 +83,6 @@ import SwiftUI
 
         withTransaction(transaction) {
             sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
-        }
-    }
-    
-    /// Present an overlay on top of the split view
-    /// - Parameters:
-    ///   - coordinator: the coordinator to display
-    ///   - animated: whether the transition should be animated
-    ///   - dismissalCallback: called when the overlay has been dismissed, programatically or otherwise
-    func setOverlayCoordinator(_ coordinator: (any CoordinatorProtocol)?,
-                               animated: Bool = true,
-                               dismissalCallback: (() -> Void)? = nil) {
-        guard let coordinator else {
-            overlayModule = nil
-            return
-        }
-        
-        if overlayModule?.coordinator === coordinator {
-            fatalError("Cannot use the same coordinator more than once")
-        }
-
-        var transaction = Transaction()
-        transaction.disablesAnimations = !animated
-
-        withTransaction(transaction) {
-            overlayModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
     }
         
@@ -166,16 +122,6 @@ private struct NavigationRootCoordinatorView: View {
         .animation(.elementDefault, value: rootCoordinator.rootModule)
         .sheet(item: $rootCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
-        }
-        .accessibilityHidden(rootCoordinator.overlayModule?.coordinator != nil)
-        .overlay {
-            Group {
-                if let coordinator = rootCoordinator.overlayModule?.coordinator {
-                    coordinator.toPresentable()
-                        .transition(.opacity)
-                }
-            }
-            .animation(.elementDefault, value: rootCoordinator.overlayModule)
         }
     }
 }
