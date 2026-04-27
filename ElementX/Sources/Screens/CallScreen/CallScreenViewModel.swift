@@ -48,18 +48,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         self.analyticsService = analyticsService
         isPictureInPictureAllowed = allowPictureInPicture
         
-        var isGenericCallLink = false
         switch configuration.kind {
-        case .genericCallLink(let url):
-            widgetDriver = GenericCallLinkWidgetDriver(url: url)
-            isGenericCallLink = true
         case .roomCall(let roomProxy, let clientProxy, _, _, _, _, _):
             guard let deviceID = clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
             widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         }
         
         super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript,
-                                                         isGenericCallLink: isGenericCallLink,
                                                          certificateValidator: appHooks.certificateValidatorHook))
         
         elementCallService.actions
@@ -163,10 +158,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     private func setupCall() {
         switch configuration.kind {
-        case .genericCallLink(let url):
-            state.url = url
-            // We need widget messaging to work before enabling CallKit, otherwise mute, hangup etc do nothing.
-            
         case .roomCall(let roomProxy, _, let clientID, let voiceOnly, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme):
             Task { [weak self] in
                 guard let self else { return }

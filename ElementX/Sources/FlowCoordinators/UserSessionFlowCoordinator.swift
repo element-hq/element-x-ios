@@ -132,8 +132,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
         case .call(let roomID, let isVoiceCall):
             Task { await presentCallScreen(roomID: roomID, isVoiceCall: isVoiceCall) }
-        case .genericCallLink(let url):
-            presentCallScreen(genericCallLink: url)
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
@@ -400,10 +398,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     // MARK: - Calls
-    
-    private func presentCallScreen(genericCallLink url: URL) {
-        presentCallScreen(configuration: .init(genericCallLink: url))
-    }
     
     private func presentCallScreen(roomID: String, isVoiceCall: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {

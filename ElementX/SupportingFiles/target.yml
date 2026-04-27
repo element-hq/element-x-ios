@@ -53,13 +53,6 @@ targets:
         CFBundleURLTypes: [
           {
             CFBundleTypeRole: Editor,
-            CFBundleURLName: "Element Call",
-            CFBundleURLSchemes: [
-              io.element.call
-            ]
-          },
-          {
-            CFBundleTypeRole: Editor,
             CFBundleURLName: "Application",
             CFBundleURLSchemes: [
               $(BASE_BUNDLE_IDENTIFIER), # The app's own scheme for custom routes
@@ -126,8 +119,6 @@ targets:
         - applinks:staging.element.io
         - applinks:develop.element.io
         - applinks:mobile.element.io
-        - applinks:call.element.io
-        - applinks:call.element.dev
         - applinks:matrix.to
         # - applinks:localhost?mode=developer # developer mode only works with https (but self-signed is fine).
         - webcredentials:*.element.io
