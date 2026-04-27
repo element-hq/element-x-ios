@@ -43,7 +43,7 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(service.homeserver.value.loginMode == .unknown)
         #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -52,8 +52,8 @@ final class ServerConfirmationScreenViewModelTests {
         
         // Then a call to configure service should be made.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
         #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
     }
     
@@ -68,7 +68,7 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
         #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -77,8 +77,8 @@ final class ServerConfirmationScreenViewModelTests {
         
         // Then the configured homeserver should be used and no additional client should be built.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
     }
     
     @Test
@@ -88,7 +88,7 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(service.homeserver.value.loginMode == .unknown)
         #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -97,9 +97,9 @@ final class ServerConfirmationScreenViewModelTests {
         
         // Then a call to configure service should be made.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
         // The create prompt is broken: https://github.com/element-hq/matrix-authentication-service/issues/3429
-        // #expect(client.urlForOidcOidcConfigurationPromptReceivedArguments?.prompt == .create)
+        // #expect(client.urlForOauthOauthConfigurationPromptReceivedArguments?.prompt == .create)
         #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
     }
     
@@ -114,7 +114,7 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
         #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -124,8 +124,8 @@ final class ServerConfirmationScreenViewModelTests {
         // Then the configured homeserver should be used and no additional client should be built.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         // The create prompt is broken: https://github.com/element-hq/matrix-authentication-service/issues/3429
-        // #expect(client.urlForOidcOidcConfigurationPromptReceivedArguments?.prompt == .create)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        // #expect(client.urlForOauthOauthConfigurationPromptReceivedArguments?.prompt == .create)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
     }
     
     @Test
@@ -135,7 +135,7 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(service.homeserver.value.loginMode == .unknown)
         #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -144,7 +144,7 @@ final class ServerConfirmationScreenViewModelTests {
         
         // Then a call to configure service should be made, but not for the OIDC URL.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         #expect(service.homeserver.value.loginMode == .password)
     }
     
@@ -159,7 +159,7 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(service.homeserver.value.loginMode == .password)
         #expect(context.viewState.mode == .confirmation(service.homeserver.value.address))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -168,7 +168,7 @@ final class ServerConfirmationScreenViewModelTests {
         
         // Then the configured homeserver should be used and no additional client should be built, nor a call to get the OIDC URL.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
     }
     
     @Test
@@ -235,7 +235,7 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(service.homeserver.value.loginMode == .unknown)
         #expect(context.viewState.mode == .picker(appSettings.accountProviders))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -244,8 +244,8 @@ final class ServerConfirmationScreenViewModelTests {
         
         // Then a call to configure service should be made.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
         #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
     }
     
@@ -260,7 +260,7 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(service.homeserver.value.loginMode == .oidc(supportsCreatePrompt: true))
         #expect(context.viewState.mode == .picker(appSettings.accountProviders))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOIDC }
@@ -269,8 +269,8 @@ final class ServerConfirmationScreenViewModelTests {
         
         // Then the configured homeserver should be used and no additional client should be built.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
     }
     
     @Test
@@ -280,7 +280,7 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(service.homeserver.value.loginMode == .unknown)
         #expect(context.viewState.mode == .picker(appSettings.accountProviders))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -289,7 +289,7 @@ final class ServerConfirmationScreenViewModelTests {
         
         // Then a call to configure service should be made, but not for the OIDC URL.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         #expect(service.homeserver.value.loginMode == .password)
     }
     
@@ -304,7 +304,7 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(service.homeserver.value.loginMode == .password)
         #expect(context.viewState.mode == .picker(appSettings.accountProviders))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When continuing from the confirmation screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -313,7 +313,7 @@ final class ServerConfirmationScreenViewModelTests {
         
         // Then the configured homeserver should be used and no additional client should be built, nor a call to get the OIDC URL.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
     }
     
     // MARK: - Helpers

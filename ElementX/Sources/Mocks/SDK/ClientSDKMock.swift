@@ -31,7 +31,7 @@ extension ClientSDKMock {
                               userId: "@alice:matrix.org",
                               deviceId: UUID().uuidString,
                               homeserverUrl: "https://matrix-client.matrix.org",
-                              oidcData: nil,
+                              oauthData: nil,
                               slidingSyncVersion: .native)
     }
     
@@ -45,7 +45,7 @@ extension ClientSDKMock {
         userIdServerNameThrowableError = MockError.generic
         serverReturnValue = "https://\(configuration.serverAddress)"
         homeserverReturnValue = configuration.homeserverURL
-        urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReturnValue = OAuthAuthorizationDataSDKMock(configuration: configuration)
+        urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReturnValue = OAuthAuthorizationDataSDKMock(configuration: configuration)
         loginUsernamePasswordInitialDeviceNameDeviceIdClosure = { [weak self] username, password, _, _ in
             guard username == configuration.validCredentials.username,
                   password == configuration.validCredentials.password else {
@@ -77,8 +77,8 @@ extension HomeserverLoginDetailsSDKMock {
         
         slidingSyncVersionReturnValue = configuration.slidingSyncVersion
         supportsPasswordLoginReturnValue = configuration.supportsPasswordLogin
-        supportsOidcLoginReturnValue = configuration.oidcLoginURL != nil
-        supportedOidcPromptsReturnValue = switch (configuration.oidcLoginURL, configuration.supportsOIDCCreatePrompt) {
+        supportsOauthLoginReturnValue = configuration.oidcLoginURL != nil
+        supportedOauthPromptsReturnValue = switch (configuration.oidcLoginURL, configuration.supportsOIDCCreatePrompt) {
         case (.none, _): []
         case (.some, true): [.consent, .create]
         case (.some, false): [.consent]
