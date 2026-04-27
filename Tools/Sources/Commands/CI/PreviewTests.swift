@@ -5,14 +5,12 @@ struct PreviewTests: AsyncParsableCommand {
     static let configuration = CommandConfiguration(commandName: "preview-tests",
                                                     abstract: "Runs the preview test CI workflow, with optional snapshot recording.")
 
-    @Option(help: "iOS version for the simulator.")
-    var osVersion = "26.4"
-
     @Flag(help: "Re-record snapshots for tests that fail or are missing a reference image.")
     var record = false
 
     private static let scheme = "PreviewTests"
     private static let device = "iPhone SE (3rd generation)"
+    private static let osVersion = "26.4.1"
     private static let simulatorType = "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
     private static let testPlanPath = "PreviewTests/SupportingFiles/PreviewTests.xctestplan"
 
@@ -27,7 +25,7 @@ struct PreviewTests: AsyncParsableCommand {
             try await RunTests.parse([
                 "--scheme", Self.scheme,
                 "--device", Self.device,
-                "--os-version", osVersion,
+                "--os-version", Self.osVersion,
                 "--create-simulator-name", Self.device,
                 "--create-simulator-type", Self.simulatorType
             ]).run()
