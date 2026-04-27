@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "L'indirizzo completo sarà %1$@";
 "a11y_expand_message_text_field" = "Allarga il campo di testo del messaggio";
 "a11y_hide_password" = "Nascondi password";
+"a11y_info" = "Info";
 "a11y_join_call" = "Entra in chiamata";
 "a11y_jump_to_bottom" = "Vai alla fine";
 "a11y_notifications_mentions_only" = "Solo menzioni";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Invia file";
 "a11y_sender_location" = "Posizione del mittente";
 "a11y_session_verification_time_limited_action_required" = "Azione richiesta a tempo limitato, hai un minuto per la verifica";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Mostra password";
 "a11y_start_call" = "Avvia una chiamata";
 "a11y_start_video_call" = "Avvia una videochiamata";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Disattiva account";
 "action_decline" = "Rifiuta";
 "action_decline_and_block" = "Rifiuta e blocca";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Elimina sondaggio";
 "action_deselect_all" = "Deseleziona tutti";
 "action_disable" = "Disabilita";
 "action_discard" = "Annulla";
 "action_dismiss" = "Chiudi";
 "action_done" = "Fine";
+"action_download" = "Download";
 "action_edit" = "Modifica";
 "action_edit_caption" = "Modifica didascalia";
 "action_edit_poll" = "Modifica sondaggio";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Utenti bloccati";
 "common_bubbles" = "Fumetti";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Chiamata avviata";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Backup della chat";
 "common_copied_to_clipboard" = "Copiato negli appunti";
 "common_copyright" = "Copyright";
@@ -753,7 +760,7 @@
 "screen_deactivate_account_list_item_2" = "Ti rimuove da tutte le stanze di chat.";
 "screen_deactivate_account_list_item_3" = "Elimina le informazioni del tuo account dal nostro server di identità.";
 "screen_deactivate_account_list_item_4" = "I tuoi messaggi saranno ancora visibili agli utenti registrati, ma non saranno disponibili per gli utenti nuovi o non registrati se decidi di eliminarli.";
-"screen_deactivate_account_title" = "Disattiva account";
+"screen_deactivate_account_title" = "Disattivazione dell'account";
 "screen_decline_and_block_block_user_option_description" = "Non vedrai alcun messaggio o invito ad una stanza da parte di questo utente";
 "screen_decline_and_block_block_user_option_title" = "Blocca utente";
 "screen_decline_and_block_report_user_option_description" = "Segnala questa stanza al fornitore del tuo account.";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Nome del file";
 "screen_media_details_no_more_files_to_show" = "Nessun altro file da mostrare";
 "screen_media_details_no_more_media_to_show" = "Non ci sono più contenuti multimediali da mostrare";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Caricato da";
 "screen_media_details_uploaded_on" = "Caricato il";
 "screen_media_picker_error_failed_selection" = "Selezione del file multimediale fallita, riprova.";

@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Täysi osoite tulee olemaan %1$@";
 "a11y_expand_message_text_field" = "Laajenna viestin tekstikenttä";
 "a11y_hide_password" = "Piilota salasana";
+"a11y_info" = "Info";
 "a11y_join_call" = "Liity puheluun";
 "a11y_jump_to_bottom" = "Siirry loppuun";
 "a11y_notifications_mentions_only" = "Vain maininnat";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Lähetä tiedostoja";
 "a11y_sender_location" = "Lähettäjän sijainti";
 "a11y_session_verification_time_limited_action_required" = "Aikarajoitettu toimenpide vaaditaan, sinulla on yksi minuutti aikaa vahvistaa";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Näytä salasana";
 "a11y_start_call" = "Aloita puhelu";
 "a11y_start_video_call" = "Aloita videopuhelu";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Deaktivoi tili";
 "action_decline" = "Hylkää";
 "action_decline_and_block" = "Hylkää ja estä";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Poista kysely";
 "action_deselect_all" = "Poista kaikki valinnat";
 "action_disable" = "Poista käytöstä";
 "action_discard" = "Hylkää";
 "action_dismiss" = "Sulje";
 "action_done" = "Valmis";
+"action_download" = "Download";
 "action_edit" = "Muokkaa";
 "action_edit_caption" = "Muokkaa kuvatekstiä";
 "action_edit_poll" = "Muokkaa kyselyä";
@@ -202,7 +207,9 @@
 "common_beta" = "Beeta";
 "common_blocked_users" = "Estetyt käyttäjät";
 "common_bubbles" = "Kuplat";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Puhelu alkoi";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Keskustelujen varmuuskopiointi";
 "common_copied_to_clipboard" = "Kopioitu leikepöydälle";
 "common_copyright" = "Tekijänoikeudet";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Tiedostonimi";
 "screen_media_details_no_more_files_to_show" = "Ei enää näytettäviä tiedostoja";
 "screen_media_details_no_more_media_to_show" = "Ei enää näytettävää mediaa";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Lähettäjä";
 "screen_media_details_uploaded_on" = "Lähetetty";
 "screen_media_picker_error_failed_selection" = "Median valinta epäonnistui, yritä uudelleen.";

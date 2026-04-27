@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "A teljes cím ez lesz: %1$@";
 "a11y_expand_message_text_field" = "Üzenet szövegmezőjének kibontása";
 "a11y_hide_password" = "Jelszó elrejtése";
+"a11y_info" = "Info";
 "a11y_join_call" = "Csatlakozás a híváshoz";
 "a11y_jump_to_bottom" = "Ugrás az aljára";
 "a11y_notifications_mentions_only" = "Csak megemlítések";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Fájlküldés";
 "a11y_sender_location" = "Felhasználó tartózkodási helye";
 "a11y_session_verification_time_limited_action_required" = "Időkorlátos művelet szükséges, egy perce van az ellenőrzésre";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Jelszó megjelenítése";
 "a11y_start_call" = "Hanghívás indítása";
 "a11y_start_video_call" = "Videohívás indítása";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Fiók deaktiválása";
 "action_decline" = "Elutasítás";
 "action_decline_and_block" = "Elutasítás és letiltás";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Szavazás törlése";
 "action_deselect_all" = "Kijelölés megszüntetése";
 "action_disable" = "Letiltás";
 "action_discard" = "Elvetés";
 "action_dismiss" = "Eltüntetés";
 "action_done" = "Kész";
+"action_download" = "Download";
 "action_edit" = "Szerkesztés";
 "action_edit_caption" = "Felirat szerkesztése";
 "action_edit_poll" = "Szavazás szerkesztése";
@@ -202,7 +207,9 @@
 "common_beta" = "Béta";
 "common_blocked_users" = "Letiltott felhasználók";
 "common_bubbles" = "Buborékok";
+"common_call_declined" = "Call declined";
 "common_call_started" = "A hívás elindult";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Csevegés biztonsági mentése";
 "common_copied_to_clipboard" = "A vágólapra másolva";
 "common_copyright" = "Szerzői jogok";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Fájlnév";
 "screen_media_details_no_more_files_to_show" = "Nincs több megjeleníthető fájl";
 "screen_media_details_no_more_media_to_show" = "Nincs több megjeleníthető média";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Feltöltötte:";
 "screen_media_details_uploaded_on" = "Feltöltve:";
 "screen_media_picker_error_failed_selection" = "Nem sikerült kiválasztani a médiát, próbálja újra.";

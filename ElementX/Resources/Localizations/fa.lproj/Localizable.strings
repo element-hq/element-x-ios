@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "نشانی کامل %1$@ خواهد بود";
 "a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "نهفتن گذرواژه";
+"a11y_info" = "Info";
 "a11y_join_call" = "پیوستن به تماس";
 "a11y_jump_to_bottom" = "به پایین بروید";
 "a11y_notifications_mentions_only" = "فقط اشاره‌ها";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "ارسال پرونده‌ها";
 "a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "نیازمند کنش محدود به زمان";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "نمایش گذرواژه";
 "a11y_start_call" = "آغاز یک تماس";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "غیرفعّال‌سازی حساب";
 "action_decline" = "رد";
 "action_decline_and_block" = "رد و انسداد";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "حذف نظرسنجی";
 "action_deselect_all" = "ناگزینش همه";
 "action_disable" = "از کار انداختن";
 "action_discard" = "دور ریختن";
 "action_dismiss" = "دورانداختن";
 "action_done" = "انجام شد";
+"action_download" = "Download";
 "action_edit" = "ویرایش";
 "action_edit_caption" = "ویرایش عنوان";
 "action_edit_poll" = "ویرایش نظرسنجی";
@@ -202,7 +207,9 @@
 "common_beta" = "آزمایشی";
 "common_blocked_users" = "کاربران مسدود";
 "common_bubbles" = "حباب‌ها";
+"common_call_declined" = "Call declined";
 "common_call_started" = "تماس آغاز شد";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "پشتیبان گپ";
 "common_copied_to_clipboard" = "در تخته‌گیره رونوشت شد";
 "common_copyright" = "حق رونوشت";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "نام پرونده";
 "screen_media_details_no_more_files_to_show" = "No more files to show";
 "screen_media_details_no_more_media_to_show" = "No more media to show";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "بارگذاشته به دست";
 "screen_media_details_uploaded_on" = "بارگذاشته در";
 "screen_media_picker_error_failed_selection" = "گزینش رسانه شکست خورد. لطفاً دوباره تلاش کنید.";

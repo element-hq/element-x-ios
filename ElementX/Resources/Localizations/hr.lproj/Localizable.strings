@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Potpuna adresa bit će %1$@";
 "a11y_expand_message_text_field" = "Proširi tekstno polje poruke";
 "a11y_hide_password" = "Sakrij zaporku";
+"a11y_info" = "Info";
 "a11y_join_call" = "Pridruži se pozivu";
 "a11y_jump_to_bottom" = "Idi na dno";
 "a11y_notifications_mentions_only" = "Samo spominjanja";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Pošalji datoteke";
 "a11y_sender_location" = "Lokacija pošiljatelja";
 "a11y_session_verification_time_limited_action_required" = "Potrebna je vremenski ograničena radnja, imate jednu minutu za potvrdu";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Prikaži zaporku";
 "a11y_start_call" = "Započni poziv";
 "a11y_start_video_call" = "Započni videopoziv";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Deaktiviraj račun";
 "action_decline" = "Odbij";
 "action_decline_and_block" = "Odbij i blokiraj";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Izbriši anketu";
 "action_deselect_all" = "Poništi sve odabire";
 "action_disable" = "Onemogući";
 "action_discard" = "Odbaci";
 "action_dismiss" = "Odbaci";
 "action_done" = "Gotovo";
+"action_download" = "Download";
 "action_edit" = "Uredi";
 "action_edit_caption" = "Uredi opis";
 "action_edit_poll" = "Uredi anketu";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Blokirani korisnici";
 "common_bubbles" = "Mjehurići";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Poziv je započeo";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Sigurnosna kopija razgovora";
 "common_copied_to_clipboard" = "Kopirano u međuspremnik";
 "common_copyright" = "Autorsko pravo";
@@ -753,7 +760,7 @@
 "screen_deactivate_account_list_item_2" = "Ukloniti vas iz svih soba za razgovore.";
 "screen_deactivate_account_list_item_3" = "Izbrisati podatke o vašem računu s našeg poslužitelja identiteta.";
 "screen_deactivate_account_list_item_4" = "Vaše će poruke i dalje biti vidljive registriranim korisnicima, ali neće biti dostupne novim ili neregistriranim korisnicima ako ih odlučite izbrisati.";
-"screen_deactivate_account_title" = "Deaktiviraj račun";
+"screen_deactivate_account_title" = "Delete account";
 "screen_decline_and_block_block_user_option_description" = "Nećete vidjeti nikakve poruke ili pozivnice za sobu od ovog korisnika";
 "screen_decline_and_block_block_user_option_title" = "Blokiraj korisnika";
 "screen_decline_and_block_report_user_option_description" = "Prijavite ovu sobu svom davatelju usluga računa.";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Naziv datoteke";
 "screen_media_details_no_more_files_to_show" = "Nema više datoteka za prikaz";
 "screen_media_details_no_more_media_to_show" = "Nema više medijskih sadržaja za prikaz";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Prenio/la";
 "screen_media_details_uploaded_on" = "Preneseno na";
 "screen_media_picker_error_failed_selection" = "Odabir medija nije uspio, pokušajte ponovno.";

@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Alamat lengkapnya adalah%1$@";
 "a11y_expand_message_text_field" = "Perluas kolom teks pesan";
 "a11y_hide_password" = "Sembunyikan kata sandi";
+"a11y_info" = "Info";
 "a11y_join_call" = "Bergabung dalam panggilan";
 "a11y_jump_to_bottom" = "Lompat ke bawah";
 "a11y_notifications_mentions_only" = "Hanya sebutan";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Kirim berkas";
 "a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Tindakan terbatas waktu diperlukan, Anda memiliki satu menit untuk memverifikasi";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Tampilkan kata sandi";
 "a11y_start_call" = "Mulai panggilan";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Nonaktifkan akun";
 "action_decline" = "Tolak";
 "action_decline_and_block" = "Tolak dan blokir";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Hapus jajak pendapat";
 "action_deselect_all" = "Deselect all";
 "action_disable" = "Nonaktifkan";
 "action_discard" = "Abaikan";
 "action_dismiss" = "Abaikan";
 "action_done" = "Selesai";
+"action_download" = "Download";
 "action_edit" = "Edit";
 "action_edit_caption" = "Edit keterangan";
 "action_edit_poll" = "Edit jajak pendapat";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Pengguna yang diblokir";
 "common_bubbles" = "Gelembung";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Panggilan dimulai";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Pencadangan percakapan";
 "common_copied_to_clipboard" = "Disalin ke papan klip";
 "common_copyright" = "Hak cipta";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Nama berkas";
 "screen_media_details_no_more_files_to_show" = "Tidak ada lagi berkas untuk ditampilkan";
 "screen_media_details_no_more_media_to_show" = "Tidak ada lagi media untuk ditampilkan";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Diunggah oleh";
 "screen_media_details_uploaded_on" = "Diunggah pada";
 "screen_media_picker_error_failed_selection" = "Gagal memilih media, silakan coba lagi.";

@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "전체 주소는 다음과 같습니다 %1$@";
 "a11y_expand_message_text_field" = "메시지 텍스트 필드 확장";
 "a11y_hide_password" = "비밀번호 숨기기";
+"a11y_info" = "Info";
 "a11y_join_call" = "통화 참가";
 "a11y_jump_to_bottom" = "맨 아래로 이동";
 "a11y_notifications_mentions_only" = "멘션만";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "파일 보내기";
 "a11y_sender_location" = "발신자 위치";
 "a11y_session_verification_time_limited_action_required" = "제한 시간 내 인증이 필요합니다.1분 안에 확인해 주세요.";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "비밀번호 표시";
 "a11y_start_call" = "통화 시작";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "계정 비활성화";
 "action_decline" = "거절";
 "action_decline_and_block" = "거부 및 차단";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "투표 삭제";
 "action_deselect_all" = "전체 선택 해제";
 "action_disable" = "비활성화";
 "action_discard" = "취소";
 "action_dismiss" = "닫기";
 "action_done" = "완료";
+"action_download" = "Download";
 "action_edit" = "편집";
 "action_edit_caption" = "캡션 편집";
 "action_edit_poll" = "투표 수정";
@@ -202,7 +207,9 @@
 "common_beta" = "베타";
 "common_blocked_users" = "차단한 사용자";
 "common_bubbles" = "버블";
+"common_call_declined" = "Call declined";
 "common_call_started" = "통화 시작";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "채팅 백업";
 "common_copied_to_clipboard" = "클립보드에 복사됨";
 "common_copyright" = "저작권";
@@ -753,7 +760,7 @@
 "screen_deactivate_account_list_item_2" = "모든 채팅방에서 자신을 제거하세요.";
 "screen_deactivate_account_list_item_3" = "당사의 신원 서버에서 귀하의 계정 정보를 삭제하세요.";
 "screen_deactivate_account_list_item_4" = "메시지는 등록된 사용자에게는 계속 표시되지만, 삭제하면 신규 또는 미등록 사용자는 볼 수 없게 됩니다.";
-"screen_deactivate_account_title" = "계정 비활성화";
+"screen_deactivate_account_title" = "Delete account";
 "screen_decline_and_block_block_user_option_description" = "이 사용자로부터 메시지나 방 초대장이 표시되지 않습니다.";
 "screen_decline_and_block_block_user_option_title" = "사용자 차단하기";
 "screen_decline_and_block_report_user_option_description" = "이 room 계정 제공자에게 신고하세요.";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "파일 명";
 "screen_media_details_no_more_files_to_show" = "더 이상 표시할 파일이 없습니다";
 "screen_media_details_no_more_media_to_show" = "더 이상 보여줄 미디어가 없습니다";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "에 의해 업로드됨";
 "screen_media_details_uploaded_on" = "에 업로드됨";
 "screen_media_picker_error_failed_selection" = "미디어 선택에 실패했습니다. 다시 시도해 주세요.";

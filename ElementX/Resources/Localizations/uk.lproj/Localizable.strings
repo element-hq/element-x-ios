@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Повна адреса буде %1$@";
 "a11y_expand_message_text_field" = "Розгорнути текстове поле повідомлення";
 "a11y_hide_password" = "Cховати пароль";
+"a11y_info" = "Info";
 "a11y_join_call" = "Приєднатися до виклику";
 "a11y_jump_to_bottom" = "Перейти вниз";
 "a11y_notifications_mentions_only" = "Тільки згадки";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Надіслати файли";
 "a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Необхідно виконати дію, обмежену в часі, у вас є одна хвилина для верифікації";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Показати пароль";
 "a11y_start_call" = "Розпочати виклик";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Деактивувати обліковий запис";
 "action_decline" = "Відхилити";
 "action_decline_and_block" = "Відхилити та заблокувати";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Видалити опитування";
 "action_deselect_all" = "Скасувати вибір усіх";
 "action_disable" = "Вимкнути";
 "action_discard" = "Відкинути";
 "action_dismiss" = "Відхилити";
 "action_done" = "Готово";
+"action_download" = "Download";
 "action_edit" = "Редагувати";
 "action_edit_caption" = "Редагувати підпис";
 "action_edit_poll" = "Редагувати опитування";
@@ -202,7 +207,9 @@
 "common_beta" = "Бета-версія";
 "common_blocked_users" = "Заблоковані користувачі";
 "common_bubbles" = "Бульбашки";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Виклик розпочато";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Резервне копіювання бесіди";
 "common_copied_to_clipboard" = "Скопійовано до буферу обміну";
 "common_copyright" = "Авторське право";
@@ -753,7 +760,7 @@
 "screen_deactivate_account_list_item_2" = "Видалити вас з усіх чатів.";
 "screen_deactivate_account_list_item_3" = "Видаліть інформацію свого облікового запису з нашого сервера ідентифікації.";
 "screen_deactivate_account_list_item_4" = "Ваші повідомлення залишатимуться видимими для зареєстрованих користувачів, але недоступними для нових або незареєстрованих користувачів, якщо ви вирішите їх видалити.";
-"screen_deactivate_account_title" = "Деактивувати обліковий запис";
+"screen_deactivate_account_title" = "Відключити обліковий запис";
 "screen_decline_and_block_block_user_option_description" = "Ви не бачитимете повідомлень або запрошень у кімнату від цього користувача";
 "screen_decline_and_block_block_user_option_title" = "Заблокувати користувача";
 "screen_decline_and_block_report_user_option_description" = "Поскаржитися на цю кімнату постачальнику облікового запису.";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Назва файлу";
 "screen_media_details_no_more_files_to_show" = "Більше немає файлів для показу";
 "screen_media_details_no_more_media_to_show" = "Більше немає медіа для показу";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Вивантажено користувачем";
 "screen_media_details_uploaded_on" = "Вивантажено";
 "screen_media_picker_error_failed_selection" = "Не вдалося вибрати медіафайл, спробуйте ще раз.";

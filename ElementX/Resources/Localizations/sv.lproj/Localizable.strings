@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Den fullständiga adressen kommer att vara %1$@";
 "a11y_expand_message_text_field" = "Expandera meddelandetextfältet";
 "a11y_hide_password" = "Dölj lösenord";
+"a11y_info" = "Info";
 "a11y_join_call" = "Anslut till samtal";
 "a11y_jump_to_bottom" = "Hoppa till botten";
 "a11y_notifications_mentions_only" = "Endast omnämningar";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Skicka filer";
 "a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Tidsbegränsad åtgärd krävs, du har en minut på dig att verifiera";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Visa lösenord";
 "a11y_start_call" = "Starta ett samtal";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Inaktivera konto";
 "action_decline" = "Neka";
 "action_decline_and_block" = "Avvisa och blockera";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Radera omröstning";
 "action_deselect_all" = "Deselect all";
 "action_disable" = "Inaktivera";
 "action_discard" = "Kassera";
 "action_dismiss" = "Avfärda";
 "action_done" = "Klar";
+"action_download" = "Download";
 "action_edit" = "Redigera";
 "action_edit_caption" = "Redigera bildtext";
 "action_edit_poll" = "Redigera omröstning";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Blockerade användare";
 "common_bubbles" = "Bubblor";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Samtal startat";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Chattsäkerhetskopia";
 "common_copied_to_clipboard" = "Kopierad till klippbordet";
 "common_copyright" = "Upphovsrätt";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Filnamn";
 "screen_media_details_no_more_files_to_show" = "Inga fler filer att visa";
 "screen_media_details_no_more_media_to_show" = "Ingen mer media att visa";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Uppladdad av";
 "screen_media_details_uploaded_on" = "Uppladdad på";
 "screen_media_picker_error_failed_selection" = "Misslyckades att välja media, vänligen pröva igen.";

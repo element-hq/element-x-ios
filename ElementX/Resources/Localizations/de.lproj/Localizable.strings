@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Die vollständige Adresse lautet %1$@";
 "a11y_expand_message_text_field" = "Nachrichtentextfeld vergrößern";
 "a11y_hide_password" = "Passwort ausblenden";
+"a11y_info" = "Info";
 "a11y_join_call" = "Anruf beitreten";
 "a11y_jump_to_bottom" = "Nach unten springen";
 "a11y_notifications_mentions_only" = "Nur Erwähnungen";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Dateien senden";
 "a11y_sender_location" = "Standort des Absenders";
 "a11y_session_verification_time_limited_action_required" = "Zeitlich begrenzte Handlung erforderlich, du hast eine Minute Zeit zur Verifizierung";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Passwort anzeigen";
 "a11y_start_call" = "Anruf starten";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Nutzerkonto deaktivieren";
 "action_decline" = "Ablehnen";
 "action_decline_and_block" = "Ablehnen und blockieren";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Umfrage löschen";
 "action_deselect_all" = "Auswahl aufheben";
 "action_disable" = "Deaktivieren";
 "action_discard" = "Verwerfen";
 "action_dismiss" = "Schließen";
 "action_done" = "Erledigt";
+"action_download" = "Download";
 "action_edit" = "Bearbeiten";
 "action_edit_caption" = "Bildunterschrift bearbeiten";
 "action_edit_poll" = "Umfrage bearbeiten";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Blockierte Nutzer";
 "common_bubbles" = "Sprechblasen";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Anruf gestartet";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Chat-Backup";
 "common_copied_to_clipboard" = "In die Zwischenablage kopiert";
 "common_copyright" = "Copyright";
@@ -753,7 +760,7 @@
 "screen_deactivate_account_list_item_2" = "Du wirst aus allen Chats entfernt.";
 "screen_deactivate_account_list_item_3" = "Lösche deine Kontoinformationen von unserem Identitätsserver.";
 "screen_deactivate_account_list_item_4" = "Deine Nachrichten werden für bereits registrierte Nutzer weiterhin sichtbar sein. Für neue oder unregistrierte Nutzer sind sie nicht verfügbar, wenn du sie löschen solltest.";
-"screen_deactivate_account_title" = "Nutzerkonto deaktivieren";
+"screen_deactivate_account_title" = "Benutzerkonto deaktivieren";
 "screen_decline_and_block_block_user_option_description" = "Du wirst keine Nachrichten oder Chat-Einladungen von diesem Nutzer sehen.";
 "screen_decline_and_block_block_user_option_title" = "Nutzer blockieren";
 "screen_decline_and_block_report_user_option_description" = "Melde diesen Chat deinem Konto-Anbieter.";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Dateiname";
 "screen_media_details_no_more_files_to_show" = "Keine weiteren Dateien zum Anzeigen";
 "screen_media_details_no_more_media_to_show" = "Keine weiteren Medien mehr zum Anzeigen";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Hochgeladen von";
 "screen_media_details_uploaded_on" = "Hochgeladen am";
 "screen_media_picker_error_failed_selection" = "Medienauswahl fehlgeschlagen, bitte versuche es erneut.";
