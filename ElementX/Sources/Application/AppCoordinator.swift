@@ -965,12 +965,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         stopSync(isBackgroundTask: false)
         userSessionFlowCoordinator?.stop()
-        
-        tearDownUserSession()
     
         // Allow for everything to deallocate properly
         Task {
-            try? await Task.sleep(for: .seconds(2))
             await userSession.clientProxy.clearCaches()
             stateMachine.processEvent(.startWithExistingSession)
             hideLoadingIndicator()
