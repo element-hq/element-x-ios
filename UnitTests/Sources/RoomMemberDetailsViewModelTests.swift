@@ -163,7 +163,6 @@ struct RoomMemberDetailsViewModelTests {
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
         
-        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
         clientProxy.directRoomForUserIDReturnValue = .success(nil)
         clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init(verificationState: .notVerified)))
         
@@ -185,7 +184,6 @@ struct RoomMemberDetailsViewModelTests {
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
         
-        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
         clientProxy.directRoomForUserIDReturnValue = .success(nil)
         clientProxy.userIdentityForFallBackToServerReturnValue = .failure(.forbiddenAccess)
         

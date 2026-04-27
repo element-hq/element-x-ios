@@ -17,7 +17,6 @@ extension ClientBuilder {
                             sessionDelegate: ClientSessionDelegate,
                             appHooks: AppHooks,
                             enableOnlySignedDeviceIsolationMode: Bool,
-                            enableKeyShareOnInvite: Bool,
                             requestTimeout: UInt64? = 30000,
                             maxRequestRetryTime: UInt64? = nil,
                             threadsEnabled: Bool) -> ClientBuilder {
@@ -40,7 +39,7 @@ extension ClientBuilder {
             builder = builder
                 .autoEnableCrossSigning(autoEnableCrossSigning: true)
                 .backupDownloadStrategy(backupDownloadStrategy: .afterDecryptionFailure)
-                .enableShareHistoryOnInvite(enableShareHistoryOnInvite: enableKeyShareOnInvite)
+                .enableShareHistoryOnInvite(enableShareHistoryOnInvite: true)
                 .autoEnableBackups(autoEnableBackups: true)
         }
 

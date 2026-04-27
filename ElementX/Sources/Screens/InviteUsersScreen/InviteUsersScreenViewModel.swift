@@ -61,8 +61,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .cancel:
             actionsSubject.send(.dismiss)
         case .proceed:
-            guard appSettings.enableKeyShareOnInvite,
-                  roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
+            guard roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
                   !state.usersToConfirm.isEmpty,
                   !state.isSkippable else {
                 inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
@@ -107,11 +106,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func inviteUsers(_ users: [String], roomProxy: JoinedRoomProxyProtocol) {
-        if appSettings.enableKeyShareOnInvite {
-            showLoadingIndicator(title: L10n.screenRoomDetailsInvitePeoplePreparing, message: L10n.screenRoomDetailsInvitePeopleDontClose)
-        } else {
-            showLoadingIndicator()
-        }
+        showLoadingIndicator(title: L10n.screenRoomDetailsInvitePeoplePreparing, message: L10n.screenRoomDetailsInvitePeopleDontClose)
         
         Task {
             defer {
