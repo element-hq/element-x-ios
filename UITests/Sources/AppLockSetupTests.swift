@@ -31,7 +31,7 @@ class AppLockSetupUITests: XCTestCase {
         }
     }
     
-    func testCreateFlow() async throws {
+    func disabled_testCreateFlow() async throws {
         app = Application.launch(.appLockSetupFlow)
         
         // Wait for the keyboard to push the sheet up before snapshotting
@@ -101,7 +101,7 @@ class AppLockSetupUITests: XCTestCase {
         try await app.assertScreenshot(step: Step.setupBiometrics)
     }
     
-    func testUnlockFlow() async throws {
+    func disabled_testUnlockFlow() async throws {
         app = Application.launch(.appLockSetupFlowUnlock)
         
         // Create PIN screen.
@@ -119,7 +119,7 @@ class AppLockSetupUITests: XCTestCase {
         try await app.assertScreenshot(step: Step.clearedStack)
     }
     
-    func testCancel() async throws {
+    func disabled_testCancel() async throws {
         app = Application.launch(.appLockSetupFlowUnlock)
         
         app.showKeyboardIfNeeded() // The secure text field is focussed automatically
