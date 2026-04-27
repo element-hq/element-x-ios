@@ -35,7 +35,7 @@ struct UnitTests: AsyncParsableCommand {
         
         if !skipPreviews {
             do {
-                try await PreviewTests.parse(["--os-version", osVersion]).run()
+                try await PreviewTests.parse([]).run()
             } catch {
                 failures.append("Preview tests failed: \(error)")
             }
