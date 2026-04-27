@@ -10,41 +10,16 @@ import SwiftUI
 
 /// Information about how a call should be configured.
 struct ElementCallConfiguration {
-    enum Kind {
-        case roomCall(roomProxy: JoinedRoomProxyProtocol,
-                      clientProxy: ClientProxyProtocol,
-                      clientID: String,
-                      voiceOnly: Bool,
-                      elementCallBaseURL: URL,
-                      elementCallBaseURLOverride: URL?,
-                      colorScheme: ColorScheme)
-    }
-    
-    /// The type of call being configured i.e. whether it's an external URL or an internal room call.
-    let kind: Kind
-    
-    /// Creates a configuration for an internal room call.
-    init(roomProxy: JoinedRoomProxyProtocol,
-         clientProxy: ClientProxyProtocol,
-         clientID: String,
-         elementCallBaseURL: URL,
-         elementCallBaseURLOverride: URL?,
-         voiceOnly: Bool,
-         colorScheme: ColorScheme) {
-        kind = .roomCall(roomProxy: roomProxy,
-                         clientProxy: clientProxy,
-                         clientID: clientID,
-                         voiceOnly: voiceOnly,
-                         elementCallBaseURL: elementCallBaseURL,
-                         elementCallBaseURLOverride: elementCallBaseURLOverride,
-                         colorScheme: colorScheme)
-    }
+    let roomProxy: JoinedRoomProxyProtocol
+    let clientProxy: ClientProxyProtocol
+    let clientID: String
+    let elementCallBaseURL: URL
+    let elementCallBaseURLOverride: URL?
+    let voiceOnly: Bool
+    let colorScheme: ColorScheme
     
     /// A string representing the call being configured.
     var callRoomID: String {
-        switch kind {
-        case .roomCall(let roomProxy, _, _, _, _, _, _):
-            roomProxy.id
-        }
+        roomProxy.id
     }
 }
