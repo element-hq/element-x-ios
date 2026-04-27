@@ -81,7 +81,7 @@ struct RunTests: AsyncParsableCommand {
     private func createSimulatorIfNecessary(name: String, type: String) async throws {
         logger.info("Checking for simulator '\(name)'…")
         
-        guard let simulators = try await CI.run(.path("/bin/zsh"), ["-cu", "xcrun simctl list devices \"iOS \(osVersion)\" available"],
+        guard let simulators = try await CI.run(.path("/bin/zsh"), ["-cu", "xcrun simctl list devices \"\(name)\" available"],
                                                 output: .string(limit: 4096)).standardOutput else {
             logger.info("No simulators found for iOS \(osVersion). Creating '\(name)'…")
             try await createSimulator(name: name, type: type)
