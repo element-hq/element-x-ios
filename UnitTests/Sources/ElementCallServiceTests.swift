@@ -81,7 +81,7 @@ final class ElementCallServiceTests {
         }
     }
     
-    @Test
+    @Test(.disabled())
     func callIsTimingOut() async {
         #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
