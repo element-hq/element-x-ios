@@ -103,8 +103,6 @@ final class InviteUsersScreenViewModelTests {
     
     @Test
     func invitingUnknownUsersOpensConfirmationDialog() async throws {
-        appSettings.enableKeyShareOnInvite = true
-        
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
         let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: mockedMembers))
         roomProxy.inviteUserIDReturnValue = .success(())
@@ -138,8 +136,6 @@ final class InviteUsersScreenViewModelTests {
     
     @Test
     func removeButtonRemovesUnknownUsers() async throws {
-        appSettings.enableKeyShareOnInvite = true
-        
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
         let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: mockedMembers))
         roomProxy.inviteUserIDReturnValue = .success(())

@@ -89,7 +89,6 @@ struct StartChatScreenViewModelTests {
     
     @Test
     func inviteConfirmationFetchesIdentity() async throws {
-        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
         clientProxy.directRoomForUserIDReturnValue = .success(nil)
         clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init(verificationState: .notVerified)))
         
@@ -105,7 +104,6 @@ struct StartChatScreenViewModelTests {
     
     @Test
     func inviteConfirmationFallsBackToUnknownIdentityOnFailure() async throws {
-        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
         clientProxy.directRoomForUserIDReturnValue = .success(nil)
         clientProxy.userIdentityForFallBackToServerReturnValue = .failure(.forbiddenAccess)
         

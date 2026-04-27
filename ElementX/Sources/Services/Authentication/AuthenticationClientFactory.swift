@@ -38,7 +38,6 @@ struct AuthenticationClientFactory: AuthenticationClientFactoryProtocol {
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite,
                          threadsEnabled: appSettings.threadsEnabled)
             .sqliteStore(config: .init(dataPath: sessionDirectories.dataPath, cachePath: sessionDirectories.cachePath)
                 .passphrase(passphrase: passphrase))
@@ -56,7 +55,6 @@ struct AuthenticationClientFactory: AuthenticationClientFactoryProtocol {
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite,
                          threadsEnabled: appSettings.threadsEnabled)
             .inMemoryStore()
             .serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress)
