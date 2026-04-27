@@ -70,9 +70,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var linkPreviewsEnabled: Bool { get set }
     
     var linkNewDeviceEnabled: Bool { get set }
-    
-    var liveLocationSharingEnabled: Bool { get set }
-        
+            
     var roomThreadListEnabled: Bool { get set }
 }
 

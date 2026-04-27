@@ -33,7 +33,6 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     
     init(interactionMode: LocationSharingInteractionMode,
          mapURLBuilder: MapTilerURLBuilderProtocol,
-         liveLocationSharingEnabled: Bool,
          roomProxy: JoinedRoomProxyProtocol,
          timelineController: TimelineControllerProtocol,
          liveLocationManager: LiveLocationManagerProtocol,
@@ -50,7 +49,6 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         
         super.init(initialViewState: .init(interactionMode: interactionMode,
                                            mapURLBuilder: mapURLBuilder,
-                                           showLiveLocationSharingButton: liveLocationSharingEnabled,
                                            ownUserID: roomProxy.ownUserID),
                    mediaProvider: mediaProvider)
         
@@ -328,8 +326,7 @@ extension LocationSharingScreenViewModel {
     }
     
     static func mock(type: MockType,
-                     senderID: String = "@dan:matrix.org",
-                     liveLocationSharingEnabled: Bool = true) -> LocationSharingScreenViewModel {
+                     senderID: String = "@dan:matrix.org") -> LocationSharingScreenViewModel {
         let interactionMode: LocationSharingInteractionMode = switch type {
         case .picker:
             .picker
@@ -378,7 +375,6 @@ extension LocationSharingScreenViewModel {
         
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
                                               mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
-                                              liveLocationSharingEnabled: liveLocationSharingEnabled,
                                               roomProxy: roomProxy,
                                               timelineController: MockTimelineController(),
                                               liveLocationManager: LiveLocationManagerMock(),

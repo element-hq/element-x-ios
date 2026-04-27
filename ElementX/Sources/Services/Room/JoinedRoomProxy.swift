@@ -91,7 +91,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         
         let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .openRoom)
         timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: appSettings.threadsEnabled),
-                                                                                                         filter: .eventFilter(filter: Self.excludedEventsFilter(appSettings: appSettings)),
+                                                                                                         filter: .eventFilter(filter: Self.excludedEventsFilter),
                                                                                                          internalIdPrefix: nil,
                                                                                                          dateDividerMode: .daily,
                                                                                                          trackReadReceipts: .messageLikeEvents,
@@ -845,7 +845,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    private static func excludedEventsFilter(appSettings: AppSettings) -> TimelineEventFilter {
+    private static let excludedEventsFilter: TimelineEventFilter = {
         var stateEventFilters: [StateEventType] = [.roomCanonicalAlias,
                                                    .roomGuestAccess,
                                                    .roomHistoryVisibility,
@@ -859,11 +859,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                    .policyRuleRoom,
                                                    .policyRuleServer,
                                                    .policyRuleUser]
-        
-        if !appSettings.liveLocationSharingEnabled {
-            stateEventFilters.append(.beaconInfo)
-        }
-        
         return .excludeEventTypes(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
-    }
+    }()
 }

@@ -44,9 +44,7 @@ struct AdvancedSettingsScreen: View {
             
             moderationAndSafetySection
             timelineMediaSection
-            if context.liveLocationSharingEnabled {
-                liveLocationSection
-            }
+            liveLocationSection
         }
         .compoundList()
         .navigationTitle(L10n.commonAdvancedSettings)
@@ -164,9 +162,7 @@ private extension AppAppearance {
 struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
-        appSettings.liveLocationSharingEnabled = true
-        return AdvancedSettingsScreenViewModel(advancedSettings: appSettings,
+        return AdvancedSettingsScreenViewModel(advancedSettings: AppSettings(),
                                                analytics: ServiceLocator.shared.analytics,
                                                clientProxy: ClientProxyMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock())

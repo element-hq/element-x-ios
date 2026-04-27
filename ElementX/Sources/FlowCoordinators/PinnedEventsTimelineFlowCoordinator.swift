@@ -108,7 +108,6 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         
         let params = LocationSharingScreenCoordinatorParameters(interactionMode: interactionMode,
                                                                 mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
-                                                                liveLocationSharingEnabled: flowParameters.appSettings.liveLocationSharingEnabled,
                                                                 roomProxy: roomProxy,
                                                                 timelineController: timelineController,
                                                                 liveLocationManager: flowParameters.userSession.liveLocationManager,

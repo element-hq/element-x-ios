@@ -32,11 +32,9 @@ enum LocationSharingInteractionMode: Hashable {
 struct LocationSharingScreenViewState: BindableState {
     init(interactionMode: LocationSharingInteractionMode,
          mapURLBuilder: MapTilerURLBuilderProtocol,
-         showLiveLocationSharingButton: Bool,
          ownUserID: String) {
         self.interactionMode = interactionMode
         self.mapURLBuilder = mapURLBuilder
-        self.showLiveLocationSharingButton = showLiveLocationSharingButton
         self.ownUserID = ownUserID
         
         let initialProfile: UserProfileProxy = switch interactionMode {
@@ -65,7 +63,6 @@ struct LocationSharingScreenViewState: BindableState {
 
     let interactionMode: LocationSharingInteractionMode
     let mapURLBuilder: MapTilerURLBuilderProtocol
-    let showLiveLocationSharingButton: Bool
     let ownUserID: String
     var userProfiles: [String: UserProfileProxy]
     var liveLocationShares: [LiveLocationShare] = []
