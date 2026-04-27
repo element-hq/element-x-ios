@@ -103,7 +103,7 @@ struct RestorationTokenTests {
                                                               userId: "@user:example.com",
                                                               deviceId: "D3V1C3",
                                                               homeserverUrl: "https://matrix.example.com",
-                                                              oidcData: "data-from-mas",
+                                                              oauthData: "data-from-mas",
                                                               slidingSyncVersion: .native),
                                              sessionDirectories: .init(),
                                              passphrase: "passphrase",
@@ -123,7 +123,7 @@ struct RestorationTokenTests {
         #expect(session.userId == originalSession.userId, "The user ID should not be changed.")
         #expect(session.deviceId == originalSession.deviceId, "The device ID should not be changed.")
         #expect(session.homeserverUrl == originalSession.homeserverUrl, "The homeserver URL should not be changed.")
-        #expect(session.oidcData == originalSession.oidcData, "The OIDC data should not be changed.")
+        #expect(session.oauthData == originalSession.oidcData, "The OAuth data should not be changed.")
     }
 }
 

@@ -84,9 +84,9 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
                 }
                 
                 actionsSubject.send(.requestPassword(passwordPublisher: passwordPublisher))
-            case .oidc(let oidcInfo):
-                guard let url = URL(string: oidcInfo.approvalUrl) else {
-                    fatalError("Invalid URL received through identity reset handle: \(oidcInfo.approvalUrl)")
+            case .oAuth(let oAuthInfo):
+                guard let url = URL(string: oAuthInfo.approvalUrl) else {
+                    fatalError("Invalid URL received through identity reset handle: \(oAuthInfo.approvalUrl)")
                 }
                 
                 hideLoadingIndicator()

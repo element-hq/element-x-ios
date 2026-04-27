@@ -72,8 +72,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
             let client = try await makeClient(homeserverAddress: homeserverAddress)
             let loginDetails = await client.homeserverLoginDetails()
             
-            homeserver.loginMode = if loginDetails.supportsOidcLogin() {
-                .oidc(supportsCreatePrompt: loginDetails.supportedOidcPrompts().contains(.create))
+            homeserver.loginMode = if loginDetails.supportsOauthLogin() {
+                .oidc(supportsCreatePrompt: loginDetails.supportedOauthPrompts().contains(.create))
             } else if loginDetails.supportsPasswordLogin() {
                 .password
             } else {
@@ -110,11 +110,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
         do {
             // The create prompt is broken: https://github.com/element-hq/matrix-authentication-service/issues/3429
             // let prompt: OidcPrompt = flow == .register ? .create : .consent
-            let oidcData = try await client.urlForOidc(oidcConfiguration: appSettings.oidcConfiguration.rustValue,
-                                                       prompt: .consent,
-                                                       loginHint: loginHint,
-                                                       deviceId: nil,
-                                                       additionalScopes: nil)
+            let oidcData = try await client.urlForOauth(oauthConfiguration: appSettings.oidcConfiguration.rustValue,
+                                                        prompt: .consent,
+                                                        loginHint: loginHint,
+                                                        deviceId: nil,
+                                                        additionalScopes: nil)
             return .success(OIDCAuthorizationDataProxy(underlyingData: oidcData))
         } catch {
             MXLog.error("Failed to get URL for OIDC login: \(error)")
@@ -125,16 +125,16 @@ class AuthenticationService: AuthenticationServiceProtocol {
     func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async {
         guard let client else { return }
         MXLog.info("Aborting OIDC login.")
-        await client.abortOidcAuth(authorizationData: data.underlyingData)
+        await client.abortOauthAuth(authorizationData: data.underlyingData)
     }
     
     func loginWithOIDCCallback(_ callbackURL: URL) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         guard let client else { return .failure(.failedLoggingIn) }
         do {
-            try await client.loginWithOidcCallback(callbackUrl: callbackURL.absoluteString)
+            try await client.loginWithOauthCallback(callbackUrl: callbackURL.absoluteString)
             await verifyClientIfPossible(client: client)
             return await userSession(for: client)
-        } catch OidcError.Cancelled {
+        } catch OAuthError.Cancelled {
             return .failure(.oidcError(.userCancellation))
         } catch {
             MXLog.error("Login with OIDC failed: \(error)")
@@ -206,7 +206,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         Task {
             do {
                 let client = try await makeClient(homeserverAddress: scannedServerNameOrBaseUrl)
-                let qrCodeHandler = client.newLoginWithQrCodeHandler(oidcConfiguration: appSettings.oidcConfiguration.rustValue)
+                let qrCodeHandler = client.newLoginWithQrCodeHandler(oauthConfiguration: appSettings.oidcConfiguration.rustValue)
                 try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener)
                 
                 // Since the QR code login flow includes verification.
@@ -284,7 +284,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                                                                     appSettings: appSettings,
                                                                     appHooks: appHooks)
             let loginDetails = await client.homeserverLoginDetails()
-            let isServerSupported = loginDetails.supportsOidcLogin() || loginDetails.supportsPasswordLogin()
+            let isServerSupported = loginDetails.supportsOauthLogin() || loginDetails.supportsPasswordLogin()
             MXLog.info("Classic app homeserver supported: \(isServerSupported)")
             classicAppAccount.state.isServerSupported = isServerSupported
             
@@ -370,7 +370,7 @@ private extension HumanQrLoginError {
             .qrCodeError(.deviceNotSignedIn)
         case .UnsupportedQrCodeType:
             .qrCodeError(.invalidQRCode)
-        case .Unknown, .OidcMetadataInvalid, .CheckCodeAlreadySent, .CheckCodeCannotBeSent:
+        case .Unknown, .OAuthMetadataInvalid, .CheckCodeAlreadySent, .CheckCodeCannotBeSent:
             .qrCodeError(.unknown)
         }
     }
