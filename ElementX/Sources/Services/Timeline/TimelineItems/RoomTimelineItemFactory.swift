@@ -69,8 +69,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        isOutgoing: isOutgoing)
         case .callInvite:
             return buildCallInviteTimelineItem(for: eventItemProxy)
-        case .rtcNotification:
-            return buildCallNotificationTimelineItem(for: eventItemProxy)
+        case .rtcNotification(let callIntent, let declinedBy):
+            return buildCallNotificationTimelineItem(for: eventItemProxy, isDM: isDM, isVoice: callIntent == "audio", declinedBy: declinedBy)
         }
     }
     
@@ -771,12 +771,19 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                    sender: eventItemProxy.sender)
     }
     
-    private func buildCallNotificationTimelineItem(for eventItemProxy: EventTimelineItemProxy) -> RoomTimelineItemProtocol {
+    private func buildCallNotificationTimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                                   isDM: Bool,
+                                                   isVoice: Bool,
+                                                   declinedBy: [String]) -> RoomTimelineItemProtocol {
         CallNotificationRoomTimelineItem(id: eventItemProxy.id,
                                          timestamp: eventItemProxy.timestamp,
                                          isEditable: eventItemProxy.isEditable,
                                          canBeRepliedTo: eventItemProxy.canBeRepliedTo,
-                                         sender: eventItemProxy.sender)
+                                         isDM: isDM,
+                                         isDeclinedByMe: declinedBy.contains(userID),
+                                         isDeclined: declinedBy.count > 0,
+                                         isVoiceCall: isVoice,
+                                         properties: .init())
     }
     
     // MARK: - State Events
