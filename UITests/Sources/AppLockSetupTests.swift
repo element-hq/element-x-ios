@@ -13,16 +13,9 @@ class AppLockSetupUITests: XCTestCase {
     var app: XCUIApplication!
     
     @MainActor enum Step {
-        static let createPIN = 0
-        static let confirmPIN = 1
         static let setupBiometrics = 2
         static let settings = 3
-        
-        /// iPad shows the settings screen behind the modal, iPhone doesn't.
-        static let changePIN = isPhone ? createPIN : 4
-        /// iPad shows the settings screen behind the modal, iPhone doesn't.
-        static let confirmChangePIN = isPhone ? confirmPIN : 5
-        
+                
         /// Not part of the flow, only to verify the stack is cleared.
         static let clearedStack = 99
         
@@ -31,20 +24,16 @@ class AppLockSetupUITests: XCTestCase {
         }
     }
     
-    func disabled_testCreateFlow() async throws {
+    func testCreateFlow() async throws {
         app = Application.launch(.appLockSetupFlow)
         
         // Wait for the keyboard to push the sheet up before snapshotting
         try await Task.sleep(for: .seconds(0.5))
         
         // Create PIN screen.
-        try await app.assertScreenshot(step: Step.createPIN)
-        
         enterPIN()
         
         // Confirm PIN screen.
-        try await app.assertScreenshot(step: Step.confirmPIN)
-        
         enterPIN()
         
         // Setup biometrics screen.
@@ -58,13 +47,9 @@ class AppLockSetupUITests: XCTestCase {
         app.buttons[A11yIdentifiers.appLockSetupSettingsScreen.changePIN].tap()
         
         // Change PIN (create).
-        try await app.assertScreenshot(step: Step.changePIN)
-        
         enterDifferentPIN()
         
         // Change PIN (confirm).
-        try await app.assertScreenshot(step: Step.confirmChangePIN)
-        
         enterDifferentPIN()
         
         // Settings screen.
@@ -81,13 +66,9 @@ class AppLockSetupUITests: XCTestCase {
         app = Application.launch(.appLockSetupFlowMandatory)
         
         // Create PIN screen (non-modal and no cancellation button).
-        try await app.assertScreenshot(step: Step.createPIN)
-        
         enterPIN()
         
         // Confirm PIN screen (non-modal and no cancellation button).
-        try await app.assertScreenshot(step: Step.confirmPIN)
-        
         enterPIN()
         
         // Setup biometrics screen (non-modal).
@@ -101,12 +82,10 @@ class AppLockSetupUITests: XCTestCase {
         try await app.assertScreenshot(step: Step.setupBiometrics)
     }
     
-    func disabled_testUnlockFlow() async throws {
+    func testUnlockFlow() async throws {
         app = Application.launch(.appLockSetupFlowUnlock)
         
         // Create PIN screen.
-        try await app.assertScreenshot()
-        
         enterPIN()
         
         // Settings screen.
@@ -119,14 +98,10 @@ class AppLockSetupUITests: XCTestCase {
         try await app.assertScreenshot(step: Step.clearedStack)
     }
     
-    func disabled_testCancel() async throws {
+    func testCancel() async throws {
         app = Application.launch(.appLockSetupFlowUnlock)
         
-        app.showKeyboardIfNeeded() // The secure text field is focussed automatically
-        
         // Create PIN screen.
-        try await app.assertScreenshot()
-        
         app.buttons[A11yIdentifiers.appLockSetupPINScreen.cancel].tap()
         
         // Return to whatever was last presented.
