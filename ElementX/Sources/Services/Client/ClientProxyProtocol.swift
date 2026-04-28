@@ -90,6 +90,12 @@ enum TimelineMediaVisibility: Decodable {
     case never
 }
 
+struct OwnBeaconInfoUpdate: Equatable {
+    let roomID: String
+    let eventID: String
+    let isLive: Bool
+}
+
 // sourcery: AutoMockable
 protocol ClientProxyProtocol: AnyObject {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
@@ -264,6 +270,10 @@ protocol ClientProxyProtocol: AnyObject {
     
     func userIdentity(for userID: String, fallBackToServer: Bool) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
     
+    // MARK: - Live Location
+
+    var ownBeaconInfoUpdatesPublisher: AnyPublisher<OwnBeaconInfoUpdate, Never> { get }
+
     // MARK: - Moderation & Safety
     
     func setTimelineMediaVisibility(_ value: TimelineMediaVisibility) async -> Result<Void, ClientProxyError>

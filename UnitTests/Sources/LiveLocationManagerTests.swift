@@ -40,14 +40,14 @@ final class LiveLocationManagerTests {
         }
         roomProxy.startLiveLocationShareDurationClosure = { _ in
             callOrder.append("start")
-            return .success(())
+            return .success("$event:matrix.org")
         }
         
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         
         try result.get()
         #expect(callOrder == ["stop", "start"])
-        #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] != nil)
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
         #expect(locationManagerMock.startUpdatingLocationCalled)
     }
     
@@ -56,7 +56,7 @@ final class LiveLocationManagerTests {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] = Date().addingTimeInterval(300)
+        appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
         
         var callOrder: [String] = []
         roomProxy.stopLiveLocationShareClosure = {
@@ -65,14 +65,14 @@ final class LiveLocationManagerTests {
         }
         roomProxy.startLiveLocationShareDurationClosure = { _ in
             callOrder.append("start")
-            return .success(())
+            return .success("$event:matrix.org")
         }
         
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(600))
         
         try result.get()
         #expect(callOrder == ["stop", "start"])
-        #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] != nil)
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
     }
     
     @Test
@@ -81,12 +81,12 @@ final class LiveLocationManagerTests {
         let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
-        appSettings.liveLocationSharingTimeoutDatesByRoomID["!room2:matrix.org"] = Date().addingTimeInterval(300)
+        appSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
         
         _ = await manager.startLiveLocation(roomID: "!room1:matrix.org", duration: .seconds(300))
         
         #expect(roomProxy.stopLiveLocationShareCalled)
-        #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room2:matrix.org"] != nil)
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] != nil)
     }
     
     @Test
@@ -97,7 +97,7 @@ final class LiveLocationManagerTests {
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         
         #expect(throws: LiveLocationManagerError.roomNotJoined) { try result.get() }
-        #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] == nil)
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
     }
     
     @Test
@@ -110,7 +110,7 @@ final class LiveLocationManagerTests {
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         
         #expect(throws: LiveLocationManagerError.startFailed) { try result.get() }
-        #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] == nil)
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
     }
     
     @Test
@@ -124,11 +124,12 @@ final class LiveLocationManagerTests {
         _ = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: duration)
         let afterStart = Date()
         
-        let storedTimeout = appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"]
+        let storedSession = try #require(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"])
         let expectedMinTimeout = beforeStart.addingTimeInterval(TimeInterval(duration.seconds))
         let expectedMaxTimeout = afterStart.addingTimeInterval(TimeInterval(duration.seconds))
         
-        try #expect((expectedMinTimeout...expectedMaxTimeout).contains(#require(storedTimeout)))
+        #expect((expectedMinTimeout...expectedMaxTimeout).contains(storedSession.expirationDate))
+        #expect(storedSession.eventID == "$event:matrix.org")
     }
     
     // MARK: - stopLiveLocation
@@ -138,12 +139,12 @@ final class LiveLocationManagerTests {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] = Date().addingTimeInterval(300)
+        appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
         
         await manager.stopLiveLocation(roomID: "!room:matrix.org")
         
         #expect(roomProxy.stopLiveLocationShareCalled)
-        #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room:matrix.org"] == nil)
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
         // Setting the timeout date above starts tracking; removing it stops tracking.
         #expect(locationManagerMock.startUpdatingLocationCalled)
         #expect(locationManagerMock.stopUpdatingLocationCalled)
@@ -165,13 +166,13 @@ final class LiveLocationManagerTests {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        appSettings.liveLocationSharingTimeoutDatesByRoomID["!room1:matrix.org"] = Date().addingTimeInterval(300)
-        appSettings.liveLocationSharingTimeoutDatesByRoomID["!room2:matrix.org"] = Date().addingTimeInterval(300)
+        appSettings.liveLocationSharingSessionsByRoomID["!room1:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
+        appSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
         
         await manager.stopLiveLocation(roomID: "!room1:matrix.org")
         
-        #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room1:matrix.org"] == nil)
-        #expect(appSettings.liveLocationSharingTimeoutDatesByRoomID["!room2:matrix.org"] != nil)
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room1:matrix.org"] == nil)
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] != nil)
     }
     
     // MARK: - Reduced accuracy
@@ -197,7 +198,7 @@ final class LiveLocationManagerTests {
     
     private func makeRoomProxy(roomID: String) -> JoinedRoomProxyMock {
         let roomProxy = JoinedRoomProxyMock(.init(id: roomID))
-        roomProxy.startLiveLocationShareDurationReturnValue = .success(())
+        roomProxy.startLiveLocationShareDurationReturnValue = .success("$event:matrix.org")
         roomProxy.stopLiveLocationShareReturnValue = .success(())
         return roomProxy
     }

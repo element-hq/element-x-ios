@@ -758,10 +758,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         await RoomLiveLocationService(liveLocationsObserver: room.liveLocationsObserver())
     }
     
-    func startLiveLocationShare(duration: Duration) async -> Result<Void, RoomProxyError> {
+    func startLiveLocationShare(duration: Duration) async -> Result<String, RoomProxyError> {
         do {
-            try await room.startLiveLocationShare(durationMillis: UInt64(duration.seconds * 1000))
-            return .success(())
+            let eventID = try await room.startLiveLocationShare(durationMillis: UInt64(duration.seconds * 1000))
+            return .success(eventID)
         } catch {
             MXLog.error("Failed starting live location share with error: \(error)")
             return .failure(.sdkError(error))

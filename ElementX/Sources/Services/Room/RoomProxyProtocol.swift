@@ -200,7 +200,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     func makeLiveLocationService() async -> RoomLiveLocationServiceProtocol
     
-    func startLiveLocationShare(duration: Duration) async -> Result<Void, RoomProxyError>
+    func startLiveLocationShare(duration: Duration) async -> Result<String, RoomProxyError>
     func sendLiveLocation(geoURI: GeoURI) async -> Result<Void, RoomProxyError>
     func stopLiveLocationShare() async -> Result<Void, RoomProxyError>
 }

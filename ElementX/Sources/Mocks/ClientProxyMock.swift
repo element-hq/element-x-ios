@@ -159,6 +159,8 @@ extension ClientProxyMock {
         
         underlyingTimelineMediaVisibilityPublisher = CurrentValueSubject<TimelineMediaVisibility, Never>(configuration.timelineMediaVisibility).asCurrentValuePublisher()
         underlyingHideInviteAvatarsPublisher = CurrentValueSubject<Bool, Never>(configuration.hideInviteAvatars).asCurrentValuePublisher()
+
+        ownBeaconInfoUpdatesPublisher = PassthroughSubject<OwnBeaconInfoUpdate, Never>().eraseToAnyPublisher()
         
         underlyingMaxMediaUploadSize = .success(configuration.maxMediaUploadSize)
         
