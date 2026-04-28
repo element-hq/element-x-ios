@@ -38,7 +38,7 @@ struct ThreadTimelineScreen: View {
                 .padding(.top, 13)
             }
             .overlay(alignment: .bottomTrailing) {
-                TimelineScrollToBottomButton(isVisible: isAtBottomAndLive) {
+                TimelineScrollButton(isHidden: timelineContext.viewState.isAtBottomAndLive) {
                     timelineContext.send(viewAction: .scrollToBottom)
                 }
             }
@@ -76,9 +76,5 @@ struct ThreadTimelineScreen: View {
                 // There is no action but the iOS 26 designs have it looking like a button.
             }
         }
-    }
-    
-    private var isAtBottomAndLive: Bool {
-        timelineContext.isScrolledToBottom && timelineContext.viewState.timelineState.isLive
     }
 }

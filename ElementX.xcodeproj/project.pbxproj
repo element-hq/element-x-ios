@@ -254,6 +254,7 @@
 		28426806399E3659BEBC5918 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6ED50FE104992419310EEB /* NotificationHandler.swift */; };
 		288408E6151D7BD3EBAA073A /* RoomScreenHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = B343C5255FB408DDE853CFDF /* RoomScreenHook.swift */; };
 		28E8C44DD6E39BEB2A1599C8 /* AccessibilityTestsAppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CABD320DE5566D133890B24 /* AccessibilityTestsAppCoordinator.swift */; };
+		291A3E0EECD496D0FCC2ADAA /* TimelineScrollButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4E14E3688FF3532456A656 /* TimelineScrollButton.swift */; };
 		2932570AA418974979D16DED /* UserPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6DE144D887A254F4CAF203 /* UserPreference.swift */; };
 		29491EE7AE37E239E839C5A3 /* LocationSharingScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEBF0E59F25E842EDB6FD11 /* LocationSharingScreenModels.swift */; };
 		2955F4C160CFD7794D819C64 /* EffectsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024F7398C5FC12586FB10E9D /* EffectsScene.swift */; };
@@ -700,6 +701,7 @@
 		756EA0D663261889EF64E6D4 /* VoiceMessageRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9CBF577B9711CFBB4FA40D /* VoiceMessageRecordingView.swift */; };
 		7573D682F089205F7F1D96CF /* SessionDirectories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2067FF58B4996323EB40C /* SessionDirectories.swift */; };
 		757862045774A0F458357E19 /* RoomThreadListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544B9262E1BC6F489C03FFFA /* RoomThreadListScreen.swift */; };
+		75E55A763FE8BA64FB8513E4 /* TimelineStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F968FDB68F9D4CB9010FED70 /* TimelineStateTests.swift */; };
 		75ED4B73983228BB6922CE3C /* KnockRequestsListScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C217DD0749EC709EED028 /* KnockRequestsListScreenViewModelProtocol.swift */; };
 		761EA50B2619307AB30891B8 /* PhishingDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB07F03461023BC39C730922 /* PhishingDetector.swift */; };
 		7624B61D0A3EFEC69C666609 /* SpaceAddRoomsScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB74D407F0E413E7593B369 /* SpaceAddRoomsScreenViewModelTests.swift */; };
@@ -1517,7 +1519,6 @@
 		FCF95603F1D056B1B106A415 /* AdvancedSettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E2B20431F890ED64255CA1 /* AdvancedSettingsScreenViewModelProtocol.swift */; };
 		FD19654C18E7C6D8AC79408D /* libMatrixRustSDKMocks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73F3153AB9D628110878E24F /* libMatrixRustSDKMocks.a */; };
 		FD29471C72872F8B7580E3E1 /* KeychainControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C0D861FC397AC34BCF089E /* KeychainControllerMock.swift */; };
-		FD439E183A48BE871AEEFAEA /* TimelineScrollToBottomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10765FBC83B34A3BC4ADB23 /* TimelineScrollToBottomButton.swift */; };
 		FD573B5D665824EB79EABF06 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327E3B3C58BEB0E65F4CF98 /* Observable.swift */; };
 		FD762761C5D0C30E6255C3D8 /* ServerConfirmationScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA4CF2F5B4F68D02E412004 /* ServerConfirmationScreenViewModelProtocol.swift */; };
 		FD9777315A5D9CDC47458AD1 /* MediaEventsTimelineScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A175D0FDEDBFA44C47FE13AE /* MediaEventsTimelineScreenViewModelProtocol.swift */; };
@@ -2151,6 +2152,7 @@
 		5B2A2B168C8DC14A1A9D1C64 /* NotificationToneManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationToneManagerProtocol.swift; sourceTree = "<group>"; };
 		5B8F0ED874DF8C9A51B0AB6F /* SettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenCoordinator.swift; sourceTree = "<group>"; };
 		5C1F000589F2CEE6B03ECFAB /* TimelineMediaPreviewViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineMediaPreviewViewModelTests.swift; sourceTree = "<group>"; };
+		5C4E14E3688FF3532456A656 /* TimelineScrollButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineScrollButton.swift; sourceTree = "<group>"; };
 		5C60559596897AC65D2CB799 /* LiveLocationSharingBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveLocationSharingBannerView.swift; sourceTree = "<group>"; };
 		5C7C7CFA6B2A62A685FF6CE3 /* DeveloperOptionsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsScreenCoordinator.swift; sourceTree = "<group>"; };
 		5CABD320DE5566D133890B24 /* AccessibilityTestsAppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityTestsAppCoordinator.swift; sourceTree = "<group>"; };
@@ -2896,7 +2898,6 @@
 		E06AAD6D9D3F5833E7A5A2F9 /* RoomListFilterModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListFilterModels.swift; sourceTree = "<group>"; };
 		E0FCA0957FAA0E15A9F5579D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Untranslated.stringsdict; sourceTree = "<group>"; };
 		E0FF9CB3EFA753277291F609 /* EncryptionResetScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionResetScreenCoordinator.swift; sourceTree = "<group>"; };
-		E10765FBC83B34A3BC4ADB23 /* TimelineScrollToBottomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineScrollToBottomButton.swift; sourceTree = "<group>"; };
 		E10DA51DBC8C7E1460DBCCBD /* UserProfileListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileListRow.swift; sourceTree = "<group>"; };
 		E157152B11E347F735C3FD6E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tr; path = tr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1573D28C8A9FB6399D0EEFB /* SecureBackupLogoutConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupLogoutConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -3040,6 +3041,7 @@
 		F899D02CF26EA7675EEBE74C /* UserSessionScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionScreenTests.swift; sourceTree = "<group>"; };
 		F8CCF9A924521DECA44778C4 /* AppLockSetupBiometricsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockSetupBiometricsScreen.swift; sourceTree = "<group>"; };
 		F91AC45CDDF85E946391CA5C /* RoomThreadListScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomThreadListScreenViewModel.swift; sourceTree = "<group>"; };
+		F968FDB68F9D4CB9010FED70 /* TimelineStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStateTests.swift; sourceTree = "<group>"; };
 		F9E543072DE58E751F028998 /* TimelineProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineProxy.swift; sourceTree = "<group>"; };
 		FA2397174D0DC3918A7A8A7B /* AnalyticsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsConfiguration.swift; sourceTree = "<group>"; };
 		FA3EB5B1848CF4F64E63C6B7 /* PermalinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermalinkTests.swift; sourceTree = "<group>"; };
@@ -3880,7 +3882,7 @@
 				CB04B2D794885025DACFCEFB /* SnapshotableGlassEffect.swift */,
 				A8558D41DD4B553A752C868A /* StackedAvatarsView.swift */,
 				1A786DE47C0DBCE0CD163193 /* StopButton.swift */,
-				E10765FBC83B34A3BC4ADB23 /* TimelineScrollToBottomButton.swift */,
+				5C4E14E3688FF3532456A656 /* TimelineScrollButton.swift */,
 				16D353E10A64172D863769BF /* TombstonedAvatarImage.swift */,
 				510DA63AB273A68D659CEC95 /* ToolbarButton.swift */,
 				78483F0143E185EDC6ECD741 /* TopBannerModifier.swift */,
@@ -5018,6 +5020,7 @@
 				9AA3AF94A06D319BB37E52DA /* TimelineItemFactoryTests.swift */,
 				ED0AD0C652385F69FA90FAF5 /* TimelineMediaPreviewDataSourceTests.swift */,
 				5C1F000589F2CEE6B03ECFAB /* TimelineMediaPreviewViewModelTests.swift */,
+				F968FDB68F9D4CB9010FED70 /* TimelineStateTests.swift */,
 				6509708F54FC883604DFDC95 /* TimelineViewModelTests.swift */,
 				76310030C831D4610A705603 /* URLComponentsTests.swift */,
 				3AB34956C87731AB094DB33A /* URLTests.swift */,
@@ -8003,6 +8006,7 @@
 				0D4EB2ABAA5FE8CB10FDBCB8 /* TimelineItemFactoryTests.swift in Sources */,
 				C02DE5F62C81FB9E173C3D2F /* TimelineMediaPreviewDataSourceTests.swift in Sources */,
 				F6BF52CB027393EE03CEC523 /* TimelineMediaPreviewViewModelTests.swift in Sources */,
+				75E55A763FE8BA64FB8513E4 /* TimelineStateTests.swift in Sources */,
 				2F6207CB5C4715FE313B1E95 /* TimelineViewModelTests.swift in Sources */,
 				8E650379587C31D7912ED67B /* UNNotification+Creator.swift in Sources */,
 				AF33B9044498211C3D82F1E1 /* UNTextInputNotificationResponse+Creator.swift in Sources */,
@@ -9079,7 +9083,7 @@
 				8446C2A7ECEFDA79F622725F /* TimelineReactionsView.swift in Sources */,
 				4DAEE2468669848B6C9F55B4 /* TimelineReadReceiptsView.swift in Sources */,
 				6EB46C92ECFEAE71959D91D2 /* TimelineReplyView.swift in Sources */,
-				FD439E183A48BE871AEEFAEA /* TimelineScrollToBottomButton.swift in Sources */,
+				291A3E0EECD496D0FCC2ADAA /* TimelineScrollButton.swift in Sources */,
 				9FBE1FB20171012260A32492 /* TimelineSenderAvatarView.swift in Sources */,
 				C4FE0E11A907C8999F92D5A8 /* TimelineStartRoomTimelineItem.swift in Sources */,
 				785613C0C092B532198EB3BB /* TimelineStartRoomTimelineView.swift in Sources */,

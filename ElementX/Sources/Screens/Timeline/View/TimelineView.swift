@@ -83,9 +83,12 @@ struct TimelineViewRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> TimelineTableViewController {
         TimelineTableViewController(coordinator: context.coordinator,
                                     isScrolledToBottom: $viewModelContext.isScrolledToBottom,
+                                    isReadMarkerVisible: $viewModelContext.isReadMarkerVisible,
+                                    newMessagesAtBottomCount: $viewModelContext.newMessagesAtBottomCount,
                                     floatingDate: $viewModelContext.floatingDate,
                                     scrollToBottomPublisher: viewModelContext.viewState.timelineState.scrollToBottomPublisher,
-                                    scrollToFirstItemForDatePublisher: viewModelContext.viewState.timelineState.scrollToFirstItemForDatePublisher)
+                                    scrollToFirstItemForDatePublisher: viewModelContext.viewState.timelineState.scrollToFirstItemForDatePublisher,
+                                    scrollToFirstUnreadPublisher: viewModelContext.viewState.timelineState.scrollToFirstUnreadPublisher)
     }
     
     func updateUIViewController(_ uiViewController: TimelineTableViewController, context: Context) {
@@ -127,7 +130,10 @@ struct TimelineViewRepresentable: UIViewControllerRepresentable {
             if tableViewController.hideTimelineMedia != context.viewState.hideTimelineMedia {
                 tableViewController.hideTimelineMedia = context.viewState.hideTimelineMedia
             }
-            
+            if tableViewController.readMarkerUniqueID != context.viewState.timelineState.readMarkerUniqueID {
+                tableViewController.readMarkerUniqueID = context.viewState.timelineState.readMarkerUniqueID
+            }
+
             if tableViewController.typingMembers.members != context.viewState.typingMembers {
                 tableViewController.setTypingMembers(context.viewState.typingMembers)
             }

@@ -27,8 +27,17 @@ struct RoomScreen: View {
 
     var body: some View {
         TimelineView(timelineContext: timelineContext)
+            .overlay(alignment: .topTrailing) {
+                if timelineContext.viewState.shouldShowJumpToUnread {
+                    TimelineScrollButton(direction: .up,
+                                         badgeCount: timelineContext.viewState.timelineState.unreadMessageCount) {
+                        timelineContext.send(viewAction: .scrollToFirstUnread)
+                    }
+                }
+            }
             .overlay(alignment: .bottomTrailing) {
-                TimelineScrollToBottomButton(isVisible: isAtBottomAndLive) {
+                TimelineScrollButton(isHidden: timelineContext.viewState.isAtBottomAndLive,
+                                     badgeCount: timelineContext.viewState.bindings.newMessagesAtBottomCount) {
                     timelineContext.send(viewAction: .scrollToBottom)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
@@ -129,11 +138,7 @@ struct RoomScreen: View {
     private func onViewAllKnockRequests() {
         context.send(viewAction: .viewKnockRequests)
     }
-    
-    private var isAtBottomAndLive: Bool {
-        timelineContext.isScrolledToBottom && timelineContext.viewState.timelineState.isLive
-    }
-    
+
     @ViewBuilder
     private var composer: some View {
         if context.viewState.hasSuccessor {

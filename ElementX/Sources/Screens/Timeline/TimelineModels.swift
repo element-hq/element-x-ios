@@ -58,6 +58,7 @@ enum TimelineViewAction {
     case paginateForwards
     case scrollToBottom
     case scrollToFirstItemForCurrentDate
+    case scrollToFirstUnread
     
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
@@ -151,7 +152,16 @@ struct TimelineViewState: BindableState {
 
 struct TimelineViewStateBindings {
     var isScrolledToBottom = true
-    
+
+    /// Whether the read marker (NEW banner) is currently visible in the timeline viewport.
+    /// Used to hide the jump-to-unread button once the user has scrolled to the read marker.
+    var isReadMarkerVisible = false
+
+    /// Count of new messages received while the user is scrolled away from the bottom of a live
+    /// timeline. Drives the badge on the scroll-to-bottom button and resets when the user returns
+    /// to the bottom.
+    var newMessagesAtBottomCount = 0
+
     /// The timestamp of the topmost visible item, used to drive the floating date badge while scrolling.
     var floatingDate: Date?
     
@@ -248,17 +258,45 @@ struct TimelineState {
     /// These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     var scrollToFirstItemForDatePublisher = PassthroughSubject<Void, Never>()
-    
+    var scrollToFirstUnreadPublisher = PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>()
+
     var itemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
-    
+
     var uniqueIDs: [TimelineItemIdentifier.UniqueID] {
         itemsDictionary.keys.elements
     }
-    
+
     var itemViewStates: [RoomTimelineItemViewState] {
         itemsDictionary.values.elements
     }
-    
+
+    /// The unique ID of the read marker (NEW banner) in the timeline, if present.
+    var readMarkerUniqueID: TimelineItemIdentifier.UniqueID? {
+        itemsDictionary.first { _, viewState in
+            if case .readMarker = viewState.type { return true }
+            return false
+        }?.key
+    }
+
+    /// The number of message-content items that follow the read marker. Returns 0 if there is no
+    /// read marker.
+    var unreadMessageCount: Int {
+        guard let readMarkerID = readMarkerUniqueID else { return 0 }
+
+        var count = 0
+        var foundMarker = false
+        for (uniqueID, viewState) in itemsDictionary {
+            if uniqueID == readMarkerID {
+                foundMarker = true
+                continue
+            }
+            if foundMarker, viewState.type.isMessageContent {
+                count += 1
+            }
+        }
+        return count
+    }
+
     func hasLoadedItem(with eventID: String) -> Bool {
         itemViewStates.contains { $0.identifier.eventID == eventID }
     }
@@ -270,6 +308,17 @@ enum ScrollDirection: Equatable {
 }
 
 extension TimelineViewState {
+    /// The user is at the bottom of a live timeline (no jump-to-bottom button needed).
+    var isAtBottomAndLive: Bool {
+        bindings.isScrolledToBottom && timelineState.isLive
+    }
+
+    /// Whether the jump-to-unread button should be shown: a read marker exists in the timeline
+    /// and isn't currently visible in the viewport.
+    var shouldShowJumpToUnread: Bool {
+        timelineState.readMarkerUniqueID != nil && !bindings.isReadMarkerVisible
+    }
+
     /// The string shown as the message preview.
     ///
     /// This converts the formatted body to a plain string to remove formatting

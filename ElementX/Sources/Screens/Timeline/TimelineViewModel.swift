@@ -179,6 +179,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             scrollToBottom()
         case .scrollToFirstItemForCurrentDate:
             state.timelineState.scrollToFirstItemForDatePublisher.send()
+        case .scrollToFirstUnread:
+            scrollToFirstUnread()
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
@@ -524,7 +526,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
             .store(in: &cancellables)
     }
-    
+
     func viewInRoomTimeline(eventID: String) async {
         switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
         case .success(let event):
@@ -647,7 +649,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             focusLive()
         }
     }
-    
+
+    private func scrollToFirstUnread() {
+        guard let readMarkerID = state.timelineState.readMarkerUniqueID else { return }
+        state.timelineState.scrollToFirstUnreadPublisher.send(readMarkerID)
+    }
+
     private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async {
         guard appMediator.appState == .active else { return }
                 
@@ -842,7 +849,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         if isSwitchingTimelines {
             state.timelineState.isSwitchingTimelines = true
         }
-        
+
+        // Read the previous dictionary before we overwrite it on the next line.
+        updateNewMessagesAtBottomCount(with: timelineItemsDictionary, isSwitchingTimelines: isSwitchingTimelines)
+
         state.timelineState.itemsDictionary = timelineItemsDictionary
     }
 
@@ -874,6 +884,33 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         return eventTimelineItem.sender == otherEventTimelineItem.sender
             && eventTimelineItem.properties.reactions.isEmpty // Reactions break the grouping.
             && otherEventTimelineItem.timestamp.timeIntervalSince(eventTimelineItem.timestamp) < 5 * 60 // As does the passage of time.
+    }
+
+    /// Increments `newMessagesAtBottomCount` by the number of newly arrived message-content items
+    /// when the user is scrolled up in a live timeline. Skips initial load and timeline switches.
+    private func updateNewMessagesAtBottomCount(with newItemsDictionary: OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>,
+                                                isSwitchingTimelines: Bool) {
+        guard state.timelineState.isLive,
+              !isSwitchingTimelines,
+              !state.bindings.isScrolledToBottom else {
+            return
+        }
+
+        let oldDictionary = state.timelineState.itemsDictionary
+        guard !oldDictionary.isEmpty,
+              !newItemsDictionary.isEmpty,
+              oldDictionary.keys.last != newItemsDictionary.keys.last else {
+            return
+        }
+
+        let oldKeys = Set(oldDictionary.keys)
+        let newMessageCount = newItemsDictionary.count { uniqueID, viewState in
+            !oldKeys.contains(uniqueID) && viewState.type.isMessageContent
+        }
+
+        if newMessageCount > 0 {
+            state.bindings.newMessagesAtBottomCount += newMessageCount
+        }
     }
 
     // MARK: - Direct chats logics

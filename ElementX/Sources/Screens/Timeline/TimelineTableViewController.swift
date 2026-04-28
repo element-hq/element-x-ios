@@ -145,8 +145,14 @@ class TimelineTableViewController: UIViewController {
     }
     
     @Binding private var isScrolledToBottom: Bool
+    @Binding private var isReadMarkerVisible: Bool
+    @Binding private var newMessagesAtBottomCount: Int
     @Binding private var floatingDate: Date?
-    
+
+    /// The unique ID of the read marker (NEW banner) currently in the timeline, if any.
+    /// Updated by `TimelineViewRepresentable.updateUIViewController` whenever it changes.
+    var readMarkerUniqueID: TimelineItemIdentifier.UniqueID?
+
     /// A work item used to auto-hide the floating date badge after scrolling stops.
     private var floatingDateHideWorkItem: DispatchWorkItem?
 
@@ -179,13 +185,18 @@ class TimelineTableViewController: UIViewController {
     
     init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
+         isReadMarkerVisible: Binding<Bool>,
+         newMessagesAtBottomCount: Binding<Int>,
          floatingDate: Binding<Date?>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>,
-         scrollToFirstItemForDatePublisher: PassthroughSubject<Void, Never>) {
+         scrollToFirstItemForDatePublisher: PassthroughSubject<Void, Never>,
+         scrollToFirstUnreadPublisher: PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>) {
         self.coordinator = coordinator
         _isScrolledToBottom = isScrolledToBottom
+        _isReadMarkerVisible = isReadMarkerVisible
+        _newMessagesAtBottomCount = newMessagesAtBottomCount
         _floatingDate = floatingDate
-        
+
         super.init(nibName: nil, bundle: nil)
         
         tableView.register(TimelineItemCell.self, forCellReuseIdentifier: TimelineItemCell.reuseIdentifier)
@@ -213,6 +224,12 @@ class TimelineTableViewController: UIViewController {
         scrollToFirstItemForDatePublisher
             .sink { [weak self] _ in
                 self?.scrollToFirstItemForCurrentDate()
+            }
+            .store(in: &cancellables)
+
+        scrollToFirstUnreadPublisher
+            .sink { [weak self] uniqueID in
+                self?.scrollToItem(uniqueID: uniqueID, animated: true)
             }
             .store(in: &cancellables)
         
@@ -383,8 +400,13 @@ class TimelineTableViewController: UIViewController {
         if isSwitchingTimelines {
             coordinator.send(viewAction: .hasSwitchedTimeline)
         }
+
+        // Re-evaluate after the snapshot has been applied so the new layout is reflected.
+        DispatchQueue.main.async { [weak self] in
+            self?.updateReadMarkerVisibility()
+        }
     }
-    
+
     /// Scrolls to the newest item in the timeline.
     private func scrollToNewestItem(animated: Bool) {
         guard !timelineItemsIDs.isEmpty else {
@@ -403,6 +425,16 @@ class TimelineTableViewController: UIViewController {
         scrollDirectionPublisher.send(.top)
     }
     
+    /// Scrolls to the item with the corresponding unique ID. Used to jump to virtual items like
+    /// the read marker that have no event ID. Positions the item near the middle of the viewport
+    /// so the user can see what's above and below the marker.
+    private func scrollToItem(uniqueID: TimelineItemIdentifier.UniqueID, animated: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let indexPath = dataSource?.indexPath(for: uniqueID) else { return }
+            tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
+        }
+    }
+
     /// Scrolls to the item with the corresponding event ID if loaded in the timeline.
     private func scrollToItem(eventID: String, animated: Bool) {
         DispatchQueue.main.async { [weak self] in // Fixes #2805
@@ -441,6 +473,27 @@ class TimelineTableViewController: UIViewController {
         }
     }
     
+    /// Updates the `isReadMarkerVisible` binding based on whether the read marker is currently
+    /// on screen or below the viewport (already scrolled past).
+    ///
+    /// In the flipped table view, "above the viewport" means a higher index path. The marker is
+    /// considered "visible or below" iff its index path ≤ the maximum visible index path.
+    private func updateReadMarkerVisibility() {
+        let isVisible: Bool = {
+            guard let readMarkerUniqueID,
+                  let readMarkerIndexPath = dataSource?.indexPath(for: readMarkerUniqueID),
+                  let visibleIndexPaths = tableView.indexPathsForVisibleRows,
+                  let maxVisibleIndexPath = visibleIndexPaths.max() else {
+                return false
+            }
+            return readMarkerIndexPath <= maxVisibleIndexPath
+        }()
+
+        if isReadMarkerVisible != isVisible {
+            isReadMarkerVisible = isVisible
+        }
+    }
+
     private func sendLastVisibleItemReadReceipt() {
         // Find the last visible timeline item and send a read receipt for it
         guard let visibleIndexPaths = tableView.indexPathsForVisibleRows else {
@@ -467,17 +520,22 @@ extension TimelineTableViewController: UITableViewDelegate {
         // Dispatch to fix runtime warning about making changes during a view update.
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            
+
             let isScrolledToBottom = scrollView.contentOffset.y <= 0
-            
+
             // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
             if self.isScrolledToBottom != isScrolledToBottom {
                 self.isScrolledToBottom = isScrolledToBottom
+                if isScrolledToBottom, self.newMessagesAtBottomCount != 0 {
+                    self.newMessagesAtBottomCount = 0
+                }
             }
-            
+
             if !isScrolledToBottom {
                 updateFloatingDate()
             }
+
+            updateReadMarkerVisibility()
         }
 
         // We never want the table view to be fully at the bottom to allow the status bar tap to work properly

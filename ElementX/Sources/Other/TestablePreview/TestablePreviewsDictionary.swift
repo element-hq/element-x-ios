@@ -206,6 +206,7 @@ enum TestablePreviewsDictionary {
         "TimelineReactionView_Previews" : TimelineReactionView_Previews.self,
         "TimelineReadReceiptsView_Previews" : TimelineReadReceiptsView_Previews.self,
         "TimelineReplyView_Previews" : TimelineReplyView_Previews.self,
+        "TimelineScrollButton_Previews" : TimelineScrollButton_Previews.self,
         "TimelineStartRoomTimelineView_Previews" : TimelineStartRoomTimelineView_Previews.self,
         "TimelineThreadSummaryView_Previews" : TimelineThreadSummaryView_Previews.self,
         "TombstonedAvatarImage_Previews" : TombstonedAvatarImage_Previews.self,
