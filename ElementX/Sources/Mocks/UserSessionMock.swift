@@ -22,5 +22,7 @@ extension UserSessionMock {
         voiceMessageMediaManager = VoiceMessageMediaManagerMock()
         
         sessionSecurityStatePublisher = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .enabled)).asCurrentValuePublisher()
+        
+        liveLocationManager = LiveLocationManagerMock(.init())
     }
 }
