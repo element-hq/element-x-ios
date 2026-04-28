@@ -125,6 +125,15 @@ class MockScreen: Identifiable {
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .settingsScreen:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@mock:client.com",
+                                                                                       deviceID: "MOCKCLIENT"))))
+            let coordinator = SettingsScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                          appSettings: ServiceLocator.shared.settings,
+                                                                          isBugReportServiceEnabled: true))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .authenticationFlow, .provisionedAuthenticationFlow, .singleProviderAuthenticationFlow, .multipleProvidersAuthenticationFlow:
             let appSettings: AppSettings! = ServiceLocator.shared.settings
             
