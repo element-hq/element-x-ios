@@ -22,14 +22,17 @@ extension BugReportPreflightScreenViewModelAction: CustomStringConvertible {
 }
 
 struct BugReportPreflightScreenViewState: BindableState {
-    var reportTemplate: String
     var diagnosticsText: String
     var isLoadingDiagnostics = true
-    var bindings = BugReportPreflightScreenViewStateBindings()
+    var bindings: BugReportPreflightScreenViewStateBindings
+    
+    var reportTemplate: String {
+        bindings.reportTemplate
+    }
     
     var fullReport: String {
         """
-        \(reportTemplate)
+        \(bindings.reportTemplate)
 
         \(UntranslatedL10n.screenBugReportPreflightDiagnosticsTitle):
         \(diagnosticsText)
@@ -37,7 +40,9 @@ struct BugReportPreflightScreenViewState: BindableState {
     }
 }
 
-struct BugReportPreflightScreenViewStateBindings { }
+struct BugReportPreflightScreenViewStateBindings {
+    var reportTemplate: String
+}
 
 enum BugReportPreflightScreenViewAction {
     case loadDiagnostics

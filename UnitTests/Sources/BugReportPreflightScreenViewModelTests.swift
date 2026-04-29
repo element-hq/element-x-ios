@@ -16,30 +16,6 @@ struct BugReportPreflightScreenViewModelTests {
     }
     
     @Test
-    func initialState() {
-        let viewModel = BugReportPreflightScreenViewModel(diagnosticsProvider: StaticDiagnosticsProvider(diagnostics: "OS: iOS 18.0"))
-        let context = viewModel.context
-        
-        #expect(context.viewState.isLoadingDiagnostics)
-        #expect(context.viewState.reportTemplate.contains(UntranslatedL10n.screenBugReportPreflightTemplateSummary))
-        #expect(context.viewState.diagnosticsText == UntranslatedL10n.screenBugReportPreflightDiagnosticsLoading)
-    }
-    
-    @Test
-    func loadDiagnostics() async throws {
-        let viewModel = BugReportPreflightScreenViewModel(diagnosticsProvider: StaticDiagnosticsProvider(diagnostics: "OS: iOS 18.0"))
-        let context = viewModel.context
-        
-        let deferred = deferFulfillment(context.observe(\.viewState.isLoadingDiagnostics)) { !$0 }
-        
-        context.send(viewAction: .loadDiagnostics)
-        try await deferred.fulfill()
-        
-        #expect(context.viewState.diagnosticsText == "OS: iOS 18.0")
-        #expect(context.viewState.fullReport.contains("OS: iOS 18.0"))
-    }
-    
-    @Test
     func copyReport() async throws {
         let viewModel = BugReportPreflightScreenViewModel(diagnosticsProvider: StaticDiagnosticsProvider(diagnostics: "OS: iOS 18.0"))
         let context = viewModel.context
@@ -77,6 +53,94 @@ struct BugReportPreflightScreenViewModelTests {
         try await deferred.fulfill()
         
         #expect(context.viewState.diagnosticsText == UntranslatedL10n.screenBugReportPreflightDiagnosticsUnavailable)
+    }
+    
+    @Test
+    func editingReportTemplate() async throws {
+        let viewModel = BugReportPreflightScreenViewModel(diagnosticsProvider: StaticDiagnosticsProvider(diagnostics: "OS: iOS 18.0"))
+        let context = viewModel.context
+        
+        let originalTemplate = context.viewState.reportTemplate
+        #expect(originalTemplate.contains(UntranslatedL10n.screenBugReportPreflightTemplateSummary))
+        
+        let editedTemplate = """
+        Summary: App crashes on launch after upgrade.
+
+        Steps:
+        1. Open the app
+        2. Wait 2 seconds
+
+        Expected: App opens normally.
+        Actual: App crashes.
+        """
+        
+        context.reportTemplate = editedTemplate
+        
+        #expect(context.viewState.reportTemplate == editedTemplate)
+        #expect(context.viewState.fullReport.contains(editedTemplate))
+        #expect(!context.viewState.fullReport.contains(originalTemplate))
+        
+        let loadingDeferred = deferFulfillment(context.observe(\.viewState.isLoadingDiagnostics)) { !$0 }
+        context.send(viewAction: .loadDiagnostics)
+        try await loadingDeferred.fulfill()
+        
+        let copyDeferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .copyReport:
+                true
+            }
+        }
+        
+        context.send(viewAction: .copyReport)
+        let action = try await copyDeferred.fulfill()
+        
+        switch action {
+        case let .copyReport(report):
+            #expect(report.contains(editedTemplate))
+            #expect(report.contains("OS: iOS 18.0"))
+        }
+    }
+    
+    @Test
+    func deterministicReportFormat() async throws {
+        let diagnostics = """
+        App: Element X
+        Version: 1.23.4 (567)
+        OS: iOS 18.0
+        """
+        
+        func generateReport() async throws -> String {
+            let viewModel = BugReportPreflightScreenViewModel(diagnosticsProvider: StaticDiagnosticsProvider(diagnostics: diagnostics))
+            let context = viewModel.context
+            
+            let deferred = deferFulfillment(context.observe(\.viewState.isLoadingDiagnostics)) { !$0 }
+            context.send(viewAction: .loadDiagnostics)
+            try await deferred.fulfill()
+            
+            return context.viewState.fullReport
+        }
+        
+        let firstRun = try await generateReport()
+        let secondRun = try await generateReport()
+        
+        #expect(firstRun == secondRun, "Same input must produce the same fullReport on every run")
+        
+        let expectedReport = """
+        \(UntranslatedL10n.screenBugReportPreflightTemplateSummary):
+
+        \(UntranslatedL10n.screenBugReportPreflightTemplateSteps):
+        1.
+        2.
+
+        \(UntranslatedL10n.screenBugReportPreflightTemplateExpected):
+
+        \(UntranslatedL10n.screenBugReportPreflightTemplateActual):
+
+        \(UntranslatedL10n.screenBugReportPreflightDiagnosticsTitle):
+        \(diagnostics)
+        """
+        
+        #expect(firstRun == expectedReport, "fullReport must match the canonical snapshot for the given inputs")
     }
     
     @Test

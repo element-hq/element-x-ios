@@ -33,9 +33,15 @@ struct BugReportPreflightScreen: View {
     
     private var templateSection: some View {
         Section(UntranslatedL10n.screenBugReportPreflightTemplateTitle) {
-            contentBox(context.viewState.reportTemplate,
-                       font: .compound.bodyMD,
-                       accessibilityIdentifier: A11yIdentifiers.bugReportPreflightScreen.template)
+            TextEditor(text: $context.reportTemplate)
+                .font(.compound.bodyMD)
+                .foregroundStyle(.compound.textPrimary)
+                .scrollContentBackground(.hidden)
+                .frame(minHeight: 160)
+                .padding(8)
+                .background(Color.compound.bgSubtleSecondaryLevel0)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .accessibilityIdentifier(A11yIdentifiers.bugReportPreflightScreen.template)
         }
     }
     

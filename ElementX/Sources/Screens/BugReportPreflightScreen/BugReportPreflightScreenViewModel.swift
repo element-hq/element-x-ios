@@ -26,8 +26,8 @@ class BugReportPreflightScreenViewModel: BugReportPreflightScreenViewModelType, 
     init(diagnosticsProvider: DiagnosticsProviding) {
         self.diagnosticsProvider = diagnosticsProvider
         
-        super.init(initialViewState: .init(reportTemplate: Self.reportTemplate,
-                                           diagnosticsText: UntranslatedL10n.screenBugReportPreflightDiagnosticsLoading))
+        super.init(initialViewState: .init(diagnosticsText: UntranslatedL10n.screenBugReportPreflightDiagnosticsLoading,
+                                           bindings: .init(reportTemplate: Self.reportTemplate)))
     }
     
     override func process(viewAction: BugReportPreflightScreenViewAction) {
