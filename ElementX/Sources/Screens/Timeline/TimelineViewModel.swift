@@ -850,7 +850,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.timelineState.isSwitchingTimelines = true
         }
 
-        // Read the previous dictionary before we overwrite it on the next line.
         updateNewMessagesAtBottomCount(with: timelineItemsDictionary, isSwitchingTimelines: isSwitchingTimelines)
 
         state.timelineState.itemsDictionary = timelineItemsDictionary
@@ -889,7 +888,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
     /// Increments `newMessagesAtBottomCount` by the number of newly arrived message-content items
     /// when the user is scrolled up in a live timeline. Skips initial load and timeline switches.
-    private func updateNewMessagesAtBottomCount(with newItemsDictionary: OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>,
+    private func updateNewMessagesAtBottomCount(with newTimelineItems: OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>,
                                                 isSwitchingTimelines: Bool) {
         guard state.timelineState.isLive,
               !isSwitchingTimelines,
@@ -899,13 +898,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
         let oldDictionary = state.timelineState.itemsDictionary
         guard !oldDictionary.isEmpty,
-              !newItemsDictionary.isEmpty,
-              oldDictionary.keys.last != newItemsDictionary.keys.last else {
+              !newTimelineItems.isEmpty,
+              oldDictionary.keys.last != newTimelineItems.keys.last else {
             return
         }
 
         let oldKeys = Set(oldDictionary.keys)
-        let newMessageCount = newItemsDictionary.count { uniqueID, viewState in
+        let newMessageCount = newTimelineItems.count { uniqueID, viewState in
             !oldKeys.contains(uniqueID) && viewState.type.isMessageContent
         }
 
