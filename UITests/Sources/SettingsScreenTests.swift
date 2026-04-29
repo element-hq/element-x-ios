@@ -10,10 +10,14 @@ import XCTest
 
 @MainActor
 class SettingsScreenTests: XCTestCase {
-    func testLaunchesBeforeLogin() {
+    func testBugReportLaunch() {
         let app = Application.launch(.settingsScreen)
 
         XCTAssertTrue(app.buttons[A11yIdentifiers.settingsScreen.done].waitForExistence(timeout: 5.0))
         XCTAssertTrue(app.descendants(matching: .any)[A11yIdentifiers.settingsScreen.notifications].waitForExistence(timeout: 5.0))
+
+        app.buttons[A11yIdentifiers.settingsScreen.reportBug].tap()
+
+        XCTAssertTrue(app.textFields[A11yIdentifiers.bugReportScreen.report].waitForExistence(timeout: 5.0))
     }
 }
