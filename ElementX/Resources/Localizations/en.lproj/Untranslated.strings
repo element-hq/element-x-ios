@@ -10,4 +10,12 @@
 "soft_logout_signin_e2e_warning_notice" = "Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.";
 "soft_logout_signin_notice" = "Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).";
 "soft_logout_signin_title" = "Sign in";
+"screen_bug_report_preflight_diagnostics_loading" = "Generating diagnostics...";
+"screen_bug_report_preflight_diagnostics_title" = "Diagnostics";
+"screen_bug_report_preflight_diagnostics_unavailable" = "Diagnostics unavailable";
+"screen_bug_report_preflight_template_actual" = "Actual result";
+"screen_bug_report_preflight_template_expected" = "Expected result";
+"screen_bug_report_preflight_template_steps" = "Steps to reproduce";
+"screen_bug_report_preflight_template_summary" = "Summary";
+"screen_bug_report_preflight_template_title" = "Bug report template";
 "untranslated" = "Untranslated";

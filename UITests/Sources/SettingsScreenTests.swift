@@ -18,6 +18,6 @@ class SettingsScreenTests: XCTestCase {
 
         app.buttons[A11yIdentifiers.settingsScreen.reportBug].tap()
 
-        XCTAssertTrue(app.textFields[A11yIdentifiers.bugReportScreen.report].waitForExistence(timeout: 5.0))
+        XCTAssertTrue(app.buttons[A11yIdentifiers.bugReportPreflightScreen.copy].waitForExistence(timeout: 5.0))
     }
 }

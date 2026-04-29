@@ -140,6 +140,14 @@ extension PreviewTests {
     }
 
     @Test
+    func bugReportPreflightScreen() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in BugReportPreflightScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func callInviteRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in CallInviteRoomTimelineView_Previews._allPreviews.enumerated() {

@@ -39,6 +39,22 @@ internal enum UntranslatedL10n {
   }
   /// Sign in
   internal static var softLogoutSigninTitle: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_signin_title") }
+  /// Generating diagnostics...
+  internal static var screenBugReportPreflightDiagnosticsLoading: String { return UntranslatedL10n.tr("Untranslated", "screen_bug_report_preflight_diagnostics_loading") }
+  /// Diagnostics
+  internal static var screenBugReportPreflightDiagnosticsTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_bug_report_preflight_diagnostics_title") }
+  /// Diagnostics unavailable
+  internal static var screenBugReportPreflightDiagnosticsUnavailable: String { return UntranslatedL10n.tr("Untranslated", "screen_bug_report_preflight_diagnostics_unavailable") }
+  /// Actual result
+  internal static var screenBugReportPreflightTemplateActual: String { return UntranslatedL10n.tr("Untranslated", "screen_bug_report_preflight_template_actual") }
+  /// Expected result
+  internal static var screenBugReportPreflightTemplateExpected: String { return UntranslatedL10n.tr("Untranslated", "screen_bug_report_preflight_template_expected") }
+  /// Steps to reproduce
+  internal static var screenBugReportPreflightTemplateSteps: String { return UntranslatedL10n.tr("Untranslated", "screen_bug_report_preflight_template_steps") }
+  /// Summary
+  internal static var screenBugReportPreflightTemplateSummary: String { return UntranslatedL10n.tr("Untranslated", "screen_bug_report_preflight_template_summary") }
+  /// Bug report template
+  internal static var screenBugReportPreflightTemplateTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_bug_report_preflight_template_title") }
   /// Untranslated
   internal static var untranslated: String { return UntranslatedL10n.tr("Untranslated", "untranslated") }
   /// Plural format key: "%#@VARIABLE@"

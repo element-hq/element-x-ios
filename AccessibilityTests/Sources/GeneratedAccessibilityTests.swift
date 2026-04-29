@@ -71,6 +71,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "BugReportScreen_Previews")
     }
 
+    func testBugReportPreflightScreen() async throws {
+        try await performAccessibilityAudit(named: "BugReportPreflightScreen_Previews")
+    }
+
     func testCallInviteRoomTimelineView() async throws {
         try await performAccessibilityAudit(named: "CallInviteRoomTimelineView_Previews")
     }

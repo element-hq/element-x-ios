@@ -15,6 +15,7 @@ enum A11yIdentifiers {
     static let appLockSetupBiometricsScreen = AppLockSetupBiometricsScreen()
     static let appLockSetupPINScreen = AppLockSetupPINScreen()
     static let appLockSetupSettingsScreen = AppLockSetupSettingsScreen()
+    static let bugReportPreflightScreen = BugReportPreflightScreen()
     static let bugReportScreen = BugReportScreen()
     static let changeServerScreen = ChangeServer()
     static let encryptionResetScreen = EncryptionResetScreen()
@@ -90,6 +91,13 @@ enum A11yIdentifiers {
         let removeScreenshot = "bug_report-remove_screenshot"
         let attachScreenshot = "bug-report-attach_screenshot"
         let cancel = "bug_report-cancel"
+    }
+
+    struct BugReportPreflightScreen {
+        let template = "bug_report_preflight-template"
+        let diagnostics = "bug_report_preflight-diagnostics"
+        let copy = "bug_report_preflight-copy"
+        let share = "bug_report_preflight-share"
     }
     
     struct ChangeServer {

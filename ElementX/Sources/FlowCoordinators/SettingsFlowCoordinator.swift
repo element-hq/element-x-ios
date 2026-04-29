@@ -25,8 +25,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
     // periphery:ignore - retaining purpose
-    private var bugReportFlowCoordinator: BugReportFlowCoordinator?
-    // periphery:ignore - retaining purpose
     private var encryptionSettingsFlowCoordinator: EncryptionSettingsFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var linkNewDeviceFlowCoordinator: LinkNewDeviceFlowCoordinator?
@@ -94,11 +92,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .appLock:
                     presentAppLockSetupFlow()
                 case .bugReport:
-                    bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .push(navigationStackCoordinator),
-                                                                                          userIndicatorController: flowParameters.userIndicatorController,
-                                                                                          bugReportService: flowParameters.bugReportService,
-                                                                                          userSession: flowParameters.userSession))
-                    bugReportFlowCoordinator?.start()
+                    presentBugReportPreflightScreen()
                 case .about:
                     presentLegalInformationScreen()
                 case .blockedUsers:
@@ -230,6 +224,14 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: flowParameters.appSettings.hideIgnoredUserProfiles,
                                                                           userSession: flowParameters.userSession,
                                                                           userIndicatorController: flowParameters.userIndicatorController))
+        navigationStackCoordinator.push(coordinator)
+    }
+
+    private func presentBugReportPreflightScreen() {
+        let diagnosticsProvider = SystemDiagnosticsProvider(userID: flowParameters.userSession.clientProxy.userID,
+                                                            deviceID: flowParameters.userSession.clientProxy.deviceID)
+        let coordinator = BugReportPreflightScreenCoordinator(parameters: .init(diagnosticsProvider: diagnosticsProvider,
+                                                                               userIndicatorController: flowParameters.userIndicatorController))
         navigationStackCoordinator.push(coordinator)
     }
         
