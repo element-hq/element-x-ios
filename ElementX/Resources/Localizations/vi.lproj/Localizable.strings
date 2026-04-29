@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Đường dẫn đầy đủ của phòng là %1$@";
 "a11y_expand_message_text_field" = "Mở rộng ô nhập tin nhắn";
 "a11y_hide_password" = "Ẩn mật khẩu";
+"a11y_info" = "Info";
 "a11y_join_call" = "Tham gia cuộc gọi";
 "a11y_jump_to_bottom" = "Xuống cuối";
 "a11y_notifications_mentions_only" = "Chỉ khi được đề cập tới";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Gửi tệp";
 "a11y_sender_location" = "Vị trí người gửi";
 "a11y_session_verification_time_limited_action_required" = "Yêu cầu hành động có giới hạn thời gian, bạn có một phút để xác minh";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Hiện mật khẩu";
 "a11y_start_call" = "Bắt đầu cuộc gọi";
 "a11y_start_video_call" = "Bắt đầu cuộc gọi video";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Vô hiệu hóa tài khoản";
 "action_decline" = "Từ chối";
 "action_decline_and_block" = "Từ chối và chặn";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Xóa cuộc thăm dò";
 "action_deselect_all" = "Bỏ chọn tất cả";
 "action_disable" = "Tắt";
 "action_discard" = "Hủy";
 "action_dismiss" = "Bỏ qua";
 "action_done" = "Xong";
+"action_download" = "Download";
 "action_edit" = "Chỉnh sửa";
 "action_edit_caption" = "Chỉnh sửa chú thích";
 "action_edit_poll" = "Sửa cuộc thăm dò";
@@ -202,7 +207,9 @@
 "common_beta" = "Thử nghiệm";
 "common_blocked_users" = "Người dùng bị chặn";
 "common_bubbles" = "Bong bóng";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Cuộc gọi bắt đầu";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Sao lưu cuộc trò chuyện";
 "common_copied_to_clipboard" = "Đã sao chép";
 "common_copyright" = "Bản quyền";
@@ -753,7 +760,7 @@
 "screen_deactivate_account_list_item_2" = "Loại bỏ bạn khỏi tất cả các phòng chat.";
 "screen_deactivate_account_list_item_3" = "Xóa thông tin tài khoản của bạn khỏi máy chủ nhận dạng của chúng tôi.";
 "screen_deactivate_account_list_item_4" = "Tin nhắn của bạn vẫn sẽ hiển thị cho người dùng đã đăng ký nhưng sẽ không hiển thị cho người dùng mới hoặc chưa đăng ký nếu bạn chọn xóa chúng.";
-"screen_deactivate_account_title" = "Vô hiệu hóa tài khoản";
+"screen_deactivate_account_title" = "Delete account";
 "screen_decline_and_block_block_user_option_description" = "Bạn sẽ không nhận được bất kỳ tin nhắn hoặc lời mời tham gia phòng nào từ người dùng này.";
 "screen_decline_and_block_block_user_option_title" = "Chặn người dùng";
 "screen_decline_and_block_report_user_option_description" = "Báo cáo phòng này cho nhà cung cấp tài khoản của bạn.";
@@ -940,10 +947,11 @@
 "screen_media_browser_media_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
 "screen_media_browser_media_empty_state_title" = "No media uploaded yet";
 "screen_media_browser_title" = "Media and files";
-"screen_media_details_file_format" = "File format";
-"screen_media_details_filename" = "File name";
+"screen_media_details_file_format" = "Format";
+"screen_media_details_filename" = "Name";
 "screen_media_details_no_more_files_to_show" = "No more files to show";
 "screen_media_details_no_more_media_to_show" = "No more media to show";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Uploaded by";
 "screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_picker_error_failed_selection" = "Không thể chọn tệp phương tiện. Vui lòng thử lại.";
