@@ -11,6 +11,12 @@ class NotificationTonePreviewer: NSObject, AVAudioPlayerDelegate {
     private let lock = NSLock()
     private var playbackRetainer: Set<AVAudioPlayer> = []
 
+    private let userIndicatorController: UserIndicatorControllerProtocol
+
+    init(userIndicatorController: UserIndicatorControllerProtocol) {
+        self.userIndicatorController = userIndicatorController
+    }
+
     func preview(_ tone: NotificationAlertTone) {
         do {
             let player = try AVAudioPlayer(contentsOf: tone.location)
@@ -20,6 +26,10 @@ class NotificationTonePreviewer: NSObject, AVAudioPlayerDelegate {
             }
             player.play()
         } catch {
+            let userIndicator = UserIndicator(type: .toast,
+                                              title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertTonePreviewToneErrorTitle,
+                                              iconName: "exclamationmark.triangle.fill")
+            userIndicatorController.submitIndicator(userIndicator)
             MXLog.error("Error previewing alert tone \(tone): \(error)")
         }
     }

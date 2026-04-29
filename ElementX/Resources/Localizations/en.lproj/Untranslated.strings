@@ -42,3 +42,5 @@
 "message_tone_elementx_default" = "Default Message";
 "message_tone_elementx_pro_default" = "Pro Message";
 "screen_notification_settings_configuration_alert_tone_section_title" = "Alert Tone";
+"screen_notification_settings_configuration_alert_tone_set_tone_error_title" = "Problem Setting Alert Tone";
+"screen_notification_settings_configuration_alert_tone_preview_tone_error_title" = "Problem Previewing Alert Tone";

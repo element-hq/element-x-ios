@@ -13,6 +13,7 @@ struct NotificationSettingsScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userSession: UserSessionProtocol
     let userNotificationCenter: UserNotificationCenterProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
     let isModallyPresented: Bool
     let appSettings: AppSettings
 }
@@ -41,6 +42,7 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
         viewModel = NotificationSettingsScreenViewModel(appSettings: parameters.appSettings,
                                                         userNotificationCenter: parameters.userNotificationCenter,
                                                         notificationSettingsProxy: parameters.userSession.clientProxy.notificationSettings,
+                                                        userIndicatorController: parameters.userIndicatorController,
                                                         isModallyPresented: parameters.isModallyPresented)
     }
     

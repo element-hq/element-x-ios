@@ -78,8 +78,12 @@ internal enum UntranslatedL10n {
   internal static var messageToneSystemUpdate: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_update") }
   /// Triple Sine
   internal static var messageToneTripleSin: String { return UntranslatedL10n.tr("Untranslated", "message_tone_triple_sin") }
+  /// Problem Previewing Alert Tone
+  internal static var screenNotificationSettingsConfigurationAlertTonePreviewToneErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_preview_tone_error_title") }
   /// Alert Tone
   internal static var screenNotificationSettingsConfigurationAlertToneSectionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_section_title") }
+  /// Problem Setting Alert Tone
+  internal static var screenNotificationSettingsConfigurationAlertToneSetToneErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_set_tone_error_title") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
