@@ -51,9 +51,9 @@ struct TimelineScrollButton: View {
     }
 
     private var icon: some View {
-        Image(systemName: direction == .down ? "chevron.down" : "chevron.up")
-            .font(.compound.bodyLG)
-            .fontWeight(.semibold)
+        CompoundIcon(direction == .down ? \.chevronDown : \.chevronUp,
+                     size: .medium,
+                     relativeTo: .compound.bodyLG)
             .foregroundColor(.compound.iconSecondary)
             .padding(13)
             .offset(y: direction == .down ? 1 : -1)
