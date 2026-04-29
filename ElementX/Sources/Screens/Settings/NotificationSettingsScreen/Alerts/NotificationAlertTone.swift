@@ -26,6 +26,9 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
         return url
     }()
 
+    static let selectedToneFilename = "currentAlert.caf"
+    static let selectedToneLocation = libraryLocation.deletingLastPathComponent().appending(component: selectedToneFilename)
+
     var label: String {
         labelOverride ?? location.deletingPathExtension().lastPathComponent
     }

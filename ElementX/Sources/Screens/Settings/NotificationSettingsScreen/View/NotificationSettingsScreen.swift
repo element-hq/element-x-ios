@@ -171,42 +171,33 @@ struct NotificationSettingsScreen: View {
         }
     }
 
-    @State
-    private var shouldShowAlertSounds = false
-
-    @State
-    private var shouldShowSystemAlertSounds = false
-
-    @State
-    private var shouldShowElementXAlertSounds = false
-
     private var soundSelectionSection: some View {
         Section {
-            DisclosureGroup("Current Sound", isExpanded: $shouldShowAlertSounds) {
-                DisclosureGroup("Element X", isExpanded: $shouldShowElementXAlertSounds) {
-                    ForEach(NotificationAlertTone.defaultElementXAlerts, id: \.filename) { alertSound in
-                        Button(action: {
-                                   context.send(viewAction: .previewAlertTone(alertSound))
-                               },
-                               label: {
-                                   Text(alertSound.label)
-                               })
+            DisclosureGroup(context.viewState.selectedAlertTone.label, isExpanded: $context.shouldShowAlertSounds) {
+                DisclosureGroup(UntranslatedL10n.commonAppName, isExpanded: $context.shouldShowElementXAlertSounds) {
+                    ForEach(NotificationAlertTone.defaultElementXAlerts, id: \.filename) { alertTone in
+                        ListRow(label: .plain(title: alertTone.label),
+                                kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone, action: {
+                                    context.send(viewAction: .selectAlertTone(alertTone))
+                                }))
                     }
                 }
 
-                DisclosureGroup("System", isExpanded: $shouldShowSystemAlertSounds) {
-                    ForEach(NotificationAlertTone.defaultSystemAlerts, id: \.filename) { alertSound in
-                        Button(action: {
-                                   context.send(viewAction: .previewAlertTone(alertSound))
-                               },
-                               label: {
-                                   Text(alertSound.label)
-                               })
+                DisclosureGroup(L10n.commonSystem, isExpanded: $context.shouldShowSystemAlertSounds) {
+                    ForEach(NotificationAlertTone.defaultSystemAlerts, id: \.filename) { alertTone in
+                        ListRow(label: .plain(title: alertTone.label),
+                                kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone, action: {
+                                    context.send(viewAction: .selectAlertTone(alertTone))
+                                }))
                     }
                 }
             }
+            .foregroundStyle(.compound.textPrimary)
+            .listRowBackground(Color.compound.bgCanvasDefaultLevel1)
+            .listRowSeparatorTint(ListRowColor.separatorTint)
         } header: {
-            Text("Alert Tone")
+            Text(UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneSectionTitle)
+                .compoundListSectionHeader()
         }
     }
 

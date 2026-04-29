@@ -30,11 +30,18 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         self.notificationSettingsProxy = notificationSettingsProxy
         
         let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
-        super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings, isModallyPresented: isModallyPresented))
-                
+        super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
+                                                                         isModallyPresented: isModallyPresented,
+                                                                         selectedAlertTone: appSettings.selectedNotificationTone ?? .defaultElementXMessageTone))
+
         // Listen for changes to AppSettings.
         appSettings.$enableNotifications
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$selectedNotificationTone
+            .map { $0 ?? .defaultElementXMessageTone }
+            .weakAssign(to: \.state.selectedAlertTone, on: self)
             .store(in: &cancellables)
         
         setupDidBecomeActiveSubscription()
@@ -77,7 +84,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         case .previewAlertTone(let alertTone):
             previewer.preview(alertTone)
         case .selectAlertTone(let alertTone):
-            MXLog.info("select \(alertTone)")
+            previewer.preview(alertTone)
+            setSelectedTone(alertTone)
         }
     }
     
@@ -224,6 +232,17 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             state.bindings.callsEnabled = notificationSettings.invitationsEnabled ?? false
         }
         state.applyingChange = false
+    }
+
+    private func setSelectedTone(_ alertTone: NotificationAlertTone) {
+        do {
+            try? FileManager.default.removeItem(at: NotificationAlertTone.selectedToneLocation)
+            try FileManager.default.createDirectory(at: NotificationAlertTone.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try FileManager.default.copyItem(at: alertTone.location, to: NotificationAlertTone.selectedToneLocation)
+            appSettings.selectedNotificationTone = alertTone
+        } catch {
+            MXLog.error("Error setting selected alert tone to designated location in filesystem: \(error)")
+        }
     }
 }
 

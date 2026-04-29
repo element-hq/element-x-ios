@@ -29,6 +29,7 @@ struct NotificationSettingsScreenViewState: BindableState {
 
     var settings: NotificationSettingsScreenSettings?
     var applyingChange = false
+    var selectedAlertTone: NotificationAlertTone
 }
 
 struct NotificationSettingsScreenViewStateBindings {
@@ -37,6 +38,9 @@ struct NotificationSettingsScreenViewStateBindings {
     var callsEnabled = false
     var invitationsEnabled = false
     var alertInfo: AlertInfo<NotificationSettingsScreenErrorType>?
+    var shouldShowAlertSounds = false
+    var shouldShowElementXAlertSounds = true
+    var shouldShowSystemAlertSounds = true
 }
 
 struct NotificationSettingsScreenSettings {
