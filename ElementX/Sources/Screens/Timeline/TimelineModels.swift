@@ -58,7 +58,7 @@ enum TimelineViewAction {
     case paginateForwards
     case scrollToBottom
     case scrollToFirstItemForCurrentDate
-    case scrollToFirstUnread
+    case scrollToReadMarker
     
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
@@ -258,7 +258,7 @@ struct TimelineState {
     /// These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     var scrollToFirstItemForDatePublisher = PassthroughSubject<Void, Never>()
-    var scrollToFirstUnreadPublisher = PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>()
+    var scrollToReadMarkerPublisher = PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>()
 
     var itemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
 
@@ -315,7 +315,7 @@ extension TimelineViewState {
 
     /// Whether the jump-to-unread button should be shown: a read marker exists in the timeline
     /// and isn't currently visible in the viewport.
-    var shouldShowJumpToUnread: Bool {
+    var shouldShowJumpToReadMarker: Bool {
         timelineState.readMarkerUniqueID != nil && !bindings.isReadMarkerVisible
     }
 

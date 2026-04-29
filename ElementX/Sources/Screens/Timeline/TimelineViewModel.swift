@@ -179,8 +179,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             scrollToBottom()
         case .scrollToFirstItemForCurrentDate:
             state.timelineState.scrollToFirstItemForDatePublisher.send()
-        case .scrollToFirstUnread:
-            scrollToFirstUnread()
+        case .scrollToReadMarker:
+            scrollToReadMarker()
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
@@ -650,9 +650,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
     }
 
-    private func scrollToFirstUnread() {
+    private func scrollToReadMarker() {
         guard let readMarkerID = state.timelineState.readMarkerUniqueID else { return }
-        state.timelineState.scrollToFirstUnreadPublisher.send(readMarkerID)
+        state.timelineState.scrollToReadMarkerPublisher.send(readMarkerID)
     }
 
     private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async {

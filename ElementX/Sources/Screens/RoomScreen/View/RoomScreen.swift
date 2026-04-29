@@ -28,10 +28,10 @@ struct RoomScreen: View {
     var body: some View {
         TimelineView(timelineContext: timelineContext)
             .overlay(alignment: .topTrailing) {
-                if timelineContext.viewState.shouldShowJumpToUnread {
+                if timelineContext.viewState.shouldShowJumpToReadMarker {
                     TimelineScrollButton(direction: .up,
                                          badgeCount: timelineContext.viewState.timelineState.unreadMessageCount) {
-                        timelineContext.send(viewAction: .scrollToFirstUnread)
+                        timelineContext.send(viewAction: .scrollToReadMarker)
                     }
                 }
             }

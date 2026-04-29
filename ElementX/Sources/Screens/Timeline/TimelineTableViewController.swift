@@ -190,7 +190,7 @@ class TimelineTableViewController: UIViewController {
          floatingDate: Binding<Date?>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>,
          scrollToFirstItemForDatePublisher: PassthroughSubject<Void, Never>,
-         scrollToFirstUnreadPublisher: PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>) {
+         scrollToReadMarkerPublisher: PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>) {
         self.coordinator = coordinator
         _isScrolledToBottom = isScrolledToBottom
         _isReadMarkerVisible = isReadMarkerVisible
@@ -227,7 +227,7 @@ class TimelineTableViewController: UIViewController {
             }
             .store(in: &cancellables)
 
-        scrollToFirstUnreadPublisher
+        scrollToReadMarkerPublisher
             .sink { [weak self] uniqueID in
                 self?.scrollToItem(uniqueID: uniqueID, animated: true)
             }
