@@ -22,11 +22,10 @@ struct CallScreen: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar(context.viewState.isGenericCallLink ? .visible : .hidden, for: .navigationBar)
+                .toolbar(.hidden, for: .navigationBar)
                 .toolbar { toolbar }
         }
         .alert(item: $context.alertInfo)
-        .preferredColorScheme(context.viewState.isGenericCallLink ? .dark : nil)
     }
     
     @ViewBuilder
