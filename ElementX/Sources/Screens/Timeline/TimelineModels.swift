@@ -271,30 +271,29 @@ struct TimelineState {
     }
 
     /// The unique ID of the read marker (NEW banner) in the timeline, if present.
-    var readMarkerUniqueID: TimelineItemIdentifier.UniqueID? {
-        itemsDictionary.first { _, viewState in
-            if case .readMarker = viewState.type { return true }
-            return false
-        }?.key
-    }
+    /// Recomputed by ``recomputeReadMarkerState()`` whenever ``itemsDictionary`` changes.
+    private(set) var readMarkerUniqueID: TimelineItemIdentifier.UniqueID?
 
     /// The number of message-content items that follow the read marker. Returns 0 if there is no
-    /// read marker.
-    var unreadMessageCount: Int {
-        guard let readMarkerID = readMarkerUniqueID else { return 0 }
+    /// read marker. Recomputed by ``recomputeReadMarkerState()`` whenever ``itemsDictionary`` changes.
+    private(set) var unreadMessageCount = 0
 
+    /// Recomputes ``readMarkerUniqueID`` and ``unreadMessageCount`` from ``itemsDictionary``.
+    /// Call after assigning a new value to ``itemsDictionary``.
+    mutating func recomputeReadMarkerState() {
+        var markerID: TimelineItemIdentifier.UniqueID?
         var count = 0
-        var foundMarker = false
         for (uniqueID, viewState) in itemsDictionary {
-            if uniqueID == readMarkerID {
-                foundMarker = true
-                continue
-            }
-            if foundMarker, viewState.type.isMessageContent {
+            if markerID == nil {
+                if case .readMarker = viewState.type {
+                    markerID = uniqueID
+                }
+            } else if viewState.type.isMessageContent {
                 count += 1
             }
         }
-        return count
+        readMarkerUniqueID = markerID
+        unreadMessageCount = count
     }
 
     func hasLoadedItem(with eventID: String) -> Bool {

@@ -854,6 +854,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         updateNewMessagesAtBottomCount(with: timelineItemsDictionary, isSwitchingTimelines: isSwitchingTimelines)
 
         state.timelineState.itemsDictionary = timelineItemsDictionary
+        state.timelineState.recomputeReadMarkerState()
     }
 
     private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {

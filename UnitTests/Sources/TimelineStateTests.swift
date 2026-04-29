@@ -24,6 +24,7 @@ struct TimelineStateTests {
         state.itemsDictionary[.init("msg3")] = makeTextViewState(uniqueID: "msg3")
         state.itemsDictionary[.init("state-event")] = makeStateViewState(uniqueID: "state-event")
         state.itemsDictionary[.init("msg4")] = makeTextViewState(uniqueID: "msg4")
+        state.recomputeReadMarkerState()
 
         #expect(state.unreadMessageCount == 2)
     }
@@ -33,6 +34,7 @@ struct TimelineStateTests {
         var state = TimelineState()
         state.itemsDictionary[.init("msg1")] = makeTextViewState(uniqueID: "msg1")
         state.itemsDictionary[.init("msg2")] = makeTextViewState(uniqueID: "msg2")
+        state.recomputeReadMarkerState()
 
         #expect(state.unreadMessageCount == 0)
     }
