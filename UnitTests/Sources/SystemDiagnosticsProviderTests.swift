@@ -8,6 +8,7 @@
 
 @testable import ElementX
 import Testing
+import Foundation
 
 struct SystemDiagnosticsProviderTests {
     @Test

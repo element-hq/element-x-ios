@@ -30,10 +30,6 @@ class BugReportPreflightScreenViewModel: BugReportPreflightScreenViewModelType, 
                                            diagnosticsText: UntranslatedL10n.screenBugReportPreflightDiagnosticsLoading))
     }
     
-    deinit {
-        diagnosticsTask = nil
-    }
-    
     override func process(viewAction: BugReportPreflightScreenViewAction) {
         switch viewAction {
         case .loadDiagnostics:
