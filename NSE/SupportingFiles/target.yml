@@ -76,7 +76,7 @@ targets:
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         OTHER_SWIFT_FLAGS:
         - "-DIS_NSE"
-        
+
     sources:
     - path: ../Sources
     - path: ../SupportingFiles
@@ -118,7 +118,7 @@ targets:
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
     - path: ../../ElementX/Sources/Other/TestablePreview/TestablePreview.swift
     - path: ../../ElementX/Sources/Other/UserAgentBuilder.swift
-    - path: ../../ElementX/Sources/Screens/Settings/NotificationSettingsScreen/Alerts/NotificationAlertTone.swift
+    - path: ../../ElementX/Sources/Screens/Settings/NotificationSettingsScreen/AlertTones/NotificationAlertTone.swift
     - path: ../../ElementX/Sources/Services/ElementCall/ElementCallServiceConstants.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
