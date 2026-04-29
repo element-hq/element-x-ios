@@ -89,6 +89,8 @@ enum NotificationSettingsScreenViewAction {
     case invitationsChanged
     case close
     case fixConfigurationMismatchTapped
+    case selectAlertTone(NotificationAlertTone)
+    case previewAlertTone(NotificationAlertTone)
 }
 
 enum NotificationSettingsScreenErrorType: Hashable {

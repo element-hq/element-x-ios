@@ -37,6 +37,8 @@ struct NotificationSettingsScreen: View {
                     if context.viewState.settings?.invitationsEnabled != nil {
                         additionalSettingsSection
                     }
+
+                    soundSelectionSection
                 }
             }
         }
@@ -168,7 +170,46 @@ struct NotificationSettingsScreen: View {
                 .compoundListSectionHeader()
         }
     }
-    
+
+    @State
+    private var shouldShowAlertSounds = false
+
+    @State
+    private var shouldShowSystemAlertSounds = false
+
+    @State
+    private var shouldShowElementXAlertSounds = false
+
+    private var soundSelectionSection: some View {
+        Section {
+            DisclosureGroup("Current Sound", isExpanded: $shouldShowAlertSounds) {
+                DisclosureGroup("Element X", isExpanded: $shouldShowElementXAlertSounds) {
+                    ForEach(NotificationAlertTone.defaultElementXAlerts, id: \.filename) { alertSound in
+                        Button(action: {
+                                   context.send(viewAction: .previewAlertTone(alertSound))
+                               },
+                               label: {
+                                   Text(alertSound.label)
+                               })
+                    }
+                }
+
+                DisclosureGroup("System", isExpanded: $shouldShowSystemAlertSounds) {
+                    ForEach(NotificationAlertTone.defaultSystemAlerts, id: \.filename) { alertSound in
+                        Button(action: {
+                                   context.send(viewAction: .previewAlertTone(alertSound))
+                               },
+                               label: {
+                                   Text(alertSound.label)
+                               })
+                    }
+                }
+            }
+        } header: {
+            Text("Alert Tone")
+        }
+    }
+
     private var configurationMismatchSection: some View {
         Section {
             ListRow(kind: .custom {

@@ -18,7 +18,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     // periphery:ignore - cancellable tasks get cancelled when reassigned
     @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
-    
+    private let previewer = NotificationTonePreviewer()
+
     var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -73,6 +74,10 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             actionsSubject.send(.close)
         case .fixConfigurationMismatchTapped:
             Task { await fixConfigurationMismatch() }
+        case .previewAlertTone(let alertTone):
+            previewer.preview(alertTone)
+        case .selectAlertTone(let alertTone):
+            MXLog.info("select \(alertTone)")
         }
     }
     
