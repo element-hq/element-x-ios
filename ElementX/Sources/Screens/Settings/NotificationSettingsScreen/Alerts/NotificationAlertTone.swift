@@ -59,86 +59,95 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
     }
 
     #if IS_MAIN_APP // localization is only available in the main app
-    static let defaultElementXMessageTone: Self = .createBundledSound(label: "Default Message",
+    static let defaultElementXMessageTone: Self = .createBundledSound(label: UntranslatedL10n.messageToneElementxDefault,
                                                                       filename: "message.caf")
 
     static let defaultSystemAlerts: [Self] = [
-        .createSystemSound(label: "Tri-tone",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemTriTone,
                            filename: "sms-received1.caf"),
-        .createSystemSound(label: "Chime",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemChime,
                            filename: "sms-received2.caf"),
-        .createSystemSound(label: "Glass",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemGlass,
                            filename: "sms-received3.caf"),
-        .createSystemSound(label: "Horn",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemHorn,
                            filename: "sms-received4.caf"),
-        .createSystemSound(label: "Bell",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemBell,
                            filename: "sms-received5.caf"),
-        .createSystemSound(label: "Electronic",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemElectronic,
                            filename: "sms-received6.caf"),
-        .createSystemSound(label: "Alert",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemAlert,
                            filename: "alarm.caf"),
-        .createSystemSound(label: "Bloom",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemBloom,
                            filename: "Bloom.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Calypso",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemCalypso,
                            filename: "Calypso.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Anticipate",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemAnticipate,
                            filename: "Anticipate.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Choo Choo",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemChooChoo,
                            filename: "Choo_Choo.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Descent",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemDescent,
                            filename: "Descent.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Fanfare",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemFanfare,
                            filename: "Fanfare.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Ladder",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemLadder,
                            filename: "Ladder.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Minuet",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemMinuet,
                            filename: "Minuet.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "News Flash",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemNewsFlash,
                            filename: "News_Flash.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Noir",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemNoir,
                            filename: "Noir.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Sherwood Forest",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemSherwoodForest,
                            filename: "Sherwood_Forest.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Spell",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemSpell,
                            filename: "Spell.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Suspense",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemSuspense,
                            filename: "Suspense.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Telegraph",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemTelegraph,
                            filename: "Telegraph.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Tiptoes",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemTiptoes,
                            filename: "Tiptoes.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Typewriters",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemTypewriters,
                            filename: "Typewriters.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Update",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemUpdate,
                            filename: "Update.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: "Swish",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemSwish,
                            filename: "Swish.caf"),
-        .createSystemSound(label: "Tweet",
+        .createSystemSound(label: UntranslatedL10n.messageToneSystemTweet,
                            filename: "tweet_sent.caf")
     ].sorted()
 
-    static let defaultElementXAlerts: [Self] = [
-        defaultElementXMessageTone,
-        .createBundledSound(label: "Triple Sin",
-                            filename: "triple_sin.caf")
-    ].sorted()
+    static let defaultElementXAlerts: [Self] = {
+        let base: [Self] = [
+            defaultElementXMessageTone,
+            .createBundledSound(label: UntranslatedL10n.messageToneTripleSin,
+                                filename: "triple_sin.caf")
+        ]
+
+        let proToneURL = Self.bundledLocation.appending(component: "sound_01.caf")
+        guard (try? proToneURL.checkResourceIsReachable()) == true else { return base }
+
+        let proTone: Self = .createBundledSound(label: UntranslatedL10n.messageToneElementxProDefault,
+                                                filename: "sound_01.caf")
+        return base + [proTone]
+    }().sorted()
     #endif
 
     static func < (lhs: NotificationAlertTone, rhs: NotificationAlertTone) -> Bool {

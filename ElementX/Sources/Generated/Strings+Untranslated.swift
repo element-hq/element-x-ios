@@ -10,6 +10,8 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum UntranslatedL10n {
+  /// Element X
+  internal static var commonAppName: String { return UntranslatedL10n.tr("Untranslated", "common_app_name") }
   /// You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.
   internal static var cryptoHistorySharingConfirmInviteDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_invite_dialog_content") }
   /// Invite new contacts to this room?
@@ -18,6 +20,66 @@ internal enum UntranslatedL10n {
   internal static var cryptoHistorySharingConfirmStartChatDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_content") }
   /// Start a chat with this new contact?
   internal static var cryptoHistorySharingConfirmStartChatDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_title") }
+  /// Default Message
+  internal static var messageToneElementxDefault: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_default") }
+  /// Pro Message
+  internal static var messageToneElementxProDefault: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_pro_default") }
+  /// Alert
+  internal static var messageToneSystemAlert: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_alert") }
+  /// Anticipate
+  internal static var messageToneSystemAnticipate: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_anticipate") }
+  /// Bell
+  internal static var messageToneSystemBell: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_bell") }
+  /// Bloom
+  internal static var messageToneSystemBloom: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_bloom") }
+  /// Calypso
+  internal static var messageToneSystemCalypso: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_calypso") }
+  /// Chime
+  internal static var messageToneSystemChime: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_chime") }
+  /// Choo Choo
+  internal static var messageToneSystemChooChoo: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_choo_choo") }
+  /// Descent
+  internal static var messageToneSystemDescent: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_descent") }
+  /// Electronic
+  internal static var messageToneSystemElectronic: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_electronic") }
+  /// Fanfare
+  internal static var messageToneSystemFanfare: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_fanfare") }
+  /// Glass
+  internal static var messageToneSystemGlass: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_glass") }
+  /// Horn
+  internal static var messageToneSystemHorn: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_horn") }
+  /// Ladder
+  internal static var messageToneSystemLadder: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_ladder") }
+  /// Minuet
+  internal static var messageToneSystemMinuet: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_minuet") }
+  /// News Flash
+  internal static var messageToneSystemNewsFlash: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_news Flash") }
+  /// Noir
+  internal static var messageToneSystemNoir: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_noir") }
+  /// Sherwood Forest
+  internal static var messageToneSystemSherwoodForest: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_sherwood_forest") }
+  /// Spell
+  internal static var messageToneSystemSpell: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_spell") }
+  /// Suspense
+  internal static var messageToneSystemSuspense: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_suspense") }
+  /// Swish
+  internal static var messageToneSystemSwish: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_swish") }
+  /// Telegraph
+  internal static var messageToneSystemTelegraph: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_telegraph") }
+  /// Tiptoes
+  internal static var messageToneSystemTiptoes: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_tiptoes") }
+  /// Tri-tone
+  internal static var messageToneSystemTriTone: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_tri_tone") }
+  /// Tweet
+  internal static var messageToneSystemTweet: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_tweet") }
+  /// Typewriters
+  internal static var messageToneSystemTypewriters: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_typewriters") }
+  /// Update
+  internal static var messageToneSystemUpdate: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_update") }
+  /// Triple Sine
+  internal static var messageToneTripleSin: String { return UntranslatedL10n.tr("Untranslated", "message_tone_triple_sin") }
+  /// Alert Tone
+  internal static var screenNotificationSettingsConfigurationAlertToneSectionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_section_title") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
