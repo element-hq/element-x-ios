@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import CoreLocation
 @testable import ElementX
 import Foundation
@@ -16,6 +17,7 @@ final class LiveLocationManagerTests {
     private var locationManagerMock: CLLocationManagerMock!
     private var manager: LiveLocationManager!
     private var appSettings: AppSettings!
+    private var beaconInfoSubject: PassthroughSubject<OwnBeaconInfoUpdate, Never>!
     
     init() {
         AppSettings.resetAllSettings()
@@ -47,6 +49,10 @@ final class LiveLocationManagerTests {
         
         try result.get()
         #expect(callOrder == ["stop", "start"])
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
+        
+        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
+        
         #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
         #expect(locationManagerMock.startUpdatingLocationCalled)
     }
@@ -56,7 +62,7 @@ final class LiveLocationManagerTests {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
+        appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$old_event:matrix.org", expirationDate: Date().addingTimeInterval(300))
         
         var callOrder: [String] = []
         roomProxy.stopLiveLocationShareClosure = {
@@ -72,6 +78,9 @@ final class LiveLocationManagerTests {
         
         try result.get()
         #expect(callOrder == ["stop", "start"])
+        
+        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
+        
         #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
     }
     
@@ -124,6 +133,8 @@ final class LiveLocationManagerTests {
         _ = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: duration)
         let afterStart = Date()
         
+        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
+        
         let storedSession = try #require(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"])
         let expectedMinTimeout = beforeStart.addingTimeInterval(TimeInterval(duration.seconds))
         let expectedMaxTimeout = afterStart.addingTimeInterval(TimeInterval(duration.seconds))
@@ -175,6 +186,26 @@ final class LiveLocationManagerTests {
         #expect(appSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] != nil)
     }
     
+    // MARK: - Beacon info updates
+
+    @Test
+    func beaconInfoUpdateFromAnotherDeviceRemovesActiveSession() async throws {
+        setUp()
+        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
+        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+
+        let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
+        try result.get()
+        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
+
+        let deferred = deferFulfillment(appSettings.$liveLocationSharingSessionsByRoomID) { $0["!room:matrix.org"] == nil }
+        beaconInfoSubject.send(OwnBeaconInfoUpdate(roomID: "!room:matrix.org", eventID: "$external_event:matrix.org", isLive: true))
+        try await deferred.fulfill()
+
+        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
+    }
+
     // MARK: - Reduced accuracy
     
     @Test
@@ -185,6 +216,8 @@ final class LiveLocationManagerTests {
         
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         try result.get()
+        
+        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
         
         #expect(locationManagerMock.startUpdatingLocationCalled)
         #expect(locationManagerMock.desiredAccuracy == kCLLocationAccuracyReduced)
@@ -206,7 +239,15 @@ final class LiveLocationManagerTests {
     private func setUp(accuracyAuthorization: CLAccuracyAuthorization = .fullAccuracy) {
         appSettings = AppSettings()
         clientProxy = ClientProxyMock(.init())
+        beaconInfoSubject = PassthroughSubject<OwnBeaconInfoUpdate, Never>()
+        clientProxy.ownBeaconInfoUpdatesPublisher = beaconInfoSubject.eraseToAnyPublisher()
         locationManagerMock = CLLocationManagerMock(.init(accuracyAuthorization: accuracyAuthorization))
         manager = LiveLocationManager(clientProxy: clientProxy, appSettings: appSettings, locationManager: locationManagerMock)
+    }
+    
+    private func simulateBeaconEcho(roomID: String, eventID: String) async throws {
+        let deferred = deferFulfillment(appSettings.$liveLocationSharingSessionsByRoomID) { $0[roomID] != nil }
+        beaconInfoSubject.send(OwnBeaconInfoUpdate(roomID: roomID, eventID: eventID, isLive: true))
+        try await deferred.fulfill()
     }
 }
