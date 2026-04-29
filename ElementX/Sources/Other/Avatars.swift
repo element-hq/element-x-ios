@@ -100,15 +100,14 @@ enum UserAvatarSizeOnScreen {
             28
         case .chats, .spaces, .map,
              .timeline, .readReceiptSheet, .completionSuggestions,
-             .blockedUsers, .roomMembersList, .knockingUserBanner,
-             .mediaPreviewDetails:
+             .blockedUsers, .roomMembersList, .knockingUserBanner:
             32
         case .startChat:
             36
         case .roomDetails:
             44
         case .inviteUsers, .knockingUserList, .sessionVerification,
-             .settings, .threadList:
+             .settings, .threadList, .mediaPreviewDetails:
             52
         case .roomChangeRoles:
             56
