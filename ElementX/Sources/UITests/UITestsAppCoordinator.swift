@@ -126,13 +126,28 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .settingsScreen:
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com",
+                                                    deviceID: "MOCKCLIENT"))
+            let appMediator = AppMediatorMock.default
+            appMediator.underlyingWindowManager = windowManager
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@mock:client.com",
-                                                                                       deviceID: "MOCKCLIENT"))))
-            let coordinator = SettingsScreenCoordinator(parameters: .init(userSession: userSession,
-                                                                          appSettings: ServiceLocator.shared.settings,
-                                                                          isBugReportServiceEnabled: true))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
+            let coordinator = SettingsFlowCoordinator(appLockService: AppLockServiceMock.mock(),
+                                                      navigationStackCoordinator: navigationStackCoordinator,
+                                                      flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                                                           bugReportService: BugReportServiceMock(.init()),
+                                                                                           elementCallService: ElementCallServiceMock(.init()),
+                                                                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                                                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                                                           linkMetadataProvider: LinkMetadataProvider(),
+                                                                                           appMediator: appMediator,
+                                                                                           appSettings: ServiceLocator.shared.settings,
+                                                                                           appHooks: AppHooks(),
+                                                                                           analytics: ServiceLocator.shared.analytics,
+                                                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                                           notificationManager: NotificationManagerMock(),
+                                                                                           stateMachineFactory: StateMachineFactory()))
+            coordinator.handleAppRoute(.settings, animated: false)
+            retainedState.append(coordinator)
             return navigationStackCoordinator
         case .authenticationFlow, .provisionedAuthenticationFlow, .singleProviderAuthenticationFlow, .multipleProvidersAuthenticationFlow:
             let appSettings: AppSettings! = ServiceLocator.shared.settings
