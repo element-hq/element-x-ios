@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Η πλήρης διεύθυνση θα είναι %1$@";
 "a11y_expand_message_text_field" = "Επεκτείνετε το πεδίο κειμένου του μηνύματος";
 "a11y_hide_password" = "Απόκρυψη κωδικού πρόσβασης";
+"a11y_info" = "Info";
 "a11y_join_call" = "Συμμετοχή στην κλήση";
 "a11y_jump_to_bottom" = "Άλμα προς τα κάτω";
 "a11y_notifications_mentions_only" = "Αναφορές μόνο";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Αποστολή αρχείων";
 "a11y_sender_location" = "Τοποθεσία αποστολέα";
 "a11y_session_verification_time_limited_action_required" = "Απαιτείται ενέργεια περιορισμένης χρονικής διάρκειας, έχετε ένα λεπτό για επαλήθευση.";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Εμφάνιση κωδικού πρόσβασης";
 "a11y_start_call" = "Ξεκίνησε μια κλήση";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Απενεργοποίηση λογαριασμού";
 "action_decline" = "Απόρριψη";
 "action_decline_and_block" = "Απόρριψη και αποκλεισμός";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Διαγραφή Δημοσκόπησης";
 "action_deselect_all" = "Αποεπιλογή όλων";
 "action_disable" = "Απενεργοποίηση";
 "action_discard" = "Απόρριψη";
 "action_dismiss" = "Παράβλεψη";
 "action_done" = "Έγινε";
+"action_download" = "Download";
 "action_edit" = "Επεξεργασία";
 "action_edit_caption" = "Επεξεργασία λεζάντας";
 "action_edit_poll" = "Επεξεργασία δημοσκόπησης";
@@ -202,7 +207,9 @@
 "common_beta" = "Δοκιμαστική";
 "common_blocked_users" = "Αποκλεισμένοι χρήστες";
 "common_bubbles" = "Φυσαλίδες";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Η κλήση ξεκίνησε";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Αντίγραφο ασφαλείας συνομιλίας";
 "common_copied_to_clipboard" = "Αντιγράφηκε στο πρόχειρο";
 "common_copyright" = "Πνευματικά δικαιώματα";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Όνομα αρχείου";
 "screen_media_details_no_more_files_to_show" = "Δεν υπάρχουν άλλα αρχεία για εμφάνιση";
 "screen_media_details_no_more_media_to_show" = "Δεν υπάρχουν άλλα μέσα για εμφάνιση";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Μεταφορτώθηκε από";
 "screen_media_details_uploaded_on" = "Μεταφορτώθηκε στις";
 "screen_media_picker_error_failed_selection" = "Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά.";

@@ -248,10 +248,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Every %1$d meter</string>
 			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>%1$dm ごと</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

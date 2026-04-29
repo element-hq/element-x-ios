@@ -312,10 +312,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Každé %1$d metry</string>
 			<key>one</key>
-			<string>Every %1$d meter</string>
+			<string>Každý %1$d metr</string>
 			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>Každých %1$d metrů</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -382,10 +384,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d osoby</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>%1$d osoba</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d lidí</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

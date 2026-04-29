@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Podgląd pełnego adresu %1$@";
 "a11y_expand_message_text_field" = "Powiększ pole tekstowe wiadomości";
 "a11y_hide_password" = "Ukryj hasło";
+"a11y_info" = "Info";
 "a11y_join_call" = "Dołącz do połączenia";
 "a11y_jump_to_bottom" = "Przejdź na dół";
 "a11y_notifications_mentions_only" = "Tylko wzmianki";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Wyślij pliki";
 "a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Wymagane jest działanie ograniczone czasowo, została jedna minuta";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Pokaż hasło";
 "a11y_start_call" = "Rozpocznij rozmowę";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Dezaktywuj konto";
 "action_decline" = "Odrzuć";
 "action_decline_and_block" = "Odrzuć i zablokuj";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Usuń ankietę";
 "action_deselect_all" = "Odznacz wszystko";
 "action_disable" = "Wyłącz";
 "action_discard" = "Odrzuć";
 "action_dismiss" = "Zamknij";
 "action_done" = "Gotowe";
+"action_download" = "Download";
 "action_edit" = "Edytuj";
 "action_edit_caption" = "Edytuj opis";
 "action_edit_poll" = "Edytuj ankietę";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Zablokowani użytkownicy";
 "common_bubbles" = "Bąbelki";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Rozpoczęto rozmowę";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Backup czatu";
 "common_copied_to_clipboard" = "Skopiowano do schowka";
 "common_copyright" = "Prawa autorskie";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Nazwa pliku";
 "screen_media_details_no_more_files_to_show" = "Brak plików do pokazania";
 "screen_media_details_no_more_media_to_show" = "Brak mediów do pokazania";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Przesłane przez";
 "screen_media_details_uploaded_on" = "Przesłane w dniu";
 "screen_media_picker_error_failed_selection" = "Nie udało się wybrać multimediów. Spróbuj ponownie.";

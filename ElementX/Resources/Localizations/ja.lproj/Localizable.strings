@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "完全なアドレスは %1$@ になります。";
 "a11y_expand_message_text_field" = "入力欄を拡大";
 "a11y_hide_password" = "パスワードを非表示";
+"a11y_info" = "Info";
 "a11y_join_call" = "通話に参加";
 "a11y_jump_to_bottom" = "一番下へ";
 "a11y_notifications_mentions_only" = "メンションのみ";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "ファイルを送信";
 "a11y_sender_location" = "送信者の位置情報";
 "a11y_session_verification_time_limited_action_required" = "1分以内に検証を完了してください";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "パスワードを表示";
 "a11y_start_call" = "通話を開始";
 "a11y_start_video_call" = "ビデオ通話を開始";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "アカウントを無効化";
 "action_decline" = "拒否";
 "action_decline_and_block" = "拒否してブロック";
+"action_delete" = "削除";
+"action_delete_account" = "アカウントを削除";
 "action_delete_poll" = "投票を削除";
 "action_deselect_all" = "全ての選択を解除";
 "action_disable" = "無効化";
 "action_discard" = "破棄";
 "action_dismiss" = "無視";
 "action_done" = "完了";
+"action_download" = "Download";
 "action_edit" = "編集";
 "action_edit_caption" = "キャプションを編集";
 "action_edit_poll" = "投票を編集";
@@ -202,7 +207,9 @@
 "common_beta" = "ベータ版";
 "common_blocked_users" = "ブロックしたユーザー";
 "common_bubbles" = "ふきだし";
+"common_call_declined" = "Call declined";
 "common_call_started" = "通話を開始しました";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "チャットをバックアップ";
 "common_copied_to_clipboard" = "クリップボードにコピーしました";
 "common_copyright" = "著作権";
@@ -552,10 +559,10 @@
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "ルームへの招待リクエストにアバターを表示しない";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "タイムラインにメディアのプレビューを表示しない";
 "screen_advanced_settings_labs" = "ラボ";
-"screen_advanced_settings_live_location_section_description" = "The distance you have to move to trigger an update.";
-"screen_advanced_settings_live_location_section_footer" = "Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$@.";
-"screen_advanced_settings_live_location_section_footer_link" = "App Settings";
-"screen_advanced_settings_live_location_section_title" = "Live location updates";
+"screen_advanced_settings_live_location_section_description" = "更新するのに必要な移動距離です。";
+"screen_advanced_settings_live_location_section_footer" = "「正確な位置情報」がこのアプリで使用可能なことを確認してください。権限を変更するには %1$@ を開いてください。";
+"screen_advanced_settings_live_location_section_footer_link" = "アプリ設定";
+"screen_advanced_settings_live_location_section_title" = "ライブ位置情報の更新";
 "screen_advanced_settings_media_compression_description" = "写真や動画を高速で送信してデータ使用量を減らす";
 "screen_advanced_settings_media_compression_title" = "メディアの品質を最適化";
 "screen_advanced_settings_moderation_and_safety_section_title" = "制限と安全";
@@ -620,7 +627,7 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "招待を送信";
 "screen_bottom_sheet_create_dm_message" = "%1$@ とチャットを始めますか？";
 "screen_bottom_sheet_create_dm_title" = "招待を送信しますか？";
-"screen_bottom_sheet_create_dm_unknown_user_content" = "この人物とのチャットがありません。続行する前に、まず招待してください。";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "この人物とのチャットがありません。はじめに、招待の状況を確認してください。";
 "screen_bottom_sheet_create_dm_unknown_user_title" = "この新しい連絡先と新規にチャットを開始しますか？";
 "screen_bottom_sheet_manage_room_member_ban" = "ユーザーを追放";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "追放";
@@ -753,7 +760,7 @@
 "screen_deactivate_account_list_item_2" = "すべてのチャットルームから退出します。";
 "screen_deactivate_account_list_item_3" = "アカウント提供元サーバーからアカウント情報を削除します。";
 "screen_deactivate_account_list_item_4" = "あなたの会話は、既存ユーザーには引き続き表示されますが、新規ユーザーには表示されなくなります。";
-"screen_deactivate_account_title" = "アカウントを無効化";
+"screen_deactivate_account_title" = "アカウントを削除";
 "screen_decline_and_block_block_user_option_description" = "このユーザーからのメッセージと招待を非表示します";
 "screen_decline_and_block_block_user_option_title" = "ユーザーをブロック";
 "screen_decline_and_block_report_user_option_description" = "アカウント提供元にこのルームを報告";
@@ -796,10 +803,10 @@
 "screen_identity_waiting_on_other_device" = "一方の端末を待機中...";
 "screen_invite_users_already_a_member" = "既に参加しています";
 "screen_invite_users_already_invited" = "既に招待しています";
-"screen_invite_users_confirm_dialog_subtitle_multiple_users" = "You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.";
-"screen_invite_users_confirm_dialog_subtitle_one_user" = "You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing.";
-"screen_invite_users_confirm_dialog_title_mutiple_users" = "Invite new contacts to this room?";
-"screen_invite_users_confirm_dialog_title_one_user" = "Invite new contact to this room?";
+"screen_invite_users_confirm_dialog_subtitle_multiple_users" = "これらの人物とのチャットがありません。はじめに、招待の状況を確認してください。";
+"screen_invite_users_confirm_dialog_subtitle_one_user" = "この連絡先とのチャットがありません。はじめに、招待の状況を確認してください。";
+"screen_invite_users_confirm_dialog_title_mutiple_users" = "このルームに新しい連絡先を招待しますか？";
+"screen_invite_users_confirm_dialog_title_one_user" = "このルームに新しい連絡先を招待しますか？";
 "screen_invites_decline_chat_message" = "%1$@への招待を本当に破棄しますか？";
 "screen_invites_decline_chat_title" = "招待を破棄";
 "screen_invites_decline_direct_chat_message" = "%1$@とのチャットを本当に拒否しますか？";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "ファイル名";
 "screen_media_details_no_more_files_to_show" = "これ以上ファイルはありません";
 "screen_media_details_no_more_media_to_show" = "これ以上メディアはありません";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "アップロード元";
 "screen_media_details_uploaded_on" = "アップロード先";
 "screen_media_picker_error_failed_selection" = "ファイルの選択に失敗しました。再試行してください。";

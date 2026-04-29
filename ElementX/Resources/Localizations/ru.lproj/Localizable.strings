@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Полный адрес %1$@";
 "a11y_expand_message_text_field" = "Развернуть поле ввода";
 "a11y_hide_password" = "Скрыть пароль";
+"a11y_info" = "Info";
 "a11y_join_call" = "Присоединиться к звонку";
 "a11y_jump_to_bottom" = "Перейти вниз";
 "a11y_notifications_mentions_only" = "Только упоминания";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Отправить файлы";
 "a11y_sender_location" = "Местоположение отправителя";
 "a11y_session_verification_time_limited_action_required" = "Требуется действие, на которое есть ограничение по времени, у вас есть одна минута для проверки";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Показать пароль";
 "a11y_start_call" = "Начать звонок";
 "a11y_start_video_call" = "Начать видеозвонок";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Отключить учётную запись";
 "action_decline" = "Отклонить";
 "action_decline_and_block" = "Отклонить и заблокировать";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Удалить опрос";
 "action_deselect_all" = "Отменить выбор";
 "action_disable" = "Отключить";
 "action_discard" = "Отменить";
 "action_dismiss" = "Закрыть";
 "action_done" = "Готово";
+"action_download" = "Download";
 "action_edit" = "Редактировать";
 "action_edit_caption" = "Изменить подпись";
 "action_edit_poll" = "Редактировать опрос";
@@ -202,7 +207,9 @@
 "common_beta" = "Бета-версия";
 "common_blocked_users" = "Заблокированные пользователи";
 "common_bubbles" = "Пузыри";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Звонок начат";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Резервная копия чатов";
 "common_copied_to_clipboard" = "Скопировано в буфер обмена";
 "common_copyright" = "Авторское право";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Имя файла";
 "screen_media_details_no_more_files_to_show" = "Больше нет файлов для отображения";
 "screen_media_details_no_more_media_to_show" = "Больше нет медиа для отображения";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Загружено";
 "screen_media_details_uploaded_on" = "Загружено";
 "screen_media_picker_error_failed_selection" = "Не удалось выбрать медиа, попробуйте еще раз.";

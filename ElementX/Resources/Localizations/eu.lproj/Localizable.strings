@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "Ezkutatu pasahitza";
+"a11y_info" = "Info";
 "a11y_join_call" = "Batu deira";
 "a11y_jump_to_bottom" = "Joan behera";
 "a11y_notifications_mentions_only" = "Aipamenak soilik";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Bidali fitxategiak";
 "a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Erakutsi pasahitza";
 "a11y_start_call" = "Hasi dei bat";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Desaktibatu kontua";
 "action_decline" = "Ukatu";
 "action_decline_and_block" = "Baztertu eta blokeatu";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Ezabatu inkesta";
 "action_deselect_all" = "Deselect all";
 "action_disable" = "Desgaitu";
 "action_discard" = "Baztertu";
 "action_dismiss" = "Baztertu";
 "action_done" = "Eginda";
+"action_download" = "Download";
 "action_edit" = "Editatu";
 "action_edit_caption" = "Editatu testua";
 "action_edit_poll" = "Editatu inkesta";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Blokeatutako erabiltzaileak";
 "common_bubbles" = "Bunbuiloak";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Deia hasi da";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Txataren babeskopia";
 "common_copied_to_clipboard" = "Arbelean kopiatu da";
 "common_copyright" = "Copyrighta";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Fitxategiaren izena";
 "screen_media_details_no_more_files_to_show" = "No more files to show";
 "screen_media_details_no_more_media_to_show" = "No more media to show";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Nork igota:";
 "screen_media_details_uploaded_on" = "Noiz igota:";
 "screen_media_picker_error_failed_selection" = "Huts egin du multimedia aukeratzeak, saiatu berriro.";

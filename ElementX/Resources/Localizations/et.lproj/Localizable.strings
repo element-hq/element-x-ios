@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Täisaadress saab olema %1$@";
 "a11y_expand_message_text_field" = "Laienda tekstivälja";
 "a11y_hide_password" = "Peida salasõna";
+"a11y_info" = "Info";
 "a11y_join_call" = "Liitu kõnega";
 "a11y_jump_to_bottom" = "Mine lõppu";
 "a11y_notifications_mentions_only" = "Ainult mainimised";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Saada faile";
 "a11y_sender_location" = "Saatja asukoht";
 "a11y_session_verification_time_limited_action_required" = "Palun tee see ajapiiranguga toiming, sul on aega üks minut";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Näita salasõna";
 "a11y_start_call" = "Helista";
 "a11y_start_video_call" = "Alusta videokõnet";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Eemalda konto kasutusest";
 "action_decline" = "Keeldu";
 "action_decline_and_block" = "Keeldu ja blokeeri";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Kustuta küsitlus";
 "action_deselect_all" = "Eemalda kõik valikud";
 "action_disable" = "Lülita välja";
 "action_discard" = "Loobu";
 "action_dismiss" = "Lõpeta";
 "action_done" = "Valmis";
+"action_download" = "Download";
 "action_edit" = "Muuda";
 "action_edit_caption" = "Muuda selgitust";
 "action_edit_poll" = "Muuda küsitlust";
@@ -202,7 +207,9 @@
 "common_beta" = "Beetaversioon";
 "common_blocked_users" = "Blokeeritud kasutajad";
 "common_bubbles" = "Mullid";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Kõne algas";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Vestluse varukoopia";
 "common_copied_to_clipboard" = "Kopeeritud lõikelauale";
 "common_copyright" = "Autoriõigused";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Failinimi";
 "screen_media_details_no_more_files_to_show" = "Pole enam kuvatavaid faile";
 "screen_media_details_no_more_media_to_show" = "Pole enam kuvatavat meediat";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Üleslaadija";
 "screen_media_details_uploaded_on" = "Üleslaaditud";
 "screen_media_picker_error_failed_selection" = "Meediafaili valimine ei õnnestunud. Palun proovi uuesti.";
