@@ -772,16 +772,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         do {
             try await room.sendLiveLocation(geoUri: geoURI.string)
             return .success(())
-        } catch let error as LiveLocationError {
-            switch error {
-            case .Network:
-                MXLog.error("Failed sending live location with error: \(error)")
-                return .failure(.sdkError(error))
-            // We can consider the session not active for any error other the Network one.
-            default:
-                MXLog.error("Failed sending live location, session is not active")
-                return .failure(.liveLocationSessionIsNotActive)
-            }
+        } catch LiveLocationError.NotLive {
+            MXLog.error("Failed sending live location, session is not active")
+            return .failure(.liveLocationSessionIsNotActive)
         } catch {
             MXLog.error("Failed sending live location with error: \(error)")
             return .failure(.sdkError(error))
