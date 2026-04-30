@@ -132,6 +132,10 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.focusEventOnNotificationTap) {
                     Text("Focus event on notification tap")
                 }
+
+                Button("Re-register Push Notifications", action: {
+                    context.send(viewAction: .reregisterPushNotifications)
+                })
             }
             
             Section {

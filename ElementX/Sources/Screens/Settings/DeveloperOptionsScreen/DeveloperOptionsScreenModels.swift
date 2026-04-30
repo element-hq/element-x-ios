@@ -48,6 +48,7 @@ struct DeveloperOptionsScreenViewStateBindings {
 
 enum DeveloperOptionsScreenViewAction {
     case clearCache
+    case reregisterPushNotifications
 }
 
 protocol DeveloperOptionsProtocol: AnyObject {

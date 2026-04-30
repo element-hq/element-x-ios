@@ -55,6 +55,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         switch viewAction {
         case .clearCache:
             actionsSubject.send(.clearCache)
+        case .reregisterPushNotifications:
+            UIApplication.shared.registerForRemoteNotifications()
         }
     }
 }
