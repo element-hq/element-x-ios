@@ -141,13 +141,13 @@ packages:
     minorVersion: 1.2.1
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
-    minorVersion: 6.25.0
+    minorVersion: 6.25.1
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.54.0
+    minorVersion: 3.55.1
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 9.10.0
+    minorVersion: 9.11.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.19.2

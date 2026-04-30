@@ -1,5 +1,5 @@
 {
-  "originHash" : "ffbed4fcb99c97f1daf5f706d30ba2acbdb0810f8774b9720d29257d9854f83e",
+  "originHash" : "6eccca91b7f5f7d7d50476c059d00f2944d321851b0e0c1d6afb529416131af2",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -131,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/maplibre/maplibre-gl-native-distribution",
       "state" : {
-        "revision" : "e0ee2c11a2859e22d3f0dd29705c18169bdafa7b",
-        "version" : "6.25.0"
+        "revision" : "40e1a0db6d055abf8a1b6e2f6127a8bb6e895cf8",
+        "version" : "6.25.1"
       }
     },
     {
@@ -194,8 +194,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "b9aa734f24973d5a017da0c18a87af2afcbc0c26",
-        "version" : "3.54.0"
+        "revision" : "c165ead50ecf66368685a8467fa625fc0960bace",
+        "version" : "3.55.1"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "3a22ecd00ad1398747bfd587e44df82716908dd3",
-        "version" : "9.10.0"
+        "revision" : "a49e7c2148ac9e38bd35ef4f13bc9d6ea3ff0b81",
+        "version" : "9.11.0"
       }
     },
     {
