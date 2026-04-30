@@ -75,6 +75,11 @@ targets:
         MARKETING_VERSION: $(MARKETING_VERSION)
         CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
         DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
+      configs:
+        debug:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: IS_SHARE_EXT DEBUG
+        release:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: IS_SHARE_EXT RELEASE
 
     sources:
     - path: ../Sources
@@ -101,5 +106,4 @@ targets:
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/CurrentValuePublisher.swift
     - path: ../../ElementX/Sources/Other/Logging
-    - path: ../../ElementX/Sources/Screens/Settings/NotificationSettingsScreen/AlertTones/NotificationAlertTone.swift
     - path: ../../ElementX/Sources/UITests/UITestsScreenIdentifier.swift
