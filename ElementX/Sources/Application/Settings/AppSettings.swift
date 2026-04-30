@@ -17,7 +17,9 @@ import SwiftUI
 protocol CommonSettingsProtocol: AnyObject {
     var lastNotificationBootTime: TimeInterval? { get set }
     #if !IS_SHARE_EXT
-    var selectedNotificationTone: NotificationAlertTone? { get set }
+    var selectedNotificationTone: NotificationAlertTone? {
+        get set
+    }
     #endif
 
     var logLevel: LogLevel { get }
