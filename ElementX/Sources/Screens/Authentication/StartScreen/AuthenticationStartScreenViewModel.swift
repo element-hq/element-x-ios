@@ -144,7 +144,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             }
         }
         
-        guard authenticationService.homeserver.value.loginMode.supportsOIDCFlow else {
+        guard authenticationService.homeserver.value.loginMode.supportsOAuthFlow else {
             actionsSubject.send(.loginDirectlyWithPassword(loginHint: loginHint))
             return
         }
@@ -154,9 +154,9 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             return
         }
         
-        switch await authenticationService.urlForOIDCLogin(loginHint: loginHint) {
-        case .success(let oidcData):
-            actionsSubject.send(.loginDirectlyWithOIDC(data: oidcData, window: window))
+        switch await authenticationService.urlForOAuthLogin(loginHint: loginHint) {
+        case .success(let oAuthData):
+            actionsSubject.send(.loginDirectlyWithOAuth(data: oAuthData, window: window))
         case .failure:
             displayError()
         }

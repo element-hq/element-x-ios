@@ -16,7 +16,7 @@ enum QRCodeLoginScreenViewModelAction: CustomStringConvertible {
     case startOver
     case signInManually
     case signedIn(userSession: UserSessionProtocol)
-    case requestOIDCAuthorisation(URL, OIDCAccountSettingsPresenter.Continuation)
+    case requestOAuthAuthorisation(URL, OAuthAccountSettingsPresenter.Continuation)
     case linkedDevice
     /// Cancel the flow (dismiss the modal).
     case cancel
@@ -26,7 +26,7 @@ enum QRCodeLoginScreenViewModelAction: CustomStringConvertible {
         case .startOver: "startOver"
         case .signInManually: "signInManually"
         case .signedIn: "signedIn"
-        case .requestOIDCAuthorisation: "requestOIDCAuthorisation"
+        case .requestOAuthAuthorisation: "requestOAuthAuthorisation"
         case .linkedDevice: "linkedDevice"
         case .cancel: "cancel"
         }

@@ -405,7 +405,7 @@ class ClientProxy: ClientProxyProtocol {
         Task {
             await syncService.start()
             
-            // If we are using OIDC we want to cache the account management URL in volatile memory on the SDK side.
+            // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
             // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
             await cacheAccountURL()
         }

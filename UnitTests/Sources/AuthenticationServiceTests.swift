@@ -45,7 +45,7 @@ struct AuthenticationServiceTests {
     }
     
     @Test
-    mutating func configureLoginWithOIDC() async throws {
+    mutating func configureLoginWithOAuth() async throws {
         try await setup()
         
         try await service.configure(for: "matrix.org", flow: .login).get()
@@ -55,7 +55,7 @@ struct AuthenticationServiceTests {
     }
     
     @Test
-    mutating func configureRegisterWithOIDC() async throws {
+    mutating func configureRegisterWithOAuth() async throws {
         try await setup()
         
         try await service.configure(for: "matrix.org", flow: .register).get()

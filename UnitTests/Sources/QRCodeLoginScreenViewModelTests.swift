@@ -147,7 +147,7 @@ struct QRCodeLoginScreenViewModelTests {
         try await deferred.fulfill()
         
         var deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
-            guard case .requestOIDCAuthorisation = action else { return false }
+            guard case .requestOAuthAuthorisation = action else { return false }
             return true
         }
         linkDesktopProgressSubject.send(.waitingForAuthorisation(verificationURL: .homeDirectory))
@@ -183,7 +183,7 @@ struct QRCodeLoginScreenViewModelTests {
         try await deferredState.fulfill()
         
         var deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
-            guard case .requestOIDCAuthorisation = action else { return false }
+            guard case .requestOAuthAuthorisation = action else { return false }
             return true
         }
         linkMobileProgressSubject.send(.waitingForAuthorisation(verificationURL: .homeDirectory))

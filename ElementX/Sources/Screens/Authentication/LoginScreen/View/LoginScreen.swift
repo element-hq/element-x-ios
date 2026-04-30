@@ -27,7 +27,7 @@ struct LoginScreen: View {
                 switch context.viewState.loginMode {
                 case .password:
                     loginForm
-                case .oidc:
+                case .oAuth:
                     // This should never be shown.
                     ProgressView()
                 default:
@@ -102,7 +102,7 @@ struct LoginScreen: View {
         }
     }
     
-    /// Text shown if neither password or OIDC login is supported.
+    /// Text shown if neither password or OAuth login is supported.
     var loginUnavailableText: some View {
         Text(L10n.screenLoginErrorUnsupportedAuthentication)
             .font(.body)

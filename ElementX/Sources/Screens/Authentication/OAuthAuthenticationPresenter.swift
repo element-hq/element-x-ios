@@ -8,15 +8,15 @@
 
 import AuthenticationServices
 
-/// Presents a web authentication session for an OIDC request.
+/// Presents a web authentication session for an OAuth request.
 ///
 /// In certain instances the URL may require opening an external app instead of using a WAS. Because of this
-/// it is recommended to not encode the OIDC authentication within any state machines, as there is no guarantee
+/// it is recommended to not encode the OAuth authentication within any state machines, as there is no guarantee
 /// that any cancellations/failures will be communicated upwards.
 @MainActor
-class OIDCAuthenticationPresenter: NSObject {
+class OAuthAuthenticationPresenter: NSObject {
     private let authenticationService: AuthenticationServiceProtocol
-    private let oidcRedirectURL: URL
+    private let redirectURL: URL
     private let presentationAnchor: UIWindow
     private let appMediator: AppMediatorProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -36,12 +36,12 @@ class OIDCAuthenticationPresenter: NSObject {
     private var activeRequest: Request?
     
     init(authenticationService: AuthenticationServiceProtocol,
-         oidcRedirectURL: URL,
+         redirectURL: URL,
          presentationAnchor: UIWindow,
          appMediator: AppMediatorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
-        self.oidcRedirectURL = oidcRedirectURL
+        self.redirectURL = redirectURL
         self.presentationAnchor = presentationAnchor
         self.appMediator = appMediator
         self.userIndicatorController = userIndicatorController
@@ -53,11 +53,11 @@ class OIDCAuthenticationPresenter: NSObject {
     /// **Note:** The failure case cannot be relied upon as a signal that the authentication has ended.
     /// In particular if the authentication URL requires opening an external app, then the user may return
     /// to the app without completing (or cancelling) the authentication.
-    func authenticate(using oidcData: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func authenticate(using oAuthData: OAuthAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         let response = await withCheckedContinuation { continuation in
-            let authenticationURL = oidcData.url
+            let authenticationURL = oAuthData.url
             
-            let session = ASWebAuthenticationSession(url: authenticationURL, callback: .oidcRedirectURL(oidcRedirectURL)) { url, error in
+            let session = ASWebAuthenticationSession(url: authenticationURL, callback: .oAuthRedirectURL(redirectURL)) { url, error in
                 MXLog.info("Handling callback from the session.")
                 continuation.resume(returning: Response(url: url, isExternal: false, error: error))
             }
@@ -86,30 +86,30 @@ class OIDCAuthenticationPresenter: NSObject {
         
         guard let url = response.url else {
             // Check for user cancellation (on the WAS sheet) to avoid showing an alert in that instance.
-            if response.error?.isOIDCUserCancellation == true {
+            if response.error?.isOAuthUserCancellation == true {
                 // No need to show an error here, just abort and return a failure.
-                await authenticationService.abortOIDCLogin(data: oidcData)
-                return .failure(.oidcError(.userCancellation))
+                await authenticationService.abortOAuthLogin(data: oAuthData)
+                return .failure(.oAuthError(.userCancellation))
             }
             
             let errorDescription = response.error.map(String.init(describing:)) ?? "Unknown error"
             MXLog.error("Missing callback URL from the web authentication session: \(errorDescription)")
             
             showFailureIndicator()
-            await authenticationService.abortOIDCLogin(data: oidcData)
-            return .failure(.oidcError(.unknown))
+            await authenticationService.abortOAuthLogin(data: oAuthData)
+            return .failure(.oAuthError(.unknown))
         }
         
         // Exchanging the callback with the homeserver can be slow, so show the loading indicator while we wait (the modal has already been dismissed).
         startLoading(delay: .milliseconds(50)) // Small delay to handle a cancellation callback without the indicator showing.
         defer { stopLoading() }
         
-        switch await authenticationService.loginWithOIDCCallback(url) {
+        switch await authenticationService.loginWithOAuthCallback(url) {
         case .success(let userSession):
             return .success(userSession)
-        case .failure(.oidcError(.userCancellation)): // Check for user cancellation (on the MAS web page)
+        case .failure(.oAuthError(.userCancellation)): // Check for user cancellation (on the MAS web page)
             // No need to show an error here, just return the failure.
-            return .failure(.oidcError(.userCancellation))
+            return .failure(.oAuthError(.userCancellation))
         case .failure(let error):
             MXLog.error("Error occurred: \(error)")
             showFailureIndicator()
@@ -163,20 +163,20 @@ class OIDCAuthenticationPresenter: NSObject {
 
 // MARK: ASWebAuthenticationPresentationContextProviding
 
-extension OIDCAuthenticationPresenter: ASWebAuthenticationPresentationContextProviding {
+extension OAuthAuthenticationPresenter: ASWebAuthenticationPresentationContextProviding {
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         presentationAnchor
     }
 }
 
 extension ASWebAuthenticationSession.Callback {
-    static func oidcRedirectURL(_ url: URL) -> Self {
+    static func oAuthRedirectURL(_ url: URL) -> Self {
         if url.scheme == "https", let host = url.host() {
             .https(host: host, path: url.path())
         } else if let scheme = url.scheme {
             .customScheme(scheme)
         } else {
-            fatalError("Invalid OIDC redirect URL: \(url)")
+            fatalError("Invalid OAuth redirect URL: \(url)")
         }
     }
 }
@@ -184,7 +184,7 @@ extension ASWebAuthenticationSession.Callback {
 // MARK: - Helpers
 
 extension Error {
-    var isOIDCUserCancellation: Bool {
+    var isOAuthUserCancellation: Bool {
         let nsError = self as NSError
         
         if nsError.domain == ASWebAuthenticationSessionErrorDomain,

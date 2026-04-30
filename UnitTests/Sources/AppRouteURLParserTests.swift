@@ -21,22 +21,22 @@ struct AppRouteURLParserTests {
     }
     
     @Test
-    func oidcCallbackRoute() {
-        // Given an OIDC callback for this app.
-        let callbackURL = appSettings.oidcRedirectURL.appending(queryItems: [URLQueryItem(name: "state", value: "12345"),
-                                                                             URLQueryItem(name: "code", value: "67890")])
+    func oAuthCallbackRoute() {
+        // Given an OAuth callback for this app.
+        let callbackURL = appSettings.oAuthRedirectURL.appending(queryItems: [URLQueryItem(name: "state", value: "12345"),
+                                                                              URLQueryItem(name: "code", value: "67890")])
         
         // When parsing that route.
         let route = appRouteURLParser.route(from: callbackURL)
         
-        // Then it should be considered a valid OIDC callback.
-        #expect(route == .oidcCallback(url: callbackURL))
+        // Then it should be considered a valid OAuth callback.
+        #expect(route == .oAuthCallback(url: callbackURL))
     }
     
     @Test
-    func oidcCallbackAppVariantRoute() {
-        // Given an OIDC callback for a different app variant.
-        let callbackURL = appSettings.oidcRedirectURL
+    func oAuthCallbackAppVariantRoute() {
+        // Given an OAuth callback for a different app variant.
+        let callbackURL = appSettings.oAuthRedirectURL
             .deletingLastPathComponent()
             .appending(component: "io.element.elementz")
             .appending(queryItems: [URLQueryItem(name: "state", value: "12345"),

@@ -188,7 +188,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .dismiss:
                     navigationStackCoordinator.setSheetCoordinator(nil)
-                case .requestOIDCAuthorisation(let url, let continuation):
+                case .requestOAuthAuthorisation(let url, let continuation):
                     presentAccountManagementURL(url, continuation: continuation)
                 }
             }
@@ -295,17 +295,17 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
     
-    // MARK: OIDC Account Management
+    // MARK: OAuth Account Management
     
-    private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
-    private func presentAccountManagementURL(_ url: URL, continuation: OIDCAccountSettingsPresenter.Continuation? = nil) {
+    private var accountSettingsPresenter: OAuthAccountSettingsPresenter?
+    private func presentAccountManagementURL(_ url: URL, continuation: OAuthAccountSettingsPresenter.Continuation? = nil) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
-        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url,
-                                                                presentationAnchor: flowParameters.windowManager.mainWindow,
-                                                                appMediator: flowParameters.appMediator,
-                                                                appSettings: flowParameters.appSettings,
-                                                                continuation: continuation)
+        accountSettingsPresenter = OAuthAccountSettingsPresenter(accountURL: url,
+                                                                 presentationAnchor: flowParameters.windowManager.mainWindow,
+                                                                 appMediator: flowParameters.appMediator,
+                                                                 appSettings: flowParameters.appSettings,
+                                                                 continuation: continuation)
         accountSettingsPresenter?.start()
     }
 }

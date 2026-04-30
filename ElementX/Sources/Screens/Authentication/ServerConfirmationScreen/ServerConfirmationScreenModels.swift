@@ -9,8 +9,8 @@
 import SwiftUI
 
 enum ServerConfirmationScreenViewModelAction {
-    /// Continue the flow using the provided OIDC parameters.
-    case continueWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
+    /// Continue the flow using the provided OAuth parameters.
+    case continueWithOAuth(data: OAuthAuthorizationDataProxy, window: UIWindow)
     /// Continue the flow using password authentication.
     case continueWithPassword
     /// The user would like to change to a different homeserver.
@@ -29,7 +29,7 @@ struct ServerConfirmationScreenViewState: BindableState {
     var mode: ServerConfirmationScreenMode
     /// The flow being attempted on the selected homeserver.
     let authenticationFlow: AuthenticationFlow
-    /// The presentation anchor used for OIDC authentication.
+    /// The presentation anchor used for OAuth authentication.
     var window: UIWindow?
     
     var bindings = ServerConfirmationScreenBindings()
@@ -76,7 +76,7 @@ struct ServerConfirmationScreenBindings {
 }
 
 enum ServerConfirmationScreenViewAction {
-    /// Updates the window used as the OIDC presentation anchor.
+    /// Updates the window used as the OAuth presentation anchor.
     case updateWindow(UIWindow)
     /// The user would like to continue with the current homeserver.
     case confirm

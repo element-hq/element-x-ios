@@ -14,9 +14,9 @@ import MatrixRustSDK
 enum AppRoute: Hashable {
     /// An account provisioning link generated externally.
     case accountProvisioningLink(AccountProvisioningParameters)
-    /// An external callback used to complete login with OIDC. This is only used when authentication
-    /// requires an external app so cannot be done within the built in web authentication session.
-    case oidcCallback(url: URL)
+    /// An external callback used to complete login with OAuth. This is only used when authentication
+    /// requires an external app so cannot be handled directly by the web authentication session.
+    case oAuthCallback(url: URL)
     
     /// The app's home screen.
     case roomList
@@ -61,7 +61,7 @@ enum AppRoute: Hashable {
     var isAuthenticationRoute: Bool {
         switch self {
         case .accountProvisioningLink: true
-        case .oidcCallback: true
+        case .oAuthCallback: true
         default: false
         }
     }
@@ -87,7 +87,7 @@ struct AppRouteURLParser {
             MatrixPermalinkParser(),
             ElementWebURLParser(domains: appSettings.elementWebHosts),
             AccountProvisioningURLParser(domain: appSettings.accountProvisioningHost),
-            OIDCCallbackURLParser(redirectURL: appSettings.oidcRedirectURL)
+            OAuthCallbackURLParser(redirectURL: appSettings.oAuthRedirectURL)
         ]
     }
     
@@ -204,12 +204,12 @@ private struct AccountProvisioningURLParser: URLParser {
     }
 }
 
-/// The parser for the OIDC callback URL. This always returns a `.oidcCallback`.
-struct OIDCCallbackURLParser: URLParser {
+/// The parser for the OAuth callback URL. This always returns an `.oAuthCallback`.
+struct OAuthCallbackURLParser: URLParser {
     let redirectURL: URL
     
     func route(from url: URL) -> AppRoute? {
         guard url.absoluteString.starts(with: redirectURL.absoluteString) else { return nil }
-        return .oidcCallback(url: url)
+        return .oAuthCallback(url: url)
     }
 }

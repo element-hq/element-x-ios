@@ -17,7 +17,7 @@ enum MockSoftLogoutScreenState: String, CaseIterable {
     // mock that screen.
     case emptyPassword
     case enteredPassword
-    case oidc
+    case oAuth
     case unsupported
     case keyBackupNeeded
 
@@ -37,9 +37,9 @@ enum MockSoftLogoutScreenState: String, CaseIterable {
                                              homeserver: .mockBasicServer,
                                              keyBackupNeeded: false,
                                              password: "12345678")
-        case .oidc:
+        case .oAuth:
             return SoftLogoutScreenViewModel(credentials: credentials,
-                                             homeserver: .mockOIDC,
+                                             homeserver: .mockOAuth,
                                              keyBackupNeeded: false)
         case .unsupported:
             return SoftLogoutScreenViewModel(credentials: credentials,

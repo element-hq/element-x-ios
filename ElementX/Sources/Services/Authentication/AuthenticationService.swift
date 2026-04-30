@@ -73,7 +73,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             let loginDetails = await client.homeserverLoginDetails()
             
             homeserver.loginMode = if loginDetails.supportsOauthLogin() {
-                .oidc(supportsCreatePrompt: loginDetails.supportedOauthPrompts().contains(.create))
+                .oAuth(supportsCreatePrompt: loginDetails.supportedOauthPrompts().contains(.create))
             } else if loginDetails.supportsPasswordLogin() {
                 .password
             } else {
@@ -83,7 +83,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             if flow == .login, homeserver.loginMode == .unsupported {
                 return .failure(.loginNotSupported)
             }
-            if flow == .register, !homeserver.loginMode.supportsOIDCFlow {
+            if flow == .register, !homeserver.loginMode.supportsOAuthFlow {
                 return .failure(.registrationNotSupported)
             }
             
@@ -105,39 +105,39 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
-    func urlForOIDCLogin(loginHint: String?) async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError> {
-        guard let client else { return .failure(.oidcError(.urlFailure)) }
+    func urlForOAuthLogin(loginHint: String?) async -> Result<OAuthAuthorizationDataProxy, AuthenticationServiceError> {
+        guard let client else { return .failure(.oAuthError(.urlFailure)) }
         do {
             // The create prompt is broken: https://github.com/element-hq/matrix-authentication-service/issues/3429
-            // let prompt: OidcPrompt = flow == .register ? .create : .consent
-            let oidcData = try await client.urlForOauth(oauthConfiguration: appSettings.oidcConfiguration.rustValue,
-                                                        prompt: .consent,
-                                                        loginHint: loginHint,
-                                                        deviceId: nil,
-                                                        additionalScopes: nil)
-            return .success(OIDCAuthorizationDataProxy(underlyingData: oidcData))
+            // let prompt: OAuthPrompt = flow == .register ? .create : .consent
+            let oAuthData = try await client.urlForOauth(oauthConfiguration: appSettings.oAuthConfiguration.rustValue,
+                                                         prompt: .consent,
+                                                         loginHint: loginHint,
+                                                         deviceId: nil,
+                                                         additionalScopes: nil)
+            return .success(OAuthAuthorizationDataProxy(underlyingData: oAuthData))
         } catch {
-            MXLog.error("Failed to get URL for OIDC login: \(error)")
-            return .failure(.oidcError(.urlFailure))
+            MXLog.error("Failed to get URL for OAuth login: \(error)")
+            return .failure(.oAuthError(.urlFailure))
         }
     }
     
-    func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async {
+    func abortOAuthLogin(data: OAuthAuthorizationDataProxy) async {
         guard let client else { return }
-        MXLog.info("Aborting OIDC login.")
+        MXLog.info("Aborting OAuth login.")
         await client.abortOauthAuth(authorizationData: data.underlyingData)
     }
     
-    func loginWithOIDCCallback(_ callbackURL: URL) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func loginWithOAuthCallback(_ callbackURL: URL) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         guard let client else { return .failure(.failedLoggingIn) }
         do {
             try await client.loginWithOauthCallback(callbackUrl: callbackURL.absoluteString)
             await verifyClientIfPossible(client: client)
             return await userSession(for: client)
-        } catch OAuthError.Cancelled {
-            return .failure(.oidcError(.userCancellation))
+        } catch MatrixRustSDK.OAuthError.Cancelled {
+            return .failure(.oAuthError(.userCancellation))
         } catch {
-            MXLog.error("Login with OIDC failed: \(error)")
+            MXLog.error("Login with OAuth failed: \(error)")
             return .failure(.failedLoggingIn)
         }
     }
@@ -149,7 +149,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             
             let refreshToken = try? client.session().refreshToken
             if refreshToken != nil {
-                MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
+                MXLog.warning("Refresh token found for a non OAuth session, can't restore session, logging out")
                 _ = try? await client.logout()
                 return .failure(.sessionTokenRefreshNotSupported)
             }
@@ -206,7 +206,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         Task {
             do {
                 let client = try await makeClient(homeserverAddress: scannedServerNameOrBaseUrl)
-                let qrCodeHandler = client.newLoginWithQrCodeHandler(oauthConfiguration: appSettings.oidcConfiguration.rustValue)
+                let qrCodeHandler = client.newLoginWithQrCodeHandler(oauthConfiguration: appSettings.oAuthConfiguration.rustValue)
                 try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener)
                 
                 // Since the QR code login flow includes verification.
@@ -273,7 +273,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     // MARK: - Classic App
     
     /// Populates the Classic app account's state by checking whether the account's homeserver is supported
-    /// (has Sliding Sync and OIDC or password login) and whether all of the required secrets are available.
+    /// (has Sliding Sync and OAuth or password login) and whether all of the required secrets are available.
     func setupClassicAppAccountState() async {
         guard let classicAppAccount, classicAppAccount.state.isServerSupported == nil else { return }
         MXLog.info("Checking Classic app account: \(classicAppAccount)")

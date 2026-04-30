@@ -24,7 +24,7 @@ enum QRCodeLoginScreenCoordinatorAction: CustomStringConvertible {
     case startOver
     case signInManually
     case signedIn(userSession: UserSessionProtocol)
-    case requestOIDCAuthorisation(URL, OIDCAccountSettingsPresenter.Continuation)
+    case requestOAuthAuthorisation(URL, OAuthAccountSettingsPresenter.Continuation)
     case linkedDevice
     /// Cancel the flow (dismiss the modal).
     case cancel
@@ -34,7 +34,7 @@ enum QRCodeLoginScreenCoordinatorAction: CustomStringConvertible {
         case .startOver: "startOver"
         case .signInManually: "signInManually"
         case .signedIn: "signedIn"
-        case .requestOIDCAuthorisation: "requestOIDCAuthorisation"
+        case .requestOAuthAuthorisation: "requestOAuthAuthorisation"
         case .linkedDevice: "linkedDevice"
         case .cancel: "cancel"
         }
@@ -71,8 +71,8 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.startOver)
             case .signedIn(let userSession):
                 actionsSubject.send(.signedIn(userSession: userSession))
-            case .requestOIDCAuthorisation(let url, let continuation):
-                actionsSubject.send(.requestOIDCAuthorisation(url, continuation))
+            case .requestOAuthAuthorisation(let url, let continuation):
+                actionsSubject.send(.requestOAuthAuthorisation(url, continuation))
             case .linkedDevice:
                 actionsSubject.send(.linkedDevice)
             case .cancel:
