@@ -51,6 +51,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        MXLog.info("Handling app route: \(appRoute)")
+        
         switch appRoute {
         case .settings:
             presentSettingsScreen(animated: animated)
