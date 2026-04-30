@@ -15,10 +15,10 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
         } else {
             systemRoot = URL(filePath: "/")
         }
-        return systemRoot.appending(components: "System", "Library", "Audio", "UISounds")
+        return systemRoot.appending(components: "System", "Library", "Audio", "UISounds", directoryHint: .isDirectory)
     }()
 
-    static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds")
+    static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds", directoryHint: .isDirectory)
     private static let bundledLocation: URL = {
         guard let url = Bundle.app.resourceURL else {
             fatalError("The app is seriously corrupt if resourceURL is missing.")

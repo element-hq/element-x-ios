@@ -207,16 +207,22 @@ struct NotificationSettingsScreen: View {
                             context.send(viewAction: .selectAlertTone(alertTone))
                         })
             }
+            .onDelete { indices in
+                let tones = indices.map {
+                    context.viewState.availableCustomTones[$0]
+                }
 
-            ListRow(label: .plain(title: "Custom Tone..."),
+                context.send(viewAction: .deleteCustomAlertTones(tones))
+            }
+
+            ListRow(label: .plain(title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneCustomToneButtonTitle),
                     kind: .button {
                         context.shouldShowCustomAlertTonePicker = true
                     })
                     .fileImporter(isPresented: $context.shouldShowCustomAlertTonePicker,
-                                  allowedContentTypes: [.mp3, .aiff, .wav, UTType("com.apple.m4a-audio")].compactMap(\.self),
-                                  onCompletion: {
-                                      context.send(viewAction: .addedCustomAlertTone($0))
-                                  })
+                                  allowedContentTypes: [.mp3, .aiff, .wav, UTType("com.apple.m4a-audio")].compactMap(\.self)) {
+                        context.send(viewAction: .addedCustomAlertTone($0))
+                    }
         } header: { }
     }
 

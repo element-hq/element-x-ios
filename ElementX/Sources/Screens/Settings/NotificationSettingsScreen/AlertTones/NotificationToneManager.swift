@@ -74,7 +74,7 @@ struct NotificationToneManager {
 
         // CAF + LPCM is the safest choice; file type inferred from .caf extension
         let outputSettings: [String: Any] = [
-            AVFormatIDKey: kAudioFormatLinearPCM,
+            AVFormatIDKey: kAudioFormatMPEG4AAC,
             AVSampleRateKey: sourceFile.fileFormat.sampleRate,
             AVNumberOfChannelsKey: sourceFile.fileFormat.channelCount,
             AVLinearPCMBitDepthKey: 16,
@@ -126,6 +126,18 @@ struct NotificationToneManager {
             if outputBuf.frameLength > 0 { try destFile.write(from: outputBuf) }
             if status == .endOfStream { break }
         }
+    }
+
+    func deleteCustomTone(_ alertTone: NotificationAlertTone) throws {
+        guard alertTone.location.deletingLastPathComponent() == NotificationAlertTone.libraryLocation else {
+            throw DeletionError.notACustomTone
+        }
+
+        try FileManager.default.removeItem(at: alertTone.location)
+    }
+
+    enum DeletionError: Error {
+        case notACustomTone
     }
 
     enum ImportError: Error {

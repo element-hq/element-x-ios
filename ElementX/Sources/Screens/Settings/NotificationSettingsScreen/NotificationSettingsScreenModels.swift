@@ -99,6 +99,7 @@ enum NotificationSettingsScreenViewAction {
     case selectAlertTone(NotificationAlertTone)
     case previewAlertTone(NotificationAlertTone)
     case addedCustomAlertTone(Result<URL, Error>)
+    case deleteCustomAlertTones([NotificationAlertTone])
 }
 
 enum NotificationSettingsScreenErrorType: Hashable {

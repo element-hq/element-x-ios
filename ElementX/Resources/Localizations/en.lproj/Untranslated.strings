@@ -40,6 +40,9 @@
 "message_tone_triple_sin" = "Triple Sine";
 "message_tone_elementx_default" = "Default Message";
 "message_tone_elementx_pro_default" = "Pro Message";
+"screen_notification_settings_configuration_alert_tone_custom_tone_button_title" = "Custom Tone...";
 "screen_notification_settings_configuration_alert_tone_section_title" = "Alert Tone";
 "screen_notification_settings_configuration_alert_tone_set_tone_error_title" = "Problem Setting Alert Tone";
 "screen_notification_settings_configuration_alert_tone_preview_tone_error_title" = "Problem Previewing Alert Tone";
+"screen_notification_settings_configuration_alert_tone_import_tone_error_title" = "Error Importing File";
+"screen_notification_settings_configuration_alert_tone_delete_tone_error_title" = "Error Deleting File";

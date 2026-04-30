@@ -102,6 +102,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             toneManager?.setSelectedTone(alertTone)
         case .addedCustomAlertTone(let result):
             addCustomAlertTone(from: result)
+        case .deleteCustomAlertTones(let tones):
+            deleteAlertTones(tones)
         }
     }
     
@@ -262,9 +264,27 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         } catch {
             MXLog.error("Error retrieving custom tone url: \(error)")
             userIndicatorController.submitIndicator(.init(type: .toast,
-                                                          title: "Error Importing File",
+                                                          title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneImportToneErrorTitle,
                                                           iconName: "exclamationmark.triangle.fill"))
         }
+    }
+
+    private func deleteAlertTones(_ tones: [NotificationAlertTone]) {
+        for tone in tones {
+            do {
+                try toneManager?.deleteCustomTone(tone)
+
+                if tone == state.selectedAlertTone {
+                    appSettings.selectedNotificationTone = nil
+                }
+            } catch {
+                MXLog.error("Error deleting alert tone \(tone.label): \(error)")
+                userIndicatorController.submitIndicator(.init(type: .toast,
+                                                              title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneDeleteToneErrorTitle,
+                                                              iconName: "exclamationmark.triangle.fill"))
+            }
+        }
+        state.availableCustomTones = toneManager?.getCustomTones() ?? []
     }
 }
 

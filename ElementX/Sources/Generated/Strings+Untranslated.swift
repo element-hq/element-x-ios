@@ -76,6 +76,12 @@ internal enum UntranslatedL10n {
   internal static var messageToneSystemUpdate: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_update") }
   /// Triple Sine
   internal static var messageToneTripleSin: String { return UntranslatedL10n.tr("Untranslated", "message_tone_triple_sin") }
+  /// Custom Tone...
+  internal static var screenNotificationSettingsConfigurationAlertToneCustomToneButtonTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_custom_tone_button_title") }
+  /// Error Deleting File
+  internal static var screenNotificationSettingsConfigurationAlertToneDeleteToneErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_delete_tone_error_title") }
+  /// Error Importing File
+  internal static var screenNotificationSettingsConfigurationAlertToneImportToneErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_import_tone_error_title") }
   /// Problem Previewing Alert Tone
   internal static var screenNotificationSettingsConfigurationAlertTonePreviewToneErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_preview_tone_error_title") }
   /// Alert Tone
