@@ -90,9 +90,13 @@ enum TimelineMediaVisibility: Decodable {
     case never
 }
 
-struct OwnBeaconInfoUpdate: Equatable {
+/// Represents a server-echoed update about the current user's own beacon info state in a room.
+struct LiveLocationOwnInfoUpdate: Equatable {
+    /// The room where the beacon info event was sent.
     let roomID: String
+    /// The event ID of the beacon info state event.
     let eventID: String
+    /// Whether the beacon is currently active (live) or has been stopped.
     let isLive: Bool
 }
 
@@ -272,7 +276,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     // MARK: - Live Location
 
-    var ownBeaconInfoUpdatesPublisher: AnyPublisher<OwnBeaconInfoUpdate, Never> { get }
+    /// Publishes updates about the current user's own live location beacon info state changes (start/stop) as echoed by the server.
+    var liveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never> { get }
 
     // MARK: - Moderation & Safety
     

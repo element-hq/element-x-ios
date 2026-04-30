@@ -48,7 +48,7 @@ class ClientProxy: ClientProxyProtocol {
     private var mediaPreviewConfigListenerTaskHandle: TaskHandle?
 
     // periphery:ignore - required for instance retention in the rust codebase
-    private var ownBeaconInfoUpdatesListenerTaskHandle: TaskHandle?
+    private var liveLocationOwnInfoUpdatesListenerTaskHandle: TaskHandle?
     
     private var delegateHandle: TaskHandle?
     
@@ -192,9 +192,9 @@ class ClientProxy: ClientProxyProtocol {
     
     var roomsToAwait: Set<String> = []
 
-    private let ownBeaconInfoUpdatesSubject = PassthroughSubject<OwnBeaconInfoUpdate, Never>()
-    var ownBeaconInfoUpdatesPublisher: AnyPublisher<OwnBeaconInfoUpdate, Never> {
-        ownBeaconInfoUpdatesSubject.eraseToAnyPublisher()
+    private let liveLocationOwnInfoUpdatesSubject = PassthroughSubject<LiveLocationOwnInfoUpdate, Never>()
+    var liveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never> {
+        liveLocationOwnInfoUpdatesSubject.eraseToAnyPublisher()
     }
 
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
@@ -279,7 +279,7 @@ class ClientProxy: ClientProxyProtocol {
             mediaPreviewConfigListenerTaskHandle = await createMediaPreviewConfigObserver()
         }
 
-        ownBeaconInfoUpdatesListenerTaskHandle = createOwnBeaconInfoUpdatesObserver()
+        liveLocationOwnInfoUpdatesListenerTaskHandle = createLiveLocationOwnInfoUpdatesObserver()
     }
     
     var userID: String {
@@ -1146,14 +1146,14 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    private func createOwnBeaconInfoUpdatesObserver() -> TaskHandle? {
+    private func createLiveLocationOwnInfoUpdatesObserver() -> TaskHandle? {
         do {
             return try client.subscribeToOwnBeaconInfoUpdates(listener: SDKListener { [weak self] update in
                 guard let self else { return }
-                let appUpdate = OwnBeaconInfoUpdate(roomID: update.roomId,
-                                                    eventID: update.eventId,
-                                                    isLive: update.live)
-                ownBeaconInfoUpdatesSubject.send(appUpdate)
+                let appUpdate = LiveLocationOwnInfoUpdate(roomID: update.roomId,
+                                                          eventID: update.eventId,
+                                                          isLive: update.live)
+                liveLocationOwnInfoUpdatesSubject.send(appUpdate)
             })
         } catch {
             MXLog.error("Failed creating own beacon info updates observer: \(error)")

@@ -2854,11 +2854,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingMaxMediaUploadSize: Result<UInt, ClientProxyError>!
     var maxMediaUploadSizeClosure: (() async -> Result<UInt, ClientProxyError>)?
-    var ownBeaconInfoUpdatesPublisher: AnyPublisher<OwnBeaconInfoUpdate, Never> {
-        get { return underlyingOwnBeaconInfoUpdatesPublisher }
-        set(value) { underlyingOwnBeaconInfoUpdatesPublisher = value }
+    var liveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never> {
+        get { return underlyingLiveLocationOwnInfoUpdatesPublisher }
+        set(value) { underlyingLiveLocationOwnInfoUpdatesPublisher = value }
     }
-    var underlyingOwnBeaconInfoUpdatesPublisher: AnyPublisher<OwnBeaconInfoUpdate, Never>!
+    var underlyingLiveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never>!
 
     //MARK: - isOnlyDeviceLeft
 
