@@ -41,7 +41,14 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
 
     init(labelOverride: String?, location: URL) {
         self.labelOverride = labelOverride
-        self.location = location
+        self.location = {
+            var isStale = false
+            guard
+                let data = try? location.bookmarkData(),
+                let backToURL = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &isStale)
+            else { return location }
+            return backToURL
+        }()
     }
 
     enum CodingKeys: CodingKey {

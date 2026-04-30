@@ -65,7 +65,11 @@ struct NotificationToneManager {
             throw ConversionError.fileAlreadyExists
         }
 
-        try convertToCAF(from: sourceURL, to: outputURL)
+        if sourceURL.pathExtension.lowercased() == "caf" {
+            try FileManager.default.copyItem(at: sourceURL, to: outputURL)
+        } else {
+            try convertToCAF(from: sourceURL, to: outputURL)
+        }
 
         return outputURL
     }
@@ -130,7 +134,7 @@ struct NotificationToneManager {
     }
 
     func deleteCustomTone(_ alertTone: NotificationAlertTone) throws {
-        guard alertTone.location.deletingLastPathComponent() == NotificationAlertTone.libraryLocation else {
+        guard alertTone.location.deletingLastPathComponent().resolvingSymlinksInPath() == NotificationAlertTone.libraryLocation else {
             throw DeletionError.notACustomTone
         }
 

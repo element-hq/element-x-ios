@@ -220,7 +220,13 @@ struct NotificationSettingsScreen: View {
                         context.shouldShowCustomAlertTonePicker = true
                     })
                     .fileImporter(isPresented: $context.shouldShowCustomAlertTonePicker,
-                                  allowedContentTypes: [.mp3, .aiff, .wav, UTType("com.apple.m4a-audio")].compactMap(\.self)) {
+                                  allowedContentTypes: [
+                                      .mp3,
+                                      .aiff,
+                                      .wav,
+                                      UTType("com.apple.m4a-audio"),
+                                      UTType("com.apple.coreaudio-format")
+                                  ].compactMap(\.self)) {
                         context.send(viewAction: .addedCustomAlertTone($0))
                     }
         } header: { }
