@@ -161,20 +161,33 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
                            filename: "tweet_sent.caf")
     ].sorted()
 
-    static let defaultElementXAlerts: [Self] = {
-        let base: [Self] = [
-            defaultElementXMessageTone,
-            .createBundledSound(label: UntranslatedL10n.messageToneTripleSin,
-                                filename: "triple_sin.caf")
-        ]
-
-        let proToneURL = Self.bundledLocation.appending(component: "sound_01.caf")
-        guard (try? proToneURL.checkResourceIsReachable()) == true else { return base }
-
-        let proTone: Self = .createBundledSound(label: UntranslatedL10n.messageToneElementxProDefault,
-                                                filename: "sound_01.caf")
-        return base + [proTone]
-    }().sorted()
+    static let defaultElementXAlerts: [Self] = [
+        defaultElementXMessageTone,
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxTripleSine,
+                            filename: "triple_sin.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxProDefault,
+                            filename: "sound_01.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxWisp,
+                            filename: "wisp.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxWarble,
+                            filename: "warble.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxTheAughts,
+                            filename: "the_aughts.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxTrill,
+                            filename: "trill.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxSineF,
+                            filename: "sine_f.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxSingingBowl,
+                            filename: "singing_bowl.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxGlassKnock,
+                            filename: "glass_knock.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxNudge,
+                            filename: "nudge.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxAdrift,
+                            filename: "adrift.caf"),
+        .createBundledSound(label: UntranslatedL10n.messageToneElementxFlick,
+                            filename: "flick.caf")
+    ].sorted()
 
     static let allDefaultAlerts: [Self] = (defaultSystemAlerts + defaultElementXAlerts).sorted()
     #endif

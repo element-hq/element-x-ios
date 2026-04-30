@@ -18,10 +18,32 @@ internal enum UntranslatedL10n {
   internal static var cryptoHistorySharingConfirmStartChatDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_content") }
   /// Start a chat with this new contact?
   internal static var cryptoHistorySharingConfirmStartChatDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_title") }
+  /// Adrift
+  internal static var messageToneElementxAdrift: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_adrift") }
   /// Default Message
   internal static var messageToneElementxDefault: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_default") }
+  /// Flick
+  internal static var messageToneElementxFlick: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_flick") }
+  /// Glass Knock
+  internal static var messageToneElementxGlassKnock: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_glass_knock") }
+  /// Nudge
+  internal static var messageToneElementxNudge: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_nudge") }
   /// Pro Message
   internal static var messageToneElementxProDefault: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_pro_default") }
+  /// Sine F
+  internal static var messageToneElementxSineF: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_sine_f") }
+  /// Singing Bowl
+  internal static var messageToneElementxSingingBowl: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_singing_bowl") }
+  /// The Aughts
+  internal static var messageToneElementxTheAughts: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_the_aughts") }
+  /// Trill
+  internal static var messageToneElementxTrill: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_trill") }
+  /// Triple Sine
+  internal static var messageToneElementxTripleSine: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_triple_sine") }
+  /// Warble
+  internal static var messageToneElementxWarble: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_warble") }
+  /// Wisp
+  internal static var messageToneElementxWisp: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_wisp") }
   /// Alert
   internal static var messageToneSystemAlert: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_alert") }
   /// Anticipate
@@ -74,8 +96,6 @@ internal enum UntranslatedL10n {
   internal static var messageToneSystemTypewriters: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_typewriters") }
   /// Update
   internal static var messageToneSystemUpdate: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_update") }
-  /// Triple Sine
-  internal static var messageToneTripleSin: String { return UntranslatedL10n.tr("Untranslated", "message_tone_triple_sin") }
   /// Custom Tone...
   internal static var screenNotificationSettingsConfigurationAlertToneCustomToneButtonTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_custom_tone_button_title") }
   /// Error Deleting File
