@@ -20,6 +20,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     // periphery:ignore - cancellable tasks get cancelled when reassigned
     @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
     private let tonePreviewer: NotificationTonePreviewer
+    private let toneManager: NotificationToneManager?
 
     var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -33,9 +34,18 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         
         let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
         tonePreviewer = NotificationTonePreviewer(userIndicatorController: userIndicatorController)
+        let toneManager: NotificationToneManager?
+        do {
+            toneManager = try NotificationToneManager(appSettings: appSettings, userIndicatorController: userIndicatorController)
+        } catch {
+            MXLog.error("Catastrophic error setting up tone manager: \(error)")
+            toneManager = nil
+        }
+        self.toneManager = toneManager
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
-                                                                         selectedAlertTone: appSettings.selectedNotificationTone ?? .defaultElementXMessageTone))
+                                                                         selectedAlertTone: appSettings.selectedNotificationTone ?? .defaultElementXMessageTone,
+                                                                         canSelectTones: toneManager != nil))
 
         // Listen for changes to AppSettings.
         appSettings.$enableNotifications
@@ -88,7 +98,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             tonePreviewer.preview(alertTone)
         case .selectAlertTone(let alertTone):
             tonePreviewer.preview(alertTone)
-            setSelectedTone(alertTone)
+            toneManager?.setSelectedTone(alertTone)
         }
     }
     
@@ -235,21 +245,6 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             state.bindings.callsEnabled = notificationSettings.invitationsEnabled ?? false
         }
         state.applyingChange = false
-    }
-
-    private func setSelectedTone(_ alertTone: NotificationAlertTone) {
-        do {
-            try? FileManager.default.removeItem(at: NotificationAlertTone.selectedToneLocation)
-            try FileManager.default.createDirectory(at: NotificationAlertTone.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
-            try FileManager.default.copyItem(at: alertTone.location, to: NotificationAlertTone.selectedToneLocation)
-            appSettings.selectedNotificationTone = alertTone
-        } catch {
-            let userIndicator = UserIndicator(type: .toast,
-                                              title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneSetToneErrorTitle,
-                                              iconName: "exclamationmark.triangle.fill")
-            userIndicatorController.submitIndicator(userIndicator)
-            MXLog.error("Error setting selected alert tone to designated location in filesystem: \(error)")
-        }
     }
 }
 

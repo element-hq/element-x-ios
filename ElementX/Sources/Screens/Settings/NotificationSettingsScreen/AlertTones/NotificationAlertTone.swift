@@ -18,7 +18,7 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
         return systemRoot.appending(components: "System", "Library", "Audio", "UISounds")
     }()
 
-    private static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds")
+    static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds")
     private static let bundledLocation: URL = {
         guard let url = Bundle.app.resourceURL else {
             fatalError("The app is seriously corrupt if resourceURL is missing.")
