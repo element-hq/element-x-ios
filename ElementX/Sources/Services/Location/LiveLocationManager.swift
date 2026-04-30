@@ -21,16 +21,20 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     /// Cached joined room proxies keyed by room ID, kept in sync with the active sessions dictionary.
     private var activeRoomProxies = [String: JoinedRoomProxyProtocol]()
     
+    /// Sessions that have been requested but not yet confirmed by the server echo.
+    /// Once the server acknowledges the beacon info, sessions are promoted to the persistent store.
+    private var startingLiveLocationSharingSessionsByRoomID = [String: LiveLocationSession]()
+    
     /// Subject used to pipe location updates into the backpressure-aware processing loop.
     private let locationUpdateSubject = PassthroughSubject<CLLocationCoordinate2D, Never>()
-
+    
     /// The most recent location update waiting to be sent. When a send is already in progress,
     /// new updates overwrite this value so only the latest is sent once the current send completes.
     private var latestPendingLocation: CLLocationCoordinate2D?
-
+    
     /// Whether a location send cycle (send + minimum delay) is currently in progress.
     private var isProcessingLocationUpdate = false
-
+    
     private var cancellables = Set<AnyCancellable>()
     
     private var isUpdatingLocation = false
@@ -64,7 +68,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         setupMinimumDistanceUpdatesAndAccuracy(minimumDistance: appSettings.liveLocationMinimumDistanceUpdate)
         setupSubscriptions()
     }
-
+    
     // MARK: - LiveLocationManagerProtocol
     
     var hasDisplayedLiveLocationDisclaimer: Bool {
@@ -87,7 +91,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     func startLiveLocation(roomID: String, duration: Duration) async -> Result<Void, LiveLocationManagerError> {
         // Stop any existing session for this room first
         var didAlreadyStopLocalSession = false
-        if appSettings.liveLocationSharingTimeoutDatesByRoomID[roomID] != nil {
+        if appSettings.liveLocationSharingSessionsByRoomID[roomID] != nil
+            || startingLiveLocationSharingSessionsByRoomID[roomID] != nil {
             await stopLiveLocation(roomID: roomID)
             didAlreadyStopLocalSession = true
         }
@@ -104,20 +109,13 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         }
         let result = await roomProxy.startLiveLocationShare(duration: duration)
         
-        guard case .success = result else {
+        guard case .success(let eventID) = result else {
             MXLog.error("Failed to start live location share in room: \(roomID)")
             return .failure(.startFailed)
         }
         
-        let timeoutDate = Date().addingTimeInterval(TimeInterval(duration.seconds))
-        appSettings.liveLocationSharingTimeoutDatesByRoomID[roomID] = timeoutDate
-        
-        if isUpdatingLocation, let lastLocation {
-            // To make sure the newly started session is in sync with the existing ones,
-            // we re-send the last location received by the manager.
-            // Otherwise we would need to wait a distance filtered update.
-            locationUpdateSubject.send(lastLocation)
-        }
+        let expirationDate = Date().addingTimeInterval(TimeInterval(duration.seconds))
+        startingLiveLocationSharingSessionsByRoomID[roomID] = LiveLocationSession(eventID: eventID, expirationDate: expirationDate)
         
         return .success(())
     }
@@ -125,7 +123,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     func stopLiveLocation(roomID: String) async {
         var roomProxy: JoinedRoomProxyProtocol?
         let cachedRoomProxy = activeRoomProxies[roomID]
-        appSettings.liveLocationSharingTimeoutDatesByRoomID.removeValue(forKey: roomID)
+        startingLiveLocationSharingSessionsByRoomID.removeValue(forKey: roomID)
+        appSettings.liveLocationSharingSessionsByRoomID.removeValue(forKey: roomID)
         
         if let cachedRoomProxy {
             roomProxy = cachedRoomProxy
@@ -186,12 +185,20 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             }
             .store(in: &cancellables)
         
-        appSettings.$liveLocationSharingTimeoutDatesByRoomID
+        clientProxy.liveLocationOwnInfoUpdatesPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] update in
+                guard let self else { return }
+                handleBeaconInfoUpdate(update)
+            }
+            .store(in: &cancellables)
+        
+        appSettings.$liveLocationSharingSessionsByRoomID
             .removeDuplicates()
             .sink { [weak self] sessions in
                 guard let self else { return }
                 syncActiveRoomProxies(with: sessions)
-                
+            
                 if sessions.isEmpty {
                     self.stopUpdatingLocation()
                 } else {
@@ -209,7 +216,32 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             .store(in: &cancellables)
     }
     
-    private func syncActiveRoomProxies(with sessions: [String: Date]) {
+    private func handleBeaconInfoUpdate(_ update: LiveLocationOwnInfoUpdate) {
+        // A new beaconInfo has been received in a room with existing active session.
+        // This is either a new start or a new stop from a different device, so we
+        // should remove the session from the current local one.
+        appSettings.liveLocationSharingSessionsByRoomID.removeValue(forKey: update.roomID)
+        
+        // Instead if we receive a new isLiveUpdate
+        guard update.isLive else { return }
+        
+        // That belongs to a session that is starting in a room and matches the eventID
+        guard let session = startingLiveLocationSharingSessionsByRoomID[update.roomID],
+              session.eventID == update.eventID else {
+            return
+        }
+        
+        // This means the server has echoed the start of the session and we can safely promote it
+        // to a started session and start sending live locations.
+        startingLiveLocationSharingSessionsByRoomID.removeValue(forKey: update.roomID)
+        appSettings.liveLocationSharingSessionsByRoomID[update.roomID] = session
+        
+        if isUpdatingLocation, let lastLocation {
+            locationUpdateSubject.send(lastLocation)
+        }
+    }
+    
+    private func syncActiveRoomProxies(with sessions: [String: LiveLocationSession]) {
         // Remove proxies for rooms no longer in the dictionary.
         let activeRoomIDs = Set(sessions.keys)
         for roomID in activeRoomProxies.keys where !activeRoomIDs.contains(roomID) {
@@ -259,11 +291,11 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     /// discarding any intermediate updates while always keeping the last one.
     private func processLocationUpdateIfNeeded() {
         guard !isProcessingLocationUpdate, let location = latestPendingLocation else { return }
-        guard !appSettings.liveLocationSharingTimeoutDatesByRoomID.isEmpty else { return }
-
+        guard !appSettings.liveLocationSharingSessionsByRoomID.isEmpty else { return }
+        
         latestPendingLocation = nil
         isProcessingLocationUpdate = true
-
+        
         Task { @MainActor [weak self] in
             guard let self else { return }
             
@@ -282,13 +314,13 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             processLocationUpdateIfNeeded()
         }
     }
-
+    
     private func sendLocationToActiveRooms(_ coordinate: CLLocationCoordinate2D) async {
-        let sessions = appSettings.liveLocationSharingTimeoutDatesByRoomID
+        let sessions = appSettings.liveLocationSharingSessionsByRoomID
         let geoURI = GeoURI(coordinate: coordinate, uncertainty: nil)
         
-        for (roomID, timeoutDate) in sessions {
-            if Date() >= timeoutDate {
+        for (roomID, session) in sessions {
+            if Date() >= session.expirationDate {
                 MXLog.info("Live location session expired for room: \(roomID)")
                 await stopLiveLocation(roomID: roomID)
                 continue
@@ -306,7 +338,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             case .failure(let error):
                 switch error {
                 case .liveLocationSessionIsNotActive:
-                    MXLog.error("Failed to send live locatio update to room \(roomID): session not active")
+                    MXLog.error("Failed to send live location update to room \(roomID): session not active")
                     await stopLiveLocation(roomID: roomID)
                 default:
                     MXLog.error("Failed to send live location update to room \(roomID): \(error)")
@@ -329,7 +361,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     }
     
     private func stopAllSessions() {
-        let roomIDs = Array(appSettings.liveLocationSharingTimeoutDatesByRoomID.keys)
+        let roomIDs = Array(Set(appSettings.liveLocationSharingSessionsByRoomID.keys)
+            .union(startingLiveLocationSharingSessionsByRoomID.keys))
         Task { [weak self] in
             guard let self else { return }
             for roomID in roomIDs {

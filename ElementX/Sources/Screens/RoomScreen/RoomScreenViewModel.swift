@@ -171,11 +171,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.isKnockingEnabled, on: self)
             .store(in: &cancellables)
         
-        appSettings.$liveLocationSharingTimeoutDatesByRoomID
+        appSettings.$liveLocationSharingSessionsByRoomID
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] timeoutDatesByRoomID in
+            .sink { [weak self] sessionsByRoomID in
                 guard let self else { return }
-                state.isSharingLiveLocation = timeoutDatesByRoomID.keys.contains(roomProxy.id)
+                state.isSharingLiveLocation = sessionsByRoomID.keys.contains(roomProxy.id)
             }
             .store(in: &cancellables)
                 

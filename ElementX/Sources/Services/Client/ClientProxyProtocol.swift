@@ -90,6 +90,16 @@ enum TimelineMediaVisibility: Decodable {
     case never
 }
 
+/// Represents a server-echoed update about the current user's own beacon info state in a room.
+struct LiveLocationOwnInfoUpdate: Equatable {
+    /// The room where the beacon info event was sent.
+    let roomID: String
+    /// The event ID of the beacon info state event.
+    let eventID: String
+    /// Whether the beacon is currently active (live) or has been stopped.
+    let isLive: Bool
+}
+
 // sourcery: AutoMockable
 protocol ClientProxyProtocol: AnyObject {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
@@ -264,6 +274,11 @@ protocol ClientProxyProtocol: AnyObject {
     
     func userIdentity(for userID: String, fallBackToServer: Bool) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
     
+    // MARK: - Live Location
+
+    /// Publishes updates about the current user's own live location beacon info state changes (start/stop) as echoed by the server.
+    var liveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never> { get }
+
     // MARK: - Moderation & Safety
     
     func setTimelineMediaVisibility(_ value: TimelineMediaVisibility) async -> Result<Void, ClientProxyError>

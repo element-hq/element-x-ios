@@ -46,6 +46,9 @@ class ClientProxy: ClientProxyProtocol {
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var mediaPreviewConfigListenerTaskHandle: TaskHandle?
+
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var liveLocationOwnInfoUpdatesListenerTaskHandle: TaskHandle?
     
     private var delegateHandle: TaskHandle?
     
@@ -188,7 +191,12 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     var roomsToAwait: Set<String> = []
-    
+
+    private let liveLocationOwnInfoUpdatesSubject = PassthroughSubject<LiveLocationOwnInfoUpdate, Never>()
+    var liveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never> {
+        liveLocationOwnInfoUpdatesSubject.eraseToAnyPublisher()
+    }
+
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(client: ClientProtocol,
@@ -270,6 +278,8 @@ class ClientProxy: ClientProxyProtocol {
         Task {
             mediaPreviewConfigListenerTaskHandle = await createMediaPreviewConfigObserver()
         }
+
+        liveLocationOwnInfoUpdatesListenerTaskHandle = createLiveLocationOwnInfoUpdatesObserver()
     }
     
     var userID: String {
@@ -1132,6 +1142,21 @@ class ClientProxy: ClientProxyProtocol {
             })
         } catch {
             MXLog.error("Failed creating media preview config observer: \(error)")
+            return nil
+        }
+    }
+
+    private func createLiveLocationOwnInfoUpdatesObserver() -> TaskHandle? {
+        do {
+            return try client.subscribeToOwnBeaconInfoUpdates(listener: SDKListener { [weak self] update in
+                guard let self else { return }
+                let appUpdate = LiveLocationOwnInfoUpdate(roomID: update.roomId,
+                                                          eventID: update.eventId,
+                                                          isLive: update.live)
+                liveLocationOwnInfoUpdatesSubject.send(appUpdate)
+            })
+        } catch {
+            MXLog.error("Failed creating own beacon info updates observer: \(error)")
             return nil
         }
     }

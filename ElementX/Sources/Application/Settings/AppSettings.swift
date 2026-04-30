@@ -352,8 +352,8 @@ final class AppSettings {
     
     // MARK: - Live Location
     
-    @UserPreference(key: UserDefaultsKeys.liveLocationSharingTimeoutDatesByRoomID, defaultValue: [String: Date](), storageType: .userDefaults(store))
-    var liveLocationSharingTimeoutDatesByRoomID
+    @UserPreference(key: UserDefaultsKeys.liveLocationSharingTimeoutDatesByRoomID, defaultValue: [String: LiveLocationSession](), storageType: .userDefaults(store))
+    var liveLocationSharingSessionsByRoomID
     
     @UserPreference(key: UserDefaultsKeys.liveLocationMinimumDistanceUpdate, defaultValue: 10, storageType: .userDefaults(store))
     var liveLocationMinimumDistanceUpdate

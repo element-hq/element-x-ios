@@ -2854,6 +2854,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingMaxMediaUploadSize: Result<UInt, ClientProxyError>!
     var maxMediaUploadSizeClosure: (() async -> Result<UInt, ClientProxyError>)?
+    var liveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never> {
+        get { return underlyingLiveLocationOwnInfoUpdatesPublisher }
+        set(value) { underlyingLiveLocationOwnInfoUpdatesPublisher = value }
+    }
+    var underlyingLiveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never>!
 
     //MARK: - isOnlyDeviceLeft
 
@@ -10766,13 +10771,13 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
     var startLiveLocationShareDurationReceivedDuration: Duration?
     var startLiveLocationShareDurationReceivedInvocations: [Duration] = []
 
-    var startLiveLocationShareDurationUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var startLiveLocationShareDurationReturnValue: Result<Void, RoomProxyError>! {
+    var startLiveLocationShareDurationUnderlyingReturnValue: Result<String, RoomProxyError>!
+    var startLiveLocationShareDurationReturnValue: Result<String, RoomProxyError>! {
         get {
             if Thread.isMainThread {
                 return startLiveLocationShareDurationUnderlyingReturnValue
             } else {
-                var returnValue: Result<Void, RoomProxyError>? = nil
+                var returnValue: Result<String, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = startLiveLocationShareDurationUnderlyingReturnValue
                 }
@@ -10790,9 +10795,9 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var startLiveLocationShareDurationClosure: ((Duration) async -> Result<Void, RoomProxyError>)?
+    var startLiveLocationShareDurationClosure: ((Duration) async -> Result<String, RoomProxyError>)?
 
-    func startLiveLocationShare(duration: Duration) async -> Result<Void, RoomProxyError> {
+    func startLiveLocationShare(duration: Duration) async -> Result<String, RoomProxyError> {
         startLiveLocationShareDurationCallsCount += 1
         startLiveLocationShareDurationReceivedDuration = duration
         DispatchQueue.main.async {
