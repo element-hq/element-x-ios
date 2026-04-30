@@ -45,7 +45,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
                                                                          selectedAlertTone: appSettings.selectedNotificationTone ?? .defaultElementXMessageTone,
-                                                                         canSelectTones: toneManager != nil))
+                                                                         canSelectTones: toneManager != nil,
+                                                                         availableCustomTones: toneManager?.getCustomTones() ?? []))
 
         // Listen for changes to AppSettings.
         appSettings.$enableNotifications
@@ -99,6 +100,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         case .selectAlertTone(let alertTone):
             tonePreviewer.preview(alertTone)
             toneManager?.setSelectedTone(alertTone)
+        case .addedCustomAlertTone(let result):
+            addCustomAlertTone(from: result)
         }
     }
     
@@ -245,6 +248,23 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             state.bindings.callsEnabled = notificationSettings.invitationsEnabled ?? false
         }
         state.applyingChange = false
+    }
+
+    private func addCustomAlertTone(from urlResult: Result<URL, Error>) {
+        do {
+            let url = try urlResult.get()
+            guard url.startAccessingSecurityScopedResource() else {
+                throw NotificationToneManager.ImportError.couldNotAccessSandboxedResource
+            }
+            try toneManager?.addNewToneToLibrary(from: url)
+            url.stopAccessingSecurityScopedResource()
+            state.availableCustomTones = toneManager?.getCustomTones() ?? []
+        } catch {
+            MXLog.error("Error retrieving custom tone url: \(error)")
+            userIndicatorController.submitIndicator(.init(type: .toast,
+                                                          title: "Error Importing File",
+                                                          iconName: "exclamationmark.triangle.fill"))
+        }
     }
 }
 

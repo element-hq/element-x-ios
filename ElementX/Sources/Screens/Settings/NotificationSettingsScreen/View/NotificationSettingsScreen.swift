@@ -8,6 +8,7 @@
 
 import Compound
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct NotificationSettingsScreen: View {
     @Bindable var context: NotificationSettingsScreenViewModel.Context
@@ -173,7 +174,13 @@ struct NotificationSettingsScreen: View {
         }
     }
 
+    @ViewBuilder
     private var soundSelectionSection: some View {
+        presetSoundSelectionSection
+        customSoundSelectionSection
+    }
+
+    private var presetSoundSelectionSection: some View {
         Section {
             DisclosureGroup(context.viewState.selectedAlertTone.label, isExpanded: $context.shouldShowAlertSounds) {
                 ForEach(NotificationAlertTone.allDefaultAlerts, id: \.filename) { alertTone in
@@ -190,6 +197,27 @@ struct NotificationSettingsScreen: View {
             Text(UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneSectionTitle)
                 .compoundListSectionHeader()
         }
+    }
+
+    private var customSoundSelectionSection: some View {
+        Section(isExpanded: $context.shouldShowAlertSounds) {
+            ForEach(context.viewState.availableCustomTones, id: \.filename) { alertTone in
+                ListRow(label: .plain(title: alertTone.label),
+                        kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
+                            context.send(viewAction: .selectAlertTone(alertTone))
+                        })
+            }
+
+            ListRow(label: .plain(title: "Custom Tone..."),
+                    kind: .button {
+                        context.shouldShowCustomAlertTonePicker = true
+                    })
+                    .fileImporter(isPresented: $context.shouldShowCustomAlertTonePicker,
+                                  allowedContentTypes: [.mp3, .aiff, .wav, UTType("com.apple.m4a-audio")].compactMap(\.self),
+                                  onCompletion: {
+                                      context.send(viewAction: .addedCustomAlertTone($0))
+                                  })
+        } header: { }
     }
 
     private var configurationMismatchSection: some View {
