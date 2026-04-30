@@ -22,6 +22,11 @@ struct TimelineScrollButton: View {
     let badgeCount: Int
     let callback: () -> Void
 
+    @ScaledMetric(relativeTo: .compound.bodyLG) private var iconSize: CGFloat = 14
+    @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeSize: CGFloat = 20
+    @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeDotSize: CGFloat = 14
+    @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeOffsetY: CGFloat = -10
+
     init(direction: Direction = .down,
          isHidden: Bool = false,
          badgeCount: Int = 0,
@@ -34,11 +39,11 @@ struct TimelineScrollButton: View {
 
     var body: some View {
         Button { callback() } label: {
-            ZStack(alignment: .topTrailing) {
+            ZStack(alignment: .top) {
                 icon
                 if badgeCount > 0 {
                     badge
-                        .offset(x: 6, y: -2)
+                        .offset(y: badgeOffsetY)
                 }
             }
             .padding()
@@ -52,7 +57,7 @@ struct TimelineScrollButton: View {
 
     private var icon: some View {
         CompoundIcon(direction == .down ? \.chevronDown : \.chevronUp,
-                     size: .medium,
+                     size: .custom(iconSize),
                      relativeTo: .compound.bodyLG)
             .foregroundColor(.compound.iconSecondary)
             .padding(13)
@@ -70,17 +75,17 @@ struct TimelineScrollButton: View {
         if badgeCount > 9 {
             // For two-digit-plus counts, fall back to a small dot so the badge stays compact.
             Circle()
-                .fill(Color.compound.bgActionPrimaryRest)
-                .frame(width: 12, height: 12)
+                .fill(Color.compound.bgBadgeAccent)
+                .frame(width: badgeDotSize, height: badgeDotSize)
                 .overlay(Circle().stroke(Color.compound.iconOnSolidPrimary, lineWidth: 2))
         } else {
             Text("\(badgeCount)")
                 .font(.compound.bodyXSSemibold)
-                .foregroundColor(.compound.textOnSolidPrimary)
-                .frame(width: 18, height: 18)
+                .foregroundColor(.compound.textBadgeAccent)
+                .frame(width: badgeSize, height: badgeSize)
                 .background {
                     Circle()
-                        .fill(Color.compound.bgActionPrimaryRest)
+                        .fill(Color.compound.bgBadgeAccent)
                         .overlay(Circle().stroke(Color.compound.iconOnSolidPrimary, lineWidth: 2))
                 }
         }
@@ -98,5 +103,6 @@ struct TimelineScrollButton_Previews: PreviewProvider, TestablePreview {
         }
         .padding()
         .background(Color.compound.bgCanvasDefault)
+        .previewLayout(.sizeThatFits)
     }
 }
