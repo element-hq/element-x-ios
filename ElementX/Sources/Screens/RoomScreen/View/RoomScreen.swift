@@ -27,14 +27,6 @@ struct RoomScreen: View {
 
     var body: some View {
         TimelineView(timelineContext: timelineContext)
-            .overlay(alignment: .topTrailing) {
-                if timelineContext.viewState.shouldShowJumpToReadMarker {
-                    TimelineScrollButton(direction: .up,
-                                         badgeCount: timelineContext.viewState.timelineState.unreadMessageCount) {
-                        timelineContext.send(viewAction: .scrollToReadMarker)
-                    }
-                }
-            }
             .overlay(alignment: .bottomTrailing) {
                 TimelineScrollButton(isHidden: timelineContext.viewState.isAtBottomAndLive,
                                      badgeCount: timelineContext.viewState.bindings.newMessagesAtBottomCount) {
@@ -50,7 +42,7 @@ struct RoomScreen: View {
                 ]),
                 // This can overlay on top of the stacked banners
                 TopBannerLayer(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
-            ], footer: dateBadge)
+            ], footer: dateBadge, trailingAccessory: jumpToReadMarkerButton)
             .safeAreaInset(edge: .top) {
                 // When VoiceOver is enabled, the table view isn't reversed and the scroll gestures
                 // don't trigger meaning the banner never hides itself and so the .overlay layout
@@ -137,6 +129,16 @@ struct RoomScreen: View {
     
     private func onViewAllKnockRequests() {
         context.send(viewAction: .viewKnockRequests)
+    }
+
+    @ViewBuilder
+    private var jumpToReadMarkerButton: some View {
+        if timelineContext.viewState.shouldShowJumpToReadMarker {
+            TimelineScrollButton(direction: .up,
+                                 badgeCount: timelineContext.viewState.timelineState.unreadMessageCount) {
+                timelineContext.send(viewAction: .scrollToReadMarker)
+            }
+        }
     }
 
     @ViewBuilder
