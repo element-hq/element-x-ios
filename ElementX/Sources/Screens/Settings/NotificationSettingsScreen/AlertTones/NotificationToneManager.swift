@@ -47,6 +47,7 @@ struct NotificationToneManager {
 
                 return .createCustomUserSound(filename: $0.lastPathComponent)
             }
+            .sorted()
     }
 
     enum ConversionError: Error {
