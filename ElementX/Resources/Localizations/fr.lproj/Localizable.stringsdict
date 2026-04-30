@@ -283,9 +283,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Every %1$d meter</string>
+			<string>%1$d mètre</string>
 			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>%1$d mètres</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

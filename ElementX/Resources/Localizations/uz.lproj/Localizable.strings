@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "To'liq manzil %1$@ bo'ladi";
 "a11y_expand_message_text_field" = "Xabar matni maydonini kengaytirish";
 "a11y_hide_password" = "Parolni yashirish";
+"a11y_info" = "Info";
 "a11y_join_call" = "Qoʻngʻiroqga qoʻshilish";
 "a11y_jump_to_bottom" = "Pastga o'tish";
 "a11y_notifications_mentions_only" = "Faqat eslatmalar";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Fayllarni yuborish";
 "a11y_sender_location" = "Yuboruvchining joylashuvi";
 "a11y_session_verification_time_limited_action_required" = "Amal bajarish vaqti cheklangan, tasdiqlash uchun bir daqiqa vaqtingiz bor";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Parolni ko'rsatish";
 "a11y_start_call" = "Qoʻngʻiroqni boshlash";
 "a11y_start_video_call" = "Video chaqiruvni boshlash";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Hisobni faolsizlantirish";
 "action_decline" = "Rad etish";
 "action_decline_and_block" = "Rad etish va bloklash";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "So‘rovnomani o‘chirish";
 "action_deselect_all" = "Hammasini bekor qilish";
 "action_disable" = "Oʻchirish";
 "action_discard" = "Bekor qilish";
 "action_dismiss" = "Bekor qilish";
 "action_done" = "Bajarildi";
+"action_download" = "Download";
 "action_edit" = "Tahrirlash";
 "action_edit_caption" = "Sarlavhani tahrirlash";
 "action_edit_poll" = "So‘rovnomani tahrirlash";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Bloklangan foydalanuvchilar";
 "common_bubbles" = "Pufakchalar";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Qoʻngʻiroq boshlandi";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Chatning zaxira nusxasi";
 "common_copied_to_clipboard" = "Buferga nusxa koʻchirildi";
 "common_copyright" = "Mualliflik huquqi";
@@ -753,7 +760,7 @@
 "screen_deactivate_account_list_item_2" = "Sizni barcha chat xonalaridan olib tashlash.";
 "screen_deactivate_account_list_item_3" = "Hisobingiz haqidagi axborotni identifikatsiya serverimizdan o‘chirib tashlang.";
 "screen_deactivate_account_list_item_4" = "Xabarlaringiz ro‘yxatdan o‘tgan foydalanuvchilarga ko‘rinadi, lekin ularni o‘chirishni tanlasangiz, yangi yoki ro‘yxatdan o‘tmagan foydalanuvchilarga ko‘rinmaydi.";
-"screen_deactivate_account_title" = "Hisobni faolsizlantirish";
+"screen_deactivate_account_title" = "Delete account";
 "screen_decline_and_block_block_user_option_description" = "Siz bu foydalanuvchidan hech qanday xabar yoki xonaga taklif ko‘rmaysiz";
 "screen_decline_and_block_block_user_option_title" = "Foydalanuvchini bloklash";
 "screen_decline_and_block_report_user_option_description" = "Bu xona haqida hisobingiz provayderiga xabar bering.";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Fayl nomi";
 "screen_media_details_no_more_files_to_show" = "Ko‘rsatish uchun boshqa fayllar yo‘q";
 "screen_media_details_no_more_media_to_show" = "Ko‘rsatish uchun boshqa media yo‘q";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Tomonidan yuklangan";
 "screen_media_details_uploaded_on" = "Yuklangan";
 "screen_media_picker_error_failed_selection" = "Media tanlash jarayonida xatolik yuz berdi, qayta urinib ko'ring";

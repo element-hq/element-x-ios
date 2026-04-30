@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "مکمل پتہ ہو گا %1$@";
 "a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "لفظ عبور چھپائیں";
+"a11y_info" = "Info";
 "a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "نیچے چھلانگ لگائیں";
 "a11y_notifications_mentions_only" = "صرف تذکرے";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "مسلیں بھیجیں";
 "a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "لفظ عبور دکھائیں";
 "a11y_start_call" = "مکالمہ شروع کریں";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "اکاؤنٹ کو غیر فعال کریں";
 "action_decline" = "مسترد کریں";
 "action_decline_and_block" = "Decline and block";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "رائے شماری حذف کریں";
 "action_deselect_all" = "Deselect all";
 "action_disable" = "غیر فعال کریں";
 "action_discard" = "رد کریں";
 "action_dismiss" = "Dismiss";
 "action_done" = "ہوگیا";
+"action_download" = "Download";
 "action_edit" = "تدوین کریں";
 "action_edit_caption" = "Edit caption";
 "action_edit_poll" = "رائے شماری میں ترمیم کریں";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "مسدود صارفین";
 "common_bubbles" = "بلبلے";
+"common_call_declined" = "Call declined";
 "common_call_started" = "مکالمہ شروع";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "گفتگو کا پشتارہ";
 "common_copied_to_clipboard" = "کلپ بورڈ میں کاپى کیا گیا";
 "common_copyright" = "حقوقِ طبع و نشر";
@@ -753,7 +760,7 @@
 "screen_deactivate_account_list_item_2" = "آپ کو تمام چیت رومز سے ہٹا دے گا۔";
 "screen_deactivate_account_list_item_3" = "ہمارے شناختی سرور سے اپنے اکاؤنٹ کی معلومات کو حذف کریں۔";
 "screen_deactivate_account_list_item_4" = "آپ کے پیغامات اب بھی رجسٹرڈ صارفین کو نظر آئیں گے لیکن اگر آپ انہیں حذف کرنے کا انتخاب کرتے ہیں تو نئے یا غیر رجسٹرڈ صارفین کے لیے دستیاب نہیں ہوں گے۔";
-"screen_deactivate_account_title" = "اکاؤنٹ کو غیر فعال کریں";
+"screen_deactivate_account_title" = "Delete account";
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
 "screen_decline_and_block_block_user_option_title" = "صارف کو مسدود کریں";
 "screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
@@ -940,10 +947,11 @@
 "screen_media_browser_media_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
 "screen_media_browser_media_empty_state_title" = "No media uploaded yet";
 "screen_media_browser_title" = "Media and files";
-"screen_media_details_file_format" = "File format";
-"screen_media_details_filename" = "File name";
+"screen_media_details_file_format" = "Format";
+"screen_media_details_filename" = "Name";
 "screen_media_details_no_more_files_to_show" = "No more files to show";
 "screen_media_details_no_more_media_to_show" = "No more media to show";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Uploaded by";
 "screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_picker_error_failed_selection" = "وسائط منتخب کرنا ناکام، برائے مہربانی دوبارہ کوشش کریں۔";

@@ -19,7 +19,6 @@ enum CallScreenViewModelAction {
 struct CallScreenViewState: BindableState {
     let script: String?
     var url: URL?
-    let isGenericCallLink: Bool
     
     let certificateValidator: CertificateValidatorHookProtocol
     

@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Het volledige adres wordt %1$@";
 "a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "Wachtwoord verbergen";
+"a11y_info" = "Info";
 "a11y_join_call" = "Deelnemen aan gesprek";
 "a11y_jump_to_bottom" = "Spring naar einde";
 "a11y_notifications_mentions_only" = "Alleen vermeldingen";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Bestanden verzenden";
 "a11y_sender_location" = "Sender location";
 "a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Wachtwoord weergeven";
 "a11y_start_call" = "Begin een oproep";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Account sluiten";
 "action_decline" = "Weigeren";
 "action_decline_and_block" = "Weigeren en blokkeren";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Peiling verwijderen";
 "action_deselect_all" = "Deselect all";
 "action_disable" = "Uitschakelen";
 "action_discard" = "Verwerpen";
 "action_dismiss" = "Sluiten";
 "action_done" = "Gereed";
+"action_download" = "Download";
 "action_edit" = "Bewerken";
 "action_edit_caption" = "Bijschrift bewerken";
 "action_edit_poll" = "Peiling wijzigen";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Geblokkeerde gebruikers";
 "common_bubbles" = "Bubbels";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Oproep gestart";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Chat back-up";
 "common_copied_to_clipboard" = "Gekopieerd naar klembord";
 "common_copyright" = "Copyright";
@@ -940,10 +947,11 @@
 "screen_media_browser_media_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
 "screen_media_browser_media_empty_state_title" = "No media uploaded yet";
 "screen_media_browser_title" = "Media en bestanden";
-"screen_media_details_file_format" = "File format";
-"screen_media_details_filename" = "File name";
+"screen_media_details_file_format" = "Format";
+"screen_media_details_filename" = "Name";
 "screen_media_details_no_more_files_to_show" = "No more files to show";
 "screen_media_details_no_more_media_to_show" = "No more media to show";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Uploaded by";
 "screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_picker_error_failed_selection" = "Het selecteren van media is mislukt. Probeer het opnieuw.";

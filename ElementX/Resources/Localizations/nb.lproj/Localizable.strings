@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "Den fullstendige adressen vil være %1$@";
 "a11y_expand_message_text_field" = "Utvid meldingstekstfeltet";
 "a11y_hide_password" = "Skjul passord";
+"a11y_info" = "Info";
 "a11y_join_call" = "Bli med i samtale";
 "a11y_jump_to_bottom" = "Hopp til bunnen";
 "a11y_notifications_mentions_only" = "Bare omtaler";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "Sende filer";
 "a11y_sender_location" = "Avsenderens lokasjon";
 "a11y_session_verification_time_limited_action_required" = "Tidsbegrenset handling kreves, du har ett minutt på deg til å verifisere";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Vis passord";
 "a11y_start_call" = "Start en samtale";
 "a11y_start_video_call" = "Start a video call";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "Deaktiver kontoen";
 "action_decline" = "Avslå";
 "action_decline_and_block" = "Avslå og blokker";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "Slett avstemning";
 "action_deselect_all" = "Velg bort alle";
 "action_disable" = "Deaktiver";
 "action_discard" = "Forkast";
 "action_dismiss" = "Avvis";
 "action_done" = "Ferdig";
+"action_download" = "Download";
 "action_edit" = "Rediger";
 "action_edit_caption" = "Rediger bildetekst";
 "action_edit_poll" = "Rediger avstemning";
@@ -202,7 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Blokkerte brukere";
 "common_bubbles" = "Bobler";
+"common_call_declined" = "Call declined";
 "common_call_started" = "Samtale startet";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Chat backup";
 "common_copied_to_clipboard" = "Kopiert til utklippstavlen";
 "common_copyright" = "Opphavsrett";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "Filnavn";
 "screen_media_details_no_more_files_to_show" = "Ingen flere filer å vise";
 "screen_media_details_no_more_media_to_show" = "Ikke flere mediefiler å vise";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "Lastet opp av";
 "screen_media_details_uploaded_on" = "Lastet opp den";
 "screen_media_picker_error_failed_selection" = "Kunne ikke velge medium, prøv igjen.";

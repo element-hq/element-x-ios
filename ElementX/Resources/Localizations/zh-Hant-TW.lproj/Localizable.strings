@@ -7,6 +7,7 @@
 "a11y_edit_room_address_hint" = "完整地址為 %1$@";
 "a11y_expand_message_text_field" = "展開訊息文字欄位";
 "a11y_hide_password" = "隱藏密碼";
+"a11y_info" = "Info";
 "a11y_join_call" = "加入通話";
 "a11y_jump_to_bottom" = "跳至底部";
 "a11y_notifications_mentions_only" = "僅限提及";
@@ -36,6 +37,7 @@
 "a11y_send_files" = "傳送檔案";
 "a11y_sender_location" = "傳送者位置";
 "a11y_session_verification_time_limited_action_required" = "需要限時動作，您有一分鐘可以驗證";
+"a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "顯示密碼";
 "a11y_start_call" = "開始通話";
 "a11y_start_video_call" = "開始視訊通話";
@@ -80,12 +82,15 @@
 "action_deactivate_account" = "停用帳號";
 "action_decline" = "拒絕";
 "action_decline_and_block" = "拒絕並封鎖";
+"action_delete" = "Delete";
+"action_delete_account" = "Delete account";
 "action_delete_poll" = "刪除投票";
 "action_deselect_all" = "取消全選";
 "action_disable" = "停用";
 "action_discard" = "捨棄";
 "action_dismiss" = "關閉";
 "action_done" = "完成";
+"action_download" = "Download";
 "action_edit" = "編輯";
 "action_edit_caption" = "編輯標題";
 "action_edit_poll" = "編輯投票";
@@ -202,7 +207,9 @@
 "common_beta" = "測試版";
 "common_blocked_users" = "封鎖的使用者";
 "common_bubbles" = "泡泡";
+"common_call_declined" = "Call declined";
 "common_call_started" = "開始通話";
+"common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "聊天室備份";
 "common_copied_to_clipboard" = "已複製到剪貼簿";
 "common_copyright" = "著作權";
@@ -944,6 +951,7 @@
 "screen_media_details_filename" = "檔案名稱";
 "screen_media_details_no_more_files_to_show" = "無可顯示的檔案";
 "screen_media_details_no_more_media_to_show" = "無可顯示的媒體";
+"screen_media_details_title" = "File info";
 "screen_media_details_uploaded_by" = "上傳者：";
 "screen_media_details_uploaded_on" = "上傳於";
 "screen_media_picker_error_failed_selection" = "選取媒體失敗，請再試一次。";
