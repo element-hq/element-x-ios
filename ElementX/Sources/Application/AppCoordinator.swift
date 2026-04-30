@@ -241,6 +241,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) {
+        MXLog.info("Handling app route:  \(appRoute)")
+        
         if let windowType {
             windowManager.handleRoute(appRoute, windowType: windowType)
             return

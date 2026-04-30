@@ -83,9 +83,14 @@ class WindowManager: SecureWindowManagerProtocol {
     }
     
     func handleRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType) {
-        if let flowCoordinator = coordinators[windowType]?.flowCoordinator {
-            flowCoordinator.handleAppRoute(appRoute, animated: true)
+        MXLog.info("Handling app route: \(appRoute) for window type: \(windowType)")
+        
+        guard let flowCoordinator = coordinators[windowType]?.flowCoordinator else {
+            MXLog.error("Invalid flow coordinator")
+            return
         }
+        
+        flowCoordinator.handleAppRoute(appRoute, animated: true)
     }
     
     func switchToMain() {
@@ -126,7 +131,10 @@ class WindowManager: SecureWindowManagerProtocol {
     }
     
     func showGlobalSearch() {
+        MXLog.info("Received global search presentation request.")
+        
         guard alternateWindow.isHidden else {
+            MXLog.info("The alternate window is visible, ignoring.")
             return
         }
         
@@ -142,7 +150,10 @@ class WindowManager: SecureWindowManagerProtocol {
     }
     
     func hideGlobalSearch() {
+        MXLog.info("Received global search dismissal request.")
+        
         guard alternateWindow.isHidden else {
+            MXLog.info("The alternate window is visible, ignoring.")
             return
         }
         
@@ -163,7 +174,10 @@ class WindowManager: SecureWindowManagerProtocol {
     // MARK: - Secondary window support
     
     func windowForType(_ type: SecondaryWindowType) -> AnyView {
+        MXLog.info("Requesting window for type: \(type)")
+        
         guard let coordinator = coordinators[type]?.coordinator else {
+            MXLog.error("Invalid coordinator for window type: \(type)")
             return AnyView(InstantlyDismissingWindow())
         }
         

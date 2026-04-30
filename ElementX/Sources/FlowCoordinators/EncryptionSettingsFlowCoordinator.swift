@@ -77,6 +77,8 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        MXLog.info("Handling app route: \(appRoute)")
+        
         switch appRoute {
         case .accountProvisioningLink:
             break // We always ignore this flow when logged in.

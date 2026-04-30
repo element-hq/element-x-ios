@@ -97,6 +97,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        MXLog.info("Handling app route: \(appRoute)")
+        
         switch appRoute {
         case .roomMemberDetails(let userID):
             if case .roomFlow = stateMachine.state, let childFlowCoordinator {

@@ -121,6 +121,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     // swiftlint:disable:next cyclomatic_complexity
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        MXLog.info("Handling app route: \(appRoute)")
+        
         guard stateMachine.state != .complete else {
             fatalError("This flow coordinator is `finished` ☠️")
         }

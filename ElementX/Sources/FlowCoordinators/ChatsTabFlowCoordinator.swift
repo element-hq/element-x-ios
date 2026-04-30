@@ -84,6 +84,8 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - FlowCoordinatorProtocol
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        MXLog.info("Handling app route: \(appRoute)")
+        
         Task {
             await asyncHandleAppRoute(appRoute, animated: animated)
         }
