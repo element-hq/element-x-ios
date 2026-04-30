@@ -36,14 +36,8 @@ class NotificationHandler {
         let eventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()),
                                                                style: .plain)
 
-        let soundName: UNNotificationSoundName
-        if settings.selectedNotificationTone == nil {
-            soundName = UNNotificationSoundName("message.caf")
-        } else {
-            soundName = UNNotificationSoundName(NotificationAlertTone.selectedToneFilename)
-        }
         notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: eventStringBuilder,
-                                                                notificationSoundName: soundName,
+                                                                notificationSoundName: settings.notificationSoundName,
                                                                 userSession: userSession)
     }
     
