@@ -179,18 +179,18 @@ struct NotificationSettingsScreen: View {
                 DisclosureGroup(UntranslatedL10n.commonAppName, isExpanded: $context.shouldShowElementXAlertSounds) {
                     ForEach(NotificationAlertTone.defaultElementXAlerts, id: \.filename) { alertTone in
                         ListRow(label: .plain(title: alertTone.label),
-                                kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone, action: {
+                                kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
                                     context.send(viewAction: .selectAlertTone(alertTone))
-                                }))
+                                })
                     }
                 }
 
                 DisclosureGroup(L10n.commonSystem, isExpanded: $context.shouldShowSystemAlertSounds) {
                     ForEach(NotificationAlertTone.defaultSystemAlerts, id: \.filename) { alertTone in
                         ListRow(label: .plain(title: alertTone.label),
-                                kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone, action: {
+                                kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
                                     context.send(viewAction: .selectAlertTone(alertTone))
-                                }))
+                                })
                     }
                 }
             }
