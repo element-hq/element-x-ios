@@ -34,62 +34,50 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
     }
 
     private let labelOverride: String?
-    let location: URL
+    private let storageLocationRoot: StorageLocation
+    private let relativePath: [String]
+    var location: URL {
+        let root: URL
+        switch storageLocationRoot {
+        case .system:
+            root = Self.systemLocation
+        case .appBundle:
+            root = Self.bundledLocation
+        case .appLibrary:
+            root = Self.libraryLocation
+        }
+
+        return relativePath.reduce(root) {
+            $0.appending(component: $1)
+        }
+    }
+
     var filename: String {
         location.lastPathComponent
     }
 
-    init(labelOverride: String?, location: URL) {
+    init(labelOverride: String?, storageLocationRoot: StorageLocation, relativePath: [String]) {
         self.labelOverride = labelOverride
-        self.location = {
-            var isStale = false
-            guard
-                let data = try? location.bookmarkData(),
-                let backToURL = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &isStale)
-            else { return location }
-            return backToURL
-        }()
+        self.storageLocationRoot = storageLocationRoot
+        self.relativePath = relativePath
     }
 
-    enum CodingKeys: CodingKey {
-        case labelOverride
-        case location
+    enum StorageLocation: Codable, Hashable {
+        case system
+        case appBundle
+        case appLibrary
     }
 
-    init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        let bookmarkData = try container.decode(Data.self, forKey: .location)
-        var stale = false
-        let location = try URL(resolvingBookmarkData: bookmarkData, bookmarkDataIsStale: &stale)
-        let labelOverride = try container.decodeIfPresent(String.self, forKey: .labelOverride)
-
-        self.init(labelOverride: labelOverride, location: location)
-    }
-
-    func encode(to encoder: any Encoder) throws {
-        let bookmarkData = try location.bookmarkData(options: [], includingResourceValuesForKeys: nil, relativeTo: nil)
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        try container.encode(bookmarkData, forKey: .location)
-        try container.encodeIfPresent(labelOverride, forKey: .labelOverride)
-    }
-
-    static func createSystemSound(label: String?, filename: String, systemSoundsSubdirectory: [String]? = nil) -> NotificationAlertTone {
-        var systemLocation = Self.systemLocation
-        for subdirectory in systemSoundsSubdirectory ?? [] {
-            systemLocation.append(component: subdirectory)
-        }
-
-        return NotificationAlertTone(labelOverride: label, location: systemLocation.appending(component: filename))
+    static func createSystemSound(label: String?, filename: String, systemSoundsSubdirectory: [String] = []) -> NotificationAlertTone {
+        NotificationAlertTone(labelOverride: label, storageLocationRoot: .system, relativePath: systemSoundsSubdirectory + [filename])
     }
 
     static func createBundledSound(label: String?, filename: String) -> NotificationAlertTone {
-        NotificationAlertTone(labelOverride: label, location: bundledLocation.appending(component: filename))
+        NotificationAlertTone(labelOverride: label, storageLocationRoot: .appBundle, relativePath: [filename])
     }
 
     static func createCustomUserSound(filename: String) -> NotificationAlertTone {
-        NotificationAlertTone(labelOverride: nil, location: libraryLocation.appending(component: filename))
+        NotificationAlertTone(labelOverride: nil, storageLocationRoot: .appLibrary, relativePath: [filename])
     }
 
     #if IS_MAIN_APP // localization is only available in the main app

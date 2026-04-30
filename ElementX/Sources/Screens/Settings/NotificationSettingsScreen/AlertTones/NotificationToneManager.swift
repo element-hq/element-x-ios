@@ -134,7 +134,7 @@ struct NotificationToneManager {
     }
 
     func deleteCustomTone(_ alertTone: NotificationAlertTone) throws {
-        guard alertTone.location.deletingLastPathComponent().resolvingSymlinksInPath() == NotificationAlertTone.libraryLocation else {
+        guard alertTone.location.deletingLastPathComponent() == NotificationAlertTone.libraryLocation else {
             throw DeletionError.notACustomTone
         }
 
