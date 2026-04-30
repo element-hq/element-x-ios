@@ -44,6 +44,30 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
         self.location = location
     }
 
+    enum CodingKeys: CodingKey {
+        case labelOverride
+        case location
+    }
+
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        let bookmarkData = try container.decode(Data.self, forKey: .location)
+        var stale = false
+        let location = try URL(resolvingBookmarkData: bookmarkData, bookmarkDataIsStale: &stale)
+        let labelOverride = try container.decodeIfPresent(String.self, forKey: .labelOverride)
+
+        self.init(labelOverride: labelOverride, location: location)
+    }
+
+    func encode(to encoder: any Encoder) throws {
+        let bookmarkData = try location.bookmarkData(options: [], includingResourceValuesForKeys: nil, relativeTo: nil)
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(bookmarkData, forKey: .location)
+        try container.encodeIfPresent(labelOverride, forKey: .labelOverride)
+    }
+
     static func createSystemSound(label: String?, filename: String, systemSoundsSubdirectory: [String]? = nil) -> NotificationAlertTone {
         var systemLocation = Self.systemLocation
         for subdirectory in systemSoundsSubdirectory ?? [] {
