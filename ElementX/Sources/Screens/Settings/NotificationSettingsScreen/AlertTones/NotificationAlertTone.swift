@@ -151,6 +151,8 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
                                                 filename: "sound_01.caf")
         return base + [proTone]
     }().sorted()
+
+    static let allDefaultAlerts: [Self] = (defaultSystemAlerts + defaultElementXAlerts).sorted()
     #endif
 
     static func < (lhs: NotificationAlertTone, rhs: NotificationAlertTone) -> Bool {

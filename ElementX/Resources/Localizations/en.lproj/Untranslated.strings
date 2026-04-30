@@ -11,7 +11,6 @@
 "soft_logout_signin_notice" = "Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).";
 "soft_logout_signin_title" = "Sign in";
 "untranslated" = "Untranslated";
-"common_app_name" = "Element X";
 "message_tone_system_tri_tone" = "Tri-tone";
 "message_tone_system_chime" = "Chime";
 "message_tone_system_glass" = "Glass";

@@ -176,22 +176,11 @@ struct NotificationSettingsScreen: View {
     private var soundSelectionSection: some View {
         Section {
             DisclosureGroup(context.viewState.selectedAlertTone.label, isExpanded: $context.shouldShowAlertSounds) {
-                DisclosureGroup(UntranslatedL10n.commonAppName, isExpanded: $context.shouldShowElementXAlertSounds) {
-                    ForEach(NotificationAlertTone.defaultElementXAlerts, id: \.filename) { alertTone in
-                        ListRow(label: .plain(title: alertTone.label),
-                                kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
-                                    context.send(viewAction: .selectAlertTone(alertTone))
-                                })
-                    }
-                }
-
-                DisclosureGroup(L10n.commonSystem, isExpanded: $context.shouldShowSystemAlertSounds) {
-                    ForEach(NotificationAlertTone.defaultSystemAlerts, id: \.filename) { alertTone in
-                        ListRow(label: .plain(title: alertTone.label),
-                                kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
-                                    context.send(viewAction: .selectAlertTone(alertTone))
-                                })
-                    }
+                ForEach(NotificationAlertTone.allDefaultAlerts, id: \.filename) { alertTone in
+                    ListRow(label: .plain(title: alertTone.label),
+                            kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
+                                context.send(viewAction: .selectAlertTone(alertTone))
+                            })
                 }
             }
             .foregroundStyle(.compound.textPrimary)
