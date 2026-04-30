@@ -341,7 +341,6 @@ final class RoomScreenViewModelTests {
     
     @Test
     func knockRequestBanner() async throws {
-        ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
                                                                                    // This one should be filtered
                                                                                    KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org", isSeen: true))]),
@@ -376,7 +375,6 @@ final class RoomScreenViewModelTests {
     
     @Test
     func knockRequestBannerMarkAsSeen() async throws {
-        ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
                                                                                    // This one should be filtered
                                                                                    KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org"))]),
@@ -408,7 +406,6 @@ final class RoomScreenViewModelTests {
     
     @Test
     func loadingKnockRequests() async throws {
-        ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loading,
                                                       joinRule: .knock))
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
@@ -428,7 +425,6 @@ final class RoomScreenViewModelTests {
     
     @Test
     func knockRequestsBannerDoesNotAppearIfUserHasNoPermission() async throws {
-        ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!"))]),
                                                       joinRule: .knock,
                                                       powerLevelsConfiguration: .init(canUserInvite: false)))

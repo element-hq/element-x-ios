@@ -71,10 +71,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            bindings: .init()),
                    mediaProvider: userSession.mediaProvider)
         
-        appSettings.$knockingEnabled
-            .weakAssign(to: \.state.knockingEnabled, on: self)
-            .store(in: &cancellables)
-        
         Task {
             state.reportRoomEnabled = await userSession.clientProxy.isReportRoomSupported
         }

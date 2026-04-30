@@ -404,8 +404,7 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
         self.customPreviewName = customPreviewName
         
         let appSettings = AppSettings()
-        appSettings.knockingEnabled = true
-        
+
         let clientProxy = ClientProxyMock(.init(hideInviteAvatars: hideInviteAvatars))
         clientProxy.canJoinRoomWithReturnValue = canJoinRoom
         

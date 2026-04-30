@@ -374,7 +374,6 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     private static func makeGenericRoomViewModel(historyVisibility: RoomHistoryVisibility) -> RoomDetailsScreenViewModel {
-        ServiceLocator.shared.settings.knockingEnabled = true
         let knockRequests: [KnockRequestProxyMock] = [.init()]
         
         let members: [RoomMemberProxyMock] = [
@@ -417,7 +416,6 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     private static func makeSimpleRoomViewModel() -> RoomDetailsScreenViewModel {
-        ServiceLocator.shared.settings.knockingEnabled = true
         let knockRequests: [KnockRequestProxyMock] = [.init()]
         
         let members: [RoomMemberProxyMock] = [

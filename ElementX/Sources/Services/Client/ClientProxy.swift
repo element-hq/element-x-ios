@@ -808,7 +808,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol {
-        RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch(), appSettings: appSettings)
+        RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch())
     }
     
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError> {
@@ -1206,10 +1206,6 @@ class ClientProxy: ClientProxyProtocol {
             case .invited:
                 return try await .invited(InvitedRoomProxy(room: room))
             case .knocked:
-                guard appSettings.knockingEnabled else {
-                    return nil
-                }
-                
                 return try await .knocked(KnockedRoomProxy(room: room))
             case .joined:
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,

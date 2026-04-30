@@ -73,7 +73,6 @@ struct RoomScreenViewState: BindableState {
     var isDirectOneToOneRoom: Bool
     
     var roomThreadListEnabled = false
-    var isKnockingEnabled = false
     var isKnockableRoom = false
     var canAcceptKnocks = false
     var canDeclineKnocks = false
@@ -88,8 +87,7 @@ struct RoomScreenViewState: BindableState {
     }
     
     var shouldSeeKnockRequests: Bool {
-        isKnockingEnabled &&
-            isKnockableRoom &&
+        isKnockableRoom &&
             !displayedKnockRequests.isEmpty &&
             (canAcceptKnocks || canDeclineKnocks || canBan)
     }
