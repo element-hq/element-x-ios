@@ -231,8 +231,14 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         let content = UNMutableNotificationContent()
         content.body = L10n.notificationReceivedWhileOfflineIos
         content.badge = originalRequest.content.unreadCount as NSNumber?
-        content.sound = .init(named: settings.notificationSoundName.publisher.value)
-        
+        let soundName: UNNotificationSoundName
+        if settings.selectedNotificationTone == nil {
+            soundName = UNNotificationSoundName("message.caf")
+        } else {
+            soundName = UNNotificationSoundName(NotificationAlertTone.selectedToneFilename)
+        }
+        content.sound = .init(named: soundName)
+
         let request = UNNotificationRequest(identifier: Self.receivedWhileOfflineNotificationID, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)
     }
