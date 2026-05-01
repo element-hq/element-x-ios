@@ -91,15 +91,10 @@ struct NotificationToneManager {
     private func convertToCAF(from sourceURL: URL, to destURL: URL) throws {
         let sourceFile = try AVAudioFile(forReading: sourceURL)
 
-        // CAF + LPCM is the safest choice; file type inferred from .caf extension
         let outputSettings: [String: Any] = [
             AVFormatIDKey: kAudioFormatMPEG4AAC,
             AVSampleRateKey: sourceFile.fileFormat.sampleRate,
-            AVNumberOfChannelsKey: sourceFile.fileFormat.channelCount,
-            AVLinearPCMBitDepthKey: 16,
-            AVLinearPCMIsFloatKey: false,
-            AVLinearPCMIsBigEndianKey: false,
-            AVLinearPCMIsNonInterleaved: false
+            AVNumberOfChannelsKey: sourceFile.fileFormat.channelCount
         ]
 
         let tempURL = URL.temporaryDirectory.appending(component: destURL.lastPathComponent)

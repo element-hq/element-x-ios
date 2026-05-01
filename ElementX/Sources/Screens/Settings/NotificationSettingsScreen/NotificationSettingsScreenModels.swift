@@ -41,8 +41,6 @@ struct NotificationSettingsScreenViewStateBindings {
     var invitationsEnabled = false
     var alertInfo: AlertInfo<NotificationSettingsScreenErrorType>?
     var shouldShowAlertSounds = false
-    var shouldShowElementXAlertSounds = true
-    var shouldShowSystemAlertSounds = true
     var shouldShowCustomAlertTonePicker = false
 }
 
@@ -97,7 +95,6 @@ enum NotificationSettingsScreenViewAction {
     case close
     case fixConfigurationMismatchTapped
     case selectAlertTone(NotificationAlertTone)
-    case previewAlertTone(NotificationAlertTone)
     case addedCustomAlertTone(Result<URL, Error>)
     case deleteCustomAlertTones([NotificationAlertTone])
 }

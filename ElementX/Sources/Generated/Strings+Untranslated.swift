@@ -73,7 +73,7 @@ internal enum UntranslatedL10n {
   /// Minuet
   internal static var messageToneSystemMinuet: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_minuet") }
   /// News Flash
-  internal static var messageToneSystemNewsFlash: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_news Flash") }
+  internal static var messageToneSystemNewsFlash: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_news_flash") }
   /// Noir
   internal static var messageToneSystemNoir: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_noir") }
   /// Sherwood Forest

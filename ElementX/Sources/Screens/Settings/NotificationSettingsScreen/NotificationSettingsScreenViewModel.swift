@@ -95,11 +95,10 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             actionsSubject.send(.close)
         case .fixConfigurationMismatchTapped:
             Task { await fixConfigurationMismatch() }
-        case .previewAlertTone(let alertTone):
-            tonePreviewer.preview(alertTone)
         case .selectAlertTone(let alertTone):
             tonePreviewer.preview(alertTone)
             toneManager?.setSelectedTone(alertTone)
+            MXLog.info("Successfully set selected tone: \(alertTone.label)")
         case .addedCustomAlertTone(let result):
             Task {
                 await self.addCustomAlertTone(from: result)
@@ -261,11 +260,11 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             guard url.startAccessingSecurityScopedResource() else {
                 throw NotificationToneManager.ImportError.couldNotAccessSandboxedResource
             }
+            defer { url.stopAccessingSecurityScopedResource() }
             try await toneManager?.addNewToneToLibrary(from: url)
-            url.stopAccessingSecurityScopedResource()
             state.availableCustomTones = toneManager?.getCustomTones() ?? []
         } catch {
-            MXLog.error("Error retrieving custom tone url: \(error)")
+            MXLog.error("Error importing custom tone url: \(error)")
             userIndicatorController.submitIndicator(.init(type: .toast,
                                                           title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneImportToneErrorTitle,
                                                           iconName: "exclamationmark.triangle.fill"))
@@ -289,6 +288,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             }
         }
         state.availableCustomTones = toneManager?.getCustomTones() ?? []
+        MXLog.info("Successfully deleted custom tone(s): \(tones.map(\.label))")
     }
 }
 
