@@ -22,10 +22,13 @@ struct TimelineScrollButton: View {
     let badgeCount: Int
     let callback: () -> Void
 
-    @ScaledMetric(relativeTo: .compound.bodyLG) private var iconSize: CGFloat = 14
+    @ScaledMetric(relativeTo: .compound.bodyLG) private var iconSize: CGFloat = 22
     @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeSize: CGFloat = 20
     @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeDotSize: CGFloat = 14
     @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeOffsetY: CGFloat = -10
+
+    /// Padding around the chevron, balanced so the total circle stays ~40pt at default text size.
+    private let iconPadding: CGFloat = 9
 
     init(direction: Direction = .down,
          isHidden: Bool = false,
@@ -60,7 +63,7 @@ struct TimelineScrollButton: View {
                      size: .custom(iconSize),
                      relativeTo: .compound.bodyLG)
             .foregroundColor(.compound.iconSecondary)
-            .padding(13)
+            .padding(iconPadding)
             .offset(y: direction == .down ? 1 : -1)
             .background {
                 Circle()
@@ -75,17 +78,17 @@ struct TimelineScrollButton: View {
         if badgeCount > 9 {
             // For two-digit-plus counts, fall back to a small dot so the badge stays compact.
             Circle()
-                .fill(Color.compound.bgBadgeAccent)
+                .fill(Color.compound.iconAccentTertiary)
                 .frame(width: badgeDotSize, height: badgeDotSize)
                 .overlay(Circle().stroke(Color.compound.iconOnSolidPrimary, lineWidth: 2))
         } else {
             Text("\(badgeCount)")
                 .font(.compound.bodyXSSemibold)
-                .foregroundColor(.compound.textBadgeAccent)
+                .foregroundColor(.compound.textOnSolidPrimary)
                 .frame(width: badgeSize, height: badgeSize)
                 .background {
                     Circle()
-                        .fill(Color.compound.bgBadgeAccent)
+                        .fill(Color.compound.iconAccentTertiary)
                         .overlay(Circle().stroke(Color.compound.iconOnSolidPrimary, lineWidth: 2))
                 }
         }
