@@ -40,7 +40,7 @@ struct SettingsScreen: View {
         .compoundList()
         .navigationTitle(L10n.commonSettings)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarVisibility(ProcessInfo.processInfo.isiOSAppOnMac ? .hidden : .automatic, for: .navigationBar)
+        .toolbarVisibility(context.viewState.navigationBarVisibility, for: .navigationBar)
         .toolbar { toolbar }
     }
     
@@ -278,6 +278,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                                                    deviceID: "AAAAAAAAAAA"))))
         return SettingsScreenViewModel(userSession: userSession,
                                        appSettings: ServiceLocator.shared.settings,
-                                       isBugReportServiceEnabled: isBugReportServiceEnabled)
+                                       isBugReportServiceEnabled: isBugReportServiceEnabled,
+                                       isInSecondaryWindow: false)
     }
 }

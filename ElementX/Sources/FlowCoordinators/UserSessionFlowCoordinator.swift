@@ -124,7 +124,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .accountProvisioningLink:
             break // We always ignore this flow when logged in.
         case .settings, .chatBackupSettings:
-            if ProcessInfo.processInfo.isiOSAppOnMac {
+            if ProcessInfo.processInfo.isiOSAppOnMac, flowParameters.windowManager.secondaryWindowsEnabled {
                 startSettingsFlow(detached: true)
             } else {
                 if stateMachine.state != .settingsScreen {
@@ -310,6 +310,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func startSettingsFlow(detached: Bool) {
         let navigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = SettingsFlowCoordinator(appLockService: appLockService,
+                                                  isInSecondaryWindow: detached,
                                                   navigationStackCoordinator: navigationStackCoordinator,
                                                   flowParameters: flowParameters)
         
