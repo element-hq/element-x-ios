@@ -102,6 +102,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        areThreadsEnabled: appSettings.threadsEnabled,
                                                        linkPreviewsEnabled: appSettings.linkPreviewsEnabled,
+                                                       jumpToReadMarkerEnabled: appSettings.jumpToReadMarkerEnabled,
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
@@ -553,6 +554,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         appSettings.$threadsEnabled
             .weakAssign(to: \.state.areThreadsEnabled, on: self)
             .store(in: &cancellables)
+
+        appSettings.$jumpToReadMarkerEnabled
+            .weakAssign(to: \.state.jumpToReadMarkerEnabled, on: self)
+            .store(in: &cancellables)
         
         userSession.clientProxy.timelineMediaVisibilityPublisher
             .removeDuplicates()
@@ -890,7 +895,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     /// when the user is scrolled up in a live timeline. Skips initial load and timeline switches.
     private func updateNewMessagesAtBottomCount(with newTimelineItems: OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>,
                                                 isSwitchingTimelines: Bool) {
-        guard state.timelineState.isLive,
+        guard state.jumpToReadMarkerEnabled,
+              state.timelineState.isLive,
               !isSwitchingTimelines,
               !state.bindings.isScrolledToBottom else {
             return

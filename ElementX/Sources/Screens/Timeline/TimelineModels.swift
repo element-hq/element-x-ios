@@ -120,6 +120,7 @@ struct TimelineViewState: BindableState {
     var isViewSourceEnabled: Bool
     var areThreadsEnabled: Bool
     var linkPreviewsEnabled: Bool
+    var jumpToReadMarkerEnabled: Bool
     
     let hasPredecessor: Bool
         
@@ -312,10 +313,10 @@ extension TimelineViewState {
         bindings.isScrolledToBottom && timelineState.isLive
     }
 
-    /// Whether the jump-to-unread button should be shown: a read marker exists in the timeline
-    /// and isn't currently visible in the viewport.
+    /// Whether the jump-to-read-marker button should be shown: the feature flag is enabled,
+    /// a read marker exists in the timeline, and it isn't currently visible in the viewport.
     var shouldShowJumpToReadMarker: Bool {
-        timelineState.readMarkerUniqueID != nil && !bindings.isReadMarkerVisible
+        jumpToReadMarkerEnabled && timelineState.readMarkerUniqueID != nil && !bindings.isReadMarkerVisible
     }
 
     /// The string shown as the message preview.

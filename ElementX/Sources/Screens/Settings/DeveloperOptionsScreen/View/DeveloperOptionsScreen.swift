@@ -87,7 +87,12 @@ struct DeveloperOptionsScreen: View {
                     Text("Can leak the device IP address when loading link metadata.")
                         .foregroundStyle(.compound.textCriticalPrimary)
                 }
-                
+
+                Toggle(isOn: $context.jumpToReadMarkerEnabled) {
+                    Text("Jump to unread")
+                    Text("Adds a button to jump to the read marker, plus a count badge for messages that arrive while scrolled away from the bottom.")
+                }
+
                 Toggle(isOn: $context.knockingEnabled) {
                     Text("Knocking")
                     Text("Ask to join rooms")
