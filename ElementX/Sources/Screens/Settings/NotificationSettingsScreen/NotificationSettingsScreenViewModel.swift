@@ -252,6 +252,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         state.applyingChange = false
     }
 
+    /// Imports the audio file at the given sandboxed URL into the tone library, refreshing the available custom tones on success.
     private func addCustomAlertTone(from urlResult: Result<URL, Error>) {
         do {
             let url = try urlResult.get()
@@ -269,6 +270,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         }
     }
 
+    /// Deletes the given tones from the library. If the active tone is deleted, the selection resets to the default.
     private func deleteAlertTones(_ tones: [NotificationAlertTone]) {
         for tone in tones {
             do {

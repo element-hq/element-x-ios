@@ -7,6 +7,8 @@
 
 import AVFoundation
 
+/// Plays a preview of a notification tone using `AVAudioPlayer`.
+/// Players are retained for the duration of playback and released automatically on completion.
 class NotificationTonePreviewer: NSObject, AVAudioPlayerDelegate {
     private let lock = NSLock()
     private var playbackRetainer: Set<AVAudioPlayer> = []
@@ -17,6 +19,7 @@ class NotificationTonePreviewer: NSObject, AVAudioPlayerDelegate {
         self.userIndicatorController = userIndicatorController
     }
 
+    /// Plays the audio file for the given tone. Shows a toast on failure.
     func preview(_ tone: NotificationAlertTone) {
         do {
             let player = try AVAudioPlayer(contentsOf: tone.location)
@@ -34,6 +37,7 @@ class NotificationTonePreviewer: NSObject, AVAudioPlayerDelegate {
         }
     }
 
+    /// Releases the player from the retainer set once playback finishes.
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         lock.withLock {
             _ = playbackRetainer.remove(player)

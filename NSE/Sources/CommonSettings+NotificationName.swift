@@ -8,6 +8,8 @@
 import UserNotifications
 
 extension CommonSettingsProtocol {
+    /// The sound name to use in outgoing notifications.
+    /// Falls back to the default Element X tone if no custom tone has been selected.
     var notificationSoundName: UNNotificationSoundName {
         if selectedNotificationTone == nil {
             return UNNotificationSoundName("message.caf")
@@ -16,6 +18,7 @@ extension CommonSettingsProtocol {
         }
     }
 
+    /// A `UNNotificationSound` built from `notificationSoundName`, ready to attach to a notification content object.
     var notificationSound: UNNotificationSound {
         UNNotificationSound(named: notificationSoundName)
     }

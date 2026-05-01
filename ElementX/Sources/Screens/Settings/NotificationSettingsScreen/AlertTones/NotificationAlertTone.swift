@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Represents a notification alert tone and its backing audio file location.
 struct NotificationAlertTone: Hashable, Comparable, Codable {
     private static let systemLocation = {
         let systemRoot: URL
@@ -18,6 +19,7 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
         return systemRoot.appending(components: "System", "Library", "Audio", "UISounds", directoryHint: .isDirectory)
     }()
 
+    /// Directory where user-imported custom tones are stored.
     static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds", directoryHint: .isDirectory)
     private static let bundledLocation: URL = {
         guard let url = Bundle.app.resourceURL else {
@@ -26,9 +28,12 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
         return url
     }()
 
+    /// Filename of the active tone file used by the notification service.
     static let selectedToneFilename = "currentAlert.caf"
+    /// File URL of the active tone copied/linked for use by the system.
     static let selectedToneLocation = libraryLocation.deletingLastPathComponent().appending(component: selectedToneFilename)
 
+    /// Display name for the tone, falling back to the filename stem.
     var label: String {
         labelOverride ?? location.deletingPathExtension().lastPathComponent
     }
@@ -36,6 +41,7 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
     private let labelOverride: String?
     private let storageLocationRoot: StorageLocation
     private let relativePath: [String]
+    /// Resolved absolute file URL for the audio file.
     var location: URL {
         let root: URL
         switch storageLocationRoot {
@@ -52,38 +58,52 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
         }
     }
 
+    /// The audio filename including its extension.
     var filename: String {
         location.lastPathComponent
     }
 
+    /// - Parameters:
+    ///   - labelOverride: Optional custom display name. If `nil`, the filename stem is used.
+    ///   - storageLocationRoot: Where the file lives (system, bundle, or library).
+    ///   - relativePath: Path components relative to the storage root, e.g. `["New", "Bloom.caf"]`.
     init(labelOverride: String?, storageLocationRoot: StorageLocation, relativePath: [String]) {
         self.labelOverride = labelOverride
         self.storageLocationRoot = storageLocationRoot
         self.relativePath = relativePath
     }
 
+    /// Indicates which storage root backs the tone's audio file.
     enum StorageLocation: Codable, Hashable {
+        /// The device's system sounds directory.
         case system
+        /// The app's main bundle resources.
         case appBundle
+        /// The app's Library directory (user-imported tones).
         case appLibrary
     }
 
+    /// Creates a tone backed by a file in the system sounds directory.
     static func createSystemSound(label: String?, filename: String, systemSoundsSubdirectory: [String] = []) -> NotificationAlertTone {
         NotificationAlertTone(labelOverride: label, storageLocationRoot: .system, relativePath: systemSoundsSubdirectory + [filename])
     }
 
+    /// Creates a tone backed by a file in the app bundle.
     static func createBundledSound(label: String?, filename: String) -> NotificationAlertTone {
         NotificationAlertTone(labelOverride: label, storageLocationRoot: .appBundle, relativePath: [filename])
     }
 
+    /// Creates a tone backed by a user-imported file in the app library.
     static func createCustomUserSound(filename: String) -> NotificationAlertTone {
         NotificationAlertTone(labelOverride: nil, storageLocationRoot: .appLibrary, relativePath: [filename])
     }
 
     #if IS_MAIN_APP // localization is only available in the main app
+    /// The default Element X bundled message tone.
     static let defaultElementXMessageTone: Self = .createBundledSound(label: UntranslatedL10n.messageToneElementxDefault,
                                                                       filename: "message.caf")
 
+    /// Pre-defined iOS system tones available for selection, sorted by name.
     static let defaultSystemAlerts: [Self] = [
         .createSystemSound(label: UntranslatedL10n.messageToneSystemTriTone,
                            filename: "sms-received1.caf"),
@@ -156,6 +176,7 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
                            filename: "tweet_sent.caf")
     ].sorted()
 
+    /// Element X bundled tones available for selection, sorted by name.
     static let defaultElementXAlerts: [Self] = [
         defaultElementXMessageTone,
         .createBundledSound(label: UntranslatedL10n.messageToneElementxTripleSine,
@@ -184,6 +205,7 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
                             filename: "flick.caf")
     ].sorted()
 
+    /// All default tones (system + Element X), sorted by name.
     static let allDefaultAlerts: [Self] = (defaultSystemAlerts + defaultElementXAlerts).sorted()
     #endif
 

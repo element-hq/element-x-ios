@@ -9,10 +9,12 @@ import AVFoundation
 import Foundation
 import UniformTypeIdentifiers
 
+/// Manages notification tone selection, import, conversion, and deletion.
 struct NotificationToneManager {
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
 
+    /// Creates the manager and ensures required library directories exist.
     init(appSettings: AppSettings, userIndicatorController: UserIndicatorControllerProtocol) throws {
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
@@ -21,6 +23,9 @@ struct NotificationToneManager {
         try FileManager.default.createDirectory(at: NotificationAlertTone.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
     }
 
+    /// Sets the given tone as the active notification alert tone.
+    ///
+    /// Copies the tone's audio file to `selectedToneLocation` and persists the selection in app settings.
     func setSelectedTone(_ alertTone: NotificationAlertTone) {
         do {
             try? FileManager.default.removeItem(at: NotificationAlertTone.selectedToneLocation)
@@ -35,6 +40,7 @@ struct NotificationToneManager {
         }
     }
 
+    /// Returns all user-imported CAF tones from the library directory, sorted by name.
     func getCustomTones() -> [NotificationAlertTone] {
         let availableFiles = try? FileManager
             .default
@@ -50,12 +56,18 @@ struct NotificationToneManager {
             .sorted()
     }
 
+    /// Errors that can occur during audio file conversion.
     enum ConversionError: Error {
+        /// `AVAudioConverter` could not be initialised for the given format pair.
         case converterSetupFailed
+        /// A tone with the same filename already exists in the library.
         case fileAlreadyExists
+        /// An `AVAudioPCMBuffer` could not be allocated.
         case bufferCreationFailed
     }
 
+    /// Imports an audio file into the tone library, converting to CAF if the source is not already CAF.
+    /// - Returns: The URL of the imported file in the library.
     @discardableResult
     func addNewToneToLibrary(from sourceURL: URL) throws -> URL {
         let baseName = sourceURL.deletingPathExtension().lastPathComponent
@@ -133,6 +145,8 @@ struct NotificationToneManager {
         }
     }
 
+    /// Removes a user-imported tone from the library.
+    /// - Throws: `DeletionError.notACustomTone` if the tone is not stored in the library directory.
     func deleteCustomTone(_ alertTone: NotificationAlertTone) throws {
         guard alertTone.location.deletingLastPathComponent() == NotificationAlertTone.libraryLocation else {
             throw DeletionError.notACustomTone
@@ -141,11 +155,15 @@ struct NotificationToneManager {
         try FileManager.default.removeItem(at: alertTone.location)
     }
 
+    /// Errors that can occur during tone deletion.
     enum DeletionError: Error {
+        /// The tone's file is not inside the user library directory and cannot be deleted.
         case notACustomTone
     }
 
+    /// Errors that can occur during tone import.
     enum ImportError: Error {
+        /// The source file could not be accessed due to sandbox restrictions.
         case couldNotAccessSandboxedResource
     }
 }
