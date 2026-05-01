@@ -101,7 +101,9 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             tonePreviewer.preview(alertTone)
             toneManager?.setSelectedTone(alertTone)
         case .addedCustomAlertTone(let result):
-            addCustomAlertTone(from: result)
+            Task {
+                await self.addCustomAlertTone(from: result)
+            }
         case .deleteCustomAlertTones(let tones):
             deleteAlertTones(tones)
         }
@@ -253,13 +255,13 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     }
 
     /// Imports the audio file at the given sandboxed URL into the tone library, refreshing the available custom tones on success.
-    private func addCustomAlertTone(from urlResult: Result<URL, Error>) {
+    private func addCustomAlertTone(from urlResult: Result<URL, Error>) async {
         do {
             let url = try urlResult.get()
             guard url.startAccessingSecurityScopedResource() else {
                 throw NotificationToneManager.ImportError.couldNotAccessSandboxedResource
             }
-            try toneManager?.addNewToneToLibrary(from: url)
+            try await toneManager?.addNewToneToLibrary(from: url)
             url.stopAccessingSecurityScopedResource()
             state.availableCustomTones = toneManager?.getCustomTones() ?? []
         } catch {

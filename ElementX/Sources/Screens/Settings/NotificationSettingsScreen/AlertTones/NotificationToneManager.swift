@@ -5,7 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import AVFoundation
+@preconcurrency import AVFoundation
 import Foundation
 import UniformTypeIdentifiers
 
@@ -68,6 +68,7 @@ struct NotificationToneManager {
 
     /// Imports an audio file into the tone library, converting to CAF if the source is not already CAF.
     /// - Returns: The URL of the imported file in the library.
+    @ConversionActor
     @discardableResult
     func addNewToneToLibrary(from sourceURL: URL) throws -> URL {
         let baseName = sourceURL.deletingPathExtension().lastPathComponent
@@ -86,6 +87,7 @@ struct NotificationToneManager {
         return outputURL
     }
 
+    @ConversionActor
     private func convertToCAF(from sourceURL: URL, to destURL: URL) throws {
         let sourceFile = try AVAudioFile(forReading: sourceURL)
 
@@ -100,10 +102,12 @@ struct NotificationToneManager {
             AVLinearPCMIsNonInterleaved: false
         ]
 
-        let destFile = try AVAudioFile(forWriting: destURL, settings: outputSettings)
+        let tempURL = URL.temporaryDirectory.appending(component: destURL.lastPathComponent)
+
+        let destTempFile = try AVAudioFile(forWriting: tempURL, settings: outputSettings)
 
         guard let converter = AVAudioConverter(from: sourceFile.processingFormat,
-                                               to: destFile.processingFormat) else {
+                                               to: destTempFile.processingFormat) else {
             throw ConversionError.converterSetupFailed
         }
 
@@ -112,8 +116,8 @@ struct NotificationToneManager {
             MXLog.error("Error creating input conversion buffer: \(sourceFile.processingFormat) \(frameCount)")
             throw ConversionError.bufferCreationFailed
         }
-        guard let outputBuf = AVAudioPCMBuffer(pcmFormat: destFile.processingFormat, frameCapacity: frameCount) else {
-            MXLog.error("Error creating output conversion buffer: \(destFile.processingFormat) \(frameCount)")
+        guard let outputBuf = AVAudioPCMBuffer(pcmFormat: destTempFile.processingFormat, frameCapacity: frameCount) else {
+            MXLog.error("Error creating output conversion buffer: \(destTempFile.processingFormat) \(frameCount)")
             throw ConversionError.bufferCreationFailed
         }
 
@@ -122,8 +126,7 @@ struct NotificationToneManager {
         while !done {
             var conversionError: NSError?
 
-            let status = converter.convert(to: outputBuf, error: &conversionError) { inputPacketCount, inputConverterStatus in
-                MXLog.info("input packet count: \(inputPacketCount)")
+            let status = converter.convert(to: outputBuf, error: &conversionError) { _, inputConverterStatus in
                 do {
                     try sourceFile.read(into: inputBuf, frameCount: frameCount)
                     if inputBuf.frameLength == 0 {
@@ -140,9 +143,11 @@ struct NotificationToneManager {
             }
 
             if status == .error, let err = conversionError { throw err }
-            if outputBuf.frameLength > 0 { try destFile.write(from: outputBuf) }
+            if outputBuf.frameLength > 0 { try destTempFile.write(from: outputBuf) }
             if status == .endOfStream { break }
         }
+
+        try FileManager.default.moveItem(at: tempURL, to: destURL)
     }
 
     /// Removes a user-imported tone from the library.
@@ -165,5 +170,10 @@ struct NotificationToneManager {
     enum ImportError: Error {
         /// The source file could not be accessed due to sandbox restrictions.
         case couldNotAccessSandboxedResource
+    }
+
+    @globalActor
+    actor ConversionActor {
+        static let shared = ConversionActor()
     }
 }
