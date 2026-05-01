@@ -26,7 +26,7 @@ struct UnitTests: AsyncParsableCommand {
                 "--retries", "3"
             ]).run()
         } catch {
-            failures.append("Unit tests failed: \(error)")
+            failures.append("UnitTests")
             logger.error("\n❌ Unit tests failed. \(error)\n")
         }
         
@@ -34,7 +34,8 @@ struct UnitTests: AsyncParsableCommand {
             do {
                 try await PreviewTests.parse([]).run()
             } catch {
-                failures.append("Preview tests failed: \(error)")
+                failures.append("PreviewTests")
+                logger.error("\n❌ Preview tests failed. \(error)\n")
             }
         }
         
@@ -47,7 +48,8 @@ struct UnitTests: AsyncParsableCommand {
         await CI.collectTestResults(resultBundle: "UnitTests.xcresult", outputName: "unit-junit.xml")
         
         if !failures.isEmpty {
-            logger.error("\n❌ \(failures.count) test suite(s) failed.\n")
+            let failedSuites = "[\(failures.joined(separator: ","))]"
+            logger.error("\n❌ \(failures.count) test suite(s) failed \(failedSuites)\n")
             throw ExitCode.failure
         }
         
