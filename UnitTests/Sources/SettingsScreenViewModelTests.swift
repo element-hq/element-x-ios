@@ -19,7 +19,8 @@ struct SettingsScreenViewModelTests {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: ""))))
         viewModel = SettingsScreenViewModel(userSession: userSession,
                                             appSettings: ServiceLocator.shared.settings,
-                                            isBugReportServiceEnabled: true)
+                                            isBugReportServiceEnabled: true,
+                                            isInSecondaryWindow: false)
         context = viewModel.context
     }
 

@@ -6,8 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
-import UIKit
+import SwiftUI
 
 enum SettingsScreenViewModelAction: Equatable {
     case close
@@ -50,6 +49,8 @@ struct SettingsScreenViewState: BindableState {
     let showAnalyticsSettings: Bool
     
     let isBugReportServiceEnabled: Bool
+    
+    let navigationBarVisibility: Visibility
     
     var bindings = SettingsScreenViewStateBindings()
 }

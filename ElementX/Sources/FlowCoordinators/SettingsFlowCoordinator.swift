@@ -19,6 +19,7 @@ enum SettingsFlowCoordinatorAction {
 
 class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let appLockService: AppLockServiceProtocol
+    private let isInSecondaryWindow: Bool
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let flowParameters: CommonFlowParameters
     
@@ -39,9 +40,11 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     init(appLockService: AppLockServiceProtocol,
+         isInSecondaryWindow: Bool,
          navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
         self.appLockService = appLockService
+        self.isInSecondaryWindow = isInSecondaryWindow
         self.navigationStackCoordinator = navigationStackCoordinator
         self.flowParameters = flowParameters
     }
@@ -72,7 +75,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSettingsScreen(animated: Bool) {
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                                     appSettings: flowParameters.appSettings,
-                                                                                    isBugReportServiceEnabled: flowParameters.bugReportService.isEnabled))
+                                                                                    isBugReportServiceEnabled: flowParameters.bugReportService.isEnabled,
+                                                                                    isInSecondaryWindow: isInSecondaryWindow))
         
         settingsScreenCoordinator.actions
             .sink { [weak self] action in

@@ -13,6 +13,7 @@ struct SettingsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let appSettings: AppSettings
     let isBugReportServiceEnabled: Bool
+    let isInSecondaryWindow: Bool
 }
 
 enum SettingsScreenCoordinatorAction {
@@ -49,7 +50,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     init(parameters: SettingsScreenCoordinatorParameters) {
         viewModel = SettingsScreenViewModel(userSession: parameters.userSession,
                                             appSettings: parameters.appSettings,
-                                            isBugReportServiceEnabled: parameters.isBugReportServiceEnabled)
+                                            isBugReportServiceEnabled: parameters.isBugReportServiceEnabled,
+                                            isInSecondaryWindow: parameters.isInSecondaryWindow)
         
         viewModel.actions
             .sink { [weak self] action in
