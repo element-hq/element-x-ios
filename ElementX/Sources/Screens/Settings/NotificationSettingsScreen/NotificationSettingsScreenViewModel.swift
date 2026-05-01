@@ -20,13 +20,18 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     // periphery:ignore - cancellable tasks get cancelled when reassigned
     @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
     private let tonePreviewer: NotificationTonePreviewer
-    private let toneManager: NotificationToneManager?
+    private let toneManager: NotificationToneManagerProtocol?
 
     var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(appSettings: AppSettings, userNotificationCenter: UserNotificationCenterProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol, isModallyPresented: Bool) {
+    init(appSettings: AppSettings,
+         userNotificationCenter: UserNotificationCenterProtocol,
+         notificationToneManager: NotificationToneManagerProtocol?,
+         notificationSettingsProxy: NotificationSettingsProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         isModallyPresented: Bool) {
         self.appSettings = appSettings
         self.userNotificationCenter = userNotificationCenter
         self.notificationSettingsProxy = notificationSettingsProxy
@@ -34,19 +39,12 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         
         let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
         tonePreviewer = NotificationTonePreviewer(userIndicatorController: userIndicatorController)
-        let toneManager: NotificationToneManager?
-        do {
-            toneManager = try NotificationToneManager(appSettings: appSettings, userIndicatorController: userIndicatorController)
-        } catch {
-            MXLog.error("Catastrophic error setting up tone manager: \(error)")
-            toneManager = nil
-        }
-        self.toneManager = toneManager
+        toneManager = notificationToneManager
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
                                                                          selectedAlertTone: appSettings.selectedNotificationTone ?? .defaultElementXMessageTone,
-                                                                         canSelectTones: toneManager != nil,
-                                                                         availableCustomTones: toneManager?.getCustomTones() ?? []))
+                                                                         canSelectTones: notificationToneManager != nil,
+                                                                         availableCustomTones: notificationToneManager?.customTones() ?? []))
 
         // Listen for changes to AppSettings.
         appSettings.$enableNotifications
@@ -262,7 +260,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             }
             defer { url.stopAccessingSecurityScopedResource() }
             try await toneManager?.addNewToneToLibrary(from: url)
-            state.availableCustomTones = toneManager?.getCustomTones() ?? []
+            state.availableCustomTones = toneManager?.customTones() ?? []
         } catch {
             MXLog.error("Error importing custom tone url: \(error)")
             userIndicatorController.submitIndicator(.init(type: .toast,
@@ -287,7 +285,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                               iconName: "exclamationmark.triangle.fill"))
             }
         }
-        state.availableCustomTones = toneManager?.getCustomTones() ?? []
+        state.availableCustomTones = toneManager?.customTones() ?? []
         MXLog.info("Successfully deleted custom tone(s): \(tones.map(\.label))")
     }
 }

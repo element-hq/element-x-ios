@@ -14627,6 +14627,235 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol, @uncheck
         }
     }
 }
+class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked Sendable {
+
+    //MARK: - setSelectedTone
+
+    var setSelectedToneUnderlyingCallsCount = 0
+    var setSelectedToneCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setSelectedToneUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setSelectedToneUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setSelectedToneUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setSelectedToneUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setSelectedToneCalled: Bool {
+        return setSelectedToneCallsCount > 0
+    }
+    var setSelectedToneReceivedAlertTone: NotificationAlertTone?
+    var setSelectedToneReceivedInvocations: [NotificationAlertTone] = []
+    var setSelectedToneClosure: ((NotificationAlertTone) -> Void)?
+
+    func setSelectedTone(_ alertTone: NotificationAlertTone) {
+        setSelectedToneCallsCount += 1
+        setSelectedToneReceivedAlertTone = alertTone
+        DispatchQueue.main.async {
+            self.setSelectedToneReceivedInvocations.append(alertTone)
+        }
+        setSelectedToneClosure?(alertTone)
+    }
+    //MARK: - customTones
+
+    var customTonesUnderlyingCallsCount = 0
+    var customTonesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return customTonesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = customTonesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                customTonesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    customTonesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var customTonesCalled: Bool {
+        return customTonesCallsCount > 0
+    }
+
+    var customTonesUnderlyingReturnValue: [NotificationAlertTone]!
+    var customTonesReturnValue: [NotificationAlertTone]! {
+        get {
+            if Thread.isMainThread {
+                return customTonesUnderlyingReturnValue
+            } else {
+                var returnValue: [NotificationAlertTone]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = customTonesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                customTonesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    customTonesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var customTonesClosure: (() -> [NotificationAlertTone])?
+
+    func customTones() -> [NotificationAlertTone] {
+        customTonesCallsCount += 1
+        if let customTonesClosure = customTonesClosure {
+            return customTonesClosure()
+        } else {
+            return customTonesReturnValue
+        }
+    }
+    //MARK: - addNewToneToLibrary
+
+    var addNewToneToLibraryFromThrowableError: Error?
+    var addNewToneToLibraryFromUnderlyingCallsCount = 0
+    var addNewToneToLibraryFromCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addNewToneToLibraryFromUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addNewToneToLibraryFromUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addNewToneToLibraryFromUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addNewToneToLibraryFromUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addNewToneToLibraryFromCalled: Bool {
+        return addNewToneToLibraryFromCallsCount > 0
+    }
+    var addNewToneToLibraryFromReceivedSourceURL: URL?
+    var addNewToneToLibraryFromReceivedInvocations: [URL] = []
+
+    var addNewToneToLibraryFromUnderlyingReturnValue: URL!
+    var addNewToneToLibraryFromReturnValue: URL! {
+        get {
+            if Thread.isMainThread {
+                return addNewToneToLibraryFromUnderlyingReturnValue
+            } else {
+                var returnValue: URL? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addNewToneToLibraryFromUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addNewToneToLibraryFromUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addNewToneToLibraryFromUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addNewToneToLibraryFromClosure: ((URL) throws -> URL)?
+
+    @NotificationToneManager.ConversionActor
+    @discardableResult
+    func addNewToneToLibrary(from sourceURL: URL) throws -> URL {
+        if let error = addNewToneToLibraryFromThrowableError {
+            throw error
+        }
+        addNewToneToLibraryFromCallsCount += 1
+        addNewToneToLibraryFromReceivedSourceURL = sourceURL
+        DispatchQueue.main.async {
+            self.addNewToneToLibraryFromReceivedInvocations.append(sourceURL)
+        }
+        if let addNewToneToLibraryFromClosure = addNewToneToLibraryFromClosure {
+            return try addNewToneToLibraryFromClosure(sourceURL)
+        } else {
+            return addNewToneToLibraryFromReturnValue
+        }
+    }
+    //MARK: - deleteCustomTone
+
+    var deleteCustomToneThrowableError: Error?
+    var deleteCustomToneUnderlyingCallsCount = 0
+    var deleteCustomToneCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deleteCustomToneUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteCustomToneUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteCustomToneUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteCustomToneUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var deleteCustomToneCalled: Bool {
+        return deleteCustomToneCallsCount > 0
+    }
+    var deleteCustomToneReceivedAlertTone: NotificationAlertTone?
+    var deleteCustomToneReceivedInvocations: [NotificationAlertTone] = []
+    var deleteCustomToneClosure: ((NotificationAlertTone) throws -> Void)?
+
+    func deleteCustomTone(_ alertTone: NotificationAlertTone) throws {
+        if let error = deleteCustomToneThrowableError {
+            throw error
+        }
+        deleteCustomToneCallsCount += 1
+        deleteCustomToneReceivedAlertTone = alertTone
+        DispatchQueue.main.async {
+            self.deleteCustomToneReceivedInvocations.append(alertTone)
+        }
+        try deleteCustomToneClosure?(alertTone)
+    }
+}
 class OrientationManagerMock: OrientationManagerProtocol, @unchecked Sendable {
 
     //MARK: - setOrientation

@@ -38,9 +38,18 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: NotificationSettingsScreenCoordinatorParameters) {
         self.parameters = parameters
-        
+
+        let toneManager: NotificationToneManagerProtocol?
+        do {
+            toneManager = try NotificationToneManager(appSettings: parameters.appSettings, userIndicatorController: parameters.userIndicatorController)
+        } catch {
+            MXLog.error("Catastrophic error setting up tone manager: \(error)")
+            toneManager = nil
+        }
+
         viewModel = NotificationSettingsScreenViewModel(appSettings: parameters.appSettings,
                                                         userNotificationCenter: parameters.userNotificationCenter,
+                                                        notificationToneManager: toneManager,
                                                         notificationSettingsProxy: parameters.userSession.clientProxy.notificationSettings,
                                                         userIndicatorController: parameters.userIndicatorController,
                                                         isModallyPresented: parameters.isModallyPresented)

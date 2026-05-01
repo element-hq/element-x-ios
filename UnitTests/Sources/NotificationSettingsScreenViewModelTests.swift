@@ -31,7 +31,9 @@ struct NotificationSettingsScreenViewModelTests {
         
         viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                         userNotificationCenter: userNotificationCenter,
+                                                        notificationToneManager: NotificationToneManagerMock(),
                                                         notificationSettingsProxy: notificationSettingsProxy,
+                                                        userIndicatorController: UserIndicatorControllerMock(),
                                                         isModallyPresented: false)
         context = viewModel.context
     }

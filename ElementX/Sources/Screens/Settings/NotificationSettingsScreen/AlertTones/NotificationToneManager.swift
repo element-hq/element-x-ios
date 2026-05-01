@@ -10,7 +10,7 @@ import Foundation
 import UniformTypeIdentifiers
 
 /// Manages notification tone selection, import, conversion, and deletion.
-struct NotificationToneManager {
+struct NotificationToneManager: NotificationToneManagerProtocol {
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
 
@@ -41,7 +41,7 @@ struct NotificationToneManager {
     }
 
     /// Returns all user-imported CAF tones from the library directory, sorted by name.
-    func getCustomTones() -> [NotificationAlertTone] {
+    func customTones() -> [NotificationAlertTone] {
         let availableFiles = try? FileManager
             .default
             .contentsOfDirectory(at: NotificationAlertTone.libraryLocation, includingPropertiesForKeys: nil)
