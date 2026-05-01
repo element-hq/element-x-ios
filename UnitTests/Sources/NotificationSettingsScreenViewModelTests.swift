@@ -7,6 +7,7 @@
 //
 
 @testable import ElementX
+import Foundation
 import MatrixRustSDK
 import Testing
 
@@ -17,6 +18,7 @@ struct NotificationSettingsScreenViewModelTests {
     private var appSettings: AppSettings
     private var userNotificationCenter: UserNotificationCenterMock
     private var notificationSettingsProxy: NotificationSettingsProxyMock
+    private var toneManager: NotificationToneManagerMock
 
     init() throws {
         AppSettings.resetAllSettings()
@@ -28,10 +30,12 @@ struct NotificationSettingsScreenViewModelTests {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
         notificationSettingsProxy.isCallEnabledReturnValue = true
+        toneManager = NotificationToneManagerMock()
+        toneManager.customTonesReturnValue = []
         
         viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                         userNotificationCenter: userNotificationCenter,
-                                                        notificationToneManager: NotificationToneManagerMock(),
+                                                        notificationToneManager: toneManager,
                                                         notificationSettingsProxy: notificationSettingsProxy,
                                                         userIndicatorController: UserIndicatorControllerMock(),
                                                         isModallyPresented: false)
@@ -400,6 +404,104 @@ struct NotificationSettingsScreenViewModelTests {
 
         #expect(notificationSettingsProxy.setInviteForMeEnabledEnabledCalled)
         #expect(notificationSettingsProxy.setInviteForMeEnabledEnabledReceivedEnabled == true)
+    }
+
+    // MARK: - Alert Tones
+
+    @Test
+    func selectingAlertTonePersistsSelection() {
+        // Given a tone and a manager that persists the selection to app settings
+        let tone = NotificationAlertTone.createBundledSound(label: "Test", filename: "test.caf")
+        toneManager.setSelectedToneClosure = { [appSettings] selectedTone in
+            appSettings.selectedNotificationTone = selectedTone
+        }
+
+        // When the user selects that tone
+        context.send(viewAction: .selectAlertTone(tone))
+
+        // Then it is reflected in app settings
+        #expect(appSettings.selectedNotificationTone == tone)
+    }
+
+    @Test
+    func deletingActiveToneResetsSelection() {
+        // Given the active tone is a custom tone
+        let customTone = NotificationAlertTone.createCustomUserSound(filename: "custom.caf")
+        appSettings.selectedNotificationTone = customTone
+        toneManager.customTonesReturnValue = [customTone]
+
+        // When that tone is deleted
+        context.send(viewAction: .deleteCustomAlertTones([customTone]))
+
+        // Then the selection is cleared, falling back to the default
+        #expect(appSettings.selectedNotificationTone == nil)
+    }
+
+    @Test
+    func deletingNonActiveTonePreservesSelection() {
+        // Given a custom tone is active and a different custom tone also exists
+        let activeTone = NotificationAlertTone.createCustomUserSound(filename: "active.caf")
+        let otherTone = NotificationAlertTone.createCustomUserSound(filename: "other.caf")
+        appSettings.selectedNotificationTone = activeTone
+        toneManager.customTonesReturnValue = [activeTone, otherTone]
+
+        // When the non-active tone is deleted
+        context.send(viewAction: .deleteCustomAlertTones([otherTone]))
+
+        // Then the active selection is unchanged
+        #expect(appSettings.selectedNotificationTone == activeTone)
+    }
+
+    @Test
+    func deletingToneUpdatesCustomList() {
+        // Given a manager that initially returns one custom tone
+        let customTone = NotificationAlertTone.createCustomUserSound(filename: "custom.caf")
+        var remainingTones = [customTone]
+        toneManager.customTonesClosure = { remainingTones }
+        let localVM = NotificationSettingsScreenViewModel(appSettings: appSettings,
+                                                          userNotificationCenter: userNotificationCenter,
+                                                          notificationToneManager: toneManager,
+                                                          notificationSettingsProxy: notificationSettingsProxy,
+                                                          userIndicatorController: UserIndicatorControllerMock(),
+                                                          isModallyPresented: false)
+
+        // When the tone is deleted and the manager reports no remaining tones
+        remainingTones = []
+        localVM.context.send(viewAction: .deleteCustomAlertTones([customTone]))
+
+        // Then the available list is empty
+        #expect(localVM.context.viewState.availableCustomTones.isEmpty)
+    }
+
+    @Test
+    func deleteCustomToneFailurePreservesSelection() {
+        // Given the active tone is a custom tone and deletion will fail
+        let customTone = NotificationAlertTone.createCustomUserSound(filename: "custom.caf")
+        appSettings.selectedNotificationTone = customTone
+        toneManager.deleteCustomToneThrowableError = NSError(domain: "test", code: 1)
+        toneManager.customTonesReturnValue = [customTone]
+
+        // When deletion is attempted
+        context.send(viewAction: .deleteCustomAlertTones([customTone]))
+
+        // Then the selection is unchanged
+        #expect(appSettings.selectedNotificationTone == customTone)
+    }
+
+    @Test
+    func importingCustomToneRefreshesAvailableList() async throws {
+        // Given a tone file ready to import
+        let importedTone = NotificationAlertTone.createCustomUserSound(filename: "imported.caf")
+        toneManager.addNewToneToLibraryFromReturnValue = importedTone.location
+        toneManager.customTonesReturnValue = [importedTone]
+
+        // When the import result is received
+        let deferred = deferFulfillment(context.observe(\.viewState.availableCustomTones)) { !$0.isEmpty }
+        context.send(viewAction: .addedCustomAlertTone(.success(importedTone.location)))
+
+        // Then the available list is updated to include the new tone
+        try await deferred.fulfill()
+        #expect(context.viewState.availableCustomTones == [importedTone])
     }
 
     @Test
