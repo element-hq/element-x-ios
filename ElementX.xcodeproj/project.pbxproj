@@ -1352,6 +1352,7 @@
 		E587A513B3E1EE9B56E9AB9C /* DSWaveformImageViews in Frameworks */ = {isa = PBXBuildFile; productRef = 2A4106A0A96DC4C273128AA5 /* DSWaveformImageViews */; };
 		E58F1F3276E98A93F7D39219 /* RoomPollsHistoryScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D8479BB704B7EF696F8ABE /* RoomPollsHistoryScreenCoordinator.swift */; };
 		E591742E509A2A009BF25F9D /* RoomEventStringBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE5800184E93CD5E02C6543 /* RoomEventStringBuilderTests.swift */; };
+		E593841CEBFDDC5387A75EBA /* NotificationToneManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D148332A613AD27E9A2896C9 /* NotificationToneManagerTests.swift */; };
 		E5AB28123E2488F97E953AC0 /* CallNotificationRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1ED17433ADC77287F8904F9 /* CallNotificationRoomTimelineItem.swift */; };
 		E5E43A0CA99AF5BA11B194A2 /* EncryptionSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD14D3ADADE8F6A10F9E88 /* EncryptionSettingsTests.swift */; };
 		E5F4C992845388B50BABACAA /* ServerSelectionScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8BC4C791D0E88CFCF4E5DF /* ServerSelectionScreenCoordinator.swift */; };
@@ -2791,6 +2792,7 @@
 		D071F86CD47582B9196C9D16 /* UserDiscoverySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDiscoverySection.swift; sourceTree = "<group>"; };
 		D09227E671DB30795C43FFFD /* KnockRequestsListScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnockRequestsListScreenViewModel.swift; sourceTree = "<group>"; };
 		D0C2D52E36AD614B3C003EF6 /* RoomTimelineItemViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemViewState.swift; sourceTree = "<group>"; };
+		D148332A613AD27E9A2896C9 /* NotificationToneManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationToneManagerTests.swift; sourceTree = "<group>"; };
 		D17F49E39CC38DAB7B305701 /* LiveLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveLocationManager.swift; sourceTree = "<group>"; };
 		D1896F6288D80E1F3EFB3DF8 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ka; path = ka.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D196116D2DD3F2757D45FCB7 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/SAS.strings; sourceTree = "<group>"; };
@@ -4946,6 +4948,7 @@
 				0F0AF1A13D358CA0BDA6065F /* NotificationContentBuilderTests.swift */,
 				8544F7058D31DBEB8DBFF0F5 /* NotificationSettingsEditScreenViewModelTests.swift */,
 				514363244AE7D68080D44C6F /* NotificationSettingsScreenViewModelTests.swift */,
+				D148332A613AD27E9A2896C9 /* NotificationToneManagerTests.swift */,
 				FA3EB5B1848CF4F64E63C6B7 /* PermalinkTests.swift */,
 				31A6314FDC51DA25712D9A81 /* PillContextTests.swift */,
 				6FA38E813BE14149F173F461 /* PinnedEventsBannerStateTests.swift */,
@@ -7910,6 +7913,7 @@
 				1B2DADC008EE211AF1DA5292 /* NotificationManagerTests.swift in Sources */,
 				C11939FDC40716C4387275A4 /* NotificationSettingsEditScreenViewModelTests.swift in Sources */,
 				E3AC72E3E58F364EF15C1CC7 /* NotificationSettingsScreenViewModelTests.swift in Sources */,
+				E593841CEBFDDC5387A75EBA /* NotificationToneManagerTests.swift in Sources */,
 				50381244BA280451771BE3ED /* PINTextFieldTests.swift in Sources */,
 				1583E2D766E4485FF91662FC /* PermalinkTests.swift in Sources */,
 				3982E60F9C126437D5E488A3 /* PillContextTests.swift in Sources */,
