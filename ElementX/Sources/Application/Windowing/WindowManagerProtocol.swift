@@ -25,7 +25,9 @@ protocol SecureWindowManagerProtocol: WindowManagerProtocol {
     /// Configures the window manager to operate on the supplied scene.
     func configure(withScene scene: UIWindowScene, session: UISceneSession)
     
-    func configure(withOpenWinddowAction openWindowAction: OpenWindowAction, dismissWindowAction: DismissWindowAction)
+    func configure(withOpenWindowAction openWindowAction: OpenWindowAction, dismissWindowAction: DismissWindowAction)
+    
+    func handleSceneDisconnection(_ scene: UIWindowScene)
     
     func handleRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType)
     

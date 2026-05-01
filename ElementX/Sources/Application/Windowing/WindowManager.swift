@@ -48,14 +48,27 @@ class WindowManager: SecureWindowManagerProtocol {
     }
     
     func configure(withScene scene: UIWindowScene, session: UISceneSession) {
-        // This gets called for all opened windows, we're only interested in the
-        // first call, for the main window (works with state restoration too).
-        guard mainWindow == nil else {
+        // This gets called for all opened windows, we're only interested in the main window.
+        guard let userInfo = session.userInfo, userInfo[SceneDelegate.sceneIDKey] as? String == SceneDelegate.mainSceneID else {
+            scene.windows.forEach { $0.tintColor = .compound.textActionPrimary } // SecondaryWindow tinting.
+            return
+        }
+        
+        // Don't allow more than 1 main window to be presented.
+        if mainScene != nil {
+            // The window will be presented momentarily, so lets leave it blank.
+            scene.keyWindow?.rootViewController = UIHostingController(rootView: Color.clear)
+            UIApplication.shared.requestSceneSessionDestruction(session, options: nil)
             return
         }
         
         mainScene = scene
         mainSession = session
+        
+        // Restore the previous window size on macOS as this isn't automatic.
+        if let previousSize = mainWindow?.frame.size {
+            scene.resizeWindowOnMac(to: previousSize)
+        }
         
         mainWindow = scene.keyWindow
         mainWindow.tintColor = .compound.textActionPrimary
@@ -76,10 +89,18 @@ class WindowManager: SecureWindowManagerProtocol {
         delegate?.windowManagerDidConfigureWindows(self)
     }
     
-    func configure(withOpenWinddowAction openWindowAction: OpenWindowAction,
+    func configure(withOpenWindowAction openWindowAction: OpenWindowAction,
                    dismissWindowAction: DismissWindowAction) {
         self.openWindowAction = openWindowAction
         self.dismissWindowAction = dismissWindowAction
+    }
+    
+    func handleSceneDisconnection(_ scene: UIWindowScene) {
+        if scene == mainScene {
+            mainScene = nil
+            mainSession = nil
+            // Leave the mainWindow so we can reapply it's size on macOS.
+        }
     }
     
     func handleRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType) {
@@ -256,5 +277,21 @@ private struct InstantlyDismissingWindow: View {
             .task {
                 dismissWindow()
             }
+    }
+}
+
+private extension UIWindowScene {
+    func resizeWindowOnMac(to size: CGSize) {
+        // Hackity hack 🔨
+        guard ProcessInfo.processInfo.isiOSAppOnMac, let sizeRestrictions else { return }
+        
+        self.sizeRestrictions?.minimumSize = size
+        self.sizeRestrictions?.maximumSize = size
+        
+        Task {
+            try await Task.sleep(for: .milliseconds(100))
+            self.sizeRestrictions?.minimumSize = sizeRestrictions.minimumSize
+            self.sizeRestrictions?.maximumSize = sizeRestrictions.maximumSize
+        }
     }
 }
