@@ -27,4 +27,11 @@ extension CallIntent {
         case .video: .video
         }
     }
+    
+    func stringValue() -> String {
+        switch self {
+        case .audio: "audio"
+        case .video: "video"
+        }
+    }
 }
