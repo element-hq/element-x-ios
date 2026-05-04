@@ -63,6 +63,7 @@
 "action_call" = "Call";
 "action_cancel" = "გაუქმება";
 "action_cancel_for_now" = "Cancel for now";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "აირჩიეთ ფოტო";
 "action_clear" = "გასუფთავება";
 "action_close" = "დახურვა";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "არასწორი მომხმარებლის სახელი და/ან პაროლი";
 "screen_login_error_invalid_user_id" = "მოცემული მომხმარებლის იდენტიფიკატორი არასწორია. დასაშვები ფორმატი: ‘@user:homeserver.org’";
 "screen_login_error_refresh_tokens" = "ეს სერვერი კონფიგურირებულია განახლების გასაღებების გამოსაყენებლად. პაროლზე დაფუძნებული შეცვლისას ისინი მხარდაჭერილი არაა.";
-"screen_login_error_unsupported_authentication" = "მოცემული სახლის სერვერი მხარს არ უჭერს პაროლით ან OIDC-ით შესვლას. გთხოვთ, დაუკავშირდეთ თქვენს ადმინისტრატორს ან აარჩიეთ სხვა სახლის სერვერი.";
+"screen_login_error_unsupported_authentication" = "მოცემული სახლის სერვერი მხარს არ უჭერს პაროლით ან OAuth-ით შესვლას. გთხოვთ, დაუკავშირდეთ თქვენს ადმინისტრატორს ან აარჩიეთ სხვა სახლის სერვერი.";
 "screen_login_form_header" = "შეიყვანეთ თქვენი დეტალები";
 "screen_login_subtitle" = "Matrix არის ღია ქსელი უსაფრთხო, დეცენტრალიზებული კომუნიკაციისთვის.";
 "screen_login_title" = "კეთილი იყოს თქვენი მობრძანება!";

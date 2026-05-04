@@ -63,6 +63,7 @@
 "action_call" = "Panggil";
 "action_cancel" = "Batal";
 "action_cancel_for_now" = "Batalkan untuk saat ini";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Pilih foto";
 "action_clear" = "Hapus";
 "action_close" = "Tutup";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Nama pengguna dan/atau kata sandi salah";
 "screen_login_error_invalid_user_id" = "Ini bukan pengenal pengguna yang valid. Format yang diharapkan: '@pengguna:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Server ini diatur untuk menggunakan token penyegaran. Ini tidak didukung ketika menggunakan log masuk berbasis kata sandi.";
-"screen_login_error_unsupported_authentication" = "Homeserver yang dipilih tidak mendukung log masuk kata sandi atau OIDC. Silakan hubungi admin Anda atau pilih homeserver yang lain.";
+"screen_login_error_unsupported_authentication" = "Homeserver yang dipilih tidak mendukung log masuk kata sandi atau OAuth. Silakan hubungi admin Anda atau pilih homeserver yang lain.";
 "screen_login_form_header" = "Masukkan detail Anda";
 "screen_login_subtitle" = "Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi.";
 "screen_login_title" = "Selamat datang kembali!";

@@ -63,6 +63,7 @@
 "action_call" = "通话";
 "action_cancel" = "取消";
 "action_cancel_for_now" = "暂时取消";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "选择照片";
 "action_clear" = "清除";
 "action_close" = "关闭";
@@ -106,9 +107,9 @@
 "action_go_to_settings" = "前往设置";
 "action_ignore" = "忽略";
 "action_invite" = "邀请";
-"action_invite_friends" = "邀请朋友";
-"action_invite_friends_to_app" = "邀请别人加入 %1$@";
-"action_invite_people_to_app" = "邀请别人加入 %1$@";
+"action_invite_friends" = "邀请人员";
+"action_invite_friends_to_app" = "邀请人员加入 %1$@";
+"action_invite_people_to_app" = "邀请人员加入 %1$@";
 "action_invites_list" = "邀请";
 "action_join" = "加入";
 "action_learn_more" = "了解更多";
@@ -283,7 +284,7 @@
 "common_or" = "或";
 "common_other_options" = "其它选项";
 "common_password" = "密码";
-"common_people" = "用户";
+"common_people" = "人员";
 "common_permalink" = "永久链接";
 "common_permission" = "权限";
 "common_pinned" = "已置顶";
@@ -560,7 +561,7 @@
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "在时间线上隐藏媒体预览";
 "screen_advanced_settings_labs" = "实验室";
 "screen_advanced_settings_live_location_section_description" = "触发一次更新所需的移动距离。";
-"screen_advanced_settings_live_location_section_footer" = "确保已为 app 启用“精确位置”。如需更改该权限请转到 %1$@ 。";
+"screen_advanced_settings_live_location_section_footer" = "确保已为 app 启用“精确位置”。如需更改该权限请转到 %1$@。";
 "screen_advanced_settings_live_location_section_footer_link" = "App 设置";
 "screen_advanced_settings_live_location_section_title" = "实时位置更新";
 "screen_advanced_settings_media_compression_description" = "针对上传进行优化";
@@ -586,13 +587,13 @@
 "screen_advanced_settings_view_source_description" = "启用在时间线上查看消息源码的选项。";
 "screen_analytics_prompt_data_usage" = "我们不会记录或分析任何个人数据";
 "screen_analytics_prompt_help_us_improve" = "共享匿名使用数据以帮助我们排查问题。";
-"screen_analytics_prompt_read_terms" = "你可以阅读我们的所有条款 %1$@。";
+"screen_analytics_prompt_read_terms" = "你可以点击 %1$@ 阅读我们的所有条款。";
 "screen_analytics_prompt_read_terms_content_link" = "此处";
 "screen_analytics_prompt_settings" = "可以随时关闭此功能";
 "screen_analytics_prompt_third_party_sharing" = "我们不会与第三方共享你的数据";
 "screen_analytics_prompt_title" = "帮助改进 %1$@";
 "screen_analytics_settings_help_us_improve" = "共享匿名使用数据以帮助我们排查问题。";
-"screen_analytics_settings_read_terms" = "你可以阅读我们的所有条款 %1$@。";
+"screen_analytics_settings_read_terms" = "你可以点击 %1$@ 阅读我们的所有条款。";
 "screen_analytics_settings_read_terms_content_link" = "此处";
 "screen_analytics_settings_share_data" = "共享分析数据";
 "screen_app_lock_biometric_authentication" = "生物识别认证";
@@ -719,13 +720,13 @@
 "screen_create_poll_settings_section_title" = "设置";
 "screen_create_poll_title" = "创建投票";
 "screen_create_room_action_create_room" = "新房间";
-"screen_create_room_add_people_title" = "邀请朋友";
+"screen_create_room_add_people_title" = "邀请人员";
 "screen_create_room_error_creating_room" = "创建房间时出错";
 "screen_create_room_error_creating_space" = "由于未知错误，空间创建失败。请稍后再试。";
 "screen_create_room_name_placeholder" = "添加名称…";
 "screen_create_room_new_room_title" = "新房间";
 "screen_create_room_new_space_title" = "新空间";
-"screen_create_room_private_option_description" = "仅限受邀者加入。";
+"screen_create_room_private_option_description" = "仅限受邀人员加入。";
 "screen_create_room_private_option_title" = "私密";
 "screen_create_room_public_option_description" = "任何人都能找到此房间。\n你可以随时在房间设置中更改。";
 "screen_create_room_public_option_short_description" = "任何人都可以加入";
@@ -734,7 +735,7 @@
 "screen_create_room_room_access_section_knocking_option_title" = "申请加入";
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "%1$@ 中的任何人都可以加入，但其他人必须申请访问。";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "申请加入";
-"screen_create_room_room_access_section_private_option_description" = "仅限受邀者加入。";
+"screen_create_room_room_access_section_private_option_description" = "仅限受邀人员加入。";
 "screen_create_room_room_access_section_private_option_title" = "私密";
 "screen_create_room_room_access_section_public_option_description" = "任何人都可以加入。";
 "screen_create_room_room_access_section_public_option_title" = "公共";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "用户名与（或）密码不正确";
 "screen_login_error_invalid_user_id" = "这不是合法的用户 ID。预期格式：“@user:homeserver.org”。";
 "screen_login_error_refresh_tokens" = "此服务器使用刷新令牌。使用密码登录时不支持这些功能。";
-"screen_login_error_unsupported_authentication" = "该服务器不支持密码登录与 OIDC 登录。请联系服务器管理员或选择另一服务器。";
+"screen_login_error_unsupported_authentication" = "该服务器不支持密码登录与 OAuth 登录。请联系服务器管理员或选择另一服务器。";
 "screen_login_form_header" = "输入详细信息";
 "screen_login_subtitle" = "Matrix 是一个用于安全、去中心化通信的开放网络。";
 "screen_login_title" = "欢迎回来！";
@@ -1126,7 +1127,7 @@
 "screen_room_attachment_source_poll" = "投票";
 "screen_room_attachment_text_formatting" = "文本格式化";
 "screen_room_change_permissions_administrators" = "管理员";
-"screen_room_change_permissions_ban_people" = "封禁成员";
+"screen_room_change_permissions_ban_people" = "封禁人员";
 "screen_room_change_permissions_change_settings" = "更改设置";
 "screen_room_change_permissions_delete_messages" = "移除消息";
 "screen_room_change_permissions_everyone" = "成员";
@@ -1176,7 +1177,7 @@
 "screen_room_details_error_unmuting" = "无法取消静音此房间，请重试。";
 "screen_room_details_invite_people_dont_close" = "完成之前请勿关闭 app。";
 "screen_room_details_invite_people_preparing" = "正在准备邀请…";
-"screen_room_details_invite_people_title" = "邀请朋友";
+"screen_room_details_invite_people_title" = "邀请人员";
 "screen_room_details_leave_conversation_title" = "离开聊天";
 "screen_room_details_leave_room_title" = "离开房间";
 "screen_room_details_media_gallery_title" = "媒体与文件";
@@ -1309,7 +1310,7 @@
 "screen_roomlist_filter_low_priority_empty_state_title" = "你暂无任何低优先级聊天";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "你可以取消选择筛选器以查看其它对话";
 "screen_roomlist_filter_mixed_empty_state_title" = "你暂无适用于此选项的聊天";
-"screen_roomlist_filter_people" = "用户";
+"screen_roomlist_filter_people" = "人员";
 "screen_roomlist_filter_people_empty_state_title" = "你暂无任何私聊";
 "screen_roomlist_filter_rooms" = "房间";
 "screen_roomlist_filter_rooms_empty_state_title" = "你尚未进入任何房间";
@@ -1336,7 +1337,7 @@
 "screen_security_and_privacy_room_access_anyone_option_title" = "任何人";
 "screen_security_and_privacy_room_access_footer" = "选择哪些无需邀请即可加入此房间的空间成员。%1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "管理空间";
-"screen_security_and_privacy_room_access_invite_only_option_description" = "仅限受邀者加入。";
+"screen_security_and_privacy_room_access_invite_only_option_description" = "仅限受邀人员加入。";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "仅限受邀者";
 "screen_security_and_privacy_room_access_section_header" = "访问权限";
 "screen_security_and_privacy_room_access_space_members_option_multiple_parents_description" = "任何位于已授权空间的成员均可加入。";
@@ -1511,8 +1512,8 @@
 "state_event_room_name_changed_by_you" = "你将房间名称更改为 %1$@";
 "state_event_room_name_removed" = "%1$@ 移除了房间名称";
 "state_event_room_name_removed_by_you" = "你移除了房间名称";
-"state_event_room_none" = "%1$@ 没有任何更改";
-"state_event_room_none_by_you" = "你未做任何更改";
+"state_event_room_none" = "%1$@ 未产生任何更改";
+"state_event_room_none_by_you" = "你未产生任何更改";
 "state_event_room_pinned_events_changed" = "%1$@ 更改了已置顶的消息";
 "state_event_room_pinned_events_changed_by_you" = "你更改了已置顶的消息";
 "state_event_room_pinned_events_pinned" = "%1$@ 置顶了 1 个消息";

@@ -63,6 +63,7 @@
 "action_call" = "Qoʻngʻiroq";
 "action_cancel" = "Bekor qilish";
 "action_cancel_for_now" = "Hozircha bekor qilish";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Fotosuratni tanlang";
 "action_clear" = "Tozalash";
 "action_close" = "Yopish";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Notog'ri foydalanuvchi nomi va/yoki parol";
 "screen_login_error_invalid_user_id" = "Bu haqiqiy foydalanuvchi identifikatori emas. Kutilayotgan format: '@user:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Ushbu server yangilash tokenlaridan foydalanishga moslashtirilgan. Parolga asoslangan tizimga kirishda bunday tokenlar qoʻllab-quvvatlanmaydi.";
-"screen_login_error_unsupported_authentication" = "Tanlangan uy serveri parol yoki OIDC loginni qo'lab-quvvatlamaydi. Iltimos, administratoringizga murojaat qiling yoki boshqa uy serverini tanlang.";
+"screen_login_error_unsupported_authentication" = "Tanlangan uy serveri parol yoki OAuth loginni qo'lab-quvvatlamaydi. Iltimos, administratoringizga murojaat qiling yoki boshqa uy serverini tanlang.";
 "screen_login_form_header" = "Tafsilotlaringizni kiriting";
 "screen_login_subtitle" = "Matrix xavfsiz, markazlashmagan aloqa uchun ochiq tarmoqdir.";
 "screen_login_title" = "Qaytib kelganingizdan xursandmiz!";

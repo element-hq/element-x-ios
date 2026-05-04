@@ -63,6 +63,7 @@
 "action_call" = "Appel";
 "action_cancel" = "Annuler";
 "action_cancel_for_now" = "Annuler pour l’instant";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Choisir une photo";
 "action_clear" = "Effacer";
 "action_close" = "Fermer";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Nom d’utilisateur et/ou mot de passe incorrects";
 "screen_login_error_invalid_user_id" = "Il ne s’agit pas d’un identifiant utilisateur valide. Format attendu : « @user:homeserver.org »";
 "screen_login_error_refresh_tokens" = "Ce serveur est configuré pour utiliser des tokens d'actualisation. Ils ne sont pas pris en charge lors de l'utilisation d'une connexion basée sur un mot de passe.";
-"screen_login_error_unsupported_authentication" = "Le serveur d’accueil sélectionné ne prend pas en charge le mot de passe ou la connexion OIDC. Contactez votre administrateur ou choisissez un autre serveur d’accueil.";
+"screen_login_error_unsupported_authentication" = "Le serveur d’accueil sélectionné ne prend pas en charge le mot de passe ou la connexion OAuth. Contactez votre administrateur ou choisissez un autre serveur d’accueil.";
 "screen_login_form_header" = "Saisissez vos identifiants";
 "screen_login_subtitle" = "Matrix est un réseau ouvert pour une communication sécurisée et décentralisée.";
 "screen_login_title" = "Content de vous revoir !";

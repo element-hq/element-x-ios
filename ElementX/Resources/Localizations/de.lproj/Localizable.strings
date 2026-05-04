@@ -63,6 +63,7 @@
 "action_call" = "Anruf";
 "action_cancel" = "Abbrechen";
 "action_cancel_for_now" = "Vorerst abbrechen";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Foto auswählen";
 "action_clear" = "Löschen";
 "action_close" = "Schließen";
@@ -422,8 +423,8 @@
 "dialog_file_too_large_to_upload_title" = "Die Datei ist zu groß zum Hochladen.";
 "dialog_permission_camera" = "Damit die Anwendung die Kamera verwenden kann, erteile bitte die Berechtigung in den Systemeinstellungen.";
 "dialog_permission_generic" = "Bitte erteile die Berechtigung in den Systemeinstellungen.";
-"dialog_permission_live_location_description_ios" = "To share your live location, %1$@ needs location access when the app is in the background. Go to Settings > Location and select Always";
-"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
+"dialog_permission_live_location_description_ios" = "Um deinen aktuellen Standort zu teilen, benötigt %1$@ Zugriff auf deinen Standort, wenn die App im Hintergrund läuft. Gehe in deine Einstellungen > Standort und aktiviere dort die Option \"Immer\".";
+"dialog_permission_location_description_ios" = "Um deinen aktuellen Standort zu teilen, benötigt %1$@ Zugriff auf deinen Standort. Gehe in deine Einstellungen > Standort.";
 "dialog_permission_location_title_ios" = "%1$@ hat keinen Zugriff auf deinen Standort.";
 "dialog_permission_microphone" = "Damit die App das Mikrofon nutzen kann, gib bitte die Berechtigung in den Systemeinstellungen frei.";
 "dialog_permission_microphone_description_ios" = "Gewähre Zugriff, damit du Audionachrichten aufnehmen und versenden kannst.";
@@ -687,7 +688,7 @@
 "screen_chat_backup_key_backup_action_enable" = "Backup aktivieren";
 "screen_chat_backup_key_backup_description" = "Dadurch kannst du deinen Chatverlauf auf allen neuen Geräten einsehen. Er ist außerdem für die Sicherung von Chats und deiner digitalen Identität erforderlich. %1$@.";
 "screen_chat_backup_key_backup_title" = "Schlüsselspeicher";
-"screen_chat_backup_key_storage_disabled_error" = "Der Schlüsselspeicher muss aktiviert sein, um Datenwiederherstellung zu ermöglichen.";
+"screen_chat_backup_key_storage_disabled_error" = "Die Schlüsselspeicherung muss aktiviert sein, damit deine Chats gesichert werden können.";
 "screen_chat_backup_key_storage_toggle_description" = "Schlüssel von diesem Gerät hochladen";
 "screen_chat_backup_key_storage_toggle_title" = "Schlüsselspeicherung zulassen";
 "screen_chat_backup_recovery_action_change" = "Wiederherstellungsschlüssel ändern";
@@ -745,22 +746,22 @@
 "screen_create_room_room_address_section_title" = "Adresse";
 "screen_create_room_room_visibility_section_title" = " Sichtbarkeit des Chats";
 "screen_create_room_space_selection_no_space_description" = "(kein Space)";
-"screen_create_room_space_selection_no_space_option" = "Do not add to a space";
-"screen_create_room_space_selection_no_space_title" = "Home";
+"screen_create_room_space_selection_no_space_option" = "Nicht zu einem Space hinzufügen";
+"screen_create_room_space_selection_no_space_title" = "Kein Space ausgewählt";
 "screen_create_room_space_selection_sheet_title" = "Space hinzufügen";
 "screen_create_room_topic_label" = "Thema (optional)";
 "screen_create_room_topic_placeholder" = "Beschreibung hinzufügen…";
-"screen_deactivate_account_confirmation_dialog_content" = "Bitte bestätige, dass du dein Konto deaktivieren möchtest. Dies kann nicht rückgängig gemacht werden.";
+"screen_deactivate_account_confirmation_dialog_content" = "Bitte bestätige, dass du dein Konto löschen möchtest. Diese Aktion kann nicht rückgängig gemacht werden.";
 "screen_deactivate_account_delete_all_messages" = "Lösche alle meine Nachrichten";
 "screen_deactivate_account_delete_all_messages_notice" = "Warnung: Künftigen Nutzern werden möglicherweise unvollständige Konversationen angezeigt.";
-"screen_deactivate_account_description" = "Dein Konto zu deaktivieren ist %1$@. Folgendes wird passieren:";
+"screen_deactivate_account_description" = "Das Löschen deines Kontos ist %1$@. Es wird:";
 "screen_deactivate_account_description_bold_part" = "irreversibel";
 "screen_deactivate_account_list_item_1" = "%1$@ dein Konto (du kannst dich nicht erneut anmelden und deine ID kann nicht wiederverwendet werden).";
 "screen_deactivate_account_list_item_1_bold_part" = "Dauerhaft deaktivieren";
 "screen_deactivate_account_list_item_2" = "Du wirst aus allen Chats entfernt.";
 "screen_deactivate_account_list_item_3" = "Lösche deine Kontoinformationen von unserem Identitätsserver.";
 "screen_deactivate_account_list_item_4" = "Deine Nachrichten werden für bereits registrierte Nutzer weiterhin sichtbar sein. Für neue oder unregistrierte Nutzer sind sie nicht verfügbar, wenn du sie löschen solltest.";
-"screen_deactivate_account_title" = "Benutzerkonto deaktivieren";
+"screen_deactivate_account_title" = "Konto löschen";
 "screen_decline_and_block_block_user_option_description" = "Du wirst keine Nachrichten oder Chat-Einladungen von diesem Nutzer sehen.";
 "screen_decline_and_block_block_user_option_title" = "Nutzer blockieren";
 "screen_decline_and_block_report_user_option_description" = "Melde diesen Chat deinem Konto-Anbieter.";
@@ -794,7 +795,7 @@
 "screen_identity_confirmation_cannot_confirm" = "Bestätigung unmöglich?";
 "screen_identity_confirmation_create_new_recovery_key" = "Erstelle einen neuen Wiederherstellungsschlüssel";
 "screen_identity_confirmation_subtitle" = "Wähle eine Verifizierungsmethode, um den sicheren Nachrichtenversand einzurichten.";
-"screen_identity_confirmation_title" = "Bestätige deine Identität";
+"screen_identity_confirmation_title" = "Bestätige deine digitale Identität";
 "screen_identity_confirmation_use_another_device" = "Ein anderes Gerät verwenden";
 "screen_identity_confirmation_use_recovery_key" = "Wiederherstellungsschlüssel verwenden";
 "screen_identity_confirmed_subtitle" = "Du kannst jetzt verschlüsselte Nachrichten lesen und versenden. Dein Chatpartner vertraut nun diesem Gerät.";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Falscher Nutzername und/oder Passwort";
 "screen_login_error_invalid_user_id" = "Dies ist keine gültige Nutzerkennung. Erwartetes Format: '@nutzer:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Dieser Server ist so konfiguriert, dass er Refresh-Tokens verwendet. Diese werden für die passwortbasierte Anmeldung nicht unterstützt.";
-"screen_login_error_unsupported_authentication" = "Der ausgewählte Homeserver unterstützt weder den Login per Passwort noch per OIDC. Bitte kontaktiere deinen Administrator oder wähle einen anderen Homeserver.";
+"screen_login_error_unsupported_authentication" = "Der ausgewählte Homeserver unterstützt weder den Login per Passwort noch per OAuth. Bitte kontaktiere deinen Administrator oder wähle einen anderen Homeserver.";
 "screen_login_form_header" = "Gib deine Daten ein";
 "screen_login_subtitle" = "Matrix ist ein offenes Netzwerk für eine sichere, dezentrale Kommunikation.";
 "screen_login_title" = "Willkommen zurück!";
@@ -1106,7 +1107,7 @@
 "screen_reset_encryption_password_placeholder" = "Eingeben...";
 "screen_reset_encryption_password_subtitle" = "Bestätige, dass du deine digitale Identität zurücksetzen möchtest.";
 "screen_reset_encryption_password_title" = "Gib dein Passwort ein, um fortzufahren";
-"screen_reset_identity_confirmation_subtitle" = "Du wirst jetzt zu deinem %1$@ Konto geleitet, um deine Identität zurückzusetzen. Danach wirst du zur App zurückgebracht.";
+"screen_reset_identity_confirmation_subtitle" = "Du wirst gleich zu deinem %1$@ Konto weitergeleitet, um deine digitale Identität zurückzusetzen. Danach kehrst du zur App zurück.";
 "screen_reset_identity_confirmation_title" = "Bestätigung nicht möglich? Rufe dein Konto auf, um deine digitale Identität zurückzusetzen.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Verifizierung zurückziehen und senden";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Du kannst deine Verifizierung zurückziehen und diese Nachricht trotzdem senden, oder du kannst vorerst abbrechen und es später noch einmal versuchen, nachdem du %1$@ erneut verifiziert hast.";
@@ -1372,7 +1373,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Bestätige, dass die folgenden Zahlen mit denen in deiner anderen Sitzung übereinstimmen.";
 "screen_session_verification_compare_numbers_title" = "Vergleiche die Zahlen";
 "screen_session_verification_complete_subtitle" = "Jetzt kannst du verschlüsselte Nachrichten sicher auf deinem anderen Gerät schreiben und lesen.";
-"screen_session_verification_complete_user_subtitle" = "Jetzt kannst du der Identität dieses Nutzers vertrauen, wenn du Nachrichten sendest oder empfängst.";
+"screen_session_verification_complete_user_subtitle" = "Jetzt kannst du beim Senden oder Empfangen von Nachrichten der digitalen Identität dieses Nutzers vertrauen.";
 "screen_session_verification_device_verified" = "Gerät verifiziert";
 "screen_session_verification_enter_recovery_key" = "Wiederherstellungsschlüssel eingeben";
 "screen_session_verification_failed_subtitle" = "Entweder ist die Anfrage abgelaufen, oder die Anfrage wurde abgelehnt, oder es gab eine Unstimmigkeit bei der Überprüfung.";
@@ -1397,7 +1398,7 @@
 "screen_session_verification_use_another_device_title" = "Öffne die App auf einem anderen verifizierten Gerät";
 "screen_session_verification_user_initiator_subtitle" = "Verifiziere diesen Nutzer für zusätzliche Sicherheit durch den Vergleich einer Reihe von Emojis auf den Geräten. Verwende dazu einen vertraulichen Kommunikationskanal.";
 "screen_session_verification_user_initiator_title" = "Diesen Nutzer verifizieren?";
-"screen_session_verification_user_responder_subtitle" = "Für zusätzliche Sicherheit möchte ein anderer Nutzer deine Identität verifizieren. Es werden dir einige Emojis zum Vergleich angezeigt.";
+"screen_session_verification_user_responder_subtitle" = "Zur zusätzlichen Sicherheit möchte ein anderer Nutzer deine digitale Identität verifizieren. Dir werden einige Emojis zum Abgleich angezeigt.";
 "screen_session_verification_waiting_another_device_subtitle" = "Du solltest ein Popup-Fenster auf dem anderen Gerät sehen. Starte die Verifizierung von dort aus.";
 "screen_session_verification_waiting_another_device_title" = "Starte die Verifizierung auf dem anderen Gerät";
 "screen_session_verification_waiting_other_device_title" = "Starte die Verifizierung auf dem anderen Gerät";
@@ -1425,7 +1426,7 @@
 "screen_signout_in_progress_dialog_content" = "Gerät wird entfernt…";
 "screen_signout_key_backup_disabled_subtitle" = "Dies ist dein einziges Gerät. Wenn du es entfernst, benötigst du einen Wiederherstellungsschlüssel, um deine digitale Identität zu bestätigen und deine verschlüsselten Chats bei deiner nächsten Anmeldung wiederherzustellen.";
 "screen_signout_key_backup_disabled_title" = "Du bist dabei, den Zugriff auf deine verschlüsselten Chats zu verlieren";
-"screen_signout_key_backup_offline_subtitle" = "Das Backup deiner Schlüssel lief noch, als du offline gegangen bist. Verbinde dich erneut, damit deine Schlüssel vor dem Abmelden gesichert werden können.";
+"screen_signout_key_backup_offline_subtitle" = "Deine Schlüssel wurden noch gesichert, während du offline gegangen bist. Stelle die Verbindung wieder her, damit deine Schlüssel gesichert werden können, bevor du dieses Gerät entfernst.";
 "screen_signout_key_backup_offline_title" = "Deine Schlüssel werden noch gesichert";
 "screen_signout_key_backup_ongoing_subtitle" = "Bitte warte, bis der Vorgang abgeschlossen ist, bevor du dieses Gerät entfernst.";
 "screen_signout_key_backup_ongoing_title" = "Deine Schlüssel werden noch gesichert";
@@ -1457,7 +1458,7 @@
 "screen_start_chat_join_room_by_address_supporting_text" = "z. B. #room -name:matrix.org";
 "screen_static_location_sheet_timestamp_description" = "Geteilt %1$@";
 "screen_static_location_sheet_title" = "Auf der Karte";
-"screen_timeline_item_menu_send_failure_changed_identity" = "Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$@ geändert hat.";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Die Nachricht wurde nicht gesendet, da die verifizierte digitale Identität von %1$@ zurückgesetzt wurde.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil %1$@ nicht alle Geräte verifiziert hat.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil du eines oder mehrere deiner Geräte nicht verifiziert hast.";
 "screen_view_location_title" = "Standort";
@@ -1542,7 +1543,7 @@
 "timeline_decryption_failure_historical_event_unverified_device" = "Für den Zugriff auf den Nachrichtenverlauf musst du dieses Gerät verifizieren";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Du hast keinen Zugriff auf diese Nachricht.";
 "timeline_decryption_failure_unable_to_decrypt" = "Nachricht kann nicht entschlüsselt werden";
-"timeline_decryption_failure_withheld_unverified" = "Diese Nachricht wurde entweder blockiert, weil du dein Gerät nicht verifiziert hast oder weil der Absender deine Identität verifizieren muss.";
+"timeline_decryption_failure_withheld_unverified" = "Diese Nachricht wurde entweder blockiert, weil du dein Gerät nicht verifiziert hast, oder weil der Absender deine digitale Identität verifizieren muss.";
 "troubleshoot_notifications_entry_point_push_history_title" = "Verlauf pushen";
 "troubleshoot_notifications_entry_point_section" = "Fehlerbehebung";
 "troubleshoot_notifications_entry_point_title" = "Fehlerbehebung für Benachrichtigungen";

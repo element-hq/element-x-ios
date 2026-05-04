@@ -63,6 +63,7 @@
 "action_call" = "Chamar";
 "action_cancel" = "Cancelar";
 "action_cancel_for_now" = "Cancelar por enquanto";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Escolher foto";
 "action_clear" = "Limpar";
 "action_close" = "Fechar";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Nome de usuário e/ou senha incorretos";
 "screen_login_error_invalid_user_id" = "Esse não é um identificador de usuário válido. Formato esperado: '@usuário:servidor.org'";
 "screen_login_error_refresh_tokens" = "Este servidor está configurado para usar tokens recarregados. Não há suporte a eles ao entrar por uma senha.";
-"screen_login_error_unsupported_authentication" = "O servidor selecionado não suporta a entrada por senha ou OIDC. Entre em contato com o administrador ou escolha outro servidor.";
+"screen_login_error_unsupported_authentication" = "O servidor selecionado não suporta a entrada por senha ou OAuth. Entre em contato com o administrador ou escolha outro servidor.";
 "screen_login_form_header" = "Digite seus dados";
 "screen_login_subtitle" = "A Matrix é uma rede aberta para comunicação segura e descentralizada.";
 "screen_login_title" = "Boas-vindas novamente!";

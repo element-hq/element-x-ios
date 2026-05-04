@@ -63,6 +63,7 @@
 "action_call" = "Hovor";
 "action_cancel" = "Zrušit";
 "action_cancel_for_now" = "Prozatím zrušit";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Vybrat fotku";
 "action_clear" = "Vymazat";
 "action_close" = "Zavřít";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Nesprávné uživatelské jméno nebo heslo";
 "screen_login_error_invalid_user_id" = "Toto není platný identifikátor uživatele. Očekávaný formát: '@user:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Tento server je nakonfigurován tak, aby používal obnovovací tokeny. Ty nejsou podporovány při použití přihlašovacích údajů založených na hesle.";
-"screen_login_error_unsupported_authentication" = "Vybraný domovský server nepodporuje přihlášení pomocí hesla nebo OIDC. Kontaktujte prosím svého správce nebo vyberte jiný domovský server.";
+"screen_login_error_unsupported_authentication" = "Vybraný domovský server nepodporuje přihlášení pomocí hesla nebo OAuth. Kontaktujte prosím svého správce nebo vyberte jiný domovský server.";
 "screen_login_form_header" = "Zadejte své údaje";
 "screen_login_subtitle" = "Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci.";
 "screen_login_title" = "Vítejte zpět!";

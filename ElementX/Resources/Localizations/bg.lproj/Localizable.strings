@@ -63,6 +63,7 @@
 "action_call" = "Обаждане";
 "action_cancel" = "Отказ";
 "action_cancel_for_now" = "Cancel for now";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Избор на снимка";
 "action_clear" = "Изчистване";
 "action_close" = "Затваряне";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Неправилно потребителско име и/или парола";
 "screen_login_error_invalid_user_id" = "Това не е валиден потребителски идентификатор. Очакван формат: ‘@user:homeserver.org’";
 "screen_login_error_refresh_tokens" = "This server is configured to use refresh tokens. These aren't supported when using password based login.";
-"screen_login_error_unsupported_authentication" = "Избраният сървър не поддържа влизане с парола или OIDC. Моля, свържете се с вашия администратор или изберете друг сървър.";
+"screen_login_error_unsupported_authentication" = "Избраният сървър не поддържа влизане с парола или OAuth. Моля, свържете се с вашия администратор или изберете друг сървър.";
 "screen_login_form_header" = "Въведете своите данни";
 "screen_login_subtitle" = "Matrix е отворена мрежа за сигурна, децентрализирана комуникация.";
 "screen_login_title" = "Добре дошли отново!";
