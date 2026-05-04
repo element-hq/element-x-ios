@@ -16,18 +16,20 @@ final class ServerConfirmationScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var client: ClientSDKMock!
     var service: AuthenticationServiceProtocol!
-    var appSettings: AppSettings!
-    
+    var appSettings: AppSettings {
+        dependencies.settings
+    }
+
     var viewModel: ServerConfirmationScreenViewModel!
     var context: ServerConfirmationScreenViewModel.Context {
         viewModel.context
     }
-    
+
+    private let dependencies: DependenciesProtocol
+
     init() {
         AppSettings.resetAllSettings()
-        appSettings = AppSettings()
-        // These app settings are kept local to the tests on purpose as if they are registered in the
-        // ServiceLocator, the providers override that we apply will break other tests in the suite.
+        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
     }
     
     deinit {
@@ -367,7 +369,7 @@ final class ServerConfirmationScreenViewModelTests {
         viewModel = ServerConfirmationScreenViewModel(authenticationService: service,
                                                       mode: mode,
                                                       authenticationFlow: authenticationFlow,
-                                                      appSettings: ServiceLocator.shared.settings,
+                                                      appSettings: dependencies.settings,
                                                       userIndicatorController: UserIndicatorControllerMock())
         
         // Add a fake window in order for the OAuth flow to continue

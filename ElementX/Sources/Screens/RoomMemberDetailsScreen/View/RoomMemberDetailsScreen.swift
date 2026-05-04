@@ -239,8 +239,8 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         return RoomMemberDetailsScreenViewModel(userID: member.userID,
                                                 roomProxy: roomProxyMock,
                                                 userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                analytics: ServiceLocator.shared.analytics,
-                                                appSettings: ServiceLocator.shared.settings)
+                                                userIndicatorController: Dependencies.previewMocks.userIndicatorController,
+                                                analytics: Dependencies.previewMocks.analytics,
+                                                appSettings: Dependencies.previewMocks.settings)
     }
 }

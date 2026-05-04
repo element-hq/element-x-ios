@@ -65,7 +65,7 @@ struct InviteUsersConfirmationSheetView_Previews: PreviewProvider, TestablePrevi
                                                    isSkippable: true,
                                                    userDiscoveryService: UserDiscoveryServiceMock(),
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   appSettings: ServiceLocator.shared.settings)
+                                                   appSettings: Dependencies.previewMocks.settings)
         
         viewModel.state.usersToConfirm = [.mockAlice, .mockCharlie, .mockBob, .mockDan]
         

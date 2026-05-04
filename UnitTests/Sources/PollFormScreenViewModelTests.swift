@@ -18,6 +18,12 @@ struct PollFormScreenViewModelTests {
         viewModel.context
     }
 
+    private let dependencies: DependenciesProtocol
+
+    init() {
+        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+    }
+
     @Test
     mutating func newPollInitialState() async throws {
         setupViewModel()
@@ -179,7 +185,7 @@ struct PollFormScreenViewModelTests {
     private mutating func setupViewModel(mode: PollFormMode = .new) {
         viewModel = PollFormScreenViewModel(mode: mode,
                                             timelineController: MockTimelineController(timelineProxy: timelineProxy),
-                                            analytics: ServiceLocator.shared.analytics,
+                                            analytics: dependencies.analytics,
                                             userIndicatorController: UserIndicatorControllerMock())
     }
 }

@@ -14,15 +14,18 @@ import Testing
 struct UserDetailsEditScreenViewModelTests {
     private var viewModel: UserDetailsEditScreenViewModel!
     private var userIndicatorController: UserIndicatorControllerMock!
-    
+    private let dependencies: DependenciesProtocol
+
     private var context: UserDetailsEditScreenViewModelType.Context {
         viewModel.context
     }
     
     init() {
         userIndicatorController = UserIndicatorControllerMock.default
+        dependencies = TestDependencies(userIndicatorController: userIndicatorController,
+                                        settings: AppSettings())
         viewModel = .init(userSession: UserSessionMock(.init()),
-                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: dependencies.settings),
                           userIndicatorController: userIndicatorController)
     }
     

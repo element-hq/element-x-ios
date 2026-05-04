@@ -18,7 +18,12 @@ struct AuthenticationServiceTests {
     var userSessionStore: UserSessionStoreMock!
     var encryptionKeyProvider: MockEncryptionKeyProvider!
     var service: AuthenticationService!
-    
+    private let dependencies: DependenciesProtocol
+
+    init() {
+        dependencies = TestDependencies(settings: AppSettings())
+    }
+
     @Test
     mutating func passwordLogin() async throws {
         try await setup(serverAddress: "example.com")
@@ -141,7 +146,7 @@ struct AuthenticationServiceTests {
         client = configuration.homeserverClients[serverAddress]
         encryption = EncryptionSDKMock()
         client.encryptionReturnValue = encryption
-        
+
         userSessionStore = UserSessionStoreMock(configuration: .init())
         encryptionKeyProvider = MockEncryptionKeyProvider()
         
@@ -153,7 +158,7 @@ struct AuthenticationServiceTests {
                                         encryptionKeyProvider: encryptionKeyProvider,
                                         classicAppManager: classicAppManager,
                                         clientFactory: clientFactory,
-                                        appSettings: ServiceLocator.shared.settings,
+                                        appSettings: dependencies.settings,
                                         appHooks: AppHooks())
         
         if let classicAppAccount = service.classicAppAccount {

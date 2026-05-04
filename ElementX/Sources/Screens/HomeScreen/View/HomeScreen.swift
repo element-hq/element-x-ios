@@ -224,9 +224,9 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   appSettings: ServiceLocator.shared.settings,
-                                   analyticsService: ServiceLocator.shared.analytics,
+                                   appSettings: Dependencies.previewMocks.settings,
+                                   analyticsService: Dependencies.previewMocks.analytics,
                                    notificationManager: NotificationManagerMock(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                   userIndicatorController: Dependencies.previewMocks.userIndicatorController)
     }
 }

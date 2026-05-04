@@ -374,8 +374,8 @@ struct CallScreen_Previews: PreviewProvider {
                                                         colorScheme: .light),
                                    allowPictureInPicture: false,
                                    appHooks: AppHooks(),
-                                   appSettings: ServiceLocator.shared.settings,
-                                   analyticsService: ServiceLocator.shared.analytics)
+                                   appSettings: Dependencies.previewMocks.settings,
+                                   analyticsService: Dependencies.previewMocks.analytics)
     }()
     
     static var previews: some View {

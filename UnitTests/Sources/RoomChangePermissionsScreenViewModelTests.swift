@@ -18,6 +18,12 @@ struct RoomChangePermissionsScreenViewModelTests {
         viewModel.context
     }
 
+    private let dependencies: DependenciesProtocol
+
+    init() {
+        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+    }
+
     @Test
     mutating func changeSetting() throws {
         setup(isSpace: false)
@@ -125,6 +131,6 @@ struct RoomChangePermissionsScreenViewModelTests {
                                                          ownPowerLevel: ownPowerLevel,
                                                          roomProxy: roomProxy,
                                                          userIndicatorController: UserIndicatorControllerMock(),
-                                                         analytics: ServiceLocator.shared.analytics)
+                                                         analytics: dependencies.analytics)
     }
 }

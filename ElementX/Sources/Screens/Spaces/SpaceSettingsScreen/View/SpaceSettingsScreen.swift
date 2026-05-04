@@ -127,11 +127,11 @@ struct SpaceSettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                                                                 canonicalAlias: "#space:matrix.org",
                                                                                                 members: .allMembersAsCreator)),
                                                            userSession: UserSessionMock(.init()),
-                                                           analyticsService: ServiceLocator.shared.analytics,
-                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                           analyticsService: Dependencies.previewMocks.analytics,
+                                                           userIndicatorController: Dependencies.previewMocks.userIndicatorController,
                                                            notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                            attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                           appSettings: ServiceLocator.shared.settings)
+                                                           appSettings: Dependencies.previewMocks.settings)
     
     static let userViewModel = RoomDetailsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
                                                                                                avatarURL: .mockMXCAvatar,
@@ -139,11 +139,11 @@ struct SpaceSettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                                                                canonicalAlias: "#space:matrix.org",
                                                                                                members: .allMembers)),
                                                           userSession: UserSessionMock(.init()),
-                                                          analyticsService: ServiceLocator.shared.analytics,
-                                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                          analyticsService: Dependencies.previewMocks.analytics,
+                                                          userIndicatorController: Dependencies.previewMocks.userIndicatorController,
                                                           notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          appSettings: ServiceLocator.shared.settings)
+                                                          appSettings: Dependencies.previewMocks.settings)
     
     static var previews: some View {
         ElementNavigationStack {

@@ -18,6 +18,14 @@ struct RoomMembersListScreenViewModelTests {
         viewModel.context
     }
 
+    private let dependencies: DependenciesProtocol
+
+    init() {
+        dependencies = TestDependencies(userIndicatorController: UserIndicatorControllerMock.default,
+                                        settings: AppSettings(),
+                                        analytics: AnalyticsClientMock())
+    }
+
     @Test
     mutating func joinedMembers() async throws {
         setup(members: [.mockAlice, .mockBob])
@@ -277,8 +285,8 @@ struct RoomMembersListScreenViewModelTests {
 
         viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
                                                    roomProxy: roomProxy,
-                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                   analytics: ServiceLocator.shared.analytics)
+                                                   userIndicatorController: dependencies.userIndicatorController,
+                                                   analytics: dependencies.analytics)
 
         let context = viewModel.context
 
@@ -297,7 +305,7 @@ struct RoomMembersListScreenViewModelTests {
         roomProxy = JoinedRoomProxyMock(.init(name: "test", members: members))
         viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
                                                    roomProxy: roomProxy,
-                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                   analytics: ServiceLocator.shared.analytics)
+                                                   userIndicatorController: dependencies.userIndicatorController,
+                                                   analytics: dependencies.analytics)
     }
 }

@@ -21,13 +21,16 @@ final class HomeScreenViewModelTests {
     var roomSummaryProvider: RoomSummaryProviderMock!
     var appSettings: AppSettings!
     var notificationManager: NotificationManagerMock!
-    
+    private let dependencies: DependenciesProtocol
+
     var cancellables = Set<AnyCancellable>()
     
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-        ServiceLocator.shared.register(appSettings: appSettings)
+        dependencies = TestDependencies(userIndicatorController: UserIndicatorControllerMock.default,
+                                        settings: appSettings,
+                                        analytics: AnalyticsClientMock())
     }
     
     deinit {
@@ -441,9 +444,9 @@ final class HomeScreenViewModelTests {
         viewModel = HomeScreenViewModel(userSession: userSession,
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         appSettings: appSettings,
-                                        analyticsService: ServiceLocator.shared.analytics,
+                                        analyticsService: dependencies.analytics,
                                         notificationManager: notificationManager,
-                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                        userIndicatorController: dependencies.userIndicatorController)
     }
 }
 

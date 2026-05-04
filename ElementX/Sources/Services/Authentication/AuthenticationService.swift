@@ -379,16 +379,18 @@ private extension HumanQrLoginError {
 // MARK: - Mocks
 
 extension AuthenticationService {
+    @MainActor
     static var mock: AuthenticationService {
         mock(classicAppManager: nil)
     }
-    
+
+    @MainActor
     static func mock(classicAppManager: ClassicAppManagerProtocol?) -> AuthenticationService {
         AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
                               classicAppManager: classicAppManager,
                               clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
-                              appSettings: ServiceLocator.shared.settings,
+                              appSettings: Dependencies.previewMocks.settings,
                               appHooks: AppHooks())
     }
 }

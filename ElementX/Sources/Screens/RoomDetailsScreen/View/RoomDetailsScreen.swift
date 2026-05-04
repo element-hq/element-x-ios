@@ -408,11 +408,11 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     analyticsService: ServiceLocator.shared.analytics,
-                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                     analyticsService: Dependencies.previewMocks.analytics,
+                     userIndicatorController: Dependencies.previewMocks.userIndicatorController,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: ServiceLocator.shared.settings)
+                     appSettings: Dependencies.previewMocks.settings)
     }
     
     private static func makeSimpleRoomViewModel() -> RoomDetailsScreenViewModel {
@@ -436,11 +436,11 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     analyticsService: ServiceLocator.shared.analytics,
-                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                     analyticsService: Dependencies.previewMocks.analytics,
+                     userIndicatorController: Dependencies.previewMocks.userIndicatorController,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: ServiceLocator.shared.settings)
+                     appSettings: Dependencies.previewMocks.settings)
     }
     
     private static func makeDMViewModel(verificationState: UserIdentityVerificationState) -> RoomDetailsScreenViewModel {
@@ -474,10 +474,10 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                     analyticsService: ServiceLocator.shared.analytics,
-                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                     analyticsService: Dependencies.previewMocks.analytics,
+                     userIndicatorController: Dependencies.previewMocks.userIndicatorController,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: ServiceLocator.shared.settings)
+                     appSettings: Dependencies.previewMocks.settings)
     }
 }

@@ -15,16 +15,18 @@ final class AnalyticsTests {
     private var appSettings: AppSettings
     private var analyticsClient: AnalyticsClientMock
     private var posthogMock: PHGPostHogMock
-    
+    private let dependencies: DependenciesProtocol
+
+    @MainActor
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
-        ServiceLocator.shared.register(analytics: AnalyticsService(client: analyticsClient,
-                                                                   appSettings: appSettings))
-        
+        dependencies = TestDependencies(settings: appSettings,
+                                        analytics: analyticsClient)
+
         posthogMock = PHGPostHogMock()
         posthogMock.configureMockBehavior()
     }
@@ -37,8 +39,8 @@ final class AnalyticsTests {
     func analyticsPromptNewUser() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When the user is prompted for analytics.
-        let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
-        
+        let showPrompt = dependencies.analytics.shouldShowAnalyticsPrompt
+
         // Then the prompt should be shown.
         #expect(showPrompt, "A prompt should be shown for a new user.")
     }
@@ -49,8 +51,8 @@ final class AnalyticsTests {
         appSettings.analyticsConsentState = .optedOut
         
         // When the user is prompted for analytics
-        let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
-        
+        let showPrompt = dependencies.analytics.shouldShowAnalyticsPrompt
+
         // Then no prompt should be shown.
         #expect(!showPrompt, "A prompt should not be shown any more.")
     }
@@ -61,8 +63,8 @@ final class AnalyticsTests {
         appSettings.analyticsConsentState = .optedIn
         
         // When the user is prompted for analytics
-        let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
-        
+        let showPrompt = dependencies.analytics.shouldShowAnalyticsPrompt
+
         // Then no prompt should be shown.
         #expect(!showPrompt, "A prompt should not be shown any more.")
     }
@@ -71,7 +73,7 @@ final class AnalyticsTests {
     func analyticsPromptNotDisplayed() {
         // Given a fresh install of the app Analytics should be disabled
         #expect(appSettings.analyticsConsentState == .unknown)
-        #expect(!ServiceLocator.shared.analytics.isEnabled)
+        #expect(!dependencies.analytics.isEnabled)
         #expect(!analyticsClient.startAnalyticsConfigurationCalled)
     }
     
@@ -79,10 +81,10 @@ final class AnalyticsTests {
     func analyticsOptOut() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When analytics is opt-out
-        ServiceLocator.shared.analytics.optOut()
+        dependencies.analytics.optOut()
         // Then analytics should be disabled
         #expect(appSettings.analyticsConsentState == .optedOut)
-        #expect(!ServiceLocator.shared.analytics.isEnabled)
+        #expect(!dependencies.analytics.isEnabled)
         #expect(!analyticsClient.isRunning)
         // Analytics client should have been stopped
         #expect(analyticsClient.stopCalled)
@@ -92,10 +94,10 @@ final class AnalyticsTests {
     func analyticsOptIn() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When analytics is opt-in
-        ServiceLocator.shared.analytics.optIn()
+        dependencies.analytics.optIn()
         // The analytics should be enabled
         #expect(appSettings.analyticsConsentState == .optedIn)
-        #expect(ServiceLocator.shared.analytics.isEnabled)
+        #expect(dependencies.analytics.isEnabled)
         // Analytics client should have been started
         #expect(analyticsClient.startAnalyticsConfigurationCalled)
     }
@@ -105,8 +107,8 @@ final class AnalyticsTests {
         // Given an existing install of the app where the user previously declined the tracking
         appSettings.analyticsConsentState = .optedOut
         // Analytics should not start
-        #expect(!ServiceLocator.shared.analytics.isEnabled)
-        ServiceLocator.shared.analytics.startIfEnabled()
+        #expect(!dependencies.analytics.isEnabled)
+        dependencies.analytics.startIfEnabled()
         #expect(!analyticsClient.startAnalyticsConfigurationCalled)
     }
     
@@ -115,8 +117,8 @@ final class AnalyticsTests {
         // Given an existing install of the app where the user previously accepted the tracking
         appSettings.analyticsConsentState = .optedIn
         // Analytics should start
-        #expect(ServiceLocator.shared.analytics.isEnabled)
-        ServiceLocator.shared.analytics.startIfEnabled()
+        #expect(dependencies.analytics.isEnabled)
+        dependencies.analytics.startIfEnabled()
         #expect(analyticsClient.startAnalyticsConfigurationCalled)
     }
     
@@ -214,14 +216,14 @@ final class AnalyticsTests {
     func resetConsentState() {
         // Given an existing install of the app where the user previously accpeted the tracking
         appSettings.analyticsConsentState = .optedIn
-        #expect(!ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt)
-        
+        #expect(!dependencies.analytics.shouldShowAnalyticsPrompt)
+
         // When forgetting analytics consents
-        ServiceLocator.shared.analytics.resetConsentState()
-        
+        dependencies.analytics.resetConsentState()
+
         // Then the analytics prompt should be presented again
         #expect(appSettings.analyticsConsentState == .unknown)
-        #expect(ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt)
+        #expect(dependencies.analytics.shouldShowAnalyticsPrompt)
     }
     
     @Test

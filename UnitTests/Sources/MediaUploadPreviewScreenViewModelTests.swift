@@ -14,8 +14,9 @@ import Testing
 final class MediaUploadPreviewScreenViewModelTests {
     var timelineProxy: TimelineProxyMock!
     var clientProxy: ClientProxyMock!
-    var userIndicatorController: UserIndicatorControllerMock!
-    
+    var userIndicatorController: UserIndicatorControllerMock
+    private let dependencies: DependenciesProtocol
+
     var viewModel: MediaUploadPreviewScreenViewModel!
     var context: MediaUploadPreviewScreenViewModel.Context {
         viewModel.context
@@ -30,7 +31,11 @@ final class MediaUploadPreviewScreenViewModelTests {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
         appSettings.optimizeMediaUploads = false
-        ServiceLocator.shared.register(appSettings: appSettings)
+
+        userIndicatorController = UserIndicatorControllerMock.default
+
+        dependencies = TestDependencies(userIndicatorController: userIndicatorController,
+                                        settings: appSettings)
     }
     
     deinit {
@@ -289,14 +294,12 @@ final class MediaUploadPreviewScreenViewModelTests {
         if let maxUploadSizeResult {
             clientProxy.underlyingMaxMediaUploadSize = maxUploadSizeResult
         }
-        
-        userIndicatorController = UserIndicatorControllerMock()
-        
+
         viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: urls,
                                                       title: "Some File",
                                                       isRoomEncrypted: true,
                                                       shouldShowCaptionWarning: true,
-                                                      mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                                                      mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: dependencies.settings),
                                                       timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                       clientProxy: clientProxy,
                                                       userIndicatorController: userIndicatorController)

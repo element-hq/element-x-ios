@@ -15,11 +15,17 @@ import Testing
 struct LocationSharingScreenViewModelTests {
     private var timelineProxy: TimelineProxyMock!
     private var viewModel: LocationSharingScreenViewModel!
-    
+
+    private let dependencies: DependenciesProtocol
+
     private var context: LocationSharingScreenViewModel.Context {
         viewModel.context
     }
-    
+
+    init() {
+        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+    }
+
     @Test
     mutating func userDidPan() {
         setupViewModel()
@@ -395,11 +401,11 @@ struct LocationSharingScreenViewModelTests {
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: nil, initialLiveLocationShare: nil),
-                                                   mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                                   mapURLBuilder: dependencies.settings.mapTilerConfiguration,
                                                    roomProxy: roomProxyMock,
                                                    timelineController: MockTimelineController(timelineProxy: TimelineProxyMock(.init())),
                                                    liveLocationManager: LiveLocationManagerMock(.init()),
-                                                   analytics: ServiceLocator.shared.analytics,
+                                                   analytics: dependencies.analytics,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
 
@@ -428,12 +434,12 @@ struct LocationSharingScreenViewModelTests {
     private mutating func setupViewModel(liveLocationManagerConfiguration: LiveLocationManagerMock.Configuration = .init(),
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
         timelineProxy = TimelineProxyMock(.init())
-        viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
-                                                   mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+        viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
+                                                   mapURLBuilder: dependencies.settings.mapTilerConfiguration,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                    liveLocationManager: LiveLocationManagerMock(liveLocationManagerConfiguration),
-                                                   analytics: ServiceLocator.shared.analytics,
+                                                   analytics: dependencies.analytics,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         viewModel.state.bindings.isLocationAuthorized = true
@@ -442,12 +448,12 @@ struct LocationSharingScreenViewModelTests {
     private mutating func setupViewModel(liveLocationManagerMock: LiveLocationManagerMock,
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
         timelineProxy = TimelineProxyMock(.init())
-        viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
-                                                   mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+        viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
+                                                   mapURLBuilder: dependencies.settings.mapTilerConfiguration,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                    liveLocationManager: liveLocationManagerMock,
-                                                   analytics: ServiceLocator.shared.analytics,
+                                                   analytics: dependencies.analytics,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         viewModel.state.bindings.isLocationAuthorized = true
@@ -464,11 +470,11 @@ struct LocationSharingScreenViewModelTests {
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: sender, initialLiveLocationShare: initialShare),
-                                                   mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                                   mapURLBuilder: dependencies.settings.mapTilerConfiguration,
                                                    roomProxy: roomProxyMock,
                                                    timelineController: MockTimelineController(timelineProxy: TimelineProxyMock(.init())),
                                                    liveLocationManager: LiveLocationManagerMock(.init()),
-                                                   analytics: ServiceLocator.shared.analytics,
+                                                   analytics: dependencies.analytics,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
     }

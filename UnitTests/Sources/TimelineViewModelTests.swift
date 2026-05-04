@@ -16,11 +16,15 @@ import Testing
 final class TimelineViewModelTests {
     var userIndicatorControllerMock: UserIndicatorControllerMock!
     var cancellables = Set<AnyCancellable>()
+    private let dependencies: DependenciesProtocol
 
     init() async throws {
         AppSettings.resetAllSettings()
         cancellables.removeAll()
         userIndicatorControllerMock = UserIndicatorControllerMock.default
+        dependencies = TestDependencies(userIndicatorController: userIndicatorControllerMock,
+                                        settings: AppSettings(),
+                                        analytics: AnalyticsClientMock())
     }
 
     deinit {
@@ -319,9 +323,9 @@ final class TimelineViewModelTests {
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
-                                          appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          appSettings: dependencies.settings,
+                                          analyticsService: dependencies.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         return (viewModel, roomProxy, timelineProxy, timelineController)
@@ -346,9 +350,9 @@ final class TimelineViewModelTests {
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
-                                          appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          appSettings: dependencies.settings,
+                                          analyticsService: dependencies.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
@@ -371,9 +375,9 @@ final class TimelineViewModelTests {
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
-                                          appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          appSettings: dependencies.settings,
+                                          analyticsService: dependencies.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
@@ -408,9 +412,9 @@ final class TimelineViewModelTests {
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
-                                          appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          appSettings: dependencies.settings,
+                                          analyticsService: dependencies.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
@@ -445,9 +449,9 @@ final class TimelineViewModelTests {
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
-                                          appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          appSettings: dependencies.settings,
+                                          analyticsService: dependencies.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
@@ -488,9 +492,9 @@ final class TimelineViewModelTests {
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
-                                          appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          appSettings: dependencies.settings,
+                                          analyticsService: dependencies.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         #expect(configuration.pinnedEventIDs == viewModel.context.viewState.pinnedEventIDs)
@@ -517,9 +521,9 @@ final class TimelineViewModelTests {
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
-                                          appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          appSettings: dependencies.settings,
+                                          analyticsService: dependencies.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
@@ -587,9 +591,9 @@ final class TimelineViewModelTests {
                           mediaPlayerProvider: MediaPlayerProviderMock(),
                           userIndicatorController: userIndicatorControllerMock,
                           appMediator: AppMediatorMock.default,
-                          appSettings: ServiceLocator.shared.settings,
-                          analyticsService: ServiceLocator.shared.analytics,
-                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                          appSettings: dependencies.settings,
+                          analyticsService: dependencies.analytics,
+                          emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                           linkMetadataProvider: LinkMetadataProvider(),
                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }

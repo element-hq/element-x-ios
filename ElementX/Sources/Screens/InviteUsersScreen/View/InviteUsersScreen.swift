@@ -193,7 +193,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
                                                    isSkippable: true,
                                                    userDiscoveryService: userDiscoveryService,
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   appSettings: ServiceLocator.shared.settings)
+                                                   appSettings: Dependencies.previewMocks.settings)
         
         if let searchQuery {
             viewModel.context.searchQuery = searchQuery

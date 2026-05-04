@@ -71,9 +71,9 @@ struct CreateRoomSpaceSelectionSheet_Previews: PreviewProvider, TestablePreview 
                                          spaceSelectionMode: .editableSpacesList(preSelectedSpace: nil),
                                          shouldShowCancelButton: false,
                                          userSession: userSession,
-                                         analytics: ServiceLocator.shared.analytics,
-                                         userIndicatorController: UserIndicatorControllerMock(),
-                                         appSettings: ServiceLocator.shared.settings)
+                                         analytics: Dependencies.previewMocks.analytics,
+                                         userIndicatorController: Dependencies.previewMocks.userIndicatorController,
+                                         appSettings: Dependencies.previewMocks.settings)
     }()
     
     static var previews: some View {

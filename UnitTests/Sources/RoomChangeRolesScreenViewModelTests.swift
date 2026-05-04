@@ -17,7 +17,13 @@ struct RoomChangeRolesScreenViewModelTests {
     var context: RoomChangeRolesScreenViewModelType.Context {
         viewModel.context
     }
-    
+
+    private let dependencies: DependenciesProtocol
+
+    init() {
+        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+    }
+
     @Test
     mutating func initialStateAdministrators() {
         setup(mode: .administrator)
@@ -197,6 +203,6 @@ struct RoomChangeRolesScreenViewModelTests {
                                                    roomProxy: roomProxy,
                                                    mediaProvider: MediaProviderMock(configuration: .init()),
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   analytics: ServiceLocator.shared.analytics)
+                                                   analytics: dependencies.analytics)
     }
 }

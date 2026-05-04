@@ -83,11 +83,11 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
                                              timelineController: MockTimelineController(),
                                              userSession: UserSessionMock(.init()),
                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                             userIndicatorController: Dependencies.previewMocks.userIndicatorController,
                                              appMediator: AppMediatorMock.default,
-                                             appSettings: ServiceLocator.shared.settings,
-                                             analyticsService: ServiceLocator.shared.analytics,
-                                             emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                             appSettings: Dependencies.previewMocks.settings,
+                                             analyticsService: Dependencies.previewMocks.analytics,
+                                             emojiProvider: EmojiProvider(appSettings: Dependencies.previewMocks.settings),
                                              linkMetadataProvider: LinkMetadataProvider(),
                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     

@@ -19,7 +19,9 @@ struct ChatsTabFlowCoordinatorTests {
     var splitCoordinator: NavigationSplitCoordinator!
     var notificationManager: NotificationManagerMock!
     let stateMachineFactory = PublishedStateMachineFactory()
-    
+
+    private let dependencies: DependenciesProtocol
+
     var cancellables = Set<AnyCancellable>()
     
     var detailCoordinator: CoordinatorProtocol? {
@@ -31,6 +33,8 @@ struct ChatsTabFlowCoordinatorTests {
     }
     
     init() async throws {
+        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())
         
@@ -42,19 +46,19 @@ struct ChatsTabFlowCoordinatorTests {
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: timelineControllerFactory,
-                                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: AppMediatorMock.default,
-                                                  appSettings: ServiceLocator.shared.settings,
+                                                  appSettings: dependencies.settings,
                                                   appHooks: AppHooks(),
-                                                  analytics: ServiceLocator.shared.analytics,
+                                                  analytics: dependencies.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: notificationManager,
                                                   stateMachineFactory: stateMachineFactory)
         chatsTabFlowCoordinator = ChatsTabFlowCoordinator(isNewLogin: false,
                                                           navigationSplitCoordinator: splitCoordinator,
                                                           flowParameters: flowParameters)
-        
+
         let deferred = deferFulfillment(stateMachineFactory.chatsTabFlowStatePublisher) { $0 == .roomList(detailState: nil) }
         chatsTabFlowCoordinator.start()
         try await deferred.fulfill()

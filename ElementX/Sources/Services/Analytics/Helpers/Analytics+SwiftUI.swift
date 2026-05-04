@@ -9,5 +9,5 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    @Entry var analyticsService: AnalyticsService = ServiceLocator.shared.analytics
+    @Entry var analyticsService: AnalyticsService?
 }

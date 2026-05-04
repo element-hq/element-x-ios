@@ -13,6 +13,8 @@ import Testing
 
 @MainActor
 struct UserSessionFlowCoordinatorTests {
+    private let dependencies: DependenciesProtocol
+
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator!
     private var rootCoordinator: NavigationRootCoordinator!
     private var userIndicatorController: UserIndicatorControllerMock!
@@ -50,17 +52,20 @@ struct UserSessionFlowCoordinatorTests {
         appMediator.networkMonitor = networkMonitor
         
         userIndicatorController = UserIndicatorControllerMock()
-        
+        dependencies = TestDependencies(userIndicatorController: userIndicatorController,
+                                        settings: AppSettings(),
+                                        analytics: AnalyticsClientMock())
+
         let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: appMediator,
-                                                  appSettings: ServiceLocator.shared.settings,
+                                                  appSettings: dependencies.settings,
                                                   appHooks: AppHooks(),
-                                                  analytics: ServiceLocator.shared.analytics,
+                                                  analytics: dependencies.analytics,
                                                   userIndicatorController: userIndicatorController,
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: stateMachineFactory)

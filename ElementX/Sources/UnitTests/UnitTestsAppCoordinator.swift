@@ -14,20 +14,17 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
     static let targetAppHooks = AppHooks()
     
     let windowManager: SecureWindowManagerProtocol
-    
+
     init(appDelegate: AppDelegate) {
         windowManager = WindowManager(appDelegate: appDelegate)
-        ServiceLocator.shared.register(userIndicatorController: UserIndicatorControllerMock.default)
-        
+
         AppSettings.configureWithSuiteName("io.element.elementx.unittests")
         AppSettings.resetAllSettings()
-        ServiceLocator.shared.register(appSettings: AppSettings())
-        
+        let appSettings = AppSettings()
+
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
-        ServiceLocator.shared.register(analytics: AnalyticsService(client: analyticsClient,
-                                                                   appSettings: ServiceLocator.shared.settings))
-        
+
         // As the tests take advantage of Rust's ability to redirect the log files, there is
         // often some debris left from the previous run, so we wipe the entire directory.
         // This is an NOT an advised way to delete logs in production, `Tracing.deleteLogFiles`

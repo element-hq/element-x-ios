@@ -20,11 +20,14 @@ final class ComposerToolbarViewModelTests {
     private var viewModel: ComposerToolbarViewModel!
     private var completionSuggestionServiceMock: CompletionSuggestionServiceMock!
     private var draftServiceMock: ComposerDraftServiceMock!
-    
+    private let dependencies: DependenciesProtocol
+
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-        ServiceLocator.shared.register(appSettings: appSettings)
+        let analyticsClient = AnalyticsClientMock()
+        dependencies = TestDependencies(settings: appSettings, analytics: analyticsClient)
+
         setUpViewModel()
     }
     
@@ -96,8 +99,8 @@ final class ComposerToolbarViewModelTests {
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                             appSettings: ServiceLocator.shared.settings,
-                                             analyticsService: ServiceLocator.shared.analytics,
+                                             appSettings: dependencies.settings,
+                                             analyticsService: dependencies.analytics,
                                              composerDraftService: draftServiceMock)
         
         #expect(viewModel.state.suggestions == suggestions)
@@ -713,8 +716,8 @@ final class ComposerToolbarViewModelTests {
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                             appSettings: ServiceLocator.shared.settings,
-                                             analyticsService: ServiceLocator.shared.analytics,
+                                             appSettings: dependencies.settings,
+                                             analyticsService: dependencies.analytics,
                                              composerDraftService: draftServiceMock)
         
         var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
@@ -758,8 +761,8 @@ final class ComposerToolbarViewModelTests {
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                             appSettings: ServiceLocator.shared.settings,
-                                             analyticsService: ServiceLocator.shared.analytics,
+                                             appSettings: dependencies.settings,
+                                             analyticsService: dependencies.analytics,
                                              composerDraftService: draftServiceMock)
         
         var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
@@ -793,8 +796,8 @@ final class ComposerToolbarViewModelTests {
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                             appSettings: ServiceLocator.shared.settings,
-                                             analyticsService: ServiceLocator.shared.analytics,
+                                             appSettings: dependencies.settings,
+                                             analyticsService: dependencies.analytics,
                                              composerDraftService: draftServiceMock)
         
         let deferred = deferFulfillment(viewModel.context.$viewState, message: "Composer should be enabled") { $0.canSend == true }
@@ -817,8 +820,8 @@ final class ComposerToolbarViewModelTests {
                                              completionSuggestionService: completionSuggestionServiceMock,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                             appSettings: ServiceLocator.shared.settings,
-                                             analyticsService: ServiceLocator.shared.analytics,
+                                             appSettings: dependencies.settings,
+                                             analyticsService: dependencies.analytics,
                                              composerDraftService: draftServiceMock)
         viewModel.context.composerFormattingEnabled = true
     }

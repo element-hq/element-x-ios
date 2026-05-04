@@ -18,7 +18,13 @@ struct ServerSelectionScreenViewModelTests {
     var context: ServerSelectionScreenViewModelType.Context {
         viewModel.context
     }
-    
+
+    private let dependencies: DependenciesProtocol
+
+    init() {
+        dependencies = TestDependencies(settings: AppSettings())
+    }
+
     @Test
     mutating func selectForLogin() async throws {
         // Given a view model for login.
@@ -153,12 +159,12 @@ struct ServerSelectionScreenViewModelTests {
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,
-                                        appSettings: ServiceLocator.shared.settings,
+                                        appSettings: dependencies.settings,
                                         appHooks: AppHooks())
         
         viewModel = ServerSelectionScreenViewModel(authenticationService: service,
                                                    authenticationFlow: authenticationFlow,
-                                                   appSettings: ServiceLocator.shared.settings,
+                                                   appSettings: dependencies.settings,
                                                    userIndicatorController: UserIndicatorControllerMock())
     }
 }

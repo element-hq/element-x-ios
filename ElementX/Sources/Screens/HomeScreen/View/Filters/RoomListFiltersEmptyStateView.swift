@@ -59,10 +59,10 @@ struct RoomListFiltersEmptyStateView_Previews: PreviewProvider, TestablePreview 
         VStack(spacing: 24) {
             ForEach(RoomListFilter.allCases) { filter in
                 RoomListFiltersEmptyStateView(state: .init(activeFilters: [filter],
-                                                           appSettings: ServiceLocator.shared.settings))
+                                                           appSettings: Dependencies.previewMocks.settings))
             }
             RoomListFiltersEmptyStateView(state: .init(activeFilters: [.people, .favourites],
-                                                       appSettings: ServiceLocator.shared.settings))
+                                                       appSettings: Dependencies.previewMocks.settings))
         }
         .padding(.bottom)
         .previewLayout(.sizeThatFits)

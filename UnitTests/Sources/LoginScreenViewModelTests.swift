@@ -18,7 +18,13 @@ struct LoginScreenViewModelTests {
     
     var clientFactory: AuthenticationClientFactoryMock!
     var service: AuthenticationServiceProtocol!
-    
+
+    private let dependencies: DependenciesProtocol
+
+    init() {
+        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+    }
+
     @Test
     mutating func basicServer() async {
         // Given the view model configured for a basic server example.com that only supports password authentication.
@@ -232,7 +238,7 @@ struct LoginScreenViewModelTests {
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,
-                                        appSettings: ServiceLocator.shared.settings,
+                                        appSettings: dependencies.settings,
                                         appHooks: AppHooks())
         
         guard case .success = await service
@@ -244,7 +250,7 @@ struct LoginScreenViewModelTests {
         viewModel = LoginScreenViewModel(authenticationService: service,
                                          loginHint: loginHint,
                                          userIndicatorController: UserIndicatorControllerMock(),
-                                         appSettings: ServiceLocator.shared.settings,
-                                         analytics: ServiceLocator.shared.analytics)
+                                         appSettings: dependencies.settings,
+                                         analytics: dependencies.analytics)
     }
 }

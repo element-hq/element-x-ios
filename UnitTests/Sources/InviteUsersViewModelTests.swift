@@ -16,11 +16,12 @@ final class InviteUsersScreenViewModelTests {
     var userDiscoveryService: UserDiscoveryServiceMock!
     var clientProxy: ClientProxyMock!
     var appSettings: AppSettings!
+    private let dependencies: DependenciesProtocol
 
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-        ServiceLocator.shared.register(appSettings: appSettings)
+        dependencies = TestDependencies(settings: appSettings)
     }
     
     deinit {
@@ -175,7 +176,7 @@ final class InviteUsersScreenViewModelTests {
                                                    isSkippable: isSkippable,
                                                    userDiscoveryService: userDiscoveryService,
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   appSettings: ServiceLocator.shared.settings)
+                                                   appSettings: dependencies.settings)
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel
     }

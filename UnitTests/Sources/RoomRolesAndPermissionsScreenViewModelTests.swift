@@ -18,6 +18,12 @@ struct RoomRolesAndPermissionsScreenViewModelTests {
         viewModel.context
     }
 
+    private let dependencies: DependenciesProtocol
+
+    init() {
+        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+    }
+
     @Test
     mutating func emptyCounters() {
         setup(members: .allMembers)
@@ -84,6 +90,6 @@ struct RoomRolesAndPermissionsScreenViewModelTests {
         roomProxy = JoinedRoomProxyMock(.init(members: members))
         viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
                                                            userIndicatorController: UserIndicatorControllerMock(),
-                                                           analytics: ServiceLocator.shared.analytics)
+                                                           analytics: dependencies.analytics)
     }
 }

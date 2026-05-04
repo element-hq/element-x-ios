@@ -18,7 +18,15 @@ final class RoomFlowCoordinatorTests {
     var roomFlowCoordinator: RoomFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!
     var cancellables = Set<AnyCancellable>()
-    
+
+    private let dependencies: DependenciesProtocol
+
+    init() {
+        dependencies = TestDependencies(userIndicatorController: UserIndicatorControllerMock.default,
+                                        settings: AppSettings(),
+                                        analytics: AnalyticsClientMock())
+    }
+
     deinit {
         AppSettings.resetAllSettings()
     }
@@ -236,7 +244,7 @@ final class RoomFlowCoordinatorTests {
     
     @Test
     func threadedEventRoutes() async throws {
-        ServiceLocator.shared.settings.threadsEnabled = true
+        dependencies.settings.threadsEnabled = true
         setupRoomFlowCoordinator()
         
         // Navigate directly to the threaded event
@@ -479,13 +487,13 @@ final class RoomFlowCoordinatorTests {
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: timelineControllerFactory,
-                                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  emojiProvider: EmojiProvider(appSettings: dependencies.settings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: AppMediatorMock.default,
-                                                  appSettings: ServiceLocator.shared.settings,
+                                                  appSettings: dependencies.settings,
                                                   appHooks: AppHooks(),
-                                                  analytics: ServiceLocator.shared.analytics,
-                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                  analytics: dependencies.analytics,
+                                                  userIndicatorController: dependencies.userIndicatorController,
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: StateMachineFactory())
         

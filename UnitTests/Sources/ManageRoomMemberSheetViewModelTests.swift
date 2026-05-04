@@ -15,7 +15,13 @@ struct ManageRoomMemberSheetViewModelTests {
     private var context: ManageRoomMemberSheetViewModel.Context! {
         viewModel.context
     }
-    
+
+    private let dependencies: DependenciesProtocol
+
+    init() {
+        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+    }
+
     @Test
     mutating func kick() async throws {
         let testReason = "Kick Test"
@@ -32,7 +38,7 @@ struct ManageRoomMemberSheetViewModelTests {
                                                    permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   analyticsService: ServiceLocator.shared.analytics,
+                                                   analyticsService: dependencies.analytics,
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
@@ -64,7 +70,7 @@ struct ManageRoomMemberSheetViewModelTests {
                                                    permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   analyticsService: ServiceLocator.shared.analytics,
+                                                   analyticsService: dependencies.analytics,
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
@@ -87,7 +93,7 @@ struct ManageRoomMemberSheetViewModelTests {
                                                    permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   analyticsService: ServiceLocator.shared.analytics,
+                                                   analyticsService: dependencies.analytics,
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         
         let deferredAction = deferFulfillment(viewModel.actions) { action in
