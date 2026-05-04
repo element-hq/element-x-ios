@@ -11,6 +11,8 @@ import CoreLocation
 import SwiftUI
 
 class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
+    private let analytics: AnalyticsService
+
     var windowManager: any SecureWindowManagerProtocol
     
     func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: SecondaryWindowType?) -> Bool {
@@ -55,7 +57,8 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(PreviewsWrapperView(wrapper: previewsWrapper))
+        AnyView(PreviewsWrapperView(wrapper: previewsWrapper)
+            .environment(\.analyticsService, analytics))
     }
     
     private func setupSignalling() {
