@@ -70,7 +70,9 @@ class WindowManager: SecureWindowManagerProtocol {
             scene.resizeWindowOnMac(to: previousSize)
         }
         
-        mainWindow = scene.keyWindow
+        // `keyWindow` can be nil on iOS 26 until the scene becomes active, but the
+        // SwiftUI WindowGroup's window is already attached to the scene by then.
+        mainWindow = scene.keyWindow ?? scene.windows.first
         mainWindow.tintColor = .compound.textActionPrimary
         
         overlayWindow = PassthroughWindow(windowScene: scene)
