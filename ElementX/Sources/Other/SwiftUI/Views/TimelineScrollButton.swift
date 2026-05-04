@@ -64,7 +64,6 @@ struct TimelineScrollButton: View {
                      relativeTo: .compound.bodyLG)
             .foregroundColor(.compound.iconSecondary)
             .padding(iconPadding)
-            .offset(y: direction == .down ? 1 : -1)
             .background {
                 Circle()
                     .fill(Color.compound.iconOnSolidPrimary)
