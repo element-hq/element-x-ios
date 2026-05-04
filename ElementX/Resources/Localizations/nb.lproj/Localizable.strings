@@ -63,6 +63,7 @@
 "action_call" = "Ring";
 "action_cancel" = "Avbryt";
 "action_cancel_for_now" = "Avbryt for nå";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Velg bilde";
 "action_clear" = "Tøm";
 "action_close" = "Lukk";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Feil brukernavn og/eller passord";
 "screen_login_error_invalid_user_id" = "Dette er ikke en gyldig brukeridentifikator. Forventet format: '@bruker:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Denne serveren er konfigurert til å bruke oppdateringstokener. Disse støttes ikke når du bruker passordbasert pålogging.";
-"screen_login_error_unsupported_authentication" = "Den valgte hjemmeserveren støtter ikke passord eller OIDC-pålogging. Ta kontakt med administratoren din eller velg en annen hjemmeserver.";
+"screen_login_error_unsupported_authentication" = "Den valgte hjemmeserveren støtter ikke passord eller OAuth-pålogging. Ta kontakt med administratoren din eller velg en annen hjemmeserver.";
 "screen_login_form_header" = "Skriv inn opplysningene dine";
 "screen_login_subtitle" = "Matrix er et åpent nettverk for sikker, desentralisert kommunikasjon.";
 "screen_login_title" = "Velkommen tilbake!";

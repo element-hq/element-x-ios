@@ -63,6 +63,7 @@
 "action_call" = "Позвонить";
 "action_cancel" = "Отмена";
 "action_cancel_for_now" = "Пока отменить";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Выбрать фото";
 "action_clear" = "Очистить";
 "action_close" = "Закрыть";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Неверное имя пользователя и/или пароль";
 "screen_login_error_invalid_user_id" = "Это некорректный идентификатор пользователя. Правильный формат: @user:homeserver.org";
 "screen_login_error_refresh_tokens" = "Этот сервер настроен на использование токенов обновления. Они не поддерживаются при использовании входа на основе пароля.";
-"screen_login_error_unsupported_authentication" = "Выбранный сервер не поддерживает вход по паролю и OIDC. Пожалуйста, свяжитесь с администратором или выберите другой сервер.";
+"screen_login_error_unsupported_authentication" = "Выбранный сервер не поддерживает вход по паролю и OAuth. Пожалуйста, свяжитесь с администратором или выберите другой сервер.";
 "screen_login_form_header" = "Введите свои данные";
 "screen_login_subtitle" = "Matrix — это открытая сеть для безопасной децентрализованной связи.";
 "screen_login_title" = "Рады видеть вас снова!";

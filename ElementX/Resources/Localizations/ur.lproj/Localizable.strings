@@ -63,6 +63,7 @@
 "action_call" = "مکالمہ کریں";
 "action_cancel" = "منسوخ کریں";
 "action_cancel_for_now" = "ابھی کے لیے منسوخ کریں";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "تصویر چنیں";
 "action_clear" = "صاف کریں";
 "action_close" = "بند کریں";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "غلط صارف نام اور/یا لفظ عبور";
 "screen_login_error_invalid_user_id" = "یہ صالح صارف شناسه نہیں ہے۔ متوقع شکل: @صارف:منزلی خادم";
 "screen_login_error_refresh_tokens" = "یہ خادم تازگی کی رموزِ ممیز استعمال کرنے کے لئے تشکیل دیا گیا ہے۔ لفظ عبور پر مبنی دخول استعمال کرتے ہوئے ان کی حمایت نہیں کی جاتی۔";
-"screen_login_error_unsupported_authentication" = "منتخب منزلی خادم کلمۂ عبوری یا OIDC دخول کا تعاون نہیں کرتا۔ برائے مہربانی اپنے منتظم سے رابطہ کریں یا کوئی اور منزلی خادم چنیں۔";
+"screen_login_error_unsupported_authentication" = "منتخب منزلی خادم کلمۂ عبوری یا OAuth دخول کا تعاون نہیں کرتا۔ برائے مہربانی اپنے منتظم سے رابطہ کریں یا کوئی اور منزلی خادم چنیں۔";
 "screen_login_form_header" = "اپنی تفصیلات درج کریں";
 "screen_login_subtitle" = "میٹرکس محفوظ، غیر مرکزی مواصلت کے لئے ایک کھلا شبکہ ہے۔";
 "screen_login_title" = "واپس خوش آمدید!";

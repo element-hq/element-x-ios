@@ -63,6 +63,7 @@
 "action_call" = "تماس";
 "action_cancel" = "لغو";
 "action_cancel_for_now" = "لغو برای امنون";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "گزینش عکس";
 "action_clear" = "پاک سازی";
 "action_close" = "بستن";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "نام کاربری یا گذرواژه نامعتبر است";
 "screen_login_error_invalid_user_id" = "این یک شناسه کاربری معتبر نیست. قالب صحیح: ‪«@user:homeserver.or";
 "screen_login_error_refresh_tokens" = "This server is configured to use refresh tokens. These aren't supported when using password based login.";
-"screen_login_error_unsupported_authentication" = "کارساز اصلی انتخاب شده از رمز عبور یا ورود OIDC پشتیبانی نمی کند. لطفا با مدیر خود تماس بگیرید یا یک کارساز خانگی دیگر را انتخاب کنید.";
+"screen_login_error_unsupported_authentication" = "کارساز اصلی انتخاب شده از رمز عبور یا ورود OAuth پشتیبانی نمی کند. لطفا با مدیر خود تماس بگیرید یا یک کارساز خانگی دیگر را انتخاب کنید.";
 "screen_login_form_header" = "جزییاتتان را وارد کنید";
 "screen_login_subtitle" = "ماتریکس شبکه‌ای بار برای ارتباطات نامتمرکز و امن است.";
 "screen_login_title" = "خوش برگشتید!";

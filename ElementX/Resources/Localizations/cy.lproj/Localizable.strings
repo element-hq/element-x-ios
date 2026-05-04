@@ -63,6 +63,7 @@
 "action_call" = "Galw";
 "action_cancel" = "Nôl";
 "action_cancel_for_now" = "Diddymu am y tro";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Dewis llun";
 "action_clear" = "Clirio";
 "action_close" = "Cau";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Enw defnyddiwr a/neu gyfrinair anghywir";
 "screen_login_error_invalid_user_id" = "Nid yw hwn yn ddynodwr defnyddiwr dilys. Fformat disgwyliedig: ‘@user:homeserver.org’";
 "screen_login_error_refresh_tokens" = "Mae'r gweinydd hwn wedi'i ffurfweddu i ddefnyddio tocynnau adnewyddu. Nid yw'r rhain yn cael eu cefnogi wrth ddefnyddio mewngofnodi ar sail cyfrinair.";
-"screen_login_error_unsupported_authentication" = "Nid yw'r gweinydd cartref ddewiswyd yn cefnogi cyfrinair na mewngofnodi OIDC. Cysylltwch â'ch gweinyddwr neu dewis gweinydd cartref arall.";
+"screen_login_error_unsupported_authentication" = "Nid yw'r gweinydd cartref ddewiswyd yn cefnogi cyfrinair na mewngofnodi OAuth. Cysylltwch â'ch gweinyddwr neu dewis gweinydd cartref arall.";
 "screen_login_form_header" = "Rhowch eich manylion";
 "screen_login_subtitle" = "Mae Matrix yn rhwydwaith agored ar gyfer cyfathrebu diogel, datganoledig.";
 "screen_login_title" = "Croeso nôl!";

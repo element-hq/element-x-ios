@@ -63,6 +63,7 @@
 "action_call" = "Soita";
 "action_cancel" = "Peruuta";
 "action_cancel_for_now" = "Peruuta toistaiseksi";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Valitse kuva";
 "action_clear" = "Tyhjennä";
 "action_close" = "Sulje";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Väärä käyttäjänimi ja/tai salasana";
 "screen_login_error_invalid_user_id" = "Tämä ei ole kelvollinen käyttäjätunnus. Odotettu muoto: '@käyttäjä:kotipalvelin.fi'";
 "screen_login_error_refresh_tokens" = "Tämä palvelin on määritetty käyttämään refresh tokeneja. Näitä ei tueta salasanapohjaisen kirjautumisen kanssa.";
-"screen_login_error_unsupported_authentication" = "Valitsemasi kotipalvelin ei tue salasana- tai OIDC-kirjautumista. Ota yhteyttä palvelimesi ylläpitäjään tai valitse toinen kotipalvelin.";
+"screen_login_error_unsupported_authentication" = "Valitsemasi kotipalvelin ei tue salasana- tai OAuth-kirjautumista. Ota yhteyttä palvelimesi ylläpitäjään tai valitse toinen kotipalvelin.";
 "screen_login_form_header" = "Anna tietosi";
 "screen_login_subtitle" = "Matrix on avoin verkko turvallista, hajautettua viestintää varten.";
 "screen_login_title" = "Tervetuloa takaisin!";

@@ -63,6 +63,7 @@
 "action_call" = "Opkald";
 "action_cancel" = "Anullér";
 "action_cancel_for_now" = "Spring over ind til videre";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Vælg billede";
 "action_clear" = "Ryd";
 "action_close" = "Luk";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Forkert brugernavn og/eller adgangskode";
 "screen_login_error_invalid_user_id" = "Dette er ikke en gyldig brugeridentifikation. Forventet format: '@bruger:hjemmeserver.org'";
 "screen_login_error_refresh_tokens" = "Denne server er konfigureret til at bruge opdateringstokens. Disse understøttes ikke, når du bruger adgangskodebaseret login.";
-"screen_login_error_unsupported_authentication" = "Den valgte hjemmeserver understøtter ikke adgangskode eller OIDC-login. Kontakt venligst din administrator eller vælg en anden hjemmeserver.";
+"screen_login_error_unsupported_authentication" = "Den valgte hjemmeserver understøtter ikke adgangskode eller OAuth-login. Kontakt venligst din administrator eller vælg en anden hjemmeserver.";
 "screen_login_form_header" = "Indtast dine oplysninger";
 "screen_login_subtitle" = "Matrix er et åbent netværk for sikker, decentraliseret kommunikation.";
 "screen_login_title" = "Velkommen tilbage!";

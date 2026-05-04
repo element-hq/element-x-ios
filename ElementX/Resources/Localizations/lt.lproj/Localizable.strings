@@ -63,6 +63,7 @@
 "action_call" = "Call";
 "action_cancel" = "Atšaukti";
 "action_cancel_for_now" = "Cancel for now";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Pasirinkti nuotrauką";
 "action_clear" = "Išvalyti";
 "action_close" = "Uždaryti";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Neteisingas vartotojo vardas ir (arba) slaptažodis";
 "screen_login_error_invalid_user_id" = "Tai nėra tinkamas vartotojo vardas. Reikalingas formatas: '@vartotojas:serveris.org'";
 "screen_login_error_refresh_tokens" = "This server is configured to use refresh tokens. These aren't supported when using password based login.";
-"screen_login_error_unsupported_authentication" = "Pasirinktas serveris nepalaiko slaptažodžio ar OIDC prisijungimo. Susisiekite su serverio administracija arba pasirinkite kitą serverį.";
+"screen_login_error_unsupported_authentication" = "Pasirinktas serveris nepalaiko slaptažodžio ar OAuth prisijungimo. Susisiekite su serverio administracija arba pasirinkite kitą serverį.";
 "screen_login_form_header" = "Įveskite savo duomenis";
 "screen_login_subtitle" = "Matrix yra atviras tinklas, skirtas saugiam, decentralizuotam bendravimui.";
 "screen_login_title" = "Sveiki sugrįžę!";

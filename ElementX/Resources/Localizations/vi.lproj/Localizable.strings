@@ -63,6 +63,7 @@
 "action_call" = "Gọi";
 "action_cancel" = "Hủy";
 "action_cancel_for_now" = "Hủy ngay";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Chọn ảnh";
 "action_clear" = "Xoá";
 "action_close" = "Đóng";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Tên người dùng và/hoặc mật khẩu không chính xác";
 "screen_login_error_invalid_user_id" = "Đây không phải là mã nhận dạng người dùng hợp lệ. Định dạng mong đợi: ‘@user:homeserver.org’";
 "screen_login_error_refresh_tokens" = "Máy chủ này được cấu hình sử dụng refresh token. Điều này không được hỗ trợ khi đăng nhập bằng mật khẩu.";
-"screen_login_error_unsupported_authentication" = "Homeserver đã chọn không hỗ trợ đăng nhập bằng mật khẩu hoặc OIDC. Vui lòng liên hệ với quản trị viên của cậu hoặc chọn một homeserver khác.";
+"screen_login_error_unsupported_authentication" = "Homeserver đã chọn không hỗ trợ đăng nhập bằng mật khẩu hoặc OAuth. Vui lòng liên hệ với quản trị viên của cậu hoặc chọn một homeserver khác.";
 "screen_login_form_header" = "Nhập thông tin chi tiết của bạn.";
 "screen_login_subtitle" = "Matrix là một mạng mở cho việc liên lạc an toàn và phi tập trung.";
 "screen_login_title" = "Chào mừng bạn quay trở lại!";

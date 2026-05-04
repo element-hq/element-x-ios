@@ -63,6 +63,7 @@
 "action_call" = "Ring";
 "action_cancel" = "Avbryt";
 "action_cancel_for_now" = "Avbryt för tillfället";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Välj bild";
 "action_clear" = "Rensa";
 "action_close" = "Stäng";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Felaktigt användarnamn och/eller lösenord";
 "screen_login_error_invalid_user_id" = "Detta är inte en giltig användaridentifierare. Förväntat format: '@användare:hemserver.org'";
 "screen_login_error_refresh_tokens" = "Den här servern är konfigurerad för att använda uppdateringstokens. Dessa stöds inte när du använder lösenordsbaserad inloggning.";
-"screen_login_error_unsupported_authentication" = "Den valda hemservern stöder inte lösenord eller OIDC-inloggning. Kontakta administratören eller välj en annan hemserver.";
+"screen_login_error_unsupported_authentication" = "Den valda hemservern stöder inte lösenord eller OAuth-inloggning. Kontakta administratören eller välj en annan hemserver.";
 "screen_login_form_header" = "Ange dina uppgifter";
 "screen_login_subtitle" = "Matrix är ett öppet nätverk för säker, decentraliserad kommunikation.";
 "screen_login_title" = "Välkommen tillbaka!";

@@ -63,6 +63,7 @@
 "action_call" = "Hívás";
 "action_cancel" = "Mégse";
 "action_cancel_for_now" = "Egyelőre nem";
+"action_choose_file" = "Choose file";
 "action_choose_photo" = "Fénykép kiválasztása";
 "action_clear" = "Törlés";
 "action_close" = "Bezárás";
@@ -925,7 +926,7 @@
 "screen_login_error_invalid_credentials" = "Helytelen felhasználónév vagy jelszó";
 "screen_login_error_invalid_user_id" = "Ez nem érvényes felhasználóazonosító. A várt formátum: „@user:homeserver.org”";
 "screen_login_error_refresh_tokens" = "Ez a kiszolgáló frissítési tokenek használatára van beállítva. Ezek jelszó alapú bejelentkezés esetén nem támogatottak.";
-"screen_login_error_unsupported_authentication" = "A kiválasztott Matrix-kiszolgáló nem támogatja a jelszavas vagy OIDC-alapú bejelentkezést. Lépjen kapcsolatba a kiszolgáló adminisztrátorával, vagy válasszon másik Matrix-kiszolgálót.";
+"screen_login_error_unsupported_authentication" = "A kiválasztott Matrix-kiszolgáló nem támogatja a jelszavas vagy OAuth-alapú bejelentkezést. Lépjen kapcsolatba a kiszolgáló adminisztrátorával, vagy válasszon másik Matrix-kiszolgálót.";
 "screen_login_form_header" = "Adja meg adatait";
 "screen_login_subtitle" = "A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz.";
 "screen_login_title" = "Örülünk, hogy visszatért!";
