@@ -19,7 +19,5 @@ struct CallNotificationRoomTimelineItem: RoomTimelineItemProtocol, Equatable {
     let isDeclined: Bool
     let isVoiceCall: Bool
     
-//    let sender: TimelineItemSender
-    
     var properties = RoomTimelineItemProperties()
 }

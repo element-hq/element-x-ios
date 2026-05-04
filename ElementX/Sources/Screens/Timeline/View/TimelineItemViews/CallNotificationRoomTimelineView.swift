@@ -15,30 +15,27 @@ struct CallNotificationRoomTimelineView: View {
     
     let timelineItem: CallNotificationRoomTimelineItem
     
-    private var tileTitle: String {
-        var title = L10n.commonCallStarted
-        if timelineItem.isDM {
-            // We only have declined variants in DM
-            if timelineItem.isDeclinedByMe {
-                title = L10n.commonCallYouDeclined
-            } else if timelineItem.isDeclined {
-                title = L10n.commonCallDeclined
-            }
-        }
-        return title
-    }
-    
-    private var iconKeyPath: KeyPath<CompoundIcons, Image> {
-        if timelineItem.isDM {
-            // We only have declined variants in DM
-            if timelineItem.isDeclined || timelineItem.isDeclinedByMe {
-                return timelineItem.isVoiceCall ? \.voiceCallDeclinedSolid : \.videoCallDeclinedSolid
-            }
-        }
-        return timelineItem.isVoiceCall ? \.voiceCallSolid : \.videoCallSolid
-    }
-    
     var body: some View {
+        let tileTitle = if timelineItem.isDM {
+            // As per design only have declined variants in DM
+            if timelineItem.isDeclinedByMe {
+                L10n.commonCallYouDeclined
+            } else if timelineItem.isDeclined {
+                L10n.commonCallDeclined
+            } else {
+                L10n.commonCallStarted
+            }
+        } else {
+            L10n.commonCallStarted
+        }
+        
+        let iconKeyPath: KeyPath<CompoundIcons, Image> = if timelineItem.isDM, timelineItem.isDeclined || timelineItem.isDeclinedByMe {
+            // As per design only have declined variants in DM
+            timelineItem.isVoiceCall ? \.voiceCallDeclinedSolid : \.videoCallDeclinedSolid
+        } else {
+            timelineItem.isVoiceCall ? \.voiceCallSolid : \.videoCallSolid
+        }
+
         HStack(spacing: 12) {
             CompoundIcon(iconKeyPath, size: .medium, relativeTo: .compound.headingMDBold)
                 .foregroundStyle(.compound.iconSecondary)
@@ -70,93 +67,84 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
     }
     
     static var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                                     timestamp: .mock,
-                                                                     isEditable: false,
-                                                                     canBeRepliedTo: false,
-                                                                     isDM: false,
-                                                                     isDeclinedByMe: false,
-                                                                     isDeclined: false,
-                                                                     isVoiceCall: false))
-                    .previewDisplayName("Video call started")
+        VStack(spacing: 0) {
+            CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
+                                                                 timestamp: .mock,
+                                                                 isEditable: false,
+                                                                 canBeRepliedTo: false,
+                                                                 isDM: false,
+                                                                 isDeclinedByMe: false,
+                                                                 isDeclined: false,
+                                                                 isVoiceCall: false))
 
-                Divider()
+            Divider()
 
-                CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                                     timestamp: .mock,
-                                                                     isEditable: false,
-                                                                     canBeRepliedTo: false,
-                                                                     isDM: true,
-                                                                     isDeclinedByMe: false,
-                                                                     isDeclined: false,
-                                                                     isVoiceCall: true))
-                    .previewDisplayName("Voice call started")
+            CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
+                                                                 timestamp: .mock,
+                                                                 isEditable: false,
+                                                                 canBeRepliedTo: false,
+                                                                 isDM: true,
+                                                                 isDeclinedByMe: false,
+                                                                 isDeclined: false,
+                                                                 isVoiceCall: true))
 
-                Divider()
+            Divider()
 
-                CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                                     timestamp: .mock,
-                                                                     isEditable: false,
-                                                                     canBeRepliedTo: false,
-                                                                     isDM: false,
-                                                                     isDeclinedByMe: true,
-                                                                     isDeclined: true,
-                                                                     isVoiceCall: false))
-                    .previewDisplayName("Room • Call declined is not shown")
+            CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
+                                                                 timestamp: .mock,
+                                                                 isEditable: false,
+                                                                 canBeRepliedTo: false,
+                                                                 isDM: false,
+                                                                 isDeclinedByMe: true,
+                                                                 isDeclined: true,
+                                                                 isVoiceCall: false))
 
-                Divider()
+            Divider()
 
-                CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                                     timestamp: .mock,
-                                                                     isEditable: false,
-                                                                     canBeRepliedTo: false,
-                                                                     isDM: true,
-                                                                     isDeclinedByMe: false,
-                                                                     isDeclined: true,
-                                                                     isVoiceCall: true))
-                    .previewDisplayName("DM • Voice call declined")
+            CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
+                                                                 timestamp: .mock,
+                                                                 isEditable: false,
+                                                                 canBeRepliedTo: false,
+                                                                 isDM: true,
+                                                                 isDeclinedByMe: false,
+                                                                 isDeclined: true,
+                                                                 isVoiceCall: true))
 
-                Divider()
+            Divider()
 
-                CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                                     timestamp: .mock,
-                                                                     isEditable: false,
-                                                                     canBeRepliedTo: false,
-                                                                     isDM: true,
-                                                                     isDeclinedByMe: true,
-                                                                     isDeclined: true,
-                                                                     isVoiceCall: true))
-                    .previewDisplayName("DM • Voice Declined by me")
+            CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
+                                                                 timestamp: .mock,
+                                                                 isEditable: false,
+                                                                 canBeRepliedTo: false,
+                                                                 isDM: true,
+                                                                 isDeclinedByMe: true,
+                                                                 isDeclined: true,
+                                                                 isVoiceCall: true))
 
-                Divider()
+            Divider()
 
-                CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                                     timestamp: .mock,
-                                                                     isEditable: false,
-                                                                     canBeRepliedTo: false,
-                                                                     isDM: true,
-                                                                     isDeclinedByMe: false,
-                                                                     isDeclined: true,
-                                                                     isVoiceCall: false))
-                    .previewDisplayName("Dm • Video • Call Declined")
+            CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
+                                                                 timestamp: .mock,
+                                                                 isEditable: false,
+                                                                 canBeRepliedTo: false,
+                                                                 isDM: true,
+                                                                 isDeclinedByMe: false,
+                                                                 isDeclined: true,
+                                                                 isVoiceCall: false))
 
-                Divider()
+            Divider()
 
-                CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                                     timestamp: .mock,
-                                                                     isEditable: false,
-                                                                     canBeRepliedTo: false,
-                                                                     isDM: true,
-                                                                     isDeclinedByMe: true,
-                                                                     isDeclined: true,
-                                                                     isVoiceCall: false))
-                    .previewDisplayName("DM • Video • Declined by me")
+            CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
+                                                                 timestamp: .mock,
+                                                                 isEditable: false,
+                                                                 canBeRepliedTo: false,
+                                                                 isDM: true,
+                                                                 isDeclinedByMe: true,
+                                                                 isDeclined: true,
+                                                                 isVoiceCall: false))
 
-                Divider()
-            }
-            .padding()
+            Divider()
         }
+        .padding()
     }
 }
