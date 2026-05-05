@@ -20,6 +20,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let appLockService: AppLockServiceProtocol
     private let analyticsService: AnalyticsService
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -66,6 +67,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         userSession = flowParameters.userSession
         self.appLockService = appLockService
         analyticsService = flowParameters.analytics
+        appMediator = flowParameters.appMediator
         appSettings = flowParameters.appSettings
         notificationManager = flowParameters.notificationManager
         userIndicatorController = flowParameters.userIndicatorController
@@ -315,6 +317,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private func startEncryptionResetFlow() {
         let resetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                           appMediator: appMediator,
                                                                            appSettings: appSettings,
                                                                            userIndicatorController: userIndicatorController,
                                                                            navigationStackCoordinator: resetNavigationStackCoordinator,

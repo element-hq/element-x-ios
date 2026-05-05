@@ -9,31 +9,57 @@
 import AuthenticationServices
 
 /// Presents a web authentication session for an OIDC request.
+///
+/// In certain instances the URL may require opening an external app instead of using a WAS. Because of this
+/// it is recommended to not encode the OIDC authentication within any state machines, as there is no guarantee
+/// that any cancellations/failures will be communicated upwards.
 @MainActor
 class OIDCAuthenticationPresenter: NSObject {
     private let authenticationService: AuthenticationServiceProtocol
     private let oidcRedirectURL: URL
     private let presentationAnchor: UIWindow
+    private let appMediator: AppMediatorProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    private var activeSession: ASWebAuthenticationSession?
+    /// The data required to complete a request.
+    struct Request {
+        let session: ASWebAuthenticationSession
+        let continuation: CheckedContinuation<Response, Never>
+    }
+    
+    struct Response {
+        let url: URL?
+        let isExternal: Bool
+        let error: Error?
+    }
+    
+    private var activeRequest: Request?
     
     init(authenticationService: AuthenticationServiceProtocol,
          oidcRedirectURL: URL,
          presentationAnchor: UIWindow,
+         appMediator: AppMediatorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.oidcRedirectURL = oidcRedirectURL
         self.presentationAnchor = presentationAnchor
+        self.appMediator = appMediator
         self.userIndicatorController = userIndicatorController
         super.init()
     }
     
     /// Presents a web authentication session for the supplied data.
+    ///
+    /// **Note:** The failure case cannot be relied upon as a signal that the authentication has ended.
+    /// In particular if the authentication URL requires opening an external app, then the user may return
+    /// to the app without completing (or cancelling) the authentication.
     func authenticate(using oidcData: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        let (url, error) = await withCheckedContinuation { continuation in
-            let session = ASWebAuthenticationSession(url: oidcData.url, callback: .oidcRedirectURL(oidcRedirectURL)) { url, error in
-                continuation.resume(returning: (url, error))
+        let response = await withCheckedContinuation { continuation in
+            let authenticationURL = oidcData.url
+            
+            let session = ASWebAuthenticationSession(url: authenticationURL, callback: .oidcRedirectURL(oidcRedirectURL)) { url, error in
+                MXLog.info("Handling callback from the session.")
+                continuation.resume(returning: Response(url: url, isExternal: false, error: error))
             }
             
             session.prefersEphemeralWebBrowserSession = false
@@ -42,21 +68,31 @@ class OIDCAuthenticationPresenter: NSObject {
                 "X-Element-User-Agent": UserAgentBuilder.makeASCIIUserAgent()
             ]
             
-            activeSession = session
-            session.start()
+            activeRequest = Request(session: session, continuation: continuation)
+            
+            if authenticationURL.scheme == "https" || authenticationURL.scheme == "http" {
+                session.start()
+            } else {
+                appMediator.open(authenticationURL)
+            }
         }
         
-        activeSession = nil
+        if response.isExternal {
+            // Manually dismiss the web authentication session if the login was completed outside of the app.
+            // Note: This doesn't trigger a callback so no need to worry about the continuation being called twice.
+            activeRequest?.session.cancel()
+        }
+        activeRequest = nil
         
-        guard let url else {
-            // Check for user cancellation to avoid showing an alert in that instance.
-            if error?.isOIDCUserCancellation == true {
+        guard let url = response.url else {
+            // Check for user cancellation (on the WAS sheet) to avoid showing an alert in that instance.
+            if response.error?.isOIDCUserCancellation == true {
                 // No need to show an error here, just abort and return a failure.
                 await authenticationService.abortOIDCLogin(data: oidcData)
                 return .failure(.oidcError(.userCancellation))
             }
             
-            let errorDescription = error.map(String.init(describing:)) ?? "Unknown error"
+            let errorDescription = response.error.map(String.init(describing:)) ?? "Unknown error"
             MXLog.error("Missing callback URL from the web authentication session: \(errorDescription)")
             
             showFailureIndicator()
@@ -71,7 +107,7 @@ class OIDCAuthenticationPresenter: NSObject {
         switch await authenticationService.loginWithOIDCCallback(url) {
         case .success(let userSession):
             return .success(userSession)
-        case .failure(.oidcError(.userCancellation)):
+        case .failure(.oidcError(.userCancellation)): // Check for user cancellation (on the MAS web page)
             // No need to show an error here, just return the failure.
             return .failure(.oidcError(.userCancellation))
         case .failure(let error):
@@ -81,8 +117,20 @@ class OIDCAuthenticationPresenter: NSObject {
         }
     }
     
+    /// This method will be used when the web authentication session redirects the user to an external
+    /// authentication app. During normal use the redirect is handled automatically by the session's closure.
+    func handleUniversalLinkCallback(_ url: URL) {
+        guard let activeRequest else {
+            MXLog.error("Failed to handle universal link callback. Missing request.")
+            return
+        }
+        MXLog.info("Handling callback from a universal link.")
+        activeRequest.continuation.resume(returning: Response(url: url, isExternal: true, error: nil))
+    }
+    
     func cancel() {
-        activeSession?.cancel()
+        activeRequest?.session.cancel()
+        activeRequest = nil // Programatically cancelling the session doesn't trigger a callback.
     }
     
     private var loadingIndicatorID: String {

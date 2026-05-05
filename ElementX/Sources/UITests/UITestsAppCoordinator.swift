@@ -735,6 +735,7 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             
             let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                               appMediator: AppMediatorMock.default,
                                                                                appSettings: ServiceLocator.shared.settings,
                                                                                userIndicatorController: userIndicatorController,
                                                                                navigationStackCoordinator: navigationStackCoordinator,

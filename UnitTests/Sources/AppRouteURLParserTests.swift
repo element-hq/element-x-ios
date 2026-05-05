@@ -21,6 +21,35 @@ struct AppRouteURLParserTests {
     }
     
     @Test
+    func oidcCallbackRoute() {
+        // Given an OIDC callback for this app.
+        let callbackURL = appSettings.oidcRedirectURL.appending(queryItems: [URLQueryItem(name: "state", value: "12345"),
+                                                                             URLQueryItem(name: "code", value: "67890")])
+        
+        // When parsing that route.
+        let route = appRouteURLParser.route(from: callbackURL)
+        
+        // Then it should be considered a valid OIDC callback.
+        #expect(route == .oidcCallback(url: callbackURL))
+    }
+    
+    @Test
+    func oidcCallbackAppVariantRoute() {
+        // Given an OIDC callback for a different app variant.
+        let callbackURL = appSettings.oidcRedirectURL
+            .deletingLastPathComponent()
+            .appending(component: "io.element.elementz")
+            .appending(queryItems: [URLQueryItem(name: "state", value: "12345"),
+                                    URLQueryItem(name: "code", value: "67890")])
+        
+        // When parsing that route in this app.
+        let route = appRouteURLParser.route(from: callbackURL)
+        
+        // Then the route shouldn't be considered valid and should be ignored.
+        #expect(route == nil)
+    }
+    
+    @Test
     func matrixUserURL() throws {
         let userID = "@test:matrix.org"
         let url = try #require(URL(string: "https://matrix.to/#/\(userID)"))

@@ -276,6 +276,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             case .accountProvisioningLink:
                 handleAppRoute(route,
                                windowType: windowType)
+            case .oidcCallback(let url):
+                if stateMachine.state == .softLogout {
+                    softLogoutCoordinator?.handleOIDCRedirectURL(url)
+                } else {
+                    authenticationFlowCoordinator?.handleOIDCRedirectURL(url)
+                }
             case .userProfile(let userID):
                 if isExternalURL {
                     handleAppRoute(route,
@@ -712,6 +718,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                    credentials: credentials,
                                                                    keyBackupNeeded: false,
+                                                                   appMediator: appMediator,
                                                                    appSettings: appSettings,
                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
             let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)

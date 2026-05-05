@@ -13,6 +13,7 @@ struct SoftLogoutScreenCoordinatorParameters {
     let authenticationService: AuthenticationServiceProtocol
     let credentials: SoftLogoutScreenCredentials
     let keyBackupNeeded: Bool
+    let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -90,6 +91,15 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         AnyView(SoftLogoutScreen(context: viewModel.context))
     }
     
+    func handleOIDCRedirectURL(_ url: URL) {
+        guard let oidcPresenter else {
+            MXLog.error("Failed to find an OIDC request in progress.")
+            return
+        }
+        
+        oidcPresenter.handleUniversalLinkCallback(url)
+    }
+    
     // MARK: - Private
     
     private static let loadingIndicatorIdentifier = "\(SoftLogoutScreenCoordinator.self)-Loading"
@@ -149,6 +159,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
                 let presenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService,
                                                             oidcRedirectURL: parameters.appSettings.oidcRedirectURL,
                                                             presentationAnchor: presentationAnchor,
+                                                            appMediator: parameters.appMediator,
                                                             userIndicatorController: parameters.userIndicatorController)
                 self.oidcPresenter = presenter
                 switch await presenter.authenticate(using: oidcData) {

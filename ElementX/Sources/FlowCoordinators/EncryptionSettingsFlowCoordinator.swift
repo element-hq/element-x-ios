@@ -80,8 +80,8 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
         MXLog.info("Handling app route: \(appRoute)")
         
         switch appRoute {
-        case .accountProvisioningLink:
-            break // We always ignore this flow when logged in.
+        case .accountProvisioningLink, .oidcCallback:
+            break // We always ignore these flows when logged in.
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile, .thread,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
