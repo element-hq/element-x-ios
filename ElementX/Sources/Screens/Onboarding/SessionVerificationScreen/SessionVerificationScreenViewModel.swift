@@ -166,7 +166,8 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             
             switch await sessionVerificationControllerProxy.acceptVerificationRequest() {
             case .success:
-                stateMachine.processEvent(.didAcceptVerificationRequest)
+                // Need to wait for the callback from the remote
+                break
             case .failure:
                 stateMachine.processEvent(.didFail)
             }
