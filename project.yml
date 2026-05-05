@@ -144,7 +144,7 @@ packages:
     minorVersion: 6.25.1
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.57.1
+    minorVersion: 3.57.2
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
     minorVersion: 9.11.0
