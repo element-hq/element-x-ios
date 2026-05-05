@@ -19,8 +19,8 @@ enum AuthenticationFlow {
 }
 
 enum AuthenticationServiceError: Error, Equatable {
-    /// An error occurred during OIDC authentication.
-    case oidcError(OIDCError)
+    /// An error occurred during OAuth authentication.
+    case oAuthError(OAuthError)
     /// An error occurred during login with QR Code.
     case qrCodeError(QRCodeLoginError)
     
@@ -46,12 +46,12 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
         
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError>
-    /// Performs login using OIDC for the current homeserver.
-    func urlForOIDCLogin(loginHint: String?) async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError>
-    /// Asks the SDK to abort an ongoing OIDC login if we didn't get a callback to complete the request with.
-    func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async
-    /// Completes an OIDC login that was started using ``urlForOIDCLogin``.
-    func loginWithOIDCCallback(_ callbackURL: URL) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    /// Performs login using OAuth for the current homeserver.
+    func urlForOAuthLogin(loginHint: String?) async -> Result<OAuthAuthorizationDataProxy, AuthenticationServiceError>
+    /// Asks the SDK to abort an ongoing OAuth login if we didn't get a callback to complete the request with.
+    func abortOAuthLogin(data: OAuthAuthorizationDataProxy) async
+    /// Completes an OAuth login that was started using ``urlForOAuthLogin``.
+    func loginWithOAuthCallback(_ callbackURL: URL) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Performs a password login using the current homeserver.
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     
@@ -70,25 +70,25 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     func refreshClassicAppAccountState() async
 }
 
-// MARK: - OIDC
+// MARK: - OAuth
 
-enum OIDCError: Error {
+enum OAuthError: Error {
     /// Failed to get the URL that should be presented for login.
     case urlFailure
     /// The user cancelled the login.
     case userCancellation
-    /// OIDC isn't supported on the currently configured server.
+    /// OAuth isn't supported on the currently configured server.
     case notSupported
     /// An unknown error occurred.
     case unknown
 }
 
-struct OIDCAuthorizationDataProxy: Hashable {
+struct OAuthAuthorizationDataProxy: Hashable {
     let underlyingData: OAuthAuthorizationData
     
     var url: URL {
         guard let url = URL(string: underlyingData.loginUrl()) else {
-            fatalError("OIDC login URL hasn't been validated.")
+            fatalError("OAuth login URL hasn't been validated.")
         }
         return url
     }

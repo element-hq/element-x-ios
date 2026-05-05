@@ -46,17 +46,17 @@ struct LoginHomeserver: Equatable {
 extension LoginHomeserver {
     /// A mock homeserver that is configured just like matrix.org.
     static var mockMatrixDotOrg: LoginHomeserver {
-        LoginHomeserver(address: "matrix.org", loginMode: .oidc(supportsCreatePrompt: true))
+        LoginHomeserver(address: "matrix.org", loginMode: .oAuth(supportsCreatePrompt: true))
     }
     
-    /// A mock homeserver that supports login and registration via a password but has no SSO providers.
+    /// A mock homeserver that supports login and registration via a password but has no OAuth support.
     static var mockBasicServer: LoginHomeserver {
         LoginHomeserver(address: "example.com", loginMode: .password)
     }
     
-    /// A mock homeserver that supports only supports authentication via a single SSO provider.
-    static var mockOIDC: LoginHomeserver {
-        LoginHomeserver(address: "company.com", loginMode: .oidc(supportsCreatePrompt: false))
+    /// A mock homeserver that supports only supports authentication via OAuth.
+    static var mockOAuth: LoginHomeserver {
+        LoginHomeserver(address: "company.com", loginMode: .oAuth(supportsCreatePrompt: false))
     }
     
     /// A mock homeserver that only with no supported login flows.

@@ -174,7 +174,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             }
         case .globalSearch:
             presentGlobalSearch()
-        case .accountProvisioningLink, .oidcCallback, .settings, .chatBackupSettings, .call:
+        case .accountProvisioningLink, .oAuthCallback, .settings, .chatBackupSettings, .call:
             break // These routes cannot be handled.
         }
     }

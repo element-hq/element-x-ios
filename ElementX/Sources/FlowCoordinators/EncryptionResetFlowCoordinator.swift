@@ -122,8 +122,8 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .requestOIDCAuthorisation(let url):
-                presentOIDCAuthorization(for: url)
+            case .requestOAuthAuthorisation(let url):
+                presentOAuthAuthorization(for: url)
             case .requestPassword(let passwordPublisher):
                 stateMachine.tryEvent(.confirmPassword, userInfo: passwordPublisher)
             case .cancel:
@@ -155,14 +155,14 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
-    private func presentOIDCAuthorization(for url: URL) {
+    private var accountSettingsPresenter: OAuthAccountSettingsPresenter?
+    private func presentOAuthAuthorization(for url: URL) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
-        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url,
-                                                                presentationAnchor: windowManager.mainWindow,
-                                                                appMediator: appMediator,
-                                                                appSettings: appSettings)
+        accountSettingsPresenter = OAuthAccountSettingsPresenter(accountURL: url,
+                                                                 presentationAnchor: windowManager.mainWindow,
+                                                                 appMediator: appMediator,
+                                                                 appSettings: appSettings)
         accountSettingsPresenter?.start()
     }
 }

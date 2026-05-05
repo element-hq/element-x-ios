@@ -23,7 +23,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Server Confirmation: Tap change server button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
         
-        // Server Selection: Clear the default, enter OIDC server and continue.
+        // Server Selection: Clear the default, enter OAuth server and continue.
         app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("example.com\n", app: app)
         
         // Await for the button to be hittable, since a loader may appear
@@ -56,7 +56,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Server Confirmation: Tap change server button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
         
-        // Server Selection: Clear the default, enter OIDC server and continue.
+        // Server Selection: Clear the default, enter OAuth server and continue.
         app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("example.com\n", app: app)
         
         // Await for the button to be hittable, since a loader may appear
@@ -91,7 +91,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Server Confirmation: Tap change server button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
         
-        // Server Selection: Clear the default, enter OIDC server and continue.
+        // Server Selection: Clear the default, enter OAuth server and continue.
         app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("example.com\n", app: app)
         
         // Await for the button to be hittable, since a loader may appear
@@ -111,9 +111,9 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         try await app.assertScreenshot()
     }
     
-    /// Disabled for now as the looping isn't 100% fool-proof and we have OIDC on the integration tests
+    /// Disabled for now as the looping isn't 100% fool-proof and we have OAuth on the integration tests
     /// so this mock version doesn't really add anything to the tests as a whole.
-    func disabled_testSelectingOIDCServer() {
+    func disabled_testSelectingOAuthServer() {
         // Allow this test to run for longer to help with the loop whilst waiting to resolve the
         // webcredentials for the Web Authentication Session (see below).
         executionTimeAllowance = 300
@@ -127,7 +127,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Server Confirmation: Tap change server button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
         
-        // Server Selection: Clear the default, enter OIDC server and continue.
+        // Server Selection: Clear the default, enter OAuth server and continue.
         app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("company.com\n", app: app)
         
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
@@ -155,7 +155,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
             }
         }
         
-        XCTAssertTrue(wasAlertText.exists, "The web authentication prompt should be shown after selecting a homeserver with OIDC.")
+        XCTAssertTrue(wasAlertText.exists, "The web authentication prompt should be shown after selecting a homeserver with OAuth.")
     }
     
     func testProvisionedLoginWithPassword() async throws {

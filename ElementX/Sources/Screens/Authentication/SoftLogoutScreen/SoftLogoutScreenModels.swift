@@ -22,8 +22,8 @@ enum SoftLogoutScreenViewModelAction: CustomStringConvertible {
     case forgotPassword
     /// Clear all user data
     case clearAllData
-    /// Continue using OIDC.
-    case continueWithOIDC
+    /// Continue using OAuth.
+    case continueWithOAuth
     
     /// A string representation of the result, ignoring any associated values that could leak PII.
     var description: String {
@@ -34,8 +34,8 @@ enum SoftLogoutScreenViewModelAction: CustomStringConvertible {
             return "forgotPassword"
         case .clearAllData:
             return "clearAllData"
-        case .continueWithOIDC:
-            return "continueWithOIDC"
+        case .continueWithOAuth:
+            return "continueWithOAuth"
         }
     }
 }
@@ -58,7 +58,7 @@ struct SoftLogoutScreenViewState: BindableState {
         homeserver.loginMode
     }
     
-    /// The presentation anchor used for OIDC authentication.
+    /// The presentation anchor used for OAuth authentication.
     var window: UIWindow?
 
     /// Whether to show recover encryption keys message
@@ -80,7 +80,7 @@ struct SoftLogoutScreenBindings {
 }
 
 enum SoftLogoutScreenViewAction {
-    /// Updates the window used as the OIDC presentation anchor.
+    /// Updates the window used as the OAuth presentation anchor.
     case updateWindow(UIWindow?)
     /// Login.
     case login
@@ -88,8 +88,8 @@ enum SoftLogoutScreenViewAction {
     case forgotPassword
     /// Clear all user data.
     case clearAllData
-    /// Continue using OIDC.
-    case continueWithOIDC
+    /// Continue using OAuth.
+    case continueWithOAuth
 }
 
 enum SoftLogoutScreenErrorType: Hashable {

@@ -155,21 +155,21 @@ struct LoginScreenViewModelTests {
     }
 
     @Test
-    mutating func oidcServer() async throws {
+    mutating func oAuthServer() async throws {
         // Given the screen configured for matrix.org
         await setupViewModel()
         
-        // When entering a username for a user on a homeserver with OIDC.
+        // When entering a username for a user on a homeserver with OAuth.
         let deferred = deferFulfillment(viewModel.actions) {
-            $0.isConfiguredForOIDC
+            $0.isConfiguredForOAuth
         }
         context.username = "@bob:company.com"
         context.send(viewAction: .parseUsername)
         try await deferred.fulfill()
 
-        // Then the view state should be updated with the homeserver and show the OIDC button.
-        #expect(context.viewState.loginMode.supportsOIDCFlow,
-                "The OIDC button should be shown.")
+        // Then the view state should be updated with the homeserver and show the OAuth button.
+        #expect(context.viewState.loginMode.supportsOAuthFlow,
+                "The OAuth button should be shown.")
     }
     
     @Test

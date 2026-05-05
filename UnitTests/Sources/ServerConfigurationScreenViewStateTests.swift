@@ -21,7 +21,7 @@ struct ServerConfirmationScreenViewStateTests {
                                                                   authenticationFlow: .login)
         #expect(elementDotIoLogin.message == L10n.screenServerConfirmationMessageLoginElementDotIo, "element.io should have a custom message.")
         
-        let otherLogin = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockOIDC.address),
+        let otherLogin = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockOAuth.address),
                                                            authenticationFlow: .login)
         #expect(otherLogin.message == "", "Other servers should not show a message.")
         
@@ -36,8 +36,8 @@ struct ServerConfirmationScreenViewStateTests {
                                                                      authenticationFlow: .register)
         #expect(matrixDotOrgRegister.message == L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
         
-        let oidcRegister = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockOIDC.address),
-                                                             authenticationFlow: .register)
-        #expect(oidcRegister.message == L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
+        let oAuthRegister = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockOAuth.address),
+                                                              authenticationFlow: .register)
+        #expect(oAuthRegister.message == L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
     }
 }

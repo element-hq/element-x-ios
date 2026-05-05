@@ -135,7 +135,7 @@ final class AppSettings {
                   allowOtherAccountProviders: Bool,
                   hideBrandChrome: Bool,
                   pushGatewayBaseURL: URL,
-                  oidcRedirectURL: URL,
+                  oAuthRedirectURL: URL,
                   websiteURL: URL,
                   logoURL: URL,
                   copyrightURL: URL,
@@ -155,7 +155,7 @@ final class AppSettings {
         self.allowOtherAccountProviders = allowOtherAccountProviders
         self.hideBrandChrome = hideBrandChrome
         self.pushGatewayBaseURL = pushGatewayBaseURL
-        self.oidcRedirectURL = oidcRedirectURL
+        self.oAuthRedirectURL = oAuthRedirectURL
         self.websiteURL = websiteURL
         self.logoURL = logoURL
         self.copyrightURL = copyrightURL
@@ -249,19 +249,19 @@ final class AppSettings {
     
     // MARK: - Authentication
     
-    /// Any pre-defined static client registrations for OIDC issuers.
-    let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
-    /// The redirect URL used for OIDC. For the normal case we don't actually need the bundle ID as the web authentication session handles the redirect internally.
+    /// Any pre-defined static client registrations for OAuth issuers.
+    let oAuthStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
+    /// The redirect URL used for OAuth. For the normal case we don't actually need the bundle ID as the web authentication session handles the redirect internally.
     /// However in the case where MAS sends the user to an external app, we need to make sure that the system will open the correct variant of the app (e.g. Nightly).
-    private(set) var oidcRedirectURL: URL! = URL(string: "https://element.io/oauth/ios/\(InfoPlistReader.main.bundleIdentifier)")
+    private(set) var oAuthRedirectURL: URL! = URL(string: "https://element.io/oauth/ios/\(InfoPlistReader.main.bundleIdentifier)")
     
-    private(set) lazy var oidcConfiguration = OIDCConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
-                                                                redirectURI: oidcRedirectURL,
-                                                                clientURI: websiteURL,
-                                                                logoURI: logoURL,
-                                                                tosURI: acceptableUseURL,
-                                                                policyURI: privacyURL,
-                                                                staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
+    private(set) lazy var oAuthConfiguration = OAuthConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
+                                                                  redirectURI: oAuthRedirectURL,
+                                                                  clientURI: websiteURL,
+                                                                  logoURI: logoURL,
+                                                                  tosURI: acceptableUseURL,
+                                                                  policyURI: privacyURL,
+                                                                  staticRegistrations: oAuthStaticRegistrations.mapKeys { $0.absoluteString })
     
     /// Whether or not the Create Account button is shown on the start screen.
     ///

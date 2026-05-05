@@ -11,7 +11,7 @@ import Foundation
 
 enum EncryptionResetScreenViewModelAction {
     case requestPassword(passwordPublisher: PassthroughSubject<String, Never>)
-    case requestOIDCAuthorisation(url: URL)
+    case requestOAuthAuthorisation(url: URL)
     case resetFinished
     case cancel
 }

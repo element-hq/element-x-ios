@@ -13,7 +13,7 @@ enum AuthenticationStartScreenViewModelAction: Equatable {
     case login
     case register
     
-    case loginDirectlyWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
+    case loginDirectlyWithOAuth(data: OAuthAuthorizationDataProxy, window: UIWindow)
     case loginDirectlyWithPassword(loginHint: String?)
     
     case reportProblem
@@ -21,7 +21,7 @@ enum AuthenticationStartScreenViewModelAction: Equatable {
 }
 
 struct AuthenticationStartScreenViewState: BindableState {
-    /// The presentation anchor used for OIDC authentication.
+    /// The presentation anchor used for OAuth authentication.
     var window: UIWindow?
     
     let serverName: String?
@@ -56,7 +56,7 @@ enum AuthenticationStartScreenAlertType {
 }
 
 enum AuthenticationStartScreenViewAction {
-    /// Updates the window used as the OIDC presentation anchor.
+    /// Updates the window used as the OAuth presentation anchor.
     case updateWindow(UIWindow)
     case developerOptions
     case reportProblem

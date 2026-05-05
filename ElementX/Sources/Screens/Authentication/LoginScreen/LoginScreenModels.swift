@@ -9,14 +9,14 @@
 import Foundation
 
 enum LoginScreenViewModelAction {
-    /// The homeserver was updated to one that supports OIDC.
-    case configuredForOIDC
+    /// The homeserver was updated to one that supports OAuth.
+    case configuredForOAuth
     /// Login was successful.
     case signedIn(UserSessionProtocol)
     
-    var isConfiguredForOIDC: Bool {
+    var isConfiguredForOAuth: Bool {
         switch self {
-        case .configuredForOIDC: true
+        case .configuredForOAuth: true
         default: false
         }
     }
