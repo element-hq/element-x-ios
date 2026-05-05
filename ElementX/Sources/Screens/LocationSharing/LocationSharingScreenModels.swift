@@ -13,6 +13,7 @@ import MatrixRustSDK
 enum LocationSharingViewAlert: Hashable {
     case missingAuthorization
     case missingAlwaysAuthorization
+    case missingLiveLocationSharingPermission
     case liveLocationDisclaimer
     case liveLocationDurationSelection
     case mapError(MapLibreError)
@@ -213,6 +214,10 @@ extension AlertInfo where T == LocationSharingViewAlert {
                       message: L10n.dialogPermissionLiveLocationDescriptionIos(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
+        case .missingLiveLocationSharingPermission:
+            self.init(id: alertID,
+                      title: L10n.screenShareLocationLiveLocationMissingPermissions,
+                      primaryButton: primaryButton)
         case .liveLocationDisclaimer:
             self.init(id: alertID,
                       title: L10n.screenShareLocationLiveLocationDisclaimerTitle,

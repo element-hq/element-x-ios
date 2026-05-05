@@ -3265,6 +3265,8 @@ internal enum L10n {
   internal static var screenShareLocationLiveLocationDisclaimerTitle: String { return L10n.tr("Localizable", "screen_share_location_live_location_disclaimer_title") }
   /// Choose how long to share your live location.
   internal static var screenShareLocationLiveLocationDurationPickerTitle: String { return L10n.tr("Localizable", "screen_share_location_live_location_duration_picker_title") }
+  /// You do not have permissions to share your live location in this room
+  internal static var screenShareLocationLiveLocationMissingPermissions: String { return L10n.tr("Localizable", "screen_share_location_live_location_missing_permissions") }
   /// Share location
   internal static var screenShareLocationTitle: String { return L10n.tr("Localizable", "screen_share_location_title") }
   /// Share my location

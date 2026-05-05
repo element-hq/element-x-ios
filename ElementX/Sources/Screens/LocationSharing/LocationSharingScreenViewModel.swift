@@ -68,7 +68,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         case .close:
             actionsSubject.send(.close)
         case .startLiveLocation:
-            checkAlwaysShareLocationPermission()
+            startLiveLocation()
         case .selectLocation:
             guard let coordinate = state.bindings.mapCenterLocation else { return }
             let uncertainty = state.isSharingUserLocation ? context.geolocationUncertainty : nil
@@ -171,13 +171,17 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         }
     }
     
-    private static let durationFormatter: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .full
-        formatter.allowedUnits = [.hour, .minute]
-        return formatter
-    }()
+    private func startLiveLocation() {
+        guard let powerLevels = roomProxy.infoPublisher.value.powerLevels,
+              powerLevels.canOwnUser(sendStateEvent: .beaconInfo),
+              powerLevels.canOwnUser(sendMessage: .beacon) else {
+            state.bindings.alertInfo = .init(alertID: .missingLiveLocationSharingPermission)
+            return
+        }
         
+        checkAlwaysShareLocationPermission()
+    }
+    
     private func checkAlwaysShareLocationPermission() {
         authorizationStatusSubscription = nil
         let authorizationStatus = liveLocationManager.authorizationStatus.value
@@ -230,6 +234,15 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                                              })
         }
     }
+    
+    /// It's easier to achieve the format we want with a DateComponentsFormatter
+    /// than using the `.formatted` function of Duration.
+    private static let durationFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .full
+        formatter.allowedUnits = [.hour, .minute]
+        return formatter
+    }()
     
     private func showLiveLocationDurationPicker() {
         let durations: [Duration] = [.seconds(15 * 60), // 15 minutes
