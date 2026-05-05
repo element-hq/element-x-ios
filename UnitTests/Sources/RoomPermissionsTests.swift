@@ -43,5 +43,6 @@ struct RoomPermissionsTests {
         #expect(permissions.roomAvatar == RoomRole.user.powerLevelValue)
         #expect(permissions.roomTopic == RoomRole.user.powerLevelValue)
         #expect(permissions.spaceChild == RoomRole.administrator.powerLevelValue)
+        #expect(permissions.liveLocation == RoomRole.moderator.powerLevelValue)
     }
 }
