@@ -35,8 +35,8 @@ struct RoomPermissionsSetting: Identifiable {
         
     /// The `RoomPermissions` property that this setting is for.
     let keyPath: KeyPath<RoomPermissions, Int64>
-    /// The `RoomPowerLevelChanges` property that this setting is saved into.
-    var rustKeyPaths: [WritableKeyPath<RoomPowerLevelChanges, Int64?>] {
+    /// The `RoomPowerLevelChanges` properties that this setting is saved into.
+    var rustKeyPaths: Set<WritableKeyPath<RoomPowerLevelChanges, Int64?>> {
         switch keyPath {
         case \.ban: [\.ban]
         case \.invite: [\.invite]
