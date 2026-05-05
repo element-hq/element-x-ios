@@ -70,7 +70,7 @@ struct LocationSharingScreenViewModelTests {
         let AuthorizationError = AlertInfo(alertID: .missingAuthorization)
         #expect(AuthorizationError.message == L10n.dialogPermissionLocationDescriptionIos(InfoPlistReader.main.bundleDisplayName))
     }
-
+    
     @Test
     mutating func sendUserLocation() async throws {
         setupViewModel()
@@ -92,14 +92,14 @@ struct LocationSharingScreenViewModelTests {
             try await deferred.fulfill()
         }
     }
-
+    
     @Test
     mutating func sendPickedLocation() async throws {
         setupViewModel()
         context.mapCenterLocation = .init(latitude: 0, longitude: 0)
         context.isLocationAuthorized = nil
         context.geolocationUncertainty = 10
-
+        
         let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
         try await confirmation { confirmation in
@@ -117,7 +117,7 @@ struct LocationSharingScreenViewModelTests {
     }
     
     // MARK: - isLocationLoading Tests
-
+    
     @Test
     mutating func isLocationLoadingInPickerModeWithAuthorizationNotDetermined() {
         setupViewModel()
@@ -125,7 +125,7 @@ struct LocationSharingScreenViewModelTests {
         context.hasLoadedUserLocation = false
         #expect(context.viewState.isLocationLoading)
     }
-
+    
     @Test
     mutating func isLocationLoadingInPickerModeWithAuthorizationGranted() {
         setupViewModel()
@@ -133,7 +133,7 @@ struct LocationSharingScreenViewModelTests {
         context.hasLoadedUserLocation = false
         #expect(context.viewState.isLocationLoading)
     }
-
+    
     @Test
     mutating func isLocationNotLoadingInPickerModeWhenLocationLoaded() {
         setupViewModel()
@@ -141,7 +141,7 @@ struct LocationSharingScreenViewModelTests {
         context.hasLoadedUserLocation = true
         #expect(!context.viewState.isLocationLoading)
     }
-
+    
     @Test
     mutating func isLocationNotLoadingInPickerModeWhenAuthorizationDenied() {
         setupViewModel()
@@ -149,7 +149,7 @@ struct LocationSharingScreenViewModelTests {
         context.hasLoadedUserLocation = false
         #expect(!context.viewState.isLocationLoading)
     }
-
+    
     @Test
     mutating func isLocationNotLoadingInNonPickerModeWithAuthorizationNotDetermined() {
         let aliceShare = makeLiveLocationShare(userID: "@alice:matrix.org")
@@ -171,7 +171,17 @@ struct LocationSharingScreenViewModelTests {
         context.hasLoadedUserLocation = false
         #expect(context.viewState.isLocationLoading)
     }
-
+    
+    // MARK: - Live Location Permission Tests
+    
+    @Test
+    mutating func startLiveLocationWithoutPermission() {
+        setupViewModel(liveLocationManagerConfiguration: .init(authorizationStatus: .authorizedAlways),
+                       members: .allMembers)
+        context.send(viewAction: .startLiveLocation)
+        #expect(context.alertInfo?.id == .missingLiveLocationSharingPermission)
+    }
+    
     // MARK: - Live Location Authorization Tests
     
     @Test
@@ -233,14 +243,14 @@ struct LocationSharingScreenViewModelTests {
     }
     
     // MARK: - Live Location Start Flow Tests
-
+    
     @Test
     mutating func startLiveLocationShowsDisclaimer() {
         setupViewModel(liveLocationManagerConfiguration: .init(authorizationStatus: .authorizedAlways))
         context.send(viewAction: .startLiveLocation)
         #expect(context.alertInfo?.id == .liveLocationDisclaimer)
     }
-
+    
     @Test
     mutating func startLiveLocationDisclaimerDeclineSkipsStart() {
         let liveLocationManagerMock = LiveLocationManagerMock(.init(authorizationStatus: .authorizedAlways))
@@ -249,7 +259,7 @@ struct LocationSharingScreenViewModelTests {
         context.alertInfo?.primaryButton.action?()
         #expect(!liveLocationManagerMock.startLiveLocationRoomIDDurationCalled)
     }
-
+    
     @Test
     mutating func startLiveLocationDisclaimerAcceptShowsDurationPicker() async throws {
         setupViewModel(liveLocationManagerConfiguration: .init(authorizationStatus: .authorizedAlways))
@@ -259,7 +269,7 @@ struct LocationSharingScreenViewModelTests {
         context.alertInfo?.secondaryButton?.action?()
         try await deferred.fulfill()
     }
-
+    
     @Test
     mutating func startLiveLocationDurationPickerCancelSkipsStart() async throws {
         let liveLocationManagerMock = LiveLocationManagerMock(.init(authorizationStatus: .authorizedAlways))
@@ -271,7 +281,7 @@ struct LocationSharingScreenViewModelTests {
         context.alertInfo?.primaryButton.action?()
         #expect(!liveLocationManagerMock.startLiveLocationRoomIDDurationCalled)
     }
-
+    
     @Test
     mutating func startLiveLocationSuccess() async throws {
         let liveLocationManagerMock = LiveLocationManagerMock(.init(authorizationStatus: .authorizedAlways))
@@ -280,16 +290,16 @@ struct LocationSharingScreenViewModelTests {
         let durationPicker = deferFulfillment(context.observe(\.alertInfo)) { $0?.id == .liveLocationDurationSelection }
         context.alertInfo?.secondaryButton?.action?()
         try await durationPicker.fulfill()
-
+        
         let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         context.alertInfo?.verticalButtons?.first?.action?()
         try await deferred.fulfill()
-
+        
         #expect(liveLocationManagerMock.startLiveLocationRoomIDDurationCalled)
         let arguments = try #require(liveLocationManagerMock.startLiveLocationRoomIDDurationReceivedArguments)
         #expect(arguments.duration == .seconds(60 * 15))
     }
-
+    
     @Test
     mutating func startLiveLocationFailureDoesNotClose() async throws {
         let liveLocationManagerMock = LiveLocationManagerMock(.init(authorizationStatus: .authorizedAlways))
@@ -299,22 +309,22 @@ struct LocationSharingScreenViewModelTests {
         let durationPicker = deferFulfillment(context.observe(\.alertInfo)) { $0?.id == .liveLocationDurationSelection }
         context.alertInfo?.secondaryButton?.action?()
         try await durationPicker.fulfill()
-
+        
         let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1)) { $0 == .close }
         context.alertInfo?.verticalButtons?.first?.action?()
         try await deferredFailure.fulfill()
     }
-
+    
     // MARK: - Live Location Share Update Tests
-
+    
     @Test
     mutating func viewLiveInitialSenderShownCorrectly() {
         let aliceShare = makeLiveLocationShare(userID: "@alice:matrix.org", latitude: 51.5, longitude: -0.1)
         let sender = TimelineItemSender(id: "@alice:matrix.org", displayName: "Alice")
         let liveLocationsSubject = CurrentValueSubject<[LiveLocationShare], Never>([aliceShare])
-
+        
         setupViewModelForViewLive(sender: sender, initialShare: aliceShare, liveLocationsSubject: liveLocationsSubject)
-
+        
         // Initial state is synchronously set from the interaction mode before the async subscription runs.
         let annotations = context.viewState.annotations
         #expect(annotations.count == 1)
@@ -324,22 +334,22 @@ struct LocationSharingScreenViewModelTests {
         #expect(annotation?.coordinate.longitude == -0.1)
         #expect(annotation?.kind == .liveUser(.init(userID: "@alice:matrix.org", displayName: "Alice")))
     }
-
+    
     @Test
     mutating func viewLiveReceivesAdditionalLocationUpdates() async throws {
         let aliceShare = makeLiveLocationShare(userID: "@alice:matrix.org", latitude: 51.5, longitude: -0.1)
         let sender = TimelineItemSender(id: "@alice:matrix.org", displayName: "Alice")
         let liveLocationsSubject = CurrentValueSubject<[LiveLocationShare], Never>([aliceShare])
-
+        
         setupViewModelForViewLive(sender: sender, initialShare: aliceShare, liveLocationsSubject: liveLocationsSubject)
-
+        
         let bobShare = makeLiveLocationShare(userID: "@bob:matrix.org", latitude: 48.8, longitude: 2.3)
         let charlieShare = makeLiveLocationShare(userID: "@charlie:matrix.org", latitude: 40.7, longitude: -74.0)
-
+        
         let deferred = deferFulfillment(context.observe(\.viewState.annotations)) { $0.count == 3 }
         liveLocationsSubject.send([aliceShare, bobShare, charlieShare])
         try await deferred.fulfill()
-
+        
         let annotations = context.viewState.annotations
         #expect(annotations.count == 3)
         let annotationIDs = Set(annotations.map(\.id))
@@ -348,42 +358,42 @@ struct LocationSharingScreenViewModelTests {
         #expect(annotations.first { $0.id == "@bob:matrix.org" }?.coordinate.latitude == 48.8)
         #expect(annotations.first { $0.id == "@charlie:matrix.org" }?.coordinate.latitude == 40.7)
     }
-
+    
     @Test
     mutating func viewLiveProfilesResolvedFromRoomMembers() async throws {
         let aliceShare = makeLiveLocationShare(userID: "@alice:matrix.org", latitude: 51.5, longitude: -0.1)
         let sender = TimelineItemSender(id: "@alice:matrix.org", displayName: "Alice")
         let liveLocationsSubject = CurrentValueSubject<[LiveLocationShare], Never>([aliceShare])
-
+        
         setupViewModelForViewLive(sender: sender, initialShare: aliceShare, liveLocationsSubject: liveLocationsSubject)
-
+        
         let bobShare = makeLiveLocationShare(userID: "@bob:matrix.org", latitude: 48.8, longitude: 2.3)
         let charlieShare = makeLiveLocationShare(userID: "@charlie:matrix.org", latitude: 40.7, longitude: -74.0)
-
+        
         let deferred = deferFulfillment(context.observe(\.viewState.annotations)) { $0.count == 3 }
         liveLocationsSubject.send([aliceShare, bobShare, charlieShare])
         try await deferred.fulfill()
-
+        
         // Annotation marker kinds should carry profiles resolved from room members.
         let annotations = context.viewState.annotations
         #expect(annotations.first { $0.id == "@alice:matrix.org" }?.kind == .liveUser(.init(userID: "@alice:matrix.org", displayName: "Alice")))
         #expect(annotations.first { $0.id == "@bob:matrix.org" }?.kind == .liveUser(.init(userID: "@bob:matrix.org", displayName: "Bob")))
         #expect(annotations.first { $0.id == "@charlie:matrix.org" }?.kind == .liveUser(.init(userID: "@charlie:matrix.org", displayName: "Charlie")))
     }
-
+    
     @Test
     mutating func viewLiveFromBannerAwaitsFirstShareThenCentersOnIt() async throws {
         // Simulates opening from the banner: no sender info and no initial share are available yet.
         // The VM should wait for the first live location update and then center on the first share,
         // which is assumed to belong to the own user.
         let liveLocationsSubject = CurrentValueSubject<[LiveLocationShare], Never>([])
-
+        
         let liveLocationServiceMock = RoomLiveLocationServiceMock()
         liveLocationServiceMock.liveLocationsPublisher = liveLocationsSubject.asCurrentValuePublisher()
-
+        
         let roomProxyMock = JoinedRoomProxyMock(.init(members: .allMembers))
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
-
+        
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: nil, initialLiveLocationShare: nil),
                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
                                                    roomProxy: roomProxyMock,
@@ -392,34 +402,35 @@ struct LocationSharingScreenViewModelTests {
                                                    analytics: ServiceLocator.shared.analytics,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
-
+        
         // Initially no annotations and no map center since sender and share are both nil.
         #expect(context.viewState.annotations.isEmpty)
         #expect(context.mapCenterLocation == nil)
-
+        
         // Once the first update arrives, the VM populates annotations and centers the map on the first share.
         let ownUserShare = makeLiveLocationShare(userID: RoomMemberProxyMock.mockMe.userID, latitude: 51.5, longitude: -0.1)
         let deferred = deferFulfillment(context.observe(\.viewState.annotations)) { !$0.isEmpty }
         liveLocationsSubject.send([ownUserShare])
         try await deferred.fulfill()
-
+        
         #expect(context.viewState.annotations.count == 1)
         #expect(context.viewState.annotations.first?.id == RoomMemberProxyMock.mockMe.userID)
         #expect(context.viewState.annotations.first?.coordinate.latitude == 51.5)
         #expect(context.viewState.annotations.first?.coordinate.longitude == -0.1)
-
+        
         // The map should have been centered on the first received share's coordinates.
         #expect(context.mapCenterLocation?.latitude == 51.5)
         #expect(context.mapCenterLocation?.longitude == -0.1)
     }
-
+    
     // MARK: - Private
-
-    private mutating func setupViewModel(liveLocationManagerConfiguration: LiveLocationManagerMock.Configuration = .init()) {
+    
+    private mutating func setupViewModel(liveLocationManagerConfiguration: LiveLocationManagerMock.Configuration = .init(),
+                                         members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
-                                                   roomProxy: JoinedRoomProxyMock(.init()),
+                                                   roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                    liveLocationManager: LiveLocationManagerMock(liveLocationManagerConfiguration),
                                                    analytics: ServiceLocator.shared.analytics,
@@ -428,11 +439,12 @@ struct LocationSharingScreenViewModelTests {
         viewModel.state.bindings.isLocationAuthorized = true
     }
     
-    private mutating func setupViewModel(liveLocationManagerMock: LiveLocationManagerMock) {
+    private mutating func setupViewModel(liveLocationManagerMock: LiveLocationManagerMock,
+                                         members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
-                                                   roomProxy: JoinedRoomProxyMock(.init()),
+                                                   roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                    liveLocationManager: liveLocationManagerMock,
                                                    analytics: ServiceLocator.shared.analytics,
@@ -440,17 +452,17 @@ struct LocationSharingScreenViewModelTests {
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         viewModel.state.bindings.isLocationAuthorized = true
     }
-
+    
     private mutating func setupViewModelForViewLive(sender: TimelineItemSender,
                                                     initialShare: LiveLocationShare,
                                                     liveLocationsSubject: CurrentValueSubject<[LiveLocationShare], Never>,
                                                     members: [RoomMemberProxyMock] = .allMembers) {
         let liveLocationServiceMock = RoomLiveLocationServiceMock()
         liveLocationServiceMock.liveLocationsPublisher = liveLocationsSubject.asCurrentValuePublisher()
-
+        
         let roomProxyMock = JoinedRoomProxyMock(.init(members: members))
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
-
+        
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: sender, initialLiveLocationShare: initialShare),
                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
                                                    roomProxy: roomProxyMock,
@@ -460,7 +472,7 @@ struct LocationSharingScreenViewModelTests {
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
     }
-
+    
     private func makeLiveLocationShare(userID: String, latitude: Double = 0.0, longitude: Double = 0.0) -> LiveLocationShare {
         LiveLocationShare(userID: userID,
                           geoURI: .init(latitude: latitude, longitude: longitude),

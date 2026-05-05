@@ -1408,6 +1408,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Waiting to accept request";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Share location";
 "screen_share_my_location_action" = "Share my location";
 "screen_share_open_apple_maps" = "Open in Apple Maps";
