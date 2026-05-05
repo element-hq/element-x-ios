@@ -1132,6 +1132,7 @@
 "screen_room_change_permissions_delete_messages" = "Remove messages";
 "screen_room_change_permissions_everyone" = "Member";
 "screen_room_change_permissions_invite_people" = "Invite people";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Manage space";
 "screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_member_moderation" = "Manage members";
