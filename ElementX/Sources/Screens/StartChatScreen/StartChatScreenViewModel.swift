@@ -97,10 +97,6 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private var internalRoomAddressState: JoinByAddressState = .example
     
     private func setupBindings() {
-        appSettings.$publicSearchEnabled
-            .weakAssign(to: \.state.isRoomDirectoryEnabled, on: self)
-            .store(in: &cancellables)
-        
         context.$viewState
             .map(\.bindings.searchQuery)
             .debounceTextQueriesAndRemoveDuplicates()

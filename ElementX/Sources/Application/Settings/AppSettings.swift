@@ -71,7 +71,6 @@ final class AppSettings {
         case liveLocationDisclaimerDisplayed
         
         // Feature flags
-        case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case lowPriorityFilterEnabled
         case enableOnlySignedDeviceIsolationMode
@@ -418,9 +417,6 @@ final class AppSettings {
     // MARK: - Feature Flags
     
     /// Others
-    @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var publicSearchEnabled
-    
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled
     

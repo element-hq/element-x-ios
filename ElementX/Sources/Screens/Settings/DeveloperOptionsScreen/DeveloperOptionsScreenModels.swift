@@ -62,7 +62,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var roomListActivityVisibility: RoomListActivityVisibility { get set }
     var elementCallBaseURLOverride: URL? { get set }
     
-    var publicSearchEnabled: Bool { get set }
     var fuzzyRoomListSearchEnabled: Bool { get set }
     var lowPriorityFilterEnabled: Bool { get set }
     var knockingEnabled: Bool { get set }

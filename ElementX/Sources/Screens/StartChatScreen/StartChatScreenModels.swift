@@ -24,7 +24,6 @@ struct StartChatScreenViewState: BindableState {
     let userID: String
     var bindings = StartChatScreenViewStateBindings()
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
-    var isRoomDirectoryEnabled = false
 
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty

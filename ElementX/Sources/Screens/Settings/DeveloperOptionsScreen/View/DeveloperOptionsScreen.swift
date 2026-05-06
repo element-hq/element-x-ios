@@ -54,10 +54,6 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("Room List") {
-                Toggle(isOn: $context.publicSearchEnabled) {
-                    Text("Public search")
-                }
-                
                 Picker("Room list activity visibility", selection: $context.roomListActivityVisibility) {
                     ForEach(RoomListActivityVisibility.allCases, id: \.self) { visibility in
                         Text(visibility.rawValue.capitalized)
