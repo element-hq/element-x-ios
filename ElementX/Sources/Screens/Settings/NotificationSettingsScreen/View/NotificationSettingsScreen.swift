@@ -176,19 +176,9 @@ struct NotificationSettingsScreen: View {
 
     @ViewBuilder
     private var soundSelectionSection: some View {
-        presetSoundSelectionSection
-        customSoundSelectionSection
-    }
-
-    private var presetSoundSelectionSection: some View {
         Section {
             DisclosureGroup(context.viewState.selectedAlertTone.label, isExpanded: $context.shouldShowAlertSounds) {
-                ForEach(NotificationAlertTone.allDefaultAlerts, id: \.filename) { alertTone in
-                    ListRow(label: .plain(title: alertTone.label),
-                            kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
-                                context.send(viewAction: .selectAlertTone(alertTone))
-                            })
-                }
+                customSoundSelectionSection
             }
             .foregroundStyle(.compound.textPrimary)
             .listRowBackground(Color.compound.bgCanvasDefaultLevel1)
@@ -197,39 +187,51 @@ struct NotificationSettingsScreen: View {
             Text(UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneSectionTitle)
                 .compoundListSectionHeader()
         }
+
+        Section(isExpanded: $context.shouldShowAlertSounds) {
+            presetSoundSelectionSection
+        } header: { }
     }
 
-    private var customSoundSelectionSection: some View {
-        Section(isExpanded: $context.shouldShowAlertSounds) {
-            ForEach(context.viewState.availableCustomTones, id: \.filename) { alertTone in
-                ListRow(label: .plain(title: alertTone.label),
-                        kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
-                            context.send(viewAction: .selectAlertTone(alertTone))
-                        })
-            }
-            .onDelete { indices in
-                let tones = indices.map {
-                    context.viewState.availableCustomTones[$0]
-                }
-
-                context.send(viewAction: .deleteCustomAlertTones(tones))
-            }
-
-            ListRow(label: .plain(title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneCustomToneButtonTitle),
-                    kind: .button {
-                        context.shouldShowCustomAlertTonePicker = true
+    private var presetSoundSelectionSection: some View {
+        ForEach(NotificationAlertTone.allDefaultAlerts, id: \.filename) { alertTone in
+            ListRow(label: .plain(title: alertTone.label),
+                    kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
+                        context.send(viewAction: .selectAlertTone(alertTone))
                     })
-                    .fileImporter(isPresented: $context.shouldShowCustomAlertTonePicker,
-                                  allowedContentTypes: [
-                                      .mp3,
-                                      .aiff,
-                                      .wav,
-                                      UTType("com.apple.m4a-audio"),
-                                      UTType("com.apple.coreaudio-format")
-                                  ].compactMap(\.self)) {
-                        context.send(viewAction: .addedCustomAlertTone($0))
-                    }
-        } header: { }
+        }
+    }
+
+    @ViewBuilder
+    private var customSoundSelectionSection: some View {
+        ForEach(context.viewState.availableCustomTones, id: \.filename) { alertTone in
+            ListRow(label: .plain(title: alertTone.label),
+                    kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
+                        context.send(viewAction: .selectAlertTone(alertTone))
+                    })
+        }
+        .onDelete { indices in
+            let tones = indices.map {
+                context.viewState.availableCustomTones[$0]
+            }
+
+            context.send(viewAction: .deleteCustomAlertTones(tones))
+        }
+
+        ListRow(label: .plain(title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneCustomToneButtonTitle),
+                kind: .button {
+                    context.shouldShowCustomAlertTonePicker = true
+                })
+                .fileImporter(isPresented: $context.shouldShowCustomAlertTonePicker,
+                              allowedContentTypes: [
+                                  .mp3,
+                                  .aiff,
+                                  .wav,
+                                  UTType("com.apple.m4a-audio"),
+                                  UTType("com.apple.coreaudio-format")
+                              ].compactMap(\.self)) {
+                    context.send(viewAction: .addedCustomAlertTone($0))
+                }
     }
 
     private var configurationMismatchSection: some View {
