@@ -15294,11 +15294,6 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingIsFavourite = value }
     }
     var underlyingIsFavourite: Bool!
-    var isDM: Bool {
-        get { return underlyingIsDM }
-        set(value) { underlyingIsDM = value }
-    }
-    var underlyingIsDM: Bool!
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var membership: Membership {
