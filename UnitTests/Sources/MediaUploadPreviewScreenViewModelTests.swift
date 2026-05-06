@@ -15,7 +15,7 @@ final class MediaUploadPreviewScreenViewModelTests {
     var timelineProxy: TimelineProxyMock!
     var clientProxy: ClientProxyMock!
     var userIndicatorController: UserIndicatorControllerMock
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
 
     var viewModel: MediaUploadPreviewScreenViewModel!
     var context: MediaUploadPreviewScreenViewModel.Context {
@@ -29,13 +29,10 @@ final class MediaUploadPreviewScreenViewModelTests {
     
     init() {
         AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
+        appSettings = AppSettings()
         appSettings.optimizeMediaUploads = false
 
         userIndicatorController = UserIndicatorControllerMock.default
-
-        dependencies = TestDependencies(userIndicatorController: userIndicatorController,
-                                        settings: appSettings)
     }
     
     deinit {
@@ -299,7 +296,7 @@ final class MediaUploadPreviewScreenViewModelTests {
                                                       title: "Some File",
                                                       isRoomEncrypted: true,
                                                       shouldShowCaptionWarning: true,
-                                                      mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: dependencies.settings),
+                                                      mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                       timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                       clientProxy: clientProxy,
                                                       userIndicatorController: userIndicatorController)

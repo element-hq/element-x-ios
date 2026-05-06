@@ -363,7 +363,10 @@ struct CallScreen_Previews: PreviewProvider {
         widgetDriver.startBaseURLClientIDColorSchemeVoiceOnlyRageshakeURLAnalyticsConfigurationReturnValue = .success(URL.userDirectory)
         
         roomProxy.elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
-        
+
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
         return CallScreenViewModel(elementCallService: ElementCallServiceMock(.init()),
                                    configuration: .init(roomProxy: roomProxy,
                                                         clientProxy: clientProxy,
@@ -374,8 +377,8 @@ struct CallScreen_Previews: PreviewProvider {
                                                         colorScheme: .light),
                                    allowPictureInPicture: false,
                                    appHooks: AppHooks(),
-                                   appSettings: Dependencies.previewMocks.settings,
-                                   analyticsService: Dependencies.previewMocks.analytics)
+                                   appSettings: appSettings,
+                                   analyticsService: analytics)
     }()
     
     static var previews: some View {

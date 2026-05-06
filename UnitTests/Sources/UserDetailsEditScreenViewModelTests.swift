@@ -13,8 +13,8 @@ import Testing
 @MainActor
 struct UserDetailsEditScreenViewModelTests {
     private var viewModel: UserDetailsEditScreenViewModel!
-    private var userIndicatorController: UserIndicatorControllerMock!
-    private let dependencies: DependenciesProtocol
+    private let userIndicatorController: UserIndicatorControllerMock!
+    private let appSettings: AppSettings
 
     private var context: UserDetailsEditScreenViewModelType.Context {
         viewModel.context
@@ -22,10 +22,9 @@ struct UserDetailsEditScreenViewModelTests {
     
     init() {
         userIndicatorController = UserIndicatorControllerMock.default
-        dependencies = TestDependencies(userIndicatorController: userIndicatorController,
-                                        settings: AppSettings())
+        appSettings = AppSettings()
         viewModel = .init(userSession: UserSessionMock(.init()),
-                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: dependencies.settings),
+                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                           userIndicatorController: userIndicatorController)
     }
     

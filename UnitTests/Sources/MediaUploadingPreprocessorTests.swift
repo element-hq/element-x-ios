@@ -15,13 +15,11 @@ final class MediaUploadingPreprocessorTests {
     let maxUploadSize: UInt = 100 * 1024 * 1024
     var appSettings: AppSettings!
     var mediaUploadingPreprocessor: MediaUploadingPreprocessor!
-    private let dependencies: DependenciesProtocol
 
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         appSettings.optimizeMediaUploads = false
-        dependencies = TestDependencies(settings: appSettings)
         mediaUploadingPreprocessor = MediaUploadingPreprocessor(appSettings: appSettings)
     }
     

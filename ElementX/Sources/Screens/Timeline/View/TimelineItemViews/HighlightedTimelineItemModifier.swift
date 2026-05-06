@@ -89,18 +89,23 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let focussedEventID = "RoomTimelineItemFixtures.default.5"
     static let composerViewModel = ComposerToolbarViewModel.mock()
-    static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
-                                                     focussedEventID: focussedEventID,
-                                                     timelineController: MockTimelineController(),
-                                                     userSession: UserSessionMock(.init()),
-                                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                     userIndicatorController: Dependencies.previewMocks.userIndicatorController,
-                                                     appMediator: AppMediatorMock.default,
-                                                     appSettings: Dependencies.previewMocks.settings,
-                                                     analyticsService: Dependencies.previewMocks.analytics,
-                                                     emojiProvider: EmojiProvider(appSettings: Dependencies.previewMocks.settings),
-                                                     linkMetadataProvider: LinkMetadataProvider(),
-                                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+    static let timelineViewModel = {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
+        return TimelineViewModel(roomProxy: roomProxyMock,
+                                 focussedEventID: focussedEventID,
+                                 timelineController: MockTimelineController(),
+                                 userSession: UserSessionMock(.init()),
+                                 mediaPlayerProvider: MediaPlayerProviderMock(),
+                                 userIndicatorController: UserIndicatorControllerMock.default,
+                                 appMediator: AppMediatorMock.default,
+                                 appSettings: appSettings,
+                                 analyticsService: analytics,
+                                 emojiProvider: EmojiProvider(appSettings: appSettings),
+                                 linkMetadataProvider: LinkMetadataProvider(),
+                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+    }()
 
     static var previews: some View {
         ElementNavigationStack {

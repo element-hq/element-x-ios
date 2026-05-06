@@ -14,13 +14,13 @@ import Testing
 struct SettingsScreenViewModelTests {
     private var viewModel: SettingsScreenViewModelProtocol
     private var context: SettingsScreenViewModelType.Context
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
 
     init() {
-        dependencies = TestDependencies(settings: AppSettings())
+        appSettings = AppSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: ""))))
         viewModel = SettingsScreenViewModel(userSession: userSession,
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             isBugReportServiceEnabled: true,
                                             isInSecondaryWindow: false)
         context = viewModel.context

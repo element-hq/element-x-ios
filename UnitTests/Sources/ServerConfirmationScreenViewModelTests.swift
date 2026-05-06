@@ -16,20 +16,17 @@ final class ServerConfirmationScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var client: ClientSDKMock!
     var service: AuthenticationServiceProtocol!
-    var appSettings: AppSettings {
-        dependencies.settings
-    }
 
     var viewModel: ServerConfirmationScreenViewModel!
     var context: ServerConfirmationScreenViewModel.Context {
         viewModel.context
     }
 
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
 
     init() {
         AppSettings.resetAllSettings()
-        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
     }
     
     deinit {
@@ -369,7 +366,7 @@ final class ServerConfirmationScreenViewModelTests {
         viewModel = ServerConfirmationScreenViewModel(authenticationService: service,
                                                       mode: mode,
                                                       authenticationFlow: authenticationFlow,
-                                                      appSettings: dependencies.settings,
+                                                      appSettings: appSettings,
                                                       userIndicatorController: UserIndicatorControllerMock())
         
         // Add a fake window in order for the OAuth flow to continue

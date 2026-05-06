@@ -11,12 +11,14 @@ import Testing
 
 @MainActor
 struct UserProfileScreenViewModelTests {
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
+    private let userIndicatorController: UserIndicatorControllerProtocol
 
     init() {
-        dependencies = TestDependencies(userIndicatorController: UserIndicatorControllerMock.default,
-                                        settings: AppSettings(),
-                                        analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
+        userIndicatorController = UserIndicatorControllerMock.default
     }
 
     @Test
@@ -28,9 +30,9 @@ struct UserProfileScreenViewModelTests {
         let viewModel = UserProfileScreenViewModel(userID: profile.userID,
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   userIndicatorController: dependencies.userIndicatorController,
-                                                   analytics: dependencies.analytics,
-                                                   appSettings: dependencies.settings)
+                                                   userIndicatorController: userIndicatorController,
+                                                   analytics: analytics,
+                                                   appSettings: appSettings)
         let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }
@@ -50,9 +52,9 @@ struct UserProfileScreenViewModelTests {
         let viewModel = UserProfileScreenViewModel(userID: profile.userID,
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   userIndicatorController: dependencies.userIndicatorController,
-                                                   analytics: dependencies.analytics,
-                                                   appSettings: dependencies.settings)
+                                                   userIndicatorController: userIndicatorController,
+                                                   analytics: analytics,
+                                                   appSettings: appSettings)
         let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }
@@ -74,9 +76,9 @@ struct UserProfileScreenViewModelTests {
         let viewModel = UserProfileScreenViewModel(userID: profile.userID,
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   userIndicatorController: dependencies.userIndicatorController,
-                                                   analytics: dependencies.analytics,
-                                                   appSettings: dependencies.settings)
+                                                   userIndicatorController: userIndicatorController,
+                                                   analytics: analytics,
+                                                   appSettings: appSettings)
 
         let context = viewModel.context
         

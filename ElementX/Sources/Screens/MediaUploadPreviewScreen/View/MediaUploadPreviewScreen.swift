@@ -370,7 +370,7 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              title: "App Icon.png",
                                                              isRoomEncrypted: true,
                                                              shouldShowCaptionWarning: true,
-                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: Dependencies.previewMocks.settings),
+                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: AppSettings()),
                                                              timelineController: MockTimelineController(),
                                                              clientProxy: ClientProxyMock(.init()),
                                                              userIndicatorController: UserIndicatorControllerMock.default)

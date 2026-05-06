@@ -405,14 +405,17 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         notificationSettingsProxyMockConfiguration.roomMode.isDefault = false
         
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
-        
+
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     analyticsService: Dependencies.previewMocks.analytics,
-                     userIndicatorController: Dependencies.previewMocks.userIndicatorController,
+                     analyticsService: analytics,
+                     userIndicatorController: UserIndicatorControllerMock.default,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: Dependencies.previewMocks.settings)
+                     appSettings: appSettings)
     }
     
     private static func makeSimpleRoomViewModel() -> RoomDetailsScreenViewModel {
@@ -433,14 +436,17 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   joinRule: .knock))
         
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
-        
+
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     analyticsService: Dependencies.previewMocks.analytics,
-                     userIndicatorController: Dependencies.previewMocks.userIndicatorController,
+                     analyticsService: analytics,
+                     userIndicatorController: UserIndicatorControllerMock.default,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: Dependencies.previewMocks.settings)
+                     appSettings: appSettings)
     }
     
     private static func makeDMViewModel(verificationState: UserIdentityVerificationState) -> RoomDetailsScreenViewModel {
@@ -471,13 +477,16 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         }
         
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
-        
+
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                     analyticsService: Dependencies.previewMocks.analytics,
-                     userIndicatorController: Dependencies.previewMocks.userIndicatorController,
+                     analyticsService: analytics,
+                     userIndicatorController: UserIndicatorControllerMock.default,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: Dependencies.previewMocks.settings)
+                     appSettings: appSettings)
     }
 }

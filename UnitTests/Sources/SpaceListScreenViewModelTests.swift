@@ -14,12 +14,9 @@ import Testing
 final class SpacesScreenViewModelTests {
     var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoom], Never>
     var spaceServiceProxy: SpaceServiceProxyMock
-    var appSettings: AppSettings {
-        dependencies.settings
-    }
 
     var viewModel: SpacesScreenViewModelProtocol
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
 
     var context: SpacesScreenViewModelType.Context {
         viewModel.context
@@ -27,7 +24,7 @@ final class SpacesScreenViewModelTests {
 
     init() {
         AppSettings.resetAllSettings()
-        dependencies = TestDependencies(settings: AppSettings())
+        appSettings = AppSettings()
 
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
@@ -47,7 +44,7 @@ final class SpacesScreenViewModelTests {
         
         viewModel = SpacesScreenViewModel(userSession: userSession,
                                           selectedSpacePublisher: .init(nil),
-                                          appSettings: dependencies.settings,
+                                          appSettings: appSettings,
                                           userIndicatorController: UserIndicatorControllerMock())
     }
     

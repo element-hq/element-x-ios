@@ -18,12 +18,14 @@ struct RoomMembersListScreenViewModelTests {
         viewModel.context
     }
 
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
+    private let userIndicatorController: UserIndicatorControllerProtocol
 
     init() {
-        dependencies = TestDependencies(userIndicatorController: UserIndicatorControllerMock.default,
-                                        settings: AppSettings(),
-                                        analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
+        userIndicatorController = UserIndicatorControllerMock.default
     }
 
     @Test
@@ -285,8 +287,8 @@ struct RoomMembersListScreenViewModelTests {
 
         viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
                                                    roomProxy: roomProxy,
-                                                   userIndicatorController: dependencies.userIndicatorController,
-                                                   analytics: dependencies.analytics)
+                                                   userIndicatorController: userIndicatorController,
+                                                   analytics: analytics)
 
         let context = viewModel.context
 
@@ -305,7 +307,7 @@ struct RoomMembersListScreenViewModelTests {
         roomProxy = JoinedRoomProxyMock(.init(name: "test", members: members))
         viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
                                                    roomProxy: roomProxy,
-                                                   userIndicatorController: dependencies.userIndicatorController,
-                                                   analytics: dependencies.analytics)
+                                                   userIndicatorController: userIndicatorController,
+                                                   analytics: analytics)
     }
 }

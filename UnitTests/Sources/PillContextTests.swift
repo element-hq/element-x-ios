@@ -13,12 +13,14 @@ import Testing
 
 @MainActor
 struct PillContextTests {
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
+    private let userIndicatorController: UserIndicatorControllerProtocol
 
     init() {
-        dependencies = TestDependencies(userIndicatorController: UserIndicatorControllerMock(),
-                                        settings: AppSettings(),
-                                        analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
+        userIndicatorController = UserIndicatorControllerMock.default
     }
 
     @Test
@@ -31,11 +33,11 @@ struct PillContextTests {
                                      timelineController: MockTimelineController(),
                                      userSession: UserSessionMock(.init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
@@ -62,11 +64,11 @@ struct PillContextTests {
                                      timelineController: MockTimelineController(),
                                      userSession: UserSessionMock(.init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
@@ -86,11 +88,11 @@ struct PillContextTests {
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
@@ -110,11 +112,11 @@ struct PillContextTests {
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init(clientProxy: clientMock)),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomID("1"), font: .preferredFont(forTextStyle: .body)))
@@ -133,11 +135,11 @@ struct PillContextTests {
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomID("1"), font: .preferredFont(forTextStyle: .body)))
@@ -160,11 +162,11 @@ struct PillContextTests {
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init(clientProxy: clientMock)),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomAlias("#foundation-and-empire:matrix.org"), font: .preferredFont(forTextStyle: .body)))
@@ -183,11 +185,11 @@ struct PillContextTests {
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomAlias("#foundation-and-empire:matrix.org"), font: .preferredFont(forTextStyle: .body)))
@@ -208,11 +210,11 @@ struct PillContextTests {
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init(clientProxy: clientMock)),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomID("1")), font: .preferredFont(forTextStyle: .body)))
@@ -231,11 +233,11 @@ struct PillContextTests {
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomID("1")), font: .preferredFont(forTextStyle: .body)))
@@ -258,11 +260,11 @@ struct PillContextTests {
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init(clientProxy: clientMock)),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomAlias("#foundation-and-empire:matrix.org")), font: .preferredFont(forTextStyle: .body)))
@@ -281,11 +283,11 @@ struct PillContextTests {
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: dependencies.userIndicatorController,
+                                     userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
-                                     appSettings: dependencies.settings,
-                                     analyticsService: dependencies.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                     appSettings: appSettings,
+                                     analyticsService: analytics,
+                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomAlias("#foundation-and-empire:matrix.org")), font: .preferredFont(forTextStyle: .body)))

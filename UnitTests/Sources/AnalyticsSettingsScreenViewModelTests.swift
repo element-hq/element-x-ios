@@ -11,24 +11,19 @@ import Testing
 
 @MainActor
 final class AnalyticsSettingsScreenViewModelTests {
-    private let dependencies: DependenciesProtocol!
-    private var appSettings: AppSettings {
-        dependencies.settings
-    }
+    private let analytics: AnalyticsService
+    private let appSettings: AppSettings
 
     private var viewModel: AnalyticsSettingsScreenViewModelProtocol!
     private var context: AnalyticsSettingsScreenViewModelType.Context!
     
     init() {
         AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
-        let analyticsClient = AnalyticsClientMock()
-        analyticsClient.isRunning = false
-        dependencies = TestDependencies(settings: appSettings,
-                                        analytics: analyticsClient)
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
 
         viewModel = AnalyticsSettingsScreenViewModel(appSettings: appSettings,
-                                                     analytics: dependencies.analytics)
+                                                     analytics: analytics)
         context = viewModel.context
     }
     

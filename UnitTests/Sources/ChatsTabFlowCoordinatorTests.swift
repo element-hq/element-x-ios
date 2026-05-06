@@ -19,8 +19,8 @@ struct ChatsTabFlowCoordinatorTests {
     var splitCoordinator: NavigationSplitCoordinator!
     var notificationManager: NotificationManagerMock!
     let stateMachineFactory = PublishedStateMachineFactory()
-
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
 
     var cancellables = Set<AnyCancellable>()
     
@@ -33,7 +33,8 @@ struct ChatsTabFlowCoordinatorTests {
     }
     
     init() async throws {
-        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
 
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())
@@ -46,12 +47,12 @@ struct ChatsTabFlowCoordinatorTests {
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: timelineControllerFactory,
-                                                  emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: AppMediatorMock.default,
-                                                  appSettings: dependencies.settings,
+                                                  appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: dependencies.analytics,
+                                                  analytics: analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: notificationManager,
                                                   stateMachineFactory: stateMachineFactory)

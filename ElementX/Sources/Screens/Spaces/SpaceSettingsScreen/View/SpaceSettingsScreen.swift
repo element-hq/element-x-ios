@@ -121,30 +121,40 @@ struct SpaceSettingsScreen: View {
 // MARK: - Previews
 
 struct SpaceSettingsScreen_Previews: PreviewProvider, TestablePreview {
-    static let ownerViewModel = RoomDetailsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
-                                                                                                avatarURL: .mockMXCAvatar,
-                                                                                                isSpace: true,
-                                                                                                canonicalAlias: "#space:matrix.org",
-                                                                                                members: .allMembersAsCreator)),
-                                                           userSession: UserSessionMock(.init()),
-                                                           analyticsService: Dependencies.previewMocks.analytics,
-                                                           userIndicatorController: Dependencies.previewMocks.userIndicatorController,
-                                                           notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                           appSettings: Dependencies.previewMocks.settings)
-    
-    static let userViewModel = RoomDetailsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
-                                                                                               avatarURL: .mockMXCAvatar,
-                                                                                               isSpace: true,
-                                                                                               canonicalAlias: "#space:matrix.org",
-                                                                                               members: .allMembers)),
-                                                          userSession: UserSessionMock(.init()),
-                                                          analyticsService: Dependencies.previewMocks.analytics,
-                                                          userIndicatorController: Dependencies.previewMocks.userIndicatorController,
-                                                          notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          appSettings: Dependencies.previewMocks.settings)
-    
+    static let ownerViewModel = {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
+        return RoomDetailsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
+                                                                               avatarURL: .mockMXCAvatar,
+                                                                               isSpace: true,
+                                                                               canonicalAlias: "#space:matrix.org",
+                                                                               members: .allMembersAsCreator)),
+                                          userSession: UserSessionMock(.init()),
+                                          analyticsService: analytics,
+                                          userIndicatorController: UserIndicatorControllerMock.default,
+                                          notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                          appSettings: appSettings)
+    }()
+
+    static let userViewModel = {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
+        return RoomDetailsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
+                                                                               avatarURL: .mockMXCAvatar,
+                                                                               isSpace: true,
+                                                                               canonicalAlias: "#space:matrix.org",
+                                                                               members: .allMembers)),
+                                          userSession: UserSessionMock(.init()),
+                                          analyticsService: analytics,
+                                          userIndicatorController: UserIndicatorControllerMock.default,
+                                          notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                          appSettings: appSettings)
+    }()
+
     static var previews: some View {
         ElementNavigationStack {
             SpaceSettingsScreen(context: ownerViewModel.context)

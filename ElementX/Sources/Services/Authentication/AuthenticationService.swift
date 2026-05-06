@@ -390,7 +390,7 @@ extension AuthenticationService {
                               encryptionKeyProvider: EncryptionKeyProvider(),
                               classicAppManager: classicAppManager,
                               clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
-                              appSettings: Dependencies.previewMocks.settings,
+                              appSettings: AppSettings(),
                               appHooks: AppHooks())
     }
 }

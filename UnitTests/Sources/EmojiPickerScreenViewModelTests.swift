@@ -18,10 +18,10 @@ struct EmojiPickerScreenViewModelTests {
         viewModel.context
     }
 
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
 
     init() {
-        dependencies = TestDependencies(settings: AppSettings())
+        appSettings = AppSettings()
     }
 
     @Test
@@ -51,7 +51,7 @@ struct EmojiPickerScreenViewModelTests {
         
         viewModel = EmojiPickerScreenViewModel(itemID: .randomEvent,
                                                selectedEmojis: selectedEmojis,
-                                               emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                               emojiProvider: EmojiProvider(appSettings: appSettings),
                                                timelineController: MockTimelineController(timelineProxy: timelineProxy))
     }
 }

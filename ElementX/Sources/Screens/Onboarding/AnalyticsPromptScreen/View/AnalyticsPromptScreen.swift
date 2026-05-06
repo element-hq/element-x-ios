@@ -102,6 +102,6 @@ struct AnalyticsPromptScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(showTerms: Bool = true) -> AnalyticsPromptScreenViewModel {
-        AnalyticsPromptScreenViewModel(termsURL: showTerms ? Dependencies.previewMocks.settings.analyticsTermsURL : nil)
+        AnalyticsPromptScreenViewModel(termsURL: showTerms ? AppSettings().analyticsTermsURL : nil)
     }
 }

@@ -11,10 +11,10 @@ import Testing
 import UIKit
 
 struct EmojiProviderTests {
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
 
     init() {
-        dependencies = TestDependencies(settings: AppSettings())
+        appSettings = AppSettings()
     }
 
     @Test @MainActor
@@ -25,7 +25,7 @@ struct EmojiProviderTests {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = [category]
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: dependencies.settings)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: appSettings)
 
         let categories = await emojiProvider.categories()
         #expect(emojiLoaderMock.categories == categories)
@@ -39,7 +39,7 @@ struct EmojiProviderTests {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = [category]
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: dependencies.settings)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: appSettings)
 
         let categories = await emojiProvider.categories(searchString: "")
         #expect(emojiLoaderMock.categories == categories)
@@ -57,7 +57,7 @@ struct EmojiProviderTests {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = categoriesForFirstLoad
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: dependencies.settings)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: appSettings)
 
         _ = await emojiProvider.categories()
         emojiLoaderMock.categories = categoriesForSecondLoad
@@ -88,7 +88,7 @@ struct EmojiProviderTests {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = categories
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: dependencies.settings)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: appSettings)
 
         _ = await emojiProvider.categories()
         let result = await emojiProvider.categories(searchString: searchString)

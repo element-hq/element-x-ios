@@ -20,10 +20,6 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
 
         AppSettings.configureWithSuiteName("io.element.elementx.unittests")
         AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
-
-        let analyticsClient = AnalyticsClientMock()
-        analyticsClient.isRunning = false
 
         // As the tests take advantage of Rust's ability to redirect the log files, there is
         // often some debris left from the previous run, so we wipe the entire directory.

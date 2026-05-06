@@ -17,13 +17,15 @@ import Testing
 final class RoomScreenViewModelTests {
     private var viewModel: RoomScreenViewModel!
 
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
+    private let userIndicatorController: UserIndicatorControllerProtocol
 
     init() async throws {
         AppSettings.resetAllSettings()
-        dependencies = TestDependencies(userIndicatorController: UserIndicatorControllerMock.default,
-                                        settings: AppSettings(),
-                                        analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
+        userIndicatorController = UserIndicatorControllerMock.default
     }
 
     deinit {
@@ -50,10 +52,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: dependencies.analytics,
-                                            userIndicatorController: dependencies.userIndicatorController)
+                                            analyticsService: analytics,
+                                            userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
         
         // check if in the default state is not showing but is indeed loading
@@ -131,10 +133,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: dependencies.analytics,
-                                            userIndicatorController: dependencies.userIndicatorController)
+                                            analyticsService: analytics,
+                                            userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
         
         // check if the banner is now in a loaded state and is showing the counter
@@ -171,7 +173,7 @@ final class RoomScreenViewModelTests {
     
     @Test
     func pinnedEventsBannerThreadedSelection() async throws {
-        dependencies.settings.threadsEnabled = true
+        appSettings.threadsEnabled = true
 
         let roomProxyMock = JoinedRoomProxyMock(.init())
         let eventMock = TimelineEventSDKMock()
@@ -192,10 +194,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: dependencies.analytics,
-                                            userIndicatorController: dependencies.userIndicatorController)
+                                            analyticsService: analytics,
+                                            userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
         
         // check if the banner is now in a loaded state and is showing the counter
@@ -251,10 +253,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: dependencies.analytics,
-                                            userIndicatorController: dependencies.userIndicatorController)
+                                            analyticsService: analytics,
+                                            userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
         
         #expect(viewModel.state.roomTitle == "StartingName")
@@ -288,10 +290,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: ongoingCallRoomIDSubject.asCurrentValuePublisher(),
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: dependencies.analytics,
-                                            userIndicatorController: dependencies.userIndicatorController)
+                                            analyticsService: analytics,
+                                            userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
         #expect(viewModel.state.shouldShowCallButton)
         
@@ -333,10 +335,10 @@ final class RoomScreenViewModelTests {
                                                 roomProxy: roomProxyMock,
                                                 initialSelectedPinnedEventID: nil,
                                                 ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                appSettings: dependencies.settings,
+                                                appSettings: appSettings,
                                                 appHooks: AppHooks(),
-                                                analyticsService: dependencies.analytics,
-                                                userIndicatorController: dependencies.userIndicatorController)
+                                                analyticsService: analytics,
+                                                userIndicatorController: userIndicatorController)
             self.viewModel = viewModel
             viewModel.stop()
         }
@@ -354,10 +356,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: dependencies.analytics,
-                                            userIndicatorController: dependencies.userIndicatorController)
+                                            analyticsService: analytics,
+                                            userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -388,10 +390,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: dependencies.analytics,
-                                            userIndicatorController: dependencies.userIndicatorController)
+                                            analyticsService: analytics,
+                                            userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -417,10 +419,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: dependencies.analytics,
-                                            userIndicatorController: dependencies.userIndicatorController)
+                                            analyticsService: analytics,
+                                            userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
         
         // Loading state just does not appear at all
@@ -437,10 +439,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: dependencies.analytics,
-                                            userIndicatorController: dependencies.userIndicatorController)
+                                            analyticsService: analytics,
+                                            userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -464,10 +466,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: dependencies.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: dependencies.analytics,
-                                            userIndicatorController: dependencies.userIndicatorController)
+                                            analyticsService: analytics,
+                                            userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
         
         let deferredInvisible = deferFailure(viewModel.context.$viewState,

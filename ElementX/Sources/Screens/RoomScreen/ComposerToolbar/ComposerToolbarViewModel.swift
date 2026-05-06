@@ -819,15 +819,18 @@ extension ComposerToolbarViewModel {
         if !canSend {
             roomProxy.identityStatusChangesPublisher = .init([.init(userId: RoomMemberProxyMock.mockAlice.userID, changedTo: .verificationViolation)])
         }
-        
+
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
         let wysiwygViewModel = WysiwygComposerViewModel()
         let viewModel = ComposerToolbarViewModel(roomProxy: roomProxy,
                                                  wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                                 appSettings: Dependencies.previewMocks.settings,
-                                                 analyticsService: Dependencies.previewMocks.analytics,
+                                                 appSettings: appSettings,
+                                                 analyticsService: analytics,
                                                  composerDraftService: ComposerDraftServiceMock(.init()))
         viewModel.state.bindings.composerFocused = focused
         viewModel.state.bindings.plainComposerText = NSAttributedString(string: message)

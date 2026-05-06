@@ -309,16 +309,19 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         } else {
             MockTimelineController.mediaGallery
         }
-        
+
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),
                                  appMediator: AppMediatorMock.default,
-                                 appSettings: Dependencies.previewMocks.settings,
-                                 analyticsService: Dependencies.previewMocks.analytics,
-                                 emojiProvider: EmojiProvider(appSettings: Dependencies.previewMocks.settings),
+                                 appSettings: appSettings,
+                                 analyticsService: analytics,
+                                 emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }

@@ -19,10 +19,12 @@ struct LoginScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var service: AuthenticationServiceProtocol!
 
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
 
     init() {
-        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
     }
 
     @Test
@@ -238,7 +240,7 @@ struct LoginScreenViewModelTests {
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,
-                                        appSettings: dependencies.settings,
+                                        appSettings: appSettings,
                                         appHooks: AppHooks())
         
         guard case .success = await service
@@ -250,7 +252,7 @@ struct LoginScreenViewModelTests {
         viewModel = LoginScreenViewModel(authenticationService: service,
                                          loginHint: loginHint,
                                          userIndicatorController: UserIndicatorControllerMock(),
-                                         appSettings: dependencies.settings,
-                                         analytics: dependencies.analytics)
+                                         appSettings: appSettings,
+                                         analytics: analytics)
     }
 }

@@ -256,15 +256,19 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                       successor: hasSuccessor ? .init(roomId: UUID().uuidString, reason: nil) : nil,
                                                       powerLevelsConfiguration: .init(canUserSendMessage: canSendMessage)))
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
+
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
         let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                   timelineController: MockTimelineController(),
                                                   userSession: UserSessionMock(.init()),
                                                   mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                  userIndicatorController: Dependencies.previewMocks.userIndicatorController,
+                                                  userIndicatorController: UserIndicatorControllerMock.default,
                                                   appMediator: AppMediatorMock.default,
-                                                  appSettings: Dependencies.previewMocks.settings,
-                                                  analyticsService: Dependencies.previewMocks.analytics,
-                                                  emojiProvider: EmojiProvider(appSettings: Dependencies.previewMocks.settings),
+                                                  appSettings: appSettings,
+                                                  analyticsService: analytics,
+                                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         

@@ -18,10 +18,10 @@ struct AuthenticationServiceTests {
     var userSessionStore: UserSessionStoreMock!
     var encryptionKeyProvider: MockEncryptionKeyProvider!
     var service: AuthenticationService!
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
 
     init() {
-        dependencies = TestDependencies(settings: AppSettings())
+        appSettings = AppSettings()
     }
 
     @Test
@@ -158,7 +158,7 @@ struct AuthenticationServiceTests {
                                         encryptionKeyProvider: encryptionKeyProvider,
                                         classicAppManager: classicAppManager,
                                         clientFactory: clientFactory,
-                                        appSettings: dependencies.settings,
+                                        appSettings: appSettings,
                                         appHooks: AppHooks())
         
         if let classicAppAccount = service.classicAppAccount {

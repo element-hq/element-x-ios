@@ -10,7 +10,7 @@ import Foundation
 import MatrixRustSDK
 
 struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
-    let dependencies: DependenciesProtocol
+    let appSettings: AppSettings
 
     func buildTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                  initialFocussedEventID: String?,
@@ -21,7 +21,7 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
                            initialFocussedEventID: initialFocussedEventID,
                            timelineItemFactory: timelineItemFactory,
                            mediaProvider: mediaProvider,
-                           appSettings: dependencies.settings)
+                           appSettings: appSettings)
     }
     
     func buildThreadTimelineController(threadRootEventID: String,
@@ -36,7 +36,7 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
                                                initialFocussedEventID: initialFocussedEventID,
                                                timelineItemFactory: timelineItemFactory,
                                                mediaProvider: mediaProvider,
-                                               appSettings: dependencies.settings))
+                                               appSettings: appSettings))
         case .failure(let error):
             return .failure(.roomProxyError(error))
         }
@@ -52,7 +52,7 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
                                                initialFocussedEventID: nil,
                                                timelineItemFactory: timelineItemFactory,
                                                mediaProvider: mediaProvider,
-                                               appSettings: dependencies.settings))
+                                               appSettings: appSettings))
         case .failure(let error):
             return .failure(.roomProxyError(error))
         }
@@ -71,7 +71,7 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
                                                initialFocussedEventID: nil,
                                                timelineItemFactory: timelineItemFactory,
                                                mediaProvider: mediaProvider,
-                                               appSettings: dependencies.settings))
+                                               appSettings: appSettings))
         case .failure(let error):
             return .failure(.roomProxyError(error))
         }

@@ -456,13 +456,15 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         clientProxy.spaceService = SpaceServiceProxyMock(.init(editableSpaces: spaces))
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        
+
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
         return CreateRoomScreenViewModel(isSpace: isSpace,
                                          spaceSelectionMode: selectionMode,
                                          shouldShowCancelButton: isSpace,
                                          userSession: userSession,
-                                         analytics: Dependencies.previewMocks.analytics,
-                                         userIndicatorController: Dependencies.previewMocks.userIndicatorController,
+                                         analytics: analytics,
+                                         userIndicatorController: UserIndicatorControllerMock.default,
                                          appSettings: appSettings)
     }
 }

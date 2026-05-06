@@ -19,12 +19,14 @@ struct RoomMemberDetailsViewModelTests {
         viewModel.context
     }
 
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
+    private let userIndicatorController: UserIndicatorControllerProtocol
 
     init() {
-        dependencies = TestDependencies(userIndicatorController: UserIndicatorControllerMock.default,
-                                        settings: AppSettings(),
-                                        analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
+        userIndicatorController = UserIndicatorControllerMock.default
     }
 
     @Test
@@ -218,8 +220,8 @@ struct RoomMemberDetailsViewModelTests {
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
                                                      userSession: userSession,
-                                                     userIndicatorController: dependencies.userIndicatorController,
-                                                     analytics: dependencies.analytics,
-                                                     appSettings: dependencies.settings)
+                                                     userIndicatorController: userIndicatorController,
+                                                     analytics: analytics,
+                                                     appSettings: appSettings)
     }
 }

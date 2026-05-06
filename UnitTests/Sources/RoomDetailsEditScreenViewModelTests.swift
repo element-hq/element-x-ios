@@ -20,10 +20,10 @@ struct RoomDetailsEditScreenViewModelTests {
         viewModel.context
     }
 
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
 
     init() {
-        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
     }
 
     @Test
@@ -173,7 +173,7 @@ struct RoomDetailsEditScreenViewModelTests {
         userIndicatorController = UserIndicatorControllerMock.default
         viewModel = .init(roomProxy: JoinedRoomProxyMock(roomProxyConfiguration),
                           userSession: UserSessionMock(.init()),
-                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: dependencies.settings),
+                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                           userIndicatorController: userIndicatorController)
     }
 }

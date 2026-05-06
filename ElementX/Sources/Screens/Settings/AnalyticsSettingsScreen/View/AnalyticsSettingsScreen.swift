@@ -39,8 +39,10 @@ struct AnalyticsSettingsScreen: View {
 
 struct AnalyticsSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        let viewModel = AnalyticsSettingsScreenViewModel(appSettings: Dependencies.previewMocks.settings,
-                                                         analytics: Dependencies.previewMocks.analytics)
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let viewModel = AnalyticsSettingsScreenViewModel(appSettings: appSettings,
+                                                         analytics: analytics)
         AnalyticsSettingsScreen(context: viewModel.context)
     }
 }

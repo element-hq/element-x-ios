@@ -11,7 +11,8 @@ import CoreLocation
 import SwiftUI
 
 class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
-    private let dependencies: DependenciesProtocol
+    private let analytics: AnalyticsService
+
     var windowManager: any SecureWindowManagerProtocol
     
     func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: SecondaryWindowType?) -> Bool {
@@ -47,11 +48,7 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
 
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
-
-        dependencies = Dependencies(userIndicatorController: UserIndicatorController(),
-                                    settings: appSettings,
-                                    analytics: AnalyticsService(client: analyticsClient,
-                                                                appSettings: appSettings))
+        analytics = .mock(analyticsClient, settings: appSettings)
 
         guard let name = ProcessInfo.accessibilityViewID,
               let previewType = TestablePreviewsDictionary.dictionary[name] else {
@@ -66,7 +63,7 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
     
     func toPresentable() -> AnyView {
         AnyView(PreviewsWrapperView(wrapper: previewsWrapper)
-            .environment(\.analyticsService, dependencies.analytics))
+            .environment(\.analyticsService, analytics))
     }
     
     private func setupSignalling() {

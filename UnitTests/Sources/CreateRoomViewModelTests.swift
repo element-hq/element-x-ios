@@ -17,7 +17,8 @@ final class CreateRoomScreenViewModelTests {
     var spaceService: SpaceServiceProxyMock!
     var userSession: UserSessionMock!
 
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
 
     private let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
     
@@ -26,7 +27,8 @@ final class CreateRoomScreenViewModelTests {
     }
 
     init() {
-        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
     }
 
     deinit {
@@ -88,14 +90,14 @@ final class CreateRoomScreenViewModelTests {
                                             spaceServiceConfiguration: .init(spaceRoomLists: ["1": .init()])))
         clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        dependencies.settings.knockingEnabled = true
+        appSettings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: true,
                                                   spaceSelectionMode: .none,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
-                                                  analytics: dependencies.analytics,
+                                                  analytics: analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  appSettings: dependencies.settings)
+                                                  appSettings: appSettings)
         self.viewModel = viewModel
         
         // Given a form with a blank topic.
@@ -338,14 +340,14 @@ final class CreateRoomScreenViewModelTests {
         clientProxy.spaceService = spaceService
         clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        dependencies.settings.knockingEnabled = true
+        appSettings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: isSpace,
                                                   spaceSelectionMode: spacesSelectionMode,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
-                                                  analytics: dependencies.analytics,
+                                                  analytics: analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  appSettings: dependencies.settings)
+                                                  appSettings: appSettings)
         self.viewModel = viewModel
     }
 }

@@ -13,10 +13,10 @@ import Testing
 
 @MainActor
 struct BlockedUsersScreenViewModelTests {
-    private let dependencies: DependenciesProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
 
     init() {
-        dependencies = TestDependencies(userIndicatorController: UserIndicatorControllerMock.default)
+        userIndicatorController = UserIndicatorControllerMock.default
     }
 
     @Test
@@ -25,7 +25,7 @@ struct BlockedUsersScreenViewModelTests {
         
         let viewModel = BlockedUsersScreenViewModel(hideProfiles: true,
                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                    userIndicatorController: dependencies.userIndicatorController)
+                                                    userIndicatorController: userIndicatorController)
 
         let deferred = deferFailure(viewModel.context.observe(\.viewState.blockedUsers), timeout: .seconds(1)) { $0.contains { $0.displayName != nil } }
         try await deferred.fulfill()
@@ -40,7 +40,7 @@ struct BlockedUsersScreenViewModelTests {
         
         let viewModel = BlockedUsersScreenViewModel(hideProfiles: false,
                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                    userIndicatorController: dependencies.userIndicatorController)
+                                                    userIndicatorController: userIndicatorController)
 
         let deferred = deferFulfillment(viewModel.context.observe(\.viewState.blockedUsers)) { $0.contains { $0.displayName != nil } }
         try await deferred.fulfill()

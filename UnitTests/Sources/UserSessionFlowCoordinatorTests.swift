@@ -13,11 +13,12 @@ import Testing
 
 @MainActor
 struct UserSessionFlowCoordinatorTests {
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
 
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator!
     private var rootCoordinator: NavigationRootCoordinator!
-    private var userIndicatorController: UserIndicatorControllerMock!
+    private let userIndicatorController: UserIndicatorControllerMock
     private let stateMachineFactory = PublishedStateMachineFactory()
     
     private let networkReachabilitySubject: CurrentValueSubject<NetworkMonitorReachability, Never> = .init(.reachable)
@@ -51,21 +52,20 @@ struct UserSessionFlowCoordinatorTests {
         let appMediator = AppMediatorMock.default
         appMediator.networkMonitor = networkMonitor
         
-        userIndicatorController = UserIndicatorControllerMock()
-        dependencies = TestDependencies(userIndicatorController: userIndicatorController,
-                                        settings: AppSettings(),
-                                        analytics: AnalyticsClientMock())
+        userIndicatorController = UserIndicatorControllerMock.default
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
 
         let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                  emojiProvider: EmojiProvider(appSettings: dependencies.settings),
+                                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: appMediator,
-                                                  appSettings: dependencies.settings,
+                                                  appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: dependencies.analytics,
+                                                  analytics: analytics,
                                                   userIndicatorController: userIndicatorController,
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: stateMachineFactory)

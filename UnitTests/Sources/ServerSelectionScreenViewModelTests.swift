@@ -19,10 +19,10 @@ struct ServerSelectionScreenViewModelTests {
         viewModel.context
     }
 
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
 
     init() {
-        dependencies = TestDependencies(settings: AppSettings())
+        appSettings = AppSettings()
     }
 
     @Test
@@ -159,12 +159,12 @@ struct ServerSelectionScreenViewModelTests {
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,
-                                        appSettings: dependencies.settings,
+                                        appSettings: appSettings,
                                         appHooks: AppHooks())
         
         viewModel = ServerSelectionScreenViewModel(authenticationService: service,
                                                    authenticationFlow: authenticationFlow,
-                                                   appSettings: dependencies.settings,
+                                                   appSettings: appSettings,
                                                    userIndicatorController: UserIndicatorControllerMock())
     }
 }

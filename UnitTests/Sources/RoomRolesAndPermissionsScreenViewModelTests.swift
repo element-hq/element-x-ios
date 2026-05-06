@@ -18,10 +18,12 @@ struct RoomRolesAndPermissionsScreenViewModelTests {
         viewModel.context
     }
 
-    private let dependencies: DependenciesProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
 
     init() {
-        dependencies = TestDependencies(settings: AppSettings(), analytics: AnalyticsClientMock())
+        appSettings = AppSettings()
+        analytics = .mock(settings: appSettings)
     }
 
     @Test
@@ -90,6 +92,6 @@ struct RoomRolesAndPermissionsScreenViewModelTests {
         roomProxy = JoinedRoomProxyMock(.init(members: members))
         viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
                                                            userIndicatorController: UserIndicatorControllerMock(),
-                                                           analytics: dependencies.analytics)
+                                                           analytics: analytics)
     }
 }

@@ -12,10 +12,10 @@ import PostHog
 import Testing
 
 final class AnalyticsTests {
-    private var appSettings: AppSettings
-    private var analyticsClient: AnalyticsClientMock
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
+    private let analyticsClient: AnalyticsClientMock
     private var posthogMock: PHGPostHogMock
-    private let dependencies: DependenciesProtocol
 
     @MainActor
     init() {
@@ -24,8 +24,7 @@ final class AnalyticsTests {
         
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
-        dependencies = TestDependencies(settings: appSettings,
-                                        analytics: analyticsClient)
+        analytics = .mock(analyticsClient, settings: appSettings)
 
         posthogMock = PHGPostHogMock()
         posthogMock.configureMockBehavior()
@@ -39,7 +38,7 @@ final class AnalyticsTests {
     func analyticsPromptNewUser() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When the user is prompted for analytics.
-        let showPrompt = dependencies.analytics.shouldShowAnalyticsPrompt
+        let showPrompt = analytics.shouldShowAnalyticsPrompt
 
         // Then the prompt should be shown.
         #expect(showPrompt, "A prompt should be shown for a new user.")
@@ -51,7 +50,7 @@ final class AnalyticsTests {
         appSettings.analyticsConsentState = .optedOut
         
         // When the user is prompted for analytics
-        let showPrompt = dependencies.analytics.shouldShowAnalyticsPrompt
+        let showPrompt = analytics.shouldShowAnalyticsPrompt
 
         // Then no prompt should be shown.
         #expect(!showPrompt, "A prompt should not be shown any more.")
@@ -63,7 +62,7 @@ final class AnalyticsTests {
         appSettings.analyticsConsentState = .optedIn
         
         // When the user is prompted for analytics
-        let showPrompt = dependencies.analytics.shouldShowAnalyticsPrompt
+        let showPrompt = analytics.shouldShowAnalyticsPrompt
 
         // Then no prompt should be shown.
         #expect(!showPrompt, "A prompt should not be shown any more.")
@@ -73,7 +72,7 @@ final class AnalyticsTests {
     func analyticsPromptNotDisplayed() {
         // Given a fresh install of the app Analytics should be disabled
         #expect(appSettings.analyticsConsentState == .unknown)
-        #expect(!dependencies.analytics.isEnabled)
+        #expect(!analytics.isEnabled)
         #expect(!analyticsClient.startAnalyticsConfigurationCalled)
     }
     
@@ -81,10 +80,10 @@ final class AnalyticsTests {
     func analyticsOptOut() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When analytics is opt-out
-        dependencies.analytics.optOut()
+        analytics.optOut()
         // Then analytics should be disabled
         #expect(appSettings.analyticsConsentState == .optedOut)
-        #expect(!dependencies.analytics.isEnabled)
+        #expect(!analytics.isEnabled)
         #expect(!analyticsClient.isRunning)
         // Analytics client should have been stopped
         #expect(analyticsClient.stopCalled)
@@ -94,10 +93,10 @@ final class AnalyticsTests {
     func analyticsOptIn() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When analytics is opt-in
-        dependencies.analytics.optIn()
+        analytics.optIn()
         // The analytics should be enabled
         #expect(appSettings.analyticsConsentState == .optedIn)
-        #expect(dependencies.analytics.isEnabled)
+        #expect(analytics.isEnabled)
         // Analytics client should have been started
         #expect(analyticsClient.startAnalyticsConfigurationCalled)
     }
@@ -107,8 +106,8 @@ final class AnalyticsTests {
         // Given an existing install of the app where the user previously declined the tracking
         appSettings.analyticsConsentState = .optedOut
         // Analytics should not start
-        #expect(!dependencies.analytics.isEnabled)
-        dependencies.analytics.startIfEnabled()
+        #expect(!analytics.isEnabled)
+        analytics.startIfEnabled()
         #expect(!analyticsClient.startAnalyticsConfigurationCalled)
     }
     
@@ -117,8 +116,8 @@ final class AnalyticsTests {
         // Given an existing install of the app where the user previously accepted the tracking
         appSettings.analyticsConsentState = .optedIn
         // Analytics should start
-        #expect(dependencies.analytics.isEnabled)
-        dependencies.analytics.startIfEnabled()
+        #expect(analytics.isEnabled)
+        analytics.startIfEnabled()
         #expect(analyticsClient.startAnalyticsConfigurationCalled)
     }
     
@@ -216,14 +215,14 @@ final class AnalyticsTests {
     func resetConsentState() {
         // Given an existing install of the app where the user previously accpeted the tracking
         appSettings.analyticsConsentState = .optedIn
-        #expect(!dependencies.analytics.shouldShowAnalyticsPrompt)
+        #expect(!analytics.shouldShowAnalyticsPrompt)
 
         // When forgetting analytics consents
-        dependencies.analytics.resetConsentState()
+        analytics.resetConsentState()
 
         // Then the analytics prompt should be presented again
         #expect(appSettings.analyticsConsentState == .unknown)
-        #expect(dependencies.analytics.shouldShowAnalyticsPrompt)
+        #expect(analytics.shouldShowAnalyticsPrompt)
     }
     
     @Test
