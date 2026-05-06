@@ -38,8 +38,8 @@
 "message_tone_system_swish" = "Swish";
 "message_tone_system_tweet" = "Tweet";
 "message_tone_elementx_triple_sine" = "Triple Sine";
-"message_tone_elementx_default" = "Default Message";
-"message_tone_elementx_pro_default" = "Pro Message";
+"message_tone_elementx_default" = "Element Default";
+"message_tone_elementx_pro_default" = "Element Fade";
 "message_tone_elementx_adrift" = "Adrift";
 "message_tone_elementx_flick" = "Flick";
 "message_tone_elementx_glass_knock" = "Glass Knock";

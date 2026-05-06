@@ -20,7 +20,7 @@ internal enum UntranslatedL10n {
   internal static var cryptoHistorySharingConfirmStartChatDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_title") }
   /// Adrift
   internal static var messageToneElementxAdrift: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_adrift") }
-  /// Default Message
+  /// Element Default
   internal static var messageToneElementxDefault: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_default") }
   /// Flick
   internal static var messageToneElementxFlick: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_flick") }
@@ -28,7 +28,7 @@ internal enum UntranslatedL10n {
   internal static var messageToneElementxGlassKnock: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_glass_knock") }
   /// Nudge
   internal static var messageToneElementxNudge: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_nudge") }
-  /// Pro Message
+  /// Element Fade
   internal static var messageToneElementxProDefault: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_pro_default") }
   /// Sine F
   internal static var messageToneElementxSineF: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_sine_f") }
