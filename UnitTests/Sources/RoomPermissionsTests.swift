@@ -24,7 +24,9 @@ struct RoomPermissionsTests {
                                                 roomName: 0,
                                                 roomAvatar: 0,
                                                 roomTopic: 0,
-                                                spaceChild: 100)
+                                                spaceChild: 100,
+                                                beacon: 0,
+                                                beaconInfo: 50)
         
         // When creating room permissions from them.
         let permissions = RoomPermissions(powerLevels: powerLevels)

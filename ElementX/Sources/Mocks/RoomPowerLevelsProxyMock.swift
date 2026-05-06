@@ -65,6 +65,8 @@ extension RoomPowerLevelsValues {
                               roomName: 50,
                               roomAvatar: 50,
                               roomTopic: 50,
-                              spaceChild: 50)
+                              spaceChild: 50,
+                              beacon: 0,
+                              beaconInfo: 50)
     }
 }
