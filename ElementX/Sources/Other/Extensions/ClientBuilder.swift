@@ -29,7 +29,6 @@ extension ClientBuilder {
                                          timeout: requestTimeout,
                                          maxConcurrentRequests: nil,
                                          maxRetryTime: maxRequestRetryTime))
-            .dmRoomDefinition(dmRoomDefinition: .twoMembers)
         
         builder = switch slidingSync {
         case .restored: builder

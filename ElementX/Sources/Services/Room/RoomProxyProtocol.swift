@@ -224,7 +224,7 @@ extension JoinedRoomProxyProtocol {
     }
     
     var isDirectOneToOneRoom: Bool {
-        infoPublisher.value.isDM
+        infoPublisher.value.isDirect && infoPublisher.value.activeMembersCount <= 2
     }
 
     func members() async -> [RoomMemberProxyProtocol]? {
