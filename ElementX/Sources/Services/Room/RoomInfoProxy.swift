@@ -54,6 +54,10 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
         roomInfo.isSpace
     }
     
+    var isDM: Bool {
+        roomInfo.isDm
+    }
+    
     var successor: SuccessorRoom? {
         roomInfo.successorRoom
     }
