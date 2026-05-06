@@ -1,3 +1,79 @@
+## Changes in 26.05.0 (2026-05-06)
+
+### What's Changed
+
+✨ Features
+* Promote "history sharing on invite" out of developer options by @richvdh in https://github.com/element-hq/element-x-ios/pull/5480
+* Removed Live Location Sharing feature flag by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5498
+* Live Location Sharing - handle server echoes by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5514
+* Limit knock FF only room creation and access type changes by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5524
+* Add the Live location setting to the change permissions screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5546
+* Remove the `RoomDirectorySearch` feature flag and enable the feature by default by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5552
+
+🙌 Improvements
+* Stop showing live location disclaimer once accepted. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5471
+* Remove support for handling SPA calls within the app. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5515
+* Update TimelineMediaPreviewDetailsView to match the latest design. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5513
+* Allow the mac app to chose room avatars directly from files instead of the photo library by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5486
+* Restore the .oidcCallback route for external authentication. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5391
+* Live Location Sharing: Show alert if user has no LLS permissions in the room. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5542
+
+🐛 Bugfixes
+* Use CurrentValuePublisher for `[LiveLocationShare]` updates by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5466
+* LocationSharingScreen: fix indefinite loading on the center to location button in non picker mode by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5469
+* Fix a bug where the onboarding flow was dismissed by logging out. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5481
+* Live Location Sharing better error handling by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5509
+* Fixes for multi-window support. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5528
+* Avoid force-unwrap of scene.keyWindow in WindowManager.configure. by @danderson-cont in https://github.com/element-hq/element-x-ios/pull/5535
+* Move verification request acceptance confirmation to method call response instead of delegate callback by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5541
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5516
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5534
+
+🧱 Build
+* Update all UI test snapshots following 26.4 migration by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5460
+* Fix testUserFlow integration tests, at least locally by @manuroe in https://github.com/element-hq/element-x-ios/pull/5352
+* update sim version to 26.4.1 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5479
+* Split OSVersion from runtime version when creating sims on CI by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5496
+* Fix UI Tests by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5502
+* Move integration test flows that don't require a backend to the UI tests by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5507
+* Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5505
+* Re-enable the AppLock UI tests on iPhone only. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5530
+* Show which test suite failed in the UnitTest logs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5531
+* Switch the xcodegen renovate schedule to fortnightly by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5543
+
+🚧 In development 🚧
+* Improve Live Location Sharing with reduced accuracy mode by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5461
+* Bold the room cell when highlighted if not showing all activity. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5468
+* Live Location Sharing: force a stop before starting a new session by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5475
+* Open Live Locations map on tapping on the banner by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5477
+* Fix a bug where calls don't ring when quiet notifications are hidden. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5484
+
+Others
+* Add a Developer Options button to the AuthenticationStartScreen on Nightly builds. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5472
+* Update SDK to 26.04.23 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5478
+* Combine DM call actions into one menu item by @amshakal in https://github.com/element-hq/element-x-ios/pull/5473
+* Update dependency PostHog to v3.54.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5482
+* Update the SDK, handling OIDC/OAuth API breaks. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5497
+* Avoid logouts when resetting the caches by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5501
+* Update sdk to 26.04.28 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5511
+* #5504 - Add logs around route handling and the global search window presentation by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5519
+* Update XcodeGen dependencies. by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5520
+* Update dependency PostHog to v3.56.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5529
+* Update dependency element-hq/compound-design-tokens to v10.1.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5526
+* Update dependency PostHog to v3.57.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5532
+* Update XcodeGen by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5539
+* Update dependency PostHog to v3.57.2 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5540
+* Rename OIDC to OAuth. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5525
+* Add an OAuthPresenterHook. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5545
+* Update SDK to 26.05.06 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5550
+
+### New Contributors
+* @danderson-cont made their first contribution in https://github.com/element-hq/element-x-ios/pull/5535
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.04.2...release/26.05.0
+
 ## Changes in 26.04.2 (2026-04-21)
 
 ### What's Changed
