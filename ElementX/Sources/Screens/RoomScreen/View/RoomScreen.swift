@@ -28,11 +28,15 @@ struct RoomScreen: View {
     var body: some View {
         TimelineView(timelineContext: timelineContext)
             .overlay(alignment: .bottomTrailing) {
-                TimelineScrollButton(isHidden: timelineContext.viewState.isAtBottomAndLive,
-                                     showsBadge: scrollToBottomShowsBadge) {
-                    timelineContext.send(viewAction: .scrollToBottom)
+                VStack(alignment: .trailing, spacing: 16) {
+                    jumpToReadMarkerButton
+                    TimelineScrollButton(isHidden: timelineContext.viewState.isAtBottomAndLive,
+                                         showsBadge: scrollToBottomShowsBadge) {
+                        timelineContext.send(viewAction: .scrollToBottom)
+                    }
+                    .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
                 }
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
+                .padding()
             }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .topBanners([
@@ -42,7 +46,7 @@ struct RoomScreen: View {
                 ]),
                 // This can overlay on top of the stacked banners
                 TopBannerLayer(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
-            ], footer: dateBadge, trailingAccessory: jumpToReadMarkerButton)
+            ], footer: dateBadge)
             .safeAreaInset(edge: .top) {
                 // When VoiceOver is enabled, the table view isn't reversed and the scroll gestures
                 // don't trigger meaning the banner never hides itself and so the .overlay layout
@@ -134,7 +138,7 @@ struct RoomScreen: View {
     @ViewBuilder
     private var jumpToReadMarkerButton: some View {
         if timelineContext.viewState.shouldShowJumpToReadMarker {
-            TimelineScrollButton(direction: .up) {
+            TimelineScrollButton(direction: .up, showsBadge: true) {
                 timelineContext.send(viewAction: .scrollToReadMarker)
             }
         }

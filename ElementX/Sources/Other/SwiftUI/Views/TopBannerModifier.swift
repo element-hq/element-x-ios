@@ -43,11 +43,8 @@ struct TopBannerLayer {
 extension View {
     /// Overlays the given banner view at the top edge of this view, using a
     /// slide from the top edge when `isVisible` is toggled.
-    func topBanner(_ banner: some View,
-                   isVisible: Bool,
-                   footer: some View = EmptyView(),
-                   trailingAccessory: some View = EmptyView()) -> some View {
-        topBanners([TopBannerLayer(banner, isVisible: isVisible)], footer: footer, trailingAccessory: trailingAccessory)
+    func topBanner(_ banner: some View, isVisible: Bool, footer: some View = EmptyView()) -> some View {
+        topBanners([TopBannerLayer(banner, isVisible: isVisible)], footer: footer)
     }
 
     /// Overlays the given Z-axis banner slots at the top edge of this view.
@@ -56,13 +53,7 @@ extension View {
     /// in/out from the top edge. The shadow and bottom padding are applied to
     /// the VStack of each slot. The footer is shared and displayed below the
     /// topmost visible slot.
-    ///
-    /// `trailingAccessory` is rendered immediately below the banner area on
-    /// the trailing edge, allowing siblings (e.g. a jump-to-read-marker
-    /// button) to dodge banners through layout rather than measurement.
-    func topBanners(_ items: [TopBannerLayer],
-                    footer: some View = EmptyView(),
-                    trailingAccessory: some View = EmptyView()) -> some View {
+    func topBanners(_ items: [TopBannerLayer], footer: some View = EmptyView()) -> some View {
         let anyBannerVisible = items.contains { $0.isVisible }
         return overlay(alignment: .top) {
             ZStack(alignment: .top) {
@@ -98,10 +89,6 @@ extension View {
                         // Banners include a 28 padding to include shadows in their size
                         // so we need to remove 28 if any is visible
                         .padding(.top, anyBannerVisible ? -15 : 13)
-                    HStack(spacing: 0) {
-                        Spacer(minLength: 0)
-                        trailingAccessory
-                    }
                 }
                 // Hidden layout used for sizing when no banner is visible
                 Color.clear

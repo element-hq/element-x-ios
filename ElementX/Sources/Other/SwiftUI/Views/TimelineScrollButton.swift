@@ -48,7 +48,6 @@ struct TimelineScrollButton: View {
                         .offset(y: badgeOffsetY)
                 }
             }
-            .padding()
         }
         .opacity(isHidden ? 0 : 1)
         .allowsHitTesting(!isHidden)
