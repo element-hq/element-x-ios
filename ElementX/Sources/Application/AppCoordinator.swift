@@ -720,6 +720,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                    keyBackupNeeded: false,
                                                                    appMediator: appMediator,
                                                                    appSettings: appSettings,
+                                                                   appHooks: appHooks,
                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
             let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
             self.softLogoutCoordinator = coordinator

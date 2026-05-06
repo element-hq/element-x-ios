@@ -34,6 +34,11 @@ class AppHooks: AppHooksProtocol {
         certificateValidatorHook = hook
     }
     
+    private(set) var oAuthPresenterHook: OAuthPresenterHookProtocol = DefaultOAuthPresenterHook()
+    func registerOAuthPresenterHook(_ hook: OAuthPresenterHookProtocol) {
+        oAuthPresenterHook = hook
+    }
+    
     private(set) var roomScreenHook: RoomScreenHookProtocol = DefaultRoomScreenHook()
     func registerRoomScreenHook(_ hook: RoomScreenHookProtocol) {
         roomScreenHook = hook
