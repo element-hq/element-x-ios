@@ -24,10 +24,16 @@ struct TimelineScrollButton: View {
 
     @ScaledMetric(relativeTo: .compound.bodyLG) private var iconSize: CGFloat = 22
     @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeDotSize: CGFloat = 14
-    @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeOffsetY: CGFloat = -10
 
     /// Padding around the chevron, balanced so the total circle stays ~40pt at default text size.
     private let iconPadding: CGFloat = 9
+
+    /// Vertical offset that half-centers the badge dot on the circle's edge. Magnitude is half
+    /// the dot's diameter so half sits inside the circle, half outside. Sign is applied at the
+    /// call site based on direction.
+    private var badgeOffsetMagnitude: CGFloat {
+        badgeDotSize / 2
+    }
 
     init(direction: Direction = .down,
          isHidden: Bool = false,
@@ -41,11 +47,11 @@ struct TimelineScrollButton: View {
 
     var body: some View {
         Button { callback() } label: {
-            ZStack(alignment: .top) {
+            ZStack(alignment: direction == .down ? .bottom : .top) {
                 icon
                 if showsBadge {
                     badge
-                        .offset(y: badgeOffsetY)
+                        .offset(y: direction == .down ? badgeOffsetMagnitude : -badgeOffsetMagnitude)
                 }
             }
         }
