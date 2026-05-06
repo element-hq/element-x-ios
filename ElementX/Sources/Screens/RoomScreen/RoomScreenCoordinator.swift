@@ -57,9 +57,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     private var roomViewModel: RoomScreenViewModelProtocol
     private var timelineViewModel: TimelineViewModelProtocol
     private var composerViewModel: ComposerToolbarViewModelProtocol
-
+    
     private var cancellables = Set<AnyCancellable>()
-
+    
     private let actionsSubject: PassthroughSubject<RoomScreenCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<RoomScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -115,7 +115,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         timelineViewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
-
+                
                 switch action {
                 case .displayEmojiPicker(let itemID, let selectedEmojis):
                     actionsSubject.send(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
@@ -161,11 +161,11 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
-
+        
         composerViewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
-
+                
                 timelineViewModel.process(composerAction: action)
             }
             .store(in: &cancellables)
@@ -234,7 +234,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     func toPresentable() -> AnyView {
         let composerToolbar = ComposerToolbar(context: composerViewModel.context)
-
+        
         return AnyView(RoomScreen(context: roomViewModel.context,
                                   timelineContext: timelineViewModel.context,
                                   composerToolbar: composerToolbar))

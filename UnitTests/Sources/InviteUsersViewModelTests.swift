@@ -16,7 +16,7 @@ final class InviteUsersScreenViewModelTests {
     var userDiscoveryService: UserDiscoveryServiceMock!
     var clientProxy: ClientProxyMock!
     var appSettings: AppSettings!
-
+    
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
@@ -117,7 +117,7 @@ final class InviteUsersScreenViewModelTests {
         
         context.send(viewAction: .toggleUser(.mockAlice))
         try await deferredState.fulfill()
-
+        
         context.send(viewAction: .proceed)
         #expect(context.presentConfirmationDialog)
         

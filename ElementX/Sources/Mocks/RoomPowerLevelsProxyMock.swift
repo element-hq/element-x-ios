@@ -27,7 +27,7 @@ extension RoomPowerLevelsProxyMock {
         self.init()
         
         underlyingValues = RoomPowerLevelsValues.mock
-                
+        
         canOwnUserSendMessageReturnValue = configuration.canUserSendMessage
         canOwnUserSendStateEventReturnValue = configuration.canUserSendState
         canOwnUserInviteReturnValue = configuration.canUserInvite

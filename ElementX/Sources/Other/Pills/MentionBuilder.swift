@@ -49,7 +49,7 @@ struct MentionBuilder: MentionBuilderProtocol {
     
     func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange) {
         let attributesToRestore = getAttributesToRestore(for: attributedString, in: range)
-
+        
         let attachmentData = PillTextAttachmentData(type: .allUsers, font: attributesToRestore.font)
         guard let attachment = PillTextAttachment(attachmentData: attachmentData) else {
             return
@@ -80,7 +80,7 @@ struct MentionBuilder: MentionBuilderProtocol {
                                                                    .font: attributesToRestore.font,
                                                                    .foregroundColor: attributesToRestore.foregroundColor]
         attachmentAttributes.addBlockquoteIfNeeded(attributesToRestore.blockquote)
-
+        
         setPillAttachment(attachment: attachment,
                           attributedString: attributedString,
                           in: range,

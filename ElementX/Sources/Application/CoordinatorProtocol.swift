@@ -17,9 +17,9 @@ protocol CoordinatorProtocol: AnyObject {
 
 extension CoordinatorProtocol {
     func start() { }
-
+    
     func stop() { }
-
+    
     func toPresentable() -> AnyView {
         AnyView(Text("View not configured"))
     }

@@ -41,7 +41,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: [],
                                                                 isSkippable: isSkippable),
                    mediaProvider: userSession.mediaProvider)
-                
+        
         setupSubscriptions()
         fetchMembersIfNeeded()
         
@@ -82,7 +82,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             toggleUser(user)
         }
     }
-
+    
     // MARK: - Private
     
     private func toggleUser(_ user: UserProfileProxy) {
@@ -207,7 +207,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             }
         }
     }
-        
+    
     private var searchQuery: String {
         context.searchQuery
     }

@@ -48,7 +48,7 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(MessageForwardingScreen(context: viewModel.context))
     }

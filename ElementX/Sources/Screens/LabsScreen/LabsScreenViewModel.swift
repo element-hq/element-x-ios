@@ -15,7 +15,7 @@ class LabsScreenViewModel: LabsScreenViewModelType, LabsScreenViewModelProtocol 
     var actionsPublisher: AnyPublisher<LabsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(labsOptions: LabsOptionsProtocol) {
         let bindings = LabsScreenViewStateBindings(labsOptions: labsOptions)
         let state = LabsScreenViewState(bindings: bindings)

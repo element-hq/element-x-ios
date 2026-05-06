@@ -24,7 +24,7 @@ class MockTimelineController: TimelineControllerProtocol {
     var roomID: String {
         roomProxy?.id ?? "MockRoomIdentifier"
     }
-
+    
     var timelineKind: TimelineKind
     
     let callbacks = PassthroughSubject<TimelineControllerCallback, Never>()
@@ -112,7 +112,7 @@ class MockTimelineController: TimelineControllerProtocol {
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async { }
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async { }
-        
+    
     func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async {
         if let timelineProxy {
             _ = await timelineProxy.toggleReaction(reaction, to: eventID)
@@ -154,7 +154,7 @@ class MockTimelineController: TimelineControllerProtocol {
     func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy? {
         nil
     }
-        
+    
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
         timelineItemsTimestamp[itemID] ?? .now
     }
@@ -285,7 +285,7 @@ class MockTimelineController: TimelineControllerProtocol {
         }
         return .success(())
     }
-        
+    
     // MARK: - UI Test signalling
     
     /// The cancellable used for UI Tests signalling.

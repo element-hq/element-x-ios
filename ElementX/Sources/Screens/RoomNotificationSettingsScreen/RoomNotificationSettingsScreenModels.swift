@@ -100,7 +100,7 @@ struct RoomNotificationSettingsScreenStrings {
         
         self.customSettingFootnote = customSettingFootnote
     }
-        
+    
     func string(for mode: RoomNotificationModeProxy) -> String {
         switch mode {
         case .allMessages:

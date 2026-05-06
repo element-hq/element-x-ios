@@ -107,7 +107,7 @@ struct DeveloperOptionsScreen: View {
             } footer: {
                 Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
             }
-
+            
             Section("Element Call remote URL override") {
                 TextField("Leave empty to use EC locally", text: $elementCallURLOverrideString)
                     .autocorrectionDisabled(true)
@@ -160,7 +160,7 @@ struct DeveloperOptionsScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
     }
-
+    
     @ViewBuilder
     private var effectsView: some View {
         if showConfetti {
@@ -170,7 +170,7 @@ struct DeveloperOptionsScreen: View {
                 .task { await removeConfettiAfterDelay() }
         }
     }
-
+    
     private func removeConfettiAfterDelay() async {
         try? await Task.sleep(for: .seconds(4))
         showConfetti = false

@@ -19,7 +19,7 @@ class SecureBackupKeyBackupScreenViewModel: SecureBackupKeyBackupScreenViewModel
     var actions: AnyPublisher<SecureBackupKeyBackupScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(secureBackupController: SecureBackupControllerProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
         self.secureBackupController = secureBackupController
         self.userIndicatorController = userIndicatorController
@@ -63,7 +63,7 @@ class SecureBackupKeyBackupScreenViewModel: SecureBackupKeyBackupScreenViewModel
     }
     
     // MARK: - Private
-        
+    
     private func disableBackup() {
         Task {
             switch await secureBackupController.disable() {

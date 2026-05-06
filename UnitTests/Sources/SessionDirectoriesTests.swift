@@ -100,11 +100,11 @@ private extension SessionDirectories {
     var mockStateStorePath: String {
         dataDirectory.appending(component: "matrix-sdk-state.sqlite3").path(percentEncoded: false)
     }
-
+    
     var mockCryptoStorePath: String {
         dataDirectory.appending(component: "matrix-sdk-crypto.sqlite3").path(percentEncoded: false)
     }
-
+    
     var mockEventCachePath: String {
         cacheDirectory.appending(component: "matrix-sdk-event-cache.sqlite3").path(percentEncoded: false)
     }

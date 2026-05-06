@@ -54,7 +54,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
         
         super.init(initialViewState: .init(activeTimelineContext: activeTimelineContext, bindings: .init(screenMode: initialScreenMode)), mediaProvider: mediaProvider)
-                
+        
         mediaTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
             guard let self, state.bindings.screenMode == .media else {
                 return
@@ -201,7 +201,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
                                                  items: currentItems)
             newGroups.append(group)
         }
-
+        
         state.groups = newGroups
         
         state.isBackPaginating = timelineViewState.timelineState.paginationState.backward == .paginating

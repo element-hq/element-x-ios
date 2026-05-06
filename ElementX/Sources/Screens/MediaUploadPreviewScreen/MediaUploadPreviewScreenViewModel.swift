@@ -28,7 +28,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     var actions: AnyPublisher<MediaUploadPreviewScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(mediaURLs: [URL],
          title: String?,
          isRoomEncrypted: Bool,

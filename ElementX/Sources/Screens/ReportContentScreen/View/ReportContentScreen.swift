@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ReportContentScreen: View {
     @Bindable var context: ReportContentScreenViewModel.Context
-
+    
     var body: some View {
         Form {
             reasonSection
@@ -25,7 +25,7 @@ struct ReportContentScreen: View {
         .toolbar { toolbar }
         .interactiveDismissDisabled()
     }
-
+    
     private var reasonSection: some View {
         Section {
             ListRow(label: .plain(title: L10n.screenReportContentHint),
@@ -47,7 +47,7 @@ struct ReportContentScreen: View {
                 .compoundListSectionFooter()
         }
     }
-
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
@@ -55,7 +55,7 @@ struct ReportContentScreen: View {
                 context.send(viewAction: .cancel)
             }
         }
-
+        
         ToolbarItem(placement: .confirmationAction) {
             Button(L10n.actionSend) {
                 context.send(viewAction: .submit)

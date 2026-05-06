@@ -49,7 +49,7 @@ struct NotificationPermissionsScreen: View {
                 .accessibilityHidden(true)
         }
     }
-
+    
     private var buttons: some View {
         VStack(spacing: 16) {
             Button(L10n.actionOk) { context.send(viewAction: .enable) }

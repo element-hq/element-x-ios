@@ -12,21 +12,21 @@ import SwiftUI
 public extension Animation {
     /// Animation to be used to disable animations.
     static let noAnimation: Animation = .linear(duration: 0)
-
+    
     /// `noAnimation` if running tests, otherwise `default` animation if `UIAccessibility.isReduceMotionEnabled` is false
     static var elementDefault: Animation {
         let animation: Animation = ProcessInfo.isRunningTests ? .noAnimation : .default
         return animation.disabledIfReduceMotionEnabled()
     }
-
+    
     /// `noAnimation` if running tests, otherwise `self` if `UIAccessibility.isReduceMotionEnabled` is false
     func disabledDuringTests() -> Self {
         let animation: Animation = ProcessInfo.isRunningTests ? .noAnimation : self
         return animation.disabledIfReduceMotionEnabled()
     }
-
+    
     // MARK: - Private
-
+    
     private func disabledIfReduceMotionEnabled() -> Self {
         UIAccessibility.isReduceMotionEnabled ? .noAnimation : self
     }

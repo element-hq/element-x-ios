@@ -25,7 +25,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     var actions: AnyPublisher<RoomMembersListScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(initialMode: RoomMembersListScreenMode = .members,
          userSession: UserSessionProtocol,
          roomProxy: JoinedRoomProxyProtocol,

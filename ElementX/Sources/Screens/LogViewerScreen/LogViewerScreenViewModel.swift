@@ -17,7 +17,7 @@ class LogViewerScreenViewModel: LogViewerScreenViewModelType, LogViewerScreenVie
     var actions: AnyPublisher<LogViewerScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init() {
         super.init(initialViewState: LogViewerScreenViewState(urls: Tracing.logFiles))
     }

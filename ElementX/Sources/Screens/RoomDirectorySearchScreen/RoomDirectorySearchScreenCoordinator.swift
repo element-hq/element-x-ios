@@ -49,7 +49,7 @@ final class RoomDirectorySearchScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(RoomDirectorySearchScreen(context: viewModel.context))
     }

@@ -66,7 +66,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         self.initialSelectedPinnedEventID = initialSelectedPinnedEventID
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
-
+        
         let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
@@ -83,7 +83,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await updateVerificationBadge()
         }
     }
-
+    
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .tappedPinnedEventsBanner:
@@ -174,7 +174,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 state.isSharingLiveLocation = sessionsByRoomID.keys.contains(roomProxy.id)
             }
             .store(in: &cancellables)
-                
+        
         roomProxy.infoPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] roomInfo in
@@ -251,7 +251,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     MXLog.error("Failed retrieving room member for identity status change: \(change)")
                     continue
                 }
-
+                
                 identityVerificationViolations[change.userId] = member
             default:
                 identityVerificationViolations[change.userId] = nil
@@ -303,9 +303,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         defer {
             hideLoadingIndicator()
         }
-
+        
         showLoadingIndicator()
-
+        
         if case .failure = await clientProxy.withdrawUserIdentityVerification(userID) {
             state.bindings.alertInfo = .init(id: .unknown, title: L10n.commonError)
         }
@@ -351,7 +351,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         default:
             state.isKnockableRoom = false
         }
-
+        
         if let powerLevels = roomInfo.powerLevels {
             state.canSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
             state.canJoinCall = powerLevels.canOwnUserJoinCall()
@@ -378,7 +378,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
     }
-        
+    
     private func acceptKnock(eventID: String) async {
         guard case let .loaded(requests) = roomProxy.knockRequestsStatePublisher.value,
               let request = requests.first(where: { $0.eventID == eventID }) else {

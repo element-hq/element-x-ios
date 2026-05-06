@@ -54,7 +54,7 @@ protocol SessionVerificationControllerProxyProtocol {
     func acknowledgeVerificationRequest(details: SessionVerificationRequestDetails) async -> Result<Void, SessionVerificationControllerProxyError>
     
     func acceptVerificationRequest() async -> Result<Void, SessionVerificationControllerProxyError>
-        
+    
     func requestDeviceVerification() async -> Result<Void, SessionVerificationControllerProxyError>
     
     func requestUserVerification(_ userID: String) async -> Result<Void, SessionVerificationControllerProxyError>

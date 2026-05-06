@@ -54,7 +54,7 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
                     guard delayedIndicators.contains(indicator.id) else {
                         return
                     }
-
+                    
                     enqueue(indicator: indicator)
                 }
             } else {
@@ -85,7 +85,7 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     }
     
     // MARK: - Private
-
+    
     private func enqueue(indicator: UserIndicator) {
         retractIndicatorWithId(indicator.id)
         indicatorQueue.append(indicator)

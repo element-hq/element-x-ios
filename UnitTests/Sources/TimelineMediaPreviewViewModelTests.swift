@@ -19,7 +19,7 @@ struct TimelineMediaPreviewViewModelTests {
     var context: TimelineMediaPreviewViewModel.Context {
         viewModel.context
     }
-
+    
     var mediaProvider: MediaProviderMock!
     var photoLibraryManager: PhotoLibraryManagerMock!
     var timelineController: MockTimelineController!

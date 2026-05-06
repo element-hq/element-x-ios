@@ -21,7 +21,7 @@ struct ListInlinePicker<SelectedValue: Hashable>: View {
                     kind: .selection(isSelected: !isWaiting ? selection == item.tag : false) {
                         var transaction = Transaction()
                         transaction.disablesAnimations = true
-
+                        
                         withTransaction(transaction) {
                             selection = item.tag
                         }

@@ -149,7 +149,7 @@ class TimelineTableViewController: UIViewController {
     
     /// A work item used to auto-hide the floating date badge after scrolling stops.
     private var floatingDateHideWorkItem: DispatchWorkItem?
-
+    
     private var timelineItemsIDs: [TimelineItemIdentifier.UniqueID] {
         timelineItemsDictionary.keys.elements.reversed()
     }
@@ -157,7 +157,7 @@ class TimelineTableViewController: UIViewController {
     /// The table's diffable data source.
     private var dataSource: UITableViewDiffableDataSource<TimelineSection, TimelineItemIdentifier.UniqueID>?
     private var cancellables = Set<AnyCancellable>()
-
+    
     /// A publisher used to throttle back pagination requests.
     ///
     /// Our view actions get wrapped in a `Task` so it is possible that a second call in
@@ -345,7 +345,7 @@ class TimelineTableViewController: UIViewController {
     /// the scroll position will be updated to maintain the position of the last visible item.
     private func applySnapshot() {
         guard let dataSource else { return }
-
+        
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, TimelineItemIdentifier.UniqueID>()
         
         // We don't want to display the typing notification in this timeline
@@ -393,7 +393,7 @@ class TimelineTableViewController: UIViewController {
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
         scrollDirectionPublisher.send(.bottom)
     }
-
+    
     /// Scrolls to the oldest item in the timeline.
     private func scrollToOldestItem(animated: Bool) {
         guard !timelineItemsIDs.isEmpty else {
@@ -479,7 +479,7 @@ extension TimelineTableViewController: UITableViewDelegate {
                 updateFloatingDate()
             }
         }
-
+        
         // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
         if scrollView.contentOffset.y == 0 {
             scrollView.contentOffset.y = -1

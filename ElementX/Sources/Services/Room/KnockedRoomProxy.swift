@@ -16,7 +16,7 @@ class KnockedRoomProxy: KnockedRoomProxyProtocol {
     lazy var ownUserID: String = room.ownUserId()
     
     let info: BaseRoomInfoProxyProtocol
-        
+    
     init(room: Room) async throws {
         self.room = room
         

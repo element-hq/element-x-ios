@@ -15,19 +15,19 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
     private let serialDispatchQueue: DispatchQueue
     
     private var roomTimelineObservationToken: TaskHandle?
-
+    
     private let paginationStateSubject = CurrentValueSubject<TimelinePaginationState, Never>(.initial)
     var paginationState: TimelinePaginationState {
         paginationStateSubject.value
     }
-
+    
     private let itemProxiesSubject: CurrentValueSubject<[TimelineItemProxy], Never>
     private(set) var itemProxies: [TimelineItemProxy] = [] {
         didSet {
             itemProxiesSubject.send(itemProxies)
         }
     }
-
+    
     var updatePublisher: AnyPublisher<([TimelineItemProxy], TimelinePaginationState), Never> {
         itemProxiesSubject
             .combineLatest(paginationStateSubject)
@@ -45,7 +45,7 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
     deinit {
         roomTimelineObservationToken?.cancel()
     }
-
+    
     init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<TimelinePaginationState, Never>) {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.timeline_item_provider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
@@ -115,11 +115,11 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             changes.append(.insert(offset: Int(index), element: itemProxy, associatedWith: nil))
         case .popBack:
             guard let itemProxy = itemProxies.last else { fatalError() }
-
+            
             changes.append(.remove(offset: itemProxies.count - 1, element: itemProxy, associatedWith: nil))
         case .popFront:
             guard let itemProxy = itemProxies.first else { fatalError() }
-
+            
             changes.append(.remove(offset: 0, element: itemProxy, associatedWith: nil))
         case .pushBack(let item):
             let itemProxy = TimelineItemProxy(item: item)
@@ -141,7 +141,7 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             for (index, itemProxy) in itemProxies.enumerated() {
                 changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }
-
+            
             for (index, timelineItem) in items.enumerated() {
                 changes.append(.insert(offset: index, element: TimelineItemProxy(item: timelineItem), associatedWith: nil))
             }

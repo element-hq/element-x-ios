@@ -25,7 +25,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     var isEnabled: Bool {
         rageshakeURL != .disabled
     }
-
+    
     var lastCrashEventID: String?
     
     init(rageshakeURLPublisher: CurrentValuePublisher<RageshakeConfiguration, Never>,
@@ -45,7 +45,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             .weakAssign(to: \.rageshakeURL, on: self)
             .store(in: &cancellables)
     }
-
+    
     // MARK: - BugReportServiceProtocol
     
     var crashedLastRun: Bool {
@@ -110,7 +110,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         for url in bugReport.files {
             params.append(MultipartFormData(key: "file", type: .file(url: url)))
         }
-
+        
         let boundary = "Boundary-\(UUID().uuidString)"
         var body = Data()
         for param in params {
@@ -122,13 +122,13 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             }
         }
         body.appendString(string: "--\(boundary)--\r\n")
-
+        
         var request = URLRequest(url: rageshakeURL)
         request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-
+        
         request.httpMethod = "POST"
         request.httpBody = body as Data
-
+        
         progressSubject
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.value, on: progressListener)
@@ -164,9 +164,9 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             return .failure(.uploadFailure(error))
         }
     }
-
+    
     // MARK: - Private
-
+    
     private var defaultParams: [MultipartFormData] {
         let (localTime, utcTime) = localAndUTCTime(for: Date())
         let version = "\(InfoPlistReader.main.bundleShortVersionString) (\(InfoPlistReader.main.bundleVersion))"
@@ -185,7 +185,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             MultipartFormData(key: "base_bundle_identifier", type: .text(value: InfoPlistReader.main.baseBundleIdentifier))
         ]
     }
-
+    
     private func localAndUTCTime(for date: Date) -> (String, String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -194,7 +194,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         let utcTime = dateFormatter.string(from: date)
         return (localTime, utcTime)
     }
-
+    
     private var os: String {
         if ProcessInfo.processInfo.isiOSAppOnMac {
             // The other APIs report macOS's equivalent iOS version, so lets use the right one to get the macOS version.
@@ -203,7 +203,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
         }
     }
-
+    
     private func zipFiles(_ logFiles: [URL]) async -> Logs {
         MXLog.info("zipFiles")
         
@@ -219,7 +219,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         }
         
         MXLog.info("zipFiles: originalSize: \(compressedLogs.originalSize), zippedSize: \(compressedLogs.zippedSize)")
-
+        
         return compressedLogs
     }
     
@@ -263,7 +263,7 @@ private extension Data {
             append(data)
         }
     }
-
+    
     mutating func appendParam(_ param: MultipartFormData, boundary: String) throws {
         appendString(string: "--\(boundary)\r\n")
         appendString(string: "Content-Disposition:form-data; name=\"\(param.key)\"")

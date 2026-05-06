@@ -4,16 +4,16 @@ import Foundation
 
 struct DownloadStrings: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "A tool to download localizable strings from localazy")
-
+    
     @Flag(help: "Use to download translation keys for all languages")
     var allLanguages = false
-
+    
     func run() throws {
         try localazyDownload()
         try sortStringsFiles()
         try swiftgen()
     }
-
+    
     private func localazyDownload() throws {
         let arguments = allLanguages ? " all" : ""
         try Zsh.run(command: "localazy download\(arguments)")
@@ -75,7 +75,7 @@ struct DownloadStrings: ParsableCommand {
         guard let closeQuote = line[afterOpen...].firstIndex(of: "\"") else { return nil }
         return String(line[afterOpen..<closeQuote])
     }
-
+    
     private func swiftgen() throws {
         try Zsh.run(command: "swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml")
     }

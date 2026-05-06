@@ -24,7 +24,7 @@ struct MediaUploadPreviewScreen: View {
     private var title: String {
         ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : ""
     }
-
+    
     private var colorSchemeOverride: ColorScheme {
         ProcessInfo.processInfo.isiOSAppOnMac ? colorScheme : .dark
     }
@@ -177,7 +177,7 @@ private struct PreviewView: UIViewControllerRepresentable {
     let mediaURLs: [URL]
     let title: String?
     @Binding var currentIndex: Int
-
+    
     func makeUIViewController(context: Context) -> UIViewController {
         let previewController = PreviewViewController(currentIndex: $currentIndex)
         previewController.dataSource = context.coordinator
@@ -189,16 +189,16 @@ private struct PreviewView: UIViewControllerRepresentable {
             return UINavigationController(rootViewController: previewController)
         }
     }
-
+    
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) { }
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(view: self)
     }
     
     class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
         let view: PreviewView
-
+        
         init(view: PreviewView) {
             self.view = view
         }
@@ -208,7 +208,7 @@ private struct PreviewView: UIViewControllerRepresentable {
         func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
             view.mediaURLs.count
         }
-
+        
         func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
             PreviewItem(previewItemURL: view.mediaURLs[index], previewItemTitle: view.title)
         }
@@ -224,7 +224,7 @@ private struct PreviewView: UIViewControllerRepresentable {
 private class PreviewItem: NSObject, QLPreviewItem {
     var previewItemURL: URL?
     var previewItemTitle: String?
-
+    
     init(previewItemURL: URL?, previewItemTitle: String?) {
         self.previewItemURL = previewItemURL
         self.previewItemTitle = previewItemTitle
@@ -248,7 +248,7 @@ private class PreviewViewController: QLPreviewController {
             }
             .store(in: &cancellables)
     }
-
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
@@ -259,7 +259,7 @@ private class PreviewViewController: QLPreviewController {
         
         // Remove top file details bar
         navigationController?.navigationBar.isHidden = true
-                
+        
         // Hide toolbar share button
         toolbarItems?.first?.isHidden = true
     }

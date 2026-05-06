@@ -35,11 +35,11 @@ struct DeveloperOptionsScreenViewState: BindableState {
 @dynamicMemberLookup
 struct DeveloperOptionsScreenViewStateBindings {
     private let developerOptions: DeveloperOptionsProtocol
-
+    
     init(developerOptions: DeveloperOptionsProtocol) {
         self.developerOptions = developerOptions
     }
-
+    
     subscript<Setting>(dynamicMember keyPath: ReferenceWritableKeyPath<DeveloperOptionsProtocol, Setting>) -> Setting {
         get { developerOptions[keyPath: keyPath] }
         set { developerOptions[keyPath: keyPath] = newValue }
@@ -70,7 +70,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var linkPreviewsEnabled: Bool { get set }
     
     var linkNewDeviceEnabled: Bool { get set }
-            
+    
     var roomThreadListEnabled: Bool { get set }
 }
 

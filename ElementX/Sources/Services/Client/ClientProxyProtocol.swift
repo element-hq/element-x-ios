@@ -111,9 +111,9 @@ protocol ClientProxyProtocol: AnyObject {
     var homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
     
     var userID: String { get }
-
+    
     var deviceID: String? { get }
-
+    
     var homeserver: String { get }
     
     var canDeactivateAccount: Bool { get }
@@ -121,9 +121,9 @@ protocol ClientProxyProtocol: AnyObject {
     var userIDServerName: String? { get }
     
     var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> { get }
-
+    
     var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> { get }
-
+    
     /// We delay fetching this until after the first sync. Nil until then
     var ignoredUsersPublisher: CurrentValuePublisher<[String]?, Never> { get }
     
@@ -170,13 +170,13 @@ protocol ClientProxyProtocol: AnyObject {
     func hasDevicesToVerifyAgainst() async -> Result<Bool, ClientProxyError>
     
     func startSync()
-
+    
     func stopSync()
     
     func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
     
     func expireSyncSessions() async
-        
+    
     func accountURL(action: AccountManagementAction) async -> URL?
     
     func directRoomForUserID(_ userID: String) -> Result<String?, ClientProxyError>
@@ -217,7 +217,7 @@ protocol ClientProxyProtocol: AnyObject {
     @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>
     
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError>
-
+    
     @discardableResult func loadUserAvatarURL() async -> Result<Void, ClientProxyError>
     
     func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError>
@@ -229,7 +229,7 @@ protocol ClientProxyProtocol: AnyObject {
     func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError>
     
     func logout() async
-
+    
     func setPusher(with configuration: PusherConfiguration) async throws
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>
@@ -249,7 +249,7 @@ protocol ClientProxyProtocol: AnyObject {
     func storeSizes() async -> Result<StoreSizes, ClientProxyError>
     
     func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError>
-
+    
     // MARK: - Ignored users
     
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError>
@@ -275,10 +275,10 @@ protocol ClientProxyProtocol: AnyObject {
     func userIdentity(for userID: String, fallBackToServer: Bool) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
     
     // MARK: - Live Location
-
+    
     /// Publishes updates about the current user's own live location beacon info state changes (start/stop) as echoed by the server.
     var liveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never> { get }
-
+    
     // MARK: - Moderation & Safety
     
     func setTimelineMediaVisibility(_ value: TimelineMediaVisibility) async -> Result<Void, ClientProxyError>

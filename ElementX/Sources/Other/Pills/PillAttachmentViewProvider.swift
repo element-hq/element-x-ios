@@ -25,7 +25,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
     
     override init(textAttachment: NSTextAttachment, parentView: UIView?, textLayoutManager: NSTextLayoutManager?, location: NSTextLocation) {
         super.init(textAttachment: textAttachment, parentView: parentView, textLayoutManager: textLayoutManager, location: location)
-
+        
         // Keep a reference to the parent text view for size adjustments and pills flushing.
         delegate = parentView?.superview as? PillAttachmentViewProviderDelegate
         tracksTextAttachmentViewBounds = true
@@ -34,7 +34,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
     @MainActor
     override func loadView() {
         super.loadView()
-
+        
         guard let textAttachment = textAttachment as? PillTextAttachment,
               let pillData = textAttachment.pillData else {
             MXLog.failure("Attachment is missing data or not of expected class")
@@ -82,7 +82,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
 
 final class ComposerMentionDisplayHelper: MentionDisplayHelper {
     weak var timelineContext: TimelineViewModel.Context?
-
+    
     init(timelineContext: TimelineViewModel.Context) {
         self.timelineContext = timelineContext
     }

@@ -23,7 +23,7 @@ final class TemplateScreenCoordinator: CoordinatorProtocol {
     private let viewModel: TemplateScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<TemplateScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<TemplateScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -47,7 +47,7 @@ final class TemplateScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(TemplateScreen(context: viewModel.context))
     }

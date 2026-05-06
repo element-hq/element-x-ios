@@ -358,7 +358,7 @@ struct MediaUploadingPreprocessor {
         
         return .init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash)
     }
-        
+    
     private func resizeImage(at url: URL, maxPixelSize: CGFloat, destination: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
         guard let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil) else {
             throw .failedResizingImage
@@ -440,7 +440,7 @@ struct MediaUploadingPreprocessor {
     private func convertVideoToMP4(_ url: URL, targetFileSize: UInt) async throws(MediaUploadingPreprocessorError) -> VideoProcessingInfo {
         let asset = AVURLAsset(url: url)
         let presetName = appSettings.optimizeMediaUploads ? AVAssetExportPreset1280x720 : AVAssetExportPreset1920x1080
-
+        
         guard let exportSession = AVAssetExportSession(asset: asset, presetName: presetName) else {
             throw .failedConvertingVideo
         }
@@ -524,11 +524,11 @@ private extension AVAssetTrack {
             guard mediaType == .video else {
                 return naturalSize
             }
-
+            
             // The naturalSize does not take the preferredTransform into consideration resulting
             // in portrait videos reporting inverted values.
             let transform = try await load(.preferredTransform)
-
+            
             switch (transform.a, transform.b, transform.c, transform.d) {
             case (0, 1, -1, 0), (0, -1, 1, 0):
                 return CGSize(width: naturalSize.height, height: naturalSize.width)

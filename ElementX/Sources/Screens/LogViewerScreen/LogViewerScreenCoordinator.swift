@@ -38,7 +38,7 @@ final class LogViewerScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(LogViewerScreen(context: viewModel.context))
     }

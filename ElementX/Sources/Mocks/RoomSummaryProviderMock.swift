@@ -289,7 +289,7 @@ extension Array where Element == RoomSummary {
     
     static let mockRoomsWithNotificationsState: [Element] = {
         var result: [Element] = []
-
+        
         // Iterate over settings modes
         for mode in RoomNotificationModeProxy.allCases {
             // Iterate over unread messages states

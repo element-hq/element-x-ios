@@ -29,7 +29,7 @@ actor MediaLoader: MediaLoaderProtocol {
     // don't have an accompanying ClientMock to own it.
     private weak var client: ClientProtocol?
     private var ongoingRequests = [MediaSourceProxy: MediaRequest]()
-
+    
     init(client: ClientProtocol) {
         self.client = client
     }

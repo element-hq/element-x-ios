@@ -21,7 +21,7 @@ struct ThreadTimelineScreen: View {
         self.timelineContext = timelineContext
         self.composerToolbar = composerToolbar
     }
-        
+    
     var body: some View {
         TimelineView(timelineContext: timelineContext)
             .background(.compound.bgCanvasDefault)

@@ -21,7 +21,7 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
     var actions: AnyPublisher<LoginScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(authenticationService: AuthenticationServiceProtocol,
          loginHint: String?,
          userIndicatorController: UserIndicatorControllerProtocol,
@@ -48,7 +48,7 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
             .weakAssign(to: \.state.homeserver, on: self)
             .store(in: &cancellables)
     }
-
+    
     override func process(viewAction: LoginScreenViewAction) {
         switch viewAction {
         case .parseUsername:

@@ -21,21 +21,21 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
         case .recoveryOutOfSync: L10n.confirmRecoveryKeyBannerTitle
         }
     }
-
+    
     var message: String {
         switch state {
         case .setUpRecovery: L10n.bannerSetUpRecoveryContent
         case .recoveryOutOfSync: L10n.confirmRecoveryKeyBannerMessage
         }
     }
-
+    
     var actionTitle: String {
         switch state {
         case .setUpRecovery: L10n.bannerSetUpRecoverySubmit
         case .recoveryOutOfSync: L10n.confirmRecoveryKeyBannerPrimaryButtonTitle
         }
     }
-
+    
     var primaryAction: HomeScreenViewAction {
         switch state {
         case .setUpRecovery: .setupRecovery

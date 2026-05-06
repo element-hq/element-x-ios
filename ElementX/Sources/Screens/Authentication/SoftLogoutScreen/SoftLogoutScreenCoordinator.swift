@@ -46,7 +46,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     private var authenticationService: AuthenticationServiceProtocol {
         parameters.authenticationService
     }
-
+    
     private var oAuthPresenter: OAuthAuthenticationPresenter?
     
     var actions: AnyPublisher<SoftLogoutScreenCoordinatorResult, Never> {
@@ -69,7 +69,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 MXLog.info("Did complete with result: \(action).")
-
+                
                 switch action {
                 case .login(let password):
                     login(withPassword: password)
@@ -117,18 +117,18 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     @MainActor private func stopLoading() {
         parameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
-
+    
     /// Shows the forgot password screen.
     @MainActor private func showForgotPasswordScreen() {
         viewModel.displayError(.alert("Not implemented."))
     }
-
+    
     /// Login with the supplied username and password.
     @MainActor private func login(withPassword password: String) {
         let username = parameters.credentials.userID
-
+        
         startLoading()
-
+        
         Task {
             switch await authenticationService.login(username: username,
                                                      password: password,
@@ -143,7 +143,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             }
         }
     }
-
+    
     private func continueWithOAuth(presentationAnchor: UIWindow?) {
         guard let presentationAnchor else { return }
         
@@ -174,7 +174,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             }
         }
     }
-
+    
     /// Processes an error to either update the flow or display it to the user.
     private func handleError(_ error: AuthenticationServiceError) {
         switch error {

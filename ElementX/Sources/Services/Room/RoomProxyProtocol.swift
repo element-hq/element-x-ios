@@ -76,7 +76,7 @@ struct RTCDeclinedEvent {
 // sourcery: AutoMockable
 protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     var infoPublisher: CurrentValuePublisher<RoomInfoProxyProtocol, Never> { get }
-
+    
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> { get }
@@ -116,11 +116,11 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
     
     func reportRoom(reason: String) async -> Result<Void, RoomProxyError>
-
+    
     func leaveRoom() async -> Result<Void, RoomProxyError>
     
     func updateMembers() async
-
+    
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError>
     
     func invite(userID: String) async -> Result<Void, RoomProxyError>
@@ -226,7 +226,7 @@ extension JoinedRoomProxyProtocol {
     var isDirectOneToOneRoom: Bool {
         infoPublisher.value.isDirect && infoPublisher.value.activeMembersCount <= 2
     }
-
+    
     func members() async -> [RoomMemberProxyProtocol]? {
         await updateMembers()
         return membersPublisher.value

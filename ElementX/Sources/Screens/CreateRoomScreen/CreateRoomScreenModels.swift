@@ -51,7 +51,7 @@ struct CreateRoomScreenViewState: BindableState {
     var canCreateRoom: Bool {
         !roomName.isEmpty && aliasErrors.isEmpty
     }
-
+    
     var aliasErrors: Set<CreateRoomScreenAliasErrorState> = []
     var aliasErrorDescription: String? {
         if aliasErrors.contains(.alreadyExists) {
@@ -62,7 +62,7 @@ struct CreateRoomScreenViewState: BindableState {
             nil
         }
     }
-        
+    
     var availableAccessTypes: [CreateRoomScreenAccessType] {
         var availableAccessTypes: [CreateRoomScreenAccessType] = []
         if isSpace {

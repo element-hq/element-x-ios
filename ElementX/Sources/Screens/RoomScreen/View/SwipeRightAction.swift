@@ -225,7 +225,7 @@ private struct PanGestureRepresentable: UIGestureRecognizerRepresentable {
         
         func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
             guard let panRecognizer = gestureRecognizer as? UIPanGestureRecognizer else { return false }
-
+            
             let velocity = panRecognizer.velocity(in: gestureRecognizer.view)
             return abs(velocity.y) < abs(velocity.x)
         }

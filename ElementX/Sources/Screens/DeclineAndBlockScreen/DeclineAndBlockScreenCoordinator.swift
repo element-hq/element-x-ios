@@ -27,7 +27,7 @@ final class DeclineAndBlockScreenCoordinator: CoordinatorProtocol {
     private let viewModel: DeclineAndBlockScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<DeclineAndBlockScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<DeclineAndBlockScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -54,7 +54,7 @@ final class DeclineAndBlockScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(DeclineAndBlockScreen(context: viewModel.context))
     }

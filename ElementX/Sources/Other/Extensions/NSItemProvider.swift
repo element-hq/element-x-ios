@@ -133,7 +133,7 @@ extension NSItemProvider {
             guard registeredContentTypes.contains(where: { $0.conforms(to: .fileURL) }) else {
                 return nil
             }
-                        
+            
             for type in registeredContentTypes {
                 if let fileExtension = type.preferredFilenameExtension {
                     return .init(type: type, fileExtension: fileExtension)

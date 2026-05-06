@@ -42,7 +42,7 @@ final class AppLockSetupBiometricsScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(AppLockSetupBiometricsScreen(context: viewModel.context))
     }

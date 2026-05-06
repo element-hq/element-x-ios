@@ -15,7 +15,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     var preferredColorScheme: ColorScheme? = .dark
-
+    
     @State private var sheetHeight: CGFloat = .zero
     private let topPadding: CGFloat = 19
     
@@ -74,12 +74,12 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .accessibilityHidden(true)
             }
-                
+            
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.filename ?? "")
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textPrimary)
-                    
+                
                 if let contentType = item.contentType {
                     Group {
                         if let fileSize = item.fileSize {

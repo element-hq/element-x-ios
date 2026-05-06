@@ -18,7 +18,7 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
     var actions: AnyPublisher<GlobalSearchScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(roomSummaryProvider: RoomSummaryProviderProtocol,
          mediaProvider: MediaProviderProtocol) {
         self.roomSummaryProvider = roomSummaryProvider

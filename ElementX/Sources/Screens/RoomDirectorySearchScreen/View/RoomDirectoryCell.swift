@@ -13,7 +13,7 @@ struct RoomDirectorySearchCell: View {
     let result: RoomDirectorySearchResult
     let mediaProvider: MediaProviderProtocol?
     let joinAction: () -> Void
-        
+    
     private var description: String? {
         if let topic = result.topic {
             return topic
@@ -27,7 +27,7 @@ struct RoomDirectorySearchCell: View {
         
         return result.id
     }
-
+    
     var body: some View {
         ListRow(label: .avatar(title: result.name ?? result.alias ?? result.id,
                                description: description,

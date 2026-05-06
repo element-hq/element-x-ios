@@ -21,7 +21,7 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
     var actions: AnyPublisher<AppLockSetupPINScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(initialMode: AppLockSetupPINScreenMode, isMandatory: Bool, appLockService: AppLockServiceProtocol) {
         self.appLockService = appLockService
         
@@ -103,7 +103,7 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
                 return
             }
         }
-         
+        
         actionsSubject.send(.complete)
     }
     

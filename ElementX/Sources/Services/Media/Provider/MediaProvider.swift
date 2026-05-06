@@ -44,7 +44,7 @@ struct MediaProvider: MediaProviderProtocol {
            let image = cacheResult.image {
             return .success(image)
         }
-
+        
         do {
             let imageData: Data
             if let size {
@@ -52,14 +52,14 @@ struct MediaProvider: MediaProviderProtocol {
             } else {
                 imageData = try await mediaLoader.loadMediaContentForSource(source)
             }
-
+            
             guard let image = UIImage(data: imageData) else {
                 MXLog.error("Invalid image data")
                 return .failure(.invalidImageData)
             }
-
+            
             try await imageCache.store(image, forKey: cacheKey)
-
+            
             return .success(image)
         } catch {
             MXLog.error("Failed retrieving image with error: \(error)")

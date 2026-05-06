@@ -33,7 +33,7 @@ struct BuildSDK: AsyncParsableCommand {
     
     @Option(help: "The profile to use when building the SDK. Omit this option to build in debug mode.")
     var profile: Profile = .reldbg
-
+    
     enum Error: LocalizedError {
         case rustupOutputFailure
         case missingRustTargets([String])
@@ -133,7 +133,7 @@ struct BuildSDK: AsyncParsableCommand {
         let updatedYAMLString = try Yams.serialize(node: projectConfig)
         try updatedYAMLString.write(to: yamlURL, atomically: true, encoding: .utf8)
     }
-
+    
     func generateSDKMocks() async throws {
         var command = GenerateSDKMocks()
         command.version = "local"

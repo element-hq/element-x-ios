@@ -11,7 +11,7 @@ import SwiftUI
 /// A button that contains text that is copied on tap
 struct CopyTextButton: View {
     let content: String
-
+    
     var body: some View {
         Button {
             UIPasteboard.general.string = content

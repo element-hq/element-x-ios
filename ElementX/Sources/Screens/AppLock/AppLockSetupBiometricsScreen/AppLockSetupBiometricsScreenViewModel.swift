@@ -18,7 +18,7 @@ class AppLockSetupBiometricsScreenViewModel: AppLockSetupBiometricsScreenViewMod
     var actions: AnyPublisher<AppLockSetupBiometricsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(appLockService: AppLockServiceProtocol) {
         self.appLockService = appLockService
         super.init(initialViewState: AppLockSetupBiometricsScreenViewState(biometryType: appLockService.biometryType))

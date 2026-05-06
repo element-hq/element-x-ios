@@ -17,7 +17,7 @@ struct RoomDetailsScreen: View {
     var body: some View {
         Form {
             roomHeaderSection
-
+            
             topicSection
             
             aboutSection
@@ -27,9 +27,9 @@ struct RoomDetailsScreen: View {
             if context.viewState.dmRecipientInfo == nil {
                 peopleSection
             }
-
+            
             securitySection
-
+            
             if let recipient = context.viewState.dmRecipientInfo?.member {
                 ignoreUserSection(user: recipient)
             }
@@ -142,7 +142,7 @@ struct RoomDetailsScreen: View {
             }
         }
     }
-
+    
     private var aboutSection: some View {
         Section {
             ListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
@@ -233,7 +233,7 @@ struct RoomDetailsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             }
-        
+            
             if context.viewState.canSeeKnockingRequests {
                 ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle, icon: \.askToJoin),
                         details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
@@ -308,7 +308,7 @@ struct RoomDetailsScreen: View {
                     .disabled(context.viewState.isProcessingIgnoreRequest)
         }
     }
-
+    
     @ViewBuilder
     private func leaveRoomAlertActions(_ item: LeaveRoomAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
@@ -316,11 +316,11 @@ struct RoomDetailsScreen: View {
             context.send(viewAction: .confirmLeave)
         }
     }
-
+    
     private func leaveRoomAlertMessage(_ item: LeaveRoomAlertItem) -> some View {
         Text(item.subtitle)
     }
-
+    
     @ViewBuilder
     private func blockUserAlertActions(_ item: RoomDetailsScreenViewStateBindings.IgnoreUserAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
@@ -329,7 +329,7 @@ struct RoomDetailsScreen: View {
             context.send(viewAction: item.viewAction)
         }
     }
-
+    
     private func blockUserAlertMessage(_ item: RoomDetailsScreenViewStateBindings.IgnoreUserAlertItem) -> some View {
         Text(item.description)
     }

@@ -22,7 +22,7 @@ struct MapLibreMapView: UIViewRepresentable {
         
         /// Map annotations
         let annotations: [LocationAnnotation]
-
+        
         init(zoomLevel: Double, initialZoomLevel: Double, mapCenter: CLLocationCoordinate2D, annotations: [LocationAnnotation] = []) {
             self.zoomLevel = zoomLevel
             self.initialZoomLevel = initialZoomLevel
@@ -36,7 +36,7 @@ struct MapLibreMapView: UIViewRepresentable {
     @Environment(\.colorScheme) private var colorScheme
     
     let mapURLBuilder: MapTilerURLBuilderProtocol
-
+    
     let options: Options
     
     let mediaProvider: MediaProviderProtocol?
@@ -93,7 +93,7 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     // MARK: - Private
-
+    
     private func setupMap(mapView: MLNMapView, with options: Options) {
         mapView.addAnnotations(options.annotations)
         mapView.zoomLevel = options.annotations.isEmpty ? options.initialZoomLevel : options.zoomLevel
@@ -174,16 +174,16 @@ struct MapLibreMapView: UIViewRepresentable {
 extension MapLibreMapView {
     class Coordinator: NSObject, MLNMapViewDelegate {
         // MARK: - Properties
-
+        
         var mapLibreView: MapLibreMapView
         
         private var previousUserLocation: MLNUserLocation?
         /// Tracks the last center coordinate reported by the map (or set programmatically),
         /// so that `updateUIView` can tell apart external binding changes from internal ones.
         var lastReportedCenter: CLLocationCoordinate2D?
-
+        
         // MARK: - Setup
-
+        
         init(_ mapLibreView: MapLibreMapView) {
             self.mapLibreView = mapLibreView
         }
@@ -212,7 +212,7 @@ extension MapLibreMapView {
                     mapView.setCenter(userLocation.coordinate, zoomLevel: self.mapLibreView.options.zoomLevel, animated: true)
                 }
             }
-
+            
             previousUserLocation = userLocation
             updateGeolocationUncertainty(location: userLocation)
         }
@@ -238,7 +238,7 @@ extension MapLibreMapView {
                 mapLibreView.mapCenterCoordinate = center
             }
         }
-
+        
         func mapView(_ mapView: MLNMapView, shouldChangeFrom oldCamera: MLNMapCamera, to newCamera: MLNMapCamera, reason: MLNCameraChangeReason) -> Bool {
             // we send the userDidPan event only for the reasons that actually will change the map center, and not zoom only / rotations only events.
             switch reason {
@@ -259,21 +259,21 @@ extension MapLibreMapView {
             }
             return true
         }
-
+        
         // MARK: Callout
-
+        
         func mapView(_ mapView: MLNMapView, annotationCanShowCallout annotation: MLNAnnotation) -> Bool {
             false
         }
-
+        
         // MARK: Private
-
+        
         private func updateGeolocationUncertainty(location: MLNUserLocation) {
             guard let clLocation = location.location, clLocation.horizontalAccuracy >= 0 else {
                 mapLibreView.geolocationUncertainty = nil
                 return
             }
-
+            
             mapLibreView.geolocationUncertainty = clLocation.horizontalAccuracy
         }
     }

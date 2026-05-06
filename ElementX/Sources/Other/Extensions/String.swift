@@ -46,12 +46,12 @@ extension String {
         guard whitespaceCount > 0 else {
             return ""
         }
-
+        
         var whiteSpaces = layoutDirection.isolateLayoutUnicodeString
-
+        
         // fixed size whitespace of size 1/3 em per character
         whiteSpaces += String(repeating: "\u{2004}", count: whitespaceCount)
-
+        
         // braille whitespace, which is non breakable but makes previous whitespaces breakable
         return whiteSpaces + "\u{2800}"
     }

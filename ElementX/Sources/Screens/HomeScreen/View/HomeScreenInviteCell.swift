@@ -134,7 +134,7 @@ struct HomeScreenInviteCell: View {
             .fill(Color.compound.borderDisabled)
             .frame(height: 1 / UIScreen.main.scale)
     }
-        
+    
     private var title: String {
         room.name
     }

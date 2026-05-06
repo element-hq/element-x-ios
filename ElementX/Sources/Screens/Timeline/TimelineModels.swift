@@ -105,7 +105,7 @@ struct TimelineViewState: BindableState {
     var showReadReceipts = false
     var isDirectOneToOneRoom = false
     var timelineState: TimelineState // check the doc before changing this
-
+    
     var ownUserID: String
     var canCurrentUserSendMessage = false
     var canCurrentUserRedactOthers = false
@@ -121,7 +121,7 @@ struct TimelineViewState: BindableState {
     var linkPreviewsEnabled: Bool
     
     let hasPredecessor: Bool
-        
+    
     /// The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
     /// It's updated from the room info, so it's faster than using the timeline
     var pinnedEventIDs: Set<String> = []
@@ -143,9 +143,9 @@ struct TimelineViewState: BindableState {
     var linkMetadataProvider: LinkMetadataProviderProtocol?
     
     var mapTilerConfiguration: MapTilerConfiguration
-
+    
     var stoppedLiveLocationIDs: Set<TimelineItemIdentifier> = []
-        
+    
     var bindings: TimelineViewStateBindings
 }
 
@@ -170,7 +170,7 @@ struct TimelineViewStateBindings {
     var readReceiptsSummaryInfo: ReadReceiptSummaryInfo?
     
     var manageMemberViewModel: ManageRoomMemberSheetViewModel?
-
+    
     var showTranslation = false
     var textToBeTranslated: String?
 }
@@ -235,7 +235,7 @@ struct TimelineState {
             /// The event has already been shown.
             case hasAppeared
         }
-
+        
         /// The ID of the event.
         let eventID: String
         /// How the event should be shown, or whether it has already appeared.

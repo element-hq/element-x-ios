@@ -43,7 +43,7 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { get }
     /// The type of flow the service is currently configured with.
     var flow: AuthenticationFlow { get }
-        
+    
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OAuth for the current homeserver.

@@ -101,7 +101,7 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
                                                      emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
                                                      linkMetadataProvider: LinkMetadataProvider(),
                                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-
+    
     static var previews: some View {
         ElementNavigationStack {
             RoomScreen(context: roomViewModel.context,

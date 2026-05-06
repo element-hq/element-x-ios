@@ -79,7 +79,7 @@ protocol TimelineControllerProtocol {
     func removeCaption(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async
     
     func toggleReaction(_ reaction: String, to eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async
-
+    
     func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async
     
     func pin(eventID: String) async

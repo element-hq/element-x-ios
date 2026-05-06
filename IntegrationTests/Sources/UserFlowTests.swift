@@ -47,7 +47,7 @@ class UserFlowTests: XCTestCase {
         firstRoom.tap(.center)
         
         sendMessages()
-                
+        
         checkTimelineItemActionMenu()
         
         // Go back to the room list

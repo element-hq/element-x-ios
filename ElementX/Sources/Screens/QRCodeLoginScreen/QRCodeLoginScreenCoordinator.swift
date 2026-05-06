@@ -46,7 +46,7 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
     private let orientationManager: OrientationManagerProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<QRCodeLoginScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<QRCodeLoginScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -88,7 +88,7 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
     func stop() {
         orientationManager.lockOrientation(.all)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(QRCodeLoginScreen(context: viewModel.context))
     }

@@ -23,7 +23,7 @@ struct TextBasedRoomTimelineTests {
                                                 content: .init(body: "Test"))
         #expect(timelineItem.additionalWhitespaces() == timestamp.formattedTime().count + 1)
     }
-
+    
     @Test
     func textRoomTimelineItemWhitespaceEndLonger() {
         let timestamp = Calendar.current.startOfDay(for: .now).addingTimeInterval(-60) // 11:59 pm
@@ -36,7 +36,7 @@ struct TextBasedRoomTimelineTests {
                                                 content: .init(body: "Test"))
         #expect(timelineItem.additionalWhitespaces() == timestamp.formattedTime().count + 1)
     }
-
+    
     @Test
     func textRoomTimelineItemWhitespaceEndWithEdit() {
         let timestamp = Date.mock
@@ -51,7 +51,7 @@ struct TextBasedRoomTimelineTests {
         let editedCount = L10n.commonEditedSuffix.count
         #expect(timelineItem.additionalWhitespaces() == timestamp.formattedTime().count + editedCount + 2)
     }
-
+    
     @Test
     func textRoomTimelineItemWhitespaceEndWithEditAndAlert() {
         let timestamp = Date.mock

@@ -14,7 +14,7 @@ enum TimelineGroupStyle: Hashable {
     case first
     case middle
     case last
-
+    
     var shouldShowSenderDetails: Bool {
         switch self {
         case .single, .first:

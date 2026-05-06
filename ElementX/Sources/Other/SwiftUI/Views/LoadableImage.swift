@@ -358,7 +358,7 @@ struct LoadableImage_Previews: PreviewProvider, TestablePreview {
                           mediaProvider: loadingMediaProvider,
                           placeholder: placeholder)
                 .layout(title: "Loading (avatar)")
-
+            
             LoadableImage(url: "mxc://wherever/345",
                           mediaType: .timelineItem(uniqueID: .init("id")),
                           blurhash: "KbLM^j]q$jT|EfR-3rtjXk",
@@ -388,7 +388,7 @@ struct LoadableImage_Previews: PreviewProvider, TestablePreview {
     static func placeholder() -> some View {
         Color.compound._bgBubbleIncoming
     }
-
+    
     static func transformer(_ view: AnyView) -> some View {
         view.overlay {
             Image(systemSymbol: .playCircleFill)

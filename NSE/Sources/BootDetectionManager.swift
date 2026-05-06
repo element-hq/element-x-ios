@@ -17,11 +17,11 @@ enum BootDetectionManager {
         guard let dummyData = dummyString.data(using: .utf8) else {
             return true
         }
-
+        
         do {
             //  add a unique filename
             let url = containerURL.appendingPathComponent(ProcessInfo.processInfo.globallyUniqueString)
-
+            
             try dummyData.write(to: url, options: .completeFileProtectionUntilFirstUserAuthentication)
             let readData = try Data(contentsOf: url)
             let readString = String(data: readData, encoding: .utf8)

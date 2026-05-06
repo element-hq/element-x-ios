@@ -65,7 +65,7 @@ struct PollFormScreenViewState: BindableState {
         case .edit(_, let poll):
             initialBindings = .init(poll: poll)
         }
-
+        
         return bindings != initialBindings
     }
 }
@@ -79,16 +79,16 @@ struct PollFormScreenViewStateBindings: Equatable {
     var question = ""
     var options: [Option] = [.init(), .init()]
     var isUndisclosed = false
-
+    
     struct Option: Identifiable, Equatable {
         let id = UUID()
         var text = ""
     }
-
+    
     var hasValidContent: Bool {
         !question.isEmpty && options.count >= 2 && options.allSatisfy { !$0.text.isEmpty }
     }
-
+    
     var alertInfo: AlertInfo<UUID>?
     
     static func == (lhs: PollFormScreenViewStateBindings, rhs: PollFormScreenViewStateBindings) -> Bool {

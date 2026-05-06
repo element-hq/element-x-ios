@@ -17,13 +17,13 @@ struct VoiceMessageRecordingView: View {
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
     @ScaledMetric private var recordingIndicatorSize = 8
-
+    
     private static let elapsedTimeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "mm:ss"
         return dateFormatter
     }()
-            
+    
     private var timeLabelContent: String {
         Self.elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: recorderState.duration))
     }
@@ -37,7 +37,7 @@ struct VoiceMessageRecordingView: View {
         HStack(spacing: 8) {
             VoiceMessageRecordingBadge()
                 .frame(width: recordingIndicatorSize, height: recordingIndicatorSize)
-
+            
             Text(timeLabelContent)
                 .lineLimit(1)
                 .font(.compound.bodySMSemibold)
@@ -55,7 +55,7 @@ struct VoiceMessageRecordingView: View {
 
 private struct VoiceMessageRecordingBadge: View {
     @State private var opacity: CGFloat = 0
-
+    
     var body: some View {
         Circle()
             .foregroundColor(.red)

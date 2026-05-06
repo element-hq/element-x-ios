@@ -32,7 +32,7 @@ struct RoomPermissionsSetting: Identifiable {
             value = newValue.powerLevelValue
         }
     }
-        
+    
     /// The `RoomPermissions` property that this setting is for.
     let keyPath: KeyPath<RoomPermissions, Int64>
     /// The `RoomPowerLevelChanges` property that this setting is saved into.

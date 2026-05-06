@@ -123,7 +123,7 @@ struct NotificationSettingsScreen: View {
                 .compoundListSectionHeader()
         }
     }
-        
+    
     private var mentionsSection: some View {
         Section {
             ListRow(label: .plain(title: L10n.screenNotificationSettingsRoomMentionLabel),
@@ -215,9 +215,9 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         }
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
         notificationSettingsProxy.isCallEnabledReturnValue = false
-
+        
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe"))))
-
+        
         var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
                                                             notificationSettingsProxy: notificationSettingsProxy,
@@ -245,7 +245,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         notificationSettingsProxy.isCallEnabledReturnValue = false
         
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe"))))
-
+        
         var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
                                                             notificationSettingsProxy: notificationSettingsProxy,
@@ -253,7 +253,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         viewModel.fetchInitialContent()
         return viewModel
     }()
-
+    
     static var previews: some View {
         NotificationSettingsScreen(context: viewModel.context)
             .snapshotPreferences(expect: viewModel.context.observe(\.viewState.settings).map { $0 != nil })

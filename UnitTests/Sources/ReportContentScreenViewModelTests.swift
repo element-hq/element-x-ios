@@ -36,7 +36,7 @@ struct ReportContentScreenViewModelTests {
         }
         
         try await deferred.fulfill()
-   
+        
         // Then the content should be reported, but the user should not be included.
         #expect(roomProxy.reportContentReasonCallsCount == 1, "The content should always be reported.")
         #expect(roomProxy.reportContentReasonReceivedArguments?.eventID == eventID, "The event ID should match the content being reported.")
@@ -59,7 +59,7 @@ struct ReportContentScreenViewModelTests {
         // When reporting the content and also ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
         viewModel.state.bindings.ignoreUser = true
-
+        
         viewModel.context.send(viewAction: .submit)
         
         let deferred = deferFulfillment(viewModel.actions) { action in

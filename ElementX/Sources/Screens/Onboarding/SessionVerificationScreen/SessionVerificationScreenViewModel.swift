@@ -16,13 +16,13 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     private let flow: SessionVerificationScreenFlow
     
     private var stateMachine: SessionVerificationScreenStateMachine
-
+    
     private var actionsSubject: PassthroughSubject<SessionVerificationScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<SessionVerificationScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
          flow: SessionVerificationScreenFlow,
          appSettings: AppSettings,
@@ -115,7 +115,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
-                
+            
             state.verificationState = context.toState
             
             switch (context.fromState, context.event, context.toState) {

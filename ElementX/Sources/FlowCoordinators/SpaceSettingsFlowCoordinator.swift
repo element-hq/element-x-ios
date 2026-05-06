@@ -55,7 +55,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         
         case presentManageAuthorizedSpacesScreen
         case dismissedManageAuthorizedSpacesScreen
-
+        
         case presentTransferOwnership
         case dismissedTransferOwnership
         
@@ -84,7 +84,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     var actions: AnyPublisher<SpaceSettingsFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-        
+    
     init(roomProxy: JoinedRoomProxyProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
@@ -140,7 +140,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                 return .manageAuthorizedSpacesScreen
             case (.manageAuthorizedSpacesScreen, .dismissedManageAuthorizedSpacesScreen):
                 return .securityAndPrivacy
-
+                
             case (.spaceSettings, .presentTransferOwnership):
                 return .transferOwnership
             case (.transferOwnership, .dismissedTransferOwnership):
@@ -191,12 +191,12 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                 presentManageAuthorizedSpacesScreen(selection: selection)
             case (.manageAuthorizedSpacesScreen, .dismissedManageAuthorizedSpacesScreen, .securityAndPrivacy):
                 break
-
+                
             case (.spaceSettings, .presentTransferOwnership, .transferOwnership):
                 presentTransferOwnershipScreen()
             case (.transferOwnership, .dismissedTransferOwnership, .spaceSettings):
                 break
-
+                
             case (.spaceSettings, .startMembersListFlow, .membersFlow):
                 startMembersListFlow()
             case (.membersFlow, .stopMembersListFlow, .spaceSettings):

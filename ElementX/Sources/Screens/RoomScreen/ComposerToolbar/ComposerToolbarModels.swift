@@ -27,9 +27,9 @@ enum ComposerToolbarViewModelAction {
     case sendMessage(plain: String, html: String?, mode: ComposerMode, intentionalMentions: IntentionalMentions)
     case editLastMessage
     case attach(ComposerAttachmentType)
-
+    
     case handlePasteOrDrop(providers: [NSItemProvider])
-
+    
     case composerModeChanged(mode: ComposerMode)
     case composerFocusedChanged(isFocused: Bool)
     
@@ -84,7 +84,7 @@ struct ComposerToolbarViewState: BindableState {
     var keyCommands: [WysiwygKeyCommand] = []
     
     var bindings: ComposerToolbarViewStateBindings
-
+    
     var isUploading: Bool {
         switch composerMode {
         case .previewVoiceMessage(_, _, let isUploading):
@@ -93,7 +93,7 @@ struct ComposerToolbarViewState: BindableState {
             return false
         }
     }
-
+    
     var showSendButton: Bool {
         switch composerMode {
         case .recordVoiceMessage:
@@ -221,7 +221,7 @@ extension FormatItem {
             return \.link
         }
     }
-
+    
     var accessibilityIdentifier: String {
         switch type {
         case .bold:
@@ -250,7 +250,7 @@ extension FormatItem {
             return A11yIdentifiers.roomScreen.composerToolbar.link
         }
     }
-
+    
     var accessibilityLabel: String {
         let localizedAction = switch type {
         case .bold:
@@ -336,7 +336,7 @@ enum ComposerMode: Equatable {
     case edit(originalEventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, type: EditType)
     case recordVoiceMessage(state: AudioRecorderState)
     case previewVoiceMessage(state: AudioPlayerState, waveform: WaveformSource, isUploading: Bool)
-
+    
     var isEdit: Bool {
         switch self {
         case .edit:
@@ -345,7 +345,7 @@ enum ComposerMode: Equatable {
             return false
         }
     }
-
+    
     var isTextEditingEnabled: Bool {
         switch self {
         case .default, .reply, .edit:

@@ -53,21 +53,21 @@ extension JoinedRoomProxyMock {
     @MainActor
     convenience init(_ configuration: JoinedRoomProxyMockConfiguration) {
         self.init()
-
+        
         id = configuration.id
-
+        
         timeline = TimelineProxyMock(.init(isAutoUpdating: configuration.shouldUseAutoUpdatingTimeline,
                                            timelineStartReached: configuration.timelineStartReached))
         
         pinnedEventsTimelineReturnValue = .failure(.failedCreatingPinnedTimeline)
-
+        
         ownUserID = configuration.ownUserID
         
         membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
         knockRequestsStatePublisher = CurrentValueSubject(configuration.knockRequestsState).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         identityStatusChangesPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
-
+        
         makeLiveLocationServiceReturnValue = RoomLiveLocationServiceMock(.init())
         
         updateMembersClosure = { }
@@ -82,7 +82,7 @@ extension JoinedRoomProxyMock {
         
         ignoreDeviceTrustAndResendDevicesSendHandleReturnValue = .success(())
         withdrawVerificationAndResendUserIDsSendHandleReturnValue = .success(())
-
+        
         flagAsUnreadReturnValue = .success(())
         markAsReadReceiptTypeReturnValue = .success(())
         flagAsFavouriteReturnValue = .success(())

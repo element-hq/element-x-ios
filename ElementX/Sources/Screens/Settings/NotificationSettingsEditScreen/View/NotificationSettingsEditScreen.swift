@@ -27,7 +27,7 @@ struct NotificationSettingsEditScreen: View {
     }
     
     // MARK: - Private
-
+    
     private var notificationModeSection: some View {
         Section {
             ForEach(context.viewState.availableDefaultModes, id: \.self) { mode in

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct PlaceholderAvatarImage: View {
     @Environment(\.redactionReasons) private var redactionReasons
-
+    
     private let textForImage: String
     private let contentID: String
     
@@ -32,18 +32,18 @@ struct PlaceholderAvatarImage: View {
         }
         .aspectRatio(1, contentMode: .fill)
     }
-
+    
     init(name: String?, contentID: String) {
         let baseName = name ?? contentID.trimmingCharacters(in: .punctuationCharacters)
         textForImage = baseName.first?.uppercased() ?? ""
         self.contentID = contentID
     }
-
+    
     private var backgroundColor: Color {
         if redactionReasons.contains(.placeholder) {
             return Color(.systemGray4) // matches the default text redaction
         }
-
+        
         return avatarColor?.background ?? .compound.iconPrimary
     }
     

@@ -68,7 +68,7 @@ struct QRCodeLoginScreenViewState: BindableState {
             }
         }
     }
-
+    
     var shouldDisplayBackButton: Bool {
         switch mode {
         case .login:

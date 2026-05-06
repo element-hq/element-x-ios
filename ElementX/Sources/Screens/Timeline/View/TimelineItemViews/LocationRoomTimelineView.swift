@@ -23,7 +23,7 @@ struct LocationRoomTimelineView: View {
                 }
         }
     }
-                                    
+    
     @ViewBuilder
     private var mainContent: some View {
         if let geoURI = timelineItem.content.geoURI {
@@ -40,16 +40,16 @@ struct LocationRoomTimelineView: View {
             FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
         }
     }
-
+    
     // MARK: - Private
-
+    
     private let mapAspectRatio: Double = 3 / 2
     private let mapMaxHeight: Double = 300
 }
 
 struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
-
+    
     static var previews: some View {
         PreviewScrollView {
             VStack(spacing: 8) {
@@ -61,7 +61,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Bubbles")
     }
-
+    
     @ViewBuilder
     static var states: some View {
         LocationRoomTimelineView(timelineItem: .init(id: .randomEvent,
@@ -71,7 +71,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      canBeRepliedTo: true,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description")))
-
+        
         LocationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                      timestamp: .mock,
                                                      isOutgoing: false,

@@ -21,7 +21,7 @@ enum UserAgentBuilder {
     static func makeUserAgent() -> String? {
         let clientName = InfoPlistReader.app.bundleDisplayName
         let clientVersion = InfoPlistReader.app.bundleShortVersionString
-
+        
         #if os(iOS)
         let scale = UIScreen.main.scale
         return if ProcessInfo.processInfo.isiOSAppOnMac {

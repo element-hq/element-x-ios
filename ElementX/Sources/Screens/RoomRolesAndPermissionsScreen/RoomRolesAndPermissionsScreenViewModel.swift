@@ -21,7 +21,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     var actionsPublisher: AnyPublisher<RoomRolesAndPermissionsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(initialPermissions: RoomPermissions? = nil, roomProxy: JoinedRoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol, analytics: AnalyticsService) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
@@ -83,7 +83,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
                                                  secondaryButton: .init(title: L10n.actionCancel, role: .cancel) { })
         }
     }
-
+    
     // MARK: - Members
     
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
@@ -148,7 +148,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         
         hideSavingIndicator()
     }
-        
+    
     // MARK: Loading indicator
     
     private static let savingIndicatorID = "RolesAndPermissionsSaving"

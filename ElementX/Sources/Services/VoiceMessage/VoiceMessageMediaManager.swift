@@ -36,7 +36,7 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
         self.audioConverter = audioConverter
         self.processingQueue = processingQueue
     }
-
+    
     deinit {
         voiceMessageCache.clearCache()
     }
@@ -50,7 +50,7 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
         if let fileURL = voiceMessageCache.fileURL(for: source) {
             return fileURL
         }
-                
+        
         // Otherwise, load the file from source
         guard case .success(let fileHandle) = await mediaProvider.loadFileFromSource(source, filename: body) else {
             throw MediaProviderError.failedRetrievingFile
@@ -61,14 +61,14 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
             if let fileURL = voiceMessageCache.fileURL(for: source) {
                 return fileURL
             }
-
+            
             // Convert from ogg
             guard let url = fileHandle.url else {
                 throw VoiceMessageMediaManagerError.missingURL
             }
             let convertedFileURL = URL.temporaryDirectory.appendingPathComponent(url.deletingPathExtension().lastPathComponent).appendingPathExtension(AudioConverterPreferredFileExtension.mpeg4aac.rawValue)
             try audioConverter.convertToMPEG4AAC(sourceURL: url, destinationURL: convertedFileURL)
-
+            
             // Cache the file and return the url
             let result = voiceMessageCache.cache(mediaSource: source, using: convertedFileURL, move: true)
             switch result {

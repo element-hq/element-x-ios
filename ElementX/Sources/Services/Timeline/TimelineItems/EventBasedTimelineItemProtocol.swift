@@ -26,11 +26,11 @@ extension EventBasedTimelineItemProtocol {
     var description: String {
         "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
     }
-
+    
     var isForwardable: Bool {
         isRemoteMessage && !(self is PollRoomTimelineItem)
     }
-
+    
     var isRemoteMessage: Bool {
         id.eventID != nil
     }
@@ -50,11 +50,11 @@ extension EventBasedTimelineItemProtocol {
     var hasFailedToSend: Bool {
         properties.deliveryStatus?.isSendingFailed == true
     }
-
+    
     var hasFailedDecryption: Bool {
         self is EncryptedRoomTimelineItem
     }
-
+    
     var timelineMenuDescription: String {
         switch self {
         case is VoiceMessageRoomTimelineItem:
@@ -63,21 +63,21 @@ extension EventBasedTimelineItemProtocol {
             return body.trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
-
+    
     func additionalWhitespaces() -> Int {
         var whiteSpaces = 1
         localizedSendInfo.forEach { _ in
             whiteSpaces += 1
         }
-
+        
         // To account for the extra spacing created by the status icon
         if hasStatusIcon {
             whiteSpaces += 3
         }
-
+        
         return whiteSpaces
     }
-
+    
     /// contains the timestamp and an optional edited localised prefix
     /// example: (edited) 12:17 PM
     var localizedSendInfo: String {
@@ -87,12 +87,12 @@ extension EventBasedTimelineItemProtocol {
         }
         return start + timestamp.formattedTime()
     }
-
+    
     var isCopyable: Bool {
         guard let messageBasedItem = self as? EventBasedMessageTimelineItemProtocol else {
             return false
         }
-
+        
         switch messageBasedItem.contentType {
         case .audio, .file, .image, .video, .location, .voice:
             return false

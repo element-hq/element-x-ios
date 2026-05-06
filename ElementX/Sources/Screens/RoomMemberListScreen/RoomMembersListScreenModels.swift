@@ -94,7 +94,7 @@ struct RoomMembersListScreenViewStateBindings {
     var mode: RoomMembersListScreenMode = .members
     /// A sheet model for the selected member to kick, ban, promote etc.
     var manageMemeberViewModel: ManageRoomMemberSheetViewModel?
-
+    
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomMembersListScreenAlertType>?
 }

@@ -37,7 +37,7 @@ struct IdentityConfirmedScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
-
+            
             Text(L10n.screenIdentityConfirmedSubtitle)
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)

@@ -177,7 +177,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         formatter.allowedUnits = [.hour, .minute]
         return formatter
     }()
-        
+    
     private func checkAlwaysShareLocationPermission() {
         authorizationStatusSubscription = nil
         let authorizationStatus = liveLocationManager.authorizationStatus.value

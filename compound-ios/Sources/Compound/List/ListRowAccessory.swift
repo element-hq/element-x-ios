@@ -55,7 +55,7 @@ public struct ListRowAccessory: View {
     private var verticalPaddingFix: CGFloat {
         -4
     }
-
+    
     /// Absolute bodge until we have the circle icon in Compound.
     @ScaledMetric private var circleOverlayInsets = 5
     

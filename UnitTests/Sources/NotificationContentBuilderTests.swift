@@ -139,7 +139,7 @@ struct NotificationContentBuilderTests {
         #expect(notificationContent.threadIdentifier == "bob:matrix.org!test:matrix.orgthread")
         #expect(notificationContent.attachments == [])
     }
-
+    
     @Test
     mutating func roomMessageNotification() async {
         let notificationItem = NotificationItemProxyMock(.init(roomID: "!testroom:matrix.org",
@@ -193,7 +193,7 @@ struct NotificationContentBuilderTests {
         #expect(notificationContent.threadIdentifier == "bob:matrix.org!testroom:matrix.org")
         #expect(notificationContent.attachments == [])
     }
-
+    
     @Test
     mutating func roomMessageNotificationWithThread() async {
         let notificationItem = NotificationItemProxyMock(.init(roomID: "!testroom:matrix.org",
@@ -220,7 +220,7 @@ struct NotificationContentBuilderTests {
         #expect(notificationContent.threadIdentifier == "bob:matrix.org!testroom:matrix.orgthread123")
         #expect(notificationContent.attachments == [])
     }
-
+    
     @Test
     mutating func roomMessageNotificationWithThreadAndMention() async {
         let notificationItem = NotificationItemProxyMock(.init(roomID: "!testroom:matrix.org",

@@ -126,7 +126,7 @@ struct LocationSharingScreen: View {
 
 struct LocationSharingScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = LocationSharingScreenViewModel.mock(type: .staticSenderLocation)
-        
+    
     static let pinViewModel = LocationSharingScreenViewModel.mock(type: .staticPinLocation)
     
     static let pickerViewModel = LocationSharingScreenViewModel.mock(type: .picker)

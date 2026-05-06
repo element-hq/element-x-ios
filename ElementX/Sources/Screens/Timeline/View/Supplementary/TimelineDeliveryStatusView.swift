@@ -14,9 +14,9 @@ struct TimelineDeliveryStatusView: View {
         case sending
         case sent
     }
-
+    
     let deliveryStatus: Status
-
+    
     private var icon: CompoundIcon {
         switch deliveryStatus {
         case .sending:

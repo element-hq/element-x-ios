@@ -21,7 +21,7 @@ class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportCont
     var actions: AnyPublisher<ReportContentScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(eventID: String, senderID: String, roomProxy: JoinedRoomProxyProtocol, clientProxy: ClientProxyProtocol) {
         self.eventID = eventID
         self.senderID = senderID
@@ -30,7 +30,7 @@ class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportCont
         
         super.init(initialViewState: ReportContentScreenViewState(bindings: ReportContentScreenViewStateBindings(reasonText: "", ignoreUser: false)))
     }
-
+    
     // MARK: - Public
     
     override func process(viewAction: ReportContentScreenViewAction) {
@@ -41,9 +41,9 @@ class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportCont
             Task { await submitReport() }
         }
     }
-
+    
     // MARK: Private
-
+    
     private func submitReport() async {
         actionsSubject.send(.submitStarted)
         

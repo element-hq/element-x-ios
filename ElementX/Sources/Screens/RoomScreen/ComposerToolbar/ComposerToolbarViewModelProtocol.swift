@@ -17,6 +17,6 @@ protocol ComposerToolbarViewModelProtocol {
     
     func start()
     func stop()
-
+    
     func process(timelineAction: TimelineComposerAction)
 }

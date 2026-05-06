@@ -48,7 +48,7 @@ final class RoomSelectionScreenCoordinator: CoordinatorProtocol {
     func stop() {
         viewModel.stop()
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(RoomSelectionScreen(context: viewModel.context))
     }

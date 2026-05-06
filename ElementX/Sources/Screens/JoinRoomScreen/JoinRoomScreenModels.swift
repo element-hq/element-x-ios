@@ -60,7 +60,7 @@ struct JoinRoomScreenViewState: BindableState {
     var mode: JoinRoomScreenMode = .loading
     
     var hideInviteAvatars = false
-        
+    
     var bindings = JoinRoomScreenViewStateBindings()
     
     var shouldHideAvatars: Bool {

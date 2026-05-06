@@ -203,22 +203,22 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 return .space
             case (.initial, .startUnjoined):
                 return .joinSpace
-            
+                
             case (.joinSpace, .joinedSpace):
                 return .space
             case (.space, .leftSpace):
                 return .leftSpace
-            
+                
             case (.space, .addRooms):
                 return .addingRooms
             case (.addingRooms, .dismissedAddRooms):
                 return .space
-            
+                
             case (.space, .presentTransferOwnership):
                 return .transferOwnership
             case (.transferOwnership, .dismissedTransferOwnership):
                 return .space
-            
+                
             case (.space, .startChildFlow):
                 guard let childEntryPoint = userInfo as? SpaceFlowCoordinatorEntryPoint else { fatalError("An entry point must be provided.") }
                 return .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: fromState)
@@ -227,34 +227,34 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 return .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: previousState)
             case (.presentingChild(_, let previousState), .stopChildFlow):
                 return previousState
-            
+                
             case (.space, .startRoomFlow):
                 return .roomFlow(previousState: fromState)
             case (.roomFlow, .startRoomFlow):
                 return fromState // Ignore tapping on multiple rooms at the same time
             case (.roomFlow(let previousState), .stopRoomFlow):
                 return previousState
-            
+                
             case (.space, .startMembersFlow):
                 return .membersFlow
             case (.membersFlow, .stopMembersFlow):
                 return .space
-            
+                
             case (.space, .startSettingsFlow):
                 return .settingsFlow
             case (.settingsFlow, .stopSettingsFlow):
                 return .space
-            
+                
             case (.space, .startRolesAndPermissionsFlow):
                 return .rolesAndPermissionsFlow
             case (.rolesAndPermissionsFlow, .stopRolesAndPermissionsFlow):
                 return .space
-            
+                
             case (.space, .startCreateChildRoomFlow):
                 return .createChildRoomFlow
             case (.createChildRoomFlow, .stopCreateChildRoomFlow):
                 return .space
-            
+                
             default:
                 return nil
             }
@@ -268,23 +268,23 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 presentSpace()
             case (.initial, .startUnjoined, .joinSpace):
                 presentJoinSpaceScreen()
-            
+                
             case (.joinSpace, .joinedSpace, .space):
                 presentSpaceAfterJoining()
             case (.space, .leftSpace, .leftSpace):
                 clearRoute(animated: true)
-            
+                
             case (.space, .addRooms, .addingRooms):
                 presentSpaceAddRoomsScreen()
             case (.addingRooms, .dismissedAddRooms, .space):
                 break
-            
+                
             case (.space, .presentTransferOwnership, .transferOwnership):
                 guard let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
                 presentTransferOwnershipScreen(roomProxy: roomProxy)
             case (.transferOwnership, .dismissedTransferOwnership, .space):
                 break
-            
+                
             case (.space, .startChildFlow, .presentingChild),
                  (.roomFlow, .startChildFlow, .presentingChild):
                 guard let entryPoint = context.userInfo as? SpaceFlowCoordinatorEntryPoint else { return }
@@ -292,7 +292,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             case (.presentingChild, .stopChildFlow, _):
                 childSpaceFlowCoordinator = nil
                 selectedSpaceRoomSubject.send(nil)
-            
+                
             case (.space, .startRoomFlow(let roomID), .roomFlow):
                 startRoomFlow(roomID: roomID)
             case (.roomFlow, .startRoomFlow, .roomFlow):
@@ -300,7 +300,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomFlow, .stopRoomFlow, _):
                 roomFlowCoordinator = nil
                 selectedSpaceRoomSubject.send(nil)
-            
+                
             case (.space, .startMembersFlow, .membersFlow):
                 guard let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else {
                     fatalError("The room proxy must always be provided")
@@ -308,25 +308,25 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 startMembersFlow(roomProxy: roomProxy)
             case (.membersFlow, .stopMembersFlow, .space):
                 membersFlowCoordinator = nil
-            
+                
             case (.space, .startSettingsFlow, .settingsFlow):
                 guard let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
                 startSettingsFlow(roomProxy: roomProxy)
             case (.settingsFlow, .stopSettingsFlow, .space):
                 settingsFlowCoordinator = nil
-            
+                
             case (.space, .startRolesAndPermissionsFlow, .rolesAndPermissionsFlow):
                 guard let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
                 startRolesAndPermissionsFlow(roomProxy: roomProxy)
             case (.rolesAndPermissionsFlow, .stopRolesAndPermissionsFlow, .space):
                 rolesAndPermissionsFlowCoordinator = nil
-            
+                
             case (.space, .startCreateChildRoomFlow, .createChildRoomFlow):
                 guard let space = context.userInfo as? SpaceServiceRoom else { fatalError("The space is missing") }
                 startCreateChildFlow(space: space)
             case (.createChildRoomFlow, .stopCreateChildRoomFlow, .space):
                 createChildRoomFlowCoordinator = nil
-            
+                
             default:
                 break
             }

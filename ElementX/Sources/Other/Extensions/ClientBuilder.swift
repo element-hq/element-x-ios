@@ -42,7 +42,7 @@ extension ClientBuilder {
                 .enableShareHistoryOnInvite(enableShareHistoryOnInvite: true)
                 .autoEnableBackups(autoEnableBackups: true)
         }
-
+        
         // Set recipient strategy and trust requirement even if `setupEncryption` is false to ensure messages
         // from insecure devices aren't displayed in push notifications.
         // See https://github.com/element-hq/element-x-ios/issues/4702.

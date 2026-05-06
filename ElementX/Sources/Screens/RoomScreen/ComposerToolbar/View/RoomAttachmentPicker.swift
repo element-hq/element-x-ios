@@ -86,7 +86,7 @@ struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
                                                     appSettings: ServiceLocator.shared.settings,
                                                     analyticsService: ServiceLocator.shared.analytics,
                                                     composerDraftService: ComposerDraftServiceMock(.init()))
-
+    
     static var previews: some View {
         RoomAttachmentPicker(context: viewModel.context)
     }

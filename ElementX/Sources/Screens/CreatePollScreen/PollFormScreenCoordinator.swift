@@ -51,7 +51,7 @@ final class PollFormScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(PollFormScreen(context: viewModel.context))
     }

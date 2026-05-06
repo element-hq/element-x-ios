@@ -156,7 +156,7 @@ struct RoomMemberDetailsScreen: View {
             }
         }
     }
-
+    
     @ViewBuilder
     private func blockUserAlertActions(_ item: RoomMemberDetailsScreenViewStateBindings.IgnoreUserAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
@@ -165,7 +165,7 @@ struct RoomMemberDetailsScreen: View {
             context.send(viewAction: item.viewAction)
         }
     }
-
+    
     private func blockUserAlertMessage(_ item: RoomMemberDetailsScreenViewStateBindings.IgnoreUserAlertItem) -> some View {
         Text(item.description)
     }
@@ -192,19 +192,19 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
                 state.verificationState == .verificationViolation
             })
             .previewDisplayName("Verification Violation User")
-            
+        
         RoomMemberDetailsScreen(context: otherUserViewModel.context)
             .snapshotPreferences(expect: otherUserViewModel.context.$viewState.map { state in
                 state.memberDetails?.role == .user && state.dmRoomID != nil
             })
             .previewDisplayName("Other User")
-            
+        
         RoomMemberDetailsScreen(context: accountOwnerViewModel.context)
             .snapshotPreferences(expect: accountOwnerViewModel.context.$viewState.map { state in
                 state.isOwnMemberDetails == true
             })
             .previewDisplayName("Account Owner")
-            
+        
         RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
             .snapshotPreferences(expect: ignoredUserViewModel.context.$viewState.map { state in
                 state.memberDetails?.isIgnored ?? false && state.dmRoomID != nil

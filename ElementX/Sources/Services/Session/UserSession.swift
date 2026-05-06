@@ -13,7 +13,7 @@ class UserSession: UserSessionProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     private var authErrorCancellable: AnyCancellable?
-
+    
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol

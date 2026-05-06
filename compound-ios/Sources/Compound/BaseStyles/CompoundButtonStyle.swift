@@ -69,7 +69,7 @@ public struct CompoundButtonStyle: ButtonStyle {
         case .toolbarIcon: 3
         }
     }
-
+    
     private var verticalPadding: CGFloat {
         if kind == .textLink {
             return 0
@@ -103,7 +103,7 @@ public struct CompoundButtonStyle: ButtonStyle {
     private var isUnderlined: Bool {
         kind == .textLink && accessibilityShowButtonShapes
     }
-
+    
     public func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
             .font(font)
@@ -147,7 +147,7 @@ public struct CompoundButtonStyle: ButtonStyle {
             EmptyView()
         }
     }
-
+    
     private var contentShape: AnyShape {
         switch kind {
         case .super, .primary, .secondary, .tertiary:
@@ -156,7 +156,7 @@ public struct CompoundButtonStyle: ButtonStyle {
             return AnyShape(Rectangle())
         }
     }
-
+    
     private func fillColor(configuration: Self.Configuration) -> Color {
         guard isEnabled else { return .compound.bgActionPrimaryDisabled }
         if configuration.role == .destructive {

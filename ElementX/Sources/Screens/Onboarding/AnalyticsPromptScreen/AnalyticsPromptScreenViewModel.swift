@@ -23,7 +23,7 @@ class AnalyticsPromptScreenViewModel: AnalyticsPromptScreenViewModelType, Analyt
         let promptStrings = AnalyticsPromptScreenStrings(termsURL: termsURL)
         super.init(initialViewState: AnalyticsPromptScreenViewState(strings: promptStrings))
     }
-
+    
     // MARK: - Public
     
     override func process(viewAction: AnalyticsPromptScreenViewAction) {

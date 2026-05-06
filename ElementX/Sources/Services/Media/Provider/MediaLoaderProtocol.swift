@@ -18,7 +18,7 @@ enum MediaLoaderError: Error {
 // sourcery: AutoMockable
 protocol MediaLoaderProtocol {
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data
-
+    
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data
     
     func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy

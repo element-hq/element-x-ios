@@ -19,7 +19,7 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
     var actionsPublisher: AnyPublisher<RoomDirectorySearchScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-        
+    
     init(userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         roomDirectorySearchProxy = userSession.clientProxy.roomDirectorySearchProxy()

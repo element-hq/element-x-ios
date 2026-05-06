@@ -59,7 +59,7 @@ struct CollapsibleReactionLayout: Layout {
             }
             return
         }
-
+        
         // Calculate the layout of the rows with the reactions button and add more button
         let reactionsAndAddMore = calculateRows(proposal: ProposedViewSize(bounds.size), subviews: Array(subviewsByType.reactions + [subviewsByType.addMoreButton]))
         // If we have extended beyond the defined number of rows we are showing the expand/collapse ui

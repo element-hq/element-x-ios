@@ -44,7 +44,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private static let attributeMSC4286 = "msc4286-external-payment-details"
     private static let cacheDispatchQueue = DispatchQueue(label: "io.element.elementx.attributed_string_builder_v2_cache")
     private static var caches: [String: LRUCache<String, AttributedString>] = [:]
-
+    
     static func invalidateCaches() {
         caches.removeAll()
     }
@@ -53,7 +53,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         self.cacheKey = cacheKey
         self.mentionBuilder = mentionBuilder
     }
-        
+    
     func fromPlain(_ string: String?) -> AttributedString? {
         guard let string else {
             return nil
@@ -62,7 +62,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         if let cached = Self.cachedValue(forKey: string, cacheKey: cacheKey) {
             return cached
         }
-
+        
         let mutableAttributedString = NSMutableAttributedString(string: string)
         addLinksAndMentions(mutableAttributedString)
         addMatrixEntityPermalinkAttributesTo(mutableAttributedString)
@@ -72,7 +72,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         return result
     }
-        
+    
     /// Do not use the default HTML renderer of NSAttributedString because this method
     /// runs on the UI thread which we want to avoid because renderHTMLString is called
     /// most of the time from a background thread.
@@ -84,7 +84,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         if let cached = Self.cachedValue(forKey: originalHTMLString, cacheKey: cacheKey) {
             return cached
         }
-                
+        
         let htmlString = originalHTMLString.replacingHtmlBreaksOccurrences()
         
         let doc = try? SwiftSoup.parseBodyFragment(htmlString)
@@ -105,7 +105,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         return result
     }
-        
+    
     // MARK: - Private
     
     // swiftlint:disable:next function_body_length cyclomatic_complexity
@@ -133,7 +133,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 if (node.previousSibling() as? Element)?.tagName() == "br" {
                     text.trimPrefix(" ")
                 }
-                 
+                
                 result.append(NSAttributedString(string: text))
                 continue
             }
@@ -155,7 +155,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.append(NSAttributedString(string: "\n"))
                 content.setFontPreservingSymbolicTraits(UIFont.boldSystemFont(ofSize: size))
-
+                
             case "p", "div":
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.append(NSAttributedString(string: "\n"))
@@ -245,7 +245,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 if indentLevel > 0 || !element.ownText().isEmpty {
                     content.insert(NSAttributedString("\n"), at: 0)
                 }
-
+                
             case "li":
                 var bullet = String(repeating: "  ", count: indentLevel)
                 if listTag == "ol" {
@@ -310,7 +310,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             }
             
             let identifier = String(string[matchRange])
-
+            
             return TextParsingMatch(type: .userID(identifier: identifier), range: match.range)
         }
         
@@ -376,7 +376,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             if hasLink {
                 return
             }
-                        
+            
             switch match.type {
             case .atRoom:
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
@@ -425,7 +425,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             }
         }
     }
-        
+    
     private func detectPhishingAttempts(_ attributedString: NSMutableAttributedString) {
         attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             guard value != nil, let internalURL = value as? URL else {

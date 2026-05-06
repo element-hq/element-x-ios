@@ -29,7 +29,7 @@ final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
     private let viewModel: IdentityConfirmationScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<IdentityConfirmationScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<IdentityConfirmationScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -63,7 +63,7 @@ final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(IdentityConfirmationScreen(context: viewModel.context))
     }

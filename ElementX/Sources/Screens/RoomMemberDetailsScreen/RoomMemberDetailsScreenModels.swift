@@ -22,7 +22,7 @@ struct RoomMemberDetailsScreenViewState: BindableState {
     var isOwnMemberDetails = false
     var isProcessingIgnoreRequest = false
     var dmRoomID: String?
-
+    
     var bindings: RoomMemberDetailsScreenViewStateBindings
     
     var showVerifiedBadge: Bool {
@@ -44,31 +44,31 @@ struct RoomMemberDetailsScreenViewStateBindings {
             case ignore
             case unignore
         }
-
+        
         let action: Action
         let cancelTitle = L10n.actionCancel
-
+        
         var title: String {
             switch action {
             case .ignore: return L10n.screenRoomMemberDetailsBlockUser
             case .unignore: return L10n.screenRoomMemberDetailsUnblockUser
             }
         }
-
+        
         var confirmationTitle: String {
             switch action {
             case .ignore: return L10n.screenRoomMemberDetailsBlockAlertAction
             case .unignore: return L10n.screenRoomMemberDetailsUnblockAlertAction
             }
         }
-
+        
         var description: String {
             switch action {
             case .ignore: return L10n.screenRoomMemberDetailsBlockAlertDescription
             case .unignore: return L10n.screenRoomMemberDetailsUnblockAlertDescription
             }
         }
-
+        
         var viewAction: RoomMemberDetailsScreenViewAction {
             switch action {
             case .ignore: return .ignoreConfirmed

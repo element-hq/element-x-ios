@@ -191,7 +191,7 @@ struct NavigationSplitCoordinatorTests {
     func splitTracksEmbeddedStackRootChanges() async {
         let sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         sidebarNavigationStackCoordinator.setRootCoordinator(SomeTestCoordinator())
-                
+        
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
         
         assertCoordinatorsEqual(sidebarNavigationStackCoordinator.rootCoordinator, navigationSplitCoordinator.compactLayoutRootCoordinator)
@@ -210,7 +210,7 @@ struct NavigationSplitCoordinatorTests {
     func splitTracksEmbeddedStackChanges() async {
         let sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         sidebarNavigationStackCoordinator.setRootCoordinator(SomeTestCoordinator())
-                
+        
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
         
         assertCoordinatorsEqual(sidebarNavigationStackCoordinator.rootCoordinator, navigationSplitCoordinator.compactLayoutRootCoordinator)
@@ -233,7 +233,7 @@ struct NavigationSplitCoordinatorTests {
         let sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         sidebarNavigationStackCoordinator.setRootCoordinator(SomeTestCoordinator())
         sidebarNavigationStackCoordinator.push(SomeTestCoordinator())
-                
+        
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
         
         assertCoordinatorsEqual(sidebarNavigationStackCoordinator.rootCoordinator, navigationSplitCoordinator.compactLayoutRootCoordinator)
@@ -299,20 +299,20 @@ struct NavigationSplitCoordinatorTests {
             }
         }
     }
-
+    
     @Test
     mutating func setRootDetailToNilAfterPoppingToRoot() async {
         navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SomeTestCoordinator())
         let sidebarCoordinator = NavigationStackCoordinator()
         sidebarCoordinator.setRootCoordinator(SomeTestCoordinator())
-
+        
         let detailCoordinator = NavigationStackCoordinator()
         detailCoordinator.setRootCoordinator(SomeTestCoordinator())
         detailCoordinator.push(SomeTestCoordinator())
-
+        
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
-
+        
         await waitForConfirmation("Details coordinator should be nil, and the compact layout revert to the sidebar root",
                                   timeout: .seconds(1)) { [navigationSplitCoordinator] confirm in
             DispatchQueue.main.async {

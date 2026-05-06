@@ -152,7 +152,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
             fatalError("Not reachable")
         }
     }
-        
+    
     init(serverName: String,
          accessType: SecurityAndPrivacyRoomAccessType,
          isEncryptionEnabled: Bool,

@@ -197,7 +197,7 @@ private struct CallView: UIViewRepresentable {
                 guard let body = message.body as? [String: String],
                       let level = body["level"],
                       let logMessage = body["message"] else { return }
-
+                
                 switch level {
                 case "log", "debug":
                     MXLog.debug("[ElementCall]: \(logMessage)")

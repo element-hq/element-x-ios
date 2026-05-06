@@ -85,7 +85,7 @@ struct NotificationContentBuilder {
             }
         }
     }
-
+    
     // MARK: - Private
     
     private func processEmpty(_ notificationContent: inout UNMutableNotificationContent) {
@@ -93,7 +93,7 @@ struct NotificationContentBuilder {
         notificationContent.body = L10n.notification
         notificationContent.categoryIdentifier = NotificationConstants.Category.message
     }
-
+    
     private func processInvited(notificationContent: inout UNMutableNotificationContent,
                                 notificationItem: NotificationItemProxyProtocol,
                                 mediaProvider: MediaProviderProtocol) async {
@@ -166,7 +166,7 @@ struct NotificationContentBuilder {
             }
         }
     }
-
+    
     private func processRoomMessage(notificationContent: inout UNMutableNotificationContent,
                                     notificationItem: NotificationItemProxyProtocol,
                                     messageType: MessageType,
@@ -228,7 +228,7 @@ struct NotificationContentBuilder {
             MXLog.error("Couldn't load the file for media attachment: \(error)")
         }
     }
-
+    
     private func addCommunicationContext(notificationContent: inout UNMutableNotificationContent,
                                          senderID: String,
                                          senderAvatarDisplayName: String,
@@ -247,7 +247,7 @@ struct NotificationContentBuilder {
                 MXLog.error("Couldn't add sender icon: \(error)")
             }
         }
-
+        
         if let fetchedImage {
             image = fetchedImage
         } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.avatarDisplayName ?? senderAvatarDisplayName,
@@ -256,7 +256,7 @@ struct NotificationContentBuilder {
         } else {
             image = INImage(named: "")
         }
-
+        
         let senderHandle = INPersonHandle(value: senderID, type: .unknown)
         let sender = INPerson(personHandle: senderHandle,
                               nameComponents: nil,
@@ -264,7 +264,7 @@ struct NotificationContentBuilder {
                               image: !icon.shouldDisplayAsGroup ? image : nil,
                               contactIdentifier: nil,
                               customIdentifier: nil)
-
+        
         // These are required to show the group name as subtitle
         var speakableGroupName: INSpeakableString?
         var recipients: [INPerson]?
@@ -274,7 +274,7 @@ struct NotificationContentBuilder {
             speakableGroupName = INSpeakableString(spokenPhrase: groupInfo.displayName)
             recipients = [sender, me]
         }
-
+        
         let intent = INSendMessageIntent(recipients: recipients,
                                          outgoingMessageType: .outgoingMessageText,
                                          content: nil,
@@ -286,14 +286,14 @@ struct NotificationContentBuilder {
         if speakableGroupName != nil {
             intent.setImage(image, forParameterNamed: \.speakableGroupName)
         }
-
+        
         // Use the intent to initialize the interaction.
         let interaction = INInteraction(intent: intent, response: nil)
-
+        
         // Interaction direction is incoming because the user is
         // receiving this message.
         interaction.direction = .incoming
-
+        
         // Donate the interaction before updating notification content.
         if !ProcessInfo.isRunningTests {
             try? await interaction.donate()
@@ -307,7 +307,7 @@ struct NotificationContentBuilder {
             notificationContent = content
         }
     }
-
+    
     @MainActor
     func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
         // The version value is used in case the design of the placeholder is updated to force a replacement

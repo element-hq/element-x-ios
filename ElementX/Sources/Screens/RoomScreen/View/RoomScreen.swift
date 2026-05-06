@@ -16,7 +16,7 @@ struct RoomScreen: View {
     @ObservedObject private var timelineContext: TimelineViewModelType.Context
     let composerToolbar: ComposerToolbar
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
-
+    
     init(context: RoomScreenViewModelType.Context,
          timelineContext: TimelineViewModelType.Context,
          composerToolbar: ComposerToolbar) {
@@ -24,7 +24,7 @@ struct RoomScreen: View {
         self.timelineContext = timelineContext
         self.composerToolbar = composerToolbar
     }
-
+    
     var body: some View {
         TimelineView(timelineContext: timelineContext)
             .overlay(alignment: .bottomTrailing) {
@@ -223,7 +223,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let readOnlyViewModels = makeViewModels(canSendMessage: false)
     static let tombstonedViewModels = makeViewModels(hasSuccessor: true)
     static let composerViewModel = ComposerToolbarViewModel.mock()
-
+    
     static var previews: some View {
         ElementNavigationStack {
             RoomScreen(context: viewModels.room.context,

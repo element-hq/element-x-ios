@@ -44,7 +44,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var isEncrypted: Bool
     var isDirect: Bool
     var permalink: URL?
-
+    
     var topic: AttributedString?
     var topicSummary: AttributedString?
     
@@ -66,9 +66,9 @@ struct RoomDetailsScreenViewState: BindableState {
     
     var isKnockableRoom = false
     var knockRequestsCount = 0
-
+    
     var reportRoomEnabled = false
-
+    
     var canSeeKnockingRequests: Bool {
         dmRecipientInfo == nil && isKnockableRoom && (canInviteUsers || canKickUsers || canBanUsers)
     }
@@ -84,9 +84,9 @@ struct RoomDetailsScreenViewState: BindableState {
     var hasTopicSection: Bool {
         topic != nil || canEditRoomTopic
     }
-
+    
     var bindings: RoomDetailsScreenViewStateBindings
-
+    
     var dmRecipientInfo: DMRecipientInfo?
     var accountOwner: RoomMemberDetails?
     
@@ -133,31 +133,31 @@ struct RoomDetailsScreenViewStateBindings {
             case ignore
             case unignore
         }
-
+        
         let action: Action
         let cancelTitle = L10n.actionCancel
-
+        
         var title: String {
             switch action {
             case .ignore: return L10n.screenDmDetailsBlockUser
             case .unignore: return L10n.screenDmDetailsUnblockUser
             }
         }
-
+        
         var confirmationTitle: String {
             switch action {
             case .ignore: return L10n.screenDmDetailsBlockAlertAction
             case .unignore: return L10n.screenDmDetailsUnblockAlertAction
             }
         }
-
+        
         var description: String {
             switch action {
             case .ignore: return L10n.screenDmDetailsBlockAlertDescription
             case .unignore: return L10n.screenDmDetailsUnblockAlertDescription
             }
         }
-
+        
         var viewAction: RoomDetailsScreenViewAction {
             switch action {
             case .ignore: return .ignoreConfirmed
@@ -167,7 +167,7 @@ struct RoomDetailsScreenViewStateBindings {
     }
     
     var isFavourite = false
-
+    
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomDetailsScreenErrorType>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
@@ -186,7 +186,7 @@ struct LeaveRoomAlertItem: AlertProtocol {
         case `public`
         case `private`
     }
-
+    
     let roomID: String
     let isDM: Bool
     let state: RoomState
@@ -196,7 +196,7 @@ struct LeaveRoomAlertItem: AlertProtocol {
     var title: String {
         isDM ? L10n.actionLeaveConversation : L10n.actionLeaveRoom
     }
-
+    
     var subtitle: String {
         switch state {
         case .empty: return L10n.leaveRoomAlertEmptySubtitle

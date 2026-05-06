@@ -105,7 +105,7 @@ struct InviteUsersScreen: View {
     }
     
     @ScaledMetric private var selectedUserCellWidth: CGFloat = 80
-
+    
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {

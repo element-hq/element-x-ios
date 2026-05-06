@@ -46,7 +46,7 @@ struct ImageMediaEventsTimelineView: View {
             .mediaGalleryTimelineAspectRatio(imageInfo: timelineItem.content.thumbnailInfo ?? timelineItem.content.imageInfo)
         }
     }
-        
+    
     private var placeholder: some View {
         Rectangle()
             .foregroundColor(.compound.bgSubtleSecondary)

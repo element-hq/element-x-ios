@@ -24,7 +24,7 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
     var actionsPublisher: AnyPublisher<ResolveVerifiedUserSendFailureScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(failure: TimelineItemSendFailure.VerifiedUser,
          sendHandle: SendHandleProxy,
          roomProxy: JoinedRoomProxyProtocol,

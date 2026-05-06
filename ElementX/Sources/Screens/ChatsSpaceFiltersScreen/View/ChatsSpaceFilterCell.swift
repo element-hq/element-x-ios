@@ -14,12 +14,12 @@ struct ChatsSpaceFilterCell: View {
     
     let filter: SpaceServiceFilter
     let mediaProvider: MediaProviderProtocol!
-        
+    
     private let verticalInsets = 12.0
     private let horizontalInsets = 16.0
     
     let action: (SpaceServiceFilter) -> Void
-
+    
     var body: some View {
         Button {
             action(filter)

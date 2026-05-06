@@ -69,7 +69,7 @@ struct TimelineBubbleLayout: Layout {
         
         // Calculate the natural size using the regular text and non-greedy quote bubbles.
         let layoutSubviews = subviews.filter { $0[Size.self].shouldLayout }
-
+        
         let subviewSizes = layoutSubviews.map { size(for: $0, subviews: subviews, proposedSize: proposal, cache: &cache) }
         
         let maxWidth = subviewSizes.map(\.width).reduce(0, max)
@@ -88,7 +88,7 @@ struct TimelineBubbleLayout: Layout {
         
         // Place the regular text and greedy components using the calculated width.
         let visibleSubviews = subviews.filter { $0[Size.self].shouldRender }
-
+        
         let subviewSizes = visibleSubviews.map { size(for: $0, subviews: subviews, proposedSize: ProposedViewSize(width: maxWidth, height: proposal.height), cache: &cache) }
         
         var y = bounds.minY

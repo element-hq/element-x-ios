@@ -30,7 +30,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     private var authenticationService: AuthenticationServiceProtocol {
         parameters.authenticationService
     }
-
+    
     private let actionsSubject: PassthroughSubject<ServerSelectionScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     

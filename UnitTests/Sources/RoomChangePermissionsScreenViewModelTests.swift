@@ -17,7 +17,7 @@ struct RoomChangePermissionsScreenViewModelTests {
     var context: RoomChangePermissionsScreenViewModelType.Context {
         viewModel.context
     }
-
+    
     @Test
     mutating func changeSetting() throws {
         setup(isSpace: false)

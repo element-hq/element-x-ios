@@ -10,7 +10,7 @@ import Foundation
 
 enum PillUtilities {
     static let atRoom = "@room"
-
+    
     /// Used by the WYSIWYG as the urlString value to identify @room mentions
     static let composerAtRoomURLString = "#"
     

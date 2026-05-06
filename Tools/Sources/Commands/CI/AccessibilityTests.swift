@@ -4,7 +4,7 @@ import Foundation
 struct AccessibilityTests: AsyncParsableCommand {
     static let configuration = CommandConfiguration(commandName: "accessibility-tests",
                                                     abstract: "Runs the accessibility test CI workflow.")
-
+    
     @Option(help: "Device name for tests.")
     var device = "iPhone 17"
     
@@ -25,15 +25,15 @@ struct AccessibilityTests: AsyncParsableCommand {
             testsFailed = true
             logger.error("\n❌ Accessibility tests failed.\n")
         }
-
+        
         // Zip results (best-effort, useful for CI artifact uploads)
         await CI.zipResults(bundles: ["AccessibilityTests.xcresult"],
                             outputName: "AccessibilityTests.xcresult.zip")
-
+        
         if testsFailed {
             throw ExitCode.failure
         }
-
+        
         logger.info("\n✅ Accessibility tests passed.\n")
     }
 }

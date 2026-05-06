@@ -22,7 +22,7 @@ final class AppLockSetupPINScreenViewModelTests {
     deinit {
         AppSettings.resetAllSettings()
     }
-
+    
     @Test
     func createPIN() async throws {
         setup(mode: .create)

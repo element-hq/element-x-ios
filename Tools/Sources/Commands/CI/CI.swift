@@ -152,7 +152,7 @@ struct CI: ParsableCommand {
         else {
             throw ValidationError("GITHUB_TOKEN environment variable is not set.")
         }
-
+        
         let repoURL = try await CI.gitRepositoryURL()
         
         if let tagName {

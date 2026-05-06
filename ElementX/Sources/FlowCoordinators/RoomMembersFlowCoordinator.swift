@@ -42,7 +42,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         case start
         
         case presentRoomMembersList
-
+        
         case presentRoomMemberDetails(userID: String)
         case dismissedRoomMemberDetails
         
@@ -246,7 +246,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
-
+        
         navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             guard let self else { return }
             if case let .roomMemberDetails(_, previousState) = stateMachine.state,

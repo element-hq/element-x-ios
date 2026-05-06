@@ -16,7 +16,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
     private let mapTilerAttributionPlacement: MapTilerAttributionPlacement
     private let mapSize: CGSize
     private let pinAnnotationView: PinAnnotation
-
+    
     @Environment(\.colorScheme) private var colorScheme
     @State private var fetchAttempt = 0
     
@@ -78,13 +78,13 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
             }
         }
     }
-
+    
     private var placeholderImage: some View {
         Image(asset: Asset.Images.mapBlurred)
             .resizable()
             .scaledToFill()
     }
-
+    
     private var errorView: some View {
         Button {
             fetchAttempt += 1

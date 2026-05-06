@@ -49,7 +49,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     
     private(set) var playbackURL: URL?
     private(set) var playbackSpeed: Float = 1.0
-
+    
     private var deinitInProgress = false
     
     var duration: TimeInterval {
@@ -129,14 +129,14 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         let time = progress * duration
         await internalAudioPlayer.seek(to: CMTime(seconds: time, preferredTimescale: 60))
     }
-
+    
     func setPlaybackSpeed(_ speed: Float) {
         playbackSpeed = speed
         if state == .playing {
             internalAudioPlayer?.rate = speed
         }
     }
-
+    
     // MARK: - Private
     
     private func setupAudioSession() {
@@ -178,7 +178,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         playerItem = nil
         removeObservers()
     }
-
+    
     private func addObservers() {
         guard let internalAudioPlayer, let playerItem else {
             return
@@ -197,7 +197,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
                 break
             }
         }
-                
+        
         rateObserver = internalAudioPlayer.observe(\.rate, options: [.old, .new]) { [weak self] _, _ in
             guard let self else { return }
             
@@ -211,7 +211,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
                 setInternalState(.playing)
             }
         }
-                
+        
         NotificationCenter.default.publisher(for: Notification.Name.AVPlayerItemDidPlayToEndTime)
             .sink { [weak self] _ in
                 guard let self else { return }

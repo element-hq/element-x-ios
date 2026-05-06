@@ -37,7 +37,7 @@ struct RoomListFiltersEmptyStateView: View {
         }
         return L10n.screenRoomlistFilterMixedEmptyStateSubtitle
     }
-
+    
     var body: some View {
         VStack(spacing: 24) {
             Text(emptyStateTitle)

@@ -39,34 +39,34 @@ class UserSessionScreenTests: XCTestCase {
         app.swipeDown() // Make sure the header shows a large title
         
         try await app.assertScreenshot(step: Step.homeScreen)
-
+        
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
         XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.roomScreen)
-
+        
         app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tap(.center)
         try await app.assertScreenshot(step: Step.composerAttachments)
     }
-
+    
     func testUserSessionReply() async throws {
         let app = Application.launch(.userSessionScreenReply, disableTimelineAccessibility: false)
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
         XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
-
+        
         let cell = app.cells.element(boundBy: 1) // Skip the typing indicator cell
         cell.swipeRight(velocity: .slow) // The iOS 26 simulator doesn't like a fast swipe.
-
+        
         try await app.assertScreenshot()
     }
-
+    
     func testElementCall() {
         let app = Application.launch(.userSessionScreen)
-
+        
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
         XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
-
+        
         app.buttons[A11yIdentifiers.roomScreen.joinCall].tap()
         
         let textField = app.textFields["Display name"]
@@ -78,7 +78,7 @@ class UserSessionScreenTests: XCTestCase {
     
     func testRoomDetails() {
         let app = Application.launch(.userSessionScreen)
-
+        
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
         XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
         
@@ -96,7 +96,7 @@ class UserSessionScreenTests: XCTestCase {
                 attempts += 1
             }
         }
-
+        
         // Open the room members list.
         app.buttons[A11yIdentifiers.roomDetailsScreen.people].tap()
         
@@ -122,7 +122,7 @@ class UserSessionScreenTests: XCTestCase {
     
     func testPhotoSharing() {
         let app = Application.launch(.userSessionScreen)
-
+        
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
         XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
         
@@ -137,7 +137,7 @@ class UserSessionScreenTests: XCTestCase {
     
     func testDocumentSharing() {
         let app = Application.launch(.userSessionScreen)
-
+        
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
         XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
         
@@ -147,7 +147,7 @@ class UserSessionScreenTests: XCTestCase {
     
     func testLocationSharing() {
         let app = Application.launch(.userSessionScreen)
-
+        
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
         XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
         

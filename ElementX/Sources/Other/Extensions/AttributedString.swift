@@ -36,7 +36,7 @@ extension AttributedString {
             case (false, false):
                 .plainText
             }
-                    
+            
             components.append(AttributedStringBuilderComponent(id: String(attributedString.characters),
                                                                attributedString: attributedString,
                                                                type: componentType))

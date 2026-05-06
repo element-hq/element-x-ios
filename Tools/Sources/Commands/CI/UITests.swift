@@ -10,35 +10,35 @@ struct UITests: AsyncParsableCommand {
                                                       swift run tools ci ui-tests --device-type iPad
                                                       swift run tools ci ui-tests --device-type iPhone --test-name "ClassName/testName"
                                                     """)
-
+    
     enum DeviceType: String, CaseIterable, ExpressibleByArgument {
         case iPhone
         case iPad
     }
-
+    
     @Option(help: "The device type to test (iPhone or iPad).")
     var deviceType: DeviceType
-
+    
     @Option(help: "iOS version for the simulator.")
     var osVersion = "26.4.1"
-
+    
     @Option(help: "Run only a specific test (format: 'ClassName/testName').")
     var testName: String?
-
+    
     private var simulatorName: String {
         switch deviceType {
         case .iPhone: "iPhone-\(osVersion)"
         case .iPad: "iPad-\(osVersion)"
         }
     }
-
+    
     private var simulatorType: String {
         switch deviceType {
         case .iPhone: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
         case .iPad: "com.apple.CoreSimulator.SimDeviceType.iPad-A16"
         }
     }
-
+    
     /// We used to run these simultaneously on iPhone and iPad but it is *really* slow on GitHub runners.
     /// Presumably because launching 2 simulators uses more memory than the runner has available.
     func run() async throws {
@@ -49,11 +49,11 @@ struct UITests: AsyncParsableCommand {
             "--create-simulator-name", simulatorName,
             "--create-simulator-type", simulatorType
         ]
-
+        
         if let testName {
             args += ["--test-name", testName]
         }
-
+        
         var testsFailed = false
         do {
             print("\n🧪 Running UI tests (\(deviceType.rawValue))…\n")
@@ -68,11 +68,11 @@ struct UITests: AsyncParsableCommand {
         
         await CI.collectCoverage(resultBundle: "UITests.xcresult", outputName: "ui-cobertura.xml")
         await CI.collectTestResults(resultBundle: "UITests.xcresult", outputName: "ui-junit.xml")
-
+        
         if testsFailed {
             throw ExitCode.failure
         }
-
+        
         print("\n✅ UI tests (\(deviceType.rawValue)) passed.\n")
     }
 }

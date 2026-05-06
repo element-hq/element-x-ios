@@ -139,7 +139,7 @@ class OAuthAuthenticationPresenter: NSObject {
     private var loadingIndicatorID: String {
         "\(Self.self)-Loading"
     }
-
+    
     private var failureIndicatorID: String {
         "\(Self.self)-Failure"
     }

@@ -23,7 +23,7 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
     
     private var identityResetHandle: IdentityResetHandle?
     private var passwordCancellable: AnyCancellable?
-
+    
     init(clientProxy: ClientProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController

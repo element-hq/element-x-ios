@@ -30,7 +30,7 @@ private struct ListRowDetailsLabelStyle: LabelStyle {
 /// This consists of both the `ListRowDetails` and the `ListRowAccessory`.
 public struct ListRowTrailingSection<Icon: View>: View {
     @Environment(\.isEnabled) private var isEnabled
-
+    
     private var title: String?
     private var icon: Icon?
     private var counter: Int?

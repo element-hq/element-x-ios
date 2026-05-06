@@ -27,7 +27,7 @@ final class BlockedUsersScreenCoordinator: CoordinatorProtocol {
     func stop() {
         viewModel.stop()
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(BlockedUsersScreen(context: viewModel.context))
     }

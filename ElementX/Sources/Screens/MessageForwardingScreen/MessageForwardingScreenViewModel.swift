@@ -22,7 +22,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     var actions: AnyPublisher<MessageForwardingScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(forwardingItem: MessageForwardingItem,
          userSession: UserSessionProtocol,
          roomSummaryProvider: RoomSummaryProviderProtocol,

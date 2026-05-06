@@ -22,7 +22,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(appSettings: AppSettings, userNotificationCenter: UserNotificationCenterProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol, isModallyPresented: Bool) {
         self.appSettings = appSettings
         self.userNotificationCenter = userNotificationCenter
@@ -30,7 +30,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         
         let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings, isModallyPresented: isModallyPresented))
-                
+        
         // Listen for changes to AppSettings.
         appSettings.$enableNotifications
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
@@ -43,7 +43,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     func fetchInitialContent() {
         fetchSettings()
     }
-        
+    
     // MARK: - Public
     
     override func process(viewAction: NotificationSettingsScreenViewAction) {
@@ -77,11 +77,11 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     }
     
     // MARK: - Private
-        
+    
     func readSystemAuthorizationStatus() async {
         state.isUserPermissionGranted = await userNotificationCenter.authorizationStatus() == .authorized
     }
-
+    
     func toggleNotifications() {
         appSettings.enableNotifications.toggle()
     }
@@ -121,11 +121,11 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             // Group chats
             var groupChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: false)
             let encryptedGroupChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: false)
-
+            
             // Direct chats
             var directChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: true)
             let encryptedDirectChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: true)
-                        
+            
             // Old clients were having specific settings for encrypted and unencrypted rooms,
             // so it's possible for `group chats` and `direct chats` settings to be inconsistent (e.g. encrypted `direct chats` can have a different mode that unencrypted `direct chats`)
             if groupChatsMode != encryptedGroupChatsMode {
@@ -143,16 +143,16 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             let roomMentionsEnabled = try? await notificationSettingsProxy.isRoomMentionEnabled()
             let callEnabled = try? await notificationSettingsProxy.isCallEnabled()
             let invitationsEnabled = try? await notificationSettingsProxy.isInviteForMeEnabled()
-                        
+            
             guard !Task.isCancelled else { return }
-
+            
             let notificationSettings = NotificationSettingsScreenSettings(groupChatsMode: groupChatsMode,
                                                                           directChatsMode: directChatsMode,
                                                                           roomMentionsEnabled: roomMentionsEnabled,
                                                                           callsEnabled: callEnabled,
                                                                           invitationsEnabled: invitationsEnabled,
                                                                           inconsistentSettings: inconsistentSettings)
-
+            
             state.settings = notificationSettings
             state.bindings.roomMentionsEnabled = notificationSettings.roomMentionsEnabled ?? false
             state.bindings.callsEnabled = notificationSettings.callsEnabled ?? false
@@ -194,7 +194,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         }
         state.applyingChange = false
     }
-        
+    
     func enableCalls(_ enable: Bool) async {
         guard let notificationSettings = state.settings else { return }
         do {

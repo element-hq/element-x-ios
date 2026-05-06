@@ -17,15 +17,15 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
-
+    
     private var isDirectOneToOneRoom: Bool {
         context.viewState.isDirectOneToOneRoom
     }
-
+    
     private var isFocussed: Bool {
         focussedEventID != nil && timelineItem.id.eventID == focussedEventID
     }
-
+    
     private var isPinned: Bool {
         guard context.viewState.timelineKind != .pinned,
               let eventID = timelineItem.id.eventID else {
@@ -51,17 +51,17 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     header
                         .zIndex(1)
                 }
-
+                
                 VStack(alignment: alignment, spacing: 0) {
                     HStack(spacing: 0) {
                         if timelineItem.isOutgoing {
                             Spacer()
                         }
-
+                        
                         messageBubbleWithReactions
                     }
                     .padding(timelineItem.isOutgoing ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
-
+                    
                     HStack(spacing: 0) {
                         if !timelineItem.isOutgoing {
                             Spacer()
@@ -246,12 +246,12 @@ private extension EventBasedTimelineItemProtocol {
             return defaultColor
         }
     }
-
+    
     /// The insets for the full bubble content.
     /// Padding affecting just the "send info" should be added inside `TimelineItemSendInfoView`
     var bubbleInsets: EdgeInsets {
         let defaultInsets: EdgeInsets = .init(around: 8)
-
+        
         switch self {
         case is StickerRoomTimelineItem:
             return .zero
@@ -286,7 +286,7 @@ private extension EdgeInsets {
     init(around: CGFloat) {
         self.init(top: around, leading: around, bottom: around, trailing: around)
     }
-
+    
     static var zero: Self = .init(around: 0)
 }
 
@@ -370,7 +370,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
-
+    
     static var previews: some View {
         mockTimeline
             .previewDisplayName("Mock Timeline")
@@ -465,7 +465,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         .environmentObject(viewModelWithPins.context)
         .environment(\.timelineContext, viewModel.context)
     }
-      
+    
     static var pinned: some View {
         ScrollView {
             MockTimelineContent(isPinned: true)
@@ -646,7 +646,7 @@ private struct MockTimelineContent: View {
                                                                                            isThreaded: isThreaded,
                                                                                            threadSummary: threadSummary)),
                                               groupStyle: .single))
-
+        
         AudioRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                   timestamp: .mock,
                                                   isOutgoing: true,

@@ -12,7 +12,7 @@ import MatrixRustSDK
 protocol RoomPowerLevelsProxyProtocol {
     var values: RoomPowerLevelsValues { get }
     var userPowerLevels: [String: Int64] { get }
-        
+    
     func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool
     func canOwnUser(sendStateEvent event: StateEventType) -> Bool
     func canOwnUserInvite() -> Bool

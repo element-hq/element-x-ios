@@ -46,7 +46,7 @@ struct HomeScreenKnockedCell: View {
     }
     
     // MARK: - Private
-
+    
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 0) {
@@ -86,7 +86,7 @@ struct HomeScreenKnockedCell: View {
             .fill(Color.compound.borderDisabled)
             .frame(height: 1 / UIScreen.main.scale)
     }
-        
+    
     private var title: String {
         room.name
     }

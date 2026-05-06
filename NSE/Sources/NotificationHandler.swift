@@ -84,7 +84,7 @@ class NotificationHandler {
         MXLog.info("\(tag) Delivering notification")
         contentHandler(notificationContent)
     }
-
+    
     private func discardNotification() {
         MXLog.info("\(tag) Discarding notification")
         

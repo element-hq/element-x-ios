@@ -29,7 +29,7 @@ public extension Task where Success == Never, Failure == Never {
             }
         }
     }
-
+    
     /// Dispatches the given throwing closure onto the given queue, wrapped within
     /// a continuation to make it non-blocking and awaitable.
     ///
@@ -59,7 +59,7 @@ extension Task {
     func store(in cancellables: inout Set<AnyCancellable>) {
         asCancellable().store(in: &cancellables)
     }
-
+    
     func asCancellable() -> AnyCancellable {
         AnyCancellable(cancel)
     }

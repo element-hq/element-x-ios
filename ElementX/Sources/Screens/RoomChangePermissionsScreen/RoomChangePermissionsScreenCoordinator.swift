@@ -50,7 +50,7 @@ final class RoomChangePermissionsScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(RoomChangePermissionsScreen(context: viewModel.context))
     }

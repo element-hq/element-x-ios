@@ -60,7 +60,7 @@ struct LocationSharingScreenViewState: BindableState {
         case .viewStatic, .viewLive: .show
         }
     }
-
+    
     let interactionMode: LocationSharingInteractionMode
     let mapURLBuilder: MapTilerURLBuilderProtocol
     let ownUserID: String
@@ -99,7 +99,7 @@ struct LocationSharingScreenViewState: BindableState {
     }
     
     var bindings = LocationSharingScreenBindings(showsUserLocationMode: .hide)
- 
+    
     /// Indicates whether the user is sharing his current location
     var isSharingUserLocation: Bool {
         bindings.isLocationAuthorized == true && bindings.showsUserLocationMode == .showAndFollow
@@ -135,7 +135,7 @@ struct LocationSharingScreenViewState: BindableState {
             !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized == true
         }
     }
-
+    
     var zoomLevel: Double {
         15.0
     }
@@ -181,7 +181,7 @@ struct LocationSharingScreenBindings {
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<LocationSharingViewAlert>?
-
+    
     var sharedAnnotation: LocationAnnotation?
 }
 

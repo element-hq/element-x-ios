@@ -27,9 +27,9 @@ protocol VoiceMessageRecorderProtocol {
     var previewAudioPlayerState: AudioPlayerState? { get }
     var isRecording: Bool { get }
     var recordingURL: URL? { get }
-
+    
     var actions: AnyPublisher<VoiceMessageRecorderAction, Never> { get }
-
+    
     func startRecording() async
     func stopRecording() async
     func cancelRecording() async

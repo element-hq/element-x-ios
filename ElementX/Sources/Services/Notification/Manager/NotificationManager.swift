@@ -26,9 +26,9 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         self.appSettings = appSettings
         super.init()
     }
-
+    
     // MARK: NotificationManagerProtocol
-
+    
     weak var delegate: NotificationManagerDelegate?
     
     func start() {
@@ -80,14 +80,14 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             }
         }
     }
-
+    
     func register(with deviceToken: Data) async -> Bool {
         guard let userSession else {
             return false
         }
         return await setPusher(with: deviceToken, clientProxy: userSession.clientProxy)
     }
-
+    
     func setUserSession(_ userSession: UserSessionProtocol?) {
         self.userSession = userSession
         
@@ -106,11 +106,11 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             MXLog.info("Notification sound enabled: \(settings.soundSetting == .enabled)")
         }
     }
-
+    
     func registrationFailed(with error: Error) {
         MXLog.error("Device token registration failed with error: \(error)")
     }
-
+    
     func showLocalNotification(with title: String, subtitle: String?) async {
         let content = UNMutableNotificationContent()
         content.title = title
@@ -150,7 +150,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                       let lastMessageDate = roomsToLastMessageDates[roomID] else {
                     return false
                 }
-                    
+                
                 return notification.date <= lastMessageDate
             }
             .map(\.request.identifier)
@@ -161,14 +161,14 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     private func removeReceivedWhileOfflineNotification() {
         notificationCenter.removeDeliveredNotifications(withIdentifiers: [NotificationServiceExtension.receivedWhileOfflineNotificationID])
     }
-
+    
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
         do {
             let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
                                                           alert: APSAlert(locKey: "Notification",
                                                                           locArgs: [])),
                                              pusherNotificationClientIdentifier: clientProxy.pusherNotificationClientIdentifier)
-
+            
             let configuration = try await PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
                                                                                  appId: appSettings.pusherAppID),
                                                               kind: .http(data: .init(url: appSettings.pushGatewayNotifyEndpoint.absoluteString,
@@ -186,7 +186,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             return false
         }
     }
-
+    
     private func pusherProfileTag() -> String {
         if let currentTag = appSettings.pusherProfileTag {
             return currentTag
@@ -196,7 +196,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             let offset = Int.random(in: 0..<chars.count)
             return String(chars[chars.index(chars.startIndex, offsetBy: offset)])
         }.joined()
-
+        
         appSettings.pusherProfileTag = newTag
         return newTag
     }
@@ -224,14 +224,14 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
         guard let delegate else {
             return [.badge, .sound, .list, .banner]
         }
-
+        
         guard delegate.shouldDisplayInAppNotification(content: notification.request.content) else {
             return []
         }
-
+        
         return [.badge, .sound, .list, .banner]
     }
-
+    
     @MainActor
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse) async {

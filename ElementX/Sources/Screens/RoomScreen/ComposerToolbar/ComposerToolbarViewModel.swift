@@ -28,23 +28,23 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     private var hasAppeard = false
-
+    
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     private struct WysiwygLinkData {
         let action: LinkAction
         let range: NSRange
         var url: String
         var text: String
     }
-
+    
     private var currentLinkData: WysiwygLinkData?
     
     private var replyLoadingTask: Task<Void, Never>?
-
+    
     init(initialText: String? = nil,
          roomProxy: JoinedRoomProxyProtocol,
          wysiwygViewModel: WysiwygComposerViewModel,
@@ -84,7 +84,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .removeDuplicates()
             .weakAssign(to: \.state.isRoomEncrypted, on: self)
             .store(in: &cancellables)
-
+        
         context.$viewState
             .map(\.composerMode)
             .removeDuplicates()
@@ -93,13 +93,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 self?.actionsSubject.send(.composerModeChanged(mode: $0))
             }
             .store(in: &cancellables)
-
+        
         context.$viewState
             .map(\.bindings.composerFocused)
             .removeDuplicates()
             .sink { [weak self] in self?.actionsSubject.send(.composerFocusedChanged(isFocused: $0)) }
             .store(in: &cancellables)
-
+        
         wysiwygViewModel.$isContentEmpty
             .removeDuplicates()
             .sink { [weak self] isEmpty in
@@ -122,7 +122,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 self?.actionsSubject.send(.contentChanged(isEmpty: plainComposerText.string.isEmpty))
             }
             .store(in: &cancellables)
-
+        
         wysiwygViewModel.$actionStates
             .map { actions in
                 FormatType
@@ -149,13 +149,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         focusComposerIfHardwareKeyboardConnected()
         
         let identityStatusChangesPublisher = roomProxy.identityStatusChangesPublisher.receive(on: DispatchQueue.main)
-
+        
         Task { [weak self] in
             for await changes in identityStatusChangesPublisher.values {
                 guard !Task.isCancelled else {
                     return
                 }
-
+                
                 await self?.processIdentityStatusChanges(changes)
             }
         }
@@ -176,7 +176,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     func stop() {
         saveDraft()
     }
-
+    
     override func process(viewAction: ComposerToolbarViewAction) {
         switch viewAction {
         case .composerAppeared:
@@ -252,7 +252,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
         }
     }
-
+    
     func process(timelineAction: TimelineComposerAction) {
         switch timelineAction {
         case .setMode(mode: let mode):
@@ -398,7 +398,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     
     private var plainComposerContent: PlainComposerContent {
         let attributedString = NSMutableAttributedString(attributedString: context.plainComposerText)
-
+        
         var shouldMakeAnotherPass = false
         var userIDs = Set<String>()
         var containsAtRoom = false
@@ -558,24 +558,24 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     MXLog.error("Failed retrieving room member for identity status change: \(change)")
                     continue
                 }
-
+                
                 identityPinningViolations[change.userId] = member
             default:
                 // clear
                 identityPinningViolations[change.userId] = nil
             }
         }
-
+        
         state.canSend = identityPinningViolations.isEmpty
     }
-
+    
     private func set(mode: ComposerMode) {
         if state.composerMode.isLoadingReply, state.composerMode.replyEventID != mode.replyEventID {
             replyLoadingTask?.cancel()
         }
         
         guard mode != state.composerMode else { return }
-
+        
         state.composerMode = mode
         switch mode {
         case .default:
@@ -589,14 +589,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             state.bindings.composerFocused = true
         }
     }
-
+    
     private func set(text: String) {
         if context.composerFormattingEnabled {
             wysiwygViewModel.textView.flushPills()
             wysiwygViewModel.setHtmlContent(text)
         } else {
             let attributedString = NSMutableAttributedString(string: text)
-
+            
             parseUserMentionsMarkdown(text) { range, url in
                 // Call your handleUserMention function here
                 attributedString.addAttribute(.link, value: url, range: range)
@@ -649,19 +649,19 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                                           range: wysiwygViewModel.attributedContent.selection,
                                           url: linkAction.url ?? "",
                                           text: "")
-
+        
         let urlBinding: Binding<String> = .init { [weak self] in
             self?.currentLinkData?.url ?? ""
         } set: { [weak self] value in
             self?.currentLinkData?.url = value
         }
-
+        
         let textBinding: Binding<String> = .init { [weak self] in
             self?.currentLinkData?.text ?? ""
         } set: { [weak self] value in
             self?.currentLinkData?.text = value
         }
-
+        
         switch linkAction {
         case .createWithText:
             state.bindings.alertInfo = makeCreateWithTextAlertInfo(urlBinding: urlBinding, textBinding: textBinding)
@@ -673,7 +673,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             break
         }
     }
-
+    
     private func makeCreateWithTextAlertInfo(urlBinding: Binding<String>, textBinding: Binding<String>) -> AlertInfo<UUID> {
         AlertInfo(id: UUID(),
                   title: L10n.richTextEditorCreateLink,
@@ -683,7 +683,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                   secondaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionSave) {
                       self.restoreComposerSelectedRange()
                       self.createLinkWithText()
-
+                      
                   },
                   textFields: [AlertInfo<UUID>.AlertTextField(placeholder: L10n.commonText,
                                                               text: textBinding,
@@ -694,7 +694,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                                                               autoCapitalization: .never,
                                                               autoCorrectionDisabled: true)])
     }
-
+    
     private func makeSetUrlAlertInfo(urlBinding: Binding<String>, isEdit: Bool) -> AlertInfo<UUID> {
         AlertInfo(id: UUID(),
                   title: isEdit ? L10n.richTextEditorEditLink : L10n.richTextEditorCreateLink,
@@ -704,14 +704,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                   secondaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionSave) {
                       self.restoreComposerSelectedRange()
                       self.setLink()
-
+                      
                   },
                   textFields: [AlertInfo<UUID>.AlertTextField(placeholder: L10n.richTextEditorUrlPlaceholder,
                                                               text: urlBinding,
                                                               autoCapitalization: .never,
                                                               autoCorrectionDisabled: true)])
     }
-
+    
     private func makeEditChoiceAlertInfo(urlBinding: Binding<String>) -> AlertInfo<UUID> {
         AlertInfo(id: UUID(),
                   title: L10n.richTextEditorEditLink,
@@ -726,23 +726,23 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                       }
                   }])
     }
-
+    
     private func restoreComposerSelectedRange() {
         guard let currentLinkData else { return }
         wysiwygViewModel.select(range: currentLinkData.range)
     }
-
+    
     private func setLink() {
         guard let currentLinkData else { return }
         wysiwygViewModel.applyLinkOperation(.setLink(urlString: currentLinkData.url))
     }
-
+    
     private func createLinkWithText() {
         guard let currentLinkData else { return }
         wysiwygViewModel.applyLinkOperation(.createLink(urlString: currentLinkData.url,
                                                         text: currentLinkData.text))
     }
-
+    
     private func removeLinks() {
         wysiwygViewModel.applyLinkOperation(.removeLinks)
     }

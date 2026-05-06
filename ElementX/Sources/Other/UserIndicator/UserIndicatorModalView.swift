@@ -12,7 +12,7 @@ import SwiftUI
 struct UserIndicatorModalView: View {
     let indicator: UserIndicator
     @State private var progressFraction = 0.0
-
+    
     var body: some View {
         ZStack {
             VStack(spacing: 12.0) {
@@ -21,7 +21,7 @@ struct UserIndicatorModalView: View {
                 } else if case .published = indicator.progress {
                     ProgressView(value: progressFraction)
                 }
-
+                
                 HStack(spacing: 8) {
                     if let iconName = indicator.iconName {
                         Image(systemName: iconName)

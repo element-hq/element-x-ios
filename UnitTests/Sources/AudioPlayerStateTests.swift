@@ -277,22 +277,22 @@ struct AudioPlayerStateTests {
     @Test
     func setPlaybackSpeed() {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
-
+        
         #expect(audioPlayerState.playbackSpeed == .default)
-
+        
         audioPlayerState.setPlaybackSpeed(.fast)
         #expect(audioPlayerState.playbackSpeed == .fast)
         #expect(audioPlayerMock.setPlaybackSpeedReceivedSpeed == 1.5)
-
+        
         audioPlayerState.setPlaybackSpeed(.fastest)
         #expect(audioPlayerState.playbackSpeed == .fastest)
         #expect(audioPlayerMock.setPlaybackSpeedReceivedSpeed == 2.0)
-
+        
         audioPlayerState.setPlaybackSpeed(.slow)
         #expect(audioPlayerState.playbackSpeed == .slow)
         #expect(audioPlayerMock.setPlaybackSpeedReceivedSpeed == 0.5)
     }
-
+    
     @Test
     func audioPlayerActionsDidFailed() async throws {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)

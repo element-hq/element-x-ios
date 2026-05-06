@@ -13,7 +13,7 @@ struct RoomMembersListScreenMemberCell: View {
     let listEntry: RoomMemberListScreenEntry
     let isLast: Bool
     let context: RoomMembersListScreenViewModel.Context
-
+    
     var body: some View {
         Button {
             context.send(viewAction: .selectMember(listEntry.member))

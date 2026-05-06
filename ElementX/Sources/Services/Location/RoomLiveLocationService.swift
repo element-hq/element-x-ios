@@ -19,7 +19,7 @@ final class RoomLiveLocationService: RoomLiveLocationServiceProtocol {
     var liveLocationsPublisher: CurrentValuePublisher<[LiveLocationShare], Never> {
         liveLocationsSubject.asCurrentValuePublisher()
     }
-        
+    
     init(liveLocationsObserver: LiveLocationsObserver) {
         self.liveLocationsObserver = liveLocationsObserver
         observationToken = liveLocationsObserver

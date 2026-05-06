@@ -101,11 +101,11 @@ class EventTimelineItemProxy {
     }()
     
     lazy var canBeRepliedTo = item.canBeRepliedTo
-            
+    
     lazy var content = item.content
-
+    
     lazy var isOwn = item.isOwn
-
+    
     lazy var isEditable = item.isEditable
     
     lazy var sender = TimelineItemSender(senderID: item.sender, senderProfile: item.senderProfile)
@@ -192,11 +192,11 @@ struct SendHandleProxy: Hashable {
     }
     
     // MARK: - Hashable
-
+    
     static func == (lhs: SendHandleProxy, rhs: SendHandleProxy) -> Bool {
         lhs.itemID == rhs.itemID
     }
-
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(itemID)
     }

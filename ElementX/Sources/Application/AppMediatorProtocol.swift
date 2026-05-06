@@ -18,7 +18,7 @@ protocol AppMediatorProtocol {
     var appState: UIApplication.State { get }
     
     func beginBackgroundTask(expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
-
+    
     func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier)
     
     func open(_ url: URL)

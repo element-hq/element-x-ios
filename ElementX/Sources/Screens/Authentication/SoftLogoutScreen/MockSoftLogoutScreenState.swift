@@ -20,7 +20,7 @@ enum MockSoftLogoutScreenState: String, CaseIterable {
     case oAuth
     case unsupported
     case keyBackupNeeded
-
+    
     /// Generate the view struct for the screen state.
     @MainActor var viewModel: SoftLogoutScreenViewModel {
         let credentials = SoftLogoutScreenCredentials(userID: "@mock:matrix.org",

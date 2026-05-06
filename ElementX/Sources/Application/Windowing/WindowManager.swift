@@ -30,7 +30,7 @@ class WindowManager: SecureWindowManagerProtocol {
             }
         }
     }
-        
+    
     var windows: [UIWindow] {
         [mainWindow, overlayWindow, globalSearchWindow, alternateWindow]
     }

@@ -92,7 +92,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             Task { await userSession.clientProxy.withdrawUserIdentityVerification(state.userID) }
         }
     }
-
+    
     // MARK: - Private
     
     private func loadMember() async {
@@ -141,7 +141,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }
-
+    
     @MainActor
     private func unignoreUser() async {
         guard let roomMemberProxy else {
@@ -162,7 +162,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }
-
+    
     private func updateMembers() {
         Task.detached {
             await self.roomProxy.updateMembers()
@@ -177,7 +177,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         let loadingIndicatorIdentifier = "roomMemberAvatarLoadingIndicator"
         userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
-            
+        
         // We don't actually know the mime type here, assume it's an image.
         if let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpeg"),
            case let .success(file) = await userSession.mediaProvider.loadFileFromSource(mediaSource) {
@@ -221,7 +221,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     
     private func createDirectChat() async {
         guard let roomMemberProxy else { fatalError() }
-
+        
         let loadingIndicatorIdentifier = "createDirectChatLoadingIndicator"
         userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
@@ -252,7 +252,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     private var loadingIndicatorIdentifier: String {
         "\(Self.self)-Loading"
     }
-
+    
     private var statusIndicatorIdentifier: String {
         "\(Self.self)-Status"
     }

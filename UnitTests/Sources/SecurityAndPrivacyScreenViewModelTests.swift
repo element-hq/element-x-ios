@@ -162,7 +162,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         #expect(context.desiredSettings.accessType == .spaceMembers(spaceIDs: [spaces[0].id]))
         #expect(context.viewState.shouldShowAccessSectionFooter)
         #expect(!context.viewState.isSaveDisabled)
-
+        
         await waitForConfirmation("Join rule has updated") { confirm in
             roomProxy.updateJoinRuleClosure = { value in
                 #expect(value == .restricted(rules: [.roomMembership(roomID: spaces[0].id)]))
@@ -207,7 +207,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         #expect(context.desiredSettings.accessType == .askToJoinWithSpaceMembers(spaceIDs: [spaces[0].id]))
         #expect(context.viewState.shouldShowAccessSectionFooter)
         #expect(!context.viewState.isSaveDisabled)
-
+        
         await waitForConfirmation("Join rule has updated") { confirm in
             roomProxy.updateJoinRuleClosure = { value in
                 #expect(value == .knockRestricted(rules: [.roomMembership(roomID: spaces[0].id)]))
@@ -254,7 +254,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         #expect(context.desiredSettings.accessType == .spaceMembers(spaceIDs: [spaces[0].id, "unknownSpaceID"]))
         #expect(context.viewState.shouldShowAccessSectionFooter)
         #expect(!context.viewState.isSaveDisabled)
-
+        
         await waitForConfirmation("Join rule has updated") { confirm in
             roomProxy.updateJoinRuleClosure = { value in
                 #expect(value == .restricted(rules: [.roomMembership(roomID: spaces[0].id), .roomMembership(roomID: "unknownSpaceID")]))

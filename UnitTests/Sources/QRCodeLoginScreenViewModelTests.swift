@@ -105,7 +105,7 @@ struct QRCodeLoginScreenViewModelTests {
         }
         context.qrResult = .init()
         try await deferred.fulfill()
-
+        
         deferred = deferFulfillment(context.$viewState) { state in
             state.state == .displayCode(.deviceCode("01"))
         }
@@ -193,7 +193,7 @@ struct QRCodeLoginScreenViewModelTests {
         let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.state != currentState }
         linkMobileProgressSubject.send(.syncingSecrets)
         try await deferredFailure.fulfill()
-
+        
         deferredAction = deferFulfillment(viewModel.actionsPublisher) { action in
             guard case .linkedDevice = action else { return false }
             return true

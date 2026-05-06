@@ -35,7 +35,7 @@ class TimelineController: TimelineControllerProtocol {
             callbacks.send(.paginationState(paginationState))
         }
     }
-
+    
     var roomID: String {
         roomProxy.id
     }
@@ -128,7 +128,7 @@ class TimelineController: TimelineControllerProtocol {
         guard let eventID = itemID.eventID else {
             return
         }
-            
+        
         _ = await activeTimeline.sendReadReceipt(for: eventID, type: receiptType)
     }
     
@@ -526,7 +526,7 @@ class TimelineController: TimelineControllerProtocol {
         guard let eventID = timelineItem.id.eventID else {
             return
         }
-
+        
         switch timelineItem.properties.replyDetails {
         case .notLoaded:
             activeTimeline.fetchDetails(for: eventID)

@@ -15,7 +15,7 @@ struct SessionDirectories: Hashable, Codable {
     var dataPath: String {
         dataDirectory.path(percentEncoded: false)
     }
-
+    
     var cachePath: String {
         cacheDirectory.path(percentEncoded: false)
     }

@@ -51,7 +51,7 @@ enum Screen: Hashable, View {
         case .gradients: GradientsScreen()
         case .fonts: FontsScreen()
         case .icons: IconsScreen()
-        
+            
         case .list: ListScreen()
         case .sizes: EmptyView()
         case .labels: EmptyView()
@@ -59,7 +59,7 @@ enum Screen: Hashable, View {
         case .textFields: EmptyView()
         case .bigIcon: BigIconScreen()
         case .titleAndIcon: TitleAndIconScreen()
-        
+            
         case .actionSheet: ActionSheetScreen()
         case .alert: AlertScreen()
         case .contextMenu: ContextMenuScreen()

@@ -76,7 +76,7 @@ struct UserProfileScreenViewModelTests {
         try await waitForMemberToLoad.fulfill()
         
         let deferred = deferFulfillment(context.observe(\.viewState.bindings).compactMap(\.inviteConfirmationUser), timeout: .seconds(5)) { $0.isUnknown }
-
+        
         context.send(viewAction: .openDirectChat)
         try await deferred.fulfill()
     }

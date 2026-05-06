@@ -62,7 +62,7 @@ final class CreateRoomScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(CreateRoomScreen(context: viewModel.context))
     }

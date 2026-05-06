@@ -15,10 +15,10 @@ class LeaveSpaceViewModel: LeaveSpaceViewModelType {
     var actions: AnyPublisher<LeaveSpaceViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let mediaProvider: MediaProviderProtocol
-
+    
     init(spaceName: String, canEditRolesAndPermissions: Bool, leaveHandle: LeaveSpaceHandleProxy, userIndicatorController: UserIndicatorControllerProtocol, mediaProvider: MediaProviderProtocol) {
         self.userIndicatorController = userIndicatorController
         self.mediaProvider = mediaProvider
@@ -61,7 +61,7 @@ class LeaveSpaceViewModel: LeaveSpaceViewModelType {
     private static var leavingIndicatorID: String {
         "\(Self.self)-Leaving"
     }
-
+    
     private static var failureIndicatorID: String {
         "\(Self.self)-Failure"
     }

@@ -31,12 +31,12 @@ final class AnalyticsSettingsScreenViewModelTests {
     deinit {
         AppSettings.resetAllSettings()
     }
-
+    
     @Test
     func initialState() {
         #expect(!context.enableAnalytics)
     }
-
+    
     @Test
     func optIn() {
         appSettings.analyticsConsentState = .optedOut

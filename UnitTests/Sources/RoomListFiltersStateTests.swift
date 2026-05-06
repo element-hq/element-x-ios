@@ -71,11 +71,11 @@ final class RoomListFiltersStateTests {
         state.activateFilter(.people)
         #expect(state.activeFilters == [.people])
         #expect(state.availableFilters == [.unreads, .favourites])
-
+        
         state.activateFilter(.unreads)
         #expect(state.activeFilters == [.people, .unreads])
         #expect(state.availableFilters == [.favourites])
-
+        
         state.activateFilter(.favourites)
         #expect(state.activeFilters == [.people, .unreads, .favourites])
         #expect(state.availableFilters == [])
@@ -91,7 +91,7 @@ final class RoomListFiltersStateTests {
         state.activateFilter(.favourites)
         #expect(state.activeFilters == [.favourites])
         #expect(state.availableFilters == [.unreads, .people, .rooms])
-
+        
         state.deactivateFilter(.favourites)
         #expect(state.activeFilters == [])
         #expect(state.availableFilters == allCasesWithoutLowPriority)
@@ -99,7 +99,7 @@ final class RoomListFiltersStateTests {
         state.activateFilter(.rooms)
         #expect(state.activeFilters == [.rooms])
         #expect(state.availableFilters == [.unreads, .favourites])
-
+        
         state.activateFilter(.unreads)
         #expect(state.activeFilters == [.rooms, .unreads])
         #expect(state.availableFilters == [.favourites])

@@ -25,7 +25,7 @@ struct RoomTimelineItemView: View {
                 context?.send(viewAction: .itemDisappeared(itemID: viewState.identifier))
             }
     }
-
+    
     @ViewBuilder private var timelineView: some View {
         switch viewState.type {
         case .text(let item):

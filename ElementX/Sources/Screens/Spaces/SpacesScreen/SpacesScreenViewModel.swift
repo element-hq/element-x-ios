@@ -20,7 +20,7 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
     var actionsPublisher: AnyPublisher<SpacesScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(userSession: UserSessionProtocol,
          selectedSpacePublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,

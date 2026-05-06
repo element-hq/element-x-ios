@@ -155,7 +155,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 internalRoomAddressState = .addressNotFound
                 return
             }
-
+            
             guard !Task.isCancelled else {
                 return
             }
@@ -189,7 +189,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             }
         }
     }
-        
+    
     private func createDirectRoom(user: UserProfileProxy) async {
         defer {
             hideLoadingIndicator()
@@ -231,7 +231,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             state.joinByAddressState = internalRoomAddressState
         }
     }
-        
+    
     // MARK: Loading indicator
     
     private static let loadingIndicatorIdentifier = "\(StartChatScreenViewModel.self)-Loading"

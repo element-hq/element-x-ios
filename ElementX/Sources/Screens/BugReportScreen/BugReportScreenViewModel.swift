@@ -20,7 +20,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     private let actionsSubject: PassthroughSubject<BugReportScreenViewModelAction, Never> = .init()
     // periphery:ignore - when set to nil this is automatically cancelled
     @CancellableTask private var uploadTask: Task<Void, Never>?
-
+    
     var actions: AnyPublisher<BugReportScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -79,7 +79,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
         }
         return true
     }
-
+    
     private func submitBugReport() async {
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)
         

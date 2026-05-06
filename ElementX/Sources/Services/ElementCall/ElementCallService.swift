@@ -154,7 +154,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             }
         }
     }
-
+    
     // MARK: - PKPushRegistryDelegate
     
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) { }

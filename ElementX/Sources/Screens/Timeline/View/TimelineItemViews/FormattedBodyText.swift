@@ -22,7 +22,7 @@ struct FormattedBodyText: View {
         container.foregroundColor = UIColor.compound.textPrimary
         return container
     }()
-        
+    
     private var attributedComponents: [AttributedStringBuilderComponent] {
         var adjustedAttributedString = attributedString + AttributedString(additionalWhitespacesSuffix)
         

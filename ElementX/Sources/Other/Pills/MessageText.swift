@@ -13,7 +13,7 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
     var timelineContext: TimelineViewModel.Context?
     var updateClosure: (() -> Void)?
     private var pillViews = NSHashTable<UIView>.weakObjects()
-        
+    
     override func addGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
         // We don't need to change the behaviour on MacOS
         if !ProcessInfo.processInfo.isiOSAppOnMac {
@@ -41,11 +41,11 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
             updateClosure?()
         }
     }
-
+    
     func registerPillView(_ pillView: UIView) {
         pillViews.add(pillView)
     }
-
+    
     func flushPills() {
         for view in pillViews.allObjects {
             view.alpha = 0.0
@@ -65,7 +65,7 @@ struct MessageText: UIViewRepresentable {
             computedSizes.removeAll()
         }
     }
-
+    
     func makeUIView(context: Context) -> MessageTextView {
         // Need to use TextKit 1 for mentions
         let textView = MessageTextView(usingTextLayoutManager: false)
@@ -82,7 +82,7 @@ struct MessageText: UIViewRepresentable {
         textView.isEditable = false
         textView.isScrollEnabled = false
         textView.adjustsFontForContentSizeCategory = true
-
+        
         // Required to allow tapping links
         // We disable selection at delegate level
         textView.isSelectable = true
@@ -90,7 +90,7 @@ struct MessageText: UIViewRepresentable {
         
         // Otherwise links can be dragged and dropped when long pressed
         textView.textDragInteraction?.isEnabled = false
-
+        
         textView.contentInset = .zero
         textView.contentInsetAdjustmentBehavior = .never
         textView.textContainerInset = .zero
@@ -103,7 +103,7 @@ struct MessageText: UIViewRepresentable {
         textView.delegate = context.coordinator
         return textView
     }
-
+    
     func updateUIView(_ uiView: MessageTextView, context: Context) {
         if let newAttributedText = try? NSAttributedString(attributedString, including: \.elementX),
            uiView.attributedText != newAttributedText {
@@ -112,7 +112,7 @@ struct MessageText: UIViewRepresentable {
         }
         context.coordinator.openURLAction = openURLAction
     }
-
+    
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: MessageTextView, context: Context) -> CGSize? {
         let proposalWidth = proposal.width ?? UIView.layoutFittingExpandedSize.width
         
@@ -126,14 +126,14 @@ struct MessageText: UIViewRepresentable {
         }
         return size
     }
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(openURLAction: openURLAction)
     }
-
+    
     final class Coordinator: NSObject, UITextViewDelegate {
         var openURLAction: OpenURLAction
-
+        
         init(openURLAction: OpenURLAction) {
             self.openURLAction = openURLAction
         }
@@ -157,7 +157,7 @@ struct MessageText: UIViewRepresentable {
             }
             return defaultAction
         }
-                        
+        
         func textView(_ textView: UITextView, menuConfigurationFor textItem: UITextItem, defaultMenu: UIMenu) -> UITextItem.MenuConfiguration? {
             switch textItem.content {
             case let .link(url):
@@ -196,14 +196,14 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             .mergeAttributes(defaultFontContainer)
         return attributedString
     }()
-
+    
     private static let htmlStringWithQuote =
         """
         <blockquote>A blockquote that is long and goes onto multiple lines as the first item in the message</blockquote><p>Then another line of text here to reply to the blockquote, which is also a multiline component.</p>
         """
     
     private static let htmlStringWithList = "<p>This is a list</p>\n<ul><li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n"
-
+    
     private static let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
     
     static var attachmentPreview: some View {
@@ -211,7 +211,7 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             .border(Color.purple)
             .environmentObject(TimelineViewModel.mock.context)
     }
-
+    
     static var previews: some View {
         MessageText(attributedString: attributedString)
             .border(Color.purple)

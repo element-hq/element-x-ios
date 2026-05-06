@@ -16,19 +16,19 @@ import Testing
 final class TimelineViewModelTests {
     var userIndicatorControllerMock: UserIndicatorControllerMock!
     var cancellables = Set<AnyCancellable>()
-
+    
     init() async throws {
         AppSettings.resetAllSettings()
         cancellables.removeAll()
         userIndicatorControllerMock = UserIndicatorControllerMock.default
     }
-
+    
     deinit {
         userIndicatorControllerMock = nil
     }
     
     // MARK: - Message Grouping
-
+    
     @Test
     func messageGrouping() {
         // Given 3 messages from Bob.
@@ -312,7 +312,7 @@ final class TimelineViewModelTests {
         
         timelineController.timelineItems = items
         timelineController.roomProxy = roomProxy
-
+        
         let viewModel = TimelineViewModel(roomProxy: roomProxy,
                                           timelineController: timelineController,
                                           userSession: UserSessionMock(.init()),

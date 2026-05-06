@@ -20,7 +20,7 @@ struct RoomTests {
         
         var callIntent = await room.joinCallIntent()
         #expect(callIntent == .startCall)
-      
+        
         room.isDirectReturnValue = true
         callIntent = await room.joinCallIntent()
         #expect(callIntent == .startCallDm)

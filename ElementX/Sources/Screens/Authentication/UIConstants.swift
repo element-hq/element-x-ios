@@ -21,7 +21,7 @@ enum UIConstants {
     
     /// The padding used to the top of the view for breaker screens that don't have a navigation bar.
     static let startScreenBreakerScreenTopPadding: CGFloat = 80
-
+    
     /// The height to use for top/bottom spacers to pad the views to fit the `maxContentHeight`.
     static func spacerHeight(in geometry: GeometryProxy) -> CGFloat {
         max(0, (geometry.size.height - maxContentHeight) / 2)

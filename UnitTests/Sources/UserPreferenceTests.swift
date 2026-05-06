@@ -15,7 +15,7 @@ struct UserPreferenceTests {
         UserDefaults.testDefaults.removeVolatileDomain(forName: .userDefaultsSuiteName)
         UserDefaults.testDefaults.removePersistentDomain(forName: .userDefaultsSuiteName)
     }
-
+    
     @Test
     func storePlistValue() {
         let setPreference = {
@@ -125,7 +125,7 @@ struct UserPreferenceTests {
         
         let value = TestPreferences()
         value.codable = nil
-
+        
         #expect(value.codable == nil)
         #expect(UserDefaults.testDefaults.data(forKey: .key3) == nil)
     }

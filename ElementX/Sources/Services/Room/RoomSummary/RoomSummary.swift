@@ -31,7 +31,7 @@ struct RoomSummary {
     }
     
     enum LastMessageState { case sending, failed }
-
+    
     let room: Room
     
     let id: String
@@ -66,15 +66,15 @@ struct RoomSummary {
     var hasUnreadMessages: Bool {
         unreadMessagesCount > 0
     }
-
+    
     var hasUnreadMentions: Bool {
         unreadMentionsCount > 0
     }
-
+    
     var hasUnreadNotifications: Bool {
         unreadNotificationsCount > 0
     }
-
+    
     var isMuted: Bool {
         notificationMode == .mute
     }
