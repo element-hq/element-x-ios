@@ -29,7 +29,7 @@ struct RoomScreen: View {
         TimelineView(timelineContext: timelineContext)
             .overlay(alignment: .bottomTrailing) {
                 TimelineScrollButton(isHidden: timelineContext.viewState.isAtBottomAndLive,
-                                     badgeCount: scrollToBottomBadgeCount) {
+                                     showsBadge: scrollToBottomShowsBadge) {
                     timelineContext.send(viewAction: .scrollToBottom)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
@@ -134,19 +134,16 @@ struct RoomScreen: View {
     @ViewBuilder
     private var jumpToReadMarkerButton: some View {
         if timelineContext.viewState.shouldShowJumpToReadMarker {
-            TimelineScrollButton(direction: .up,
-                                 badgeCount: timelineContext.viewState.timelineState.unreadMessageCount) {
+            TimelineScrollButton(direction: .up) {
                 timelineContext.send(viewAction: .scrollToReadMarker)
             }
         }
     }
 
-    /// Hide the new-messages badge when the jump-to-read-marker feature is disabled —
-    /// the count is meaningless without the matching jump button.
-    private var scrollToBottomBadgeCount: Int {
+    /// Hide the new-messages dot when the jump-to-read-marker feature is disabled.
+    private var scrollToBottomShowsBadge: Bool {
         timelineContext.viewState.jumpToReadMarkerEnabled
-            ? timelineContext.viewState.bindings.newMessagesAtBottomCount
-            : 0
+            && timelineContext.viewState.bindings.hasNewMessagesAtBottom
     }
 
     @ViewBuilder

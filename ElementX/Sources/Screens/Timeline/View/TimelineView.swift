@@ -84,7 +84,7 @@ struct TimelineViewRepresentable: UIViewControllerRepresentable {
         TimelineTableViewController(coordinator: context.coordinator,
                                     isScrolledToBottom: $viewModelContext.isScrolledToBottom,
                                     isReadMarkerVisible: $viewModelContext.isReadMarkerVisible,
-                                    newMessagesAtBottomCount: $viewModelContext.newMessagesAtBottomCount,
+                                    hasNewMessagesAtBottom: $viewModelContext.hasNewMessagesAtBottom,
                                     floatingDate: $viewModelContext.floatingDate,
                                     scrollToBottomPublisher: viewModelContext.viewState.timelineState.scrollToBottomPublisher,
                                     scrollToFirstItemForDatePublisher: viewModelContext.viewState.timelineState.scrollToFirstItemForDatePublisher,

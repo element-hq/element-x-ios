@@ -855,10 +855,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.timelineState.isSwitchingTimelines = true
         }
 
-        updateNewMessagesAtBottomCount(with: timelineItemsDictionary, isSwitchingTimelines: isSwitchingTimelines)
+        updateHasNewMessagesAtBottom(with: timelineItemsDictionary, isSwitchingTimelines: isSwitchingTimelines)
 
         state.timelineState.itemsDictionary = timelineItemsDictionary
-        state.timelineState.recomputeReadMarkerState()
+        state.timelineState.recomputeReadMarkerUniqueID()
     }
 
     private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
@@ -891,14 +891,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             && otherEventTimelineItem.timestamp.timeIntervalSince(eventTimelineItem.timestamp) < 5 * 60 // As does the passage of time.
     }
 
-    /// Increments `newMessagesAtBottomCount` by the number of newly arrived message-content items
-    /// when the user is scrolled up in a live timeline. Skips initial load and timeline switches.
-    private func updateNewMessagesAtBottomCount(with newTimelineItems: OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>,
-                                                isSwitchingTimelines: Bool) {
+    /// Sets `hasNewMessagesAtBottom` to `true` when newer items arrive while the user is scrolled
+    /// up in a live timeline. Skips initial load and timeline switches.
+    private func updateHasNewMessagesAtBottom(with newTimelineItems: OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>,
+                                              isSwitchingTimelines: Bool) {
         guard state.jumpToReadMarkerEnabled,
               state.timelineState.isLive,
               !isSwitchingTimelines,
-              !state.bindings.isScrolledToBottom else {
+              !state.bindings.isScrolledToBottom,
+              !state.bindings.hasNewMessagesAtBottom else {
             return
         }
 
@@ -909,14 +910,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             return
         }
 
-        let oldKeys = Set(oldDictionary.keys)
-        let newMessageCount = newTimelineItems.count { uniqueID, viewState in
-            !oldKeys.contains(uniqueID) && viewState.type.isMessageContent
-        }
-
-        if newMessageCount > 0 {
-            state.bindings.newMessagesAtBottomCount += newMessageCount
-        }
+        state.bindings.hasNewMessagesAtBottom = true
     }
 
     // MARK: - Direct chats logics

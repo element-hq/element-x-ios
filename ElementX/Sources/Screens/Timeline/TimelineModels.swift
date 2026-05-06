@@ -158,10 +158,10 @@ struct TimelineViewStateBindings {
     /// Used to hide the jump-to-unread button once the user has scrolled to the read marker.
     var isReadMarkerVisible = false
 
-    /// Count of new messages received while the user is scrolled away from the bottom of a live
-    /// timeline. Drives the badge on the scroll-to-bottom button and resets when the user returns
-    /// to the bottom.
-    var newMessagesAtBottomCount = 0
+    /// Whether new messages have arrived while the user is scrolled away from the bottom of a
+    /// live timeline. Drives the presence dot on the scroll-to-bottom button and resets when the
+    /// user returns to the bottom.
+    var hasNewMessagesAtBottom = false
 
     /// The timestamp of the topmost visible item, used to drive the floating date badge while scrolling.
     var floatingDate: Date?
@@ -272,29 +272,16 @@ struct TimelineState {
     }
 
     /// The unique ID of the read marker (NEW banner) in the timeline, if present.
-    /// Recomputed by ``recomputeReadMarkerState()`` whenever ``itemsDictionary`` changes.
+    /// Recomputed by ``recomputeReadMarkerUniqueID()`` whenever ``itemsDictionary`` changes.
     private(set) var readMarkerUniqueID: TimelineItemIdentifier.UniqueID?
 
-    /// The number of message-content items that follow the read marker. Returns 0 if there is no
-    /// read marker. Recomputed by ``recomputeReadMarkerState()`` whenever ``itemsDictionary`` changes.
-    private(set) var unreadMessageCount = 0
-
-    /// Recomputes ``readMarkerUniqueID`` and ``unreadMessageCount`` from ``itemsDictionary``.
-    /// Call after assigning a new value to ``itemsDictionary``.
-    mutating func recomputeReadMarkerState() {
-        var markerID: TimelineItemIdentifier.UniqueID?
-        var count = 0
-        for (uniqueID, viewState) in itemsDictionary {
-            if markerID == nil {
-                if case .readMarker = viewState.type {
-                    markerID = uniqueID
-                }
-            } else if viewState.type.isMessageContent {
-                count += 1
-            }
-        }
-        readMarkerUniqueID = markerID
-        unreadMessageCount = count
+    /// Recomputes ``readMarkerUniqueID`` from ``itemsDictionary``. Call after assigning a new
+    /// value to ``itemsDictionary``.
+    mutating func recomputeReadMarkerUniqueID() {
+        readMarkerUniqueID = itemsDictionary.first { _, viewState in
+            if case .readMarker = viewState.type { return true }
+            return false
+        }?.key
     }
 
     func hasLoadedItem(with eventID: String) -> Bool {

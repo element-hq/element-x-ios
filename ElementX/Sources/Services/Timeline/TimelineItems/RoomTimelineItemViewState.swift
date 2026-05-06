@@ -203,18 +203,4 @@ enum RoomTimelineItemType: Equatable {
             return nil
         }
     }
-
-    /// Whether this item represents a user-facing message that should be counted towards unread
-    /// totals. Excludes virtual items (separators, read marker, pagination indicators), redacted
-    /// messages, state events and unsupported items.
-    var isMessageContent: Bool {
-        switch self {
-        case .text, .image, .video, .audio, .file, .emote, .notice, .encrypted,
-             .sticker, .location, .liveLocation, .poll, .voice, .callInvite, .callNotification:
-            true
-        case .separator, .redacted, .readMarker, .paginationIndicator, .timelineStart,
-             .state, .group, .unsupported:
-            false
-        }
-    }
 }

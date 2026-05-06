@@ -146,7 +146,7 @@ class TimelineTableViewController: UIViewController {
     
     @Binding private var isScrolledToBottom: Bool
     @Binding private var isReadMarkerVisible: Bool
-    @Binding private var newMessagesAtBottomCount: Int
+    @Binding private var hasNewMessagesAtBottom: Bool
     @Binding private var floatingDate: Date?
 
     /// The unique ID of the read marker (NEW banner) currently in the timeline, if any.
@@ -186,7 +186,7 @@ class TimelineTableViewController: UIViewController {
     init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
          isReadMarkerVisible: Binding<Bool>,
-         newMessagesAtBottomCount: Binding<Int>,
+         hasNewMessagesAtBottom: Binding<Bool>,
          floatingDate: Binding<Date?>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>,
          scrollToFirstItemForDatePublisher: PassthroughSubject<Void, Never>,
@@ -194,7 +194,7 @@ class TimelineTableViewController: UIViewController {
         self.coordinator = coordinator
         _isScrolledToBottom = isScrolledToBottom
         _isReadMarkerVisible = isReadMarkerVisible
-        _newMessagesAtBottomCount = newMessagesAtBottomCount
+        _hasNewMessagesAtBottom = hasNewMessagesAtBottom
         _floatingDate = floatingDate
 
         super.init(nibName: nil, bundle: nil)
@@ -526,8 +526,8 @@ extension TimelineTableViewController: UITableViewDelegate {
             // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
             if self.isScrolledToBottom != isScrolledToBottom {
                 self.isScrolledToBottom = isScrolledToBottom
-                if isScrolledToBottom, self.newMessagesAtBottomCount != 0 {
-                    self.newMessagesAtBottomCount = 0
+                if isScrolledToBottom, self.hasNewMessagesAtBottom {
+                    self.hasNewMessagesAtBottom = false
                 }
             }
 
