@@ -195,8 +195,10 @@ extension LinkNewDeviceService.LinkDesktopProgress: CustomStringConvertible {
 private extension QRCodeLoginError {
     init(rustError: HumanQrGrantLoginError) {
         self = switch rustError {
-        case .InvalidCheckCode, .ConnectionInsecure:
+        case .ConnectionInsecure:
             .connectionInsecure
+        case .InvalidCheckCode:
+            .invalidCheckCode
         case .UnsupportedProtocol:
             .linkingNotSupported
         case .Expired, .NotFound, .DeviceNotFound:
@@ -226,13 +228,6 @@ class CheckCodeSenderProxy: Equatable {
     
     func send(code: UInt8) async throws {
         try await underlyingSender.send(code: code)
-    }
-    
-    /// Bypassed for now whilst we wait for an SDK update (however its worth noting that
-    /// things should still fail if the wrong code is provided, just not necessarily with
-    /// the right error being shown). https://github.com/matrix-org/matrix-rust-sdk/pull/5957
-    func validate(checkCode: UInt8) -> Bool {
-        true
     }
 }
 

@@ -237,16 +237,10 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             fatalError("Attempting to check code from the wrong state.")
         }
         
+        state.state = .confirmCode(.sendingCode)
+        
         let stringValue = state.bindings.checkCodeInput
         let code = UInt8(stringValue) ?? 0
-        
-        if !checkCodeSender.validate(checkCode: code) {
-            MXLog.error("Invalid code entered.")
-            state.state = .confirmCode(.invalidCode)
-            return
-        }
-        
-        state.state = .confirmCode(.sendingCode)
         
         do {
             MXLog.info("Valid code entered, sending.")
@@ -291,6 +285,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             state.state = .error(.cancelled)
         case .connectionInsecure:
             state.state = .error(.connectionNotSecure)
+        case .invalidCheckCode:
+            state.state = .confirmCode(.invalidCode)
         case .declined:
             state.state = .error(.declined)
         case .linkingNotSupported:
