@@ -33,7 +33,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
             appSettings.selectedNotificationTone = alertTone
         } catch {
             let userIndicator = UserIndicator(type: .toast,
-                                              title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneSetToneErrorTitle,
+                                              title: UntranslatedL10n.screenNotificationSettingsConfigurationMessageSoundSetSoundErrorTitle,
                                               iconName: "exclamationmark.triangle.fill")
             userIndicatorController.submitIndicator(userIndicator)
             MXLog.error("Error setting selected alert tone to designated location in filesystem: \(error)")

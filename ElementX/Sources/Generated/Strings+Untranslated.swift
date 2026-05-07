@@ -19,95 +19,95 @@ internal enum UntranslatedL10n {
   /// Start a chat with this new contact?
   internal static var cryptoHistorySharingConfirmStartChatDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_title") }
   /// Adrift
-  internal static var messageToneElementxAdrift: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_adrift") }
+  internal static var messageSoundElementxAdrift: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_adrift") }
   /// Element Default
-  internal static var messageToneElementxDefault: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_default") }
+  internal static var messageSoundElementxDefault: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_default") }
   /// Flick
-  internal static var messageToneElementxFlick: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_flick") }
+  internal static var messageSoundElementxFlick: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_flick") }
   /// Glass Knock
-  internal static var messageToneElementxGlassKnock: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_glass_knock") }
+  internal static var messageSoundElementxGlassKnock: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_glass_knock") }
   /// Nudge
-  internal static var messageToneElementxNudge: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_nudge") }
+  internal static var messageSoundElementxNudge: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_nudge") }
   /// Element Fade
-  internal static var messageToneElementxProDefault: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_pro_default") }
+  internal static var messageSoundElementxProDefault: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_pro_default") }
   /// Sine F
-  internal static var messageToneElementxSineF: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_sine_f") }
+  internal static var messageSoundElementxSineF: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_sine_f") }
   /// Singing Bowl
-  internal static var messageToneElementxSingingBowl: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_singing_bowl") }
+  internal static var messageSoundElementxSingingBowl: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_singing_bowl") }
   /// The Aughts
-  internal static var messageToneElementxTheAughts: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_the_aughts") }
+  internal static var messageSoundElementxTheAughts: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_the_aughts") }
   /// Trill
-  internal static var messageToneElementxTrill: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_trill") }
+  internal static var messageSoundElementxTrill: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_trill") }
   /// Triple Sine
-  internal static var messageToneElementxTripleSine: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_triple_sine") }
+  internal static var messageSoundElementxTripleSine: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_triple_sine") }
   /// Warble
-  internal static var messageToneElementxWarble: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_warble") }
+  internal static var messageSoundElementxWarble: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_warble") }
   /// Wisp
-  internal static var messageToneElementxWisp: String { return UntranslatedL10n.tr("Untranslated", "message_tone_elementx_wisp") }
+  internal static var messageSoundElementxWisp: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_wisp") }
   /// Alert
-  internal static var messageToneSystemAlert: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_alert") }
+  internal static var messageSoundSystemAlert: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_alert") }
   /// Anticipate
-  internal static var messageToneSystemAnticipate: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_anticipate") }
+  internal static var messageSoundSystemAnticipate: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_anticipate") }
   /// Bell
-  internal static var messageToneSystemBell: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_bell") }
+  internal static var messageSoundSystemBell: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_bell") }
   /// Bloom
-  internal static var messageToneSystemBloom: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_bloom") }
+  internal static var messageSoundSystemBloom: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_bloom") }
   /// Calypso
-  internal static var messageToneSystemCalypso: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_calypso") }
+  internal static var messageSoundSystemCalypso: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_calypso") }
   /// Chime
-  internal static var messageToneSystemChime: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_chime") }
+  internal static var messageSoundSystemChime: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_chime") }
   /// Choo Choo
-  internal static var messageToneSystemChooChoo: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_choo_choo") }
+  internal static var messageSoundSystemChooChoo: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_choo_choo") }
   /// Descent
-  internal static var messageToneSystemDescent: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_descent") }
+  internal static var messageSoundSystemDescent: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_descent") }
   /// Electronic
-  internal static var messageToneSystemElectronic: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_electronic") }
+  internal static var messageSoundSystemElectronic: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_electronic") }
   /// Fanfare
-  internal static var messageToneSystemFanfare: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_fanfare") }
+  internal static var messageSoundSystemFanfare: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_fanfare") }
   /// Glass
-  internal static var messageToneSystemGlass: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_glass") }
+  internal static var messageSoundSystemGlass: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_glass") }
   /// Horn
-  internal static var messageToneSystemHorn: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_horn") }
+  internal static var messageSoundSystemHorn: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_horn") }
   /// Ladder
-  internal static var messageToneSystemLadder: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_ladder") }
+  internal static var messageSoundSystemLadder: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_ladder") }
   /// Minuet
-  internal static var messageToneSystemMinuet: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_minuet") }
+  internal static var messageSoundSystemMinuet: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_minuet") }
   /// News Flash
-  internal static var messageToneSystemNewsFlash: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_news_flash") }
+  internal static var messageSoundSystemNewsFlash: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_news_flash") }
   /// Noir
-  internal static var messageToneSystemNoir: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_noir") }
+  internal static var messageSoundSystemNoir: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_noir") }
   /// Sherwood Forest
-  internal static var messageToneSystemSherwoodForest: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_sherwood_forest") }
+  internal static var messageSoundSystemSherwoodForest: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_sherwood_forest") }
   /// Spell
-  internal static var messageToneSystemSpell: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_spell") }
+  internal static var messageSoundSystemSpell: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_spell") }
   /// Suspense
-  internal static var messageToneSystemSuspense: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_suspense") }
+  internal static var messageSoundSystemSuspense: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_suspense") }
   /// Swish
-  internal static var messageToneSystemSwish: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_swish") }
+  internal static var messageSoundSystemSwish: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_swish") }
   /// Telegraph
-  internal static var messageToneSystemTelegraph: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_telegraph") }
+  internal static var messageSoundSystemTelegraph: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_telegraph") }
   /// Tiptoes
-  internal static var messageToneSystemTiptoes: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_tiptoes") }
+  internal static var messageSoundSystemTiptoes: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_tiptoes") }
   /// Tri-tone
-  internal static var messageToneSystemTriTone: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_tri_tone") }
+  internal static var messageSoundSystemTriTone: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_tri_tone") }
   /// Tweet
-  internal static var messageToneSystemTweet: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_tweet") }
+  internal static var messageSoundSystemTweet: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_tweet") }
   /// Typewriters
-  internal static var messageToneSystemTypewriters: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_typewriters") }
+  internal static var messageSoundSystemTypewriters: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_typewriters") }
   /// Update
-  internal static var messageToneSystemUpdate: String { return UntranslatedL10n.tr("Untranslated", "message_tone_system_update") }
-  /// Custom Tone...
-  internal static var screenNotificationSettingsConfigurationAlertToneCustomToneButtonTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_custom_tone_button_title") }
+  internal static var messageSoundSystemUpdate: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_update") }
+  /// Custom Sound...
+  internal static var screenNotificationSettingsConfigurationMessageSoundCustomSoundButtonTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_custom_sound_button_title") }
   /// Error Deleting File
-  internal static var screenNotificationSettingsConfigurationAlertToneDeleteToneErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_delete_tone_error_title") }
+  internal static var screenNotificationSettingsConfigurationMessageSoundDeleteSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_delete_sound_error_title") }
   /// Error Importing File
-  internal static var screenNotificationSettingsConfigurationAlertToneImportToneErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_import_tone_error_title") }
-  /// Problem Previewing Alert Tone
-  internal static var screenNotificationSettingsConfigurationAlertTonePreviewToneErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_preview_tone_error_title") }
-  /// Alert Tone
-  internal static var screenNotificationSettingsConfigurationAlertToneSectionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_section_title") }
-  /// Problem Setting Alert Tone
-  internal static var screenNotificationSettingsConfigurationAlertToneSetToneErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_alert_tone_set_tone_error_title") }
+  internal static var screenNotificationSettingsConfigurationMessageSoundImportSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_import_sound_error_title") }
+  /// Problem Previewing Alert Sound
+  internal static var screenNotificationSettingsConfigurationMessageSoundPreviewSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_preview_sound_error_title") }
+  /// Sound
+  internal static var screenNotificationSettingsConfigurationMessageSoundSectionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_section_title") }
+  /// Problem Setting Alert Sound
+  internal static var screenNotificationSettingsConfigurationMessageSoundSetSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_set_sound_error_title") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

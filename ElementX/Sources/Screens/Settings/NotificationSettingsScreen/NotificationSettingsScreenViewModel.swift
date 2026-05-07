@@ -264,7 +264,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         } catch {
             MXLog.error("Error importing custom tone url: \(error)")
             userIndicatorController.submitIndicator(.init(type: .toast,
-                                                          title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneImportToneErrorTitle,
+                                                          title: UntranslatedL10n.screenNotificationSettingsConfigurationMessageSoundImportSoundErrorTitle,
                                                           iconName: "exclamationmark.triangle.fill"))
         }
     }
@@ -281,7 +281,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             } catch {
                 MXLog.error("Error deleting alert tone \(tone.label): \(error)")
                 userIndicatorController.submitIndicator(.init(type: .toast,
-                                                              title: UntranslatedL10n.screenNotificationSettingsConfigurationAlertToneDeleteToneErrorTitle,
+                                                              title: UntranslatedL10n.screenNotificationSettingsConfigurationMessageSoundDeleteSoundErrorTitle,
                                                               iconName: "exclamationmark.triangle.fill"))
             }
         }
