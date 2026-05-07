@@ -17,14 +17,14 @@ struct RoomScreen: View {
     let composerToolbar: ComposerToolbar
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
 
-    /// Which scroll button (if any) currently has the "Mark as read" pill displayed alongside it.
-    /// Set when the user long-presses one of the scroll buttons; the pill anchors to that button.
-    @State private var markAsReadSource: MarkAsReadSource?
-
     enum MarkAsReadSource {
         case up
         case down
     }
+
+    /// Which scroll button (if any) currently has the "Mark as read" pill displayed alongside it.
+    /// Set when the user long-presses one of the scroll buttons; the pill anchors to that button.
+    @State private var markAsReadSource: MarkAsReadSource?
 
     init(context: RoomScreenViewModelType.Context,
          timelineContext: TimelineViewModelType.Context,
@@ -59,7 +59,7 @@ struct RoomScreen: View {
                             markAsReadPill
                                 .transition(.move(edge: .trailing).combined(with: .opacity))
                         }
-                        TimelineScrollButton(isHidden: timelineContext.viewState.isAtBottomAndLive,
+                        TimelineScrollButton(isHidden: !timelineContext.viewState.shouldShowScrollToBottomButton,
                                              showsBadge: scrollToBottomShowsBadge,
                                              onLongPress: scrollToBottomShowsBadge ? { revealMarkAsReadPill(source: .down) } : nil) {
                             dismissMarkAsReadPill()
@@ -120,6 +120,9 @@ struct RoomScreen: View {
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo)
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
+            .onChange(of: pillSourceButtonIsVisible) { _, isVisible in
+                if !isVisible { dismissMarkAsReadPill() }
+            }
             .track(screen: .Room)
             .sentryTrace("\(Self.self)")
     }
@@ -215,6 +218,18 @@ struct RoomScreen: View {
 
     private func dismissMarkAsReadPill() {
         markAsReadSource = nil
+    }
+
+    /// Whether the scroll button that the pill is anchored to is still being rendered.
+    /// Used to dismiss an orphaned pill when the source button gets hidden — without
+    /// this, the pill can render alongside an invisible button. Returns `true` when no
+    /// pill is shown so the `onChange` doesn't fire spuriously when the source clears.
+    private var pillSourceButtonIsVisible: Bool {
+        switch markAsReadSource {
+        case .up: timelineContext.viewState.shouldShowJumpToReadMarker
+        case .down: timelineContext.viewState.shouldShowScrollToBottomButton
+        case .none: true
+        }
     }
 
     /// Hide the new-messages dot when the jump-to-read-marker feature is disabled.

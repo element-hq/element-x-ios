@@ -301,6 +301,12 @@ extension TimelineViewState {
         bindings.isScrolledToBottom && timelineState.isLive
     }
 
+    /// Whether the scroll-to-bottom button should be shown: the user is scrolled away from the
+    /// bottom of a live timeline.
+    var shouldShowScrollToBottomButton: Bool {
+        !isAtBottomAndLive
+    }
+
     /// Whether the jump-to-read-marker button should be shown: the feature flag is enabled,
     /// a read marker exists in the timeline, and it isn't currently visible in the viewport.
     var shouldShowJumpToReadMarker: Bool {

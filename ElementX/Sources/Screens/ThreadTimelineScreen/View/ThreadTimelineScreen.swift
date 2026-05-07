@@ -38,7 +38,7 @@ struct ThreadTimelineScreen: View {
                 .padding(.top, 13)
             }
             .overlay(alignment: .bottomTrailing) {
-                TimelineScrollButton(isHidden: timelineContext.viewState.isAtBottomAndLive) {
+                TimelineScrollButton(isHidden: !timelineContext.viewState.shouldShowScrollToBottomButton) {
                     timelineContext.send(viewAction: .scrollToBottom)
                 }
             }

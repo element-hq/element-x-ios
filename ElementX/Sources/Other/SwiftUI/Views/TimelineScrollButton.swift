@@ -23,14 +23,14 @@ struct TimelineScrollButton: View {
     let onLongPress: (() -> Void)?
     let callback: () -> Void
 
-    @ScaledMetric(relativeTo: .compound.bodyLG) private var iconSize: CGFloat = 22
-    @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeDotSize: CGFloat = 14
+    @ScaledMetric(relativeTo: .compound.bodyLG) private var iconSize: CGFloat = 24
+    @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeDotSize: CGFloat = 12
     @GestureState private var isPressing = false
     /// Set when a long-press is recognized so the trailing touch-up doesn't also fire `callback()`.
     @State private var consumedByLongPress = false
 
-    /// Padding around the chevron, balanced so the total circle stays ~40pt at default text size.
-    private let iconPadding: CGFloat = 9
+    /// Padding around the chevron, balanced so the total circle stays ~36pt at default text size.
+    private let iconPadding: CGFloat = 6
 
     /// Vertical offset that half-centers the badge dot on the circle's edge. Magnitude is half
     /// the dot's diameter so half sits inside the circle, half outside. Sign is applied at the
@@ -100,25 +100,28 @@ struct TimelineScrollButton: View {
         .animation(.elementDefault, value: isHidden)
     }
 
+    @ViewBuilder
     private var icon: some View {
-        CompoundIcon(direction == .down ? \.chevronDown : \.chevronUp,
-                     size: .custom(iconSize),
-                     relativeTo: .compound.bodyLG)
-            .foregroundColor(.compound.iconSecondary)
+        let chevron = CompoundIcon(direction == .down ? \.chevronDown : \.chevronUp,
+                                   size: .custom(iconSize),
+                                   relativeTo: .compound.bodyLG)
+            .foregroundStyle(.compound.iconPrimary)
             .padding(iconPadding)
-            .background {
-                Circle()
-                    .fill(Color.compound.iconOnSolidPrimary)
-                    // Intentionally using system primary colour to get white/black.
-                    .shadow(color: .primary.opacity(0.33), radius: 2.0)
-            }
+        if #available(iOS 26, *) {
+            chevron
+                .glassEffect(.regular, in: Circle())
+                .overlay(Circle().stroke(Color.compound.borderInteractiveSecondary, lineWidth: 1))
+        } else {
+            chevron
+                .background(.regularMaterial, in: Circle())
+                .overlay(Circle().stroke(Color.compound.borderInteractiveSecondary, lineWidth: 1))
+        }
     }
 
     private var badge: some View {
         Circle()
-            .fill(Color.compound.iconAccentTertiary)
+            .fill(Color.compound.iconAccentPrimary)
             .frame(width: badgeDotSize, height: badgeDotSize)
-            .overlay(Circle().stroke(Color.compound.iconOnSolidPrimary, lineWidth: 2))
     }
 }
 

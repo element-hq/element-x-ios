@@ -90,7 +90,7 @@ struct DeveloperOptionsScreen: View {
 
                 Toggle(isOn: $context.jumpToReadMarkerEnabled) {
                     Text("Jump to unread")
-                    Text("Adds a button to jump to the read marker, plus a count badge for messages that arrive while scrolled away from the bottom.")
+                    Text("Adds a button to jump to the read marker, plus a presence dot on the scroll-to-bottom button when new messages arrive while scrolled away.")
                 }
 
                 Toggle(isOn: $context.knockingEnabled) {
