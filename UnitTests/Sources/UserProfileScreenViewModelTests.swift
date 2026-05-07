@@ -14,13 +14,13 @@ struct UserProfileScreenViewModelTests {
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-
+    
     init() {
         appSettings = AppSettings()
         analytics = .mock(settings: appSettings)
         userIndicatorController = UserIndicatorControllerMock.default
     }
-
+    
     @Test
     func initialState() async throws {
         let profile = UserProfileProxy(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: .mockMXCAvatar)
@@ -79,7 +79,7 @@ struct UserProfileScreenViewModelTests {
                                                    userIndicatorController: userIndicatorController,
                                                    analytics: analytics,
                                                    appSettings: appSettings)
-
+        
         let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }

@@ -20,7 +20,7 @@ struct StartChatScreenViewModelTests {
     private var context: StartChatScreenViewModel.Context {
         viewModel.context
     }
-
+    
     init() {
         appSettings = AppSettings()
         analytics = .mock(settings: appSettings)

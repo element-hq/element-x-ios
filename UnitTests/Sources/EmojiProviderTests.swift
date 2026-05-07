@@ -12,11 +12,11 @@ import UIKit
 
 struct EmojiProviderTests {
     private let appSettings: AppSettings
-
+    
     init() {
         appSettings = AppSettings()
     }
-
+    
     @Test @MainActor
     func emojisLoadedCategoriesAreLoadedFromLoader() async {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
@@ -26,7 +26,7 @@ struct EmojiProviderTests {
         emojiLoaderMock.categories = [category]
         
         let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: appSettings)
-
+        
         let categories = await emojiProvider.categories()
         #expect(emojiLoaderMock.categories == categories)
     }
@@ -40,7 +40,7 @@ struct EmojiProviderTests {
         emojiLoaderMock.categories = [category]
         
         let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: appSettings)
-
+        
         let categories = await emojiProvider.categories(searchString: "")
         #expect(emojiLoaderMock.categories == categories)
     }
@@ -58,7 +58,7 @@ struct EmojiProviderTests {
         emojiLoaderMock.categories = categoriesForFirstLoad
         
         let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: appSettings)
-
+        
         _ = await emojiProvider.categories()
         emojiLoaderMock.categories = categoriesForSecondLoad
         
@@ -89,7 +89,7 @@ struct EmojiProviderTests {
         emojiLoaderMock.categories = categories
         
         let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: appSettings)
-
+        
         _ = await emojiProvider.categories()
         let result = await emojiProvider.categories(searchString: searchString)
         #expect(result.count == 2)

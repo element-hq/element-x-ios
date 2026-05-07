@@ -24,7 +24,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-
+    
     private let appDelegate: AppDelegate
     private let appHooks: AppHooks
     private let bugReportService: BugReportServiceProtocol
@@ -80,7 +80,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let appSettings = appHooks.appSettingsHook.configure(AppSettings())
         self.appSettings = appSettings
-
+        
         targetConfiguration = Target.mainApp.configure(logLevel: appSettings.logLevel,
                                                        traceLogPacks: appSettings.traceLogPacks,
                                                        sentryURL: appSettings.bugReportSentryRustURL,
@@ -100,13 +100,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         self.appHooks = appHooks
         
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
-
+        
         let posthogAnalyticsClient = PostHogAnalyticsClient()
         posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
         analyticsService = AnalyticsService(client: posthogAnalyticsClient, appSettings: appSettings)
-
+        
         userIndicatorController = UserIndicatorController()
-
+        
         elementCallService = ElementCallService()
         
         navigationRootCoordinator = NavigationRootCoordinator()
@@ -138,7 +138,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                             appHooks: appHooks)
         
         Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
-
+        
         analyticsService.startIfEnabled()
         
         windowManager.delegate = self
@@ -840,7 +840,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             // Reset analytics
             analyticsService.optOut()
             analyticsService.resetConsentState()
-
+            
             stateMachine.processEvent(.completedSigningOut)
                        
             hideLoadingIndicator()
@@ -849,7 +849,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func tearDownUserSession() {
         userIndicatorController.retractAllIndicators()
-
+        
         userSession = nil
         
         userSessionFlowCoordinator = nil
@@ -952,7 +952,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private static func setupSentry(bugReportService: BugReportServiceProtocol, appSettings: AppSettings, analytics: AnalyticsService) {
         guard let bugReportSentryURL = appSettings.bugReportSentryURL else { return }
-
+        
         let options: Options = .init()
         
         #if DEBUG
@@ -1010,7 +1010,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // Any ongoing transactions will no longer be valid after calling SentrySDK.start so lets
         // remove them and start over, otherwise the app will crash if finishTransaction is used.
         analytics.signpost.resetTransactions()
-
+        
         SentrySDK.start(options: options) // Swift
         enableSentryLogging(enabled: options.enabled) // Rust
         
@@ -1076,7 +1076,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         guard let userSession else { return }
         
         analyticsService.signpost.startTransaction(.upToDateRoomList)
-
+        
         userSession.clientProxy.startSync()
         
         guard clientProxyObserver == nil else {

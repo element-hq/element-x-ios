@@ -14,18 +14,18 @@ import Testing
 final class SpacesScreenViewModelTests {
     var topLevelSpacesSubject: CurrentValueSubject<[SpaceServiceRoom], Never>
     var spaceServiceProxy: SpaceServiceProxyMock
-
+    
     var viewModel: SpacesScreenViewModelProtocol
     private let appSettings: AppSettings
-
+    
     var context: SpacesScreenViewModelType.Context {
         viewModel.context
     }
-
+    
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-
+        
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         

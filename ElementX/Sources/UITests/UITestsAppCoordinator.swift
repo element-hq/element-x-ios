@@ -15,7 +15,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-
+    
     private let navigationRootCoordinator: NavigationRootCoordinator
     
     // periphery:ignore - retaining purpose
@@ -32,19 +32,19 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         UIView.setAnimationsEnabled(false)
         
         navigationRootCoordinator = NavigationRootCoordinator()
-
+        
         MXLog.configure(currentTarget: "uitests")
-
+        
         AppSettings.configureWithSuiteName("io.element.elementx.uitests")
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-
+        
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
-
+        
         analytics = .mock(analyticsClient, settings: appSettings)
         userIndicatorController = UserIndicatorController()
-
+        
         windowManager.delegate = self
     }
     
@@ -57,7 +57,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
                                     appSettings: appSettings,
                                     analytics: analytics,
                                     userIndicatorController: userIndicatorController)
-
+        
         if let coordinator = mockScreen.coordinator {
             navigationRootCoordinator.setRootCoordinator(coordinator)
         }
@@ -88,7 +88,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
     
     func windowManagerDidConfigureWindows(_ windowManager: SecureWindowManagerProtocol) {
         userIndicatorController.window = windowManager.overlayWindow
-
+        
         // Set up the alternate window for the App Lock flow coordinator tests.
         guard let screenID = ProcessInfo.testScreenID, screenID == .appLockFlow || screenID == .appLockFlowDisabled else { return }
         let screen = MockScreen(id: screenID == .appLockFlow ? .appLockFlowAlternateWindow : .appLockFlowDisabledAlternateWindow,
@@ -97,7 +97,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
                                 appSettings: appSettings,
                                 analytics: analytics,
                                 userIndicatorController: userIndicatorController)
-
+        
         guard let coordinator = screen.coordinator else {
             fatalError()
         }
@@ -113,11 +113,11 @@ class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
     let windowManager: SecureWindowManagerProtocol
     let navigationRootCoordinator: NavigationRootCoordinator
-
+    
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-
+    
     private var client: UITestsSignalling.Client?
     
     private var retainedState = [Any]()
@@ -136,7 +136,7 @@ class MockScreen: Identifiable {
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
     }
-
+    
     lazy var coordinator: CoordinatorProtocol? = {
         switch id {
         case .serverSelection:
@@ -149,7 +149,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .authenticationFlow, .provisionedAuthenticationFlow, .singleProviderAuthenticationFlow, .multipleProvidersAuthenticationFlow:
             let appSettings: AppSettings! = appSettings
-
+            
             if id == .singleProviderAuthenticationFlow || id == .multipleProvidersAuthenticationFlow {
                 let accountProviders = id == .singleProviderAuthenticationFlow ? ["example.com"] : ["guest.example.com", "example.com"]
                 appSettings.override(accountProviders: accountProviders,
@@ -229,7 +229,7 @@ class MockScreen: Identifiable {
                                                          navigationCoordinator: navigationCoordinator,
                                                          notificationCenter: notificationCenter,
                                                          appSettings: appSettings)
-
+            
             flowCoordinator.actions
                 .sink { [weak self] action in
                     guard let self else { return }
@@ -830,7 +830,7 @@ class MockScreen: Identifiable {
                                                                                                      stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
                                                         mediaProvider: MediaProviderMock(configuration: .init()),
                                                         appSettings: appSettings)
-
+            
             let flowCoordinator = ChatsTabFlowCoordinator(isNewLogin: false,
                                                           navigationSplitCoordinator: navigationSplitCoordinator,
                                                           flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),

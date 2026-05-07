@@ -16,7 +16,7 @@ final class AnalyticsTests {
     private let analytics: AnalyticsService
     private let analyticsClient: AnalyticsClientMock
     private var posthogMock: PHGPostHogMock
-
+    
     @MainActor
     init() {
         AppSettings.resetAllSettings()
@@ -25,7 +25,7 @@ final class AnalyticsTests {
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
         analytics = .mock(analyticsClient, settings: appSettings)
-
+        
         posthogMock = PHGPostHogMock()
         posthogMock.configureMockBehavior()
     }
@@ -39,7 +39,7 @@ final class AnalyticsTests {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When the user is prompted for analytics.
         let showPrompt = analytics.shouldShowAnalyticsPrompt
-
+        
         // Then the prompt should be shown.
         #expect(showPrompt, "A prompt should be shown for a new user.")
     }
@@ -51,7 +51,7 @@ final class AnalyticsTests {
         
         // When the user is prompted for analytics
         let showPrompt = analytics.shouldShowAnalyticsPrompt
-
+        
         // Then no prompt should be shown.
         #expect(!showPrompt, "A prompt should not be shown any more.")
     }
@@ -63,7 +63,7 @@ final class AnalyticsTests {
         
         // When the user is prompted for analytics
         let showPrompt = analytics.shouldShowAnalyticsPrompt
-
+        
         // Then no prompt should be shown.
         #expect(!showPrompt, "A prompt should not be shown any more.")
     }
@@ -216,10 +216,10 @@ final class AnalyticsTests {
         // Given an existing install of the app where the user previously accpeted the tracking
         appSettings.analyticsConsentState = .optedIn
         #expect(!analytics.shouldShowAnalyticsPrompt)
-
+        
         // When forgetting analytics consents
         analytics.resetConsentState()
-
+        
         // Then the analytics prompt should be presented again
         #expect(appSettings.analyticsConsentState == .unknown)
         #expect(analytics.shouldShowAnalyticsPrompt)

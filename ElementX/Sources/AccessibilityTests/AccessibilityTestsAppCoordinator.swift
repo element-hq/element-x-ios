@@ -45,7 +45,7 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
         AppSettings.configureWithSuiteName("io.element.elementx.accessibilitytests")
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
-
+        
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
         analytics = .mock(analyticsClient, settings: appSettings)

@@ -14,10 +14,10 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
     static let targetAppHooks = AppHooks()
     
     let windowManager: SecureWindowManagerProtocol
-
+    
     init(appDelegate: AppDelegate) {
         windowManager = WindowManager(appDelegate: appDelegate)
-
+        
         AppSettings.configureWithSuiteName("io.element.elementx.unittests")
         AppSettings.resetAllSettings()
 

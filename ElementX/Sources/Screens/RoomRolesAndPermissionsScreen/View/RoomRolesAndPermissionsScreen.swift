@@ -122,7 +122,7 @@ struct RoomRolesAndPermissionsScreen_Previews: PreviewProvider, TestablePreview 
                                                                   roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)),
                                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                                   analytics: .mock())
-
+    
     static let creatorViewModel = RoomRolesAndPermissionsScreenViewModel(initialPermissions: RoomPermissions(powerLevels: .mock),
                                                                          roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsCreator)),
                                                                          userIndicatorController: UserIndicatorControllerMock(),

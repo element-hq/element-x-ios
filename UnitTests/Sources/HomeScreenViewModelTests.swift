@@ -23,7 +23,7 @@ final class HomeScreenViewModelTests {
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-
+    
     var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -32,7 +32,7 @@ final class HomeScreenViewModelTests {
         analytics = .mock(settings: appSettings)
         userIndicatorController = UserIndicatorControllerMock.default
     }
-
+    
     deinit {
         AppSettings.resetAllSettings()
     }

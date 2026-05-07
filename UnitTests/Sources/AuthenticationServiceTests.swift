@@ -19,11 +19,11 @@ struct AuthenticationServiceTests {
     var encryptionKeyProvider: MockEncryptionKeyProvider!
     var service: AuthenticationService!
     private let appSettings: AppSettings
-
+    
     init() {
         appSettings = AppSettings()
     }
-
+    
     @Test
     mutating func passwordLogin() async throws {
         try await setup(serverAddress: "example.com")
@@ -146,7 +146,7 @@ struct AuthenticationServiceTests {
         client = configuration.homeserverClients[serverAddress]
         encryption = EncryptionSDKMock()
         client.encryptionReturnValue = encryption
-
+        
         userSessionStore = UserSessionStoreMock(configuration: .init())
         encryptionKeyProvider = MockEncryptionKeyProvider()
         

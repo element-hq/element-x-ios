@@ -21,20 +21,20 @@ final class JoinRoomScreenViewModelTests {
     var viewModel: JoinRoomScreenViewModelProtocol!
     
     var clientProxy: ClientProxyMock!
-
+    
     var context: JoinRoomScreenViewModelType.Context {
         viewModel.context
     }
-
+    
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
-
+    
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         userIndicatorController = UserIndicatorControllerMock.default
     }
-
+    
     deinit {
         viewModel = nil
         clientProxy = nil

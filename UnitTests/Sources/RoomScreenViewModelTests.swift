@@ -16,18 +16,18 @@ import Testing
 @MainActor
 final class RoomScreenViewModelTests {
     private var viewModel: RoomScreenViewModel!
-
+    
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-
+    
     init() async throws {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         analytics = .mock(settings: appSettings)
         userIndicatorController = UserIndicatorControllerMock.default
     }
-
+    
     deinit {
         AppSettings.resetAllSettings()
     }
@@ -174,7 +174,7 @@ final class RoomScreenViewModelTests {
     @Test
     func pinnedEventsBannerThreadedSelection() async throws {
         appSettings.threadsEnabled = true
-
+        
         let roomProxyMock = JoinedRoomProxyMock(.init())
         let eventMock = TimelineEventSDKMock()
         eventMock.threadRootEventIdReturnValue = "thread"

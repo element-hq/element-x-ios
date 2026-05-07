@@ -15,7 +15,7 @@ final class MediaUploadingPreprocessorTests {
     let maxUploadSize: UInt = 100 * 1024 * 1024
     var appSettings: AppSettings!
     var mediaUploadingPreprocessor: MediaUploadingPreprocessor!
-
+    
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()

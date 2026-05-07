@@ -21,7 +21,7 @@ struct ChatsTabFlowCoordinatorTests {
     let stateMachineFactory = PublishedStateMachineFactory()
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
-
+    
     var cancellables = Set<AnyCancellable>()
     
     var detailCoordinator: CoordinatorProtocol? {
@@ -35,7 +35,7 @@ struct ChatsTabFlowCoordinatorTests {
     init() async throws {
         appSettings = AppSettings()
         analytics = .mock(settings: appSettings)
-
+        
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())
         
@@ -59,7 +59,7 @@ struct ChatsTabFlowCoordinatorTests {
         chatsTabFlowCoordinator = ChatsTabFlowCoordinator(isNewLogin: false,
                                                           navigationSplitCoordinator: splitCoordinator,
                                                           flowParameters: flowParameters)
-
+        
         let deferred = deferFulfillment(stateMachineFactory.chatsTabFlowStatePublisher) { $0 == .roomList(detailState: nil) }
         chatsTabFlowCoordinator.start()
         try await deferred.fulfill()
