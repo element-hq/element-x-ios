@@ -18,32 +18,10 @@ internal enum UntranslatedL10n {
   internal static var cryptoHistorySharingConfirmStartChatDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_content") }
   /// Start a chat with this new contact?
   internal static var cryptoHistorySharingConfirmStartChatDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_title") }
-  /// Adrift
-  internal static var messageSoundElementxAdrift: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_adrift") }
   /// Element Default
   internal static var messageSoundElementxDefault: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_default") }
-  /// Flick
-  internal static var messageSoundElementxFlick: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_flick") }
-  /// Glass Knock
-  internal static var messageSoundElementxGlassKnock: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_glass_knock") }
-  /// Nudge
-  internal static var messageSoundElementxNudge: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_nudge") }
   /// Element Fade
   internal static var messageSoundElementxProDefault: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_pro_default") }
-  /// Sine F
-  internal static var messageSoundElementxSineF: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_sine_f") }
-  /// Singing Bowl
-  internal static var messageSoundElementxSingingBowl: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_singing_bowl") }
-  /// The Aughts
-  internal static var messageSoundElementxTheAughts: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_the_aughts") }
-  /// Trill
-  internal static var messageSoundElementxTrill: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_trill") }
-  /// Triple Sine
-  internal static var messageSoundElementxTripleSine: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_triple_sine") }
-  /// Warble
-  internal static var messageSoundElementxWarble: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_warble") }
-  /// Wisp
-  internal static var messageSoundElementxWisp: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_wisp") }
   /// Alert
   internal static var messageSoundSystemAlert: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_alert") }
   /// Anticipate

@@ -179,30 +179,8 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
     /// Element X bundled tones available for selection, sorted by name.
     static let defaultElementXAlerts: [Self] = [
         defaultElementXMessageTone,
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxTripleSine,
-                            filename: "triple_sin.caf"),
         .createBundledSound(label: UntranslatedL10n.messageSoundElementxProDefault,
-                            filename: "sound_01.caf"),
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxWisp,
-                            filename: "wisp.caf"),
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxWarble,
-                            filename: "warble.caf"),
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxTheAughts,
-                            filename: "the_aughts.caf"),
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxTrill,
-                            filename: "trill.caf"),
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxSineF,
-                            filename: "sine_f.caf"),
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxSingingBowl,
-                            filename: "singing_bowl.caf"),
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxGlassKnock,
-                            filename: "glass_knock.caf"),
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxNudge,
-                            filename: "nudge.caf"),
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxAdrift,
-                            filename: "adrift.caf"),
-        .createBundledSound(label: UntranslatedL10n.messageSoundElementxFlick,
-                            filename: "flick.caf")
+                            filename: "sound_01.caf")
     ].sorted()
 
     /// All default tones (system + Element X), sorted by name.
