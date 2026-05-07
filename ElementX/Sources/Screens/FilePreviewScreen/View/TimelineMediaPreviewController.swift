@@ -333,21 +333,21 @@ private struct CaptionScrollView: View {
     @State private var shouldShowFade = false
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView(.vertical) {
-                captionContent
-                    .background {
-                        GeometryReader { geometry in
-                            DispatchQueue.main.async {
-                                shouldShowFade = geometry.size.height > maxHeight
-                            }
-                            return Color.clear
-                        }
-                    }
+        ScrollView(.vertical) {
+            captionContent
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(16)
+        }
+        .onScrollGeometryChange(for: Bool.self) { geometry in
+            geometry.contentOffset.y >= geometry.contentSize.height - geometry.containerSize.height - geometry.contentInsets.bottom
+        } action: { _, isBottomVisible in
+            if shouldShowFade == isBottomVisible {
+                withAnimation(.elementDefault) { shouldShowFade = !isBottomVisible }
             }
-            .frame(maxHeight: maxHeight)
-            .padding(16)
-            
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .frame(maxHeight: maxHeight)
+        .overlay(alignment: .bottom) {
             if shouldShowFade {
                 LinearGradient(stops: [.init(color: .clear, location: 0.0),
                                        .init(color: .black.opacity(0.5), location: 1.0)],
@@ -356,7 +356,6 @@ private struct CaptionScrollView: View {
                     .frame(height: 40)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             BlurEffectView(style: .systemChromeMaterial)
                 .ignoresSafeArea()
