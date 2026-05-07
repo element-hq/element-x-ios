@@ -30,9 +30,9 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         let initialViewState: QRCodeLoginState = switch mode {
         case .login: .loginInstructions
         case .linkDesktop: .linkDesktopInstructions
-        case .linkMobile(let progressPublisher):
+        case .linkMobile(let progressPublisher, _):
             switch progressPublisher.value {
-            case .qrReady(let image): .displayQR(image)
+            case .qrReady(let image): .displayQR(.active(image))
             default: .error(.unknown)
             }
         }
@@ -40,7 +40,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         super.init(initialViewState: .init(state: initialViewState, mode: mode, canSignInManually: canSignInManually))
         setupSubscriptions()
         
-        if case .linkMobile(let progressPublisher) = mode {
+        if case .linkMobile(let progressPublisher, _) = mode {
             listenToDisplayQRProgress(progressPublisher: progressPublisher)
         }
     }
@@ -232,6 +232,39 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             }
     }
     
+    private func regenerateQRCode() async {
+        guard case .linkMobile(_, let clientProxy) = state.mode else {
+            fatalError("Cannot display a QR code in this mode.")
+        }
+        
+        let linkNewDeviceService = clientProxy.linkNewDeviceService()
+        let progressPublisher = linkNewDeviceService.linkMobileDevice()
+        
+        do {
+            async let minimumDelay = Task.sleep(for: .seconds(1)) // To show the spinner for long enough so there isn't a flicker.
+            async let qrReadyProgress = progressPublisher.values
+                .first { progress in
+                    switch progress {
+                    case .qrReady: true
+                    default: false
+                    }
+                }
+
+            guard case .qrReady(let image) = try await (qrReadyProgress, minimumDelay).0 else {
+                state.state = .error(.unknown)
+                return
+            }
+
+            state.state = .displayQR(.active(image))
+        } catch let error as QRCodeLoginError {
+            handleError(error)
+        } catch {
+            handleError(.unknown)
+        }
+        
+        listenToDisplayQRProgress(progressPublisher: progressPublisher)
+    }
+    
     private func sendCheckCode() async {
         guard case let .confirmCode(.inputCode(checkCodeSender)) = state.state else {
             fatalError("Attempting to check code from the wrong state.")
@@ -291,6 +324,9 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             state.state = .error(.declined)
         case .linkingNotSupported:
             state.state = .error(.linkingNotSupported)
+        case .expired where state.state.isDisplayQR:
+            state.state = .displayQR(.expired)
+            Task { await regenerateQRCode() }
         case .expired:
             state.state = .error(.expired)
         case .slidingSyncNotAvailable:
