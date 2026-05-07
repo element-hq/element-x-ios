@@ -20,10 +20,14 @@ struct TimelineScrollButton: View {
     let direction: Direction
     let isHidden: Bool
     let showsBadge: Bool
+    let onLongPress: (() -> Void)?
     let callback: () -> Void
 
     @ScaledMetric(relativeTo: .compound.bodyLG) private var iconSize: CGFloat = 22
     @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeDotSize: CGFloat = 14
+    @GestureState private var isPressing = false
+    /// Set when a long-press is recognized so the trailing touch-up doesn't also fire `callback()`.
+    @State private var consumedByLongPress = false
 
     /// Padding around the chevron, balanced so the total circle stays ~40pt at default text size.
     private let iconPadding: CGFloat = 9
@@ -38,15 +42,49 @@ struct TimelineScrollButton: View {
     init(direction: Direction = .down,
          isHidden: Bool = false,
          showsBadge: Bool = false,
+         onLongPress: (() -> Void)? = nil,
          callback: @escaping () -> Void) {
         self.direction = direction
         self.isHidden = isHidden
         self.showsBadge = showsBadge
+        self.onLongPress = onLongPress
         self.callback = callback
     }
 
     var body: some View {
-        Button { callback() } label: {
+        if let onLongPress {
+            buttonContent
+                .scaleEffect(isPressing ? 1.05 : 1.0)
+                .compositingGroup()
+                .shadow(color: .black.opacity(isPressing ? 0.2 : 0), radius: isPressing ? 12 : 0)
+                .animation(.spring(response: 0.7), value: isPressing)
+                .simultaneousGesture(LongPressGesture(minimumDuration: 0.5)
+                    .updating($isPressing) { current, state, _ in state = current }
+                    .onEnded { _ in
+                        consumedByLongPress = true
+                        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                        onLongPress()
+                        // Safety net: if the user releases off-button after the long-press is
+                        // recognized, the Button's tap never fires and won't clear the flag,
+                        // which would swallow their next tap. Clear it past the touch-up window.
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .milliseconds(500))
+                            consumedByLongPress = false
+                        }
+                    })
+        } else {
+            buttonContent
+        }
+    }
+
+    private var buttonContent: some View {
+        Button {
+            if consumedByLongPress {
+                consumedByLongPress = false
+                return
+            }
+            callback()
+        } label: {
             ZStack(alignment: direction == .down ? .bottom : .top) {
                 icon
                 if showsBadge {

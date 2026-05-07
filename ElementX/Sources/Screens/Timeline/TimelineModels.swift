@@ -59,6 +59,7 @@ enum TimelineViewAction {
     case scrollToBottom
     case scrollToFirstItemForCurrentDate
     case scrollToReadMarker
+    case markAllAsRead
     
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)

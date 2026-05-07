@@ -182,6 +182,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.timelineState.scrollToFirstItemForDatePublisher.send()
         case .scrollToReadMarker:
             scrollToReadMarker()
+        case .markAllAsRead:
+            state.bindings.hasNewMessagesAtBottom = false
+            Task { await roomProxy.markAsRead(receiptType: .fullyRead) }
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
