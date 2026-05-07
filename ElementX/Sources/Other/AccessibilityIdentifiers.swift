@@ -159,6 +159,9 @@ enum A11yIdentifiers {
         let joinCall = "room-join_call"
         let scrollToBottom = "room-scroll_to_bottom"
         
+        let startVoiceCall = "room-start_voice_call"
+        let startVideoCall = "room-start_video_call"
+        
         let messageComposer = "room-message_composer"
         let sendButton = "room-send_button"
 
