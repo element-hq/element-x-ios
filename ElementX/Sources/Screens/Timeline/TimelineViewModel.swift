@@ -858,7 +858,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.timelineState.isSwitchingTimelines = true
         }
 
-        updateHasNewMessagesAtBottom(with: timelineItemsDictionary, isSwitchingTimelines: isSwitchingTimelines)
+        updateHasNewMessagesAtBottom(with: timelineItemsDictionary)
 
         state.timelineState.itemsDictionary = timelineItemsDictionary
         state.timelineState.recomputeReadMarkerUniqueID()
@@ -896,11 +896,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
     /// Sets `hasNewMessagesAtBottom` to `true` when newer items arrive while the user is scrolled
     /// up in a live timeline. Skips initial load and timeline switches.
-    private func updateHasNewMessagesAtBottom(with newTimelineItems: OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>,
-                                              isSwitchingTimelines: Bool) {
+    private func updateHasNewMessagesAtBottom(with newTimelineItems: OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>) {
         guard state.jumpToReadMarkerEnabled,
               state.timelineState.isLive,
-              !isSwitchingTimelines,
+              !state.timelineState.isSwitchingTimelines,
               !state.bindings.isScrolledToBottom,
               !state.bindings.hasNewMessagesAtBottom else {
             return
