@@ -659,7 +659,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
 
     private func scrollToReadMarker() {
-        guard let readMarkerID = state.timelineState.readMarkerUniqueID else { return }
+        guard let readMarkerID = state.timelineState.readMarkerUniqueID else {
+            assertionFailure("scrollToReadMarker called with no readMarkerUniqueID")
+            return
+        }
         state.timelineState.scrollToReadMarkerPublisher.send(readMarkerID)
     }
 
