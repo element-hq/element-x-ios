@@ -38,60 +38,62 @@ enum AppBuildType {
 /// State is persisted in `UserDefaults`, which is thread-safe per Apple's documentation, hence `@unchecked`.
 final class AppSettings: @unchecked Sendable {
     private enum UserDefaultsKeys: String {
-        case lastVersionLaunched
-        case seenInvites
-        case hasSeenNewSoundBanner
-        case appLockNumberOfPINAttempts
-        case appLockNumberOfBiometricAttempts
-        case timelineStyle
+        static let lastVersionLaunched = UserDefaultsKeys(rawValue: "lastVersionLaunched")
+        static let seenInvites = UserDefaultsKeys(rawValue: "seenInvites")
+        static let hasSeenNewSoundBanner = UserDefaultsKeys(rawValue: "hasSeenNewSoundBanner")
+        static let appLockNumberOfPINAttempts = UserDefaultsKeys(rawValue: "appLockNumberOfPINAttempts")
+        static let appLockNumberOfBiometricAttempts = UserDefaultsKeys(rawValue: "appLockNumberOfBiometricAttempts")
+        static let timelineStyle = UserDefaultsKeys(rawValue: "timelineStyle")
         
-        case analyticsConsentState
-        case hasRunNotificationPermissionsOnboarding
-        case hasRunIdentityConfirmationOnboarding
-        case hasRequestedLocationAlwaysLocationAuthorization
+        static let analyticsConsentState = UserDefaultsKeys(rawValue: "analyticsConsentState")
+        static let hasRunNotificationPermissionsOnboarding = UserDefaultsKeys(rawValue: "hasRunNotificationPermissionsOnboarding")
+        static let hasRunIdentityConfirmationOnboarding = UserDefaultsKeys(rawValue: "hasRunIdentityConfirmationOnboarding")
+        static let hasRequestedLocationAlwaysLocationAuthorization = UserDefaultsKeys(rawValue: "hasRequestedLocationAlwaysLocationAuthorization")
         
-        case frequentlyUsedSystemEmojis
+        static let frequentlyUsedSystemEmojis = UserDefaultsKeys(rawValue: "frequentlyUsedSystemEmojis")
         
-        case enableNotifications
-        case enableInAppNotifications
-        case pusherProfileTag
-        case lastNotificationBootTime
+        static let enableNotifications = UserDefaultsKeys(rawValue: "enableNotifications")
+        static let enableInAppNotifications = UserDefaultsKeys(rawValue: "enableInAppNotifications")
+        static let pusherProfileTag = UserDefaultsKeys(rawValue: "pusherProfileTag")
+        static let lastNotificationBootTime = UserDefaultsKeys(rawValue: "lastNotificationBootTime")
         case selectedNotificationTone
-        case logLevel
-        case traceLogPacks
-        case viewSourceEnabled
-        case optimizeMediaUploads
-        case appAppearance
-        case sharePresence
+        static let logLevel = UserDefaultsKeys(rawValue: "logLevel")
+        static let traceLogPacks = UserDefaultsKeys(rawValue: "traceLogPacks")
+        static let viewSourceEnabled = UserDefaultsKeys(rawValue: "viewSourceEnabled")
+        static let optimizeMediaUploads = UserDefaultsKeys(rawValue: "optimizeMediaUploads")
+        static let appAppearance = UserDefaultsKeys(rawValue: "appAppearance")
+        static let sharePresence = UserDefaultsKeys(rawValue: "sharePresence")
         
-        case elementCallBaseURLOverride
+        static let elementCallBaseURLOverride = UserDefaultsKeys(rawValue: "elementCallBaseURLOverride")
         
-        case voiceMessagePlaybackSpeed
+        static let voiceMessagePlaybackSpeed = UserDefaultsKeys(rawValue: "voiceMessagePlaybackSpeed")
         
         // Live Location
-        case liveLocationSharingTimeoutDatesByRoomID
-        case liveLocationMinimumDistanceUpdate
-        case liveLocationDisclaimerDisplayed
+        static let liveLocationSharingTimeoutDatesByRoomID = UserDefaultsKeys(rawValue: "liveLocationSharingTimeoutDatesByRoomID")
+        static let liveLocationMinimumDistanceUpdate = UserDefaultsKeys(rawValue: "liveLocationMinimumDistanceUpdate")
+        static let liveLocationDisclaimerDisplayed = UserDefaultsKeys(rawValue: "liveLocationDisclaimerDisplayed")
         
         // Feature flags
-        case fuzzyRoomListSearchEnabled
-        case lowPriorityFilterEnabled
-        case enableOnlySignedDeviceIsolationMode
-        case knockingEnabled
-        case threadsEnabled
-        case roomThreadListEnabled
-        case linkPreviewsEnabled
+        static let fuzzyRoomListSearchEnabled = UserDefaultsKeys(rawValue: "fuzzyRoomListSearchEnabled")
+        static let lowPriorityFilterEnabled = UserDefaultsKeys(rawValue: "lowPriorityFilterEnabled")
+        static let enableOnlySignedDeviceIsolationMode = UserDefaultsKeys(rawValue: "enableOnlySignedDeviceIsolationMode")
+        static let knockingEnabled = UserDefaultsKeys(rawValue: "knockingEnabled")
+        static let threadsEnabled = UserDefaultsKeys(rawValue: "threadsEnabled")
+        static let roomThreadListEnabled = UserDefaultsKeys(rawValue: "roomThreadListEnabled")
+        static let linkPreviewsEnabled = UserDefaultsKeys(rawValue: "linkPreviewsEnabled")
         case jumpToReadMarkerEnabled
-        case focusEventOnNotificationTap
-        case linkNewDeviceEnabled
-        case automaticBackPaginationEnabled
+        static let focusEventOnNotificationTap = UserDefaultsKeys(rawValue: "focusEventOnNotificationTap")
+        static let linkNewDeviceEnabled = UserDefaultsKeys(rawValue: "linkNewDeviceEnabled")
+        static let automaticBackPaginationEnabled = UserDefaultsKeys(rawValue: "automaticBackPaginationEnabled")
         case clientPausingAndResumingEnabled
         
         // Doug's tweaks 🔧
-        case roomListActivityVisibility
-        case hideQuietNotificationAlerts
+        static let roomListActivityVisibility = UserDefaultsKeys(rawValue: "roomListActivityVisibility")
+        static let hideQuietNotificationAlerts = UserDefaultsKeys(rawValue: "hideQuietNotificationAlerts")
         
-        case developerOptionsEnabled
+        static let developerOptionsEnabled = UserDefaultsKeys(rawValue: "developerOptionsEnabled")
+        
+        let rawValue: String
     }
     
     private static let suiteName: String = InfoPlistReader.main.appGroupIdentifier
