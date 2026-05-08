@@ -94,10 +94,10 @@ final class AppSettings: @unchecked Sendable {
         case developerOptionsEnabled
     }
     
-    private nonisolated(unsafe) static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
+    private static let suiteName: String = InfoPlistReader.main.appGroupIdentifier
 
-    /// UserDefaults to be used on reads and writes. `UserDefaults` is thread-safe per Apple's documentation.
-    private nonisolated(unsafe) static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
+    /// UserDefaults to be used on reads and writes.
+    private let store: UserDefaultsProtocol
     
     static var appBuildType: AppBuildType {
         #if DEBUG
@@ -112,25 +112,16 @@ final class AppSettings: @unchecked Sendable {
         #endif
     }
     
-    static func resetAllSettings() {
+    func resetAllSettings() {
         MXLog.warning("Resetting the AppSettings.")
-        store.removePersistentDomain(forName: suiteName)
+        store.removePersistentDomain(forName: Self.suiteName)
     }
     
-    static func resetSessionSpecificSettings() {
+    func resetSessionSpecificSettings() {
         MXLog.warning("Resetting the user session specific AppSettings.")
         store.removeObject(forKey: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding.rawValue)
     }
     
-    static func configureWithSuiteName(_ name: String) {
-        suiteName = name
-        
-        guard let userDefaults = UserDefaults(suiteName: name) else {
-            fatalError("Fail to load shared UserDefaults")
-        }
-        
-        store = userDefaults
-    }
     
     // MARK: - Hooks
     
@@ -182,17 +173,17 @@ final class AppSettings: @unchecked Sendable {
     /// The last known version of the app that was launched on this device, which is
     /// used to detect when migrations should be run. When `nil` the app may have been
     /// deleted between runs so should clear data in the shared container and keychain.
-    @UserPreference(key: UserDefaultsKeys.lastVersionLaunched, storageType: .userDefaults(store))
+    @UserPreference
     var lastVersionLaunched: String?
         
     /// The Set of room identifiers of invites that the user already saw in the invites list.
     /// This Set is being used to implement badges for unread invites.
-    @UserPreference(key: UserDefaultsKeys.seenInvites, defaultValue: [], storageType: .userDefaults(store))
+    @UserPreference
     var seenInvites: Set<String>
     
     /// Defaults to `true` for new users, and we use a migration to set it to `false` for existing users.
-    @UserPreference(key: UserDefaultsKeys.hasSeenNewSoundBanner, defaultValue: true, storageType: .userDefaults(store))
-    var hasSeenNewSoundBanner
+    @UserPreference
+    var hasSeenNewSoundBanner: Bool
     
     /// The initial set of account providers shown to the user in the authentication flow.
     ///
@@ -236,7 +227,7 @@ final class AppSettings: @unchecked Sendable {
     /// **Note:** This property isn't overridable as it in unexpected for forks to come across the error (or to even have a "Pro" app).
     let elementProAppStoreURL: URL = "https://apps.apple.com/app/element-pro-for-work/id6502951615"
     
-    @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
+    @UserPreference
     var appAppearance: AppAppearance
     
     // MARK: - Security
@@ -248,7 +239,7 @@ final class AppSettings: @unchecked Sendable {
     /// Any codes that the user isn't allowed to use for their PIN.
     let appLockPINCodeBlockList = ["0000", "1234"]
     /// The number of attempts the user has made to unlock the app with a PIN code (resets when unlocked).
-    @UserPreference(key: UserDefaultsKeys.appLockNumberOfPINAttempts, defaultValue: 0, storageType: .userDefaults(store))
+    @UserPreference
     var appLockNumberOfPINAttempts: Int
     
     // MARK: - Authentication
@@ -287,21 +278,21 @@ final class AppSettings: @unchecked Sendable {
         pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify")
     }
     
-    @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
-    var enableNotifications
+    @UserPreference
+    var enableNotifications: Bool
 
-    @UserPreference(key: UserDefaultsKeys.enableInAppNotifications, defaultValue: true, storageType: .userDefaults(store))
-    var enableInAppNotifications
+    @UserPreference
+    var enableInAppNotifications: Bool
     
-    @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
-    var hideQuietNotificationAlerts
+    @UserPreference
+    var hideQuietNotificationAlerts: Bool
 
     /// Tag describing which set of device specific rules a pusher executes.
-    @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
+    @UserPreference
     var pusherProfileTag: String?
     
     /// The device's last boot time as recorded by the NSE.
-    @UserPreference(key: UserDefaultsKeys.lastNotificationBootTime, storageType: .userDefaults(store))
+    @UserPreference
     var lastNotificationBootTime: TimeInterval?
 
     /// The sound played when delivering noisy notifications. If nil, use the ElementX default
@@ -310,10 +301,10 @@ final class AppSettings: @unchecked Sendable {
 
     // MARK: - Logging
         
-    @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: LogLevel.info, storageType: .userDefaults(store))
-    var logLevel
+    @UserPreference
+    var logLevel: LogLevel
     
-    @UserPreference(key: UserDefaultsKeys.traceLogPacks, defaultValue: [], storageType: .userDefaults(store))
+    @UserPreference
     var traceLogPacks: Set<TraceLogPack>
     
     // MARK: - Bug report
@@ -341,46 +332,46 @@ final class AppSettings: @unchecked Sendable {
     }
     
     /// Whether the user has opted in to send analytics.
-    @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
-    var analyticsConsentState
+    @UserPreference
+    var analyticsConsentState: AnalyticsConsentState
     
-    @UserPreference(key: UserDefaultsKeys.hasRunNotificationPermissionsOnboarding, defaultValue: false, storageType: .userDefaults(store))
-    var hasRunNotificationPermissionsOnboarding
+    @UserPreference
+    var hasRunNotificationPermissionsOnboarding: Bool
     
-    @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: false, storageType: .userDefaults(store))
-    var hasRunIdentityConfirmationOnboarding
+    @UserPreference
+    var hasRunIdentityConfirmationOnboarding: Bool
     
-    @UserPreference(key: UserDefaultsKeys.hasRequestedLocationAlwaysLocationAuthorization, defaultValue: false, storageType: .userDefaults(store))
-    var hasRequestedLocationAlwaysLocationAuthorization
+    @UserPreference
+    var hasRequestedLocationAlwaysLocationAuthorization: Bool
     
-    @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
-    var frequentlyUsedSystemEmojis
+    @UserPreference
+    var frequentlyUsedSystemEmojis: [FrequentlyUsedEmoji]
     
     // MARK: - Live Location
     
-    @UserPreference(key: UserDefaultsKeys.liveLocationSharingTimeoutDatesByRoomID, defaultValue: [String: LiveLocationSession](), storageType: .userDefaults(store))
-    var liveLocationSharingSessionsByRoomID
+    @UserPreference
+    var liveLocationSharingSessionsByRoomID: [String: LiveLocationSession]
     
-    @UserPreference(key: UserDefaultsKeys.liveLocationMinimumDistanceUpdate, defaultValue: 10, storageType: .userDefaults(store))
-    var liveLocationMinimumDistanceUpdate
+    @UserPreference
+    var liveLocationMinimumDistanceUpdate: Int
     
-    @UserPreference(key: UserDefaultsKeys.liveLocationDisclaimerDisplayed, defaultValue: false, storageType: .userDefaults(store))
-    var liveLocationDisclaimerDisplayed
+    @UserPreference
+    var liveLocationDisclaimerDisplayed: Bool
     
     // MARK: - Home Screen
     
-    @UserPreference(key: UserDefaultsKeys.roomListActivityVisibility, defaultValue: .current, storageType: .userDefaults(store))
+    @UserPreference
     var roomListActivityVisibility: RoomListActivityVisibility
     
     // MARK: - Room Screen
     
-    @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: appBuildType == .debug, storageType: .userDefaults(store))
-    var viewSourceEnabled
+    @UserPreference
+    var viewSourceEnabled: Bool
     
-    @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: true, storageType: .userDefaults(store))
-    var optimizeMediaUploads
+    @UserPreference
+    var optimizeMediaUploads: Bool
 
-    @UserPreference(key: UserDefaultsKeys.voiceMessagePlaybackSpeed, defaultValue: AudioPlaybackSpeed.default, storageType: .userDefaults(store))
+    @UserPreference
     var voiceMessagePlaybackSpeed: AudioPlaybackSpeed
 
     /// Whether or not to show a warning on the media caption composer so the user knows
@@ -399,7 +390,7 @@ final class AppSettings: @unchecked Sendable {
     let elementCallPosthogAPIKey = "phc_rXGHx9vDmyEvyRxPziYtdVIv0ahEv8A9uLWFcCi1WcU"
     let elementCallPosthogSentryDSN = "https://3bd2f95ba5554d4497da7153b552ffb5@sentry.tools.element.io/41"
     
-    @UserPreference(key: UserDefaultsKeys.elementCallBaseURLOverride, defaultValue: nil, storageType: .userDefaults(store))
+    @UserPreference
     var elementCallBaseURLOverride: URL?
     
     // MARK: - Users
@@ -417,51 +408,95 @@ final class AppSettings: @unchecked Sendable {
     
     // MARK: - Presence
     
-    @UserPreference(key: UserDefaultsKeys.sharePresence, defaultValue: true, storageType: .userDefaults(store))
-    var sharePresence
+    @UserPreference
+    var sharePresence: Bool
     
     // MARK: - Feature Flags
     
     /// Others
-    @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var fuzzyRoomListSearchEnabled
+    @UserPreference
+    var fuzzyRoomListSearchEnabled: Bool
     
-    @UserPreference(key: UserDefaultsKeys.lowPriorityFilterEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var lowPriorityFilterEnabled
+    @UserPreference
+    var lowPriorityFilterEnabled: Bool
     
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
-    @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
-    var enableOnlySignedDeviceIsolationMode
+    @UserPreference
+    var enableOnlySignedDeviceIsolationMode: Bool
     
-    @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var knockingEnabled
+    @UserPreference
+    var knockingEnabled: Bool
     
-    @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var threadsEnabled
+    @UserPreference
+    var threadsEnabled: Bool
     
-    @UserPreference(key: UserDefaultsKeys.roomThreadListEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var roomThreadListEnabled
+    @UserPreference
+    var roomThreadListEnabled: Bool
     
-    @UserPreference(key: UserDefaultsKeys.focusEventOnNotificationTap, defaultValue: false, storageType: .userDefaults(store))
-    var focusEventOnNotificationTap
+    @UserPreference
+    var focusEventOnNotificationTap: Bool
         
-    @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var linkPreviewsEnabled
-
+    @UserPreference
+    var linkPreviewsEnabled: Bool
+    
     @UserPreference(key: UserDefaultsKeys.jumpToReadMarkerEnabled, defaultValue: false, storageType: .userDefaults(store))
     var jumpToReadMarkerEnabled
 
-    @UserPreference(key: UserDefaultsKeys.linkNewDeviceEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var linkNewDeviceEnabled
+    @UserPreference
+    var linkNewDeviceEnabled: Bool
     
-    @UserPreference(key: UserDefaultsKeys.automaticBackPaginationEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var automaticBackPaginationEnabled
+    @UserPreference
+    var automaticBackPaginationEnabled: Bool
     
     @UserPreference(key: UserDefaultsKeys.clientPausingAndResumingEnabled, defaultValue: appBuildType != .release, storageType: .volatile)
     var clientPausingAndResumingEnabled
     
-    @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType != .release, storageType: .userDefaults(store))
-    var developerOptionsEnabled
+    @UserPreference
+    var developerOptionsEnabled: Bool
+	
+    init(store: UserDefaultsProtocol? = nil) {
+        // UserDefaults to be used on reads and writes.
+        let store: UserDefaultsProtocol! = store ?? UserDefaults(suiteName: Self.suiteName)
+        self.store = store
+		
+        _lastVersionLaunched = UserPreference(key: .lastVersionLaunched, storage: store)
+        _seenInvites = UserPreference(key: .seenInvites, defaultValue: [], storage: store)
+        _hasSeenNewSoundBanner = UserPreference(key: .hasSeenNewSoundBanner, defaultValue: true, storage: store)
+        _appAppearance = UserPreference(key: .appAppearance, defaultValue: .system, storage: store)
+        _appLockNumberOfPINAttempts = UserPreference(key: .appLockNumberOfPINAttempts, defaultValue: 0, storage: store)
+        _enableNotifications = UserPreference(key: .enableNotifications, defaultValue: true, storage: store)
+        _enableInAppNotifications = UserPreference(key: .enableInAppNotifications, defaultValue: true, storage: store)
+        _hideQuietNotificationAlerts = UserPreference(key: .hideQuietNotificationAlerts, defaultValue: false, storage: store)
+        _pusherProfileTag = UserPreference(key: .pusherProfileTag, storage: store)
+        _lastNotificationBootTime = UserPreference(key: .lastNotificationBootTime, storage: store)
+        _logLevel = UserPreference(key: .logLevel, defaultValue: LogLevel.info, storage: store)
+        _traceLogPacks = UserPreference(key: .traceLogPacks, defaultValue: [], storage: store)
+        _analyticsConsentState = UserPreference(key: .analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storage: store)
+        _hasRunNotificationPermissionsOnboarding = UserPreference(key: .hasRunNotificationPermissionsOnboarding, defaultValue: false, storage: store)
+        _hasRunIdentityConfirmationOnboarding = UserPreference(key: .hasRunIdentityConfirmationOnboarding, defaultValue: false, storage: store)
+        _hasRequestedLocationAlwaysLocationAuthorization = UserPreference(key: .hasRequestedLocationAlwaysLocationAuthorization, defaultValue: false, storage: store)
+        _frequentlyUsedSystemEmojis = UserPreference(key: .frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storage: store)
+        _liveLocationSharingSessionsByRoomID = UserPreference(key: .liveLocationSharingTimeoutDatesByRoomID, defaultValue: [String: LiveLocationSession](), storage: store)
+        _liveLocationMinimumDistanceUpdate = UserPreference(key: .liveLocationMinimumDistanceUpdate, defaultValue: 10, storage: store)
+        _liveLocationDisclaimerDisplayed = UserPreference(key: .liveLocationDisclaimerDisplayed, defaultValue: false, storage: store)
+        _roomListActivityVisibility = UserPreference(key: .roomListActivityVisibility, defaultValue: .current, storage: store)
+        _viewSourceEnabled = UserPreference(key: .viewSourceEnabled, defaultValue: Self.appBuildType == .debug, storage: store)
+        _optimizeMediaUploads = UserPreference(key: .optimizeMediaUploads, defaultValue: true, storage: store)
+        _voiceMessagePlaybackSpeed = UserPreference(key: .voiceMessagePlaybackSpeed, defaultValue: AudioPlaybackSpeed.default, storage: store)
+        _elementCallBaseURLOverride = UserPreference(key: .elementCallBaseURLOverride, defaultValue: nil, storage: store)
+        _sharePresence = UserPreference(key: .sharePresence, defaultValue: true, storage: store)
+        _fuzzyRoomListSearchEnabled = UserPreference(key: .fuzzyRoomListSearchEnabled, defaultValue: false, storage: store)
+        _lowPriorityFilterEnabled = UserPreference(key: .lowPriorityFilterEnabled, defaultValue: false, storage: store)
+        _enableOnlySignedDeviceIsolationMode = UserPreference(key: .enableOnlySignedDeviceIsolationMode, defaultValue: false, storage: store)
+        _knockingEnabled = UserPreference(key: .knockingEnabled, defaultValue: false, storage: store)
+        _threadsEnabled = UserPreference(key: .threadsEnabled, defaultValue: false, storage: store)
+        _roomThreadListEnabled = UserPreference(key: .roomThreadListEnabled, defaultValue: false, storage: store)
+        _focusEventOnNotificationTap = UserPreference(key: .focusEventOnNotificationTap, defaultValue: false, storage: store)
+        _linkPreviewsEnabled = UserPreference(key: .linkPreviewsEnabled, defaultValue: false, storage: store)
+        _linkNewDeviceEnabled = UserPreference(key: .linkNewDeviceEnabled, defaultValue: false, storage: store)
+        _automaticBackPaginationEnabled = UserPreference(key: .automaticBackPaginationEnabled, defaultValue: false, storage: store)
+        _developerOptionsEnabled = UserPreference(key: .developerOptionsEnabled, defaultValue: Self.appBuildType != .release, storage: store)
+    }
 }
 
 extension AppSettings: CommonSettingsProtocol { }

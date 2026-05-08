@@ -46,11 +46,11 @@ final class UserPreference<T: Codable> {
     ///   - defaultValue: The default value to use if no stored value exists or if `forceDefault` is `true`.
     ///   - keyedStorage: The storage instance where the value is saved.
     ///   - forceDefault: A publisher that determines whether the default value should always be used. Defaults to publish `false`. Useful in the context of remote settings that need to override the local value.
-    init(key: String,
+    init(key: AppSettings.UserDefaultsKeys,
          defaultValue: T,
          keyedStorage: any KeyedStorage<T>,
          mode: Mode) {
-        self.key = key
+        self.key = key.rawValue
         self.defaultValue = defaultValue
         self.keyedStorage = keyedStorage
         self.mode = mode
@@ -95,35 +95,17 @@ final class UserPreference<T: Codable> {
 // MARK: - UserPreference convenience initializers
 
 extension UserPreference {
-    enum StorageType {
-        case userDefaults(UserDefaults)
-        case volatile
-    }
-    
-    convenience init(key: String, defaultValue: T, storageType: StorageType, mode: Mode = .localOverRemote) {
-        let storage: any KeyedStorage<T>
-        
-        switch storageType {
-        case .userDefaults(let userDefaults):
-            storage = UserDefaultsStorage(userDefaults: userDefaults)
-        case .volatile:
-            storage = [String: T]()
-        }
-        
+    convenience init(key: AppSettings.UserDefaultsKeys, defaultValue: T, storage backingStorage: UserDefaultsProtocol, mode: Mode = .localOverRemote) {
+        let storage: any KeyedStorage<T> = UserDefaultsStorage(userDefaults: backingStorage)
+
         self.init(key: key, defaultValue: defaultValue, keyedStorage: storage, mode: mode)
     }
     
-    convenience init<R: RawRepresentable>(key: R, defaultValue: T, storageType: StorageType, mode: Mode = .localOverRemote) where R.RawValue == String {
-        self.init(key: key.rawValue, defaultValue: defaultValue, storageType: storageType, mode: mode)
+    
+    convenience init(key: AppSettings.UserDefaultsKeys, storage: UserDefaultsProtocol, mode: Mode = .localOverRemote) where T: ExpressibleByNilLiteral {
+        self.init(key: key, defaultValue: nil, storage: storage, mode: mode)
     }
     
-    convenience init(key: String, storageType: StorageType, mode: Mode = .localOverRemote) where T: ExpressibleByNilLiteral {
-        self.init(key: key, defaultValue: nil, storageType: storageType, mode: mode)
-    }
-    
-    convenience init<R: RawRepresentable>(key: R, storageType: StorageType, mode: Mode = .localOverRemote) where R: RawRepresentable, R.RawValue == String, T: ExpressibleByNilLiteral {
-        self.init(key: key.rawValue, storageType: storageType, mode: mode)
-    }
 }
 
 // MARK: - Storage
@@ -139,9 +121,9 @@ protocol KeyedStorage<Value> {
 /// When used with a `Value` that conforms to `PlistRepresentable` the Codable encode/decode
 /// phase is skipped, and values are stored natively in the plist.
 final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
-    private let userDefaults: UserDefaults
+    private let userDefaults: UserDefaultsProtocol
     
-    init(userDefaults: UserDefaults) {
+    init(userDefaults: UserDefaultsProtocol) {
         self.userDefaults = userDefaults
     }
     
@@ -183,7 +165,7 @@ final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
             userDefaults.removeObject(forKey: key)
         } else {
             let encodedValue = try? JSONEncoder().encode(value)
-            userDefaults.setValue(encodedValue, forKey: key)
+            userDefaults.set(encodedValue, forKey: key)
         }
     }
     
