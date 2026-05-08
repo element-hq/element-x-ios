@@ -24,8 +24,8 @@ struct UserPreferenceTests {
         let value = TestPreferences(testDefaults)
         
         #expect(value.plist == "Hello")
-        #expect(testDefaults.string(forKey: AppSettings.UserDefaultsKeys.key2.rawValue) != nil)
-        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKeys.key2.rawValue) == nil)
+        #expect(testDefaults.string(forKey: AppSettings.UserDefaultsKey.key2.rawValue) != nil)
+        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key2.rawValue) == nil)
     }
     
     @Test
@@ -43,7 +43,7 @@ struct UserPreferenceTests {
         let value = TestPreferences(testDefaults)
         
         #expect(value.codable == storedType)
-        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKeys.key3.rawValue) != nil)
+        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key3.rawValue) != nil)
     }
     
     @Test
@@ -76,7 +76,7 @@ struct UserPreferenceTests {
         let value = TestPreferences(testDefaults)
         
         #expect(value.volatileCodable == nil)
-        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKeys.key4.rawValue) == nil)
+        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key4.rawValue) == nil)
     }
     
     @Test
@@ -92,8 +92,8 @@ struct UserPreferenceTests {
         let value = TestPreferences(testDefaults)
         
         #expect(value.plistArray == [1, 2, 3])
-        #expect(testDefaults.array(forKey: AppSettings.UserDefaultsKeys.key5.rawValue) as? [Int] == [1, 2, 3])
-        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKeys.key5.rawValue) == nil)
+        #expect(testDefaults.array(forKey: AppSettings.UserDefaultsKey.key5.rawValue) as? [Int] == [1, 2, 3])
+        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key5.rawValue) == nil)
     }
     
     @Test
@@ -110,7 +110,7 @@ struct UserPreferenceTests {
         value.plist = nil
         
         #expect(value.plist == nil)
-        #expect(testDefaults.string(forKey: AppSettings.UserDefaultsKeys.key2.rawValue) == nil)
+        #expect(testDefaults.string(forKey: AppSettings.UserDefaultsKey.key2.rawValue) == nil)
     }
     
     @Test
@@ -129,7 +129,7 @@ struct UserPreferenceTests {
         value.codable = nil
 
         #expect(value.codable == nil)
-        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKeys.key3.rawValue) == nil)
+        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key3.rawValue) == nil)
     }
     
     @Test
@@ -192,7 +192,7 @@ private struct CodableTestType: Equatable, Codable {
     let b: [Int]
 }
 
-private extension AppSettings.UserDefaultsKeys {
+private extension AppSettings.UserDefaultsKey {
     static let testKey = Self(rawValue: "testKey")
     static let key1 = Self(rawValue: "foo.volatile")
     static let key2 = Self(rawValue: "foo.plist")

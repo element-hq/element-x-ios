@@ -38,62 +38,70 @@ enum AppBuildType {
 /// State is persisted in `UserDefaults`, which is thread-safe per Apple's documentation, hence `@unchecked`.
 final class AppSettings: @unchecked Sendable {
     private enum UserDefaultsKeys: String {
-        static let lastVersionLaunched = UserDefaultsKeys(rawValue: "lastVersionLaunched")
-        static let seenInvites = UserDefaultsKeys(rawValue: "seenInvites")
-        static let hasSeenNewSoundBanner = UserDefaultsKeys(rawValue: "hasSeenNewSoundBanner")
-        static let appLockNumberOfPINAttempts = UserDefaultsKeys(rawValue: "appLockNumberOfPINAttempts")
-        static let appLockNumberOfBiometricAttempts = UserDefaultsKeys(rawValue: "appLockNumberOfBiometricAttempts")
-        static let timelineStyle = UserDefaultsKeys(rawValue: "timelineStyle")
+        static let lastVersionLaunched: UserDefaultsKey = "lastVersionLaunched"
+        static let seenInvites: UserDefaultsKey = "seenInvites"
+        static let hasSeenNewSoundBanner: UserDefaultsKey = "hasSeenNewSoundBanner"
+        static let appLockNumberOfPINAttempts: UserDefaultsKey = "appLockNumberOfPINAttempts"
+        static let appLockNumberOfBiometricAttempts: UserDefaultsKey = "appLockNumberOfBiometricAttempts"
+        static let timelineStyle: UserDefaultsKey = "timelineStyle"
         
-        static let analyticsConsentState = UserDefaultsKeys(rawValue: "analyticsConsentState")
-        static let hasRunNotificationPermissionsOnboarding = UserDefaultsKeys(rawValue: "hasRunNotificationPermissionsOnboarding")
-        static let hasRunIdentityConfirmationOnboarding = UserDefaultsKeys(rawValue: "hasRunIdentityConfirmationOnboarding")
-        static let hasRequestedLocationAlwaysLocationAuthorization = UserDefaultsKeys(rawValue: "hasRequestedLocationAlwaysLocationAuthorization")
+        static let analyticsConsentState: UserDefaultsKey = "analyticsConsentState"
+        static let hasRunNotificationPermissionsOnboarding: UserDefaultsKey = "hasRunNotificationPermissionsOnboarding"
+        static let hasRunIdentityConfirmationOnboarding: UserDefaultsKey = "hasRunIdentityConfirmationOnboarding"
+        static let hasRequestedLocationAlwaysLocationAuthorization: UserDefaultsKey = "hasRequestedLocationAlwaysLocationAuthorization"
         
-        static let frequentlyUsedSystemEmojis = UserDefaultsKeys(rawValue: "frequentlyUsedSystemEmojis")
+        static let frequentlyUsedSystemEmojis: UserDefaultsKey = "frequentlyUsedSystemEmojis"
         
-        static let enableNotifications = UserDefaultsKeys(rawValue: "enableNotifications")
-        static let enableInAppNotifications = UserDefaultsKeys(rawValue: "enableInAppNotifications")
-        static let pusherProfileTag = UserDefaultsKeys(rawValue: "pusherProfileTag")
-        static let lastNotificationBootTime = UserDefaultsKeys(rawValue: "lastNotificationBootTime")
+        static let enableNotifications: UserDefaultsKey = "enableNotifications"
+        static let enableInAppNotifications: UserDefaultsKey = "enableInAppNotifications"
+        static let pusherProfileTag: UserDefaultsKey = "pusherProfileTag"
+        static let lastNotificationBootTime: UserDefaultsKey = "lastNotificationBootTime"
         case selectedNotificationTone
-        static let logLevel = UserDefaultsKeys(rawValue: "logLevel")
-        static let traceLogPacks = UserDefaultsKeys(rawValue: "traceLogPacks")
-        static let viewSourceEnabled = UserDefaultsKeys(rawValue: "viewSourceEnabled")
-        static let optimizeMediaUploads = UserDefaultsKeys(rawValue: "optimizeMediaUploads")
-        static let appAppearance = UserDefaultsKeys(rawValue: "appAppearance")
-        static let sharePresence = UserDefaultsKeys(rawValue: "sharePresence")
+        static let logLevel: UserDefaultsKey = "logLevel"
+        static let traceLogPacks: UserDefaultsKey = "traceLogPacks"
+        static let viewSourceEnabled: UserDefaultsKey = "viewSourceEnabled"
+        static let optimizeMediaUploads: UserDefaultsKey = "optimizeMediaUploads"
+        static let appAppearance: UserDefaultsKey = "appAppearance"
+        static let sharePresence: UserDefaultsKey = "sharePresence"
         
-        static let elementCallBaseURLOverride = UserDefaultsKeys(rawValue: "elementCallBaseURLOverride")
+        static let elementCallBaseURLOverride: UserDefaultsKey = "elementCallBaseURLOverride"
         
-        static let voiceMessagePlaybackSpeed = UserDefaultsKeys(rawValue: "voiceMessagePlaybackSpeed")
+        static let voiceMessagePlaybackSpeed: UserDefaultsKey = "voiceMessagePlaybackSpeed"
         
         // Live Location
-        static let liveLocationSharingTimeoutDatesByRoomID = UserDefaultsKeys(rawValue: "liveLocationSharingTimeoutDatesByRoomID")
-        static let liveLocationMinimumDistanceUpdate = UserDefaultsKeys(rawValue: "liveLocationMinimumDistanceUpdate")
-        static let liveLocationDisclaimerDisplayed = UserDefaultsKeys(rawValue: "liveLocationDisclaimerDisplayed")
+        static let liveLocationSharingTimeoutDatesByRoomID: UserDefaultsKey = "liveLocationSharingTimeoutDatesByRoomID"
+        static let liveLocationMinimumDistanceUpdate: UserDefaultsKey = "liveLocationMinimumDistanceUpdate"
+        static let liveLocationDisclaimerDisplayed: UserDefaultsKey = "liveLocationDisclaimerDisplayed"
         
         // Feature flags
-        static let fuzzyRoomListSearchEnabled = UserDefaultsKeys(rawValue: "fuzzyRoomListSearchEnabled")
-        static let lowPriorityFilterEnabled = UserDefaultsKeys(rawValue: "lowPriorityFilterEnabled")
-        static let enableOnlySignedDeviceIsolationMode = UserDefaultsKeys(rawValue: "enableOnlySignedDeviceIsolationMode")
-        static let knockingEnabled = UserDefaultsKeys(rawValue: "knockingEnabled")
-        static let threadsEnabled = UserDefaultsKeys(rawValue: "threadsEnabled")
-        static let roomThreadListEnabled = UserDefaultsKeys(rawValue: "roomThreadListEnabled")
-        static let linkPreviewsEnabled = UserDefaultsKeys(rawValue: "linkPreviewsEnabled")
+        static let fuzzyRoomListSearchEnabled: UserDefaultsKey = "fuzzyRoomListSearchEnabled"
+        static let lowPriorityFilterEnabled: UserDefaultsKey = "lowPriorityFilterEnabled"
+        static let enableOnlySignedDeviceIsolationMode: UserDefaultsKey = "enableOnlySignedDeviceIsolationMode"
+        static let knockingEnabled: UserDefaultsKey = "knockingEnabled"
+        static let threadsEnabled: UserDefaultsKey = "threadsEnabled"
+        static let roomThreadListEnabled: UserDefaultsKey = "roomThreadListEnabled"
+        static let linkPreviewsEnabled: UserDefaultsKey = "linkPreviewsEnabled"
         case jumpToReadMarkerEnabled
-        static let focusEventOnNotificationTap = UserDefaultsKeys(rawValue: "focusEventOnNotificationTap")
-        static let linkNewDeviceEnabled = UserDefaultsKeys(rawValue: "linkNewDeviceEnabled")
-        static let automaticBackPaginationEnabled = UserDefaultsKeys(rawValue: "automaticBackPaginationEnabled")
+        static let focusEventOnNotificationTap: UserDefaultsKey = "focusEventOnNotificationTap"
+        static let linkNewDeviceEnabled: UserDefaultsKey = "linkNewDeviceEnabled"
+        static let automaticBackPaginationEnabled: UserDefaultsKey = "automaticBackPaginationEnabled"
         case clientPausingAndResumingEnabled
         
         // Doug's tweaks 🔧
-        static let roomListActivityVisibility = UserDefaultsKeys(rawValue: "roomListActivityVisibility")
-        static let hideQuietNotificationAlerts = UserDefaultsKeys(rawValue: "hideQuietNotificationAlerts")
+        static let roomListActivityVisibility: UserDefaultsKey = "roomListActivityVisibility"
+        static let hideQuietNotificationAlerts: UserDefaultsKey = "hideQuietNotificationAlerts"
         
-        static let developerOptionsEnabled = UserDefaultsKeys(rawValue: "developerOptionsEnabled")
+        static let developerOptionsEnabled: UserDefaultsKey = "developerOptionsEnabled"
         
         let rawValue: String
+        
+        init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+        
+        init(stringLiteral value: StringLiteralType) {
+            self.init(rawValue: value)
+        }
     }
     
     private static let suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -121,7 +129,7 @@ final class AppSettings: @unchecked Sendable {
     
     func resetSessionSpecificSettings() {
         MXLog.warning("Resetting the user session specific AppSettings.")
-        store.removeObject(forKey: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding.rawValue)
+        store.removeObject(forKey: UserDefaultsKey.hasRunIdentityConfirmationOnboarding.rawValue)
     }
     
     // MARK: - Hooks
