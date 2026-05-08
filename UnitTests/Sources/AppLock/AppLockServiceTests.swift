@@ -26,8 +26,6 @@ final class AppLockServiceTests {
         service.disable()
     }
     
-    deinit { }
-    
     // MARK: - PIN Code
     
     @Test

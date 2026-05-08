@@ -24,7 +24,7 @@ struct UserPreferenceTests {
         let value = TestPreferences(testDefaults)
         
         #expect(value.plist == "Hello")
-        #expect(testDefaults.string(forKey: AppSettings.UserDefaultsKey.key2.rawValue) != nil)
+        #expect(testDefaults.object(forKey: AppSettings.UserDefaultsKey.key2.rawValue) is String)
         #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key2.rawValue) == nil)
     }
     
@@ -92,7 +92,7 @@ struct UserPreferenceTests {
         let value = TestPreferences(testDefaults)
         
         #expect(value.plistArray == [1, 2, 3])
-        #expect(testDefaults.array(forKey: AppSettings.UserDefaultsKey.key5.rawValue) as? [Int] == [1, 2, 3])
+        #expect(testDefaults.object(forKey: AppSettings.UserDefaultsKey.key5.rawValue) as? [Int] == [1, 2, 3])
         #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key5.rawValue) == nil)
     }
     
@@ -110,7 +110,7 @@ struct UserPreferenceTests {
         value.plist = nil
         
         #expect(value.plist == nil)
-        #expect(testDefaults.string(forKey: AppSettings.UserDefaultsKey.key2.rawValue) == nil)
+        #expect(testDefaults.object(forKey: AppSettings.UserDefaultsKey.key2.rawValue) as? String == nil)
     }
     
     @Test
@@ -161,8 +161,6 @@ struct UserPreferenceTests {
 }
 
 private struct TestPreferences {
-    private let storage = UserDefaultsMock()
-    
     @UserPreference
     var volatileVar: String?
     

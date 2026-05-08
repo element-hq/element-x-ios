@@ -42,12 +42,4 @@ public final class UserDefaultsMock: UserDefaultsProtocol, Sendable {
     public func removePersistentDomain(forName name: String) {
         storage = [:]
     }
-    
-    public func string(forKey key: String) -> String? {
-        object(forKey: key) as? String
-    }
-    
-    public func array(forKey key: String) -> [Any]? {
-        object(forKey: key) as? [Any]
-    }
 }
