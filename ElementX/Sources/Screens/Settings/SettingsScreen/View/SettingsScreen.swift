@@ -277,7 +277,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com",
                                                                                    deviceID: "AAAAAAAAAAA"))))
         return SettingsScreenViewModel(userSession: userSession,
-                                       appSettings: AppSettings(),
+                                       appSettings: AppSettings(store: UserDefaultsMock()),
                                        isBugReportServiceEnabled: isBugReportServiceEnabled,
                                        isInSecondaryWindow: false)
     }

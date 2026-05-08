@@ -101,11 +101,9 @@ extension UserPreference {
         self.init(key: key, defaultValue: defaultValue, keyedStorage: storage, mode: mode)
     }
     
-    
     convenience init(key: AppSettings.UserDefaultsKeys, storage: UserDefaultsProtocol, mode: Mode = .localOverRemote) where T: ExpressibleByNilLiteral {
         self.init(key: key, defaultValue: nil, storage: storage, mode: mode)
     }
-    
 }
 
 // MARK: - Storage

@@ -289,7 +289,7 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
                                           flow: SessionVerificationScreenFlow = .deviceInitiator) -> some View {
         let viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
                                                            flow: flow,
-                                                           appSettings: AppSettings(),
+                                                           appSettings: AppSettings(store: UserDefaultsMock()),
                                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                                            verificationState: state)
         

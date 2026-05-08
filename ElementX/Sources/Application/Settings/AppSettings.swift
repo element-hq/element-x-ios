@@ -124,7 +124,6 @@ final class AppSettings: @unchecked Sendable {
         store.removeObject(forKey: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding.rawValue)
     }
     
-    
     // MARK: - Hooks
     
     // swiftlint:disable:next function_parameter_count

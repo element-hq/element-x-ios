@@ -50,7 +50,7 @@ struct UserSessionFlowCoordinatorTests {
         appMediator.networkMonitor = networkMonitor
         
         userIndicatorController = UserIndicatorControllerMock.default
-        let appSettings = AppSettings()
+        let appSettings = AppSettings(store: UserDefaultsMock())
 
         let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                   bugReportService: BugReportServiceMock(.init()),

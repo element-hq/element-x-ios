@@ -163,7 +163,7 @@ struct ServerConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         ServerConfirmationScreenViewModel(authenticationService: AuthenticationService.mock,
                                           mode: mode,
                                           authenticationFlow: flow,
-                                          appSettings: AppSettings(),
+                                          appSettings: AppSettings(store: UserDefaultsMock()),
                                           userIndicatorController: UserIndicatorControllerMock.default)
     }
 }

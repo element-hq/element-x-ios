@@ -342,7 +342,7 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
                                                       isViewSourceEnabled: true,
                                                       areThreadsEnabled: true,
                                                       timelineKind: .live,
-                                                      emojiProvider: EmojiProvider(appSettings: AppSettings()))
+                                                      emojiProvider: EmojiProvider(appSettings: AppSettings(store: UserDefaultsMock())))
         guard let actions = provider.makeActions() else { return nil }
         
         if var textItem = item as? TextRoomTimelineItem {

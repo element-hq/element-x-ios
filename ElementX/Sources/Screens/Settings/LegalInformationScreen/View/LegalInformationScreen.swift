@@ -33,7 +33,7 @@ struct LegalInformationScreen: View {
 // MARK: - Previews
 
 struct LegalInformationScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = LegalInformationScreenViewModel(appSettings: AppSettings())
+    static let viewModel = LegalInformationScreenViewModel(appSettings: AppSettings(store: UserDefaultsMock()))
     static var previews: some View {
         LegalInformationScreen(context: viewModel.context)
     }

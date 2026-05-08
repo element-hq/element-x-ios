@@ -11,7 +11,6 @@ import Foundation
 import Testing
 
 struct UserPreferenceTests {
-
     @Test
     func storePlistValue() {
         let testDefaults = UserDefaultsMock()
@@ -180,10 +179,10 @@ private struct TestPreferences {
     var plistArray: [Int]?
     
     init(_ storage: UserDefaultsProtocol) {
-        _volatileVar = UserPreference(key: .key1, storage: storage)
+        _volatileVar = UserPreference(key: .key1, storage: UserDefaultsMock())
         _plist = UserPreference(key: .key2, storage: storage)
         _codable = UserPreference(key: .key3, storage: storage)
-        _volatileCodable = UserPreference(key: .key4, storage: storage)
+        _volatileCodable = UserPreference(key: .key4, storage: UserDefaultsMock())
         _plistArray = UserPreference(key: .key5, storage: storage)
     }
 }
@@ -192,7 +191,6 @@ private struct CodableTestType: Equatable, Codable {
     let a: String
     let b: [Int]
 }
-
 
 private extension AppSettings.UserDefaultsKeys {
     static let testKey = Self(rawValue: "testKey")

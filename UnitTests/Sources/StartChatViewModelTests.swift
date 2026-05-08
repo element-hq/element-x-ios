@@ -20,7 +20,6 @@ struct StartChatScreenViewModelTests {
     }
     
     init() {
-        let appSettings = AppSettings()
         
         clientProxy = .init(.init(userID: ""))
         userDiscoveryService = UserDiscoveryServiceMock()

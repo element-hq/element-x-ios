@@ -90,10 +90,10 @@ struct RoomListFiltersView: View {
 
 struct RoomListFiltersView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomListFiltersView(state: .constant(.init(appSettings: AppSettings())))
+        RoomListFiltersView(state: .constant(.init(appSettings: AppSettings(store: UserDefaultsMock()))))
         RoomListFiltersView(state: .constant(.init(activeFilters: [.rooms, .favourites],
-                                                   appSettings: AppSettings())))
+                                                   appSettings: AppSettings(store: UserDefaultsMock()))))
         RoomListFiltersView(state: .constant(.init(activeFilters: [.lowPriority],
-                                                   appSettings: AppSettings())))
+                                                   appSettings: AppSettings(store: UserDefaultsMock()))))
     }
 }
