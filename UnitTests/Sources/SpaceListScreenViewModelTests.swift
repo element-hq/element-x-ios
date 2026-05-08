@@ -22,8 +22,7 @@ final class SpacesScreenViewModelTests {
     }
     
     init() {
-        AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
         
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
@@ -45,10 +44,6 @@ final class SpacesScreenViewModelTests {
                                           selectedSpacePublisher: .init(nil),
                                           appSettings: appSettings,
                                           userIndicatorController: UserIndicatorControllerMock())
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
     }
     
     @Test

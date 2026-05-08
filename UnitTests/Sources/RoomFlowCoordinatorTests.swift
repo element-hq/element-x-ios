@@ -22,13 +22,11 @@ final class RoomFlowCoordinatorTests {
     private let appSettings: AppSettings
 
     init() {
-        appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
+        analytics = .mock(settings: appSettings)
+        userIndicatorController = UserIndicatorControllerMock.default
     }
 
-    deinit {
-        AppSettings.resetAllSettings()
-    }
-    
     @Test
     func roomPresentation() async throws {
         setupRoomFlowCoordinator()

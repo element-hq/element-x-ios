@@ -17,8 +17,7 @@ final class AppLockServiceTests {
     private var service: AppLockService
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
         
         keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
         keychainController.resetSecrets()
@@ -27,9 +26,7 @@ final class AppLockServiceTests {
         service.disable()
     }
     
-    deinit {
-        AppSettings.resetAllSettings()
-    }
+    deinit { }
     
     // MARK: - PIN Code
     

@@ -26,10 +26,6 @@ final class ComposerToolbarViewModelTests {
         setUpViewModel()
     }
     
-    deinit {
-        AppSettings.resetAllSettings()
-    }
-    
     @Test
     func composerFocus() {
         viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventID("mock"), type: .default)))

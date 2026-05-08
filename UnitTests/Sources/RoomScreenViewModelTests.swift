@@ -20,12 +20,9 @@ final class RoomScreenViewModelTests {
     private let appSettings: AppSettings
     
     init() async throws {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
+        analytics = .mock(settings: appSettings)
+        userIndicatorController = UserIndicatorControllerMock.default
     }
     
     @Test

@@ -17,8 +17,10 @@ final class TimelineViewModelTests {
     var cancellables = Set<AnyCancellable>()
 
     init() async throws {
-        AppSettings.resetAllSettings()
         cancellables.removeAll()
+        userIndicatorControllerMock = UserIndicatorControllerMock.default
+        appSettings = AppSettings(store: UserDefaultsMock())
+        analytics = .mock(settings: appSettings)
     }
 
     // MARK: - Message Grouping

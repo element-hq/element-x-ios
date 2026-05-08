@@ -28,15 +28,10 @@ final class MediaUploadPreviewScreenViewModelTests {
     }
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
         appSettings.optimizeMediaUploads = false
 
         userIndicatorController = UserIndicatorControllerMock.default
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
     }
     
     @Test

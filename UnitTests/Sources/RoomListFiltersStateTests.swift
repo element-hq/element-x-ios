@@ -15,13 +15,8 @@ final class RoomListFiltersStateTests {
     let allCasesWithoutLowPriority = RoomListFilter.allCases.filter { $0 != .lowPriority }
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
         state = RoomListFiltersState(appSettings: appSettings)
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
     }
     
     @Test

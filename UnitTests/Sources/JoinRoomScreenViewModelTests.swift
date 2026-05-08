@@ -29,14 +29,13 @@ final class JoinRoomScreenViewModelTests {
     private let appSettings: AppSettings
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
+        userIndicatorController = UserIndicatorControllerMock.default
     }
     
     deinit {
         viewModel = nil
         clientProxy = nil
-        AppSettings.resetAllSettings()
     }
     
     @Test

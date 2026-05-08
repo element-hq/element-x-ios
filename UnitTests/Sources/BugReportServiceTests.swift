@@ -16,8 +16,7 @@ final class BugReportServiceTests {
     var bugReportService: BugReportServiceProtocol!
     
     init() throws {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
         appSettings.bugReportRageshakeURL.reset()
         
         let bugReportServiceMock = BugReportServiceMock()

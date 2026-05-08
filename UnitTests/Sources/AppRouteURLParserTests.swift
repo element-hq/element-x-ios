@@ -15,8 +15,7 @@ struct AppRouteURLParserTests {
     var appRouteURLParser: AppRouteURLParser
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
     }
     

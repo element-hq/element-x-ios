@@ -22,10 +22,6 @@ final class RoomSummaryProviderTests {
     var dynamicEntriesController: RoomListDynamicEntriesControllerSDKMock!
     var roomSummaryProvider: RoomSummaryProvider!
 
-    deinit {
-        AppSettings.resetAllSettings()
-    }
-
     @Test
     func defaultRustFilters() async {
         // Given a new room provider.
@@ -94,8 +90,7 @@ final class RoomSummaryProviderTests {
     // MARK: - Helpers
     
     private func setup(isLowPriorityFilterEnabled: Bool = false) {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
         appSettings.lowPriorityFilterEnabled = isLowPriorityFilterEnabled
 
         let stateEventStringBuilder = RoomStateEventStringBuilder(userID: "@me:matrix.org")

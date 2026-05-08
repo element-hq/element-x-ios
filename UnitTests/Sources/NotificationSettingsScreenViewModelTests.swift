@@ -21,11 +21,9 @@ struct NotificationSettingsScreenViewModelTests {
     private var toneManager: NotificationToneManagerMock
 
     init() throws {
-        AppSettings.resetAllSettings()
-
         userNotificationCenter = UserNotificationCenterMock()
         userNotificationCenter.authorizationStatusReturnValue = .authorized
-        appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
         notificationSettingsProxy = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = true

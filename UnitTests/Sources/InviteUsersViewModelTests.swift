@@ -17,11 +17,7 @@ final class InviteUsersScreenViewModelTests {
     var clientProxy: ClientProxyMock!
 
     init() {
-        AppSettings.resetAllSettings()
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
     }
     
     var context: InviteUsersScreenViewModel.Context {
