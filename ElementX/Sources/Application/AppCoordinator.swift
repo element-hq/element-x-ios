@@ -93,7 +93,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("\(appName) \(appVersion) (\(appBuild))")
         
         if ProcessInfo.processInfo.environment["RESET_APP_SETTINGS"].map(Bool.init) == true {
-            AppSettings.resetAllSettings()
+            appSettings.resetAllSettings()
         }
         
         self.appDelegate = appDelegate
@@ -544,7 +544,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     /// - Parameter includingSettings: Whether to additionally wipe the user's app settings too.
     private func wipeUserData(includingSettings: Bool = false) {
         if includingSettings {
-            AppSettings.resetAllSettings()
+            appSettings.resetAllSettings()
             appLockFlowCoordinator.appLockService.disable()
         }
         userSessionStore.reset()
@@ -830,7 +830,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             userSessionStore.logout(userSession: userSession)
             tearDownUserSession()
             
-            AppSettings.resetSessionSpecificSettings()
+            appSettings.resetSessionSpecificSettings()
             appHooks.remoteSettingsHook.reset(appSettings)
             
             // Reset analytics

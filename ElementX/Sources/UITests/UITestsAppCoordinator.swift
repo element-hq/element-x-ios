@@ -35,9 +35,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         
         MXLog.configure(currentTarget: "uitests")
         
-        AppSettings.configureWithSuiteName("io.element.elementx.uitests")
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings(store: UserDefaultsMock())
         
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false

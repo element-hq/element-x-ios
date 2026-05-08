@@ -42,8 +42,11 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
         
         MXLog.configure(currentTarget: "accessibility-tests")
         
-        AppSettings.configureWithSuiteName("io.element.elementx.accessibilitytests")
-        AppSettings.resetAllSettings()
+        let appSettings = AppSettings(store: UserDefaultsMock())
+        
+        let analyticsClient = AnalyticsClientMock()
+        analyticsClient.isRunning = false
+        analytics = .mock(analyticsClient, settings: appSettings)
 
         guard let name = ProcessInfo.accessibilityViewID,
               let previewType = TestablePreviewsDictionary.dictionary[name] else {

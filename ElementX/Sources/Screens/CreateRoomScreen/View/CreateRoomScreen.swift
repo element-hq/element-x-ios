@@ -446,8 +446,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                       isSpace: Bool = false,
                                       selectionMode: CreateRoomScreenSpaceSelectionMode = .editableSpacesList(preSelectedSpace: nil),
                                       isAliasAvailable: Bool = true) -> CreateRoomScreenViewModel {
-        AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
+        let appSettings = AppSettings(store: UserDefaultsMock())
         appSettings.knockingEnabled = isKnockingEnabled
         
         let clientProxy = ClientProxyMock(.init(userIDServerName: "example.org",

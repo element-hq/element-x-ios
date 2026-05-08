@@ -229,40 +229,30 @@ struct SecurityAndPrivacyScreen: View {
 // MARK: - Previews
 
 struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
-    static let inviteOnlyViewModel = {
-        AppSettings.resetAllSettings()
-        return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsCreator,
-                                                                                      joinRule: .invite)),
-                                                 clientProxy: ClientProxyMock(.init()),
-                                                 userIndicatorController: UserIndicatorControllerMock(),
-                                                 appSettings: AppSettings())
-    }()
+    static let inviteOnlyViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsCreator,
+                                                                                                            joinRule: .invite)),
+                                                                       clientProxy: ClientProxyMock(.init()),
+                                                                       userIndicatorController: UserIndicatorControllerMock(),
+                                                                       appSettings: AppSettings(store: UserDefaultsMock()))
     
-    static let publicViewModel = {
-        AppSettings.resetAllSettings()
-        return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
-                                                                                      canonicalAlias: "#room:matrix.org",
-                                                                                      members: .allMembersAsCreator,
-                                                                                      joinRule: .public,
-                                                                                      isVisibleInPublicDirectory: true)),
-                                                 clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
-                                                 userIndicatorController: UserIndicatorControllerMock(),
-                                                 appSettings: AppSettings())
-    }()
+    static let publicViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
+                                                                                                        canonicalAlias: "#room:matrix.org",
+                                                                                                        members: .allMembersAsCreator,
+                                                                                                        joinRule: .public,
+                                                                                                        isVisibleInPublicDirectory: true)),
+                                                                   clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                                   userIndicatorController: UserIndicatorControllerMock(),
+                                                                   appSettings: AppSettings(store: UserDefaultsMock()))
     
-    static let publicNoAddressViewModel = {
-        AppSettings.resetAllSettings()
-        return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
-                                                                                      members: .allMembersAsCreator,
-                                                                                      joinRule: .public)),
-                                                 clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
-                                                 userIndicatorController: UserIndicatorControllerMock(),
-                                                 appSettings: AppSettings())
-    }()
+    static let publicNoAddressViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
+                                                                                                                 members: .allMembersAsCreator,
+                                                                                                                 joinRule: .public)),
+                                                                            clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                                            userIndicatorController: UserIndicatorControllerMock(),
+                                                                            appSettings: AppSettings(store: UserDefaultsMock()))
     
     static let singleSpaceMembersViewModel = {
-        AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
+        let appSettings = AppSettings(store: UserDefaultsMock())
         
         let space = [SpaceServiceRoom].mockSingleRoom[0]
         
@@ -278,8 +268,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let multipleSpacesMembersViewModel = {
-        AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
+        let appSettings = AppSettings(store: UserDefaultsMock())
         
         let spaces = [SpaceServiceRoom].mockJoinedSpaces
         
@@ -295,8 +284,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let askToJoinViewModel = {
-        AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
+        let appSettings = AppSettings(store: UserDefaultsMock())
         appSettings.knockingEnabled = true
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
@@ -310,8 +298,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let singleAskToJoinSpaceMembersViewModel = {
-        AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
+        let appSettings = AppSettings(store: UserDefaultsMock())
         appSettings.knockingEnabled = true
         
         let space = [SpaceServiceRoom].mockSingleRoom[0]
@@ -328,8 +315,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let multipleAskToJoinSpacesMembersViewModel = {
-        AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
+        let appSettings = AppSettings(store: UserDefaultsMock())
         appSettings.knockingEnabled = true
         
         let spaces = [SpaceServiceRoom].mockJoinedSpaces
@@ -345,18 +331,15 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
                                                  appSettings: appSettings)
     }()
     
-    static let publicSpaceViewModel = {
-        AppSettings.resetAllSettings()
-        return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isSpace: true,
-                                                                                      isEncrypted: false,
-                                                                                      canonicalAlias: "#space:matrix.org",
-                                                                                      members: .allMembersAsCreator,
-                                                                                      joinRule: .public,
-                                                                                      isVisibleInPublicDirectory: true)),
-                                                 clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
-                                                 userIndicatorController: UserIndicatorControllerMock(),
-                                                 appSettings: AppSettings())
-    }()
+    static let publicSpaceViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isSpace: true,
+                                                                                                             isEncrypted: false,
+                                                                                                             canonicalAlias: "#space:matrix.org",
+                                                                                                             members: .allMembersAsCreator,
+                                                                                                             joinRule: .public,
+                                                                                                             isVisibleInPublicDirectory: true)),
+                                                                        clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                                        userIndicatorController: UserIndicatorControllerMock(),
+                                                                        appSettings: AppSettings(store: UserDefaultsMock()))
     
     static var previews: some View {
         ElementNavigationStack {
