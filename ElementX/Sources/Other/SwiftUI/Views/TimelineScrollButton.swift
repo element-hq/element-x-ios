@@ -64,13 +64,13 @@ struct TimelineScrollButton: View {
                         consumedByLongPress = true
                         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
                         onLongPress()
-                        // Safety net: if the user releases off-button after the long-press is
-                        // recognized, the Button's tap never fires and won't clear the flag,
-                        // which would swallow their next tap. Clear it past the touch-up window.
-                        Task { @MainActor in
-                            try? await Task.sleep(for: .milliseconds(500))
-                            consumedByLongPress = false
-                        }
+                    })
+                .simultaneousGesture(DragGesture(minimumDistance: 0)
+                    .onEnded { _ in
+                        // Touch-up signal. Defer the clear so the Button's tap action — which
+                        // also fires on touch-up when the release was on-button — reads the
+                        // flag while it's still set and suppresses the unwanted callback.
+                        Task { @MainActor in consumedByLongPress = false }
                     })
         } else {
             buttonContent
