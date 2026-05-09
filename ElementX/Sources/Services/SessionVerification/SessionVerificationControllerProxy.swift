@@ -85,6 +85,10 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
         
         do {
             try await sessionVerificationController.acceptVerificationRequest()
+            
+            MXLog.info("Accepted verification request")
+            actions.send(.acceptedVerificationRequest)
+            
             return .success(())
         } catch {
             MXLog.error("Failed requesting session verification with error: \(error)")
@@ -179,9 +183,10 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     }
     
     fileprivate func didAcceptVerificationRequest() {
-        MXLog.info("Accepted verification request")
-        
-        actions.send(.acceptedVerificationRequest)
+        // Noop because the rust side state machine changes states before sending
+        // the actual request, leading to race conditions with the SAS verification
+        // startup. The `acceptedVerificationRequest` is now called from the `startSasVerification`
+        // method above.
     }
     
     fileprivate func didStartSasVerification() {

@@ -11,7 +11,7 @@ import SwiftUI
 
 enum RoomMembersFlowCoordinatorAction {
     case finished
-    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
+    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)
     case verifyUser(userID: String)
 }
 
@@ -97,6 +97,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        MXLog.info("Handling app route: \(appRoute)")
+        
         switch appRoute {
         case .roomMemberDetails(let userID):
             if case .roomFlow = stateMachine.state, let childFlowCoordinator {
@@ -118,9 +120,10 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             }
         case .roomAlias, .childRoomAlias, .eventOnRoomAlias, .childEventOnRoomAlias:
             break // These are converted to a room ID route one level above.
-        case .accountProvisioningLink, .roomList, .room, .roomDetails, .event,
-             .userProfile, .call, .genericCallLink, .settings, .chatBackupSettings,
-             .share, .transferOwnership, .thread:
+        case .accountProvisioningLink, .oAuthCallback,
+             .roomList, .room, .roomDetails, .event,
+             .userProfile, .call, .settings, .chatBackupSettings,
+             .share, .transferOwnership, .thread, .globalSearch:
             break
         }
     }
@@ -225,7 +228,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                                                                   roomProxy: roomProxy,
                                                                   userSession: flowParameters.userSession,
                                                                   userIndicatorController: flowParameters.userIndicatorController,
-                                                                  analytics: flowParameters.analytics)
+                                                                  analytics: flowParameters.analytics,
+                                                                  appSettings: flowParameters.appSettings)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
@@ -235,8 +239,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentUserProfile(userID: userID))
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: [], eventID: nil))
-            case .startCall(let roomProxy):
-                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+            case .startCall(let roomProxy, let isVoiceCall):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
             case .verifyUser(let userID):
                 actionsSubject.send(.verifyUser(userID: userID))
             }
@@ -286,7 +290,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                                                                 isPresentedModally: false,
                                                                 userSession: flowParameters.userSession,
                                                                 userIndicatorController: flowParameters.userIndicatorController,
-                                                                analytics: flowParameters.analytics)
+                                                                analytics: flowParameters.analytics,
+                                                                appSettings: flowParameters.appSettings)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -294,8 +299,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: [], eventID: nil))
-            case .startCall(let roomProxy):
-                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+            case .startCall(let roomProxy, let isVoiceCall):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
             case .dismiss:
                 break // Not supported when pushed.
             }
@@ -322,8 +327,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .presentCallScreen(let roomProxy):
-                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+                case .presentCallScreen(let roomProxy, let isVoiceCall):
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
                 case .verifyUser(let userID):
                     actionsSubject.send(.verifyUser(userID: userID))
                 case .continueWithSpaceFlow:

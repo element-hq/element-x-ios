@@ -22,11 +22,10 @@ struct CallScreen: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar(context.viewState.isGenericCallLink ? .visible : .hidden, for: .navigationBar)
+                .toolbar(.hidden, for: .navigationBar)
                 .toolbar { toolbar }
         }
         .alert(item: $context.alertInfo)
-        .preferredColorScheme(context.viewState.isGenericCallLink ? .dark : nil)
     }
     
     @ViewBuilder
@@ -194,6 +193,23 @@ private struct CallView: UIViewRepresentable {
                 viewModelContext?.send(viewAction: .outputDeviceSelected(deviceID: deviceID))
             case .onBackButtonPressed:
                 viewModelContext?.send(viewAction: .navigateBack)
+            case .forwardLogs:
+                guard let body = message.body as? [String: String],
+                      let level = body["level"],
+                      let logMessage = body["message"] else { return }
+
+                switch level {
+                case "log", "debug":
+                    MXLog.debug("[ElementCall]: \(logMessage)")
+                case "info":
+                    MXLog.info("[ElementCall]: \(logMessage)")
+                case "warn":
+                    MXLog.warning("[ElementCall]: \(logMessage)")
+                case "error":
+                    MXLog.error("[ElementCall]: \(logMessage)")
+                default:
+                    break
+                }
             }
         }
         
@@ -343,7 +359,7 @@ struct CallScreen_Previews: PreviewProvider {
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
         widgetDriver.underlyingActions = PassthroughSubject<ElementCallWidgetDriverAction, Never>().eraseToAnyPublisher()
-        widgetDriver.startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReturnValue = .success(URL.userDirectory)
+        widgetDriver.startBaseURLClientIDColorSchemeVoiceOnlyRageshakeURLAnalyticsConfigurationReturnValue = .success(URL.userDirectory)
         
         roomProxy.elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
         
@@ -353,6 +369,7 @@ struct CallScreen_Previews: PreviewProvider {
                                                         clientID: InfoPlistReader.main.bundleIdentifier,
                                                         elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL,
                                                         elementCallBaseURLOverride: nil,
+                                                        voiceOnly: false,
                                                         colorScheme: .light),
                                    allowPictureInPicture: false,
                                    appHooks: AppHooks(),

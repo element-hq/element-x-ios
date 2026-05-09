@@ -10,7 +10,7 @@ import Foundation
 
 enum UserProfileScreenViewModelAction {
     case openDirectChat(roomID: String)
-    case startCall(roomProxy: JoinedRoomProxyProtocol)
+    case startCall(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)
     case dismiss
 }
 
@@ -20,6 +20,7 @@ struct UserProfileScreenViewState: BindableState {
     let isPresentedModally: Bool
     
     var userProfile: UserProfileProxy?
+    var isIdentityKnown = false
     var isVerified: Bool?
     var permalink: URL?
     var dmRoomID: String?
@@ -33,7 +34,7 @@ struct UserProfileScreenViewState: BindableState {
 
 struct UserProfileScreenViewStateBindings {
     var alertInfo: AlertInfo<UserProfileScreenAlertType>?
-    var inviteConfirmationUser: UserProfileProxy?
+    var inviteConfirmationUser: UserToInvite?
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
@@ -43,7 +44,7 @@ enum UserProfileScreenViewAction {
     case displayAvatar(URL)
     case openDirectChat
     case createDirectChat
-    case startCall(roomID: String)
+    case startCall(roomID: String, isVoiceCall: Bool)
     case dismiss
 }
 

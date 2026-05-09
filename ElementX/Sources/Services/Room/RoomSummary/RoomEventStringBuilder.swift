@@ -12,7 +12,6 @@ import MatrixRustSDK
 struct RoomEventStringBuilder {
     let stateEventStringBuilder: RoomStateEventStringBuilder
     let messageEventStringBuilder: RoomMessageEventStringBuilder
-    let shouldDisambiguateDisplayNames: Bool
     let shouldPrefixSenderName: Bool
     
     func buildAttributedString(for eventItemProxy: EventTimelineItemProxy) -> AttributedString? {
@@ -22,11 +21,7 @@ struct RoomEventStringBuilder {
     }
     
     func buildAttributedString(for content: TimelineItemContent, sender: TimelineItemSender, isOutgoing: Bool) -> AttributedString? {
-        let displayName = if shouldDisambiguateDisplayNames {
-            sender.disambiguatedDisplayName ?? sender.id
-        } else {
-            sender.displayName ?? sender.id
-        }
+        let displayName = sender.disambiguatedDisplayName ?? sender.id
         
         switch content {
         case .msgLike(let messageLikeContent):
@@ -34,14 +29,14 @@ struct RoomEventStringBuilder {
             case .message(let messageContent):
                 return messageEventStringBuilder.buildAttributedString(for: messageContent.msgType, senderDisplayName: displayName, isOutgoing: isOutgoing)
             case .sticker:
-                if messageEventStringBuilder.destination == .pinnedEvent {
+                if messageEventStringBuilder.style == .typeBolded {
                     var string = AttributedString(L10n.commonSticker)
                     string.bold()
                     return string
                 }
                 return prefix(L10n.commonSticker, with: displayName, isOutgoing: isOutgoing)
             case .poll(let question, _, _, _, _, _, _):
-                if messageEventStringBuilder.destination == .pinnedEvent {
+                if messageEventStringBuilder.style == .typeBolded {
                     let questionPlaceholder = "{question}"
                     var finalString = AttributedString(L10n.commonPollSummary(questionPlaceholder))
                     finalString.bold()
@@ -60,6 +55,8 @@ struct RoomEventStringBuilder {
                 default: L10n.commonWaitingForDecryptionKey
                 }
                 return prefix(errorMessage, with: displayName, isOutgoing: isOutgoing)
+            case .liveLocation:
+                return messageEventStringBuilder.buildAttributedStringForLiveLocation(senderDisplayName: displayName, isOutgoing: isOutgoing)
             case .other:
                 return nil // We shouldn't receive these without asking for custom event types.
             }
@@ -86,9 +83,6 @@ struct RoomEventStringBuilder {
             return prefix(L10n.commonUnsupportedCall, with: displayName, isOutgoing: isOutgoing)
         case .rtcNotification:
             return prefix(L10n.commonCallStarted, with: displayName, isOutgoing: isOutgoing)
-        case .liveLocation:
-            // TODO: Implement
-            return nil
         }
     }
     
@@ -106,11 +100,16 @@ struct RoomEventStringBuilder {
     }
     
     static func pinnedEventStringBuilder(userID: String) -> Self {
-        RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID,
-                                                              shouldDisambiguateDisplayNames: false),
+        RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID),
                                messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "pinnedEvents", mentionBuilder: PlainMentionBuilder()),
-                                                                destination: .pinnedEvent),
-                               shouldDisambiguateDisplayNames: false,
+                                                                style: .typeBolded),
+                               shouldPrefixSenderName: false)
+    }
+    
+    static func threadListEventStringBuilder(userID: String) -> Self {
+        RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID),
+                               messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "threadList", mentionBuilder: PlainMentionBuilder()),
+                                                                style: .plain),
                                shouldPrefixSenderName: false)
     }
 }

@@ -20,7 +20,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, appSettings: AppSettings, isBugReportServiceEnabled: Bool) {
+    init(userSession: UserSessionProtocol, appSettings: AppSettings, isBugReportServiceEnabled: Bool, isInSecondaryWindow: Bool) {
         self.appSettings = appSettings
         
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
@@ -29,7 +29,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
                                            showDeveloperOptions: appSettings.developerOptionsEnabled,
                                            showAnalyticsSettings: appSettings.canPromptForAnalytics,
-                                           isBugReportServiceEnabled: isBugReportServiceEnabled),
+                                           isBugReportServiceEnabled: isBugReportServiceEnabled,
+                                           navigationBarVisibility: isInSecondaryWindow ? .hidden : .automatic),
                    mediaProvider: userSession.mediaProvider)
         
         appSettings.$developerOptionsEnabled
@@ -88,7 +89,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             await userSession.clientProxy.loadUserAvatarURL()
             await userSession.clientProxy.loadUserDisplayName()
             await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile)
-            await state.accountSessionsListURL = userSession.clientProxy.accountURL(action: .devicesList)
         }
     }
     

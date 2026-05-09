@@ -169,8 +169,6 @@ final class JoinRoomScreenViewModelTests {
     // MARK: - Helpers
     
     private func setupViewModel(throwing: Bool = false, mode: TestMode = .joined) {
-        ServiceLocator.shared.settings.knockingEnabled = true
-        
         clientProxy = ClientProxyMock(.init())
         
         clientProxy.joinRoomViaReturnValue = throwing ? .failure(.sdkError(ClientProxyMockError.generic)) : .success(())

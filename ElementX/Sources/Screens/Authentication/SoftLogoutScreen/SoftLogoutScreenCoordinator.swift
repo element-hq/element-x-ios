@@ -13,7 +13,9 @@ struct SoftLogoutScreenCoordinatorParameters {
     let authenticationService: AuthenticationServiceProtocol
     let credentials: SoftLogoutScreenCredentials
     let keyBackupNeeded: Bool
+    let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
+    let appHooks: AppHooks
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -45,7 +47,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         parameters.authenticationService
     }
 
-    private var oidcPresenter: OIDCAuthenticationPresenter?
+    private var oAuthPresenter: OAuthAuthenticationPresenter?
     
     var actions: AnyPublisher<SoftLogoutScreenCoordinatorResult, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -75,8 +77,8 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
                     showForgotPasswordScreen()
                 case .clearAllData:
                     actionsSubject.send(.clearAllData)
-                case .continueWithOIDC:
-                    continueWithOIDC(presentationAnchor: viewModel.context.viewState.window)
+                case .continueWithOAuth:
+                    continueWithOAuth(presentationAnchor: viewModel.context.viewState.window)
                 }
             }
             .store(in: &cancellables)
@@ -88,6 +90,15 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     
     func toPresentable() -> AnyView {
         AnyView(SoftLogoutScreen(context: viewModel.context))
+    }
+    
+    func handleOAuthCallbackURL(_ url: URL) {
+        guard let oAuthPresenter else {
+            MXLog.error("Failed to find an OAuth request in progress.")
+            return
+        }
+        
+        oAuthPresenter.handleUniversalLinkCallback(url)
     }
     
     // MARK: - Private
@@ -133,31 +144,33 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         }
     }
 
-    private func continueWithOIDC(presentationAnchor: UIWindow?) {
+    private func continueWithOAuth(presentationAnchor: UIWindow?) {
         guard let presentationAnchor else { return }
         
         startLoading()
         
         Task {
-            switch await authenticationService.urlForOIDCLogin(loginHint: nil) {
+            switch await authenticationService.urlForOAuthLogin(loginHint: nil) {
             case .failure(let error):
                 stopLoading()
                 handleError(error)
-            case .success(let oidcData):
+            case .success(let oAuthData):
                 stopLoading()
                 
-                let presenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService,
-                                                            oidcRedirectURL: parameters.appSettings.oidcRedirectURL,
-                                                            presentationAnchor: presentationAnchor,
-                                                            userIndicatorController: parameters.userIndicatorController)
-                self.oidcPresenter = presenter
-                switch await presenter.authenticate(using: oidcData) {
+                let presenter = OAuthAuthenticationPresenter(authenticationService: parameters.authenticationService,
+                                                             redirectURL: parameters.appSettings.oAuthRedirectURL,
+                                                             presentationAnchor: presentationAnchor,
+                                                             appMediator: parameters.appMediator,
+                                                             appHooks: parameters.appHooks,
+                                                             userIndicatorController: parameters.userIndicatorController)
+                self.oAuthPresenter = presenter
+                switch await presenter.authenticate(using: oAuthData) {
                 case .success(let userSession):
                     actionsSubject.send(.signedIn(userSession))
                 case .failure(let error):
                     handleError(error)
                 }
-                self.oidcPresenter = nil
+                self.oAuthPresenter = nil
             }
         }
     }
@@ -169,10 +182,10 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             viewModel.displayError(.alert(L10n.screenLoginErrorInvalidCredentials))
         case .accountDeactivated:
             viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
-        case .oidcError(.notSupported):
-            // Temporary alert hijacking the use of .notSupported, can be removed when OIDC support is in the SDK.
+        case .oAuthError(.notSupported):
+            // Temporary alert hijacking the use of .notSupported, can be removed when OAuth support is in the SDK.
             viewModel.displayError(.alert(L10n.commonServerNotSupported))
-        case .oidcError(.userCancellation):
+        case .oAuthError(.userCancellation):
             // No need to show an error, the user cancelled authentication.
             break
         case .sessionTokenRefreshNotSupported:

@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct DeveloperOptionsScreen: View {
+    @Environment(\.dismiss) private var dismiss
+    
     @Bindable var context: DeveloperOptionsScreenViewModel.Context
     
     @State private var showConfetti = false
@@ -52,12 +54,11 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("Room List") {
-                Toggle(isOn: $context.publicSearchEnabled) {
-                    Text("Public search")
-                }
-                
-                Toggle(isOn: $context.hideUnreadMessagesBadge) {
-                    Text("Hide grey dots")
+                Picker("Room list activity visibility", selection: $context.roomListActivityVisibility) {
+                    ForEach(RoomListActivityVisibility.allCases, id: \.self) { visibility in
+                        Text(visibility.rawValue.capitalized)
+                            .tag(visibility)
+                    }
                 }
                 
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
@@ -67,9 +68,18 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.lowPriorityFilterEnabled) {
                     Text("Low priority filter")
                 }
+                
+                Toggle(isOn: $context.automaticBackPaginationEnabled) {
+                    Text("Automatic back pagination")
+                    Text("Requires app reboot")
+                }
             }
             
-            Section("Timeline") {
+            Section("Room") {
+                Toggle(isOn: $context.roomThreadListEnabled) {
+                    Text("Room thread list")
+                }
+                
                 Toggle(isOn: $context.linkPreviewsEnabled) {
                     Text("Link previews")
                     Text("Follows the timeline media visibility settings.")
@@ -77,12 +87,6 @@ struct DeveloperOptionsScreen: View {
                         .foregroundStyle(.compound.textCriticalPrimary)
                 }
                 
-                Toggle(isOn: $context.liveLocationSharingEnabled) {
-                    Text("Live location sharing")
-                }
-            }
-                        
-            Section("Join rules") {
                 Toggle(isOn: $context.knockingEnabled) {
                     Text("Knocking")
                     Text("Ask to join rooms")
@@ -100,17 +104,7 @@ struct DeveloperOptionsScreen: View {
                 Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
             }
 
-            Section {
-                Toggle(isOn: $context.enableKeyShareOnInvite) {
-                    Text("Share encrypted history with new members")
-                    Text("Requires app reboot")
-                }
-            } footer: {
-                Text("When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.")
-                Text("WARNING: this feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.")
-            }
-
-            Section {
+            Section("Element Call remote URL override") {
                 TextField("Leave empty to use EC locally", text: $elementCallURLOverrideString)
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
@@ -123,8 +117,6 @@ struct DeveloperOptionsScreen: View {
                             context.elementCallBaseURLOverride = url
                         }
                     }
-            } header: {
-                Text("Element Call remote URL override")
             }
             
             Section("Notifications") {
@@ -132,6 +124,7 @@ struct DeveloperOptionsScreen: View {
                     Text("Hide quiet alerts")
                     Text("The badge count will still be updated")
                 }
+                
                 Toggle(isOn: $context.focusEventOnNotificationTap) {
                     Text("Focus event on notification tap")
                 }
@@ -146,19 +139,22 @@ struct DeveloperOptionsScreen: View {
                         .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // Fix separator alignment
                 }
             }
-
-            Section {
-                Button(role: .destructive) {
-                    context.send(viewAction: .clearCache)
-                } label: {
-                    Text("Clear cache")
-                        .frame(maxWidth: .infinity)
+            
+            if context.viewState.shouldShowClearCache {
+                Section {
+                    Button(role: .destructive) {
+                        context.send(viewAction: .clearCache)
+                    } label: {
+                        Text("Clear cache")
+                            .frame(maxWidth: .infinity)
+                    }
                 }
             }
         }
         .overlay(effectsView)
         .navigationTitle(L10n.commonDeveloperOptions)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
     }
 
     @ViewBuilder
@@ -174,6 +170,19 @@ struct DeveloperOptionsScreen: View {
     private func removeConfettiAfterDelay() async {
         try? await Task.sleep(for: .seconds(4))
         showConfetti = false
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        if context.viewState.isPresentedModally {
+            ToolbarItem(placement: .primaryAction) {
+                if #available(iOS 26.0, *) {
+                    Button(role: .close, action: dismiss.callAsFunction)
+                } else {
+                    Button(L10n.actionDone, action: dismiss.callAsFunction)
+                }
+            }
+        }
     }
 }
 

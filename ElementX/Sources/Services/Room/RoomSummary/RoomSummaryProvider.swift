@@ -90,12 +90,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.roomList = roomList
         
         do {
-            listUpdatesSubscriptionResult = roomList.entriesWithDynamicAdaptersWith(pageSize: UInt32(roomListPageSize),
-                                                                                    enableLatestEventSorter: true,
-                                                                                    listener: SDKListener { [weak self] updates in
-                                                                                        guard let self else { return }
-                                                                                        diffsPublisher.send(updates)
-                                                                                    })
+            listUpdatesSubscriptionResult = roomList.entriesWithDynamicAdapters(pageSize: UInt32(roomListPageSize),
+                                                                                listener: SDKListener { [weak self] updates in
+                                                                                    guard let self else { return }
+                                                                                    diffsPublisher.send(updates)
+                                                                                })
             
             // Forces the listener above to be called with the current state
             setFilter(.all(filters: []))
@@ -314,6 +313,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         default: nil
         }
         
+        let activeCallIntent: RtcCallIntent? = switch roomInfo.activeRoomCallConsensusIntent {
+        case .full(let intent):
+            intent
+        case .partial(intent: let intent, _, _):
+            intent
+        case .none:
+            nil
+        }
+        
         return RoomSummary(room: room,
                            id: roomInfo.id,
                            joinRequestType: joinRequestType,
@@ -333,6 +341,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            canonicalAlias: roomInfo.canonicalAlias,
                            alternativeAliases: .init(roomInfo.alternativeAliases),
                            hasOngoingCall: roomInfo.hasRoomCall,
+                           activeCallIntent: activeCallIntent.map { .init(rustCallIntent: $0) },
                            isMarkedUnread: roomInfo.isMarkedUnread,
                            isFavourite: roomInfo.isFavourite,
                            isTombstoned: roomInfo.successorRoom != nil)

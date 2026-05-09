@@ -19,7 +19,7 @@ struct NotificationContentBuilderTests {
     init() {
         notificationContent = .init()
         let stringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()),
-                                                          destination: .notification)
+                                                          style: .plain)
         mediaProvider = MediaProviderMock(configuration: .init())
         notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: stringBuilder,
                                                                 notificationSoundName: UNNotificationSoundName("message.caf"),

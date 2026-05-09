@@ -11,13 +11,25 @@ import SwiftUI
 
 class WindowManager: SecureWindowManagerProtocol {
     private let appDelegate: AppDelegate
-    weak var windowScene: UIWindowScene?
+    weak var mainScene: UIWindowScene?
+    weak var mainSession: UISceneSession?
     weak var delegate: SecureWindowManagerDelegate?
     
     private(set) var mainWindow: UIWindow!
     private(set) var overlayWindow: UIWindow!
     private(set) var globalSearchWindow: UIWindow!
     private(set) var alternateWindow: UIWindow!
+    
+    private(set) var openWindowAction: OpenWindowAction!
+    private(set) var dismissWindowAction: DismissWindowAction!
+    
+    var secondaryWindowsEnabled = true {
+        didSet {
+            if secondaryWindowsEnabled == false {
+                closeAllSecondaryWindows()
+            }
+        }
+    }
         
     var windows: [UIWindow] {
         [mainWindow, overlayWindow, globalSearchWindow, alternateWindow]
@@ -29,29 +41,79 @@ class WindowManager: SecureWindowManagerProtocol {
     /// A duration that allows window switching to wait a couple of frames to avoid a transition through black.
     private let windowHideDelay = Duration.milliseconds(33)
     
+    private var coordinators: [SecondaryWindowType: (coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?)] = [:]
+    
     init(appDelegate: AppDelegate) {
         self.appDelegate = appDelegate
     }
     
-    func configure(with windowScene: UIWindowScene) {
-        self.windowScene = windowScene
-        mainWindow = windowScene.keyWindow
+    func configure(withScene scene: UIWindowScene, session: UISceneSession) {
+        // This gets called for all opened windows, we're only interested in the main window.
+        guard let userInfo = session.userInfo, userInfo[SceneDelegate.sceneIDKey] as? String == SceneDelegate.mainSceneID else {
+            scene.windows.forEach { $0.tintColor = .compound.textActionPrimary } // SecondaryWindow tinting.
+            return
+        }
+        
+        // Don't allow more than 1 main window to be presented.
+        if mainScene != nil {
+            // The window will be presented momentarily, so lets leave it blank.
+            scene.keyWindow?.rootViewController = UIHostingController(rootView: Color.clear)
+            UIApplication.shared.requestSceneSessionDestruction(session, options: nil)
+            return
+        }
+        
+        mainScene = scene
+        mainSession = session
+        
+        // Restore the previous window size on macOS as this isn't automatic.
+        if let previousSize = mainWindow?.frame.size {
+            scene.resizeWindowOnMac(to: previousSize)
+        }
+        
+        // `keyWindow` can be nil on iOS 26 until the scene becomes active, but the
+        // SwiftUI WindowGroup's window is already attached to the scene by then.
+        mainWindow = scene.keyWindow ?? scene.windows.first
         mainWindow.tintColor = .compound.textActionPrimary
         
-        overlayWindow = PassthroughWindow(windowScene: windowScene)
+        overlayWindow = PassthroughWindow(windowScene: scene)
         overlayWindow.tintColor = .compound.textActionPrimary
         overlayWindow.backgroundColor = .clear
         overlayWindow.isHidden = false
         
-        globalSearchWindow = UIWindow(windowScene: windowScene)
+        globalSearchWindow = UIWindow(windowScene: scene)
         globalSearchWindow.tintColor = .compound.textActionPrimary
         globalSearchWindow.backgroundColor = .clear
         globalSearchWindow.isHidden = true
         
-        alternateWindow = UIWindow(windowScene: windowScene)
+        alternateWindow = UIWindow(windowScene: scene)
         alternateWindow.tintColor = .compound.textActionPrimary
         
         delegate?.windowManagerDidConfigureWindows(self)
+    }
+    
+    func configure(withOpenWindowAction openWindowAction: OpenWindowAction,
+                   dismissWindowAction: DismissWindowAction) {
+        self.openWindowAction = openWindowAction
+        self.dismissWindowAction = dismissWindowAction
+    }
+    
+    func handleSceneDisconnection(_ scene: UIWindowScene) {
+        if scene == mainScene {
+            mainScene = nil
+            mainSession = nil
+            // Leave the mainWindow so we can reapply it's size on macOS.
+        }
+    }
+    
+    func handleRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType) {
+        MXLog.info("Handling app route: \(appRoute) for window type: \(windowType)")
+        
+        guard let flowCoordinator = coordinators[windowType]?.flowCoordinator else {
+            MXLog.error("Invalid flow coordinator")
+            return
+        }
+        
+        flowCoordinator.handleAppRoute(appRoute, animated: true)
     }
     
     func switchToMain() {
@@ -92,16 +154,29 @@ class WindowManager: SecureWindowManagerProtocol {
     }
     
     func showGlobalSearch() {
+        MXLog.info("Received global search presentation request.")
+        
         guard alternateWindow.isHidden else {
+            MXLog.info("The alternate window is visible, ignoring.")
             return
         }
         
+        if let mainSession {
+            let request = UISceneSessionActivationRequest(session: mainSession)
+            UIApplication.shared.activateSceneSession(for: request) { error in
+                MXLog.error("Failed to focus window with error: \(error)")
+            }
+        }
+        
         globalSearchWindow.isHidden = false
-        globalSearchWindow.makeKey()
+        globalSearchWindow.makeKeyAndVisible()
     }
     
     func hideGlobalSearch() {
+        MXLog.info("Received global search dismissal request.")
+        
         guard alternateWindow.isHidden else {
+            MXLog.info("The alternate window is visible, ignoring.")
             return
         }
         
@@ -109,12 +184,53 @@ class WindowManager: SecureWindowManagerProtocol {
         mainWindow.makeKey()
     }
     
+    // MARK: - OrientationManager
+    
     func setOrientation(_ orientation: UIInterfaceOrientationMask) {
-        windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
+        mainScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
     }
     
     func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
         appDelegate.orientationLock = orientation
+    }
+    
+    // MARK: - Secondary window support
+    
+    func windowForType(_ type: SecondaryWindowType) -> AnyView {
+        MXLog.info("Requesting window for type: \(type)")
+        
+        guard let coordinator = coordinators[type]?.coordinator else {
+            MXLog.error("Invalid coordinator for window type: \(type)")
+            return AnyView(InstantlyDismissingWindow())
+        }
+        
+        // This behaves strangely and gets called late but cleans up enough
+        // and is self contained enough to be just good .. enough
+        return AnyView(coordinator.toPresentable().onDisappear { [weak self] in
+            self?.coordinators[type] = nil
+        })
+    }
+    
+    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: SecondaryWindowType) {
+        if secondaryWindowsEnabled == false {
+            MXLog.error("Cannot register coordinator, secondary windows are disabled.")
+            return
+        }
+        
+        coordinators[type] = (coordinator, flowCoordinator)
+        openWindowAction(value: type)
+    }
+    
+    func closeSecondaryWindow(forType type: SecondaryWindowType) {
+        dismissWindowAction(value: type)
+    }
+    
+    func closeAllSecondaryWindows() {
+        for key in coordinators.keys {
+            dismissWindowAction(value: key)
+        }
+        
+        coordinators.removeAll()
     }
 }
 
@@ -149,6 +265,35 @@ private class PassthroughWindow: UIWindow {
             
             // If the returned view is the `UIHostingController`'s view, ignore.
             return rootViewController.view == hitView ? nil : hitView
+        }
+    }
+}
+
+/// Whenever restoring an app SwiftUI tries to restore its windows as well
+/// which we're generally not prepared for so use this to just close them instead
+private struct InstantlyDismissingWindow: View {
+    @Environment(\.dismissWindow) var dismissWindow
+    
+    var body: some View {
+        Rectangle()
+            .task {
+                dismissWindow()
+            }
+    }
+}
+
+private extension UIWindowScene {
+    func resizeWindowOnMac(to size: CGSize) {
+        // Hackity hack 🔨
+        guard ProcessInfo.processInfo.isiOSAppOnMac, let sizeRestrictions else { return }
+        
+        self.sizeRestrictions?.minimumSize = size
+        self.sizeRestrictions?.maximumSize = size
+        
+        Task {
+            try await Task.sleep(for: .milliseconds(100))
+            self.sizeRestrictions?.minimumSize = sizeRestrictions.minimumSize
+            self.sizeRestrictions?.maximumSize = sizeRestrictions.maximumSize
         }
     }
 }

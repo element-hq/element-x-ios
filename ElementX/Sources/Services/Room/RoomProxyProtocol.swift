@@ -20,6 +20,7 @@ enum RoomProxyError: Error {
     case missingTransactionID
     case failedCreatingPinnedTimeline
     case timelineError(TimelineProxyError)
+    case liveLocationSessionIsNotActive
 }
 
 /// An enum that describes the relationship between the current user and the room, and contains a reference to the specific implementation of the `RoomProxy`.
@@ -97,6 +98,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError>
     
     func threadTimeline(eventID: String) async -> Result<TimelineProxyProtocol, RoomProxyError>
+    
+    func threadListService() -> RoomThreadListServiceProxyProtocol
     
     func loadOrFetchEventDetails(for eventID: String) async -> Result<TimelineEvent, RoomProxyError>
     
@@ -192,6 +195,14 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     func saveDraft(_ draft: ComposerDraft, threadRootEventID: String?) async -> Result<Void, RoomProxyError>
     func loadDraft(threadRootEventID: String?) async -> Result<ComposerDraft?, RoomProxyError>
     func clearDraft(threadRootEventID: String?) async -> Result<Void, RoomProxyError>
+    
+    // MARK: - Live Location
+    
+    func makeLiveLocationService() async -> RoomLiveLocationServiceProtocol
+    
+    func startLiveLocationShare(duration: Duration) async -> Result<String, RoomProxyError>
+    func sendLiveLocation(geoURI: GeoURI) async -> Result<Void, RoomProxyError>
+    func stopLiveLocationShare() async -> Result<Void, RoomProxyError>
 }
 
 extension JoinedRoomProxyProtocol {

@@ -34,6 +34,25 @@ extension Date {
         }
     }
     
+    /// The date of an expiration formatted with the minimal necessary units given how long in the future it is.
+    func formattedExpiration() -> String {
+        let calendar = Calendar.current
+        let now = Date.now
+        
+        guard let tomorrow = calendar.date(byAdding: .hour, value: 24, to: now),
+              let oneYearFromNow = calendar.date(byAdding: .year, value: 1, to: now) else {
+            return formatted(date: .omitted, time: .shortened)
+        }
+        
+        if self < tomorrow {
+            return formatted(date: .omitted, time: .shortened)
+        } else if self < oneYearFromNow {
+            return formatted(.dateTime.day().month())
+        } else {
+            return formatted(.dateTime.year())
+        }
+    }
+    
     /// Similar to ``formattedMinimal`` but returning "Today" instead of the time and
     /// including the year when it the date is from a previous year (rather than over a year ago).
     func formattedDateSeparator() -> String {

@@ -114,7 +114,11 @@ extension RoomChangePermissionsScreenViewState {
                         RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsDeleteMessages,
                                                value: currentPermissions.redact,
                                                ownPowerLevel: ownPowerLevel,
-                                               keyPath: \.redact)
+                                               keyPath: \.redact),
+                        RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsLiveLocation,
+                                               value: currentPermissions.liveLocation,
+                                               ownPowerLevel: ownPowerLevel,
+                                               keyPath: \.liveLocation)
                     ]
                 }
             case .manageSpace:

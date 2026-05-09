@@ -2,7 +2,7 @@ name: Danger CI
 
 on:
   pull_request:
-    types: [ labeled, synchronize, opened, reopened ]
+    types: [labeled, synchronize, opened, reopened]
 
 permissions: {}
 

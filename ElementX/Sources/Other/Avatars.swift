@@ -83,8 +83,10 @@ enum UserAvatarSizeOnScreen {
     case mediaPreviewDetails
     case sendInviteConfirmation
     case sessionVerification
+    case threadList
     case threadSummary
     case map
+    case classicAppAccount
 
     var value: CGFloat {
         switch self {
@@ -98,15 +100,14 @@ enum UserAvatarSizeOnScreen {
             28
         case .chats, .spaces, .map,
              .timeline, .readReceiptSheet, .completionSuggestions,
-             .blockedUsers, .roomMembersList, .knockingUserBanner,
-             .mediaPreviewDetails:
+             .blockedUsers, .roomMembersList, .knockingUserBanner:
             32
         case .startChat:
             36
         case .roomDetails:
             44
         case .inviteUsers, .knockingUserList, .sessionVerification,
-             .settings:
+             .settings, .threadList, .mediaPreviewDetails:
             52
         case .roomChangeRoles:
             56
@@ -114,7 +115,7 @@ enum UserAvatarSizeOnScreen {
             64
         case .dmDetails:
             75
-        case .memberDetails, .editUserDetails:
+        case .memberDetails, .editUserDetails, .classicAppAccount:
             96
         }
     }
@@ -132,10 +133,12 @@ enum RoomAvatarSizeOnScreen {
     case globalSearch
     case roomSelection
     case details
+    case editRoomDetails
     case notificationSettings
     case roomDirectorySearch
     case joinRoom
     case spaceHeader
+    case editSpaceDetails
     case spaceAddRooms
     case spaceAddRoomsSelected
     case completionSuggestions
@@ -155,9 +158,9 @@ enum RoomAvatarSizeOnScreen {
         case .chats, .spaces, .spaceSettings,
              .spaceAddRoomsSelected:
             52
-        case .joinRoom, .spaceHeader:
+        case .joinRoom, .spaceHeader, .editSpaceDetails:
             64
-        case .details:
+        case .details, .editRoomDetails:
             96
         }
     }

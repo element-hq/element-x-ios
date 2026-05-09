@@ -15,6 +15,7 @@ struct HomeScreenRoomCell: View {
     @Environment(\.redactionReasons) private var redactionReasons
     
     let room: HomeScreenRoom
+    var roomListActivityVisibility: RoomListActivityVisibility = .current
     let isSelected: Bool
     let mediaProvider: MediaProviderProtocol!
     let action: (HomeScreenViewAction) -> Void
@@ -74,7 +75,7 @@ struct HomeScreenRoomCell: View {
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
-                .font(.compound.bodyLGSemibold)
+                .font(headerFont)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -84,6 +85,17 @@ struct HomeScreenRoomCell: View {
                     .font(room.isHighlighted ? .compound.bodySMSemibold : .compound.bodySM)
                     .foregroundColor(room.isHighlighted ? .compound.textActionAccent : .compound.textSecondary)
             }
+        }
+    }
+    
+    private var headerFont: Font {
+        switch roomListActivityVisibility {
+        case .current:
+            .compound.bodyLGSemibold
+        case .show:
+            room.hasUnreads ? .compound.bodyLGSemibold : .compound.bodyLG
+        case .hide:
+            room.isHighlighted ? .compound.bodyLGSemibold : .compound.bodyLG
         }
     }
     
@@ -119,11 +131,16 @@ struct HomeScreenRoomCell: View {
             Spacer()
             
             HStack(spacing: 8) {
-                if room.badges.isCallShown {
-                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                if room.badges.callBadgeType == .voice {
+                    CompoundIcon(\.voiceCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
                         .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
                 }
                 
+                if room.badges.callBadgeType == .video {
+                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                        .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
+                }
+                 
                 if room.badges.isMuteShown {
                     CompoundIcon(\.notificationsOffSolid, size: .custom(15), relativeTo: .compound.bodyMD)
                         .accessibilityLabel(L10n.a11yNotificationsMuted)
@@ -152,7 +169,19 @@ struct HomeScreenRoomCell: View {
     private var lastMessage: some View {
         if let displayedLastMessage = room.displayedLastMessage {
             Text(displayedLastMessage)
+                .font(lastMessageFont)
                 .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
+        }
+    }
+    
+    private var lastMessageFont: Font {
+        switch roomListActivityVisibility {
+        case .current:
+            .compound.bodyMD
+        case .show:
+            room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD
+        case .hide:
+            room.isHighlighted ? .compound.bodyMDSemibold : .compound.bodyMD
         }
     }
 }
@@ -170,8 +199,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 
 private extension View {
     func lastMessageFormatting(hasFailed: Bool) -> some View {
-        font(.compound.bodyMD)
-            .foregroundColor(hasFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
+        foregroundColor(hasFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
     }
@@ -219,7 +247,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     }
     
     static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
-        HomeScreenRoom(summary: summary, hideUnreadMessagesBadge: false)
+        HomeScreenRoom(summary: summary)
     }
     
     static func makeViewModel(roomSummaryProvider: RoomSummaryProviderProtocol) -> HomeScreenViewModel {
@@ -253,10 +281,11 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                   canonicalAlias: "#foundation-and-empire:matrix.org",
                                   alternativeAliases: [],
                                   hasOngoingCall: false,
+                                  activeCallIntent: nil,
                                   isMarkedUnread: false,
                                   isFavourite: false,
                                   isTombstoned: false)
         
-        return .init(summary: summary, hideUnreadMessagesBadge: false)
+        return .init(summary: summary)
     }
 }

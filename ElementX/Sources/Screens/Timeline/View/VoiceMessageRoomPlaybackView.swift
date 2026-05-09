@@ -48,6 +48,7 @@ struct VoiceMessageRoomPlaybackView: View {
         .onChange(of: isDragging) { _, newValue in
             onScrubbing(newValue)
         }
+        .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
     }
     

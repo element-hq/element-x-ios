@@ -529,7 +529,7 @@ class TimelineInteractionHandler {
     }
     
     func processItemTap(_ itemID: TimelineItemIdentifier) async -> TimelineControllerAction {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) as? EventBasedMessageTimelineItemProtocol else {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) as? EventBasedTimelineItemProtocol else {
             return .none
         }
         
@@ -540,12 +540,21 @@ class TimelineInteractionHandler {
                                           geoURI: geoURI,
                                           kind: item.content.kind,
                                           timestamp: item.timestamp))
-        case is ImageRoomTimelineItem,
-             is VideoRoomTimelineItem:
-            return await mediaPreviewAction(for: timelineItem, messageTypes: [.image, .video])
-        case is AudioRoomTimelineItem,
-             is FileRoomTimelineItem:
-            return await mediaPreviewAction(for: timelineItem, messageTypes: [.audio, .file])
+        case let item as LiveLocationRoomTimelineItem:
+            guard let geoURI = item.content.lastGeoURI else { return .none }
+            let initialLiveLocationShare = LiveLocationShare(userID: item.sender.id,
+                                                             geoURI: geoURI,
+                                                             timestamp: item.timestamp,
+                                                             timeoutDate: item.content.timeoutDate)
+            return .displayLiveLocation(sender: item.sender, initialLiveLocationShare: initialLiveLocationShare)
+        case let item as ImageRoomTimelineItem:
+            return await mediaPreviewAction(for: item, messageTypes: [.image, .video])
+        case let item as VideoRoomTimelineItem:
+            return await mediaPreviewAction(for: item, messageTypes: [.image, .video])
+        case let item as AudioRoomTimelineItem:
+            return await mediaPreviewAction(for: item, messageTypes: [.audio, .file])
+        case let item as FileRoomTimelineItem:
+            return await mediaPreviewAction(for: item, messageTypes: [.audio, .file])
         default:
             return .none
         }

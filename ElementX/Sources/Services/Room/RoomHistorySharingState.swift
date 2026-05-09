@@ -5,8 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-/// Enumeration of the two possible cases in which history sharing under MSC4268 is enabled. These
-/// variants implicitly assume that the feature flag, `enableKeyShareOnInvite`, is set.
+/// Enumeration of the two possible cases in which history sharing under MSC4268 is enabled.
 enum RoomHistorySharingState: Equatable {
     /// The feature flag is set, and the room history visibility is either `invited` or `joined`. New
     /// members of the room cannot read the room history.

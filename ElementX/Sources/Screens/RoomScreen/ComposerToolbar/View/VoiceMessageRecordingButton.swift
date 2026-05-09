@@ -23,6 +23,11 @@ struct VoiceMessageRecordingButton: View {
     
     private let impactFeedbackGenerator = UIImpactFeedbackGenerator()
     
+    private var recordIconColour: Color {
+        guard isEnabled else { return .compound.iconDisabled }
+        return Compound.supportsGlass ? .compound.iconPrimary : .compound.iconSecondary
+    }
+    
     var body: some View {
         Button {
             impactFeedbackGenerator.impactOccurred()
@@ -35,15 +40,19 @@ struct VoiceMessageRecordingButton: View {
         } label: {
             switch mode {
             case .idle:
-                CompoundIcon(\.micOn, size: .medium, relativeTo: .compound.headingLG)
-                    .foregroundColor(isEnabled ? .compound.iconSecondary : .compound.iconDisabled)
-                    .scaledPadding(10, relativeTo: .compound.headingLG)
+                CompoundIcon(Compound.supportsGlass ? \.micOnSolid : \.micOn,
+                             size: .medium,
+                             relativeTo: .compound.headingLG)
+                    .foregroundColor(recordIconColour)
+                    .scaledPadding(Compound.supportsGlass ? 10 : 6, relativeTo: .compound.headingLG)
             case .recording:
-                CompoundIcon(asset: Asset.Images.stopRecording, size: .medium, relativeTo: .compound.headingLG)
+                CompoundIcon(\.stopSolid,
+                             size: Compound.supportsGlass ? .medium : .small,
+                             relativeTo: .compound.headingLG)
                     .foregroundColor(.compound.iconOnSolidPrimary)
-                    .scaledPadding(6, relativeTo: .compound.headingLG)
-                    .background(.compound.bgActionPrimaryRest, in: Circle())
-                    .scaledPadding(4, relativeTo: .compound.headingLG)
+                    .scaledPadding(Compound.supportsGlass ? 10 : 8, relativeTo: .compound.headingLG)
+                    .background(.compound.bgActionPrimaryRest, in: .circle)
+                    .compositingGroup()
             }
         }
         .buttonStyle(VoiceMessageRecordingButtonStyle())
@@ -52,17 +61,32 @@ struct VoiceMessageRecordingButton: View {
 }
 
 private struct VoiceMessageRecordingButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+    
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .opacity(configuration.isPressed ? 0.6 : 1)
+        if #available(iOS 26, *) {
+            if isEnabled {
+                configuration.label
+                    .snapshotableGlassEffect(.regular.interactive(),
+                                             snapshotBackground: .compound.bgSubtleSecondary,
+                                             in: .circle)
+            } else {
+                configuration.label
+                    .background(.compound.bgSubtlePrimary, in: .circle)
+            }
+        } else {
+            configuration.label
+                .opacity(configuration.isPressed ? 0.6 : 1)
+        }
     }
 }
 
 struct VoiceMessageRecordingButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 12) {
             VoiceMessageRecordingButton(mode: .idle)
-            
+                .disabled(true)
+            VoiceMessageRecordingButton(mode: .idle)
             VoiceMessageRecordingButton(mode: .recording)
         }
     }

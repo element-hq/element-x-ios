@@ -78,8 +78,8 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
         Task {
             switch await authenticationService.configure(for: homeserverDomain, flow: .login) {
             case .success:
-                if authenticationService.homeserver.value.loginMode.supportsOIDCFlow {
-                    actionsSubject.send(.configuredForOIDC)
+                if authenticationService.homeserver.value.loginMode.supportsOAuthFlow {
+                    actionsSubject.send(.configuredForOAuth)
                 }
                 stopLoading()
             case .failure(let error):

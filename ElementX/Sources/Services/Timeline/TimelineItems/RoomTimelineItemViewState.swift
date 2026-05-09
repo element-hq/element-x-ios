@@ -39,6 +39,11 @@ final class RoomTimelineItemViewState: Identifiable, Equatable, ObservableObject
     var id: TimelineItemIdentifier.UniqueID {
         identifier.uniqueID
     }
+    
+    /// The timestamp of the item if available (separator date or event timestamp), `nil` otherwise.
+    var timestamp: Date? {
+        type.timestamp
+    }
 }
 
 enum RoomTimelineItemType: Equatable {
@@ -64,6 +69,7 @@ enum RoomTimelineItemType: Equatable {
     case voice(VoiceMessageRoomTimelineItem)
     case callInvite(CallInviteRoomTimelineItem)
     case callNotification(CallNotificationRoomTimelineItem)
+    case liveLocation(LiveLocationRoomTimelineItem)
 
     init(item: RoomTimelineItemProtocol) {
         switch item {
@@ -111,6 +117,8 @@ enum RoomTimelineItemType: Equatable {
             self = .callInvite(item)
         case let item as CallNotificationRoomTimelineItem:
             self = .callNotification(item)
+        case let item as LiveLocationRoomTimelineItem:
+            self = .liveLocation(item)
         default:
             fatalError("Unknown timeline item")
         }
@@ -139,8 +147,60 @@ enum RoomTimelineItemType: Equatable {
              .poll(let item as RoomTimelineItemProtocol),
              .voice(let item as RoomTimelineItemProtocol),
              .callInvite(let item as RoomTimelineItemProtocol),
-             .callNotification(let item as RoomTimelineItemProtocol):
+             .callNotification(let item as RoomTimelineItemProtocol),
+             .liveLocation(let item as RoomTimelineItemProtocol):
             return item.id
+        }
+    }
+    
+    /// The timestamp of the item if available.
+    /// Returns the separator date for `.separator`, the event timestamp for all event-based
+    /// items, the timestamp of the first event inside a `.group`, and `nil` for virtual items
+    /// that carry no timestamp (read marker, pagination indicator, timeline start).
+    var timestamp: Date? {
+        switch self {
+        case .separator(let item):
+            return item.timestamp
+        case .text(let item):
+            return item.timestamp
+        case .image(let item):
+            return item.timestamp
+        case .video(let item):
+            return item.timestamp
+        case .audio(let item):
+            return item.timestamp
+        case .file(let item):
+            return item.timestamp
+        case .emote(let item):
+            return item.timestamp
+        case .notice(let item):
+            return item.timestamp
+        case .redacted(let item):
+            return item.timestamp
+        case .encrypted(let item):
+            return item.timestamp
+        case .sticker(let item):
+            return item.timestamp
+        case .unsupported(let item):
+            return item.timestamp
+        case .state(let item):
+            return item.timestamp
+        case .location(let item):
+            return item.timestamp
+        case .poll(let item):
+            return item.timestamp
+        case .voice(let item):
+            return item.timestamp
+        case .callInvite(let item):
+            return item.timestamp
+        case .callNotification(let item):
+            return item.timestamp
+        case .liveLocation(let item):
+            return item.timestamp
+        case .group(let item):
+            return (item.items.first { $0 is EventBasedTimelineItemProtocol } as? EventBasedTimelineItemProtocol)?.timestamp
+        case .readMarker, .paginationIndicator, .timelineStart:
+            return nil
         }
     }
 }

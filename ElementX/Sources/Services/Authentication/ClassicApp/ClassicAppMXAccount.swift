@@ -6,14 +6,46 @@
 //
 
 import Foundation
+import Observation
 
-struct ClassicAppAccount: Equatable {
+struct ClassicAppAccount: Equatable, CustomStringConvertible {
     let userID: String
     let displayName: String?
     let avatarURL: URL?
+    
     let serverName: String
+    let homeserverURL: URL
+    
     let cryptoStoreURL: URL
-    let cryptoStorePassphrase: Data
+    let cryptoStorePassphrase: String
+    
+    let accessToken: String // For avatar loading and key backup detection.
+    
+    /// Custom `CustomStringConvertible` without the access token.
+    var description: String {
+        "ClassicAppAccount(userID: \(userID), homeserverURL: \(homeserverURL))"
+    }
+    
+    enum AvailableSecrets { case complete, requiresBackup, unavailable }
+    
+    @Observable
+    class State: Equatable {
+        static func == (lhs: State, rhs: State) -> Bool {
+            lhs.isServerSupported == rhs.isServerSupported && lhs.availableSecrets == rhs.availableSecrets
+        }
+        
+        /// Whether or not the account's server is supported by Element X (or `nil` whilst determining support).
+        ///
+        /// The account will be hidden when this value is `false`.
+        var isServerSupported: Bool?
+        /// Information about the secrets available from Element X (or `nil` whilst determining availability).
+        ///
+        /// See ``AuthenticationService.refreshClassicAppAccountState`` for details about how
+        /// this property's value affects the authentication flow.
+        var availableSecrets: AvailableSecrets?
+    }
+    
+    let state = State()
 }
 
 // MARK: NSCoding Types
@@ -21,8 +53,10 @@ struct ClassicAppAccount: Equatable {
 final class ClassicAppMXAccount: NSObject, NSCoding {
     /// The obtained user ID.
     var userID: String
+    /// The access token to create a MXRestClient.
+    var accessToken: String
     /// The homeserver url (ex: "https://matrix.org").
-    var homeserver: String?
+    var homeserverURL: URL
     
     /// Disable the account without logging out (NO by default).
     ///
@@ -35,6 +69,11 @@ final class ClassicAppMXAccount: NSObject, NSCoding {
     /// Whether or not the account is considered active.
     var isActive: Bool {
         !isDisabled && !isSoftLogout
+    }
+    
+    /// Override the existing `CustomStringConvertible` conformance.
+    override var description: String {
+        "ClassicAppMXAccount(userID: \(userID), homeserverURL: \(homeserverURL), isDisabled: \(isDisabled), isSoftLogout: \(isSoftLogout))"
     }
     
     // MARK: NSCoding
@@ -64,12 +103,15 @@ final class ClassicAppMXAccount: NSObject, NSCoding {
     
     required init?(coder: NSCoder) {
         guard let userID = coder.decodeObject(forKey: Keys.userID) as? String,
-              let homeserver = coder.decodeObject(forKey: Keys.homeserverURL) as? String else {
+              let accessToken = coder.decodeObject(forKey: Keys.accessToken) as? String,
+              let homeserver = coder.decodeObject(forKey: Keys.homeserverURL) as? String,
+              let homeserverURL = URL(string: homeserver) else {
             return nil
         }
         
         self.userID = userID
-        self.homeserver = homeserver
+        self.accessToken = accessToken
+        self.homeserverURL = homeserverURL
         
         isDisabled = coder.decodeBool(forKey: Keys.isDisabled)
         isSoftLogout = coder.decodeBool(forKey: Keys.isSoftLogout)
@@ -89,7 +131,7 @@ final class ClassicAppMXUser: NSObject, NSCoding {
     /// The user display name.
     let displayName: String?
     /// The url of the user of the avatar.
-    let avatarURL: String?
+    let avatarURL: URL?
     
     // MARK: NSCoding
     
@@ -110,7 +152,9 @@ final class ClassicAppMXUser: NSObject, NSCoding {
         
         self.userID = userID
         displayName = aDecoder.decodeObject(forKey: Keys.displayName) as? String
-        avatarURL = aDecoder.decodeObject(forKey: Keys.avatarURL) as? String
+        
+        let avatarURLString = aDecoder.decodeObject(forKey: Keys.avatarURL) as? String
+        avatarURL = avatarURLString.flatMap { URL(string: $0) }
         
         super.init()
     }

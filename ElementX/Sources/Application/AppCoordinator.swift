@@ -178,8 +178,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 switch action {
-                case .startCall(let roomID):
-                    self?.handleAppRoute(.call(roomID: roomID))
+                case .startCall(let roomID, let isVoiceCall):
+                    self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
                 case .receivedIncomingCallRequest:
                     // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`
                     // the UIApplication states don't change and syncing is neither started nor ran on
@@ -191,6 +191,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 }
             }
             .store(in: &cancellables)
+        
+        windowManager.secondaryWindowsEnabled = !appLockService.isEnabled
+        appLockService.isEnabledPublisher.sink { [weak windowManager] appLockEnabled in
+            windowManager?.secondaryWindowsEnabled = !appLockEnabled
+        }
+        .store(in: &cancellables)
     }
     
     func start() {
@@ -236,49 +242,88 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                     secondaryButton: .init(title: L10n.actionContinue) { openURLAction(confirmationParameters.internalURL) })
         return true
     }
+    
+    func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) {
+        MXLog.info("Handling app route:  \(appRoute)")
+        
+        if let windowType {
+            windowManager.handleRoute(appRoute, windowType: windowType)
+            return
+        }
+        
+        var handled = false
+        
+        switch appRoute {
+        case .accountProvisioningLink:
+            if let authenticationFlowCoordinator {
+                authenticationFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
+                handled = true
+            }
+        default:
+            if let userSessionFlowCoordinator {
+                userSessionFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
+                handled = true
+            }
+        }
+        
+        if !handled {
+            storedAppRoute = appRoute
+        }
+    }
 
-    func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
+    func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: SecondaryWindowType?) -> Bool {
         // Parse into an AppRoute to redirect these in a type safe way.
         
         if let route = appRouteURLParser.route(from: url) {
             switch route {
             case .accountProvisioningLink:
-                handleAppRoute(route)
-            case .genericCallLink(let url):
-                if let userSessionFlowCoordinator {
-                    userSessionFlowCoordinator.handleAppRoute(route, animated: true)
+                handleAppRoute(route,
+                               windowType: windowType)
+            case .oAuthCallback(let url):
+                if stateMachine.state == .softLogout {
+                    softLogoutCoordinator?.handleOAuthCallbackURL(url)
                 } else {
-                    presentCallScreen(genericCallLink: url)
+                    authenticationFlowCoordinator?.handleOAuthCallbackURL(url)
                 }
             case .userProfile(let userID):
                 if isExternalURL {
-                    handleAppRoute(route)
+                    handleAppRoute(route,
+                                   windowType: windowType)
                 } else {
-                    handleAppRoute(.roomMemberDetails(userID: userID))
+                    handleAppRoute(.roomMemberDetails(userID: userID),
+                                   windowType: windowType)
                 }
             case .room(let roomID, let via):
                 if isExternalURL {
-                    handleAppRoute(route)
+                    handleAppRoute(route,
+                                   windowType: windowType)
                 } else {
-                    handleAppRoute(.childRoom(roomID: roomID, via: via))
+                    handleAppRoute(.childRoom(roomID: roomID, via: via),
+                                   windowType: windowType)
                 }
             case .roomAlias(let alias):
                 if isExternalURL {
-                    handleAppRoute(route)
+                    handleAppRoute(route,
+                                   windowType: windowType)
                 } else {
-                    handleAppRoute(.childRoomAlias(alias))
+                    handleAppRoute(.childRoomAlias(alias),
+                                   windowType: windowType)
                 }
             case .event(let eventID, let roomID, let via):
                 if isExternalURL {
-                    handleAppRoute(route)
+                    handleAppRoute(route,
+                                   windowType: windowType)
                 } else {
-                    handleAppRoute(.childEvent(eventID: eventID, roomID: roomID, via: via))
+                    handleAppRoute(.childEvent(eventID: eventID, roomID: roomID, via: via),
+                                   windowType: windowType)
                 }
             case .eventOnRoomAlias(let eventID, let alias):
                 if isExternalURL {
-                    handleAppRoute(route)
+                    handleAppRoute(route,
+                                   windowType: windowType)
                 } else {
-                    handleAppRoute(.childEventOnRoomAlias(eventID: eventID, alias: alias))
+                    handleAppRoute(.childEventOnRoomAlias(eventID: eventID, alias: alias),
+                                   windowType: windowType)
                 }
             case .share(let payload):
                 guard isExternalURL else {
@@ -287,7 +332,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 }
                 
                 do {
-                    try handleAppRoute(.share(payload.withDefaultTemporaryDirectory()))
+                    try handleAppRoute(.share(payload.withDefaultTemporaryDirectory()),
+                                       windowType: windowType)
                 } catch {
                     MXLog.error("Failed moving payload out of the app group container: \(error)")
                 }
@@ -312,7 +358,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         MXLog.info("Starting call in room: \(roomIdentifier)")
-        handleAppRoute(AppRoute.call(roomID: roomIdentifier))
+        handleAppRoute(AppRoute.call(roomID: roomIdentifier, isVoiceCall: false), windowType: nil)
     }
     
     // MARK: - AuthenticationFlowCoordinatorDelegate
@@ -366,15 +412,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             } else {
                 storedRoomsToAwait = [roomID]
             }
-            handleAppRoute(.room(roomID: roomID, via: []))
+            handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
         } else if appSettings.threadsEnabled, let threadRootEventID = content.threadRootEventID {
-            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID))
+            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID), windowType: nil)
         } else if let eventID {
             // Only track main timeline event deeplinking
             ServiceLocator.shared.analytics.signpost.startTransaction(.notificationToMessage)
-            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []))
+            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []), windowType: nil)
         } else {
-            handleAppRoute(.room(roomID: roomID, via: []))
+            handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
         }
     }
     
@@ -614,12 +660,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                           classicAppManager: classicAppManager,
                                                           appSettings: appSettings,
                                                           appHooks: appHooks)
+        Task { await authenticationService.setupClassicAppAccountState() }
         
         let coordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
                                                         bugReportService: bugReportService,
                                                         navigationRootCoordinator: navigationRootCoordinator,
                                                         appMediator: appMediator,
                                                         appSettings: appSettings,
+                                                        appHooks: appHooks,
                                                         analytics: ServiceLocator.shared.analytics,
                                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
         coordinator.delegate = self
@@ -673,7 +721,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                    credentials: credentials,
                                                                    keyBackupNeeded: false,
+                                                                   appMediator: appMediator,
                                                                    appSettings: appSettings,
+                                                                   appHooks: appHooks,
                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
             let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
             self.softLogoutCoordinator = coordinator
@@ -758,6 +808,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
+        windowManager.closeAllSecondaryWindows()
+        
         showLoadingIndicator()
         
         stopSync(isBackgroundTask: false)
@@ -833,35 +885,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         elementCallService.setClientProxy(userSession.clientProxy)
     }
-    
-    private func presentCallScreen(genericCallLink url: URL) {
-        let configuration = ElementCallConfiguration(genericCallLink: url)
-        
-        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
-                                                                            configuration: configuration,
-                                                                            allowPictureInPicture: false,
-                                                                            appSettings: appSettings,
-                                                                            appHooks: appHooks,
-                                                                            analytics: ServiceLocator.shared.analytics))
-        
-        callScreenCoordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .pictureInPictureIsAvailable:
-                    break
-                case .pictureInPictureStarted, .pictureInPictureStopped:
-                    // Don't allow PiP when signed out - the user could login at which point we'd
-                    // need to hand over the call from here to the user session flow coordinator.
-                    MXLog.error("Picture in Picture not supported before login.")
-                case .dismiss:
-                    navigationRootCoordinator.setOverlayCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationRootCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: false)
-    }
 
     private func configureNotificationManager() {
         notificationManager.setUserSession(userSession)
@@ -924,27 +947,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         .store(in: &cancellables)
     }
     
-    private func handleAppRoute(_ appRoute: AppRoute) {
-        var handled = false
-        
-        switch appRoute {
-        case .accountProvisioningLink:
-            if let authenticationFlowCoordinator {
-                authenticationFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
-                handled = true
-            }
-        default:
-            if let userSessionFlowCoordinator {
-                userSessionFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
-                handled = true
-            }
-        }
-        
-        if !handled {
-            storedAppRoute = appRoute
-        }
-    }
-    
     private func clearCache() {
         guard let userSession else {
             fatalError("User session not setup")
@@ -956,12 +958,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         stopSync(isBackgroundTask: false)
         userSessionFlowCoordinator?.stop()
-        
-        tearDownUserSession()
     
         // Allow for everything to deallocate properly
         Task {
-            try? await Task.sleep(for: .seconds(2))
             await userSession.clientProxy.clearCaches()
             stateMachine.processEvent(.startWithExistingSession)
             hideLoadingIndicator()
@@ -1019,20 +1018,20 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
         // This callback is only executed once during the entire run of the program to avoid
         // multiple callbacks if there are multiple crash events to send (see method documentation)
-        options.onCrashedLastRun = { event in
+        options.onLastRunStatusDetermined = { status, event in
+            guard case .didCrash = status, let event else { return }
             MXLog.error("Sentry detected a crash in the previous run: \(event.eventId.sentryIdString)")
             bugReportService.lastCrashEventID = event.eventId.sentryIdString
         }
+        
+        // Any ongoing transactions will no longer be valid after calling SentrySDK.start so lets
+        // remove them and start over, otherwise the app will crash if finishTransaction is used.
+        ServiceLocator.shared.analytics.signpost.resetTransactions()
         
         SentrySDK.start(options: options) // Swift
         enableSentryLogging(enabled: options.enabled) // Rust
         
         MXLog.info("Sentry configured (enabled: \(options.enabled))")
-    }
-    
-    private func teardownSentry() {
-        SentrySDK.close()
-        MXLog.info("SentrySDK stopped")
     }
     
     private func processInlineReply(roomID: String, replyText: String) async {

@@ -11,7 +11,7 @@ import Foundation
 enum RoomMemberDetailsScreenViewModelAction {
     case openUserProfile
     case openDirectChat(roomID: String)
-    case startCall(roomProxy: JoinedRoomProxyProtocol)
+    case startCall(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)
     case verifyUser(userID: String)
 }
 
@@ -79,7 +79,7 @@ struct RoomMemberDetailsScreenViewStateBindings {
     
     var ignoreUserAlert: IgnoreUserAlertItem?
     var alertInfo: AlertInfo<RoomMemberDetailsScreenAlertType>?
-    var inviteConfirmationUser: UserProfileProxy?
+    var inviteConfirmationUser: UserToInvite?
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
@@ -93,7 +93,7 @@ enum RoomMemberDetailsScreenViewAction {
     case displayAvatar(URL)
     case openDirectChat
     case createDirectChat
-    case startCall(roomID: String)
+    case startCall(roomID: String, isVoiceCall: Bool)
     case verifyUser
     case withdrawVerification
 }

@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct HomeScreenRoomList: View {
+    @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
+    
     @ObservedObject var context: HomeScreenViewModel.Context
     
     var body: some View {
@@ -33,7 +35,14 @@ struct HomeScreenRoomList: View {
             case .room:
                 let isSelected = context.viewState.selectedRoomID == room.id
                 
-                HomeScreenRoomCell(room: room, isSelected: isSelected, mediaProvider: context.mediaProvider, action: context.send)
+                HomeScreenRoomCell(room: room,
+                                   roomListActivityVisibility: context.viewState.roomListActivityVisibility,
+                                   isSelected: isSelected,
+                                   mediaProvider: context.mediaProvider,
+                                   action: context.send)
+                    .simultaneousGesture(TapGesture(count: 2).onEnded {
+                        context.send(viewAction: .detachRoom(roomIdentifier: room.id))
+                    })
                     .contextMenu {
                         if room.badges.isDotShown {
                             Button {
@@ -46,6 +55,14 @@ struct HomeScreenRoomList: View {
                                 context.send(viewAction: .markRoomAsUnread(roomIdentifier: room.id))
                             } label: {
                                 Label(L10n.screenRoomlistMarkAsUnread, icon: \.markAsUnread)
+                            }
+                        }
+                        
+                        if supportsMultipleWindows {
+                            Button {
+                                context.send(viewAction: .detachRoom(roomIdentifier: room.id))
+                            } label: {
+                                Label("Open in new window", icon: \.spotlight)
                             }
                         }
                         

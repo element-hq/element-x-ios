@@ -57,6 +57,7 @@ struct RoomSummary {
     let alternativeAliases: Set<String>
     
     let hasOngoingCall: Bool
+    let activeCallIntent: CallIntent?
     
     let isMarkedUnread: Bool
     let isFavourite: Bool
@@ -140,6 +141,7 @@ extension RoomSummary {
         canonicalAlias = nil
         alternativeAliases = []
         hasOngoingCall = false
+        activeCallIntent = nil
         
         joinRequestType = nil
         isMarkedUnread = false

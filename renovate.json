@@ -7,25 +7,27 @@
   "labels" : [
     "pr-misc"
   ],
-  "ignoreDeps": ["pointfreeco/swift-snapshot-testing"],
+  "minimumReleaseAge": "7 days",
   "packageRules" : [
     {
       "matchManagers": ["github-actions"],
       "groupName" : "GitHub Actions"
     },
     {
-      "matchManagers": ["swift", "cocoapods"],
-      "groupName" : "Swift"
+      "matchManagers": ["xcodegen"],
+      "groupName": "XcodeGen",
+      "schedule": [
+          "every 2 weeks on wednesday",
+      ]
+    },
+    {
+      "matchManagers": ["swift"],
+      "groupName" : "Tools"
     },
     {
       "managers": ["swift", "cocoapods"],
       "matchPaths": ["compound-ios/Package.swift"],
       "groupName": "Compound"
     },
-    {
-      "matchManagers": ["bundler"],
-      "groupName" : "Ruby"
-    }
   ]
 }
-

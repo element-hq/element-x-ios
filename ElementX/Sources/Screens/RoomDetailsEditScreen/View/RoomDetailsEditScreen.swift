@@ -11,11 +11,12 @@ import SwiftUI
 
 struct RoomDetailsEditScreen: View {
     @ObservedObject var context: RoomDetailsEditScreenViewModel.Context
+    
+    private enum Focus { case name, topic }
     @FocusState private var focus: Focus?
     
-    private enum Focus {
-        case name
-        case topic
+    private var isSpace: Bool {
+        context.viewState.isSpace
     }
     
     var body: some View {
@@ -60,20 +61,15 @@ struct RoomDetailsEditScreen: View {
                                    url: context.viewState.avatarURL,
                                    name: context.viewState.initialName,
                                    contentID: context.viewState.roomID,
-                                   shape: context.viewState.isSpace ? .roundedRect : .circle,
-                                   avatarSize: .user(on: .memberDetails),
+                                   shape: isSpace ? .roundedRect : .circle,
+                                   avatarSize: .room(on: isSpace ? .editSpaceDetails : .editRoomDetails),
                                    mediaProvider: context.mediaProvider)
                 .accessibilityLabel(L10n.a11yEditAvatar)
-                .overlay(alignment: .bottomTrailing) {
-                    if context.viewState.canEditAvatar {
-                        avatarOverlayIcon
-                    }
-                }
                 .confirmationDialog("", isPresented: $context.showMediaSheet) {
                     mediaActionSheet
                 }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(EditAvatarButtonStyle())
         .disabled(!context.viewState.canEditAvatar)
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
@@ -100,7 +96,7 @@ struct RoomDetailsEditScreen: View {
     private var topicSection: some View {
         Section {
             if context.viewState.canEditTopic {
-                ListRow(label: .plain(title: context.viewState.isSpace ? L10n.commonSpaceTopicPlaceholder : L10n.commonTopicPlaceholder),
+                ListRow(label: .plain(title: isSpace ? L10n.commonSpaceTopicPlaceholder : L10n.commonTopicPlaceholder),
                         kind: .textField(text: $context.topic, axis: .vertical))
                     .focused($focus, equals: .topic)
                     .lineLimit(3...)
@@ -116,17 +112,6 @@ struct RoomDetailsEditScreen: View {
         }
     }
     
-    private var avatarOverlayIcon: some View {
-        CompoundIcon(\.editSolid, size: .xSmall, relativeTo: .compound.bodyLG)
-            .foregroundColor(.white)
-            .padding(4)
-            .background {
-                Circle()
-                    .foregroundColor(.black)
-            }
-            .accessibilityHidden(true)
-    }
-    
     @ViewBuilder
     private var mediaActionSheet: some View {
         Button {
@@ -134,11 +119,19 @@ struct RoomDetailsEditScreen: View {
         } label: {
             Text(L10n.actionTakePhoto)
         }
+        
         Button {
             context.send(viewAction: .displayMediaPicker)
         } label: {
             Text(L10n.actionChoosePhoto)
         }
+        
+        Button {
+            context.send(viewAction: .displayFilePicker)
+        } label: {
+            Text(L10n.actionChooseFile)
+        }
+        
         if context.viewState.showDeleteImageAction {
             Button(role: .destructive) {
                 context.send(viewAction: .removeImage)
@@ -152,27 +145,9 @@ struct RoomDetailsEditScreen: View {
 // MARK: - Previews
 
 struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
-    static let editableViewModel = {
-        let roomProxy = JoinedRoomProxyMock(.init(id: "test_id",
-                                                  name: "Room",
-                                                  members: [.mockMeAdmin]))
-        
-        return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
-                                              userSession: UserSessionMock(.init()),
-                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                                              userIndicatorController: UserIndicatorControllerMock.default)
-    }()
-    
-    static let readOnlyViewModel = {
-        let roomProxy = JoinedRoomProxyMock(.init(id: "test_id",
-                                                  name: "Room",
-                                                  members: [.mockAlice]))
-        
-        return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
-                                              userSession: UserSessionMock(.init()),
-                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                                              userIndicatorController: UserIndicatorControllerMock.default)
-    }()
+    static let editableViewModel = makeViewModel(readOnly: false)
+    static let readOnlyViewModel = makeViewModel(readOnly: true)
+    static let editableSpaceViewModel = makeViewModel(readOnly: false, isSpace: true)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -183,9 +158,26 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
         ElementNavigationStack {
             RoomDetailsEditScreen(context: editableViewModel.context)
         }
-        .snapshotPreferences(expect: editableViewModel.context.$viewState.map { state in
-            state.canEditTopic == true
-        })
+        .snapshotPreferences(expect: editableViewModel.context.$viewState.map { $0.canEditTopic == true })
         .previewDisplayName("Editable")
+        
+        ElementNavigationStack {
+            RoomDetailsEditScreen(context: editableSpaceViewModel.context)
+        }
+        .snapshotPreferences(expect: editableSpaceViewModel.context.$viewState.map { $0.canEditTopic == true })
+        .previewDisplayName("Space")
+    }
+    
+    static func makeViewModel(readOnly: Bool, isSpace: Bool = false) -> RoomDetailsEditScreenViewModel {
+        let members: [RoomMemberProxyMock] = readOnly ? [.mockAlice] : [.mockMeAdmin]
+        let roomProxy = JoinedRoomProxyMock(.init(id: "test_id",
+                                                  name: isSpace ? "Space" : "Room",
+                                                  isSpace: isSpace,
+                                                  members: members))
+        
+        return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
+                                              userSession: UserSessionMock(.init()),
+                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                                              userIndicatorController: UserIndicatorControllerMock.default)
     }
 }

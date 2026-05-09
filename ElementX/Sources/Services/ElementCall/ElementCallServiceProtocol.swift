@@ -10,7 +10,7 @@ import Combine
 
 enum ElementCallServiceAction {
     case receivedIncomingCallRequest
-    case startCall(roomID: String)
+    case startCall(roomID: String, isVoiceCall: Bool)
     case endCall(roomID: String)
     case setAudioEnabled(_ enabled: Bool, roomID: String)
 }

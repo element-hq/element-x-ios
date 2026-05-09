@@ -40,13 +40,15 @@ enum RoomScreenCoordinatorAction {
     case presentLocationPicker
     case presentPollForm(mode: PollFormMode)
     case presentLocationViewer(StaticLocationData)
+    case presentLiveLocationViewer(sender: TimelineItemSender?, initialLiveLocationShare: LiveLocationShare?)
     case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case presentRoomMemberDetails(userID: String)
     case presentMessageForwarding(forwardingItem: MessageForwardingItem)
-    case presentCallScreen
+    case presentCallScreen(isVoiceCall: Bool)
     case presentPinnedEventsTimeline
     case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case presentKnockRequestsList
+    case presentThreadList
     case presentThread(threadRootEventID: String, focussedEventID: String?)
     case presentRoom(roomID: String, via: [String])
 }
@@ -124,7 +126,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 case .displayMediaPicker:
                     actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .photoLibrary, selectionType: .multiple)))
                 case .displayDocumentPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents, selectionType: .multiple)))
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents(), selectionType: .multiple)))
                 case .displayMediaPreview(let mediaPreviewViewModel):
                     roomViewModel.displayMediaPreview(mediaPreviewViewModel)
                 case .displayLocationPicker:
@@ -139,6 +141,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
                 case .displayLocation(let location):
                     actionsSubject.send(.presentLocationViewer(location))
+                case .displayLiveLocation(let sender, let initialLiveLocationShare):
+                    actionsSubject.send(.presentLiveLocationViewer(sender: sender, initialLiveLocationShare: initialLiveLocationShare))
                 case .displayResolveSendFailure(let failure, let sendHandle):
                     actionsSubject.send(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
                 case .displayThread(let itemID):
@@ -177,8 +181,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentPinnedEventsTimeline)
                 case .displayRoomDetails:
                     actionsSubject.send(.presentRoomDetails)
-                case .displayCall:
-                    actionsSubject.send(.presentCallScreen)
+                case .displayCall(let isVoiceCall):
+                    actionsSubject.send(.presentCallScreen(isVoiceCall: isVoiceCall))
                 case .removeComposerFocus:
                     composerViewModel.process(timelineAction: .removeFocus)
                 case .displayKnockRequests:
@@ -187,8 +191,14 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentRoom(roomID: roomID, via: via))
                 case .displayMessageForwarding(let forwardingItem):
                     actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
+                case .displayThreadList:
+                    actionsSubject.send(.presentThreadList)
                 case .displayThread(let threadRootEventID, let focussedEventID):
                     actionsSubject.send(.presentThread(threadRootEventID: threadRootEventID, focussedEventID: focussedEventID))
+                case .stopLiveLocationSharing:
+                    Task { [weak self] in await self?.timelineViewModel.stopLiveLocationSharing() }
+                case .displayLiveLocation:
+                    actionsSubject.send(.presentLiveLocationViewer(sender: nil, initialLiveLocationShare: nil))
                 }
             }
             .store(in: &cancellables)

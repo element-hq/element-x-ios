@@ -84,6 +84,14 @@ extension PreviewTests {
     }
 
     @Test
+    func authenticationClassicAppBackupInstructionsView() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in AuthenticationClassicAppBackupInstructionsView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func authenticationStartScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AuthenticationStartScreen_Previews._allPreviews.enumerated() {
@@ -316,6 +324,14 @@ extension PreviewTests {
     }
 
     @Test
+    func floatingDateBadge() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in FloatingDateBadge_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func formButtonStyles() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in FormButtonStyles_Previews._allPreviews.enumerated() {
@@ -460,6 +476,14 @@ extension PreviewTests {
     }
 
     @Test
+    func inviteUsersConfirmationSheetView() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in InviteUsersConfirmationSheetView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func inviteUsersScreenSelectedItem() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in InviteUsersScreenSelectedItem_Previews._allPreviews.enumerated() {
@@ -575,6 +599,30 @@ extension PreviewTests {
     func linkNewDeviceScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in LinkNewDeviceScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
+    func liveLocationRoomTimelineView() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in LiveLocationRoomTimelineView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
+    func liveLocationSharingBannerView() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in LiveLocationSharingBannerView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
+    func liveLocationSheet() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in LiveLocationSheet_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
@@ -1164,6 +1212,14 @@ extension PreviewTests {
     }
 
     @Test
+    func roomThreadListScreen() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in RoomThreadListScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func sFNumberedListView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SFNumberedListView_Previews._allPreviews.enumerated() {
@@ -1351,14 +1407,6 @@ extension PreviewTests {
     func spaceSettingsScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in SpaceSettingsScreen_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
-    func spacesAnnouncementSheetView() async throws {
-        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
-        for (index, preview) in SpacesAnnouncementSheetView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
@@ -1612,6 +1660,14 @@ extension PreviewTests {
     }
 
     @Test
+    func userLocationCell() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in UserLocationCell_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func userProfileCell() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in UserProfileCell_Previews._allPreviews.enumerated() {
@@ -1719,6 +1775,14 @@ extension PreviewTests {
     func voiceMessageRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in VoiceMessageRoomTimelineView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
+    func voiceMessageTrashButton() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in VoiceMessageTrashButton_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }

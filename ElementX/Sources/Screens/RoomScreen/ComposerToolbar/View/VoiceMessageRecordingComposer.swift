@@ -15,17 +15,16 @@ struct VoiceMessageRecordingComposer: View {
     
     var body: some View {
         VoiceMessageRecordingView(recorderState: recorderState)
-            .padding(.vertical, 8.0)
-            .padding(.horizontal, 12.0)
+            .padding(.vertical, Compound.supportsGlass ? 14 : 8)
+            .padding(.horizontal, Compound.supportsGlass ? 16 : 12)
             .background {
-                let roundedRectangle = RoundedRectangle(cornerRadius: 12)
-                ZStack {
-                    roundedRectangle
-                        .fill(Color.compound.bgSubtleSecondary)
-                }
+                RoundedRectangle(cornerRadius: Compound.supportsGlass ? 21 : 12)
+                    .fill(.compound.bgSubtleSecondary)
             }
     }
 }
+
+// MARK: - Previews
 
 struct VoiceMessageRecordingComposer_Previews: PreviewProvider, TestablePreview {
     static let recorderState = AudioRecorderState()

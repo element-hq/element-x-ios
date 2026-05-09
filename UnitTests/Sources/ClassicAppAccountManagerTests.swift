@@ -77,7 +77,9 @@ extension ClassicAppAccount {
                                  displayName: "Classic App Account",
                                  avatarURL: "mxc://matrix.org/LYIzLOiILkjQJCqsgzAOUirs",
                                  serverName: "matrix.org",
+                                 homeserverURL: "https://matrix-client.matrix.org",
                                  cryptoStoreURL: classicAppAccountManager.cryptoStoreURL(for: userID),
-                                 cryptoStorePassphrase: cryptoStorePassphrase)
+                                 cryptoStorePassphrase: cryptoStorePassphrase.base64EncodedString(),
+                                 accessToken: "mct_6luZquERViQxGSXqzdxDeMpQkEjHpk_ISvHO2") // Note: Deactivated account
     }
 }

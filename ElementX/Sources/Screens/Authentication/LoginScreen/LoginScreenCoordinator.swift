@@ -20,8 +20,8 @@ struct LoginScreenCoordinatorParameters {
 }
 
 enum LoginScreenCoordinatorAction {
-    /// The homeserver was updated to one that supports OIDC.
-    case configuredForOIDC
+    /// The homeserver was updated to one that supports OAuth.
+    case configuredForOAuth
     /// Login was successful.
     case signedIn(UserSessionProtocol)
 }
@@ -62,8 +62,8 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .configuredForOIDC:
-                    actionsSubject.send(.configuredForOIDC)
+                case .configuredForOAuth:
+                    actionsSubject.send(.configuredForOAuth)
                 case .signedIn(let userSession):
                     actionsSubject.send(.signedIn(userSession))
                 }

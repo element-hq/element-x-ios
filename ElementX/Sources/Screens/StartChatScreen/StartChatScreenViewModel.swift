@@ -67,8 +67,16 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 hideLoadingIndicator()
                 actionsSubject.send(.showRoom(roomID: roomId))
             case .success:
-                hideLoadingIndicator()
-                state.bindings.selectedUserToInvite = user
+                Task {
+                    // If an error occured while fetching the identity, assume they are unknown.
+                    let isUnknown = if case .success(let identity) = await self.userSession.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) {
+                        identity == nil
+                    } else {
+                        true
+                    }
+                    self.state.bindings.selectedUserToInvite = UserToInvite(user: user, isUnknown: isUnknown)
+                    hideLoadingIndicator()
+                }
             case .failure:
                 hideLoadingIndicator()
                 displayError()
@@ -89,10 +97,6 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private var internalRoomAddressState: JoinByAddressState = .example
     
     private func setupBindings() {
-        appSettings.$publicSearchEnabled
-            .weakAssign(to: \.state.isRoomDirectoryEnabled, on: self)
-            .store(in: &cancellables)
-        
         context.$viewState
             .map(\.bindings.searchQuery)
             .debounceTextQueriesAndRemoveDuplicates()

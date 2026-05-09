@@ -341,7 +341,6 @@ final class RoomScreenViewModelTests {
     
     @Test
     func knockRequestBanner() async throws {
-        ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
                                                                                    // This one should be filtered
                                                                                    KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org", isSeen: true))]),
@@ -376,7 +375,6 @@ final class RoomScreenViewModelTests {
     
     @Test
     func knockRequestBannerMarkAsSeen() async throws {
-        ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
                                                                                    // This one should be filtered
                                                                                    KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org"))]),
@@ -408,7 +406,6 @@ final class RoomScreenViewModelTests {
     
     @Test
     func loadingKnockRequests() async throws {
-        ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loading,
                                                       joinRule: .knock))
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
@@ -428,7 +425,6 @@ final class RoomScreenViewModelTests {
     
     @Test
     func knockRequestsBannerDoesNotAppearIfUserHasNoPermission() async throws {
-        ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!"))]),
                                                       joinRule: .knock,
                                                       powerLevelsConfiguration: .init(canUserInvite: false)))
@@ -452,46 +448,7 @@ final class RoomScreenViewModelTests {
     // MARK: - History Sharing
     
     @Test
-    func roomWithSharedHistoryDoesNotDisplayBadgeIfFeatureFlagNotSet() async throws {
-        ServiceLocator.shared.settings.enableKeyShareOnInvite = false
-        
-        var configuration = JoinedRoomProxyMockConfiguration(historyVisibility: .joined)
-        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
-        let roomProxyMock = JoinedRoomProxyMock(configuration)
-        
-        // setup the room proxy actions publisher
-        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
-        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
-                                            roomProxy: roomProxyMock,
-                                            initialSelectedPinnedEventID: nil,
-                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        self.viewModel = viewModel
-        
-        let deferredInvisible = deferFailure(viewModel.context.$viewState,
-                                             timeout: .seconds(1),
-                                             message: "The icon should not be shown when the room history visibility is not .shared or .worldReadable") { viewState in
-            viewState.roomHistorySharingState != nil
-        }
-        try await deferredInvisible.fulfill()
-        
-        configuration.historyVisibility = .shared
-        infoSubject.send(RoomInfoProxyMock(configuration))
-        let deferredShared = deferFailure(viewModel.context.$viewState,
-                                          timeout: .seconds(1),
-                                          message: "The icon should not be shown when the room history visibility is .shared, since the flag isn't set") { viewState in
-            viewState.roomHistorySharingState != nil
-        }
-        try await deferredShared.fulfill()
-    }
-    
-    @Test
-    func roomWithSharedHistoryDisplaysBadgeWhenFeatureFlagSet() async throws {
-        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
-        
+    func roomWithSharedHistoryDisplaysBadge() async throws {
         var configuration = JoinedRoomProxyMockConfiguration(isEncrypted: false, historyVisibility: .joined)
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
         let roomProxyMock = JoinedRoomProxyMock(configuration)

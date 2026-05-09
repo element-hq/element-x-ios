@@ -32,6 +32,9 @@ class AppLockSetupUITests: XCTestCase {
     }
     
     func testCreateFlow() async throws {
+        // There's an issue with the number pad keyboard style on iPad.
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
+        
         app = Application.launch(.appLockSetupFlow)
         
         // Wait for the keyboard to push the sheet up before snapshotting
@@ -102,6 +105,9 @@ class AppLockSetupUITests: XCTestCase {
     }
     
     func testUnlockFlow() async throws {
+        // There's an issue with the number pad keyboard style on iPad.
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
+        
         app = Application.launch(.appLockSetupFlowUnlock)
         
         // Create PIN screen.
@@ -120,6 +126,9 @@ class AppLockSetupUITests: XCTestCase {
     }
     
     func testCancel() async throws {
+        // There's an issue with the number pad keyboard style on iPad.
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
+        
         app = Application.launch(.appLockSetupFlowUnlock)
         
         app.showKeyboardIfNeeded() // The secure text field is focussed automatically

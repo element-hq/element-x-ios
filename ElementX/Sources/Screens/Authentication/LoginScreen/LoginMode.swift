@@ -13,15 +13,15 @@ enum LoginMode: Equatable {
     /// The login mode hasn't been determined yet.
     case unknown
     /// The homeserver supports login via OpenID Connect.
-    case oidc(supportsCreatePrompt: Bool)
+    case oAuth(supportsCreatePrompt: Bool)
     /// The homeserver supports login with a password.
     case password
     /// The homeserver only allows login with unsupported mechanisms. Use fallback instead.
     case unsupported
     
-    var supportsOIDCFlow: Bool {
+    var supportsOAuthFlow: Bool {
         switch self {
-        case .oidc: true
+        case .oAuth: true
         default: false
         }
     }

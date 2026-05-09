@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct IdentityConfirmationScreen: View {
-    let context: IdentityConfirmationScreenViewModel.Context
+    @Bindable var context: IdentityConfirmationScreenViewModel.Context
     
     var shouldShowSkipButton: Bool {
         #if DEBUG
@@ -31,6 +31,7 @@ struct IdentityConfirmationScreen: View {
         .backgroundStyle(.compound.bgCanvasDefault)
         .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled()
+        .alert(item: $context.alertInfo)
     }
     
     // MARK: - Private

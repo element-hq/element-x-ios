@@ -14,29 +14,30 @@ extension AuthenticationClientFactoryMock {
     struct Configuration {
         var homeserverClients = [
             "matrix.org": ClientSDKMock(configuration: .init()),
+            "https://matrix-client.matrix.org": ClientSDKMock(configuration: .init()),
             "example.com": ClientSDKMock(configuration: .init(serverAddress: "example.com",
                                                               homeserverURL: "https://matrix.example.com",
                                                               slidingSyncVersion: .native,
-                                                              oidcLoginURL: nil,
-                                                              supportsOIDCCreatePrompt: false,
+                                                              oAuthLoginURL: nil,
+                                                              supportsOAuthCreatePrompt: false,
                                                               supportsPasswordLogin: true)),
             "company.com": ClientSDKMock(configuration: .init(serverAddress: "company.com",
                                                               homeserverURL: "https://matrix.company.com",
                                                               slidingSyncVersion: .native,
-                                                              oidcLoginURL: "https://auth.company.com/oidc",
-                                                              supportsOIDCCreatePrompt: false,
+                                                              oAuthLoginURL: "https://auth.company.com/login",
+                                                              supportsOAuthCreatePrompt: false,
                                                               supportsPasswordLogin: false)),
             "server.net": ClientSDKMock(configuration: .init(serverAddress: "server.net",
                                                              homeserverURL: "https://matrix.server.net",
                                                              slidingSyncVersion: .native,
-                                                             oidcLoginURL: nil,
-                                                             supportsOIDCCreatePrompt: false,
+                                                             oAuthLoginURL: nil,
+                                                             supportsOAuthCreatePrompt: false,
                                                              supportsPasswordLogin: false)),
             "secure.gov": ClientSDKMock(configuration: .init(serverAddress: "secure.gov",
                                                              homeserverURL: "https://ess.secure.gov",
                                                              slidingSyncVersion: .native,
-                                                             oidcLoginURL: "https://auth.secure.gov/oidc",
-                                                             supportsOIDCCreatePrompt: false,
+                                                             oAuthLoginURL: "https://auth.secure.gov/login",
+                                                             supportsOAuthCreatePrompt: false,
                                                              supportsPasswordLogin: false,
                                                              elementWellKnown: "{\"version\":1,\"enforce_element_pro\":true}"))
         ]
@@ -46,6 +47,13 @@ extension AuthenticationClientFactoryMock {
         self.init()
         
         makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure = { address, _, _, _, _, _ in
+            guard let client = configuration.homeserverClients[address] else {
+                throw ClientBuildError.ServerUnreachable(message: "Not a known homeserver.")
+            }
+            return client
+        }
+        
+        makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksClosure = { address, _, _, _ in
             guard let client = configuration.homeserverClients[address] else {
                 throw ClientBuildError.ServerUnreachable(message: "Not a known homeserver.")
             }

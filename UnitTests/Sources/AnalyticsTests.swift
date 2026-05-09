@@ -127,7 +127,8 @@ final class AnalyticsTests {
         #expect(client.pendingUserProperties == nil, "No user properties should have been set yet.")
         
         // When updating the user properties
-        client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil,
+        client.updateUserProperties(AnalyticsEvent.UserProperties(URLPreviewsEnabled: nil,
+                                                                  allChatsActiveFilter: nil,
                                                                   ftueUseCaseSelection: .PersonalMessaging,
                                                                   numFavouriteRooms: 4,
                                                                   numSpaces: 5, recoveryState: .Disabled, verificationState: .Verified))
@@ -145,7 +146,9 @@ final class AnalyticsTests {
     func mergingUserProperties() {
         // Given a client with a cached use case user properties
         let client = PostHogAnalyticsClient()
-        client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: .PersonalMessaging,
+        client.updateUserProperties(AnalyticsEvent.UserProperties(URLPreviewsEnabled: nil,
+                                                                  allChatsActiveFilter: nil,
+                                                                  ftueUseCaseSelection: .PersonalMessaging,
                                                                   numFavouriteRooms: nil,
                                                                   numSpaces: nil, recoveryState: nil, verificationState: nil))
         
@@ -155,7 +158,9 @@ final class AnalyticsTests {
         #expect(client.pendingUserProperties?.numSpaces == nil, "The number of spaces should not be set.")
         
         // When updating the number of spaced
-        client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: nil,
+        client.updateUserProperties(AnalyticsEvent.UserProperties(URLPreviewsEnabled: nil,
+                                                                  allChatsActiveFilter: nil,
+                                                                  ftueUseCaseSelection: nil,
                                                                   numFavouriteRooms: 4,
                                                                   numSpaces: 5, recoveryState: nil, verificationState: nil))
         
@@ -173,7 +178,9 @@ final class AnalyticsTests {
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
         try client.start(analyticsConfiguration: #require(appSettings.analyticsConfiguration))
         
-        client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: .PersonalMessaging,
+        client.updateUserProperties(AnalyticsEvent.UserProperties(URLPreviewsEnabled: nil,
+                                                                  allChatsActiveFilter: nil,
+                                                                  ftueUseCaseSelection: .PersonalMessaging,
                                                                   numFavouriteRooms: nil,
                                                                   numSpaces: nil, recoveryState: nil, verificationState: nil))
         

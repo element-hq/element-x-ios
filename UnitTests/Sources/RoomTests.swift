@@ -18,19 +18,25 @@ struct RoomTests {
         room.hasActiveRoomCallReturnValue = false
         room.isDirectReturnValue = false
         
-        var callIntent = await room.joinCallIntent
+        var callIntent = await room.joinCallIntent()
         #expect(callIntent == .startCall)
-        
+      
         room.isDirectReturnValue = true
-        callIntent = await room.joinCallIntent
+        callIntent = await room.joinCallIntent()
         #expect(callIntent == .startCallDm)
         
+        callIntent = await room.joinCallIntent(voiceOnly: true)
+        #expect(callIntent == .startCallDmVoice)
+        
         room.hasActiveRoomCallReturnValue = true
-        callIntent = await room.joinCallIntent
+        callIntent = await room.joinCallIntent()
         #expect(callIntent == .joinExistingDm)
         
+        callIntent = await room.joinCallIntent(voiceOnly: true)
+        #expect(callIntent == .joinExistingDmVoice)
+        
         room.isDirectReturnValue = false
-        callIntent = await room.joinCallIntent
+        callIntent = await room.joinCallIntent()
         #expect(callIntent == .joinExisting)
     }
 }

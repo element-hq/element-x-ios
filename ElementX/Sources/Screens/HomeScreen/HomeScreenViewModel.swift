@@ -114,8 +114,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        appSettings.$hideUnreadMessagesBadge
-            .sink { [weak self] _ in self?.updateRooms() }
+        appSettings.$roomListActivityVisibility
+            .sink { [weak self] value in
+                self?.state.roomListActivityVisibility = value
+                self?.updateRooms()
+            }
             .store(in: &cancellables)
         
         appSettings.$seenInvites
@@ -173,6 +176,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch viewAction {
         case .selectRoom(let roomIdentifier):
             actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
+        case .detachRoom(let roomIdentifier):
+            actionsSubject.send(.detachRoom(roomIdentifier: roomIdentifier))
         case .showRoomDetails(let roomIdentifier):
             actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
         case .leaveRoom(let roomIdentifier):
@@ -197,8 +202,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:
             actionsSubject.send(.presentStartChatScreen)
-        case .globalSearch:
-            actionsSubject.send(.presentGlobalSearch)
         case .spaceFilters:
             if spaceFilterSubject.value != nil {
                 spaceFilterSubject.send(nil)
@@ -363,7 +366,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         for summary in roomSummaryProvider.roomListPublisher.value {
             let room = HomeScreenRoom(summary: summary,
-                                      hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge,
+                                      roomListActivityVisibility: appSettings.roomListActivityVisibility,
                                       seenInvites: seenInvites)
             rooms.append(room)
         }

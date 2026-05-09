@@ -1,0 +1,30 @@
+name: Move new issues onto Issue triage board
+
+on:
+  issues:
+    types: [opened]
+
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+
+jobs:
+  add_to_triage:
+    runs-on: ubuntu-latest
+    if: >
+      github.repository == 'element-hq/element-x-ios'
+    steps:
+      - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+        with:
+          project-url: https://github.com/orgs/element-hq/projects/81
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  move_element_x_issues:
+    name: ElementX issues to ElementX project board
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: >
+      github.repository == 'element-hq/element-x-ios'
+    steps:
+      - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+        with:
+          project-url: https://github.com/orgs/element-hq/projects/43
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

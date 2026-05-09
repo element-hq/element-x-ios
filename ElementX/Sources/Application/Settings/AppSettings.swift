@@ -23,7 +23,6 @@ protocol CommonSettingsProtocol: AnyObject {
     var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
     
     var enableOnlySignedDeviceIsolationMode: Bool { get }
-    var enableKeyShareOnInvite: Bool { get }
     var threadsEnabled: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
 }
@@ -39,7 +38,6 @@ final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
-        case hasSeenSpacesAnnouncement
         case hasSeenNewSoundBanner
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
@@ -48,6 +46,7 @@ final class AppSettings {
         case analyticsConsentState
         case hasRunNotificationPermissionsOnboarding
         case hasRunIdentityConfirmationOnboarding
+        case hasRequestedLocationAlwaysLocationAuthorization
         
         case frequentlyUsedSystemEmojis
         
@@ -67,23 +66,28 @@ final class AppSettings {
         
         case voiceMessagePlaybackSpeed
         
+        // Live Location
+        case liveLocationSharingTimeoutDatesByRoomID
+        case liveLocationMinimumDistanceUpdate
+        case liveLocationDisclaimerDisplayed
+        
         // Feature flags
-        case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case lowPriorityFilterEnabled
         case enableOnlySignedDeviceIsolationMode
-        case enableKeyShareOnInvite
         case knockingEnabled
         case threadsEnabled
-        case developerOptionsEnabled
+        case roomThreadListEnabled
         case linkPreviewsEnabled
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
-        case liveLocationSharingEnabled
+        case automaticBackPaginationEnabled
         
         // Doug's tweaks 🔧
-        case hideUnreadMessagesBadge
+        case roomListActivityVisibility
         case hideQuietNotificationAlerts
+        
+        case developerOptionsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -131,7 +135,7 @@ final class AppSettings {
                   allowOtherAccountProviders: Bool,
                   hideBrandChrome: Bool,
                   pushGatewayBaseURL: URL,
-                  oidcRedirectURL: URL,
+                  oAuthRedirectURL: URL,
                   websiteURL: URL,
                   logoURL: URL,
                   copyrightURL: URL,
@@ -151,7 +155,7 @@ final class AppSettings {
         self.allowOtherAccountProviders = allowOtherAccountProviders
         self.hideBrandChrome = hideBrandChrome
         self.pushGatewayBaseURL = pushGatewayBaseURL
-        self.oidcRedirectURL = oidcRedirectURL
+        self.oAuthRedirectURL = oAuthRedirectURL
         self.websiteURL = websiteURL
         self.logoURL = logoURL
         self.copyrightURL = copyrightURL
@@ -181,9 +185,6 @@ final class AppSettings {
     /// This Set is being used to implement badges for unread invites.
     @UserPreference(key: UserDefaultsKeys.seenInvites, defaultValue: [], storageType: .userDefaults(store))
     var seenInvites: Set<String>
-    
-    @UserPreference(key: UserDefaultsKeys.hasSeenSpacesAnnouncement, defaultValue: false, storageType: .userDefaults(store))
-    var hasSeenSpacesAnnouncement
     
     /// Defaults to `true` for new users, and we use a migration to set it to `false` for existing users.
     @UserPreference(key: UserDefaultsKeys.hasSeenNewSoundBanner, defaultValue: true, storageType: .userDefaults(store))
@@ -249,22 +250,22 @@ final class AppSettings {
     
     // MARK: - Authentication
     
-    /// Any pre-defined static client registrations for OIDC issuers.
-    let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
-    /// The redirect URL used for OIDC. Uses custom URL scheme with SINGLE slash (no authority).
-    /// MAS native app policy requires: no "://", scheme matches client_uri in reverse-DNS.
-    /// org.ucmeet.UCMeetChat:/callback → matches ucmeet.org
-    private(set) var oidcRedirectURL: URL = "org.ucmeet.UCMeetChat:/callback"
+    /// Any pre-defined static client registrations for OAuth issuers.
+    let oAuthStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
+    /// The redirect URL used for OAuth. UCMeet uses a custom URL scheme with SINGLE slash (no authority).
+    /// MAS native-app policy requires: no `://`, scheme matches client_uri in reverse-DNS.
+    /// `org.ucmeet.UCMeetChat:/callback` → matches `www.ucmeet.info`.
+    /// We retain the custom-scheme approach instead of upstream's `https://element.io/oauth/ios/...`
+    /// Universal Link approach because we don't host an AASA at our website yet.
+    private(set) var oAuthRedirectURL: URL! = URL(string: "org.ucmeet.UCMeetChat:/callback")
 
-    /// All OIDC metadata URIs must be on the same host (MAS policy).
-    /// Using ucmeet.org because redirect scheme org.ucmeet.* maps to ucmeet.org in reverse-DNS.
-    private(set) lazy var oidcConfiguration = OIDCConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
-                                                                redirectURI: oidcRedirectURL,
-                                                                clientURI: URL(string: "https://ucmeet.org")!,
-                                                                logoURI: URL(string: "https://ucmeet.org/favicon.png")!,
-                                                                tosURI: URL(string: "https://ucmeet.org/terms")!,
-                                                                policyURI: URL(string: "https://ucmeet.org/privacy")!,
-                                                                staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
+    private(set) lazy var oAuthConfiguration = OAuthConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
+                                                                  redirectURI: oAuthRedirectURL,
+                                                                  clientURI: websiteURL,
+                                                                  logoURI: logoURL,
+                                                                  tosURI: acceptableUseURL,
+                                                                  policyURI: privacyURL,
+                                                                  staticRegistrations: oAuthStaticRegistrations.mapKeys { $0.absoluteString })
     
     /// Whether or not the Create Account button is shown on the start screen.
     ///
@@ -355,13 +356,27 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: false, storageType: .userDefaults(store))
     var hasRunIdentityConfirmationOnboarding
     
+    @UserPreference(key: UserDefaultsKeys.hasRequestedLocationAlwaysLocationAuthorization, defaultValue: false, storageType: .userDefaults(store))
+    var hasRequestedLocationAlwaysLocationAuthorization
+    
     @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
     var frequentlyUsedSystemEmojis
     
+    // MARK: - Live Location
+    
+    @UserPreference(key: UserDefaultsKeys.liveLocationSharingTimeoutDatesByRoomID, defaultValue: [String: LiveLocationSession](), storageType: .userDefaults(store))
+    var liveLocationSharingSessionsByRoomID
+    
+    @UserPreference(key: UserDefaultsKeys.liveLocationMinimumDistanceUpdate, defaultValue: 10, storageType: .userDefaults(store))
+    var liveLocationMinimumDistanceUpdate
+    
+    @UserPreference(key: UserDefaultsKeys.liveLocationDisclaimerDisplayed, defaultValue: false, storageType: .userDefaults(store))
+    var liveLocationDisclaimerDisplayed
+    
     // MARK: - Home Screen
     
-    @UserPreference(key: UserDefaultsKeys.hideUnreadMessagesBadge, defaultValue: false, storageType: .userDefaults(store))
-    var hideUnreadMessagesBadge
+    @UserPreference(key: UserDefaultsKeys.roomListActivityVisibility, defaultValue: .current, storageType: .userDefaults(store))
+    var roomListActivityVisibility: RoomListActivityVisibility
     
     // MARK: - Room Screen
     
@@ -414,9 +429,6 @@ final class AppSettings {
     // MARK: - Feature Flags
     
     /// Others
-    @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var publicSearchEnabled
-    
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled
     
@@ -427,15 +439,14 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
     var enableOnlySignedDeviceIsolationMode
     
-    /// Configuration to enable encrypted history sharing on invite, and accepting keys from inviters.
-    @UserPreference(key: UserDefaultsKeys.enableKeyShareOnInvite, defaultValue: false, storageType: .userDefaults(store))
-    var enableKeyShareOnInvite
-    
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
     
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.roomThreadListEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var roomThreadListEnabled
     
     @UserPreference(key: UserDefaultsKeys.focusEventOnNotificationTap, defaultValue: false, storageType: .userDefaults(store))
     var focusEventOnNotificationTap
@@ -446,10 +457,10 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.linkNewDeviceEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkNewDeviceEnabled
     
-    @UserPreference(key: UserDefaultsKeys.liveLocationSharingEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var liveLocationSharingEnabled
+    @UserPreference(key: UserDefaultsKeys.automaticBackPaginationEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var automaticBackPaginationEnabled
     
-    @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType == .debug, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType != .release, storageType: .userDefaults(store))
     var developerOptionsEnabled
 }
 

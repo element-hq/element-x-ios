@@ -84,16 +84,16 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
                 }
                 
                 actionsSubject.send(.requestPassword(passwordPublisher: passwordPublisher))
-            case .oidc(let oidcInfo):
-                guard let url = URL(string: oidcInfo.approvalUrl) else {
-                    fatalError("Invalid URL received through identity reset handle: \(oidcInfo.approvalUrl)")
+            case .oAuth(let oAuthInfo):
+                guard let url = URL(string: oAuthInfo.approvalUrl) else {
+                    fatalError("Invalid URL received through identity reset handle: \(oAuthInfo.approvalUrl)")
                 }
                 
                 hideLoadingIndicator()
                 
-                actionsSubject.send(.requestOIDCAuthorisation(url: url))
+                actionsSubject.send(.requestOAuthAuthorisation(url: url))
                 
-                await resetWithOIDCAuthorisation()
+                await resetWithOAuthAuthorisation()
             }
         case .failure(let error):
             MXLog.error("Failed resetting encryption with error \(error)")
@@ -121,7 +121,7 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
         }
     }
     
-    private func resetWithOIDCAuthorisation() async {
+    private func resetWithOAuthAuthorisation() async {
         guard let identityResetHandle else {
             fatalError("Requested reset flow continuation without a stored handle")
         }

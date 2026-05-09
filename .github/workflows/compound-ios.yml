@@ -7,20 +7,19 @@ on:
   workflow_dispatch:
 
   push:
-    branches: [ develop ]
+    branches: [develop]
     paths:
-      - 'compound-ios/**'
-  
+      - "compound-ios/**"
+
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
-      - 'compound-ios/**'
+      - "compound-ios/**"
 
 permissions: {}
 
 jobs:
   tests:
-
     runs-on: macos-26
     timeout-minutes: 15
 
@@ -31,47 +30,46 @@ jobs:
       cancel-in-progress: true
 
     steps:
-    - uses: nschloe/action-cached-lfs-checkout@1c185ad576953eab13e35ffe1bffef437d97e9d2 # v1.2.4
-      with:
-        persist-credentials: false
+      - uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
+        with:
+          persist-credentials: false
 
-    - name: Configure Xcode 26
-      run: sudo xcode-select -s /Applications/Xcode_26.1.1.app
-        
-    - name: Install sourcery
-      run: brew install sourcery
-        
-    - name: Generate preview tests
-      working-directory: compound-ios
-      run: sourcery --config Tools/Sourcery/PreviewTestsConfig.yml
+      - name: Configure Xcode 26
+        run: sudo xcode-select -s /Applications/Xcode_26.4.app
 
-    - name: Create simulator
-      run: xcrun simctl create "Snapshots" "iPhone SE (3rd generation)" "com.apple.CoreSimulator.SimRuntime.iOS-26-1"
+      - name: Install sourcery
+        run: brew install sourcery
 
-    - name: Run tests
-      working-directory: compound-ios
-      run: set -o pipefail && xcodebuild test -scheme 'Compound' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=Snapshots,OS=26.1' -skipPackagePluginValidation -resultBundlePath Logs/CompoundTests.xcresult | xcbeautify --renderer github-actions
+      - name: Generate preview tests
+        working-directory: compound-ios
+        run: sourcery --config Tools/Sourcery/PreviewTestsConfig.yml
 
-    - name: Zip artifacts
-      if: failure() # We only care about artefacts if the tests fail
-      working-directory: compound-ios
-      run: zip -r Logs/CompoundTests.xcresult.zip Logs/CompoundTests.xcresult/
+      - name: Create simulator
+        run: xcrun simctl create "Snapshots" "iPhone SE (3rd generation)" "com.apple.CoreSimulator.SimRuntime.iOS-26-4"
 
-    - name: Archive artifacts
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-      if: failure() # We only care about artefacts if the tests fail
-      with:
-        name: test-results
-        path: compound-ios/Logs/CompoundTests.xcresult.zip
-        retention-days: 1
-        if-no-files-found: ignore
+      - name: Run tests
+        working-directory: compound-ios
+        run: set -o pipefail && xcodebuild test -scheme 'Compound' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=Snapshots,OS=26.4.1' -skipPackagePluginValidation -resultBundlePath Logs/CompoundTests.xcresult | xcbeautify --renderer github-actions
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
-      with:
-        fail_ci_if_error: false
-        token: ${{ secrets.CODECOV_TOKEN }}
-        xcode: true
-        xcode_archive_path: compound-ios/Logs/CompoundTests.xcresult
-        flags: compound
- 
+      - name: Zip artifacts
+        if: failure() # We only care about artefacts if the tests fail
+        working-directory: compound-ios
+        run: zip -r Logs/CompoundTests.xcresult.zip Logs/CompoundTests.xcresult/
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure() # We only care about artefacts if the tests fail
+        with:
+          name: test-results
+          path: compound-ios/Logs/CompoundTests.xcresult.zip
+          retention-days: 1
+          if-no-files-found: ignore
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
+        with:
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+          xcode: true
+          xcode_archive_path: compound-ios/Logs/CompoundTests.xcresult
+          flags: compound

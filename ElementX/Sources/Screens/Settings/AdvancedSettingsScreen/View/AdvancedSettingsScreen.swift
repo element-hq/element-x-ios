@@ -10,6 +10,13 @@ import Compound
 import SwiftUI
 
 struct AdvancedSettingsScreen: View {
+    static let measurementFormatter = {
+        let formatter = MeasurementFormatter()
+        formatter.unitOptions = .providedUnit
+        formatter.unitStyle = .short
+        return formatter
+    }()
+    
     @Bindable var context: AdvancedSettingsScreenViewModel.Context
     
     var body: some View {
@@ -37,6 +44,7 @@ struct AdvancedSettingsScreen: View {
             
             moderationAndSafetySection
             timelineMediaSection
+            liveLocationSection
         }
         .compoundList()
         .navigationTitle(L10n.commonAdvancedSettings)
@@ -84,6 +92,56 @@ struct AdvancedSettingsScreen: View {
                 .compoundListSectionFooter()
         }
     }
+    
+    @ViewBuilder
+    private var liveLocationSection: some View {
+        let binding = Binding(get: {
+            Double(context.liveLocationMinimumDistanceUpdate)
+        }, set: { newValue in
+            context.liveLocationMinimumDistanceUpdate = Int(newValue)
+        })
+        
+        Section {
+            ListRow(kind: .custom {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(L10n.screenAdvancedSettingsLiveLocationUpdateDistance(context.liveLocationMinimumDistanceUpdate))
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textPrimary)
+                        // The internal hidden label of the slider will read voice over
+                        .accessibilityHidden(true)
+                    Slider(value: binding, in: 1...100) {
+                        Text(L10n.screenAdvancedSettingsLiveLocationUpdateDistance(context.liveLocationMinimumDistanceUpdate))
+                    } minimumValueLabel: {
+                        Text(Self.measurementFormatter.string(from: .init(value: 1,
+                                                                          unit: UnitLength.meters)))
+                            .font(.compound.bodyLG)
+                            .foregroundStyle(.compound.textSecondary)
+                            .padding(.trailing, 15)
+                    } maximumValueLabel: {
+                        Text(Self.measurementFormatter.string(from: .init(value: 100,
+                                                                          unit: UnitLength.meters)))
+                            .font(.compound.bodyLG)
+                            .foregroundStyle(.compound.textSecondary)
+                            .padding(.leading, 15)
+                    }
+                    .tint(.compound.iconAccentPrimary)
+                }
+                .padding(.horizontal, ListRowPadding.horizontal)
+                .padding(.vertical, ListRowPadding.vertical)
+            })
+        } header: {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(L10n.screenAdvancedSettingsLiveLocationSectionTitle)
+                    .compoundListSectionHeader()
+                Text(L10n.screenAdvancedSettingsLiveLocationSectionDescription)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textSecondary)
+            }
+        } footer: {
+            Text(context.viewState.liveLocationUpdateFooterAttributedString)
+                .compoundListSectionFooter()
+        }
+    }
 }
 
 private extension AppAppearance {
@@ -102,10 +160,14 @@ private extension AppAppearance {
 // MARK: - Previews
 
 struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = AdvancedSettingsScreenViewModel(advancedSettings: ServiceLocator.shared.settings,
-                                                           analytics: ServiceLocator.shared.analytics,
-                                                           clientProxy: ClientProxyMock(.init()),
-                                                           userIndicatorController: UserIndicatorControllerMock())
+    static let viewModel = {
+        AppSettings.resetAllSettings()
+        return AdvancedSettingsScreenViewModel(advancedSettings: AppSettings(),
+                                               analytics: ServiceLocator.shared.analytics,
+                                               clientProxy: ClientProxyMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock())
+    }()
+    
     static var previews: some View {
         ElementNavigationStack {
             AdvancedSettingsScreen(context: viewModel.context)

@@ -145,6 +145,10 @@ class TimelineTableViewController: UIViewController {
     }
     
     @Binding private var isScrolledToBottom: Bool
+    @Binding private var floatingDate: Date?
+    
+    /// A work item used to auto-hide the floating date badge after scrolling stops.
+    private var floatingDateHideWorkItem: DispatchWorkItem?
 
     private var timelineItemsIDs: [TimelineItemIdentifier.UniqueID] {
         timelineItemsDictionary.keys.elements.reversed()
@@ -175,9 +179,12 @@ class TimelineTableViewController: UIViewController {
     
     init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
-         scrollToBottomPublisher: PassthroughSubject<Void, Never>) {
+         floatingDate: Binding<Date?>,
+         scrollToBottomPublisher: PassthroughSubject<Void, Never>,
+         scrollToFirstItemForDatePublisher: PassthroughSubject<Void, Never>) {
         self.coordinator = coordinator
         _isScrolledToBottom = isScrolledToBottom
+        _floatingDate = floatingDate
         
         super.init(nibName: nil, bundle: nil)
         
@@ -200,6 +207,12 @@ class TimelineTableViewController: UIViewController {
         scrollToBottomPublisher
             .sink { [weak self] _ in
                 self?.scrollToNewestItem(animated: true)
+            }
+            .store(in: &cancellables)
+        
+        scrollToFirstItemForDatePublisher
+            .sink { [weak self] _ in
+                self?.scrollToFirstItemForCurrentDate()
             }
             .store(in: &cancellables)
         
@@ -461,6 +474,10 @@ extension TimelineTableViewController: UITableViewDelegate {
             if self.isScrolledToBottom != isScrolledToBottom {
                 self.isScrolledToBottom = isScrolledToBottom
             }
+            
+            if !isScrolledToBottom {
+                updateFloatingDate()
+            }
         }
 
         // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
@@ -502,6 +519,80 @@ extension TimelineTableViewController: UITableViewDelegate {
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         sendLastVisibleItemReadReceipt()
+    }
+}
+
+// MARK: - Floating Date Badge
+
+extension TimelineTableViewController {
+    /// Computes the timestamp for the topmost visible timeline item
+    /// and updates the floating date binding.
+    func updateFloatingDate() {
+        guard let date = newestVisibleDate() else {
+            return
+        }
+        
+        // Before updating it already schedule it's removal or the future.
+        // The schedule needs to happen regardless of a value change
+        // to extend the display duration of the floating date.
+        scheduleFloatingDateHide()
+        
+        // Only update when the calendar day changes to avoid needless SwiftUI recomputation.
+        if floatingDate.map({ !Calendar.current.isDate($0, inSameDayAs: date) }) ?? true {
+            floatingDate = date
+        }
+    }
+    
+    /// Schedules the floating date badge to be hidden after a delay.
+    func scheduleFloatingDateHide() {
+        floatingDateHideWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.floatingDate = nil
+        }
+        floatingDateHideWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+    }
+    
+    /// Scrolls to the first (oldest) item on the same calendar day as the current floating date.
+    private func scrollToFirstItemForCurrentDate() {
+        guard let floatingDate else { return }
+        // timelineItemsDictionary is ordered oldest-first; the first match is the earliest item for that day.
+        for uniqueID in timelineItemsDictionary.keys {
+            if let timestamp = timelineItemsDictionary[uniqueID]?.timestamp,
+               Calendar.current.isDate(timestamp, inSameDayAs: floatingDate),
+               let indexPath = dataSource?.indexPath(for: uniqueID) {
+                // The table view is flipped, so .bottom aligns the cell to the visual top.
+                tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                return
+            }
+        }
+    }
+    
+    /// Returns the timestamp of the newest visible timeline item.
+    ///
+    /// The table view is flipped (unless VoiceOver is running), so the "newest"
+    /// visible cell on screen is actually the *last* index path in `indexPathsForVisibleRows`
+    /// when the table is flipped, or the *first* when it is not.
+    private func newestVisibleDate() -> Date? {
+        guard let visibleIndexPaths = tableView.indexPathsForVisibleRows,
+              !visibleIndexPaths.isEmpty else {
+            return nil
+        }
+        
+        // In a flipped table view the last index path is the topmost item on screen;
+        // when VoiceOver is active the table is not flipped so the first is topmost.
+        let isFlipped = scaleY == -1
+        let orderedPaths = isFlipped ? visibleIndexPaths.reversed() : visibleIndexPaths
+        
+        // Walk from topmost downward and return the timestamp of the first item that has one.
+        for indexPath in orderedPaths {
+            if let uniqueID = dataSource?.itemIdentifier(for: indexPath),
+               let timestamp = timelineItemsDictionary[uniqueID]?.timestamp {
+                return timestamp
+            }
+        }
+        
+        return nil
     }
 }
 

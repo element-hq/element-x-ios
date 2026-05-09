@@ -37,6 +37,11 @@ enum Tracing {
         // Log everything on integration tests to check whether
         // the logs contain any sensitive data. See `integration-tests.yml`
         let level: LogLevel = ProcessInfo.isRunningIntegrationTests ? .trace : logLevel
+        let sentryConfig = sentryURL.map { url in
+            SentryConfig(dsn: url.absoluteString,
+                         appVersion: InfoPlistReader.app.bundleShortVersionString,
+                         appPlatform: ProcessInfo.processInfo.platform)
+        }
         
         return .init(logLevel: level.rustLogLevel,
                      traceLogPacks: traceLogPacks.map(\.rustLogPack),
@@ -48,7 +53,7 @@ enum Tracing {
                                          // Total compressed size needs to be under CloudFlare's max request size of 50Mb
                                          maxTotalSizeBytes: 100 * 1024 * 1024, // 100Mb
                                          maxAgeSeconds: 7 * 24 * 60 * 60), // One week
-                     sentryDsn: sentryURL?.absoluteString)
+                     sentryConfig: sentryConfig)
     }
     
     /// A list of all log file URLs, sorted chronologically.

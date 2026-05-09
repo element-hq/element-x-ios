@@ -15,19 +15,19 @@ struct SettingsScreen: View {
     
     private var shouldHideManageAccountSection: Bool {
         context.viewState.accountProfileURL == nil &&
-            context.viewState.accountSessionsListURL == nil &&
-            !context.viewState.showBlockedUsers
+            !context.viewState.showBlockedUsers &&
+            !context.viewState.showLinkNewDeviceButton
     }
     
     var body: some View {
         Form {
             userSection
             
-            manageMyAppSection
-            
             if !shouldHideManageAccountSection {
                 manageAccountSection
             }
+            
+            manageMyAppSection
             
             generalSection
             
@@ -40,6 +40,7 @@ struct SettingsScreen: View {
         .compoundList()
         .navigationTitle(L10n.commonSettings)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarVisibility(context.viewState.navigationBarVisibility, for: .navigationBar)
         .toolbar { toolbar }
     }
     
@@ -108,16 +109,8 @@ struct SettingsScreen: View {
     
     private var manageAccountSection: some View {
         Section {
-            if context.viewState.showLinkNewDeviceButton {
-                ListRow(label: .default(title: L10n.commonLinkNewDevice,
-                                        icon: \.devices),
-                        kind: .navigationLink {
-                            context.send(viewAction: .linkNewDevice)
-                        })
-            }
-            
             if let url = context.viewState.accountProfileURL {
-                ListRow(label: .default(title: L10n.actionManageAccount,
+                ListRow(label: .default(title: L10n.actionManageAccountAndDevices,
                                         icon: \.userProfile),
                         kind: .button {
                             context.send(viewAction: .manageAccount(url: url))
@@ -125,11 +118,11 @@ struct SettingsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.account)
             }
             
-            if let url = context.viewState.accountSessionsListURL {
-                ListRow(label: .default(title: L10n.actionManageDevices,
+            if context.viewState.showLinkNewDeviceButton {
+                ListRow(label: .default(title: L10n.commonLinkNewDevice,
                                         icon: \.devices),
-                        kind: .button {
-                            context.send(viewAction: .manageAccount(url: url))
+                        kind: .navigationLink {
+                            context.send(viewAction: .linkNewDevice)
                         })
             }
             
@@ -189,7 +182,7 @@ struct SettingsScreen: View {
     private var signOutSection: some View {
         Section {
             ListRow(label: .action(title: L10n.screenSignoutPreferenceItem,
-                                   icon: \.signOut,
+                                   icon: \.close,
                                    role: .destructive),
                     kind: .button {
                         context.send(viewAction: .logout)
@@ -197,8 +190,8 @@ struct SettingsScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
             
             if context.viewState.showAccountDeactivation {
-                ListRow(label: .action(title: L10n.actionDeactivateAccount,
-                                       icon: \.warning,
+                ListRow(label: .action(title: L10n.actionDeleteAccount,
+                                       icon: \.delete,
                                        role: .destructive),
                         kind: .navigationLink {
                             context.send(viewAction: .deactivateAccount)
@@ -246,8 +239,8 @@ struct SettingsScreen: View {
     }
     
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.actionDone) { context.send(viewAction: .close) }
+        ToolbarItem(placement: .primaryAction) {
+            ToolbarButton(role: .close) { context.send(viewAction: .close) }
                 .accessibilityIdentifier(A11yIdentifiers.settingsScreen.done)
         }
     }
@@ -270,13 +263,13 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
         ElementNavigationStack {
             SettingsScreen(context: viewModel.context)
         }
-        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil })
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
         .previewDisplayName("Default")
         
         ElementNavigationStack {
             SettingsScreen(context: bugReportDisabledViewModel.context)
         }
-        .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil })
+        .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
         .previewDisplayName("Bug report disabled")
     }
     
@@ -285,6 +278,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                                                    deviceID: "AAAAAAAAAAA"))))
         return SettingsScreenViewModel(userSession: userSession,
                                        appSettings: ServiceLocator.shared.settings,
-                                       isBugReportServiceEnabled: isBugReportServiceEnabled)
+                                       isBugReportServiceEnabled: isBugReportServiceEnabled,
+                                       isInSecondaryWindow: false)
     }
 }

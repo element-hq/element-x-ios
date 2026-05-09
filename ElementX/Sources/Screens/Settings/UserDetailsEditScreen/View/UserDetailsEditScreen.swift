@@ -67,14 +67,12 @@ struct UserDetailsEditScreen: View {
                                    shape: .circle,
                                    avatarSize: .user(on: .editUserDetails),
                                    mediaProvider: context.mediaProvider)
-                .overlay(alignment: .bottomTrailing) {
-                    avatarOverlayIcon
-                }
                 .confirmationDialog("", isPresented: $context.showMediaSheet) {
                     mediaActionSheet
                 }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(EditAvatarButtonStyle())
+        .disabled(!context.viewState.canEditAvatar)
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
     }
@@ -84,20 +82,11 @@ struct UserDetailsEditScreen: View {
             ListRow(label: .plain(title: L10n.screenEditProfileDisplayNamePlaceholder),
                     kind: .textField(text: $context.name, axis: .horizontal))
                 .focused($focus)
+                .disabled(!context.viewState.canEditDisplayName)
         } header: {
             Text(L10n.screenEditProfileDisplayName)
                 .compoundListSectionHeader()
         }
-    }
-    
-    private var avatarOverlayIcon: some View {
-        CompoundIcon(\.editSolid, size: .xSmall, relativeTo: .compound.bodyLG)
-            .foregroundColor(.white)
-            .padding(4)
-            .background {
-                Circle()
-                    .foregroundColor(.black)
-            }
     }
     
     @ViewBuilder
@@ -107,10 +96,17 @@ struct UserDetailsEditScreen: View {
         } label: {
             Text(L10n.actionTakePhoto)
         }
+        
         Button {
             context.send(viewAction: .displayMediaPicker)
         } label: {
             Text(L10n.actionChoosePhoto)
+        }
+        
+        Button {
+            context.send(viewAction: .displayFilePicker)
+        } label: {
+            Text(L10n.actionChooseFile)
         }
         
         if context.viewState.showDeleteImageAction {
@@ -126,13 +122,26 @@ struct UserDetailsEditScreen: View {
 // MARK: - Previews
 
 struct UserDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = UserDetailsEditScreenViewModel(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@stefan:matrix.org")))),
-                                                          mediaUploadingPreprocessor: .init(appSettings: ServiceLocator.shared.settings),
-                                                          userIndicatorController: UserIndicatorControllerMock.default)
+    static let viewModel = makeViewModel()
+    static let readOnlyViewModel = makeViewModel(canChangeProfile: false)
     
     static var previews: some View {
         ElementNavigationStack {
             UserDetailsEditScreen(context: viewModel.context)
         }
+        .previewDisplayName("Default")
+        
+        ElementNavigationStack {
+            UserDetailsEditScreen(context: readOnlyViewModel.context)
+        }
+        .previewDisplayName("Read Only")
+    }
+    
+    static func makeViewModel(canChangeProfile: Bool = true) -> UserDetailsEditScreenViewModel {
+        UserDetailsEditScreenViewModel(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@stefan:matrix.org",
+                                                                                                             canChangeAvatar: canChangeProfile,
+                                                                                                             canChangeDisplayName: canChangeProfile)))),
+        mediaUploadingPreprocessor: .init(appSettings: ServiceLocator.shared.settings),
+        userIndicatorController: UserIndicatorControllerMock.default)
     }
 }

@@ -17,8 +17,25 @@ enum TimelineReplyViewPlacement {
 struct TimelineReplyView: View {
     let placement: TimelineReplyViewPlacement
     let timelineItemReplyDetails: TimelineItemReplyDetails?
+    var maxWidth: CGFloat?
+    
+    private let backgroundShape = RoundedRectangle(cornerRadius: 8)
     
     var body: some View {
+        content
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: maxWidth, alignment: .leading)
+            .padding(4.0)
+            .background {
+                ZStack {
+                    backgroundShape.fill(.compound.bgCanvasDefault)
+                    backgroundShape.stroke(.compound.separatorPrimary)
+                }
+            }
+    }
+    
+    @ViewBuilder
+    private var content: some View {
         if let timelineItemReplyDetails {
             switch timelineItemReplyDetails {
             case .loaded(let sender, _, let content):
@@ -29,7 +46,7 @@ struct TimelineReplyView: View {
                         ReplyView(sender: sender,
                                   plainBody: content.caption ?? content.filename,
                                   formattedBody: content.formattedCaption,
-                                  icon: .init(kind: .systemIcon("waveform"), cornerRadii: iconCornerRadii))
+                                  icon: .init(kind: .systemIcon("waveform")))
                     case .emote(let content):
                         ReplyView(sender: sender,
                                   plainBody: content.body,
@@ -38,12 +55,12 @@ struct TimelineReplyView: View {
                         ReplyView(sender: sender,
                                   plainBody: content.caption ?? content.filename,
                                   formattedBody: content.formattedCaption,
-                                  icon: .init(kind: .icon(\.document), cornerRadii: iconCornerRadii))
+                                  icon: .init(kind: .icon(\.document)))
                     case .image(let content):
                         ReplyView(sender: sender,
                                   plainBody: content.caption ?? content.filename,
                                   formattedBody: content.formattedCaption,
-                                  icon: .init(kind: .mediaSource(content.thumbnailInfo?.source ?? content.imageInfo.source), cornerRadii: iconCornerRadii))
+                                  icon: .init(kind: .mediaSource(content.thumbnailInfo?.source ?? content.imageInfo.source)))
                     case .notice(let content):
                         ReplyView(sender: sender,
                                   plainBody: content.body,
@@ -56,41 +73,37 @@ struct TimelineReplyView: View {
                         ReplyView(sender: sender,
                                   plainBody: content.caption ?? content.filename,
                                   formattedBody: content.formattedCaption,
-                                  icon: content.thumbnailInfo.map { .init(kind: .mediaSource($0.source), cornerRadii: iconCornerRadii) })
+                                  icon: content.thumbnailInfo.map { .init(kind: .mediaSource($0.source)) })
                     case .voice:
                         ReplyView(sender: sender,
                                   plainBody: L10n.commonVoiceMessage,
                                   formattedBody: nil,
-                                  icon: .init(kind: .icon(\.micOn), cornerRadii: iconCornerRadii))
+                                  icon: .init(kind: .icon(\.micOn)))
                     case .location:
                         ReplyView(sender: sender,
                                   plainBody: L10n.commonSharedLocation,
                                   formattedBody: nil,
-                                  icon: .init(kind: .icon(\.locationPin), cornerRadii: iconCornerRadii))
+                                  icon: .init(kind: .icon(\.locationPin)))
                     }
                 case .poll(let question):
                     ReplyView(sender: sender,
                               plainBody: question,
                               formattedBody: nil,
-                              icon: .init(kind: .icon(\.polls), cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .icon(\.polls)))
+                case .liveLocation:
+                    ReplyView(sender: sender,
+                              plainBody: L10n.commonSharedLiveLocation,
+                              formattedBody: nil,
+                              icon: .init(kind: .icon(\.locationPin)))
                 case .redacted:
                     ReplyView(sender: sender,
                               plainBody: L10n.commonMessageRemoved,
                               formattedBody: nil,
-                              icon: .init(kind: .icon(\.delete), cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .icon(\.delete)))
                 }
             default:
                 LoadingReplyView()
             }
-        }
-    }
-    
-    private var iconCornerRadii: Double {
-        switch placement {
-        case .composer:
-            return 9.0
-        case .timeline:
-            return 4.0
         }
     }
     
@@ -112,7 +125,7 @@ struct TimelineReplyView: View {
             }
             
             let kind: Kind
-            let cornerRadii: Double
+            let cornerRadii = 4.0
         }
         
         @EnvironmentObject private var context: TimelineViewModel.Context
@@ -175,7 +188,7 @@ struct TimelineReplyView: View {
                         .aspectRatio(contentMode: .fit)
                         .padding(8.0)
                 case .icon(let keyPath):
-                    CompoundIcon(keyPath, size: .small, relativeTo: .body)
+                    CompoundIcon(keyPath, size: .medium, relativeTo: .body)
                 }
             }
         }
@@ -282,6 +295,11 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                 eventID: "123",
                                                                 eventContent: .message(.location(.init(body: ""))))),
+            
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
+                                                                eventContent: .liveLocation)),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),

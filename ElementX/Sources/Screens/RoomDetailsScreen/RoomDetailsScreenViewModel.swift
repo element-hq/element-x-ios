@@ -61,13 +61,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.infoPublisher.value.topic)
         
-        // Clear details.historySharingState manually while we are still behind a feature flag.
-        var details = roomProxy.details
-        if !appSettings.enableKeyShareOnInvite {
-            details.historySharingState = nil
-        }
-        
-        super.init(initialViewState: .init(details: details,
+        super.init(initialViewState: .init(details: roomProxy.details,
                                            isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                            isDirect: roomProxy.infoPublisher.value.isDirect,
                                            topic: topic,
@@ -76,10 +70,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            notificationSettingsState: .loading,
                                            bindings: .init()),
                    mediaProvider: userSession.mediaProvider)
-        
-        appSettings.$knockingEnabled
-            .weakAssign(to: \.state.knockingEnabled, on: self)
-            .store(in: &cancellables)
         
         Task {
             state.reportRoomEnabled = await userSession.clientProxy.isReportRoomSupported
@@ -151,8 +141,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             Task { await toggleFavourite(isFavourite) }
         case .processTapRolesAndPermissions:
             actionsSubject.send(.requestRolesAndPermissionsPresentation)
-        case .processTapCall:
-            actionsSubject.send(.startCall)
+        case .processTapCall(let isVoiceCall):
+            actionsSubject.send(.startCall(isVoiceCall: isVoiceCall))
         case .processTapPinnedEvents:
             analyticsService.trackInteraction(name: .PinnedMessageRoomInfoButton)
             actionsSubject.send(.displayPinnedEventsTimeline)
@@ -280,14 +270,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.joinedMembersCount = roomInfo.joinedMembersCount
         
         state.details = roomProxy.details
-        
-        // Set state.details.historySharingState manually while we are still behind
-        // a feature flag.
-        if appSettings.enableKeyShareOnInvite {
-            state.details.historySharingState = roomInfo.historySharingState
-        } else {
-            state.details.historySharingState = nil
-        }
+        state.details.historySharingState = roomInfo.historySharingState
         
         let topic = attributedStringBuilder.fromPlain(roomInfo.topic)
         state.topic = topic

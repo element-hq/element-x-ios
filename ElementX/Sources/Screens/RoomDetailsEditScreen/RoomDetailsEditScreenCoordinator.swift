@@ -52,6 +52,8 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
                     self?.displayMediaPickerWithMode(.init(source: .camera, selectionType: .single))
                 case .displayMediaPicker:
                     self?.displayMediaPickerWithMode(.init(source: .photoLibrary, selectionType: .single))
+                case .displayFilePicker:
+                    self?.displayMediaPickerWithMode(.init(source: .documents(types: [.image]), selectionType: .single))
                 }
             }
             .store(in: &cancellables)

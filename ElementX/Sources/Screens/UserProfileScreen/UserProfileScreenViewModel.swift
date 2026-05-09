@@ -16,6 +16,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     private let userSession: UserSessionProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
+    private let appSettings: AppSettings
     
     private var actionsSubject: PassthroughSubject<UserProfileScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<UserProfileScreenViewModelAction, Never> {
@@ -26,10 +27,12 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
          isPresentedModally: Bool,
          userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         analytics: AnalyticsService) {
+         analytics: AnalyticsService,
+         appSettings: AppSettings) {
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
+        self.appSettings = appSettings
         
         let initialViewState = UserProfileScreenViewState(userID: userID,
                                                           isOwnUser: userID == userSession.clientProxy.userID,
@@ -62,8 +65,8 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             openDirectChat()
         case .createDirectChat:
             Task { await createDirectChat() }
-        case .startCall(let roomID):
-            Task { await startCall(roomID: roomID) }
+        case .startCall(let roomID, let isVoiceCall):
+            Task { await startCall(roomID: roomID, isVoiceCall: isVoiceCall) }
         case .dismiss:
             actionsSubject.send(.dismiss)
         }
@@ -92,8 +95,10 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         }
         
         if case let .success(.some(identity)) = await identityResult {
+            state.isIdentityKnown = true
             state.isVerified = identity.verificationState == .verified
         } else {
+            state.isIdentityKnown = false
             MXLog.error("Failed to find the user's identity.")
         }
     }
@@ -122,7 +127,14 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
-                state.bindings.inviteConfirmationUser = userProfile
+                Task {
+                    let isUnknown = if case let .success(identity) = await userSession.clientProxy.userIdentity(for: userProfile.userID, fallBackToServer: false) {
+                        identity == nil
+                    } else {
+                        true
+                    }
+                    state.bindings.inviteConfirmationUser = .init(user: userProfile, isUnknown: isUnknown)
+                }
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
@@ -144,12 +156,12 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         }
     }
     
-    private func startCall(roomID: String) async {
+    private func startCall(roomID: String, isVoiceCall: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             showErrorIndicator()
             return
         }
-        actionsSubject.send(.startCall(roomProxy: roomProxy))
+        actionsSubject.send(.startCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
     }
     
     // MARK: User Indicators

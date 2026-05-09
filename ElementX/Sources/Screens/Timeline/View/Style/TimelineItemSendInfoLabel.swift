@@ -15,8 +15,7 @@ extension View {
                               adjustedDeliveryStatus: TimelineItemDeliveryStatus?,
                               context: TimelineViewModel.Context) -> some View {
         modifier(TimelineItemSendInfoModifier(sendInfo: .init(timelineItem: timelineItem,
-                                                              adjustedDeliveryStatus: adjustedDeliveryStatus,
-                                                              enableKeyShareOnInvite: context.viewState.enableKeyShareOnInvite),
+                                                              adjustedDeliveryStatus: adjustedDeliveryStatus),
                                               context: context))
     }
 }
@@ -32,7 +31,7 @@ private struct TimelineItemSendInfoModifier: ViewModifier {
             AnyLayout(HStackLayout(alignment: .bottom, spacing: spacing))
         case .vertical(let spacing):
             AnyLayout(GridLayout(alignment: .leading, verticalSpacing: spacing))
-        case .overlay:
+        case .overlay, .hidden:
             AnyLayout(ZStackLayout(alignment: .bottomTrailing))
         }
     }
@@ -93,6 +92,8 @@ private struct TimelineItemSendInfoLabel: View {
                 content
                     .gridColumnAlignment(.trailing)
             }
+        case .hidden:
+            EmptyView()
         }
     }
     
@@ -125,6 +126,7 @@ private struct TimelineItemSendInfo {
         case horizontal(spacing: CGFloat = 4)
         case vertical(spacing: CGFloat = 4)
         case overlay(capsuleStyle: Bool)
+        case hidden
     }
     
     let itemID: TimelineItemIdentifier
@@ -147,7 +149,7 @@ private struct TimelineItemSendInfo {
 }
 
 private extension TimelineItemSendInfo {
-    init(timelineItem: EventBasedTimelineItemProtocol, adjustedDeliveryStatus: TimelineItemDeliveryStatus?, enableKeyShareOnInvite: Bool) {
+    init(timelineItem: EventBasedTimelineItemProtocol, adjustedDeliveryStatus: TimelineItemDeliveryStatus?) {
         itemID = timelineItem.id
         localizedString = timelineItem.localizedSendInfo
         
@@ -155,7 +157,7 @@ private extension TimelineItemSendInfo {
             .sendingFailed
         } else if let authenticity = timelineItem.properties.encryptionAuthenticity {
             .encryptionAuthenticity(authenticity)
-        } else if enableKeyShareOnInvite, let forwarder = timelineItem.properties.encryptionForwarder {
+        } else if let forwarder = timelineItem.properties.encryptionForwarder {
             .encryptionForwarder(forwarder)
         } else {
             nil
@@ -164,6 +166,8 @@ private extension TimelineItemSendInfo {
         layoutType = switch timelineItem {
         case is TextBasedRoomTimelineItem:
             .overlay(capsuleStyle: false)
+        case let liveLocationTimelineItem as LiveLocationRoomTimelineItem:
+            liveLocationTimelineItem.layout
         case let message as EventBasedMessageTimelineItemProtocol:
             switch message {
             case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
@@ -182,6 +186,16 @@ private extension TimelineItemSendInfo {
             .vertical(spacing: 16)
         default:
             .horizontal()
+        }
+    }
+}
+
+private extension LiveLocationRoomTimelineItem {
+    var layout: TimelineItemSendInfo.LayoutType {
+        if content.isLive, isOutgoing {
+            .hidden
+        } else {
+            .overlay(capsuleStyle: true)
         }
     }
 }

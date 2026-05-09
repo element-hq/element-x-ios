@@ -38,8 +38,8 @@ class SoftLogoutScreenViewModel: SoftLogoutScreenViewModelType, SoftLogoutScreen
             actionsSubject.send(.forgotPassword)
         case .clearAllData:
             actionsSubject.send(.clearAllData)
-        case .continueWithOIDC:
-            actionsSubject.send(.continueWithOIDC)
+        case .continueWithOAuth:
+            actionsSubject.send(.continueWithOAuth)
         case .updateWindow(let window):
             guard state.window != window else { return }
             Task { state.window = window }

@@ -25,7 +25,12 @@ struct LocationSharingScreen: View {
                 .sheet(isPresented: .constant(true)) {
                     StaticLocationSheet(context: context)
                         .alert(item: $context.alertInfo)
-                        .popover(isPresented: $context.showShareSheet) { shareSheet }
+                }
+        case .viewLive:
+            mainContent
+                .sheet(isPresented: .constant(true)) {
+                    LiveLocationSheet(context: context)
+                        .alert(item: $context.alertInfo)
                 }
         }
     }
@@ -35,7 +40,7 @@ struct LocationSharingScreen: View {
     private var mainContent: some View {
         mapView
             .ignoresSafeArea(edges: .bottom)
-            .track(screen: context.viewState.isLocationPickerMode ? .LocationSend : .LocationView)
+            .track(screen: context.viewState.interactionMode == .picker ? .LocationSend : .LocationView)
             .navigationTitle(L10n.screenViewLocationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
@@ -45,6 +50,7 @@ struct LocationSharingScreen: View {
         ZStack(alignment: .center) {
             MapLibreMapView(mapURLBuilder: context.viewState.mapURLBuilder,
                             options: mapOptions,
+                            mediaProvider: context.mediaProvider,
                             showsUserLocationMode: $context.showsUserLocationMode,
                             error: $context.mapError,
                             mapCenterCoordinate: $context.mapCenterLocation,
@@ -53,15 +59,19 @@ struct LocationSharingScreen: View {
                             geolocationUncertainty: $context.geolocationUncertainty) {
                 context.send(viewAction: .userDidPan)
             }
-            .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
+            .ignoresSafeArea(edges: mapSafeAreaEdges)
             
-            if context.viewState.isLocationPickerMode {
-                LocationMarkerView(userProfile: context.viewState.locationMarkerUserProfile, mediaProvider: context.mediaProvider)
+            if let pickerMarkerKind = context.viewState.pickerMarkerKind {
+                LocationMarkerView(kind: pickerMarkerKind, mediaProvider: context.mediaProvider)
             }
         }
         .overlay(alignment: .topTrailing) {
             centerToUserLocationButton
         }
+    }
+    
+    private var mapSafeAreaEdges: Edge.Set {
+        context.viewState.interactionMode == .picker ? .horizontal : [.horizontal, .bottom]
     }
     
     @ToolbarContentBuilder
@@ -74,25 +84,10 @@ struct LocationSharingScreen: View {
     }
     
     private var mapOptions: MapLibreMapView.Options {
-        var annotations: [String: LocationAnnotation] = [:]
-        if !context.viewState.isLocationPickerMode {
-            let id = context.viewState.locationMarkerUserProfile?.userID ?? UUID().uuidString
-            let annotation = LocationAnnotation(id: id,
-                                                coordinate: context.viewState.initialMapCenter,
-                                                anchorPoint: .bottomCenter) {
-                LocationMarkerView(userProfile: context.viewState.locationMarkerUserProfile, mediaProvider: context.mediaProvider)
-            }
-            annotations[id] = annotation
-        }
-        
-        return .init(zoomLevel: context.viewState.zoomLevel,
-                     initialZoomLevel: context.viewState.initialZoomLevel,
-                     mapCenter: context.viewState.initialMapCenter,
-                     annotations: annotations)
-    }
-    
-    private var mapSafeAreaEdges: Edge.Set {
-        context.viewState.isLocationPickerMode ? .horizontal : [.horizontal, .bottom]
+        .init(zoomLevel: context.viewState.zoomLevel,
+              initialZoomLevel: context.viewState.initialZoomLevel,
+              mapCenter: context.viewState.initialMapCenter,
+              annotations: context.viewState.annotations)
     }
     
     @ViewBuilder
@@ -125,49 +120,24 @@ struct LocationSharingScreen: View {
         .dynamicTypeSize(.large)
         .padding(13)
     }
-    
-    @ViewBuilder
-    private var shareSheet: some View {
-        let location = context.viewState.initialMapCenter
-        let senderName = context.viewState.locationMarkerUserProfile?.displayName ?? context.viewState.locationMarkerUserProfile?.userID
-        AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location, senderName: senderName)],
-                        applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location, senderName: senderName) })
-            .ignoresSafeArea(edges: .bottom)
-            .presentationDetents([.medium, .large])
-            .presentationCompactAdaptation(shareSheetCompactPresentation)
-            .presentationDragIndicator(.hidden)
-    }
-    
-    private var shareSheetCompactPresentation: PresentationAdaptation {
-        if #available(iOS 26.0, *) {
-            .none // ShareLinks use a popover presentation on iOS 26, let it match that.
-        } else {
-            .sheet
-        }
-    }
 }
 
 // MARK: - Previews
 
 struct LocationSharingScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = LocationSharingScreenViewModel.mock(type: .staticSenderLocation)
-    
-    static let withoutLiveSharingViewModel = LocationSharingScreenViewModel.mock(type: .picker, liveLocationSharingEnabled: false)
-    
+        
     static let pinViewModel = LocationSharingScreenViewModel.mock(type: .staticPinLocation)
     
     static let pickerViewModel = LocationSharingScreenViewModel.mock(type: .picker)
+    
+    static let liveLocationViewModel = LocationSharingScreenViewModel.mock(type: .viewLive)
     
     static var previews: some View {
         ElementNavigationStack {
             LocationSharingScreen(context: pickerViewModel.context)
         }
         .previewDisplayName("Picker")
-        
-        ElementNavigationStack {
-            LocationSharingScreen(context: withoutLiveSharingViewModel.context)
-        }
-        .previewDisplayName("Picker without live location sharing")
         
         ElementNavigationStack {
             LocationSharingScreen(context: viewModel.context)
@@ -178,9 +148,10 @@ struct LocationSharingScreen_Previews: PreviewProvider, TestablePreview {
             LocationSharingScreen(context: pinViewModel.context)
         }
         .previewDisplayName("Pin Static Location")
+        
+        ElementNavigationStack {
+            LocationSharingScreen(context: liveLocationViewModel.context)
+        }
+        .previewDisplayName("Live Location")
     }
-}
-
-private extension CGPoint {
-    static let bottomCenter: Self = .init(x: 0.5, y: 1)
 }

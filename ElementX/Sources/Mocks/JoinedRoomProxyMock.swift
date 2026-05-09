@@ -68,6 +68,8 @@ extension JoinedRoomProxyMock {
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         identityStatusChangesPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
 
+        makeLiveLocationServiceReturnValue = RoomLiveLocationServiceMock(.init())
+        
         updateMembersClosure = { }
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
@@ -137,7 +139,7 @@ extension JoinedRoomProxyMock {
             fatalError()
         }
         
-        widgetDriver.startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReturnValue = .success(url)
+        widgetDriver.startBaseURLClientIDColorSchemeVoiceOnlyRageshakeURLAnalyticsConfigurationUnderlyingReturnValue = .success(url)
         
         elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
         

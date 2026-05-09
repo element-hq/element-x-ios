@@ -16,6 +16,15 @@ struct AuthenticationStartScreen: View {
     @Bindable var context: AuthenticationStartScreenViewModel.Context
     
     var body: some View {
+        if case let .welcomeBack(classicAppAccount) = context.viewState.classicAppMode,
+           classicAppAccount.state.isServerSupported != false {
+            AuthenticationClassicAppAccountView(context: context, classicAppAccount: classicAppAccount)
+        } else {
+            standardContent
+        }
+    }
+    
+    var standardContent: some View {
         // This view uses a GeometryReader instead of FullscreenDialog so its content takes the full
         // height available (after taking the buttons out of the equation) in order for the logo
         // and title to appear vertically centred and equally spaced within this content area.
@@ -41,10 +50,11 @@ struct AuthenticationStartScreen: View {
             }
             .scrollBounceBehavior(.basedOnSize)
         }
-        .navigationBarHidden(true)
         .background {
             AuthenticationStartScreenBackgroundImage()
         }
+        .navigationBarHidden(context.viewState.classicAppMode == nil)
+        .toolbar { toolbar }
         .alert(item: $context.alertInfo)
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
@@ -113,12 +123,15 @@ struct AuthenticationStartScreen: View {
             versionText
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textSecondary)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 16)
                 .onTapGesture(count: 7) {
                     context.send(viewAction: .reportProblem)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.appVersion)
+                .overlay(alignment: .trailing) {
+                    developerOptionsButton
+                        .scaledOffset(x: 32, y: -0.5, relativeTo: .compound.bodySM)
+                }
+                .padding(.top, 16)
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()
@@ -129,6 +142,28 @@ struct AuthenticationStartScreen: View {
         let shortVersionString = ProcessInfo.isRunningTests ? "0.0.0" : InfoPlistReader.main.bundleShortVersionString
         return Text(L10n.screenOnboardingAppVersion(shortVersionString))
     }
+    
+    @ViewBuilder
+    var developerOptionsButton: some View {
+        if AppSettings.appBuildType != .release, !ProcessInfo.isRunningTests {
+            Button { context.send(viewAction: .developerOptions) } label: {
+                CompoundIcon(\.code)
+                    .foregroundStyle(.compound.iconSecondary)
+            }
+            .accessibilityLabel(L10n.commonDeveloperOptions)
+        }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .primaryAction) {
+            if case let .otherOptions(classicAppAccount) = context.viewState.classicAppMode {
+                ToolbarButton(role: .close) {
+                    context.send(viewAction: .closeOtherOptions(classicAppAccount))
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Previews
@@ -136,19 +171,32 @@ struct AuthenticationStartScreen: View {
 struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let provisionedViewModel = makeViewModel(provisionedServerName: "example.com")
+    static let classicAppViewModel = makeViewModel(hasClassicAppAccount: true)
     
     static var previews: some View {
         AuthenticationStartScreen(context: viewModel.context)
             .previewDisplayName("Default")
         AuthenticationStartScreen(context: provisionedViewModel.context)
             .previewDisplayName("Provisioned")
+        
+        ElementNavigationStack {
+            AuthenticationStartScreen(context: classicAppViewModel.context)
+        }
+        .previewDisplayName("Classic App")
     }
     
-    static func makeViewModel(provisionedServerName: String? = nil) -> AuthenticationStartScreenViewModel {
-        AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock,
-                                           provisioningParameters: provisionedServerName.map { .init(accountProvider: $0, loginHint: nil) },
-                                           isBugReportServiceEnabled: true,
-                                           appSettings: ServiceLocator.shared.settings,
-                                           userIndicatorController: UserIndicatorControllerMock())
+    static func makeViewModel(provisionedServerName: String? = nil, hasClassicAppAccount: Bool = false) -> AuthenticationStartScreenViewModel {
+        let classicAppAccount = ClassicAppAccount.mockDan
+        classicAppAccount.state.isServerSupported = true
+        classicAppAccount.state.availableSecrets = .complete
+        let classicAppManager: ClassicAppManagerMock? = hasClassicAppAccount ? .init(.init(accounts: [classicAppAccount])) : nil
+        
+        return AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock(classicAppManager: classicAppManager),
+                                                  provisioningParameters: provisionedServerName.map { .init(accountProvider: $0, loginHint: nil) },
+                                                  isBugReportServiceEnabled: true,
+                                                  appMediator: AppMediatorMock(),
+                                                  appSettings: ServiceLocator.shared.settings,
+                                                  mediaProvider: MediaProviderMock(configuration: .init()),
+                                                  userIndicatorController: UserIndicatorControllerMock())
     }
 }

@@ -17,7 +17,6 @@ enum SessionVerificationScreenViewAction {
     case acceptVerificationRequest
     case ignoreVerificationRequest
     case requestVerification
-    case startSasVerification
     case restart
     case accept
     case decline

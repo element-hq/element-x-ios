@@ -140,11 +140,7 @@ private struct MessageComposerReplyHeader: View {
     let action: () -> Void
     
     var body: some View {
-        TimelineReplyView(placement: .composer, timelineItemReplyDetails: replyDetails)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(4.0)
-            .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 13, style: .circular))
+        TimelineReplyView(placement: .composer, timelineItemReplyDetails: replyDetails, maxWidth: .infinity)
             .overlay(alignment: .topTrailing) {
                 Button(action: action) {
                     CompoundIcon(\.close, size: .small, relativeTo: .compound.bodySMSemibold)
@@ -206,28 +202,46 @@ extension View {
 }
 
 private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
-    private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
+    @Environment(\.isEnabled) private var isEnabled
     
     let header: Header
     
+    private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
+    
     func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            if isEnabled {
+                mainContent(content: content)
+                    .snapshotableGlassEffect(.regular.interactive(), // Doesn't need to be interactive but Apple does it 🤷‍♂️
+                                             snapshotBackground: .compound.bgSubtleSecondary,
+                                             in: composerShape)
+            } else {
+                mainContent(content: content)
+                    .background(.compound.bgSubtlePrimary, in: composerShape)
+            }
+        } else {
+            mainContent(content: content)
+                .background {
+                    ZStack {
+                        composerShape
+                            .fill(Color.compound.bgSubtleSecondary)
+                        composerShape
+                            .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
+                    }
+                }
+        }
+    }
+    
+    func mainContent(content: Content) -> some View {
         VStack(alignment: .leading, spacing: -6) {
             header
             
             content
                 .tint(.compound.iconAccentTertiary)
-                .padding(.vertical, 10)
+                .padding(.vertical, Compound.supportsGlass ? 11 : 10)
         }
-        .padding(.horizontal, 12.0)
+        .padding(.horizontal, Compound.supportsGlass ? 16 : 12)
         .clipShape(composerShape)
-        .background {
-            ZStack {
-                composerShape
-                    .fill(Color.compound.bgSubtleSecondary)
-                composerShape
-                    .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
-            }
-        }
     }
 }
 

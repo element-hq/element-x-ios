@@ -133,7 +133,7 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
     }
     
     private func fetchLoginURLIfNeededAndContinue() async {
-        guard authenticationService.homeserver.value.loginMode.supportsOIDCFlow else {
+        guard authenticationService.homeserver.value.loginMode.supportsOAuthFlow else {
             actionsSubject.send(.continueWithPassword)
             return
         }
@@ -146,9 +146,9 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
         startLoading() // Uses the same ID, so no need to worry if the indicator already exists
         defer { stopLoading() }
         
-        switch await authenticationService.urlForOIDCLogin(loginHint: nil) {
-        case .success(let oidcData):
-            actionsSubject.send(.continueWithOIDC(data: oidcData, window: window))
+        switch await authenticationService.urlForOAuthLogin(loginHint: nil) {
+        case .success(let oAuthData):
+            actionsSubject.send(.continueWithOAuth(data: oAuthData, window: window))
         case .failure:
             displayError(.unknownError)
         }

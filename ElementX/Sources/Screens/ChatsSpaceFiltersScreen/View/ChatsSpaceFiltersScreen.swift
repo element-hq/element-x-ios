@@ -35,8 +35,8 @@ struct ChatsSpaceFiltersScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            ToolbarButton(role: .cancel) {
+        ToolbarItem(placement: .primaryAction) {
+            ToolbarButton(role: .close) {
                 context.send(viewAction: .cancel)
             }
         }

@@ -33,23 +33,6 @@ struct NavigationRootCoordinatorTests {
         assertCoordinatorsEqual(secondRootCoordinator, navigationRootCoordinator.rootCoordinator)
     }
     
-    @Test
-    func overlay() {
-        let rootCoordinator = SomeTestCoordinator()
-        navigationRootCoordinator.setRootCoordinator(rootCoordinator)
-        
-        let overlayCoordinator = SomeTestCoordinator()
-        navigationRootCoordinator.setOverlayCoordinator(overlayCoordinator)
-        
-        assertCoordinatorsEqual(rootCoordinator, navigationRootCoordinator.rootCoordinator)
-        assertCoordinatorsEqual(overlayCoordinator, navigationRootCoordinator.overlayCoordinator)
-        
-        navigationRootCoordinator.setOverlayCoordinator(nil)
-        
-        assertCoordinatorsEqual(rootCoordinator, navigationRootCoordinator.rootCoordinator)
-        #expect(navigationRootCoordinator.overlayCoordinator == nil)
-    }
-    
     // MARK: - Dismissal Callbacks
     
     @Test
@@ -64,19 +47,6 @@ struct NavigationRootCoordinatorTests {
             }
             
             navigationRootCoordinator.setRootCoordinator(nil)
-        }
-    }
-    
-    @Test
-    func overlayDismissalCallback() async {
-        let overlayCoordinator = SomeTestCoordinator()
-        
-        await confirmation("Wait for callback") { confirm in
-            navigationRootCoordinator.setOverlayCoordinator(overlayCoordinator) {
-                confirm()
-            }
-            
-            navigationRootCoordinator.setOverlayCoordinator(nil)
         }
     }
     

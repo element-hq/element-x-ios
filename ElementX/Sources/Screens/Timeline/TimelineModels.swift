@@ -24,6 +24,7 @@ enum TimelineViewModelAction {
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayMediaPreview(TimelineMediaPreviewViewModel)
     case displayLocation(StaticLocationData)
+    case displayLiveLocation(sender: TimelineItemSender, initialLiveLocationShare: LiveLocationShare)
     case displayResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case displayThread(itemID: TimelineItemIdentifier)
     case composer(action: TimelineComposerAction)
@@ -56,6 +57,7 @@ enum TimelineViewAction {
     case paginateBackwards
     case paginateForwards
     case scrollToBottom
+    case scrollToFirstItemForCurrentDate
     
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
@@ -69,6 +71,8 @@ enum TimelineViewAction {
     case handlePasteOrDrop(providers: [NSItemProvider])
     case handlePollAction(TimelineViewPollAction)
     case handleAudioPlayerAction(TimelineAudioPlayerAction)
+    
+    case stopLiveLocationSharing(TimelineItemIdentifier)
     
     /// Focus the timeline onto the specified event ID (switching to a detached timeline if needed).
     case focusOnEventID(String)
@@ -140,13 +144,16 @@ struct TimelineViewState: BindableState {
     
     var mapTilerConfiguration: MapTilerConfiguration
 
-    var enableKeyShareOnInvite: Bool
-    
+    var stoppedLiveLocationIDs: Set<TimelineItemIdentifier> = []
+        
     var bindings: TimelineViewStateBindings
 }
 
 struct TimelineViewStateBindings {
     var isScrolledToBottom = true
+    
+    /// The timestamp of the topmost visible item, used to drive the floating date badge while scrolling.
+    var floatingDate: Date?
     
     /// The state of wether reactions listed on the timeline are expanded/collapsed.
     /// Key is itemID, value is the collapsed state.
@@ -240,6 +247,7 @@ struct TimelineState {
     
     /// These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
+    var scrollToFirstItemForDatePublisher = PassthroughSubject<Void, Never>()
     
     var itemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
     

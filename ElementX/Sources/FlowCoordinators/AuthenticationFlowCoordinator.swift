@@ -22,6 +22,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
+    private let appHooks: AppHooks
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -39,13 +40,13 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case serverConfirmationScreen
         /// The screen to choose a different server.
         case serverSelectionScreen
-        /// The web authentication session is being presented.
-        case oidcAuthentication
         /// The screen to login with a password.
         case loginScreen
         
         /// The screen to report an error.
         case bugReportFlow
+        /// The screen to toggle feature flags.
+        case developerOptions
         
         /// The flow is complete.
         case complete
@@ -62,8 +63,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case loginWithQR
         /// Show the server confirmation screen.
         case confirmServer(AuthenticationFlow)
-        /// The user encountered a problem.
-        case reportProblem
         
         /// The QR login flow was aborted.
         case cancelledLoginWithQR
@@ -75,17 +74,20 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         /// The user is no longer selecting a server.
         case dismissedServerSelection
         
-        /// Show the web authentication session for OIDC (using the parameters in the `userInfo`).
-        case continueWithOIDC
-        /// The web authentication session was aborted.
-        case cancelledOIDCAuthentication(previousState: State)
         /// Show the screen to login with password (with the optional login hint in the `userInfo`).
         case continueWithPassword
         /// The password login was aborted.
         case cancelledPasswordLogin(previousState: State)
         
+        /// The user encountered a problem.
+        case reportProblem
         /// The user has finished reporting a problem (or viewing the logs).
         case bugReportFlowComplete
+        
+        /// The user wants to toggle a feature flag.
+        case developerOptions
+        /// The user finished toggling feature flags.
+        case dismissedDeveloperOptions
         
         /// The user has successfully signed in. The new session can be found in the `userInfo`.
         case signedIn
@@ -94,7 +96,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let stateMachine: StateMachine<State, Event>
     private var cancellables = Set<AnyCancellable>()
     
-    private var oidcPresenter: OIDCAuthenticationPresenter?
+    private var oAuthPresenter: OAuthAuthenticationPresenter?
     
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
@@ -106,6 +108,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
          navigationRootCoordinator: NavigationRootCoordinator,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
+         appHooks: AppHooks,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
@@ -113,6 +116,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.appMediator = appMediator
         self.appSettings = appSettings
+        self.appHooks = appHooks
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
@@ -127,6 +131,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        MXLog.info("Handling app route: \(appRoute)")
+        
         switch appRoute {
         case .accountProvisioningLink(let provisioningParameters):
             guard appSettings.allowOtherAccountProviders else {
@@ -145,6 +151,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func clearRoute(animated: Bool) {
+        oAuthPresenter?.cancel() // Handle ongoing OAuth authentication first.
+        
         switch stateMachine.state {
         case .initial, .startScreen:
             break
@@ -156,16 +164,24 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case .serverSelectionScreen:
             navigationStackCoordinator.setSheetCoordinator(nil)
             navigationStackCoordinator.popToRoot(animated: animated)
-        case .oidcAuthentication:
-            oidcPresenter?.cancel()
-            navigationStackCoordinator.popToRoot(animated: animated)
         case .loginScreen:
             navigationStackCoordinator.popToRoot(animated: animated)
         case .bugReportFlow:
             navigationStackCoordinator.setSheetCoordinator(nil)
+        case .developerOptions:
+            navigationStackCoordinator.setSheetCoordinator(nil)
         case .complete:
             fatalError()
         }
+    }
+    
+    func handleOAuthCallbackURL(_ url: URL) {
+        guard let oAuthPresenter else {
+            MXLog.error("Failed to find an OAuth request in progress.")
+            return
+        }
+        
+        oAuthPresenter.handleUniversalLinkCallback(url)
     }
     
     // MARK: - Setup
@@ -206,16 +222,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
         stateMachine.addRoutes(event: .dismissedServerSelection, transitions: [.serverSelectionScreen => .serverConfirmationScreen])
         
-        stateMachine.addRoutes(event: .continueWithOIDC, transitions: [.serverConfirmationScreen => .oidcAuthentication,
-                                                                       .startScreen => .oidcAuthentication]) { [weak self] context in
-            guard let (oidcData, window) = context.userInfo as? (OIDCAuthorizationDataProxy, UIWindow) else {
-                fatalError("Missing the OIDC data and presentation anchor.")
-            }
-            self?.showOIDCAuthentication(oidcData: oidcData, presentationAnchor: window, fromState: context.fromState)
-        }
-        stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .serverConfirmationScreen), transitions: [.oidcAuthentication => .serverConfirmationScreen])
-        stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .startScreen), transitions: [.oidcAuthentication => .startScreen])
-        
         stateMachine.addRoutes(event: .continueWithPassword, transitions: [.serverConfirmationScreen => .loginScreen,
                                                                            .startScreen => .loginScreen]) { [weak self] context in
             let loginHint = context.userInfo as? String
@@ -231,10 +237,18 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
         stateMachine.addRoutes(event: .bugReportFlowComplete, transitions: [.bugReportFlow => .startScreen])
         
+        // Developer Options
+        
+        stateMachine.addRoutes(event: .developerOptions, transitions: [.startScreen => .developerOptions]) { [weak self] _ in
+            self?.showDeveloperOptionsScreen()
+        }
+        stateMachine.addRoutes(event: .dismissedDeveloperOptions, transitions: [.developerOptions => .startScreen])
+        
         // Completion
         
         stateMachine.addRoutes(event: .signedIn, transitions: [.qrCodeLoginScreen => .complete,
-                                                               .oidcAuthentication => .complete,
+                                                               .serverConfirmationScreen => .complete, // OAuth authentication
+                                                               .startScreen => .complete, // Direct OAuth authentication
                                                                .loginScreen => .complete]) { [weak self] context in
             guard let userSession = context.userInfo as? UserSessionProtocol else { fatalError("The user session wasn't included in the context") }
             self?.userHasSignedIn(userSession: userSession)
@@ -259,10 +273,18 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func showStartScreen(fromState: State, applying provisioningParameters: AccountProvisioningParameters? = nil) {
+        let mediaProvider = authenticationService.classicAppAccount.map { account in
+            MediaProvider(mediaLoader: ClassicAppMediaLoader(classicAppAccount: account),
+                          imageCache: .onlyInMemory,
+                          homeserverReachabilityPublisher: appMediator.networkMonitor.reachabilityPublisher) // Close enough approximation
+        }
+        
         let parameters = AuthenticationStartScreenParameters(authenticationService: authenticationService,
                                                              provisioningParameters: provisioningParameters,
                                                              isBugReportServiceEnabled: bugReportService.isEnabled,
+                                                             appMediator: appMediator,
                                                              appSettings: appSettings,
+                                                             mediaProvider: mediaProvider,
                                                              userIndicatorController: userIndicatorController)
         let coordinator = AuthenticationStartScreenCoordinator(parameters: parameters)
         
@@ -277,13 +299,16 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.confirmServer(.login))
                 case .register:
                     stateMachine.tryEvent(.confirmServer(.register))
-                case .reportProblem:
-                    stateMachine.tryEvent(.reportProblem)
                     
-                case .loginDirectlyWithOIDC(let oidcData, let window):
-                    stateMachine.tryEvent(.continueWithOIDC, userInfo: (oidcData, window))
+                case .loginDirectlyWithOAuth(let oAuthData, let window):
+                    showOAuthAuthentication(oAuthData: oAuthData, presentationAnchor: window)
                 case .loginDirectlyWithPassword(let loginHint):
                     stateMachine.tryEvent(.continueWithPassword, userInfo: loginHint)
+                
+                case .reportProblem:
+                    stateMachine.tryEvent(.reportProblem)
+                case .developerOptions:
+                    stateMachine.tryEvent(.developerOptions)
                 }
             }
             .store(in: &cancellables)
@@ -310,16 +335,14 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .startOver:
                 fatalError("QR code login shouldn't request to start over as it's handled within the screen.")
-            case .requestOIDCAuthorisation, .linkedDevice:
-                fatalError("QR code login shouldn't request an OIDC flow or link a device.")
+            case .requestOAuthAuthorisation, .linkedDevice:
+                fatalError("QR code login shouldn't request an OAuth flow or link a device.")
             case .signInManually:
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.cancelledLoginWithQR)
                 stateMachine.tryEvent(.confirmServer(.login))
             case .signedIn(let userSession):
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                // Since the qr code login flow includes verification
-                appSettings.hasRunIdentityConfirmationOnboarding = true
                 DispatchQueue.main.async {
                     self.stateMachine.tryEvent(.signedIn, userInfo: userSession)
                 }
@@ -351,8 +374,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .continueWithOIDC(let oidcData, let window):
-                stateMachine.tryEvent(.continueWithOIDC, userInfo: (oidcData, window))
+            case .continueWithOAuth(let oAuthData, let window):
+                showOAuthAuthentication(oAuthData: oAuthData, presentationAnchor: window)
             case .continueWithPassword:
                 stateMachine.tryEvent(.continueWithPassword)
             case .changeServer:
@@ -394,22 +417,26 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func showOIDCAuthentication(oidcData: OIDCAuthorizationDataProxy, presentationAnchor: UIWindow, fromState: State) {
-        let presenter = OIDCAuthenticationPresenter(authenticationService: authenticationService,
-                                                    oidcRedirectURL: appSettings.oidcRedirectURL,
-                                                    presentationAnchor: presentationAnchor,
-                                                    userIndicatorController: userIndicatorController)
-        oidcPresenter = presenter
+    /// **Note:** We have intentionally excluded this presentation from the state machine as it doesn't mutate our navigation stack and there
+    /// isn't a robust way to detect why the user returned to the app when the MAS URL directly opens an external app for authentication without
+    /// presenting a web authentication session.
+    private func showOAuthAuthentication(oAuthData: OAuthAuthorizationDataProxy, presentationAnchor: UIWindow) {
+        let presenter = OAuthAuthenticationPresenter(authenticationService: authenticationService,
+                                                     redirectURL: appSettings.oAuthRedirectURL,
+                                                     presentationAnchor: presentationAnchor,
+                                                     appMediator: appMediator,
+                                                     appHooks: appHooks,
+                                                     userIndicatorController: userIndicatorController)
+        oAuthPresenter = presenter
         
         Task {
-            switch await presenter.authenticate(using: oidcData) {
+            switch await presenter.authenticate(using: oAuthData) {
             case .success(let userSession):
                 stateMachine.tryEvent(.signedIn, userInfo: userSession)
             case .failure:
-                stateMachine.tryEvent(.cancelledOIDCAuthentication(previousState: fromState))
-                // Nothing more to do, the alerts are handled by the presenter.
+                break // Nothing to do, any alerts will be handled by the presenter.
             }
-            oidcPresenter = nil
+            oAuthPresenter = nil
         }
     }
     
@@ -428,8 +455,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .signedIn(let userSession):
                     stateMachine.tryEvent(.signedIn, userInfo: userSession)
-                case .configuredForOIDC:
-                    // Pop back to the confirmation screen for OIDC login to continue.
+                case .configuredForOAuth:
+                    // Pop back to the confirmation screen for OAuth login to continue.
                     navigationStackCoordinator.pop(animated: false)
                 }
             }
@@ -457,6 +484,28 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         bugReportFlowCoordinator = coordinator
         coordinator.start()
+    }
+    
+    // MARK: - Developer Options
+    
+    private func showDeveloperOptionsScreen() {
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = DeveloperOptionsScreenCoordinator(appSettings: appSettings,
+                                                            appHooks: appHooks,
+                                                            clientProxy: nil)
+        coordinator.actions
+            .sink { action in
+                switch action {
+                case .clearCache:
+                    break // Not sent when clientProxy == nil
+                }
+            }
+            .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedDeveloperOptions)
+        }
     }
     
     // MARK: - Completion

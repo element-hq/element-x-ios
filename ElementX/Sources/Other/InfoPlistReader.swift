@@ -27,6 +27,7 @@ struct InfoPlistReader {
         static let classicAppGroupIdentifier = "classicAppGroupIdentifier"
         static let classicAppKeychainServiceIdentifier = "classicAppKeychainServiceIdentifier"
         static let classicAppKeychainAccessGroupIdentifier = "classicAppKeychainAccessGroupIdentifier"
+        static let classicAppDeepLinkURL = "classicAppDeepLinkURL"
     }
     
     private enum Values {
@@ -131,6 +132,11 @@ struct InfoPlistReader {
     
     var classicAppKeychainAccessGroupIdentifier: String? {
         infoPlistValue(forKey: Keys.classicAppKeychainAccessGroupIdentifier)
+    }
+    
+    var classicAppDeepLinkURL: URL? {
+        let urlString: String? = infoPlistValue(forKey: Keys.classicAppDeepLinkURL)
+        return urlString.flatMap { URL(string: $0) }
     }
     
     // MARK: - Private

@@ -7,31 +7,36 @@
 //
 
 import Foundation
-import MatrixRustSDK
 import OrderedCollections
 
 enum RoomScreenViewModelAction: Equatable {
     case focusEvent(eventID: String)
+    case displayThreadList
     case displayThread(threadRootEventID: String, focussedEventID: String)
     case displayPinnedEventsTimeline
     case displayRoomDetails
-    case displayCall
+    case displayCall(isVoiceCall: Bool)
     case removeComposerFocus
     case displayKnockRequests
     case displayRoom(roomID: String, via: [String])
     case displayMessageForwarding(MessageForwardingItem)
+    case stopLiveLocationSharing
+    case displayLiveLocation
 }
 
 enum RoomScreenViewAction {
     case tappedPinnedEventsBanner
     case viewAllPins
     case displayRoomDetails
-    case displayCall
+    case displayCall(isVoiceCall: Bool)
     case footerViewAction(RoomScreenFooterViewAction)
     case acceptKnock(eventID: String)
     case dismissKnockRequests
     case viewKnockRequests
     case displaySuccessorRoom
+    case displayThreadList
+    case tappedOpenLiveLocation
+    case tappedStopLiveLocation
 }
 
 struct RoomScreenViewState: BindableState {
@@ -46,6 +51,8 @@ struct RoomScreenViewState: BindableState {
         !pinnedEventsBannerState.isEmpty && lastScrollDirection != .top
     }
     
+    var isSharingLiveLocation = false
+    
     var canSendMessage = true
     
     /// Whether or not starting a call is supported.
@@ -54,13 +61,18 @@ struct RoomScreenViewState: BindableState {
     var canJoinCall = false
     /// Whether or not this room currently has a call in progress.
     var hasOngoingCall: Bool
+    /// The ongoing call nature (audio or video), null if not advertised by the participants
+    var activeRoomCallIntent: CallIntent?
     /// Whether or not the user is already part of a call in another room.
     var isParticipatingInOngoingCall = false
     var shouldShowCallButton: Bool {
         isCallingEnabled && !isParticipatingInOngoingCall // Hide the join call button when already in the call
     }
     
-    var isKnockingEnabled = false
+    /// Whether the current room is a DM
+    var isDirectOneToOneRoom: Bool
+    
+    var roomThreadListEnabled = false
     var isKnockableRoom = false
     var canAcceptKnocks = false
     var canDeclineKnocks = false
@@ -75,13 +87,12 @@ struct RoomScreenViewState: BindableState {
     }
     
     var shouldSeeKnockRequests: Bool {
-        isKnockingEnabled &&
-            isKnockableRoom &&
+        isKnockableRoom &&
             !displayedKnockRequests.isEmpty &&
             (canAcceptKnocks || canDeclineKnocks || canBan)
     }
     
-    /// If `enableKeyShareOnInvite` is set, determines the current history sharing state.
+    /// The current history sharing state.
     var roomHistorySharingState: RoomHistorySharingState?
     
     var footerDetails: RoomScreenFooterViewDetails?

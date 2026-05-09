@@ -488,8 +488,6 @@ extension HomeScreenViewModelAction: @retroactive Equatable {
             true
         case (.presentStartChatScreen, .presentStartChatScreen):
             true
-        case (.presentGlobalSearch, .presentGlobalSearch):
-            true
         case (.logout, .logout):
             true
         default:

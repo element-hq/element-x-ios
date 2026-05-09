@@ -30,6 +30,7 @@ struct InviteUsersScreenViewState: BindableState {
     
     var selectedUsers: [UserProfileProxy] = []
     var membershipState: [String: MembershipState] = .init()
+    var usersToConfirm: [UserProfileProxy] = []
     
     var isSearching = false
     
@@ -69,6 +70,9 @@ struct InviteUsersScreenViewStateBindings {
     var searchQuery = ""
     var selectedUsersPosition: String?
     
+    /// Whether we are showing the confirmation dialog.
+    var presentConfirmationDialog = false
+    
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<InviteUsersScreenErrorType>?
 }
@@ -76,5 +80,7 @@ struct InviteUsersScreenViewStateBindings {
 enum InviteUsersScreenViewAction {
     case cancel
     case proceed
+    case removeUnknownUsers
+    case confirmUnknownUsers
     case toggleUser(UserProfileProxy)
 }

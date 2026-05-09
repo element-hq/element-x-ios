@@ -90,10 +90,11 @@ struct MediaFileRoomTimelineContent: View {
             .foregroundStyle(.compound.textPrimary)
             .lineLimit(2)
         } icon: {
-            CompoundIcon(icon, size: .xSmall, relativeTo: .body)
+            CompoundIcon(icon, size: .medium, relativeTo: .body)
                 .foregroundColor(.compound.iconPrimary)
-                .scaledPadding(8)
-                .background(.compound.iconOnSolidPrimary, in: Circle())
+                .scaledPadding(6)
+                .background(.compound.iconOnSolidPrimary,
+                            in: RoundedRectangle(cornerRadius: 4, style: .continuous))
         }
         .labelStyle(.custom(spacing: 8, alignment: .center))
         .padding(.horizontal, 4) // Add to the styler's padding of 8, as we use the default insets for the caption.

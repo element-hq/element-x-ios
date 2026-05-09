@@ -21,6 +21,7 @@ struct HomeScreenCoordinatorParameters {
 
 enum HomeScreenCoordinatorAction {
     case presentRoom(roomIdentifier: String)
+    case detachRoom(roomIdentifier: String)
     case presentRoomDetails(roomIdentifier: String)
     case presentReportRoom(roomIdentifier: String)
     case presentDeclineAndBlock(userID: String, roomID: String)
@@ -33,7 +34,6 @@ enum HomeScreenCoordinatorAction {
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
     case presentStartChatScreen
-    case presentGlobalSearch
     case logout
 }
 
@@ -65,6 +65,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                 switch action {
                 case .presentRoom(let roomIdentifier):
                     actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
+                case .detachRoom(let roomIdentifier):
+                    actionsSubject.send(.detachRoom(roomIdentifier: roomIdentifier))
                 case .presentRoomDetails(roomIdentifier: let roomIdentifier):
                     actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
                 case .presentReportRoom(let roomIdentifier):
@@ -87,8 +89,6 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentEncryptionResetScreen)
                 case .presentStartChatScreen:
                     actionsSubject.send(.presentStartChatScreen)
-                case .presentGlobalSearch:
-                    actionsSubject.send(.presentGlobalSearch)
                 case .logout:
                     actionsSubject.send(.logout)
                 case .transferOwnership(let roomIdentifier):

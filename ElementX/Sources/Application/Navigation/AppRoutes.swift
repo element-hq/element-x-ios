@@ -14,6 +14,9 @@ import MatrixRustSDK
 enum AppRoute: Hashable {
     /// An account provisioning link generated externally.
     case accountProvisioningLink(AccountProvisioningParameters)
+    /// An external callback used to complete login with OAuth. This is only used when authentication
+    /// requires an external app so cannot be handled directly by the web authentication session.
+    case oAuthCallback(url: URL)
     
     /// The app's home screen.
     case roomList
@@ -40,9 +43,7 @@ enum AppRoute: Hashable {
     /// The profile of a matrix user (outside of a room).
     case userProfile(userID: String)
     /// An Element Call running in a particular room
-    case call(roomID: String)
-    /// An Element Call link generated outside of a chat room.
-    case genericCallLink(url: URL)
+    case call(roomID: String, isVoiceCall: Bool)
     /// The settings screen.
     case settings
     /// The setting screen for key backup.
@@ -53,11 +54,14 @@ enum AppRoute: Hashable {
     case transferOwnership(roomID: String)
     /// A thread within a room, only to be used to handle tap on notification for threaded events.
     case thread(roomID: String, threadRootEventID: String, focusEventID: String?)
+    /// The global search screen
+    case globalSearch
     
     /// Whether or not the route should be handled by the authentication flow.
     var isAuthenticationRoute: Bool {
         switch self {
         case .accountProvisioningLink: true
+        case .oAuthCallback: true
         default: false
         }
     }
@@ -84,7 +88,7 @@ struct AppRouteURLParser {
             MatrixPermalinkParser(),
             ElementWebURLParser(domains: appSettings.elementWebHosts),
             AccountProvisioningURLParser(domain: appSettings.accountProvisioningHost),
-            ElementCallURLParser()
+            OAuthCallbackURLParser(redirectURL: appSettings.oAuthRedirectURL)
         ]
     }
     
@@ -134,46 +138,10 @@ private struct AppGroupURLParser: URLParser {
     }
 }
 
-/// The parser for Element Call links. This always returns a `.genericCallLink`.
-private struct ElementCallURLParser: URLParser {
-    private let knownHosts: [String] = [] // UCMeet: calls use embedded Element Call bundle, no hosted instance
-    private let customSchemeURLQueryParameterName = "url"
-    
-    func route(from url: URL) -> AppRoute? {
-        // Element Call not supported, WebRTC not available
-        // https://github.com/element-hq/element-x-ios/issues/1794
-        if ProcessInfo.processInfo.isiOSAppOnMac {
-            return nil
-        }
-        
-        // First try processing URLs with custom schemes
-        if let scheme = url.scheme,
-           scheme == InfoPlistReader.app.elementCallScheme {
-            guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-                return nil
-            }
-            
-            guard let encodedURLString = components.queryItems?.first(where: { $0.name == customSchemeURLQueryParameterName })?.value,
-                  let callURL = URL(string: encodedURLString),
-                  callURL.scheme == "https" // Don't allow URLs from potentially unsafe domains
-            else {
-                MXLog.error("Invalid custom scheme call parameters: \(url)")
-                return nil
-            }
-            
-            return .genericCallLink(url: callURL)
-        }
-        
-        // Otherwise try to interpret it as an universal link
-        guard let host = url.host, knownHosts.contains(host) else {
-            return nil
-        }
-        
-        return .genericCallLink(url: url)
-    }
-}
-
 /// Converts `ucmatrix.org` permalinks to `matrix.to` format for SDK parsing.
+/// UCMeet customization: matrix.to is blocked in Russia, all outgoing permalinks are
+/// rewritten to ucmatrix.org via URL.replacingMatrixToHost(); this parser handles the
+/// inbound side, rewriting back to matrix.to so the SDK permalink parser still works.
 private struct UCMatrixPermalinkParser: URLParser {
     private let permalinkParser = MatrixPermalinkParser()
 
@@ -187,6 +155,7 @@ private struct UCMatrixPermalinkParser: URLParser {
         return permalinkParser.route(from: matrixToURL)
     }
 }
+
 
 private struct MatrixPermalinkParser: URLParser {
     func route(from url: URL) -> AppRoute? {
@@ -252,5 +221,15 @@ private struct AccountProvisioningURLParser: URLParser {
         let loginHint = components.queryItems?.first { $0.name == AccountProvisioningParameters.CodingKeys.loginHint.rawValue }?.value
         
         return .accountProvisioningLink(.init(accountProvider: serverName, loginHint: loginHint))
+    }
+}
+
+/// The parser for the OAuth callback URL. This always returns an `.oAuthCallback`.
+struct OAuthCallbackURLParser: URLParser {
+    let redirectURL: URL
+    
+    func route(from url: URL) -> AppRoute? {
+        guard url.absoluteString.starts(with: redirectURL.absoluteString) else { return nil }
+        return .oAuthCallback(url: url)
     }
 }

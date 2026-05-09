@@ -11,5 +11,6 @@ import Foundation
 enum TimelineEventContent: Hashable {
     case message(EventBasedMessageTimelineItemContentType)
     case poll(question: String)
+    case liveLocation
     case redacted
 }

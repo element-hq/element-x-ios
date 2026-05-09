@@ -16,6 +16,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let room: RoomProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
+    private let eventStringBuilder: RoomEventStringBuilder
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
@@ -78,17 +79,19 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     init(roomListService: RoomListServiceProtocol,
          room: RoomProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService) async throws {
+         analyticsService: AnalyticsService,
+         eventStringBuilder: RoomEventStringBuilder) async throws {
         self.roomListService = roomListService
         self.room = room
         self.appSettings = appSettings
         self.analyticsService = analyticsService
+        self.eventStringBuilder = eventStringBuilder
         
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))
         
         let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .openRoom)
         timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: appSettings.threadsEnabled),
-                                                                                                         filter: .eventFilter(filter: excludedEventsFilter),
+                                                                                                         filter: .eventFilter(filter: Self.excludedEventsFilter),
                                                                                                          internalIdPrefix: nil,
                                                                                                          dateDividerMode: .daily,
                                                                                                          trackReadReceipts: .messageLikeEvents,
@@ -198,6 +201,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             MXLog.error("Unexpected error: \(error)")
             return .failure(.sdkError(error))
         }
+    }
+    
+    func threadListService() -> RoomThreadListServiceProxyProtocol {
+        RoomThreadListProxy(threadListService: room.threadListService(), eventStringBuilder: eventStringBuilder)
     }
     
     func loadOrFetchEventDetails(for eventID: String) async -> Result<TimelineEvent, RoomProxyError> {
@@ -744,6 +751,45 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    // MARK: - Live Location
+    
+    func makeLiveLocationService() async -> RoomLiveLocationServiceProtocol {
+        await RoomLiveLocationService(liveLocationsObserver: room.liveLocationsObserver())
+    }
+    
+    func startLiveLocationShare(duration: Duration) async -> Result<String, RoomProxyError> {
+        do {
+            let eventID = try await room.startLiveLocationShare(durationMillis: UInt64(duration.seconds * 1000))
+            return .success(eventID)
+        } catch {
+            MXLog.error("Failed starting live location share with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func sendLiveLocation(geoURI: GeoURI) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.sendLiveLocation(geoUri: geoURI.string)
+            return .success(())
+        } catch LiveLocationError.NotLive {
+            MXLog.error("Failed sending live location, session is not active")
+            return .failure(.liveLocationSessionIsNotActive)
+        } catch {
+            MXLog.error("Failed sending live location with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func stopLiveLocationShare() async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.stopLiveLocationShare()
+            return .success(())
+        } catch {
+            MXLog.error("Failed stopping live location share with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
 
     // MARK: - Private
     
@@ -792,9 +838,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    private let excludedEventsFilter: TimelineEventFilter = {
-        var stateEventFilters: [StateEventType] = [.roomAliases,
-                                                   .roomCanonicalAlias,
+    private static let excludedEventsFilter: TimelineEventFilter = {
+        var stateEventFilters: [StateEventType] = [.roomCanonicalAlias,
                                                    .roomGuestAccess,
                                                    .roomHistoryVisibility,
                                                    .roomJoinRules,
@@ -807,7 +852,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                    .policyRuleRoom,
                                                    .policyRuleServer,
                                                    .policyRuleUser]
-        
         return .excludeEventTypes(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
     }()
 }

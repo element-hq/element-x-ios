@@ -67,7 +67,9 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
             .flatMap { $0 }
             .filter { state.currentPermissions[keyPath: $0.keyPath] != $0.value }
         for setting in changedSettings {
-            changes[keyPath: setting.rustKeyPath] = setting.value
+            for keyPath in setting.rustKeyPaths {
+                changes[keyPath: keyPath] = setting.value
+            }
         }
         
         switch await roomProxy.applyPowerLevelChanges(changes) {

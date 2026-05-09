@@ -21,8 +21,8 @@ struct UserProfileScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
-        .sheet(item: $context.inviteConfirmationUser) { user in
-            SendInviteConfirmationView(userToInvite: user,
+        .sheet(item: $context.inviteConfirmationUser) { userToInvite in
+            SendInviteConfirmationView(userToInvite: userToInvite,
                                        mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .createDirectChat)
             }
@@ -66,11 +66,20 @@ struct UserProfileScreen: View {
             
             if let roomID = context.viewState.dmRoomID {
                 Button {
-                    context.send(viewAction: .startCall(roomID: roomID))
+                    context.send(viewAction: .startCall(roomID: roomID, isVoiceCall: true))
+                } label: {
+                    CompoundIcon(\.voiceCall)
+                }
+                .accessibilityLabel(L10n.a11yStartVoiceCall)
+                .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
+                
+                Button {
+                    context.send(viewAction: .startCall(roomID: roomID, isVoiceCall: false))
                 } label: {
                     CompoundIcon(\.videoCall)
                 }
-                .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
+                .accessibilityLabel(L10n.a11yStartVideoCall)
+                .buttonStyle(FormActionButtonStyle(title: L10n.commonVideo))
             }
             
             if let permalink = context.viewState.permalink {
@@ -138,6 +147,7 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
                                           isPresentedModally: false,
                                           userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          analytics: ServiceLocator.shared.analytics)
+                                          analytics: ServiceLocator.shared.analytics,
+                                          appSettings: ServiceLocator.shared.settings)
     }
 }

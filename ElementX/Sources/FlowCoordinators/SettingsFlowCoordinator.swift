@@ -19,6 +19,7 @@ enum SettingsFlowCoordinatorAction {
 
 class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let appLockService: AppLockServiceProtocol
+    private let isInSecondaryWindow: Bool
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let flowParameters: CommonFlowParameters
     
@@ -39,9 +40,11 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     init(appLockService: AppLockServiceProtocol,
+         isInSecondaryWindow: Bool,
          navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
         self.appLockService = appLockService
+        self.isInSecondaryWindow = isInSecondaryWindow
         self.navigationStackCoordinator = navigationStackCoordinator
         self.flowParameters = flowParameters
     }
@@ -51,6 +54,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        MXLog.info("Handling app route: \(appRoute)")
+        
         switch appRoute {
         case .settings:
             presentSettingsScreen(animated: animated)
@@ -70,7 +75,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSettingsScreen(animated: Bool) {
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                                     appSettings: flowParameters.appSettings,
-                                                                                    isBugReportServiceEnabled: flowParameters.bugReportService.isEnabled))
+                                                                                    isBugReportServiceEnabled: flowParameters.bugReportService.isEnabled,
+                                                                                    isInSecondaryWindow: isInSecondaryWindow))
         
         settingsScreenCoordinator.actions
             .sink { [weak self] action in
@@ -182,7 +188,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .dismiss:
                     navigationStackCoordinator.setSheetCoordinator(nil)
-                case .requestOIDCAuthorisation(let url, let continuation):
+                case .requestOAuthAuthorisation(let url, let continuation):
                     presentAccountManagementURL(url, continuation: continuation)
                 }
             }
@@ -289,16 +295,18 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
     
-    // MARK: OIDC Account Management
+    // MARK: OAuth Account Management
     
-    private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
-    private func presentAccountManagementURL(_ url: URL, continuation: OIDCAccountSettingsPresenter.Continuation? = nil) {
+    private var accountSettingsPresenter: OAuthAccountSettingsPresenter?
+    private func presentAccountManagementURL(_ url: URL, continuation: OAuthAccountSettingsPresenter.Continuation? = nil) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
-        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url,
-                                                                presentationAnchor: flowParameters.windowManager.mainWindow,
-                                                                appSettings: flowParameters.appSettings,
-                                                                continuation: continuation)
+        accountSettingsPresenter = OAuthAccountSettingsPresenter(accountURL: url,
+                                                                 presentationAnchor: flowParameters.windowManager.mainWindow,
+                                                                 appMediator: flowParameters.appMediator,
+                                                                 appSettings: flowParameters.appSettings,
+                                                                 appHooks: flowParameters.appHooks,
+                                                                 continuation: continuation)
         accountSettingsPresenter?.start()
     }
 }

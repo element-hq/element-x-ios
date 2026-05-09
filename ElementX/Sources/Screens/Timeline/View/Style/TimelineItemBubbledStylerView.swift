@@ -197,12 +197,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 // The rendered reply bubble with a greedy width. The custom layout prevents
                 // the infinite width from increasing the overall width of the view.
                 
-                TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(4.0)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.compound.bgCanvasDefault)
-                    .cornerRadius(8)
+                TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails, maxWidth: .infinity)
                     .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
                     .onTapGesture {
                         if context.viewState.timelineKind != .pinned {
@@ -212,8 +207,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 
                 // Add a fixed width reply bubble that is used for layout calculations but won't be rendered.
                 TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(4.0)
                     .timelineBubbleLayoutSize(.bubbleWidth(mode: .layout))
                     .hidden()
             }
@@ -271,6 +264,9 @@ private extension EventBasedTimelineItemProtocol {
             return locationTimelineItem.content.geoURI == nil ||
                 properties.replyDetails != nil ||
                 properties.isThreaded ? defaultInsets : .zero
+        case is LiveLocationRoomTimelineItem:
+            return properties.replyDetails != nil ||
+                properties.isThreaded ? defaultInsets : .zero
         default:
             return defaultInsets
         }
@@ -278,7 +274,7 @@ private extension EventBasedTimelineItemProtocol {
     
     var contentCornerRadius: CGFloat {
         switch self {
-        case is ImageRoomTimelineItem, is VideoRoomTimelineItem, is LocationRoomTimelineItem:
+        case is ImageRoomTimelineItem, is VideoRoomTimelineItem, is LocationRoomTimelineItem, is LiveLocationRoomTimelineItem:
             return properties.replyDetails != nil || properties.isThreaded ? 8 : .zero
         default:
             return .zero
@@ -339,7 +335,6 @@ private extension TimelineItemKeyForwarder {
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel: TimelineViewModel = {
         let appSettings = AppSettings()
-        appSettings.enableKeyShareOnInvite = true
         appSettings.threadsEnabled = true
         
         let roomProxy = JoinedRoomProxyMock(.init())

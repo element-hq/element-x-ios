@@ -67,17 +67,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.initialSelectedPinnedEventID = initialSelectedPinnedEventID
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
 
-        let roomHistorySharingState: RoomHistorySharingState? = if appSettings.enableKeyShareOnInvite {
-            roomProxy.infoPublisher.value.historySharingState
-        } else {
-            nil
-        }
-        
         let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
+                                            isDirectOneToOneRoom: roomProxy.isDirectOneToOneRoom,
                                             hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
-                                            roomHistorySharingState: roomHistorySharingState)
+                                            roomHistorySharingState: roomProxy.infoPublisher.value.historySharingState)
         super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)
         
@@ -98,8 +93,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.displayPinnedEventsTimeline)
         case .displayRoomDetails:
             actionsSubject.send(.displayRoomDetails)
-        case .displayCall:
-            actionsSubject.send(.displayCall)
+        case .displayCall(let isVoiceCall):
+            actionsSubject.send(.displayCall(isVoiceCall: isVoiceCall))
             actionsSubject.send(.removeComposerFocus)
             analyticsService.trackInteraction(name: .MobileRoomCallButton)
         case .footerViewAction(let action):
@@ -119,6 +114,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             guard let successorID = roomProxy.infoPublisher.value.successor?.roomId else { return }
             let serverNames = roomProxy.knownServerNames(maxCount: 50) // Limit to the same number used by ClientProxy.resolveRoomAlias(_:)
             actionsSubject.send(.displayRoom(roomID: successorID, via: Array(serverNames)))
+        case .displayThreadList:
+            actionsSubject.send(.displayThreadList)
+        case .tappedStopLiveLocation:
+            actionsSubject.send(.stopLiveLocationSharing)
+        case .tappedOpenLiveLocation:
+            actionsSubject.send(.displayLiveLocation)
         }
     }
     
@@ -162,8 +163,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func setupSubscriptions(ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>) {
-        appSettings.$knockingEnabled
-            .weakAssign(to: \.state.isKnockingEnabled, on: self)
+        appSettings.$roomThreadListEnabled
+            .weakAssign(to: \.state.roomThreadListEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$liveLocationSharingSessionsByRoomID
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] sessionsByRoomID in
+                guard let self else { return }
+                state.isSharingLiveLocation = sessionsByRoomID.keys.contains(roomProxy.id)
+            }
             .store(in: &cancellables)
                 
         roomProxy.infoPublisher
@@ -327,6 +336,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.roomTitle = roomInfo.displayName ?? roomProxy.id
         state.roomAvatar = roomInfo.avatar
         state.hasOngoingCall = roomInfo.hasRoomCall
+        state.activeRoomCallIntent = roomInfo.activeRoomCallIntent
         state.hasSuccessor = roomInfo.successor != nil
         
         let pinnedEventIDs = roomInfo.pinnedEventIDs
@@ -350,13 +360,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canBan = powerLevels.canOwnUserBan()
         }
         
-        // This causes the UI to become inconsistent with the user's mental model if the user
-        // does not restart the app after disabling the feature flag. We can probably ignore
-        // such cases, since we explicitly ask for an app restart in the caption of the feature
-        // flag switch.
-        if appSettings.enableKeyShareOnInvite {
-            state.roomHistorySharingState = roomInfo.historySharingState
-        }
+        state.roomHistorySharingState = roomInfo.historySharingState
     }
     
     private func setupPinnedEventsTimelineItemProviderIfNeeded() {

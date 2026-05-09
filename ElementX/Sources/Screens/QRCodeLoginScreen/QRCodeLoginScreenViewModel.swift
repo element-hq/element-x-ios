@@ -20,7 +20,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
     
     private var currentTask: AnyCancellable?
-    private var oidcResultTask: AnyCancellable?
+    private var oAuthResultTask: AnyCancellable?
     
     init(mode: QRCodeLoginScreenMode,
          canSignInManually: Bool,
@@ -182,7 +182,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 case .establishingSecureChannel(let checkCodeString):
                     state.state = .displayCode(.deviceCode(checkCodeString))
                 case .waitingForAuthorisation(let url):
-                    requestOIDCAuthorization(url: url)
+                    requestOAuthAuthorization(url: url)
                 case .syncingSecrets:
                     break // Nothing to do.
                 case .done:
@@ -222,14 +222,12 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 case .qrScanned(let checkCodeSender):
                     state.state = .confirmCode(.inputCode(checkCodeSender))
                 case .waitingForAuthorisation(let url):
-                    requestOIDCAuthorization(url: url)
+                    requestOAuthAuthorization(url: url)
                 case .syncingSecrets:
-                    // break // Nothing to do.
-                    // .done is rarely received at the moment, so lets consider linking to be done here.
+                    break // Nothing to do.
+                case .done:
                     MXLog.info("Link with QR code completed.")
                     actionsSubject.send(.linkedDevice)
-                case .done:
-                    break // Not necessary right now with the workaround above in place.
                 }
             }
     }
@@ -259,11 +257,11 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         }
     }
     
-    private func requestOIDCAuthorization(url: URL) {
-        let (stream, continuation) = AsyncStream<Result<Void, OIDCError>>.makeStream()
-        actionsSubject.send(.requestOIDCAuthorisation(url, continuation))
+    private func requestOAuthAuthorization(url: URL) {
+        let (stream, continuation) = AsyncStream<Result<Void, OAuthError>>.makeStream()
+        actionsSubject.send(.requestOAuthAuthorisation(url, continuation))
         
-        oidcResultTask = Task { [weak self] in
+        oAuthResultTask = Task { [weak self] in
             for await result in stream {
                 guard let self else { return }
                 switch result {

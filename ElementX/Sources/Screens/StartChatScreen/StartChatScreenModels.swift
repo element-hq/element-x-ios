@@ -24,7 +24,6 @@ struct StartChatScreenViewState: BindableState {
     let userID: String
     var bindings = StartChatScreenViewStateBindings()
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
-    var isRoomDirectoryEnabled = false
 
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty
@@ -44,7 +43,7 @@ struct StartChatScreenViewStateBindings {
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<StartChatScreenErrorType>?
     
-    var selectedUserToInvite: UserProfileProxy?
+    var selectedUserToInvite: UserToInvite?
     var isJoinRoomByAddressSheetPresented = false
 }
 

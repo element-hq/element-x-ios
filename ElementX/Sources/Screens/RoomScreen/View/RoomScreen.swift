@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Compound
 import SwiftUI
 import WysiwygComposer
@@ -33,16 +34,28 @@ struct RoomScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
             }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .topBanner(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled)
-            // This can overlay on top of the pinnedItemsBanner
-            .topBanner(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
+            .topBanners([
+                TopBannerLayer(verticalBanners: [
+                    TopBannerItem(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled),
+                    TopBannerItem(liveLocationBanner, isVisible: context.viewState.isSharingLiveLocation && !isVoiceOverEnabled)
+                ]),
+                // This can overlay on top of the stacked banners
+                TopBannerLayer(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
+            ], footer: dateBadge)
             .safeAreaInset(edge: .top) {
                 // When VoiceOver is enabled, the table view isn't reversed and the scroll gestures
                 // don't trigger meaning the banner never hides itself and so the .overlay layout
                 // above permanently obscures the top of the timeline. So whenever VoiceOver is
                 // enabled we use a safe area inset to vertically stack it above the timeline.
-                if context.viewState.shouldShowPinnedEventsBanner, isVoiceOverEnabled {
-                    pinnedItemsBanner
+                if context.viewState.shouldShowPinnedEventsBanner || context.viewState.isSharingLiveLocation, isVoiceOverEnabled {
+                    VStack(spacing: 0) {
+                        if context.viewState.shouldShowPinnedEventsBanner {
+                            pinnedItemsBanner
+                        }
+                        if context.viewState.isSharingLiveLocation {
+                            liveLocationBanner
+                        }
+                    }
                 }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -73,6 +86,14 @@ struct RoomScreen: View {
             .sentryTrace("\(Self.self)")
     }
     
+    private var liveLocationBanner: some View {
+        LiveLocationSharingBannerView {
+            context.send(viewAction: .tappedOpenLiveLocation)
+        } onStop: {
+            context.send(viewAction: .tappedStopLiveLocation)
+        }
+    }
+    
     private var pinnedItemsBanner: some View {
         PinnedItemsBannerView(state: context.viewState.pinnedEventsBannerState,
                               onMainButtonTap: { context.send(viewAction: .tappedPinnedEventsBanner) },
@@ -86,6 +107,15 @@ struct RoomScreen: View {
                                 onViewAll: onViewAllKnockRequests,
                                 mediaProvider: context.mediaProvider)
             .padding(.top, 16)
+    }
+    
+    @ViewBuilder
+    private var dateBadge: some View {
+        if !isVoiceOverEnabled {
+            FloatingDateBadge(dateText: timelineContext.floatingDate?.formattedDateSeparator()) {
+                timelineContext.send(viewAction: .scrollToFirstItemForCurrentDate)
+            }
+        }
     }
     
     private func dismissKnockRequestsBanner() {
@@ -163,30 +193,25 @@ struct RoomScreen: View {
         }
         
         if !ProcessInfo.processInfo.isiOSAppOnMac {
-            ToolbarItem(placement: .primaryAction) {
-                if context.viewState.shouldShowCallButton {
-                    callButton
-                        .disabled(!context.viewState.canJoinCall)
+            if context.viewState.shouldShowCallButton {
+                RoomCallControlsToolbar(viewState: context.viewState) { isVoiceCall in
+                    context.send(viewAction: .displayCall(isVoiceCall: isVoiceCall))
                 }
             }
         }
-    }
-    
-    @ViewBuilder
-    private var callButton: some View {
-        if context.viewState.hasOngoingCall {
-            JoinCallButton {
-                context.send(viewAction: .displayCall)
+        
+        if context.viewState.roomThreadListEnabled {
+            if #available(iOS 26, *) {
+                ToolbarSpacer(.fixed, placement: .primaryAction)
             }
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
-        } else {
-            Button {
-                context.send(viewAction: .displayCall)
-            } label: {
-                CompoundIcon(\.videoCallSolid)
+            
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    context.send(viewAction: .displayThreadList)
+                } label: {
+                    CompoundIcon(\.threads)
+                }
             }
-            .accessibilityLabel(L10n.a11yStartCall)
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         }
     }
 }
@@ -197,19 +222,20 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModels = makeViewModels()
     static let readOnlyViewModels = makeViewModels(canSendMessage: false)
     static let tombstonedViewModels = makeViewModels(hasSuccessor: true)
+    static let composerViewModel = ComposerToolbarViewModel.mock()
 
     static var previews: some View {
         ElementNavigationStack {
             RoomScreen(context: viewModels.room.context,
                        timelineContext: viewModels.timeline.context,
-                       composerToolbar: ComposerToolbar.mock())
+                       composerToolbar: ComposerToolbar(context: composerViewModel.context))
         }
         .previewDisplayName("Normal")
         
         ElementNavigationStack {
             RoomScreen(context: readOnlyViewModels.room.context,
                        timelineContext: readOnlyViewModels.timeline.context,
-                       composerToolbar: ComposerToolbar.mock())
+                       composerToolbar: ComposerToolbar(context: composerViewModel.context))
         }
         .previewDisplayName("Read-only")
         .snapshotPreferences(expect: readOnlyViewModels.room.context.$viewState.map { !$0.canSendMessage })
@@ -217,7 +243,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         ElementNavigationStack {
             RoomScreen(context: tombstonedViewModels.room.context,
                        timelineContext: tombstonedViewModels.timeline.context,
-                       composerToolbar: ComposerToolbar.mock())
+                       composerToolbar: ComposerToolbar(context: composerViewModel.context))
         }
         .previewDisplayName("Tombstoned")
         .snapshotPreferences(expect: tombstonedViewModels.room.context.$viewState.map(\.hasSuccessor))

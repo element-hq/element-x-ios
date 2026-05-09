@@ -127,11 +127,20 @@ struct HomeScreen: View {
     }
     
     private struct SpaceFiltersButton: View {
+        @Environment(\.isInSidebar) private var isInSidebar
+        
         var selected = false
         var action: () -> Void
         
+        /// Design prefers the custom style over the system's styling of a Toggle within a toolbar,
+        /// however Glass isn't supported for toolbar buttons in the sidebar on iPadOS 26 (likely due
+        /// to glass on glass being discouraged by Apple), so we need to handle our styling accordingly.
+        var shouldUseGlassButtonStyle: Bool {
+            !isInSidebar
+        }
+        
         var body: some View {
-            if #available(iOS 26, *) {
+            if #available(iOS 26, *), shouldUseGlassButtonStyle {
                 if selected {
                     content
                         .backportButtonStyleGlassProminent()

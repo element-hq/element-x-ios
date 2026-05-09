@@ -65,7 +65,11 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         fatalError("Not implemented.")
     }
     
-    func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
+    func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: SecondaryWindowType?) -> Bool {
+        fatalError("Not implemented.")
+    }
+    
+    func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) {
         fatalError("Not implemented.")
     }
     
@@ -130,7 +134,7 @@ class MockScreen: Identifiable {
                                      allowOtherAccountProviders: false,
                                      hideBrandChrome: false,
                                      pushGatewayBaseURL: appSettings.pushGatewayBaseURL,
-                                     oidcRedirectURL: appSettings.oidcRedirectURL,
+                                     oAuthRedirectURL: appSettings.oAuthRedirectURL,
                                      websiteURL: appSettings.websiteURL,
                                      logoURL: appSettings.logoURL,
                                      copyrightURL: appSettings.copyrightURL,
@@ -153,6 +157,7 @@ class MockScreen: Identifiable {
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appMediator: AppMediatorMock.default,
                                                                 appSettings: appSettings,
+                                                                appHooks: AppHooks(),
                                                                 analytics: ServiceLocator.shared.analytics,
                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
             flowCoordinator.start()
@@ -587,7 +592,6 @@ class MockScreen: Identifiable {
             appSettings.hasRunIdentityConfirmationOnboarding = true
             appSettings.hasRunNotificationPermissionsOnboarding = true
             appSettings.analyticsConsentState = .optedOut
-            appSettings.hasSeenSpacesAnnouncement = true
             
             let roomSummaries: [RoomSummary] = if id == .userSessionSpacesFlow {
                 [[RoomSummary].mockSpaceInvites[0]] + .mockRooms
@@ -731,7 +735,9 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             
             let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                               appMediator: AppMediatorMock.default,
                                                                                appSettings: ServiceLocator.shared.settings,
+                                                                               appHooks: AppHooks(),
                                                                                userIndicatorController: userIndicatorController,
                                                                                navigationStackCoordinator: navigationStackCoordinator,
                                                                                windowManger: windowManager))
@@ -768,7 +774,7 @@ class MockScreen: Identifiable {
                     switch action {
                     case .dismiss:
                         navigationRootCoordinator.setSheetCoordinator(nil)
-                    case .requestOIDCAuthorisation:
+                    case .requestOAuthAuthorisation:
                         break
                     }
                 }

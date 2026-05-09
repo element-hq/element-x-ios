@@ -16,6 +16,7 @@ enum ElementCallServiceNotificationKey: String {
     case rtcNotifyEventID
     /// The Date at which the incoming call should stop ringing.
     case expirationDate
+    case isVoiceCall
 }
 
 let ElementCallServiceNotificationDiscardDelta = 15.0

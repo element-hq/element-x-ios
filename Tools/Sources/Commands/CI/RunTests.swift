@@ -9,7 +9,7 @@ struct RunTests: AsyncParsableCommand {
                                                     
                                                     Examples:
                                                       swift run tools run-tests --scheme UnitTests
-                                                      swift run tools run-tests --scheme UITests --device iPhone --os-version 26.1
+                                                      swift run tools run-tests --scheme UITests --device iPhone --os-version 26.4
                                                       swift run tools run-tests --scheme PreviewTests --create-simulator-name "iPhone SE (3rd generation)" \
                                                         --create-simulator-type com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation
                                                     """)
@@ -20,8 +20,12 @@ struct RunTests: AsyncParsableCommand {
     @Option(help: "The simulator device name to run tests on (e.g. 'iPhone 17').")
     var device = "iPhone 17"
     
-    @Option(help: "The iOS version to use for the simulator runtime (e.g. '26.1').")
-    var osVersion = "26.1"
+    @Option(help: "The iOS version to use for the simulator runtime (e.g. '26.4').")
+    var osVersion = "26.4.1"
+    
+    var runtime: String {
+        osVersion.split(separator: ".").prefix(2).joined(separator: ".")
+    }
     
     @Option(help: "Number of times to retry failed tests. Only the failing tests are re-run, not the entire suite.")
     var retries = 0
@@ -48,7 +52,7 @@ struct RunTests: AsyncParsableCommand {
     }
     
     private var simulatorRuntime: String {
-        "com.apple.CoreSimulator.SimRuntime.iOS-\(osVersion.replacingOccurrences(of: ".", with: "-"))"
+        "com.apple.CoreSimulator.SimRuntime.iOS-\(runtime.replacingOccurrences(of: ".", with: "-"))"
     }
     
     func run() async throws {
@@ -81,9 +85,9 @@ struct RunTests: AsyncParsableCommand {
     private func createSimulatorIfNecessary(name: String, type: String) async throws {
         logger.info("Checking for simulator '\(name)'…")
         
-        guard let simulators = try await CI.run(.path("/bin/zsh"), ["-cu", "xcrun simctl list devices \"iOS \(osVersion)\" available"],
+        guard let simulators = try await CI.run(.path("/bin/zsh"), ["-cu", "xcrun simctl list devices \"iOS \(runtime)\" available"],
                                                 output: .string(limit: 4096)).standardOutput else {
-            logger.info("No simulators found for iOS \(osVersion). Creating '\(name)'…")
+            logger.info("No simulators found for iOS \(runtime). Creating '\(name)'…")
             try await createSimulator(name: name, type: type)
             return
         }

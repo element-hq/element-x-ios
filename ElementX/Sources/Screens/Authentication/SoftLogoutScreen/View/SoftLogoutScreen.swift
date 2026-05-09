@@ -26,8 +26,8 @@ struct SoftLogoutScreen: View {
                 switch context.viewState.loginMode {
                 case .password:
                     loginForm
-                case .oidc:
-                    oidcButton
+                case .oAuth:
+                    oAuthButton
                 default:
                     loginUnavailableText
                 }
@@ -98,15 +98,15 @@ struct SoftLogoutScreen: View {
         }
     }
 
-    /// The OIDC button that can be used for login.
-    var oidcButton: some View {
-        Button { context.send(viewAction: .continueWithOIDC) } label: {
+    /// The OAuth button that can be used for login.
+    var oAuthButton: some View {
+        Button { context.send(viewAction: .continueWithOAuth) } label: {
             Text(L10n.actionContinue)
         }
         .buttonStyle(.compound(.primary))
     }
 
-    /// Text shown if neither password or OIDC login is supported.
+    /// Text shown if neither password or OAuth login is supported.
     var loginUnavailableText: some View {
         Text(L10n.screenLoginErrorUnsupportedAuthentication)
             .font(.body)

@@ -114,11 +114,10 @@ struct CreateRoomScreen: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .scaledFrame(size: 70, relativeTo: .title)
-                    .clipShape(context.viewState.isSpace ? AnyShape(RoundedRectangle(cornerRadius: 16)) : AnyShape(Circle()))
+                    .avatarShape(context.viewState.isSpace ? .roundedRect : .circle, size: 70)
                     .overlay(alignment: .bottomTrailing) {
-                        editAvatarBadge
-                            .scaledOffset(x: 12, y: 4, relativeTo: .title)
-                            .accessibilityHidden(true)
+                        EditAvatarBadge()
+                            .scaledOffset(x: 8, y: 0, relativeTo: .title)
                     }
             } else {
                 CompoundIcon(\.takePhoto, size: .medium, relativeTo: .title)
@@ -140,10 +139,16 @@ struct CreateRoomScreen: View {
             Button(L10n.actionTakePhoto) {
                 context.send(viewAction: .displayCameraPicker)
             }
+            
             Button(L10n.actionChoosePhoto) {
                 context.send(viewAction: .displayMediaPicker)
             }
             .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.mediaPicker)
+            
+            Button(L10n.actionChooseFile) {
+                context.send(viewAction: .displayFilePicker)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.filePicker)
             
             if context.viewState.avatarImage != nil {
                 Button(L10n.actionRemove, role: .destructive) {
@@ -151,23 +156,6 @@ struct CreateRoomScreen: View {
                 }
             }
         }
-    }
-    
-    private var editAvatarBadge: some View {
-        CompoundIcon(\.edit, size: .small, relativeTo: .body)
-            .foregroundStyle(.compound.iconPrimary)
-            .scaledPadding(5, relativeTo: .title)
-            .background {
-                Circle()
-                    .fill(Color.compound.bgCanvasDefault)
-                    .overlay {
-                        Circle()
-                            .inset(by: 0.5)
-                            .stroke(.compound.borderInteractiveSecondary, lineWidth: 1)
-                    }
-            }
-            .scaledPadding(3.5, relativeTo: .title)
-            .background(.compound.bgSubtleSecondaryLevel0, in: Circle())
     }
     
     private var topicSection: some View {

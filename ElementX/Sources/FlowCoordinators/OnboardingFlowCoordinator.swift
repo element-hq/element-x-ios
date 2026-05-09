@@ -13,14 +13,16 @@ import SwiftState
 enum OnboardingFlowCoordinatorAction {
     case requestPresentation(animated: Bool)
     case dismiss
-    case logout
+    case logoutConfirmed
 }
 
 class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let appLockService: AppLockServiceProtocol
     private let analyticsService: AnalyticsService
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
+    private let appHooks: AppHooks
     private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let windowManager: WindowManagerProtocol
@@ -66,7 +68,9 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         userSession = flowParameters.userSession
         self.appLockService = appLockService
         analyticsService = flowParameters.analytics
+        appMediator = flowParameters.appMediator
         appSettings = flowParameters.appSettings
+        appHooks = flowParameters.appHooks
         notificationManager = flowParameters.notificationManager
         userIndicatorController = flowParameters.userIndicatorController
         windowManager = flowParameters.windowManager
@@ -260,8 +264,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             case .reset:
                 startEncryptionResetFlow()
-            case .logout:
-                actionsSubject.send(.logout)
+            case .logoutConfirmed:
+                actionsSubject.send(.logoutConfirmed)
             }
         }
         .store(in: &cancellables)
@@ -315,7 +319,9 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private func startEncryptionResetFlow() {
         let resetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                           appMediator: appMediator,
                                                                            appSettings: appSettings,
+                                                                           appHooks: appHooks,
                                                                            userIndicatorController: userIndicatorController,
                                                                            navigationStackCoordinator: resetNavigationStackCoordinator,
                                                                            windowManger: windowManager))

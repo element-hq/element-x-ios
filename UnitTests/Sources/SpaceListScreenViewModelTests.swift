@@ -85,25 +85,4 @@ final class SpacesScreenViewModelTests {
             Issue.record("The action should select the space.")
         }
     }
-    
-    @Test
-    func featureAnnouncement() async throws {
-        #expect(!appSettings.hasSeenSpacesAnnouncement)
-        #expect(!context.isPresentingFeatureAnnouncement)
-        
-        let deferred = deferFulfillment(context.observe(\.isPresentingFeatureAnnouncement)) { $0 == true }
-        viewModel.context.send(viewAction: .screenAppeared)
-        try await deferred.fulfill()
-        #expect(context.isPresentingFeatureAnnouncement)
-        
-        viewModel.context.send(viewAction: .featureAnnouncementAppeared)
-        #expect(appSettings.hasSeenSpacesAnnouncement)
-        
-        context.isPresentingFeatureAnnouncement = false
-        
-        let deferredFailure = deferFailure(context.observe(\.isPresentingFeatureAnnouncement), timeout: .seconds(1)) { $0 == true }
-        viewModel.context.send(viewAction: .screenAppeared)
-        try await deferredFailure.fulfill()
-        #expect(!context.isPresentingFeatureAnnouncement)
-    }
 }

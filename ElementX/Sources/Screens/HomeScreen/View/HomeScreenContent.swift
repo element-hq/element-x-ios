@@ -99,12 +99,6 @@ struct HomeScreenContent: View {
                     scrollView.setContentOffset(oldOffset, animated: false)
                 }
             }
-            .background {
-                Button("") {
-                    context.send(viewAction: .globalSearch)
-                }
-                .keyboardShortcut(KeyEquivalent("k"), modifiers: [.command])
-            }
             .overlay {
                 if context.viewState.shouldShowEmptyFilterState {
                     RoomListFiltersEmptyStateView(state: context.filtersState)

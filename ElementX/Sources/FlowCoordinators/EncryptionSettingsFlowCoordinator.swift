@@ -77,13 +77,16 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        MXLog.info("Handling app route: \(appRoute)")
+        
         switch appRoute {
-        case .accountProvisioningLink:
-            break // We always ignore this flow when logged in.
+        case .accountProvisioningLink, .oAuthCallback:
+            break // We always ignore these flows when logged in.
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile, .thread,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
-             .call, .genericCallLink, .settings, .share, .transferOwnership:
+             .call, .settings, .share, .transferOwnership,
+             .globalSearch:
             // These routes aren't in this flow so clear the entire stack.
             clearRoute(animated: animated)
         case .chatBackupSettings:

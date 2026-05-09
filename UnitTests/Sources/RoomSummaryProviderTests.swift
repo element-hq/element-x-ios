@@ -102,8 +102,7 @@ final class RoomSummaryProviderTests {
         let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
         let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: stateEventStringBuilder,
                                                         messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: attributedStringBuilder,
-                                                                                                                 destination: .roomList),
-                                                        shouldDisambiguateDisplayNames: true,
+                                                                                                                 style: .senderPrefixed),
                                                         shouldPrefixSenderName: true)
 
         roomSummaryProvider = RoomSummaryProvider(roomListService: RoomListServiceSDKMock(),
@@ -117,7 +116,7 @@ final class RoomSummaryProviderTests {
         let dynamicAdaptersResult = RoomListEntriesWithDynamicAdaptersResultSDKMock()
         dynamicAdaptersResult.controllerReturnValue = dynamicEntriesController
         roomList = RoomListSDKMock()
-        roomList.entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReturnValue = dynamicAdaptersResult
+        roomList.entriesWithDynamicAdaptersPageSizeListenerReturnValue = dynamicAdaptersResult
         roomList.loadingStateListenerReturnValue = .some(.init(state: .notLoaded, stateStream: .init(noHandle: .init())))
         roomSummaryProvider.setRoomList(roomList)
     }

@@ -70,6 +70,7 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
     func start(baseURL: URL,
                clientID: String,
                colorScheme: ColorScheme,
+               voiceOnly: Bool,
                rageshakeURL: String?,
                analyticsConfiguration: ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError> {
         guard let room = room as? Room else {
@@ -77,7 +78,7 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
         }
         
         async let useEncryption = (try? room.latestEncryptionState() == .encrypted) ?? false
-        async let intent = room.joinCallIntent
+        async let intent = room.joinCallIntent(voiceOnly: voiceOnly)
         
         let widgetSettings: WidgetSettings
         do {
@@ -92,6 +93,7 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
                                                                                 posthogApiKey: analyticsConfiguration?.posthogAPIKey,
                                                                                 rageshakeSubmitUrl: rageshakeURL,
                                                                                 sentryDsn: analyticsConfiguration?.sentryDSN,
+                                                                                
                                                                                 sentryEnvironment: nil),
                                                                    config: .init(intent: intent))
         } catch {

@@ -56,7 +56,7 @@ struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
 }
 
 private struct ElementWellKnown: Decodable {
-    var version: Int
+    var version: Int?
     var enforceElementPro: Bool?
     
     enum CodingKeys: String, CodingKey {

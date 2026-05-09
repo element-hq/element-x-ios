@@ -69,11 +69,11 @@ struct SpaceHeaderView: View {
     private var spaceDetails: some View {
         Label {
             Text(spaceDetailsVisibilityTitle)
-                .font(.compound.bodyLG)
+                .font(.compound.bodyMD)
                 .foregroundStyle(.compound.textSecondary)
                 .multilineTextAlignment(.center)
         } icon: {
-            CompoundIcon(spaceDetailsVisibilityIcon, size: .small, relativeTo: .compound.bodyLG)
+            CompoundIcon(spaceDetailsVisibilityIcon, size: .xSmall, relativeTo: .compound.bodyMD)
                 .foregroundStyle(.compound.iconTertiary)
         }
         .labelStyle(.custom(spacing: 4))

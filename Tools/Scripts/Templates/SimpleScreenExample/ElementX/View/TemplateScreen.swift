@@ -47,12 +47,12 @@ struct TemplateScreen_Previews: PreviewProvider, TestablePreview {
     static let incrementedViewModel = makeViewModel(counterValue: 1)
     
     static var previews: some View {
-        NavigationStack {
+        ElementNavigationStack {
             TemplateScreen(context: viewModel.context)
         }
         .previewDisplayName("Initial")
         
-        NavigationStack {
+        ElementNavigationStack {
             TemplateScreen(context: incrementedViewModel.context)
         }
         .previewDisplayName("Incremented")

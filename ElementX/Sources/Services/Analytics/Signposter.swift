@@ -75,6 +75,10 @@ class Signposter {
         transactions[transactionName] = nil
     }
     
+    func resetTransactions() {
+        transactions.removeAll()
+    }
+    
     // MARK: - Spans
     
     func addSpan(_ spanName: SpanName, toTransaction transactionName: TransactionName) -> Span? {

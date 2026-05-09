@@ -25,6 +25,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let callKitID: UUID
         let roomID: String
         let rtcNotificationID: String?
+        let isVoiceCall: Bool
     }
     
     private let pushRegistry: PKPushRegistry
@@ -111,7 +112,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let callID = if let incomingCallID, incomingCallID.roomID == roomID {
             incomingCallID
         } else {
-            CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: nil)
+            CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: nil, isVoiceCall: false)
         }
         
         incomingCallID = nil
@@ -177,7 +178,9 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
-        let callID = CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: rtcNotificationID)
+        let isVoiceCall = payload.dictionaryPayload[ElementCallServiceNotificationKey.isVoiceCall.rawValue] as? Bool ?? false
+        
+        let callID = CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: rtcNotificationID, isVoiceCall: isVoiceCall)
         incomingCallID = callID
         
         guard let expirationDate = (payload.dictionaryPayload[ElementCallServiceNotificationKey.expirationDate.rawValue] as? Date) else {
@@ -199,6 +202,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let roomDisplayName = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
         
         let update = CXCallUpdate()
+        // Work Around: Always set video to true! https://github.com/element-hq/element-x-ios/issues/5335
+        // If not for audio call the app will not be put to foreground and the webview won't be able to handle the call...
+        // Consequence: The call will be presented to the user as a video call in CallKit UI,
+        // but once Element Call is launched it will correctly route to a voice-only call.
         update.hasVideo = true
         update.localizedCallerName = roomDisplayName
         // https://stackoverflow.com/a/41230020/730924
@@ -271,7 +278,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             // Then end the and call rely on `setupCallSession` to create a new one
             provider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
             
-            self.actionsSubject.send(.startCall(roomID: incomingCallID.roomID))
+            self.actionsSubject.send(.startCall(roomID: incomingCallID.roomID, isVoiceCall: incomingCallID.isVoiceCall))
             self.endUnansweredCallTask?.cancel()
         }
     }

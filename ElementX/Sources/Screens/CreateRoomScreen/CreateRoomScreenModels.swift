@@ -21,6 +21,7 @@ enum CreateRoomScreenViewModelAction {
     case createdRoom(JoinedRoomProxyProtocol, SpaceRoomListProxyProtocol?)
     case displayMediaPicker
     case displayCameraPicker
+    case displayFilePicker
     case dismiss
 }
 
@@ -114,6 +115,7 @@ enum CreateRoomScreenViewAction {
     case createRoom
     case displayCameraPicker
     case displayMediaPicker
+    case displayFilePicker
     case removeImage
     case updateRoomName(String)
     case updateAliasLocalPart(String)

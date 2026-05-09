@@ -1,0 +1,58 @@
+name: Update project following Renovate-XcodeGen update
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - project.yml
+
+permissions: {}
+
+jobs:
+  update-project:
+    name: Update Xcode project
+    runs-on: macos-26
+    timeout-minutes: 20
+    permissions:
+      contents: write
+
+    # Only run for Renovate PRs originating from this repository (not forks)
+    if: github.event.pull_request.user.login == 'renovate[bot]' && github.event.pull_request.head.repo.full_name == github.repository
+
+    concurrency:
+      group: renovate-xcodegen-${{ github.head_ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          # We need to push any changes to the project.
+          persist-credentials: true
+
+      - name: Install dependencies
+        run: |
+          unset HOMEBREW_NO_INSTALL_FROM_API
+          export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+          brew install xcodegen FelixHerrmann/tap/swift-package-list
+
+      - name: Run XcodeGen
+        run: xcodegen
+
+      - name: Resolve dependencies and build the project
+        run: xcodebuild -scheme ElementX -project ElementX.xcodeproj -destination 'generic/platform=iOS Simulator' build
+
+      - name: Update Acknowledgements
+        run: swift-package-list ElementX.xcodeproj --requires-license --ignore-package compound-ios --ignore-package compound-design-tokens --ignore-package matrix-rich-text-editor-swift --ignore-package element-call-swift --output-type settings-bundle --output-path ElementX/SupportingFiles
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "Element CI"
+          git config user.email "ci@element.io"
+          git add ElementX.xcodeproj/project.pbxproj
+          git add ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+          git add ElementX/SupportingFiles/Settings.bundle
+          git diff --staged --quiet || git commit -m "Run XcodeGen, update Package.resolved and Settings.bundle"
+          git push

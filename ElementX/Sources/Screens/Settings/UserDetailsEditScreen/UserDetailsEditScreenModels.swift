@@ -18,6 +18,9 @@ enum UserDetailsEditScreenViewModelAction {
 struct UserDetailsEditScreenViewState: BindableState {
     let userID: String
     
+    var canEditAvatar = true
+    var canEditDisplayName = true
+    
     var currentAvatarURL: URL?
     var selectedAvatarURL: URL?
     
@@ -64,5 +67,6 @@ enum UserDetailsEditScreenViewAction {
     case presentMediaSource
     case displayCameraPicker
     case displayMediaPicker
+    case displayFilePicker
     case removeImage
 }

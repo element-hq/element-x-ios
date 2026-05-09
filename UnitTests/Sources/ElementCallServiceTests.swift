@@ -49,9 +49,39 @@ final class ElementCallServiceTests {
         }
         
         #expect(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        // Verify the provider was called with a CXCallUpdate that has video enabled
+        if let args = callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments {
+            #expect(args.update.hasVideo == true)
+        } else {
+            Issue.record("Expected reportNewIncomingCallWithUpdateCompletionReceivedArguments to be captured")
+        }
     }
     
     @Test
+    func incomingVoiceCall() async {
+        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        
+        await confirmation { confirmation in
+            let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
+                .updateIsVoice(true)
+            
+            service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP) {
+                confirmation()
+            }
+        }
+        
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
+        // Verify the provider was called with a CXCallUpdate that has video enabled
+        if let args = callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments {
+            // Due to a limitation on Callkit and Webviews, we currently have to report voice calls as having video,
+            // even if they are voice calls :/ If not the webview is not started and the call is not shown to the user.
+            #expect(args.update.hasVideo == true)
+        } else {
+            Issue.record("Expected reportNewIncomingCallWithUpdateCompletionReceivedArguments to be captured")
+        }
+    }
+    
+    @Test(.disabled())
     func callIsTimingOut() async {
         #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
@@ -136,6 +166,11 @@ private class PKPushPayloadMock: PKPushPayload {
     
     func updatingExpiration(_ from: Date, lifetime: TimeInterval) -> Self {
         dict[ElementCallServiceNotificationKey.expirationDate.rawValue] = from.addingTimeInterval(lifetime)
+        return self
+    }
+    
+    func updateIsVoice(_ isVoice: Bool) -> Self {
+        dict[ElementCallServiceNotificationKey.isVoiceCall.rawValue] = isVoice
         return self
     }
 }

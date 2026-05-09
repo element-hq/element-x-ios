@@ -69,6 +69,9 @@ targets:
             ]
           }
         ]
+        UIApplicationSceneManifest: {
+          UIApplicationSupportsMultipleScenes: true
+        }
         UISupportedInterfaceOrientations: [
           UIInterfaceOrientationPortrait,
           UIInterfaceOrientationPortraitUpsideDown,
@@ -87,11 +90,14 @@ targets:
         NSMicrophoneUsageDescription: To record and send messages with audio, $(APP_DISPLAY_NAME) needs to access the microphone.
         NSPhotoLibraryAddUsageDescription: This lets you save images and videos to your photo library.
         NSLocationWhenInUseUsageDescription: Grant location access so that $(APP_DISPLAY_NAME) can share your location.
+        NSLocationAlwaysAndWhenInUseUsageDescription: To share your live location, $(APP_DISPLAY_NAME) needs location access when the app is in the background.
         NSFaceIDUsageDescription: Face ID is used to access your app.
         UIBackgroundModes: [
           audio,
           fetch,
-          processing
+          processing,
+          voip,
+          location
         ]
         BGTaskSchedulerPermittedIdentifiers: [
           org.ucmeet.UCMeetChat.background.refresh
@@ -111,7 +117,7 @@ targets:
       path: ElementX.entitlements
       properties:
         aps-environment: development
-        # Associated domains removed — matrix.to AASA doesn't list our Bundle ID, OIDC uses custom URL scheme
+        # Associated domains: Element domains removed (UCMeet fork). applinks:ucmatrix.org will be added via the universal-links-ucmatrix branch (see documentation/universal_links_status.md).
         com.apple.developer.usernotifications.communication: true
         com.apple.security.app-sandbox: true
         com.apple.security.application-groups:

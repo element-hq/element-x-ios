@@ -23,9 +23,8 @@ extension XCUIElement {
         let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count)
         typeText(deleteString)
         
-        for character in text {
-            typeText(String(character))
-        }
+        // Note: In the past, we had to type chars one by one to avoid CI flakiness
+        typeText(text)
     }
     
     func tap(_ point: UnitPoint) {

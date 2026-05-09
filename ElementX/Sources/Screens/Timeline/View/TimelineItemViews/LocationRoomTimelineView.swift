@@ -30,7 +30,7 @@ struct LocationRoomTimelineView: View {
             MapLibreStaticMapView(geoURI: geoURI,
                                   mapURLBuilder: context.viewState.mapTilerConfiguration,
                                   mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
-                LocationMarkerView(userProfile: timelineItem.content.kind == .sender ? .init(sender: timelineItem.sender) : nil,
+                LocationMarkerView(kind: timelineItem.content.kind == .sender ? .staticUser(.init(sender: timelineItem.sender)) : .pin,
                                    mediaProvider: context.mediaProvider)
             }
             .frame(maxHeight: mapMaxHeight)
@@ -47,28 +47,18 @@ struct LocationRoomTimelineView: View {
     private let mapMaxHeight: Double = 300
 }
 
-private extension MapLibreStaticMapView {
-    init(geoURI: GeoURI, mapURLBuilder: MapTilerURLBuilderProtocol, mapSize: CGSize, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
-        self.init(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
-                  zoomLevel: 15,
-                  attributionPlacement: .bottomLeft,
-                  mapURLBuilder: mapURLBuilder,
-                  mapSize: mapSize,
-                  pinAnnotationView: pinAnnotationView)
-    }
-}
-
 struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
 
     static var previews: some View {
-        ScrollView {
+        PreviewScrollView {
             VStack(spacing: 8) {
                 states
             }
         }
         .environmentObject(viewModel.context)
         .environment(\.timelineContext, viewModel.context)
+        .previewLayout(.sizeThatFits)
         .previewDisplayName("Bubbles")
     }
 
@@ -99,9 +89,8 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366),
                                                                     kind: .pin),
-                                                     properties: .init(replyDetails: .loaded(sender: .init(id: "Someone"),
+                                                     properties: .init(replyDetails: .loaded(sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
                                                                                              eventID: "123",
-                                                                                             eventContent: .message(.text(.init(body: "The thread content goes 'ere.")))),
-                                                                       isThreaded: true)))
+                                                                                             eventContent: .message(.location(.init(body: "")))))))
     }
 }

@@ -167,11 +167,12 @@ private extension HomeScreenRoom {
                                   canonicalAlias: "#footest:somewhere.org",
                                   alternativeAliases: [],
                                   hasOngoingCall: false,
+                                  activeCallIntent: nil,
                                   isMarkedUnread: false,
                                   isFavourite: false,
                                   isTombstoned: false)
         
-        return .init(summary: summary, hideUnreadMessagesBadge: false)
+        return .init(summary: summary)
     }
     
     static func roomKnocked(alias: String? = nil, avatarURL: URL? = nil) -> HomeScreenRoom {
@@ -199,10 +200,11 @@ private extension HomeScreenRoom {
                                   canonicalAlias: alias,
                                   alternativeAliases: [],
                                   hasOngoingCall: false,
+                                  activeCallIntent: nil,
                                   isMarkedUnread: false,
                                   isFavourite: false,
                                   isTombstoned: false)
         
-        return .init(summary: summary, hideUnreadMessagesBadge: false)
+        return .init(summary: summary)
     }
 }

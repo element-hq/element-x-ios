@@ -13,8 +13,12 @@ import SwiftUI
 class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
     var windowManager: any SecureWindowManagerProtocol
     
-    func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
+    func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: SecondaryWindowType?) -> Bool {
         fatalError("Not implemented")
+    }
+    
+    func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) {
+        fatalError("Not implemented.")
     }
     
     func handlePotentialPhishingAttempt(url: URL, openURLAction: @escaping (URL) -> Void) -> Bool {

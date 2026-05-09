@@ -17,6 +17,11 @@ protocol AuthenticationClientFactoryProtocol {
                     clientSessionDelegate: ClientSessionDelegate,
                     appSettings: AppSettings,
                     appHooks: AppHooks) async throws -> ClientProtocol
+    
+    func makeInMemoryClient(homeserverAddress: String,
+                            clientSessionDelegate: ClientSessionDelegate,
+                            appSettings: AppSettings,
+                            appHooks: AppHooks) async throws -> ClientProtocol
 }
 
 /// A wrapper around `ClientBuilder` to allow for mocked clients to be injected into authentication tests.
@@ -33,10 +38,25 @@ struct AuthenticationClientFactory: AuthenticationClientFactoryProtocol {
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite,
                          threadsEnabled: appSettings.threadsEnabled)
             .sqliteStore(config: .init(dataPath: sessionDirectories.dataPath, cachePath: sessionDirectories.cachePath)
                 .passphrase(passphrase: passphrase))
+            .serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress)
+            .build()
+    }
+    
+    func makeInMemoryClient(homeserverAddress: String,
+                            clientSessionDelegate: ClientSessionDelegate,
+                            appSettings: AppSettings,
+                            appHooks: AppHooks) async throws -> ClientProtocol {
+        try await ClientBuilder
+            .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
+                         slidingSync: .discover,
+                         sessionDelegate: clientSessionDelegate,
+                         appHooks: appHooks,
+                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
+                         threadsEnabled: appSettings.threadsEnabled)
+            .inMemoryStore()
             .serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress)
             .build()
     }

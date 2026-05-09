@@ -12,8 +12,7 @@ import MatrixRustSDK
 
 final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
     private let roomDirectorySearch: RoomDirectorySearchProtocol
-    private let appSettings: AppSettings
-    private let serialDispatchQueue = DispatchQueue(label: "org.ucmeet.UCMeetChat.room_directory_search_proxy", qos: .default)
+    private let serialDispatchQueue = DispatchQueue(label: "io.element.elementx.room_directory_search_proxy", qos: .default)
     
     private let resultsSubject = CurrentValueSubject<[RoomDirectorySearchResult], Never>([])
     
@@ -32,10 +31,8 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(roomDirectorySearch: RoomDirectorySearchProtocol,
-         appSettings: AppSettings) {
+    init(roomDirectorySearch: RoomDirectorySearchProtocol) {
         self.roomDirectorySearch = roomDirectorySearch
-        self.appSettings = appSettings
         diffsPublisher
             .receive(on: serialDispatchQueue)
             .sink { [weak self] in self?.updateResultsWithDiffs($0) }
@@ -149,6 +146,6 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
                                   name: value.name,
                                   topic: value.topic,
                                   avatar: .room(id: value.roomId, name: value.name, avatarURL: value.avatarUrl.flatMap(URL.init(string:))),
-                                  canBeJoined: value.joinRule == .public || (appSettings.knockingEnabled && value.joinRule == .knock))
+                                  canBeJoined: value.joinRule == .public || value.joinRule == .knock)
     }
 }

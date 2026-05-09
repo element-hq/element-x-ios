@@ -36,6 +36,7 @@ extension EventTimelineItem {
                   isOwn: configuration.isOwn,
                   isEditable: false,
                   content: configuration.content,
+                  eventTypeRaw: nil,
                   timestamp: 0,
                   localSendState: nil,
                   localCreatedAt: nil,
