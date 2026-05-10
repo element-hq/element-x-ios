@@ -100,15 +100,16 @@ Branded fork of **Element X iOS** (Matrix messenger, SwiftUI) → publish on App
 
 | Fact | Value |
 |------|-------|
-| Upstream | `element-hq/element-x-ios` (synced Feb 11, SDK v26.02.10) |
+| Upstream | `element-hq/element-x-ios` (synced 2026-05-10 to `release/26.05.0`, SDK v26.05.06) |
 | Architecture | Coordinator-based MVVM, SwiftUI, ~68k LOC, ~907 Swift files |
 | Build system | XcodeGen (`project.yml`, `app.yml`, `target.yml`) + SPM |
-| Core SDK | Matrix Rust SDK v26.02.10 (opaque binary, **cannot modify**) |
+| Core SDK | Matrix Rust SDK v26.05.06 (opaque binary, **cannot modify**) |
 | License | AGPL v3 |
 | iOS minimum | 18.0 |
+| Xcode required | 26.4+ |
 | Push | APNs + Firebase SDK (FCM, 14 unit tests) |
-| Calls | Element Call (MatrixRTC + LiveKit) |
-| Auth | OIDC via MAS |
+| Calls | Element Call (MatrixRTC + LiveKit) — voice/video toggle in DM toolbar (since 2026-05-10 sync) |
+| Auth | OAuth (formerly OIDC, renamed upstream 2026-05) via MAS, custom-scheme callback `org.ucmeet.UCMeetChat:/callback` |
 
 ## Key Files
 
@@ -204,10 +205,10 @@ All docs in `documentation/` folder:
 | Hours invested | ~104h of ~120h budget |
 | Hours remaining | ~6–10h (Build 5 upload, AGPL link, submission, review response) |
 | Decisions resolved | 9/12 |
-| Unit tests | 962 run, 899 passed, 63 pre-existing failures, 0 new |
+| Unit tests | Post-sync 2026-05-10: 1016 run, 67 unique failures (~13 traceable to UCMeet customizations like ucmatrix.org permalinks, matrix.ucmeet.org homeserver, analytics nil; ~18 Swift Testing async timeouts; ~36 to triage). Baseline pre-sync: 962/899/63. |
 | User-visible Element branding | **0** |
-| Upstream divergence | 60 ahead, 0 behind element-hq/element-x-ios |
+| Upstream divergence | 0 ahead, 0 behind `release/26.05.0` (synced 2026-05-10). Branch `chore/upstream-sync-2026-05` ahead of `develop` by the 2 sync commits until merged. |
 
 ---
 
-*Last updated: 2026-04-13. See `documentation/progress_log.md` for detailed daily log.*
+*Last updated: 2026-05-10. See `documentation/progress_log.md` for detailed daily log.*
