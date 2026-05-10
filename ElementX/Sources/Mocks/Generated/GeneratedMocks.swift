@@ -20016,6 +20016,76 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             return sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue
         }
     }
+    //MARK: - sendGallery
+
+    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount = 0
+    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCalled: Bool {
+        return sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCount > 0
+    }
+    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArguments: (itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?)?
+    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocations: [(itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?)] = []
+
+    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure: (([GalleryItemInfo], String?, String?, String?) async -> Result<Void, TimelineProxyError>)?
+
+    func sendGallery(itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?) async -> Result<Void, TimelineProxyError> {
+        sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCount += 1
+        sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArguments = (itemInfos: itemInfos, caption: caption, formattedCaption: formattedCaption, inReplyToEventID: inReplyToEventID)
+        DispatchQueue.main.async {
+            self.sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocations.append((itemInfos: itemInfos, caption: caption, formattedCaption: formattedCaption, inReplyToEventID: inReplyToEventID))
+        }
+        if let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure = sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure {
+            return await sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure(itemInfos, caption, formattedCaption, inReplyToEventID)
+        } else {
+            return sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValue
+        }
+    }
     //MARK: - sendReadReceipt
 
     var sendReadReceiptForTypeUnderlyingCallsCount = 0

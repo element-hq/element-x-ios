@@ -354,6 +354,30 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
     
+    func sendGallery(itemInfos: [GalleryItemInfo],
+                     caption: String?,
+                     formattedCaption: String?,
+                     inReplyToEventID: String?) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Sending gallery with \(itemInfos.count) items")
+
+        do {
+            let formatted = formattedCaption.map { FormattedBody(format: .html, body: $0) }
+            let params = GalleryUploadParameters(caption: caption,
+                                                 formattedCaption: formatted,
+                                                 mentions: nil,
+                                                 inReplyTo: inReplyToEventID)
+
+            let handle = try timeline.sendGallery(params: params, itemInfos: itemInfos)
+            try await handle.join()
+            MXLog.info("Finished sending gallery")
+        } catch {
+            MXLog.error("Failed sending gallery with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+
+        return .success(())
+    }
+
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
                           waveform: [Float],
