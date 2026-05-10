@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import AVFoundation
 import Combine
 import Compound
 import GameController
@@ -35,17 +36,7 @@ struct MediaUploadPreviewScreen: View {
         mainContent
             .id(context.viewState.mediaURLs)
             .ignoresSafeArea(edges: [.horizontal])
-            .safeAreaInset(edge: .top) {
-                if context.viewState.mediaURLs.count > 1 {
-                    Text(L10n.screenMediaUploadPreviewItemCount(currentIndex + 1, context.viewState.mediaURLs.count))
-                        .font(.compound.bodyMD)
-                        .foregroundColor(.compound.textPrimary)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 8)
-                        .background(.compound.bgBadgeDefault)
-                        .clipShape(.capsule)
-                }
-            }
+            .overlay(alignment: .top) { galleryBadge }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composer
                     .padding(.horizontal, 12)
@@ -75,12 +66,30 @@ struct MediaUploadPreviewScreen: View {
     }
     
     @ViewBuilder
+    private var galleryBadge: some View {
+        if context.viewState.mediaURLs.count > 1 {
+            Text(UntranslatedL10n.screenMediaUploadPreviewCount(currentIndex + 1, context.viewState.mediaURLs.count))
+                .font(.compound.bodySMSemibold)
+                .foregroundStyle(.compound.textPrimary)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(Color.compound.bgCanvasDefault.opacity(0.85),
+                            in: Capsule())
+                .padding(.top, 12)
+                .accessibilityLabel(UntranslatedL10n.commonAttachmentsCount(context.viewState.mediaURLs.count))
+        }
+    }
+
+    @ViewBuilder
     private var mainContent: some View {
         if ProcessInfo.processInfo.isiOSAppOnMac {
             Text(title)
                 .font(.compound.headingMD)
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if context.viewState.mediaURLs.count > 1 {
+            UploadMediaPeekCarousel(mediaURLs: context.viewState.mediaURLs,
+                                    currentIndex: $currentIndex)
         } else {
             PreviewView(mediaURLs: context.viewState.mediaURLs,
                         title: context.viewState.title,
@@ -209,6 +218,73 @@ struct MediaUploadPreviewScreen: View {
             isComposerFocussed = true
         }
         #endif
+    }
+}
+
+private struct UploadMediaPeekCarousel: View {
+    let mediaURLs: [URL]
+    @Binding var currentIndex: Int
+
+    @State private var scrolledID: Int?
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 8) {
+                ForEach(Array(mediaURLs.enumerated()), id: \.offset) { index, url in
+                    UploadMediaThumbnail(url: url)
+                        .containerRelativeFrame(.horizontal)
+                        .id(index)
+                }
+            }
+            .scrollTargetLayout()
+        }
+        .contentMargins(.horizontal, 24, for: .scrollContent)
+        .scrollTargetBehavior(.viewAligned)
+        .scrollPosition(id: $scrolledID)
+        .onAppear {
+            if scrolledID == nil { scrolledID = currentIndex }
+        }
+        .onChange(of: scrolledID) { _, newValue in
+            if let newValue, newValue != currentIndex { currentIndex = newValue }
+        }
+    }
+}
+
+private struct UploadMediaThumbnail: View {
+    let url: URL
+    @State private var image: UIImage?
+
+    var body: some View {
+        ZStack {
+            Color.black
+            if let image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+            } else {
+                ProgressView().tint(.white)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .task(id: url) { await load() }
+    }
+
+    private func load() async {
+        if let image = UIImage(contentsOfFile: url.path(percentEncoded: false)) {
+            self.image = image
+            return
+        }
+
+        // Fall back to a video frame thumbnail.
+        let asset = AVURLAsset(url: url)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        do {
+            let cgImage = try await generator.image(at: .zero).image
+            image = UIImage(cgImage: cgImage)
+        } catch {
+            image = nil
+        }
     }
 }
 

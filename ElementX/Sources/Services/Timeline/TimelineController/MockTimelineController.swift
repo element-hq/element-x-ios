@@ -252,7 +252,21 @@ class MockTimelineController: TimelineControllerProtocol {
                                                         waveform: waveform,
                                                         requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
         }
-        
+
+        return .success(())
+    }
+
+    func sendGallery(itemInfos: [GalleryItemInfo],
+                     caption: String?,
+                     formattedCaption: String?,
+                     inReplyToEventID: String?) async -> Result<Void, TimelineControllerError> {
+        if let timelineProxy {
+            return await timelineProxy.sendGallery(itemInfos: itemInfos,
+                                                   caption: caption,
+                                                   formattedCaption: formattedCaption,
+                                                   inReplyToEventID: inReplyToEventID).mapError(TimelineControllerError.timelineProxyError)
+        }
+
         return .success(())
     }
     

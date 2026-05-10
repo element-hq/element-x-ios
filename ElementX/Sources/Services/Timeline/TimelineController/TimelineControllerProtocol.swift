@@ -133,6 +133,11 @@ protocol TimelineControllerProtocol {
                           audioInfo: AudioInfo,
                           waveform: [Float],
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>
+
+    func sendGallery(itemInfos: [GalleryItemInfo],
+                     caption: String?,
+                     formattedCaption: String?,
+                     inReplyToEventID: String?) async -> Result<Void, TimelineControllerError>
     
     // MARK: - Poll
     

@@ -18,5 +18,21 @@
 			<string>%d untranslated items</string>
 		</dict>
 	</dict>
+	<key>common_attachments_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d attachment</string>
+			<key>other</key>
+			<string>%1$d attachments</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

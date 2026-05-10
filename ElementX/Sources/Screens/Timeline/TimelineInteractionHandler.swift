@@ -240,6 +240,10 @@ class TimelineInteractionHandler {
             text = content.caption ?? ""
             htmlText = content.formattedCaptionHTMLString
             editType = text.isEmpty ? .addCaption : .editCaption
+        case .gallery(let content):
+            text = content.caption ?? ""
+            htmlText = content.formattedCaptionHTMLString
+            editType = text.isEmpty ? .addCaption : .editCaption
         default:
             text = messageTimelineItem.body
         }
@@ -555,6 +559,9 @@ class TimelineInteractionHandler {
             return await mediaPreviewAction(for: item, messageTypes: [.audio, .file])
         case let item as FileRoomTimelineItem:
             return await mediaPreviewAction(for: item, messageTypes: [.audio, .file])
+        case is GalleryRoomTimelineItem:
+            // Single-tile preview within a gallery is not yet implemented.
+            return .none
         default:
             return .none
         }
