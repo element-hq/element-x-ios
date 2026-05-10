@@ -40,6 +40,8 @@ struct RoomTimelineItemView: View {
             AudioRoomTimelineView(timelineItem: item)
         case .file(let item):
             FileRoomTimelineView(timelineItem: item)
+        case .gallery(let item):
+            GalleryRoomTimelineView(timelineItem: item)
         case .emote(let item):
             EmoteRoomTimelineView(timelineItem: item)
         case .notice(let item):

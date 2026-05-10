@@ -53,6 +53,7 @@ enum RoomTimelineItemType: Equatable {
     case video(VideoRoomTimelineItem)
     case audio(AudioRoomTimelineItem)
     case file(FileRoomTimelineItem)
+    case gallery(GalleryRoomTimelineItem)
     case emote(EmoteRoomTimelineItem)
     case notice(NoticeRoomTimelineItem)
     case redacted(RedactedRoomTimelineItem)
@@ -83,6 +84,8 @@ enum RoomTimelineItemType: Equatable {
             self = .audio(item)
         case let item as FileRoomTimelineItem:
             self = .file(item)
+        case let item as GalleryRoomTimelineItem:
+            self = .gallery(item)
         case let item as SeparatorRoomTimelineItem:
             self = .separator(item)
         case let item as NoticeRoomTimelineItem:
@@ -132,6 +135,7 @@ enum RoomTimelineItemType: Equatable {
              .video(let item as RoomTimelineItemProtocol),
              .audio(let item as RoomTimelineItemProtocol),
              .file(let item as RoomTimelineItemProtocol),
+             .gallery(let item as RoomTimelineItemProtocol),
              .emote(let item as RoomTimelineItemProtocol),
              .notice(let item as RoomTimelineItemProtocol),
              .redacted(let item as RoomTimelineItemProtocol),
@@ -170,6 +174,8 @@ enum RoomTimelineItemType: Equatable {
         case .audio(let item):
             return item.timestamp
         case .file(let item):
+            return item.timestamp
+        case .gallery(let item):
             return item.timestamp
         case .emote(let item):
             return item.timestamp

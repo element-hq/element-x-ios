@@ -325,23 +325,99 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                           _ messageContent: MessageContent,
                                           _ galleryMessageContent: GalleryMessageContent,
                                           _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
-        TextRoomTimelineItem(id: eventItemProxy.id,
-                             timestamp: eventItemProxy.timestamp,
-                             isOutgoing: isOutgoing,
-                             isEditable: eventItemProxy.isEditable,
-                             canBeRepliedTo: eventItemProxy.canBeRepliedTo,
-                             shouldBoost: eventItemProxy.shouldBoost,
-                             sender: eventItemProxy.sender,
-                             content: .init(body: galleryMessageContent.body),
-                             properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
-                                               isThreaded: messageLikeContent.threadRoot != nil,
-                                               threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
-                                               isEdited: messageContent.isEdited,
-                                               reactions: buildAggregatedReactions(messageLikeContent.reactions),
-                                               deliveryStatus: eventItemProxy.deliveryStatus,
-                                               orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                               encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
-                                               encryptionForwarder: eventItemProxy.forwarder))
+        GalleryRoomTimelineItem(id: eventItemProxy.id,
+                                timestamp: eventItemProxy.timestamp,
+                                isOutgoing: isOutgoing,
+                                isEditable: eventItemProxy.isEditable,
+                                canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                shouldBoost: eventItemProxy.shouldBoost,
+                                sender: eventItemProxy.sender,
+                                content: buildGalleryTimelineItemContent(galleryMessageContent, eventID: eventItemProxy.id.uniqueID.value),
+                                properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
+                                                  isThreaded: messageLikeContent.threadRoot != nil,
+                                                  threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
+                                                  isEdited: messageContent.isEdited,
+                                                  reactions: buildAggregatedReactions(messageLikeContent.reactions),
+                                                  deliveryStatus: eventItemProxy.deliveryStatus,
+                                                  orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
+                                                  encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                  encryptionForwarder: eventItemProxy.forwarder))
+    }
+
+    private func buildGalleryTimelineItemContent(_ messageContent: GalleryMessageContent, eventID: String) -> GalleryRoomTimelineItemContent {
+        let htmlCaption = messageContent.formatted?.format == .html ? messageContent.formatted?.body : nil
+        let plainCaption = messageContent.formatted?.format != .html ? messageContent.formatted?.body : nil
+        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : (plainCaption.flatMap(attributedStringBuilder.fromPlain))
+
+        let items = messageContent.itemtypes.enumerated().map { index, itemType in
+            buildGalleryItem(itemType, id: "\(eventID)-\(index)")
+        }
+
+        return GalleryRoomTimelineItemContent(body: messageContent.body,
+                                              caption: plainCaption ?? messageContent.body,
+                                              formattedCaption: formattedCaption,
+                                              formattedCaptionHTMLString: htmlCaption,
+                                              items: items)
+    }
+
+    private func galleryItemSize(width: UInt64?, height: UInt64?) -> CGSize? {
+        guard let width, let height else { return nil }
+        return CGSize(width: CGFloat(width), height: CGFloat(height))
+    }
+
+    private func buildGalleryItem(_ itemType: GalleryItemType, id: String) -> GalleryItem {
+        switch itemType {
+        case .image(let content):
+            return GalleryItem(id: id,
+                               filename: content.filename,
+                               kind: .image,
+                               mediaSource: MediaSourceProxy(source: content.source, mimeType: content.info?.mimetype),
+                               thumbnailSource: content.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: content.info?.thumbnailInfo?.mimetype) },
+                               size: galleryItemSize(width: content.info?.width, height: content.info?.height),
+                               blurhash: content.info?.blurhash,
+                               duration: nil,
+                               contentType: UTType(mimeType: content.info?.mimetype, fallbackFilename: content.filename))
+        case .video(let content):
+            return GalleryItem(id: id,
+                               filename: content.filename,
+                               kind: .video,
+                               mediaSource: MediaSourceProxy(source: content.source, mimeType: content.info?.mimetype),
+                               thumbnailSource: content.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: content.info?.thumbnailInfo?.mimetype) },
+                               size: galleryItemSize(width: content.info?.width, height: content.info?.height),
+                               blurhash: content.info?.blurhash,
+                               duration: content.info?.duration,
+                               contentType: UTType(mimeType: content.info?.mimetype, fallbackFilename: content.filename))
+        case .audio(let content):
+            return GalleryItem(id: id,
+                               filename: content.filename,
+                               kind: .audio,
+                               mediaSource: MediaSourceProxy(source: content.source, mimeType: content.info?.mimetype),
+                               thumbnailSource: nil,
+                               size: nil,
+                               blurhash: nil,
+                               duration: content.audio?.duration,
+                               contentType: UTType(mimeType: content.info?.mimetype, fallbackFilename: content.filename))
+        case .file(let content):
+            return GalleryItem(id: id,
+                               filename: content.filename,
+                               kind: .file,
+                               mediaSource: MediaSourceProxy(source: content.source, mimeType: content.info?.mimetype),
+                               thumbnailSource: content.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: content.info?.thumbnailInfo?.mimetype) },
+                               size: nil,
+                               blurhash: nil,
+                               duration: nil,
+                               contentType: UTType(mimeType: content.info?.mimetype, fallbackFilename: content.filename))
+        case .other(_, let body):
+            return GalleryItem(id: id,
+                               filename: body,
+                               kind: .other,
+                               mediaSource: nil,
+                               thumbnailSource: nil,
+                               size: nil,
+                               blurhash: nil,
+                               duration: nil,
+                               contentType: nil)
+        }
     }
     
     private func buildStickerTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
@@ -910,7 +986,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .location(let content):
             .location(buildLocationTimelineItemContent(content))
         case .gallery(let content):
-            .text(.init(body: content.body))
+            .gallery(buildGalleryTimelineItemContent(content, eventID: senderID))
         case .other(_, let body):
             .text(.init(body: body))
         case .none:
