@@ -113,6 +113,13 @@ struct TimelineReplyView: View {
                                   plainBody: L10n.commonSharedLocation,
                                   formattedBody: nil,
                                   icon: .init(kind: .icon(\.locationPin)))
+                    case .gallery(let content):
+                        ReplyView(sender: sender,
+                                  plainBody: content.caption ?? content.body,
+                                  formattedBody: content.formattedCaption,
+                                  icon: content.items.first?.thumbnailSource.map { .init(kind: .mediaSource($0)) }
+                                      ?? content.items.first?.mediaSource.map { .init(kind: .mediaSource($0)) }
+                                      ?? .init(kind: .icon(\.attachment)))
                     }
                 case .poll(let question):
                     ReplyView(sender: sender,
