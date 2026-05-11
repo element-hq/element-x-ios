@@ -8,7 +8,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum CallIntent: Codable, CaseIterable {
+enum CallIntent: String, Codable, CaseIterable {
     case video, audio
 }
 
@@ -25,13 +25,6 @@ extension CallIntent {
         switch self {
         case .audio: .audio
         case .video: .video
-        }
-    }
-    
-    func stringValue() -> String {
-        switch self {
-        case .audio: "audio"
-        case .video: "video"
         }
     }
 }

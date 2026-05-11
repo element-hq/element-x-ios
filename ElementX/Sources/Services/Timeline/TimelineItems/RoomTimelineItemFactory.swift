@@ -775,7 +775,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    isDM: Bool,
                                                    callIntent: String?,
                                                    declinedBy: [String]) -> RoomTimelineItemProtocol {
-        let isVoiceCall = callIntent == CallIntent.audio.stringValue()
+        let isVoiceCall = callIntent == CallIntent.audio.rawValue
         return CallNotificationRoomTimelineItem(id: eventItemProxy.id,
                                                 timestamp: eventItemProxy.timestamp,
                                                 isEditable: eventItemProxy.isEditable,
