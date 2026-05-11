@@ -64,18 +64,27 @@ extension EventBasedTimelineItemProtocol {
         }
     }
 
-    func additionalWhitespaces() -> Int {
-        var whiteSpaces = 1
-        localizedSendInfo.forEach { _ in
-            whiteSpaces += 1
-        }
-
-        // To account for the extra spacing created by the status icon
+    /// The inline area to reserve at the trailing edge of the message text so the
+    /// bubble's natural size accommodates the timestamp (which is overlaid on the
+    /// bubble's bottom-trailing corner). Text wraps around this area: if it fits on
+    /// the last line, the timestamp tucks inline; otherwise it sits on a new line.
+    /// Sized using the same dynamic-type-aware font as the rendered timestamp.
+    var trailingReservedSize: CGSize {
+        let textStyle: UIFont.TextStyle = .caption1 // matches compound.bodyXS
+        let font = UIFont.preferredFont(forTextStyle: textStyle)
+        let textSize = (localizedSendInfo as NSString).size(withAttributes: [.font: font])
+        var width = textSize.width
+        var height = textSize.height
         if hasStatusIcon {
-            whiteSpaces += 3
+            // CompoundIcon at .xSmall is 16pt at the base size; scale with the same UIFontMetrics
+            // as the icon's `relativeTo: .compound.bodyXS` modifier, plus the 4pt HStack spacing.
+            let iconSize = UIFontMetrics(forTextStyle: textStyle).scaledValue(for: 16)
+            width += iconSize + 4
+            height = max(height, iconSize)
         }
-
-        return whiteSpaces
+        // Small visual gap between the text content and the overlaid timestamp.
+        width += 4
+        return CGSize(width: ceil(width), height: ceil(height))
     }
 
     /// contains the timestamp and an optional edited localised prefix
