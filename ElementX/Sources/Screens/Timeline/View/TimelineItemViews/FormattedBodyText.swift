@@ -12,7 +12,7 @@ struct FormattedBodyText: View {
     @Environment(\.layoutDirection) private var layoutDirection
     
     private let attributedString: AttributedString
-    private let additionalWhitespacesCount: Int
+    private let trailingReservedSize: CGSize
     private let boostFontSize: Bool
     
     private let defaultAttributesContainer: AttributeContainer = {
@@ -22,14 +22,9 @@ struct FormattedBodyText: View {
         container.foregroundColor = UIColor.compound.textPrimary
         return container
     }()
-        
+    
     private var attributedComponents: [AttributedStringBuilderComponent] {
-        var adjustedAttributedString = attributedString + AttributedString(additionalWhitespacesSuffix)
-        
-        // If this is not a list, force the writing direction by adding the correct unicode character.
-        if !String(attributedString.characters).starts(with: "\t") {
-            adjustedAttributedString = AttributedString(layoutDirection.isolateLayoutUnicodeString) + adjustedAttributedString
-        }
+        var adjustedAttributedString = attributedString
         
         // Required to allow the underlying TextView to use  body font when no font is specifie in the AttributedString.
         adjustedAttributedString.mergeAttributes(defaultAttributesContainer, mergePolicy: .keepCurrent)
@@ -44,22 +39,17 @@ struct FormattedBodyText: View {
     }
     
     init(attributedString: AttributedString,
-         additionalWhitespacesCount: Int = 0,
+         trailingReservedSize: CGSize = .zero,
          boostFontSize: Bool = false) {
         self.attributedString = attributedString
-        self.additionalWhitespacesCount = additionalWhitespacesCount
+        self.trailingReservedSize = trailingReservedSize
         self.boostFontSize = boostFontSize
     }
     
-    init(text: String, additionalWhitespacesCount: Int = 0, boostFontSize: Bool = false) {
+    init(text: String, trailingReservedSize: CGSize = .zero, boostFontSize: Bool = false) {
         self.init(attributedString: AttributedString(text),
-                  additionalWhitespacesCount: additionalWhitespacesCount,
+                  trailingReservedSize: trailingReservedSize,
                   boostFontSize: boostFontSize)
-    }
-    
-    /// These is needed to create the slightly off inlined timestamp effect
-    private var additionalWhitespacesSuffix: String {
-        .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, layoutDirection: layoutDirection)
     }
     
     var body: some View {
@@ -71,36 +61,39 @@ struct FormattedBodyText: View {
     
     /// The attributed components laid out for the bubbles timeline style.
     var layout: some View {
-        TimelineBubbleLayout(spacing: 8) {
-            ForEach(attributedComponents) { component in
-                // Ignore if the string contains only the layout correction
-                if String(component.attributedString.characters) == layoutDirection.isolateLayoutUnicodeString {
-                    EmptyView()
-                } else {
-                    switch component.type {
-                    case .blockquote:
-                        BlockquoteView(attributedString: component.attributedString, mode: .rendering)
-                            .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
-                    case .codeBlock:
-                        CodeBlockView(attributedString: component.attributedString, mode: .rendering)
-                            .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
-                            .contextMenu {
-                                Button(L10n.actionCopy) {
-                                    UIPasteboard.general.string = component.attributedString.string
-                                }
+        // The trailing reserved area must only be applied to the last plain text
+        // component so that the bubble's natural size accommodates the overlaid
+        // timestamp, and TextKit decides whether to keep the timestamp on the last
+        // line or push it to a new one.
+        let components = attributedComponents
+        let lastPlainTextIndex = components.lastIndex { $0.type == .plainText }
+        
+        return TimelineBubbleLayout(spacing: 8) {
+            ForEach(Array(components.enumerated()), id: \.element.id) { index, component in
+                switch component.type {
+                case .blockquote:
+                    BlockquoteView(attributedString: component.attributedString, mode: .rendering)
+                        .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
+                case .codeBlock:
+                    CodeBlockView(attributedString: component.attributedString, mode: .rendering)
+                        .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
+                        .contextMenu {
+                            Button(L10n.actionCopy) {
+                                UIPasteboard.general.string = component.attributedString.string
                             }
-                    case .plainText:
-                        MessageText(attributedString: component.attributedString)
-                            .padding(.horizontal, 4)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .timelineBubbleLayoutSize(.natural)
-                    }
+                        }
+                case .plainText:
+                    MessageText(attributedString: component.attributedString,
+                                trailingReservedSize: index == lastPlainTextIndex ? trailingReservedSize : .zero)
+                        .padding(.horizontal, 4)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .timelineBubbleLayoutSize(.natural)
                 }
             }
             
             // Make a second iteration through the components adding naturally sized versions of the
             // block quotes and code blocks which are used for layout calculations but won't be rendered.
-            ForEach(attributedComponents) { component in
+            ForEach(components) { component in
                 switch component.type {
                 case .blockquote:
                     BlockquoteView(attributedString: component.attributedString, mode: .layout)

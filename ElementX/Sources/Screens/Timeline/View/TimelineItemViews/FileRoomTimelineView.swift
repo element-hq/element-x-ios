@@ -19,7 +19,7 @@ struct FileRoomTimelineView: View {
                                          fileSize: timelineItem.content.fileSize,
                                          caption: timelineItem.content.caption,
                                          formattedCaption: timelineItem.content.formattedCaption,
-                                         additionalWhitespaces: timelineItem.additionalWhitespaces(),
+                                         trailingReservedSize: timelineItem.trailingReservedSize,
                                          shouldBoost: timelineItem.shouldBoost) {
                 context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
             }
@@ -35,7 +35,7 @@ struct MediaFileRoomTimelineContent: View {
     let fileSize: UInt?
     let caption: String?
     let formattedCaption: AttributedString?
-    let additionalWhitespaces: Int
+    var trailingReservedSize: CGSize = .zero
     var shouldBoost = false
     var isAudioFile = false
     
@@ -66,11 +66,11 @@ struct MediaFileRoomTimelineContent: View {
             
             if let formattedCaption {
                 FormattedBodyText(attributedString: formattedCaption,
-                                  additionalWhitespacesCount: additionalWhitespaces,
+                                  trailingReservedSize: trailingReservedSize,
                                   boostFontSize: shouldBoost)
             } else if let caption {
                 FormattedBodyText(text: caption,
-                                  additionalWhitespacesCount: additionalWhitespaces,
+                                  trailingReservedSize: trailingReservedSize,
                                   boostFontSize: shouldBoost)
             }
         }

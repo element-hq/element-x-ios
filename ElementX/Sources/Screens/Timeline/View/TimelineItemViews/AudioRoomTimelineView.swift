@@ -19,7 +19,7 @@ struct AudioRoomTimelineView: View {
                                          fileSize: timelineItem.content.fileSize,
                                          caption: timelineItem.content.caption,
                                          formattedCaption: timelineItem.content.formattedCaption,
-                                         additionalWhitespaces: timelineItem.additionalWhitespaces(),
+                                         trailingReservedSize: timelineItem.trailingReservedSize,
                                          shouldBoost: timelineItem.shouldBoost,
                                          isAudioFile: true) {
                 context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
