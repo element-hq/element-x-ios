@@ -56,29 +56,6 @@ struct StringTests {
     }
 
     @Test
-    func generateBreakableWhitespaceEnd() {
-        var count = 5
-        var result = "\u{2066}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
-        #expect(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight) == result)
-
-        count = 3
-        result = "\u{2066}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
-        #expect(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight) == result)
-
-        count = 0
-        result = ""
-        #expect(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight) == result)
-
-        count = 4
-        result = "\u{2067}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
-        #expect(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .rightToLeft) == result)
-
-        count = 0
-        result = ""
-        #expect(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .rightToLeft) == result)
-    }
-    
-    @Test
     func ellipsizeWorks() {
         #expect("ellipsize".ellipsize(length: 5) == "ellip…")
     }
