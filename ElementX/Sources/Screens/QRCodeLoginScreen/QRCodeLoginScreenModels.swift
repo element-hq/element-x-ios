@@ -39,7 +39,7 @@ enum QRCodeLoginScreenMode {
     /// Configures the screen to link another device by scanning a QR code.
     case linkDesktop(LinkNewDeviceServiceProtocol)
     /// Configures the screen to link another device by showing it a QR code.
-    case linkMobile(LinkNewDeviceService.LinkMobileProgressPublisher)
+    case linkMobile(LinkNewDeviceService.LinkMobileProgressPublisher, ClientProxyProtocol)
 }
 
 struct QRCodeLoginScreenViewState: BindableState {
@@ -107,7 +107,7 @@ enum QRCodeLoginState: Equatable {
     case displayCode(DisplayCodeState)
     
     /// Initial state where the user can link another device using the shown QR code.
-    case displayQR(UIImage)
+    case displayQR(DisplayQRState)
     /// The user needs to enter the two digit code to confirm the channel is secure
     case confirmCode(CheckCodeState)
     
@@ -169,6 +169,13 @@ enum QRCodeLoginState: Equatable {
                 }
             }
         }
+    }
+    
+    enum DisplayQRState: Equatable {
+        /// The QR code is available and is being shown.
+        case active(UIImage)
+        /// The QR code being shown has expired. We will need to generate a new one.
+        case expired
     }
     
     enum DisplayCodeState: Equatable {
