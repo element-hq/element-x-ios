@@ -37,7 +37,8 @@ struct LocationRoomTimelineView: View {
             .aspectRatio(mapAspectRatio, contentMode: .fit)
             .clipped()
         } else {
-            FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
+            FormattedBodyText(text: timelineItem.body,
+                              trailingReservedSize: timelineItem.trailingReservedSize)
         }
     }
 

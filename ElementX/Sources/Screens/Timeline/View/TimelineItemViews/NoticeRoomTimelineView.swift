@@ -18,9 +18,11 @@ struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
             
             Label {
                 if let attributedString = timelineItem.content.formattedBody {
-                    FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
+                    FormattedBodyText(attributedString: attributedString,
+                                      trailingReservedSize: timelineItem.trailingReservedSize)
                 } else {
-                    FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
+                    FormattedBodyText(text: timelineItem.content.body,
+                                      trailingReservedSize: timelineItem.trailingReservedSize)
                 }
             } icon: {
                 CompoundIcon(\.info, size: .small, relativeTo: .compound.bodyLG)

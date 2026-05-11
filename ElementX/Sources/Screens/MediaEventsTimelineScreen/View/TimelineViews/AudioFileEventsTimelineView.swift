@@ -17,7 +17,7 @@ struct AudioMediaEventsTimelineView: View {
                                      fileSize: timelineItem.content.fileSize,
                                      caption: timelineItem.content.caption,
                                      formattedCaption: timelineItem.content.formattedCaption,
-                                     additionalWhitespaces: timelineItem.additionalWhitespaces(),
+                                     trailingReservedSize: timelineItem.trailingReservedSize,
                                      isAudioFile: true)
             .accessibilityLabel(L10n.commonAudio)
             .frame(maxWidth: .infinity, alignment: .leading)
