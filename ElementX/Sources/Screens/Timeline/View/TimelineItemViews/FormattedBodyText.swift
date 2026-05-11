@@ -9,8 +9,6 @@
 import SwiftUI
 
 struct FormattedBodyText: View {
-    @Environment(\.layoutDirection) private var layoutDirection
-    
     private let attributedString: AttributedString
     private let trailingReservedSize: CGSize
     private let boostFontSize: Bool
