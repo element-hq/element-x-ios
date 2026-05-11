@@ -309,7 +309,6 @@
 "common_refreshing" = "A atualizar…";
 "common_removing" = "Removing…";
 "common_replying_to" = "Em resposta a %1$@";
-"common_report_a_bug" = "Comunicar falha";
 "common_report_a_problem" = "Comunicar um problema";
 "common_report_submitted" = "Denúncia submetida";
 "common_rich_text_editor" = "Editor de texto rico";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Remover mensagens";
 "screen_room_change_permissions_everyone" = "Participante";
 "screen_room_change_permissions_invite_people" = "Convidar pessoas";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Gerir espaço";
 "screen_room_change_permissions_manage_space_rooms" = "Gerir salas";
 "screen_room_change_permissions_member_moderation" = "Gerir participantes";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Não feches a aplicação até concluir.";
 "screen_room_details_invite_people_preparing" = "A preparar convites…";
 "screen_room_details_invite_people_title" = "Convidar pessoas";
+"screen_room_details_invite_title" = "Convidar";
 "screen_room_details_leave_conversation_title" = "Sair da conversa";
 "screen_room_details_leave_room_title" = "Sair da sala";
 "screen_room_details_media_gallery_title" = "Multimédia e ficheiros";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "À aguardar a aceitação do pedido";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Partilhar localização";
 "screen_share_my_location_action" = "Partilhar a minha localização";
 "screen_share_open_apple_maps" = "Abrir no Apple Maps";

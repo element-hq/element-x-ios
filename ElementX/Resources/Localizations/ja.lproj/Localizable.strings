@@ -309,7 +309,6 @@
 "common_refreshing" = "更新中...";
 "common_removing" = "削除しています…";
 "common_replying_to" = "%1$@ に返信";
-"common_report_a_bug" = "バグを報告";
 "common_report_a_problem" = "問題を報告";
 "common_report_submitted" = "報告は送信されました";
 "common_rich_text_editor" = "リッチテキストエディター";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "メッセージの削除";
 "screen_room_change_permissions_everyone" = "メンバー";
 "screen_room_change_permissions_invite_people" = "ユーザーの招待";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "スペースの管理";
 "screen_room_change_permissions_manage_space_rooms" = "ルームを管理";
 "screen_room_change_permissions_member_moderation" = "メンバーの管理";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "終了するまでアプリを閉じないでください。";
 "screen_room_details_invite_people_preparing" = "招待を準備中...";
 "screen_room_details_invite_people_title" = "ユーザーを招待";
+"screen_room_details_invite_title" = "招待";
 "screen_room_details_leave_conversation_title" = "会話を退出";
 "screen_room_details_leave_room_title" = "ルームを退出";
 "screen_room_details_media_gallery_title" = "ファイルとメディア";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "リクエストの承認を待機中";
 "screen_share_location_live_location_disclaimer_title" = "ライブ位置情報の履歴はルームに保管され、メンバーは後から確認することもできます。";
 "screen_share_location_live_location_duration_picker_title" = "ライブ位置情報を共有する期間を選択してください。";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "場所を共有";
 "screen_share_my_location_action" = "現在地を共有する";
 "screen_share_open_apple_maps" = "Apple Maps で開く";

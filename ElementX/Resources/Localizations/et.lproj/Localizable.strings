@@ -63,7 +63,7 @@
 "action_call" = "Helista";
 "action_cancel" = "Loobu";
 "action_cancel_for_now" = "Hetkel jäta tegemata";
-"action_choose_file" = "Choose file";
+"action_choose_file" = "Vali fail";
 "action_choose_photo" = "Vali foto";
 "action_clear" = "Selge";
 "action_close" = "Sulge";
@@ -83,15 +83,15 @@
 "action_deactivate_account" = "Eemalda konto kasutusest";
 "action_decline" = "Keeldu";
 "action_decline_and_block" = "Keeldu ja blokeeri";
-"action_delete" = "Delete";
-"action_delete_account" = "Delete account";
+"action_delete" = "Kustuta";
+"action_delete_account" = "Kustuta kasutajakonto";
 "action_delete_poll" = "Kustuta küsitlus";
 "action_deselect_all" = "Eemalda kõik valikud";
 "action_disable" = "Lülita välja";
 "action_discard" = "Loobu";
 "action_dismiss" = "Lõpeta";
 "action_done" = "Valmis";
-"action_download" = "Download";
+"action_download" = "Laadi alla";
 "action_edit" = "Muuda";
 "action_edit_caption" = "Muuda selgitust";
 "action_edit_poll" = "Muuda küsitlust";
@@ -190,7 +190,7 @@
 "banner_new_sound_title" = "Oleme sinu helisid värskendanud";
 "banner_set_up_recovery_content" = "Loo uus taastevõti, mida saad kasutada oma krüptitud sõnumite ajaloo taastamisel olukorras, kus kaotad ligipääsu oma seadmetele.";
 "banner_set_up_recovery_submit" = "Seadista andmete taastamine";
-"banner_set_up_recovery_title" = "Seadista taastamine";
+"banner_set_up_recovery_title" = "Varunda oma vestlused";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ei võimalda selles Androidi versioonis Bluetoothi heliseadmete kasutamist. Palun vali mõni muu heliseade.";
 "common_about" = "Rakenduse teave";
 "common_acceptable_use_policy" = "Vastuvõetava kasutamise põhimõtted";
@@ -208,9 +208,9 @@
 "common_beta" = "Beetaversioon";
 "common_blocked_users" = "Blokeeritud kasutajad";
 "common_bubbles" = "Mullid";
-"common_call_declined" = "Call declined";
+"common_call_declined" = "Osapool keeldus kõnest";
 "common_call_started" = "Kõne algas";
-"common_call_you_declined" = "You declined a call";
+"common_call_you_declined" = "Sa keeldusid kõnest";
 "common_chat_backup" = "Vestluse varukoopia";
 "common_copied_to_clipboard" = "Kopeeritud lõikelauale";
 "common_copyright" = "Autoriõigused";
@@ -261,8 +261,8 @@
 "common_line_copied_to_clipboard" = "Rida on kopeeritud lõikelauale";
 "common_link_copied_to_clipboard" = "Link on kopeeritud lõikelauale";
 "common_link_new_device" = "Seo uus seade";
-"common_live_location" = "Live location";
-"common_live_location_ended" = "Live location ended";
+"common_live_location" = "Asukoha jagamine reaalajas";
+"common_live_location_ended" = "Reaalajas asukoha jagamine on lõppenud";
 "common_loading" = "Laadime…";
 "common_loading_more" = "Laadime veel...";
 "common_message" = "Sõnum";
@@ -282,7 +282,7 @@
 "common_open_source_licenses" = "Avatud lähtekoodiga litsentsid";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "või";
-"common_other_options" = "Other options";
+"common_other_options" = "Muud valikud";
 "common_password" = "Salasõna";
 "common_people" = "Inimesed";
 "common_permalink" = "Püsilink";
@@ -309,7 +309,6 @@
 "common_refreshing" = "Värskendame andmeid…";
 "common_removing" = "Eemaldan…";
 "common_replying_to" = "Vastates kasutajale %1$@";
-"common_report_a_bug" = "Teata veast";
 "common_report_a_problem" = "Teata veast";
 "common_report_submitted" = "Veateade on saadetud";
 "common_rich_text_editor" = "Vormindatud teksti toimeti";
@@ -387,7 +386,7 @@
 "common_voice_message" = "Häälsõnum";
 "common_waiting" = "Ootame…";
 "common_waiting_for_decryption_key" = "Ootame selle sõnumi dekrüptimisvõtit";
-"common_waiting_live_location" = "Waiting for live location…";
+"common_waiting_live_location" = "Ootan asukoha jagamist reaalajas…";
 "common_world_readable_history" = "Kõik võivad ajalugu näha";
 "common_you" = "Sina";
 "confirm_recovery_key_banner_message" = "Säilitamaks ligipääsu vestluste ja krüptovõtmete varukoopiale, palun sisesta kinnituseks oma taastevõti.";
@@ -562,7 +561,7 @@
 "screen_advanced_settings_labs" = "Katsed";
 "screen_advanced_settings_live_location_section_description" = "The distance you have to move to trigger an update.";
 "screen_advanced_settings_live_location_section_footer" = "Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$@.";
-"screen_advanced_settings_live_location_section_footer_link" = "App Settings";
+"screen_advanced_settings_live_location_section_footer_link" = "Rakenduse seadistused";
 "screen_advanced_settings_live_location_section_title" = "Live location updates";
 "screen_advanced_settings_media_compression_description" = "Sellega laadid fotosid ja videoid kiiremini üles ning vähendad andmemahtu";
 "screen_advanced_settings_media_compression_title" = "Optimeeri meedia kvaliteeti";
@@ -751,7 +750,7 @@
 "screen_create_room_space_selection_sheet_title" = "Lisa kogukonda";
 "screen_create_room_topic_label" = "Teema (kui soovid lisada)";
 "screen_create_room_topic_placeholder" = "Lisa kirjeldus…";
-"screen_deactivate_account_confirmation_dialog_content" = "Palun kinnita uuesti, et soovid eemaldada oma konto kasutusest";
+"screen_deactivate_account_confirmation_dialog_content" = "Palun kinnita uuesti, et soovid kustutada oma kasutajakonto. Seda tegevust ei saa tagasi pöörata.";
 "screen_deactivate_account_delete_all_messages" = "Kustuta kõik minu sõnumid";
 "screen_deactivate_account_delete_all_messages_notice" = "Hoiatus: tulevased kasutajad võivad näha poolikuid vestlusi.";
 "screen_deactivate_account_description" = "Sinu konto kasutusest eemaldamine on %1$@ ja sellega:";
@@ -761,7 +760,7 @@
 "screen_deactivate_account_list_item_2" = "Sind logitakse välja kõikidest jututubadest.";
 "screen_deactivate_account_list_item_3" = "Kustutatakse sinu andmed meie isikutuvastusserverist.";
 "screen_deactivate_account_list_item_4" = "Sinu sõnumid on jätkuvalt nähtavad registreeritud kasutajatele, kuid kui otsustad sõnumid kustutada, siis nad nad pole nähtavad uutele ja registreerimata kasutajatele.";
-"screen_deactivate_account_title" = "Eemalda konto kasutusest";
+"screen_deactivate_account_title" = "Kustuta kasutajakonto";
 "screen_decline_and_block_block_user_option_description" = "Sa ei näe enam selle kasutaja saadetud sõnumeid ja jututubade kutseid";
 "screen_decline_and_block_block_user_option_title" = "Blokeeri kasutaja";
 "screen_decline_and_block_report_user_option_description" = "Teata sellest jututoast oma teenusepakkujale.";
@@ -921,7 +920,7 @@
 "screen_link_new_device_wrong_number_title" = "Numbrid ei klapi";
 "screen_live_location_sheet_nobody_sharing" = "Mitte keegi ei jaga oma asukohta";
 "screen_live_location_sheet_sharing_live_location" = "Asukoht on jagamisel reaalajas";
-"screen_live_location_sheet_title" = "On the map";
+"screen_live_location_sheet_title" = "Kaardil";
 "screen_login_error_deactivated_account" = "Konto on kasutusest eemaldatud.";
 "screen_login_error_invalid_credentials" = "Vigane kasutajanimi ja/või salasõna";
 "screen_login_error_invalid_user_id" = "See ei ole korrektne kasutajanimi. Õige vorming on: „@kasutaja:koduserver.ee“";
@@ -1102,10 +1101,10 @@
 "screen_report_room_title" = "Teata jututoast";
 "screen_reset_encryption_confirmation_alert_action" = "Jah, lähtesta nüüd";
 "screen_reset_encryption_confirmation_alert_subtitle" = "See tegevus on tagasipöördumatu.";
-"screen_reset_encryption_confirmation_alert_title" = "Kas sa oled kindel, et soovid oma andmete krüptimist lähtestada?";
+"screen_reset_encryption_confirmation_alert_title" = "Kas sa oled kindel, et soovid oma võrguidentiteeti lähtestada?";
 "screen_reset_encryption_password_error" = "Tekkis teadmata viga. Palun kontrolli, kas sinu kasutajakonto salasõna on õige ja proovi uuesti.";
 "screen_reset_encryption_password_placeholder" = "Sisesta...";
-"screen_reset_encryption_password_subtitle" = "Palun kinnita, et soovid oma andmete krüptimist lähtestada.";
+"screen_reset_encryption_password_subtitle" = "Palun kinnita, et soovid oma võrguidentiteedi lähtestada.";
 "screen_reset_encryption_password_title" = "Jätkamaks sisesta oma kasutajakonto salasõna";
 "screen_reset_identity_confirmation_subtitle" = "Oma võrguidentiteedi lähtestamiseks suuname sind %1$@ kasutajakonto halduse lehele. Hiljem suunatakse sind tagasi sama rakenduse juurde.";
 "screen_reset_identity_confirmation_title" = "Sa ei saa seda kinnitada? Ava oma kasutajakonto haldus ja lähtesta oma võrguidentiteet.";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Eemalda sõnumid";
 "screen_room_change_permissions_everyone" = "Liikmed";
 "screen_room_change_permissions_invite_people" = "Osalejate kutsumine";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Halda kogukonda";
 "screen_room_change_permissions_manage_space_rooms" = "Halda jututuba";
 "screen_room_change_permissions_member_moderation" = "Liikmete haldus";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Ära sulge rakendust enne, kui tegevus on lõppenud.";
 "screen_room_details_invite_people_preparing" = "Valmistan kutseid ette...";
 "screen_room_details_invite_people_title" = "Kutsu osalejaid";
+"screen_room_details_invite_title" = "Kutsu";
 "screen_room_details_leave_conversation_title" = "Lahku vestlusest";
 "screen_room_details_leave_room_title" = "Lahku jututoast";
 "screen_room_details_media_gallery_title" = "Meedia ja failid";
@@ -1206,7 +1207,7 @@
 "screen_room_grouped_state_events_reduce" = "Näita vähem";
 "screen_room_invite_again_alert_message" = "Kas sa sooviksid neid tagasi kutsuda?";
 "screen_room_invite_again_alert_title" = "Sa oled selles vestluses üksinda";
-"screen_room_live_location_banner" = "Sharing live location";
+"screen_room_live_location_banner" = "Asukoht on jagamisel reaalajas";
 "screen_room_member_details_block_alert_action" = "Blokeeri";
 "screen_room_member_details_block_alert_description" = "Blokeeritud kasutajad ei saa sulle kirjutada ja kõik nende sõnumid on sinu eest peidetud. Sa saad alati blokeeringu eemaldada.";
 "screen_room_member_details_block_user" = "Blokeeri kasutaja";
@@ -1407,7 +1408,8 @@
 "screen_session_verification_waiting_to_accept_subtitle" = "Jätkamaks nõustu verifitseerimisprotsessi alustamisega oma teises sessioonis.";
 "screen_session_verification_waiting_to_accept_title" = "Ootame nõustumist verifitseerimispäringuga";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
-"screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
+"screen_share_location_live_location_duration_picker_title" = "Vali, kui kaua tahad oma reaalajas jagada.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Jaga asukohta";
 "screen_share_my_location_action" = "Jaga minu asukohta";
 "screen_share_open_apple_maps" = "Ava Apple Mapsis";

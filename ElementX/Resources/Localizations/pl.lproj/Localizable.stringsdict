@@ -154,10 +154,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d zaznaczone</string>
+			<key>many</key>
+			<string>%1$d zaznaczonych</string>
 			<key>one</key>
-			<string>%1$d selected</string>
-			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d zaznaczony</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -224,10 +226,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Masz %d nowe wiadomości.</string>
+			<key>many</key>
+			<string>Masz %d nowych wiadomości.</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
-			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>Masz %d nową wiadomość.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -277,7 +281,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>%d nieprzeczytane wiadomość</string>
+			<string>%d nieprzeczytane wiadomości</string>
 			<key>many</key>
 			<string>%d nieprzeczytanych wiadomości</string>
 			<key>one</key>
@@ -312,10 +316,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Co %1$d metry</string>
+			<key>many</key>
+			<string>Co %1$d metrów</string>
 			<key>one</key>
-			<string>Every %1$d meter</string>
-			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>Co %1$d metr</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -382,10 +388,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d osoby</string>
+			<key>many</key>
+			<string>%1$d osób</string>
 			<key>one</key>
-			<string>%1$d person</string>
-			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d osoba</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -416,10 +424,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d zbanowanych</string>
+			<key>many</key>
+			<string>%1$d zbanowanych</string>
 			<key>one</key>
-			<string>%1$d Banned</string>
-			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d zbanowany</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -450,10 +460,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d zaproszonych</string>
+			<key>many</key>
+			<string>%1$d zaproszonych</string>
 			<key>one</key>
-			<string>%1$d Invited</string>
-			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d zaproszony</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -574,10 +586,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Usuń %1$d pokoje z %2$@</string>
+			<key>many</key>
+			<string>Usuń %1$d pokoi z %2$@</string>
 			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
-			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>Usuń %1$d pokój z %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

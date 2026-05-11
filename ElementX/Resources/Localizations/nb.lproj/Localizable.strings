@@ -309,7 +309,6 @@
 "common_refreshing" = "Oppdaterer…";
 "common_removing" = "Fjerner...";
 "common_replying_to" = "Svar til %1$@";
-"common_report_a_bug" = "Rapporter en feil";
 "common_report_a_problem" = "Rapporter et problem";
 "common_report_submitted" = "Rapport sendt inn";
 "common_rich_text_editor" = "Redigeringsprogram for rik tekst";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Fjern meldinger";
 "screen_room_change_permissions_everyone" = "Medlem";
 "screen_room_change_permissions_invite_people" = "Inviter folk";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Administrer området";
 "screen_room_change_permissions_manage_space_rooms" = "Administrer rom";
 "screen_room_change_permissions_member_moderation" = "Administrer medlemmer";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Ikke lukk appen før den er ferdig.";
 "screen_room_details_invite_people_preparing" = "Forbereder invitasjoner...";
 "screen_room_details_invite_people_title" = "Inviter folk";
+"screen_room_details_invite_title" = "Inviter";
 "screen_room_details_leave_conversation_title" = "Forlat samtalen";
 "screen_room_details_leave_room_title" = "Forlat rommet";
 "screen_room_details_media_gallery_title" = "Medier og filer";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Venter på å godta forespørselen";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Del posisjon";
 "screen_share_my_location_action" = "Del min posisjon";
 "screen_share_open_apple_maps" = "Åpne i Apple Maps";

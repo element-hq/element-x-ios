@@ -7,7 +7,7 @@
 "a11y_edit_room_address_hint" = "完整地址为 %1$@";
 "a11y_expand_message_text_field" = "展开消息文本框";
 "a11y_hide_password" = "隐藏密码";
-"a11y_info" = "Info";
+"a11y_info" = "信息";
 "a11y_join_call" = "加入通话";
 "a11y_jump_to_bottom" = "跳转到底部";
 "a11y_notifications_mentions_only" = "仅提及";
@@ -63,7 +63,7 @@
 "action_call" = "通话";
 "action_cancel" = "取消";
 "action_cancel_for_now" = "暂时取消";
-"action_choose_file" = "Choose file";
+"action_choose_file" = "选择文件";
 "action_choose_photo" = "选择照片";
 "action_clear" = "清除";
 "action_close" = "关闭";
@@ -122,7 +122,7 @@
 "action_manage_account_and_devices" = "管理账户与设备";
 "action_manage_devices" = "管理设备";
 "action_manage_rooms" = "管理房间";
-"action_message" = "发送消息给";
+"action_message" = "发送消息";
 "action_minimize" = "最小化";
 "action_next" = "下一步";
 "action_no" = "否";
@@ -309,7 +309,6 @@
 "common_refreshing" = "正在刷新…";
 "common_removing" = "正在移除…";
 "common_replying_to" = "正在回复 %1$@";
-"common_report_a_bug" = "报告 bug";
 "common_report_a_problem" = "报告问题";
 "common_report_submitted" = "报告已提交";
 "common_rich_text_editor" = "富文本编辑器";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "移除消息";
 "screen_room_change_permissions_everyone" = "成员";
 "screen_room_change_permissions_invite_people" = "邀请人员";
+"screen_room_change_permissions_live_location" = "共享实时位置";
 "screen_room_change_permissions_manage_space" = "管理空间";
 "screen_room_change_permissions_manage_space_rooms" = "管理房间";
 "screen_room_change_permissions_member_moderation" = "管理成员";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "完成之前请勿关闭 app。";
 "screen_room_details_invite_people_preparing" = "正在准备邀请…";
 "screen_room_details_invite_people_title" = "邀请人员";
+"screen_room_details_invite_title" = "邀请";
 "screen_room_details_leave_conversation_title" = "离开聊天";
 "screen_room_details_leave_room_title" = "离开房间";
 "screen_room_details_media_gallery_title" = "媒体与文件";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "等待接受请求";
 "screen_share_location_live_location_disclaimer_title" = "你实时位置历史将存储在房间中，并于会话结束后对其他成员可见。";
 "screen_share_location_live_location_duration_picker_title" = "选择共享实时位置的时长。";
+"screen_share_location_live_location_missing_permissions" = "你无权在此房内共享实时位置。";
 "screen_share_location_title" = "共享位置";
 "screen_share_my_location_action" = "共享我的位置";
 "screen_share_open_apple_maps" = "在 Apple Maps 中打开";

@@ -690,8 +690,6 @@ internal enum L10n {
   internal static func commonReplyingTo(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_replying_to", String(describing: p1))
   }
-  /// Report a bug
-  internal static var commonReportABug: String { return L10n.tr("Localizable", "common_report_a_bug") }
   /// Report a problem
   internal static var commonReportAProblem: String { return L10n.tr("Localizable", "common_report_a_problem") }
   /// Report submitted
@@ -2728,6 +2726,8 @@ internal enum L10n {
   internal static var screenRoomDetailsInvitePeoplePreparing: String { return L10n.tr("Localizable", "screen_room_details_invite_people_preparing") }
   /// Invite people
   internal static var screenRoomDetailsInvitePeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_people_title") }
+  /// Invite
+  internal static var screenRoomDetailsInviteTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_title") }
   /// Leave conversation
   internal static var screenRoomDetailsLeaveConversationTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_conversation_title") }
   /// Leave room

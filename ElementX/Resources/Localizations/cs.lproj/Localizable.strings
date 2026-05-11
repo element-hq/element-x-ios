@@ -309,7 +309,6 @@
 "common_refreshing" = "Obnovování...";
 "common_removing" = "Odstraňování…";
 "common_replying_to" = "Odpověď na %1$@";
-"common_report_a_bug" = "Nahlásit chybu";
 "common_report_a_problem" = "Nahlásit problém";
 "common_report_submitted" = "Zpráva odeslána";
 "common_rich_text_editor" = "Editor formátovaného textu";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Odstranit zprávy";
 "screen_room_change_permissions_everyone" = "Člen";
 "screen_room_change_permissions_invite_people" = "Pozvat přátele";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Správa prostoru";
 "screen_room_change_permissions_manage_space_rooms" = "Spravovat místnosti";
 "screen_room_change_permissions_member_moderation" = "Spravovat členy";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Nezavírejte aplikaci, dokud neskončíte.";
 "screen_room_details_invite_people_preparing" = "Příprava pozvánek...";
 "screen_room_details_invite_people_title" = "Pozvat přátele";
+"screen_room_details_invite_title" = "Pozvat";
 "screen_room_details_leave_conversation_title" = "Opustit konverzaci";
 "screen_room_details_leave_room_title" = "Opustit místnost";
 "screen_room_details_media_gallery_title" = "Média a soubory";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Čekání na přijetí žádosti";
 "screen_share_location_live_location_disclaimer_title" = "Vaše historie aktuální polohy bude uložena v místnosti a bude viditelná pro členy i po skončení relace.";
 "screen_share_location_live_location_duration_picker_title" = "Zvolte, jak dlouho chcete sdílet svou aktuální polohu.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Sdílet polohu";
 "screen_share_my_location_action" = "Sdílet moji polohu";
 "screen_share_open_apple_maps" = "Otevřít v Mapách Apple";

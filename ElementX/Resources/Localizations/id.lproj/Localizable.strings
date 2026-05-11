@@ -309,7 +309,6 @@
 "common_refreshing" = "Menyegarkan…";
 "common_removing" = "Removing…";
 "common_replying_to" = "Membalas %1$@";
-"common_report_a_bug" = "Laporkan kutu";
 "common_report_a_problem" = "Laporkan masalah";
 "common_report_submitted" = "Laporan terkirim";
 "common_rich_text_editor" = "Penyunting teks kaya";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Hilangkan pesan";
 "screen_room_change_permissions_everyone" = "Semua Anggota";
 "screen_room_change_permissions_invite_people" = "Boleh mungundang";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Manage space";
 "screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_member_moderation" = "Kelola anggota";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Jangan tutup aplikasi tunggu hingga selesai.";
 "screen_room_details_invite_people_preparing" = "Mempersiapkan undangan...";
 "screen_room_details_invite_people_title" = "Undang orang-orang";
+"screen_room_details_invite_title" = "Undang";
 "screen_room_details_leave_conversation_title" = "Tinggalkan percakapan";
 "screen_room_details_leave_room_title" = "Tinggalkan ruangan";
 "screen_room_details_media_gallery_title" = "Media dan berkas";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Menunggu untuk menerima permintaan";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Bagikan lokasi";
 "screen_share_my_location_action" = "Bagikan lokasi saya";
 "screen_share_open_apple_maps" = "Buka di Apple Maps";

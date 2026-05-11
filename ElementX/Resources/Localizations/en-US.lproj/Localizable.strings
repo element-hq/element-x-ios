@@ -309,7 +309,6 @@
 "common_refreshing" = "Refreshing…";
 "common_removing" = "Removing…";
 "common_replying_to" = "Replying to %1$@";
-"common_report_a_bug" = "Report a bug";
 "common_report_a_problem" = "Report a problem";
 "common_report_submitted" = "Report submitted";
 "common_rich_text_editor" = "Rich text editor";
@@ -1179,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
 "screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_invite_people_title" = "Invite people";
+"screen_room_details_invite_title" = "Invite";
 "screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "Leave room";
 "screen_room_details_media_gallery_title" = "Media and files";

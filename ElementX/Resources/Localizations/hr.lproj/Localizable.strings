@@ -309,7 +309,6 @@
 "common_refreshing" = "Osvježavanje…";
 "common_removing" = "U tijeku je uklanjanje…";
 "common_replying_to" = "Odgovara korisniku %1$@";
-"common_report_a_bug" = "Prijavi pogrešku";
 "common_report_a_problem" = "Prijavi problem";
 "common_report_submitted" = "Prijava je podnesena";
 "common_rich_text_editor" = "Uređivač obogaćenog teksta";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Uklanjanje poruka";
 "screen_room_change_permissions_everyone" = "Član";
 "screen_room_change_permissions_invite_people" = "Pozivanje osoba";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Upravljaj prostorom";
 "screen_room_change_permissions_manage_space_rooms" = "Upravljaj sobama";
 "screen_room_change_permissions_member_moderation" = "Upravljanje članovima";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Ne zatvarajte aplikaciju dok se ne završi.";
 "screen_room_details_invite_people_preparing" = "Priprema pozivnica...";
 "screen_room_details_invite_people_title" = "Pozovi osobe";
+"screen_room_details_invite_title" = "Pozovi";
 "screen_room_details_leave_conversation_title" = "Napusti razgovor";
 "screen_room_details_leave_room_title" = "Napusti sobu";
 "screen_room_details_media_gallery_title" = "Mediji i datoteke";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Čekanje na prihvaćanje zahtjeva";
 "screen_share_location_live_location_disclaimer_title" = "Vaša povijest lokacije uživo bit će pohranjena u sobi i vidljiva članovima nakon završetka sesije.";
 "screen_share_location_live_location_duration_picker_title" = "Odaberite koliko dugo želite dijeliti svoju lokaciju uživo.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Podijeli lokaciju";
 "screen_share_my_location_action" = "Podijeli moju lokaciju";
 "screen_share_open_apple_maps" = "Otvori u Apple Maps";

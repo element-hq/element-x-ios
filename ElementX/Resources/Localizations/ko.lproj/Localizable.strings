@@ -309,7 +309,6 @@
 "common_refreshing" = "새로고침 중…";
 "common_removing" = "삭제 중...";
 "common_replying_to" = "%1$@님에게 답장하는 중";
-"common_report_a_bug" = "버그 보고";
 "common_report_a_problem" = "문제 보고";
 "common_report_submitted" = "보고 제출됨";
 "common_rich_text_editor" = "리치 텍스트 편집기";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "메시지 삭제";
 "screen_room_change_permissions_everyone" = "멤버";
 "screen_room_change_permissions_invite_people" = "사람 초대하기";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "스페이스 관리";
 "screen_room_change_permissions_manage_space_rooms" = "방 관리";
 "screen_room_change_permissions_member_moderation" = "멤버 관리";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "작업이 완료될 때까지 앱을 닫지 마세요.";
 "screen_room_details_invite_people_preparing" = "초대 준비중...";
 "screen_room_details_invite_people_title" = "사람 초대하기";
+"screen_room_details_invite_title" = "초대";
 "screen_room_details_leave_conversation_title" = "대화에서 나가기";
 "screen_room_details_leave_room_title" = "방 떠나기";
 "screen_room_details_media_gallery_title" = "미디어 및 파일";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "요청 수락을 기다리는 중";
 "screen_share_location_live_location_disclaimer_title" = "실시간 위치 기록은 대화방에 저장되며, 공유 종료 후에도 멤버들이 확인할 수 있습니다.";
 "screen_share_location_live_location_duration_picker_title" = "실시간 위치를 공유할 시간을 선택해 주세요.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "위치 공유";
 "screen_share_my_location_action" = "내 위치 공유";
 "screen_share_open_apple_maps" = "Apple Maps에서 열기";

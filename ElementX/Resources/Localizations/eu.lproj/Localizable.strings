@@ -309,7 +309,6 @@
 "common_refreshing" = "Freskatzen…";
 "common_removing" = "Removing…";
 "common_replying_to" = "%1$@(r)i erantzuten";
-"common_report_a_bug" = "Eman akats baten berri";
 "common_report_a_problem" = "Eman arazo baten berri";
 "common_report_submitted" = "Salaketa bidali da";
 "common_rich_text_editor" = "Testu aberatsaren editorea";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Kendu mezuak";
 "screen_room_change_permissions_everyone" = "Member";
 "screen_room_change_permissions_invite_people" = "Gonbidatu jendea";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Manage space";
 "screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_member_moderation" = "Manage members";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
 "screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_invite_people_title" = "Gonbidatu jendea";
+"screen_room_details_invite_title" = "Gonbidatu";
 "screen_room_details_leave_conversation_title" = "Utzi elkarrizketa";
 "screen_room_details_leave_room_title" = "Atera gelatik";
 "screen_room_details_media_gallery_title" = "Multimedia eta fitxategiak";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Eskaera onartzeko zain";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Partekatu kokapena";
 "screen_share_my_location_action" = "Partekatu nire kokapena";
 "screen_share_open_apple_maps" = "Ireki Apple Maps-en";

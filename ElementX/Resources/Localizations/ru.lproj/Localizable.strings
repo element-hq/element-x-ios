@@ -309,7 +309,6 @@
 "common_refreshing" = "Обновление…";
 "common_removing" = "Удаление...";
 "common_replying_to" = "Отвечает %1$@";
-"common_report_a_bug" = "Сообщить об ошибке";
 "common_report_a_problem" = "Сообщить о проблеме";
 "common_report_submitted" = "Отчет отправлен";
 "common_rich_text_editor" = "Форматирование";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Удалять сообщения";
 "screen_room_change_permissions_everyone" = "Участники";
 "screen_room_change_permissions_invite_people" = "Приглашать людей";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Управление пространством";
 "screen_room_change_permissions_manage_space_rooms" = "Управление комнатами";
 "screen_room_change_permissions_member_moderation" = "Управлять участниками";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Не закрывайте приложение, пока не закончите.";
 "screen_room_details_invite_people_preparing" = "Подготовка приглашений...";
 "screen_room_details_invite_people_title" = "Пригласить в комнату";
+"screen_room_details_invite_title" = "Пригласить";
 "screen_room_details_leave_conversation_title" = "Покинуть беседу";
 "screen_room_details_leave_room_title" = "Покинуть комнату";
 "screen_room_details_media_gallery_title" = "Медиа и файлы";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Ожидание принятия запроса";
 "screen_share_location_live_location_disclaimer_title" = "История вашего местоположения в режиме реального времени будет сохранена в комнате и станет доступна участникам после окончания сессии.";
 "screen_share_location_live_location_duration_picker_title" = "Выберите, как долго вы будете делиться своим местоположением в режиме реального времени.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Поделиться местоположением";
 "screen_share_my_location_action" = "Поделиться моим местоположением";
 "screen_share_open_apple_maps" = "Открыть в Apple Maps";

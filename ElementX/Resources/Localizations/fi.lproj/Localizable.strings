@@ -309,7 +309,6 @@
 "common_refreshing" = "Päivitetään...";
 "common_removing" = "Poistetaan…";
 "common_replying_to" = "Vastataan käyttäjälle %1$@";
-"common_report_a_bug" = "Ilmoita virheestä";
 "common_report_a_problem" = "Ilmoita ongelmasta";
 "common_report_submitted" = "Ilmoitus lähetetty";
 "common_rich_text_editor" = "Rikastettu tekstieditori";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Viestien poistaminen";
 "screen_room_change_permissions_everyone" = "Jäsen";
 "screen_room_change_permissions_invite_people" = "Kutsujen antaminen";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Tilan hallitseminen";
 "screen_room_change_permissions_manage_space_rooms" = "Huoneiden hallitseminen";
 "screen_room_change_permissions_member_moderation" = "Jäsenien hallitseminen";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Älä sulje sovellusta ennen kuin se on valmis.";
 "screen_room_details_invite_people_preparing" = "Valmistellaan kutsuja...";
 "screen_room_details_invite_people_title" = "Kutsu henkilöitä";
+"screen_room_details_invite_title" = "Kutsu";
 "screen_room_details_leave_conversation_title" = "Poistu keskustelusta";
 "screen_room_details_leave_room_title" = "Poistu huoneesta";
 "screen_room_details_media_gallery_title" = "Media ja tiedostot";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Odotetaan pyynnön hyväksymistä";
 "screen_share_location_live_location_disclaimer_title" = "Reaaliaikainen sijaintihistoriasi tallennetaan huoneeseen ja on jäsenten nähtävissä istunnon päätyttyä.";
 "screen_share_location_live_location_duration_picker_title" = "Valitse, kuinka kauan haluat jakaa reaaliaikaisen sijaintisi.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Jaa sijainti";
 "screen_share_my_location_action" = "Jaa sijaintini";
 "screen_share_open_apple_maps" = "Avaa Apple Mapsissa";
