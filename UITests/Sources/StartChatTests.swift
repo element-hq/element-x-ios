@@ -38,7 +38,7 @@ class StartChatTests: XCTestCase {
         try await app.assertScreenshot(step: Step.createRoom)
         
         app.buttons[A11yIdentifiers.createRoomScreen.roomAvatar].tap()
-        app.popovers.buttons.element(boundBy: 2).tap() // There are 2 buttons with the accessibility identifier, so use the index to get the right one.
+        app.popovers.buttons.element(boundBy: 3).tap() // There are 3 buttons with the accessibility identifier, so use the index to get the right one.
         let cancelButton = app.buttons["Cancel"]
         // The system UI snapshot is unreliable, instead lets just assert something.
         // XCTAssertTrue(cancelButton.waitForExistence(timeout: 1.0))
