@@ -16,26 +16,6 @@ struct CallNotificationRoomTimelineView: View {
     let timelineItem: CallNotificationRoomTimelineItem
     
     var body: some View {
-        let tileTitle = if timelineItem.isDM {
-            // As per design only have declined variants in DM
-            if timelineItem.isDeclinedByMe {
-                L10n.commonCallYouDeclined
-            } else if timelineItem.isDeclined {
-                L10n.commonCallDeclined
-            } else {
-                L10n.commonCallStarted
-            }
-        } else {
-            L10n.commonCallStarted
-        }
-        
-        let iconKeyPath: KeyPath<CompoundIcons, Image> = if timelineItem.isDM, timelineItem.isDeclined || timelineItem.isDeclinedByMe {
-            // As per design only have declined variants in DM
-            timelineItem.isVoiceCall ? \.voiceCallDeclinedSolid : \.videoCallDeclinedSolid
-        } else {
-            timelineItem.isVoiceCall ? \.voiceCallSolid : \.videoCallSolid
-        }
-
         HStack(spacing: 12) {
             CompoundIcon(iconKeyPath, size: .medium, relativeTo: .compound.headingMDBold)
                 .foregroundStyle(.compound.iconSecondary)
@@ -56,6 +36,32 @@ struct CallNotificationRoomTimelineView: View {
         .overlay(RoundedRectangle(cornerRadius: 8)
             .stroke(.compound.borderInteractiveSecondary, lineWidth: 1))
         .padding(16)
+    }
+    
+    // MARK: - Private
+        
+    private var tileTitle: String {
+        if timelineItem.isDM {
+            // As per design only have declined variants in DM
+            if timelineItem.isDeclinedByMe {
+                L10n.commonCallYouDeclined
+            } else if timelineItem.isDeclined {
+                L10n.commonCallDeclined
+            } else {
+                L10n.commonCallStarted
+            }
+        } else {
+            L10n.commonCallStarted
+        }
+    }
+
+    private var iconKeyPath: KeyPath<CompoundIcons, Image> {
+        if timelineItem.isDM, timelineItem.isDeclined || timelineItem.isDeclinedByMe {
+            // As per design only have declined variants in DM
+            timelineItem.isVoiceCall ? \.voiceCallDeclinedSolid : \.videoCallDeclinedSolid
+        } else {
+            timelineItem.isVoiceCall ? \.voiceCallSolid : \.videoCallSolid
+        }
     }
 }
 
