@@ -36,7 +36,7 @@ struct CallScreen: View {
             CallView(url: context.viewState.url, viewModelContext: context)
                 // This URL is stable, forces view reloads if this representable is ever reused for another url
                 .id(context.viewState.url)
-                .ignoresSafeArea(edges: .bottom)
+                .ignoresSafeArea()
         }
     }
     
@@ -121,6 +121,7 @@ private struct CallView: UIViewRepresentable {
             webView.uiDelegate = self
             webView.navigationDelegate = self
             webView.isInspectable = true
+            webView.scrollView.contentInsetAdjustmentBehavior = .never // Let Element Call manage the safe areas within the web view.
             
             webView.customUserAgent = UserAgentBuilder.makeASCIIUserAgent()
             
