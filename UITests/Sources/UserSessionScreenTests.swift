@@ -285,6 +285,7 @@ class UserSessionScreenTests: XCTestCase {
         profileButton.tap(.center)
         
         // Open analytics
+        app.swipeUp() // Make sure the the analytics entry is visible
         app.buttons[A11yIdentifiers.settingsScreen.analytics].tap()
         
         // Go back to settings
