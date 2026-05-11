@@ -11,18 +11,12 @@ import Testing
 
 @MainActor
 struct UserProfileScreenViewModelTests {
-    private let appSettings: AppSettings
-    private let analytics: AnalyticsService
-    private let userIndicatorController: UserIndicatorControllerProtocol
-    
-    init() {
-        appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
-        userIndicatorController = UserIndicatorControllerMock.default
-    }
-    
     @Test
     func initialState() async throws {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let profile = UserProfileProxy(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: .mockMXCAvatar)
         let clientProxy = ClientProxyMock(.init())
         clientProxy.profileForReturnValue = .success(profile)
@@ -45,6 +39,10 @@ struct UserProfileScreenViewModelTests {
     
     @Test
     func initialStateAccountOwner() async throws {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let profile = UserProfileProxy(userID: RoomMemberProxyMock.mockMe.userID, displayName: "Me", avatarURL: .mockMXCAvatar)
         let clientProxy = ClientProxyMock(.init())
         clientProxy.profileForReturnValue = .success(profile)
@@ -67,6 +65,10 @@ struct UserProfileScreenViewModelTests {
     
     @Test
     func startingDmWithUnknownUserFetchesIdentity() async throws {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let profile = UserProfileProxy.mockAlice
         
         let clientProxy = ClientProxyMock(.init())

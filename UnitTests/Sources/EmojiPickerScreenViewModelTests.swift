@@ -18,12 +18,6 @@ struct EmojiPickerScreenViewModelTests {
         viewModel.context
     }
 
-    private let appSettings: AppSettings
-
-    init() {
-        appSettings = AppSettings()
-    }
-
     @Test
     mutating func toggleReaction() async throws {
         setupViewModel()
@@ -51,7 +45,7 @@ struct EmojiPickerScreenViewModelTests {
         
         viewModel = EmojiPickerScreenViewModel(itemID: .randomEvent,
                                                selectedEmojis: selectedEmojis,
-                                               emojiProvider: EmojiProvider(appSettings: appSettings),
+                                               emojiProvider: EmojiProvider(appSettings: AppSettings()),
                                                timelineController: MockTimelineController(timelineProxy: timelineProxy))
     }
 }

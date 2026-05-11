@@ -15,17 +15,13 @@ import WysiwygComposer
 
 @MainActor
 final class ComposerToolbarViewModelTests {
-    private var appSettings: AppSettings!
     private var wysiwygViewModel: WysiwygComposerViewModel!
     private var viewModel: ComposerToolbarViewModel!
     private var completionSuggestionServiceMock: CompletionSuggestionServiceMock!
     private var draftServiceMock: ComposerDraftServiceMock!
-    private let analytics: AnalyticsService
 
     init() {
         AppSettings.resetAllSettings()
-        appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
 
         setUpViewModel()
     }
@@ -93,13 +89,15 @@ final class ComposerToolbarViewModelTests {
                                              .init(suggestionType: .user(.init(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: nil)), range: .init(), rawSuggestionText: "")]
         let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions))
         
+        let appSettings = AppSettings()
+        
         viewModel = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                              wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              appSettings: appSettings,
-                                             analyticsService: analytics,
+                                             analyticsService: .mock(settings: appSettings),
                                              composerDraftService: draftServiceMock)
         
         #expect(viewModel.state.suggestions == suggestions)
@@ -710,13 +708,15 @@ final class ComposerToolbarViewModelTests {
         let mockSubject = CurrentValueSubject<[IdentityStatusChange], Never>([])
         roomProxyMock.underlyingIdentityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
         
+        let appSettings = AppSettings()
+        
         viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
                                              wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              appSettings: appSettings,
-                                             analyticsService: analytics,
+                                             analyticsService: .mock(settings: appSettings),
                                              composerDraftService: draftServiceMock)
         
         var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
@@ -755,13 +755,15 @@ final class ComposerToolbarViewModelTests {
         
         roomProxyMock.underlyingIdentityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
         
+        let appSettings = AppSettings()
+        
         viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
                                              wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              appSettings: appSettings,
-                                             analyticsService: analytics,
+                                             analyticsService: .mock(settings: appSettings),
                                              composerDraftService: draftServiceMock)
         
         var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
@@ -789,6 +791,7 @@ final class ComposerToolbarViewModelTests {
         }
         
         roomProxyMock.underlyingIdentityStatusChangesPublisher = CurrentValueSubject([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinViolation)]).asCurrentValuePublisher()
+        let appSettings = AppSettings()
         
         viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
                                              wysiwygViewModel: wysiwygViewModel,
@@ -796,7 +799,7 @@ final class ComposerToolbarViewModelTests {
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              appSettings: appSettings,
-                                             analyticsService: analytics,
+                                             analyticsService: .mock(settings: appSettings),
                                              composerDraftService: draftServiceMock)
         
         let deferred = deferFulfillment(viewModel.context.$viewState, message: "Composer should be enabled") { $0.canSend == true }
@@ -813,6 +816,8 @@ final class ComposerToolbarViewModelTests {
             draftServiceMock.loadDraftClosure = loadDraftClosure
         }
         
+        let appSettings = AppSettings()
+        
         viewModel = ComposerToolbarViewModel(initialText: initialText,
                                              roomProxy: JoinedRoomProxyMock(.init()),
                                              wysiwygViewModel: wysiwygViewModel,
@@ -820,7 +825,7 @@ final class ComposerToolbarViewModelTests {
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              appSettings: appSettings,
-                                             analyticsService: analytics,
+                                             analyticsService: .mock(settings: appSettings),
                                              composerDraftService: draftServiceMock)
         viewModel.context.composerFormattingEnabled = true
     }

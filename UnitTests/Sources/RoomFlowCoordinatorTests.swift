@@ -20,13 +20,9 @@ final class RoomFlowCoordinatorTests {
     var cancellables = Set<AnyCancellable>()
 
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
-    private let userIndicatorController: UserIndicatorControllerProtocol
 
     init() {
         appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
-        userIndicatorController = UserIndicatorControllerMock.default
     }
 
     deinit {
@@ -494,8 +490,8 @@ final class RoomFlowCoordinatorTests {
                                                   appMediator: AppMediatorMock.default,
                                                   appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: analytics,
-                                                  userIndicatorController: userIndicatorController,
+                                                  analytics: .mock(settings: appSettings),
+                                                  userIndicatorController: UserIndicatorControllerMock.default,
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: StateMachineFactory())
         

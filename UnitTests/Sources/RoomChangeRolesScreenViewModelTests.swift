@@ -17,13 +17,7 @@ struct RoomChangeRolesScreenViewModelTests {
     var context: RoomChangeRolesScreenViewModelType.Context {
         viewModel.context
     }
-
-    private let analytics: AnalyticsService
-
-    init() {
-        analytics = .mock()
-    }
-
+    
     @Test
     mutating func initialStateAdministrators() {
         setup(mode: .administrator)
@@ -203,6 +197,6 @@ struct RoomChangeRolesScreenViewModelTests {
                                                    roomProxy: roomProxy,
                                                    mediaProvider: MediaProviderMock(configuration: .init()),
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   analytics: analytics)
+                                                   analytics: .mock())
     }
 }

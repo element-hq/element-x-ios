@@ -18,14 +18,10 @@ final class RoomScreenViewModelTests {
     private var viewModel: RoomScreenViewModel!
     
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
-    private let userIndicatorController: UserIndicatorControllerProtocol
     
     init() async throws {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
-        userIndicatorController = UserIndicatorControllerMock.default
     }
     
     deinit {
@@ -54,8 +50,8 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: analytics,
-                                            userIndicatorController: userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         // check if in the default state is not showing but is indeed loading
@@ -135,8 +131,8 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: analytics,
-                                            userIndicatorController: userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         // check if the banner is now in a loaded state and is showing the counter
@@ -196,8 +192,8 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: analytics,
-                                            userIndicatorController: userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         // check if the banner is now in a loaded state and is showing the counter
@@ -255,8 +251,8 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: analytics,
-                                            userIndicatorController: userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         #expect(viewModel.state.roomTitle == "StartingName")
@@ -292,8 +288,8 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: ongoingCallRoomIDSubject.asCurrentValuePublisher(),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: analytics,
-                                            userIndicatorController: userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         #expect(viewModel.state.shouldShowCallButton)
         
@@ -337,8 +333,8 @@ final class RoomScreenViewModelTests {
                                                 ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                 appSettings: appSettings,
                                                 appHooks: AppHooks(),
-                                                analyticsService: analytics,
-                                                userIndicatorController: userIndicatorController)
+                                                analyticsService: .mock(settings: appSettings),
+                                                userIndicatorController: UserIndicatorControllerMock.default)
             self.viewModel = viewModel
             viewModel.stop()
         }
@@ -358,8 +354,8 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: analytics,
-                                            userIndicatorController: userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -392,8 +388,8 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: analytics,
-                                            userIndicatorController: userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -421,8 +417,8 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: analytics,
-                                            userIndicatorController: userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         // Loading state just does not appear at all
@@ -441,8 +437,8 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: analytics,
-                                            userIndicatorController: userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -468,8 +464,8 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: analytics,
-                                            userIndicatorController: userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         let deferredInvisible = deferFailure(viewModel.context.$viewState,

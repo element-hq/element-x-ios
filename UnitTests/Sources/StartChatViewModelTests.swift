@@ -14,23 +14,20 @@ struct StartChatScreenViewModelTests {
     private var viewModel: StartChatScreenViewModelProtocol!
     private var clientProxy: ClientProxyMock!
     private var userDiscoveryService: UserDiscoveryServiceMock!
-    private let appSettings: AppSettings
-    private let analytics: AnalyticsService
-
+    
     private var context: StartChatScreenViewModel.Context {
         viewModel.context
     }
     
     init() {
-        appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
-
+        let appSettings = AppSettings()
+        
         clientProxy = .init(.init(userID: ""))
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         viewModel = StartChatScreenViewModel(userSession: userSession,
-                                             analytics: analytics,
+                                             analytics: .mock(settings: appSettings),
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              userDiscoveryService: userDiscoveryService,
                                              appSettings: appSettings)

@@ -13,18 +13,12 @@ import Testing
 
 @MainActor
 struct PillContextTests {
-    private let appSettings: AppSettings
-    private let analytics: AnalyticsService
-    private let userIndicatorController: UserIndicatorControllerProtocol
-
-    init() {
-        appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
-        userIndicatorController = UserIndicatorControllerMock.default
-    }
-
     @Test
     func user() async {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let id = "@test:matrix.org"
         let proxyMock = JoinedRoomProxyMock(.init(name: "Test"))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
@@ -56,6 +50,10 @@ struct PillContextTests {
     
     @Test
     func ownUser() {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let id = "@test:matrix.org"
         let proxyMock = JoinedRoomProxyMock(.init(name: "Test", ownUserID: id))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
@@ -78,6 +76,10 @@ struct PillContextTests {
     
     @Test
     func allUsers() {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let avatarURL = URL(string: "https://matrix.jpg")
         let id = "test_room"
         let displayName = "Test"
@@ -103,6 +105,10 @@ struct PillContextTests {
     
     @Test
     func roomIDMention() {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let proxyMock = JoinedRoomProxyMock(.init())
         let mockController = MockTimelineController()
         let clientMock = ClientProxyMock(.init())
@@ -128,6 +134,10 @@ struct PillContextTests {
     
     @Test
     func roomIDMentionMissingRoom() {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let proxyMock = JoinedRoomProxyMock(.init())
         let mockController = MockTimelineController()
         mockController.roomProxy = proxyMock
@@ -151,6 +161,10 @@ struct PillContextTests {
     
     @Test
     func roomAliasMention() {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let proxyMock = JoinedRoomProxyMock(.init())
         let mockController = MockTimelineController()
         mockController.roomProxy = proxyMock
@@ -178,6 +192,10 @@ struct PillContextTests {
     
     @Test
     func roomAliasMentionMissingRoom() {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let proxyMock = JoinedRoomProxyMock(.init())
         let mockController = MockTimelineController()
         mockController.roomProxy = proxyMock
@@ -201,6 +219,10 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomIDMention() {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let proxyMock = JoinedRoomProxyMock(.init())
         let mockController = MockTimelineController()
         mockController.roomProxy = proxyMock
@@ -226,6 +248,10 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomIDMentionMissingRoom() {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let proxyMock = JoinedRoomProxyMock(.init())
         let mockController = MockTimelineController()
         mockController.roomProxy = proxyMock
@@ -249,6 +275,10 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomAliasMention() {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let proxyMock = JoinedRoomProxyMock(.init())
         let mockController = MockTimelineController()
         mockController.roomProxy = proxyMock
@@ -276,6 +306,10 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomAliasMentionMissingRoom() {
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        let userIndicatorController = UserIndicatorControllerMock.default
+
         let proxyMock = JoinedRoomProxyMock(.init())
         let mockController = MockTimelineController()
         mockController.roomProxy = proxyMock

@@ -27,12 +27,10 @@ final class JoinRoomScreenViewModelTests {
     }
     
     private let appSettings: AppSettings
-    private let userIndicatorController: UserIndicatorControllerProtocol
     
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-        userIndicatorController = UserIndicatorControllerMock.default
     }
     
     deinit {
@@ -207,7 +205,7 @@ final class JoinRoomScreenViewModelTests {
         viewModel = JoinRoomScreenViewModel(source: .generic(roomID: "1", via: []),
                                             appSettings: appSettings,
                                             userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                            userIndicatorController: userIndicatorController)
+                                            userIndicatorController: UserIndicatorControllerMock.default)
     }
 }
 

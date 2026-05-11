@@ -19,13 +19,7 @@ struct RoomDetailsEditScreenViewModelTests {
     var context: RoomDetailsEditScreenViewModelType.Context {
         viewModel.context
     }
-
-    private let appSettings: AppSettings
-
-    init() {
-        appSettings = AppSettings()
-    }
-
+    
     @Test
     mutating func cannotSaveOnLanding() {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
@@ -173,7 +167,7 @@ struct RoomDetailsEditScreenViewModelTests {
         userIndicatorController = UserIndicatorControllerMock.default
         viewModel = .init(roomProxy: JoinedRoomProxyMock(roomProxyConfiguration),
                           userSession: UserSessionMock(.init()),
-                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: AppSettings()),
                           userIndicatorController: userIndicatorController)
     }
 }

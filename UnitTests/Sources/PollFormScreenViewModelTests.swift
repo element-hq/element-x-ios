@@ -18,12 +18,6 @@ struct PollFormScreenViewModelTests {
         viewModel.context
     }
 
-    private let analytics: AnalyticsService
-
-    init() {
-        analytics = .mock()
-    }
-
     @Test
     mutating func newPollInitialState() async throws {
         setupViewModel()
@@ -185,7 +179,7 @@ struct PollFormScreenViewModelTests {
     private mutating func setupViewModel(mode: PollFormMode = .new) {
         viewModel = PollFormScreenViewModel(mode: mode,
                                             timelineController: MockTimelineController(timelineProxy: timelineProxy),
-                                            analytics: analytics,
+                                            analytics: .mock(),
                                             userIndicatorController: UserIndicatorControllerMock())
     }
 }

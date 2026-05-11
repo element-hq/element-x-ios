@@ -14,23 +14,13 @@ import Testing
 
 @MainActor
 final class TimelineViewModelTests {
-    var userIndicatorControllerMock: UserIndicatorControllerMock!
     var cancellables = Set<AnyCancellable>()
-    private let appSettings: AppSettings
-    private let analytics: AnalyticsService
 
     init() async throws {
         AppSettings.resetAllSettings()
         cancellables.removeAll()
-        userIndicatorControllerMock = UserIndicatorControllerMock.default
-        appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
     }
 
-    deinit {
-        userIndicatorControllerMock = nil
-    }
-    
     // MARK: - Message Grouping
 
     @Test
@@ -317,14 +307,16 @@ final class TimelineViewModelTests {
         timelineController.timelineItems = items
         timelineController.roomProxy = roomProxy
 
+        let appSettings = AppSettings()
+
         let viewModel = TimelineViewModel(roomProxy: roomProxy,
                                           timelineController: timelineController,
                                           userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          userIndicatorController: userIndicatorControllerMock,
+                                          userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: analytics,
+                                          analyticsService: .mock(settings: appSettings),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -341,6 +333,8 @@ final class TimelineViewModelTests {
                                            addReadReceipts: receipts)
         let id = message.id
         
+        let appSettings = AppSettings()
+
         // When showing them in a timeline.
         let timelineController = MockTimelineController()
         timelineController.timelineItems = [message]
@@ -348,10 +342,10 @@ final class TimelineViewModelTests {
                                           timelineController: timelineController,
                                           userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          userIndicatorController: userIndicatorControllerMock,
+                                          userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: analytics,
+                                          analyticsService: .mock(settings: appSettings),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -366,6 +360,8 @@ final class TimelineViewModelTests {
     
     @Test
     func showManageUserAsAdmin() async throws {
+        let appSettings = AppSettings()
+
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
                                                                                members: [RoomMemberProxyMock.mockAdmin,
                                                                                          RoomMemberProxyMock.mockAlice],
@@ -373,10 +369,10 @@ final class TimelineViewModelTests {
                                           timelineController: MockTimelineController(),
                                           userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          userIndicatorController: userIndicatorControllerMock,
+                                          userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: analytics,
+                                          analyticsService: .mock(settings: appSettings),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -403,6 +399,8 @@ final class TimelineViewModelTests {
     
     @Test
     func showDetailsForAnAdmin() async throws {
+        let appSettings = AppSettings()
+
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
                                                                                members: [RoomMemberProxyMock.mockAdmin,
                                                                                          RoomMemberProxyMock.mockAlice],
@@ -410,10 +408,10 @@ final class TimelineViewModelTests {
                                           timelineController: MockTimelineController(),
                                           userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          userIndicatorController: userIndicatorControllerMock,
+                                          userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: analytics,
+                                          analyticsService: .mock(settings: appSettings),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -440,6 +438,8 @@ final class TimelineViewModelTests {
     
     @Test
     func showDetailsForABannedUser() async throws {
+        let appSettings = AppSettings()
+
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
                                                                                members: [RoomMemberProxyMock.mockAdmin,
                                                                                          RoomMemberProxyMock.mockBanned[0]],
@@ -447,10 +447,10 @@ final class TimelineViewModelTests {
                                           timelineController: MockTimelineController(),
                                           userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          userIndicatorController: userIndicatorControllerMock,
+                                          userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: analytics,
+                                          analyticsService: .mock(settings: appSettings),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -480,6 +480,8 @@ final class TimelineViewModelTests {
     
     @Test
     func pinnedEvents() async throws {
+        let appSettings = AppSettings()
+
         var configuration = JoinedRoomProxyMockConfiguration(name: "",
                                                              pinnedEventIDs: .init(["test1"]))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
@@ -490,10 +492,10 @@ final class TimelineViewModelTests {
                                           timelineController: MockTimelineController(),
                                           userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          userIndicatorController: userIndicatorControllerMock,
+                                          userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: analytics,
+                                          analyticsService: .mock(settings: appSettings),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -509,6 +511,8 @@ final class TimelineViewModelTests {
     
     @Test
     func canUserPinEvents() async throws {
+        let appSettings = AppSettings()
+
         let configuration = JoinedRoomProxyMockConfiguration(name: "",
                                                              powerLevelsConfiguration: .init(canUserPin: true))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
@@ -519,10 +523,10 @@ final class TimelineViewModelTests {
                                           timelineController: MockTimelineController(),
                                           userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          userIndicatorController: userIndicatorControllerMock,
+                                          userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: analytics,
+                                          analyticsService: .mock(settings: appSettings),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -584,18 +588,20 @@ final class TimelineViewModelTests {
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
                                focussedEventID: String? = nil,
                                timelineController: TimelineControllerProtocol) -> TimelineViewModel {
-        TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
-                          focussedEventID: focussedEventID,
-                          timelineController: timelineController,
-                          userSession: UserSessionMock(.init()),
-                          mediaPlayerProvider: MediaPlayerProviderMock(),
-                          userIndicatorController: userIndicatorControllerMock,
-                          appMediator: AppMediatorMock.default,
-                          appSettings: appSettings,
-                          analyticsService: analytics,
-                          emojiProvider: EmojiProvider(appSettings: appSettings),
-                          linkMetadataProvider: LinkMetadataProvider(),
-                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+        let appSettings = AppSettings()
+
+        return TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
+                                 focussedEventID: focussedEventID,
+                                 timelineController: timelineController,
+                                 userSession: UserSessionMock(.init()),
+                                 mediaPlayerProvider: MediaPlayerProviderMock(),
+                                 userIndicatorController: UserIndicatorControllerMock.default,
+                                 appMediator: AppMediatorMock.default,
+                                 appSettings: appSettings,
+                                 analyticsService: .mock(settings: appSettings),
+                                 emojiProvider: EmojiProvider(appSettings: appSettings),
+                                 linkMetadataProvider: LinkMetadataProvider(),
+                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }
 

@@ -14,15 +14,7 @@ struct RoomMembersFlowCoordinatorTests {
     var membersFlowCoordinator: RoomMembersFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!
     var stateMachineFactory: PublishedStateMachineFactory!
-
-    private let appSettings: AppSettings
-    private let analytics: AnalyticsService
-
-    init() {
-        appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
-    }
-
+    
     @Test
     mutating func clearRoute() async throws {
         try await setup(entryPoint: .roomMembersList)
@@ -58,6 +50,9 @@ struct RoomMembersFlowCoordinatorTests {
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.directRoomForUserIDReturnValue = .success(nil)
+        
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
         
         let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                   bugReportService: BugReportServiceMock(.init()),

@@ -16,7 +16,6 @@ final class SpacesScreenViewModelTests {
     var spaceServiceProxy: SpaceServiceProxyMock
     
     var viewModel: SpacesScreenViewModelProtocol
-    private let appSettings: AppSettings
     
     var context: SpacesScreenViewModelType.Context {
         viewModel.context
@@ -24,7 +23,7 @@ final class SpacesScreenViewModelTests {
     
     init() {
         AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        let appSettings = AppSettings()
         
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))

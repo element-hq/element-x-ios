@@ -18,12 +18,6 @@ struct RoomChangePermissionsScreenViewModelTests {
         viewModel.context
     }
 
-    private let analytics: AnalyticsService
-
-    init() {
-        analytics = .mock()
-    }
-
     @Test
     mutating func changeSetting() throws {
         setup(isSpace: false)
@@ -131,6 +125,6 @@ struct RoomChangePermissionsScreenViewModelTests {
                                                          ownPowerLevel: ownPowerLevel,
                                                          roomProxy: roomProxy,
                                                          userIndicatorController: UserIndicatorControllerMock(),
-                                                         analytics: analytics)
+                                                         analytics: .mock())
     }
 }

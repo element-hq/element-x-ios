@@ -15,19 +15,11 @@ import Testing
 struct LocationSharingScreenViewModelTests {
     private var timelineProxy: TimelineProxyMock!
     private var viewModel: LocationSharingScreenViewModel!
-
-    private let appSettings: AppSettings
-    private let analytics: AnalyticsService
-
+    
     private var context: LocationSharingScreenViewModel.Context {
         viewModel.context
     }
-
-    init() {
-        appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
-    }
-
+    
     @Test
     mutating func userDidPan() {
         setupViewModel()
@@ -402,12 +394,14 @@ struct LocationSharingScreenViewModelTests {
         let roomProxyMock = JoinedRoomProxyMock(.init(members: .allMembers))
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
+        let appSettings = AppSettings()
+        
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: nil, initialLiveLocationShare: nil),
                                                    mapURLBuilder: appSettings.mapTilerConfiguration,
                                                    roomProxy: roomProxyMock,
                                                    timelineController: MockTimelineController(timelineProxy: TimelineProxyMock(.init())),
                                                    liveLocationManager: LiveLocationManagerMock(.init()),
-                                                   analytics: analytics,
+                                                   analytics: .mock(settings: appSettings),
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
 
@@ -435,13 +429,14 @@ struct LocationSharingScreenViewModelTests {
     
     private mutating func setupViewModel(liveLocationManagerConfiguration: LiveLocationManagerMock.Configuration = .init(),
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
+        let appSettings = AppSettings()
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
                                                    mapURLBuilder: appSettings.mapTilerConfiguration,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                    liveLocationManager: LiveLocationManagerMock(liveLocationManagerConfiguration),
-                                                   analytics: analytics,
+                                                   analytics: .mock(settings: appSettings),
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         viewModel.state.bindings.isLocationAuthorized = true
@@ -449,13 +444,14 @@ struct LocationSharingScreenViewModelTests {
 
     private mutating func setupViewModel(liveLocationManagerMock: LiveLocationManagerMock,
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
+        let appSettings = AppSettings()
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
                                                    mapURLBuilder: appSettings.mapTilerConfiguration,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                    liveLocationManager: liveLocationManagerMock,
-                                                   analytics: analytics,
+                                                   analytics: .mock(settings: appSettings),
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         viewModel.state.bindings.isLocationAuthorized = true
@@ -465,6 +461,7 @@ struct LocationSharingScreenViewModelTests {
                                                     initialShare: LiveLocationShare,
                                                     liveLocationsSubject: CurrentValueSubject<[LiveLocationShare], Never>,
                                                     members: [RoomMemberProxyMock] = .allMembers) {
+        let appSettings = AppSettings()
         let liveLocationServiceMock = RoomLiveLocationServiceMock()
         liveLocationServiceMock.liveLocationsPublisher = liveLocationsSubject.asCurrentValuePublisher()
         
@@ -476,7 +473,7 @@ struct LocationSharingScreenViewModelTests {
                                                    roomProxy: roomProxyMock,
                                                    timelineController: MockTimelineController(timelineProxy: TimelineProxyMock(.init())),
                                                    liveLocationManager: LiveLocationManagerMock(.init()),
-                                                   analytics: analytics,
+                                                   analytics: .mock(settings: appSettings),
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
     }

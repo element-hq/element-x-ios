@@ -18,13 +18,7 @@ struct ServerSelectionScreenViewModelTests {
     var context: ServerSelectionScreenViewModelType.Context {
         viewModel.context
     }
-
-    private let appSettings: AppSettings
-
-    init() {
-        appSettings = AppSettings()
-    }
-
+    
     @Test
     mutating func selectForLogin() async throws {
         // Given a view model for login.
@@ -154,6 +148,8 @@ struct ServerSelectionScreenViewModelTests {
     // MARK: - Helpers
     
     private mutating func setup(authenticationFlow: AuthenticationFlow) {
+        let appSettings = AppSettings()
+        
         clientFactory = AuthenticationClientFactoryMock(configuration: .init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),

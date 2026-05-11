@@ -13,9 +13,6 @@ import Testing
 
 @MainActor
 struct UserSessionFlowCoordinatorTests {
-    private let appSettings: AppSettings
-    private let analytics: AnalyticsService
-
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator!
     private var rootCoordinator: NavigationRootCoordinator!
     private let userIndicatorController: UserIndicatorControllerMock
@@ -53,8 +50,7 @@ struct UserSessionFlowCoordinatorTests {
         appMediator.networkMonitor = networkMonitor
         
         userIndicatorController = UserIndicatorControllerMock.default
-        appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
+        let appSettings = AppSettings()
 
         let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                   bugReportService: BugReportServiceMock(.init()),
@@ -65,7 +61,7 @@ struct UserSessionFlowCoordinatorTests {
                                                   appMediator: appMediator,
                                                   appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: analytics,
+                                                  analytics: .mock(settings: appSettings),
                                                   userIndicatorController: userIndicatorController,
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: stateMachineFactory)
