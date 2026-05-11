@@ -148,6 +148,13 @@ final class ElementCallServiceTests {
             await testClock.advance(by: .seconds(100))
         }
     }
+    
+    @Test
+    func callIntentRawValues() {
+        // Test to ensure that the implicit rawValue of the string enum matches the MSC values
+        #expect(CallIntent.audio.rawValue == "audio")
+        #expect(CallIntent.video.rawValue == "video")
+    }
 }
 
 private class PKPushPayloadMock: PKPushPayload {

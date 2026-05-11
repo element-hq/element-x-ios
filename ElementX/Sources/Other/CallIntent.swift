@@ -8,7 +8,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum CallIntent: Codable, CaseIterable {
+enum CallIntent: String, Codable, CaseIterable {
     case video, audio
 }
 

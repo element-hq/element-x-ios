@@ -69,8 +69,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        isOutgoing: isOutgoing)
         case .callInvite:
             return buildCallInviteTimelineItem(for: eventItemProxy)
-        case .rtcNotification:
-            return buildCallNotificationTimelineItem(for: eventItemProxy)
+        case .rtcNotification(let callIntent, let declinedBy):
+            return buildCallNotificationTimelineItem(for: eventItemProxy, isDM: isDM, callIntent: callIntent, declinedBy: declinedBy)
         }
     }
     
@@ -771,12 +771,20 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                    sender: eventItemProxy.sender)
     }
     
-    private func buildCallNotificationTimelineItem(for eventItemProxy: EventTimelineItemProxy) -> RoomTimelineItemProtocol {
-        CallNotificationRoomTimelineItem(id: eventItemProxy.id,
-                                         timestamp: eventItemProxy.timestamp,
-                                         isEditable: eventItemProxy.isEditable,
-                                         canBeRepliedTo: eventItemProxy.canBeRepliedTo,
-                                         sender: eventItemProxy.sender)
+    private func buildCallNotificationTimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                                   isDM: Bool,
+                                                   callIntent: String?,
+                                                   declinedBy: [String]) -> RoomTimelineItemProtocol {
+        let isVoiceCall = callIntent == CallIntent.audio.rawValue
+        return CallNotificationRoomTimelineItem(id: eventItemProxy.id,
+                                                timestamp: eventItemProxy.timestamp,
+                                                isEditable: eventItemProxy.isEditable,
+                                                canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                                isDM: isDM,
+                                                isDeclinedByMe: declinedBy.contains(userID),
+                                                isDeclined: declinedBy.count > 0,
+                                                isVoiceCall: isVoiceCall,
+                                                properties: .init())
     }
     
     // MARK: - State Events
