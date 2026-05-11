@@ -60,6 +60,7 @@ struct AuthenticationClassicAppAccountView: View {
                                 contentID: classicAppAccount.userID,
                                 avatarSize: .user(on: .classicAppAccount),
                                 mediaProvider: context.mediaProvider)
+                .accessibilityHidden(true)
             
             VStack(spacing: 0) {
                 Text(L10n.screenOnboardingWelcomeBack)
