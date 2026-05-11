@@ -119,11 +119,14 @@ struct MessageText: UIViewRepresentable {
         let string = attributedText.string as NSString
         guard string.length > 0 else { return true }
 
+        // Isolate the last paragraph because its direction is what decides
+        // which side the trailing attachment ends up on.
         let lastParagraphRange = string.paragraphRange(for: NSRange(location: string.length - 1, length: 0))
         let lastParagraph = string.substring(with: lastParagraphRange)
 
         let textIsRTL = lastParagraph.firstStrongCharacterIsRTL
-        return textIsRTL == (layoutDirection == .rightToLeft)
+        let layoutIsRTL = layoutDirection == .rightToLeft
+        return textIsRTL == layoutIsRTL
     }
     
     func makeUIView(context: Context) -> MessageTextView {
