@@ -121,39 +121,26 @@ struct SpaceSettingsScreen: View {
 // MARK: - Previews
 
 struct SpaceSettingsScreen_Previews: PreviewProvider, TestablePreview {
-    static let ownerViewModel = {
+    static let ownerViewModel = makeViewModel(members: .allMembersAsCreator)
+    
+    static let userViewModel = makeViewModel(members: .allMembers)
+    
+    static func makeViewModel(members: [RoomMemberProxyMock]) -> RoomDetailsScreenViewModel {
         let appSettings = AppSettings()
         let analytics = AnalyticsService.mock(settings: appSettings)
-
+        
         return RoomDetailsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
                                                                                avatarURL: .mockMXCAvatar,
                                                                                isSpace: true,
                                                                                canonicalAlias: "#space:matrix.org",
-                                                                               members: .allMembersAsCreator)),
+                                                                               members: members)),
                                           userSession: UserSessionMock(.init()),
                                           analyticsService: analytics,
                                           userIndicatorController: UserIndicatorControllerMock.default,
                                           notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                           appSettings: appSettings)
-    }()
-
-    static let userViewModel = {
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
-        return RoomDetailsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
-                                                                               avatarURL: .mockMXCAvatar,
-                                                                               isSpace: true,
-                                                                               canonicalAlias: "#space:matrix.org",
-                                                                               members: .allMembers)),
-                                          userSession: UserSessionMock(.init()),
-                                          analyticsService: analytics,
-                                          userIndicatorController: UserIndicatorControllerMock.default,
-                                          notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                          appSettings: appSettings)
-    }()
+    }
 
     static var previews: some View {
         ElementNavigationStack {

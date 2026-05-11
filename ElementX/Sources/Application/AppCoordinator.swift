@@ -1088,18 +1088,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .dropFirst()
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self, userIndicatorController, analyticsService] state in
+            .sink { [weak self] state in
                 let toastIdentifier = "StaleDataIndicator"
+                guard let self else { return }
                 
                 switch state {
                 case .loading:
-                    if self?.userSession?.clientProxy.homeserverReachabilityPublisher.value == .reachable,
-                       self?.appMediator.networkMonitor.reachabilityPublisher.value == .reachable {
-                        userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
+                    if self.userSession?.clientProxy.homeserverReachabilityPublisher.value == .reachable,
+                       self.appMediator.networkMonitor.reachabilityPublisher.value == .reachable {
+                        self.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
                     }
                 case .notLoading:
-                    analyticsService.signpost.finishTransaction(.upToDateRoomList)
-                    userIndicatorController.retractIndicatorWithId(toastIdentifier)
+                    self.analyticsService.signpost.finishTransaction(.upToDateRoomList)
+                    self.userIndicatorController.retractIndicatorWithId(toastIdentifier)
                 }
             }
     }

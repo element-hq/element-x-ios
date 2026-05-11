@@ -11,8 +11,8 @@ import Testing
 
 @MainActor
 final class AnalyticsSettingsScreenViewModelTests {
-    private let analytics: AnalyticsService
     private let appSettings: AppSettings
+    private let analytics: AnalyticsService
 
     private var viewModel: AnalyticsSettingsScreenViewModelProtocol!
     private var context: AnalyticsSettingsScreenViewModelType.Context!

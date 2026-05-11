@@ -19,8 +19,6 @@ struct ChatsTabFlowCoordinatorTests {
     var splitCoordinator: NavigationSplitCoordinator!
     var notificationManager: NotificationManagerMock!
     let stateMachineFactory = PublishedStateMachineFactory()
-    private let appSettings: AppSettings
-    private let analytics: AnalyticsService
     
     var cancellables = Set<AnyCancellable>()
     
@@ -33,8 +31,8 @@ struct ChatsTabFlowCoordinatorTests {
     }
     
     init() async throws {
-        appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
+        let appSettings = AppSettings()
+        let analytics: AnalyticsService = .mock(settings: appSettings)
         
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())

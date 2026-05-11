@@ -18,11 +18,6 @@ struct AuthenticationServiceTests {
     var userSessionStore: UserSessionStoreMock!
     var encryptionKeyProvider: MockEncryptionKeyProvider!
     var service: AuthenticationService!
-    private let appSettings: AppSettings
-    
-    init() {
-        appSettings = AppSettings()
-    }
     
     @Test
     mutating func passwordLogin() async throws {
@@ -158,7 +153,7 @@ struct AuthenticationServiceTests {
                                         encryptionKeyProvider: encryptionKeyProvider,
                                         classicAppManager: classicAppManager,
                                         clientFactory: clientFactory,
-                                        appSettings: appSettings,
+                                        appSettings: AppSettings(),
                                         appHooks: AppHooks())
         
         if let classicAppAccount = service.classicAppAccount {
