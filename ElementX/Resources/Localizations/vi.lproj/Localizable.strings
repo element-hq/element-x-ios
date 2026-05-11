@@ -309,7 +309,6 @@
 "common_refreshing" = "Đang làm mới…";
 "common_removing" = "Đang xóa…";
 "common_replying_to" = "Đang trả lời cho %1$@";
-"common_report_a_bug" = "Báo cáo lỗi";
 "common_report_a_problem" = "Báo cáo sự cố";
 "common_report_submitted" = "Đã gửi báo cáo";
 "common_rich_text_editor" = "Trình soạn thảo văn bản nâng cao";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Xóa tin nhắn";
 "screen_room_change_permissions_everyone" = "Thành viên";
 "screen_room_change_permissions_invite_people" = "Mời mọi người";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Manage space";
 "screen_room_change_permissions_manage_space_rooms" = "Quản lý phòng trò chuyện";
 "screen_room_change_permissions_member_moderation" = "Quản lý thành viên";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
 "screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_invite_people_title" = "Mời ai đó";
+"screen_room_details_invite_title" = "Mời";
 "screen_room_details_leave_conversation_title" = "Rời khỏi cuộc trò chuyện";
 "screen_room_details_leave_room_title" = "Rời phòng";
 "screen_room_details_media_gallery_title" = "Media and files";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Đang chờ chấp nhận yêu cầu";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Chia sẻ vị trí";
 "screen_share_my_location_action" = "Chia sẻ vị trí của tôi";
 "screen_share_open_apple_maps" = "Mở trong Apple Maps";

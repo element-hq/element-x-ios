@@ -59,9 +59,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d other</string>
+			<string>%d دیگر</string>
 			<key>other</key>
-			<string>%d others</string>
+			<string>%d دیگران</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -491,9 +491,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
+			<string>%1$@، %2$@ و %3$d سایر</string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@، %2$@ و %3$d موارد دیگر</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -507,9 +507,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
+			<string>%1$@ در حال تایپ است</string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ در حال تایپ هستند</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

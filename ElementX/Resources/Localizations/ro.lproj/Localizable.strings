@@ -1,5 +1,5 @@
 "a11y_add_reaction" = "Adăugați o reacție: %1$@";
-"a11y_address" = "Address";
+"a11y_address" = "Adresă";
 "a11y_avatar" = "Imagine de profil";
 "a11y_collapse_message_text_field" = "Micșorați câmpul mesajului";
 "a11y_delete" = "Ștergere";
@@ -309,7 +309,6 @@
 "common_refreshing" = "Se actualizează";
 "common_removing" = "Removing…";
 "common_replying_to" = "Răspuns pentru %1$@";
-"common_report_a_bug" = "Raportați o eroare";
 "common_report_a_problem" = "Raportați o problemă";
 "common_report_submitted" = "Raport trimis";
 "common_rich_text_editor" = "Editor text avansat";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Ștergeți mesajele";
 "screen_room_change_permissions_everyone" = "Membru";
 "screen_room_change_permissions_invite_people" = "Invitați persoane";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Gestionați spațiul";
 "screen_room_change_permissions_manage_space_rooms" = "Gestionați camerele";
 "screen_room_change_permissions_member_moderation" = "Gestionați membrii";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Nu închideți aplicația până nu se termină.";
 "screen_room_details_invite_people_preparing" = "Se pregătesc invitațiile...";
 "screen_room_details_invite_people_title" = "Invitați prieteni";
+"screen_room_details_invite_title" = "Invitați";
 "screen_room_details_leave_conversation_title" = "Părăsiți conversația";
 "screen_room_details_leave_room_title" = "Părăsiți camera";
 "screen_room_details_media_gallery_title" = "Media și fișiere";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Se așteptă acceptarea cererii";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Partajați locația";
 "screen_share_my_location_action" = "Distribuiți locația mea";
 "screen_share_open_apple_maps" = "Deschideți în Apple Maps";

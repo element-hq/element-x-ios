@@ -309,7 +309,6 @@
 "common_refreshing" = "Wird erneuert...";
 "common_removing" = "Entferne…";
 "common_replying_to" = "%1$@ antworten";
-"common_report_a_bug" = "Einen Fehler melden";
 "common_report_a_problem" = "Ein Problem melden";
 "common_report_submitted" = "Bericht eingereicht";
 "common_rich_text_editor" = "Rich-Text-Editor";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Nachrichten entfernen";
 "screen_room_change_permissions_everyone" = "Mitglied";
 "screen_room_change_permissions_invite_people" = "Mitglieder hinzufügen";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Space konfigurieren";
 "screen_room_change_permissions_manage_space_rooms" = "Chats und Gruppen konfigurieren";
 "screen_room_change_permissions_member_moderation" = "Mitglieder verwalten";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Schließ die App erst, wenn du fertig bist.";
 "screen_room_details_invite_people_preparing" = "Einladungen werden vorbereitet...";
 "screen_room_details_invite_people_title" = "Nutzer einladen";
+"screen_room_details_invite_title" = "Einladen";
 "screen_room_details_leave_conversation_title" = "Unterhaltung verlassen";
 "screen_room_details_leave_room_title" = "Verlassen";
 "screen_room_details_media_gallery_title" = "Medien und Dateien";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Warten auf die Annahme der Anfrage";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Wie lange soll der Live-Standort geteilt werden?";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Standort teilen";
 "screen_share_my_location_action" = "Meinen Standort teilen";
 "screen_share_open_apple_maps" = "In Apple Maps öffnen";

@@ -63,7 +63,7 @@
 "action_call" = "Hívás";
 "action_cancel" = "Mégse";
 "action_cancel_for_now" = "Egyelőre nem";
-"action_choose_file" = "Choose file";
+"action_choose_file" = "Fájl kiválasztása";
 "action_choose_photo" = "Fénykép kiválasztása";
 "action_clear" = "Törlés";
 "action_close" = "Bezárás";
@@ -309,7 +309,6 @@
 "common_refreshing" = "Frissítés…";
 "common_removing" = "Eltávolítás…";
 "common_replying_to" = "Válasz %1$@ számára";
-"common_report_a_bug" = "Hiba jelentése";
 "common_report_a_problem" = "Probléma jelentése";
 "common_report_submitted" = "A jelentés elküldve";
 "common_rich_text_editor" = "Formázott szöveges szerkesztő";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Üzenetek eltávolítása";
 "screen_room_change_permissions_everyone" = "Tag";
 "screen_room_change_permissions_invite_people" = "Emberek meghívása";
+"screen_room_change_permissions_live_location" = "Valós idejű hely megosztása";
 "screen_room_change_permissions_manage_space" = "Tér kezelése";
 "screen_room_change_permissions_manage_space_rooms" = "Szobák kezelése";
 "screen_room_change_permissions_member_moderation" = "Tagok kezelése";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Ne zárja be az alkalmazást, amíg nem végzett.";
 "screen_room_details_invite_people_preparing" = "Meghívók előkészítése…";
 "screen_room_details_invite_people_title" = "Ismerősök meghívása";
+"screen_room_details_invite_title" = "Meghívás";
 "screen_room_details_leave_conversation_title" = "Beszélgetés elhagyása";
 "screen_room_details_leave_room_title" = "Szoba elhagyása";
 "screen_room_details_media_gallery_title" = "Média és fájlok";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Várakozás a kérés elfogadására";
 "screen_share_location_live_location_disclaimer_title" = "Az élő helymeghatározás története a szobában lesz tárolva, és a munkamenet befejezése után is látható marad a tagok számára.";
 "screen_share_location_live_location_duration_picker_title" = "Válassza ki, mennyi ideig szeretné megosztani az aktuális tartózkodási helyét.";
+"screen_share_location_live_location_missing_permissions" = "Nincs jogosultsága az élő tartózkodási helyének megosztására ebben a szobában.";
 "screen_share_location_title" = "Hely megosztása";
 "screen_share_my_location_action" = "Saját hely megosztása";
 "screen_share_open_apple_maps" = "Megnyitás az Apple Mapsben";

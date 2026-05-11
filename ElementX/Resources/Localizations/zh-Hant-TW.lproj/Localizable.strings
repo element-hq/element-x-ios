@@ -309,7 +309,6 @@
 "common_refreshing" = "重新整理中...";
 "common_removing" = "正在移除……";
 "common_replying_to" = "正在回覆%1$@";
-"common_report_a_bug" = "回報程式錯誤";
 "common_report_a_problem" = "回報問題";
 "common_report_submitted" = "已遞交報告";
 "common_rich_text_editor" = "格式化文字編輯器";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "移除訊息";
 "screen_room_change_permissions_everyone" = "成員";
 "screen_room_change_permissions_invite_people" = "邀請夥伴";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "管理空間";
 "screen_room_change_permissions_manage_space_rooms" = "管理聊天室";
 "screen_room_change_permissions_member_moderation" = "管理成員";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "完成前請勿關閉應用程式。";
 "screen_room_details_invite_people_preparing" = "正在準備邀請……";
 "screen_room_details_invite_people_title" = "邀請夥伴";
+"screen_room_details_invite_title" = "邀請";
 "screen_room_details_leave_conversation_title" = "離開對話";
 "screen_room_details_leave_room_title" = "離開聊天室";
 "screen_room_details_media_gallery_title" = "媒體與檔案";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "等待接受請求";
 "screen_share_location_live_location_disclaimer_title" = "您的即時位置歷史將儲存於聊天室中，並在工作階段結束後對其他成員可見。";
 "screen_share_location_live_location_duration_picker_title" = "選擇分享即時位置的時間長度。";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "分享位置";
 "screen_share_my_location_action" = "分享我的位置";
 "screen_share_open_apple_maps" = "在 Apple Maps 中開啟";

@@ -154,10 +154,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d вибрані</string>
+			<key>many</key>
+			<string>%1$d вибрано</string>
 			<key>one</key>
-			<string>%1$d selected</string>
-			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d вибраний</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -224,10 +226,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>У вас %d нових повідомлення.</string>
+			<key>many</key>
+			<string>У вас %d нових повідомлень.</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
-			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>У вас %d нове повідомлення.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -312,10 +316,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Кожні %1$d метри</string>
+			<key>many</key>
+			<string>Кожні %1$d метрів</string>
 			<key>one</key>
-			<string>Every %1$d meter</string>
-			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>Кожен %1$d метр</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -364,10 +370,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Залишити %1$d кімнату та простори</string>
+			<key>many</key>
+			<string>Залишити %1$d кімнат та просторів</string>
 			<key>one</key>
-			<string>Leave %1$d room and space</string>
-			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>Залишити %1$d кімнату та простір</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -380,10 +388,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d осіб</string>
+			<key>many</key>
+			<string>%1$d осіб</string>
 			<key>one</key>
-			<string>%1$d person</string>
-			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d особа</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -414,10 +424,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d Заблоковано</string>
+			<key>many</key>
+			<string>%1$d Заблоковано</string>
 			<key>one</key>
-			<string>%1$d Banned</string>
-			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d Заблокований</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -574,10 +586,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Видалити %1$d кімнати з %2$@</string>
+			<key>many</key>
+			<string>Видалити %1$d кімнат з %2$@</string>
 			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
-			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>Видалити %1$d кімнату з %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -590,10 +604,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Ви заблокували %1$d користувачів. Ви не отримуватимете сповіщення для цих користувачів.</string>
+			<key>many</key>
+			<string>Ви заблокували %1$d користувачів. Ви не отримуватимете сповіщення для цих користувачів.</string>
 			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
-			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>Ви заблокували %1$d користувача. Ви не отримуватимете сповіщення для цього користувача.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

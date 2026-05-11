@@ -309,7 +309,6 @@
 "common_refreshing" = "Actualisation…";
 "common_removing" = "Suppression…";
 "common_replying_to" = "En réponse à %1$@";
-"common_report_a_bug" = "Signaler un problème";
 "common_report_a_problem" = "Remonter un problème";
 "common_report_submitted" = "Rapport soumis";
 "common_rich_text_editor" = "Éditeur de texte enrichi";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Supprimer des messages";
 "screen_room_change_permissions_everyone" = "Membre";
 "screen_room_change_permissions_invite_people" = "Inviter des personnes";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Gérer l'espace";
 "screen_room_change_permissions_manage_space_rooms" = "Gérer les salons";
 "screen_room_change_permissions_member_moderation" = "Gérer les membres";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Ne fermez pas l'application avant que l'opération soit terminée.";
 "screen_room_details_invite_people_preparing" = "Préparation des invitations...";
 "screen_room_details_invite_people_title" = "Inviter des amis";
+"screen_room_details_invite_title" = "Inviter";
 "screen_room_details_leave_conversation_title" = "Quitter la discussion";
 "screen_room_details_leave_room_title" = "Quitter le salon";
 "screen_room_details_media_gallery_title" = "Médias et fichiers";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "En attente d’acceptation de la demande";
 "screen_share_location_live_location_disclaimer_title" = "Votre historique de localisation en direct sera enregistré dans le salon et visible par les membres après la fin de la session.";
 "screen_share_location_live_location_duration_picker_title" = "Choisissez la durée pendant laquelle vous partagerez votre position en direct.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Partage de position";
 "screen_share_my_location_action" = "Partager ma position";
 "screen_share_open_apple_maps" = "Ouvrir dans Apple Maps";

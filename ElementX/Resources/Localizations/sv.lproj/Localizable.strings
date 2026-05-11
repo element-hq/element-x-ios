@@ -309,7 +309,6 @@
 "common_refreshing" = "Uppdaterar …";
 "common_removing" = "Removing…";
 "common_replying_to" = "Svarar till %1$@";
-"common_report_a_bug" = "Rapportera en bugg";
 "common_report_a_problem" = "Rapportera ett problem";
 "common_report_submitted" = "Rapport inskickad";
 "common_rich_text_editor" = "Riktextredigerare";
@@ -1132,6 +1131,7 @@
 "screen_room_change_permissions_delete_messages" = "Ta bort meddelanden";
 "screen_room_change_permissions_everyone" = "Medlem";
 "screen_room_change_permissions_invite_people" = "Bjud in personer";
+"screen_room_change_permissions_live_location" = "Share live location";
 "screen_room_change_permissions_manage_space" = "Manage space";
 "screen_room_change_permissions_manage_space_rooms" = "Manage rooms";
 "screen_room_change_permissions_member_moderation" = "Hantera medlemmar";
@@ -1178,6 +1178,7 @@
 "screen_room_details_invite_people_dont_close" = "Stäng inte appen förrän det är klart.";
 "screen_room_details_invite_people_preparing" = "Förbereder inbjudningar …";
 "screen_room_details_invite_people_title" = "Bjud in personer";
+"screen_room_details_invite_title" = "Bjud in";
 "screen_room_details_leave_conversation_title" = "Lämna konversation";
 "screen_room_details_leave_room_title" = "Lämna rum";
 "screen_room_details_media_gallery_title" = "Media och filer";
@@ -1408,6 +1409,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Väntar på att acceptera begäran";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
+"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
 "screen_share_location_title" = "Dela plats";
 "screen_share_my_location_action" = "Dela min plats";
 "screen_share_open_apple_maps" = "Öppna i Apple Maps";
