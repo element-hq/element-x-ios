@@ -102,46 +102,30 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
 
         let destTempFile = try AVAudioFile(forWriting: tempURL, settings: outputSettings)
 
-        guard let converter = AVAudioConverter(from: sourceFile.processingFormat,
-                                               to: destTempFile.processingFormat) else {
-            throw ConversionError.converterSetupFailed
-        }
-
         let frameCount: AVAudioFrameCount = 4096
-        guard let inputBuf = AVAudioPCMBuffer(pcmFormat: sourceFile.processingFormat, frameCapacity: frameCount) else {
-            MXLog.error("Error creating input conversion buffer: \(sourceFile.processingFormat) \(frameCount)")
-            throw ConversionError.bufferCreationFailed
-        }
-        guard let outputBuf = AVAudioPCMBuffer(pcmFormat: destTempFile.processingFormat, frameCapacity: frameCount) else {
-            MXLog.error("Error creating output conversion buffer: \(destTempFile.processingFormat) \(frameCount)")
+        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: sourceFile.processingFormat, frameCapacity: frameCount) else {
+            MXLog.error("Error creating pcm conversion buffer: \(sourceFile.processingFormat) \(frameCount)")
             throw ConversionError.bufferCreationFailed
         }
 
-        var done = false
-
-        while !done {
-            var conversionError: NSError?
-
-            let status = converter.convert(to: outputBuf, error: &conversionError) { _, inputConverterStatus in
-                do {
-                    try sourceFile.read(into: inputBuf, frameCount: frameCount)
-                    if inputBuf.frameLength == 0 {
-                        inputConverterStatus.pointee = .endOfStream
-                        done = true
-                    } else {
-                        inputConverterStatus.pointee = .haveData
-                    }
-                } catch {
-                    inputConverterStatus.pointee = .endOfStream
-                    done = true
-                }
-                return inputBuf
-            }
-
-            if status == .error, let err = conversionError { throw err }
-            if outputBuf.frameLength > 0 { try destTempFile.write(from: outputBuf) }
-            if status == .endOfStream { break }
+        do {
+            repeat {
+                try sourceFile.read(into: pcmBuffer)
+                
+                guard pcmBuffer.frameLength > 0 else { break }
+                
+                try destTempFile.write(from: pcmBuffer)
+            } while pcmBuffer.frameLength > 0 && sourceFile.framePosition < sourceFile.length
+        } catch {
+            let nsError = error as NSError
+            guard
+                // the framePosition < sourceFile.length SHOULD stop this from throwing, but as
+                // a defensive fallback, this just means that it reached/read past EOF
+                nsError.code == 0,
+                nsError.domain == "Foundation._GenericObjCError"
+            else { throw error }
         }
+        destTempFile.close()
 
         try FileManager.default.moveItem(at: tempURL, to: destURL)
         MXLog.info("Converted \(sourceURL.path(percentEncoded: false)) to caf")
