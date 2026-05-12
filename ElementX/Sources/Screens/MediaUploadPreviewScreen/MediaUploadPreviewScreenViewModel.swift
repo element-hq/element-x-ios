@@ -88,6 +88,11 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         case .cancel:
             requestHandle?.cancel()
             actionsSubject.send(.dismiss)
+        case .editedMedia(let index):
+            guard mediaURLs.indices.contains(index) else { return }
+            state.mediaEditVersion += 1
+            processingTask.cancel()
+            processingTask = Self.processMedia(at: mediaURLs, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
         }
     }
     

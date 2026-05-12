@@ -139,6 +139,9 @@ packages:
   LRUCache:
     url: https://github.com/nicklockwood/LRUCache
     minorVersion: 1.2.1
+  Mantis:
+    url: https://github.com/guoyingtao/Mantis
+    minorVersion: 2.31.1
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
     minorVersion: 6.26.0
