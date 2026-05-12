@@ -16448,6 +16448,7 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingUnreadMentionsCount = value }
     }
     var underlyingUnreadMentionsCount: UInt!
+    var fullyReadEventID: String?
     var pinnedEventIDs: Set<String> {
         get { return underlyingPinnedEventIDs }
         set(value) { underlyingPinnedEventIDs = value }

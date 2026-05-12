@@ -276,6 +276,11 @@ struct TimelineState {
     /// Recomputed by ``recomputeReadMarkerUniqueID()`` whenever ``itemsDictionary`` changes.
     private(set) var readMarkerUniqueID: TimelineItemIdentifier.UniqueID?
 
+    /// The user's `m.fully_read` event ID, pushed from `RoomInfo`. Used as a fallback
+    /// signal when ``readMarkerUniqueID`` is nil because the marker event isn't paginated
+    /// into the loaded timeline window.
+    var fullyReadEventID: String?
+
     /// Recomputes ``readMarkerUniqueID`` from ``itemsDictionary``. Call after assigning a new
     /// value to ``itemsDictionary``.
     mutating func recomputeReadMarkerUniqueID() {
@@ -307,10 +312,26 @@ extension TimelineViewState {
         !isAtBottomAndLive
     }
 
-    /// Whether the jump-to-read-marker button should be shown: the feature flag is enabled,
-    /// a read marker exists in the timeline, and it isn't currently visible in the viewport.
+    /// Whether the jump-to-read-marker button should be shown.
+    ///
+    /// Primary path: the SDK has materialised a virtual `ReadMarker` item in the
+    /// loaded timeline window. Show while it isn't visible in the viewport.
+    ///
+    /// Fallback path: the marker event is older than the loaded window, so no
+    /// virtual item exists. Show only when items have actually loaded AND the
+    /// marker event isn't among them — if the marker IS loaded but no virtual
+    /// item was inserted, the user is caught up (no events newer than the marker)
+    /// and there's nothing to jump to.
     var shouldShowJumpToReadMarker: Bool {
-        jumpToReadMarkerEnabled && timelineState.readMarkerUniqueID != nil && !bindings.isReadMarkerVisible
+        guard jumpToReadMarkerEnabled else { return false }
+        if timelineState.readMarkerUniqueID != nil {
+            return !bindings.isReadMarkerVisible
+        }
+        guard let fullyReadEventID = timelineState.fullyReadEventID else {
+            return false
+        }
+        return !timelineState.itemsDictionary.isEmpty
+            && !timelineState.hasLoadedItem(with: fullyReadEventID)
     }
 
     /// The string shown as the message preview.

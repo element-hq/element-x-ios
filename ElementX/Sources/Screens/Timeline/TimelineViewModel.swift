@@ -181,7 +181,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .scrollToFirstItemForCurrentDate:
             state.timelineState.scrollToFirstItemForDatePublisher.send()
         case .scrollToReadMarker:
-            scrollToReadMarker()
+            Task { await scrollToReadMarker() }
         case .markAllAsRead:
             state.bindings.hasNewMessagesAtBottom = false
             Task { await roomProxy.markAsRead(receiptType: .fullyRead) }
@@ -427,6 +427,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
         state.pinnedEventIDs = roomInfo.pinnedEventIDs
         state.isDM = roomInfo.isDM
+        state.timelineState.fullyReadEventID = roomInfo.fullyReadEventID
         
         if let powerLevels = roomInfo.powerLevels {
             state.canCurrentUserSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
@@ -658,12 +659,25 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
     }
 
-    private func scrollToReadMarker() {
-        guard let readMarkerID = state.timelineState.readMarkerUniqueID else {
-            assertionFailure("scrollToReadMarker called with no readMarkerUniqueID")
+    private func scrollToReadMarker() async {
+        // Primary: SDK has materialised the virtual ReadMarker. Smooth in-window scroll.
+        if let readMarkerID = state.timelineState.readMarkerUniqueID {
+            state.timelineState.scrollToReadMarkerPublisher.send(readMarkerID)
             return
         }
-        state.timelineState.scrollToReadMarkerPublisher.send(readMarkerID)
+
+        // Fallback: mirror the same-room permalink flow exactly
+        // (RoomFlowCoordinator.handleChildEventRoute lines 223-258): pre-fetch the
+        // event first to prime the SDK's event cache, then focus on it via the
+        // same focusOnEvent path permalinks use.
+        guard let fullyReadEventID = state.timelineState.fullyReadEventID else { return }
+
+        switch await roomProxy.loadOrFetchEventDetails(for: fullyReadEventID) {
+        case .success:
+            await focusOnEvent(eventID: fullyReadEventID)
+        case .failure:
+            displayErrorToast(L10n.errorMessageNotFound)
+        }
     }
 
     private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async {
