@@ -30,7 +30,7 @@ class NotificationTonePreviewer: NSObject, AVAudioPlayerDelegate {
             player.play()
         } catch {
             let userIndicator = UserIndicator(type: .toast,
-                                              title: UntranslatedL10n.screenNotificationSettingsConfigurationMessageSoundPreviewSoundErrorTitle,
+                                              title: UntranslatedL10n.screenNotificationSettingsSoundPreviewSoundErrorTitle,
                                               iconName: "exclamationmark.triangle.fill")
             userIndicatorController.submitIndicator(userIndicator)
             MXLog.error("Error previewing alert tone \(tone): \(error)")

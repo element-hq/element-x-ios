@@ -18,74 +18,74 @@ internal enum UntranslatedL10n {
   internal static var cryptoHistorySharingConfirmStartChatDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_content") }
   /// Start a chat with this new contact?
   internal static var cryptoHistorySharingConfirmStartChatDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_title") }
+  /// Custom sound...
+  internal static var screenNotificationSettingsSoundCustomSoundButtonTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_custom_sound_button_title") }
+  /// Error deleting file
+  internal static var screenNotificationSettingsSoundDeleteSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_delete_sound_error_title") }
   /// Element Default
-  internal static var messageSoundElementxDefault: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_default") }
+  internal static var screenNotificationSettingsSoundElementDefault: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_element_default") }
   /// Element Fade
-  internal static var messageSoundElementxProDefault: String { return UntranslatedL10n.tr("Untranslated", "message_sound_elementx_pro_default") }
-  /// Alert
-  internal static var messageSoundSystemAlert: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_alert") }
-  /// Anticipate
-  internal static var messageSoundSystemAnticipate: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_anticipate") }
-  /// Bell
-  internal static var messageSoundSystemBell: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_bell") }
-  /// Bloom
-  internal static var messageSoundSystemBloom: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_bloom") }
-  /// Calypso
-  internal static var messageSoundSystemCalypso: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_calypso") }
-  /// Chime
-  internal static var messageSoundSystemChime: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_chime") }
-  /// Choo Choo
-  internal static var messageSoundSystemChooChoo: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_choo_choo") }
-  /// Descent
-  internal static var messageSoundSystemDescent: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_descent") }
-  /// Electronic
-  internal static var messageSoundSystemElectronic: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_electronic") }
-  /// Fanfare
-  internal static var messageSoundSystemFanfare: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_fanfare") }
-  /// Glass
-  internal static var messageSoundSystemGlass: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_glass") }
-  /// Horn
-  internal static var messageSoundSystemHorn: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_horn") }
-  /// Ladder
-  internal static var messageSoundSystemLadder: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_ladder") }
-  /// Minuet
-  internal static var messageSoundSystemMinuet: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_minuet") }
-  /// News Flash
-  internal static var messageSoundSystemNewsFlash: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_news_flash") }
-  /// Noir
-  internal static var messageSoundSystemNoir: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_noir") }
-  /// Sherwood Forest
-  internal static var messageSoundSystemSherwoodForest: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_sherwood_forest") }
-  /// Spell
-  internal static var messageSoundSystemSpell: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_spell") }
-  /// Suspense
-  internal static var messageSoundSystemSuspense: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_suspense") }
-  /// Swish
-  internal static var messageSoundSystemSwish: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_swish") }
-  /// Telegraph
-  internal static var messageSoundSystemTelegraph: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_telegraph") }
-  /// Tiptoes
-  internal static var messageSoundSystemTiptoes: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_tiptoes") }
-  /// Tri-tone
-  internal static var messageSoundSystemTriTone: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_tri_tone") }
-  /// Tweet
-  internal static var messageSoundSystemTweet: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_tweet") }
-  /// Typewriters
-  internal static var messageSoundSystemTypewriters: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_typewriters") }
-  /// Update
-  internal static var messageSoundSystemUpdate: String { return UntranslatedL10n.tr("Untranslated", "message_sound_system_update") }
-  /// Custom Sound...
-  internal static var screenNotificationSettingsConfigurationMessageSoundCustomSoundButtonTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_custom_sound_button_title") }
-  /// Error Deleting File
-  internal static var screenNotificationSettingsConfigurationMessageSoundDeleteSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_delete_sound_error_title") }
-  /// Error Importing File
-  internal static var screenNotificationSettingsConfigurationMessageSoundImportSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_import_sound_error_title") }
-  /// Problem Previewing Alert Sound
-  internal static var screenNotificationSettingsConfigurationMessageSoundPreviewSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_preview_sound_error_title") }
+  internal static var screenNotificationSettingsSoundElementFade: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_element_fade") }
+  /// Error importing file
+  internal static var screenNotificationSettingsSoundImportSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_import_sound_error_title") }
+  /// Problem previewing alert sound
+  internal static var screenNotificationSettingsSoundPreviewSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_preview_sound_error_title") }
   /// Sound
-  internal static var screenNotificationSettingsConfigurationMessageSoundSectionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_section_title") }
-  /// Problem Setting Alert Sound
-  internal static var screenNotificationSettingsConfigurationMessageSoundSetSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_configuration_message_sound_set_sound_error_title") }
+  internal static var screenNotificationSettingsSoundSectionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_section_title") }
+  /// Problem setting alert sound
+  internal static var screenNotificationSettingsSoundSetSoundErrorTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_set_sound_error_title") }
+  /// Alert
+  internal static var screenNotificationSettingsSoundSystemAlert: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_alert") }
+  /// Anticipate
+  internal static var screenNotificationSettingsSoundSystemAnticipate: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_anticipate") }
+  /// Bell
+  internal static var screenNotificationSettingsSoundSystemBell: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_bell") }
+  /// Bloom
+  internal static var screenNotificationSettingsSoundSystemBloom: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_bloom") }
+  /// Calypso
+  internal static var screenNotificationSettingsSoundSystemCalypso: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_calypso") }
+  /// Chime
+  internal static var screenNotificationSettingsSoundSystemChime: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_chime") }
+  /// Choo Choo
+  internal static var screenNotificationSettingsSoundSystemChooChoo: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_choo_choo") }
+  /// Descent
+  internal static var screenNotificationSettingsSoundSystemDescent: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_descent") }
+  /// Electronic
+  internal static var screenNotificationSettingsSoundSystemElectronic: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_electronic") }
+  /// Fanfare
+  internal static var screenNotificationSettingsSoundSystemFanfare: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_fanfare") }
+  /// Glass
+  internal static var screenNotificationSettingsSoundSystemGlass: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_glass") }
+  /// Horn
+  internal static var screenNotificationSettingsSoundSystemHorn: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_horn") }
+  /// Ladder
+  internal static var screenNotificationSettingsSoundSystemLadder: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_ladder") }
+  /// Minuet
+  internal static var screenNotificationSettingsSoundSystemMinuet: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_minuet") }
+  /// News Flash
+  internal static var screenNotificationSettingsSoundSystemNewsFlash: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_news_flash") }
+  /// Noir
+  internal static var screenNotificationSettingsSoundSystemNoir: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_noir") }
+  /// Sherwood Forest
+  internal static var screenNotificationSettingsSoundSystemSherwoodForest: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_sherwood_forest") }
+  /// Spell
+  internal static var screenNotificationSettingsSoundSystemSpell: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_spell") }
+  /// Suspense
+  internal static var screenNotificationSettingsSoundSystemSuspense: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_suspense") }
+  /// Swish
+  internal static var screenNotificationSettingsSoundSystemSwish: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_swish") }
+  /// Telegraph
+  internal static var screenNotificationSettingsSoundSystemTelegraph: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_telegraph") }
+  /// Tiptoes
+  internal static var screenNotificationSettingsSoundSystemTiptoes: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_tiptoes") }
+  /// Tri-tone
+  internal static var screenNotificationSettingsSoundSystemTriTone: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_tri_tone") }
+  /// Tweet
+  internal static var screenNotificationSettingsSoundSystemTweet: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_tweet") }
+  /// Typewriters
+  internal static var screenNotificationSettingsSoundSystemTypewriters: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_typewriters") }
+  /// Update
+  internal static var screenNotificationSettingsSoundSystemUpdate: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_system_update") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
