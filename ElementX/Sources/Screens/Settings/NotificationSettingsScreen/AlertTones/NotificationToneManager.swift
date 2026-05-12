@@ -89,6 +89,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
 
     @ConversionActor
     private func convertToCAF(from sourceURL: URL, to destURL: URL) throws {
+        MXLog.info("Converting \(sourceURL.path(percentEncoded: false)) to caf")
         let sourceFile = try AVAudioFile(forReading: sourceURL)
 
         let outputSettings: [String: Any] = [
@@ -143,6 +144,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
         }
 
         try FileManager.default.moveItem(at: tempURL, to: destURL)
+        MXLog.info("Converted \(sourceURL.path(percentEncoded: false)) to caf")
     }
 
     /// Removes a user-imported tone from the library.
