@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum MediaUploadPreviewScreenViewModelAction {
     case dismiss
@@ -42,5 +43,5 @@ enum MediaUploadPreviewAlertType: Hashable {
 enum MediaUploadPreviewScreenViewAction {
     case send
     case cancel
-    case editedMedia(index: Int)
+    case editedMedia(image: UIImage, index: Int)
 }

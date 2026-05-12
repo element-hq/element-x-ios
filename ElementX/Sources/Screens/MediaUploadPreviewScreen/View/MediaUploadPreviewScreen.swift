@@ -63,7 +63,7 @@ struct MediaUploadPreviewScreen: View {
             .alert(item: $context.alertInfo)
             .sheet(isPresented: $context.isPresentingMediaEditor) {
                 ImageEditorView(imageURL: context.viewState.mediaURLs[currentIndex]) { croppedImage in
-                    saveAndApplyCroppedImage(croppedImage, at: currentIndex)
+                    context.send(viewAction: .editedMedia(image: croppedImage, index: currentIndex))
                     context.isPresentingMediaEditor = false
                 } onCancel: {
                     context.isPresentingMediaEditor = false
@@ -190,21 +190,6 @@ struct MediaUploadPreviewScreen: View {
         return type.conforms(to: .image)
     }
 
-    private func saveAndApplyCroppedImage(_ image: UIImage, at index: Int) {
-        guard let data = image.jpegData(compressionQuality: 1.0) else {
-            return
-        }
-        
-        let originalURL = context.viewState.mediaURLs[index]
-        
-        do {
-            try data.write(to: originalURL, options: .atomic)
-            context.send(viewAction: .editedMedia(index: index))
-        } catch {
-            MXLog.error("Failed writing cropped image with error: \(error)")
-        }
-    }
-    
     private func handleKeyPress(_ key: UIKeyboardHIDUsage) {
         switch key {
         case .keyboardReturnOrEnter:

@@ -88,11 +88,22 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         case .cancel:
             requestHandle?.cancel()
             actionsSubject.send(.dismiss)
-        case .editedMedia(let index):
-            guard mediaURLs.indices.contains(index) else { return }
-            state.mediaEditVersion += 1
-            processingTask.cancel()
-            processingTask = Self.processMedia(at: mediaURLs, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
+        case .editedMedia(let image, let index):
+            guard mediaURLs.indices.contains(index),
+                  let data = image.jpegData(compressionQuality: 1.0) else {
+                return
+            }
+            
+            do {
+                try data.write(to: mediaURLs[index], options: .atomic)
+                
+                state.mediaEditVersion += 1
+                
+                processingTask.cancel()
+                processingTask = Self.processMedia(at: mediaURLs, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
+            } catch {
+                MXLog.error("Failed writing cropped image with error: \(error)")
+            }
         }
     }
     
