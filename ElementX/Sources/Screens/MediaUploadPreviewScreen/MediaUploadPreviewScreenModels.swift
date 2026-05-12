@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum MediaUploadPreviewScreenViewModelAction {
     case dismiss
@@ -19,6 +20,8 @@ struct MediaUploadPreviewScreenViewState: BindableState {
     let isRoomEncrypted: Bool
     var shouldDisableInteraction = false
     
+    var mediaEditVersion = 0
+
     var bindings = MediaUploadPreviewScreenBindings()
 }
 
@@ -28,6 +31,7 @@ struct MediaUploadPreviewScreenBindings: BindableState {
     var selectedRange = NSRange(location: 0, length: 0)
     
     var isPresentingMediaCaptionWarning = false
+    var isPresentingMediaEditor = false
     var alertInfo: AlertInfo<MediaUploadPreviewAlertType>?
 }
 
@@ -39,4 +43,5 @@ enum MediaUploadPreviewAlertType: Hashable {
 enum MediaUploadPreviewScreenViewAction {
     case send
     case cancel
+    case editedMedia(image: UIImage, index: Int)
 }

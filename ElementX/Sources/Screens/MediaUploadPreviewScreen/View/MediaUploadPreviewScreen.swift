@@ -9,8 +9,10 @@
 import Combine
 import Compound
 import GameController
+import Mantis
 import QuickLook
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct MediaUploadPreviewScreen: View {
     @Environment(\.colorScheme) private var colorScheme
@@ -59,6 +61,17 @@ struct MediaUploadPreviewScreen: View {
             .preferredColorScheme(colorSchemeOverride)
             .onAppear(perform: focusComposerIfHardwareKeyboardConnected)
             .alert(item: $context.alertInfo)
+            .sheet(isPresented: $context.isPresentingMediaEditor) {
+                ImageEditorView(imageURL: context.viewState.mediaURLs[currentIndex]) { croppedImage in
+                    context.send(viewAction: .editedMedia(image: croppedImage, index: currentIndex))
+                    context.isPresentingMediaEditor = false
+                } onCancel: {
+                    context.isPresentingMediaEditor = false
+                }
+                .ignoresSafeArea()
+                // Make sure out of bound error alerts are shown even if the sheet is presented
+                .alert(item: $context.alertInfo)
+            }
     }
     
     @ViewBuilder
@@ -71,6 +84,7 @@ struct MediaUploadPreviewScreen: View {
         } else {
             PreviewView(mediaURLs: context.viewState.mediaURLs,
                         title: context.viewState.title,
+                        mediaEditVersion: context.viewState.mediaEditVersion,
                         currentIndex: $currentIndex)
         }
     }
@@ -149,8 +163,33 @@ struct MediaUploadPreviewScreen: View {
             // follow the dark colour scheme on devices running with dark mode disabled.
             .tint(.compound.textActionPrimary)
         }
+        
+        if isCurrentMediaImage {
+            ToolbarItem(placement: .primaryAction) {
+                Button { context.isPresentingMediaEditor = true } label: {
+                    CompoundIcon(\.editSolid)
+                }
+                // Fix a bug with the preferredColorScheme on iOS 18 where the button doesn't
+                // follow the dark colour scheme on devices running with dark mode disabled.
+                .tint(.compound.textActionPrimary)
+            }
+        }
     }
     
+    private var isCurrentMediaImage: Bool {
+        guard context.viewState.mediaURLs.indices.contains(currentIndex) else {
+            return false
+        }
+        
+        let url = context.viewState.mediaURLs[currentIndex]
+        
+        guard let type = UTType(filenameExtension: url.pathExtension) else {
+            return false
+        }
+        
+        return type.conforms(to: .image)
+    }
+
     private func handleKeyPress(_ key: UIKeyboardHIDUsage) {
         switch key {
         case .keyboardReturnOrEnter:
@@ -176,6 +215,7 @@ struct MediaUploadPreviewScreen: View {
 private struct PreviewView: UIViewControllerRepresentable {
     let mediaURLs: [URL]
     let title: String?
+    let mediaEditVersion: Int
     @Binding var currentIndex: Int
 
     func makeUIViewController(context: Context) -> UIViewController {
@@ -190,7 +230,17 @@ private struct PreviewView: UIViewControllerRepresentable {
         }
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) { }
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        guard context.coordinator.mediaEditVersion != mediaEditVersion else {
+            return
+        }
+        
+        context.coordinator.mediaEditVersion = mediaEditVersion
+        
+        let previewController = (uiViewController as? UINavigationController)?.viewControllers.first as? QLPreviewController
+            ?? uiViewController as? QLPreviewController
+        previewController?.reloadData()
+    }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(view: self)
@@ -198,9 +248,11 @@ private struct PreviewView: UIViewControllerRepresentable {
     
     class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
         let view: PreviewView
+        var mediaEditVersion: Int
 
         init(view: PreviewView) {
             self.view = view
+            mediaEditVersion = view.mediaEditVersion
         }
         
         // MARK: - QLPreviewControllerDataSource
@@ -262,6 +314,49 @@ private class PreviewViewController: QLPreviewController {
                 
         // Hide toolbar share button
         toolbarItems?.first?.isHidden = true
+    }
+}
+
+// MARK: - ImageCropView
+
+private struct ImageEditorView: UIViewControllerRepresentable {
+    let imageURL: URL
+    var onCrop: (UIImage) -> Void
+    var onCancel: () -> Void
+
+    func makeUIViewController(context: Context) -> CropViewController {
+        let image = UIImage(contentsOfFile: imageURL.path) ?? UIImage()
+        
+        let cropViewController = Mantis.cropViewController(image: image)
+        cropViewController.delegate = context.coordinator
+        return cropViewController
+    }
+
+    func updateUIViewController(_ uiViewController: CropViewController, context: Context) { }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onCrop: onCrop, onCancel: onCancel)
+    }
+
+    class Coordinator: NSObject, CropViewControllerDelegate {
+        var onCrop: (UIImage) -> Void
+        var onCancel: () -> Void
+
+        init(onCrop: @escaping (UIImage) -> Void, onCancel: @escaping () -> Void) {
+            self.onCrop = onCrop
+            self.onCancel = onCancel
+        }
+
+        func cropViewControllerDidCrop(_ cropViewController: CropViewController,
+                                       cropped: UIImage,
+                                       transformation: Transformation,
+                                       cropInfo: CropInfo) {
+            onCrop(cropped)
+        }
+
+        func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
+            onCancel()
+        }
     }
 }
 

@@ -238,6 +238,7 @@ targets:
     - package: KZFileWatchers
     - package: LoremSwiftum
     - package: LRUCache
+    - package: Mantis
     - package: MapLibre
     - package: PostHog
     - package: SwiftState
