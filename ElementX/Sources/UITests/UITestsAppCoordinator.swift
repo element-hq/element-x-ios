@@ -134,7 +134,7 @@ class MockScreen: Identifiable {
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
     }
-
+    
     lazy var coordinator: CoordinatorProtocol? = {
         switch id {
         case .serverSelection:

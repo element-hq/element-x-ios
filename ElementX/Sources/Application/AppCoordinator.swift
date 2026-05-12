@@ -1084,7 +1084,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .dropFirst()
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self, userIndicatorController, analyticsService] state in
+            .sink { [weak self] state in
                 let toastIdentifier = "StaleDataIndicator"
                 guard let self else { return }
                 

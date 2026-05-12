@@ -16,7 +16,7 @@ struct SettingsScreenViewModelTests {
     private var context: SettingsScreenViewModelType.Context
     
     init() {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: UserDefaultsMock())
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: ""))))
         viewModel = SettingsScreenViewModel(userSession: userSession,
                                             appSettings: appSettings,

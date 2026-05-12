@@ -148,7 +148,7 @@ struct ServerSelectionScreenViewModelTests {
     // MARK: - Helpers
     
     private mutating func setup(authenticationFlow: AuthenticationFlow) {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings(store: UserDefaultsMock())
         
         clientFactory = AuthenticationClientFactoryMock(configuration: .init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),

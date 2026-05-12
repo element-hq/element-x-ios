@@ -30,7 +30,6 @@ final class JoinRoomScreenViewModelTests {
     
     init() {
         appSettings = AppSettings(store: UserDefaultsMock())
-        userIndicatorController = UserIndicatorControllerMock.default
     }
     
     deinit {

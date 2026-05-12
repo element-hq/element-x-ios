@@ -22,7 +22,7 @@ final class SpacesScreenViewModelTests {
     }
     
     init() {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: UserDefaultsMock())
         
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))

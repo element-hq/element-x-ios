@@ -21,8 +21,6 @@ final class RoomScreenViewModelTests {
     
     init() async throws {
         appSettings = AppSettings(store: UserDefaultsMock())
-        analytics = .mock(settings: appSettings)
-        userIndicatorController = UserIndicatorControllerMock.default
     }
     
     @Test
