@@ -224,7 +224,7 @@ extension RoomFlowCoordinator {
             case (.mediaEventsTimeline, .presentMessageForwarding(forwardingItem: let forwardingItem)):
                 return .messageForwarding(forwardingItem: forwardingItem, previousState: fromState)
 
-            case (.room, .presentMapNavigator(_)):
+            case (.room, .presentMapNavigator):
                 return .mapNavigator(previousState: fromState)
             
             case (.room, .presentPollForm):
@@ -271,7 +271,7 @@ extension RoomFlowCoordinator {
             case (.thread, .presentMessageForwarding(let forwardingItem)):
                 return .messageForwarding(forwardingItem: forwardingItem, previousState: fromState)
 
-            case (.thread, .presentMapNavigator(_)):
+            case (.thread, .presentMapNavigator):
                 return .mapNavigator(previousState: fromState)
             
             case (.thread, .presentPollForm):

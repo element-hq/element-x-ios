@@ -46,7 +46,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.notificationCenter = notificationCenter
-        
+
         super.init(initialViewState: .init(interactionMode: interactionMode,
                                            mapURLBuilder: mapURLBuilder,
                                            ownUserID: roomProxy.ownUserID),
@@ -332,17 +332,20 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
 extension LocationSharingScreenViewModel {
     enum MockType {
         case picker
+        case pickerWithoutLiveLocationOption
         case staticSenderLocation
         case staticPinLocation
         case viewLive
         case viewLiveEmpty
     }
-    
+
     static func mock(type: MockType,
                      senderID: String = "@dan:matrix.org") -> LocationSharingScreenViewModel {
         let interactionMode: LocationSharingInteractionMode = switch type {
         case .picker:
-            .picker
+            .picker(shouldShowLiveLocationOption: true)
+        case .pickerWithoutLiveLocationOption:
+            .picker(shouldShowLiveLocationOption: false)
         case .staticPinLocation:
             .viewStatic(.init(sender: .init(id: senderID),
                               geoURI: .init(latitude: 41.9027835,
