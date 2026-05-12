@@ -174,8 +174,15 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
                            filename: "Swish.caf"),
         .createSystemSound(label: UntranslatedL10n.messageSoundSystemTweet,
                            filename: "tweet_sent.caf")
-    ].sorted()
-
+    ]
+    .compactMap { (alertTone: NotificationAlertTone) -> NotificationAlertTone? in
+        guard (try? alertTone.location.checkResourceIsReachable()) == true else {
+            return nil
+        }
+        return alertTone
+    }
+    .sorted()
+    
     /// Element X bundled tones available for selection, sorted by name.
     static let defaultElementXAlerts: [Self] = [
         defaultElementXMessageTone,
