@@ -402,7 +402,7 @@ struct LocationSharingScreenViewModelTests {
                                                    analytics: ServiceLocator.shared.analytics,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
-        
+
         // Initially no annotations and no map center since sender and share are both nil.
         #expect(context.viewState.annotations.isEmpty)
         #expect(context.mapCenterLocation == nil)
@@ -428,7 +428,7 @@ struct LocationSharingScreenViewModelTests {
     private mutating func setupViewModel(liveLocationManagerConfiguration: LiveLocationManagerMock.Configuration = .init(),
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
         timelineProxy = TimelineProxyMock(.init())
-        viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
+        viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
@@ -438,11 +438,11 @@ struct LocationSharingScreenViewModelTests {
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         viewModel.state.bindings.isLocationAuthorized = true
     }
-    
+
     private mutating func setupViewModel(liveLocationManagerMock: LiveLocationManagerMock,
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
         timelineProxy = TimelineProxyMock(.init())
-        viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
+        viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),

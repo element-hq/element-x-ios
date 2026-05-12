@@ -25,9 +25,21 @@ enum LocationSharingScreenViewModelAction {
 }
 
 enum LocationSharingInteractionMode: Hashable {
-    case picker
+    case picker(shouldShowLiveLocationOption: Bool)
     case viewStatic(StaticLocationData)
     case viewLive(sender: TimelineItemSender?, initialLiveLocationShare: LiveLocationShare?)
+
+    var isPicker: Bool {
+        if case .picker = self { return true }
+        return false
+    }
+
+    var shouldShowLiveLocationOption: Bool {
+        if case .picker(let shouldShowLiveLocationOption) = self {
+            return shouldShowLiveLocationOption
+        }
+        return false
+    }
 }
 
 struct LocationSharingScreenViewState: BindableState {
