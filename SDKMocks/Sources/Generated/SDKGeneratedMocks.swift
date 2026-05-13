@@ -3507,6 +3507,46 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await logoutClosure?()
     }
 
+    //MARK: - markAllRoomsAsRead
+
+    open var markAllRoomsAsReadThrowableError: Error?
+    open var markAllRoomsAsReadUnderlyingCallsCount = 0
+    open var markAllRoomsAsReadCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return markAllRoomsAsReadUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAllRoomsAsReadUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAllRoomsAsReadUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAllRoomsAsReadUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var markAllRoomsAsReadCalled: Bool {
+        return markAllRoomsAsReadCallsCount > 0
+    }
+    open var markAllRoomsAsReadClosure: (() async throws -> Void)?
+
+    open override func markAllRoomsAsRead() async throws {
+        if let error = markAllRoomsAsReadThrowableError {
+            throw error
+        }
+        markAllRoomsAsReadCallsCount += 1
+        try await markAllRoomsAsReadClosure?()
+    }
+
     //MARK: - newGrantLoginWithQrCodeHandler
 
     open var newGrantLoginWithQrCodeHandlerUnderlyingCallsCount = 0
@@ -3902,6 +3942,46 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         optimizeStoresCallsCount += 1
         try await optimizeStoresClosure?()
+    }
+
+    //MARK: - pause
+
+    open var pauseThrowableError: Error?
+    open var pauseUnderlyingCallsCount = 0
+    open var pauseCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return pauseUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pauseUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pauseUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pauseUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var pauseCalled: Bool {
+        return pauseCallsCount > 0
+    }
+    open var pauseClosure: (() async throws -> Void)?
+
+    open override func pause() async throws {
+        if let error = pauseThrowableError {
+            throw error
+        }
+        pauseCallsCount += 1
+        try await pauseClosure?()
     }
 
     //MARK: - registerNotificationHandler
@@ -4300,6 +4380,46 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             self.restoreSessionWithSessionRoomLoadSettingsReceivedInvocations.append((session: session, roomLoadSettings: roomLoadSettings))
         }
         try await restoreSessionWithSessionRoomLoadSettingsClosure?(session, roomLoadSettings)
+    }
+
+    //MARK: - resume
+
+    open var resumeThrowableError: Error?
+    open var resumeUnderlyingCallsCount = 0
+    open var resumeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resumeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resumeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resumeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resumeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var resumeCalled: Bool {
+        return resumeCallsCount > 0
+    }
+    open var resumeClosure: (() async throws -> Void)?
+
+    open override func resume() async throws {
+        if let error = resumeThrowableError {
+            throw error
+        }
+        resumeCallsCount += 1
+        try await resumeClosure?()
     }
 
     //MARK: - roomAliasExists
@@ -7475,6 +7595,77 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return disableSslVerificationClosure()
         } else {
             return disableSslVerificationReturnValue
+        }
+    }
+
+    //MARK: - dmRoomDefinition
+
+    open var dmRoomDefinitionDmRoomDefinitionUnderlyingCallsCount = 0
+    open var dmRoomDefinitionDmRoomDefinitionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return dmRoomDefinitionDmRoomDefinitionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = dmRoomDefinitionDmRoomDefinitionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                dmRoomDefinitionDmRoomDefinitionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    dmRoomDefinitionDmRoomDefinitionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var dmRoomDefinitionDmRoomDefinitionCalled: Bool {
+        return dmRoomDefinitionDmRoomDefinitionCallsCount > 0
+    }
+    open var dmRoomDefinitionDmRoomDefinitionReceivedDmRoomDefinition: DmRoomDefinition?
+    open var dmRoomDefinitionDmRoomDefinitionReceivedInvocations: [DmRoomDefinition] = []
+
+    open var dmRoomDefinitionDmRoomDefinitionUnderlyingReturnValue: ClientBuilder!
+    open var dmRoomDefinitionDmRoomDefinitionReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return dmRoomDefinitionDmRoomDefinitionUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = dmRoomDefinitionDmRoomDefinitionUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                dmRoomDefinitionDmRoomDefinitionUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    dmRoomDefinitionDmRoomDefinitionUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var dmRoomDefinitionDmRoomDefinitionClosure: ((DmRoomDefinition) -> ClientBuilder)?
+
+    open override func dmRoomDefinition(dmRoomDefinition: DmRoomDefinition) -> ClientBuilder {
+        dmRoomDefinitionDmRoomDefinitionCallsCount += 1
+        dmRoomDefinitionDmRoomDefinitionReceivedDmRoomDefinition = dmRoomDefinition
+        DispatchQueue.main.async {
+            self.dmRoomDefinitionDmRoomDefinitionReceivedInvocations.append(dmRoomDefinition)
+        }
+        if let dmRoomDefinitionDmRoomDefinitionClosure = dmRoomDefinitionDmRoomDefinitionClosure {
+            return dmRoomDefinitionDmRoomDefinitionClosure(dmRoomDefinition)
+        } else {
+            return dmRoomDefinitionDmRoomDefinitionReturnValue
         }
     }
 
@@ -25031,12 +25222,12 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
             }
         }
     }
-    open var roomsClosure: (() -> [SpaceRoom])?
+    open var roomsClosure: (() async -> [SpaceRoom])?
 
-    open override func rooms() -> [SpaceRoom] {
+    open override func rooms() async -> [SpaceRoom] {
         roomsCallsCount += 1
         if let roomsClosure = roomsClosure {
-            return roomsClosure()
+            return await roomsClosure()
         } else {
             return roomsReturnValue
         }
@@ -25234,16 +25425,16 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
             }
         }
     }
-    open var subscribeToRoomUpdateListenerClosure: ((SpaceRoomListEntriesListener) -> TaskHandle)?
+    open var subscribeToRoomUpdateListenerClosure: ((SpaceRoomListEntriesListener) async -> TaskHandle)?
 
-    open override func subscribeToRoomUpdate(listener: SpaceRoomListEntriesListener) -> TaskHandle {
+    open override func subscribeToRoomUpdate(listener: SpaceRoomListEntriesListener) async -> TaskHandle {
         subscribeToRoomUpdateListenerCallsCount += 1
         subscribeToRoomUpdateListenerReceivedListener = listener
         DispatchQueue.main.async {
             self.subscribeToRoomUpdateListenerReceivedInvocations.append(listener)
         }
         if let subscribeToRoomUpdateListenerClosure = subscribeToRoomUpdateListenerClosure {
-            return subscribeToRoomUpdateListenerClosure(listener)
+            return await subscribeToRoomUpdateListenerClosure(listener)
         } else {
             return subscribeToRoomUpdateListenerReturnValue
         }
