@@ -184,7 +184,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await scrollToReadMarker() }
         case .markAllAsRead:
             state.bindings.hasNewMessagesAtBottom = false
-            Task { await roomProxy.markAsRead(receiptType: .fullyRead) }
+            Task {
+                _ = await roomProxy.markAsRead(receiptType: .fullyRead)
+                // Clear locally so the jump-to-unread button hides without waiting
+                // for the SDK to push a refreshed RoomInfo. Doing this after the
+                // await means any stale RoomInfo update racing the mark-as-read
+                // call has already landed and can't overwrite this clear.
+                state.timelineState.fullyReadEventID = nil
+            }
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
