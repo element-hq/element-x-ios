@@ -857,6 +857,15 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+
+    func markAllRoomsAsRead() async -> Result<Void, ClientProxyError> {
+        do {
+            return try await .success(client.markAllRoomsAsRead())
+        } catch {
+            MXLog.error("Failed marking all rooms as read with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
     
     func storeSizes() async -> Result<StoreSizes, ClientProxyError> {
         do {
