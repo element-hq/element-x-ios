@@ -1,3 +1,13 @@
+## Changes in 26.05.2 (2026-05-13)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix for cropped boosted emoji by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5580
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.05.1...release/26.05.2
+
 ## Changes in 26.05.1 (2026-05-12)
 
 ### What's Changed
