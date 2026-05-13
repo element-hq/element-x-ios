@@ -24,7 +24,7 @@ struct FormattedBodyText: View {
     private var attributedComponents: [AttributedStringBuilderComponent] {
         var adjustedAttributedString = attributedString
         
-        // Required to allow the underlying TextView to use  body font when no font is specifie in the AttributedString.
+        // Required to allow the underlying TextView to use  body font when no font is specified in the AttributedString.
         adjustedAttributedString.mergeAttributes(defaultAttributesContainer, mergePolicy: .keepCurrent)
         
         let string = String(attributedString.characters)
