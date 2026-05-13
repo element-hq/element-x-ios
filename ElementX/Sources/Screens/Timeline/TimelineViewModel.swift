@@ -95,7 +95,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
         super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
                                                        roomID: roomProxy.id,
-                                                       isDirectOneToOneRoom: roomProxy.isDirectOneToOneRoom,
+                                                       isDM: roomProxy.infoPublisher.value.isDM,
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        hideTimelineMedia: hideTimelineMedia,
@@ -420,6 +420,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
         state.pinnedEventIDs = roomInfo.pinnedEventIDs
+        state.isDM = roomInfo.isDM
         
         if let powerLevels = roomInfo.powerLevels {
             state.canCurrentUserSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)

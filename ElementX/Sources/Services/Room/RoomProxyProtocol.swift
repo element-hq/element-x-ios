@@ -222,10 +222,6 @@ extension JoinedRoomProxyProtocol {
                            isDirect: infoPublisher.value.isDirect,
                            historySharingState: historySharingState)
     }
-    
-    var isDirectOneToOneRoom: Bool {
-        infoPublisher.value.isDirect && infoPublisher.value.activeMembersCount <= 2
-    }
 
     func members() async -> [RoomMemberProxyProtocol]? {
         await updateMembers()

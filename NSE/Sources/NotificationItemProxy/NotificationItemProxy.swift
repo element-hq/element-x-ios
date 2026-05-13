@@ -45,6 +45,10 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         notificationItem.roomInfo.isDirect
     }
     
+    var isDM: Bool {
+        notificationItem.roomInfo.isDm
+    }
+    
     var isRoomPrivate: Bool {
         switch notificationItem.roomInfo.joinRule {
         case .invite, .knock, .restricted, .knockRestricted:
@@ -119,6 +123,10 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     }
     
     var isRoomDirect: Bool {
+        false
+    }
+    
+    var isDM: Bool {
         false
     }
     

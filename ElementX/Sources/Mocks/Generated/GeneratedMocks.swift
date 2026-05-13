@@ -13318,6 +13318,11 @@ class NotificationItemProxyMock: NotificationItemProxyProtocol, @unchecked Senda
         set(value) { underlyingIsRoomPrivate = value }
     }
     var underlyingIsRoomPrivate: Bool!
+    var isDM: Bool {
+        get { return underlyingIsDM }
+        set(value) { underlyingIsDM = value }
+    }
+    var underlyingIsDM: Bool!
     var isNoisy: Bool {
         get { return underlyingIsNoisy }
         set(value) { underlyingIsNoisy = value }
@@ -15284,6 +15289,11 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingIsDirect = value }
     }
     var underlyingIsDirect: Bool!
+    var isDM: Bool {
+        get { return underlyingIsDM }
+        set(value) { underlyingIsDM = value }
+    }
+    var underlyingIsDM: Bool!
     var isSpace: Bool {
         get { return underlyingIsSpace }
         set(value) { underlyingIsSpace = value }
@@ -15404,6 +15414,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
         set(value) { underlyingPowerLevel = value }
     }
     var underlyingPowerLevel: RoomPowerLevel!
+    var isServiceMember: Bool {
+        get { return underlyingIsServiceMember }
+        set(value) { underlyingIsServiceMember = value }
+    }
+    var underlyingIsServiceMember: Bool!
 
 }
 class RoomMembershipDetailsProxyMock: RoomMembershipDetailsProxyProtocol, @unchecked Sendable {

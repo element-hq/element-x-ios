@@ -84,7 +84,7 @@ class ThreadTimelineScreenViewModel: ThreadTimelineScreenViewModelType, ThreadTi
     // MARK: - Private
     
     private func updateVerificationBadge() async {
-        guard roomProxy.isDirectOneToOneRoom,
+        guard roomProxy.infoPublisher.value.isDM,
               let dmRecipient = roomProxy.membersPublisher.value.first(where: { $0.userID != roomProxy.ownUserID }),
               case let .success(userIdentity) = await userSession.clientProxy.userIdentity(for: dmRecipient.userID, fallBackToServer: true) else {
             state.dmRecipientVerificationState = .notVerified

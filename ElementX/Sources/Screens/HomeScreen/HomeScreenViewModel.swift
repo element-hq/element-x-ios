@@ -404,12 +404,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             
             guard roomProxy.infoPublisher.value.joinedMembersCount > 1 else {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID,
-                                                                       isDM: roomProxy.isDirectOneToOneRoom,
+                                                                       isDM: roomProxy.infoPublisher.value.isDM,
                                                                        state: roomProxy.infoPublisher.value.isPrivate ?? true ? .empty : .public)
                 return
             }
             
-            if !roomProxy.isDirectOneToOneRoom {
+            if !roomProxy.infoPublisher.value.isDM {
                 if case let .success(ownMember) = await roomProxy.getMember(userID: roomProxy.ownUserID),
                    ownMember.role.isOwner {
                     await roomProxy.updateMembers()
@@ -434,7 +434,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 }
             }
             
-            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: roomProxy.infoPublisher.value.isPrivate ?? true ? .private : .public)
+            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.infoPublisher.value.isDM, state: roomProxy.infoPublisher.value.isPrivate ?? true ? .private : .public)
         }
     }
     

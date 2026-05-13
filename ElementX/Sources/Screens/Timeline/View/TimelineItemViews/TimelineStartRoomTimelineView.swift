@@ -19,7 +19,7 @@ struct TimelineStartRoomTimelineView: View {
                 upgradeDialogue
             }
             // We don't display the title for tombstoned DMs
-            if context?.viewState.isDirectOneToOneRoom != true {
+            if context?.viewState.isDM != true {
                 Text(title)
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)

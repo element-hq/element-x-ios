@@ -70,7 +70,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
-                                            isDirectOneToOneRoom: roomProxy.isDirectOneToOneRoom,
+                                            isDM: roomProxy.infoPublisher.value.isDM,
                                             hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
                                             roomHistorySharingState: roomProxy.infoPublisher.value.historySharingState)
         super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
@@ -271,7 +271,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func updateVerificationBadge() async {
-        guard roomProxy.isDirectOneToOneRoom,
+        guard roomProxy.infoPublisher.value.isDM,
               let dmRecipient = roomProxy.membersPublisher.value.first(where: { $0.userID != roomProxy.ownUserID }),
               case let .success(userIdentity) = await clientProxy.userIdentity(for: dmRecipient.userID, fallBackToServer: true) else {
             state.dmRecipientVerificationState = .notVerified
@@ -338,6 +338,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.hasOngoingCall = roomInfo.hasRoomCall
         state.activeRoomCallIntent = roomInfo.activeRoomCallIntent
         state.hasSuccessor = roomInfo.successor != nil
+        state.isDM = roomInfo.isDM
         
         let pinnedEventIDs = roomInfo.pinnedEventIDs
         // Only update the loading state of the banner
@@ -345,7 +346,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.pinnedEventsBannerState = .loading(numbersOfEvents: pinnedEventIDs.count)
         }
         
-        switch (roomProxy.isDirectOneToOneRoom, roomInfo.joinRule) {
+        switch (roomInfo.isDM, roomInfo.joinRule) {
         case (false, .knock), (false, .knockRestricted):
             state.isKnockableRoom = true
         default:

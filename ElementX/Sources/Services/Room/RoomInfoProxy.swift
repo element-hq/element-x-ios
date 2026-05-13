@@ -49,6 +49,10 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     var isDirect: Bool {
         roomInfo.isDirect
     }
+    
+    var isDM: Bool {
+        roomInfo.isDm
+    }
 
     var isSpace: Bool {
         roomInfo.isSpace

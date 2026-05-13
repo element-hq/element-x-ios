@@ -51,4 +51,8 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     var powerLevel: RoomPowerLevel {
         .init(rustPowerLevel: member.powerLevel)
     }
+    
+    var isServiceMember: Bool {
+        member.isServiceMember
+    }
 }

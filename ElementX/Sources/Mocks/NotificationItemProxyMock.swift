@@ -52,5 +52,6 @@ extension NotificationItemProxyMock {
         underlyingIsNoisy = configuration.isNoisy
         underlyingHasMention = configuration.hasMention
         threadRootEventID = configuration.threadRootEventID
+        underlyingIsDM = configuration.isRoomDirect && configuration.roomJoinedMembers <= 2
     }
 }
