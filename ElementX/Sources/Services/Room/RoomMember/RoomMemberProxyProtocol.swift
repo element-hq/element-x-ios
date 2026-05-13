@@ -25,6 +25,8 @@ protocol RoomMemberProxyProtocol: AnyObject {
     var isIgnored: Bool { get }
     
     var powerLevel: RoomPowerLevel { get }
+    
+    var isServiceMember: Bool { get }
 }
 
 extension RoomMemberProxyProtocol {

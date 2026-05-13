@@ -24,6 +24,7 @@ struct SpaceServiceRoom {
     
     var isSpace: Bool
     var isDirect: Bool?
+    var isDM: Bool?
     var childrenCount: Int
     
     var joinedMembersCount: Int
@@ -70,6 +71,7 @@ extension SpaceServiceRoom {
         
         isSpace = spaceRoom.roomType == .space
         isDirect = spaceRoom.isDirect
+        isDM = spaceRoom.isDm
         childrenCount = Int(spaceRoom.childrenCount)
         
         joinedMembersCount = Int(spaceRoom.numJoinedMembers)
@@ -92,6 +94,7 @@ extension SpaceServiceRoom {
                      avatarURL: URL? = nil,
                      isSpace: Bool,
                      isDirect: Bool? = nil,
+                     isDM: Bool? = nil,
                      childrenCount: Int = 0,
                      joinedMembersCount: Int = 0,
                      heroes: [UserProfileProxy] = [],
@@ -108,6 +111,7 @@ extension SpaceServiceRoom {
                          avatarURL: avatarURL,
                          isSpace: isSpace,
                          isDirect: isDirect,
+                         isDM: isDM,
                          childrenCount: childrenCount,
                          joinedMembersCount: joinedMembersCount,
                          heroes: heroes,

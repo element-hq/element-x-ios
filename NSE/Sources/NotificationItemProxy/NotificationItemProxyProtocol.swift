@@ -35,16 +35,12 @@ protocol NotificationItemProxyProtocol {
     var isRoomDirect: Bool { get }
     
     var isRoomPrivate: Bool { get }
+    
+    var isDM: Bool { get }
 
     var isNoisy: Bool { get }
 
     var hasMention: Bool { get }
     
     var threadRootEventID: String? { get }
-}
-
-extension NotificationItemProxyProtocol {
-    var isDM: Bool {
-        isRoomDirect && roomJoinedMembers <= 2
-    }
 }

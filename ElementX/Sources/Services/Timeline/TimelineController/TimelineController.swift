@@ -419,7 +419,7 @@ class TimelineController: TimelineControllerProtocol {
         let isNewTimeline = isSwitchingTimelines
         isSwitchingTimelines = false
         
-        let isDM = roomProxy.isDirectOneToOneRoom
+        let isDM = roomProxy.infoPublisher.value.isDM
         let displayName = roomProxy.infoPublisher.value.displayName
         let hasPredecessor = roomProxy.predecessorRoom != nil
         

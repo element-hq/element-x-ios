@@ -22,7 +22,7 @@ struct RoomCallControlsToolbar: ToolbarContent {
                 .disabled(!viewState.canJoinCall)
             }
         } else {
-            if viewState.isDirectOneToOneRoom {
+            if viewState.isDM {
                 if viewState.roomThreadListEnabled {
                     // If the developer mode room thread list option is enabled there
                     // is not enough place for 2 calls buttons
@@ -85,11 +85,11 @@ struct RoomCallControlsToolbar_Previews: PreviewProvider {
                 Color.clear.toolbar { RoomCallControlsToolbar(viewState: .mock(hasOngoingCall: true)) { _ in } }
             }
             ElementNavigationStack {
-                Color.clear.toolbar { RoomCallControlsToolbar(viewState: .mock(hasOngoingCall: false, isDirectOneToOneRoom: true)) { _ in } }
+                Color.clear.toolbar { RoomCallControlsToolbar(viewState: .mock(hasOngoingCall: false, isDM: true)) { _ in } }
             }
             
             ElementNavigationStack {
-                Color.clear.toolbar { RoomCallControlsToolbar(viewState: .mock(hasOngoingCall: false, isDirectOneToOneRoom: true, roomThreadListEnabled: true)) { _ in } }
+                Color.clear.toolbar { RoomCallControlsToolbar(viewState: .mock(hasOngoingCall: false, isDM: true, roomThreadListEnabled: true)) { _ in } }
             }
             ElementNavigationStack {
                 Color.clear.toolbar { RoomCallControlsToolbar(viewState: .mock(hasOngoingCall: false)) { _ in } }
@@ -106,12 +106,12 @@ struct RoomCallControlsToolbar_Previews: PreviewProvider {
 }
 
 private extension RoomScreenViewState {
-    static func mock(hasOngoingCall: Bool, isDirectOneToOneRoom: Bool = false, canJoinCall: Bool = true, activeRoomCallIntent: CallIntent? = nil, roomThreadListEnabled: Bool = false) -> RoomScreenViewState {
+    static func mock(hasOngoingCall: Bool, isDM: Bool = false, canJoinCall: Bool = true, activeRoomCallIntent: CallIntent? = nil, roomThreadListEnabled: Bool = false) -> RoomScreenViewState {
         RoomScreenViewState(roomAvatar: .room(id: "mock", name: "Mock Room", avatarURL: nil),
                             canJoinCall: canJoinCall,
                             hasOngoingCall: hasOngoingCall,
                             activeRoomCallIntent: activeRoomCallIntent,
-                            isDirectOneToOneRoom: isDirectOneToOneRoom,
+                            isDM: isDM,
                             roomThreadListEnabled: roomThreadListEnabled,
                             hasSuccessor: false)
     }

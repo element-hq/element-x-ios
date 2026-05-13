@@ -70,7 +70,7 @@ struct RoomScreenViewState: BindableState {
     }
     
     /// Whether the current room is a DM
-    var isDirectOneToOneRoom: Bool
+    var isDM: Bool
     
     var roomThreadListEnabled = false
     var isKnockableRoom = false
