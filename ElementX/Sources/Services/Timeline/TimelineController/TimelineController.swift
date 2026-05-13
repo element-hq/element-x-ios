@@ -62,6 +62,7 @@ class TimelineController: TimelineControllerProtocol {
         activeTimelineItemProvider = liveTimelineItemProvider
         
         liveTimelineItemProvider.roomMemberEventPublisher.sink {
+            MXLog.info("Received room member event, updating members")
             Task { await roomProxy.updateMembers() }
         }
         .store(in: &cancellables)
