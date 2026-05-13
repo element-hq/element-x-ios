@@ -152,6 +152,15 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                                  canBeRepliedTo: true,
                                                                  sender: .test,
                                                                  content: .init(body: "באמת! -- house!"))
+    
+    static let bigEmoji = TextRoomTimelineItem(id: .randomEvent,
+                                               timestamp: .mock,
+                                               isOutgoing: true,
+                                               isEditable: false,
+                                               canBeRepliedTo: true,
+                                               shouldBoost: true,
+                                               sender: .test,
+                                               content: .init(body: "😮"))
 
     static var testView: some View {
         VStack(spacing: 0) {
@@ -172,6 +181,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
             TextRoomTimelineView(timelineItem: rtlStringThatContainsLtr)
             TextRoomTimelineView(timelineItem: ltrStringThatFinishesInRtl)
             TextRoomTimelineView(timelineItem: rtlStringThatFinishesInLtr)
+            TextRoomTimelineView(timelineItem: bigEmoji)
         }
     }
 

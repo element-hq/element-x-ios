@@ -102,14 +102,34 @@ struct MessageText: UIViewRepresentable {
                                        size: CGSize(width: trailingReservedSize.width,
                                                     height: max(trailingReservedSize.height, 1)))
 
+            // Inherit the font from the preceding character so the appended runs
+            // (newline and attachment) carry the same line metrics as the surrounding
+            // text — otherwise a small default font on those characters can shrink the
+            // line height and clip e.g. a font-boosted lone emoji.
+            let trailingFont = baseText.length > 0
+                ? baseText.attribute(.font, at: baseText.length - 1, effectiveRange: nil)
+                : nil
+
             // When the last paragraph's natural text direction doesn't match the layout
             // direction, the inline attachment would land on the wrong side and overlap the
             // overlaid timestamp. Force it onto its own line so the bubble just grows taller.
             if !lastParagraphDirectionMatchesLayout(in: combined) {
-                combined.append(NSAttributedString(string: "\n"))
+                let newlineString = NSMutableAttributedString(string: "\n")
+                if let trailingFont {
+                    newlineString.addAttribute(.font,
+                                               value: trailingFont,
+                                               range: NSRange(location: 0, length: newlineString.length))
+                }
+                combined.append(newlineString)
             }
 
-            combined.append(NSAttributedString(attachment: attachment))
+            let attachmentString = NSMutableAttributedString(attachment: attachment)
+            if let trailingFont {
+                attachmentString.addAttribute(.font,
+                                              value: trailingFont,
+                                              range: NSRange(location: 0, length: attachmentString.length))
+            }
+            combined.append(attachmentString)
         }
 
         return combined
