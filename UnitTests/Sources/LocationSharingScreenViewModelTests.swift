@@ -431,7 +431,7 @@ struct LocationSharingScreenViewModelTests {
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
         let appSettings = AppSettings()
         timelineProxy = TimelineProxyMock(.init())
-        viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
+        viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
                                                    mapURLBuilder: appSettings.mapTilerConfiguration,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
@@ -446,7 +446,7 @@ struct LocationSharingScreenViewModelTests {
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
         let appSettings = AppSettings()
         timelineProxy = TimelineProxyMock(.init())
-        viewModel = LocationSharingScreenViewModel(interactionMode: .picker,
+        viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
                                                    mapURLBuilder: appSettings.mapTilerConfiguration,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
