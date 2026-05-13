@@ -10,6 +10,7 @@ import SwiftUI
 
 struct DeveloperOptionsScreen: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var showMarkAllRoomsAsReadAlert = false
     
     @Bindable var context: DeveloperOptionsScreenViewModel.Context
     
@@ -132,9 +133,15 @@ struct DeveloperOptionsScreen: View {
             
             Section {
                 Button {
-                    context.send(viewAction: .markAllRoomsAsRead)
+                    showMarkAllRoomsAsReadAlert = true
                 } label: {
                     Text("Mark all rooms as read")
+                }.alert("Are you sure you want to mark all the rooms as read?", isPresented: $showMarkAllRoomsAsReadAlert) {
+                    Button("Cancel", role: .cancel) { }
+                    
+                    Button("Yes") {
+                        context.send(viewAction: .markAllRoomsAsRead)
+                    }
                 }
             } footer: {
                 Text("""
