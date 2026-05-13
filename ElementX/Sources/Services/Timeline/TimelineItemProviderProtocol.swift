@@ -31,10 +31,10 @@ protocol TimelineItemProviderProtocol {
     var paginationState: TimelinePaginationState { get }
     /// The kind of the timeline
     var kind: TimelineKind { get }
-    /// A publisher that signals when changes to the room's membership have occurred through `/sync`.
+    /// A publisher that signals when member changes have occurred in the room through `/sync`.
     ///
     /// This is temporary and will be replace by a subscription on the room itself.
-    var membershipChangePublisher: AnyPublisher<Void, Never> { get }
+    var roomMemberEventPublisher: AnyPublisher<Void, Never> { get }
 }
 
 // sourcery: AutoMockable

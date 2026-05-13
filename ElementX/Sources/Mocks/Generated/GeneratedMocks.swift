@@ -18990,11 +18990,11 @@ class TimelineItemProviderMock: TimelineItemProviderProtocol, @unchecked Sendabl
         set(value) { underlyingKind = value }
     }
     var underlyingKind: TimelineKind!
-    var membershipChangePublisher: AnyPublisher<Void, Never> {
-        get { return underlyingMembershipChangePublisher }
-        set(value) { underlyingMembershipChangePublisher = value }
+    var roomMemberEventPublisher: AnyPublisher<Void, Never> {
+        get { return underlyingRoomMemberEventPublisher }
+        set(value) { underlyingRoomMemberEventPublisher = value }
     }
-    var underlyingMembershipChangePublisher: AnyPublisher<Void, Never>!
+    var underlyingRoomMemberEventPublisher: AnyPublisher<Void, Never>!
 
 }
 class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {

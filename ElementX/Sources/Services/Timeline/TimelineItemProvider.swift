@@ -36,9 +36,9 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
     
     let kind: TimelineKind
     
-    private let membershipChangeSubject = PassthroughSubject<Void, Never>()
-    var membershipChangePublisher: AnyPublisher<Void, Never> {
-        membershipChangeSubject
+    private let roomMemberEventSubject = PassthroughSubject<Void, Never>()
+    var roomMemberEventPublisher: AnyPublisher<Void, Never> {
+        roomMemberEventSubject
             .eraseToAnyPublisher()
     }
     
@@ -100,8 +100,8 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             for (index, item) in items.enumerated() {
                 let itemProxy = TimelineItemProxy(item: item)
                 
-                if itemProxy.isMembershipChange {
-                    membershipChangeSubject.send(())
+                if itemProxy.isRoomMemberEvent {
+                    roomMemberEventSubject.send(())
                 }
                 
                 changes.append(.insert(offset: Int(itemProxies.count) + index, element: itemProxy, associatedWith: nil))
@@ -124,8 +124,8 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
         case .pushBack(let item):
             let itemProxy = TimelineItemProxy(item: item)
             
-            if itemProxy.isMembershipChange {
-                membershipChangeSubject.send(())
+            if itemProxy.isRoomMemberEvent {
+                roomMemberEventSubject.send(())
             }
             
             changes.append(.insert(offset: Int(itemProxies.count), element: itemProxy, associatedWith: nil))
@@ -158,7 +158,7 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
 }
 
 private extension TimelineItemProxy {
-    var isMembershipChange: Bool {
+    var isRoomMemberEvent: Bool {
         switch self {
         case .event(let eventTimelineItemProxy):
             switch eventTimelineItemProxy.content {

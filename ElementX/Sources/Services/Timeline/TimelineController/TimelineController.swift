@@ -61,7 +61,7 @@ class TimelineController: TimelineControllerProtocol {
         activeTimeline = timelineProxy
         activeTimelineItemProvider = liveTimelineItemProvider
         
-        liveTimelineItemProvider.membershipChangePublisher.sink {
+        liveTimelineItemProvider.roomMemberEventPublisher.sink {
             Task { await roomProxy.updateMembers() }
         }
         .store(in: &cancellables)

@@ -31,7 +31,7 @@ extension TimelineProxyMock {
         } else {
             let timelineItemProvider = TimelineItemProviderMock()
             timelineItemProvider.paginationState = .init(backward: configuration.timelineStartReached ? .endReached : .idle, forward: .endReached)
-            timelineItemProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
+            timelineItemProvider.underlyingRoomMemberEventPublisher = PassthroughSubject().eraseToAnyPublisher()
             underlyingTimelineItemProvider = timelineItemProvider
         }
     }
