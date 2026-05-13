@@ -48,6 +48,7 @@ struct DeveloperOptionsScreenViewStateBindings {
 
 enum DeveloperOptionsScreenViewAction {
     case clearCache
+    case markAllRoomsAsRead
 }
 
 protocol DeveloperOptionsProtocol: AnyObject {

@@ -18,7 +18,10 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private let clientProxy: ClientProxyProtocol?
+    
     init(developerOptions: DeveloperOptionsProtocol, elementCallBaseURL: URL, appHooks: AppHooks, clientProxy: ClientProxyProtocol?) {
+        self.clientProxy = clientProxy
         super.init(initialViewState: .init(elementCallBaseURL: elementCallBaseURL,
                                            appHooks: appHooks,
                                            shouldShowClearCache: clientProxy != nil,
@@ -55,6 +58,10 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         switch viewAction {
         case .clearCache:
             actionsSubject.send(.clearCache)
+        case .markAllRoomsAsRead:
+            Task.detached {
+                await self.clientProxy?.markAllRoomsAsRead()
+            }
         }
     }
 }

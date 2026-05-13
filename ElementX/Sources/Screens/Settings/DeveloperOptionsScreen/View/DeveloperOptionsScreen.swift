@@ -132,6 +132,20 @@ struct DeveloperOptionsScreen: View {
             
             Section {
                 Button {
+                    context.send(viewAction: .markAllRoomsAsRead)
+                } label: {
+                    Text("Mark all rooms as read")
+                }
+            } footer: {
+                Text("""
+                This will send a private read receipt and a read marker in every room you are part of. \ 
+                It's a long running operation that might get rate limited. \
+                It will run in the background but the app must be alive for it to finish.
+                """)
+            }
+            
+            Section {
+                Button {
                     showConfetti = true
                 } label: {
                     Text("🥳")

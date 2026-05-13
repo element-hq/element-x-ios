@@ -5200,6 +5200,71 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return optimizeStoresReturnValue
         }
     }
+    //MARK: - markAllRoomsAsRead
+
+    var markAllRoomsAsReadUnderlyingCallsCount = 0
+    var markAllRoomsAsReadCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return markAllRoomsAsReadUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAllRoomsAsReadUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAllRoomsAsReadUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAllRoomsAsReadUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var markAllRoomsAsReadCalled: Bool {
+        return markAllRoomsAsReadCallsCount > 0
+    }
+
+    var markAllRoomsAsReadUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var markAllRoomsAsReadReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return markAllRoomsAsReadUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAllRoomsAsReadUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAllRoomsAsReadUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAllRoomsAsReadUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var markAllRoomsAsReadClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    @discardableResult
+    func markAllRoomsAsRead() async -> Result<Void, ClientProxyError> {
+        markAllRoomsAsReadCallsCount += 1
+        if let markAllRoomsAsReadClosure = markAllRoomsAsReadClosure {
+            return await markAllRoomsAsReadClosure()
+        } else {
+            return markAllRoomsAsReadReturnValue
+        }
+    }
     //MARK: - storeSizes
 
     var storeSizesUnderlyingCallsCount = 0
