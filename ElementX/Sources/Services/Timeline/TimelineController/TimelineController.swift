@@ -19,6 +19,8 @@ class TimelineController: TimelineControllerProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let appSettings: AppSettings
     
+    private var cancellables: Set<AnyCancellable> = []
+    
     let callbacks = PassthroughSubject<TimelineControllerCallback, Never>()
     
     private var activeTimeline: TimelineProxyProtocol
@@ -58,6 +60,11 @@ class TimelineController: TimelineControllerProtocol {
         
         activeTimeline = timelineProxy
         activeTimelineItemProvider = liveTimelineItemProvider
+        
+        liveTimelineItemProvider.membershipChangePublisher.sink {
+            Task { await roomProxy.updateMembers() }
+        }
+        .store(in: &cancellables)
         
         guard let initialFocussedEventID else {
             configureActiveTimelineItemProvider()

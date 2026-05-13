@@ -10,16 +10,16 @@ import Foundation
 import SwiftUI
 
 struct TimelineSenderAvatarView: View {
-    @Environment(\.timelineContext) private var context
-
+    @EnvironmentObject private var context: TimelineViewModel.Context
+    
     let timelineItem: EventBasedTimelineItemProtocol
-        
+    
     var body: some View {
-        LoadableAvatarImage(url: timelineItem.sender.avatarURL,
+        LoadableAvatarImage(url: context.viewState.members[timelineItem.sender.id]?.avatarURL ?? timelineItem.sender.avatarURL,
                             name: timelineItem.sender.displayName,
                             contentID: timelineItem.sender.id,
                             avatarSize: .user(on: .timeline),
-                            mediaProvider: context?.mediaProvider)
+                            mediaProvider: context.mediaProvider)
             .overlay {
                 Circle().stroke(Color.compound.bgCanvasDefault, lineWidth: 3)
             }

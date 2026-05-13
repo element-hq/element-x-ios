@@ -162,7 +162,7 @@ private extension TimelineItemProxy {
         switch self {
         case .event(let eventTimelineItemProxy):
             switch eventTimelineItemProxy.content {
-            case .roomMembership:
+            case .roomMembership, .profileChange:
                 true
             default:
                 false
