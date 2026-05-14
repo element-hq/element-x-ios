@@ -153,7 +153,7 @@ struct AuthenticationServiceTests {
                                         encryptionKeyProvider: encryptionKeyProvider,
                                         classicAppManager: classicAppManager,
                                         clientFactory: clientFactory,
-                                        appSettings: ServiceLocator.shared.settings,
+                                        appSettings: AppSettings(),
                                         appHooks: AppHooks())
         
         if let classicAppAccount = service.classicAppAccount {

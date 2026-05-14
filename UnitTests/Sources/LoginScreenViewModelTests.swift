@@ -227,12 +227,14 @@ struct LoginScreenViewModelTests {
     // MARK: - Helpers
     
     private mutating func setupViewModel(homeserverAddress: String = "example.com", loginHint: String? = nil) async {
+        let appSettings = AppSettings()
+        
         clientFactory = AuthenticationClientFactoryMock(configuration: .init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,
-                                        appSettings: ServiceLocator.shared.settings,
+                                        appSettings: appSettings,
                                         appHooks: AppHooks())
         
         guard case .success = await service
@@ -244,7 +246,7 @@ struct LoginScreenViewModelTests {
         viewModel = LoginScreenViewModel(authenticationService: service,
                                          loginHint: loginHint,
                                          userIndicatorController: UserIndicatorControllerMock(),
-                                         appSettings: ServiceLocator.shared.settings,
-                                         analytics: ServiceLocator.shared.analytics)
+                                         appSettings: appSettings,
+                                         analytics: .mock(settings: appSettings))
     }
 }

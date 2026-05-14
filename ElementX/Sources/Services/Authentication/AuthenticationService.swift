@@ -382,13 +382,13 @@ extension AuthenticationService {
     static var mock: AuthenticationService {
         mock(classicAppManager: nil)
     }
-    
+
     static func mock(classicAppManager: ClassicAppManagerProtocol?) -> AuthenticationService {
         AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
                               classicAppManager: classicAppManager,
                               clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
-                              appSettings: ServiceLocator.shared.settings,
+                              appSettings: AppSettings(),
                               appHooks: AppHooks())
     }
 }

@@ -15,7 +15,7 @@ import Testing
 struct UserSessionFlowCoordinatorTests {
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator!
     private var rootCoordinator: NavigationRootCoordinator!
-    private var userIndicatorController: UserIndicatorControllerMock!
+    private let userIndicatorController: UserIndicatorControllerMock
     private let stateMachineFactory = PublishedStateMachineFactory()
     
     private let networkReachabilitySubject: CurrentValueSubject<NetworkMonitorReachability, Never> = .init(.reachable)
@@ -49,18 +49,19 @@ struct UserSessionFlowCoordinatorTests {
         let appMediator = AppMediatorMock.default
         appMediator.networkMonitor = networkMonitor
         
-        userIndicatorController = UserIndicatorControllerMock()
-        
+        userIndicatorController = UserIndicatorControllerMock.default
+        let appSettings = AppSettings()
+
         let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: appMediator,
-                                                  appSettings: ServiceLocator.shared.settings,
+                                                  appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: ServiceLocator.shared.analytics,
+                                                  analytics: .mock(settings: appSettings),
                                                   userIndicatorController: userIndicatorController,
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: stateMachineFactory)

@@ -131,8 +131,8 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
     
     static let viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
                                                           roomProxy: JoinedRoomProxyMock(.init(name: "Some room", members: [])),
-                                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                          analytics: ServiceLocator.shared.analytics)
+                                                          userIndicatorController: UserIndicatorControllerMock.default,
+                                                          analytics: .mock())
     static var previews: some View {
         VStack(spacing: 0) {
             Section("Invited/Joined") {

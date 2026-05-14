@@ -78,14 +78,20 @@ struct RoomAttachmentPicker: View {
 }
 
 struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()),
-                                                    wysiwygViewModel: WysiwygComposerViewModel(),
-                                                    completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                                    mediaProvider: MediaProviderMock(configuration: .init()),
-                                                    mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                                    appSettings: ServiceLocator.shared.settings,
-                                                    analyticsService: ServiceLocator.shared.analytics,
-                                                    composerDraftService: ComposerDraftServiceMock(.init()))
+    static let viewModel = makeViewModel()
+
+    static func makeViewModel() -> ComposerToolbarViewModel {
+        let appSettings = AppSettings()
+
+        return ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()),
+                                        wysiwygViewModel: WysiwygComposerViewModel(),
+                                        completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                        mediaProvider: MediaProviderMock(configuration: .init()),
+                                        mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                        appSettings: appSettings,
+                                        analyticsService: .mock(settings: appSettings),
+                                        composerDraftService: ComposerDraftServiceMock(.init()))
+    }
 
     static var previews: some View {
         RoomAttachmentPicker(context: viewModel.context)

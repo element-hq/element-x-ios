@@ -141,7 +141,7 @@ struct UserDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
         UserDetailsEditScreenViewModel(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@stefan:matrix.org",
                                                                                                              canChangeAvatar: canChangeProfile,
                                                                                                              canChangeDisplayName: canChangeProfile)))),
-        mediaUploadingPreprocessor: .init(appSettings: ServiceLocator.shared.settings),
+        mediaUploadingPreprocessor: .init(appSettings: AppSettings()),
         userIndicatorController: UserIndicatorControllerMock.default)
     }
 }

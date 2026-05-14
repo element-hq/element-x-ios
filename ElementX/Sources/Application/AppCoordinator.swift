@@ -22,6 +22,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let targetConfiguration: Target.ConfigurationResult
     private let appMediator: AppMediator
     private let appSettings: AppSettings
+    private let analyticsService: AnalyticsService
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    
     private let appDelegate: AppDelegate
     private let appHooks: AppHooks
     private let bugReportService: BugReportServiceProtocol
@@ -76,7 +79,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         appMediator = AppMediator(windowManager: windowManager, networkMonitor: networkMonitor)
         
         let appSettings = appHooks.appSettingsHook.configure(AppSettings())
-        ServiceLocator.shared.register(appSettings: appSettings)
+        self.appSettings = appSettings
         
         targetConfiguration = Target.mainApp.configure(logLevel: appSettings.logLevel,
                                                        traceLogPacks: appSettings.traceLogPacks,
@@ -94,17 +97,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         self.appDelegate = appDelegate
-        self.appSettings = appSettings
         self.appHooks = appHooks
         
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
         
-        ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
-        
         let posthogAnalyticsClient = PostHogAnalyticsClient()
         posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
-        let analyticsService = AnalyticsService(client: posthogAnalyticsClient, appSettings: appSettings)
-        ServiceLocator.shared.register(analytics: analyticsService)
+        analyticsService = AnalyticsService(client: posthogAnalyticsClient, appSettings: appSettings)
+        
+        userIndicatorController = UserIndicatorController()
         
         elementCallService = ElementCallService()
         
@@ -136,7 +137,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                             sdkGitSHA: sdkGitSha(),
                                             appHooks: appHooks)
         
-        Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings)
+        Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
         
         analyticsService.startIfEnabled()
         
@@ -165,9 +166,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         registerBackgroundAppRefresh()
         
         appSettings.$analyticsConsentState
-            .dropFirst() // Called above before configuring the ServiceLocator
-            .sink { [bugReportService] _ in
-                Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings)
+            .dropFirst() // Sentry is configured during init; only reconfigure when consent state actually changes
+            .sink { [bugReportService, analyticsService, appSettings] _ in
+                Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
             }
             .store(in: &cancellables)
         
@@ -216,7 +217,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     func toPresentable() -> AnyView {
         AnyView(navigationRootCoordinator.toPresentable()
-            .environment(\.analyticsService, ServiceLocator.shared.analytics)
+            .environment(\.analyticsService, analyticsService)
             .onReceive(appSettings.$appAppearance) { [weak self] appAppearance in
                 guard let self else { return }
                     
@@ -370,7 +371,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     func windowManagerDidConfigureWindows(_ windowManager: SecureWindowManagerProtocol) {
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: appLockFlowCoordinator.toPresentable())
-        ServiceLocator.shared.userIndicatorController.window = windowManager.overlayWindow
+        userIndicatorController.window = windowManager.overlayWindow
     }
     
     // MARK: - NotificationManagerDelegate
@@ -414,7 +415,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID), windowType: nil)
         } else if let eventID {
             // Only track main timeline event deeplinking
-            ServiceLocator.shared.analytics.signpost.startTransaction(.notificationToMessage)
+            analyticsService.signpost.startTransaction(.notificationToMessage)
             handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []), windowType: nil)
         } else {
             handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
@@ -665,8 +666,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                         appMediator: appMediator,
                                                         appSettings: appSettings,
                                                         appHooks: appHooks,
-                                                        analytics: ServiceLocator.shared.analytics,
-                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                        analytics: analyticsService,
+                                                        userIndicatorController: userIndicatorController)
         coordinator.delegate = self
         
         authenticationFlowCoordinator = coordinator
@@ -721,7 +722,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                    appMediator: appMediator,
                                                                    appSettings: appSettings,
                                                                    appHooks: appHooks,
-                                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                                   userIndicatorController: userIndicatorController)
             let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
             self.softLogoutCoordinator = coordinator
             coordinator.actions
@@ -750,24 +751,24 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         if let serverName = userSession.clientProxy.userIDServerName {
-            ServiceLocator.shared.analytics.signpost.addGlobalTag(.homeserver, value: serverName)
+            analyticsService.signpost.addGlobalTag(.homeserver, value: serverName)
         }
         
         if !isNewLogin {
-            ServiceLocator.shared.analytics.signpost.startTransaction(.cachedRoomList)
+            analyticsService.signpost.startTransaction(.cachedRoomList)
         }
         
         let flowParameters = CommonFlowParameters(userSession: userSession,
                                                   bugReportService: bugReportService,
                                                   elementCallService: elementCallService,
-                                                  timelineControllerFactory: TimelineControllerFactory(),
+                                                  timelineControllerFactory: TimelineControllerFactory(appSettings: appSettings),
                                                   emojiProvider: EmojiProvider(appSettings: appSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: appMediator,
                                                   appSettings: appSettings,
                                                   appHooks: appHooks,
-                                                  analytics: ServiceLocator.shared.analytics,
-                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                  analytics: analyticsService,
+                                                  userIndicatorController: userIndicatorController,
                                                   notificationManager: notificationManager,
                                                   stateMachineFactory: StateMachineFactory())
         
@@ -837,8 +838,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             appHooks.remoteSettingsHook.reset(appSettings)
             
             // Reset analytics
-            ServiceLocator.shared.analytics.optOut()
-            ServiceLocator.shared.analytics.resetConsentState()
+            analyticsService.optOut()
+            analyticsService.resetConsentState()
             
             stateMachine.processEvent(.completedSigningOut)
                        
@@ -847,7 +848,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private func tearDownUserSession() {
-        ServiceLocator.shared.userIndicatorController.retractAllIndicators()
+        userIndicatorController.retractAllIndicators()
         
         userSession = nil
         
@@ -949,7 +950,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    private static func setupSentry(bugReportService: BugReportServiceProtocol, appSettings: AppSettings) {
+    private static func setupSentry(bugReportService: BugReportServiceProtocol, appSettings: AppSettings, analytics: AnalyticsService) {
         guard let bugReportSentryURL = appSettings.bugReportSentryURL else { return }
         
         let options: Options = .init()
@@ -1008,7 +1009,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         // Any ongoing transactions will no longer be valid after calling SentrySDK.start so lets
         // remove them and start over, otherwise the app will crash if finishTransaction is used.
-        ServiceLocator.shared.analytics.signpost.resetTransactions()
+        analytics.signpost.resetTransactions()
         
         SentrySDK.start(options: options) // Swift
         enableSentryLogging(enabled: options.enabled) // Rust
@@ -1043,18 +1044,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private static let loadingIndicatorIdentifier = "\(AppCoordinator.self)-Loading"
     
     private func showLoadingIndicator() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                                                    type: .modal,
-                                                                                    title: L10n.commonLoading,
-                                                                                    persistent: true))
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
     }
     
     private func hideLoadingIndicator() {
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
     private func showLoginErrorToast() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: "Failed logging in"))
+        userIndicatorController.submitIndicator(UserIndicator(title: "Failed logging in"))
     }
 
     // MARK: - Application State
@@ -1074,8 +1075,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func startSync() {
         guard let userSession else { return }
         
-        ServiceLocator.shared.analytics.signpost.startTransaction(.upToDateRoomList)
-    
+        analyticsService.signpost.startTransaction(.upToDateRoomList)
+        
         userSession.clientProxy.startSync()
         
         guard clientProxyObserver == nil else {
@@ -1089,16 +1090,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 let toastIdentifier = "StaleDataIndicator"
+                guard let self else { return }
                 
                 switch state {
                 case .loading:
-                    if self?.userSession?.clientProxy.homeserverReachabilityPublisher.value == .reachable,
-                       self?.appMediator.networkMonitor.reachabilityPublisher.value == .reachable {
-                        ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
+                    if self.userSession?.clientProxy.homeserverReachabilityPublisher.value == .reachable,
+                       self.appMediator.networkMonitor.reachabilityPublisher.value == .reachable {
+                        self.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
                     }
                 case .notLoading:
-                    ServiceLocator.shared.analytics.signpost.finishTransaction(.upToDateRoomList)
-                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(toastIdentifier)
+                    self.analyticsService.signpost.finishTransaction(.upToDateRoomList)
+                    self.userIndicatorController.retractIndicatorWithId(toastIdentifier)
                 }
             }
     }

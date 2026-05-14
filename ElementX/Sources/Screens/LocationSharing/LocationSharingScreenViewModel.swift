@@ -388,13 +388,16 @@ extension LocationSharingScreenViewModel {
         let liveLocationServiceMock = RoomLiveLocationServiceMock(.init(shares: liveLocationShares))
         let roomProxy = JoinedRoomProxyMock(.init(members: .allMembers, ownUserID: RoomMemberProxyMock.mockMe.userID))
         roomProxy.makeLiveLocationServiceReturnValue = liveLocationServiceMock
-        
+
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
-                                              mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                              mapURLBuilder: appSettings.mapTilerConfiguration,
                                               roomProxy: roomProxy,
                                               timelineController: MockTimelineController(),
                                               liveLocationManager: LiveLocationManagerMock(),
-                                              analytics: ServiceLocator.shared.analytics,
+                                              analytics: analytics,
                                               userIndicatorController: UserIndicatorControllerMock(),
                                               mediaProvider: MediaProviderMock(configuration: .init()))
     }

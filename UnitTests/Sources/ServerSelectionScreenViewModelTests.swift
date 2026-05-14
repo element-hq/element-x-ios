@@ -148,17 +148,19 @@ struct ServerSelectionScreenViewModelTests {
     // MARK: - Helpers
     
     private mutating func setup(authenticationFlow: AuthenticationFlow) {
+        let appSettings = AppSettings()
+        
         clientFactory = AuthenticationClientFactoryMock(configuration: .init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,
-                                        appSettings: ServiceLocator.shared.settings,
+                                        appSettings: appSettings,
                                         appHooks: AppHooks())
         
         viewModel = ServerSelectionScreenViewModel(authenticationService: service,
                                                    authenticationFlow: authenticationFlow,
-                                                   appSettings: ServiceLocator.shared.settings,
+                                                   appSettings: appSettings,
                                                    userIndicatorController: UserIndicatorControllerMock())
     }
 }

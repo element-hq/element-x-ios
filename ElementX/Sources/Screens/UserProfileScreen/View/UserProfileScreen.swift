@@ -142,12 +142,15 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
         if userID != RoomMemberProxyMock.mockMe.userID {
             clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")
         }
-        
+
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+
         return UserProfileScreenViewModel(userID: userID,
                                           isPresentedModally: false,
                                           userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          analytics: ServiceLocator.shared.analytics,
-                                          appSettings: ServiceLocator.shared.settings)
+                                          userIndicatorController: UserIndicatorControllerMock.default,
+                                          analytics: analytics,
+                                          appSettings: appSettings)
     }
 }

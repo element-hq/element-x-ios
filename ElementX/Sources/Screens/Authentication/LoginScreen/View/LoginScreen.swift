@@ -158,11 +158,14 @@ struct LoginScreen_Previews: PreviewProvider, TestablePreview {
         
         Task { await authenticationService.configure(for: homeserverAddress, flow: .login) }
         
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        
         let viewModel = LoginScreenViewModel(authenticationService: authenticationService,
                                              loginHint: nil,
                                              userIndicatorController: UserIndicatorControllerMock(),
-                                             appSettings: ServiceLocator.shared.settings,
-                                             analytics: ServiceLocator.shared.analytics)
+                                             appSettings: appSettings,
+                                             analytics: analytics)
         
         if withCredentials {
             viewModel.context.username = "alice"

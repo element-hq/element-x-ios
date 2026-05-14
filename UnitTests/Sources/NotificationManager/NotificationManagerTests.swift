@@ -22,13 +22,11 @@ final class NotificationManagerTests {
     private var handleInlineReplyDelegateCalled = false
     private var notificationTappedDelegateCalled = false
     private var registerForRemoteNotificationsDelegateCalled: (() -> Void)?
-    
-    private var appSettings: AppSettings {
-        ServiceLocator.shared.settings
-    }
+    private let appSettings: AppSettings
 
     init() {
         AppSettings.resetAllSettings()
+        appSettings = AppSettings()
         notificationCenter = UserNotificationCenterMock()
         notificationCenter.requestAuthorizationOptionsReturnValue = true
         notificationCenter.authorizationStatusReturnValue = .authorized

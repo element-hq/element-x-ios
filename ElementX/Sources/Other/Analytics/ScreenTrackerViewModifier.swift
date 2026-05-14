@@ -18,7 +18,7 @@ struct ScreenTrackerViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .onAppear {
-                analyticsService.track(screen: screen)
+                analyticsService?.track(screen: screen)
             }
     }
 }

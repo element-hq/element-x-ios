@@ -458,7 +458,7 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
         viewModel = JoinRoomScreenViewModel(source: source,
                                             appSettings: appSettings,
                                             userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            userIndicatorController: UserIndicatorControllerMock.default)
     }
     
     var previewDisplayName: String {

@@ -21,16 +21,16 @@ final class JoinRoomScreenViewModelTests {
     var viewModel: JoinRoomScreenViewModelProtocol!
     
     var clientProxy: ClientProxyMock!
-    var appSettings: AppSettings!
     
     var context: JoinRoomScreenViewModelType.Context {
         viewModel.context
     }
     
+    private let appSettings: AppSettings
+    
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-        ServiceLocator.shared.register(appSettings: appSettings)
     }
     
     deinit {
@@ -205,7 +205,7 @@ final class JoinRoomScreenViewModelTests {
         viewModel = JoinRoomScreenViewModel(source: .generic(roomID: "1", via: []),
                                             appSettings: appSettings,
                                             userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            userIndicatorController: UserIndicatorControllerMock.default)
     }
 }
 

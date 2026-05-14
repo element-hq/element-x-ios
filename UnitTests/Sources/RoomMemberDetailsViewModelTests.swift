@@ -205,13 +205,17 @@ struct RoomMemberDetailsViewModelTests {
         roomProxyMock.getMemberUserIDClosure = { _ in
             .success(roomMemberProxyMock)
         }
+        
+        let appSettings = AppSettings()
+        let analytics = AnalyticsService.mock(settings: appSettings)
+        
         // swiftlint:disable:next force_unwrapping
         let userSession = clientProxy != nil ? UserSessionMock(.init(clientProxy: clientProxy!)) : UserSessionMock(.init())
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
                                                      userSession: userSession,
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                     analytics: ServiceLocator.shared.analytics,
-                                                     appSettings: ServiceLocator.shared.settings)
+                                                     userIndicatorController: UserIndicatorControllerMock.default,
+                                                     analytics: analytics,
+                                                     appSettings: appSettings)
     }
 }

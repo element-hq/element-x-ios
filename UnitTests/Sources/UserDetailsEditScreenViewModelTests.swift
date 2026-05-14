@@ -13,17 +13,15 @@ import Testing
 @MainActor
 struct UserDetailsEditScreenViewModelTests {
     private var viewModel: UserDetailsEditScreenViewModel!
-    private var userIndicatorController: UserIndicatorControllerMock!
-    
+
     private var context: UserDetailsEditScreenViewModelType.Context {
         viewModel.context
     }
     
     init() {
-        userIndicatorController = UserIndicatorControllerMock.default
         viewModel = .init(userSession: UserSessionMock(.init()),
-                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                          userIndicatorController: userIndicatorController)
+                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: AppSettings()),
+                          userIndicatorController: UserIndicatorControllerMock.default)
     }
     
     @Test

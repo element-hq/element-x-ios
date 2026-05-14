@@ -17,8 +17,11 @@ import Testing
 final class RoomScreenViewModelTests {
     private var viewModel: RoomScreenViewModel!
     
+    private let appSettings: AppSettings
+    
     init() async throws {
         AppSettings.resetAllSettings()
+        appSettings = AppSettings()
     }
     
     deinit {
@@ -45,10 +48,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         // check if in the default state is not showing but is indeed loading
@@ -126,10 +129,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         // check if the banner is now in a loaded state and is showing the counter
@@ -166,7 +169,7 @@ final class RoomScreenViewModelTests {
     
     @Test
     func pinnedEventsBannerThreadedSelection() async throws {
-        ServiceLocator.shared.settings.threadsEnabled = true
+        appSettings.threadsEnabled = true
         
         let roomProxyMock = JoinedRoomProxyMock(.init())
         let eventMock = TimelineEventSDKMock()
@@ -187,10 +190,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         // check if the banner is now in a loaded state and is showing the counter
@@ -246,10 +249,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         #expect(viewModel.state.roomTitle == "StartingName")
@@ -283,10 +286,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: ongoingCallRoomIDSubject.asCurrentValuePublisher(),
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         #expect(viewModel.state.shouldShowCallButton)
         
@@ -328,10 +331,10 @@ final class RoomScreenViewModelTests {
                                                 roomProxy: roomProxyMock,
                                                 initialSelectedPinnedEventID: nil,
                                                 ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                appSettings: ServiceLocator.shared.settings,
+                                                appSettings: appSettings,
                                                 appHooks: AppHooks(),
-                                                analyticsService: ServiceLocator.shared.analytics,
-                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                analyticsService: .mock(settings: appSettings),
+                                                userIndicatorController: UserIndicatorControllerMock.default)
             self.viewModel = viewModel
             viewModel.stop()
         }
@@ -349,10 +352,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -383,10 +386,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -412,10 +415,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         // Loading state just does not appear at all
@@ -432,10 +435,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -459,10 +462,10 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: .mock(settings: appSettings),
+                                            userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
         let deferredInvisible = deferFailure(viewModel.context.$viewState,
