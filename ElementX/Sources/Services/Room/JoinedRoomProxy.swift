@@ -234,6 +234,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                 case .file: .file
                 case .image: .image
                 case .video: .video
+                case .gallery: .gallery
                 }
             }
             

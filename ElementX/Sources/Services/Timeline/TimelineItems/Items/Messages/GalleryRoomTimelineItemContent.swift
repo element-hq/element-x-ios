@@ -52,4 +52,10 @@ struct GalleryItem: Hashable, Identifiable {
     var isFile: Bool {
         kind == .file
     }
+
+    /// Whether the item can render a visible thumbnail. Images always can (their `mediaSource`
+    /// IS the image); for everything else we need an explicit `thumbnailSource`.
+    var hasThumbnail: Bool {
+        isImage || thumbnailSource != nil
+    }
 }

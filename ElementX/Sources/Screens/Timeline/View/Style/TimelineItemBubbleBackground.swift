@@ -14,18 +14,12 @@ extension View {
     ///   - isOutgoing: rounds the corners according to the side it shows on, defaults to true
     ///   - insets: defaults to what we use for file timeline items, text uses custom values
     ///   - color: self explanatory, defaults to subtle secondary
-    ///   - cornerRadius: the radius applied to the bubble's rounded corners
-    ///   - forceAllCorners: when true, ignores the timeline group style and rounds all four corners
     func bubbleBackground(isOutgoing: Bool = true,
                           insets: EdgeInsets = .init(top: 8, leading: 12, bottom: 8, trailing: 12),
-                          color: @autoclosure @MainActor () -> Color? = .compound.bgSubtleSecondary,
-                          cornerRadius: CGFloat = 12,
-                          forceAllCorners: Bool = false) -> some View {
+                          color: @autoclosure @MainActor () -> Color? = .compound.bgSubtleSecondary) -> some View {
         modifier(TimelineItemBubbleBackgroundModifier(isOutgoing: isOutgoing,
                                                       insets: insets,
-                                                      color: color(),
-                                                      cornerRadius: cornerRadius,
-                                                      forceAllCorners: forceAllCorners))
+                                                      color: color()))
     }
 }
 
@@ -35,20 +29,15 @@ private struct TimelineItemBubbleBackgroundModifier: ViewModifier {
     let isOutgoing: Bool
     let insets: EdgeInsets
     var color: Color?
-    var cornerRadius: CGFloat = 12
-    var forceAllCorners = false
 
     func body(content: Content) -> some View {
         content
             .padding(insets)
             .background(color)
-            .cornerRadius(cornerRadius, corners: roundedCorners)
+            .cornerRadius(12, corners: roundedCorners)
     }
 
     private var roundedCorners: UIRectCorner {
-        if forceAllCorners {
-            return .allCorners
-        }
         switch timelineGroupStyle {
         case .single:
             return .allCorners

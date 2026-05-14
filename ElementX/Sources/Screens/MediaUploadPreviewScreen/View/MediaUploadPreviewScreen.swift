@@ -252,6 +252,30 @@ private struct UploadMediaPeekCarousel: View {
 
 private struct UploadMediaThumbnail: View {
     let url: URL
+
+    private var contentType: UTType? {
+        UTType(filenameExtension: url.pathExtension)
+    }
+
+    private var isImageOrVideo: Bool {
+        guard let contentType else { return false }
+        return contentType.conforms(to: .image) || contentType.conforms(to: .movie) || contentType.conforms(to: .audiovisualContent)
+    }
+
+    var body: some View {
+        Group {
+            if isImageOrVideo {
+                UploadMediaImageThumbnail(url: url)
+            } else {
+                UploadMediaFilePreview(url: url, title: url.lastPathComponent)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+private struct UploadMediaImageThumbnail: View {
+    let url: URL
     @State private var image: UIImage?
 
     var body: some View {
@@ -265,7 +289,6 @@ private struct UploadMediaThumbnail: View {
                 ProgressView().tint(.white)
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 8))
         .task(id: url) { await load() }
     }
 
@@ -284,6 +307,39 @@ private struct UploadMediaThumbnail: View {
             image = UIImage(cgImage: cgImage)
         } catch {
             image = nil
+        }
+    }
+}
+
+private struct UploadMediaFilePreview: UIViewControllerRepresentable {
+    let url: URL
+    let title: String
+
+    func makeUIViewController(context: Context) -> QLPreviewController {
+        let controller = QLPreviewController()
+        controller.dataSource = context.coordinator
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: QLPreviewController, context: Context) { }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(url: url, title: title)
+    }
+
+    final class Coordinator: NSObject, QLPreviewControllerDataSource {
+        private let item: PreviewItem
+
+        init(url: URL, title: String) {
+            item = PreviewItem(previewItemURL: url, previewItemTitle: title)
+        }
+
+        func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+            1
+        }
+
+        func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+            item
         }
     }
 }

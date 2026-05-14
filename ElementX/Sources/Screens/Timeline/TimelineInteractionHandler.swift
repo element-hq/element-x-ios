@@ -552,19 +552,26 @@ class TimelineInteractionHandler {
                                                              timeoutDate: item.content.timeoutDate)
             return .displayLiveLocation(sender: item.sender, initialLiveLocationShare: initialLiveLocationShare)
         case let item as ImageRoomTimelineItem:
-            return await mediaPreviewAction(for: item, messageTypes: [.image, .video])
+            return await mediaPreviewAction(for: item, messageTypes: [.image, .video, .gallery])
         case let item as VideoRoomTimelineItem:
-            return await mediaPreviewAction(for: item, messageTypes: [.image, .video])
+            return await mediaPreviewAction(for: item, messageTypes: [.image, .video, .gallery])
         case let item as AudioRoomTimelineItem:
-            return await mediaPreviewAction(for: item, messageTypes: [.audio, .file])
+            return await mediaPreviewAction(for: item, messageTypes: [.audio, .file, .gallery])
         case let item as FileRoomTimelineItem:
-            return await mediaPreviewAction(for: item, messageTypes: [.audio, .file])
-        case is GalleryRoomTimelineItem:
-            // Single-tile preview within a gallery is not yet implemented.
-            return .none
+            return await mediaPreviewAction(for: item, messageTypes: [.audio, .file, .gallery])
         default:
             return .none
         }
+    }
+
+    /// Opens a media preview scoped to a single gallery's attachments. The preview pages
+    /// only between the items of that one gallery — siblings in the wider timeline aren't
+    /// reachable from this entry point (use the regular media tap for that).
+    func processGalleryItemTap(itemID: TimelineItemIdentifier, index: Int) -> TimelineControllerAction {
+        guard let galleryItem = timelineController.timelineItems.firstUsingStableID(itemID) as? GalleryRoomTimelineItem else {
+            return .none
+        }
+        return .displayGalleryPreview(galleryItem: galleryItem, initialIndex: index)
     }
     
     // MARK: - Private
