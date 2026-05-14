@@ -135,11 +135,18 @@ struct InviteUsersScreen: View {
         }
         
         ToolbarItem(placement: .confirmationAction) {
-            ToolbarButton(role: .confirm(title: L10n.actionInvite)) {
-                context.send(viewAction: .proceed)
+            if context.viewState.isSkippable, context.viewState.selectedUsers.isEmpty {
+                Button(L10n.actionSkip) {
+                    context.send(viewAction: .proceed)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.proceed)
+            } else {
+                ToolbarButton(role: .confirm(title: L10n.actionInvite)) {
+                    context.send(viewAction: .proceed)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.proceed)
+                .disabled(context.viewState.selectedUsers.isEmpty)
             }
-            .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.proceed)
-            .disabled(context.viewState.isActionDisabled)
         }
     }
     

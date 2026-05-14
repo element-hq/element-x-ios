@@ -59,14 +59,6 @@ struct InviteUsersScreenViewState: BindableState {
     }
 
     let isSkippable: Bool
-
-    var actionText: String {
-        L10n.actionDone
-    }
-
-    var isActionDisabled: Bool {
-        isSkippable ? false : selectedUsers.isEmpty
-    }
 }
 
 struct InviteUsersScreenViewStateBindings {

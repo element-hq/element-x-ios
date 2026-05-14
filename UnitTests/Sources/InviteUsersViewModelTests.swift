@@ -163,6 +163,50 @@ final class InviteUsersScreenViewModelTests {
         try await deferredState.fulfill()
     }
     
+    // MARK: - Draft (new room)
+
+    @Test
+    func createsNewRoomInDraftMode() async throws {
+        userDiscoveryService = UserDiscoveryServiceMock()
+        userDiscoveryService.searchProfilesWithReturnValue = .success([])
+
+        clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
+        let newRoomID = "!newroom:example.com"
+        clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success(newRoomID)
+
+        viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                               roomType: .draft,
+                                               lockedInvitees: [.mockAlice],
+                                               isSkippable: false,
+                                               userDiscoveryService: userDiscoveryService,
+                                               userIndicatorController: UserIndicatorControllerMock(),
+                                               appSettings: AppSettings())
+
+        // The locked invitee starts pre-selected and locked.
+        #expect(context.viewState.selectedUsers.map(\.userID) == [UserProfileProxy.mockAlice.userID])
+        #expect(context.viewState.isUserLocked(.mockAlice))
+
+        let deferredAction = deferFulfillment(viewModel.actions) { action in
+            if case .openRoom(let roomID) = action, roomID == newRoomID {
+                return true
+            }
+            return false
+        }
+
+        context.send(viewAction: .proceed)
+
+        try await deferredAction.fulfill()
+
+        let args = try #require(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments)
+        #expect(args.name == nil)
+        #expect(args.topic == nil)
+        #expect(args.accessType == .private)
+        #expect(args.isSpace == false)
+        #expect(args.userIDs == [UserProfileProxy.mockAlice.userID])
+        #expect(args.avatarURL == nil)
+        #expect(args.aliasLocalPart == nil)
+    }
+
     // MARK: - Helpers
     
     private func setupViewModel(roomProxy: JoinedRoomProxyProtocol, isSkippable: Bool) {
