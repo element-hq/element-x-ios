@@ -16,6 +16,7 @@ enum InviteUsersScreenErrorType: Error {
 
 enum InviteUsersScreenViewModelAction {
     case dismiss
+    case invite(userIDs: [String])
 }
 
 enum InviteUsersScreenRoomType {
@@ -25,42 +26,44 @@ enum InviteUsersScreenRoomType {
 
 struct InviteUsersScreenViewState: BindableState {
     var bindings = InviteUsersScreenViewStateBindings()
-    
+
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
-    
+
     var selectedUsers: [UserProfileProxy] = []
+    var lockedInvitees: [UserProfileProxy] = []
     var membershipState: [String: MembershipState] = .init()
     var usersToConfirm: [UserProfileProxy] = []
-    
+
     var isSearching = false
-    
+
     var hasEmptySearchResults: Bool {
         !isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
-    
+
     func isUserSelected(_ user: UserProfileProxy) -> Bool {
         isUserDisabled(user) || selectedUsers.contains { $0.userID == user.userID }
     }
-    
+
     func isUserDisabled(_ user: UserProfileProxy) -> Bool {
+        if isUserLocked(user) { return true }
         let membershipState = membershipState(user)
         return membershipState == .invite || membershipState == .join
     }
-    
+
+    func isUserLocked(_ user: UserProfileProxy) -> Bool {
+        lockedInvitees.contains { $0.userID == user.userID }
+    }
+
     func membershipState(_ user: UserProfileProxy) -> MembershipState? {
         membershipState[user.userID]
     }
-    
+
     let isSkippable: Bool
-    
+
     var actionText: String {
-        if isSkippable, selectedUsers.isEmpty {
-            L10n.actionSkip
-        } else {
-            L10n.actionInvite
-        }
+        L10n.actionDone
     }
-    
+
     var isActionDisabled: Bool {
         isSkippable ? false : selectedUsers.isEmpty
     }

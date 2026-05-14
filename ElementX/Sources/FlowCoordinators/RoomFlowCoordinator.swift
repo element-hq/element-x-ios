@@ -89,7 +89,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
-    
+
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
     
     private var cancellables = Set<AnyCancellable>()
@@ -539,7 +539,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (_, .presentInviteUsersScreen, .inviteUsersScreen):
                 presentInviteUsersScreen()
-                
+
+            case (_, .presentInviteToNewRoomScreen(let invitee), .inviteToNewRoomScreen):
+                presentInviteToNewRoomScreen(invitee: invitee)
+
             case (_, .presentTransferOwnershipScreen, .transferOwnershipScreen):
                 presentTransferOwnershipScreen()
                     
@@ -956,6 +959,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentNotificationSettingsScreen)
             case .presentInviteUsersScreen:
                 stateMachine.tryEvent(.presentInviteUsersScreen)
+            case .presentInviteToNewRoom(let invitee):
+                stateMachine.tryEvent(.presentInviteToNewRoomScreen(invitee: invitee))
             case .presentPollsHistory:
                 stateMachine.tryEvent(.presentPollsHistory)
             case .presentRolesAndPermissionsScreen:
@@ -1329,25 +1334,27 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentInviteUsersScreen() {
         let stackCoordinator = NavigationStackCoordinator()
         let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: userSession,
-                                                                      roomProxy: roomProxy,
+                                                                      roomType: .room(roomProxy: roomProxy),
                                                                       isSkippable: false,
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
                                                                       userIndicatorController: flowParameters.userIndicatorController,
                                                                       appSettings: flowParameters.appSettings)
-        
+
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         stackCoordinator.setRootCoordinator(coordinator)
-        
+
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
-            
+
             switch action {
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
+            case .invite:
+                break
             }
         }
         .store(in: &cancellables)
-        
+
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissInviteUsersScreen)
         }
@@ -1659,7 +1666,36 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         flowCoordinator.start(animated: animated)
         membersFlowCoordinator = flowCoordinator
     }
-    
+
+    private func presentInviteToNewRoomScreen(invitee: UserProfileProxy) {
+        let stackCoordinator = NavigationStackCoordinator()
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: userSession,
+                                                                      roomType: .draft,
+                                                                      lockedInvitees: [invitee],
+                                                                      isSkippable: false,
+                                                                      userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
+                                                                      userIndicatorController: flowParameters.userIndicatorController,
+                                                                      appSettings: flowParameters.appSettings)
+        let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
+        stackCoordinator.setRootCoordinator(coordinator)
+
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            case .invite:
+                // Phase 3: create the room with these userIDs.
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissInviteToNewRoomScreen)
+        }
+    }
+
     private static let loadingIndicatorID = "\(RoomFlowCoordinator.self)-Loading"
     
     private func showLoadingIndicator(delay: Duration? = nil,

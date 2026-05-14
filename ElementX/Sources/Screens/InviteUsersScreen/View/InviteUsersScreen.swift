@@ -110,7 +110,9 @@ struct InviteUsersScreen: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
                 ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                    InviteUsersScreenSelectedItem(user: user, mediaProvider: context.mediaProvider) {
+                    InviteUsersScreenSelectedItem(user: user,
+                                                  mediaProvider: context.mediaProvider,
+                                                  isLocked: context.viewState.isUserLocked(user)) {
                         deselect(user)
                     }
                     .frame(width: selectedUserCellWidth)
@@ -153,14 +155,15 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
     static let searchingViewModel = makeViewModel(searchQuery: "Alice")
     static let selectedViewModel = makeViewModel(hasSelection: true)
     static let confirmSelectedViewModel = makeViewModel(shouldConfirm: true)
-    
+    static let draftViewModel = makeViewModel(roomType: .draft, lockedInvitees: [.mockAlice], isSkippable: false)
+
     static var previews: some View {
         ElementNavigationStack {
             InviteUsersScreen(context: viewModel.context)
         }
         .previewDisplayName("Suggestions")
         .snapshotPreferences(expect: viewModel.context.$viewState.map { !$0.usersSection.users.isEmpty })
-        
+
         ElementNavigationStack {
             InviteUsersScreen(context: searchingViewModel.context)
         }
@@ -168,46 +171,58 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         .snapshotPreferences(expect: searchingViewModel.context.$viewState.map {
             $0.usersSection.type == .searchResult && !$0.usersSection.users.isEmpty
         })
-        
+
         ElementNavigationStack {
             InviteUsersScreen(context: selectedViewModel.context)
         }
         .previewDisplayName("Selected")
         .snapshotPreferences(expect: selectedViewModel.context.$viewState.map { !$0.selectedUsers.isEmpty })
-        
+
         ElementNavigationStack {
             InviteUsersScreen(context: confirmSelectedViewModel.context)
         }
         .previewDisplayName("Confirm Selected")
+
+        ElementNavigationStack {
+            InviteUsersScreen(context: draftViewModel.context)
+        }
+        .previewDisplayName("Draft (locked invitee)")
+        .snapshotPreferences(expect: draftViewModel.context.$viewState.map { !$0.lockedInvitees.isEmpty })
     }
-    
-    static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false, shouldConfirm: Bool = false) -> InviteUsersScreenViewModel {
+
+    static func makeViewModel(searchQuery: String? = nil,
+                              hasSelection: Bool = false,
+                              shouldConfirm: Bool = false,
+                              roomType: InviteUsersScreenRoomType? = nil,
+                              lockedInvitees: [UserProfileProxy] = [],
+                              isSkippable: Bool = true) -> InviteUsersScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentConversationCounterpartsReturnValue = [.mockAlice, .mockBob, .mockCharlie, .mockDan, .mockVerbose]
-        
+
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-        
+
         let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   roomProxy: JoinedRoomProxyMock(.init(members: [])),
-                                                   isSkippable: true,
+                                                   roomType: roomType ?? .room(roomProxy: JoinedRoomProxyMock(.init(members: []))),
+                                                   lockedInvitees: lockedInvitees,
+                                                   isSkippable: isSkippable,
                                                    userDiscoveryService: userDiscoveryService,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    appSettings: AppSettings())
-        
+
         if let searchQuery {
             viewModel.context.searchQuery = searchQuery
         }
-        
+
         if hasSelection {
             viewModel.state.selectedUsers = [.mockAlice]
         }
-        
+
         if shouldConfirm {
             viewModel.state.usersToConfirm = [.mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice, .mockAlice]
             viewModel.state.bindings.presentConfirmationDialog = true
         }
-        
+
         return viewModel
     }
 }

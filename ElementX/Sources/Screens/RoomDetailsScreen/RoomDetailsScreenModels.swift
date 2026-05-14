@@ -18,6 +18,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case requestMemberDetailsPresentation
     case requestRecipientDetailsPresentation(userID: String)
     case requestInvitePeoplePresentation
+    case requestInviteToNewRoomPresentation(selectedInvitee: UserProfileProxy)
     case leftRoom
     case requestEditDetailsPresentation
     case requestPollsHistoryPresentation
@@ -98,6 +99,7 @@ struct RoomDetailsScreenViewState: BindableState {
             }
             shortcuts.append(.videoCall)
         }
+        // The invite flow is different for DMs
         if dmRecipientInfo == nil, canInviteUsers {
             shortcuts.append(.invite)
         }

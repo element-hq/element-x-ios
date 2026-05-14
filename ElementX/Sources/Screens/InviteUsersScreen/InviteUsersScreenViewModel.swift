@@ -14,60 +14,67 @@ typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreen
 
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
     private let clientProxy: ClientProxyProtocol
-    private let roomProxy: JoinedRoomProxyProtocol
+    private let roomType: InviteUsersScreenRoomType
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appSettings: AppSettings
-    
+
     private var suggestedUsers = [UserProfileProxy]()
-    
+
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<InviteUsersScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-    
+
     init(userSession: UserSessionProtocol,
-         roomProxy: JoinedRoomProxyProtocol,
+         roomType: InviteUsersScreenRoomType,
+         lockedInvitees: [UserProfileProxy] = [],
          isSkippable: Bool,
          userDiscoveryService: UserDiscoveryServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
         clientProxy = userSession.clientProxy
-        self.roomProxy = roomProxy
+        self.roomType = roomType
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings
-        
-        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: [],
+
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: lockedInvitees,
+                                                                lockedInvitees: lockedInvitees,
                                                                 isSkippable: isSkippable),
                    mediaProvider: userSession.mediaProvider)
-                
+
         setupSubscriptions()
         fetchMembersIfNeeded()
-        
+
         Task {
             suggestedUsers = await userSession.clientProxy.recentConversationCounterparts()
-            
+
             if state.usersSection.type == .suggestions {
                 state.usersSection = .init(type: .suggestions, users: suggestedUsers)
             }
         }
     }
-    
+
     // MARK: - Public
-    
+
     override func process(viewAction: InviteUsersScreenViewAction) {
         switch viewAction {
         case .cancel:
             actionsSubject.send(.dismiss)
         case .proceed:
-            guard roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
-                  !state.usersToConfirm.isEmpty,
-                  !state.isSkippable else {
-                inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
-                return
+            switch roomType {
+            case .draft:
+                actionsSubject.send(.invite(userIDs: state.selectedUsers.map(\.userID)))
+            case .room(let roomProxy):
+                guard roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
+                      !state.usersToConfirm.isEmpty,
+                      !state.isSkippable else {
+                    inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
+                    return
+                }
+                state.bindings.presentConfirmationDialog = true
             }
-            state.bindings.presentConfirmationDialog = true
         case .removeUnknownUsers:
             state.bindings.presentConfirmationDialog = false
             state.selectedUsers.removeAll { user in
@@ -77,15 +84,18 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .confirmUnknownUsers:
             state.bindings.presentConfirmationDialog = false
             state.usersToConfirm = []
-            inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
+            if case .room(let roomProxy) = roomType {
+                inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
+            }
         case .toggleUser(let user):
             toggleUser(user)
         }
     }
 
     // MARK: - Private
-    
+
     private func toggleUser(_ user: UserProfileProxy) {
+        guard !state.isUserLocked(user) else { return }
         if state.selectedUsers.contains(user) {
             state.selectedUsers.removeAll { $0.userID == user.userID }
         } else {
@@ -168,12 +178,14 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func fetchMembersIfNeeded() {
+        guard case .room(let roomProxy) = roomType else { return }
+
         Task {
             showLoadingIndicator()
             await roomProxy.updateMembers()
             hideLoadingIndicator()
         }
-        
+
         roomProxy.membersPublisher
             .filter { !$0.isEmpty }
             .first()

@@ -87,6 +87,8 @@ final class InviteUsersScreenViewModelTests {
             switch action {
             case .dismiss:
                 return true
+            case .invite:
+                return false
             }
         }
         
@@ -122,6 +124,8 @@ final class InviteUsersScreenViewModelTests {
             switch action {
             case .dismiss:
                 return true
+            case .invite:
+                return false
             }
         }
         
@@ -168,7 +172,7 @@ final class InviteUsersScreenViewModelTests {
         clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
         
         let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   roomProxy: roomProxy,
+                                                   roomType: .room(roomProxy: roomProxy),
                                                    isSkippable: isSkippable,
                                                    userDiscoveryService: userDiscoveryService,
                                                    userIndicatorController: UserIndicatorControllerMock(),

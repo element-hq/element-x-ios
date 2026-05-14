@@ -95,6 +95,8 @@ extension RoomFlowCoordinator {
         case spaceFlow(previousState: State)
         /// A members flow is in progress
         case membersFlow(previousState: State)
+        /// Inviting people to a not-yet-created room (e.g. starting a new room from a DM).
+        case inviteToNewRoomScreen(previousState: State)
     }
     
     struct EventUserInfo {
@@ -195,6 +197,9 @@ extension RoomFlowCoordinator {
         
         case startMembersFlow(entryPoint: RoomMembersFlowCoordinatorEntryPoint)
         case stopMembersFlow
+
+        case presentInviteToNewRoomScreen(invitee: UserProfileProxy)
+        case dismissInviteToNewRoomScreen
     }
     
     // swiftlint:disable:next function_body_length
@@ -408,7 +413,12 @@ extension RoomFlowCoordinator {
                 return .inviteUsersScreen(previousState: fromState)
             case (.inviteUsersScreen(let previousState), .dismissInviteUsersScreen):
                 return previousState
-                
+
+            case (_, .presentInviteToNewRoomScreen):
+                return .inviteToNewRoomScreen(previousState: fromState)
+            case (.inviteToNewRoomScreen(let previousState), .dismissInviteToNewRoomScreen):
+                return previousState
+
             case (_, .presentTransferOwnershipScreen):
                 return .transferOwnershipScreen(previousState: fromState)
             case (.transferOwnershipScreen(let previousState), .dismissedTransferOwnershipScreen):

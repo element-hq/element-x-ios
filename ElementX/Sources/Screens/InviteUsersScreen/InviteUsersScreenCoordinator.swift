@@ -11,7 +11,8 @@ import SwiftUI
 
 struct InviteUsersScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let roomProxy: JoinedRoomProxyProtocol
+    let roomType: InviteUsersScreenRoomType
+    var lockedInvitees: [UserProfileProxy] = []
     let isSkippable: Bool
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -20,37 +21,41 @@ struct InviteUsersScreenCoordinatorParameters {
 
 enum InviteUsersScreenCoordinatorAction {
     case dismiss
+    case invite(userIDs: [String])
 }
 
 final class InviteUsersScreenCoordinator: CoordinatorProtocol {
     private let viewModel: InviteUsersScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<InviteUsersScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
-    
+
     var actions: AnyPublisher<InviteUsersScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-    
+
     init(parameters: InviteUsersScreenCoordinatorParameters) {
         viewModel = InviteUsersScreenViewModel(userSession: parameters.userSession,
-                                               roomProxy: parameters.roomProxy,
+                                               roomType: parameters.roomType,
+                                               lockedInvitees: parameters.lockedInvitees,
                                                isSkippable: parameters.isSkippable,
                                                userDiscoveryService: parameters.userDiscoveryService,
                                                userIndicatorController: parameters.userIndicatorController,
                                                appSettings: parameters.appSettings)
     }
-    
+
     func start() {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .dismiss:
                 actionsSubject.send(.dismiss)
+            case .invite(let userIDs):
+                actionsSubject.send(.invite(userIDs: userIDs))
             }
         }
         .store(in: &cancellables)
     }
-    
+
     func toPresentable() -> AnyView {
         AnyView(InviteUsersScreen(context: viewModel.context))
     }
