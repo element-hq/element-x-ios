@@ -32,9 +32,11 @@ struct NotificationToneManagerTests {
 
         // When deletion is attempted
         // Then it throws because only library tones may be deleted
-        #expect(throws: NotificationToneManager.DeletionError.self) {
+        let error = #expect(throws: NotificationToneManager.ManagerError.self) {
             try manager.deleteCustomTone(tone)
         }
+        
+        #expect(error == .notACustomTone)
     }
 
     @Test
@@ -44,9 +46,11 @@ struct NotificationToneManagerTests {
 
         // When deletion is attempted
         // Then it throws because only library tones may be deleted
-        #expect(throws: NotificationToneManager.DeletionError.self) {
+        let error = #expect(throws: NotificationToneManager.ManagerError.self) {
             try manager.deleteCustomTone(tone)
         }
+        
+        #expect(error == .notACustomTone)
     }
 
     // MARK: - Custom Tone Listing
@@ -89,7 +93,7 @@ struct NotificationToneManagerTests {
 
         // When importing the same file a second time
         // Then it throws ConversionError (specifically fileAlreadyExists)
-        await #expect(throws: NotificationToneManager.ConversionError.self) {
+        await #expect(throws: NotificationToneManager.ManagerError.self) {
             try await manager.addNewToneToLibrary(from: sourceURL)
         }
     }

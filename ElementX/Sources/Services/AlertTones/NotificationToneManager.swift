@@ -11,6 +11,26 @@ import UniformTypeIdentifiers
 
 /// Manages notification tone selection, import, conversion, and deletion.
 struct NotificationToneManager: NotificationToneManagerProtocol {
+    @globalActor
+    actor ConversionActor {
+        static let shared = ConversionActor()
+    }
+    
+    enum ManagerError: Error, Equatable {
+        /// The tone's file is not inside the user library directory and cannot be deleted.
+        case notACustomTone
+        
+        /// The source file could not be accessed due to sandbox restrictions.
+        case couldNotAccessSandboxedResource
+        
+        /// `AVAudioConverter` could not be initialised for the given format pair.
+        case converterSetupFailed
+        /// A tone with the same filename already exists in the library.
+        case fileAlreadyExists
+        /// An `AVAudioPCMBuffer` could not be allocated.
+        case bufferCreationFailed
+    }
+    
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
 
@@ -56,16 +76,6 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
             .sorted()
     }
 
-    /// Errors that can occur during audio file conversion.
-    enum ConversionError: Error {
-        /// `AVAudioConverter` could not be initialised for the given format pair.
-        case converterSetupFailed
-        /// A tone with the same filename already exists in the library.
-        case fileAlreadyExists
-        /// An `AVAudioPCMBuffer` could not be allocated.
-        case bufferCreationFailed
-    }
-
     /// Imports an audio file into the tone library, converting to CAF if the source is not already CAF.
     /// - Returns: The URL of the imported file in the library.
     @ConversionActor
@@ -75,7 +85,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
         let outputURL = NotificationTone.libraryLocation.appending(component: baseName).appendingPathExtension("caf")
 
         guard (try? outputURL.checkResourceIsReachable()) != true else {
-            throw ConversionError.fileAlreadyExists
+            throw ManagerError.fileAlreadyExists
         }
 
         if sourceURL.pathExtension.lowercased() == "caf" {
@@ -87,27 +97,39 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
         return outputURL
     }
 
+    /// Removes a user-imported tone from the library.
+    /// - Throws: `DeletionError.notACustomTone` if the tone is not stored in the library directory.
+    func deleteCustomTone(_ alertTone: NotificationTone) throws {
+        guard alertTone.location.deletingLastPathComponent() == NotificationTone.libraryLocation else {
+            throw ManagerError.notACustomTone
+        }
+
+        try FileManager.default.removeItem(at: alertTone.location)
+    }
+    
+    // MARK: - Private
+    
     @ConversionActor
     private func convertToCAF(from sourceURL: URL, to destURL: URL) throws {
         MXLog.info("Converting \(sourceURL.path(percentEncoded: false)) to caf")
         let sourceFile = try AVAudioFile(forReading: sourceURL)
-
+        
         let outputSettings: [String: Any] = [
             AVFormatIDKey: kAudioFormatMPEG4AAC,
             AVSampleRateKey: sourceFile.fileFormat.sampleRate,
             AVNumberOfChannelsKey: sourceFile.fileFormat.channelCount
         ]
-
+        
         let tempURL = URL.temporaryDirectory.appending(component: destURL.lastPathComponent)
-
+        
         let destTempFile = try AVAudioFile(forWriting: tempURL, settings: outputSettings)
-
+        
         let frameCount: AVAudioFrameCount = 4096
         guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: sourceFile.processingFormat, frameCapacity: frameCount) else {
             MXLog.error("Error creating pcm conversion buffer: \(sourceFile.processingFormat) \(frameCount)")
-            throw ConversionError.bufferCreationFailed
+            throw ManagerError.bufferCreationFailed
         }
-
+        
         do {
             repeat {
                 try sourceFile.read(into: pcmBuffer)
@@ -126,35 +148,8 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
             else { throw error }
         }
         destTempFile.close()
-
+        
         try FileManager.default.moveItem(at: tempURL, to: destURL)
         MXLog.info("Converted \(sourceURL.path(percentEncoded: false)) to caf")
-    }
-
-    /// Removes a user-imported tone from the library.
-    /// - Throws: `DeletionError.notACustomTone` if the tone is not stored in the library directory.
-    func deleteCustomTone(_ alertTone: NotificationTone) throws {
-        guard alertTone.location.deletingLastPathComponent() == NotificationTone.libraryLocation else {
-            throw DeletionError.notACustomTone
-        }
-
-        try FileManager.default.removeItem(at: alertTone.location)
-    }
-
-    /// Errors that can occur during tone deletion.
-    enum DeletionError: Error {
-        /// The tone's file is not inside the user library directory and cannot be deleted.
-        case notACustomTone
-    }
-
-    /// Errors that can occur during tone import.
-    enum ImportError: Error {
-        /// The source file could not be accessed due to sandbox restrictions.
-        case couldNotAccessSandboxedResource
-    }
-
-    @globalActor
-    actor ConversionActor {
-        static let shared = ConversionActor()
     }
 }

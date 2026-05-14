@@ -270,7 +270,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         do {
             let url = try urlResult.get()
             guard url.startAccessingSecurityScopedResource() else {
-                throw NotificationToneManager.ImportError.couldNotAccessSandboxedResource
+                throw NotificationToneManager.ManagerError.couldNotAccessSandboxedResource
             }
             defer { url.stopAccessingSecurityScopedResource() }
             try await toneManager?.addNewToneToLibrary(from: url)

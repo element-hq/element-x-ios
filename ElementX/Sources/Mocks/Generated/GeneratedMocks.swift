@@ -14734,6 +14734,51 @@ class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked S
             return customTonesReturnValue
         }
     }
+    //MARK: - deleteCustomTone
+
+    var deleteCustomToneThrowableError: Error?
+    var deleteCustomToneUnderlyingCallsCount = 0
+    var deleteCustomToneCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deleteCustomToneUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteCustomToneUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteCustomToneUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteCustomToneUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var deleteCustomToneCalled: Bool {
+        return deleteCustomToneCallsCount > 0
+    }
+    var deleteCustomToneReceivedAlertTone: NotificationTone?
+    var deleteCustomToneReceivedInvocations: [NotificationTone] = []
+    var deleteCustomToneClosure: ((NotificationTone) throws -> Void)?
+
+    func deleteCustomTone(_ alertTone: NotificationTone) throws {
+        if let error = deleteCustomToneThrowableError {
+            throw error
+        }
+        deleteCustomToneCallsCount += 1
+        deleteCustomToneReceivedAlertTone = alertTone
+        DispatchQueue.main.async {
+            self.deleteCustomToneReceivedInvocations.append(alertTone)
+        }
+        try deleteCustomToneClosure?(alertTone)
+    }
     //MARK: - addNewToneToLibrary
 
     var addNewToneToLibraryFromThrowableError: Error?
@@ -14809,51 +14854,6 @@ class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked S
         } else {
             return addNewToneToLibraryFromReturnValue
         }
-    }
-    //MARK: - deleteCustomTone
-
-    var deleteCustomToneThrowableError: Error?
-    var deleteCustomToneUnderlyingCallsCount = 0
-    var deleteCustomToneCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return deleteCustomToneUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = deleteCustomToneUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                deleteCustomToneUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    deleteCustomToneUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var deleteCustomToneCalled: Bool {
-        return deleteCustomToneCallsCount > 0
-    }
-    var deleteCustomToneReceivedAlertTone: NotificationTone?
-    var deleteCustomToneReceivedInvocations: [NotificationTone] = []
-    var deleteCustomToneClosure: ((NotificationTone) throws -> Void)?
-
-    func deleteCustomTone(_ alertTone: NotificationTone) throws {
-        if let error = deleteCustomToneThrowableError {
-            throw error
-        }
-        deleteCustomToneCallsCount += 1
-        deleteCustomToneReceivedAlertTone = alertTone
-        DispatchQueue.main.async {
-            self.deleteCustomToneReceivedInvocations.append(alertTone)
-        }
-        try deleteCustomToneClosure?(alertTone)
     }
 }
 class OrientationManagerMock: OrientationManagerProtocol, @unchecked Sendable {
