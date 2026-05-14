@@ -183,7 +183,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError>
     
-    func createRoom(name: String,
+    func createRoom(name: String?,
                     topic: String?,
                     accessType: CreateRoomAccessType,
                     isSpace: Bool,

@@ -21,7 +21,7 @@ struct InviteUsersScreenCoordinatorParameters {
 
 enum InviteUsersScreenCoordinatorAction {
     case dismiss
-    case invite(userIDs: [String])
+    case openRoom(roomID: String)
 }
 
 final class InviteUsersScreenCoordinator: CoordinatorProtocol {
@@ -49,8 +49,8 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .dismiss:
                 actionsSubject.send(.dismiss)
-            case .invite(let userIDs):
-                actionsSubject.send(.invite(userIDs: userIDs))
+            case .openRoom(let roomID):
+                actionsSubject.send(.openRoom(roomID: roomID))
             }
         }
         .store(in: &cancellables)

@@ -16,7 +16,7 @@ enum InviteUsersScreenErrorType: Error {
 
 enum InviteUsersScreenViewModelAction {
     case dismiss
-    case invite(userIDs: [String])
+    case openRoom(roomID: String)
 }
 
 enum InviteUsersScreenRoomType {

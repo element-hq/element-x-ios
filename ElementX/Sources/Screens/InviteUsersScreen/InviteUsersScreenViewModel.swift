@@ -65,7 +65,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .proceed:
             switch roomType {
             case .draft:
-                actionsSubject.send(.invite(userIDs: state.selectedUsers.map(\.userID)))
+                createDraftRoom(userIDs: state.selectedUsers.map(\.userID))
             case .room(let roomProxy):
                 guard roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
                       !state.usersToConfirm.isEmpty,
@@ -115,6 +115,29 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         }
     }
     
+    private func createDraftRoom(userIDs: [String]) {
+        showLoadingIndicator(title: L10n.commonCreatingRoom)
+
+        Task {
+            defer { hideLoadingIndicator() }
+
+            switch await clientProxy.createRoom(name: nil,
+                                                topic: nil,
+                                                accessType: .private,
+                                                isSpace: false,
+                                                userIDs: userIDs,
+                                                avatarURL: nil,
+                                                aliasLocalPart: nil) {
+            case .success(let roomID):
+                actionsSubject.send(.openRoom(roomID: roomID))
+            case .failure:
+                state.bindings.alertInfo = .init(id: .unknown,
+                                                 title: L10n.commonError,
+                                                 message: L10n.screenStartChatErrorStartingChat)
+            }
+        }
+    }
+
     private func inviteUsers(_ users: [String], roomProxy: JoinedRoomProxyProtocol) {
         showLoadingIndicator(title: L10n.screenRoomDetailsInvitePeoplePreparing, message: L10n.screenRoomDetailsInvitePeopleDontClose)
         

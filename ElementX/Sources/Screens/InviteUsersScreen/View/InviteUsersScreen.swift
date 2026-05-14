@@ -135,7 +135,7 @@ struct InviteUsersScreen: View {
         }
         
         ToolbarItem(placement: .confirmationAction) {
-            Button(context.viewState.actionText) {
+            ToolbarButton(role: .confirm(title: L10n.actionInvite)) {
                 context.send(viewAction: .proceed)
             }
             .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.proceed)

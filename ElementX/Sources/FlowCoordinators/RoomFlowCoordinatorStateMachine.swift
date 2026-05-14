@@ -65,7 +65,7 @@ extension RoomFlowCoordinator {
         case roomDetailsEditScreen
         case notificationSettings
         case globalNotificationSettings
-        case inviteUsersScreen(previousState: State)
+        case inviteUsersScreen(mode: InviteUsersFlowMode, previousState: State)
         case mediaUploadPicker(mode: MediaPickerScreenMode, previousState: State)
         case mediaUploadPreview(mediaURLs: [URL], previousState: State)
         case emojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>, previousState: State)
@@ -95,8 +95,6 @@ extension RoomFlowCoordinator {
         case spaceFlow(previousState: State)
         /// A members flow is in progress
         case membersFlow(previousState: State)
-        /// Inviting people to a not-yet-created room (e.g. starting a new room from a DM).
-        case inviteToNewRoomScreen(previousState: State)
     }
     
     struct EventUserInfo {
@@ -138,7 +136,7 @@ extension RoomFlowCoordinator {
         case presentGlobalNotificationSettingsScreen
         case dismissGlobalNotificationSettingsScreen
         
-        case presentInviteUsersScreen
+        case presentInviteUsersScreen(mode: InviteUsersFlowMode)
         case dismissInviteUsersScreen
                 
         case presentMediaUploadPicker(mode: MediaPickerScreenMode)
@@ -197,9 +195,6 @@ extension RoomFlowCoordinator {
         
         case startMembersFlow(entryPoint: RoomMembersFlowCoordinatorEntryPoint)
         case stopMembersFlow
-
-        case presentInviteToNewRoomScreen(invitee: UserProfileProxy)
-        case dismissInviteToNewRoomScreen
     }
     
     // swiftlint:disable:next function_body_length
@@ -409,14 +404,9 @@ extension RoomFlowCoordinator {
             case (.mediaUploadPicker(_, let previousMediaUploadPickerState), .presentMediaUploadPreview(let mediaURLs)):
                 return .mediaUploadPreview(mediaURLs: mediaURLs, previousState: previousMediaUploadPickerState)
                 
-            case (_, .presentInviteUsersScreen):
-                return .inviteUsersScreen(previousState: fromState)
-            case (.inviteUsersScreen(let previousState), .dismissInviteUsersScreen):
-                return previousState
-
-            case (_, .presentInviteToNewRoomScreen):
-                return .inviteToNewRoomScreen(previousState: fromState)
-            case (.inviteToNewRoomScreen(let previousState), .dismissInviteToNewRoomScreen):
+            case (_, .presentInviteUsersScreen(let mode)):
+                return .inviteUsersScreen(mode: mode, previousState: fromState)
+            case (.inviteUsersScreen(_, let previousState), .dismissInviteUsersScreen):
                 return previousState
 
             case (_, .presentTransferOwnershipScreen):

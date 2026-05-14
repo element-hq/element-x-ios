@@ -276,7 +276,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
-            case .invite:
+            case .openRoom:
                 break
             }
         }

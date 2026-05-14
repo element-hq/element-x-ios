@@ -285,7 +285,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
                 } else {
                     actionsSubject.send(.finished(.room(id: roomProxy.id)))
                 }
-            case .invite:
+            case .openRoom:
                 break
             }
         }

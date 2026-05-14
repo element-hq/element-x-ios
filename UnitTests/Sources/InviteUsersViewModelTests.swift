@@ -87,7 +87,7 @@ final class InviteUsersScreenViewModelTests {
             switch action {
             case .dismiss:
                 return true
-            case .invite:
+            case .openRoom:
                 return false
             }
         }
@@ -124,7 +124,7 @@ final class InviteUsersScreenViewModelTests {
             switch action {
             case .dismiss:
                 return true
-            case .invite:
+            case .openRoom:
                 return false
             }
         }
