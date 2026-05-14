@@ -211,10 +211,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         stateMachine.processEvent(.startWithExistingSession)
     }
 
-    func stop() {
-        hideLoadingIndicator()
-    }
-    
     func toPresentable() -> AnyView {
         AnyView(navigationRootCoordinator.toPresentable()
             .environment(\.analyticsService, analyticsService)
