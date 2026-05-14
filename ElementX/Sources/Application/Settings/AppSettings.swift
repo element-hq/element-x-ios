@@ -81,6 +81,7 @@ final class AppSettings {
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
         case automaticBackPaginationEnabled
+        case clientPausingAndResumingEnabled
         
         // Doug's tweaks 🔧
         case roomListActivityVisibility
@@ -447,6 +448,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.automaticBackPaginationEnabled, defaultValue: false, storageType: .userDefaults(store))
     var automaticBackPaginationEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.clientPausingAndResumingEnabled, defaultValue: appBuildType != .release, storageType: .volatile)
+    var clientPausingAndResumingEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: appBuildType != .release, storageType: .userDefaults(store))
     var developerOptionsEnabled

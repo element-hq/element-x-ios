@@ -403,6 +403,14 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Starting sync")
         
         Task {
+            if appSettings.clientPausingAndResumingEnabled {
+                do {
+                    try await client.resume()
+                } catch {
+                    MXLog.error("Failed resuming client with error: \(error)")
+                }
+            }
+            
             await syncService.start()
             
             // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
@@ -454,6 +462,15 @@ class ClientProxy: ClientProxyProtocol {
             }
             
             await syncService.stop()
+            
+            if appSettings.clientPausingAndResumingEnabled {
+                do {
+                    try await client.pause()
+                } catch {
+                    MXLog.error("Failed pausing client with error: \(error)")
+                }
+            }
+            
             MXLog.info("Sync stopped")
         }
     }
