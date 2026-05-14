@@ -32,12 +32,10 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     }
     
     private let appSettings: AppSettings
-    private let userIndicatorController: UserIndicatorControllerProtocol
 
     /// Creates the manager and ensures required library directories exist.
-    init(appSettings: AppSettings, userIndicatorController: UserIndicatorControllerProtocol) throws {
+    init(appSettings: AppSettings) throws {
         self.appSettings = appSettings
-        self.userIndicatorController = userIndicatorController
 
         try FileManager.default.createDirectory(at: NotificationTone.libraryLocation, withIntermediateDirectories: true)
         try FileManager.default.createDirectory(at: NotificationTone.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
@@ -46,17 +44,17 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     /// Sets the given tone as the active notification alert tone.
     ///
     /// Copies the tone's audio file to `selectedToneLocation` and persists the selection in app settings.
-    func setSelectedTone(_ alertTone: NotificationTone) {
+    func setSelectedTone(_ alertTone: NotificationTone) throws {
         do {
             try? FileManager.default.removeItem(at: NotificationTone.selectedToneLocation)
             try FileManager.default.copyItem(at: alertTone.location, to: NotificationTone.selectedToneLocation)
             appSettings.selectedNotificationTone = alertTone
         } catch {
-            let userIndicator = UserIndicator(type: .toast,
-                                              title: UntranslatedL10n.screenNotificationSettingsSoundSetSoundErrorTitle,
-                                              iconName: "exclamationmark.triangle.fill")
-            userIndicatorController.submitIndicator(userIndicator)
-            MXLog.error("Error setting selected alert tone to designated location in filesystem: \(error)")
+            if (try? NotificationTone.selectedToneLocation.checkResourceIsReachable()) != true {
+                // make sure the selected tone is reset if there's no custom tone present
+                appSettings.selectedNotificationTone = nil
+            }
+            throw error
         }
     }
 

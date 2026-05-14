@@ -14631,6 +14631,7 @@ class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked S
 
     //MARK: - setSelectedTone
 
+    var setSelectedToneThrowableError: Error?
     var setSelectedToneUnderlyingCallsCount = 0
     var setSelectedToneCallsCount: Int {
         get {
@@ -14660,15 +14661,18 @@ class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked S
     }
     var setSelectedToneReceivedAlertTone: NotificationTone?
     var setSelectedToneReceivedInvocations: [NotificationTone] = []
-    var setSelectedToneClosure: ((NotificationTone) -> Void)?
+    var setSelectedToneClosure: ((NotificationTone) throws -> Void)?
 
-    func setSelectedTone(_ alertTone: NotificationTone) {
+    func setSelectedTone(_ alertTone: NotificationTone) throws {
+        if let error = setSelectedToneThrowableError {
+            throw error
+        }
         setSelectedToneCallsCount += 1
         setSelectedToneReceivedAlertTone = alertTone
         DispatchQueue.main.async {
             self.setSelectedToneReceivedInvocations.append(alertTone)
         }
-        setSelectedToneClosure?(alertTone)
+        try setSelectedToneClosure?(alertTone)
     }
     //MARK: - customTones
 

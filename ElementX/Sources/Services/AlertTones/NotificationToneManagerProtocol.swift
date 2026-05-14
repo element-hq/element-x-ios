@@ -9,7 +9,7 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol NotificationToneManagerProtocol {
-    func setSelectedTone(_ alertTone: NotificationTone)
+    func setSelectedTone(_ alertTone: NotificationTone) throws
     func customTones() -> [NotificationTone]
     func deleteCustomTone(_ alertTone: NotificationTone) throws
     

@@ -108,9 +108,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         case .fixConfigurationMismatchTapped:
             Task { await fixConfigurationMismatch() }
         case .selectAlertTone(let alertTone):
-            tonePreviewer.load(sourceURL: alertTone.location, playbackURL: alertTone.location, autoplay: true)
-            toneManager?.setSelectedTone(alertTone)
-            MXLog.info("Successfully set selected tone: \(alertTone.label)")
+            setSelectedTone(alertTone)
         case .addedCustomAlertTone(let result):
             Task {
                 await self.addCustomAlertTone(from: result)
@@ -280,6 +278,20 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             userIndicatorController.submitIndicator(.init(type: .toast,
                                                           title: UntranslatedL10n.screenNotificationSettingsSoundImportSoundErrorTitle,
                                                           iconName: "exclamationmark.triangle.fill"))
+        }
+    }
+    
+    private func setSelectedTone(_ alertTone: NotificationTone) {
+        do {
+            tonePreviewer.load(sourceURL: alertTone.location, playbackURL: alertTone.location, autoplay: true)
+            try toneManager?.setSelectedTone(alertTone)
+            MXLog.info("Successfully set selected tone: \(alertTone.label)")
+        } catch {
+            let userIndicator = UserIndicator(type: .toast,
+                                              title: UntranslatedL10n.screenNotificationSettingsSoundSetSoundErrorTitle,
+                                              iconName: "exclamationmark.triangle.fill")
+            userIndicatorController.submitIndicator(userIndicator)
+            MXLog.error("Error setting selected alert tone to designated location in filesystem: \(error)")
         }
     }
 
