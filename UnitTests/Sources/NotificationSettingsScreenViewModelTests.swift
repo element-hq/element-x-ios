@@ -411,7 +411,7 @@ struct NotificationSettingsScreenViewModelTests {
     @Test
     func selectingAlertTonePersistsSelection() {
         // Given a tone and a manager that persists the selection to app settings
-        let tone = NotificationAlertTone.createBundledSound(label: "Test", filename: "test.caf")
+        let tone = NotificationTone.createBundledSound(label: "Test", filename: "test.caf")
         toneManager.setSelectedToneClosure = { [appSettings] selectedTone in
             appSettings.selectedNotificationTone = selectedTone
         }
@@ -426,7 +426,7 @@ struct NotificationSettingsScreenViewModelTests {
     @Test
     func deletingActiveToneResetsSelection() {
         // Given the active tone is a custom tone
-        let customTone = NotificationAlertTone.createCustomUserSound(filename: "custom.caf")
+        let customTone = NotificationTone.createCustomUserSound(filename: "custom.caf")
         appSettings.selectedNotificationTone = customTone
         toneManager.customTonesReturnValue = [customTone]
 
@@ -440,8 +440,8 @@ struct NotificationSettingsScreenViewModelTests {
     @Test
     func deletingNonActiveTonePreservesSelection() {
         // Given a custom tone is active and a different custom tone also exists
-        let activeTone = NotificationAlertTone.createCustomUserSound(filename: "active.caf")
-        let otherTone = NotificationAlertTone.createCustomUserSound(filename: "other.caf")
+        let activeTone = NotificationTone.createCustomUserSound(filename: "active.caf")
+        let otherTone = NotificationTone.createCustomUserSound(filename: "other.caf")
         appSettings.selectedNotificationTone = activeTone
         toneManager.customTonesReturnValue = [activeTone, otherTone]
 
@@ -455,7 +455,7 @@ struct NotificationSettingsScreenViewModelTests {
     @Test
     func deletingToneUpdatesCustomList() {
         // Given a manager that initially returns one custom tone
-        let customTone = NotificationAlertTone.createCustomUserSound(filename: "custom.caf")
+        let customTone = NotificationTone.createCustomUserSound(filename: "custom.caf")
         var remainingTones = [customTone]
         toneManager.customTonesClosure = { remainingTones }
         let localVM = NotificationSettingsScreenViewModel(appSettings: appSettings,
@@ -476,7 +476,7 @@ struct NotificationSettingsScreenViewModelTests {
     @Test
     func deleteCustomToneFailurePreservesSelection() {
         // Given the active tone is a custom tone and deletion will fail
-        let customTone = NotificationAlertTone.createCustomUserSound(filename: "custom.caf")
+        let customTone = NotificationTone.createCustomUserSound(filename: "custom.caf")
         appSettings.selectedNotificationTone = customTone
         toneManager.deleteCustomToneThrowableError = NSError(domain: "test", code: 1)
         toneManager.customTonesReturnValue = [customTone]
@@ -491,7 +491,7 @@ struct NotificationSettingsScreenViewModelTests {
     @Test
     func importingCustomToneRefreshesAvailableList() async throws {
         // Given a tone file ready to import
-        let importedTone = NotificationAlertTone.createCustomUserSound(filename: "imported.caf")
+        let importedTone = NotificationTone.createCustomUserSound(filename: "imported.caf")
         toneManager.addNewToneToLibraryFromReturnValue = importedTone.location
         toneManager.customTonesReturnValue = [importedTone]
 

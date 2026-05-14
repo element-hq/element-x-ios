@@ -19,17 +19,17 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
 
-        try FileManager.default.createDirectory(at: NotificationAlertTone.libraryLocation, withIntermediateDirectories: true)
-        try FileManager.default.createDirectory(at: NotificationAlertTone.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: NotificationTone.libraryLocation, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: NotificationTone.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
     }
 
     /// Sets the given tone as the active notification alert tone.
     ///
     /// Copies the tone's audio file to `selectedToneLocation` and persists the selection in app settings.
-    func setSelectedTone(_ alertTone: NotificationAlertTone) {
+    func setSelectedTone(_ alertTone: NotificationTone) {
         do {
-            try? FileManager.default.removeItem(at: NotificationAlertTone.selectedToneLocation)
-            try FileManager.default.copyItem(at: alertTone.location, to: NotificationAlertTone.selectedToneLocation)
+            try? FileManager.default.removeItem(at: NotificationTone.selectedToneLocation)
+            try FileManager.default.copyItem(at: alertTone.location, to: NotificationTone.selectedToneLocation)
             appSettings.selectedNotificationTone = alertTone
         } catch {
             let userIndicator = UserIndicator(type: .toast,
@@ -41,10 +41,10 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     }
 
     /// Returns all user-imported CAF tones from the library directory, sorted by name.
-    func customTones() -> [NotificationAlertTone] {
+    func customTones() -> [NotificationTone] {
         let availableFiles = try? FileManager
             .default
-            .contentsOfDirectory(at: NotificationAlertTone.libraryLocation, includingPropertiesForKeys: nil)
+            .contentsOfDirectory(at: NotificationTone.libraryLocation, includingPropertiesForKeys: nil)
 
         return (availableFiles ?? [])
             .compactMap {
@@ -72,7 +72,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     @discardableResult
     func addNewToneToLibrary(from sourceURL: URL) throws -> URL {
         let baseName = sourceURL.deletingPathExtension().lastPathComponent
-        let outputURL = NotificationAlertTone.libraryLocation.appending(component: baseName).appendingPathExtension("caf")
+        let outputURL = NotificationTone.libraryLocation.appending(component: baseName).appendingPathExtension("caf")
 
         guard (try? outputURL.checkResourceIsReachable()) != true else {
             throw ConversionError.fileAlreadyExists
@@ -133,8 +133,8 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
 
     /// Removes a user-imported tone from the library.
     /// - Throws: `DeletionError.notACustomTone` if the tone is not stored in the library directory.
-    func deleteCustomTone(_ alertTone: NotificationAlertTone) throws {
-        guard alertTone.location.deletingLastPathComponent() == NotificationAlertTone.libraryLocation else {
+    func deleteCustomTone(_ alertTone: NotificationTone) throws {
+        guard alertTone.location.deletingLastPathComponent() == NotificationTone.libraryLocation else {
             throw DeletionError.notACustomTone
         }
 

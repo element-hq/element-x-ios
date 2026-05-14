@@ -28,7 +28,7 @@ struct NotificationToneManagerTests {
     @Test
     func deletingSystemToneThrowsNotACustomTone() {
         // Given a system tone (lives outside the library directory)
-        let tone = NotificationAlertTone.createSystemSound(label: nil, filename: "alarm.caf")
+        let tone = NotificationTone.createSystemSound(label: nil, filename: "alarm.caf")
 
         // When deletion is attempted
         // Then it throws because only library tones may be deleted
@@ -40,7 +40,7 @@ struct NotificationToneManagerTests {
     @Test
     func deletingBundledToneThrowsNotACustomTone() {
         // Given a bundled app tone (lives outside the library directory)
-        let tone = NotificationAlertTone.createBundledSound(label: nil, filename: "message.caf")
+        let tone = NotificationTone.createBundledSound(label: nil, filename: "message.caf")
 
         // When deletion is attempted
         // Then it throws because only library tones may be deleted
@@ -54,8 +54,8 @@ struct NotificationToneManagerTests {
     @Test
     func customTonesFiltersToCAFOnly() throws {
         // Given both CAF and non-CAF files written to the library directory
-        let cafURL = NotificationAlertTone.libraryLocation.appending(component: "\(UUID().uuidString).caf")
-        let mp3URL = NotificationAlertTone.libraryLocation.appending(component: "\(UUID().uuidString).mp3")
+        let cafURL = NotificationTone.libraryLocation.appending(component: "\(UUID().uuidString).caf")
+        let mp3URL = NotificationTone.libraryLocation.appending(component: "\(UUID().uuidString).mp3")
         defer {
             try? FileManager.default.removeItem(at: cafURL)
             try? FileManager.default.removeItem(at: mp3URL)
@@ -77,7 +77,7 @@ struct NotificationToneManagerTests {
     func addingDuplicateToneThrowsFileAlreadyExists() async throws {
         // Given a CAF file that has already been imported into the library
         let sourceURL = URL.temporaryDirectory.appending(component: "\(UUID().uuidString).caf")
-        let importedURL = NotificationAlertTone.libraryLocation
+        let importedURL = NotificationTone.libraryLocation
             .appending(component: sourceURL.deletingPathExtension().lastPathComponent)
             .appendingPathExtension("caf")
         defer {

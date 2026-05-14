@@ -14,7 +14,7 @@ extension CommonSettingsProtocol {
         if selectedNotificationTone == nil {
             return UNNotificationSoundName("message.caf")
         } else {
-            return UNNotificationSoundName(NotificationAlertTone.selectedToneFilename)
+            return UNNotificationSoundName(NotificationTone.selectedToneFilename)
         }
     }
 

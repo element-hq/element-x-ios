@@ -194,7 +194,7 @@ struct NotificationSettingsScreen: View {
     }
 
     private var presetSoundSelectionSection: some View {
-        ForEach(NotificationAlertTone.allDefaultAlerts, id: \.filename) { alertTone in
+        ForEach(NotificationTone.allDefaultAlerts, id: \.filename) { alertTone in
             ListRow(label: .plain(title: alertTone.label),
                     kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
                         context.send(viewAction: .selectAlertTone(alertTone))

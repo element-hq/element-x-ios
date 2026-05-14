@@ -8,7 +8,7 @@
 import Foundation
 
 /// Represents a notification alert tone and its backing audio file location.
-struct NotificationAlertTone: Hashable, Comparable, Codable {
+struct NotificationTone: Hashable, Comparable, Codable {
     private static let systemLocation = {
         let systemRoot: URL
         if let simulatorRoot = ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] {
@@ -84,18 +84,18 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
     }
 
     /// Creates a tone backed by a file in the system sounds directory.
-    static func createSystemSound(label: String?, filename: String, systemSoundsSubdirectory: [String] = []) -> NotificationAlertTone {
-        NotificationAlertTone(labelOverride: label, storageLocationRoot: .system, relativePath: systemSoundsSubdirectory + [filename])
+    static func createSystemSound(label: String?, filename: String, systemSoundsSubdirectory: [String] = []) -> NotificationTone {
+        NotificationTone(labelOverride: label, storageLocationRoot: .system, relativePath: systemSoundsSubdirectory + [filename])
     }
 
     /// Creates a tone backed by a file in the app bundle.
-    static func createBundledSound(label: String?, filename: String) -> NotificationAlertTone {
-        NotificationAlertTone(labelOverride: label, storageLocationRoot: .appBundle, relativePath: [filename])
+    static func createBundledSound(label: String?, filename: String) -> NotificationTone {
+        NotificationTone(labelOverride: label, storageLocationRoot: .appBundle, relativePath: [filename])
     }
 
     /// Creates a tone backed by a user-imported file in the app library.
-    static func createCustomUserSound(filename: String) -> NotificationAlertTone {
-        NotificationAlertTone(labelOverride: nil, storageLocationRoot: .appLibrary, relativePath: [filename])
+    static func createCustomUserSound(filename: String) -> NotificationTone {
+        NotificationTone(labelOverride: nil, storageLocationRoot: .appLibrary, relativePath: [filename])
     }
 
     #if IS_MAIN_APP // localization is only available in the main app
@@ -175,7 +175,7 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
         .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTweet,
                            filename: "tweet_sent.caf")
     ]
-    .compactMap { (alertTone: NotificationAlertTone) -> NotificationAlertTone? in
+    .compactMap { (alertTone: NotificationTone) -> NotificationTone? in
         guard (try? alertTone.location.checkResourceIsReachable()) == true else {
             return nil
         }
@@ -194,7 +194,7 @@ struct NotificationAlertTone: Hashable, Comparable, Codable {
     static let allDefaultAlerts: [Self] = (defaultSystemAlerts + defaultElementXAlerts).sorted()
     #endif
 
-    static func < (lhs: NotificationAlertTone, rhs: NotificationAlertTone) -> Bool {
+    static func < (lhs: NotificationTone, rhs: NotificationTone) -> Bool {
         lhs.label < rhs.label
     }
 }

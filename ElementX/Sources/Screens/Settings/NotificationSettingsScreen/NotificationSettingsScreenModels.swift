@@ -29,9 +29,9 @@ struct NotificationSettingsScreenViewState: BindableState {
 
     var settings: NotificationSettingsScreenSettings?
     var applyingChange = false
-    var selectedAlertTone: NotificationAlertTone
+    var selectedAlertTone: NotificationTone
     var canSelectTones: Bool
-    var availableCustomTones: [NotificationAlertTone]
+    var availableCustomTones: [NotificationTone]
 }
 
 struct NotificationSettingsScreenViewStateBindings {
@@ -94,9 +94,9 @@ enum NotificationSettingsScreenViewAction {
     case invitationsChanged
     case close
     case fixConfigurationMismatchTapped
-    case selectAlertTone(NotificationAlertTone)
+    case selectAlertTone(NotificationTone)
     case addedCustomAlertTone(Result<URL, Error>)
-    case deleteCustomAlertTones([NotificationAlertTone])
+    case deleteCustomAlertTones([NotificationTone])
 }
 
 enum NotificationSettingsScreenErrorType: Hashable {

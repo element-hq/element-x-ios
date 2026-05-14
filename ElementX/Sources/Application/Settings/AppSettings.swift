@@ -16,7 +16,7 @@ import SwiftUI
 /// Common settings between app and NSE
 protocol CommonSettingsProtocol: AnyObject {
     var lastNotificationBootTime: TimeInterval? { get set }
-    var selectedNotificationTone: NotificationAlertTone? { get set }
+    var selectedNotificationTone: NotificationTone? { get set }
 
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
@@ -302,7 +302,7 @@ final class AppSettings {
 
     /// The sound played when delivering noisy notifications. If nil, use the ElementX default
     @UserPreference(key: UserDefaultsKeys.selectedNotificationTone, defaultValue: nil, storageType: .userDefaults(store))
-    var selectedNotificationTone: NotificationAlertTone?
+    var selectedNotificationTone: NotificationTone?
 
     // MARK: - Logging
         

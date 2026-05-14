@@ -284,7 +284,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     }
 
     /// Deletes the given tones from the library. If the active tone is deleted, the selection resets to the default.
-    private func deleteAlertTones(_ tones: [NotificationAlertTone]) {
+    private func deleteAlertTones(_ tones: [NotificationTone]) {
         for tone in tones {
             do {
                 try toneManager?.deleteCustomTone(tone)

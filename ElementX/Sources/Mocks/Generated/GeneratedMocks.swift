@@ -14658,11 +14658,11 @@ class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked S
     var setSelectedToneCalled: Bool {
         return setSelectedToneCallsCount > 0
     }
-    var setSelectedToneReceivedAlertTone: NotificationAlertTone?
-    var setSelectedToneReceivedInvocations: [NotificationAlertTone] = []
-    var setSelectedToneClosure: ((NotificationAlertTone) -> Void)?
+    var setSelectedToneReceivedAlertTone: NotificationTone?
+    var setSelectedToneReceivedInvocations: [NotificationTone] = []
+    var setSelectedToneClosure: ((NotificationTone) -> Void)?
 
-    func setSelectedTone(_ alertTone: NotificationAlertTone) {
+    func setSelectedTone(_ alertTone: NotificationTone) {
         setSelectedToneCallsCount += 1
         setSelectedToneReceivedAlertTone = alertTone
         DispatchQueue.main.async {
@@ -14700,13 +14700,13 @@ class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked S
         return customTonesCallsCount > 0
     }
 
-    var customTonesUnderlyingReturnValue: [NotificationAlertTone]!
-    var customTonesReturnValue: [NotificationAlertTone]! {
+    var customTonesUnderlyingReturnValue: [NotificationTone]!
+    var customTonesReturnValue: [NotificationTone]! {
         get {
             if Thread.isMainThread {
                 return customTonesUnderlyingReturnValue
             } else {
-                var returnValue: [NotificationAlertTone]? = nil
+                var returnValue: [NotificationTone]? = nil
                 DispatchQueue.main.sync {
                     returnValue = customTonesUnderlyingReturnValue
                 }
@@ -14724,9 +14724,9 @@ class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked S
             }
         }
     }
-    var customTonesClosure: (() -> [NotificationAlertTone])?
+    var customTonesClosure: (() -> [NotificationTone])?
 
-    func customTones() -> [NotificationAlertTone] {
+    func customTones() -> [NotificationTone] {
         customTonesCallsCount += 1
         if let customTonesClosure = customTonesClosure {
             return customTonesClosure()
@@ -14840,11 +14840,11 @@ class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked S
     var deleteCustomToneCalled: Bool {
         return deleteCustomToneCallsCount > 0
     }
-    var deleteCustomToneReceivedAlertTone: NotificationAlertTone?
-    var deleteCustomToneReceivedInvocations: [NotificationAlertTone] = []
-    var deleteCustomToneClosure: ((NotificationAlertTone) throws -> Void)?
+    var deleteCustomToneReceivedAlertTone: NotificationTone?
+    var deleteCustomToneReceivedInvocations: [NotificationTone] = []
+    var deleteCustomToneClosure: ((NotificationTone) throws -> Void)?
 
-    func deleteCustomTone(_ alertTone: NotificationAlertTone) throws {
+    func deleteCustomTone(_ alertTone: NotificationTone) throws {
         if let error = deleteCustomToneThrowableError {
             throw error
         }
