@@ -19,7 +19,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     private let userIndicatorController: UserIndicatorControllerProtocol
     // periphery:ignore - cancellable tasks get cancelled when reassigned
     @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
-    private let tonePreviewer: NotificationTonePreviewer
+    private let tonePreviewer: AudioPlayerProtocol
     private let toneManager: NotificationToneManagerProtocol?
 
     var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> {
@@ -38,7 +38,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         self.userIndicatorController = userIndicatorController
         
         let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
-        tonePreviewer = NotificationTonePreviewer(userIndicatorController: userIndicatorController)
+        tonePreviewer = AudioPlayer()
         toneManager = notificationToneManager
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
@@ -58,6 +58,20 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         
         setupDidBecomeActiveSubscription()
         setupNotificationSettingsSubscription()
+        
+        tonePreviewer.actions
+            .receive(on: DispatchQueue.main)
+            .sink { action in
+                guard case .didFailWithError(let error) = action else {
+                    return
+                }
+                let userIndicator = UserIndicator(type: .toast,
+                                                  title: UntranslatedL10n.screenNotificationSettingsSoundPreviewSoundErrorTitle,
+                                                  iconName: "exclamationmark.triangle.fill")
+                userIndicatorController.submitIndicator(userIndicator)
+                MXLog.error("Error previewing alert tone: \(error)")
+            }
+            .store(in: &cancellables)
     }
     
     func fetchInitialContent() {
@@ -94,7 +108,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         case .fixConfigurationMismatchTapped:
             Task { await fixConfigurationMismatch() }
         case .selectAlertTone(let alertTone):
-            tonePreviewer.preview(alertTone)
+            tonePreviewer.load(sourceURL: alertTone.location, playbackURL: alertTone.location, autoplay: true)
             toneManager?.setSelectedTone(alertTone)
             MXLog.info("Successfully set selected tone: \(alertTone.label)")
         case .addedCustomAlertTone(let result):
