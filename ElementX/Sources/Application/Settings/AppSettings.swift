@@ -16,11 +16,7 @@ import SwiftUI
 /// Common settings between app and NSE
 protocol CommonSettingsProtocol: AnyObject {
     var lastNotificationBootTime: TimeInterval? { get set }
-    #if !IS_SHARE_EXT
-    var selectedNotificationTone: NotificationAlertTone? {
-        get set
-    }
-    #endif
+    var selectedNotificationTone: NotificationAlertTone? { get set }
 
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
@@ -304,11 +300,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.lastNotificationBootTime, storageType: .userDefaults(store))
     var lastNotificationBootTime: TimeInterval?
 
-    #if !IS_SHARE_EXT
     /// The sound played when delivering noisy notifications. If nil, use the ElementX default
     @UserPreference(key: UserDefaultsKeys.selectedNotificationTone, defaultValue: nil, storageType: .userDefaults(store))
     var selectedNotificationTone: NotificationAlertTone?
-    #endif
 
     // MARK: - Logging
         

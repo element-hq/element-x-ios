@@ -75,11 +75,6 @@ targets:
         MARKETING_VERSION: $(MARKETING_VERSION)
         CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
         DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
-      configs:
-        debug:
-          SWIFT_ACTIVE_COMPILATION_CONDITIONS: IS_SHARE_EXT DEBUG
-        release:
-          SWIFT_ACTIVE_COMPILATION_CONDITIONS: IS_SHARE_EXT RELEASE
 
     sources:
     - path: ../Sources
@@ -92,6 +87,7 @@ targets:
     - path: ../../Secrets/Secrets.swift
     - path: ../../ElementX/Sources/Application/Settings
     - path: ../../ElementX/Sources/Application/TargetConfiguration.swift
+    - path: ../../ElementX/Sources/Services/AlertTones/NotificationAlertTone.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
