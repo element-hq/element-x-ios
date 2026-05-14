@@ -25,6 +25,7 @@ enum TimelineControllerAction {
     }
     
     case displayMediaPreview(item: EventBasedMessageTimelineItemProtocol, timelineViewModel: TimelineViewModelKind)
+    case displayGalleryPreview(galleryItem: GalleryRoomTimelineItem, initialIndex: Int)
     case displayLocation(StaticLocationData)
     case displayLiveLocation(sender: TimelineItemSender, initialLiveLocationShare: LiveLocationShare)
     case none

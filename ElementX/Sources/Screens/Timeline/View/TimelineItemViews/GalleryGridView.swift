@@ -13,7 +13,7 @@ struct GalleryGridView: View {
     let items: [GalleryItem]
     let uniqueID: TimelineItemIdentifier.UniqueID
     let mediaProvider: MediaProviderProtocol?
-    let onTap: () -> Void
+    let onTap: (Int) -> Void
 
     static let spacing: CGFloat = 4
     static let groupWidth: CGFloat = 264
@@ -32,43 +32,40 @@ struct GalleryGridView: View {
 
     private struct Row {
         let indices: [Int]
+        let height: CGFloat
     }
 
+    /// Hero-style layout: 1 = full-width, 2 = two full-width stacked rows, 3 = full-width hero
+    /// over two squares, 4 = 2×2 squares, 5+ = top row two squares, bottom row three squares.
     private var rows: [Row] {
         switch visibleCount {
-        case 1: return [Row(indices: [0])]
-        case 2: return [Row(indices: [0, 1])]
-        case 3: return [Row(indices: [0, 1, 2])]
-        case 4: return [Row(indices: [0, 1]), Row(indices: [2, 3])]
-        case 5: return [Row(indices: [0, 1]), Row(indices: [2, 3, 4])]
+        case 1: return [Row(indices: [0], height: 130)]
+        case 2: return [Row(indices: [0], height: 130),
+                        Row(indices: [1], height: 130)]
+        case 3: return [Row(indices: [0], height: 130),
+                        Row(indices: [1, 2], height: 130)]
+        case 4: return [Row(indices: [0, 1], height: 130),
+                        Row(indices: [2, 3], height: 130)]
+        case 5: return [Row(indices: [0, 1], height: 130),
+                        Row(indices: [2, 3, 4], height: 85)]
         default: return []
-        }
-    }
-
-    private func tileSize(forColumnCount count: Int) -> CGSize {
-        switch count {
-        case 1: return CGSize(width: Self.groupWidth, height: 130)
-        case 2: return CGSize(width: 130, height: 130)
-        case 3: return CGSize(width: 85, height: 85)
-        default: return .zero
         }
     }
 
     var body: some View {
         VStack(spacing: Self.spacing) {
             ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+                let totalSpacing = CGFloat(row.indices.count - 1) * Self.spacing
+                let tileWidth = (Self.groupWidth - totalSpacing) / CGFloat(row.indices.count)
                 HStack(spacing: Self.spacing) {
-                    let size = tileSize(forColumnCount: row.indices.count)
                     ForEach(row.indices, id: \.self) { index in
-                        tile(at: index, size: size)
+                        tile(at: index, size: CGSize(width: tileWidth, height: row.height))
                     }
                 }
             }
         }
         .frame(width: Self.groupWidth)
         .clipShape(RoundedRectangle(cornerRadius: 6))
-        .contentShape(Rectangle())
-        .onTapGesture(perform: onTap)
     }
 
     @ViewBuilder
@@ -83,6 +80,8 @@ struct GalleryGridView: View {
                             overflowCount: overflow)
                 .frame(width: size.width, height: size.height)
                 .clipped()
+                .contentShape(Rectangle())
+                .onTapGesture { onTap(index) }
         }
     }
 }

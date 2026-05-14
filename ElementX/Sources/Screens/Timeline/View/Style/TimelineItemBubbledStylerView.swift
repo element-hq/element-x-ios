@@ -182,9 +182,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
             .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
                               insets: timelineItem.bubbleInsets,
-                              color: timelineItem.bubbleBackgroundColor,
-                              cornerRadius: timelineItem.bubbleCornerRadius,
-                              forceAllCorners: timelineItem.forcesBubbleAllCorners)
+                              color: timelineItem.bubbleBackgroundColor)
     }
     
     var contentWithReply: some View {
@@ -281,14 +279,6 @@ private extension EventBasedTimelineItemProtocol {
         default:
             return .zero
         }
-    }
-
-    var bubbleCornerRadius: CGFloat {
-        self is GalleryRoomTimelineItem ? 6 : 12
-    }
-
-    var forcesBubbleAllCorners: Bool {
-        self is GalleryRoomTimelineItem
     }
 }
 

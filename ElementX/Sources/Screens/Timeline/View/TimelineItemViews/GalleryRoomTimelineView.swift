@@ -17,29 +17,58 @@ struct GalleryRoomTimelineView: View {
         timelineItem.content.caption != nil
     }
 
+    /// A gallery falls back to a vertical file-list layout when any of its items lacks a thumbnail
+    /// (typically audio or generic files). Mixed galleries (image/video + file) also use the list
+    /// — a grid of mostly-icons looks worse than a tidy list.
+    private var usesListLayout: Bool {
+        timelineItem.content.items.contains { !$0.hasThumbnail }
+    }
+
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             VStack(alignment: .leading, spacing: 8) {
-                GalleryGridView(items: timelineItem.content.items,
-                                uniqueID: timelineItem.id.uniqueID,
-                                mediaProvider: context?.mediaProvider) {
-                    context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
+                if usesListLayout {
+                    GalleryListView(items: timelineItem.content.items,
+                                    uniqueID: timelineItem.id.uniqueID,
+                                    mediaProvider: context?.mediaProvider) { index in
+                        tap(index: index)
+                    }
+                } else {
+                    GalleryGridView(items: timelineItem.content.items,
+                                    uniqueID: timelineItem.id.uniqueID,
+                                    mediaProvider: context?.mediaProvider) { index in
+                        tap(index: index)
+                    }
                 }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(UntranslatedL10n.commonAttachmentsCount(timelineItem.content.items.count))
 
-                if let attributedCaption = timelineItem.content.formattedCaption {
-                    FormattedBodyText(attributedString: attributedCaption,
-                                      additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                      boostFontSize: timelineItem.shouldBoost)
-                } else if let caption = timelineItem.content.caption {
-                    FormattedBodyText(text: caption,
-                                      additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                      boostFontSize: timelineItem.shouldBoost)
+                if hasMediaCaption {
+                    if usesListLayout {
+                        GalleryListView.galleryDivider
+                    }
+                    caption
                 }
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(UntranslatedL10n.commonAttachmentsCount(timelineItem.content.items.count))
             .frame(width: GalleryGridView.groupWidth, alignment: .leading)
         }
+    }
+
+    @ViewBuilder
+    private var caption: some View {
+        if let attributedCaption = timelineItem.content.formattedCaption {
+            FormattedBodyText(attributedString: attributedCaption,
+                              additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                              boostFontSize: timelineItem.shouldBoost)
+        } else if let caption = timelineItem.content.caption {
+            FormattedBodyText(text: caption,
+                              additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                              boostFontSize: timelineItem.shouldBoost)
+        }
+    }
+
+    private func tap(index: Int) {
+        context?.send(viewAction: .galleryItemTapped(itemID: timelineItem.id, index: index))
     }
 }
 
@@ -57,6 +86,7 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                 GalleryRoomTimelineView(timelineItem: makeItem(itemCount: 4))
                 GalleryRoomTimelineView(timelineItem: makeItem(itemCount: 5))
                 GalleryRoomTimelineView(timelineItem: makeItem(itemCount: 7, caption: "A trip to remember 🌅"))
+                GalleryRoomTimelineView(timelineItem: makeFileListItem(caption: "Quarterly reports"))
             }
             .padding(.vertical, 20)
         }
@@ -85,6 +115,49 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                        canBeRepliedTo: true,
                                        sender: .init(id: "Bob"),
                                        content: .init(body: "Gallery (\(itemCount) items)",
+                                                      caption: caption,
+                                                      items: items),
+                                       properties: .init())
+    }
+
+    private static func makeFileListItem(caption: String?) -> GalleryRoomTimelineItem {
+        let items: [GalleryItem] = [
+            GalleryItem(id: "preview-image",
+                        filename: "photo.jpg",
+                        kind: .image,
+                        mediaSource: ImageInfoProxy.mockImage.source,
+                        thumbnailSource: ImageInfoProxy.mockThumbnail.source,
+                        size: .init(width: 1920, height: 1080),
+                        blurhash: nil,
+                        duration: nil,
+                        contentType: .jpeg),
+            GalleryItem(id: "preview-pdf",
+                        filename: "report.pdf",
+                        kind: .file,
+                        mediaSource: nil,
+                        thumbnailSource: nil,
+                        size: nil,
+                        blurhash: nil,
+                        duration: nil,
+                        contentType: .pdf),
+            GalleryItem(id: "preview-audio",
+                        filename: "meeting.m4a",
+                        kind: .audio,
+                        mediaSource: nil,
+                        thumbnailSource: nil,
+                        size: nil,
+                        blurhash: nil,
+                        duration: 65,
+                        contentType: .mpeg4Audio)
+        ]
+
+        return GalleryRoomTimelineItem(id: .randomEvent,
+                                       timestamp: .mock,
+                                       isOutgoing: false,
+                                       isEditable: false,
+                                       canBeRepliedTo: true,
+                                       sender: .init(id: "Bob"),
+                                       content: .init(body: "Mixed gallery",
                                                       caption: caption,
                                                       items: items),
                                        properties: .init())

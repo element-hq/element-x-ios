@@ -159,6 +159,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await timelineController.processItemDisappearance(id) }
         case .mediaTapped(let id):
             Task { await handleMediaTapped(with: id) }
+        case .galleryItemTapped(let id, let index):
+            handleGalleryItemTapped(itemID: id, index: index)
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
         case .toggleReaction(let emoji, let itemID):
@@ -656,12 +658,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func handleMediaTapped(with itemID: TimelineItemIdentifier) async {
         state.showLoading = true
         let action = await timelineInteractionHandler.processItemTap(itemID)
-        
+
         switch action {
         case .displayMediaPreview(let item, let timelineViewModelKind):
             actionsSubject.send(.composer(action: .removeFocus)) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
-            
+
             let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind)
+            actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
+        case .displayGalleryPreview(let galleryItem, let initialIndex):
+            actionsSubject.send(.composer(action: .removeFocus))
+            let mediaPreviewViewModel = makeGalleryPreviewViewModel(galleryItem: galleryItem, initialIndex: initialIndex)
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
         case .displayLocation(let location):
             actionsSubject.send(.displayLocation(location))
@@ -671,6 +677,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             break
         }
         state.showLoading = false
+    }
+
+    private func handleGalleryItemTapped(itemID: TimelineItemIdentifier, index: Int) {
+        let action = timelineInteractionHandler.processGalleryItemTap(itemID: itemID, index: index)
+        if case let .displayGalleryPreview(galleryItem, initialIndex) = action {
+            actionsSubject.send(.composer(action: .removeFocus))
+            let mediaPreviewViewModel = makeGalleryPreviewViewModel(galleryItem: galleryItem, initialIndex: initialIndex)
+            actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
+        }
     }
     
     private func handleItemSendInfoTapped(itemID: TimelineItemIdentifier) {
@@ -788,6 +803,17 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                              photoLibraryManager: PhotoLibraryManager(),
                                              userIndicatorController: userIndicatorController,
                                              appMediator: appMediator)
+    }
+
+    private func makeGalleryPreviewViewModel(galleryItem: GalleryRoomTimelineItem,
+                                             initialIndex: Int) -> TimelineMediaPreviewViewModel {
+        TimelineMediaPreviewViewModel(galleryItem: galleryItem,
+                                      initialIndex: initialIndex,
+                                      timelineViewModel: self,
+                                      mediaProvider: userSession.mediaProvider,
+                                      photoLibraryManager: PhotoLibraryManager(),
+                                      userIndicatorController: userIndicatorController,
+                                      appMediator: appMediator)
     }
     
     // MARK: - Timeline Item Building

@@ -16,7 +16,7 @@ enum TimelineMediaPreviewViewModelAction: Equatable {
 }
 
 enum TimelineMediaPreviewDriverAction {
-    case itemLoaded(TimelineItemIdentifier.EventOrTransactionID)
+    case itemLoaded(String)
     case showItemDetails(TimelineMediaPreviewItem.Media)
     case exportFile(TimelineMediaPreviewFileExportPicker.File)
     case authorizationRequired(appMediator: AppMediatorProtocol)
