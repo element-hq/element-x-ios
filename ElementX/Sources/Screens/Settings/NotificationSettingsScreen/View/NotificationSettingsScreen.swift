@@ -39,9 +39,7 @@ struct NotificationSettingsScreen: View {
                         additionalSettingsSection
                     }
 
-                    if context.viewState.canSelectTones {
-                        soundSelectionSection
-                    }
+                    soundSelectionSection
                 }
             }
         }

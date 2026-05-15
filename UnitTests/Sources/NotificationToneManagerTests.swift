@@ -17,9 +17,9 @@ import Testing
 struct NotificationToneManagerTests {
     private let manager: NotificationToneManager
 
-    init() throws {
+    init() {
         AppSettings.resetAllSettings()
-        manager = try NotificationToneManager(appSettings: AppSettings())
+        manager = NotificationToneManager(appSettings: AppSettings())
     }
 
     // MARK: - Deletion

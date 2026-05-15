@@ -20,7 +20,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     // periphery:ignore - cancellable tasks get cancelled when reassigned
     @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
     private let notificationTonePreviewer: AudioPlayerProtocol
-    private let notificationToneManager: NotificationToneManagerProtocol?
+    private let notificationToneManager: NotificationToneManagerProtocol
 
     var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -28,7 +28,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
 
     init(appSettings: AppSettings,
          userNotificationCenter: UserNotificationCenterProtocol,
-         notificationToneManager: NotificationToneManagerProtocol?,
+         notificationToneManager: NotificationToneManagerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          isModallyPresented: Bool) {
@@ -43,8 +43,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
                                                                          selectedAlertTone: appSettings.selectedNotificationTone ?? NotificationToneManager.defaultElementXMessageTone,
-                                                                         canSelectTones: notificationToneManager != nil,
-                                                                         availableCustomTones: notificationToneManager?.customTones() ?? []))
+                                                                         availableCustomTones: notificationToneManager.customTones()))
 
         // Listen for changes to AppSettings.
         appSettings.$enableNotifications
@@ -271,8 +270,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                 throw NotificationToneManager.ManagerError.couldNotAccessSandboxedResource
             }
             defer { url.stopAccessingSecurityScopedResource() }
-            try await notificationToneManager?.addNewToneToLibrary(from: url)
-            state.availableCustomTones = notificationToneManager?.customTones() ?? []
+            try await notificationToneManager.addNewToneToLibrary(from: url)
+            state.availableCustomTones = notificationToneManager.customTones()
         } catch {
             MXLog.error("Error importing custom tone url: \(error)")
             userIndicatorController.submitIndicator(.init(type: .toast,
@@ -284,7 +283,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     private func setSelectedTone(_ alertTone: NotificationTone) {
         do {
             notificationTonePreviewer.load(sourceURL: alertTone.location, playbackURL: alertTone.location, autoplay: true)
-            try notificationToneManager?.setSelectedTone(alertTone)
+            try notificationToneManager.setSelectedTone(alertTone)
             MXLog.info("Successfully set selected tone: \(alertTone.label)")
         } catch {
             let userIndicator = UserIndicator(type: .toast,
@@ -299,7 +298,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     private func deleteAlertTones(_ tones: [NotificationTone]) {
         for tone in tones {
             do {
-                try notificationToneManager?.deleteCustomTone(tone)
+                try notificationToneManager.deleteCustomTone(tone)
 
                 if tone == state.selectedAlertTone {
                     appSettings.selectedNotificationTone = nil
@@ -311,7 +310,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                               iconName: "exclamationmark.triangle.fill"))
             }
         }
-        state.availableCustomTones = notificationToneManager?.customTones() ?? []
+        state.availableCustomTones = notificationToneManager.customTones()
         MXLog.info("Successfully deleted custom tone(s): \(tones.map(\.label))")
     }
 }

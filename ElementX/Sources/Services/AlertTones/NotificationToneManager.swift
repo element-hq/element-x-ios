@@ -34,11 +34,15 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     private let appSettings: AppSettings
     
     /// Creates the manager and ensures required library directories exist.
-    init(appSettings: AppSettings) throws {
+    init(appSettings: AppSettings) {
         self.appSettings = appSettings
         
-        try FileManager.default.createDirectory(at: NotificationTone.libraryLocation, withIntermediateDirectories: true)
-        try FileManager.default.createDirectory(at: Self.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
+        do {
+            try FileManager.default.createDirectory(at: NotificationTone.libraryLocation, withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: Self.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
+        } catch {
+            fatalError("Catastrophic error setting up tone manager: \(error)")
+        }
     }
     
     /// Sets the given tone as the active notification alert tone.
