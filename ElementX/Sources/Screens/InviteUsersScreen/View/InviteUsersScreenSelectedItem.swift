@@ -14,12 +14,12 @@ struct InviteUsersScreenSelectedItem: View {
     let mediaProvider: MediaProviderProtocol?
     var isLocked = false
     let dismissAction: () -> Void
-
+    
     var body: some View {
         VStack(spacing: 10) {
             avatar
                 .accessibilityHidden(true)
-
+            
             Text(user.displayName ?? user.userID)
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textSecondary)
@@ -32,9 +32,9 @@ struct InviteUsersScreenSelectedItem: View {
             }
         }
     }
-
+    
     // MARK: - Private
-
+    
     @ViewBuilder
     var avatar: some View {
         let avatarImage = LoadableAvatarImage(url: user.avatarURL,
@@ -48,7 +48,7 @@ struct InviteUsersScreenSelectedItem: View {
             avatarImage.overlayRemoveItemButton(action: dismissAction)
         }
     }
-
+    
     var closeButtonLabel: some View {
         CompoundIcon(\.close, size: .custom(12), relativeTo: .compound.bodySM)
             .foregroundStyle(.compound.iconOnSolidPrimary)

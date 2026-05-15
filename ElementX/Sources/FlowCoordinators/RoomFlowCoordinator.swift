@@ -60,6 +60,13 @@ struct FocusEvent: Hashable {
     let shouldSetPin: Bool
 }
 
+enum InviteUsersFlow: Hashable {
+    /// Invite people into the current room.
+    case existingRoom
+    /// Start a new room with the given invitee pre-selected and mandatory.
+    case newRoom(mandatoryInvitee: UserProfileProxy)
+}
+
 // swiftlint:disable:next type_body_length
 class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let roomID: String
@@ -89,7 +96,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
-
+    
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
     
     private var cancellables = Set<AnyCancellable>()
@@ -537,9 +544,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
                 presentMediaUploadPreviewScreen(for: mediaURLs, timelineController: timelineController, animated: animated)
                 
-            case (_, .presentInviteUsersScreen(let mode), .inviteUsersScreen):
-                presentInviteUsersScreen(mode: mode)
-
+            case (_, .presentInviteUsersScreen(let flow), .inviteUsersScreen):
+                presentInviteUsersScreen(flow: flow)
+                
             case (_, .presentTransferOwnershipScreen, .transferOwnershipScreen):
                 presentTransferOwnershipScreen()
                     
@@ -955,9 +962,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .presentNotificationSettingsScreen:
                 stateMachine.tryEvent(.presentNotificationSettingsScreen)
             case .presentInviteUsersScreen:
-                stateMachine.tryEvent(.presentInviteUsersScreen(mode: .existingRoom))
-            case .presentInviteToNewRoom(let invitee):
-                stateMachine.tryEvent(.presentInviteUsersScreen(mode: .newRoom(invitee: invitee)))
+                stateMachine.tryEvent(.presentInviteUsersScreen(flow: .existingRoom))
+            case .presentInviteToNewRoom(let mandatoryInvitee):
+                stateMachine.tryEvent(.presentInviteUsersScreen(flow: .newRoom(mandatoryInvitee: mandatoryInvitee)))
             case .presentPollsHistory:
                 stateMachine.tryEvent(.presentPollsHistory)
             case .presentRolesAndPermissionsScreen:
@@ -1328,52 +1335,38 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    enum InviteUsersFlowMode: Hashable {
-        /// Invite people into the current room.
-        case existingRoom
-        /// Start a new room with the given invitee pre-selected and locked.
-        case newRoom(invitee: UserProfileProxy)
-    }
-
-    private func presentInviteUsersScreen(mode: InviteUsersFlowMode = .existingRoom) {
+    private func presentInviteUsersScreen(flow: InviteUsersFlow = .existingRoom) {
         let stackCoordinator = NavigationStackCoordinator()
 
-        let roomType: InviteUsersScreenRoomType
-        let lockedInvitees: [UserProfileProxy]
-        switch mode {
-        case .existingRoom:
-            roomType = .room(roomProxy: roomProxy)
-            lockedInvitees = []
-        case .newRoom(let invitee):
-            roomType = .draft
-            lockedInvitees = [invitee]
+        let roomType: InviteUsersScreenRoomType = switch flow {
+        case .existingRoom: .existingRoom(roomProxy: roomProxy)
+        case .newRoom(let mandatoryInvitee): .draft(mandatoryInvitees: [mandatoryInvitee])
         }
 
         let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: userSession,
                                                                       roomType: roomType,
-                                                                      lockedInvitees: lockedInvitees,
                                                                       isSkippable: false,
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
                                                                       userIndicatorController: flowParameters.userIndicatorController,
                                                                       appSettings: flowParameters.appSettings)
-
+        
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         stackCoordinator.setRootCoordinator(coordinator)
-
+        
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
-
+            
             switch action {
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .openRoom(let roomID):
-                guard case .newRoom = mode else { return }
+                guard case .newRoom = flow else { return }
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
             }
         }
         .store(in: &cancellables)
-
+        
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissInviteUsersScreen)
         }
@@ -1685,7 +1678,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         flowCoordinator.start(animated: animated)
         membersFlowCoordinator = flowCoordinator
     }
-
+    
     private static let loadingIndicatorID = "\(RoomFlowCoordinator.self)-Loading"
     
     private func showLoadingIndicator(delay: Duration? = nil,

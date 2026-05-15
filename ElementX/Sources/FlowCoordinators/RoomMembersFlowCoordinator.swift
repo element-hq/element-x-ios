@@ -261,18 +261,18 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     private func presentInviteUsersScreen() {
         let stackCoordinator = NavigationStackCoordinator()
         let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.userSession,
-                                                                      roomType: .room(roomProxy: roomProxy),
+                                                                      roomType: .existingRoom(roomProxy: roomProxy),
                                                                       isSkippable: false,
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.userSession.clientProxy),
                                                                       userIndicatorController: flowParameters.userIndicatorController,
                                                                       appSettings: flowParameters.appSettings)
-
+        
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         stackCoordinator.setRootCoordinator(coordinator)
-
+        
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
-
+            
             switch action {
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
@@ -281,7 +281,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
-
+        
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissedInviteUsersScreen)
         }

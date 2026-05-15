@@ -164,49 +164,73 @@ final class InviteUsersScreenViewModelTests {
     }
     
     // MARK: - Draft (new room)
-
+    
     @Test
     func createsNewRoomInDraftMode() async throws {
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
-
+        
         clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
         let newRoomID = "!newroom:example.com"
         clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success(newRoomID)
-
+        
         viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                               roomType: .draft,
-                                               lockedInvitees: [.mockAlice],
+                                               roomType: .draft(mandatoryInvitees: [.mockAlice]),
                                                isSkippable: false,
                                                userDiscoveryService: userDiscoveryService,
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                appSettings: AppSettings())
-
+        
         // The locked invitee starts pre-selected and locked.
         #expect(context.viewState.selectedUsers.map(\.userID) == [UserProfileProxy.mockAlice.userID])
-        #expect(context.viewState.isUserLocked(.mockAlice))
-
+        #expect(context.viewState.isInviteeMandatory(.mockAlice))
+        // The proceed button is disabled while the only selected user is the locked invitee.
+        #expect(!context.viewState.hasInvitableSelectedUsers)
+        
+        // Selecting a non-locked user enables the proceed button.
+        var deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+            state.isUserSelected(.mockBob)
+        }
+        context.send(viewAction: .toggleUser(.mockBob))
+        try await deferredState.fulfill()
+        #expect(context.viewState.hasInvitableSelectedUsers)
+        
+        // Deselecting the non-locked user disables the proceed button again.
+        deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+            !state.isUserSelected(.mockBob)
+        }
+        context.send(viewAction: .toggleUser(.mockBob))
+        try await deferredState.fulfill()
+        #expect(!context.viewState.hasInvitableSelectedUsers)
+        
+        // Re-select the non-locked user before proceeding.
+        deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+            state.isUserSelected(.mockBob)
+        }
+        context.send(viewAction: .toggleUser(.mockBob))
+        try await deferredState.fulfill()
+        
         let deferredAction = deferFulfillment(viewModel.actions) { action in
             if case .openRoom(let roomID) = action, roomID == newRoomID {
                 return true
             }
             return false
         }
-
+        
         context.send(viewAction: .proceed)
-
+        
         try await deferredAction.fulfill()
-
+        
         let args = try #require(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments)
         #expect(args.name == nil)
         #expect(args.topic == nil)
         #expect(args.accessType == .private)
         #expect(args.isSpace == false)
-        #expect(args.userIDs == [UserProfileProxy.mockAlice.userID])
+        #expect(args.userIDs == [UserProfileProxy.mockAlice.userID, UserProfileProxy.mockBob.userID])
         #expect(args.avatarURL == nil)
         #expect(args.aliasLocalPart == nil)
     }
-
+    
     // MARK: - Helpers
     
     private func setupViewModel(roomProxy: JoinedRoomProxyProtocol, isSkippable: Bool) {
@@ -216,7 +240,7 @@ final class InviteUsersScreenViewModelTests {
         clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
         
         let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   roomType: .room(roomProxy: roomProxy),
+                                                   roomType: .existingRoom(roomProxy: roomProxy),
                                                    isSkippable: isSkippable,
                                                    userDiscoveryService: userDiscoveryService,
                                                    userIndicatorController: UserIndicatorControllerMock(),

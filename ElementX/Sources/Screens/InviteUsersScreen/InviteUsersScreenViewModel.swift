@@ -18,17 +18,16 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appSettings: AppSettings
-
+    
     private var suggestedUsers = [UserProfileProxy]()
-
+    
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<InviteUsersScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(userSession: UserSessionProtocol,
          roomType: InviteUsersScreenRoomType,
-         lockedInvitees: [UserProfileProxy] = [],
          isSkippable: Bool,
          userDiscoveryService: UserDiscoveryServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
@@ -39,25 +38,27 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings
 
-        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: lockedInvitees,
-                                                                lockedInvitees: lockedInvitees,
+        let mandatoryInvitees: [UserProfileProxy] = if case .draft(let invitees) = roomType { invitees } else { [] }
+
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: mandatoryInvitees,
+                                                                mandatoryInvitees: mandatoryInvitees,
                                                                 isSkippable: isSkippable),
                    mediaProvider: userSession.mediaProvider)
-
+        
         setupSubscriptions()
         fetchMembersIfNeeded()
-
+        
         Task {
             suggestedUsers = await userSession.clientProxy.recentConversationCounterparts()
-
+            
             if state.usersSection.type == .suggestions {
                 state.usersSection = .init(type: .suggestions, users: suggestedUsers)
             }
         }
     }
-
+    
     // MARK: - Public
-
+    
     override func process(viewAction: InviteUsersScreenViewAction) {
         switch viewAction {
         case .cancel:
@@ -65,8 +66,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .proceed:
             switch roomType {
             case .draft:
-                createDraftRoom(userIDs: state.selectedUsers.map(\.userID))
-            case .room(let roomProxy):
+                createDraftRoom(mandatoryUserIDs: state.selectedUsers.map(\.userID))
+            case .existingRoom(let roomProxy):
                 guard roomProxy.details.historySharingState != RoomHistorySharingState.hidden,
                       !state.usersToConfirm.isEmpty,
                       !state.isSkippable else {
@@ -84,7 +85,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .confirmUnknownUsers:
             state.bindings.presentConfirmationDialog = false
             state.usersToConfirm = []
-            if case .room(let roomProxy) = roomType {
+            if case .existingRoom(let roomProxy) = roomType {
                 inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
             }
         case .toggleUser(let user):
@@ -93,9 +94,10 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
 
     // MARK: - Private
-
+    
     private func toggleUser(_ user: UserProfileProxy) {
-        guard !state.isUserLocked(user) else { return }
+        guard !state.isInviteeMandatory(user) else { return }
+
         if state.selectedUsers.contains(user) {
             state.selectedUsers.removeAll { $0.userID == user.userID }
         } else {
@@ -115,7 +117,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         }
     }
     
-    private func createDraftRoom(userIDs: [String]) {
+    private func createDraftRoom(mandatoryUserIDs: [String]) {
         showLoadingIndicator(title: L10n.commonCreatingRoom)
 
         Task {
@@ -125,7 +127,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                                                 topic: nil,
                                                 accessType: .private,
                                                 isSpace: false,
-                                                userIDs: userIDs,
+                                                userIDs: mandatoryUserIDs,
                                                 avatarURL: nil,
                                                 aliasLocalPart: nil) {
             case .success(let roomID):
@@ -137,7 +139,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             }
         }
     }
-
+    
     private func inviteUsers(_ users: [String], roomProxy: JoinedRoomProxyProtocol) {
         showLoadingIndicator(title: L10n.screenRoomDetailsInvitePeoplePreparing, message: L10n.screenRoomDetailsInvitePeopleDontClose)
         
@@ -201,14 +203,14 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func fetchMembersIfNeeded() {
-        guard case .room(let roomProxy) = roomType else { return }
-
+        guard case .existingRoom(let roomProxy) = roomType else { return }
+        
         Task {
             showLoadingIndicator()
             await roomProxy.updateMembers()
             hideLoadingIndicator()
         }
-
+        
         roomProxy.membersPublisher
             .filter { !$0.isEmpty }
             .first()

@@ -45,7 +45,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     indirect enum State: StateType {
         /// The state machine hasn't started.
         case initial
-
+        
         /// Shown when the flow is started with options to create a room/DM, join by alias, use the room directory etc.
         case startChat
         /// The user is creating a new room.
@@ -55,7 +55,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         /// The user is inviting users to a newly created room.
         case inviteUsers
     }
-
+    
     enum Event: EventType {
         /// The flow is being started.
         case start
@@ -63,12 +63,12 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         case createRoom(isSpace: Bool)
         /// The user dismissed the create room screen.
         case dismissedCreateRoom
-
+        
         /// The user would like to pick an avatar for the room.
         case presentRoomAvatarPicker
         /// The user finished picking the avatar.
         case dismissedRoomAvatarPicker
-
+        
         /// The user's room was created successfully.
         case createdRoom
     }
@@ -270,7 +270,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentInviteUsersScreen(roomProxy: JoinedRoomProxyProtocol, spaceRoomListProxy: SpaceRoomListProxyProtocol?) {
         let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.userSession,
-                                                                      roomType: .room(roomProxy: roomProxy),
+                                                                      roomType: .existingRoom(roomProxy: roomProxy),
                                                                       isSkippable: true,
                                                                       userDiscoveryService: userDiscoveryService,
                                                                       userIndicatorController: flowParameters.userIndicatorController,
@@ -290,7 +290,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
-
+        
         navigationStackCoordinator.push(coordinator)
     }
 }

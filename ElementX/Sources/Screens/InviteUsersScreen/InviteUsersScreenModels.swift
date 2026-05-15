@@ -20,44 +20,48 @@ enum InviteUsersScreenViewModelAction {
 }
 
 enum InviteUsersScreenRoomType {
-    case draft
-    case room(roomProxy: JoinedRoomProxyProtocol)
+    case draft(mandatoryInvitees: [UserProfileProxy])
+    case existingRoom(roomProxy: JoinedRoomProxyProtocol)
 }
 
 struct InviteUsersScreenViewState: BindableState {
     var bindings = InviteUsersScreenViewStateBindings()
-
+    
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
-
+    
     var selectedUsers: [UserProfileProxy] = []
-    var lockedInvitees: [UserProfileProxy] = []
+    var mandatoryInvitees: [UserProfileProxy] = []
     var membershipState: [String: MembershipState] = .init()
     var usersToConfirm: [UserProfileProxy] = []
-
+    
     var isSearching = false
-
+    
     var hasEmptySearchResults: Bool {
         !isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
-
+    
+    var hasInvitableSelectedUsers: Bool {
+        selectedUsers.contains { !isInviteeMandatory($0) }
+    }
+    
     func isUserSelected(_ user: UserProfileProxy) -> Bool {
         isUserDisabled(user) || selectedUsers.contains { $0.userID == user.userID }
     }
-
+    
     func isUserDisabled(_ user: UserProfileProxy) -> Bool {
-        if isUserLocked(user) { return true }
+        if isInviteeMandatory(user) { return true }
         let membershipState = membershipState(user)
         return membershipState == .invite || membershipState == .join
     }
-
-    func isUserLocked(_ user: UserProfileProxy) -> Bool {
-        lockedInvitees.contains { $0.userID == user.userID }
+    
+    func isInviteeMandatory(_ user: UserProfileProxy) -> Bool {
+        mandatoryInvitees.contains { $0.userID == user.userID }
     }
-
+    
     func membershipState(_ user: UserProfileProxy) -> MembershipState? {
         membershipState[user.userID]
     }
-
+    
     let isSkippable: Bool
 }
 
