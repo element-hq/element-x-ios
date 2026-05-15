@@ -66,6 +66,13 @@ extension View {
                                     ForEach(Array(item.verticalBanners.enumerated()), id: \.offset) { _, vBanner in
                                         if vBanner.isVisible {
                                             vBanner.banner
+                                                // Group the banner's geometry so the slide
+                                                // animation transforms it as one unit instead
+                                                // of animating each child SwiftUI primitive
+                                                // independently. Unlike `drawingGroup`, this
+                                                // doesn't rasterise — interactive children
+                                                // (Buttons) continue to render normally.
+                                                .geometryGroup()
                                                 .transition(.move(edge: .top))
                                         }
                                     }
