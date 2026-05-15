@@ -23,7 +23,7 @@ import PostHog
 /// To add a new event create a PR to that repo with the new/updated schema. Once merged
 /// into `main`, update the AnalyticsEvents Swift package in `project.yml`.
 ///
-class AnalyticsService {
+class AnalyticsService: AnalyticsServiceProtocol {
     /// The analytics client to send events with.
     private let client: AnalyticsClientProtocol
     private let appSettings: AppSettings
