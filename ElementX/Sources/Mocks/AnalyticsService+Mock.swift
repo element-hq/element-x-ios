@@ -26,6 +26,7 @@ extension AnalyticsServiceMock {
         let mock = AnalyticsServiceMock()
         mock.isEnabled = false
         mock.shouldShowAnalyticsPrompt = false
+        mock.signpost = Signposter()
         return mock
     }
 }
