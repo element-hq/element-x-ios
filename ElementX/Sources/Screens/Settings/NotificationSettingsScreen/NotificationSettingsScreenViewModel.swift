@@ -65,8 +65,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                     return
                 }
                 let userIndicator = UserIndicator(type: .toast,
-                                                  title: UntranslatedL10n.screenNotificationSettingsSoundPreviewSoundErrorTitle,
-                                                  iconName: "exclamationmark.triangle.fill")
+                                                  title: UntranslatedL10n.screenNotificationSettingsSoundPreviewSoundErrorTitle)
                 userIndicatorController.submitIndicator(userIndicator)
                 MXLog.error("Error previewing alert tone: \(error)")
             }
@@ -275,8 +274,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         } catch {
             MXLog.error("Error importing custom tone url: \(error)")
             userIndicatorController.submitIndicator(.init(type: .toast,
-                                                          title: UntranslatedL10n.screenNotificationSettingsSoundImportSoundErrorTitle,
-                                                          iconName: "exclamationmark.triangle.fill"))
+                                                          title: UntranslatedL10n.screenNotificationSettingsSoundImportSoundErrorTitle))
         }
     }
     
@@ -287,8 +285,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             MXLog.info("Successfully set selected tone: \(alertTone.label)")
         } catch {
             let userIndicator = UserIndicator(type: .toast,
-                                              title: UntranslatedL10n.screenNotificationSettingsSoundSetSoundErrorTitle,
-                                              iconName: "exclamationmark.triangle.fill")
+                                              title: UntranslatedL10n.screenNotificationSettingsSoundSetSoundErrorTitle)
             userIndicatorController.submitIndicator(userIndicator)
             MXLog.error("Error setting selected alert tone to designated location in filesystem: \(error)")
         }
@@ -306,8 +303,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             } catch {
                 MXLog.error("Error deleting alert tone \(tone.label): \(error)")
                 userIndicatorController.submitIndicator(.init(type: .toast,
-                                                              title: UntranslatedL10n.screenNotificationSettingsSoundDeleteSoundErrorTitle,
-                                                              iconName: "exclamationmark.triangle.fill"))
+                                                              title: UntranslatedL10n.screenNotificationSettingsSoundDeleteSoundErrorTitle))
             }
         }
         state.availableCustomTones = notificationToneManager.customTones()
