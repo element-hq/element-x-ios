@@ -490,7 +490,7 @@ final class RoomFlowCoordinatorTests {
                                                   appMediator: AppMediatorMock.default,
                                                   appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: AnalyticsService.mock(settings: appSettings),
+                                                  analytics: AnalyticsServiceMock.default(),
                                                   userIndicatorController: UserIndicatorControllerMock.default,
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: StateMachineFactory())

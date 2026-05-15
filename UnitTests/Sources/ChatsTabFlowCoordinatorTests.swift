@@ -32,8 +32,6 @@ struct ChatsTabFlowCoordinatorTests {
     
     init() async throws {
         let appSettings = AppSettings()
-        let analytics: AnalyticsService = .mock(settings: appSettings)
-        
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())
         
@@ -50,7 +48,7 @@ struct ChatsTabFlowCoordinatorTests {
                                                   appMediator: AppMediatorMock.default,
                                                   appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: analytics,
+                                                  analytics: AnalyticsServiceMock.default(),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: notificationManager,
                                                   stateMachineFactory: stateMachineFactory)

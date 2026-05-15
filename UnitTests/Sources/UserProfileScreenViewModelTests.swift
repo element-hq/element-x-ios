@@ -13,8 +13,6 @@ import Testing
 struct UserProfileScreenViewModelTests {
     @Test
     func initialState() async throws {
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let profile = UserProfileProxy(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: .mockMXCAvatar)
@@ -25,8 +23,8 @@ struct UserProfileScreenViewModelTests {
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                    userIndicatorController: userIndicatorController,
-                                                   analytics: analytics,
-                                                   appSettings: appSettings)
+                                                   analytics: AnalyticsServiceMock.default(),
+                                                   appSettings: AppSettings())
         let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }
@@ -39,8 +37,6 @@ struct UserProfileScreenViewModelTests {
     
     @Test
     func initialStateAccountOwner() async throws {
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let profile = UserProfileProxy(userID: RoomMemberProxyMock.mockMe.userID, displayName: "Me", avatarURL: .mockMXCAvatar)
@@ -51,8 +47,8 @@ struct UserProfileScreenViewModelTests {
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                    userIndicatorController: userIndicatorController,
-                                                   analytics: analytics,
-                                                   appSettings: appSettings)
+                                                   analytics: AnalyticsServiceMock.default(),
+                                                   appSettings: AppSettings())
         let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }
@@ -65,8 +61,6 @@ struct UserProfileScreenViewModelTests {
     
     @Test
     func startingDmWithUnknownUserFetchesIdentity() async throws {
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let profile = UserProfileProxy.mockAlice
@@ -79,8 +73,8 @@ struct UserProfileScreenViewModelTests {
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                    userIndicatorController: userIndicatorController,
-                                                   analytics: analytics,
-                                                   appSettings: appSettings)
+                                                   analytics: AnalyticsServiceMock.default(),
+                                                   appSettings: AppSettings())
         
         let context = viewModel.context
         

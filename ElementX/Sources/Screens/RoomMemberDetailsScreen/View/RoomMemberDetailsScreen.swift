@@ -236,14 +236,11 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
             clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")
         }
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return RoomMemberDetailsScreenViewModel(userID: member.userID,
                                                 roomProxy: roomProxyMock,
                                                 userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                                 userIndicatorController: UserIndicatorControllerMock.default,
-                                                analytics: analytics,
-                                                appSettings: appSettings)
+                                                analytics: AnalyticsServiceMock.default(),
+                                                appSettings: AppSettings())
     }
 }

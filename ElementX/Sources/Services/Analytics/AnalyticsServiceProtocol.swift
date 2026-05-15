@@ -7,6 +7,7 @@
 
 import AnalyticsEvents
 
+// sourcery: AutoMockable
 protocol AnalyticsServiceProtocol: AnyObject {
     var signpost: Signposter { get }
     var shouldShowAnalyticsPrompt: Bool { get }

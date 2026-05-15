@@ -258,8 +258,6 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
 
         let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                   timelineController: MockTimelineController(),
                                                   userSession: UserSessionMock(.init()),
@@ -267,7 +265,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                   userIndicatorController: UserIndicatorControllerMock.default,
                                                   appMediator: AppMediatorMock.default,
                                                   appSettings: appSettings,
-                                                  analyticsService: analytics,
+                                                  analyticsService: AnalyticsServiceMock.default(),
                                                   emojiProvider: EmojiProvider(appSettings: appSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()))

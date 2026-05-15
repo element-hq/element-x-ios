@@ -316,7 +316,7 @@ final class TimelineViewModelTests {
                                           userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: AnalyticsService.mock(settings: appSettings),
+                                          analyticsService: AnalyticsServiceMock.default(),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -345,7 +345,7 @@ final class TimelineViewModelTests {
                                           userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: AnalyticsService.mock(settings: appSettings),
+                                          analyticsService: AnalyticsServiceMock.default(),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -372,7 +372,7 @@ final class TimelineViewModelTests {
                                           userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: AnalyticsService.mock(settings: appSettings),
+                                          analyticsService: AnalyticsServiceMock.default(),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -411,7 +411,7 @@ final class TimelineViewModelTests {
                                           userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: AnalyticsService.mock(settings: appSettings),
+                                          analyticsService: AnalyticsServiceMock.default(),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -450,7 +450,7 @@ final class TimelineViewModelTests {
                                           userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: AnalyticsService.mock(settings: appSettings),
+                                          analyticsService: AnalyticsServiceMock.default(),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -495,7 +495,7 @@ final class TimelineViewModelTests {
                                           userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: AnalyticsService.mock(settings: appSettings),
+                                          analyticsService: AnalyticsServiceMock.default(),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -526,7 +526,7 @@ final class TimelineViewModelTests {
                                           userIndicatorController: UserIndicatorControllerMock.default,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: appSettings,
-                                          analyticsService: AnalyticsService.mock(settings: appSettings),
+                                          analyticsService: AnalyticsServiceMock.default(),
                                           emojiProvider: EmojiProvider(appSettings: appSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -598,7 +598,7 @@ final class TimelineViewModelTests {
                                  userIndicatorController: UserIndicatorControllerMock.default,
                                  appMediator: AppMediatorMock.default,
                                  appSettings: appSettings,
-                                 analyticsService: AnalyticsService.mock(settings: appSettings),
+                                 analyticsService: AnalyticsServiceMock.default(),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

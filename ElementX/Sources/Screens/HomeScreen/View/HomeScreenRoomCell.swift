@@ -253,13 +253,10 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(roomSummaryProvider: RoomSummaryProviderProtocol) -> HomeScreenViewModel {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe", roomSummaryProvider: roomSummaryProvider))))
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   appSettings: appSettings,
-                                   analyticsService: analytics,
+                                   appSettings: AppSettings(),
+                                   analyticsService: AnalyticsServiceMock.default(),
                                    notificationManager: NotificationManagerMock(),
                                    userIndicatorController: UserIndicatorControllerMock.default)
     }

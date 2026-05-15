@@ -148,8 +148,6 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
     static let composerViewModel = ComposerToolbarViewModel.mock()
     static let timelineViewModel = {
         let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return TimelineViewModel(roomProxy: roomProxyMock,
                                  timelineController: MockTimelineController(),
                                  userSession: UserSessionMock(.init()),
@@ -157,7 +155,7 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
                                  userIndicatorController: UserIndicatorControllerMock.default,
                                  appMediator: AppMediatorMock.default,
                                  appSettings: appSettings,
-                                 analyticsService: analytics,
+                                 analyticsService: AnalyticsServiceMock.default(),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

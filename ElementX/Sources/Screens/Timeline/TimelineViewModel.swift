@@ -1059,8 +1059,6 @@ extension TimelineViewModel {
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview room", predecessor: hasPredecessor ? .init(roomId: UUID().uuidString) : nil))
 
         let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: timelineController ?? MockTimelineController(timelineKind: timelineKind),
@@ -1069,7 +1067,7 @@ extension TimelineViewModel {
                                  userIndicatorController: UserIndicatorControllerMock.default,
                                  appMediator: AppMediatorMock.default,
                                  appSettings: appSettings,
-                                 analyticsService: analytics,
+                                 analyticsService: AnalyticsServiceMock.default(),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

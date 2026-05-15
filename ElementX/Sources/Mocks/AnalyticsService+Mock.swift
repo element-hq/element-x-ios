@@ -6,6 +6,7 @@
 //
 
 extension AnalyticsService {
+    @available(*, deprecated, renamed: "AnalyticsServiceMock")
     static func mock(_ clientOverride: AnalyticsClientProtocol? = nil, settings: AppSettings? = nil) -> AnalyticsService {
         let client: AnalyticsClientProtocol
         if let clientOverride {
@@ -17,5 +18,14 @@ extension AnalyticsService {
         }
         
         return .init(client: client, appSettings: settings ?? AppSettings())
+    }
+}
+
+extension AnalyticsServiceMock {
+    static func `default`() -> AnalyticsServiceMock {
+        let mock = AnalyticsServiceMock()
+        mock.isEnabled = false
+        mock.shouldShowAnalyticsPrompt = false
+        return mock
     }
 }

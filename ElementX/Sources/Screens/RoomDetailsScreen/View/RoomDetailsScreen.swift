@@ -406,16 +406,13 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     analyticsService: analytics,
+                     analyticsService: AnalyticsServiceMock.default(),
                      userIndicatorController: UserIndicatorControllerMock.default,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: appSettings)
+                     appSettings: AppSettings())
     }
     
     private static func makeSimpleRoomViewModel() -> RoomDetailsScreenViewModel {
@@ -437,16 +434,13 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     analyticsService: analytics,
+                     analyticsService: AnalyticsServiceMock.default(),
                      userIndicatorController: UserIndicatorControllerMock.default,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: appSettings)
+                     appSettings: AppSettings())
     }
     
     private static func makeDMViewModel(verificationState: UserIdentityVerificationState) -> RoomDetailsScreenViewModel {
@@ -478,15 +472,12 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                     analyticsService: analytics,
+                     analyticsService: AnalyticsServiceMock.default(),
                      userIndicatorController: UserIndicatorControllerMock.default,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: appSettings)
+                     appSettings: AppSettings())
     }
 }
