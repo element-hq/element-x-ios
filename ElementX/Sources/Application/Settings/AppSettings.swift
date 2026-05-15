@@ -467,7 +467,7 @@ final class AppSettings: @unchecked Sendable {
         // UserDefaults to be used on reads and writes.
         guard
             let store: UserDefaultsProtocol = store ?? UserDefaults(suiteName: Self.suiteName)
-        else { fatalError("Catastophic error - UserDefaults could not be instantiated with suite name: \(Self.suiteName)") }
+        else { fatalError("Catastrophic error - UserDefaults could not be instantiated with suite name: \(Self.suiteName)") }
         self.store = store
 		
         _lastVersionLaunched = UserPreference(key: .lastVersionLaunched, storage: store)
