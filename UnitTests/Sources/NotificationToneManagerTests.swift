@@ -17,10 +17,9 @@ import Testing
 struct NotificationToneManagerTests {
     private let manager: NotificationToneManager
 
-    init() async throws {
+    init() throws {
         AppSettings.resetAllSettings()
-        manager = try await NotificationToneManager(appSettings: AppSettings(),
-                                                    userIndicatorController: UserIndicatorControllerMock())
+        manager = try NotificationToneManager(appSettings: AppSettings())
     }
 
     // MARK: - Deletion
