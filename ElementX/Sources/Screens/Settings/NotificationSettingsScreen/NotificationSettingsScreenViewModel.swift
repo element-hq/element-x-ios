@@ -42,7 +42,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         toneManager = notificationToneManager
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
-                                                                         selectedAlertTone: appSettings.selectedNotificationTone ?? .defaultElementXMessageTone,
+                                                                         selectedAlertTone: appSettings.selectedNotificationTone ?? NotificationToneManager.defaultElementXMessageTone,
                                                                          canSelectTones: notificationToneManager != nil,
                                                                          availableCustomTones: notificationToneManager?.customTones() ?? []))
 
@@ -52,7 +52,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             .store(in: &cancellables)
         
         appSettings.$selectedNotificationTone
-            .map { $0 ?? .defaultElementXMessageTone }
+            .map { $0 ?? NotificationToneManager.defaultElementXMessageTone }
             .weakAssign(to: \.state.selectedAlertTone, on: self)
             .store(in: &cancellables)
         

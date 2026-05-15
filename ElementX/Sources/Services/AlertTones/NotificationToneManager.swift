@@ -32,48 +32,48 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     }
     
     private let appSettings: AppSettings
-
+    
     /// Creates the manager and ensures required library directories exist.
     init(appSettings: AppSettings) throws {
         self.appSettings = appSettings
-
+        
         try FileManager.default.createDirectory(at: NotificationTone.libraryLocation, withIntermediateDirectories: true)
-        try FileManager.default.createDirectory(at: NotificationTone.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: Self.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
     }
-
+    
     /// Sets the given tone as the active notification alert tone.
     ///
     /// Copies the tone's audio file to `selectedToneLocation` and persists the selection in app settings.
     func setSelectedTone(_ alertTone: NotificationTone) throws {
         do {
-            try? FileManager.default.removeItem(at: NotificationTone.selectedToneLocation)
-            try FileManager.default.copyItem(at: alertTone.location, to: NotificationTone.selectedToneLocation)
+            try? FileManager.default.removeItem(at: Self.selectedToneLocation)
+            try FileManager.default.copyItem(at: alertTone.location, to: Self.selectedToneLocation)
             appSettings.selectedNotificationTone = alertTone
         } catch {
-            if (try? NotificationTone.selectedToneLocation.checkResourceIsReachable()) != true {
+            if (try? Self.selectedToneLocation.checkResourceIsReachable()) != true {
                 // make sure the selected tone is reset if there's no custom tone present
                 appSettings.selectedNotificationTone = nil
             }
             throw error
         }
     }
-
+    
     /// Returns all user-imported CAF tones from the library directory, sorted by name.
     func customTones() -> [NotificationTone] {
         let availableFiles = try? FileManager
             .default
             .contentsOfDirectory(at: NotificationTone.libraryLocation, includingPropertiesForKeys: nil)
-
+        
         return (availableFiles ?? [])
             .compactMap {
                 let pathExtension = $0.pathExtension
                 guard UTType(filenameExtension: pathExtension) == UTType("com.apple.coreaudio-format") else { return nil }
-
+                
                 return .createCustomUserSound(filename: $0.lastPathComponent)
             }
             .sorted()
     }
-
+    
     /// Imports an audio file into the tone library, converting to CAF if the source is not already CAF.
     /// - Returns: The URL of the imported file in the library.
     @ConversionActor
@@ -81,27 +81,27 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     func addNewToneToLibrary(from sourceURL: URL) throws -> URL {
         let baseName = sourceURL.deletingPathExtension().lastPathComponent
         let outputURL = NotificationTone.libraryLocation.appending(component: baseName).appendingPathExtension("caf")
-
+        
         guard (try? outputURL.checkResourceIsReachable()) != true else {
             throw ManagerError.fileAlreadyExists
         }
-
+        
         if sourceURL.pathExtension.lowercased() == "caf" {
             try FileManager.default.copyItem(at: sourceURL, to: outputURL)
         } else {
             try convertToCAF(from: sourceURL, to: outputURL)
         }
-
+        
         return outputURL
     }
-
+    
     /// Removes a user-imported tone from the library.
     /// - Throws: `DeletionError.notACustomTone` if the tone is not stored in the library directory.
     func deleteCustomTone(_ alertTone: NotificationTone) throws {
         guard alertTone.location.deletingLastPathComponent() == NotificationTone.libraryLocation else {
             throw ManagerError.notACustomTone
         }
-
+        
         try FileManager.default.removeItem(at: alertTone.location)
     }
     
@@ -150,4 +150,105 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
         try FileManager.default.moveItem(at: tempURL, to: destURL)
         MXLog.info("Converted \(sourceURL.path(percentEncoded: false)) to caf")
     }
+    
+    /// Filename of the active tone file used by the notification service.
+    static let selectedToneFilename = "currentAlert.caf"
+    /// File URL of the active tone copied/linked for use by the system.
+    static let selectedToneLocation = NotificationTone.libraryLocation.deletingLastPathComponent().appending(component: selectedToneFilename)
+    
+    #if IS_MAIN_APP
+    /// The default Element X bundled message tone.
+    static let defaultElementXMessageTone: NotificationTone = .createBundledSound(label: UntranslatedL10n.screenNotificationSettingsSoundElementDefault,
+                                                                                  filename: "message.caf")
+    
+    /// Pre-defined iOS system tones available for selection, sorted by name.
+    static let defaultSystemAlerts: [NotificationTone] = [
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTriTone,
+                           filename: "sms-received1.caf"),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemChime,
+                           filename: "sms-received2.caf"),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemGlass,
+                           filename: "sms-received3.caf"),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemHorn,
+                           filename: "sms-received4.caf"),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemBell,
+                           filename: "sms-received5.caf"),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemElectronic,
+                           filename: "sms-received6.caf"),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemAlert,
+                           filename: "alarm.caf"),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemBloom,
+                           filename: "Bloom.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemCalypso,
+                           filename: "Calypso.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemAnticipate,
+                           filename: "Anticipate.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemChooChoo,
+                           filename: "Choo_Choo.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemDescent,
+                           filename: "Descent.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemFanfare,
+                           filename: "Fanfare.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemLadder,
+                           filename: "Ladder.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemMinuet,
+                           filename: "Minuet.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemNewsFlash,
+                           filename: "News_Flash.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemNoir,
+                           filename: "Noir.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemSherwoodForest,
+                           filename: "Sherwood_Forest.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemSpell,
+                           filename: "Spell.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemSuspense,
+                           filename: "Suspense.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTelegraph,
+                           filename: "Telegraph.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTiptoes,
+                           filename: "Tiptoes.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTypewriters,
+                           filename: "Typewriters.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemUpdate,
+                           filename: "Update.caf",
+                           systemSoundsSubdirectory: ["New"]),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemSwish,
+                           filename: "Swish.caf"),
+        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTweet,
+                           filename: "tweet_sent.caf")
+    ]
+    .compactMap { (alertTone: NotificationTone) -> NotificationTone? in
+        guard (try? alertTone.location.checkResourceIsReachable()) == true else {
+            return nil
+        }
+        return alertTone
+    }
+    .sorted()
+    
+    /// Element X bundled tones available for selection, sorted by name.
+    static let defaultElementXAlerts: [NotificationTone] = [
+        defaultElementXMessageTone,
+        .createBundledSound(label: UntranslatedL10n.screenNotificationSettingsSoundElementFade,
+                            filename: "sound_01.caf")
+    ].sorted()
+    
+    /// All default tones (system + Element X), sorted by name.
+    static let allDefaultAlerts: [NotificationTone] = (defaultSystemAlerts + defaultElementXAlerts).sorted()
+    #endif
 }
