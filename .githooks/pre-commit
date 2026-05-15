@@ -10,3 +10,9 @@ then
 fi
 
 ./Tools/Scripts/validate_lfs.sh
+
+LOCAL_SCRIPT_PATH="$HOME/.local/elementx_local_dev/pre-commit"
+if [ -x "$LOCAL_SCRIPT_PATH" ]; then
+	export ELEMENTX_REPO="$(pwd)"
+	"$LOCAL_SCRIPT_PATH"
+fi
