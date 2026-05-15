@@ -69,7 +69,7 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = PinnedEventsTimelineScreenViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                                                userIndicatorController: UserIndicatorControllerMock(),
                                                                appSettings: AppSettings(),
-                                                               analyticsService: .mock())
+                                                               analyticsService: AnalyticsService.mock())
     
     static let emptyTimelineViewModel: TimelineViewModel = {
         let timelineController = MockTimelineController(timelineKind: .pinned)

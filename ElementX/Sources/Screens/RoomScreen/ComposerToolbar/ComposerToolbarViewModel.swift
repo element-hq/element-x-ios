@@ -20,7 +20,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let roomProxy: JoinedRoomProxyProtocol
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     private let draftService: ComposerDraftServiceProtocol
     private var identityPinningViolations = [String: RoomMemberProxyProtocol]()
     
@@ -52,7 +52,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
          mediaProvider: MediaProviderProtocol,
          mentionDisplayHelper: MentionDisplayHelper,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService,
+         analyticsService: AnalyticsServiceProtocol,
          composerDraftService: ComposerDraftServiceProtocol) {
         self.initialText = initialText
         self.wysiwygViewModel = wysiwygViewModel

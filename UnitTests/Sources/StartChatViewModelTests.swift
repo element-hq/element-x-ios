@@ -27,7 +27,7 @@ struct StartChatScreenViewModelTests {
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         viewModel = StartChatScreenViewModel(userSession: userSession,
-                                             analytics: .mock(settings: appSettings),
+                                             analytics: AnalyticsService.mock(settings: appSettings),
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              userDiscoveryService: userDiscoveryService,
                                              appSettings: appSettings)

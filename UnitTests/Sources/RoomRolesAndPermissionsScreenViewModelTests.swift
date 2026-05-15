@@ -84,6 +84,6 @@ struct RoomRolesAndPermissionsScreenViewModelTests {
         roomProxy = JoinedRoomProxyMock(.init(members: members))
         viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
                                                            userIndicatorController: UserIndicatorControllerMock(),
-                                                           analytics: .mock())
+                                                           analytics: AnalyticsService.mock())
     }
 }

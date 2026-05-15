@@ -164,7 +164,7 @@ struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
         return AdvancedSettingsScreenViewModel(advancedSettings: appSettings,
-                                               analytics: .mock(settings: appSettings),
+                                               analytics: AnalyticsService.mock(settings: appSettings),
                                                clientProxy: ClientProxyMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock.default)
     }()

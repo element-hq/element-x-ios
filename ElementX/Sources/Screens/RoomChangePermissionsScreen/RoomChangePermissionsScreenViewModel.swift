@@ -15,7 +15,7 @@ typealias RoomChangePermissionsScreenViewModelType = StateStoreViewModelV2<RoomC
 class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModelType, RoomChangePermissionsScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     
     private var actionsSubject: PassthroughSubject<RoomChangePermissionsScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomChangePermissionsScreenViewModelAction, Never> {
@@ -26,7 +26,7 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
          ownPowerLevel: RoomPowerLevel,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         analytics: AnalyticsService) {
+         analytics: AnalyticsServiceProtocol) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics

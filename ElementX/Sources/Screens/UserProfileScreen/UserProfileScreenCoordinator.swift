@@ -14,7 +14,7 @@ struct UserProfileScreenCoordinatorParameters {
     let isPresentedModally: Bool
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
     let appSettings: AppSettings
 }
 

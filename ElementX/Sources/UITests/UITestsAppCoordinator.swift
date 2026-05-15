@@ -13,7 +13,7 @@ import UIKit
 
 class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate {
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let navigationRootCoordinator: NavigationRootCoordinator
@@ -42,7 +42,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
         
-        analytics = .mock(analyticsClient, settings: appSettings)
+        analytics = AnalyticsService.mock(analyticsClient, settings: appSettings)
         userIndicatorController = UserIndicatorController()
         
         windowManager.delegate = self
@@ -115,7 +115,7 @@ class MockScreen: Identifiable {
     let navigationRootCoordinator: NavigationRootCoordinator
     
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var client: UITestsSignalling.Client?
@@ -127,7 +127,7 @@ class MockScreen: Identifiable {
          windowManager: SecureWindowManagerProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
          appSettings: AppSettings,
-         analytics: AnalyticsService,
+         analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.id = id
         self.windowManager = windowManager

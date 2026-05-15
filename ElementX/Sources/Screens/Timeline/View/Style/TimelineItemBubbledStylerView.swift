@@ -346,7 +346,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  userIndicatorController: UserIndicatorControllerMock.default,
                                  appMediator: AppMediatorMock.default,
                                  appSettings: appSettings,
-                                 analyticsService: .mock(settings: appSettings),
+                                 analyticsService: AnalyticsService.mock(settings: appSettings),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -365,7 +365,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  userIndicatorController: UserIndicatorControllerMock.default,
                                  appMediator: AppMediatorMock.default,
                                  appSettings: appSettings,
-                                 analyticsService: .mock(settings: appSettings),
+                                 analyticsService: AnalyticsService.mock(settings: appSettings),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

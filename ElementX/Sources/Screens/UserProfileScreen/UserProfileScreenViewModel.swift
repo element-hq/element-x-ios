@@ -15,7 +15,7 @@ typealias UserProfileScreenViewModelType = StateStoreViewModelV2<UserProfileScre
 class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let appSettings: AppSettings
     
     private var actionsSubject: PassthroughSubject<UserProfileScreenViewModelAction, Never> = .init()
@@ -27,7 +27,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
          isPresentedModally: Bool,
          userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         analytics: AnalyticsService,
+         analytics: AnalyticsServiceProtocol,
          appSettings: AppSettings) {
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController

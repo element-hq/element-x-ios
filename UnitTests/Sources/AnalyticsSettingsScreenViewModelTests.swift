@@ -12,7 +12,7 @@ import Testing
 @MainActor
 final class AnalyticsSettingsScreenViewModelTests {
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
 
     private var viewModel: AnalyticsSettingsScreenViewModelProtocol!
     private var context: AnalyticsSettingsScreenViewModelType.Context!
@@ -20,7 +20,7 @@ final class AnalyticsSettingsScreenViewModelTests {
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
+        analytics = AnalyticsService.mock(settings: appSettings)
 
         viewModel = AnalyticsSettingsScreenViewModel(appSettings: appSettings,
                                                      analytics: analytics)

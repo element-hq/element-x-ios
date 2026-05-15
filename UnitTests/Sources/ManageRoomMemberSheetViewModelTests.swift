@@ -32,7 +32,7 @@ struct ManageRoomMemberSheetViewModelTests {
                                                    permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   analyticsService: .mock(),
+                                                   analyticsService: AnalyticsService.mock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
@@ -64,7 +64,7 @@ struct ManageRoomMemberSheetViewModelTests {
                                                    permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   analyticsService: .mock(),
+                                                   analyticsService: AnalyticsService.mock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
@@ -87,7 +87,7 @@ struct ManageRoomMemberSheetViewModelTests {
                                                    permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   analyticsService: .mock(),
+                                                   analyticsService: AnalyticsService.mock(),
                                                    mediaProvider: MediaProviderMock(configuration: .init()))
         
         let deferredAction = deferFulfillment(viewModel.actions) { action in

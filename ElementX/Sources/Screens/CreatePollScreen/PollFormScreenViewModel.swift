@@ -13,7 +13,7 @@ typealias PollFormScreenViewModelType = StateStoreViewModelV2<PollFormScreenView
 
 class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewModelProtocol {
     private let timelineController: TimelineControllerProtocol
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var actionsSubject: PassthroughSubject<PollFormScreenViewModelAction, Never> = .init()
@@ -24,7 +24,7 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
     init(mode: PollFormMode,
          maxNumberOfOptions: Int? = nil,
          timelineController: TimelineControllerProtocol,
-         analytics: AnalyticsService,
+         analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.timelineController = timelineController
         self.analytics = analytics

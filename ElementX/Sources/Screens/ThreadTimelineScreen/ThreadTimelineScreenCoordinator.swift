@@ -22,7 +22,7 @@ struct ThreadTimelineScreenCoordinatorParameters {
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
     let composerDraftService: ComposerDraftServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
     let userIndicatorController: UserIndicatorControllerProtocol

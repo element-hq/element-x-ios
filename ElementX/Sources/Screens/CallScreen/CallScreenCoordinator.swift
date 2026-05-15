@@ -16,7 +16,7 @@ struct CallScreenCoordinatorParameters {
     let allowPictureInPicture: Bool
     let appSettings: AppSettings
     let appHooks: AppHooks
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
 }
 
 enum CallScreenCoordinatorAction {

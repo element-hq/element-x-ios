@@ -17,7 +17,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol
     private let liveLocationManager: LiveLocationManagerProtocol
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenter: NotificationCenter
     
@@ -36,7 +36,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
          roomProxy: JoinedRoomProxyProtocol,
          timelineController: TimelineControllerProtocol,
          liveLocationManager: LiveLocationManagerProtocol,
-         analytics: AnalyticsService,
+         analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          notificationCenter: NotificationCenter = .default) {

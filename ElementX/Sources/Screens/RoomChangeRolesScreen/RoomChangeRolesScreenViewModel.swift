@@ -14,7 +14,7 @@ typealias RoomChangeRolesScreenViewModelType = StateStoreViewModelV2<RoomChangeR
 class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomChangeRolesScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     
     private let actionsSubject: PassthroughSubject<RoomChangeRolesScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomChangeRolesScreenViewModelAction, Never> {
@@ -25,7 +25,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
          roomProxy: JoinedRoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         analytics: AnalyticsService) {
+         analytics: AnalyticsServiceProtocol) {
         guard mode != .user || mode != .creator else { fatalError("Invalid screen configuration: \(mode)") }
 
         self.roomProxy = roomProxy

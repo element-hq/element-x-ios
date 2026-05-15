@@ -21,7 +21,7 @@ final class HomeScreenViewModelTests {
     var roomSummaryProvider: RoomSummaryProviderMock!
     var notificationManager: NotificationManagerMock!
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     var cancellables = Set<AnyCancellable>()
@@ -29,7 +29,7 @@ final class HomeScreenViewModelTests {
     init() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
+        analytics = AnalyticsService.mock(settings: appSettings)
         userIndicatorController = UserIndicatorControllerMock.default
     }
     

@@ -121,12 +121,12 @@ struct RoomRolesAndPermissionsScreen_Previews: PreviewProvider, TestablePreview 
     static let viewModel = RoomRolesAndPermissionsScreenViewModel(initialPermissions: RoomPermissions(powerLevels: .mock),
                                                                   roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)),
                                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                                  analytics: .mock())
+                                                                  analytics: AnalyticsService.mock())
     
     static let creatorViewModel = RoomRolesAndPermissionsScreenViewModel(initialPermissions: RoomPermissions(powerLevels: .mock),
                                                                          roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsCreator)),
                                                                          userIndicatorController: UserIndicatorControllerMock(),
-                                                                         analytics: .mock())
+                                                                         analytics: AnalyticsService.mock())
     static var previews: some View {
         ElementNavigationStack {
             RoomRolesAndPermissionsScreen(context: viewModel.context)

@@ -14,7 +14,7 @@ struct PollFormScreenCoordinatorParameters {
     /// The max number of allowed options, if no value provided the default value of the view model will be used.
     var maxNumberOfOptions: Int?
     let timelineController: TimelineControllerProtocol
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 

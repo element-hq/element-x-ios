@@ -34,7 +34,7 @@ struct RoomDetailsScreenViewModelTests {
         notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -48,7 +48,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers, joinRule: .public))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -70,7 +70,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -93,7 +93,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -153,7 +153,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -176,7 +176,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -209,7 +209,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -241,7 +241,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -274,7 +274,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -308,7 +308,7 @@ struct RoomDetailsScreenViewModelTests {
                                                   powerLevelsConfiguration: .init(canUserInvite: false)))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -327,7 +327,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers, joinRule: .public))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -381,7 +381,7 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -422,7 +422,7 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -463,7 +463,7 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -485,7 +485,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -507,7 +507,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -527,7 +527,7 @@ struct RoomDetailsScreenViewModelTests {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError = NotificationSettingsError.Generic(msg: "error")
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -737,7 +737,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, knockRequestsState: .loaded(mockedRequests), joinRule: .knock))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -760,7 +760,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, knockRequestsState: .loading, joinRule: .knock))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -785,7 +785,7 @@ struct RoomDetailsScreenViewModelTests {
                                                   powerLevelsConfiguration: .init(canUserInvite: false)))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -810,7 +810,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, members: mockedMembers, knockRequestsState: .loaded(mockedRequests), joinRule: .knock))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
@@ -839,7 +839,7 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
+                                               analyticsService: AnalyticsService.mock(settings: appSettings),
                                                userIndicatorController: UserIndicatorControllerMock.default,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),

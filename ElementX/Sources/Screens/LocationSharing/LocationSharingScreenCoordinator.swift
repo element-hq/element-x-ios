@@ -16,7 +16,7 @@ struct LocationSharingScreenCoordinatorParameters {
     let timelineController: TimelineControllerProtocol
     let liveLocationManager: LiveLocationManagerProtocol
     let appMediator: AppMediatorProtocol
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let mediaProvider: MediaProviderProtocol
 }

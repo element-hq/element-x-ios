@@ -12,7 +12,7 @@ import SwiftUI
 struct RoomDetailsScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let userSession: UserSessionProtocol
-    let analyticsService: AnalyticsService
+    let analyticsService: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol

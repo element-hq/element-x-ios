@@ -29,7 +29,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     private let emojiProvider: EmojiProviderProtocol
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
     
@@ -55,7 +55,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService,
+         analyticsService: AnalyticsServiceProtocol,
          emojiProvider: EmojiProviderProtocol,
          linkMetadataProvider: LinkMetadataProviderProtocol,
          timelineControllerFactory: TimelineControllerFactoryProtocol) {

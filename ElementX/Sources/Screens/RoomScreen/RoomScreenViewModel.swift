@@ -18,7 +18,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let clientProxy: ClientProxyProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let appSettings: AppSettings
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var initialSelectedPinnedEventID: String?
@@ -56,7 +56,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,
          appHooks: AppHooks,
-         analyticsService: AnalyticsService,
+         analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         clientProxy = userSession.clientProxy
         self.roomProxy = roomProxy

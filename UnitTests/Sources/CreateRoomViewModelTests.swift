@@ -18,7 +18,7 @@ final class CreateRoomScreenViewModelTests {
     var userSession: UserSessionMock!
 
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
 
     private let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
     
@@ -28,7 +28,7 @@ final class CreateRoomScreenViewModelTests {
 
     init() {
         appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
+        analytics = AnalyticsService.mock(settings: appSettings)
     }
 
     deinit {

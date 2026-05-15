@@ -61,7 +61,7 @@ struct UserSessionFlowCoordinatorTests {
                                                   appMediator: appMediator,
                                                   appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: .mock(settings: appSettings),
+                                                  analytics: AnalyticsService.mock(settings: appSettings),
                                                   userIndicatorController: userIndicatorController,
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: stateMachineFactory)

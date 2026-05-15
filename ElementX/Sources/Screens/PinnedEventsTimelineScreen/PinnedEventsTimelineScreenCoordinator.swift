@@ -16,7 +16,7 @@ struct PinnedEventsTimelineScreenCoordinatorParameters {
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
     let emojiProvider: EmojiProviderProtocol
     let linkMetadataProvider: LinkMetadataProviderProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol

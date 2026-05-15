@@ -14,7 +14,7 @@ typealias StartChatScreenViewModelType = StateStoreViewModel<StartChatScreenView
 
 class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let appSettings: AppSettings
@@ -27,7 +27,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     }
     
     init(userSession: UserSessionProtocol,
-         analytics: AnalyticsService,
+         analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol,
          appSettings: AppSettings) {

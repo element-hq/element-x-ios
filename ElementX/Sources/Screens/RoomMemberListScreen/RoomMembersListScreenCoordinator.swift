@@ -13,7 +13,7 @@ struct RoomMembersListScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let roomProxy: JoinedRoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
 }
 
 enum RoomMembersListScreenCoordinatorAction {
