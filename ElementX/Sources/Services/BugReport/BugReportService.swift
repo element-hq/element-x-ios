@@ -49,7 +49,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     // MARK: - BugReportServiceProtocol
     
     var crashedLastRun: Bool {
-        SentrySDK.crashedLastRun
+        SentrySDK.lastRunStatus == .didCrash
     }
     
     // swiftlint:disable:next cyclomatic_complexity
