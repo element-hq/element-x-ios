@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Combine
+@preconcurrency import Combine
 import MatrixRustSDK
 import SwiftUI
 
@@ -52,7 +52,11 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
     private let room: RoomProtocol
     private let deviceID: String
     
-    private var widgetDriver: WidgetDriverAndHandle?
+    private let _widgetDriver: SendableBox<WidgetDriverAndHandle?>
+    private var widgetDriver: WidgetDriverAndHandle? {
+        get { _widgetDriver.value }
+        set { _widgetDriver.value = newValue }
+    }
     
     let widgetID = UUID().uuidString
     let messagePublisher = PassthroughSubject<String, Never>()
@@ -65,6 +69,7 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
     init(room: RoomProtocol, deviceID: String) {
         self.room = room
         self.deviceID = deviceID
+        _widgetDriver = nil
     }
     
     func start(baseURL: URL,

@@ -11,46 +11,46 @@ import Foundation
 import MatrixRustSDK
 
 private final class WeakSessionVerificationControllerProxy: SessionVerificationControllerDelegate {
-    private weak var proxy: SessionVerificationControllerProxy?
+    private let proxy: WeakSendableBox<SessionVerificationControllerProxy>
     
     init(proxy: SessionVerificationControllerProxy) {
-        self.proxy = proxy
+        self.proxy = .init(proxy)
     }
     
     // MARK: - SessionVerificationControllerDelegate
     
     func didReceiveVerificationRequest(details: MatrixRustSDK.SessionVerificationRequestDetails) {
-        proxy?.didReceiveVerificationRequest(details: details)
+        proxy.value?.didReceiveVerificationRequest(details: details)
     }
     
     func didReceiveVerificationData(data: MatrixRustSDK.SessionVerificationData) {
         switch data {
         // We can handle only emojis for now
         case .emojis(let emojis, _):
-            proxy?.didReceiveData(emojis)
+            proxy.value?.didReceiveData(emojis)
         default:
             break
         }
     }
     
     func didAcceptVerificationRequest() {
-        proxy?.didAcceptVerificationRequest()
+        proxy.value?.didAcceptVerificationRequest()
     }
     
     func didStartSasVerification() {
-        proxy?.didStartSasVerification()
+        proxy.value?.didStartSasVerification()
     }
     
     func didFail() {
-        proxy?.didFail()
+        proxy.value?.didFail()
     }
     
     func didCancel() {
-        proxy?.didCancel()
+        proxy.value?.didCancel()
     }
     
     func didFinish() {
-        proxy?.didFinish()
+        proxy.value?.didFinish()
     }
 }
 

@@ -11,17 +11,17 @@ import Foundation
 import MatrixRustSDK
 
 private final class WeakNotificationSettingsProxy: NotificationSettingsDelegate {
-    private weak var proxy: NotificationSettingsProxy?
+    private let proxy: WeakSendableBox<NotificationSettingsProxy>
     
     init(proxy: NotificationSettingsProxy) {
-        self.proxy = proxy
+        self.proxy = .init(proxy)
     }
     
     // MARK: - NotificationSettingsDelegate
     
     func settingsDidChange() {
         Task {
-            await proxy?.settingsDidChange()
+            await proxy.value?.settingsDidChange()
         }
     }
 }
