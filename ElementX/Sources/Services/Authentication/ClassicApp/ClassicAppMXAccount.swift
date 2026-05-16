@@ -8,7 +8,7 @@
 import Foundation
 import Observation
 
-struct ClassicAppAccount: Equatable, CustomStringConvertible {
+struct ClassicAppAccount: Equatable, CustomStringConvertible, Sendable {
     let userID: String
     let displayName: String?
     let avatarURL: URL?
@@ -29,20 +29,29 @@ struct ClassicAppAccount: Equatable, CustomStringConvertible {
     enum AvailableSecrets { case complete, requiresBackup, unavailable }
     
     @Observable
-    class State: Equatable {
+    final class State: Equatable, Sendable {
         static func == (lhs: State, rhs: State) -> Bool {
             lhs.isServerSupported == rhs.isServerSupported && lhs.availableSecrets == rhs.availableSecrets
         }
         
+        private let _isServerSupported: SendableBox<Bool?> = nil
         /// Whether or not the account's server is supported by Element X (or `nil` whilst determining support).
         ///
         /// The account will be hidden when this value is `false`.
-        var isServerSupported: Bool?
+        var isServerSupported: Bool? {
+            get { _isServerSupported.value }
+            set { _isServerSupported.value = newValue }
+        }
+        
+        private let _availableSecrets: SendableBox<AvailableSecrets?> = nil
         /// Information about the secrets available from Element X (or `nil` whilst determining availability).
         ///
         /// See ``AuthenticationService.refreshClassicAppAccountState`` for details about how
         /// this property's value affects the authentication flow.
-        var availableSecrets: AvailableSecrets?
+        var availableSecrets: AvailableSecrets? {
+            get { _availableSecrets.value }
+            set { _availableSecrets.value = newValue }
+        }
     }
     
     let state = State()

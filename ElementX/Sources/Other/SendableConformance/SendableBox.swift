@@ -14,6 +14,7 @@ import Foundation
 /// types that point to reference types), make sure to only create one Box instance per instance of Wrapped.
 ///
 /// Leverages the `@dynamicMemberLookup` feature in swift to be able to access properties directly on the Box.
+@Observable
 @dynamicMemberLookup
 final class SendableBox<Wrapped>: @unchecked Sendable {
     private let isolationLock = NSLock()
