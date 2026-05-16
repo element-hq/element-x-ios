@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Wraps a non-Sendable type and assures most of it's interactions are done in isolation with locking mechanisms
+/// Wraps a non-Sendable type and assures most of its interactions are done in isolation with locking mechanisms
 ///
 /// The exception is reference types. If multiple SendableBox instances are created with a reference to the same class,
 /// each SendableBox operates in isolation and ignorance of the others. When using with reference types (or value
@@ -17,7 +17,7 @@ import Foundation
 @Observable
 @dynamicMemberLookup
 final class SendableBox<Wrapped>: @unchecked Sendable {
-    private let isolationLock = NSLock()
+    private let isolationLock = NSRecursiveLock()
     
     private var _value: Wrapped
     var value: Wrapped {
