@@ -27,7 +27,6 @@ struct RoomDetailsScreenViewModelTests {
     init() {
         AppSettings.resetAllSettings()
         let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
         
         cancellables.removeAll()
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test"))
