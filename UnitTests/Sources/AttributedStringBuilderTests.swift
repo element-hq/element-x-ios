@@ -305,7 +305,7 @@ struct AttributedStringBuilderTests {
             foundBlockquoteAndLink = true
         }
         
-        #expect(foundBlockquoteAndLink != false, "Couldn't find blockquote or link")
+        #expect(foundBlockquoteAndLink == true, "Couldn't find blockquote or link")
     }
     
     @Test
