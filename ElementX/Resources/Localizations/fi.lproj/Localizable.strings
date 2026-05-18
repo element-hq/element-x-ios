@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Edistyneet asetukset";
 "common_an_image" = "kuva";
 "common_analytics" = "Analytiikka";
-"common_android_fetching_notifications_title" = "Synkronoidaan ilmoituksia...";
 "common_android_shortcuts_remove_reason_left_room" = "Poistuit huoneesta";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Sinut kirjattiin ulos istunnosta";
 "common_appearance" = "Ulkoasu";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Poistuit huoneesta";
 "common_current_user_left_space" = "Poistuit tilasta";
 "common_current_user_rejected_invite" = "Kutsu hylätty";
-"common_dark" = "Tumma";
 "common_date_date_at_time" = "%1$@ klo %2$@";
 "common_date_this_month" = "Tässä kuussa";
 "common_decryption_error" = "Salauksen purkuvirhe";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Tätä Matrix-tunnusta ei löytynyt, joten kutsu ei välttämättä mene perille.";
 "common_leaving_room" = "Poistutaan huoneesta";
 "common_leaving_space" = "Poistutaan tilasta";
-"common_light" = "Vaalea";
 "common_line_copied_to_clipboard" = "Rivi kopioitu leikepöydälle";
 "common_link_copied_to_clipboard" = "Linkki kopioitu leikepöydälle";
 "common_link_new_device" = "Yhdistä uusi laite";
@@ -350,7 +347,6 @@
 "common_suggested" = "Ehdotettu";
 "common_suggestions" = "Ehdotukset";
 "common_syncing" = "Synkronoidaan";
-"common_system" = "Järjestelmän oletus";
 "common_text" = "Teksti";
 "common_third_party_notices" = "Kolmannen osapuolen ilmoitukset";
 "common_thread" = "Viestiketju";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ teki tuntemattoman muutoksen jäsenyyteensä";
 "test_language_identifier" = "fi";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Tumma";
+"theme_light" = "Vaalea";
+"theme_system" = "Järjestelmän oletus";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Viestihistoria ei ole saatavilla tällä laitteella";
 "timeline_decryption_failure_historical_event_unverified_device" = "Sinun on vahvistettava tämä laite, jotta pääset käsiksi viestihistoriaan.";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Sinulla ei ole oikeutta lukea tätä viestiä";

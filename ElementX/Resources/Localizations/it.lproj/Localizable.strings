@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Impostazioni avanzate";
 "common_an_image" = "un'immagine";
 "common_analytics" = "Statistiche di utilizzo";
-"common_android_fetching_notifications_title" = "Sincronizzazione delle notifiche...";
 "common_android_shortcuts_remove_reason_left_room" = "Hai lasciato la stanza";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Sei stato disconnesso dalla sessione";
 "common_appearance" = "Aspetto";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Hai lasciato la stanza";
 "common_current_user_left_space" = "Hai lasciato lo spazio";
 "common_current_user_rejected_invite" = "Invito rifiutato";
-"common_dark" = "Scuro";
 "common_date_date_at_time" = "%1$@ alle %2$@";
 "common_date_this_month" = "Questo mese";
 "common_decryption_error" = "Errore di decrittazione";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Questo ID Matrix non può essere trovato, quindi l'invito potrebbe non essere ricevuto.";
 "common_leaving_room" = "Lascio la stanza";
 "common_leaving_space" = "Uscendo dallo spazio";
-"common_light" = "Chiaro";
 "common_line_copied_to_clipboard" = "Riga copiata negli appunti";
 "common_link_copied_to_clipboard" = "Collegamento copiato negli appunti";
 "common_link_new_device" = "Collega un nuovo dispositivo";
@@ -350,7 +347,6 @@
 "common_suggested" = "Suggeriti";
 "common_suggestions" = "Suggerimenti";
 "common_syncing" = "Sincronizzazione";
-"common_system" = "Sistema";
 "common_text" = "Testo";
 "common_third_party_notices" = "Comunicazioni di terze parti";
 "common_thread" = "Discussione";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ ha apportato una modifica sconosciuta alla propria presenza nella stanza";
 "test_language_identifier" = "it";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Scuro";
+"theme_light" = "Chiaro";
+"theme_system" = "Sistema";
 "timeline_decryption_failure_historical_event_no_key_backup" = "La cronologia messaggi non è disponibile su questo dispositivo";
 "timeline_decryption_failure_historical_event_unverified_device" = "È necessario verificare questo dispositivo per accedere alla cronologia messaggi";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Non hai accesso a questo messaggio";

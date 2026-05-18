@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Cài đặt nâng cao";
 "common_an_image" = "một hình ảnh";
 "common_analytics" = "Phân tích";
-"common_android_fetching_notifications_title" = "Đang đồng bộ thông báo...";
 "common_android_shortcuts_remove_reason_left_room" = "Bạn rời phòng";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Bạn đã bị đăng xuất";
 "common_appearance" = "Giao diện";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Đã rời khỏi phòng";
 "common_current_user_left_space" = "Rời khỏi không gian";
 "common_current_user_rejected_invite" = "Lời mời bị từ chối";
-"common_dark" = "Tối";
 "common_date_date_at_time" = "%1$@ lúc %2$@";
 "common_date_this_month" = "Tháng này";
 "common_decryption_error" = "Lỗi khi giải mã";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Không tìm thấy Matrix ID này, nên lời mời có thể chưa được nhận.";
 "common_leaving_room" = "Rời khỏi phòng";
 "common_leaving_space" = "Rời khỏi không gian";
-"common_light" = "Sáng";
 "common_line_copied_to_clipboard" = "Đã sao chép dòng";
 "common_link_copied_to_clipboard" = "Đã chép liên kết vào bộ nhớ tạm";
 "common_link_new_device" = "Liên kết thiết bị mới";
@@ -350,7 +347,6 @@
 "common_suggested" = "Gợi ý";
 "common_suggestions" = "Gợi ý";
 "common_syncing" = "Đang đồng bộ";
-"common_system" = "Hệ thống";
 "common_text" = "Văn bản";
 "common_third_party_notices" = "Thông báo từ bên thứ ba";
 "common_thread" = "Chủ đề";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ đã thực hiện một thay đổi không xác định đối với tư cách thành viên của họ";
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Tối";
+"theme_light" = "Sáng";
+"theme_system" = "Hệ thống";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
 "timeline_decryption_failure_historical_event_unverified_device" = "You need to verify this device for access to historical messages";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Bạn không thể xem tin nhắn này";

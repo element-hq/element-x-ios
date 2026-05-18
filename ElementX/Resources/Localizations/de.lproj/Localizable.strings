@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Erweiterte Einstellungen";
 "common_an_image" = "ein Bild";
 "common_analytics" = "Analysedaten";
-"common_android_fetching_notifications_title" = "Benachrichtigungen werden synchronisiert...";
 "common_android_shortcuts_remove_reason_left_room" = "Du hast den Chat verlassen";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du wurdest aus der Sitzung abgemeldet.";
 "common_appearance" = "Erscheinungsbild";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Hat den Chat verlassen";
 "common_current_user_left_space" = "Space verlassen";
 "common_current_user_rejected_invite" = "Einladung abgelehnt";
-"common_dark" = "Dunkel";
 "common_date_date_at_time" = "%1$@ um %2$@";
 "common_date_this_month" = "Diesen Monat";
 "common_decryption_error" = "Dekodierungsfehler";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Diese Matrix Kennung wurde nicht gefunden, daher wird die Einladung möglicherweise nicht empfangen.";
 "common_leaving_room" = "Chat verlassen";
 "common_leaving_space" = "Space wird verlassen";
-"common_light" = "Hell";
 "common_line_copied_to_clipboard" = "Zeile in die Zwischenablage kopiert";
 "common_link_copied_to_clipboard" = "Link in die Zwischenablage kopiert";
 "common_link_new_device" = "Neues Gerät verknüpfen";
@@ -350,7 +347,6 @@
 "common_suggested" = "Empfohlen";
 "common_suggestions" = "Vorschläge";
 "common_syncing" = "Synchronisieren";
-"common_system" = "System";
 "common_text" = "Text";
 "common_third_party_notices" = "Hinweise von Drittanbietern";
 "common_thread" = "Thread";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ hat eine unbekannte Änderung vorgenommen";
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Dunkel";
+"theme_light" = "Hell";
+"theme_system" = "System";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Der Nachrichtenverlauf ist auf diesem Gerät nicht verfügbar";
 "timeline_decryption_failure_historical_event_unverified_device" = "Für den Zugriff auf den Nachrichtenverlauf musst du dieses Gerät verifizieren";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Du hast keinen Zugriff auf diese Nachricht.";
