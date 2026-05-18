@@ -7,7 +7,6 @@
 
 import AnalyticsEvents
 
-// sourcery: AutoMockable
 /// A service responsible for managing analytics clients and sending events through them.
 ///
 /// Events may include user activity, or app health data such as crashes,
@@ -117,6 +116,7 @@ protocol AnalyticsServiceProtocol: AnyObject {
     func trackPinUnpinEvent(_ event: AnalyticsEvent.PinUnpinAction)
 }
 
+// sourcery: AutoMockable
 extension AnalyticsServiceProtocol {
     func track(screen: AnalyticsEvent.MobileScreen.ScreenName) {
         track(screen: screen, duration: nil)
