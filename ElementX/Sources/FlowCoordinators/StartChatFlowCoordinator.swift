@@ -270,7 +270,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentInviteUsersScreen(roomProxy: JoinedRoomProxyProtocol, spaceRoomListProxy: SpaceRoomListProxyProtocol?) {
         let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.userSession,
-                                                                      roomProxy: roomProxy,
+                                                                      roomType: .existingRoom(roomProxy: roomProxy),
                                                                       isSkippable: true,
                                                                       userDiscoveryService: userDiscoveryService,
                                                                       userIndicatorController: flowParameters.userIndicatorController,
@@ -285,6 +285,8 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
                 } else {
                     actionsSubject.send(.finished(.room(id: roomProxy.id)))
                 }
+            case .openRoom:
+                break
             }
         }
         .store(in: &cancellables)

@@ -65,7 +65,7 @@ extension RoomFlowCoordinator {
         case roomDetailsEditScreen
         case notificationSettings
         case globalNotificationSettings
-        case inviteUsersScreen(previousState: State)
+        case inviteUsersScreen(flow: InviteUsersFlow, previousState: State)
         case mediaUploadPicker(mode: MediaPickerScreenMode, previousState: State)
         case mediaUploadPreview(mediaURLs: [URL], previousState: State)
         case emojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>, previousState: State)
@@ -136,7 +136,7 @@ extension RoomFlowCoordinator {
         case presentGlobalNotificationSettingsScreen
         case dismissGlobalNotificationSettingsScreen
         
-        case presentInviteUsersScreen
+        case presentInviteUsersScreen(flow: InviteUsersFlow)
         case dismissInviteUsersScreen
                 
         case presentMediaUploadPicker(mode: MediaPickerScreenMode)
@@ -404,9 +404,9 @@ extension RoomFlowCoordinator {
             case (.mediaUploadPicker(_, let previousMediaUploadPickerState), .presentMediaUploadPreview(let mediaURLs)):
                 return .mediaUploadPreview(mediaURLs: mediaURLs, previousState: previousMediaUploadPickerState)
                 
-            case (_, .presentInviteUsersScreen):
-                return .inviteUsersScreen(previousState: fromState)
-            case (.inviteUsersScreen(let previousState), .dismissInviteUsersScreen):
+            case (_, .presentInviteUsersScreen(let flow)):
+                return .inviteUsersScreen(flow: flow, previousState: fromState)
+            case (.inviteUsersScreen(_, let previousState), .dismissInviteUsersScreen):
                 return previousState
                 
             case (_, .presentTransferOwnershipScreen):

@@ -110,7 +110,9 @@ struct InviteUsersScreen: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
                 ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                    InviteUsersScreenSelectedItem(user: user, mediaProvider: context.mediaProvider) {
+                    InviteUsersScreenSelectedItem(user: user,
+                                                  mediaProvider: context.mediaProvider,
+                                                  isLocked: context.viewState.isInviteeMandatory(user)) {
                         deselect(user)
                     }
                     .frame(width: selectedUserCellWidth)
@@ -133,11 +135,18 @@ struct InviteUsersScreen: View {
         }
         
         ToolbarItem(placement: .confirmationAction) {
-            Button(context.viewState.actionText) {
-                context.send(viewAction: .proceed)
+            if context.viewState.isSkippable, context.viewState.selectedUsers.isEmpty {
+                Button(L10n.actionSkip) {
+                    context.send(viewAction: .proceed)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.proceed)
+            } else {
+                ToolbarButton(role: .confirm(title: L10n.actionInvite)) {
+                    context.send(viewAction: .proceed)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.proceed)
+                .disabled(!context.viewState.hasInvitableSelectedUsers)
             }
-            .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.proceed)
-            .disabled(context.viewState.isActionDisabled)
         }
     }
     
@@ -153,6 +162,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
     static let searchingViewModel = makeViewModel(searchQuery: "Alice")
     static let selectedViewModel = makeViewModel(hasSelection: true)
     static let confirmSelectedViewModel = makeViewModel(shouldConfirm: true)
+    static let draftViewModel = makeViewModel(roomType: .draft(mandatoryInvitees: [.mockAlice]), isSkippable: false)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -179,18 +189,28 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
             InviteUsersScreen(context: confirmSelectedViewModel.context)
         }
         .previewDisplayName("Confirm Selected")
+        
+        ElementNavigationStack {
+            InviteUsersScreen(context: draftViewModel.context)
+        }
+        .previewDisplayName("Draft (locked invitee)")
+        .snapshotPreferences(expect: draftViewModel.context.$viewState.map { !$0.mandatoryInvitees.isEmpty })
     }
     
-    static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false, shouldConfirm: Bool = false) -> InviteUsersScreenViewModel {
+    static func makeViewModel(searchQuery: String? = nil,
+                              hasSelection: Bool = false,
+                              shouldConfirm: Bool = false,
+                              roomType: InviteUsersScreenRoomType? = nil,
+                              isSkippable: Bool = true) -> InviteUsersScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentConversationCounterpartsReturnValue = [.mockAlice, .mockBob, .mockCharlie, .mockDan, .mockVerbose]
-        
+
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-        
+
         let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   roomProxy: JoinedRoomProxyMock(.init(members: [])),
-                                                   isSkippable: true,
+                                                   roomType: roomType ?? .existingRoom(roomProxy: JoinedRoomProxyMock(.init(members: []))),
+                                                   isSkippable: isSkippable,
                                                    userDiscoveryService: userDiscoveryService,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    appSettings: AppSettings())

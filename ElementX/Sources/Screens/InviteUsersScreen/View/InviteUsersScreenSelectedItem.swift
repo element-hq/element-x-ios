@@ -12,6 +12,7 @@ import SwiftUI
 struct InviteUsersScreenSelectedItem: View {
     let user: UserProfileProxy
     let mediaProvider: MediaProviderProtocol?
+    var isLocked = false
     let dismissAction: () -> Void
     
     var body: some View {
@@ -25,18 +26,27 @@ struct InviteUsersScreenSelectedItem: View {
                 .lineLimit(1)
         }
         .accessibilityElement(children: .combine)
-        .accessibilityAction(named: L10n.actionRemove, dismissAction)
+        .accessibilityActions {
+            if !isLocked {
+                Button(L10n.actionRemove, action: dismissAction)
+            }
+        }
     }
     
     // MARK: - Private
     
+    @ViewBuilder
     var avatar: some View {
-        LoadableAvatarImage(url: user.avatarURL,
-                            name: user.displayName,
-                            contentID: user.userID,
-                            avatarSize: .user(on: .inviteUsers),
-                            mediaProvider: mediaProvider)
-            .overlayRemoveItemButton(action: dismissAction)
+        let avatarImage = LoadableAvatarImage(url: user.avatarURL,
+                                              name: user.displayName,
+                                              contentID: user.userID,
+                                              avatarSize: .user(on: .inviteUsers),
+                                              mediaProvider: mediaProvider)
+        if isLocked {
+            avatarImage
+        } else {
+            avatarImage.overlayRemoveItemButton(action: dismissAction)
+        }
     }
     
     var closeButtonLabel: some View {

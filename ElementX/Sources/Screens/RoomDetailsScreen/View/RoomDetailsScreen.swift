@@ -22,6 +22,11 @@ struct RoomDetailsScreen: View {
             
             aboutSection
             
+            // The invitation flow is different for DMs
+            if context.viewState.dmRecipientInfo != nil {
+                inviteToNewRoomSection
+            }
+            
             configurationSection
             
             if context.viewState.dmRecipientInfo == nil {
@@ -163,6 +168,13 @@ struct RoomDetailsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
         }
+    }
+    
+    private var inviteToNewRoomSection: some View {
+        ListRow(label: .default(title: L10n.actionInvite, icon: \.userAdd),
+                kind: .navigationLink {
+                    context.send(viewAction: .processTapInvite)
+                })
     }
     
     private var configurationSection: some View {

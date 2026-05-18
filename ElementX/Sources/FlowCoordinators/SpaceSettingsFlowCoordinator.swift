@@ -240,7 +240,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             case .transferOwnership:
                 stateMachine.tryEvent(.presentTransferOwnership)
             case .presentRecipientDetails, .presentNotificationSettingsScreen, .presentReportRoomScreen,
-                 .presentInviteUsersScreen, .presentPollsHistory, .presentCall,
+                 .presentInviteUsersScreen, .presentInviteToNewRoom, .presentPollsHistory, .presentCall,
                  .presentPinnedEventsTimeline, .presentMediaEventsTimeline, .presentKnockingRequestsListScreen:
                 fatalError("Not handled in the space context")
             }
