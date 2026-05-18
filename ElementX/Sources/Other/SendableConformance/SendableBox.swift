@@ -7,13 +7,29 @@
 
 import Foundation
 
-/// Wraps a non-Sendable type and assures most of its interactions are done in isolation with locking mechanisms
+/// Synchronizes access to a stored value across concurrency boundaries by protecting it with a lock, enabling
+/// `Sendable` conformance on the containing type.
 ///
-/// The exception is reference types. If multiple SendableBox instances are created with a reference to the same class,
-/// each SendableBox operates in isolation and ignorance of the others. When using with reference types (or value
-/// types that point to reference types), make sure to only create one Box instance per instance of Wrapped.
+/// This addresses one specific concern: the container's unsynchronized hold on its stored property. It does not
+/// address the internal thread-safety of the wrapped value itself -- that remains a separate responsibility. For
+/// reference types, this means the box synchronizes the pointer, not the internals of the referenced object. This
+/// is intentional and consistent with how other synchronization primitives (locks, queues, actors) work -- they
+/// protect access to a reference, not the reference's contents.
 ///
-/// Leverages the `@dynamicMemberLookup` feature in swift to be able to access properties directly on the Box.
+/// **Disciplines required:**
+/// - For reference types: the wrapped type should itself be `Sendable`, or internal mutations must be
+/// otherwise synchronized
+/// - Only one `SendableBox` instance should exist per instance of a wrapped reference type (multiple boxes
+///  do not synchronize with each other)
+/// - Mutations to the wrapped value should go through the box, not via a retained reference to the wrapped object
+///
+/// **Benefits attained:**
+/// - Access to the stored property through the box is synchronized -- no unsynchronized mutations to the
+/// pointer/reference can occur
+/// - Each wrapped property carries its own synchronized conformance, reducing the need for broad
+/// `@unchecked Sendable` on the containing type
+///
+/// Leverages `@dynamicMemberLookup` for ergonomic property access directly on the box.
 @Observable
 @dynamicMemberLookup
 final class SendableBox<Wrapped>: @unchecked Sendable {
