@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Ustawienia zaawansowane";
 "common_an_image" = "obraz";
 "common_analytics" = "Dane analityczne";
-"common_android_fetching_notifications_title" = "Synchronizuję powiadomienia...";
 "common_android_shortcuts_remove_reason_left_room" = "Opuściłeś pokój";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Zostałeś wylogowany z sesji";
 "common_appearance" = "Wygląd";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Opuszczono pokój";
 "common_current_user_left_space" = "Opuścił przestrzeń";
 "common_current_user_rejected_invite" = "Odrzucono zaproszenie";
-"common_dark" = "Ciemny";
 "common_date_date_at_time" = "%1$@ o %2$@";
 "common_date_this_month" = "W tym miesiącu";
 "common_decryption_error" = "Błąd deszyfrowania";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Nie można znaleźć identyfikatora Matrix ID, zaproszenie mogło nie dotrzeć.";
 "common_leaving_room" = "Opuszczanie pokoju";
 "common_leaving_space" = "Opuszczam przestrzeń";
-"common_light" = "Jasny";
 "common_line_copied_to_clipboard" = "Wiersz skopiowany do schowka";
 "common_link_copied_to_clipboard" = "Link został skopiowany do schowka";
 "common_link_new_device" = "Powiąż nowe urządzenie";
@@ -350,7 +347,6 @@
 "common_suggested" = "Polecane";
 "common_suggestions" = "Sugestie";
 "common_syncing" = "Synchronizuję";
-"common_system" = "System";
 "common_text" = "Tekst";
 "common_third_party_notices" = "Informacje stron trzecich";
 "common_thread" = "Wątek";
@@ -376,7 +372,7 @@
 "common_verify_device" = "Zweryfikuj urządzenie";
 "common_verify_identity" = "Zweryfikuj tożsamość";
 "common_verify_user" = "Zweryfikuj użytkownika";
-"common_video" = "Film";
+"common_video" = "Wideo";
 "common_video_quality_high" = "Wysoka jakość";
 "common_video_quality_high_description" = "Najlepsza jakość, większy rozmiar pliku";
 "common_video_quality_low" = "Niska jakość";
@@ -848,7 +844,7 @@
 "screen_key_backup_disable_confirmation_description" = "Jeśli usuniesz wszystkie swoje urządzenia, stracisz zaszyfrowaną historię wiadomości i będziesz musiał zresetować swoją tożsamość cyfrową.";
 "screen_key_backup_disable_confirmation_title" = "Czy na pewno chcesz usunąć magazyn kluczy?";
 "screen_key_backup_disable_description" = "Usunięcie magazynu kluczy usunie Twoją tożsamość cyfrową i klucze wiadomości z serwera, wyłączając następujące funkcje bezpieczeństwa:";
-"screen_key_backup_disable_description_point_1" = "Posiadał historii wiadomości szyfrowanych na nowych urządzeniach";
+"screen_key_backup_disable_description_point_1" = "Stracisz dostęp do zaszyfrowanej historii wiadomości na nowych urządzeniach";
 "screen_key_backup_disable_description_point_2" = "Utracisz dostęp do wiadomości szyfrowanych, jeśli zostaniesz wszędzie wylogowany z %1$@";
 "screen_key_backup_disable_title" = "Czy na pewno chcesz wyłączyć backup?";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Tak, akceptuj wszystkie";
@@ -1119,7 +1115,7 @@
 "screen_room_alias_resolver_resolve_alias_failure" = "Nie udało się uzyskać aliasu pokoju.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_photo" = "Zrób zdjęcie";
-"screen_room_attachment_source_camera_video" = "Nagraj film";
+"screen_room_attachment_source_camera_video" = "Nagraj wideo";
 "screen_room_attachment_source_files" = "Załącznik";
 "screen_room_attachment_source_gallery" = "Zdjęcia i filmy";
 "screen_room_attachment_source_location" = "Udostępnij lokalizację";
@@ -1239,8 +1235,8 @@
 "screen_room_notification_settings_allow_custom" = "Zezwalaj na ustawienia niestandardowe";
 "screen_room_notification_settings_allow_custom_footnote" = "Włączenie tej opcji nadpisze ustawienie domyślne";
 "screen_room_notification_settings_custom_settings_title" = "Powiadamiaj mnie o tym czacie przez";
-"screen_room_notification_settings_default_setting_footnote" = "Możesz to zmienić w swoim %1$@.";
-"screen_room_notification_settings_default_setting_footnote_content_link" = "ustawienia globalne";
+"screen_room_notification_settings_default_setting_footnote" = "Możesz to zmienić w %1$@.";
+"screen_room_notification_settings_default_setting_footnote_content_link" = "ustawieniach globalnych";
 "screen_room_notification_settings_default_setting_title" = "Ustawienie domyślne";
 "screen_room_notification_settings_edit_remove_setting" = "Usuń ustawienia własne";
 "screen_room_notification_settings_error_loading_settings" = "Wystąpił błąd podczas ładowania ustawień powiadomień.";
@@ -1498,7 +1494,7 @@
 "state_event_room_invite_by_you" = "Zaprosiłeś %1$@";
 "state_event_room_invite_you" = "%1$@ zaprosił Cię";
 "state_event_room_join" = "%1$@ dołączył do pokoju";
-"state_event_room_join_by_you" = "Dołączyłeś(aś) do pokoju";
+"state_event_room_join_by_you" = "Dołączyłeś do pokoju";
 "state_event_room_knock" = "%1$@ prosi o możliwość dołączenia";
 "state_event_room_knock_accepted" = "%1$@ zezwolił %2$@ na dołączenie";
 "state_event_room_knock_accepted_by_you" = "Zezwoliłeś %1$@ na dołączenie";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ dokonał nieznanej zmiany w swoim członkostwie";
 "test_language_identifier" = "pl";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Czarny";
+"theme_dark" = "Ciemny";
+"theme_light" = "Jasny";
+"theme_system" = "System";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historia wiadomości nie jest dostępna na tym urządzeniu";
 "timeline_decryption_failure_historical_event_unverified_device" = "Musisz zweryfikować to urządzenie, aby uzyskać dostęp do historii wiadomości";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nie masz uprawnień do tej wiadomości";

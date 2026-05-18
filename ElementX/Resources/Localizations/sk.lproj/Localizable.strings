@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Pokročilé nastavenia";
 "common_an_image" = "obrázok";
 "common_analytics" = "Analytika";
-"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Opustili ste miestnosť";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Boli ste odhlásení zo relácie.";
 "common_appearance" = "Vzhľad";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Opustil/a miestnosť";
 "common_current_user_left_space" = "Opustil priestor";
 "common_current_user_rejected_invite" = "Pozvánka bola odmietnutá";
-"common_dark" = "Tmavý";
 "common_date_date_at_time" = "%1$@ o %2$@";
 "common_date_this_month" = "Tento mesiac";
 "common_decryption_error" = "Chyba dešifrovania";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Toto Matrix ID sa nedá nájsť, takže pozvánka nemusí byť prijatá.";
 "common_leaving_room" = "Opustenie miestnosti";
 "common_leaving_space" = "Opúšťanie priestoru";
-"common_light" = "Svetlý";
 "common_line_copied_to_clipboard" = "Riadok skopírovaný do schránky";
 "common_link_copied_to_clipboard" = "Odkaz bol skopírovaný do schránky";
 "common_link_new_device" = "Prepojiť nové zariadenie";
@@ -350,7 +347,6 @@
 "common_suggested" = "Navrhované";
 "common_suggestions" = "Návrhy";
 "common_syncing" = "Synchronizuje sa";
-"common_system" = "Systém";
 "common_text" = "Text";
 "common_third_party_notices" = "Oznámenia tretích strán";
 "common_thread" = "Vlákno";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ urobil/a neznámu zmenu svojho členstva";
 "test_language_identifier" = "sk";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Tmavý";
+"theme_light" = "Svetlý";
+"theme_system" = "Systém";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historické správy nie sú na tomto zariadení k dispozícii";
 "timeline_decryption_failure_historical_event_unverified_device" = "Ak chcete získať prístup k historickým správam, musíte toto zariadenie overiť";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nemáte prístup k tejto správe";

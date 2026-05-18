@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Додаткові налаштування";
 "common_an_image" = "зображення";
 "common_analytics" = "Аналітика";
-"common_android_fetching_notifications_title" = "Синхронізація сповіщень...";
 "common_android_shortcuts_remove_reason_left_room" = "Ви вийшли з кімнати";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Ви вийшли з сеансу";
 "common_appearance" = "Тема";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Виходить з кімнати";
 "common_current_user_left_space" = "Вийшов із простору";
 "common_current_user_rejected_invite" = "Запрошення відхилено";
-"common_dark" = "Темна";
 "common_date_date_at_time" = "%1$@ о %2$@";
 "common_date_this_month" = "Цього місяця";
 "common_decryption_error" = "Помилка розшифрування";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Цей Matrix-ID не знайдено, тому запрошення може не бути отримано.";
 "common_leaving_room" = "Вихід з кімнати";
 "common_leaving_space" = "Вихід з простору";
-"common_light" = "Світла";
 "common_line_copied_to_clipboard" = "Рядок скопійовано до буфера обміну";
 "common_link_copied_to_clipboard" = "Посилання скопійовано в буфер обміну";
 "common_link_new_device" = "Під'єднати новий пристрій";
@@ -350,7 +347,6 @@
 "common_suggested" = "Запропоновано";
 "common_suggestions" = "Пропозиції";
 "common_syncing" = "Синхронізація";
-"common_system" = "Системна";
 "common_text" = "Текст";
 "common_third_party_notices" = "Повідомлення третіх сторін";
 "common_thread" = "Гілка";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ вносить невідомі зміни щодо свого членства";
 "test_language_identifier" = "uk";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Темна";
+"theme_light" = "Світла";
+"theme_system" = "Системна";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Історичні повідомлення недоступні на цьому пристрої";
 "timeline_decryption_failure_historical_event_unverified_device" = "Щоб отримати доступ до історичних повідомлень, потрібно верифікувати цей пристрій";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Ви не маєте доступу до цього повідомлення";

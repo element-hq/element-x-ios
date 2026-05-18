@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Gosodiadau uwch";
 "common_an_image" = "delwedd";
 "common_analytics" = "Dadansoddeg";
-"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Rydych wedi gadael yr ystafell";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Rydych wedi'ch allgofnodi o'r sesiwn";
 "common_appearance" = "Gwedd";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Wedi gadael yr ystafell";
 "common_current_user_left_space" = "Gofod chwith";
 "common_current_user_rejected_invite" = "Wedi gwrthod y gwahoddiad";
-"common_dark" = "Tywyll";
 "common_date_date_at_time" = "%1$@ am %2$@";
 "common_date_this_month" = "Y mis hwn";
 "common_decryption_error" = "Gwall dadgryptio";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Nid oes modd dod o hyd i'r ID Matrics hwn, felly mae'n bosibl na fydd y gwahoddiad yn cael ei dderbyn.";
 "common_leaving_room" = "Gadael ystafell";
 "common_leaving_space" = "Leaving space";
-"common_light" = "Golau";
 "common_line_copied_to_clipboard" = "Llinell wedi'i chopïo i'r clipfwrdd";
 "common_link_copied_to_clipboard" = "Dolen wedi'i chopïo i'r clipfwrdd";
 "common_link_new_device" = "Link new device";
@@ -350,7 +347,6 @@
 "common_suggested" = "Suggested";
 "common_suggestions" = "Awgrymiadau";
 "common_syncing" = "Cydweddu";
-"common_system" = "System";
 "common_text" = "Testun";
 "common_third_party_notices" = "Hysbysiadau trydydd parti";
 "common_thread" = "Edefyn";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "Mae %1$@ wedi gwneud newid anhysbys i'w aelodaeth";
 "test_language_identifier" = "cy";
 "test_untranslated_default_language_identifier" = "cy";
+"theme_black" = "Black";
+"theme_dark" = "Tywyll";
+"theme_light" = "Golau";
+"theme_system" = "System";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Nid yw negeseuon hanesyddol ar gael ar y ddyfais hon";
 "timeline_decryption_failure_historical_event_unverified_device" = "Mae angen i chi wirio'r ddyfais hon i gael mynediad at negeseuon hanesyddol";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Does gennych chi ddim mynediad i'r neges hon";
