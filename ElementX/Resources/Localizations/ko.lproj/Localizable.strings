@@ -200,7 +200,6 @@
 "common_advanced_settings" = "고급 설정";
 "common_an_image" = "이미지";
 "common_analytics" = "통계";
-"common_android_fetching_notifications_title" = "알림 동기화 중...";
 "common_android_shortcuts_remove_reason_left_room" = "방을 떠남";
 "common_android_shortcuts_remove_reason_session_logged_out" = "세션에서 로그아웃되었습니다.";
 "common_appearance" = "외관";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "방 떠남";
 "common_current_user_left_space" = "스페이스 떠남";
 "common_current_user_rejected_invite" = "초대 거부됨";
-"common_dark" = "다크";
 "common_date_date_at_time" = "%2$@ 에 %1$@";
 "common_date_this_month" = "이번 달";
 "common_decryption_error" = "복호화 오류";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Matrix ID를 찾을 수 없기 때문에 초대가 수신되지 않을 수도 있습니다.";
 "common_leaving_room" = "방을 떠나는 중";
 "common_leaving_space" = "스페이스 떠나는 중";
-"common_light" = "라이트";
 "common_line_copied_to_clipboard" = "줄이 클립보드에 복사되었습니다.";
 "common_link_copied_to_clipboard" = "링크가 클립보드에 복사됨";
 "common_link_new_device" = "새 기기 연결";
@@ -350,7 +347,6 @@
 "common_suggested" = "공유된 스페이스";
 "common_suggestions" = "제안";
 "common_syncing" = "동기화 중";
-"common_system" = "시스템";
 "common_text" = "글자";
 "common_third_party_notices" = "제3자 고지";
 "common_thread" = "스레드";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@님이 멤버십에 알려지지 않은 변경 사항을 만들었습니다.";
 "test_language_identifier" = "ko";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "다크";
+"theme_light" = "라이트";
+"theme_system" = "시스템";
 "timeline_decryption_failure_historical_event_no_key_backup" = "이 장치에서는 과거 메시지를 사용할 수 없습니다.";
 "timeline_decryption_failure_historical_event_unverified_device" = "이전 메시지에 액세스하려면 이 장치를 확인해야 합니다.";
 "timeline_decryption_failure_historical_event_user_not_joined" = "이 메시지에 액세스할 수 없습니다";

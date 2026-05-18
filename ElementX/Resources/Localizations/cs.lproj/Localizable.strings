@@ -7,7 +7,7 @@
 "a11y_edit_room_address_hint" = "Úplná adresa bude %1$@";
 "a11y_expand_message_text_field" = "Rozbalit textové pole zprávy";
 "a11y_hide_password" = "Skrýt heslo";
-"a11y_info" = "Info";
+"a11y_info" = "Informace";
 "a11y_join_call" = "Připojit se k hovoru";
 "a11y_jump_to_bottom" = "Přejít dolů";
 "a11y_notifications_mentions_only" = "Pouze zmínky";
@@ -37,7 +37,7 @@
 "a11y_send_files" = "Odeslat soubory";
 "a11y_sender_location" = "Poloha odesílatele";
 "a11y_session_verification_time_limited_action_required" = "Vyžaduje se časově omezená akce, na ověření máte jednu minutu";
-"a11y_settings_with_required_action" = "Settings, action required";
+"a11y_settings_with_required_action" = "Nastavení, vyžaduje akci";
 "a11y_show_password" = "Zobrazit heslo";
 "a11y_start_call" = "Zahájit hovor";
 "a11y_start_video_call" = "Zahájit videohovor";
@@ -63,7 +63,7 @@
 "action_call" = "Hovor";
 "action_cancel" = "Zrušit";
 "action_cancel_for_now" = "Prozatím zrušit";
-"action_choose_file" = "Choose file";
+"action_choose_file" = "Vyberte soubor";
 "action_choose_photo" = "Vybrat fotku";
 "action_clear" = "Vymazat";
 "action_close" = "Zavřít";
@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Pokročilá nastavení";
 "common_an_image" = "obrázek";
 "common_analytics" = "Analytika";
-"common_android_fetching_notifications_title" = "Synchronizace oznámení...";
 "common_android_shortcuts_remove_reason_left_room" = "Opustili jste místnost";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Byli jste odhlášeni z relace";
 "common_appearance" = "Vzhled";
@@ -208,9 +207,9 @@
 "common_beta" = "Beta";
 "common_blocked_users" = "Blokovaní uživatelé";
 "common_bubbles" = "Bubliny";
-"common_call_declined" = "Call declined";
+"common_call_declined" = "Hovor odmítnut";
 "common_call_started" = "Hovor zahájen";
-"common_call_you_declined" = "You declined a call";
+"common_call_you_declined" = "Odmítli jste hovor";
 "common_chat_backup" = "Záloha chatu";
 "common_copied_to_clipboard" = "Zkopírováno do schránky";
 "common_copyright" = "Autorská práva";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Místnost opuštěna";
 "common_current_user_left_space" = "Opustit prostor";
 "common_current_user_rejected_invite" = "Pozvánka odmítnuta";
-"common_dark" = "Tmavé";
 "common_date_date_at_time" = "%1$@ v %2$@";
 "common_date_this_month" = "Tento měsíc";
 "common_decryption_error" = "Chyba dešifrování";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Tento Matrix identifikátor nelze najít, takže pozvánka nemusí být přijata.";
 "common_leaving_room" = "Opuštění místnosti";
 "common_leaving_space" = "Opuštění prostoru";
-"common_light" = "Světlý";
 "common_line_copied_to_clipboard" = "Řádek zkopírován do schránky";
 "common_link_copied_to_clipboard" = "Odkaz zkopírován do schránky";
 "common_link_new_device" = "Připojit nové zařízení";
@@ -350,7 +347,6 @@
 "common_suggested" = "Doporučeno";
 "common_suggestions" = "Návrhy";
 "common_syncing" = "Synchronizace";
-"common_system" = "Systém";
 "common_text" = "Text";
 "common_third_party_notices" = "Oznámení třetích stran";
 "common_thread" = "Vlákno";
@@ -395,7 +391,7 @@
 "confirm_recovery_key_banner_title" = "Vaše úložiště klíčů není synchronizováno";
 "crash_detection_dialog_content" = "%1$@ havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?";
 "crypto_event_authenticity_mismatched_sender" = "Odesílatel události se neshoduje s vlastníkem zařízení, které ji odeslalo.";
-"crypto_event_authenticity_not_guaranteed" = "Autenticitu této zašifrované zprávy nelze na tomto zařízení zaručit.";
+"crypto_event_authenticity_not_guaranteed" = "Pravost této šifrované zprávy nelze na tomto zařízení zaručit.";
 "crypto_event_authenticity_previously_verified" = "Zašifrováno dříve ověřeným uživatelem.";
 "crypto_event_authenticity_sent_in_clear" = "Není zašifrováno.";
 "crypto_event_authenticity_unknown_device" = "Šifrováno neznámým nebo smazaným zařízením.";
@@ -750,17 +746,17 @@
 "screen_create_room_space_selection_sheet_title" = "Přidat do prostoru";
 "screen_create_room_topic_label" = "Téma (nepovinné)";
 "screen_create_room_topic_placeholder" = "Přidat popis…";
-"screen_deactivate_account_confirmation_dialog_content" = "Potvrďte prosím, že chcete svůj účet deaktivovat. Tuto akci nelze vrátit zpět.";
+"screen_deactivate_account_confirmation_dialog_content" = "Potvrďte prosím, že chcete smazat svůj účet. Tuto akci nelze vrátit zpět.";
 "screen_deactivate_account_delete_all_messages" = "Smazat všechny mé zprávy";
 "screen_deactivate_account_delete_all_messages_notice" = "Upozornění: Budoucí uživatelé mohou vidět neúplné konverzace.";
-"screen_deactivate_account_description" = "Deaktivace vašeho účtu je %1$@, což způsobí:";
+"screen_deactivate_account_description" = "Smazání účtu je %1$@, dojde k:";
 "screen_deactivate_account_description_bold_part" = "nezvratná";
 "screen_deactivate_account_list_item_1" = "%1$@ váš účet (nemůžete se znovu přihlásit a vaše ID nelze znovu použít).";
 "screen_deactivate_account_list_item_1_bold_part" = "Trvale zakázat";
 "screen_deactivate_account_list_item_2" = "Odebere vás ze všech chatovacích místností.";
 "screen_deactivate_account_list_item_3" = "Odstraní informace o vašem účtu z našeho serveru identit.";
 "screen_deactivate_account_list_item_4" = "Vaše zprávy budou stále viditelné registrovaným uživatelům, ale nebudou dostupné novým ani neregistrovaným uživatelům, pokud se rozhodnete je smazat.";
-"screen_deactivate_account_title" = "Deaktivovat účet";
+"screen_deactivate_account_title" = "Smazat účet";
 "screen_decline_and_block_block_user_option_description" = "Od tohoto uživatele neuvidíte žádné zprávy ani pozvánky do místnosti";
 "screen_decline_and_block_block_user_option_title" = "Zablokovat uživatele";
 "screen_decline_and_block_report_user_option_description" = "Nahlaste tuto místnost svému poskytovateli účtu.";
@@ -921,7 +917,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Nikdo nesdílí svou polohu";
 "screen_live_location_sheet_sharing_live_location" = "Sdílení aktuální polohy";
 "screen_live_location_sheet_title" = "Na mapě";
-"screen_login_error_deactivated_account" = "Tento účet byl deaktivován.";
+"screen_login_error_deactivated_account" = "Tento účet byl smazán.";
 "screen_login_error_invalid_credentials" = "Nesprávné uživatelské jméno nebo heslo";
 "screen_login_error_invalid_user_id" = "Toto není platný identifikátor uživatele. Očekávaný formát: '@user:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Tento server je nakonfigurován tak, aby používal obnovovací tokeny. Ty nejsou podporovány při použití přihlašovacích údajů založených na hesle.";
@@ -951,7 +947,7 @@
 "screen_media_details_filename" = "Název souboru";
 "screen_media_details_no_more_files_to_show" = "Žádné další soubory k zobrazení";
 "screen_media_details_no_more_media_to_show" = "Žádná další média k zobrazení";
-"screen_media_details_title" = "File info";
+"screen_media_details_title" = "Informace o souboru";
 "screen_media_details_uploaded_by" = "Nahrál(a)";
 "screen_media_details_uploaded_on" = "Nahráno";
 "screen_media_picker_error_failed_selection" = "Výběr média se nezdařil, zkuste to prosím znovu.";
@@ -1131,7 +1127,7 @@
 "screen_room_change_permissions_delete_messages" = "Odstranit zprávy";
 "screen_room_change_permissions_everyone" = "Člen";
 "screen_room_change_permissions_invite_people" = "Pozvat přátele";
-"screen_room_change_permissions_live_location" = "Share live location";
+"screen_room_change_permissions_live_location" = "Sdílet aktuální polohu";
 "screen_room_change_permissions_manage_space" = "Správa prostoru";
 "screen_room_change_permissions_manage_space_rooms" = "Spravovat místnosti";
 "screen_room_change_permissions_member_moderation" = "Spravovat členy";
@@ -1409,7 +1405,7 @@
 "screen_session_verification_waiting_to_accept_title" = "Čekání na přijetí žádosti";
 "screen_share_location_live_location_disclaimer_title" = "Vaše historie aktuální polohy bude uložena v místnosti a bude viditelná pro členy i po skončení relace.";
 "screen_share_location_live_location_duration_picker_title" = "Zvolte, jak dlouho chcete sdílet svou aktuální polohu.";
-"screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";
+"screen_share_location_live_location_missing_permissions" = "Nemáte oprávnění sdílet svou aktuální polohu v této místnosti.";
 "screen_share_location_title" = "Sdílet polohu";
 "screen_share_my_location_action" = "Sdílet moji polohu";
 "screen_share_open_apple_maps" = "Otevřít v Mapách Apple";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ provedl(a) neznámou změnu svého členství";
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Černý";
+"theme_dark" = "Tmavé";
+"theme_light" = "Světlý";
+"theme_system" = "Systém";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historické zprávy nejsou na tomto zařízení k dispozici";
 "timeline_decryption_failure_historical_event_unverified_device" = "Pro přístup k historickým zprávám musíte toto zařízení ověřit";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nemáte přístup k této zprávě";

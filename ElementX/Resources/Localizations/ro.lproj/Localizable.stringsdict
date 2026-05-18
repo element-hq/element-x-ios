@@ -154,10 +154,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d selectate</string>
 			<key>one</key>
-			<string>%1$d selected</string>
+			<string>%1$d selectat</string>
 			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d selectate</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -220,10 +222,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Aveți %d mesaje noi.</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
+			<string>Aveți %d mesaj nou.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>Aveți %d mesaje noi.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -300,10 +304,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>La fiecare %1$d metri</string>
 			<key>one</key>
-			<string>Every %1$d meter</string>
+			<string>La fiecare %1$d metru</string>
 			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>La fiecare %1$d metri</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -370,10 +376,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d persoane</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>%1$d persoană</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d persoane</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -566,10 +574,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Eliminați camerele %1$d din %2$@</string>
 			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
+			<string>Eliminați camera %1$d din %2$@</string>
 			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>Eliminați camerele %1$d din %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

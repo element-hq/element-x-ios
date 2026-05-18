@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Ezarpen aurreratuak";
 "common_an_image" = "irudia";
 "common_analytics" = "Estatistikak";
-"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Gelatik atera zara";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Itxura";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Gelatik atera da";
 "common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Gonbidapenari uko egin zaio";
-"common_dark" = "Iluna";
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "Hilabete hau";
 "common_decryption_error" = "Deszifratze-errorea";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Matrix IDa ezin da topatu eta, beraz, litekeena da gonbidapena ez jasotzea.";
 "common_leaving_room" = "Gelatik ateratzen";
 "common_leaving_space" = "Leaving space";
-"common_light" = "Argia";
 "common_line_copied_to_clipboard" = "Lerroa arbelean kopiatu da";
 "common_link_copied_to_clipboard" = "Esteka arbelean kopiatu da";
 "common_link_new_device" = "Link new device";
@@ -350,7 +347,6 @@
 "common_suggested" = "Suggested";
 "common_suggestions" = "Iradokizunak";
 "common_syncing" = "Sinkronizatzen";
-"common_system" = "Sistema";
 "common_text" = "Testua";
 "common_third_party_notices" = "Hirugarrenei buruzko oharrak";
 "common_thread" = "Haria";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@(e)k kidetzan aldaketa ezezagun bat egin du";
 "test_language_identifier" = "eu";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Iluna";
+"theme_light" = "Argia";
+"theme_system" = "Sistema";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Iraganeko mezuak ez daude gailu honetan eskuragarri";
 "timeline_decryption_failure_historical_event_unverified_device" = "You need to verify this device for access to historical messages";
 "timeline_decryption_failure_historical_event_user_not_joined" = "You don't have access to this message";

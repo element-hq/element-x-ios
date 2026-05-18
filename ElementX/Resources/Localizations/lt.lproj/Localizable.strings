@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Advanced settings";
 "common_an_image" = "an image";
 "common_analytics" = "Analitika";
-"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Jūs išėjote iš kambario";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Appearance";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Išėjo iš kambario";
 "common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Invite declined";
-"common_dark" = "Dark";
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "This month";
 "common_decryption_error" = "Iššifravimo klaida";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Šio Matrix ID nepavyksta rasti, todėl kvietimas gali būti negautas.";
 "common_leaving_room" = "Paliekamas kambarys";
 "common_leaving_space" = "Leaving space";
-"common_light" = "Light";
 "common_line_copied_to_clipboard" = "Line copied to clipboard";
 "common_link_copied_to_clipboard" = "Nuoroda nukopijuota į iškarpinę";
 "common_link_new_device" = "Link new device";
@@ -350,7 +347,6 @@
 "common_suggested" = "Suggested";
 "common_suggestions" = "Pasiūlymai";
 "common_syncing" = "Sinchronizuojama";
-"common_system" = "System";
 "common_text" = "Text";
 "common_third_party_notices" = "Trečiųjų šalių pranešimai";
 "common_thread" = "Thread";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ padarė nežinomą savo narystės pakeitimą";
 "test_language_identifier" = "lt";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Dark";
+"theme_light" = "Light";
+"theme_system" = "System";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
 "timeline_decryption_failure_historical_event_unverified_device" = "You need to verify this device for access to historical messages";
 "timeline_decryption_failure_historical_event_user_not_joined" = "You don't have access to this message";

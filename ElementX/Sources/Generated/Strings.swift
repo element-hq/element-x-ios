@@ -440,8 +440,6 @@ internal enum L10n {
   internal static var commonAnImage: String { return L10n.tr("Localizable", "common_an_image") }
   /// Analytics
   internal static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
-  /// Syncing notifications...
-  internal static var commonAndroidFetchingNotificationsTitle: String { return L10n.tr("Localizable", "common_android_fetching_notifications_title") }
   /// You left the room
   internal static var commonAndroidShortcutsRemoveReasonLeftRoom: String { return L10n.tr("Localizable", "common_android_shortcuts_remove_reason_left_room") }
   /// You were logged out of the session
@@ -480,8 +478,6 @@ internal enum L10n {
   internal static var commonCurrentUserLeftSpace: String { return L10n.tr("Localizable", "common_current_user_left_space") }
   /// Invite declined
   internal static var commonCurrentUserRejectedInvite: String { return L10n.tr("Localizable", "common_current_user_rejected_invite") }
-  /// Dark
-  internal static var commonDark: String { return L10n.tr("Localizable", "common_dark") }
   /// %1$@ at %2$@
   internal static func commonDateDateAtTime(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "common_date_date_at_time", String(describing: p1), String(describing: p2))
@@ -562,8 +558,6 @@ internal enum L10n {
   internal static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
   /// Leaving space
   internal static var commonLeavingSpace: String { return L10n.tr("Localizable", "common_leaving_space") }
-  /// Light
-  internal static var commonLight: String { return L10n.tr("Localizable", "common_light") }
   /// Line copied to clipboard
   internal static var commonLineCopiedToClipboard: String { return L10n.tr("Localizable", "common_line_copied_to_clipboard") }
   /// Link copied to clipboard
@@ -784,8 +778,6 @@ internal enum L10n {
   internal static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
   /// Syncing
   internal static var commonSyncing: String { return L10n.tr("Localizable", "common_syncing") }
-  /// System
-  internal static var commonSystem: String { return L10n.tr("Localizable", "common_system") }
   /// Text
   internal static var commonText: String { return L10n.tr("Localizable", "common_text") }
   /// Third-party notices
@@ -3657,6 +3649,14 @@ internal enum L10n {
   internal static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   internal static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
+  /// Black
+  internal static var themeBlack: String { return L10n.tr("Localizable", "theme_black") }
+  /// Dark
+  internal static var themeDark: String { return L10n.tr("Localizable", "theme_dark") }
+  /// Light
+  internal static var themeLight: String { return L10n.tr("Localizable", "theme_light") }
+  /// System
+  internal static var themeSystem: String { return L10n.tr("Localizable", "theme_system") }
   /// Historical messages are not available on this device
   internal static var timelineDecryptionFailureHistoricalEventNoKeyBackup: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_no_key_backup") }
   /// You need to verify this device for access to historical messages

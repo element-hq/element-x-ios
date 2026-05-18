@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Avanserte innstillinger";
 "common_an_image" = "et bilde";
 "common_analytics" = "Analyse";
-"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Du forlot rommet";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du ble logget ut av økten";
 "common_appearance" = "Utseende";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Forlot rommet";
 "common_current_user_left_space" = "Forlot område";
 "common_current_user_rejected_invite" = "Invitasjon avslått";
-"common_dark" = "Mørk";
 "common_date_date_at_time" = "%1$@ kl. %2$@";
 "common_date_this_month" = "Denne måneden";
 "common_decryption_error" = "Dekrypteringsfeil";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Finner ikke denne Matrix-IDen, så invitasjonen blir kanskje ikke mottatt.";
 "common_leaving_room" = "Forlater rommet";
 "common_leaving_space" = "Forlater området";
-"common_light" = "Lys";
 "common_line_copied_to_clipboard" = "Linje kopiert til utklippstavlen";
 "common_link_copied_to_clipboard" = "Lenke kopiert til utklippstavlen";
 "common_link_new_device" = "Koble til ny enhet";
@@ -350,7 +347,6 @@
 "common_suggested" = "Foreslått";
 "common_suggestions" = "Forslag";
 "common_syncing" = "Synkroniserer";
-"common_system" = "System";
 "common_text" = "Tekst";
 "common_third_party_notices" = "Varsler fra tredjeparter";
 "common_thread" = "Tråd";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ gjort en ukjent endring i medlemskapet";
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Mørk";
+"theme_light" = "Lys";
+"theme_system" = "System";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historiske meldinger er ikke tilgjengelige på denne enheten";
 "timeline_decryption_failure_historical_event_unverified_device" = "Du må verifisere denne enheten for å få tilgang til historiske meldinger";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Du har ikke tilgang til denne meldingen";
