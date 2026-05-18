@@ -440,8 +440,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      timestamp: eventItemProxy.timestamp,
                                      isOutgoing: isOutgoing,
                                      isEditable: eventItemProxy.isEditable,
-                                     // Workaround until https://github.com/matrix-org/matrix-rust-sdk/pull/6563 is merged.
-                                     canBeRepliedTo: false,
+                                     canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                      sender: eventItemProxy.sender,
                                      content: .init(from: liveLocationContent, timestamp: eventItemProxy.timestamp),
                                      properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
