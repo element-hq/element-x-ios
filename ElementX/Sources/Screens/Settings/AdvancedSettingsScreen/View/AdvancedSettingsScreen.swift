@@ -148,11 +148,11 @@ private extension AppAppearance {
     var name: String {
         switch self {
         case .system:
-            return L10n.commonSystem
+            L10n.themeSystem
         case .light:
-            return L10n.commonLight
+            L10n.themeLight
         case .dark:
-            return L10n.commonDark
+            L10n.themeDark
         }
     }
 }
