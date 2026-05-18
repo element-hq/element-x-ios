@@ -516,7 +516,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func createRoom(name: String,
+    func createRoom(name: String?,
                     topic: String?,
                     accessType: CreateRoomAccessType,
                     isSpace: Bool,
