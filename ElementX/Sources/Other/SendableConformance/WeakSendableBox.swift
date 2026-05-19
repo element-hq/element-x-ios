@@ -30,4 +30,20 @@ final class WeakSendableBox<Wrapped: AnyObject>: @unchecked Sendable {
     init(_ value: Wrapped) {
         self._value = value
     }
+    
+    func withLock<Success, Failure: Error>(_ block: (inout Wrapped) throws(Failure) -> Success?) throws(Failure) -> Success? {
+        do {
+            return try isolationLock.withLock {
+                guard var _value else { return nil }
+                let output = try block(&_value)
+                self._value = _value
+                return output
+            }
+        } catch let error as Failure {
+            throw error
+        } catch {
+            // NSRecursiveLock rethrows instead of using typed throws, but `block` can only throw `Failure`
+            fatalError("this path is impossible")
+        }
+    }
 }
