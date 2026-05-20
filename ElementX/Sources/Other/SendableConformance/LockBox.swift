@@ -36,7 +36,7 @@ import Foundation
 /// Leverages `@dynamicMemberLookup` for ergonomic property access directly on the box.
 @Observable
 @dynamicMemberLookup
-final class LockBox<Wrapped>: @unchecked Sendable {
+final class LockBox<Wrapped> {
     private let isolationLock = NSRecursiveLock()
     
     private var _value: Wrapped
@@ -77,3 +77,5 @@ extension LockBox: ExpressibleByNilLiteral where Wrapped: ExpressibleByNilLitera
         self.init(nil)
     }
 }
+
+extension LockBox: @unchecked Sendable where Wrapped: Sendable { }
