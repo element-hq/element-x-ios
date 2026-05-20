@@ -306,7 +306,7 @@ final class TimelineViewModelTests {
         timelineController.timelineItems = items
         timelineController.roomProxy = roomProxy
 
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: VolatileUserDefaults())
 
         let viewModel = TimelineViewModel(roomProxy: roomProxy,
                                           timelineController: timelineController,
@@ -332,7 +332,7 @@ final class TimelineViewModelTests {
                                            addReadReceipts: receipts)
         let id = message.id
         
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: VolatileUserDefaults())
 
         // When showing them in a timeline.
         let timelineController = MockTimelineController()
@@ -359,7 +359,7 @@ final class TimelineViewModelTests {
     
     @Test
     func showManageUserAsAdmin() async throws {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: VolatileUserDefaults())
 
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
                                                                                members: [RoomMemberProxyMock.mockAdmin,
@@ -398,7 +398,7 @@ final class TimelineViewModelTests {
     
     @Test
     func showDetailsForAnAdmin() async throws {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: VolatileUserDefaults())
 
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
                                                                                members: [RoomMemberProxyMock.mockAdmin,
@@ -437,7 +437,7 @@ final class TimelineViewModelTests {
     
     @Test
     func showDetailsForABannedUser() async throws {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: VolatileUserDefaults())
 
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
                                                                                members: [RoomMemberProxyMock.mockAdmin,
@@ -479,7 +479,7 @@ final class TimelineViewModelTests {
     
     @Test
     func pinnedEvents() async throws {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: VolatileUserDefaults())
 
         var configuration = JoinedRoomProxyMockConfiguration(name: "",
                                                              pinnedEventIDs: .init(["test1"]))
@@ -510,7 +510,7 @@ final class TimelineViewModelTests {
     
     @Test
     func canUserPinEvents() async throws {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: VolatileUserDefaults())
 
         let configuration = JoinedRoomProxyMockConfiguration(name: "",
                                                              powerLevelsConfiguration: .init(canUserPin: true))
@@ -587,7 +587,7 @@ final class TimelineViewModelTests {
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
                                focussedEventID: String? = nil,
                                timelineController: TimelineControllerProtocol) -> TimelineViewModel {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: VolatileUserDefaults())
 
         return TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
                                  focussedEventID: focussedEventID,

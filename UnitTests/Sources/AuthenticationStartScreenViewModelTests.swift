@@ -26,7 +26,7 @@ final class AuthenticationStartScreenViewModelTests {
     }
     
     init() {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        appSettings = AppSettings(store: VolatileUserDefaults())
     }
     
     @Test

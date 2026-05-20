@@ -161,7 +161,7 @@ private extension AppAppearance {
 
 struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings(store: VolatileUserDefaults())
         return AdvancedSettingsScreenViewModel(advancedSettings: appSettings,
                                                analytics: AnalyticsServiceMock.default,
                                                clientProxy: ClientProxyMock(.init()),

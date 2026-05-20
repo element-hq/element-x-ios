@@ -388,7 +388,7 @@ extension AuthenticationService {
                               encryptionKeyProvider: EncryptionKeyProvider(),
                               classicAppManager: classicAppManager,
                               clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
-                              appSettings: AppSettings(store: UserDefaultsMock()),
+                              appSettings: AppSettings(store: VolatileUserDefaults()),
                               appHooks: AppHooks())
     }
 }

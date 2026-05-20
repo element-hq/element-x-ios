@@ -90,7 +90,7 @@ final class RoomSummaryProviderTests {
     // MARK: - Helpers
     
     private func setup(isLowPriorityFilterEnabled: Bool = false) {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        appSettings = AppSettings(store: VolatileUserDefaults())
         appSettings.lowPriorityFilterEnabled = isLowPriorityFilterEnabled
 
         let stateEventStringBuilder = RoomStateEventStringBuilder(userID: "@me:matrix.org")

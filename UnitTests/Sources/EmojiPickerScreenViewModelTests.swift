@@ -45,7 +45,7 @@ struct EmojiPickerScreenViewModelTests {
         
         viewModel = EmojiPickerScreenViewModel(itemID: .randomEvent,
                                                selectedEmojis: selectedEmojis,
-                                               emojiProvider: EmojiProvider(appSettings: AppSettings(store: UserDefaultsMock())),
+                                               emojiProvider: EmojiProvider(appSettings: AppSettings(store: VolatileUserDefaults())),
                                                timelineController: MockTimelineController(timelineProxy: timelineProxy))
     }
 }

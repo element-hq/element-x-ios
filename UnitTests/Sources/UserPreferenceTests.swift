@@ -13,7 +13,7 @@ import Testing
 struct UserPreferenceTests {
     @Test
     func storePlistValue() {
-        let testDefaults = UserDefaultsMock()
+        let testDefaults = VolatileUserDefaults()
         let setPreference = {
             let value = TestPreferences(testDefaults)
             value.plist = "Hello"
@@ -30,7 +30,7 @@ struct UserPreferenceTests {
     
     @Test
     func storeCodableValue() {
-        let testDefaults = UserDefaultsMock()
+        let testDefaults = VolatileUserDefaults()
         let storedType = CodableTestType(a: "some", b: [1, 2, 3])
         
         let setPreference = {
@@ -48,7 +48,7 @@ struct UserPreferenceTests {
     
     @Test
     func storePlistValueOnVolatileStorage() {
-        let testDefaults = UserDefaultsMock()
+        let testDefaults = VolatileUserDefaults()
         let setPreference = {
             let value = TestPreferences(testDefaults)
             value.volatileVar = "Hello"
@@ -63,7 +63,7 @@ struct UserPreferenceTests {
     
     @Test
     func storeCodableValueOnVolatileStorage() {
-        let testDefaults = UserDefaultsMock()
+        let testDefaults = VolatileUserDefaults()
         let storedType = CodableTestType(a: "some", b: [1, 2, 3])
         
         let setPreference = {
@@ -81,7 +81,7 @@ struct UserPreferenceTests {
     
     @Test
     func storePlistArray() {
-        let testDefaults = UserDefaultsMock()
+        let testDefaults = VolatileUserDefaults()
         let setPreference = {
             let value = TestPreferences(testDefaults)
             value.plistArray = [1, 2, 3]
@@ -98,7 +98,7 @@ struct UserPreferenceTests {
     
     @Test
     func assignNilToPlistType() {
-        let testDefaults = UserDefaultsMock()
+        let testDefaults = VolatileUserDefaults()
         let setPreference = {
             let value = TestPreferences(testDefaults)
             value.plist = "Hello"
@@ -115,7 +115,7 @@ struct UserPreferenceTests {
     
     @Test
     func assignNilToCodableType() {
-        let testDefaults = UserDefaultsMock()
+        let testDefaults = VolatileUserDefaults()
         let storedType = CodableTestType(a: "some", b: [1, 2, 3])
         
         let setPreference = {
@@ -134,7 +134,7 @@ struct UserPreferenceTests {
     
     @Test
     func localOverRemoteValue() {
-        let storage = UserDefaultsMock()
+        let storage = VolatileUserDefaults()
         @UserPreference(key: .testKey, defaultValue: "", storage: storage) var preference
         #expect(preference == "")
         
@@ -147,7 +147,7 @@ struct UserPreferenceTests {
     
     @Test
     func remoteOverLocalValue() {
-        let storage = UserDefaultsMock()
+        let storage = VolatileUserDefaults()
         @UserPreference(key: .testKey, defaultValue: "", storage: storage, mode: .remoteOverLocal) var preference
         #expect(preference == "")
         
@@ -177,10 +177,10 @@ private struct TestPreferences {
     var plistArray: [Int]?
     
     init(_ storage: UserDefaultsProtocol) {
-        _volatileVar = UserPreference(key: .key1, storage: UserDefaultsMock())
+        _volatileVar = UserPreference(key: .key1, storage: VolatileUserDefaults())
         _plist = UserPreference(key: .key2, storage: storage)
         _codable = UserPreference(key: .key3, storage: storage)
-        _volatileCodable = UserPreference(key: .key4, storage: UserDefaultsMock())
+        _volatileCodable = UserPreference(key: .key4, storage: VolatileUserDefaults())
         _plistArray = UserPreference(key: .key5, storage: storage)
     }
 }

@@ -19,7 +19,7 @@ final class AnalyticsTests {
     
     @MainActor
     init() {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        appSettings = AppSettings(store: VolatileUserDefaults())
         
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false

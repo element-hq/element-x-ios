@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class UserDefaultsMock: UserDefaultsProtocol, Sendable {
+public final class VolatileUserDefaults: UserDefaultsProtocol, Sendable {
     private let lock = NSLock()
 	
     private nonisolated(unsafe) var _storage: [String: Any]

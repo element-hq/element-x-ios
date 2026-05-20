@@ -20,7 +20,7 @@ struct UserDetailsEditScreenViewModelTests {
     
     init() {
         viewModel = .init(userSession: UserSessionMock(.init()),
-                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: AppSettings(store: UserDefaultsMock())),
+                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: AppSettings(store: VolatileUserDefaults())),
                           userIndicatorController: UserIndicatorControllerMock.default)
     }
     

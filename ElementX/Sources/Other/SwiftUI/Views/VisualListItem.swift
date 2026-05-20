@@ -56,7 +56,7 @@ private struct VisualListItemLabelStyle: LabelStyle {
 // MARK: - Previews
 
 struct VisualListItem_Previews: PreviewProvider, TestablePreview {
-    static let strings = AnalyticsPromptScreenStrings(termsURL: AppSettings(store: UserDefaultsMock()).analyticsTermsURL)
+    static let strings = AnalyticsPromptScreenStrings(termsURL: AppSettings(store: VolatileUserDefaults()).analyticsTermsURL)
 
     static var testImage1: some View {
         Image(systemName: "circle")

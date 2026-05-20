@@ -109,7 +109,7 @@ struct IdentityConfirmationScreenViewModelTests {
         userSession.sessionSecurityStatePublisher = securityStateSubject.asCurrentValuePublisher()
         
         viewModel = IdentityConfirmationScreenViewModel(userSession: userSession,
-                                                        appSettings: AppSettings(store: UserDefaultsMock()),
+                                                        appSettings: AppSettings(store: VolatileUserDefaults()),
                                                         userIndicatorController: UserIndicatorControllerMock())
     }
 }

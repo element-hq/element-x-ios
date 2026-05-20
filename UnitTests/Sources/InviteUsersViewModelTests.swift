@@ -236,7 +236,7 @@ final class InviteUsersScreenViewModelTests {
                                                    isSkippable: isSkippable,
                                                    userDiscoveryService: userDiscoveryService,
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   appSettings: AppSettings(store: UserDefaultsMock()))
+                                                   appSettings: AppSettings(store: VolatileUserDefaults()))
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel
     }

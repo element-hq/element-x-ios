@@ -22,7 +22,7 @@ final class RoomFlowCoordinatorTests {
     private let appSettings: AppSettings
 
     init() {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        appSettings = AppSettings(store: VolatileUserDefaults())
     }
 
     @Test

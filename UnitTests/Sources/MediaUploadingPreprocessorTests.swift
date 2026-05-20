@@ -17,7 +17,7 @@ final class MediaUploadingPreprocessorTests {
     var mediaUploadingPreprocessor: MediaUploadingPreprocessor!
     
     init() {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        appSettings = AppSettings(store: VolatileUserDefaults())
         appSettings.optimizeMediaUploads = false
         mediaUploadingPreprocessor = MediaUploadingPreprocessor(appSettings: appSettings)
     }

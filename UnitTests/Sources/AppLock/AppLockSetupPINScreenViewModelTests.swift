@@ -184,7 +184,7 @@ final class AppLockSetupPINScreenViewModelTests {
     
     private func setup(mode: AppLockSetupPINScreenMode) {
         keychainController = KeychainControllerMock()
-        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings(store: UserDefaultsMock()))
+        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings(store: VolatileUserDefaults()))
         viewModel = AppLockSetupPINScreenViewModel(initialMode: mode, isMandatory: false, appLockService: appLockService)
     }
 }

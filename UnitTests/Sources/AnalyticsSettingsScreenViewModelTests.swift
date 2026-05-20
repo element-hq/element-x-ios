@@ -18,7 +18,7 @@ final class AnalyticsSettingsScreenViewModelTests {
     private var context: AnalyticsSettingsScreenViewModelType.Context!
     
     init() {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        appSettings = AppSettings(store: VolatileUserDefaults())
         analytics = .mock(settings: appSettings)
 
         viewModel = AnalyticsSettingsScreenViewModel(appSettings: appSettings,

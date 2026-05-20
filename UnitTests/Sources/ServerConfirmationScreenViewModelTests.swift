@@ -25,7 +25,7 @@ final class ServerConfirmationScreenViewModelTests {
     private let appSettings: AppSettings
 
     init() {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        appSettings = AppSettings(store: VolatileUserDefaults())
     }
     
     // MARK: - Confirmation mode

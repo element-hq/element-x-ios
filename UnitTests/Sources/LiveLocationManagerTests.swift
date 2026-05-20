@@ -228,7 +228,7 @@ final class LiveLocationManagerTests {
     }
     
     private func setUp(accuracyAuthorization: CLAccuracyAuthorization = .fullAccuracy) {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        appSettings = AppSettings(store: VolatileUserDefaults())
         clientProxy = ClientProxyMock(.init())
         beaconInfoSubject = PassthroughSubject<LiveLocationOwnInfoUpdate, Never>()
         clientProxy.liveLocationOwnInfoUpdatesPublisher = beaconInfoSubject.eraseToAnyPublisher()
