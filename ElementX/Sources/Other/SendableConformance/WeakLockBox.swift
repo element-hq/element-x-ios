@@ -31,6 +31,8 @@ final class WeakLockBox<Wrapped: AnyObject> {
         self._value = value
     }
     
+    /// See ``LockBox.withLock`` - Mostly the same, but since the `value` is stored weakly, this
+    /// only executes if the pointer is not nil.
     func withLock<Success, Failure: Error>(_ block: (inout Wrapped) throws(Failure) -> Success?) throws(Failure) -> Success? {
         do {
             return try isolationLock.withLock {
