@@ -13,7 +13,7 @@ import SwiftUI
 class ShareExtensionViewController: UIViewController {
     private static var targetConfiguration: Target.ConfigurationResult?
     private let appSettings: CommonSettingsProtocol = {
-        guard let userDefaults = UserDefaults(suiteName: AppSettings.suiteName) else {
+        guard let userDefaults = TrackedUserDefaults(suiteName: AppSettings.suiteName) else {
             fatalError("Catastrophic error retrieving user defaults for \(AppSettings.suiteName)")
         }
         return AppSettings(store: userDefaults)

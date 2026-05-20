@@ -79,7 +79,7 @@ actor NotificationServiceExtensionActor {
     }
     
     override init() {
-        guard let userDefaults = UserDefaults(suiteName: AppSettings.suiteName) else {
+        guard let userDefaults = TrackedUserDefaults(suiteName: AppSettings.suiteName) else {
             fatalError("Catastrophic error retrieving user defaults for \(AppSettings.suiteName)")
         }
         settings = AppSettings(store: userDefaults)

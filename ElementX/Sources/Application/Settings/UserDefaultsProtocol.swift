@@ -13,7 +13,6 @@ public protocol UserDefaultsProtocol: AnyObject {
     func object(forKey key: String) -> Any?
     func removeObject(forKey key: String)
     func set(_ value: Any?, forKey key: String)
-    func removePersistentDomain(forName name: String)
+    
+    func reset()
 }
-
-extension UserDefaults: UserDefaultsProtocol { }

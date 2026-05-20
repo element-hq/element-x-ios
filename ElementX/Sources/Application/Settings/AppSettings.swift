@@ -114,7 +114,7 @@ final class AppSettings: @unchecked Sendable {
     
     func resetAllSettings() {
         MXLog.warning("Resetting the AppSettings.")
-        store.removePersistentDomain(forName: Self.suiteName)
+        store.reset()
     }
     
     func resetSessionSpecificSettings() {

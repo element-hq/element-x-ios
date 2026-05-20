@@ -39,7 +39,7 @@ public final class VolatileUserDefaults: UserDefaultsProtocol, Sendable {
         storage[key] = value
     }
 	
-    public func removePersistentDomain(forName name: String) {
+    public func reset() {
         storage = [:]
     }
 }
