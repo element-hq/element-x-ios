@@ -12,7 +12,13 @@ import SwiftUI
 
 class ShareExtensionViewController: UIViewController {
     private static var targetConfiguration: Target.ConfigurationResult?
-    private let appSettings: CommonSettingsProtocol = AppSettings()
+    private let appSettings: CommonSettingsProtocol = {
+        guard let userDefaults = UserDefaults(suiteName: AppSettings.suiteName) else {
+            fatalError("Catastrophic error retrieving user defaults for \(AppSettings.suiteName)")
+        }
+        return AppSettings(store: userDefaults)
+    }()
+
     private var appHooks: AppHooks!
     
     private let keychainController = KeychainController(service: .sessions,

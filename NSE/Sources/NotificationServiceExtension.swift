@@ -63,7 +63,7 @@ actor NotificationServiceExtensionActor {
     
     private static let firstNotificationThreshold: TimeInterval = 15 * 60
     
-    private let settings: CommonSettingsProtocol = AppSettings()
+    private let settings: CommonSettingsProtocol
     private let appHooks: AppHooks
     
     /// This is nonisolated just because the expire function needs to be served ASAP so we should not call it from  a Task, however this is
@@ -78,7 +78,12 @@ actor NotificationServiceExtensionActor {
         MXLog.info("\(tag) deinit")
     }
     
-    init() {
+    override init() {
+        guard let userDefaults = UserDefaults(suiteName: AppSettings.suiteName) else {
+            fatalError("Catastrophic error retrieving user defaults for \(AppSettings.suiteName)")
+        }
+        settings = AppSettings(store: userDefaults)
+        
         appHooks = AppHooks()
         appHooks.setUp()
 

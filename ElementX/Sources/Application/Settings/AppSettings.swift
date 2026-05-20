@@ -104,7 +104,7 @@ final class AppSettings: @unchecked Sendable {
         }
     }
     
-    private static let suiteName: String = InfoPlistReader.main.appGroupIdentifier
+    static let suiteName: String = InfoPlistReader.main.appGroupIdentifier
 
     /// UserDefaults to be used on reads and writes.
     private let store: UserDefaultsProtocol
@@ -463,11 +463,8 @@ final class AppSettings: @unchecked Sendable {
     @UserPreference
     var developerOptionsEnabled: Bool
 	
-    init(store: UserDefaultsProtocol? = nil) {
+    init(store: UserDefaultsProtocol) {
         // UserDefaults to be used on reads and writes.
-        guard
-            let store: UserDefaultsProtocol = store ?? UserDefaults(suiteName: Self.suiteName)
-        else { fatalError("Catastrophic error - UserDefaults could not be instantiated with suite name: \(Self.suiteName)") }
         self.store = store
 		
         _lastVersionLaunched = UserPreference(key: .lastVersionLaunched, storage: store)
