@@ -827,7 +827,7 @@ extension ComposerToolbarViewModel {
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  appSettings: AppSettings(),
-                                                 analyticsService: AnalyticsServiceMock.default(),
+                                                 analyticsService: AnalyticsServiceMock.default,
                                                  composerDraftService: ComposerDraftServiceMock(.init()))
         viewModel.state.bindings.composerFocused = focused
         viewModel.state.bindings.plainComposerText = NSAttributedString(string: message)

@@ -375,7 +375,7 @@ struct CallScreen_Previews: PreviewProvider {
                                    allowPictureInPicture: false,
                                    appHooks: AppHooks(),
                                    appSettings: AppSettings(),
-                                   analyticsService: AnalyticsServiceMock.default())
+                                   analyticsService: AnalyticsServiceMock.default)
     }()
     
     static var previews: some View {

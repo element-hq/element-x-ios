@@ -212,7 +212,7 @@ struct RoomMemberDetailsViewModelTests {
                                                      roomProxy: roomProxyMock,
                                                      userSession: userSession,
                                                      userIndicatorController: UserIndicatorControllerMock.default,
-                                                     analytics: AnalyticsServiceMock.default(),
+                                                     analytics: AnalyticsServiceMock.default,
                                                      appSettings: AppSettings())
     }
 }

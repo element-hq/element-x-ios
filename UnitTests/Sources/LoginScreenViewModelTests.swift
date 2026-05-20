@@ -247,6 +247,6 @@ struct LoginScreenViewModelTests {
                                          loginHint: loginHint,
                                          userIndicatorController: UserIndicatorControllerMock(),
                                          appSettings: appSettings,
-                                         analytics: AnalyticsServiceMock.default())
+                                         analytics: AnalyticsServiceMock.default)
     }
 }

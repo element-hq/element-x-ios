@@ -313,7 +313,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
 
         var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
-                                                            notificationToneManager: NotificationToneManagerMock(),
+                                                            notificationToneManager: NotificationToneManagerMock.default,
                                                             notificationSettingsProxy: notificationSettingsProxy,
                                                             userIndicatorController: UserIndicatorControllerMock(),
                                                             isModallyPresented: true)
