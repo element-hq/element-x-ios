@@ -495,6 +495,10 @@ final class AppSettings: @unchecked Sendable {
         _automaticBackPaginationEnabled = UserPreference(key: .automaticBackPaginationEnabled, defaultValue: false, storage: store)
         _developerOptionsEnabled = UserPreference(key: .developerOptionsEnabled, defaultValue: Self.appBuildType != .release, storage: store)
     }
+    
+    static func volatile() -> AppSettings {
+        AppSettings(store: VolatileUserDefaults())
+    }
 }
 
 extension AppSettings: CommonSettingsProtocol { }
