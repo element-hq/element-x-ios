@@ -46,7 +46,7 @@ final class UserPreference<T: Codable> {
     ///   - defaultValue: The default value to use if no stored value exists or if `forceDefault` is `true`.
     ///   - keyedStorage: The storage instance where the value is saved.
     ///   - forceDefault: A publisher that determines whether the default value should always be used. Defaults to publish `false`. Useful in the context of remote settings that need to override the local value.
-    init(key: AppSettings.UserDefaultsKey,
+    init(key: any PreferenceKeyable,
          defaultValue: T,
          keyedStorage: any KeyedStorage<T>,
          mode: Mode) {
@@ -95,16 +95,20 @@ final class UserPreference<T: Codable> {
 // MARK: - UserPreference convenience initializers
 
 extension UserPreference {
-    convenience init(key: AppSettings.UserDefaultsKey, defaultValue: T, storage backingStorage: UserDefaultsProtocol, mode: Mode = .localOverRemote) {
+    convenience init(key: any PreferenceKeyable, defaultValue: T, storage backingStorage: UserDefaultsProtocol, mode: Mode = .localOverRemote) {
         let storage: any KeyedStorage<T> = UserDefaultsStorage(userDefaults: backingStorage)
 
         self.init(key: key, defaultValue: defaultValue, keyedStorage: storage, mode: mode)
     }
     
-    convenience init(key: AppSettings.UserDefaultsKey, storage: UserDefaultsProtocol, mode: Mode = .localOverRemote) where T: ExpressibleByNilLiteral {
+    convenience init(key: any PreferenceKeyable, storage: UserDefaultsProtocol, mode: Mode = .localOverRemote) where T: ExpressibleByNilLiteral {
         self.init(key: key, defaultValue: nil, storage: storage, mode: mode)
     }
 }
+
+// MARK: - Keys
+
+protocol PreferenceKeyable: RawRepresentable where RawValue == String { }
 
 // MARK: - Storage
 

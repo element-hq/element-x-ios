@@ -24,8 +24,8 @@ struct UserPreferenceTests {
         let value = TestPreferences(testDefaults)
         
         #expect(value.plist == "Hello")
-        #expect(testDefaults.object(forKey: AppSettings.UserDefaultsKey.key2.rawValue) is String)
-        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key2.rawValue) == nil)
+        #expect(testDefaults.object(forKey: TestsKey.key2.rawValue) is String)
+        #expect(testDefaults.data(forKey: TestsKey.key2.rawValue) == nil)
     }
     
     @Test
@@ -43,7 +43,7 @@ struct UserPreferenceTests {
         let value = TestPreferences(testDefaults)
         
         #expect(value.codable == storedType)
-        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key3.rawValue) != nil)
+        #expect(testDefaults.data(forKey: TestsKey.key3.rawValue) != nil)
     }
     
     @Test
@@ -76,7 +76,7 @@ struct UserPreferenceTests {
         let value = TestPreferences(testDefaults)
         
         #expect(value.volatileCodable == nil)
-        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key4.rawValue) == nil)
+        #expect(testDefaults.data(forKey: TestsKey.key4.rawValue) == nil)
     }
     
     @Test
@@ -92,8 +92,8 @@ struct UserPreferenceTests {
         let value = TestPreferences(testDefaults)
         
         #expect(value.plistArray == [1, 2, 3])
-        #expect(testDefaults.object(forKey: AppSettings.UserDefaultsKey.key5.rawValue) as? [Int] == [1, 2, 3])
-        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key5.rawValue) == nil)
+        #expect(testDefaults.object(forKey: TestsKey.key5.rawValue) as? [Int] == [1, 2, 3])
+        #expect(testDefaults.data(forKey: TestsKey.key5.rawValue) == nil)
     }
     
     @Test
@@ -110,7 +110,7 @@ struct UserPreferenceTests {
         value.plist = nil
         
         #expect(value.plist == nil)
-        #expect(testDefaults.object(forKey: AppSettings.UserDefaultsKey.key2.rawValue) as? String == nil)
+        #expect(testDefaults.object(forKey: TestsKey.key2.rawValue) as? String == nil)
     }
     
     @Test
@@ -129,13 +129,13 @@ struct UserPreferenceTests {
         value.codable = nil
 
         #expect(value.codable == nil)
-        #expect(testDefaults.data(forKey: AppSettings.UserDefaultsKey.key3.rawValue) == nil)
+        #expect(testDefaults.data(forKey: TestsKey.key3.rawValue) == nil)
     }
     
     @Test
     func localOverRemoteValue() {
         let storage = VolatileUserDefaults()
-        @UserPreference(key: .testKey, defaultValue: "", storage: storage) var preference
+        @UserPreference(key: TestsKey.testKey, defaultValue: "", storage: storage) var preference
         #expect(preference == "")
         
         _preference.remoteValue = "remote"
@@ -148,7 +148,7 @@ struct UserPreferenceTests {
     @Test
     func remoteOverLocalValue() {
         let storage = VolatileUserDefaults()
-        @UserPreference(key: .testKey, defaultValue: "", storage: storage, mode: .remoteOverLocal) var preference
+        @UserPreference(key: TestsKey.testKey, defaultValue: "", storage: storage, mode: .remoteOverLocal) var preference
         #expect(preference == "")
         
         _preference.remoteValue = "remote"
@@ -177,11 +177,11 @@ private struct TestPreferences {
     var plistArray: [Int]?
     
     init(_ storage: UserDefaultsProtocol) {
-        _volatileVar = UserPreference(key: .key1, storage: VolatileUserDefaults())
-        _plist = UserPreference(key: .key2, storage: storage)
-        _codable = UserPreference(key: .key3, storage: storage)
-        _volatileCodable = UserPreference(key: .key4, storage: VolatileUserDefaults())
-        _plistArray = UserPreference(key: .key5, storage: storage)
+        _volatileVar = UserPreference(key: TestsKey.key1, storage: VolatileUserDefaults())
+        _plist = UserPreference(key: TestsKey.key2, storage: storage)
+        _codable = UserPreference(key: TestsKey.key3, storage: storage)
+        _volatileCodable = UserPreference(key: TestsKey.key4, storage: VolatileUserDefaults())
+        _plistArray = UserPreference(key: TestsKey.key5, storage: storage)
     }
 }
 
@@ -190,11 +190,13 @@ private struct CodableTestType: Equatable, Codable {
     let b: [Int]
 }
 
-private extension AppSettings.UserDefaultsKey {
+private struct TestsKey: PreferenceKeyable, RawRepresentable {
     static let testKey = Self(rawValue: "testKey")
     static let key1 = Self(rawValue: "foo.volatile")
     static let key2 = Self(rawValue: "foo.plist")
     static let key3 = Self(rawValue: "foo.codable")
     static let key4 = Self(rawValue: "foo.volatile.codable")
     static let key5 = Self(rawValue: "foo.plist.array")
+    
+    let rawValue: String
 }

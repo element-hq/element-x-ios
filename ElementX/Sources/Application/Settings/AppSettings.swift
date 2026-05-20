@@ -38,70 +38,60 @@ enum AppBuildType {
 /// State is persisted in `UserDefaults`, which is thread-safe per Apple's documentation, hence `@unchecked`.
 final class AppSettings: @unchecked Sendable {
     private enum UserDefaultsKeys: String {
-        static let lastVersionLaunched: UserDefaultsKey = "lastVersionLaunched"
-        static let seenInvites: UserDefaultsKey = "seenInvites"
-        static let hasSeenNewSoundBanner: UserDefaultsKey = "hasSeenNewSoundBanner"
-        static let appLockNumberOfPINAttempts: UserDefaultsKey = "appLockNumberOfPINAttempts"
-        static let appLockNumberOfBiometricAttempts: UserDefaultsKey = "appLockNumberOfBiometricAttempts"
-        static let timelineStyle: UserDefaultsKey = "timelineStyle"
+        case lastVersionLaunched
+        case seenInvites
+        case hasSeenNewSoundBanner
+        case appLockNumberOfPINAttempts
+        case appLockNumberOfBiometricAttempts
+        case timelineStyle
         
-        static let analyticsConsentState: UserDefaultsKey = "analyticsConsentState"
-        static let hasRunNotificationPermissionsOnboarding: UserDefaultsKey = "hasRunNotificationPermissionsOnboarding"
-        static let hasRunIdentityConfirmationOnboarding: UserDefaultsKey = "hasRunIdentityConfirmationOnboarding"
-        static let hasRequestedLocationAlwaysLocationAuthorization: UserDefaultsKey = "hasRequestedLocationAlwaysLocationAuthorization"
+        case analyticsConsentState
+        case hasRunNotificationPermissionsOnboarding
+        case hasRunIdentityConfirmationOnboarding
+        case hasRequestedLocationAlwaysLocationAuthorization
         
-        static let frequentlyUsedSystemEmojis: UserDefaultsKey = "frequentlyUsedSystemEmojis"
+        case frequentlyUsedSystemEmojis
         
-        static let enableNotifications: UserDefaultsKey = "enableNotifications"
-        static let enableInAppNotifications: UserDefaultsKey = "enableInAppNotifications"
-        static let pusherProfileTag: UserDefaultsKey = "pusherProfileTag"
-        static let lastNotificationBootTime: UserDefaultsKey = "lastNotificationBootTime"
+        case enableNotifications
+        case enableInAppNotifications
+        case pusherProfileTag
+        case lastNotificationBootTime
         case selectedNotificationTone
-        static let logLevel: UserDefaultsKey = "logLevel"
-        static let traceLogPacks: UserDefaultsKey = "traceLogPacks"
-        static let viewSourceEnabled: UserDefaultsKey = "viewSourceEnabled"
-        static let optimizeMediaUploads: UserDefaultsKey = "optimizeMediaUploads"
-        static let appAppearance: UserDefaultsKey = "appAppearance"
-        static let sharePresence: UserDefaultsKey = "sharePresence"
+        case logLevel
+        case traceLogPacks
+        case viewSourceEnabled
+        case optimizeMediaUploads
+        case appAppearance
+        case sharePresence
         
-        static let elementCallBaseURLOverride: UserDefaultsKey = "elementCallBaseURLOverride"
+        case elementCallBaseURLOverride
         
-        static let voiceMessagePlaybackSpeed: UserDefaultsKey = "voiceMessagePlaybackSpeed"
+        case voiceMessagePlaybackSpeed
         
         // Live Location
-        static let liveLocationSharingTimeoutDatesByRoomID: UserDefaultsKey = "liveLocationSharingTimeoutDatesByRoomID"
-        static let liveLocationMinimumDistanceUpdate: UserDefaultsKey = "liveLocationMinimumDistanceUpdate"
-        static let liveLocationDisclaimerDisplayed: UserDefaultsKey = "liveLocationDisclaimerDisplayed"
+        case liveLocationSharingTimeoutDatesByRoomID
+        case liveLocationMinimumDistanceUpdate
+        case liveLocationDisclaimerDisplayed
         
         // Feature flags
-        static let fuzzyRoomListSearchEnabled: UserDefaultsKey = "fuzzyRoomListSearchEnabled"
-        static let lowPriorityFilterEnabled: UserDefaultsKey = "lowPriorityFilterEnabled"
-        static let enableOnlySignedDeviceIsolationMode: UserDefaultsKey = "enableOnlySignedDeviceIsolationMode"
-        static let knockingEnabled: UserDefaultsKey = "knockingEnabled"
-        static let threadsEnabled: UserDefaultsKey = "threadsEnabled"
-        static let roomThreadListEnabled: UserDefaultsKey = "roomThreadListEnabled"
-        static let linkPreviewsEnabled: UserDefaultsKey = "linkPreviewsEnabled"
+        case fuzzyRoomListSearchEnabled
+        case lowPriorityFilterEnabled
+        case enableOnlySignedDeviceIsolationMode
+        case knockingEnabled
+        case threadsEnabled
+        case roomThreadListEnabled
+        case linkPreviewsEnabled
         case jumpToReadMarkerEnabled
-        static let focusEventOnNotificationTap: UserDefaultsKey = "focusEventOnNotificationTap"
-        static let linkNewDeviceEnabled: UserDefaultsKey = "linkNewDeviceEnabled"
-        static let automaticBackPaginationEnabled: UserDefaultsKey = "automaticBackPaginationEnabled"
+        case focusEventOnNotificationTap
+        case linkNewDeviceEnabled
+        case automaticBackPaginationEnabled
         case clientPausingAndResumingEnabled
         
         // Doug's tweaks 🔧
-        static let roomListActivityVisibility: UserDefaultsKey = "roomListActivityVisibility"
-        static let hideQuietNotificationAlerts: UserDefaultsKey = "hideQuietNotificationAlerts"
+        case roomListActivityVisibility
+        case hideQuietNotificationAlerts
         
-        static let developerOptionsEnabled: UserDefaultsKey = "developerOptionsEnabled"
-        
-        let rawValue: String
-        
-        init(rawValue: String) {
-            self.rawValue = rawValue
-        }
-        
-        init(stringLiteral value: StringLiteralType) {
-            self.init(rawValue: value)
-        }
+        case developerOptionsEnabled
     }
     
     static let suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -508,3 +498,13 @@ final class AppSettings: @unchecked Sendable {
 }
 
 extension AppSettings: CommonSettingsProtocol { }
+
+private extension UserPreference {
+    convenience init(key: AppSettings.UserDefaultsKey, defaultValue: T, storage backingStorage: UserDefaultsProtocol, mode: Mode = .localOverRemote) {
+        self.init(key: key as any PreferenceKeyable, defaultValue: defaultValue, storage: backingStorage, mode: mode)
+    }
+    
+    convenience init(key: AppSettings.UserDefaultsKey, storage: UserDefaultsProtocol, mode: Mode = .localOverRemote) where T: ExpressibleByNilLiteral {
+        self.init(key: key as any PreferenceKeyable, defaultValue: nil, storage: storage, mode: mode)
+    }
+}
