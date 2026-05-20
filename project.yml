@@ -92,7 +92,7 @@ packages:
     # path: ../emojibase-bindings
   SwiftOGG:
     url: https://github.com/element-hq/swift-ogg
-    minorVersion: 0.0.3
+    minorVersion: 0.0.4
     # path: ../swift-ogg
   WysiwygComposer:
     url: https://github.com/element-hq/matrix-rich-text-editor-swift
@@ -111,7 +111,7 @@ packages:
     from: 1.0.6
   Collections:
     url: https://github.com/apple/swift-collections
-    minorVersion: 1.4.1
+    minorVersion: 1.5.0
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
     minorVersion: 5.8.0
@@ -129,7 +129,7 @@ packages:
     minorVersion: 4.2.2
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    minorVersion: 8.8.1
+    minorVersion: 8.9.0
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     minorVersion: 1.2.0
@@ -147,10 +147,10 @@ packages:
     minorVersion: 6.26.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.57.2
+    minorVersion: 3.58.1
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 9.11.0
+    minorVersion: 9.13.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.19.2
@@ -165,7 +165,7 @@ packages:
     minorVersion: 6.0.1
   Version:
     url: https://github.com/mxcl/Version
-    minorVersion: 2.2.0
+    minorVersion: 2.2.1
 
 aggregateTargets:
   Periphery:
