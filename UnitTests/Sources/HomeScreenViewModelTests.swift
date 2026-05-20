@@ -440,7 +440,7 @@ final class HomeScreenViewModelTests {
         viewModel = HomeScreenViewModel(userSession: userSession,
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         appSettings: appSettings,
-                                        analyticsService: AnalyticsServiceMock.default(),
+                                        analyticsService: AnalyticsServiceMock.default,
                                         notificationManager: notificationManager,
                                         userIndicatorController: UserIndicatorControllerMock.default)
     }

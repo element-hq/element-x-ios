@@ -29,7 +29,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -63,7 +63,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -90,7 +90,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -117,7 +117,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -143,7 +143,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -173,7 +173,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -199,7 +199,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -227,7 +227,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -253,7 +253,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -283,7 +283,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
@@ -309,7 +309,7 @@ struct PillContextTests {
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: appSettings,
-                                     analyticsService: AnalyticsServiceMock.default(),
+                                     analyticsService: AnalyticsServiceMock.default,
                                      emojiProvider: EmojiProvider(appSettings: appSettings),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))

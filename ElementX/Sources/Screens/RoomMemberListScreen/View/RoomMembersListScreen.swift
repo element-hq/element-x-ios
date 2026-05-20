@@ -262,6 +262,6 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
                                                                                    ownUserID: ownUserID,
                                                                                    powerLevelsConfiguration: .init(canUserInvite: false))),
                                               userIndicatorController: UserIndicatorControllerMock.default,
-                                              analytics: AnalyticsServiceMock.default())
+                                              analytics: AnalyticsServiceMock.default)
     }
 }

@@ -6,7 +6,7 @@
 //
 
 extension AnalyticsServiceMock {
-    static func `default`() -> AnalyticsServiceMock {
+    static var `default`: AnalyticsServiceMock {
         let mock = AnalyticsServiceMock()
         mock.isEnabled = false
         mock.shouldShowAnalyticsPrompt = false

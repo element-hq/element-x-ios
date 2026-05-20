@@ -155,7 +155,7 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
                                  userIndicatorController: UserIndicatorControllerMock.default,
                                  appMediator: AppMediatorMock.default,
                                  appSettings: appSettings,
-                                 analyticsService: AnalyticsServiceMock.default(),
+                                 analyticsService: AnalyticsServiceMock.default,
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

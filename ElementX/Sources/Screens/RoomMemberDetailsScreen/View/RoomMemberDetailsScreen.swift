@@ -240,7 +240,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                 roomProxy: roomProxyMock,
                                                 userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                                 userIndicatorController: UserIndicatorControllerMock.default,
-                                                analytics: AnalyticsServiceMock.default(),
+                                                analytics: AnalyticsServiceMock.default,
                                                 appSettings: AppSettings())
     }
 }

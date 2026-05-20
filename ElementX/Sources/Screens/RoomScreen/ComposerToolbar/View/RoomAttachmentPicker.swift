@@ -89,7 +89,7 @@ struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
                                         mediaProvider: MediaProviderMock(configuration: .init()),
                                         mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                         appSettings: appSettings,
-                                        analyticsService: AnalyticsServiceMock.default(),
+                                        analyticsService: AnalyticsServiceMock.default,
                                         composerDraftService: ComposerDraftServiceMock(.init()))
     }
 

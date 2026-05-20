@@ -42,7 +42,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
         
-        analytics = AnalyticsServiceMock.default()
+        analytics = AnalyticsServiceMock.default
         userIndicatorController = UserIndicatorController()
         
         windowManager.delegate = self
