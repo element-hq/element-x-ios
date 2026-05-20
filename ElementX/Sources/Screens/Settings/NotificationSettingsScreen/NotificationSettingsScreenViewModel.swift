@@ -280,8 +280,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     
     private func setSelectedTone(_ alertTone: NotificationTone) {
         do {
-            notificationTonePreviewer.load(sourceURL: alertTone.location, playbackURL: alertTone.location, autoplay: true)
-            try notificationToneManager.setSelectedTone(alertTone)
+            let toneLocation = try notificationToneManager.setSelectedTone(alertTone)
+            notificationTonePreviewer.load(sourceURL: toneLocation, playbackURL: toneLocation, autoplay: true)
             MXLog.info("Successfully set selected tone: \(alertTone.label)")
         } catch {
             let userIndicator = UserIndicator(type: .toast,

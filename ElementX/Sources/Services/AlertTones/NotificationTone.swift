@@ -9,54 +9,18 @@ import Foundation
 
 /// Represents a notification alert tone and its backing audio file location.
 struct NotificationTone: Hashable, Comparable, Codable {
-    private static let systemLocation = {
-        let systemRoot: URL
-        if let simulatorRoot = ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] {
-            systemRoot = URL(filePath: simulatorRoot)
-        } else {
-            systemRoot = URL(filePath: "/")
-        }
-        return systemRoot.appending(components: "System", "Library", "Audio", "UISounds", directoryHint: .isDirectory)
-    }()
-    
-    /// Directory where user-imported custom tones are stored.
-    static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds", directoryHint: .isDirectory)
-    
-    private static let bundledLocation: URL = {
-        guard let url = Bundle.app.resourceURL else {
-            fatalError("The app is seriously corrupt if resourceURL is missing.")
-        }
-        return url
-    }()
-    
     /// Display name for the tone, falling back to the filename stem.
     var label: String {
-        labelOverride ?? location.deletingPathExtension().lastPathComponent
+        labelOverride ?? URL(filePath: "/\(relativePath.last, default: "")").deletingPathExtension().lastPathComponent
     }
 
     private let labelOverride: String?
-    private let storageLocationRoot: StorageLocation
-    private let relativePath: [String]
-    /// Resolved absolute file URL for the audio file.
-    var location: URL {
-        let root: URL
-        switch storageLocationRoot {
-        case .system:
-            root = Self.systemLocation
-        case .appBundle:
-            root = Self.bundledLocation
-        case .appLibrary:
-            root = Self.libraryLocation
-        }
-
-        return relativePath.reduce(root) {
-            $0.appending(component: $1)
-        }
-    }
+    let storageLocationRoot: StorageLocation
+    let relativePath: [String]
 
     /// The audio filename including its extension.
     var filename: String {
-        location.lastPathComponent
+        relativePath.last ?? ""
     }
 
     /// - Parameters:

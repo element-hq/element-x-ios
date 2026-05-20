@@ -414,6 +414,7 @@ struct NotificationSettingsScreenViewModelTests {
         let tone = NotificationTone.createBundledSound(label: "Test", filename: "test.caf")
         toneManager.setSelectedToneClosure = { [appSettings] selectedTone in
             appSettings.selectedNotificationTone = selectedTone
+            return NotificationToneManager.libraryLocation
         }
 
         // When the user selects that tone
@@ -492,12 +493,13 @@ struct NotificationSettingsScreenViewModelTests {
     func importingCustomToneRefreshesAvailableList() async throws {
         // Given a tone file ready to import
         let importedTone = NotificationTone.createCustomUserSound(filename: "imported.caf")
-        toneManager.addNewToneToLibraryFromReturnValue = importedTone.location
+        let location = NotificationToneManager.libraryLocation.appending(component: importedTone.filename)
+        toneManager.addNewToneToLibraryFromReturnValue = location
         toneManager.customTonesReturnValue = [importedTone]
 
         // When the import result is received
         let deferred = deferFulfillment(context.observe(\.viewState.availableCustomTones)) { !$0.isEmpty }
-        context.send(viewAction: .addedCustomAlertTone(.success(importedTone.location)))
+        context.send(viewAction: .addedCustomAlertTone(.success(location)))
 
         // Then the available list is updated to include the new tone
         try await deferred.fulfill()

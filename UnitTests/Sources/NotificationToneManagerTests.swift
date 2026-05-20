@@ -57,8 +57,8 @@ struct NotificationToneManagerTests {
     @Test
     func customTonesFiltersToCAFOnly() throws {
         // Given both CAF and non-CAF files written to the library directory
-        let cafURL = NotificationTone.libraryLocation.appending(component: "\(UUID().uuidString).caf")
-        let mp3URL = NotificationTone.libraryLocation.appending(component: "\(UUID().uuidString).mp3")
+        let cafURL = NotificationToneManager.libraryLocation.appending(component: "\(UUID().uuidString).caf")
+        let mp3URL = NotificationToneManager.libraryLocation.appending(component: "\(UUID().uuidString).mp3")
         defer {
             try? FileManager.default.removeItem(at: cafURL)
             try? FileManager.default.removeItem(at: mp3URL)
@@ -80,7 +80,7 @@ struct NotificationToneManagerTests {
     func addingDuplicateToneThrowsFileAlreadyExists() async throws {
         // Given a CAF file that has already been imported into the library
         let sourceURL = URL.temporaryDirectory.appending(component: "\(UUID().uuidString).caf")
-        let importedURL = NotificationTone.libraryLocation
+        let importedURL = NotificationToneManager.libraryLocation
             .appending(component: sourceURL.deletingPathExtension().lastPathComponent)
             .appendingPathExtension("caf")
         defer {

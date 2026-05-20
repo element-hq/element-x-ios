@@ -45,12 +45,15 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     /// Filename of the active tone file used by the notification service.
     static let selectedToneFilename = "currentAlert.caf"
     
+    /// Directory where user-imported custom tones are stored.
+    static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds", directoryHint: .isDirectory)
+    
     /// Creates the manager and ensures required library directories exist.
     init(appSettings: AppSettings) {
         self.appSettings = appSettings
         
         do {
-            try FileManager.default.createDirectory(at: NotificationTone.libraryLocation, withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: NotificationToneManager.libraryLocation, withIntermediateDirectories: true)
             try FileManager.default.createDirectory(at: Self.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
         } catch {
             fatalError("Catastrophic error setting up tone manager: \(error)")
@@ -60,11 +63,13 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     /// Sets the given tone as the active notification alert tone.
     ///
     /// Copies the tone's audio file to `selectedToneLocation` and persists the selection in app settings.
-    func setSelectedTone(_ alertTone: NotificationTone) throws {
+    func setSelectedTone(_ alertTone: NotificationTone) throws -> URL {
         do {
             try? FileManager.default.removeItem(at: Self.selectedToneLocation)
-            try FileManager.default.copyItem(at: alertTone.location, to: Self.selectedToneLocation)
+            let toneLocation = Self.toneLocation(for: alertTone)
+            try FileManager.default.copyItem(at: toneLocation, to: Self.selectedToneLocation)
             appSettings.selectedNotificationTone = alertTone
+            return Self.selectedToneLocation
         } catch {
             if (try? Self.selectedToneLocation.checkResourceIsReachable()) != true {
                 // make sure the selected tone is reset if there's no custom tone present
@@ -78,7 +83,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     func customTones() -> [NotificationTone] {
         let availableFiles = try? FileManager
             .default
-            .contentsOfDirectory(at: NotificationTone.libraryLocation, includingPropertiesForKeys: nil)
+            .contentsOfDirectory(at: NotificationToneManager.libraryLocation, includingPropertiesForKeys: nil)
         
         return (availableFiles ?? [])
             .compactMap {
@@ -96,7 +101,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     @discardableResult
     func addNewToneToLibrary(from sourceURL: URL) throws -> URL {
         let baseName = sourceURL.deletingPathExtension().lastPathComponent
-        let outputURL = NotificationTone.libraryLocation.appending(component: baseName).appendingPathExtension("caf")
+        let outputURL = NotificationToneManager.libraryLocation.appending(component: baseName).appendingPathExtension("caf")
         
         guard (try? outputURL.checkResourceIsReachable()) != true else {
             throw ManagerError.fileAlreadyExists
@@ -114,11 +119,12 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     /// Removes a user-imported tone from the library.
     /// - Throws: `DeletionError.notACustomTone` if the tone is not stored in the library directory.
     func deleteCustomTone(_ alertTone: NotificationTone) throws {
-        guard alertTone.location.deletingLastPathComponent() == NotificationTone.libraryLocation else {
+        let toneLocation = Self.toneLocation(for: alertTone)
+        guard toneLocation.deletingLastPathComponent() == NotificationToneManager.libraryLocation else {
             throw ManagerError.notACustomTone
         }
         
-        try FileManager.default.removeItem(at: alertTone.location)
+        try FileManager.default.removeItem(at: toneLocation)
     }
     
     // MARK: - Private
@@ -168,7 +174,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     }
 
     /// File URL of the active tone copied/linked for use by the system.
-    private static let selectedToneLocation = NotificationTone.libraryLocation.deletingLastPathComponent().appending(component: selectedToneFilename)
+    private static let selectedToneLocation = NotificationToneManager.libraryLocation.deletingLastPathComponent().appending(component: selectedToneFilename)
     
     #if IS_MAIN_APP
     /// Pre-defined iOS system tones available for selection, sorted by name.
@@ -244,7 +250,8 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
                            filename: "tweet_sent.caf")
     ]
     .compactMap { (alertTone: NotificationTone) -> NotificationTone? in
-        guard (try? alertTone.location.checkResourceIsReachable()) == true else {
+        let toneLocation = toneLocation(for: alertTone)
+        guard (try? toneLocation.checkResourceIsReachable()) == true else {
             return nil
         }
         return alertTone
@@ -258,4 +265,37 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
                             filename: "sound_01.caf")
     ].sorted()
     #endif
+
+    private static let systemLocation = {
+        let systemRoot: URL
+        if let simulatorRoot = ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] {
+            systemRoot = URL(filePath: simulatorRoot)
+        } else {
+            systemRoot = URL(filePath: "/")
+        }
+        return systemRoot.appending(components: "System", "Library", "Audio", "UISounds", directoryHint: .isDirectory)
+    }()
+
+    private static let bundledLocation: URL = {
+        guard let url = Bundle.app.resourceURL else {
+            fatalError("The app is seriously corrupt if resourceURL is missing.")
+        }
+        return url
+    }()
+    
+    private static func toneLocation(for tone: NotificationTone) -> URL {
+        let root: URL
+        switch tone.storageLocationRoot {
+        case .system:
+            root = Self.systemLocation
+        case .appBundle:
+            root = Self.bundledLocation
+        case .appLibrary:
+            root = Self.libraryLocation
+        }
+        
+        return tone.relativePath.reduce(root) {
+            $0.appending(component: $1)
+        }
+    }
 }

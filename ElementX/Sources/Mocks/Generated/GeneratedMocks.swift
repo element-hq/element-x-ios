@@ -14661,9 +14661,35 @@ class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked S
     }
     var setSelectedToneReceivedAlertTone: NotificationTone?
     var setSelectedToneReceivedInvocations: [NotificationTone] = []
-    var setSelectedToneClosure: ((NotificationTone) throws -> Void)?
 
-    func setSelectedTone(_ alertTone: NotificationTone) throws {
+    var setSelectedToneUnderlyingReturnValue: URL!
+    var setSelectedToneReturnValue: URL! {
+        get {
+            if Thread.isMainThread {
+                return setSelectedToneUnderlyingReturnValue
+            } else {
+                var returnValue: URL? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setSelectedToneUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setSelectedToneUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setSelectedToneUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var setSelectedToneClosure: ((NotificationTone) throws -> URL)?
+
+    @discardableResult
+    func setSelectedTone(_ alertTone: NotificationTone) throws -> URL {
         if let error = setSelectedToneThrowableError {
             throw error
         }
@@ -14672,7 +14698,11 @@ class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked S
         DispatchQueue.main.async {
             self.setSelectedToneReceivedInvocations.append(alertTone)
         }
-        try setSelectedToneClosure?(alertTone)
+        if let setSelectedToneClosure = setSelectedToneClosure {
+            return try setSelectedToneClosure(alertTone)
+        } else {
+            return setSelectedToneReturnValue
+        }
     }
     //MARK: - customTones
 
