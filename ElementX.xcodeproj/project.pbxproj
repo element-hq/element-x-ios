@@ -10187,7 +10187,7 @@
 			repositoryURL = "https://github.com/PostHog/posthog-ios";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 3.57.2;
+				minimumVersion = 3.58.1;
 			};
 		};
 		A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
@@ -10195,7 +10195,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 9.11.0;
+				minimumVersion = 9.13.0;
 			};
 		};
 		AB8E808A59756170682BEC20 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -10227,7 +10227,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 8.8.1;
+				minimumVersion = 8.9.0;
 			};
 		};
 		D5F7D47BBAAE0CF1DDEB3034 /* XCRemoteSwiftPackageReference "DeviceKit" */ = {
@@ -10251,7 +10251,7 @@
 			repositoryURL = "https://github.com/element-hq/swift-ogg";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.0.3;
+				minimumVersion = 0.0.4;
 			};
 		};
 		E9C4F3A12AA1F65C13A8C8EB /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
@@ -10275,7 +10275,7 @@
 			repositoryURL = "https://github.com/mxcl/Version";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 2.2.0;
+				minimumVersion = 2.2.1;
 			};
 		};
 		EE40B0E16A55BD23ECBFFD22 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */ = {
@@ -10291,7 +10291,7 @@
 			repositoryURL = "https://github.com/apple/swift-collections";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.4.1;
+				minimumVersion = 1.5.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
