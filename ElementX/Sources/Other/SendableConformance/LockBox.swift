@@ -21,7 +21,7 @@ import Foundation
 /// **Disciplines required:**
 /// - For reference types: the wrapped type should itself be `Sendable`, or internal mutations must be
 /// otherwise synchronized
-/// - Only one `SendableBox` instance should exist per instance of a wrapped reference type (multiple boxes
+/// - Only one `LockBox` instance should exist per instance of a wrapped reference type (multiple boxes
 ///  do not synchronize with each other)
 /// - Mutations to the wrapped value should go through the box, not via a retained reference to the wrapped object
 /// - For reference types, use `withLock { }` when the operation on the referenced object must be atomic with
@@ -36,7 +36,7 @@ import Foundation
 /// Leverages `@dynamicMemberLookup` for ergonomic property access directly on the box.
 @Observable
 @dynamicMemberLookup
-final class SendableBox<Wrapped>: @unchecked Sendable {
+final class LockBox<Wrapped>: @unchecked Sendable {
     private let isolationLock = NSRecursiveLock()
     
     private var _value: Wrapped
@@ -72,7 +72,7 @@ final class SendableBox<Wrapped>: @unchecked Sendable {
     }
 }
 
-extension SendableBox: ExpressibleByNilLiteral where Wrapped: ExpressibleByNilLiteral {
+extension LockBox: ExpressibleByNilLiteral where Wrapped: ExpressibleByNilLiteral {
     convenience init(nilLiteral: ()) {
         self.init(nil)
     }

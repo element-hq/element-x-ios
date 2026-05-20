@@ -7,9 +7,9 @@
 
 import Foundation
 
-/// See ``SendableBox`` - Mostly the same, but the value stored with `weak` reference semantics
+/// See ``LockBox`` - Mostly the same, but the value stored with `weak` reference semantics
 @dynamicMemberLookup
-final class WeakSendableBox<Wrapped: AnyObject>: @unchecked Sendable {
+final class WeakLockBox<Wrapped: AnyObject>: @unchecked Sendable {
     private let isolationLock = NSRecursiveLock()
     
     private weak var _value: Wrapped?

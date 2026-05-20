@@ -34,7 +34,7 @@ struct ClassicAppAccount: Equatable, CustomStringConvertible, Sendable {
             lhs.isServerSupported == rhs.isServerSupported && lhs.availableSecrets == rhs.availableSecrets
         }
         
-        private let _isServerSupported: SendableBox<Bool?> = nil
+        private let _isServerSupported: LockBox<Bool?> = nil
         /// Whether or not the account's server is supported by Element X (or `nil` whilst determining support).
         ///
         /// The account will be hidden when this value is `false`.
@@ -43,7 +43,7 @@ struct ClassicAppAccount: Equatable, CustomStringConvertible, Sendable {
             set { _isServerSupported.value = newValue }
         }
         
-        private let _availableSecrets: SendableBox<AvailableSecrets?> = nil
+        private let _availableSecrets: LockBox<AvailableSecrets?> = nil
         /// Information about the secrets available from Element X (or `nil` whilst determining availability).
         ///
         /// See ``AuthenticationService.refreshClassicAppAccountState`` for details about how

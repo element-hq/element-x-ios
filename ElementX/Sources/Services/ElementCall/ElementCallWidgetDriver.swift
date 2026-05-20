@@ -52,7 +52,7 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
     private let room: RoomProtocol
     private let deviceID: String
     
-    private let _widgetDriver: SendableBox<WidgetDriverAndHandle?>
+    private let _widgetDriver: LockBox<WidgetDriverAndHandle?>
     private var widgetDriver: WidgetDriverAndHandle? {
         get { _widgetDriver.value }
         set { _widgetDriver.value = newValue }

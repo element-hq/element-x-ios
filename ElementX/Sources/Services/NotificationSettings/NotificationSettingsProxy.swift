@@ -11,7 +11,7 @@ import Foundation
 import MatrixRustSDK
 
 private final class WeakNotificationSettingsProxy: NotificationSettingsDelegate {
-    private let proxy: WeakSendableBox<NotificationSettingsProxy>
+    private let proxy: WeakLockBox<NotificationSettingsProxy>
     
     init(proxy: NotificationSettingsProxy) {
         self.proxy = .init(proxy)

@@ -11,7 +11,7 @@ import Foundation
 import MatrixRustSDK
 
 private final class WeakSessionVerificationControllerProxy: SessionVerificationControllerDelegate {
-    private let proxy: WeakSendableBox<SessionVerificationControllerProxy>
+    private let proxy: WeakLockBox<SessionVerificationControllerProxy>
     
     init(proxy: SessionVerificationControllerProxy) {
         self.proxy = .init(proxy)
