@@ -33,6 +33,18 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     
     private let appSettings: AppSettings
     
+    #if IS_MAIN_APP
+    /// The default Element X bundled message tone.
+    static let defaultElementXMessageTone: NotificationTone = .createBundledSound(label: UntranslatedL10n.screenNotificationSettingsSoundElementDefault,
+                                                                                  filename: "message.caf")
+    
+    /// All default tones (system + Element X), sorted by name.
+    static let allDefaultAlerts: [NotificationTone] = (defaultSystemAlerts + defaultElementXAlerts).sorted()
+    #endif
+    
+    /// Filename of the active tone file used by the notification service.
+    static let selectedToneFilename = "currentAlert.caf"
+    
     /// Creates the manager and ensures required library directories exist.
     init(appSettings: AppSettings) {
         self.appSettings = appSettings
@@ -154,19 +166,13 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
         try FileManager.default.moveItem(at: tempURL, to: destURL)
         MXLog.info("Converted \(sourceURL.path(percentEncoded: false)) to caf")
     }
-    
-    /// Filename of the active tone file used by the notification service.
-    static let selectedToneFilename = "currentAlert.caf"
+
     /// File URL of the active tone copied/linked for use by the system.
-    static let selectedToneLocation = NotificationTone.libraryLocation.deletingLastPathComponent().appending(component: selectedToneFilename)
+    private static let selectedToneLocation = NotificationTone.libraryLocation.deletingLastPathComponent().appending(component: selectedToneFilename)
     
     #if IS_MAIN_APP
-    /// The default Element X bundled message tone.
-    static let defaultElementXMessageTone: NotificationTone = .createBundledSound(label: UntranslatedL10n.screenNotificationSettingsSoundElementDefault,
-                                                                                  filename: "message.caf")
-    
     /// Pre-defined iOS system tones available for selection, sorted by name.
-    static let defaultSystemAlerts: [NotificationTone] = [
+    private static let defaultSystemAlerts: [NotificationTone] = [
         .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTriTone,
                            filename: "sms-received1.caf"),
         .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemChime,
@@ -246,13 +252,10 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     .sorted()
     
     /// Element X bundled tones available for selection, sorted by name.
-    static let defaultElementXAlerts: [NotificationTone] = [
+    private static let defaultElementXAlerts: [NotificationTone] = [
         defaultElementXMessageTone,
         .createBundledSound(label: UntranslatedL10n.screenNotificationSettingsSoundElementFade,
                             filename: "sound_01.caf")
     ].sorted()
-    
-    /// All default tones (system + Element X), sorted by name.
-    static let allDefaultAlerts: [NotificationTone] = (defaultSystemAlerts + defaultElementXAlerts).sorted()
     #endif
 }
