@@ -6,34 +6,28 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Combine
+@preconcurrency import Combine
 import Foundation
 import MatrixRustSDK
 
-private final class WeakNotificationSettingsProxy: NotificationSettingsDelegate {
-    private let proxy: WeakLockBox<NotificationSettingsProxy>
-    
-    init(proxy: NotificationSettingsProxy) {
-        self.proxy = .init(proxy)
-    }
-    
+extension WeakLockBox: NotificationSettingsDelegate where Wrapped == NotificationSettingsProxy {
     // MARK: - NotificationSettingsDelegate
     
     func settingsDidChange() {
-        Task {
-            await proxy.value?.settingsDidChange()
+        Task { @MainActor in
+            value?.settingsDidChange()
         }
     }
 }
 
 final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
-    private(set) var notificationSettings: MatrixRustSDK.NotificationSettingsProtocol
+    let notificationSettings: MatrixRustSDK.NotificationSettingsProtocol
     
     let callbacks = PassthroughSubject<NotificationSettingsProxyCallback, Never>()
 
     init(notificationSettings: MatrixRustSDK.NotificationSettingsProtocol) {
         self.notificationSettings = notificationSettings
-        notificationSettings.setDelegate(delegate: WeakNotificationSettingsProxy(proxy: self))
+        notificationSettings.setDelegate(delegate: WeakLockBox(self))
     }
     
     func getNotificationSettings(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws -> RoomNotificationSettingsProxyProtocol {

@@ -48,7 +48,7 @@ struct SessionVerificationEmoji: Hashable {
 }
 
 // sourcery: AutoMockable
-protocol SessionVerificationControllerProxyProtocol {
+protocol SessionVerificationControllerProxyProtocol: Sendable {
     var actions: PassthroughSubject<SessionVerificationControllerProxyAction, Never> { get }
     
     func acknowledgeVerificationRequest(details: SessionVerificationRequestDetails) async -> Result<Void, SessionVerificationControllerProxyError>

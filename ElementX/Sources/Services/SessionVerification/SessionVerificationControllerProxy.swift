@@ -6,60 +6,54 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Combine
+@preconcurrency import Combine
 import Foundation
 import MatrixRustSDK
 
-private final class WeakSessionVerificationControllerProxy: SessionVerificationControllerDelegate {
-    private let proxy: WeakLockBox<SessionVerificationControllerProxy>
-    
-    init(proxy: SessionVerificationControllerProxy) {
-        self.proxy = .init(proxy)
-    }
-    
+extension WeakLockBox: SessionVerificationControllerDelegate where Wrapped == SessionVerificationControllerProxy {
     // MARK: - SessionVerificationControllerDelegate
     
     func didReceiveVerificationRequest(details: MatrixRustSDK.SessionVerificationRequestDetails) {
-        proxy.value?.didReceiveVerificationRequest(details: details)
+        value?.didReceiveVerificationRequest(details: details)
     }
     
     func didReceiveVerificationData(data: MatrixRustSDK.SessionVerificationData) {
         switch data {
         // We can handle only emojis for now
         case .emojis(let emojis, _):
-            proxy.value?.didReceiveData(emojis)
+            value?.didReceiveData(emojis)
         default:
             break
         }
     }
     
     func didAcceptVerificationRequest() {
-        proxy.value?.didAcceptVerificationRequest()
+        value?.didAcceptVerificationRequest()
     }
     
     func didStartSasVerification() {
-        proxy.value?.didStartSasVerification()
+        value?.didStartSasVerification()
     }
     
     func didFail() {
-        proxy.value?.didFail()
+        value?.didFail()
     }
     
     func didCancel() {
-        proxy.value?.didCancel()
+        value?.didCancel()
     }
     
     func didFinish() {
-        proxy.value?.didFinish()
+        value?.didFinish()
     }
 }
 
-class SessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol {
+final class SessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol {
     private let sessionVerificationController: SessionVerificationController
     
     init(sessionVerificationController: SessionVerificationController) {
         self.sessionVerificationController = sessionVerificationController
-        sessionVerificationController.setDelegate(delegate: WeakSessionVerificationControllerProxy(proxy: self))
+        sessionVerificationController.setDelegate(delegate: WeakLockBox(self))
     }
     
     deinit {

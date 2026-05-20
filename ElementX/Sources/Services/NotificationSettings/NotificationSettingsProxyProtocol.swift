@@ -15,7 +15,7 @@ enum NotificationSettingsProxyCallback {
 }
 
 // sourcery: AutoMockable
-protocol NotificationSettingsProxyProtocol {
+protocol NotificationSettingsProxyProtocol: Sendable {
     var callbacks: PassthroughSubject<NotificationSettingsProxyCallback, Never> { get }
     
     func getNotificationSettings(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws -> RoomNotificationSettingsProxyProtocol
