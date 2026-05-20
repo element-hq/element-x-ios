@@ -16,8 +16,8 @@ import SwiftUI
 /// Common settings between app and NSE
 protocol CommonSettingsProtocol: AnyObject {
     var lastNotificationBootTime: TimeInterval? { get set }
-    var notificationSoundName: RemotePreference<UNNotificationSoundName> { get }
-    
+    var selectedNotificationTone: NotificationTone? { get set }
+
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
     var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
@@ -54,6 +54,7 @@ final class AppSettings {
         case enableInAppNotifications
         case pusherProfileTag
         case lastNotificationBootTime
+        case selectedNotificationTone
         case logLevel
         case traceLogPacks
         case viewSourceEnabled
@@ -299,10 +300,11 @@ final class AppSettings {
     /// The device's last boot time as recorded by the NSE.
     @UserPreference(key: UserDefaultsKeys.lastNotificationBootTime, storageType: .userDefaults(store))
     var lastNotificationBootTime: TimeInterval?
-    
-    /// The name of sound played when delivering noisy notifications.
-    var notificationSoundName: RemotePreference<UNNotificationSoundName> = .init(.init("message.caf"))
-    
+
+    /// The sound played when delivering noisy notifications. If nil, use the ElementX default
+    @UserPreference(key: UserDefaultsKeys.selectedNotificationTone, defaultValue: nil, storageType: .userDefaults(store))
+    var selectedNotificationTone: NotificationTone?
+
     // MARK: - Logging
         
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: LogLevel.info, storageType: .userDefaults(store))

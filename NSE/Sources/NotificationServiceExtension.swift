@@ -231,8 +231,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         let content = UNMutableNotificationContent()
         content.body = L10n.notificationReceivedWhileOfflineIos
         content.badge = originalRequest.content.unreadCount as NSNumber?
-        content.sound = .init(named: settings.notificationSoundName.publisher.value)
-        
+        content.sound = settings.notificationSound
+
         let request = UNNotificationRequest(identifier: Self.receivedWhileOfflineNotificationID, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)
     }
