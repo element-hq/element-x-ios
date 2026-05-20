@@ -311,8 +311,6 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         }
 
         let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
                                  userSession: UserSessionMock(.init()),
@@ -320,7 +318,7 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  userIndicatorController: UserIndicatorControllerMock(),
                                  appMediator: AppMediatorMock.default,
                                  appSettings: appSettings,
-                                 analyticsService: analytics,
+                                 analyticsService: AnalyticsServiceMock.default(),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

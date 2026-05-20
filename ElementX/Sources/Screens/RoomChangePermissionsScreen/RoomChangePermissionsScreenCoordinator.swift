@@ -14,7 +14,7 @@ struct RoomChangePermissionsScreenCoordinatorParameters {
     let permissions: RoomPermissions
     let roomProxy: JoinedRoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
 }
 
 enum RoomChangePermissionsScreenCoordinatorAction {

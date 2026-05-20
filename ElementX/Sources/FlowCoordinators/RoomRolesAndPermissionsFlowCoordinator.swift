@@ -20,7 +20,7 @@ struct RoomRolesAndPermissionsFlowCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
     let userIndicatorController: UserIndicatorControllerProtocol
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
 }
 
 class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
@@ -28,7 +28,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     
     enum State: StateType {
         /// The state machine hasn't started.

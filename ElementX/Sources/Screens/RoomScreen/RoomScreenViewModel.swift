@@ -18,7 +18,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let clientProxy: ClientProxyProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let appSettings: AppSettings
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var initialSelectedPinnedEventID: String?
@@ -56,7 +56,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,
          appHooks: AppHooks,
-         analyticsService: AnalyticsService,
+         analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         clientProxy = userSession.clientProxy
         self.roomProxy = roomProxy
@@ -457,17 +457,14 @@ extension RoomScreenViewModel {
     static func mock(roomProxyMock: JoinedRoomProxyMock,
                      clientProxyMock: ClientProxyMock = ClientProxyMock(.init()),
                      appHooks: AppHooks = AppHooks()) -> RoomScreenViewModel {
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
-        return RoomScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                                   roomProxy: roomProxyMock,
-                                   initialSelectedPinnedEventID: nil,
-                                   ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                   appSettings: appSettings,
-                                   appHooks: appHooks,
-                                   analyticsService: analytics,
-                                   userIndicatorController: UserIndicatorControllerMock.default)
+        RoomScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
+                            roomProxy: roomProxyMock,
+                            initialSelectedPinnedEventID: nil,
+                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                            appSettings: AppSettings(),
+                            appHooks: appHooks,
+                            analyticsService: AnalyticsServiceMock.default(),
+                            userIndicatorController: UserIndicatorControllerMock.default)
     }
 }
 

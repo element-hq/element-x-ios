@@ -15,7 +15,7 @@ typealias CreateRoomScreenViewModelType = StateStoreViewModel<CreateRoomScreenVi
 class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var syncNameAndAlias = true
@@ -31,7 +31,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
          spaceSelectionMode: CreateRoomScreenSpaceSelectionMode,
          shouldShowCancelButton: Bool,
          userSession: UserSessionProtocol,
-         analytics: AnalyticsService,
+         analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
         self.userSession = userSession

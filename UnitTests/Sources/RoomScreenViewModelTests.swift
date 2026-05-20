@@ -50,7 +50,7 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: .mock(settings: appSettings),
+                                            analyticsService: AnalyticsServiceMock.default(),
                                             userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
@@ -131,7 +131,7 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: .mock(settings: appSettings),
+                                            analyticsService: AnalyticsServiceMock.default(),
                                             userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
@@ -192,7 +192,7 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: .mock(settings: appSettings),
+                                            analyticsService: AnalyticsServiceMock.default(),
                                             userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
@@ -251,7 +251,7 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: .mock(settings: appSettings),
+                                            analyticsService: AnalyticsServiceMock.default(),
                                             userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
@@ -288,7 +288,7 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: ongoingCallRoomIDSubject.asCurrentValuePublisher(),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: .mock(settings: appSettings),
+                                            analyticsService: AnalyticsServiceMock.default(),
                                             userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         #expect(viewModel.state.shouldShowCallButton)
@@ -333,7 +333,7 @@ final class RoomScreenViewModelTests {
                                                 ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                 appSettings: appSettings,
                                                 appHooks: AppHooks(),
-                                                analyticsService: .mock(settings: appSettings),
+                                                analyticsService: AnalyticsServiceMock.default(),
                                                 userIndicatorController: UserIndicatorControllerMock.default)
             self.viewModel = viewModel
             viewModel.stop()
@@ -354,7 +354,7 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: .mock(settings: appSettings),
+                                            analyticsService: AnalyticsServiceMock.default(),
                                             userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
@@ -388,7 +388,7 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: .mock(settings: appSettings),
+                                            analyticsService: AnalyticsServiceMock.default(),
                                             userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
@@ -417,7 +417,7 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: .mock(settings: appSettings),
+                                            analyticsService: AnalyticsServiceMock.default(),
                                             userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
@@ -437,7 +437,7 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: .mock(settings: appSettings),
+                                            analyticsService: AnalyticsServiceMock.default(),
                                             userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         
@@ -464,7 +464,7 @@ final class RoomScreenViewModelTests {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appSettings: appSettings,
                                             appHooks: AppHooks(),
-                                            analyticsService: .mock(settings: appSettings),
+                                            analyticsService: AnalyticsServiceMock.default(),
                                             userIndicatorController: UserIndicatorControllerMock.default)
         self.viewModel = viewModel
         

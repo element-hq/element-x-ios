@@ -15,7 +15,7 @@ typealias ManageRoomMemberSheetViewModelType = StateStoreViewModelV2<ManageRoomM
 class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, ManageRoomMemberSheetViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     
     private var actionsSubject: PassthroughSubject<ManageRoomMemberSheetViewModelAction, Never> = .init()
     
@@ -27,7 +27,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
          permissions: ManageRoomMemberPermissions,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         analyticsService: AnalyticsService,
+         analyticsService: AnalyticsServiceProtocol,
          mediaProvider: MediaProviderProtocol) {
         self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy

@@ -17,7 +17,7 @@ class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let networkMonitor: NetworkMonitorProtocol
     private let appSettings: AppSettings
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     
     let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
@@ -202,7 +202,7 @@ class ClientProxy: ClientProxyProtocol {
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService) async throws {
+         analyticsService: AnalyticsServiceProtocol) async throws {
         self.client = client
         self.networkMonitor = networkMonitor
         self.appSettings = appSettings

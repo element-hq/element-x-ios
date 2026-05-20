@@ -11,7 +11,7 @@ import SwiftUI
 
 struct AnalyticsSettingsScreenCoordinatorParameters {
     let appSettings: AppSettings
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
 }
 
 final class AnalyticsSettingsScreenCoordinator: CoordinatorProtocol {

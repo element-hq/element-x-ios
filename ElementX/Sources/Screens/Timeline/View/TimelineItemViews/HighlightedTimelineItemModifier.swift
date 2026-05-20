@@ -91,8 +91,6 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
     static let composerViewModel = ComposerToolbarViewModel.mock()
     static let timelineViewModel = {
         let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return TimelineViewModel(roomProxy: roomProxyMock,
                                  focussedEventID: focussedEventID,
                                  timelineController: MockTimelineController(),
@@ -101,7 +99,7 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
                                  userIndicatorController: UserIndicatorControllerMock.default,
                                  appMediator: AppMediatorMock.default,
                                  appSettings: appSettings,
-                                 analyticsService: analytics,
+                                 analyticsService: AnalyticsServiceMock.default(),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

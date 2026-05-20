@@ -26,7 +26,7 @@ struct RoomScreenCoordinatorParameters {
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let appHooks: AppHooks
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
     let composerDraftService: ComposerDraftServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
     let userIndicatorController: UserIndicatorControllerProtocol

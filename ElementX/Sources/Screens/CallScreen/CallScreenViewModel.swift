@@ -18,7 +18,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     private let configuration: ElementCallConfiguration
     private let isPictureInPictureAllowed: Bool
     private let appSettings: AppSettings
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
     
@@ -41,7 +41,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
          allowPictureInPicture: Bool,
          appHooks: AppHooks,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService) {
+         analyticsService: AnalyticsServiceProtocol) {
         self.elementCallService = elementCallService
         self.configuration = configuration
         self.appSettings = appSettings

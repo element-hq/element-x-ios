@@ -126,20 +126,17 @@ struct SpaceSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let userViewModel = makeViewModel(members: .allMembers)
     
     static func makeViewModel(members: [RoomMemberProxyMock]) -> RoomDetailsScreenViewModel {
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-        
-        return RoomDetailsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
-                                                                               avatarURL: .mockMXCAvatar,
-                                                                               isSpace: true,
-                                                                               canonicalAlias: "#space:matrix.org",
-                                                                               members: members)),
-                                          userSession: UserSessionMock(.init()),
-                                          analyticsService: analytics,
-                                          userIndicatorController: UserIndicatorControllerMock.default,
-                                          notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                          appSettings: appSettings)
+        RoomDetailsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
+                                                                        avatarURL: .mockMXCAvatar,
+                                                                        isSpace: true,
+                                                                        canonicalAlias: "#space:matrix.org",
+                                                                        members: members)),
+                                   userSession: UserSessionMock(.init()),
+                                   analyticsService: AnalyticsServiceMock.default(),
+                                   userIndicatorController: UserIndicatorControllerMock.default,
+                                   notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                   attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                   appSettings: AppSettings())
     }
 
     static var previews: some View {

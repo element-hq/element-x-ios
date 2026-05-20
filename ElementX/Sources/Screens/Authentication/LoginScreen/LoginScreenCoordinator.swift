@@ -16,7 +16,7 @@ struct LoginScreenCoordinatorParameters {
     let loginHint: String?
     let userIndicatorController: UserIndicatorControllerProtocol
     let appSettings: AppSettings
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
 }
 
 enum LoginScreenCoordinatorAction {

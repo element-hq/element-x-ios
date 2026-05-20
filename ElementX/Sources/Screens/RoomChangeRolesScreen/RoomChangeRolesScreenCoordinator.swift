@@ -14,7 +14,7 @@ struct RoomChangeRolesScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
 }
 
 enum RoomChangeRolesScreenCoordinatorAction {

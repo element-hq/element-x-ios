@@ -14,7 +14,7 @@ typealias RoomRolesAndPermissionsScreenViewModelType = StateStoreViewModelV2<Roo
 class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewModelType, RoomRolesAndPermissionsScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private var ownUser: RoomMemberDetails?
     
     private var actionsSubject: PassthroughSubject<RoomRolesAndPermissionsScreenViewModelAction, Never> = .init()
@@ -22,7 +22,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(initialPermissions: RoomPermissions? = nil, roomProxy: JoinedRoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol, analytics: AnalyticsService) {
+    init(initialPermissions: RoomPermissions? = nil, roomProxy: JoinedRoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol, analytics: AnalyticsServiceProtocol) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics

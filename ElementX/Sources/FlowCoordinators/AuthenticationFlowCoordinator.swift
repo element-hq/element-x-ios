@@ -23,7 +23,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     enum State: StateType {
@@ -109,7 +109,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          appHooks: AppHooks,
-         analytics: AnalyticsService,
+         analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.bugReportService = bugReportService

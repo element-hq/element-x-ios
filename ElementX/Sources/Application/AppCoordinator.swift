@@ -22,7 +22,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let targetConfiguration: Target.ConfigurationResult
     private let appMediator: AppMediator
     private let appSettings: AppSettings
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let appDelegate: AppDelegate
@@ -946,7 +946,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    private static func setupSentry(bugReportService: BugReportServiceProtocol, appSettings: AppSettings, analytics: AnalyticsService) {
+    private static func setupSentry(bugReportService: BugReportServiceProtocol, appSettings: AppSettings, analytics: AnalyticsServiceProtocol) {
         guard let bugReportSentryURL = appSettings.bugReportSentryURL else { return }
         
         let options: Options = .init()

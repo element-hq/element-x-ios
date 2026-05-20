@@ -15,7 +15,7 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appSettings: AppSettings
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     
     private let actionsSubject: PassthroughSubject<PinnedEventsTimelineScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<PinnedEventsTimelineScreenViewModelAction, Never> {
@@ -25,7 +25,7 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
     init(roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService) {
+         analyticsService: AnalyticsServiceProtocol) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings
