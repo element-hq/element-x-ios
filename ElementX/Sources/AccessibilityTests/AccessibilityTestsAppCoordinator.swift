@@ -40,7 +40,7 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
         
         MXLog.configure(currentTarget: "accessibility-tests")
         
-        let appSettings = AppSettings(store: VolatileUserDefaults())
+        let appSettings = AppSettings.volatile()
 
         guard let name = ProcessInfo.accessibilityViewID,
               let previewType = TestablePreviewsDictionary.dictionary[name] else {

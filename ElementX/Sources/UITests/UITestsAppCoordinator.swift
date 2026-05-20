@@ -35,7 +35,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         
         MXLog.configure(currentTarget: "uitests")
         
-        appSettings = AppSettings(store: VolatileUserDefaults())
+        appSettings = AppSettings.volatile()
         
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false

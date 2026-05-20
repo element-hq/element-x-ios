@@ -64,7 +64,7 @@ struct LabsScreen: View {
 // MARK: - Previews
 
 struct LabsScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = LabsScreenViewModel(labsOptions: AppSettings(store: VolatileUserDefaults()))
+    static let viewModel = LabsScreenViewModel(labsOptions: AppSettings.volatile())
         
     static var previews: some View {
         ElementNavigationStack {

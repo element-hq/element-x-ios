@@ -29,7 +29,7 @@ final class JoinRoomScreenViewModelTests {
     private let appSettings: AppSettings
     
     init() {
-        appSettings = AppSettings(store: VolatileUserDefaults())
+        appSettings = AppSettings.volatile()
     }
     
     deinit {

@@ -16,7 +16,7 @@ final class BugReportServiceTests {
     var bugReportService: BugReportServiceProtocol!
     
     init() throws {
-        appSettings = AppSettings(store: VolatileUserDefaults())
+        appSettings = AppSettings.volatile()
         appSettings.bugReportRageshakeURL.reset()
         
         let bugReportServiceMock = BugReportServiceMock()

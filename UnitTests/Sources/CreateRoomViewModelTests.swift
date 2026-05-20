@@ -26,7 +26,7 @@ final class CreateRoomScreenViewModelTests {
     }
 
     init() {
-        appSettings = AppSettings(store: UserDefaultsMock())
+        appSettings = AppSettings.volatile()
     }
 
     deinit {

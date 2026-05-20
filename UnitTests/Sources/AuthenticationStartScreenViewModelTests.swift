@@ -26,7 +26,7 @@ final class AuthenticationStartScreenViewModelTests {
     }
     
     init() {
-        appSettings = AppSettings(store: VolatileUserDefaults())
+        appSettings = AppSettings.volatile()
     }
     
     @Test

@@ -22,7 +22,7 @@ final class RoomFlowCoordinatorTests {
     private let appSettings: AppSettings
 
     init() {
-        appSettings = AppSettings(store: VolatileUserDefaults())
+        appSettings = AppSettings.volatile()
     }
 
     @Test

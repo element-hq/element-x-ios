@@ -233,7 +233,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
                                                                                                             joinRule: .invite)),
                                                                        clientProxy: ClientProxyMock(.init()),
                                                                        userIndicatorController: UserIndicatorControllerMock(),
-                                                                       appSettings: AppSettings(store: VolatileUserDefaults()))
+                                                                       appSettings: .volatile())
     
     static let publicViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
                                                                                                         canonicalAlias: "#room:matrix.org",
@@ -242,17 +242,17 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
                                                                                                         isVisibleInPublicDirectory: true)),
                                                                    clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
                                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                                   appSettings: AppSettings(store: VolatileUserDefaults()))
+                                                                   appSettings: .volatile())
     
     static let publicNoAddressViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
                                                                                                                  members: .allMembersAsCreator,
                                                                                                                  joinRule: .public)),
                                                                             clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
                                                                             userIndicatorController: UserIndicatorControllerMock(),
-                                                                            appSettings: AppSettings(store: VolatileUserDefaults()))
+                                                                            appSettings: .volatile())
     
     static let singleSpaceMembersViewModel = {
-        let appSettings = AppSettings(store: VolatileUserDefaults())
+        let appSettings = AppSettings.volatile()
         
         let space = [SpaceServiceRoom].mockSingleRoom[0]
         
@@ -268,7 +268,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let multipleSpacesMembersViewModel = {
-        let appSettings = AppSettings(store: VolatileUserDefaults())
+        let appSettings = AppSettings.volatile()
         
         let spaces = [SpaceServiceRoom].mockJoinedSpaces
         
@@ -284,7 +284,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let askToJoinViewModel = {
-        let appSettings = AppSettings(store: VolatileUserDefaults())
+        let appSettings = AppSettings.volatile()
         appSettings.knockingEnabled = true
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
@@ -298,7 +298,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let singleAskToJoinSpaceMembersViewModel = {
-        let appSettings = AppSettings(store: VolatileUserDefaults())
+        let appSettings = AppSettings.volatile()
         appSettings.knockingEnabled = true
         
         let space = [SpaceServiceRoom].mockSingleRoom[0]
@@ -315,7 +315,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let multipleAskToJoinSpacesMembersViewModel = {
-        let appSettings = AppSettings(store: VolatileUserDefaults())
+        let appSettings = AppSettings.volatile()
         appSettings.knockingEnabled = true
         
         let spaces = [SpaceServiceRoom].mockJoinedSpaces
@@ -339,7 +339,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
                                                                                                              isVisibleInPublicDirectory: true)),
                                                                         clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
                                                                         userIndicatorController: UserIndicatorControllerMock(),
-                                                                        appSettings: AppSettings(store: VolatileUserDefaults()))
+                                                                        appSettings: .volatile())
     
     static var previews: some View {
         ElementNavigationStack {

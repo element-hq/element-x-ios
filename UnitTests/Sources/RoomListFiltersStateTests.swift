@@ -15,7 +15,7 @@ final class RoomListFiltersStateTests {
     let allCasesWithoutLowPriority = RoomListFilter.allCases.filter { $0 != .lowPriority }
     
     init() {
-        appSettings = AppSettings(store: VolatileUserDefaults())
+        appSettings = AppSettings.volatile()
         state = RoomListFiltersState(appSettings: appSettings)
     }
     

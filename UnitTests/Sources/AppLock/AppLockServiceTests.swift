@@ -17,7 +17,7 @@ final class AppLockServiceTests {
     private var service: AppLockService
     
     init() {
-        appSettings = AppSettings(store: VolatileUserDefaults())
+        appSettings = AppSettings.volatile()
         
         keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
         keychainController.resetSecrets()

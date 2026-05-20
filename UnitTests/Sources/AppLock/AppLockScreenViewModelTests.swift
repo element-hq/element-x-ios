@@ -21,7 +21,7 @@ final class AppLockScreenViewModelTests {
     }
     
     init() {
-        appSettings = AppSettings(store: VolatileUserDefaults())
+        appSettings = AppSettings.volatile()
         keychainController = KeychainControllerMock()
         appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         viewModel = AppLockScreenViewModel(appLockService: appLockService)

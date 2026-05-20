@@ -21,7 +21,7 @@ struct AppLockSetupSettingsScreenViewModelTests {
     
     init() {
         keychainController = KeychainControllerMock()
-        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings(store: VolatileUserDefaults()))
+        appLockService = AppLockService(keychainController: keychainController, appSettings: .volatile())
         viewModel = AppLockSetupSettingsScreenViewModel(appLockService: AppLockServiceMock.mock())
     }
 

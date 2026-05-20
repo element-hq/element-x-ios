@@ -15,7 +15,7 @@ import Testing
 struct PillContextTests {
     @Test
     func user() async {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let id = "@test:matrix.org"
@@ -49,7 +49,7 @@ struct PillContextTests {
     
     @Test
     func ownUser() {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let id = "@test:matrix.org"
@@ -74,7 +74,7 @@ struct PillContextTests {
     
     @Test
     func allUsers() {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let avatarURL = URL(string: "https://matrix.jpg")
@@ -102,7 +102,7 @@ struct PillContextTests {
     
     @Test
     func roomIDMention() {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -130,7 +130,7 @@ struct PillContextTests {
     
     @Test
     func roomIDMentionMissingRoom() {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -156,7 +156,7 @@ struct PillContextTests {
     
     @Test
     func roomAliasMention() {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -186,7 +186,7 @@ struct PillContextTests {
     
     @Test
     func roomAliasMentionMissingRoom() {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -212,7 +212,7 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomIDMention() {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -240,7 +240,7 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomIDMentionMissingRoom() {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -266,7 +266,7 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomAliasMention() {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -296,7 +296,7 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomAliasMentionMissingRoom() {
-        let appSettings = AppSettings(store: UserDefaultsMock())
+        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock.default
 
         let proxyMock = JoinedRoomProxyMock(.init())

@@ -19,7 +19,7 @@ struct EmojiProviderTests {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = [category]
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: AppSettings(store: VolatileUserDefaults()))
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: .volatile())
         
         let categories = await emojiProvider.categories()
         #expect(emojiLoaderMock.categories == categories)
@@ -33,7 +33,7 @@ struct EmojiProviderTests {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = [category]
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: AppSettings(store: VolatileUserDefaults()))
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: .volatile())
         
         let categories = await emojiProvider.categories(searchString: "")
         #expect(emojiLoaderMock.categories == categories)
@@ -51,7 +51,7 @@ struct EmojiProviderTests {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = categoriesForFirstLoad
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: AppSettings(store: VolatileUserDefaults()))
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: .volatile())
         
         _ = await emojiProvider.categories()
         emojiLoaderMock.categories = categoriesForSecondLoad
@@ -82,7 +82,7 @@ struct EmojiProviderTests {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = categories
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: AppSettings(store: VolatileUserDefaults()))
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: .volatile())
         
         _ = await emojiProvider.categories()
         let result = await emojiProvider.categories(searchString: searchString)
