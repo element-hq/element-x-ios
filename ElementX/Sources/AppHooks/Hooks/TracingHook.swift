@@ -8,7 +8,7 @@
 
 import MatrixRustSDK
 
-protocol TracingHookProtocol {
+protocol TracingHookProtocol: Sendable {
     func update(_ configuration: TracingConfiguration, with rageshakeURL: RemotePreference<RageshakeConfiguration>)
 }
 

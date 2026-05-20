@@ -14,7 +14,7 @@ import Foundation
 import SwiftUI
 
 /// Common settings between app and NSE
-protocol CommonSettingsProtocol: AnyObject {
+protocol CommonSettingsProtocol: AnyObject, Sendable {
     var lastNotificationBootTime: TimeInterval? { get set }
     var selectedNotificationTone: NotificationTone? { get set }
 
@@ -34,7 +34,9 @@ enum AppBuildType {
 }
 
 /// Store Element specific app settings.
-final class AppSettings {
+///
+/// State is persisted in `UserDefaults`, which is thread-safe per Apple's documentation, hence `@unchecked`.
+final class AppSettings: @unchecked Sendable {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
@@ -92,10 +94,10 @@ final class AppSettings {
         case developerOptionsEnabled
     }
     
-    private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
+    private nonisolated(unsafe) static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
 
-    /// UserDefaults to be used on reads and writes.
-    private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
+    /// UserDefaults to be used on reads and writes. `UserDefaults` is thread-safe per Apple's documentation.
+    private nonisolated(unsafe) static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
     
     static var appBuildType: AppBuildType {
         #if DEBUG
