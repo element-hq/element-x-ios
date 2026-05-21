@@ -170,13 +170,14 @@ struct RoomScreen: View {
     private func onViewAllKnockRequests() {
         context.send(viewAction: .viewKnockRequests)
     }
-
+    
     @ViewBuilder
     private var jumpToReadMarkerButton: some View {
         if timelineContext.viewState.shouldShowJumpToReadMarker {
             TimelineScrollButton(direction: .up,
-                                 showsBadge: true,
-                                 onLongPress: { revealMarkAsReadPill(source: .up) }) {
+                                 showsBadge: true) {
+                revealMarkAsReadPill(source: .up)
+            } callback: {
                 dismissMarkAsReadPill()
                 timelineContext.send(viewAction: .scrollToReadMarker)
             }
