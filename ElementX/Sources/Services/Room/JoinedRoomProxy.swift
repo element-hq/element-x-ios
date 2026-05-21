@@ -206,7 +206,13 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     func threadListService() -> RoomThreadListServiceProxyProtocol {
         RoomThreadListProxy(threadListService: room.threadListService(), eventStringBuilder: eventStringBuilder)
     }
-    
+
+    func messageSearchProxy(query: String) -> RoomMessageSearchProxyProtocol {
+        RoomMessageSearchProxy(iterator: room.searchMessages(query: query, numResultsPerBatch: 20),
+                               ownUserID: ownUserID,
+                               eventStringBuilder: eventStringBuilder)
+    }
+
     func loadOrFetchEventDetails(for eventID: String) async -> Result<TimelineEvent, RoomProxyError> {
         do {
             let event = try await room.loadOrFetchEvent(eventId: eventID)

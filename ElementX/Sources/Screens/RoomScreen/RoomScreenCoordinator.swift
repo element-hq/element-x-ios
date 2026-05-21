@@ -49,6 +49,7 @@ enum RoomScreenCoordinatorAction {
     case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case presentKnockRequestsList
     case presentThreadList
+    case presentMessageSearch
     case presentThread(threadRootEventID: String, focussedEventID: String?)
     case presentRoom(roomID: String, via: [String])
 }
@@ -193,6 +194,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
                 case .displayThreadList:
                     actionsSubject.send(.presentThreadList)
+                case .displayMessageSearch:
+                    actionsSubject.send(.presentMessageSearch)
                 case .displayThread(let threadRootEventID, let focussedEventID):
                     actionsSubject.send(.presentThread(threadRootEventID: threadRootEventID, focussedEventID: focussedEventID))
                 case .stopLiveLocationSharing:

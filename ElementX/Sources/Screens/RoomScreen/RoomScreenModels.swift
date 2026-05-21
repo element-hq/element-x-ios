@@ -12,6 +12,7 @@ import OrderedCollections
 enum RoomScreenViewModelAction: Equatable {
     case focusEvent(eventID: String)
     case displayThreadList
+    case displayMessageSearch
     case displayThread(threadRootEventID: String, focussedEventID: String)
     case displayPinnedEventsTimeline
     case displayRoomDetails
@@ -35,6 +36,7 @@ enum RoomScreenViewAction {
     case viewKnockRequests
     case displaySuccessorRoom
     case displayThreadList
+    case displayMessageSearch
     case tappedOpenLiveLocation
     case tappedStopLiveLocation
 }

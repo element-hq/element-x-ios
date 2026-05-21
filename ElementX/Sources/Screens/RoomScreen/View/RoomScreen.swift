@@ -213,6 +213,15 @@ struct RoomScreen: View {
                 }
             }
         }
+
+        ToolbarItem(placement: .primaryAction) {
+            Button {
+                context.send(viewAction: .displayMessageSearch)
+            } label: {
+                CompoundIcon(\.search)
+            }
+            .accessibilityLabel(L10n.actionSearch)
+        }
     }
 }
 
