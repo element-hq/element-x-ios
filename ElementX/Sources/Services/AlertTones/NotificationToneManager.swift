@@ -33,14 +33,12 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     
     private let appSettings: AppSettings
     
-    #if IS_MAIN_APP
     /// The default Element X bundled message tone.
-    static let defaultElementXMessageTone: NotificationTone = .createBundledSound(label: UntranslatedL10n.screenNotificationSettingsSoundElementDefault,
+    static let defaultElementXMessageTone: NotificationTone = .createBundledSound(label: L10n.screenNotificationSettingsSoundElementDefault,
                                                                                   filename: "message.caf")
     
     /// All default tones (system + Element X), sorted by name.
     static let allDefaultAlerts: [NotificationTone] = (defaultSystemAlerts + defaultElementXAlerts).sorted()
-    #endif
     
     /// Filename of the active tone file used by the notification service.
     static let selectedToneFilename = "currentAlert.caf"
@@ -175,78 +173,77 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
 
     /// File URL of the active tone copied/linked for use by the system.
     private static let selectedToneLocation = NotificationToneManager.libraryLocation.deletingLastPathComponent().appending(component: selectedToneFilename)
-    
-    #if IS_MAIN_APP
+
     /// Pre-defined iOS system tones available for selection, sorted by name.
     private static let defaultSystemAlerts: [NotificationTone] = [
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTriTone,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemTriTone,
                            filename: "sms-received1.caf"),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemChime,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemChime,
                            filename: "sms-received2.caf"),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemGlass,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemGlass,
                            filename: "sms-received3.caf"),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemHorn,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemHorn,
                            filename: "sms-received4.caf"),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemBell,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemBell,
                            filename: "sms-received5.caf"),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemElectronic,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemElectronic,
                            filename: "sms-received6.caf"),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemAlert,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemAlert,
                            filename: "alarm.caf"),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemBloom,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemBloom,
                            filename: "Bloom.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemCalypso,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemCalypso,
                            filename: "Calypso.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemAnticipate,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemAnticipate,
                            filename: "Anticipate.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemChooChoo,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemChooChoo,
                            filename: "Choo_Choo.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemDescent,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemDescent,
                            filename: "Descent.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemFanfare,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemFanfare,
                            filename: "Fanfare.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemLadder,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemLadder,
                            filename: "Ladder.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemMinuet,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemMinuet,
                            filename: "Minuet.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemNewsFlash,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemNewsFlash,
                            filename: "News_Flash.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemNoir,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemNoir,
                            filename: "Noir.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemSherwoodForest,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemSherwoodForest,
                            filename: "Sherwood_Forest.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemSpell,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemSpell,
                            filename: "Spell.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemSuspense,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemSuspense,
                            filename: "Suspense.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTelegraph,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemTelegraph,
                            filename: "Telegraph.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTiptoes,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemTiptoes,
                            filename: "Tiptoes.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTypewriters,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemTypewriters,
                            filename: "Typewriters.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemUpdate,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemUpdate,
                            filename: "Update.caf",
                            systemSoundsSubdirectory: ["New"]),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemSwish,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemSwish,
                            filename: "Swish.caf"),
-        .createSystemSound(label: UntranslatedL10n.screenNotificationSettingsSoundSystemTweet,
+        .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemTweet,
                            filename: "tweet_sent.caf")
     ]
     .compactMap { (alertTone: NotificationTone) -> NotificationTone? in
@@ -261,10 +258,9 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     /// Element X bundled tones available for selection, sorted by name.
     private static let defaultElementXAlerts: [NotificationTone] = [
         defaultElementXMessageTone,
-        .createBundledSound(label: UntranslatedL10n.screenNotificationSettingsSoundElementFade,
+        .createBundledSound(label: L10n.screenNotificationSettingsSoundElementFade,
                             filename: "sound_01.caf")
     ].sorted()
-    #endif
 
     private static let systemLocation = {
         let systemRoot: URL
