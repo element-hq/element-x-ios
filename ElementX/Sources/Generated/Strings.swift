@@ -42,6 +42,8 @@ internal enum L10n {
   internal static var a11yJoinCall: String { return L10n.tr("Localizable", "a11y_join_call") }
   /// Jump to bottom
   internal static var a11yJumpToBottom: String { return L10n.tr("Localizable", "a11y_jump_to_bottom") }
+  /// Jump to unread
+  internal static var a11yJumpToUnread: String { return L10n.tr("Localizable", "a11y_jump_to_unread") }
   /// Mentions only
   internal static var a11yNotificationsMentionsOnly: String { return L10n.tr("Localizable", "a11y_notifications_mentions_only") }
   /// Muted

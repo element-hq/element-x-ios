@@ -10,6 +10,7 @@
 "a11y_info" = "Info";
 "a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Jump to bottom";
+"a11y_jump_to_unread" = "Jump to unread";
 "a11y_notifications_mentions_only" = "Mentions only";
 "a11y_notifications_muted" = "Muted";
 "a11y_notifications_new_mentions" = "New mentions";
