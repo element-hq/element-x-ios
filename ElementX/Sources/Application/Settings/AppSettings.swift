@@ -79,6 +79,7 @@ final class AppSettings {
         case threadsEnabled
         case roomThreadListEnabled
         case linkPreviewsEnabled
+        case jumpToReadMarkerEnabled
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
         case automaticBackPaginationEnabled
@@ -444,7 +445,10 @@ final class AppSettings {
         
     @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkPreviewsEnabled
-    
+
+    @UserPreference(key: UserDefaultsKeys.jumpToReadMarkerEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var jumpToReadMarkerEnabled
+
     @UserPreference(key: UserDefaultsKeys.linkNewDeviceEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkNewDeviceEnabled
     

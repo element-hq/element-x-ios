@@ -58,6 +58,8 @@ enum TimelineViewAction {
     case paginateForwards
     case scrollToBottom
     case scrollToFirstItemForCurrentDate
+    case scrollToReadMarker
+    case markAllAsRead
     
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
@@ -119,6 +121,7 @@ struct TimelineViewState: BindableState {
     var isViewSourceEnabled: Bool
     var areThreadsEnabled: Bool
     var linkPreviewsEnabled: Bool
+    var jumpToReadMarkerEnabled: Bool
     
     let hasPredecessor: Bool
         
@@ -151,7 +154,16 @@ struct TimelineViewState: BindableState {
 
 struct TimelineViewStateBindings {
     var isScrolledToBottom = true
-    
+
+    /// Whether the read marker (NEW banner) is currently visible in the timeline viewport.
+    /// Used to hide the jump-to-unread button once the user has scrolled to the read marker.
+    var isReadMarkerVisible = false
+
+    /// Whether new messages have arrived while the user is scrolled away from the bottom of a
+    /// live timeline. Drives the presence dot on the scroll-to-bottom button and resets when the
+    /// user returns to the bottom.
+    var hasNewMessagesAtBottom = false
+
     /// The timestamp of the topmost visible item, used to drive the floating date badge while scrolling.
     var floatingDate: Date?
     
@@ -248,17 +260,36 @@ struct TimelineState {
     /// These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     var scrollToFirstItemForDatePublisher = PassthroughSubject<Void, Never>()
-    
+    var scrollToReadMarkerPublisher = PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>()
+
     var itemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
-    
+
     var uniqueIDs: [TimelineItemIdentifier.UniqueID] {
         itemsDictionary.keys.elements
     }
-    
+
     var itemViewStates: [RoomTimelineItemViewState] {
         itemsDictionary.values.elements
     }
-    
+
+    /// The unique ID of the read marker (NEW banner) in the timeline, if present.
+    /// Recomputed by ``recomputeReadMarkerUniqueID()`` whenever ``itemsDictionary`` changes.
+    private(set) var readMarkerUniqueID: TimelineItemIdentifier.UniqueID?
+
+    /// The user's `m.fully_read` event ID, pushed from `RoomInfo`. Used as a fallback
+    /// signal when ``readMarkerUniqueID`` is nil because the marker event isn't paginated
+    /// into the loaded timeline window.
+    var fullyReadEventID: String?
+
+    /// Recomputes ``readMarkerUniqueID`` from ``itemsDictionary``. Call after assigning a new
+    /// value to ``itemsDictionary``.
+    mutating func recomputeReadMarkerUniqueID() {
+        readMarkerUniqueID = itemsDictionary.first { _, viewState in
+            if case .readMarker = viewState.type { return true }
+            return false
+        }?.key
+    }
+
     func hasLoadedItem(with eventID: String) -> Bool {
         itemViewStates.contains { $0.identifier.eventID == eventID }
     }
@@ -270,6 +301,39 @@ enum ScrollDirection: Equatable {
 }
 
 extension TimelineViewState {
+    /// The user is at the bottom of a live timeline (no jump-to-bottom button needed).
+    var isAtBottomAndLive: Bool {
+        bindings.isScrolledToBottom && timelineState.isLive
+    }
+
+    /// Whether the scroll-to-bottom button should be shown: the user is scrolled away from the
+    /// bottom of a live timeline.
+    var shouldShowScrollToBottomButton: Bool {
+        !isAtBottomAndLive
+    }
+
+    /// Whether the jump-to-read-marker button should be shown.
+    ///
+    /// Primary path: the SDK has materialised a virtual `ReadMarker` item in the
+    /// loaded timeline window. Show while it isn't visible in the viewport.
+    ///
+    /// Fallback path: the marker event is older than the loaded window, so no
+    /// virtual item exists. Show only when items have actually loaded AND the
+    /// marker event isn't among them — if the marker IS loaded but no virtual
+    /// item was inserted, the user is caught up (no events newer than the marker)
+    /// and there's nothing to jump to.
+    var shouldShowJumpToReadMarker: Bool {
+        guard jumpToReadMarkerEnabled else { return false }
+        if timelineState.readMarkerUniqueID != nil {
+            return !bindings.isReadMarkerVisible
+        }
+        guard let fullyReadEventID = timelineState.fullyReadEventID else {
+            return false
+        }
+        return !timelineState.itemsDictionary.isEmpty
+            && !timelineState.hasLoadedItem(with: fullyReadEventID)
+    }
+
     /// The string shown as the message preview.
     ///
     /// This converts the formatted body to a plain string to remove formatting
