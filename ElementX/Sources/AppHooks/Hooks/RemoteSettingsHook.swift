@@ -13,7 +13,7 @@ enum RemoteSettingsError: Error {
     case elementProRequired(serverName: String)
 }
 
-protocol RemoteSettingsHookProtocol {
+protocol RemoteSettingsHookProtocol: Sendable {
     #if IS_MAIN_APP
     @MainActor func initializeCache(using client: ClientProtocol, applyingTo appSettings: CommonSettingsProtocol) async -> Result<Void, RemoteSettingsError>
     func updateCache(using client: ClientProtocol) async

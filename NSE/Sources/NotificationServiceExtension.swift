@@ -8,7 +8,8 @@
 
 import Combine
 import MatrixRustSDK
-import UserNotifications
+import Synchronization
+@preconcurrency import UserNotifications
 
 // The lifecycle of the NSE looks something like the following:
 //  1)  App receives notification
@@ -29,74 +30,96 @@ import UserNotifications
 // called on the same instance of `NotificationService` as a previous
 // notification.
 
-class NotificationServiceExtension: UNNotificationServiceExtension {
+final class NotificationServiceExtension: UNNotificationServiceExtension {
+    let actor: NotificationServiceExtensionActor
+    
+    override init() {
+        actor = NotificationServiceExtensionActor()
+        super.init()
+    }
+    
+    /// This wouldn't be allowed normally because we added `@Sendable` to the contentHandler which is not by default, however there's nothing we can do about it
+    /// since the `UNNotificationServiceExtension` does not support swift 6 concurency yet, so we need to use the `@preconcurrency import` to suppress
+    /// this error, and then we handle all the concurrency logic inside the actor that the NSE delegates all the logic to.
+    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping @Sendable (UNNotificationContent) -> Void) {
+        let actor = actor
+        Task { await actor.handle(request, withContentHandler: contentHandler) }
+    }
+    
+    override func serviceExtensionTimeWillExpire() {
+        actor.serviceExtensionTimeWillExpire()
+    }
+}
+
+actor NotificationServiceExtensionActor {
     static let receivedWhileOfflineNotificationID = "io.element.elementx.receivedWhileOfflineNotification"
-    
-    private static var targetConfiguration: Target.ConfigurationResult?
-    
+
+    /// Process-wide target configuration, `Mutex`-protected so it can be read/written from any
+    /// thread (in particular, from the actor's synchronous `init` without spawning a Task).
+    private static let targetConfiguration = Mutex<Target.ConfigurationResult?>(nil)
+
+    @MainActor
     private static var hasHandledFirstNotificationSinceBoot = false
+    
     private static let firstNotificationThreshold: TimeInterval = 15 * 60
     
     private let settings: CommonSettingsProtocol = AppSettings()
     private let appHooks: AppHooks
     
-    private var notificationHandler: NotificationHandler?
+    /// This is nonisolated just because the expire function needs to be served ASAP so we should not call it from  a Task, however this is
+    /// always written and read in the actor isolated context, and only read nonisolated in `serviceExtensionTimeWillExpire` function
+    /// which is an acceptable compromise since it's a failure state, and the race condition will not make it worse and present a partial notification regardless.
+    private nonisolated(unsafe) var notificationHandler: NotificationHandler?
     private let keychainController = KeychainController(service: .sessions,
                                                         accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-    
-    private var cancellables: Set<AnyCancellable> = []
-    
-    /// We can make the whole NSE a MainActor after https://github.com/swiftlang/swift-evolution/blob/main/proposals/0371-isolated-synchronous-deinit.md
-    /// otherwise we wouldn't be able to log the tag in the deinit.
+        
     deinit {
         ExtensionLogger.logMemory(with: tag)
         MXLog.info("\(tag) deinit")
     }
     
-    override init() {
+    init() {
         appHooks = AppHooks()
         appHooks.setUp()
-        
+
         // If the device is still locked then we can't write to the app group container and
         // the target configuration will fail. We could call exit(0) here, however with the
         // notification filtering entitlement that results in the notification being discarded
         // so we need to wait for the delegate method to be called and bail out there instead.
-        if !BootDetectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
-           Self.targetConfiguration == nil {
-            Self.targetConfiguration = Target.nse.configure(logLevel: settings.logLevel,
-                                                            traceLogPacks: settings.traceLogPacks,
-                                                            sentryURL: nil,
-                                                            rageshakeURL: settings.bugReportRageshakeURL,
-                                                            appHooks: appHooks)
+        // The `Mutex` guarantees `Target.nse.configure(...)` runs at most once per process even
+        // under concurrent NSE instance creation.
+        if !BootDetectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory) {
+            Self.targetConfiguration.withLock { state in
+                guard state == nil else { return }
+                state = Target.nse.configure(logLevel: settings.logLevel,
+                                             traceLogPacks: settings.traceLogPacks,
+                                             sentryURL: nil,
+                                             rageshakeURL: settings.bugReportRageshakeURL,
+                                             appHooks: appHooks)
+            }
         }
-        
-        super.init()
     }
     
-    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        Task { await handle(request, withContentHandler: contentHandler) }
-    }
-    
-    private func handle(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) async {
+    func handle(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) async {
         // If we skipped configuring the target it means we can't write to the app group, so we're unlikely to
         // be able to create a session (and even if we could, we would be missing the lightweightTokioRuntime).
         // Additionally, APNs servers only store the most recent notification when the device is powered off.
         // So lets a) skip processing the notification and b) deliver a special "offline" notification as a workaround.
-        guard Self.targetConfiguration != nil else {
+        guard Self.targetConfiguration.withLock({ $0 != nil }) else {
             // MXLog isn't configured:
             // swiftlint:disable:next print_deprecation
             print("Device is locked after reboot.")
             
-            if Self.hasHandledFirstNotificationSinceBoot {
+            if await Self.hasHandledFirstNotificationSinceBoot {
                 return contentHandler(request.content)
             } else {
-                Self.hasHandledFirstNotificationSinceBoot = true
+                await MainActor.run { Self.hasHandledFirstNotificationSinceBoot = true }
                 deliverReceivedWhileOfflineNotification(for: request)
                 return contentHandler(.init())
             }
         }
         
-        guard !shouldDeliverReceivedWhileOfflineNotification() else {
+        guard await !shouldDeliverReceivedWhileOfflineNotification() else {
             // Don't log until the app hooks have been run:
             // swiftlint:disable:next print_deprecation
             print("Device is unlocked but may have missed notifications while offline.")
@@ -167,7 +190,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
     }
     
-    override func serviceExtensionTimeWillExpire() {
+    nonisolated func serviceExtensionTimeWillExpire() {
         notificationHandler?.handleTimeExpiration()
     }
     
@@ -180,13 +203,13 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     ///
     /// Note that this only handles the first-boot case. When the SDK is able to compute the unread count, we should start to use the NSE,
     /// remote-notifications (content-available) and background app refreshes to fetch and deliver our notifications as a more robust solution.
-    private func shouldDeliverReceivedWhileOfflineNotification() -> Bool {
-        if Self.hasHandledFirstNotificationSinceBoot {
+    private func shouldDeliverReceivedWhileOfflineNotification() async -> Bool {
+        if await Self.hasHandledFirstNotificationSinceBoot {
             // If we've already handled the first notification in this process there's no need to continue.
             return false
         }
         
-        Self.hasHandledFirstNotificationSinceBoot = true
+        await MainActor.run { Self.hasHandledFirstNotificationSinceBoot = true }
         
         guard let currentBootTime = BootDetectionManager.systemBootTime() else {
             // There's not much we can do if the boot time is unknown, so don't show the offline notification.
@@ -238,8 +261,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
     
     // MARK: - Logging
-    
-    private var tag: String {
+
+    private nonisolated var tag: String {
         "[NSE][\(Unmanaged.passUnretained(self).toOpaque())][\(Unmanaged.passUnretained(Thread.current).toOpaque())][\(ProcessInfo.processInfo.processIdentifier)]"
     }
 }
