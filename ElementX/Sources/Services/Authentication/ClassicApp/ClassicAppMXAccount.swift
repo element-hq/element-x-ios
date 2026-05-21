@@ -8,7 +8,7 @@
 import Foundation
 import Observation
 
-struct ClassicAppAccount: Equatable, CustomStringConvertible, Sendable {
+struct ClassicAppAccount: Equatable, CustomStringConvertible {
     let userID: String
     let displayName: String?
     let avatarURL: URL?
