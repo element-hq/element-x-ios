@@ -81,6 +81,9 @@ struct SpaceRoomCell: View {
                 }
             }
             .padding(.horizontal, horizontalInsets)
+            // Ensure the EditMode transition stays inside this cell if there are other insertions/removals in the list.
+            // Seems to slow down the animations a bit in Xcode previews but its fine in the simulator and on a device.
+            .drawingGroup()
             .accessibilityElement(children: .combine)
         }
         .buttonStyle(SpaceRoomCellButtonStyle(isHighlighted: isHighlighted))
