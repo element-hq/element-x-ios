@@ -182,7 +182,7 @@ struct NotificationSettingsScreen: View {
             .listRowBackground(Color.compound.bgCanvasDefaultLevel1)
             .listRowSeparatorTint(ListRowColor.separatorTint)
         } header: {
-            Text(UntranslatedL10n.screenNotificationSettingsSoundSectionTitle)
+            Text(L10n.screenNotificationSettingsSoundSectionTitle)
                 .compoundListSectionHeader()
         }
 
@@ -216,7 +216,7 @@ struct NotificationSettingsScreen: View {
             context.send(viewAction: .deleteCustomAlertTones(tones))
         }
 
-        ListRow(label: .plain(title: UntranslatedL10n.screenNotificationSettingsSoundCustomSoundButtonTitle),
+        ListRow(label: .plain(title: L10n.screenNotificationSettingsSoundCustomSoundButtonTitle),
                 kind: .button {
                     context.shouldShowCustomAlertTonePicker = true
                 })
