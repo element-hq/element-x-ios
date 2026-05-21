@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TrackedUserDefaults: UserDefaults, UserDefaultsProtocol {
+final class TrackedUserDefaults: UserDefaults, UserDefaultsProtocol {
     private let lock = NSLock()
     
     private nonisolated(unsafe) var _trackedSuites: [String] = []
