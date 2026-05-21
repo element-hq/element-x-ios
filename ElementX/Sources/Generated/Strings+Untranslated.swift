@@ -10,8 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum UntranslatedL10n {
-  /// Jump to unread
-  internal static var a11yJumpToUnread: String { return UntranslatedL10n.tr("Untranslated", "a11y_jump_to_unread") }
   /// Custom sound...
   internal static var screenNotificationSettingsSoundCustomSoundButtonTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_custom_sound_button_title") }
   /// Error deleting file

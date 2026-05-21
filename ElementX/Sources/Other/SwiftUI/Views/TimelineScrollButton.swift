@@ -96,7 +96,7 @@ struct TimelineScrollButton: View {
         .opacity(isHidden ? 0 : 1)
         .allowsHitTesting(!isHidden)
         .accessibilityHidden(isHidden)
-        .accessibilityLabel(direction == .down ? L10n.a11yJumpToBottom : UntranslatedL10n.a11yJumpToUnread)
+        .accessibilityLabel(direction == .down ? L10n.a11yJumpToBottom : L10n.a11yJumpToUnread)
         .animation(.elementDefault, value: isHidden)
     }
 
