@@ -795,6 +795,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "TimelineReplyView_Previews")
     }
 
+    func testTimelineScrollButton() async throws {
+        try await performAccessibilityAudit(named: "TimelineScrollButton_Previews")
+    }
+
     func testTimelineStartRoomTimelineView() async throws {
         try await performAccessibilityAudit(named: "TimelineStartRoomTimelineView_Previews")
     }

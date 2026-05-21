@@ -1588,6 +1588,14 @@ extension PreviewTests {
     }
 
     @Test
+    func timelineScrollButton() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in TimelineScrollButton_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func timelineStartRoomTimelineView() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in TimelineStartRoomTimelineView_Previews._allPreviews.enumerated() {

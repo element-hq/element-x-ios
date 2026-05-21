@@ -17,6 +17,15 @@ struct RoomScreen: View {
     let composerToolbar: ComposerToolbar
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
 
+    enum MarkAsReadSource {
+        case up
+        case down
+    }
+
+    /// Which scroll button (if any) currently has the "Mark as read" pill displayed alongside it.
+    /// Set when the user long-presses one of the scroll buttons; the pill anchors to that button.
+    @State private var markAsReadSource: MarkAsReadSource?
+
     init(context: RoomScreenViewModelType.Context,
          timelineContext: TimelineViewModelType.Context,
          composerToolbar: ComposerToolbar) {
@@ -27,11 +36,40 @@ struct RoomScreen: View {
 
     var body: some View {
         TimelineView(timelineContext: timelineContext)
-            .overlay(alignment: .bottomTrailing) {
-                TimelineScrollToBottomButton(isVisible: isAtBottomAndLive) {
-                    timelineContext.send(viewAction: .scrollToBottom)
+            .overlay {
+                // Sits below the bottom-trailing overlay in z-order, so taps on the pill or
+                // buttons still go to them; taps anywhere else dismiss the pill.
+                if markAsReadSource != nil {
+                    Color.clear
+                        .contentShape(Rectangle())
+                        .onTapGesture { dismissMarkAsReadPill() }
                 }
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
+            }
+            .overlay(alignment: .bottomTrailing) {
+                VStack(alignment: .trailing, spacing: 16) {
+                    HStack(spacing: 8) {
+                        if markAsReadSource == .up {
+                            markAsReadPill
+                                .transition(.move(edge: .trailing).combined(with: .opacity))
+                        }
+                        jumpToReadMarkerButton
+                    }
+                    HStack(spacing: 8) {
+                        if markAsReadSource == .down {
+                            markAsReadPill
+                                .transition(.move(edge: .trailing).combined(with: .opacity))
+                        }
+                        TimelineScrollButton(isHidden: !timelineContext.viewState.shouldShowScrollToBottomButton,
+                                             showsBadge: scrollToBottomShowsBadge,
+                                             onLongPress: scrollToBottomShowsBadge ? { revealMarkAsReadPill(source: .down) } : nil) {
+                            dismissMarkAsReadPill()
+                            timelineContext.send(viewAction: .scrollToBottom)
+                        }
+                        .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
+                    }
+                }
+                .padding()
+                .animation(.elementDefault, value: markAsReadSource)
             }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .topBanners([
@@ -82,6 +120,9 @@ struct RoomScreen: View {
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo)
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
+            .onChange(of: pillSourceButtonIsVisible) { _, isVisible in
+                if !isVisible { dismissMarkAsReadPill() }
+            }
             .track(screen: .Room)
             .sentryTrace("\(Self.self)")
     }
@@ -129,11 +170,74 @@ struct RoomScreen: View {
     private func onViewAllKnockRequests() {
         context.send(viewAction: .viewKnockRequests)
     }
-    
-    private var isAtBottomAndLive: Bool {
-        timelineContext.isScrolledToBottom && timelineContext.viewState.timelineState.isLive
+
+    @ViewBuilder
+    private var jumpToReadMarkerButton: some View {
+        if timelineContext.viewState.shouldShowJumpToReadMarker {
+            TimelineScrollButton(direction: .up,
+                                 showsBadge: true,
+                                 onLongPress: { revealMarkAsReadPill(source: .up) }) {
+                dismissMarkAsReadPill()
+                timelineContext.send(viewAction: .scrollToReadMarker)
+            }
+        }
     }
-    
+
+    private var markAsReadPill: some View {
+        Button {
+            timelineContext.send(viewAction: .markAllAsRead)
+            dismissMarkAsReadPill()
+        } label: {
+            markAsReadPillLabel
+        }
+    }
+
+    @ViewBuilder
+    private var markAsReadPillLabel: some View {
+        // Font scales with Dynamic Type via the Compound token; padding is a fixed point value
+        // so the pill grows with the text instead of growing twice over.
+        let label = Label {
+            Text(L10n.screenRoomlistMarkAsRead)
+        } icon: {
+            CompoundIcon(\.markAsRead, size: .medium, relativeTo: .compound.bodyLG)
+        }
+        .font(.compound.bodyLG)
+        .foregroundStyle(.compound.textPrimary)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 20)
+        if #available(iOS 26, *) {
+            label.glassEffect(.regular.interactive(), in: Capsule())
+        } else {
+            label.background(.regularMaterial, in: Capsule())
+        }
+    }
+
+    private func revealMarkAsReadPill(source: MarkAsReadSource) {
+        markAsReadSource = source
+    }
+
+    private func dismissMarkAsReadPill() {
+        markAsReadSource = nil
+    }
+
+    /// Whether the scroll button that the pill is anchored to is still being rendered.
+    /// Used to dismiss an orphaned pill when the source button gets hidden — without
+    /// this, the pill can render alongside an invisible button. Returns `true` when no
+    /// pill is shown so the `onChange` doesn't fire spuriously when the source clears.
+    private var pillSourceButtonIsVisible: Bool {
+        switch markAsReadSource {
+        case .up: timelineContext.viewState.shouldShowJumpToReadMarker
+        case .down: timelineContext.viewState.shouldShowScrollToBottomButton
+        case .none: true
+        }
+    }
+
+    /// Hide the new-messages dot when the jump-to-read-marker feature is disabled.
+    private var scrollToBottomShowsBadge: Bool {
+        timelineContext.viewState.jumpToReadMarkerEnabled
+            && timelineContext.viewState.bindings.hasNewMessagesAtBottom
+    }
+
     @ViewBuilder
     private var composer: some View {
         if context.viewState.hasSuccessor {
