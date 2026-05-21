@@ -12,14 +12,6 @@ import Foundation
 internal enum UntranslatedL10n {
   /// Jump to unread
   internal static var a11yJumpToUnread: String { return UntranslatedL10n.tr("Untranslated", "a11y_jump_to_unread") }
-  /// You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.
-  internal static var cryptoHistorySharingConfirmInviteDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_invite_dialog_content") }
-  /// Invite new contacts to this room?
-  internal static var cryptoHistorySharingConfirmInviteDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_invite_dialog_title") }
-  /// You currently don’t have any chats with this person. Confirm inviting them before continuing.
-  internal static var cryptoHistorySharingConfirmStartChatDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_content") }
-  /// Start a chat with this new contact?
-  internal static var cryptoHistorySharingConfirmStartChatDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_title") }
   /// Custom sound...
   internal static var screenNotificationSettingsSoundCustomSoundButtonTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_sound_custom_sound_button_title") }
   /// Error deleting file
