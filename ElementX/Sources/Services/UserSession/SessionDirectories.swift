@@ -19,7 +19,12 @@ struct SessionDirectories: Hashable, Codable {
     var cachePath: String {
         cacheDirectory.path(percentEncoded: false)
     }
-    
+
+    /// The local search index store. Lives in the data directory so it persists across launches.
+    var searchIndexPath: String {
+        dataDirectory.appending(component: "matrix-sdk-search-index").path(percentEncoded: false)
+    }
+
     // MARK: Data Management
     
     /// Removes the directories from disk if they have been created.

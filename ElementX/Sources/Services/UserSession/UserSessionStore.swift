@@ -140,6 +140,8 @@ class UserSessionStore: UserSessionStoreProtocol {
             .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                                        cachePath: credentials.restorationToken.sessionDirectories.cachePath)
                     .passphrase(passphrase: credentials.restorationToken.passphrase))
+            .withSearchIndexStore(path: credentials.restorationToken.sessionDirectories.searchIndexPath,
+                                  password: credentials.restorationToken.passphrase)
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
         

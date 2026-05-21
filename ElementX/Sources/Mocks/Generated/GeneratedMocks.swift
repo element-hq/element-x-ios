@@ -8427,6 +8427,76 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return threadListServiceReturnValue
         }
     }
+    //MARK: - messageSearchProxy
+
+    var messageSearchProxyQueryUnderlyingCallsCount = 0
+    var messageSearchProxyQueryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return messageSearchProxyQueryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = messageSearchProxyQueryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                messageSearchProxyQueryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    messageSearchProxyQueryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var messageSearchProxyQueryCalled: Bool {
+        return messageSearchProxyQueryCallsCount > 0
+    }
+    var messageSearchProxyQueryReceivedQuery: String?
+    var messageSearchProxyQueryReceivedInvocations: [String] = []
+
+    var messageSearchProxyQueryUnderlyingReturnValue: RoomMessageSearchProxyProtocol!
+    var messageSearchProxyQueryReturnValue: RoomMessageSearchProxyProtocol! {
+        get {
+            if Thread.isMainThread {
+                return messageSearchProxyQueryUnderlyingReturnValue
+            } else {
+                var returnValue: RoomMessageSearchProxyProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = messageSearchProxyQueryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                messageSearchProxyQueryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    messageSearchProxyQueryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var messageSearchProxyQueryClosure: ((String) -> RoomMessageSearchProxyProtocol)?
+
+    func messageSearchProxy(query: String) -> RoomMessageSearchProxyProtocol {
+        messageSearchProxyQueryCallsCount += 1
+        messageSearchProxyQueryReceivedQuery = query
+        DispatchQueue.main.async {
+            self.messageSearchProxyQueryReceivedInvocations.append(query)
+        }
+        if let messageSearchProxyQueryClosure = messageSearchProxyQueryClosure {
+            return messageSearchProxyQueryClosure(query)
+        } else {
+            return messageSearchProxyQueryReturnValue
+        }
+    }
     //MARK: - loadOrFetchEventDetails
 
     var loadOrFetchEventDetailsForUnderlyingCallsCount = 0
@@ -16513,6 +16583,73 @@ class RoomMembershipDetailsProxyMock: RoomMembershipDetailsProxyProtocol, @unche
     var underlyingOwnRoomMember: RoomMemberProxyProtocol!
     var senderRoomMember: RoomMemberProxyProtocol?
 
+}
+class RoomMessageSearchProxyMock: RoomMessageSearchProxyProtocol, @unchecked Sendable {
+
+    //MARK: - loadNextResults
+
+    var loadNextResultsUnderlyingCallsCount = 0
+    var loadNextResultsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadNextResultsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadNextResultsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadNextResultsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadNextResultsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadNextResultsCalled: Bool {
+        return loadNextResultsCallsCount > 0
+    }
+
+    var loadNextResultsUnderlyingReturnValue: Result<[RoomMessageSearchResult]?, RoomProxyError>!
+    var loadNextResultsReturnValue: Result<[RoomMessageSearchResult]?, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return loadNextResultsUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[RoomMessageSearchResult]?, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadNextResultsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadNextResultsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadNextResultsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadNextResultsClosure: (() async -> Result<[RoomMessageSearchResult]?, RoomProxyError>)?
+
+    func loadNextResults() async -> Result<[RoomMessageSearchResult]?, RoomProxyError> {
+        loadNextResultsCallsCount += 1
+        if let loadNextResultsClosure = loadNextResultsClosure {
+            return await loadNextResultsClosure()
+        } else {
+            return loadNextResultsReturnValue
+        }
+    }
 }
 class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol, @unchecked Sendable {
     var mode: RoomNotificationModeProxy {

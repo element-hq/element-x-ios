@@ -402,7 +402,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     
             case (.room, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
                 startPinnedEventsTimelineFlow()
-                
+
+            case (.room, .presentMessageSearch, .messageSearch):
+                presentMessageSearch(animated: animated)
+
             // Thread List
 
             case (.room, .presentThreadList, .threadList):
@@ -739,6 +742,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentKnockRequestsListScreen)
                 case .presentThreadList:
                     stateMachine.tryEvent(.presentThreadList, userInfo: EventUserInfo(animated: animated))
+                case .presentMessageSearch:
+                    stateMachine.tryEvent(.presentMessageSearch, userInfo: EventUserInfo(animated: animated))
                 case .presentThread(let threadRootEventID, let focussedEventID):
                     stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focussedEventID))
                 case .presentRoom(let roomID, let via):
@@ -770,6 +775,27 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    private func presentMessageSearch(animated: Bool) {
+        let coordinator = RoomMessageSearchScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                               mediaProvider: userSession.mediaProvider))
+
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+
+            switch action {
+            case .dismiss:
+                navigationStackCoordinator.pop()
+            case .displayEvent(let eventID):
+                stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false))))
+            }
+        }
+        .store(in: &cancellables)
+
+        navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissMessageSearch)
+        }
+    }
+
     private func presentThread(threadRootEventID: String, focusEventID: String?, animated: Bool) async {
         showLoadingIndicator()
         defer { hideLoadingIndicator() }

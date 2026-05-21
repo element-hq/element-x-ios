@@ -151,6 +151,7 @@ enum TestablePreviewsDictionary {
         "RoomMemberDetailsScreen_Previews" : RoomMemberDetailsScreen_Previews.self,
         "RoomMembersListMemberCell_Previews" : RoomMembersListMemberCell_Previews.self,
         "RoomMembersListScreen_Previews" : RoomMembersListScreen_Previews.self,
+        "RoomMessageSearchScreen_Previews" : RoomMessageSearchScreen_Previews.self,
         "RoomNotificationSettingsCustomSectionView_Previews" : RoomNotificationSettingsCustomSectionView_Previews.self,
         "RoomNotificationSettingsScreen_Previews" : RoomNotificationSettingsScreen_Previews.self,
         "RoomNotificationSettingsUserDefinedScreen_Previews" : RoomNotificationSettingsUserDefinedScreen_Previews.self,
