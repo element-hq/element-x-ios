@@ -87,7 +87,7 @@ struct JoinRoomByAddressView_Previews: PreviewProvider, TestablePreview {
                                         analytics: AnalyticsServiceMock.default,
                                         userIndicatorController: UserIndicatorControllerMock(),
                                         userDiscoveryService: userDiscoveryService,
-                                        appSettings: AppSettings())
+                                        appSettings: .volatile())
     }()
     
     static var previews: some View {

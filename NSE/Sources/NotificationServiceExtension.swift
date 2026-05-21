@@ -78,7 +78,7 @@ actor NotificationServiceExtensionActor {
         MXLog.info("\(tag) deinit")
     }
     
-    override init() {
+    init() {
         guard let userDefaults = TrackedUserDefaults(suiteName: AppSettings.suiteName) else {
             fatalError("Catastrophic error retrieving user defaults for \(AppSettings.suiteName)")
         }

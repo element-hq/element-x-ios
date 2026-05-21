@@ -213,6 +213,6 @@ struct RoomMemberDetailsViewModelTests {
                                                      userSession: userSession,
                                                      userIndicatorController: UserIndicatorControllerMock.default,
                                                      analytics: AnalyticsServiceMock.default,
-                                                     appSettings: AppSettings())
+                                                     appSettings: .volatile())
     }
 }

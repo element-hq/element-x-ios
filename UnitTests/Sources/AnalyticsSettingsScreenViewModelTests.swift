@@ -19,7 +19,9 @@ final class AnalyticsSettingsScreenViewModelTests {
     
     init() {
         appSettings = AppSettings.volatile()
-        analytics = .mock(settings: appSettings)
+        let client = AnalyticsClientMock()
+        client.isRunning = false
+        analytics = AnalyticsService(client: client, appSettings: appSettings)
 
         viewModel = AnalyticsSettingsScreenViewModel(appSettings: appSettings,
                                                      analytics: analytics)

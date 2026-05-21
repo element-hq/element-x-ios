@@ -171,7 +171,7 @@ final class InviteUsersScreenViewModelTests {
                                                isSkippable: false,
                                                userDiscoveryService: userDiscoveryService,
                                                userIndicatorController: UserIndicatorControllerMock(),
-                                               appSettings: AppSettings())
+                                               appSettings: .volatile())
         
         // The locked invitee starts pre-selected and locked.
         #expect(context.viewState.selectedUsers.map(\.userID) == [UserProfileProxy.mockAlice.userID])

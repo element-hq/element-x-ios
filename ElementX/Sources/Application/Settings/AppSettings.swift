@@ -37,7 +37,7 @@ enum AppBuildType {
 ///
 /// State is persisted in `UserDefaults`, which is thread-safe per Apple's documentation, hence `@unchecked`.
 final class AppSettings: @unchecked Sendable {
-    private enum UserDefaultsKeys: String {
+    fileprivate enum UserDefaultsKeys: String, PreferenceKeyable {
         case lastVersionLaunched
         case seenInvites
         case hasSeenNewSoundBanner
@@ -119,7 +119,7 @@ final class AppSettings: @unchecked Sendable {
     
     func resetSessionSpecificSettings() {
         MXLog.warning("Resetting the user session specific AppSettings.")
-        store.removeObject(forKey: UserDefaultsKey.hasRunIdentityConfirmationOnboarding.rawValue)
+        store.removeObject(forKey: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding.rawValue)
     }
     
     // MARK: - Hooks
@@ -295,7 +295,7 @@ final class AppSettings: @unchecked Sendable {
     var lastNotificationBootTime: TimeInterval?
 
     /// The sound played when delivering noisy notifications. If nil, use the ElementX default
-    @UserPreference(key: UserDefaultsKeys.selectedNotificationTone, defaultValue: nil, storageType: .userDefaults(store))
+    @UserPreference
     var selectedNotificationTone: NotificationTone?
 
     // MARK: - Logging
@@ -438,8 +438,8 @@ final class AppSettings: @unchecked Sendable {
     @UserPreference
     var linkPreviewsEnabled: Bool
     
-    @UserPreference(key: UserDefaultsKeys.jumpToReadMarkerEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var jumpToReadMarkerEnabled
+    @UserPreference
+    var jumpToReadMarkerEnabled: Bool
 
     @UserPreference
     var linkNewDeviceEnabled: Bool
@@ -447,8 +447,8 @@ final class AppSettings: @unchecked Sendable {
     @UserPreference
     var automaticBackPaginationEnabled: Bool
     
-    @UserPreference(key: UserDefaultsKeys.clientPausingAndResumingEnabled, defaultValue: appBuildType != .release, storageType: .volatile)
-    var clientPausingAndResumingEnabled
+    @UserPreference
+    var clientPausingAndResumingEnabled: Bool
     
     @UserPreference
     var developerOptionsEnabled: Bool
@@ -467,6 +467,7 @@ final class AppSettings: @unchecked Sendable {
         _hideQuietNotificationAlerts = UserPreference(key: .hideQuietNotificationAlerts, defaultValue: false, storage: store)
         _pusherProfileTag = UserPreference(key: .pusherProfileTag, storage: store)
         _lastNotificationBootTime = UserPreference(key: .lastNotificationBootTime, storage: store)
+        _selectedNotificationTone = UserPreference(key: .selectedNotificationTone, storage: store)
         _logLevel = UserPreference(key: .logLevel, defaultValue: LogLevel.info, storage: store)
         _traceLogPacks = UserPreference(key: .traceLogPacks, defaultValue: [], storage: store)
         _analyticsConsentState = UserPreference(key: .analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storage: store)
@@ -491,8 +492,10 @@ final class AppSettings: @unchecked Sendable {
         _roomThreadListEnabled = UserPreference(key: .roomThreadListEnabled, defaultValue: false, storage: store)
         _focusEventOnNotificationTap = UserPreference(key: .focusEventOnNotificationTap, defaultValue: false, storage: store)
         _linkPreviewsEnabled = UserPreference(key: .linkPreviewsEnabled, defaultValue: false, storage: store)
+        _jumpToReadMarkerEnabled = UserPreference(key: .jumpToReadMarkerEnabled, defaultValue: false, storage: store)
         _linkNewDeviceEnabled = UserPreference(key: .linkNewDeviceEnabled, defaultValue: false, storage: store)
         _automaticBackPaginationEnabled = UserPreference(key: .automaticBackPaginationEnabled, defaultValue: false, storage: store)
+        _clientPausingAndResumingEnabled = UserPreference(key: .clientPausingAndResumingEnabled, defaultValue: Self.appBuildType != .release, storage: VolatileUserDefaults())
         _developerOptionsEnabled = UserPreference(key: .developerOptionsEnabled, defaultValue: Self.appBuildType != .release, storage: store)
     }
     
@@ -504,11 +507,11 @@ final class AppSettings: @unchecked Sendable {
 extension AppSettings: CommonSettingsProtocol { }
 
 private extension UserPreference {
-    convenience init(key: AppSettings.UserDefaultsKey, defaultValue: T, storage backingStorage: UserDefaultsProtocol, mode: Mode = .localOverRemote) {
+    convenience init(key: AppSettings.UserDefaultsKeys, defaultValue: T, storage backingStorage: UserDefaultsProtocol, mode: Mode = .localOverRemote) {
         self.init(key: key as any PreferenceKeyable, defaultValue: defaultValue, storage: backingStorage, mode: mode)
     }
     
-    convenience init(key: AppSettings.UserDefaultsKey, storage: UserDefaultsProtocol, mode: Mode = .localOverRemote) where T: ExpressibleByNilLiteral {
+    convenience init(key: AppSettings.UserDefaultsKeys, storage: UserDefaultsProtocol, mode: Mode = .localOverRemote) where T: ExpressibleByNilLiteral {
         self.init(key: key as any PreferenceKeyable, defaultValue: nil, storage: storage, mode: mode)
     }
 }

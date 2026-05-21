@@ -424,7 +424,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                      userIndicatorController: UserIndicatorControllerMock.default,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: AppSettings())
+                     appSettings: .volatile())
     }
     
     private static func makeSimpleRoomViewModel() -> RoomDetailsScreenViewModel {
@@ -452,7 +452,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                      userIndicatorController: UserIndicatorControllerMock.default,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: AppSettings())
+                     appSettings: .volatile())
     }
     
     private static func makeDMViewModel(verificationState: UserIdentityVerificationState) -> RoomDetailsScreenViewModel {
@@ -490,6 +490,6 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                      userIndicatorController: UserIndicatorControllerMock.default,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: AppSettings())
+                     appSettings: .volatile())
     }
 }

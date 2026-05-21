@@ -148,6 +148,6 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
                                           userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                           userIndicatorController: UserIndicatorControllerMock.default,
                                           analytics: AnalyticsServiceMock.default,
-                                          appSettings: AppSettings())
+                                          appSettings: .volatile())
     }
 }
