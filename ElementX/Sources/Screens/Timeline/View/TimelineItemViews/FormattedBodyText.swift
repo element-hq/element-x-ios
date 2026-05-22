@@ -63,7 +63,15 @@ struct FormattedBodyText: View {
         // component so that the bubble's natural size accommodates the overlaid
         // timestamp, and TextKit decides whether to keep the timestamp on the last
         // line or push it to a new one.
-        let components = attributedComponents
+        var components = attributedComponents
+        // When the body ends in a block component (blockquote/codeBlock) the overlaid
+        // timestamp would land on top of it, so append an empty trailing plain-text
+        // component that exists solely to reserve space for the timestamp underneath.
+        if trailingReservedSize != .zero, let last = components.last, last.type != .plainText {
+            components.append(AttributedStringBuilderComponent(id: "trailingTimestampSpacer",
+                                                               attributedString: AttributedString(),
+                                                               type: .plainText))
+        }
         let lastPlainTextIndex = components.lastIndex { $0.type == .plainText }
         
         return TimelineBubbleLayout(spacing: 8) {
