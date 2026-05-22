@@ -136,7 +136,7 @@ struct SpaceSettingsScreen_Previews: PreviewProvider, TestablePreview {
                                    userIndicatorController: UserIndicatorControllerMock.default,
                                    notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                    attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                   appSettings: AppSettings())
+                                   appSettings: .volatile())
     }
 
     static var previews: some View {

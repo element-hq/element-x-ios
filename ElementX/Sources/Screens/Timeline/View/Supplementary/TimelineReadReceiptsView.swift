@@ -80,7 +80,8 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
     ]
 
     static let viewModel = {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
+
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Test", members: members)),
                                  timelineController: MockTimelineController(),
                                  userSession: UserSessionMock(.init()),

@@ -20,12 +20,7 @@ final class RoomScreenViewModelTests {
     private let appSettings: AppSettings
     
     init() async throws {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
+        appSettings = AppSettings.volatile()
     }
     
     @Test

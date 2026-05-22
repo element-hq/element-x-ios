@@ -334,7 +334,7 @@ private extension TimelineItemKeyForwarder {
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel: TimelineViewModel = {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         appSettings.threadsEnabled = true
         
         let roomProxy = JoinedRoomProxyMock(.init())
@@ -353,7 +353,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     }()
     
     static let viewModelWithPins: TimelineViewModel = {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         appSettings.threadsEnabled = true
         
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: ["pinned"]))

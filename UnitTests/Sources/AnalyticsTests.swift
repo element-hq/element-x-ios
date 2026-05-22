@@ -19,8 +19,7 @@ final class AnalyticsTests {
     
     @MainActor
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings.volatile()
         
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
@@ -28,10 +27,6 @@ final class AnalyticsTests {
         
         posthogMock = PHGPostHogMock()
         posthogMock.configureMockBehavior()
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
     }
     
     @Test

@@ -249,8 +249,8 @@ private extension Set<TraceLogPack> {
 // MARK: - Previews
 
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
-    static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: AppSettings(),
-                                                           elementCallBaseURL: AppSettings().elementCallBaseURL,
+    static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: AppSettings.volatile(),
+                                                           elementCallBaseURL: AppSettings.volatile().elementCallBaseURL,
                                                            appHooks: AppHooks(),
                                                            clientProxy: ClientProxyMock(.init()))
     

@@ -22,13 +22,9 @@ final class RoomFlowCoordinatorTests {
     private let appSettings: AppSettings
 
     init() {
-        appSettings = AppSettings()
+        appSettings = AppSettings.volatile()
     }
 
-    deinit {
-        AppSettings.resetAllSettings()
-    }
-    
     @Test
     func roomPresentation() async throws {
         setupRoomFlowCoordinator()

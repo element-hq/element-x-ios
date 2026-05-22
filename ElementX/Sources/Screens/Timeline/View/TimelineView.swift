@@ -153,7 +153,8 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let composerViewModel = ComposerToolbarViewModel.mock()
     static let timelineViewModel = {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
+
         return TimelineViewModel(roomProxy: roomProxyMock,
                                  timelineController: MockTimelineController(),
                                  userSession: UserSessionMock(.init()),

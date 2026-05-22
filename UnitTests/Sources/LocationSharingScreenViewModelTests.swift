@@ -394,7 +394,7 @@ struct LocationSharingScreenViewModelTests {
         let roomProxyMock = JoinedRoomProxyMock(.init(members: .allMembers))
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: nil, initialLiveLocationShare: nil),
                                                    mapURLBuilder: appSettings.mapTilerConfiguration,
@@ -429,7 +429,7 @@ struct LocationSharingScreenViewModelTests {
     
     private mutating func setupViewModel(liveLocationManagerConfiguration: LiveLocationManagerMock.Configuration = .init(),
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
                                                    mapURLBuilder: appSettings.mapTilerConfiguration,
@@ -444,7 +444,7 @@ struct LocationSharingScreenViewModelTests {
 
     private mutating func setupViewModel(liveLocationManagerMock: LiveLocationManagerMock,
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
                                                    mapURLBuilder: appSettings.mapTilerConfiguration,
@@ -461,7 +461,7 @@ struct LocationSharingScreenViewModelTests {
                                                     initialShare: LiveLocationShare,
                                                     liveLocationsSubject: CurrentValueSubject<[LiveLocationShare], Never>,
                                                     members: [RoomMemberProxyMock] = .allMembers) {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         let liveLocationServiceMock = RoomLiveLocationServiceMock()
         liveLocationServiceMock.liveLocationsPublisher = liveLocationsSubject.asCurrentValuePublisher()
         

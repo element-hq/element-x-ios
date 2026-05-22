@@ -29,14 +29,12 @@ final class JoinRoomScreenViewModelTests {
     private let appSettings: AppSettings
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings.volatile()
     }
     
     deinit {
         viewModel = nil
         clientProxy = nil
-        AppSettings.resetAllSettings()
     }
     
     @Test

@@ -26,12 +26,7 @@ final class AuthenticationStartScreenViewModelTests {
     }
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
+        appSettings = AppSettings.volatile()
     }
     
     @Test

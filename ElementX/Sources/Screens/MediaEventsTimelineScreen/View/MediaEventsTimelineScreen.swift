@@ -310,7 +310,7 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
             MockTimelineController.mediaGallery
         }
 
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
                                  userSession: UserSessionMock(.init()),

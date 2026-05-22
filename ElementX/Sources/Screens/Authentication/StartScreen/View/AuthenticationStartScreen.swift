@@ -195,7 +195,7 @@ struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
                                                   provisioningParameters: provisionedServerName.map { .init(accountProvider: $0, loginHint: nil) },
                                                   isBugReportServiceEnabled: true,
                                                   appMediator: AppMediatorMock(),
-                                                  appSettings: AppSettings(),
+                                                  appSettings: .volatile(),
                                                   mediaProvider: MediaProviderMock(configuration: .init()),
                                                   userIndicatorController: UserIndicatorControllerMock())
     }

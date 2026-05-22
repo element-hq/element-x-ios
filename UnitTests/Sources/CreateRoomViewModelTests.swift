@@ -26,11 +26,10 @@ final class CreateRoomScreenViewModelTests {
     }
 
     init() {
-        appSettings = AppSettings()
+        appSettings = AppSettings.volatile()
     }
 
     deinit {
-        AppSettings.resetAllSettings()
         viewModel = nil
         clientProxy = nil
         spaceService = nil

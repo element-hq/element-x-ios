@@ -25,8 +25,7 @@ final class NotificationManagerTests {
     private let appSettings: AppSettings
 
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings.volatile()
         notificationCenter = UserNotificationCenterMock()
         notificationCenter.requestAuthorizationOptionsReturnValue = true
         notificationCenter.authorizationStatusReturnValue = .authorized
