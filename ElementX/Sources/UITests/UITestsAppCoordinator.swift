@@ -724,7 +724,7 @@ class MockScreen: Identifiable {
             return PlaceholderScreenCoordinator(hideBrandChrome: false)
         case .createPoll:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new,
+            let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new(topic: nil),
                                                                           maxNumberOfOptions: 10,
                                                                           timelineController: MockTimelineController(),
                                                                           analytics: analytics,
