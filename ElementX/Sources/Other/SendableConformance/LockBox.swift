@@ -107,4 +107,10 @@ extension LockBox: ExpressibleByNilLiteral where Wrapped: ExpressibleByNilLitera
     }
 }
 
+extension LockBox: ExpressibleByBooleanLiteral where Wrapped: ExpressibleByBooleanLiteral {
+    convenience init(booleanLiteral value: Wrapped.BooleanLiteralType) {
+        self.init(Wrapped(booleanLiteral: value))
+    }
+}
+
 extension LockBox: @unchecked Sendable where Wrapped: Sendable { }

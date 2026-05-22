@@ -121,7 +121,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             
             MXLog.info("Enabling recovery")
             
-            var keyUploadErrored = false
+            let keyUploadErrored: LockBox<Bool> = false
             let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: nil, progressListener: SDKListener { [weak self] state in
                 guard let self else { return }
                 
@@ -132,11 +132,11 @@ class SecureBackupController: SecureBackupControllerProtocol {
                     recoveryStateSubject.send(.enabled)
                 case .roomKeyUploadError:
                     MXLog.error("Failed enabling recovery: room key upload error")
-                    keyUploadErrored = true
+                    keyUploadErrored.value = true
                 }
             })
             
-            return keyUploadErrored ? .failure(.failedGeneratingRecoveryKey) : .success(recoveryKey)
+            return keyUploadErrored.value ? .failure(.failedGeneratingRecoveryKey) : .success(recoveryKey)
         } catch {
             MXLog.error("Failed generating recovery key with error: \(error)")
             
