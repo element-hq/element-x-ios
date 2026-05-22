@@ -110,19 +110,18 @@ class SecureBackupController: SecureBackupControllerProtocol {
         return .success(())
     }
     
-    func generateRecoveryKey() async -> Result<String, SecureBackupControllerError> {
+    func generateRecoveryKey(withPassphrase passphrase: String?) async -> Result<String, SecureBackupControllerError> {
         do {
-            guard recoveryState.value == .disabled else {
+            if recoveryState.value == .disabled {
+                MXLog.info("Enabling recovery")
+            } else {
                 MXLog.info("Resetting recovery key")
-                
-                let key = try await encryption.resetRecoveryKey()
-                return .success(key)
             }
             
-            MXLog.info("Enabling recovery")
-            
             var keyUploadErrored = false
-            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: nil, progressListener: SDKListener { [weak self] state in
+            // Note: `enableRecovery` also handles the reset case (equivalent to `resetRecoveryKey`).
+            // Despite the name, it is the correct call for both initial setup and key rotation.
+            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: passphrase, progressListener: SDKListener { [weak self] state in
                 guard let self else { return }
                 
                 switch state {

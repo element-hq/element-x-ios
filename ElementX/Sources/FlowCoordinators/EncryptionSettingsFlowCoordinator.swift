@@ -18,6 +18,7 @@ enum EncryptionSettingsFlowCoordinatorAction: Equatable {
 struct EncryptionSettingsFlowCoordinatorParameters {
     let userSession: UserSessionProtocol
     let appSettings: AppSettings
+    let appHooks: AppHooks
     let userIndicatorController: UserIndicatorControllerProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
 }
@@ -25,6 +26,7 @@ struct EncryptionSettingsFlowCoordinatorParameters {
 class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let appSettings: AppSettings
+    private let appHooks: AppHooks
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     
@@ -65,6 +67,7 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     init(parameters: EncryptionSettingsFlowCoordinatorParameters) {
         userSession = parameters.userSession
         appSettings = parameters.appSettings
+        appHooks = parameters.appHooks
         userIndicatorController = parameters.userIndicatorController
         navigationStackCoordinator = parameters.navigationStackCoordinator
         
@@ -158,9 +161,11 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentRecoveryKeyScreen() {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                                     userIndicatorController: userIndicatorController,
-                                                                                     isModallyPresented: true))
+        let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
+                                                                            userIndicatorController: userIndicatorController,
+                                                                            isModallyPresented: true)
+        let coordinator = appHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters,
+                                                                         homeserver: userSession.clientProxy.homeserver)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }

@@ -68,6 +68,15 @@ final class AppHooks: AppHooksProtocol {
     func registerDeveloperOptionsScreenHook(_ hook: DeveloperOptionsScreenHookProtocol) {
         _developerOptionsScreenHook.withLock { $0 = hook }
     }
+    
+    private let _recoveryKeyScreenHook: Mutex<RecoveryKeyScreenHookProtocol> = Mutex(DefaultRecoveryKeyScreenHook())
+    var recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol {
+        _recoveryKeyScreenHook.withLock { $0 }
+    }
+    
+    func registerRecoveryKeyScreenHook(_ hook: RecoveryKeyScreenHookProtocol) {
+        _recoveryKeyScreenHook.withLock { $0 = hook }
+    }
     #endif
     
     private let _tracingHook: Mutex<TracingHookProtocol> = Mutex(DefaultTracingHook())

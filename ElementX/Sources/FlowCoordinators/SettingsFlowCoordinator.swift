@@ -143,6 +143,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func startEncryptionSettingsFlow(animated: Bool) {
         let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                               appSettings: flowParameters.appSettings,
+                                                                              appHooks: flowParameters.appHooks,
                                                                               userIndicatorController: flowParameters.userIndicatorController,
                                                                               navigationStackCoordinator: navigationStackCoordinator))
         coordinator.actionsPublisher.sink { [weak self] action in

@@ -10963,30 +10963,44 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sen
     }
     //MARK: - generateRecoveryKey
 
-    private let generateRecoveryKeyCallsCountLock = NSLock()
-    private var generateRecoveryKeyUnderlyingCallsCount = 0
-    var generateRecoveryKeyCallsCount: Int {
-        get { generateRecoveryKeyCallsCountLock.withLock { generateRecoveryKeyUnderlyingCallsCount } }
-        set { generateRecoveryKeyCallsCountLock.withLock { generateRecoveryKeyUnderlyingCallsCount = newValue } }
+    private let generateRecoveryKeyWithPassphraseCallsCountLock = NSLock()
+    private var generateRecoveryKeyWithPassphraseUnderlyingCallsCount = 0
+    var generateRecoveryKeyWithPassphraseCallsCount: Int {
+        get { generateRecoveryKeyWithPassphraseCallsCountLock.withLock { generateRecoveryKeyWithPassphraseUnderlyingCallsCount } }
+        set { generateRecoveryKeyWithPassphraseCallsCountLock.withLock { generateRecoveryKeyWithPassphraseUnderlyingCallsCount = newValue } }
     }
-    var generateRecoveryKeyCalled: Bool {
-        return generateRecoveryKeyCallsCount > 0
+    var generateRecoveryKeyWithPassphraseCalled: Bool {
+        return generateRecoveryKeyWithPassphraseCallsCount > 0
+    }
+    private let generateRecoveryKeyWithPassphraseReceivedPassphraseLock = NSLock()
+    private var generateRecoveryKeyWithPassphraseUnderlyingReceivedPassphrase: String?
+    var generateRecoveryKeyWithPassphraseReceivedPassphrase: String? {
+        get { generateRecoveryKeyWithPassphraseReceivedPassphraseLock.withLock { generateRecoveryKeyWithPassphraseUnderlyingReceivedPassphrase } }
+        set { generateRecoveryKeyWithPassphraseReceivedPassphraseLock.withLock { generateRecoveryKeyWithPassphraseUnderlyingReceivedPassphrase = newValue } }
+    }
+    private let generateRecoveryKeyWithPassphraseReceivedInvocationsLock = NSLock()
+    private var generateRecoveryKeyWithPassphraseUnderlyingReceivedInvocations: [String?] = []
+    var generateRecoveryKeyWithPassphraseReceivedInvocations: [String?] {
+        get { generateRecoveryKeyWithPassphraseReceivedInvocationsLock.withLock { generateRecoveryKeyWithPassphraseUnderlyingReceivedInvocations } }
+        set { generateRecoveryKeyWithPassphraseReceivedInvocationsLock.withLock { generateRecoveryKeyWithPassphraseUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let generateRecoveryKeyReturnValueLock = NSLock()
-    private var generateRecoveryKeyUnderlyingReturnValue: Result<String, SecureBackupControllerError>!
-    var generateRecoveryKeyReturnValue: Result<String, SecureBackupControllerError>! {
-        get { generateRecoveryKeyReturnValueLock.withLock { generateRecoveryKeyUnderlyingReturnValue } }
-        set { generateRecoveryKeyReturnValueLock.withLock { generateRecoveryKeyUnderlyingReturnValue = newValue } }
+    private let generateRecoveryKeyWithPassphraseReturnValueLock = NSLock()
+    private var generateRecoveryKeyWithPassphraseUnderlyingReturnValue: Result<String, SecureBackupControllerError>!
+    var generateRecoveryKeyWithPassphraseReturnValue: Result<String, SecureBackupControllerError>! {
+        get { generateRecoveryKeyWithPassphraseReturnValueLock.withLock { generateRecoveryKeyWithPassphraseUnderlyingReturnValue } }
+        set { generateRecoveryKeyWithPassphraseReturnValueLock.withLock { generateRecoveryKeyWithPassphraseUnderlyingReturnValue = newValue } }
     }
-    var generateRecoveryKeyClosure: (() async -> Result<String, SecureBackupControllerError>)?
+    var generateRecoveryKeyWithPassphraseClosure: ((String?) async -> Result<String, SecureBackupControllerError>)?
 
-    func generateRecoveryKey() async -> Result<String, SecureBackupControllerError> {
-        generateRecoveryKeyCallsCountLock.withLock { generateRecoveryKeyUnderlyingCallsCount += 1 }
-        if let generateRecoveryKeyClosure = generateRecoveryKeyClosure {
-            return await generateRecoveryKeyClosure()
+    func generateRecoveryKey(withPassphrase passphrase: String?) async -> Result<String, SecureBackupControllerError> {
+        generateRecoveryKeyWithPassphraseCallsCountLock.withLock { generateRecoveryKeyWithPassphraseUnderlyingCallsCount += 1 }
+        generateRecoveryKeyWithPassphraseReceivedPassphrase = passphrase
+        generateRecoveryKeyWithPassphraseReceivedInvocationsLock.withLock { generateRecoveryKeyWithPassphraseUnderlyingReceivedInvocations.append(passphrase) }
+        if let generateRecoveryKeyWithPassphraseClosure = generateRecoveryKeyWithPassphraseClosure {
+            return await generateRecoveryKeyWithPassphraseClosure(passphrase)
         } else {
-            return generateRecoveryKeyReturnValue
+            return generateRecoveryKeyWithPassphraseReturnValue
         }
     }
     //MARK: - confirmRecoveryKey
