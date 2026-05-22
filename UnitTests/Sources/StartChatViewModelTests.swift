@@ -92,7 +92,7 @@ struct StartChatScreenViewModelTests {
     @Test
     func inviteConfirmationFetchesIdentity() async throws {
         clientProxy.directRoomForUserIDReturnValue = .success(nil)
-        clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init(verificationState: .notVerified)))
+        clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(.init(verificationState: .notVerified)))
         
         // User identity becomes known, i.e. not unknown
         let deferred = deferFulfillment(viewModel.context.$viewState.compactMap(\.bindings.selectedUserToInvite)) {

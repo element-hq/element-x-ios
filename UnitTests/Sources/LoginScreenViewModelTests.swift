@@ -229,8 +229,8 @@ struct LoginScreenViewModelTests {
     private mutating func setupViewModel(homeserverAddress: String = "example.com", loginHint: String? = nil) async {
         let appSettings = AppSettings.volatile()
         
-        clientFactory = AuthenticationClientFactoryMock(configuration: .init())
-        service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
+        clientFactory = AuthenticationClientFactoryMock(.init())
+        service = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,

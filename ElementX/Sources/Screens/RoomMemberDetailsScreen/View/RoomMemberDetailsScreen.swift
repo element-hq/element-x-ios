@@ -221,11 +221,11 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         clientProxyMock.userIdentityForFallBackToServerClosure = { userID, _ in
             let identity = switch userID {
             case RoomMemberProxyMock.mockDan.userID:
-                UserIdentityProxyMock(configuration: .init(verificationState: .verified))
+                UserIdentityProxyMock(.init(verificationState: .verified))
             case RoomMemberProxyMock.mockBob.userID:
-                UserIdentityProxyMock(configuration: .init(verificationState: .verificationViolation))
+                UserIdentityProxyMock(.init(verificationState: .verificationViolation))
             default:
-                UserIdentityProxyMock(configuration: .init())
+                UserIdentityProxyMock(.init())
             }
             
             return .success(identity)

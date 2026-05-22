@@ -824,7 +824,7 @@ extension ComposerToolbarViewModel {
         let viewModel = ComposerToolbarViewModel(roomProxy: roomProxy,
                                                  wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
-                                                 mediaProvider: MediaProviderMock(configuration: .init()),
+                                                 mediaProvider: MediaProviderMock(.init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  appSettings: .volatile(),
                                                  analyticsService: AnalyticsServiceMock(.init()),

@@ -196,7 +196,7 @@ struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
                                                   isBugReportServiceEnabled: true,
                                                   appMediator: AppMediatorMock(),
                                                   appSettings: .volatile(),
-                                                  mediaProvider: MediaProviderMock(configuration: .init()),
+                                                  mediaProvider: MediaProviderMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock())
     }
 }

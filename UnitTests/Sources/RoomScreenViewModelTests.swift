@@ -229,7 +229,7 @@ final class RoomScreenViewModelTests {
         var configuration = JoinedRoomProxyMockConfiguration(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false)
         let roomProxyMock = JoinedRoomProxyMock(configuration)
         
-        let powerLevelsMock = RoomPowerLevelsProxyMock(configuration: .init())
+        let powerLevelsMock = RoomPowerLevelsProxyMock(.init())
         powerLevelsMock.canUserJoinCallUserIDReturnValue = .success(false)
         powerLevelsMock.canOwnUserJoinCallReturnValue = false
         roomProxyMock.powerLevelsReturnValue = .success(powerLevelsMock)

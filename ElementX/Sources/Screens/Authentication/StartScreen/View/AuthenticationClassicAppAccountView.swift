@@ -152,7 +152,7 @@ struct AuthenticationClassicAppAccountView_Previews: PreviewProvider { // Not Te
                                            isBugReportServiceEnabled: false,
                                            appMediator: AppMediatorMock(),
                                            appSettings: .volatile(),
-                                           mediaProvider: MediaProviderMock(configuration: .init()),
+                                           mediaProvider: MediaProviderMock(.init()),
                                            userIndicatorController: UserIndicatorControllerMock())
     }
 }

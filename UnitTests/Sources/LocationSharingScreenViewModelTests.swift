@@ -403,7 +403,7 @@ struct LocationSharingScreenViewModelTests {
                                                    liveLocationManager: LiveLocationManagerMock(.init()),
                                                    analytics: AnalyticsServiceMock(.init()),
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   mediaProvider: MediaProviderMock(configuration: .init()))
+                                                   mediaProvider: MediaProviderMock(.init()))
 
         // Initially no annotations and no map center since sender and share are both nil.
         #expect(context.viewState.annotations.isEmpty)
@@ -438,7 +438,7 @@ struct LocationSharingScreenViewModelTests {
                                                    liveLocationManager: LiveLocationManagerMock(liveLocationManagerConfiguration),
                                                    analytics: AnalyticsServiceMock(.init()),
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   mediaProvider: MediaProviderMock(configuration: .init()))
+                                                   mediaProvider: MediaProviderMock(.init()))
         viewModel.state.bindings.isLocationAuthorized = true
     }
 
@@ -453,7 +453,7 @@ struct LocationSharingScreenViewModelTests {
                                                    liveLocationManager: liveLocationManagerMock,
                                                    analytics: AnalyticsServiceMock(.init()),
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   mediaProvider: MediaProviderMock(configuration: .init()))
+                                                   mediaProvider: MediaProviderMock(.init()))
         viewModel.state.bindings.isLocationAuthorized = true
     }
     
@@ -475,7 +475,7 @@ struct LocationSharingScreenViewModelTests {
                                                    liveLocationManager: LiveLocationManagerMock(.init()),
                                                    analytics: AnalyticsServiceMock(.init()),
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   mediaProvider: MediaProviderMock(configuration: .init()))
+                                                   mediaProvider: MediaProviderMock(.init()))
     }
     
     private func makeLiveLocationShare(userID: String, latitude: Double = 0.0, longitude: Double = 0.0) -> LiveLocationShare {

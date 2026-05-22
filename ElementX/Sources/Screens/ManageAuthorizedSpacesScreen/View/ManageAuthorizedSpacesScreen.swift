@@ -109,7 +109,7 @@ struct ManageAuthorizedSpacesScreen_Previews: PreviewProvider, TestablePreview {
                                                                                                   initialSelectedIDs: ["space1",
                                                                                                                        "space3",
                                                                                                                        "!unknown-space-id-2"]),
-                                                                 mediaProvider: MediaProviderMock(configuration: .init()))
+                                                                 mediaProvider: MediaProviderMock(.init()))
     
     static var previews: some View {
         ElementNavigationStack {

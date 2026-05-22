@@ -46,7 +46,7 @@ struct SpaceAddRoomsScreenSelectedItem_Previews: PreviewProvider, TestablePrevie
                                                     avatar: .room(id: "",
                                                                   name: "Selected Room",
                                                                   avatarURL: .mockMXCAvatar)),
-                                        mediaProvider: MediaProviderMock(configuration: .init())) { }
+                                        mediaProvider: MediaProviderMock(.init())) { }
             .frame(width: 80)
     }
 }

@@ -86,7 +86,7 @@ struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
         return ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                         wysiwygViewModel: WysiwygComposerViewModel(),
                                         completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                        mediaProvider: MediaProviderMock(configuration: .init()),
+                                        mediaProvider: MediaProviderMock(.init()),
                                         mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                         appSettings: appSettings,
                                         analyticsService: AnalyticsServiceMock(.init()),

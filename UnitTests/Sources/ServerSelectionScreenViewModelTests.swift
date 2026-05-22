@@ -150,8 +150,8 @@ struct ServerSelectionScreenViewModelTests {
     private mutating func setup(authenticationFlow: AuthenticationFlow) {
         let appSettings = AppSettings.volatile()
         
-        clientFactory = AuthenticationClientFactoryMock(configuration: .init())
-        service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
+        clientFactory = AuthenticationClientFactoryMock(.init())
+        service = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,

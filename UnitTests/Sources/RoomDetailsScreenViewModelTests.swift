@@ -341,7 +341,7 @@ struct RoomDetailsScreenViewModelTests {
         
         roomProxyMock = JoinedRoomProxyMock(configuration)
         
-        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(.init())
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomAvatar)
         }
@@ -380,7 +380,7 @@ struct RoomDetailsScreenViewModelTests {
         
         roomProxyMock = JoinedRoomProxyMock(configuration)
         
-        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(.init())
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomName)
         }
@@ -419,7 +419,7 @@ struct RoomDetailsScreenViewModelTests {
         
         roomProxyMock = JoinedRoomProxyMock(configuration)
         
-        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(.init())
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomTopic)
         }

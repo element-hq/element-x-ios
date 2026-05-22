@@ -535,7 +535,7 @@ final class TimelineViewModelTests {
         }
         try await deferred.fulfill()
         
-        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(.init())
         powerLevelsProxyMock.canUserPinOrUnpinUserIDReturnValue = .success(false)
         powerLevelsProxyMock.canOwnUserPinOrUnpinReturnValue = false
         roomProxyMock.powerLevelsReturnValue = .success(powerLevelsProxyMock)
