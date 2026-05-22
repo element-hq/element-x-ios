@@ -126,8 +126,10 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentLocationViewer(location))
                 case .displayLiveLocation(let sender, let initialLiveLocationShare):
                     actionsSubject.send(.presentLiveLocationViewer(sender: sender, initialLiveLocationShare: initialLiveLocationShare))
-                case .displayPollForm(let mode):
-                    actionsSubject.send(.presentPollForm(mode: mode))
+                case .displayNewPollForm:
+                    actionsSubject.send(.presentPollForm(mode: .new(topic: composerViewModel.context.plainComposerText.string)))
+                case .displayEditPollForm(let eventID, let poll):
+                    actionsSubject.send(.presentPollForm(mode: .edit(eventID: eventID, poll: poll)))
                 case .displayMediaUploadPreviewScreen(let mediaURLs):
                     actionsSubject.send(.presentMediaUploadPreviewScreen(mediaURLs: mediaURLs,
                                                                          caption: composerViewModel.context.plainComposerText))

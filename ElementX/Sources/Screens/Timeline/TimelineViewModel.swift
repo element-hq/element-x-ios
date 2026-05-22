@@ -370,7 +370,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .location:
             actionsSubject.send(.displayLocationPicker)
         case .poll:
-            actionsSubject.send(.displayPollForm(mode: .new))
+            actionsSubject.send(.displayNewPollForm)
         }
     }
     
@@ -380,8 +380,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             timelineInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         case let .end(pollStartID):
             displayAlert(.pollEndConfirmation(pollStartID))
-        case .edit(let pollStartID, let poll):
-            actionsSubject.send(.displayPollForm(mode: .edit(eventID: pollStartID, poll: poll)))
+        case .edit(let eventID, let poll):
+            actionsSubject.send(.displayEditPollForm(eventID: eventID, poll: poll))
         }
     }
     
@@ -514,8 +514,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .displayMessageForwarding(let itemID):
                     Task { await self.forwardMessage(itemID: itemID) }
-                case .displayPollForm(let mode):
-                    actionsSubject.send(.displayPollForm(mode: mode))
+                case .displayEditPollForm(let eventID, let poll):
+                    actionsSubject.send(.displayEditPollForm(eventID: eventID, poll: poll))
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
                 case .displayMediaUploadPreviewScreen(let mediaURLs):

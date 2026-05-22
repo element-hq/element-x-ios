@@ -16,7 +16,7 @@ enum TimelineInteractionHandlerAction {
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayMediaUploadPreviewScreen(mediaURLs: [URL])
-    case displayPollForm(mode: PollFormMode)
+    case displayEditPollForm(eventID: String, poll: Poll)
     
     case showActionMenu(TimelineItemActionMenuInfo)
     case showDebugInfo(TimelineItemDebugInfo)
@@ -130,7 +130,7 @@ class TimelineInteractionHandler {
                     MXLog.error("Cannot edit poll with id: \(timelineItem.id)")
                     return
                 }
-                actionsSubject.send(.displayPollForm(mode: .edit(eventID: eventID, poll: pollTimelineItem.poll)))
+                actionsSubject.send(.displayEditPollForm(eventID: eventID, poll: pollTimelineItem.poll))
             default:
                 MXLog.error("Cannot edit item with id: \(timelineItem.id)")
             }
