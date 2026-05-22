@@ -483,11 +483,11 @@ final class RoomFlowCoordinatorTests {
                                                   timelineControllerFactory: timelineControllerFactory,
                                                   emojiProvider: EmojiProvider(appSettings: appSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
-                                                  appMediator: AppMediatorMock.default,
+                                                  appMediator: AppMediatorMock(.init()),
                                                   appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: AnalyticsServiceMock.default,
-                                                  userIndicatorController: UserIndicatorControllerMock.default,
+                                                  analytics: AnalyticsServiceMock(.init()),
+                                                  userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: StateMachineFactory())
         

@@ -17,7 +17,7 @@ struct GlobalSearchScreenViewModelTests {
     
     init() {
         viewModel = GlobalSearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                mediaProvider: MediaProviderMock(configuration: .init()))
+                                                mediaProvider: MediaProviderMock(.init()))
         context = viewModel.context
     }
     

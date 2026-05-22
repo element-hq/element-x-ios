@@ -46,7 +46,7 @@ struct JoinedRoomProxyMockConfiguration {
     var predecessor: PredecessorRoom?
     var successor: SuccessorRoom?
     
-    var powerLevelsConfiguration = RoomPowerLevelsProxyMockConfiguration()
+    var powerLevelsConfiguration = RoomPowerLevelsProxyMock.Configuration()
 }
 
 extension JoinedRoomProxyMock {
@@ -97,7 +97,7 @@ extension JoinedRoomProxyMock {
         }
         updatePowerLevelsForUsersReturnValue = .success(())
         
-        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: configuration.powerLevelsConfiguration)
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration.powerLevelsConfiguration)
         
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { [weak self] userID, _ in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
@@ -196,7 +196,7 @@ extension RoomInfoProxyMock {
         joinRule = configuration.joinRule
         historyVisibility = configuration.historyVisibility
         
-        powerLevels = RoomPowerLevelsProxyMock(configuration: configuration.powerLevelsConfiguration)
+        powerLevels = RoomPowerLevelsProxyMock(configuration.powerLevelsConfiguration)
     }
 }
 

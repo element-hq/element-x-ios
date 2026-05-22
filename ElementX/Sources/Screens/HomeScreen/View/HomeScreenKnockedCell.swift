@@ -135,9 +135,9 @@ struct HomeScreenKnockedCell_Previews: PreviewProvider, TestablePreview {
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: .volatile(),
-                                   analyticsService: AnalyticsServiceMock.default,
+                                   analyticsService: AnalyticsServiceMock(.init()),
                                    notificationManager: NotificationManagerMock(),
-                                   userIndicatorController: UserIndicatorControllerMock.default)
+                                   userIndicatorController: UserIndicatorControllerMock())
     }
 }
 

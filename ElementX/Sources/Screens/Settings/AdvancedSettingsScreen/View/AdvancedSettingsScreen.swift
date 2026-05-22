@@ -163,9 +163,9 @@ struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let appSettings = AppSettings.volatile()
         return AdvancedSettingsScreenViewModel(advancedSettings: appSettings,
-                                               analytics: AnalyticsServiceMock.default,
+                                               analytics: AnalyticsServiceMock(.init()),
                                                clientProxy: ClientProxyMock(.init()),
-                                               userIndicatorController: UserIndicatorControllerMock.default)
+                                               userIndicatorController: UserIndicatorControllerMock())
     }()
     
     static var previews: some View {

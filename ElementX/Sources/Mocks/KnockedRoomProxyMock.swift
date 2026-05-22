@@ -65,6 +65,6 @@ extension RoomInfoProxyMock {
         joinRule = .knock
         historyVisibility = .shared
         
-        powerLevels = RoomPowerLevelsProxyMock(configuration: .init())
+        powerLevels = RoomPowerLevelsProxyMock(.init())
     }
 }

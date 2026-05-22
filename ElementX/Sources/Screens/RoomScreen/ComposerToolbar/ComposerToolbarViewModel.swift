@@ -824,10 +824,10 @@ extension ComposerToolbarViewModel {
         let viewModel = ComposerToolbarViewModel(roomProxy: roomProxy,
                                                  wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
-                                                 mediaProvider: MediaProviderMock(configuration: .init()),
+                                                 mediaProvider: MediaProviderMock(.init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  appSettings: .volatile(),
-                                                 analyticsService: AnalyticsServiceMock.default,
+                                                 analyticsService: AnalyticsServiceMock(.init()),
                                                  composerDraftService: ComposerDraftServiceMock(.init()))
         viewModel.state.bindings.composerFocused = focused
         viewModel.state.bindings.plainComposerText = NSAttributedString(string: message)

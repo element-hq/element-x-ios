@@ -142,6 +142,6 @@ struct UserDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
                                                                                                              canChangeAvatar: canChangeProfile,
                                                                                                              canChangeDisplayName: canChangeProfile)))),
         mediaUploadingPreprocessor: .init(appSettings: .volatile()),
-        userIndicatorController: UserIndicatorControllerMock.default)
+        userIndicatorController: UserIndicatorControllerMock())
     }
 }

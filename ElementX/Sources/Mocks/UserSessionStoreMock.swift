@@ -9,7 +9,7 @@
 extension UserSessionStoreMock {
     struct Configuration { }
     
-    convenience init(configuration: Configuration) {
+    convenience init(_ configuration: Configuration) {
         self.init()
         
         userSessionForSessionDirectoriesPassphraseReturnValue = .success(UserSessionMock(.init()))

@@ -374,6 +374,6 @@ struct CallScreen_Previews: PreviewProvider {
                                                         colorScheme: .light),
                                    allowPictureInPicture: false,
                                    appSettings: .volatile(),
-                                   analyticsService: AnalyticsServiceMock.default)
+                                   analyticsService: AnalyticsServiceMock(.init()))
     }
 }

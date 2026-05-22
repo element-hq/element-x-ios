@@ -207,7 +207,7 @@ private class GlobalSearchTextField: UITextField {
 
 struct GlobalSearchScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = GlobalSearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                       mediaProvider: MediaProviderMock(configuration: .init()))
+                                                       mediaProvider: MediaProviderMock(.init()))
     
     static var previews: some View {
         ElementNavigationStack {

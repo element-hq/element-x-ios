@@ -40,7 +40,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
         
-        analytics = AnalyticsServiceMock.default
+        analytics = AnalyticsServiceMock(.init())
         userIndicatorController = UserIndicatorController()
         
         windowManager.delegate = self
@@ -175,7 +175,7 @@ class MockScreen: Identifiable {
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: AuthenticationService.mock,
                                                                 bugReportService: BugReportServiceMock(.init()),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
-                                                                appMediator: AppMediatorMock.default,
+                                                                appMediator: AppMediatorMock(.init()),
                                                                 appSettings: appSettings,
                                                                 appHooks: AppHooks(),
                                                                 analytics: analytics,
@@ -296,7 +296,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -318,7 +318,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -340,7 +340,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -361,7 +361,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -385,7 +385,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -409,7 +409,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -432,7 +432,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -457,7 +457,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -481,7 +481,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -504,7 +504,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -541,7 +541,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -565,7 +565,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -589,7 +589,7 @@ class MockScreen: Identifiable {
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: AppMediatorMock(.init()),
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
                                                              analytics: analytics,
@@ -605,7 +605,7 @@ class MockScreen: Identifiable {
             let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy,
                                                                             flow: .deviceInitiator,
                                                                             appSettings: appSettings,
-                                                                            mediaProvider: MediaProviderMock(configuration: .init()))
+                                                                            mediaProvider: MediaProviderMock(.init()))
             return SessionVerificationScreenCoordinator(parameters: parameters)
         case .userSessionScreen, .userSessionScreenReply, .userSessionSpacesFlow:
             let appSettings: AppSettings = appSettings
@@ -630,7 +630,7 @@ class MockScreen: Identifiable {
             let spaceServiceProxy = SpaceServiceProxyMock(id == .userSessionSpacesFlow ? .populated : .init())
             clientProxy.spaceService = spaceServiceProxy
             
-            let appMediator = AppMediatorMock.default
+            let appMediator = AppMediatorMock(.init())
             appMediator.underlyingWindowManager = windowManager
 
             let flowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
@@ -669,7 +669,7 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
             let coordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: .init(roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)),
-                                                                                       mediaProvider: MediaProviderMock(configuration: .init()),
+                                                                                       mediaProvider: MediaProviderMock(.init()),
                                                                                        navigationStackCoordinator: navigationStackCoordinator,
                                                                                        userIndicatorController: userIndicatorController,
                                                                                        analytics: analytics))
@@ -695,7 +695,7 @@ class MockScreen: Identifiable {
                                                                                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                                                                 emojiProvider: EmojiProvider(appSettings: appSettings),
                                                                                                 linkMetadataProvider: LinkMetadataProvider(),
-                                                                                                appMediator: AppMediatorMock.default,
+                                                                                                appMediator: AppMediatorMock(.init()),
                                                                                                 appSettings: appSettings,
                                                                                                 appHooks: AppHooks(),
                                                                                                 analytics: analytics,
@@ -755,7 +755,7 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             
             let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
-                                                                               appMediator: AppMediatorMock.default,
+                                                                               appMediator: AppMediatorMock(.init()),
                                                                                appSettings: appSettings,
                                                                                appHooks: AppHooks(),
                                                                                userIndicatorController: userIndicatorController,
@@ -781,7 +781,7 @@ class MockScreen: Identifiable {
                                                                                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                                                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                                                                                     linkMetadataProvider: LinkMetadataProvider(),
-                                                                                                    appMediator: AppMediatorMock.default,
+                                                                                                    appMediator: AppMediatorMock(.init()),
                                                                                                     appSettings: appSettings,
                                                                                                     appHooks: AppHooks(),
                                                                                                     analytics: analytics,
@@ -826,7 +826,7 @@ class MockScreen: Identifiable {
                                                         timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
                                                                                                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                                                                      stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
-                                                        mediaProvider: MediaProviderMock(configuration: .init()),
+                                                        mediaProvider: MediaProviderMock(.init()),
                                                         appSettings: appSettings)
             
             let flowCoordinator = ChatsTabFlowCoordinator(isNewLogin: false,
@@ -837,7 +837,7 @@ class MockScreen: Identifiable {
                                                                                                timelineControllerFactory: TimelineControllerFactoryMock(.init(timelineController: timelineController)),
                                                                                                emojiProvider: EmojiProvider(appSettings: appSettings),
                                                                                                linkMetadataProvider: LinkMetadataProvider(),
-                                                                                               appMediator: AppMediatorMock.default,
+                                                                                               appMediator: AppMediatorMock(.init()),
                                                                                                appSettings: appSettings,
                                                                                                appHooks: AppHooks(),
                                                                                                analytics: analytics,

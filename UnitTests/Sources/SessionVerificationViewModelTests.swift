@@ -22,7 +22,7 @@ struct SessionVerificationViewModelTests {
         viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController,
                                                        flow: .deviceInitiator,
                                                        appSettings: .volatile(),
-                                                       mediaProvider: MediaProviderMock(configuration: .init()))
+                                                       mediaProvider: MediaProviderMock(.init()))
         context = viewModel.context
     }
 

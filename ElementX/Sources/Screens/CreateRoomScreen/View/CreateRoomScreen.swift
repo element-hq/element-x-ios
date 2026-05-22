@@ -460,8 +460,8 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                          spaceSelectionMode: selectionMode,
                                          shouldShowCancelButton: isSpace,
                                          userSession: userSession,
-                                         analytics: AnalyticsServiceMock.default,
-                                         userIndicatorController: UserIndicatorControllerMock.default,
+                                         analytics: AnalyticsServiceMock(.init()),
+                                         userIndicatorController: UserIndicatorControllerMock(),
                                          appSettings: appSettings)
     }
 }

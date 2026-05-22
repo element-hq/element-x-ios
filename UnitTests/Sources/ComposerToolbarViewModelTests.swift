@@ -88,10 +88,10 @@ final class ComposerToolbarViewModelTests {
         viewModel = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                              wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
-                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mediaProvider: MediaProviderMock(.init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              appSettings: appSettings,
-                                             analyticsService: AnalyticsServiceMock.default,
+                                             analyticsService: AnalyticsServiceMock(.init()),
                                              composerDraftService: draftServiceMock)
         
         #expect(viewModel.state.suggestions == suggestions)
@@ -707,10 +707,10 @@ final class ComposerToolbarViewModelTests {
         viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
                                              wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
-                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mediaProvider: MediaProviderMock(.init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              appSettings: appSettings,
-                                             analyticsService: AnalyticsServiceMock.default,
+                                             analyticsService: AnalyticsServiceMock(.init()),
                                              composerDraftService: draftServiceMock)
         
         var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
@@ -754,10 +754,10 @@ final class ComposerToolbarViewModelTests {
         viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
                                              wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
-                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mediaProvider: MediaProviderMock(.init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              appSettings: appSettings,
-                                             analyticsService: AnalyticsServiceMock.default,
+                                             analyticsService: AnalyticsServiceMock(.init()),
                                              composerDraftService: draftServiceMock)
         
         var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
@@ -790,10 +790,10 @@ final class ComposerToolbarViewModelTests {
         viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
                                              wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
-                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mediaProvider: MediaProviderMock(.init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              appSettings: appSettings,
-                                             analyticsService: AnalyticsServiceMock.default,
+                                             analyticsService: AnalyticsServiceMock(.init()),
                                              composerDraftService: draftServiceMock)
         
         let deferred = deferFulfillment(viewModel.context.$viewState, message: "Composer should be enabled") { $0.canSend == true }
@@ -816,10 +816,10 @@ final class ComposerToolbarViewModelTests {
                                              roomProxy: JoinedRoomProxyMock(.init()),
                                              wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: completionSuggestionServiceMock,
-                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mediaProvider: MediaProviderMock(.init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              appSettings: appSettings,
-                                             analyticsService: AnalyticsServiceMock.default,
+                                             analyticsService: AnalyticsServiceMock(.init()),
                                              composerDraftService: draftServiceMock)
         viewModel.context.composerFormattingEnabled = true
     }

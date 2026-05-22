@@ -167,7 +167,7 @@ struct SpaceRoomCellButtonStyle: ButtonStyle {
 }
 
 struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
-    static let mediaProvider = MediaProviderMock(configuration: .init())
+    static let mediaProvider = MediaProviderMock(.init())
     
     static let spaces = [SpaceServiceRoom].mockSpaceList
     

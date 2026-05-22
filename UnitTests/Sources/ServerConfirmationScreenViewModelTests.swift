@@ -344,14 +344,14 @@ final class ServerConfirmationScreenViewModelTests {
         }
         
         // Manually create a configuration as the default homeserver address setting is immutable.
-        client = ClientSDKMock(configuration: .init(oAuthLoginURL: supportsOAuth ? "https://account.matrix.org/authorize" : nil,
-                                                    supportsOAuthCreatePrompt: supportsOAuthCreatePrompt,
-                                                    supportsPasswordLogin: supportsPasswordLogin,
-                                                    elementWellKnown: requiresElementPro ? "{\"version\":1,\"enforce_element_pro\":true}" : nil))
+        client = ClientSDKMock(.init(oAuthLoginURL: supportsOAuth ? "https://account.matrix.org/authorize" : nil,
+                                     supportsOAuthCreatePrompt: supportsOAuthCreatePrompt,
+                                     supportsPasswordLogin: supportsPasswordLogin,
+                                     elementWellKnown: requiresElementPro ? "{\"version\":1,\"enforce_element_pro\":true}" : nil))
         let configuration = AuthenticationClientFactoryMock.Configuration(homeserverClients: ["matrix.org": client])
         
-        clientFactory = AuthenticationClientFactoryMock(configuration: configuration)
-        service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
+        clientFactory = AuthenticationClientFactoryMock(configuration)
+        service = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,

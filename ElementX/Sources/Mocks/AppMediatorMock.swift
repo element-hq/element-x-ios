@@ -9,18 +9,22 @@
 import UIKit
 
 extension AppMediatorMock {
-    static var `default`: AppMediatorMock {
-        let mock = AppMediatorMock()
+    struct Configuration {
+        var appState = UIApplication.State.active
+        var isCameraAuthorized = true
+        var networkMonitor = NetworkMonitorMock(.init())
+    }
+    
+    convenience init(_ configuration: Configuration) {
+        self.init()
         
-        mock.underlyingAppState = .active
-        mock.requestAuthorizationIfNeededUnderlyingReturnValue = true
-        mock.underlyingNetworkMonitor = NetworkMonitorMock.default
+        underlyingAppState = configuration.appState
+        requestAuthorizationIfNeededUnderlyingReturnValue = configuration.isCameraAuthorized
+        underlyingNetworkMonitor = configuration.networkMonitor
         
         let windowManagerMock = WindowManagerMock()
         windowManagerMock.closeAllSecondaryWindowsClosure = { }
         windowManagerMock.closeSecondaryWindowForTypeClosure = { _ in }
-        mock.underlyingWindowManager = windowManagerMock
-        
-        return mock
+        underlyingWindowManager = windowManagerMock
     }
 }

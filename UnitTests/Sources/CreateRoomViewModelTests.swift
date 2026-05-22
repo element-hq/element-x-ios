@@ -92,7 +92,7 @@ final class CreateRoomScreenViewModelTests {
                                                   spaceSelectionMode: .none,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
-                                                  analytics: AnalyticsServiceMock.default,
+                                                  analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   appSettings: appSettings)
         self.viewModel = viewModel
@@ -342,7 +342,7 @@ final class CreateRoomScreenViewModelTests {
                                                   spaceSelectionMode: spacesSelectionMode,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
-                                                  analytics: AnalyticsServiceMock.default,
+                                                  analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   appSettings: appSettings)
         self.viewModel = viewModel

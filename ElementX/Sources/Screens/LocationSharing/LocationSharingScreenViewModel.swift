@@ -394,8 +394,8 @@ extension LocationSharingScreenViewModel {
                                               roomProxy: roomProxy,
                                               timelineController: MockTimelineController(),
                                               liveLocationManager: LiveLocationManagerMock(),
-                                              analytics: AnalyticsServiceMock.default,
+                                              analytics: AnalyticsServiceMock(.init()),
                                               userIndicatorController: UserIndicatorControllerMock(),
-                                              mediaProvider: MediaProviderMock(configuration: .init()))
+                                              mediaProvider: MediaProviderMock(.init()))
     }
 }

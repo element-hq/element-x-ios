@@ -420,8 +420,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
 
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     analyticsService: AnalyticsServiceMock.default,
-                     userIndicatorController: UserIndicatorControllerMock.default,
+                     analyticsService: AnalyticsServiceMock(.init()),
+                     userIndicatorController: UserIndicatorControllerMock(),
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                      appSettings: .volatile())
@@ -448,8 +448,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
 
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     analyticsService: AnalyticsServiceMock.default,
-                     userIndicatorController: UserIndicatorControllerMock.default,
+                     analyticsService: AnalyticsServiceMock(.init()),
+                     userIndicatorController: UserIndicatorControllerMock(),
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                      appSettings: .volatile())
@@ -474,9 +474,9 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         clientProxyMock.userIdentityForFallBackToServerClosure = { userID, _ in
             let identity = switch userID {
             case RoomMemberProxyMock.mockDan.userID:
-                UserIdentityProxyMock(configuration: .init(verificationState: verificationState))
+                UserIdentityProxyMock(.init(verificationState: verificationState))
             default:
-                UserIdentityProxyMock(configuration: .init())
+                UserIdentityProxyMock(.init())
             }
             
             return .success(identity)
@@ -486,8 +486,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
 
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                     analyticsService: AnalyticsServiceMock.default,
-                     userIndicatorController: UserIndicatorControllerMock.default,
+                     analyticsService: AnalyticsServiceMock(.init()),
+                     userIndicatorController: UserIndicatorControllerMock(),
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                      appSettings: .volatile())

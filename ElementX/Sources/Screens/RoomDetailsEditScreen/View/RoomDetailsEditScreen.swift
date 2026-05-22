@@ -178,6 +178,6 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
         return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
                                               userSession: UserSessionMock(.init()),
                                               mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: .volatile()),
-                                              userIndicatorController: UserIndicatorControllerMock.default)
+                                              userIndicatorController: UserIndicatorControllerMock())
     }
 }

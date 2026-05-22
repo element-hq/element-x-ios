@@ -88,7 +88,7 @@ struct RoomDirectorySearchScreen_Previews: PreviewProvider, TestablePreview {
                                                                avatarURL: .mockMXCAvatar),
                                                  canBeJoined: false)]
         
-        let roomDirectorySearchProxy = RoomDirectorySearchProxyMock(configuration: .init(results: results))
+        let roomDirectorySearchProxy = RoomDirectorySearchProxyMock(.init(results: results))
         
         let clientProxy = ClientProxyMock(.init(roomDirectorySearchProxy: roomDirectorySearchProxy))
         

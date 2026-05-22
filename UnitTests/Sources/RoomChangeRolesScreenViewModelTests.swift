@@ -195,8 +195,8 @@ struct RoomChangeRolesScreenViewModelTests {
         roomProxy = JoinedRoomProxyMock(.init(members: .allMembersAsAdmin))
         viewModel = RoomChangeRolesScreenViewModel(mode: mode,
                                                    roomProxy: roomProxy,
-                                                   mediaProvider: MediaProviderMock(configuration: .init()),
+                                                   mediaProvider: MediaProviderMock(.init()),
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   analytics: AnalyticsServiceMock.default)
+                                                   analytics: AnalyticsServiceMock(.init()))
     }
 }

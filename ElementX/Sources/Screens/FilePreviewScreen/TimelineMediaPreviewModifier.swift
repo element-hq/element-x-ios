@@ -166,7 +166,7 @@ struct TimelineMediaPreviewModifier_Previews: PreviewProvider {
         let timelineController = MockTimelineController(timelineKind: .media(.mediaFilesScreen))
         timelineController.timelineItems = [item]
         
-        let mediaProvider = MediaProviderMock(configuration: .init())
+        let mediaProvider = MediaProviderMock(.init())
         
         if isDownloading {
             mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in

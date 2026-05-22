@@ -164,6 +164,6 @@ struct ServerConfirmationScreen_Previews: PreviewProvider, TestablePreview {
                                           mode: mode,
                                           authenticationFlow: flow,
                                           appSettings: .volatile(),
-                                          userIndicatorController: UserIndicatorControllerMock.default)
+                                          userIndicatorController: UserIndicatorControllerMock())
     }
 }

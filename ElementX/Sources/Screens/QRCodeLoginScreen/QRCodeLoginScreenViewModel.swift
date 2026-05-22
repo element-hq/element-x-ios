@@ -340,7 +340,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         
     /// Only for mocking initial states
     fileprivate init(state: QRCodeLoginState, mode: QRCodeLoginScreenMode, canSignInManually: Bool, checkCodeInput: String) {
-        appMediator = AppMediatorMock.default
+        appMediator = AppMediatorMock(.init())
         super.init(initialViewState: .init(state: state,
                                            mode: mode,
                                            canSignInManually: canSignInManually,

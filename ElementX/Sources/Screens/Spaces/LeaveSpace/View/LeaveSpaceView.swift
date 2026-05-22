@@ -177,6 +177,6 @@ struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
                                    canEditRolesAndPermissions: true,
                                    leaveHandle: leaveHandle,
                                    userIndicatorController: UserIndicatorControllerMock(),
-                                   mediaProvider: MediaProviderMock(configuration: .init()))
+                                   mediaProvider: MediaProviderMock(.init()))
     }
 }
