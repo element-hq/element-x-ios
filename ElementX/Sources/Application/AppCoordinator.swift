@@ -1106,6 +1106,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                selector: #selector(applicationWillResignActive),
                                                name: UIApplication.willResignActiveNotification,
                                                object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationDidEnterBackground),
+                                               name: UIApplication.didEnterBackgroundNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillEnterForeground),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationDidBecomeActive),
                                                name: UIApplication.didBecomeActiveNotification,
@@ -1128,15 +1138,21 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     @objc
     private func applicationWillTerminate() {
+        MXLog.info("Application will terminate")
         stopSync(isBackgroundTask: false)
     }
 
     @objc
-    private func applicationWillResignActive() {
-        MXLog.info("Application will resign active")
-
+    private func applicationDidEnterBackground() {
+        MXLog.info("Application did enter background")
+        
         scheduleDelayedSyncStop()
         scheduleBackgroundAppRefresh()
+    }
+    
+    @objc
+    private func applicationWillResignActive() {
+        MXLog.info("Application will resign active")
     }
     
     private func scheduleDelayedSyncStop() {
@@ -1157,10 +1173,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     @objc
-    private func applicationDidBecomeActive() {
-        MXLog.info("Application did become active")
+    private func applicationWillEnterForeground() {
+        MXLog.info("Application will enter foreground")
         endActiveBackgroundTask()
         startSync()
+    }
+    
+    @objc
+    private func applicationDidBecomeActive() {
+        MXLog.info("Application did become active")
     }
     
     private func endActiveBackgroundTask() {
