@@ -14,6 +14,7 @@ enum TimelineControllerCallback {
     case updatedTimelineItems(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool)
     case paginationState(TimelinePaginationState)
     case isLive(Bool)
+    case sentMessage
 }
 
 enum TimelineControllerAction {

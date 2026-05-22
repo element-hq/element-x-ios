@@ -296,6 +296,7 @@ class TimelineController: TimelineControllerProtocol {
                                                 intentionalMentions: intentionalMentions) {
         case .success:
             MXLog.info("Finished sending message")
+            callbacks.send(.sentMessage)
             await donateSendMessageIntent()
         case .failure(let error):
             MXLog.error("Failed sending message with error: \(error)")
@@ -306,20 +307,32 @@ class TimelineController: TimelineControllerProtocol {
                    audioInfo: MatrixRustSDK.AudioInfo,
                    caption: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
-        await activeTimeline.sendAudio(url: url,
-                                       audioInfo: audioInfo,
-                                       caption: caption,
-                                       requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+        switch await activeTimeline.sendAudio(url: url,
+                                              audioInfo: audioInfo,
+                                              caption: caption,
+                                              requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
+        case .success:
+            callbacks.send(.sentMessage)
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
     }
     
     func sendFile(url: URL,
                   fileInfo: MatrixRustSDK.FileInfo,
                   caption: String?,
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
-        await activeTimeline.sendFile(url: url,
-                                      fileInfo: fileInfo,
-                                      caption: caption,
-                                      requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+        switch await activeTimeline.sendFile(url: url,
+                                             fileInfo: fileInfo,
+                                             caption: caption,
+                                             requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
+        case .success:
+            callbacks.send(.sentMessage)
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
     }
     
     func sendImage(url: URL,
@@ -327,11 +340,17 @@ class TimelineController: TimelineControllerProtocol {
                    imageInfo: MatrixRustSDK.ImageInfo,
                    caption: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
-        await activeTimeline.sendImage(url: url,
-                                       thumbnailURL: thumbnailURL,
-                                       imageInfo: imageInfo,
-                                       caption: caption,
-                                       requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+        switch await activeTimeline.sendImage(url: url,
+                                              thumbnailURL: thumbnailURL,
+                                              imageInfo: imageInfo,
+                                              caption: caption,
+                                              requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
+        case .success:
+            callbacks.send(.sentMessage)
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
     }
     
     func sendVideo(url: URL,
@@ -339,11 +358,17 @@ class TimelineController: TimelineControllerProtocol {
                    videoInfo: MatrixRustSDK.VideoInfo,
                    caption: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
-        await activeTimeline.sendVideo(url: url,
-                                       thumbnailURL: thumbnailURL,
-                                       videoInfo: videoInfo,
-                                       caption: caption,
-                                       requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+        switch await activeTimeline.sendVideo(url: url,
+                                              thumbnailURL: thumbnailURL,
+                                              videoInfo: videoInfo,
+                                              caption: caption,
+                                              requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
+        case .success:
+            callbacks.send(.sentMessage)
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
     }
     
     func sendLocation(body: String,
@@ -351,22 +376,40 @@ class TimelineController: TimelineControllerProtocol {
                       description: String?,
                       zoomLevel: UInt8?,
                       assetType: AssetType?) async -> Result<Void, TimelineControllerError> {
-        await activeTimeline.sendLocation(body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType).mapError(TimelineControllerError.timelineProxyError)
+        switch await activeTimeline.sendLocation(body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType).mapError(TimelineControllerError.timelineProxyError) {
+        case .success:
+            callbacks.send(.sentMessage)
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
     }
     
     func sendVoiceMessage(url: URL,
                           audioInfo: MatrixRustSDK.AudioInfo,
                           waveform: [Float],
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
-        await activeTimeline.sendVoiceMessage(url: url,
-                                              audioInfo: audioInfo,
-                                              waveform: waveform, requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+        switch await activeTimeline.sendVoiceMessage(url: url,
+                                                     audioInfo: audioInfo,
+                                                     waveform: waveform, requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
+        case .success:
+            callbacks.send(.sentMessage)
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
     }
     
     // MARK: - Polls
     
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
-        await activeTimeline.createPoll(question: question, answers: answers, pollKind: pollKind).mapError(TimelineControllerError.timelineProxyError)
+        switch await activeTimeline.createPoll(question: question, answers: answers, pollKind: pollKind).mapError(TimelineControllerError.timelineProxyError) {
+        case .success:
+            callbacks.send(.sentMessage)
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
     }
     
     func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
