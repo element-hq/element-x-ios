@@ -26,6 +26,7 @@ Only once all of the above is met should you open a PR with your proposed change
 	*  If the PR doesn't show minimal effort on your part it will be closed
 	*  Try to write the description yourself, we don't have the bandwidth for LLM essays. The code needs to speak for itself.
 * We use git for version control and GitHub for reviews, so in order to make everybody's life easier please:
+	* Keep the existing pull request template
 	* Don't submit large PRs, especially if not previously talked about. Anything above 200 lines is large (excluding generated code e.g. tests, translations, mocks)
 	* Please don't open unfinished PRs and expect us to fill in the details
 	* If you would like our opinion/direction on unfinished code please link your branch or idea in the ticket
