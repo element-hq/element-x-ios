@@ -472,6 +472,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                             state.timelineState.focussedEvent = nil
                         }
                     }
+                case .sentMessage:
+                    actionsSubject.send(.composer(action: .clear))
                 }
             }
             .store(in: &cancellables)
@@ -763,8 +765,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         guard !message.isEmpty else {
             fatalError("This message should never be empty")
         }
-
-        actionsSubject.send(.composer(action: .clear))
         
         switch mode {
         case .reply(let eventID, _, _):
