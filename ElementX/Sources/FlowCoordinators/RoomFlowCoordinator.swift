@@ -426,11 +426,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (_, .presentReportContent, .reportContent(let itemID, let senderID, _)):
                 presentReportContent(for: itemID, from: senderID)
                 
-            case (_, .presentMediaUploadPicker, .mediaUploadPicker(let mode, _)):
+            case (_, .presentMediaUploadPicker, .mediaUploadPicker(let mode, let caption, _)):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
                     fatalError("Missing required TimelineController")
                 }
-                presentMediaUploadPickerWithMode(mode, timelineController: timelineController, animated: animated)
+                presentMediaUploadPickerWithMode(mode, caption: caption, timelineController: timelineController, animated: animated)
                 
             case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji, _)):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
@@ -537,12 +537,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
                 presentPollForm(mode: mode, timelineController: timelineController)
                 
-            case (_, .presentMediaUploadPreview, .mediaUploadPreview(let mediaURLs, _)):
+            case (_, .presentMediaUploadPreview, .mediaUploadPreview(let mediaURLs, let caption, _)):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
                     fatalError("Missing required TimelineController")
                 }
                 
-                presentMediaUploadPreviewScreen(for: mediaURLs, timelineController: timelineController, animated: animated)
+                presentMediaUploadPreviewScreen(for: mediaURLs, caption: caption, timelineController: timelineController, animated: animated)
                 
             case (_, .presentInviteUsersScreen(let flow), .inviteUsersScreen):
                 presentInviteUsersScreen(flow: flow)
@@ -600,7 +600,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .eventFocus(let focusedEvent):
                     roomScreenCoordinator?.focusOnEvent(focusedEvent)
                 case .share(.mediaFiles(_, let mediaFiles)):
-                    stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaFiles.map(\.url)),
+                    stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaFiles.map(\.url), caption: nil),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .share(.text(_, let text)):
                     roomScreenCoordinator?.shareText(text)
@@ -645,7 +645,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             
         switch presentationAction {
         case .share(.mediaFiles(_, let mediaFiles)):
-            stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaFiles.map(\.url)),
+            stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaFiles.map(\.url), caption: nil),
                                   userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
         case .thread(let rootEventID, let focusEvent):
             stateMachine.tryEvent(.presentThread(threadRootEventID: rootEventID, focusEventID: focusEvent?.eventID))
@@ -702,11 +702,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentReportContent(let itemID, let senderID):
                     stateMachine.tryEvent(.presentReportContent(itemID: itemID,
                                                                 senderID: senderID))
-                case .presentMediaUploadPicker(let mode):
-                    stateMachine.tryEvent(.presentMediaUploadPicker(mode: mode),
+                case .presentMediaUploadPicker(let mode, let caption):
+                    stateMachine.tryEvent(.presentMediaUploadPicker(mode: mode, caption: caption),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-                case .presentMediaUploadPreviewScreen(let url):
-                    stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: url),
+                case .presentMediaUploadPreviewScreen(let url, let caption):
+                    stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: url, caption: caption),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .presentEmojiPicker(let itemID, let selectedEmojis):
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis),
@@ -814,11 +814,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .presentReportContent(let itemID, let senderID):
                 stateMachine.tryEvent(.presentReportContent(itemID: itemID, senderID: senderID))
-            case .presentMediaUploadPicker(let mode):
-                stateMachine.tryEvent(.presentMediaUploadPicker(mode: mode),
+            case .presentMediaUploadPicker(let mode, let caption):
+                stateMachine.tryEvent(.presentMediaUploadPicker(mode: mode, caption: caption),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-            case .presentMediaUploadPreviewScreen(let mediaURLs):
-                stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaURLs),
+            case .presentMediaUploadPreviewScreen(let mediaURLs, let caption):
+                stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaURLs, caption: caption),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
             case .presentLocationPicker:
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker(shouldShowLiveLocationOption: false)),
@@ -1079,6 +1079,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentMediaUploadPickerWithMode(_ mode: MediaPickerScreenMode,
+                                                  caption: NSAttributedString,
                                                   timelineController: TimelineControllerProtocol,
                                                   animated: Bool) {
         let stackCoordinator = NavigationStackCoordinator()
@@ -1093,7 +1094,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .cancel:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .selectedMediaAtURLs(let urls):
-                stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: urls),
+                stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: urls, caption: caption),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
             }
         }
@@ -1108,6 +1109,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     private func presentMediaUploadPreviewScreen(for mediaURLs: [URL],
+                                                 caption: NSAttributedString?,
                                                  timelineController: TimelineControllerProtocol,
                                                  animated: Bool) {
         let stackCoordinator = NavigationStackCoordinator()
@@ -1119,6 +1121,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
 
         let parameters = MediaUploadPreviewScreenCoordinatorParameters(mediaURLs: mediaURLs,
+                                                                       caption: caption,
                                                                        title: title,
                                                                        isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                                        shouldShowCaptionWarning: flowParameters.appSettings.shouldShowMediaCaptionWarning,

@@ -34,8 +34,8 @@ struct RoomScreenCoordinatorParameters {
 
 enum RoomScreenCoordinatorAction {
     case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
-    case presentMediaUploadPicker(mode: MediaPickerScreenMode)
-    case presentMediaUploadPreviewScreen(mediaURLs: [URL])
+    case presentMediaUploadPicker(mode: MediaPickerScreenMode, caption: NSAttributedString)
+    case presentMediaUploadPreviewScreen(mediaURLs: [URL], caption: NSAttributedString)
     case presentRoomDetails
     case presentLocationPicker
     case presentPollForm(mode: PollFormMode)
@@ -122,11 +122,14 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
                 case .displayCameraPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .camera, selectionType: .multiple)))
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .camera, selectionType: .multiple),
+                                                                  caption: composerViewModel.context.plainComposerText))
                 case .displayMediaPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .photoLibrary, selectionType: .multiple)))
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .photoLibrary, selectionType: .multiple),
+                                                                  caption: composerViewModel.context.plainComposerText))
                 case .displayDocumentPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents(), selectionType: .multiple)))
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents(), selectionType: .multiple),
+                                                                  caption: composerViewModel.context.plainComposerText))
                 case .displayMediaPreview(let mediaPreviewViewModel):
                     roomViewModel.displayMediaPreview(mediaPreviewViewModel)
                 case .displayLocationPicker:
@@ -134,7 +137,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 case .displayPollForm(let mode):
                     actionsSubject.send(.presentPollForm(mode: mode))
                 case .displayMediaUploadPreviewScreen(let mediaURLs):
-                    actionsSubject.send(.presentMediaUploadPreviewScreen(mediaURLs: mediaURLs))
+                    actionsSubject.send(.presentMediaUploadPreviewScreen(mediaURLs: mediaURLs,
+                                                                         caption: composerViewModel.context.plainComposerText))
                 case .displaySenderDetails(userID: let userID):
                     actionsSubject.send(.presentRoomMemberDetails(userID: userID))
                 case .displayMessageForwarding(let forwardingItem):
