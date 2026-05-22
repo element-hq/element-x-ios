@@ -39,7 +39,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     init(elementCallService: ElementCallServiceProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
-         appHooks: AppHooks,
          appSettings: AppSettings,
          analyticsService: AnalyticsServiceProtocol) {
         self.elementCallService = elementCallService
@@ -51,8 +50,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         guard let deviceID = configuration.clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
         widgetDriver = configuration.roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         
-        super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript,
-                                                         certificateValidator: appHooks.certificateValidatorHook))
+        super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript))
         
         elementCallService.actions
             .receive(on: DispatchQueue.main)

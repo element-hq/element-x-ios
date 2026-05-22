@@ -74,7 +74,6 @@ private struct CallView: UIViewRepresentable {
     @MainActor
     class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate, AVPictureInPictureControllerDelegate {
         private weak var viewModelContext: CallScreenViewModel.Context?
-        private let certificateValidator: CertificateValidatorHookProtocol
         
         private var webView: WKWebView!
         private var pictureInPictureController: AVPictureInPictureController?
@@ -88,7 +87,6 @@ private struct CallView: UIViewRepresentable {
         
         init(viewModelContext: CallScreenViewModel.Context) {
             self.viewModelContext = viewModelContext
-            certificateValidator = viewModelContext.viewState.certificateValidator
             pictureInPictureViewController = AVPictureInPictureVideoCallViewController()
             pictureInPictureViewController.preferredContentSize = CGSize(width: 1920, height: 1080)
             
@@ -238,10 +236,6 @@ private struct CallView: UIViewRepresentable {
         
         // MARK: - WKNavigationDelegate
         
-        func webView(_ webView: WKWebView, respondTo challenge: URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
-            await certificateValidator.respondTo(challenge)
-        }
-        
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
             if let navigationURL = navigationAction.request.url {
                 // Do not allow navigation to a different URL scheme.
@@ -351,7 +345,13 @@ private struct CallView: UIViewRepresentable {
 // MARK: - Previews
 
 struct CallScreen_Previews: PreviewProvider {
-    static let viewModel = {
+    static let viewModel = makeViewModel()
+    
+    static var previews: some View {
+        CallScreen(context: viewModel.context)
+    }
+    
+    static func makeViewModel() -> CallScreenViewModel {
         let clientProxy = ClientProxyMock()
         clientProxy.deviceID = "call-device-id"
         
@@ -373,12 +373,7 @@ struct CallScreen_Previews: PreviewProvider {
                                                         voiceOnly: false,
                                                         colorScheme: .light),
                                    allowPictureInPicture: false,
-                                   appHooks: AppHooks(),
                                    appSettings: .volatile(),
                                    analyticsService: AnalyticsServiceMock.default)
-    }()
-    
-    static var previews: some View {
-        CallScreen(context: viewModel.context)
     }
 }

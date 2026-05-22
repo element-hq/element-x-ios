@@ -42,15 +42,6 @@ final class AppHooks: AppHooksProtocol {
         _bugReportHook.withLock { $0 = hook }
     }
     
-    private let _certificateValidatorHook: Mutex<CertificateValidatorHookProtocol> = Mutex(DefaultCertificateValidator())
-    var certificateValidatorHook: CertificateValidatorHookProtocol {
-        _certificateValidatorHook.withLock { $0 }
-    }
-    
-    func registerCertificateValidatorHook(_ hook: CertificateValidatorHookProtocol) {
-        _certificateValidatorHook.withLock { $0 = hook }
-    }
-    
     private let _oAuthPresenterHook: Mutex<OAuthPresenterHookProtocol> = Mutex(DefaultOAuthPresenterHook())
     var oAuthPresenterHook: OAuthPresenterHookProtocol {
         _oAuthPresenterHook.withLock { $0 }
