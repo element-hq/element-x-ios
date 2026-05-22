@@ -46,11 +46,14 @@ PRs must meet these rules. Prefer Xcode MCP tools over terminal commands.
 
 ## Pull Request Guidelines
 
-- Use sentence-style commit/PR messages (no conventional commits).
-- Apply exactly **one** `pr-` label (see `.github/release.yml`).
-- PR title = changelog entry — make it descriptive; no "Fixes #…" prefixes.
-- Include screenshots/videos for visual changes.
-- Keep PRs under 1000 additions; split large changes.
+- Sentence-style titles (no conventional commits).
+- Exactly one `pr-` label (see `.github/release.yml`).
+- Title = changelog entry — descriptive, no "Fixes #…".
+- Leave description template for the developer.
+- Screenshots/videos for visual changes.
+- 500 additions max — split large changes.
+- Commits need a title and description; no tiny or massive commits.
+- No history rewrites.
 
 ---
 
