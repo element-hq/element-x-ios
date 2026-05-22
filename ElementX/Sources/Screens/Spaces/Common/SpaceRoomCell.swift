@@ -81,6 +81,8 @@ struct SpaceRoomCell: View {
                 }
             }
             .padding(.horizontal, horizontalInsets)
+            // Ensure the EditMode transition stays inside this cell if there are other insertions/removals in the list.
+            .geometryGroup()
             .accessibilityElement(children: .combine)
         }
         .buttonStyle(SpaceRoomCellButtonStyle(isHighlighted: isHighlighted))
