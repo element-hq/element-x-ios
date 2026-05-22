@@ -8,14 +8,13 @@
 
 import Foundation
 
-struct AttributedStringBuilderComponent: Hashable, Identifiable {
+struct AttributedStringBuilderComponent: Hashable {
     enum ComponentType {
         case plainText
         case blockquote
         case codeBlock
     }
-    
-    let id: String
+
     let attributedString: AttributedString
     let type: ComponentType
 }

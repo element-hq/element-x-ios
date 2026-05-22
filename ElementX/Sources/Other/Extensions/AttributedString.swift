@@ -37,8 +37,7 @@ extension AttributedString {
                 .plainText
             }
                     
-            components.append(AttributedStringBuilderComponent(id: String(attributedString.characters),
-                                                               attributedString: attributedString,
+            components.append(AttributedStringBuilderComponent(attributedString: attributedString,
                                                                type: componentType))
         }
         

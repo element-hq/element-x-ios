@@ -68,14 +68,13 @@ struct FormattedBodyText: View {
         // timestamp would land on top of it, so append an empty trailing plain-text
         // component that exists solely to reserve space for the timestamp underneath.
         if trailingReservedSize != .zero, let last = components.last, last.type != .plainText {
-            components.append(AttributedStringBuilderComponent(id: "trailingTimestampSpacer",
-                                                               attributedString: AttributedString(),
+            components.append(AttributedStringBuilderComponent(attributedString: AttributedString(),
                                                                type: .plainText))
         }
         let lastPlainTextIndex = components.lastIndex { $0.type == .plainText }
-        
+
         return TimelineBubbleLayout(spacing: 8) {
-            ForEach(Array(components.enumerated()), id: \.element.id) { index, component in
+            ForEach(Array(components.enumerated()), id: \.offset) { index, component in
                 switch component.type {
                 case .blockquote:
                     BlockquoteView(attributedString: component.attributedString, mode: .rendering)
@@ -96,10 +95,10 @@ struct FormattedBodyText: View {
                         .timelineBubbleLayoutSize(.natural)
                 }
             }
-            
+
             // Make a second iteration through the components adding naturally sized versions of the
             // block quotes and code blocks which are used for layout calculations but won't be rendered.
-            ForEach(components) { component in
+            ForEach(Array(components.enumerated()), id: \.offset) { _, component in
                 switch component.type {
                 case .blockquote:
                     BlockquoteView(attributedString: component.attributedString, mode: .layout)
