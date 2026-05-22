@@ -117,7 +117,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
         let viewModel = ServerSelectionScreenViewModel(authenticationService: authenticationService,
                                                        authenticationFlow: .login,
                                                        appSettings: .volatile(),
-                                                       userIndicatorController: UserIndicatorControllerMock.default)
+                                                       userIndicatorController: UserIndicatorControllerMock())
         viewModel.context.homeserverAddress = homeserverAddress
         if homeserverAddress == "thisisbad" {
             viewModel.context.send(viewAction: .confirm)

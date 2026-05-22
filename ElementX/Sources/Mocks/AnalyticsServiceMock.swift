@@ -6,11 +6,17 @@
 //
 
 extension AnalyticsServiceMock {
-    static var `default`: AnalyticsServiceMock {
-        let mock = AnalyticsServiceMock()
-        mock.isEnabled = false
-        mock.shouldShowAnalyticsPrompt = false
-        mock.signpost = Signposter()
-        return mock
+    struct Configuration {
+        var isEnabled = false
+        var shouldShowAnalyticsPrompt = false
+        var signpost = Signposter()
+    }
+    
+    convenience init(_ configuration: Configuration) {
+        self.init()
+        
+        isEnabled = configuration.isEnabled
+        shouldShowAnalyticsPrompt = configuration.shouldShowAnalyticsPrompt
+        signpost = configuration.signpost
     }
 }

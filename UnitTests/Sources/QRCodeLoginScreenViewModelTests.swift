@@ -242,7 +242,7 @@ struct QRCodeLoginScreenViewModelTests {
             screenMode = .linkMobile(linkNewDeviceService.linkMobileDevice(), clientProxy)
         }
         
-        appMediator = AppMediatorMock.default
+        appMediator = AppMediatorMock(.init())
         viewModel = QRCodeLoginScreenViewModel(mode: screenMode,
                                                canSignInManually: true,
                                                appMediator: appMediator)

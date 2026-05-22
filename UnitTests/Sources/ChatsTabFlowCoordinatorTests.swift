@@ -46,10 +46,10 @@ struct ChatsTabFlowCoordinatorTests {
                                                   timelineControllerFactory: timelineControllerFactory,
                                                   emojiProvider: EmojiProvider(appSettings: appSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
-                                                  appMediator: AppMediatorMock.default,
+                                                  appMediator: AppMediatorMock(.init()),
                                                   appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: AnalyticsServiceMock.default,
+                                                  analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: notificationManager,
                                                   stateMachineFactory: stateMachineFactory)

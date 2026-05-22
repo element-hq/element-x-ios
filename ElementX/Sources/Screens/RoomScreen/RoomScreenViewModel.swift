@@ -463,8 +463,8 @@ extension RoomScreenViewModel {
                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                             appSettings: .volatile(),
                             appHooks: appHooks,
-                            analyticsService: AnalyticsServiceMock.default,
-                            userIndicatorController: UserIndicatorControllerMock.default)
+                            analyticsService: AnalyticsServiceMock(.init()),
+                            userIndicatorController: UserIndicatorControllerMock())
     }
 }
 

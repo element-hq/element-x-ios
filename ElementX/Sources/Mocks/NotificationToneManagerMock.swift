@@ -6,9 +6,13 @@
 //
 
 extension NotificationToneManagerMock {
-    static var `default`: NotificationToneManagerMock {
-        let mock = NotificationToneManagerMock()
-        mock.customTonesReturnValue = []
-        return mock
+    struct Configuration {
+        let customTones: [NotificationTone] = []
+    }
+    
+    convenience init(_ configuration: Configuration) {
+        self.init()
+        
+        customTonesReturnValue = configuration.customTones
     }
 }

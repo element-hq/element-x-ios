@@ -162,7 +162,7 @@ struct LoginScreen_Previews: PreviewProvider, TestablePreview {
                                              loginHint: nil,
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              appSettings: .volatile(),
-                                             analytics: AnalyticsServiceMock.default)
+                                             analytics: AnalyticsServiceMock(.init()))
         
         if withCredentials {
             viewModel.context.username = "alice"

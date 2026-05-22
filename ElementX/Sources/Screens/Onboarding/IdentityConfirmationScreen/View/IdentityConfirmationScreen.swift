@@ -141,6 +141,6 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         
         return IdentityConfirmationScreenViewModel(userSession: userSession,
                                                    appSettings: .volatile(),
-                                                   userIndicatorController: UserIndicatorControllerMock.default)
+                                                   userIndicatorController: UserIndicatorControllerMock())
     }
 }

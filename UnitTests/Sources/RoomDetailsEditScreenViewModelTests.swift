@@ -164,7 +164,7 @@ struct RoomDetailsEditScreenViewModelTests {
     // MARK: - Private
     
     private mutating func setupViewModel(roomProxyConfiguration: JoinedRoomProxyMockConfiguration) {
-        userIndicatorController = UserIndicatorControllerMock.default
+        userIndicatorController = UserIndicatorControllerMock()
         viewModel = .init(roomProxy: JoinedRoomProxyMock(roomProxyConfiguration),
                           userSession: UserSessionMock(.init()),
                           mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: .volatile()),
