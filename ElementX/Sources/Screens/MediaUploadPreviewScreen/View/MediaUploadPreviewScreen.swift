@@ -367,6 +367,7 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
     static let testURL = Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png")
     
     static let viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: [snapshotURL],
+                                                             caption: nil,
                                                              title: "App Icon.png",
                                                              isRoomEncrypted: true,
                                                              shouldShowCaptionWarning: true,
