@@ -162,6 +162,30 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                sender: .test,
                                                content: .init(body: "😮"))
 
+    static let endingWithBlockquote: TextRoomTimelineItem = {
+        let builder = AttributedStringBuilder(cacheKey: "preview", mentionBuilder: MentionBuilder())
+        let attributedString = builder.fromHTML("<p>Some text before</p><blockquote>A quoted line at the end</blockquote>")
+        return TextRoomTimelineItem(id: .randomEvent,
+                                    timestamp: .mock,
+                                    isOutgoing: true,
+                                    isEditable: false,
+                                    canBeRepliedTo: true,
+                                    sender: .test,
+                                    content: .init(body: "", formattedBody: attributedString))
+    }()
+
+    static let endingWithCodeblock: TextRoomTimelineItem = {
+        let builder = AttributedStringBuilder(cacheKey: "preview", mentionBuilder: MentionBuilder())
+        let attributedString = builder.fromHTML("<p>Some text before</p><pre><code>let x = 42</code></pre>")
+        return TextRoomTimelineItem(id: .randomEvent,
+                                    timestamp: .mock,
+                                    isOutgoing: true,
+                                    isEditable: false,
+                                    canBeRepliedTo: true,
+                                    sender: .test,
+                                    content: .init(body: "", formattedBody: attributedString))
+    }()
+
     static var testView: some View {
         VStack(spacing: 0) {
             TextRoomTimelineView(timelineItem: base)
@@ -170,6 +194,8 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
             TextRoomTimelineView(timelineItem: sendingNonLast)
             TextRoomTimelineView(timelineItem: sendingLast)
             TextRoomTimelineView(timelineItem: failed)
+            TextRoomTimelineView(timelineItem: endingWithBlockquote)
+            TextRoomTimelineView(timelineItem: endingWithCodeblock)
         }
     }
 
