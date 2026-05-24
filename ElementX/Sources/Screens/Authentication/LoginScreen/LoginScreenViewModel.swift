@@ -15,7 +15,7 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
     private let authenticationService: AuthenticationServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     
     private var actionsSubject: PassthroughSubject<LoginScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<LoginScreenViewModelAction, Never> {
@@ -26,7 +26,7 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
          loginHint: String?,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings,
-         analytics: AnalyticsService) {
+         analytics: AnalyticsServiceProtocol) {
         self.authenticationService = authenticationService
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings

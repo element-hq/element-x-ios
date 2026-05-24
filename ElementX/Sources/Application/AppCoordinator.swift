@@ -22,7 +22,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let targetConfiguration: Target.ConfigurationResult
     private let appMediator: AppMediator
     private let appSettings: AppSettings
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let appDelegate: AppDelegate
@@ -78,7 +78,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let networkMonitor = NetworkMonitor()
         appMediator = AppMediator(windowManager: windowManager, networkMonitor: networkMonitor)
         
-        let appSettings = appHooks.appSettingsHook.configure(AppSettings())
+        guard let userDefaults = TrackedUserDefaults(suiteName: AppSettings.suiteName) else {
+            fatalError("Catastrophic error retrieving user defaults for \(AppSettings.suiteName)")
+        }
+        let appSettings = appHooks.appSettingsHook.configure(AppSettings(store: userDefaults))
         self.appSettings = appSettings
         
         targetConfiguration = Target.mainApp.configure(logLevel: appSettings.logLevel,
@@ -93,7 +96,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("\(appName) \(appVersion) (\(appBuild))")
         
         if ProcessInfo.processInfo.environment["RESET_APP_SETTINGS"].map(Bool.init) == true {
-            AppSettings.resetAllSettings()
+            appSettings.resetAllSettings()
         }
         
         self.appDelegate = appDelegate
@@ -211,10 +214,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         stateMachine.processEvent(.startWithExistingSession)
     }
 
-    func stop() {
-        hideLoadingIndicator()
-    }
-    
     func toPresentable() -> AnyView {
         AnyView(navigationRootCoordinator.toPresentable()
             .environment(\.analyticsService, analyticsService)
@@ -548,7 +547,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     /// - Parameter includingSettings: Whether to additionally wipe the user's app settings too.
     private func wipeUserData(includingSettings: Bool = false) {
         if includingSettings {
-            AppSettings.resetAllSettings()
+            appSettings.resetAllSettings()
             appLockFlowCoordinator.appLockService.disable()
         }
         userSessionStore.reset()
@@ -834,7 +833,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             userSessionStore.logout(userSession: userSession)
             tearDownUserSession()
             
-            AppSettings.resetSessionSpecificSettings()
+            appSettings.resetSessionSpecificSettings()
             appHooks.remoteSettingsHook.reset(appSettings)
             
             // Reset analytics
@@ -950,7 +949,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    private static func setupSentry(bugReportService: BugReportServiceProtocol, appSettings: AppSettings, analytics: AnalyticsService) {
+    private static func setupSentry(bugReportService: BugReportServiceProtocol, appSettings: AppSettings, analytics: AnalyticsServiceProtocol) {
         guard let bugReportSentryURL = appSettings.bugReportSentryURL else { return }
         
         let options: Options = .init()
@@ -1110,6 +1109,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                selector: #selector(applicationWillResignActive),
                                                name: UIApplication.willResignActiveNotification,
                                                object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationDidEnterBackground),
+                                               name: UIApplication.didEnterBackgroundNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillEnterForeground),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationDidBecomeActive),
                                                name: UIApplication.didBecomeActiveNotification,
@@ -1132,15 +1141,21 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     @objc
     private func applicationWillTerminate() {
+        MXLog.info("Application will terminate")
         stopSync(isBackgroundTask: false)
     }
 
     @objc
-    private func applicationWillResignActive() {
-        MXLog.info("Application will resign active")
-
+    private func applicationDidEnterBackground() {
+        MXLog.info("Application did enter background")
+        
         scheduleDelayedSyncStop()
         scheduleBackgroundAppRefresh()
+    }
+    
+    @objc
+    private func applicationWillResignActive() {
+        MXLog.info("Application will resign active")
     }
     
     private func scheduleDelayedSyncStop() {
@@ -1161,10 +1176,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     @objc
-    private func applicationDidBecomeActive() {
-        MXLog.info("Application did become active")
+    private func applicationWillEnterForeground() {
+        MXLog.info("Application will enter foreground")
         endActiveBackgroundTask()
         startSync()
+    }
+    
+    @objc
+    private func applicationDidBecomeActive() {
+        MXLog.info("Application did become active")
     }
     
     private func endActiveBackgroundTask() {

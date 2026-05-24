@@ -15,9 +15,9 @@ enum ExpiringTaskRunnerError: Error {
 actor ExpiringTaskRunner<T: Sendable> {
     private var continuation: CheckedContinuation<T, Error>?
     
-    private var task: () async throws -> T
-    
-    init(_ task: @escaping () async throws -> T) {
+    private var task: @Sendable () async throws -> T
+
+    init(_ task: @escaping @Sendable () async throws -> T) {
         self.task = task
     }
     

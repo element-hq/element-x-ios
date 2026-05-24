@@ -36,7 +36,7 @@ struct CommonFlowParameters {
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let appHooks: AppHooks
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let notificationManager: NotificationManagerProtocol
     let stateMachineFactory: StateMachineFactoryProtocol

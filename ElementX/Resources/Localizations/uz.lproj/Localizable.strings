@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Kengaytirilgan sozlamalar";
 "common_an_image" = "rasm";
 "common_analytics" = "Analitika";
-"common_android_fetching_notifications_title" = "Bildirishnomalar sinxronlanmoqda...";
 "common_android_shortcuts_remove_reason_left_room" = "Siz xonani tark etdingiz";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Siz sessiyadan chiqdingiz";
 "common_appearance" = "Ko'rinish";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Xonani tark etdi";
 "common_current_user_left_space" = "Tar etilgan maydon";
 "common_current_user_rejected_invite" = "Taklif rad etildi";
-"common_dark" = "Tungi";
 "common_date_date_at_time" = "%1$@da %2$@";
 "common_date_this_month" = "Bu oy";
 "common_decryption_error" = "Shifrni ochish xatosi";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Ushbu Matrix identifikatori topilmadi, shuning uchun taklif qabul qilinmasligi mumkin.";
 "common_leaving_room" = "Xonadan chiqish";
 "common_leaving_space" = "Maydonni tark etish";
-"common_light" = "Nur";
 "common_line_copied_to_clipboard" = "Satr vaqtinchalik xotiraga nusxalandi";
 "common_link_copied_to_clipboard" = "Havola vaqtinchalik xotiraga nusxalandi";
 "common_link_new_device" = "Yangi qurilmani ulang";
@@ -350,7 +347,6 @@
 "common_suggested" = "Tavsiya etilgan";
 "common_suggestions" = "Tavsiyalar";
 "common_syncing" = "Sinxronlash";
-"common_system" = "Tizim";
 "common_text" = "Matn";
 "common_third_party_notices" = "Uchinchi tomon bildirishnomalari";
 "common_thread" = "Ip";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ aʼzoligiga nomaʼlum oʻzgarishlar kiritdi";
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Tungi";
+"theme_light" = "Nur";
+"theme_system" = "Tizim";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Bu qurilmada tarixiy xabarlar mavjud emas";
 "timeline_decryption_failure_historical_event_unverified_device" = "Tarixiy xabarlarga kirish uchun bu qurilmani tasdiqlashingiz kerak";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Sizni ushbu xabarga ruxsatingiz yoʻq";

@@ -14,7 +14,7 @@ struct HomeScreenCoordinatorParameters {
     let bugReportService: BugReportServiceProtocol
     let selectedRoomPublisher: CurrentValuePublisher<String?, Never>
     let appSettings: AppSettings
-    let analyticsService: AnalyticsService
+    let analyticsService: AnalyticsServiceProtocol
     let notificationManager: NotificationManagerProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }

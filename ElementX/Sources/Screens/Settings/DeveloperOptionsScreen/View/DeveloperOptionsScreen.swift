@@ -87,7 +87,12 @@ struct DeveloperOptionsScreen: View {
                     Text("Can leak the device IP address when loading link metadata.")
                         .foregroundStyle(.compound.textCriticalPrimary)
                 }
-                
+
+                Toggle(isOn: $context.jumpToReadMarkerEnabled) {
+                    Text("Jump to unread")
+                    Text("Adds a button to jump to the read marker, plus a presence dot on the scroll-to-bottom button when new messages arrive while scrolled away.")
+                }
+
                 Toggle(isOn: $context.knockingEnabled) {
                     Text("Knocking")
                     Text("Ask to join rooms")
@@ -244,8 +249,8 @@ private extension Set<TraceLogPack> {
 // MARK: - Previews
 
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
-    static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: AppSettings(),
-                                                           elementCallBaseURL: AppSettings().elementCallBaseURL,
+    static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: AppSettings.volatile(),
+                                                           elementCallBaseURL: AppSettings.volatile().elementCallBaseURL,
                                                            appHooks: AppHooks(),
                                                            clientProxy: ClientProxyMock(.init()))
     

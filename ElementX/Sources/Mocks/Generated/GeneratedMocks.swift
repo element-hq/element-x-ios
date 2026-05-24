@@ -256,6 +256,761 @@ class AnalyticsClientMock: AnalyticsClientProtocol, @unchecked Sendable {
         updateUserPropertiesClosure?(event)
     }
 }
+class AnalyticsServiceMock: AnalyticsServiceProtocol, @unchecked Sendable {
+    var signpost: Signposter {
+        get { return underlyingSignpost }
+        set(value) { underlyingSignpost = value }
+    }
+    var underlyingSignpost: Signposter!
+    var shouldShowAnalyticsPrompt: Bool {
+        get { return underlyingShouldShowAnalyticsPrompt }
+        set(value) { underlyingShouldShowAnalyticsPrompt = value }
+    }
+    var underlyingShouldShowAnalyticsPrompt: Bool!
+    var isEnabled: Bool {
+        get { return underlyingIsEnabled }
+        set(value) { underlyingIsEnabled = value }
+    }
+    var underlyingIsEnabled: Bool!
+
+    //MARK: - optIn
+
+    var optInUnderlyingCallsCount = 0
+    var optInCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return optInUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = optInUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                optInUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    optInUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var optInCalled: Bool {
+        return optInCallsCount > 0
+    }
+    var optInClosure: (() -> Void)?
+
+    func optIn() {
+        optInCallsCount += 1
+        optInClosure?()
+    }
+    //MARK: - optOut
+
+    var optOutUnderlyingCallsCount = 0
+    var optOutCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return optOutUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = optOutUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                optOutUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    optOutUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var optOutCalled: Bool {
+        return optOutCallsCount > 0
+    }
+    var optOutClosure: (() -> Void)?
+
+    func optOut() {
+        optOutCallsCount += 1
+        optOutClosure?()
+    }
+    //MARK: - startIfEnabled
+
+    var startIfEnabledUnderlyingCallsCount = 0
+    var startIfEnabledCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return startIfEnabledUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = startIfEnabledUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                startIfEnabledUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    startIfEnabledUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var startIfEnabledCalled: Bool {
+        return startIfEnabledCallsCount > 0
+    }
+    var startIfEnabledClosure: (() -> Void)?
+
+    func startIfEnabled() {
+        startIfEnabledCallsCount += 1
+        startIfEnabledClosure?()
+    }
+    //MARK: - reset
+
+    var resetUnderlyingCallsCount = 0
+    var resetCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() -> Void)?
+
+    func reset() {
+        resetCallsCount += 1
+        resetClosure?()
+    }
+    //MARK: - resetConsentState
+
+    var resetConsentStateUnderlyingCallsCount = 0
+    var resetConsentStateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetConsentStateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetConsentStateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetConsentStateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetConsentStateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var resetConsentStateCalled: Bool {
+        return resetConsentStateCallsCount > 0
+    }
+    var resetConsentStateClosure: (() -> Void)?
+
+    func resetConsentState() {
+        resetConsentStateCallsCount += 1
+        resetConsentStateClosure?()
+    }
+    //MARK: - track
+
+    var trackScreenDurationUnderlyingCallsCount = 0
+    var trackScreenDurationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackScreenDurationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackScreenDurationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackScreenDurationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackScreenDurationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackScreenDurationCalled: Bool {
+        return trackScreenDurationCallsCount > 0
+    }
+    var trackScreenDurationReceivedArguments: (screen: AnalyticsEvent.MobileScreen.ScreenName, milliseconds: Int?)?
+    var trackScreenDurationReceivedInvocations: [(screen: AnalyticsEvent.MobileScreen.ScreenName, milliseconds: Int?)] = []
+    var trackScreenDurationClosure: ((AnalyticsEvent.MobileScreen.ScreenName, Int?) -> Void)?
+
+    func track(screen: AnalyticsEvent.MobileScreen.ScreenName, duration milliseconds: Int?) {
+        trackScreenDurationCallsCount += 1
+        trackScreenDurationReceivedArguments = (screen: screen, milliseconds: milliseconds)
+        DispatchQueue.main.async {
+            self.trackScreenDurationReceivedInvocations.append((screen: screen, milliseconds: milliseconds))
+        }
+        trackScreenDurationClosure?(screen, milliseconds)
+    }
+    //MARK: - trackInteraction
+
+    var trackInteractionIndexNameUnderlyingCallsCount = 0
+    var trackInteractionIndexNameCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackInteractionIndexNameUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackInteractionIndexNameUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackInteractionIndexNameUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackInteractionIndexNameUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackInteractionIndexNameCalled: Bool {
+        return trackInteractionIndexNameCallsCount > 0
+    }
+    var trackInteractionIndexNameReceivedArguments: (index: Int?, name: AnalyticsEvent.Interaction.Name)?
+    var trackInteractionIndexNameReceivedInvocations: [(index: Int?, name: AnalyticsEvent.Interaction.Name)] = []
+    var trackInteractionIndexNameClosure: ((Int?, AnalyticsEvent.Interaction.Name) -> Void)?
+
+    func trackInteraction(index: Int?, name: AnalyticsEvent.Interaction.Name) {
+        trackInteractionIndexNameCallsCount += 1
+        trackInteractionIndexNameReceivedArguments = (index: index, name: name)
+        DispatchQueue.main.async {
+            self.trackInteractionIndexNameReceivedInvocations.append((index: index, name: name))
+        }
+        trackInteractionIndexNameClosure?(index, name)
+    }
+    //MARK: - trackError
+
+    var trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserUnderlyingCallsCount = 0
+    var trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserCalled: Bool {
+        return trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserCallsCount > 0
+    }
+    var trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserReceivedArguments: (context: String?, domain: AnalyticsEvent.Error.Domain, name: AnalyticsEvent.Error.Name, timeToDecryptMillis: Int?, eventLocalAgeMillis: Int?, isFederated: Bool?, isMatrixDotOrg: Bool?, userTrustsOwnIdentity: Bool?, wasVisibleToUser: Bool?)?
+    var trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserReceivedInvocations: [(context: String?, domain: AnalyticsEvent.Error.Domain, name: AnalyticsEvent.Error.Name, timeToDecryptMillis: Int?, eventLocalAgeMillis: Int?, isFederated: Bool?, isMatrixDotOrg: Bool?, userTrustsOwnIdentity: Bool?, wasVisibleToUser: Bool?)] = []
+    var trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserClosure: ((String?, AnalyticsEvent.Error.Domain, AnalyticsEvent.Error.Name, Int?, Int?, Bool?, Bool?, Bool?, Bool?) -> Void)?
+
+    func trackError(context: String?, domain: AnalyticsEvent.Error.Domain, name: AnalyticsEvent.Error.Name, timeToDecryptMillis: Int?, eventLocalAgeMillis: Int?, isFederated: Bool?, isMatrixDotOrg: Bool?, userTrustsOwnIdentity: Bool?, wasVisibleToUser: Bool?) {
+        trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserCallsCount += 1
+        trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserReceivedArguments = (context: context, domain: domain, name: name, timeToDecryptMillis: timeToDecryptMillis, eventLocalAgeMillis: eventLocalAgeMillis, isFederated: isFederated, isMatrixDotOrg: isMatrixDotOrg, userTrustsOwnIdentity: userTrustsOwnIdentity, wasVisibleToUser: wasVisibleToUser)
+        DispatchQueue.main.async {
+            self.trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserReceivedInvocations.append((context: context, domain: domain, name: name, timeToDecryptMillis: timeToDecryptMillis, eventLocalAgeMillis: eventLocalAgeMillis, isFederated: isFederated, isMatrixDotOrg: isMatrixDotOrg, userTrustsOwnIdentity: userTrustsOwnIdentity, wasVisibleToUser: wasVisibleToUser))
+        }
+        trackErrorContextDomainNameTimeToDecryptMillisEventLocalAgeMillisIsFederatedIsMatrixDotOrgUserTrustsOwnIdentityWasVisibleToUserClosure?(context, domain, name, timeToDecryptMillis, eventLocalAgeMillis, isFederated, isMatrixDotOrg, userTrustsOwnIdentity, wasVisibleToUser)
+    }
+    //MARK: - trackCreatedRoom
+
+    var trackCreatedRoomIsDMUnderlyingCallsCount = 0
+    var trackCreatedRoomIsDMCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackCreatedRoomIsDMUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackCreatedRoomIsDMUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackCreatedRoomIsDMUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackCreatedRoomIsDMUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackCreatedRoomIsDMCalled: Bool {
+        return trackCreatedRoomIsDMCallsCount > 0
+    }
+    var trackCreatedRoomIsDMReceivedIsDM: Bool?
+    var trackCreatedRoomIsDMReceivedInvocations: [Bool] = []
+    var trackCreatedRoomIsDMClosure: ((Bool) -> Void)?
+
+    func trackCreatedRoom(isDM: Bool) {
+        trackCreatedRoomIsDMCallsCount += 1
+        trackCreatedRoomIsDMReceivedIsDM = isDM
+        DispatchQueue.main.async {
+            self.trackCreatedRoomIsDMReceivedInvocations.append(isDM)
+        }
+        trackCreatedRoomIsDMClosure?(isDM)
+    }
+    //MARK: - trackComposer
+
+    var trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadUnderlyingCallsCount = 0
+    var trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadCalled: Bool {
+        return trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadCallsCount > 0
+    }
+    var trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadReceivedArguments: (inThread: Bool, isEditing: Bool, isReply: Bool, messageType: AnalyticsEvent.Composer.MessageType, startsThread: Bool?)?
+    var trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadReceivedInvocations: [(inThread: Bool, isEditing: Bool, isReply: Bool, messageType: AnalyticsEvent.Composer.MessageType, startsThread: Bool?)] = []
+    var trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadClosure: ((Bool, Bool, Bool, AnalyticsEvent.Composer.MessageType, Bool?) -> Void)?
+
+    func trackComposer(inThread: Bool, isEditing: Bool, isReply: Bool, messageType: AnalyticsEvent.Composer.MessageType, startsThread: Bool?) {
+        trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadCallsCount += 1
+        trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadReceivedArguments = (inThread: inThread, isEditing: isEditing, isReply: isReply, messageType: messageType, startsThread: startsThread)
+        DispatchQueue.main.async {
+            self.trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadReceivedInvocations.append((inThread: inThread, isEditing: isEditing, isReply: isReply, messageType: messageType, startsThread: startsThread))
+        }
+        trackComposerInThreadIsEditingIsReplyMessageTypeStartsThreadClosure?(inThread, isEditing, isReply, messageType, startsThread)
+    }
+    //MARK: - trackViewRoom
+
+    var trackViewRoomIsDMIsSpaceUnderlyingCallsCount = 0
+    var trackViewRoomIsDMIsSpaceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackViewRoomIsDMIsSpaceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackViewRoomIsDMIsSpaceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackViewRoomIsDMIsSpaceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackViewRoomIsDMIsSpaceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackViewRoomIsDMIsSpaceCalled: Bool {
+        return trackViewRoomIsDMIsSpaceCallsCount > 0
+    }
+    var trackViewRoomIsDMIsSpaceReceivedArguments: (isDM: Bool, isSpace: Bool)?
+    var trackViewRoomIsDMIsSpaceReceivedInvocations: [(isDM: Bool, isSpace: Bool)] = []
+    var trackViewRoomIsDMIsSpaceClosure: ((Bool, Bool) -> Void)?
+
+    func trackViewRoom(isDM: Bool, isSpace: Bool) {
+        trackViewRoomIsDMIsSpaceCallsCount += 1
+        trackViewRoomIsDMIsSpaceReceivedArguments = (isDM: isDM, isSpace: isSpace)
+        DispatchQueue.main.async {
+            self.trackViewRoomIsDMIsSpaceReceivedInvocations.append((isDM: isDM, isSpace: isSpace))
+        }
+        trackViewRoomIsDMIsSpaceClosure?(isDM, isSpace)
+    }
+    //MARK: - trackJoinedRoom
+
+    var trackJoinedRoomIsDMIsSpaceActiveMemberCountUnderlyingCallsCount = 0
+    var trackJoinedRoomIsDMIsSpaceActiveMemberCountCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackJoinedRoomIsDMIsSpaceActiveMemberCountUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackJoinedRoomIsDMIsSpaceActiveMemberCountUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackJoinedRoomIsDMIsSpaceActiveMemberCountUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackJoinedRoomIsDMIsSpaceActiveMemberCountUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackJoinedRoomIsDMIsSpaceActiveMemberCountCalled: Bool {
+        return trackJoinedRoomIsDMIsSpaceActiveMemberCountCallsCount > 0
+    }
+    var trackJoinedRoomIsDMIsSpaceActiveMemberCountReceivedArguments: (isDM: Bool, isSpace: Bool, activeMemberCount: UInt)?
+    var trackJoinedRoomIsDMIsSpaceActiveMemberCountReceivedInvocations: [(isDM: Bool, isSpace: Bool, activeMemberCount: UInt)] = []
+    var trackJoinedRoomIsDMIsSpaceActiveMemberCountClosure: ((Bool, Bool, UInt) -> Void)?
+
+    func trackJoinedRoom(isDM: Bool, isSpace: Bool, activeMemberCount: UInt) {
+        trackJoinedRoomIsDMIsSpaceActiveMemberCountCallsCount += 1
+        trackJoinedRoomIsDMIsSpaceActiveMemberCountReceivedArguments = (isDM: isDM, isSpace: isSpace, activeMemberCount: activeMemberCount)
+        DispatchQueue.main.async {
+            self.trackJoinedRoomIsDMIsSpaceActiveMemberCountReceivedInvocations.append((isDM: isDM, isSpace: isSpace, activeMemberCount: activeMemberCount))
+        }
+        trackJoinedRoomIsDMIsSpaceActiveMemberCountClosure?(isDM, isSpace, activeMemberCount)
+    }
+    //MARK: - trackPollCreated
+
+    var trackPollCreatedIsUndisclosedNumberOfAnswersUnderlyingCallsCount = 0
+    var trackPollCreatedIsUndisclosedNumberOfAnswersCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackPollCreatedIsUndisclosedNumberOfAnswersUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackPollCreatedIsUndisclosedNumberOfAnswersUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackPollCreatedIsUndisclosedNumberOfAnswersUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackPollCreatedIsUndisclosedNumberOfAnswersUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackPollCreatedIsUndisclosedNumberOfAnswersCalled: Bool {
+        return trackPollCreatedIsUndisclosedNumberOfAnswersCallsCount > 0
+    }
+    var trackPollCreatedIsUndisclosedNumberOfAnswersReceivedArguments: (isUndisclosed: Bool, numberOfAnswers: Int)?
+    var trackPollCreatedIsUndisclosedNumberOfAnswersReceivedInvocations: [(isUndisclosed: Bool, numberOfAnswers: Int)] = []
+    var trackPollCreatedIsUndisclosedNumberOfAnswersClosure: ((Bool, Int) -> Void)?
+
+    func trackPollCreated(isUndisclosed: Bool, numberOfAnswers: Int) {
+        trackPollCreatedIsUndisclosedNumberOfAnswersCallsCount += 1
+        trackPollCreatedIsUndisclosedNumberOfAnswersReceivedArguments = (isUndisclosed: isUndisclosed, numberOfAnswers: numberOfAnswers)
+        DispatchQueue.main.async {
+            self.trackPollCreatedIsUndisclosedNumberOfAnswersReceivedInvocations.append((isUndisclosed: isUndisclosed, numberOfAnswers: numberOfAnswers))
+        }
+        trackPollCreatedIsUndisclosedNumberOfAnswersClosure?(isUndisclosed, numberOfAnswers)
+    }
+    //MARK: - trackPollVote
+
+    var trackPollVoteUnderlyingCallsCount = 0
+    var trackPollVoteCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackPollVoteUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackPollVoteUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackPollVoteUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackPollVoteUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackPollVoteCalled: Bool {
+        return trackPollVoteCallsCount > 0
+    }
+    var trackPollVoteClosure: (() -> Void)?
+
+    func trackPollVote() {
+        trackPollVoteCallsCount += 1
+        trackPollVoteClosure?()
+    }
+    //MARK: - trackPollEnd
+
+    var trackPollEndUnderlyingCallsCount = 0
+    var trackPollEndCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackPollEndUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackPollEndUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackPollEndUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackPollEndUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackPollEndCalled: Bool {
+        return trackPollEndCallsCount > 0
+    }
+    var trackPollEndClosure: (() -> Void)?
+
+    func trackPollEnd() {
+        trackPollEndCallsCount += 1
+        trackPollEndClosure?()
+    }
+    //MARK: - trackRoomModeration
+
+    var trackRoomModerationActionRoleUnderlyingCallsCount = 0
+    var trackRoomModerationActionRoleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackRoomModerationActionRoleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackRoomModerationActionRoleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackRoomModerationActionRoleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackRoomModerationActionRoleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackRoomModerationActionRoleCalled: Bool {
+        return trackRoomModerationActionRoleCallsCount > 0
+    }
+    var trackRoomModerationActionRoleReceivedArguments: (action: AnalyticsEvent.RoomModeration.Action, role: RoomRole?)?
+    var trackRoomModerationActionRoleReceivedInvocations: [(action: AnalyticsEvent.RoomModeration.Action, role: RoomRole?)] = []
+    var trackRoomModerationActionRoleClosure: ((AnalyticsEvent.RoomModeration.Action, RoomRole?) -> Void)?
+
+    func trackRoomModeration(action: AnalyticsEvent.RoomModeration.Action, role: RoomRole?) {
+        trackRoomModerationActionRoleCallsCount += 1
+        trackRoomModerationActionRoleReceivedArguments = (action: action, role: role)
+        DispatchQueue.main.async {
+            self.trackRoomModerationActionRoleReceivedInvocations.append((action: action, role: role))
+        }
+        trackRoomModerationActionRoleClosure?(action, role)
+    }
+    //MARK: - trackSessionSecurityState
+
+    var trackSessionSecurityStateUnderlyingCallsCount = 0
+    var trackSessionSecurityStateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackSessionSecurityStateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackSessionSecurityStateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackSessionSecurityStateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackSessionSecurityStateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackSessionSecurityStateCalled: Bool {
+        return trackSessionSecurityStateCallsCount > 0
+    }
+    var trackSessionSecurityStateReceivedState: SessionSecurityState?
+    var trackSessionSecurityStateReceivedInvocations: [SessionSecurityState] = []
+    var trackSessionSecurityStateClosure: ((SessionSecurityState) -> Void)?
+
+    func trackSessionSecurityState(_ state: SessionSecurityState) {
+        trackSessionSecurityStateCallsCount += 1
+        trackSessionSecurityStateReceivedState = state
+        DispatchQueue.main.async {
+            self.trackSessionSecurityStateReceivedInvocations.append(state)
+        }
+        trackSessionSecurityStateClosure?(state)
+    }
+    //MARK: - updateUserProperties
+
+    var updateUserPropertiesUnderlyingCallsCount = 0
+    var updateUserPropertiesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateUserPropertiesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateUserPropertiesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateUserPropertiesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateUserPropertiesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateUserPropertiesCalled: Bool {
+        return updateUserPropertiesCallsCount > 0
+    }
+    var updateUserPropertiesReceivedUserProperties: AnalyticsEvent.UserProperties?
+    var updateUserPropertiesReceivedInvocations: [AnalyticsEvent.UserProperties] = []
+    var updateUserPropertiesClosure: ((AnalyticsEvent.UserProperties) -> Void)?
+
+    func updateUserProperties(_ userProperties: AnalyticsEvent.UserProperties) {
+        updateUserPropertiesCallsCount += 1
+        updateUserPropertiesReceivedUserProperties = userProperties
+        DispatchQueue.main.async {
+            self.updateUserPropertiesReceivedInvocations.append(userProperties)
+        }
+        updateUserPropertiesClosure?(userProperties)
+    }
+    //MARK: - trackPinUnpinEvent
+
+    var trackPinUnpinEventUnderlyingCallsCount = 0
+    var trackPinUnpinEventCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackPinUnpinEventUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackPinUnpinEventUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackPinUnpinEventUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackPinUnpinEventUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var trackPinUnpinEventCalled: Bool {
+        return trackPinUnpinEventCallsCount > 0
+    }
+    var trackPinUnpinEventReceivedEvent: AnalyticsEvent.PinUnpinAction?
+    var trackPinUnpinEventReceivedInvocations: [AnalyticsEvent.PinUnpinAction] = []
+    var trackPinUnpinEventClosure: ((AnalyticsEvent.PinUnpinAction) -> Void)?
+
+    func trackPinUnpinEvent(_ event: AnalyticsEvent.PinUnpinAction) {
+        trackPinUnpinEventCallsCount += 1
+        trackPinUnpinEventReceivedEvent = event
+        DispatchQueue.main.async {
+            self.trackPinUnpinEventReceivedInvocations.append(event)
+        }
+        trackPinUnpinEventClosure?(event)
+    }
+}
 class AppLockServiceMock: AppLockServiceProtocol, @unchecked Sendable {
     var isMandatory: Bool {
         get { return underlyingIsMandatory }
@@ -3367,8 +4122,8 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled: Bool {
         return createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCount > 0
     }
-    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments: (name: String, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)?
-    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedInvocations: [(name: String, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)] = []
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments: (name: String?, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)?
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedInvocations: [(name: String?, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)] = []
 
     var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue: Result<String, ClientProxyError>!
     var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue: Result<String, ClientProxyError>! {
@@ -3394,9 +4149,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure: ((String, String?, CreateRoomAccessType, Bool, [String], URL?, String?) async -> Result<String, ClientProxyError>)?
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure: ((String?, String?, CreateRoomAccessType, Bool, [String], URL?, String?) async -> Result<String, ClientProxyError>)?
 
-    func createRoom(name: String, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
+    func createRoom(name: String?, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
         createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCount += 1
         createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments = (name: name, topic: topic, accessType: accessType, isSpace: isSpace, userIDs: userIDs, avatarURL: avatarURL, aliasLocalPart: aliasLocalPart)
         DispatchQueue.main.async {
@@ -14627,6 +15382,269 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol, @uncheck
         }
     }
 }
+class NotificationToneManagerMock: NotificationToneManagerProtocol, @unchecked Sendable {
+
+    //MARK: - setSelectedTone
+
+    var setSelectedToneThrowableError: Error?
+    var setSelectedToneUnderlyingCallsCount = 0
+    var setSelectedToneCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setSelectedToneUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setSelectedToneUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setSelectedToneUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setSelectedToneUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setSelectedToneCalled: Bool {
+        return setSelectedToneCallsCount > 0
+    }
+    var setSelectedToneReceivedAlertTone: NotificationTone?
+    var setSelectedToneReceivedInvocations: [NotificationTone] = []
+
+    var setSelectedToneUnderlyingReturnValue: URL!
+    var setSelectedToneReturnValue: URL! {
+        get {
+            if Thread.isMainThread {
+                return setSelectedToneUnderlyingReturnValue
+            } else {
+                var returnValue: URL? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setSelectedToneUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setSelectedToneUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setSelectedToneUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var setSelectedToneClosure: ((NotificationTone) throws -> URL)?
+
+    @discardableResult
+    func setSelectedTone(_ alertTone: NotificationTone) throws -> URL {
+        if let error = setSelectedToneThrowableError {
+            throw error
+        }
+        setSelectedToneCallsCount += 1
+        setSelectedToneReceivedAlertTone = alertTone
+        DispatchQueue.main.async {
+            self.setSelectedToneReceivedInvocations.append(alertTone)
+        }
+        if let setSelectedToneClosure = setSelectedToneClosure {
+            return try setSelectedToneClosure(alertTone)
+        } else {
+            return setSelectedToneReturnValue
+        }
+    }
+    //MARK: - customTones
+
+    var customTonesUnderlyingCallsCount = 0
+    var customTonesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return customTonesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = customTonesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                customTonesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    customTonesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var customTonesCalled: Bool {
+        return customTonesCallsCount > 0
+    }
+
+    var customTonesUnderlyingReturnValue: [NotificationTone]!
+    var customTonesReturnValue: [NotificationTone]! {
+        get {
+            if Thread.isMainThread {
+                return customTonesUnderlyingReturnValue
+            } else {
+                var returnValue: [NotificationTone]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = customTonesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                customTonesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    customTonesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var customTonesClosure: (() -> [NotificationTone])?
+
+    func customTones() -> [NotificationTone] {
+        customTonesCallsCount += 1
+        if let customTonesClosure = customTonesClosure {
+            return customTonesClosure()
+        } else {
+            return customTonesReturnValue
+        }
+    }
+    //MARK: - deleteCustomTone
+
+    var deleteCustomToneThrowableError: Error?
+    var deleteCustomToneUnderlyingCallsCount = 0
+    var deleteCustomToneCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deleteCustomToneUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteCustomToneUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteCustomToneUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteCustomToneUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var deleteCustomToneCalled: Bool {
+        return deleteCustomToneCallsCount > 0
+    }
+    var deleteCustomToneReceivedAlertTone: NotificationTone?
+    var deleteCustomToneReceivedInvocations: [NotificationTone] = []
+    var deleteCustomToneClosure: ((NotificationTone) throws -> Void)?
+
+    func deleteCustomTone(_ alertTone: NotificationTone) throws {
+        if let error = deleteCustomToneThrowableError {
+            throw error
+        }
+        deleteCustomToneCallsCount += 1
+        deleteCustomToneReceivedAlertTone = alertTone
+        DispatchQueue.main.async {
+            self.deleteCustomToneReceivedInvocations.append(alertTone)
+        }
+        try deleteCustomToneClosure?(alertTone)
+    }
+    //MARK: - addNewToneToLibrary
+
+    var addNewToneToLibraryFromThrowableError: Error?
+    var addNewToneToLibraryFromUnderlyingCallsCount = 0
+    var addNewToneToLibraryFromCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addNewToneToLibraryFromUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addNewToneToLibraryFromUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addNewToneToLibraryFromUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addNewToneToLibraryFromUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addNewToneToLibraryFromCalled: Bool {
+        return addNewToneToLibraryFromCallsCount > 0
+    }
+    var addNewToneToLibraryFromReceivedSourceURL: URL?
+    var addNewToneToLibraryFromReceivedInvocations: [URL] = []
+
+    var addNewToneToLibraryFromUnderlyingReturnValue: URL!
+    var addNewToneToLibraryFromReturnValue: URL! {
+        get {
+            if Thread.isMainThread {
+                return addNewToneToLibraryFromUnderlyingReturnValue
+            } else {
+                var returnValue: URL? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addNewToneToLibraryFromUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addNewToneToLibraryFromUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addNewToneToLibraryFromUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addNewToneToLibraryFromClosure: ((URL) throws -> URL)?
+
+    @NotificationToneManager.ConversionActor
+    @discardableResult
+    func addNewToneToLibrary(from sourceURL: URL) throws -> URL {
+        if let error = addNewToneToLibraryFromThrowableError {
+            throw error
+        }
+        addNewToneToLibraryFromCallsCount += 1
+        addNewToneToLibraryFromReceivedSourceURL = sourceURL
+        DispatchQueue.main.async {
+            self.addNewToneToLibraryFromReceivedInvocations.append(sourceURL)
+        }
+        if let addNewToneToLibraryFromClosure = addNewToneToLibraryFromClosure {
+            return try addNewToneToLibraryFromClosure(sourceURL)
+        } else {
+            return addNewToneToLibraryFromReturnValue
+        }
+    }
+}
 class OrientationManagerMock: OrientationManagerProtocol, @unchecked Sendable {
 
     //MARK: - setOrientation
@@ -15430,6 +16448,7 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingUnreadMentionsCount = value }
     }
     var underlyingUnreadMentionsCount: UInt!
+    var fullyReadEventID: String?
     var pinnedEventIDs: Set<String> {
         get { return underlyingPinnedEventIDs }
         set(value) { underlyingPinnedEventIDs = value }

@@ -11,6 +11,7 @@ import SwiftUI
 
 struct MediaUploadPreviewScreenCoordinatorParameters {
     let mediaURLs: [URL]
+    let caption: NSAttributedString?
     let title: String?
     let isRoomEncrypted: Bool
     let shouldShowCaptionWarning: Bool
@@ -35,6 +36,7 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: MediaUploadPreviewScreenCoordinatorParameters) {
         viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: parameters.mediaURLs,
+                                                      caption: parameters.caption,
                                                       title: parameters.title,
                                                       isRoomEncrypted: parameters.isRoomEncrypted,
                                                       shouldShowCaptionWarning: parameters.shouldShowCaptionWarning,

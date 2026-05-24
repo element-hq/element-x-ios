@@ -200,7 +200,6 @@
 "common_advanced_settings" = "進階設定";
 "common_an_image" = "影像";
 "common_analytics" = "分析";
-"common_android_fetching_notifications_title" = "正在同步通知……";
 "common_android_shortcuts_remove_reason_left_room" = "您離開聊天室";
 "common_android_shortcuts_remove_reason_session_logged_out" = "您已登出工作階段";
 "common_appearance" = "外觀";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "已離開聊天室";
 "common_current_user_left_space" = "離開空間";
 "common_current_user_rejected_invite" = "邀請被拒絕";
-"common_dark" = "深色";
 "common_date_date_at_time" = "%1$@ 在 %2$@";
 "common_date_this_month" = "本月";
 "common_decryption_error" = "解密錯誤";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "找不到此 Matrix ID，因此可能沒有人會收到邀請。";
 "common_leaving_room" = "正在離開聊天室";
 "common_leaving_space" = "離開空間";
-"common_light" = "淺色";
 "common_line_copied_to_clipboard" = "行已複製到剪貼簿";
 "common_link_copied_to_clipboard" = "連結已複製到剪貼簿";
 "common_link_new_device" = "連結新裝置";
@@ -350,7 +347,6 @@
 "common_suggested" = "已建議";
 "common_suggestions" = "建議";
 "common_syncing" = "同步中";
-"common_system" = "系統";
 "common_text" = "文字";
 "common_third_party_notices" = "第三方通知";
 "common_thread" = "討論串";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ 對其會員資格做出了未知的變更";
 "test_language_identifier" = "zh-tw";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "深色";
+"theme_light" = "淺色";
+"theme_system" = "系統";
 "timeline_decryption_failure_historical_event_no_key_backup" = "歷史訊息在此裝置上無法讀取";
 "timeline_decryption_failure_historical_event_unverified_device" = "您必須驗證此裝置才能存取歷史訊息";
 "timeline_decryption_failure_historical_event_user_not_joined" = "您無法存取此則訊息";

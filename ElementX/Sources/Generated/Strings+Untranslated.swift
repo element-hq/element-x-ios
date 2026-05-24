@@ -14,14 +14,6 @@ internal enum UntranslatedL10n {
   internal static func commonAttachmentsCount(_ p1: Int) -> String {
     return UntranslatedL10n.tr("Untranslated", "common_attachments_count", p1)
   }
-  /// You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing.
-  internal static var cryptoHistorySharingConfirmInviteDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_invite_dialog_content") }
-  /// Invite new contacts to this room?
-  internal static var cryptoHistorySharingConfirmInviteDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_invite_dialog_title") }
-  /// You currently don’t have any chats with this person. Confirm inviting them before continuing.
-  internal static var cryptoHistorySharingConfirmStartChatDialogContent: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_content") }
-  /// Start a chat with this new contact?
-  internal static var cryptoHistorySharingConfirmStartChatDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "crypto_history_sharing_confirm_start_chat_dialog_title") }
   /// %1$d of %2$d
   internal static func screenMediaUploadPreviewCount(_ p1: Int, _ p2: Int) -> String {
     return UntranslatedL10n.tr("Untranslated", "screen_media_upload_preview_count", p1, p2)

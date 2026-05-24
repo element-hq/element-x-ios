@@ -221,17 +221,17 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 0) {
             ForEach(genericRooms) { room in
-                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(.init())) { _ in }
             }
             
-            HomeScreenRoomCell(room: .placeholder(), isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+            HomeScreenRoomCell(room: .placeholder(), isSelected: false, mediaProvider: MediaProviderMock(.init())) { _ in }
                 .redacted(reason: .placeholder)
         }
         .previewDisplayName("Generic")
         
         VStack(spacing: 0) {
             ForEach(notificationsStateRooms) { room in
-                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(.init())) { _ in }
             }
         }
         .previewLayout(.sizeThatFits)
@@ -239,7 +239,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
         
         VStack(spacing: 0) {
             ForEach(lastMessageStateRooms) { room in
-                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(.init())) { _ in }
             }
         }
         .previewLayout(.sizeThatFits)
@@ -253,15 +253,12 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(roomSummaryProvider: RoomSummaryProviderProtocol) -> HomeScreenViewModel {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe", roomSummaryProvider: roomSummaryProvider))))
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   appSettings: appSettings,
-                                   analyticsService: analytics,
+                                   appSettings: .volatile(),
+                                   analyticsService: AnalyticsServiceMock(.init()),
                                    notificationManager: NotificationManagerMock(),
-                                   userIndicatorController: UserIndicatorControllerMock.default)
+                                   userIndicatorController: UserIndicatorControllerMock())
     }
     
     static func makeRoom(lastMessageState: RoomSummary.LastMessageState) -> HomeScreenRoom {

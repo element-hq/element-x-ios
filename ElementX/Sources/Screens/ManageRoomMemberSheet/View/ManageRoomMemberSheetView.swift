@@ -120,7 +120,7 @@ private extension ManageRoomMemberSheetViewModel {
                                                                  ownPowerLevel: powerLevel),
                                               roomProxy: JoinedRoomProxyMock(.init()),
                                               userIndicatorController: UserIndicatorControllerMock(),
-                                              analyticsService: .mock(),
-                                              mediaProvider: MediaProviderMock(configuration: .init()))
+                                              analyticsService: AnalyticsServiceMock(.init()),
+                                              mediaProvider: MediaProviderMock(.init()))
     }
 }

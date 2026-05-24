@@ -121,14 +121,11 @@ struct HomeScreenRecoveryKeyConfirmationBanner_Previews: PreviewProvider, Testab
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   appSettings: appSettings,
-                                   analyticsService: analytics,
+                                   appSettings: .volatile(),
+                                   analyticsService: AnalyticsServiceMock(.init()),
                                    notificationManager: NotificationManagerMock(),
-                                   userIndicatorController: UserIndicatorControllerMock.default)
+                                   userIndicatorController: UserIndicatorControllerMock())
     }
 }

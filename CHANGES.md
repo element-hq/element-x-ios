@@ -1,3 +1,38 @@
+## Changes in 26.05.3 (2026-05-19)
+
+### What's Changed
+
+✨ Features
+* Invite the DM recipient to a new room by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5588
+
+🙌 Improvements
+* Use isDM from the SDK by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5583
+
+🐛 Bugfixes
+* Client pausing and resuming by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5587
+* Improve TopBanner sliding animation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5597
+* Fixing Room List in Spaces View Not Rendering Some Rooms by @atridadl in https://github.com/element-hq/element-x-ios/pull/5595
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5604
+
+🧱 Build
+* Wait for the search field to be usable and remove unnecessary sleeps. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5592
+* Remove the focused ComposerToolbar accessibility test and preview by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5591
+
+🚧 In development 🚧
+* Add a developer option button for marking every single room as read by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5582
+
+Others
+* Bump the RustSDK to v26.05.13 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5581
+* Replace the ServiceLocator with direct dependency injection by @mredig in https://github.com/element-hq/element-x-ios/pull/5548
+* Update sdk to 26.05.18 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5605
+
+### New Contributors
+* @atridadl made their first contribution in https://github.com/element-hq/element-x-ios/pull/5595
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.05.2...release/26.05.3
+
 ## Changes in 26.05.2 (2026-05-13)
 
 ### What's Changed

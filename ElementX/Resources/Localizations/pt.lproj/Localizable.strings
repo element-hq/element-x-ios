@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Configurações avançadas";
 "common_an_image" = "uma imagem";
 "common_analytics" = "Recolha e análise de dados";
-"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Saíste da sala";
 "common_android_shortcuts_remove_reason_session_logged_out" = "A tua sessão foi terminada";
 "common_appearance" = "Aparência";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Saíste da sala";
 "common_current_user_left_space" = "Saíste do espaço";
 "common_current_user_rejected_invite" = "Convite rejeitado";
-"common_dark" = "Escuro";
 "common_date_date_at_time" = "%1$@ às %2$@";
 "common_date_this_month" = "Este mês";
 "common_decryption_error" = "Erro de decifragem";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Não foi possível encontrar este ID Matrix, portanto o convite pode não ser recebido.";
 "common_leaving_room" = "A sair da sala";
 "common_leaving_space" = "A sair do espaço";
-"common_light" = "Claro";
 "common_line_copied_to_clipboard" = "Linha copiada para a área de transferência";
 "common_link_copied_to_clipboard" = "Ligação copiada para a área de transferência";
 "common_link_new_device" = "Link new device";
@@ -350,7 +347,6 @@
 "common_suggested" = "Suggested";
 "common_suggestions" = "Sugestões";
 "common_syncing" = "A sincronizar…";
-"common_system" = "Sistema";
 "common_text" = "Texto";
 "common_third_party_notices" = "Avisos de terceiros";
 "common_thread" = "Tópico";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ efetuou uma alteração desconhecida à sua participação na sala";
 "test_language_identifier" = "pt";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Escuro";
+"theme_light" = "Claro";
+"theme_system" = "Sistema";
 "timeline_decryption_failure_historical_event_no_key_backup" = "O histórico de mensagens não está disponível neste dispositivo";
 "timeline_decryption_failure_historical_event_unverified_device" = "É necessário verificares este dispositivos para acederes a mensagens antigas";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Não tens acesso a esta mensagem";

@@ -1,3 +1,9 @@
 #!/bin/sh
 command -v git-lfs >/dev/null 2>&1 || { echo >&2 "\nThis repository is configured for Git LFS but 'git-lfs' was not found on your path. If you no longer wish to use Git LFS, remove this hook by deleting '.git/hooks/post-merge'.\n"; exit 2; }
 git lfs post-merge "$@"
+
+LOCAL_SCRIPT_PATH="$HOME/.local/elementx_local_dev/post-merge"
+if [ -x "$LOCAL_SCRIPT_PATH" ]; then
+	export ELEMENTX_REPO="$(pwd)"
+	"$LOCAL_SCRIPT_PATH"
+fi

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct AdvancedSettingsScreenCoordinatorParameters {
     let appSettings: AppSettings
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
     let clientProxy: ClientProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }

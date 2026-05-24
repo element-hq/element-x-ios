@@ -91,6 +91,6 @@ struct RoomChangePermissionsScreen_Previews: PreviewProvider, TestablePreview {
                                              ownPowerLevel: ownPowerLevel,
                                              roomProxy: JoinedRoomProxyMock(.init(isSpace: isSpace)),
                                              userIndicatorController: UserIndicatorControllerMock(),
-                                             analytics: .mock())
+                                             analytics: AnalyticsServiceMock(.init()))
     }
 }

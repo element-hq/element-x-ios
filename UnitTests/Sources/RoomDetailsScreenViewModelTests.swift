@@ -25,34 +25,29 @@ struct RoomDetailsScreenViewModelTests {
     var cancellables = Set<AnyCancellable>()
     
     init() {
-        AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-        
         cancellables.removeAll()
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test"))
         notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
     }
     
     @Test
     mutating func leaveRoomTappedWhenPublic() async throws {
-        let appSettings = AppSettings()
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers, joinRule: .public))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.leaveRoomAlertItem)) { $0 != nil }
         
         context.send(viewAction: .processTapLeave)
@@ -64,17 +59,15 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func leaveRoomTappedWhenRoomNotPublic() async throws {
-        let appSettings = AppSettings()
-
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.leaveRoomAlertItem)) { $0 != nil }
         
         context.send(viewAction: .processTapLeave)
@@ -87,17 +80,15 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func leaveRoomTappedWithLessThanTwoMembers() {
-        let appSettings = AppSettings()
-
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         context.send(viewAction: .processTapLeave)
         #expect(context.leaveRoomAlertItem?.state == .empty)
@@ -146,18 +137,16 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func initialDMDetailsState() async throws {
-        let appSettings = AppSettings()
-
         let recipient = RoomMemberProxyMock.mockDan
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         let deferred = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
@@ -168,19 +157,17 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func ignoreSuccess() async throws {
-        let appSettings = AppSettings()
-
         let recipient = RoomMemberProxyMock.mockDan
         
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
@@ -200,8 +187,6 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func ignoreFailure() async throws {
-        let appSettings = AppSettings()
-
         let recipient = RoomMemberProxyMock.mockDan
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         let clientProxy = ClientProxyMock(.init())
@@ -209,11 +194,11 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
@@ -234,18 +219,16 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func unignoreSuccess() async throws {
-        let appSettings = AppSettings()
-
         let recipient = RoomMemberProxyMock.mockIgnored
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
@@ -265,8 +248,6 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func unignoreFailure() async throws {
-        let appSettings = AppSettings()
-
         let recipient = RoomMemberProxyMock.mockIgnored
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         let clientProxy = ClientProxyMock(.init())
@@ -274,11 +255,11 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
@@ -299,8 +280,6 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func cannotInvitePeople() async {
-        let appSettings = AppSettings()
-
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test",
                                                   members: mockedMembers,
@@ -308,11 +287,11 @@ struct RoomDetailsScreenViewModelTests {
                                                   powerLevelsConfiguration: .init(canUserInvite: false)))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -321,17 +300,15 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func invitePeople() async {
-        let appSettings = AppSettings()
-
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers, joinRule: .public))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -356,8 +333,6 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func canEditAvatar() async {
-        let appSettings = AppSettings()
-
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         
         let configuration = JoinedRoomProxyMockConfiguration(name: "Test",
@@ -366,7 +341,7 @@ struct RoomDetailsScreenViewModelTests {
         
         roomProxyMock = JoinedRoomProxyMock(configuration)
         
-        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(.init())
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomAvatar)
         }
@@ -381,11 +356,11 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -397,8 +372,6 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func canEditName() async {
-        let appSettings = AppSettings()
-
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         
         let configuration = JoinedRoomProxyMockConfiguration(name: "Test",
@@ -407,7 +380,7 @@ struct RoomDetailsScreenViewModelTests {
         
         roomProxyMock = JoinedRoomProxyMock(configuration)
         
-        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(.init())
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomName)
         }
@@ -422,11 +395,11 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -438,8 +411,6 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func canEditTopic() async {
-        let appSettings = AppSettings()
-
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         
         let configuration = JoinedRoomProxyMockConfiguration(name: "Test",
@@ -448,7 +419,7 @@ struct RoomDetailsScreenViewModelTests {
         
         roomProxyMock = JoinedRoomProxyMock(configuration)
         
-        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(.init())
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomTopic)
         }
@@ -463,11 +434,11 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -479,17 +450,15 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func cannotEditRoom() async {
-        let appSettings = AppSettings()
-
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -501,17 +470,15 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func cannotEditDirectRoom() async {
-        let appSettings = AppSettings()
-
         let mockedMembers: [RoomMemberProxyMock] = [.mockMeAdmin, .mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -522,16 +489,14 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func notificationLoadingSettingsFailure() async throws {
-        let appSettings = AppSettings()
-
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError = NotificationSettingsError.Generic(msg: "error")
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         var deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { $0.isError }
         
@@ -731,17 +696,15 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func knockRequestsCounter() async throws {
-        let appSettings = AppSettings()
-
         let mockedRequests: [KnockRequestProxyMock] = [.init(), .init()]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, knockRequestsState: .loaded(mockedRequests), joinRule: .knock))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 2 && state.canSeeKnockingRequests
@@ -755,16 +718,14 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func knockRequestsCounterIsLoading() async throws {
-        let appSettings = AppSettings()
-
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, knockRequestsState: .loading, joinRule: .knock))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 0 && state.canSeeKnockingRequests
@@ -775,8 +736,6 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func knockRequestsCounterIsNotShownIfNoPermissions() async throws {
-        let appSettings = AppSettings()
-
         let mockedRequests: [KnockRequestProxyMock] = [.init(), .init()]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test",
                                                   isDirect: false,
@@ -785,11 +744,11 @@ struct RoomDetailsScreenViewModelTests {
                                                   powerLevelsConfiguration: .init(canUserInvite: false)))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 2 &&
@@ -803,18 +762,16 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func knockRequestsCounterIsNotShownIfDM() async throws {
-        let appSettings = AppSettings()
-
         let mockedRequests: [KnockRequestProxyMock] = [.init(), .init()]
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, members: mockedMembers, knockRequestsState: .loaded(mockedRequests), joinRule: .knock))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 2 &&
@@ -830,8 +787,6 @@ struct RoomDetailsScreenViewModelTests {
     
     @Test
     mutating func historySharingPillDisplayed() async throws {
-        let appSettings = AppSettings()
-
         let configuration = JoinedRoomProxyMockConfiguration(historyVisibility: .shared)
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
@@ -839,11 +794,11 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
-                                               analyticsService: .mock(settings: appSettings),
-                                               userIndicatorController: UserIndicatorControllerMock.default,
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: appSettings)
+                                               appSettings: .volatile())
         
         let deferredShared = deferFulfillment(context.observe(\.viewState),
                                               message: "The pill should be shown for rooms with shared history visibility") { state in

@@ -10,9 +10,13 @@ import Combine
 import Foundation
 
 extension NetworkMonitorMock {
-    static var `default`: NetworkMonitorMock {
-        let mock = NetworkMonitorMock()
-        mock.underlyingReachabilityPublisher = .init(.init(.reachable))
-        return mock
+    struct Configuration {
+        var reachabilityPublisher = CurrentValuePublisher<NetworkMonitorReachability, Never>(.init(.reachable))
+    }
+    
+    convenience init(_ configuration: Configuration) {
+        self.init()
+        
+        underlyingReachabilityPublisher = configuration.reachabilityPublisher
     }
 }

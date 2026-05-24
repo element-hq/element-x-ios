@@ -12,9 +12,9 @@ import SwiftUI
 typealias AnalyticsSettingsScreenViewModelType = StateStoreViewModelV2<AnalyticsSettingsScreenViewState, AnalyticsSettingsScreenViewAction>
 
 class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, AnalyticsSettingsScreenViewModelProtocol {
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     
-    init(appSettings: AppSettings, analytics: AnalyticsService) {
+    init(appSettings: AppSettings, analytics: AnalyticsServiceProtocol) {
         self.analytics = analytics
         
         let strings = AnalyticsSettingsScreenStrings(termsURL: appSettings.analyticsTermsURL)

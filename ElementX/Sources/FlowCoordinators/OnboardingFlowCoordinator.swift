@@ -19,7 +19,7 @@ enum OnboardingFlowCoordinatorAction {
 class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let appLockService: AppLockServiceProtocol
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks

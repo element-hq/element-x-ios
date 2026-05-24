@@ -16,28 +16,60 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     private let appSettings: AppSettings
     private let userNotificationCenter: UserNotificationCenterProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     // periphery:ignore - cancellable tasks get cancelled when reassigned
     @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
-    
+    private let notificationTonePreviewer: AudioPlayerProtocol
+    private let notificationToneManager: NotificationToneManagerProtocol
+
     var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(appSettings: AppSettings, userNotificationCenter: UserNotificationCenterProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol, isModallyPresented: Bool) {
+    init(appSettings: AppSettings,
+         userNotificationCenter: UserNotificationCenterProtocol,
+         notificationToneManager: NotificationToneManagerProtocol,
+         notificationSettingsProxy: NotificationSettingsProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         isModallyPresented: Bool) {
         self.appSettings = appSettings
         self.userNotificationCenter = userNotificationCenter
         self.notificationSettingsProxy = notificationSettingsProxy
+        self.userIndicatorController = userIndicatorController
+        notificationTonePreviewer = AudioPlayer()
+        self.notificationToneManager = notificationToneManager
         
         let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
-        super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings, isModallyPresented: isModallyPresented))
-                
+        super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
+                                                                         isModallyPresented: isModallyPresented,
+                                                                         selectedAlertTone: appSettings.selectedNotificationTone ?? NotificationToneManager.defaultElementXMessageTone,
+                                                                         availableCustomTones: notificationToneManager.customTones()))
+
         // Listen for changes to AppSettings.
         appSettings.$enableNotifications
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
             .store(in: &cancellables)
         
+        appSettings.$selectedNotificationTone
+            .map { $0 ?? NotificationToneManager.defaultElementXMessageTone }
+            .weakAssign(to: \.state.selectedAlertTone, on: self)
+            .store(in: &cancellables)
+        
         setupDidBecomeActiveSubscription()
         setupNotificationSettingsSubscription()
+        
+        notificationTonePreviewer.actions
+            .receive(on: DispatchQueue.main)
+            .sink { action in
+                guard case .didFailWithError(let error) = action else {
+                    return
+                }
+                let userIndicator = UserIndicator(type: .toast,
+                                                  title: L10n.screenNotificationSettingsSoundPreviewSoundErrorTitle)
+                userIndicatorController.submitIndicator(userIndicator)
+                MXLog.error("Error previewing alert tone: \(error)")
+            }
+            .store(in: &cancellables)
     }
     
     func fetchInitialContent() {
@@ -73,6 +105,14 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             actionsSubject.send(.close)
         case .fixConfigurationMismatchTapped:
             Task { await fixConfigurationMismatch() }
+        case .selectAlertTone(let alertTone):
+            setSelectedTone(alertTone)
+        case .addedCustomAlertTone(let result):
+            Task {
+                await self.addCustomAlertTone(from: result)
+            }
+        case .deleteCustomAlertTones(let tones):
+            deleteAlertTones(tones)
         }
     }
     
@@ -219,6 +259,55 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             state.bindings.callsEnabled = notificationSettings.invitationsEnabled ?? false
         }
         state.applyingChange = false
+    }
+
+    /// Imports the audio file at the given sandboxed URL into the tone library, refreshing the available custom tones on success.
+    private func addCustomAlertTone(from urlResult: Result<URL, Error>) async {
+        do {
+            let url = try urlResult.get()
+            guard url.startAccessingSecurityScopedResource() else {
+                throw NotificationToneManager.ManagerError.couldNotAccessSandboxedResource
+            }
+            defer { url.stopAccessingSecurityScopedResource() }
+            try await notificationToneManager.addNewToneToLibrary(from: url)
+            state.availableCustomTones = notificationToneManager.customTones()
+        } catch {
+            MXLog.error("Error importing custom tone url: \(error)")
+            userIndicatorController.submitIndicator(.init(type: .toast,
+                                                          title: L10n.screenNotificationSettingsSoundImportSoundErrorTitle))
+        }
+    }
+    
+    private func setSelectedTone(_ alertTone: NotificationTone) {
+        do {
+            let toneLocation = try notificationToneManager.setSelectedTone(alertTone)
+            notificationTonePreviewer.load(sourceURL: toneLocation, playbackURL: toneLocation, autoplay: true)
+            MXLog.info("Successfully set selected tone: \(alertTone.label)")
+        } catch {
+            let userIndicator = UserIndicator(type: .toast,
+                                              title: L10n.screenNotificationSettingsSoundSetSoundErrorTitle)
+            userIndicatorController.submitIndicator(userIndicator)
+            MXLog.error("Error setting selected alert tone to designated location in filesystem: \(error)")
+        }
+    }
+
+    /// Deletes the given tones from the library. If the active tone is deleted, the selection resets to the default.
+    private func deleteAlertTones(_ tones: [NotificationTone]) {
+        for tone in tones {
+            do {
+                try notificationToneManager.deleteCustomTone(tone)
+
+                if tone == state.selectedAlertTone {
+                    appSettings.selectedNotificationTone = nil
+                }
+            } catch {
+                MXLog.error("Error deleting alert tone \(tone.label): \(error)")
+                userIndicatorController.submitIndicator(.init(type: .toast,
+                                                              title: L10n.screenNotificationSettingsSoundDeleteSoundErrorTitle))
+            }
+        }
+        state.availableCustomTones = notificationToneManager.customTones()
+        MXLog.info("Successfully deleted custom tone(s): \(tones.map(\.label))")
     }
 }
 

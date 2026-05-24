@@ -164,7 +164,7 @@ struct RoomMemberDetailsViewModelTests {
         try await waitForMemberToLoad.fulfill()
         
         clientProxy.directRoomForUserIDReturnValue = .success(nil)
-        clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init(verificationState: .notVerified)))
+        clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(.init(verificationState: .notVerified)))
         
         // The user identity becomes known, i.e. not unknown.
         let deferred = deferFulfillment(viewModel.context.$viewState.compactMap(\.bindings.inviteConfirmationUser)) {
@@ -206,16 +206,13 @@ struct RoomMemberDetailsViewModelTests {
             .success(roomMemberProxyMock)
         }
         
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-        
         // swiftlint:disable:next force_unwrapping
         let userSession = clientProxy != nil ? UserSessionMock(.init(clientProxy: clientProxy!)) : UserSessionMock(.init())
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
                                                      userSession: userSession,
-                                                     userIndicatorController: UserIndicatorControllerMock.default,
-                                                     analytics: analytics,
-                                                     appSettings: appSettings)
+                                                     userIndicatorController: UserIndicatorControllerMock(),
+                                                     analytics: AnalyticsServiceMock(.init()),
+                                                     appSettings: .volatile())
     }
 }

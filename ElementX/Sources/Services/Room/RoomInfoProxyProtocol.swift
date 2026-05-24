@@ -58,6 +58,7 @@ protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var unreadMessagesCount: UInt { get }
     var unreadNotificationsCount: UInt { get }
     var unreadMentionsCount: UInt { get }
+    var fullyReadEventID: String? { get }
     var pinnedEventIDs: Set<String> { get }
     var joinRule: JoinRule? { get }
     var historyVisibility: RoomHistoryVisibility { get }

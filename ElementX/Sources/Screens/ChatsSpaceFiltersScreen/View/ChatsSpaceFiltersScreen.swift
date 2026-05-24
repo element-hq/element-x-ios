@@ -54,6 +54,6 @@ struct ChatsSpaceFiltersScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel() -> ChatsSpaceFiltersScreenViewModel {
         ChatsSpaceFiltersScreenViewModel(spaceService: SpaceServiceProxyMock(.populated),
-                                         mediaProvider: MediaProviderMock(configuration: .init()))
+                                         mediaProvider: MediaProviderMock(.init()))
     }
 }

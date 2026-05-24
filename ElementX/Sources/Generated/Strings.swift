@@ -42,6 +42,8 @@ internal enum L10n {
   internal static var a11yJoinCall: String { return L10n.tr("Localizable", "a11y_join_call") }
   /// Jump to bottom
   internal static var a11yJumpToBottom: String { return L10n.tr("Localizable", "a11y_jump_to_bottom") }
+  /// Jump to unread
+  internal static var a11yJumpToUnread: String { return L10n.tr("Localizable", "a11y_jump_to_unread") }
   /// Mentions only
   internal static var a11yNotificationsMentionsOnly: String { return L10n.tr("Localizable", "a11y_notifications_mentions_only") }
   /// Muted
@@ -440,8 +442,6 @@ internal enum L10n {
   internal static var commonAnImage: String { return L10n.tr("Localizable", "common_an_image") }
   /// Analytics
   internal static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
-  /// Syncing notifications...
-  internal static var commonAndroidFetchingNotificationsTitle: String { return L10n.tr("Localizable", "common_android_fetching_notifications_title") }
   /// You left the room
   internal static var commonAndroidShortcutsRemoveReasonLeftRoom: String { return L10n.tr("Localizable", "common_android_shortcuts_remove_reason_left_room") }
   /// You were logged out of the session
@@ -480,8 +480,6 @@ internal enum L10n {
   internal static var commonCurrentUserLeftSpace: String { return L10n.tr("Localizable", "common_current_user_left_space") }
   /// Invite declined
   internal static var commonCurrentUserRejectedInvite: String { return L10n.tr("Localizable", "common_current_user_rejected_invite") }
-  /// Dark
-  internal static var commonDark: String { return L10n.tr("Localizable", "common_dark") }
   /// %1$@ at %2$@
   internal static func commonDateDateAtTime(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "common_date_date_at_time", String(describing: p1), String(describing: p2))
@@ -562,8 +560,6 @@ internal enum L10n {
   internal static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
   /// Leaving space
   internal static var commonLeavingSpace: String { return L10n.tr("Localizable", "common_leaving_space") }
-  /// Light
-  internal static var commonLight: String { return L10n.tr("Localizable", "common_light") }
   /// Line copied to clipboard
   internal static var commonLineCopiedToClipboard: String { return L10n.tr("Localizable", "common_line_copied_to_clipboard") }
   /// Link copied to clipboard
@@ -784,8 +780,6 @@ internal enum L10n {
   internal static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
   /// Syncing
   internal static var commonSyncing: String { return L10n.tr("Localizable", "common_syncing") }
-  /// System
-  internal static var commonSystem: String { return L10n.tr("Localizable", "common_system") }
   /// Text
   internal static var commonText: String { return L10n.tr("Localizable", "common_text") }
   /// Third-party notices
@@ -2320,6 +2314,74 @@ internal enum L10n {
   internal static var screenNotificationSettingsNotificationSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_notification_section_title") }
   /// Notify me on @room
   internal static var screenNotificationSettingsRoomMentionLabel: String { return L10n.tr("Localizable", "screen_notification_settings_room_mention_label") }
+  /// Custom sound...
+  internal static var screenNotificationSettingsSoundCustomSoundButtonTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_custom_sound_button_title") }
+  /// Error deleting file
+  internal static var screenNotificationSettingsSoundDeleteSoundErrorTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_delete_sound_error_title") }
+  /// Element Default
+  internal static var screenNotificationSettingsSoundElementDefault: String { return L10n.tr("Localizable", "screen_notification_settings_sound_element_default") }
+  /// Element Fade
+  internal static var screenNotificationSettingsSoundElementFade: String { return L10n.tr("Localizable", "screen_notification_settings_sound_element_fade") }
+  /// Error importing file
+  internal static var screenNotificationSettingsSoundImportSoundErrorTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_import_sound_error_title") }
+  /// Problem previewing alert sound
+  internal static var screenNotificationSettingsSoundPreviewSoundErrorTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_preview_sound_error_title") }
+  /// Sound
+  internal static var screenNotificationSettingsSoundSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_section_title") }
+  /// Problem setting alert sound
+  internal static var screenNotificationSettingsSoundSetSoundErrorTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_set_sound_error_title") }
+  /// Alert
+  internal static var screenNotificationSettingsSoundSystemAlert: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_alert") }
+  /// Anticipate
+  internal static var screenNotificationSettingsSoundSystemAnticipate: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_anticipate") }
+  /// Bell
+  internal static var screenNotificationSettingsSoundSystemBell: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_bell") }
+  /// Bloom
+  internal static var screenNotificationSettingsSoundSystemBloom: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_bloom") }
+  /// Calypso
+  internal static var screenNotificationSettingsSoundSystemCalypso: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_calypso") }
+  /// Chime
+  internal static var screenNotificationSettingsSoundSystemChime: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_chime") }
+  /// Choo Choo
+  internal static var screenNotificationSettingsSoundSystemChooChoo: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_choo_choo") }
+  /// Descent
+  internal static var screenNotificationSettingsSoundSystemDescent: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_descent") }
+  /// Electronic
+  internal static var screenNotificationSettingsSoundSystemElectronic: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_electronic") }
+  /// Fanfare
+  internal static var screenNotificationSettingsSoundSystemFanfare: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_fanfare") }
+  /// Glass
+  internal static var screenNotificationSettingsSoundSystemGlass: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_glass") }
+  /// Horn
+  internal static var screenNotificationSettingsSoundSystemHorn: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_horn") }
+  /// Ladder
+  internal static var screenNotificationSettingsSoundSystemLadder: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_ladder") }
+  /// Minuet
+  internal static var screenNotificationSettingsSoundSystemMinuet: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_minuet") }
+  /// News Flash
+  internal static var screenNotificationSettingsSoundSystemNewsFlash: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_news_flash") }
+  /// Noir
+  internal static var screenNotificationSettingsSoundSystemNoir: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_noir") }
+  /// Sherwood Forest
+  internal static var screenNotificationSettingsSoundSystemSherwoodForest: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_sherwood_forest") }
+  /// Spell
+  internal static var screenNotificationSettingsSoundSystemSpell: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_spell") }
+  /// Suspense
+  internal static var screenNotificationSettingsSoundSystemSuspense: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_suspense") }
+  /// Swish
+  internal static var screenNotificationSettingsSoundSystemSwish: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_swish") }
+  /// Telegraph
+  internal static var screenNotificationSettingsSoundSystemTelegraph: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_telegraph") }
+  /// Tiptoes
+  internal static var screenNotificationSettingsSoundSystemTiptoes: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_tiptoes") }
+  /// Tri-tone
+  internal static var screenNotificationSettingsSoundSystemTriTone: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_tri_tone") }
+  /// Tweet
+  internal static var screenNotificationSettingsSoundSystemTweet: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_tweet") }
+  /// Typewriters
+  internal static var screenNotificationSettingsSoundSystemTypewriters: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_typewriters") }
+  /// Update
+  internal static var screenNotificationSettingsSoundSystemUpdate: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_update") }
   /// To receive notifications, please change your %1$@.
   internal static func screenNotificationSettingsSystemNotificationsActionRequired(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_notification_settings_system_notifications_action_required", String(describing: p1))
@@ -3657,6 +3719,14 @@ internal enum L10n {
   internal static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   internal static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
+  /// Black
+  internal static var themeBlack: String { return L10n.tr("Localizable", "theme_black") }
+  /// Dark
+  internal static var themeDark: String { return L10n.tr("Localizable", "theme_dark") }
+  /// Light
+  internal static var themeLight: String { return L10n.tr("Localizable", "theme_light") }
+  /// System
+  internal static var themeSystem: String { return L10n.tr("Localizable", "theme_system") }
   /// Historical messages are not available on this device
   internal static var timelineDecryptionFailureHistoricalEventNoKeyBackup: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_no_key_backup") }
   /// You need to verify this device for access to historical messages

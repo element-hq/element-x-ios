@@ -82,8 +82,7 @@ struct SpaceRoomCell: View {
             }
             .padding(.horizontal, horizontalInsets)
             // Ensure the EditMode transition stays inside this cell if there are other insertions/removals in the list.
-            // Seems to slow down the animations a bit in Xcode previews but its fine in the simulator and on a device.
-            .drawingGroup()
+            .geometryGroup()
             .accessibilityElement(children: .combine)
         }
         .buttonStyle(SpaceRoomCellButtonStyle(isHighlighted: isHighlighted))
@@ -168,7 +167,7 @@ struct SpaceRoomCellButtonStyle: ButtonStyle {
 }
 
 struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
-    static let mediaProvider = MediaProviderMock(configuration: .init())
+    static let mediaProvider = MediaProviderMock(.init())
     
     static let spaces = [SpaceServiceRoom].mockSpaceList
     

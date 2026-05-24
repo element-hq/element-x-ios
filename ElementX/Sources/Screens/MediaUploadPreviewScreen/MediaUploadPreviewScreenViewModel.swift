@@ -30,6 +30,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     }
 
     init(mediaURLs: [URL],
+         caption: NSAttributedString?,
          title: String?,
          isRoomEncrypted: Bool,
          shouldShowCaptionWarning: Bool,
@@ -49,7 +50,8 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         super.init(initialViewState: MediaUploadPreviewScreenViewState(mediaURLs: mediaURLs,
                                                                        title: title,
                                                                        shouldShowCaptionWarning: shouldShowCaptionWarning,
-                                                                       isRoomEncrypted: isRoomEncrypted))
+                                                                       isRoomEncrypted: isRoomEncrypted,
+                                                                       bindings: .init(caption: caption ?? NSAttributedString())))
     }
     
     override func process(viewAction: MediaUploadPreviewScreenViewAction) {

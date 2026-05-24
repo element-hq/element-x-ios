@@ -159,7 +159,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
     
     private func removeReceivedWhileOfflineNotification() {
-        notificationCenter.removeDeliveredNotifications(withIdentifiers: [NotificationServiceExtension.receivedWhileOfflineNotificationID])
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: [NotificationServiceExtensionActor.receivedWhileOfflineNotificationID])
     }
 
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {

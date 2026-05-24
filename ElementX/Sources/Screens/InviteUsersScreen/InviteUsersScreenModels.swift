@@ -16,11 +16,12 @@ enum InviteUsersScreenErrorType: Error {
 
 enum InviteUsersScreenViewModelAction {
     case dismiss
+    case openRoom(roomID: String)
 }
 
 enum InviteUsersScreenRoomType {
-    case draft
-    case room(roomProxy: JoinedRoomProxyProtocol)
+    case draft(mandatoryInvitees: [UserProfileProxy])
+    case existingRoom(roomProxy: JoinedRoomProxyProtocol)
 }
 
 struct InviteUsersScreenViewState: BindableState {
@@ -29,6 +30,7 @@ struct InviteUsersScreenViewState: BindableState {
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
     
     var selectedUsers: [UserProfileProxy] = []
+    var mandatoryInvitees: [UserProfileProxy] = []
     var membershipState: [String: MembershipState] = .init()
     var usersToConfirm: [UserProfileProxy] = []
     
@@ -38,13 +40,22 @@ struct InviteUsersScreenViewState: BindableState {
         !isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
     
+    var hasInvitableSelectedUsers: Bool {
+        selectedUsers.contains { !isInviteeMandatory($0) }
+    }
+    
     func isUserSelected(_ user: UserProfileProxy) -> Bool {
         isUserDisabled(user) || selectedUsers.contains { $0.userID == user.userID }
     }
     
     func isUserDisabled(_ user: UserProfileProxy) -> Bool {
+        if isInviteeMandatory(user) { return true }
         let membershipState = membershipState(user)
         return membershipState == .invite || membershipState == .join
+    }
+    
+    func isInviteeMandatory(_ user: UserProfileProxy) -> Bool {
+        mandatoryInvitees.contains { $0.userID == user.userID }
     }
     
     func membershipState(_ user: UserProfileProxy) -> MembershipState? {
@@ -52,18 +63,6 @@ struct InviteUsersScreenViewState: BindableState {
     }
     
     let isSkippable: Bool
-    
-    var actionText: String {
-        if isSkippable, selectedUsers.isEmpty {
-            L10n.actionSkip
-        } else {
-            L10n.actionInvite
-        }
-    }
-    
-    var isActionDisabled: Bool {
-        isSkippable ? false : selectedUsers.isEmpty
-    }
 }
 
 struct InviteUsersScreenViewStateBindings {

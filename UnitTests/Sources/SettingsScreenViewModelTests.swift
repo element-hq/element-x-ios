@@ -16,7 +16,7 @@ struct SettingsScreenViewModelTests {
     private var context: SettingsScreenViewModelType.Context
     
     init() {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: ""))))
         viewModel = SettingsScreenViewModel(userSession: userSession,
                                             appSettings: appSettings,

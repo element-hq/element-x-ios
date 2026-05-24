@@ -12,7 +12,7 @@ import SwiftUI
 struct RoomRolesAndPermissionsScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let analytics: AnalyticsService
+    let analytics: AnalyticsServiceProtocol
 }
 
 enum RoomRolesAndPermissionsScreenCoordinatorAction {

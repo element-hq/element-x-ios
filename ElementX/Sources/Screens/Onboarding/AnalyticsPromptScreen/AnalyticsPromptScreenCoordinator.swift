@@ -14,7 +14,7 @@ enum AnalyticsPromptScreenCoordinatorAction {
 }
 
 final class AnalyticsPromptScreenCoordinator: CoordinatorProtocol {
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private var viewModel: AnalyticsPromptScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<AnalyticsPromptScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -23,7 +23,7 @@ final class AnalyticsPromptScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(analytics: AnalyticsService, termsURL: URL?) {
+    init(analytics: AnalyticsServiceProtocol, termsURL: URL?) {
         self.analytics = analytics
         viewModel = AnalyticsPromptScreenViewModel(termsURL: termsURL)
     }

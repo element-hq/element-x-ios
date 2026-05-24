@@ -12,9 +12,13 @@ import MatrixRustSDK
 
 class TimelineItemProvider: TimelineItemProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
-    private let serialDispatchQueue: DispatchQueue
-    
+
     private var roomTimelineObservationToken: TaskHandle?
+
+    /// Bridge from the SDK's synchronous callback into Swift Concurrency. Yielding is safe from any
+    /// thread; a single long-lived `for await` consumer (set up in `init`) applies the diffs on the
+    /// main actor in FIFO order, guaranteeing one in-flight update at a time.
+    private let diffContinuation: AsyncStream<[TimelineDiff]>.Continuation
 
     private let paginationStateSubject = CurrentValueSubject<TimelinePaginationState, Never>(.initial)
     var paginationState: TimelinePaginationState {
@@ -33,35 +37,44 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             .combineLatest(paginationStateSubject)
             .eraseToAnyPublisher()
     }
-    
+
     let kind: TimelineKind
-    
+
     private let membershipChangeSubject = PassthroughSubject<Void, Never>()
     var membershipChangePublisher: AnyPublisher<Void, Never> {
         membershipChangeSubject
             .eraseToAnyPublisher()
     }
-    
+
     deinit {
+        diffContinuation.finish()
         roomTimelineObservationToken?.cancel()
     }
 
     init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<TimelinePaginationState, Never>) {
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.timeline_item_provider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
         self.kind = kind
-        
+
+        let (diffStream, diffContinuation) = AsyncStream<[TimelineDiff]>.makeStream()
+        self.diffContinuation = diffContinuation
+
         paginationStatePublisher
             .sink { [weak self] in
                 self?.paginationStateSubject.send($0)
             }
             .store(in: &cancellables)
-        
+
+        // `for await` guarantees FIFO ordering and that only one diff is being applied at a time.
+        // The stream also allows to handle the sendable items in the listener.
+        Task { [weak self] in
+            for await diffs in diffStream {
+                self?.updateItemsWithDiffs(diffs)
+            }
+        }
+
         Task {
-            roomTimelineObservationToken = await timeline.addListener(listener: SDKListener { [weak self] timelineDiffs in
-                self?.serialDispatchQueue.sync {
-                    self?.updateItemsWithDiffs(timelineDiffs)
-                }
+            roomTimelineObservationToken = await timeline.addListener(listener: SDKListener { diffs in
+                diffContinuation.yield(diffs)
             })
         }
     }

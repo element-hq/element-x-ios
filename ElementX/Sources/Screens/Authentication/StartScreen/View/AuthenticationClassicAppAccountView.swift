@@ -151,8 +151,8 @@ struct AuthenticationClassicAppAccountView_Previews: PreviewProvider { // Not Te
                                            provisioningParameters: nil,
                                            isBugReportServiceEnabled: false,
                                            appMediator: AppMediatorMock(),
-                                           appSettings: AppSettings(),
-                                           mediaProvider: MediaProviderMock(configuration: .init()),
+                                           appSettings: .volatile(),
+                                           mediaProvider: MediaProviderMock(.init()),
                                            userIndicatorController: UserIndicatorControllerMock())
     }
 }

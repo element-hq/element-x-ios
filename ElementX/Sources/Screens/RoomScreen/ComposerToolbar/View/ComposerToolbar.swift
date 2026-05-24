@@ -382,7 +382,6 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let timelineViewModel = TimelineViewModel.mock
     
     static let viewModel = ComposerToolbarViewModel.mock()
-    static let focusedViewModel = ComposerToolbarViewModel.mock(focused: true, message: "Hello, World!")
     static let editingViewModel = ComposerToolbarViewModel.mock(message: "Hello, Wrold!", mockMode: .editing)
     static let multiLineViewModel = ComposerToolbarViewModel.mock(message: "Hello, World! This is a loooong message that wraps onto multiple lines.")
     static let voiceMessageRecordingViewModel = ComposerToolbarViewModel.mock(mockMode: .recordVoiceMessage)
@@ -396,7 +395,6 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 8) {
             ComposerToolbar(context: viewModel.context)
-            ComposerToolbar(context: focusedViewModel.context)
             ComposerToolbar(context: editingViewModel.context)
             ComposerToolbar(context: multiLineViewModel.context)
                 .padding(.bottom)

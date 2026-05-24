@@ -384,11 +384,11 @@ extension AuthenticationService {
     }
 
     static func mock(classicAppManager: ClassicAppManagerProtocol?) -> AuthenticationService {
-        AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
+        AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
                               classicAppManager: classicAppManager,
-                              clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
-                              appSettings: AppSettings(),
+                              clientFactory: AuthenticationClientFactoryMock(.init()),
+                              appSettings: .volatile(),
                               appHooks: AppHooks())
     }
 }

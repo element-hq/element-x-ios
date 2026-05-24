@@ -83,9 +83,12 @@ struct TimelineViewRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> TimelineTableViewController {
         TimelineTableViewController(coordinator: context.coordinator,
                                     isScrolledToBottom: $viewModelContext.isScrolledToBottom,
+                                    isReadMarkerVisible: $viewModelContext.isReadMarkerVisible,
+                                    hasNewMessagesAtBottom: $viewModelContext.hasNewMessagesAtBottom,
                                     floatingDate: $viewModelContext.floatingDate,
                                     scrollToBottomPublisher: viewModelContext.viewState.timelineState.scrollToBottomPublisher,
-                                    scrollToFirstItemForDatePublisher: viewModelContext.viewState.timelineState.scrollToFirstItemForDatePublisher)
+                                    scrollToFirstItemForDatePublisher: viewModelContext.viewState.timelineState.scrollToFirstItemForDatePublisher,
+                                    scrollToReadMarkerPublisher: viewModelContext.viewState.timelineState.scrollToReadMarkerPublisher)
     }
     
     func updateUIViewController(_ uiViewController: TimelineTableViewController, context: Context) {
@@ -127,7 +130,10 @@ struct TimelineViewRepresentable: UIViewControllerRepresentable {
             if tableViewController.hideTimelineMedia != context.viewState.hideTimelineMedia {
                 tableViewController.hideTimelineMedia = context.viewState.hideTimelineMedia
             }
-            
+            if tableViewController.readMarkerUniqueID != context.viewState.timelineState.readMarkerUniqueID {
+                tableViewController.readMarkerUniqueID = context.viewState.timelineState.readMarkerUniqueID
+            }
+
             if tableViewController.typingMembers.members != context.viewState.typingMembers {
                 tableViewController.setTypingMembers(context.viewState.typingMembers)
             }
@@ -147,17 +153,16 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let composerViewModel = ComposerToolbarViewModel.mock()
     static let timelineViewModel = {
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
+        let appSettings = AppSettings.volatile()
 
         return TimelineViewModel(roomProxy: roomProxyMock,
                                  timelineController: MockTimelineController(),
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 userIndicatorController: UserIndicatorControllerMock.default,
-                                 appMediator: AppMediatorMock.default,
+                                 userIndicatorController: UserIndicatorControllerMock(),
+                                 appMediator: AppMediatorMock(.init()),
                                  appSettings: appSettings,
-                                 analyticsService: analytics,
+                                 analyticsService: AnalyticsServiceMock(.init()),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

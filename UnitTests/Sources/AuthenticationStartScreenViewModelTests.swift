@@ -26,12 +26,7 @@ final class AuthenticationStartScreenViewModelTests {
     }
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
+        appSettings = AppSettings.volatile()
     }
     
     @Test
@@ -284,9 +279,9 @@ final class AuthenticationStartScreenViewModelTests {
                                 supportsPasswordLogin: Bool = true,
                                 availableSecrets: ClassicAppAccount.AvailableSecrets = .complete) async {
         // Manually create a configuration as the default homeserver address setting is immutable.
-        client = ClientSDKMock(configuration: .init(oAuthLoginURL: supportsOAuth ? "https://account.company.com/authorize" : nil,
-                                                    supportsOAuthCreatePrompt: false,
-                                                    supportsPasswordLogin: supportsPasswordLogin))
+        client = ClientSDKMock(.init(oAuthLoginURL: supportsOAuth ? "https://account.company.com/authorize" : nil,
+                                     supportsOAuthCreatePrompt: false,
+                                     supportsPasswordLogin: supportsPasswordLogin))
         // Map both the server name and the homeserver URL so fallback lookups work.
         let homeserverClients: [String: ClientSDKMock] = ["company.com": client,
                                                           "https://matrix.company.com": client]
@@ -300,8 +295,8 @@ final class AuthenticationStartScreenViewModelTests {
         
         notificationCenter = NotificationCenter()
         
-        clientFactory = AuthenticationClientFactoryMock(configuration: configuration)
-        authenticationService = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
+        clientFactory = AuthenticationClientFactoryMock(configuration)
+        authenticationService = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                                                       encryptionKeyProvider: EncryptionKeyProvider(),
                                                       classicAppManager: classicAppManager,
                                                       clientFactory: clientFactory,
@@ -315,7 +310,7 @@ final class AuthenticationStartScreenViewModelTests {
                                                        isBugReportServiceEnabled: true,
                                                        appMediator: AppMediatorMock(),
                                                        appSettings: appSettings,
-                                                       mediaProvider: MediaProviderMock(configuration: .init()),
+                                                       mediaProvider: MediaProviderMock(.init()),
                                                        notificationCenter: notificationCenter,
                                                        userIndicatorController: UserIndicatorControllerMock())
         

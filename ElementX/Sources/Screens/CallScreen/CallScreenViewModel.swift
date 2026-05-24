@@ -18,7 +18,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     private let configuration: ElementCallConfiguration
     private let isPictureInPictureAllowed: Bool
     private let appSettings: AppSettings
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
     
@@ -39,9 +39,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     init(elementCallService: ElementCallServiceProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
-         appHooks: AppHooks,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService) {
+         analyticsService: AnalyticsServiceProtocol) {
         self.elementCallService = elementCallService
         self.configuration = configuration
         self.appSettings = appSettings
@@ -51,8 +50,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         guard let deviceID = configuration.clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
         widgetDriver = configuration.roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         
-        super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript,
-                                                         certificateValidator: appHooks.certificateValidatorHook))
+        super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript))
         
         elementCallService.actions
             .receive(on: DispatchQueue.main)

@@ -12,7 +12,7 @@ extension MediaProviderMock {
     struct Configuration { }
     
     // swiftlint:disable:next cyclomatic_complexity
-    convenience init(configuration: Configuration) {
+    convenience init(_ configuration: Configuration) {
         self.init()
         
         imageFromSourceSizeClosure = { mediaSource, _ in

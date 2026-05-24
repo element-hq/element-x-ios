@@ -136,13 +136,13 @@ struct AuthenticationServiceTests {
                                 classicAppAccounts: [ClassicAppAccount] = [],
                                 availableSecrets: ClassicAppAccount.AvailableSecrets = .complete) async throws {
         let configuration: AuthenticationClientFactoryMock.Configuration = .init()
-        let clientFactory = AuthenticationClientFactoryMock(configuration: configuration)
+        let clientFactory = AuthenticationClientFactoryMock(configuration)
         
         client = configuration.homeserverClients[serverAddress]
         encryption = EncryptionSDKMock()
         client.encryptionReturnValue = encryption
         
-        userSessionStore = UserSessionStoreMock(configuration: .init())
+        userSessionStore = UserSessionStoreMock(.init())
         encryptionKeyProvider = MockEncryptionKeyProvider()
         
         let classicAppManager = ClassicAppManagerMock(.init(accounts: classicAppAccounts,
@@ -153,7 +153,7 @@ struct AuthenticationServiceTests {
                                         encryptionKeyProvider: encryptionKeyProvider,
                                         classicAppManager: classicAppManager,
                                         clientFactory: clientFactory,
-                                        appSettings: AppSettings(),
+                                        appSettings: .volatile(),
                                         appHooks: AppHooks())
         
         if let classicAppAccount = service.classicAppAccount {

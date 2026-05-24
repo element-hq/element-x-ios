@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Avancerade inställningar";
 "common_an_image" = "en bild";
 "common_analytics" = "Analysdata";
-"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Du lämnade rummet";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du loggades ut ur sessionen";
 "common_appearance" = "Utseende";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Lämnade rummet";
 "common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Inbjudan avvisad";
-"common_dark" = "Mörkt";
 "common_date_date_at_time" = "%1$@vid %2$@";
 "common_date_this_month" = "Denna månad";
 "common_decryption_error" = "Avkrypteringsfel";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Det här Matrix-ID:t kan inte hittas, så inbjudan kanske inte tas emot.";
 "common_leaving_room" = "Lämnar rummet";
 "common_leaving_space" = "Leaving space";
-"common_light" = "Ljust";
 "common_line_copied_to_clipboard" = "Rad kopierad till klippbordet";
 "common_link_copied_to_clipboard" = "Länk kopierad till klippbordet";
 "common_link_new_device" = "Link new device";
@@ -350,7 +347,6 @@
 "common_suggested" = "Suggested";
 "common_suggestions" = "Förslag";
 "common_syncing" = "Synkar";
-"common_system" = "System";
 "common_text" = "Text";
 "common_third_party_notices" = "Meddelanden från tredje part";
 "common_thread" = "Tråd";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ gjorde en okänd ändring till deras medlemsskap.";
 "test_language_identifier" = "sv";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Mörkt";
+"theme_light" = "Ljust";
+"theme_system" = "System";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historiska meddelanden är inte tillgängliga på den här enheten";
 "timeline_decryption_failure_historical_event_unverified_device" = "Du måste verifiera den här enheten för åtkomst till historiska meddelanden";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Du har inte tillgång till det här meddelandet";

@@ -12,7 +12,7 @@ import MatrixRustSDK
 class UserSessionStore: UserSessionStoreProtocol {
     private let keychainController: KeychainControllerProtocol
     private let appSettings: AppSettings
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     private let networkMonitor: NetworkMonitorProtocol
     private let appHooks: AppHooks
     
@@ -32,7 +32,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     init(keychainController: KeychainControllerProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService,
+         analyticsService: AnalyticsServiceProtocol,
          appHooks: AppHooks,
          networkMonitor: NetworkMonitorProtocol) {
         self.keychainController = keychainController

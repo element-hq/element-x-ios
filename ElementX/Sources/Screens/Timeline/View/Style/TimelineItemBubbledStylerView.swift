@@ -334,7 +334,7 @@ private extension TimelineItemKeyForwarder {
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel: TimelineViewModel = {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         appSettings.threadsEnabled = true
         
         let roomProxy = JoinedRoomProxyMock(.init())
@@ -343,17 +343,17 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  timelineController: MockTimelineController(),
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 userIndicatorController: UserIndicatorControllerMock.default,
-                                 appMediator: AppMediatorMock.default,
+                                 userIndicatorController: UserIndicatorControllerMock(),
+                                 appMediator: AppMediatorMock(.init()),
                                  appSettings: appSettings,
-                                 analyticsService: .mock(settings: appSettings),
+                                 analyticsService: AnalyticsServiceMock(.init()),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
     
     static let viewModelWithPins: TimelineViewModel = {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         appSettings.threadsEnabled = true
         
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: ["pinned"]))
@@ -362,10 +362,10 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  timelineController: MockTimelineController(),
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 userIndicatorController: UserIndicatorControllerMock.default,
-                                 appMediator: AppMediatorMock.default,
+                                 userIndicatorController: UserIndicatorControllerMock(),
+                                 appMediator: AppMediatorMock(.init()),
                                  appSettings: appSettings,
-                                 analyticsService: .mock(settings: appSettings),
+                                 analyticsService: AnalyticsServiceMock(.init()),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

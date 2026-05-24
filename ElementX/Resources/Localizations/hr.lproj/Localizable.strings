@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Napredne postavke";
 "common_an_image" = "slika";
 "common_analytics" = "Analitika";
-"common_android_fetching_notifications_title" = "Sinkronizacija obavijesti...";
 "common_android_shortcuts_remove_reason_left_room" = "Napustili ste sobu";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Odjavljeni ste iz sesije";
 "common_appearance" = "Izgled";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Napustio/la je sobu";
 "common_current_user_left_space" = "Napušteni prostor";
 "common_current_user_rejected_invite" = "Poziv je odbijen";
-"common_dark" = "Tamno";
 "common_date_date_at_time" = "%1$@ u %2$@";
 "common_date_this_month" = "Ovaj mjesec";
 "common_decryption_error" = "Pogreška kod dešifriranja";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Ovaj Matrix ID nije moguće pronaći, pa se pozivnica možda neće primiti.";
 "common_leaving_room" = "Izlazak iz sobe";
 "common_leaving_space" = "Napuštanje prostora";
-"common_light" = "Svijetlo";
 "common_line_copied_to_clipboard" = "Redak je kopiran u međuspremnik";
 "common_link_copied_to_clipboard" = "Poveznica je kopirana u međuspremnik.";
 "common_link_new_device" = "Poveži novi uređaj";
@@ -350,7 +347,6 @@
 "common_suggested" = "Preporučeno";
 "common_suggestions" = "Prijedlozi";
 "common_syncing" = "Sinkronizacija";
-"common_system" = "Sustav";
 "common_text" = "Tekst";
 "common_third_party_notices" = "Obavijesti trećih strana";
 "common_thread" = "Nit";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ napravio/la je nepoznatu promjenu u svom članstvu";
 "test_language_identifier" = "hr";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Tamno";
+"theme_light" = "Svijetlo";
+"theme_system" = "Sustav";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Prijašnje poruke nisu dostupne na ovom uređaju";
 "timeline_decryption_failure_historical_event_unverified_device" = "Trebate potvrditi ovaj uređaj kako biste mogli pristupiti prijašnjim porukama";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nemate pristup ovoj poruci";

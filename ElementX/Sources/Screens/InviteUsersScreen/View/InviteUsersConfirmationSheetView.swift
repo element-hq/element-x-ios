@@ -61,11 +61,11 @@ struct InviteUsersConfirmationSheetView_Previews: PreviewProvider, TestablePrevi
     
     static func makeViewModel() -> InviteUsersScreenViewModel {
         let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init()))),
-                                                   roomProxy: JoinedRoomProxyMock(.init(members: [])),
+                                                   roomType: .existingRoom(roomProxy: JoinedRoomProxyMock(.init(members: []))),
                                                    isSkippable: true,
                                                    userDiscoveryService: UserDiscoveryServiceMock(),
                                                    userIndicatorController: UserIndicatorControllerMock(),
-                                                   appSettings: AppSettings())
+                                                   appSettings: .volatile())
         
         viewModel.state.usersToConfirm = [.mockAlice, .mockCharlie, .mockBob, .mockDan]
         

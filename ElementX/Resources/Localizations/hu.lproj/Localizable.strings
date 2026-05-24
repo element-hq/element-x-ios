@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Speciális beállítások";
 "common_an_image" = "egy kép";
 "common_analytics" = "Elemzések";
-"common_android_fetching_notifications_title" = "Értesítések szinkronizálása…";
 "common_android_shortcuts_remove_reason_left_room" = "Elhagyta a szobát";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Ki lett jelentkeztetve a munkamenetből";
 "common_appearance" = "Megjelenítés";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Elhagyta a szobát";
 "common_current_user_left_space" = "Tér elhagyva";
 "common_current_user_rejected_invite" = "Meghívás elutasítva";
-"common_dark" = "Sötét";
 "common_date_date_at_time" = "%1$@, %2$@";
 "common_date_this_month" = "Ebben a hónapban";
 "common_decryption_error" = "Visszafejtési hiba";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Ez a Matrix-azonosító nem található, ezért előfordulhat, hogy a meghívó nem érkezik meg.";
 "common_leaving_room" = "Szoba elhagyása";
 "common_leaving_space" = "Tér elhagyása";
-"common_light" = "Világos";
 "common_line_copied_to_clipboard" = "A sor a vágólapra másolva";
 "common_link_copied_to_clipboard" = "Hivatkozás a vágólapra másolva";
 "common_link_new_device" = "Új eszköz összekapcsolása";
@@ -350,7 +347,6 @@
 "common_suggested" = "Javaslat";
 "common_suggestions" = "Javaslatok";
 "common_syncing" = "Szinkronizálás";
-"common_system" = "Rendszer";
 "common_text" = "Szöveg";
 "common_third_party_notices" = "Harmadik felek nyilatkozatai";
 "common_thread" = "Üzenetszál";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ ismeretlen változást hajtott végre a tagságában";
 "test_language_identifier" = "hu";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Fekete";
+"theme_dark" = "Sötét";
+"theme_light" = "Világos";
+"theme_system" = "Rendszer";
 "timeline_decryption_failure_historical_event_no_key_backup" = "A korábbi üzenetek nem érhetők el ezen az eszközön";
 "timeline_decryption_failure_historical_event_unverified_device" = "Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nincs hozzáférése ehhez az üzenethez";

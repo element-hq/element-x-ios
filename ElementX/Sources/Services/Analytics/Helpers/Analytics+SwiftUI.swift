@@ -9,5 +9,5 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    @Entry var analyticsService: AnalyticsService?
+    @Entry var analyticsService: AnalyticsServiceProtocol?
 }

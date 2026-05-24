@@ -37,7 +37,7 @@ extension ClientSDKMock {
     
     enum MockError: Error { case generic }
     
-    convenience init(configuration: Configuration) {
+    convenience init(_ configuration: Configuration) {
         self.init()
         
         homeserverLoginDetailsReturnValue = HomeserverLoginDetailsSDKMock(configuration: configuration)

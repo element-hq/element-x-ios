@@ -12,7 +12,7 @@ import SwiftUI
 struct RoomDetailsScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let userSession: UserSessionProtocol
-    let analyticsService: AnalyticsService
+    let analyticsService: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol
@@ -26,6 +26,7 @@ enum RoomDetailsScreenCoordinatorAction {
     case presentRoomDetailsEditScreen
     case presentNotificationSettingsScreen
     case presentInviteUsersScreen
+    case presentInviteToNewRoom(invitee: UserProfileProxy)
     case presentPollsHistory
     case presentRolesAndPermissionsScreen
     case presentCall(isVoiceCall: Bool)
@@ -71,6 +72,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentRoomMembersList)
                 case .requestInvitePeoplePresentation:
                     actionsSubject.send(.presentInviteUsersScreen)
+                case .requestInviteToNewRoomPresentation(let invitee):
+                    actionsSubject.send(.presentInviteToNewRoom(invitee: invitee))
                 case .leftRoom:
                     actionsSubject.send(.leftRoom)
                 case .requestEditDetailsPresentation:

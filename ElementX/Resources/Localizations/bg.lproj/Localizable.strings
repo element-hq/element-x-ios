@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Разширени настройки";
 "common_an_image" = "изображение";
 "common_analytics" = "Статистика";
-"common_android_fetching_notifications_title" = "Syncing notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Вие напуснахте стаята";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Облик";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Стаята е напусната";
 "common_current_user_left_space" = "Пространството е напуснато";
 "common_current_user_rejected_invite" = "Invite declined";
-"common_dark" = "Тъмен";
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "Този месец";
 "common_decryption_error" = "Грешка при разшифроване";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Този Matrix ID не може да бъде намерен, така че поканата може да не бъде получена.";
 "common_leaving_room" = "Стаята се напуска";
 "common_leaving_space" = "Пространството се напуска";
-"common_light" = "Светъл";
 "common_line_copied_to_clipboard" = "Line copied to clipboard";
 "common_link_copied_to_clipboard" = "Връзката е копирана в клипборда";
 "common_link_new_device" = "Link new device";
@@ -350,7 +347,6 @@
 "common_suggested" = "Suggested";
 "common_suggestions" = "Предложения";
 "common_syncing" = "Синхронизиране";
-"common_system" = "Система";
 "common_text" = "Текст";
 "common_third_party_notices" = "Уведомления от трети страни";
 "common_thread" = "Нишка";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ направи неизвестна промяна в членството си";
 "test_language_identifier" = "bg";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Тъмен";
+"theme_light" = "Светъл";
+"theme_system" = "Система";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
 "timeline_decryption_failure_historical_event_unverified_device" = "Трябва да потвърдите това устройство за да достъпите исторически съобщения";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Нямате достъп до това съобщение";

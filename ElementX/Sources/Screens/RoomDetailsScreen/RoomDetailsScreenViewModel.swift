@@ -14,7 +14,7 @@ typealias RoomDetailsScreenViewModelType = StateStoreViewModelV2<RoomDetailsScre
 class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private let userSession: UserSessionProtocol
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
@@ -46,7 +46,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     init(roomProxy: JoinedRoomProxyProtocol,
          userSession: UserSessionProtocol,
-         analyticsService: AnalyticsService,
+         analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
@@ -110,7 +110,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapPeople:
             actionsSubject.send(.requestMemberDetailsPresentation)
         case .processTapInvite:
-            actionsSubject.send(.requestInvitePeoplePresentation)
+            if let dmRecipient = state.dmRecipientInfo {
+                actionsSubject.send(.requestInviteToNewRoomPresentation(selectedInvitee: .init(member: dmRecipient.member)))
+            } else {
+                actionsSubject.send(.requestInvitePeoplePresentation)
+            }
         case .processTapLeave:
             processTapToLeave()
         case .confirmLeave:

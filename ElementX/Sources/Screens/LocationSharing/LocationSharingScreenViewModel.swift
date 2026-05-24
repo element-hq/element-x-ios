@@ -17,7 +17,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol
     private let liveLocationManager: LiveLocationManagerProtocol
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenter: NotificationCenter
     
@@ -36,7 +36,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
          roomProxy: JoinedRoomProxyProtocol,
          timelineController: TimelineControllerProtocol,
          liveLocationManager: LiveLocationManagerProtocol,
-         analytics: AnalyticsService,
+         analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          notificationCenter: NotificationCenter = .default) {
@@ -389,16 +389,13 @@ extension LocationSharingScreenViewModel {
         let roomProxy = JoinedRoomProxyMock(.init(members: .allMembers, ownUserID: RoomMemberProxyMock.mockMe.userID))
         roomProxy.makeLiveLocationServiceReturnValue = liveLocationServiceMock
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
-                                              mapURLBuilder: appSettings.mapTilerConfiguration,
+                                              mapURLBuilder: AppSettings.volatile().mapTilerConfiguration,
                                               roomProxy: roomProxy,
                                               timelineController: MockTimelineController(),
                                               liveLocationManager: LiveLocationManagerMock(),
-                                              analytics: analytics,
+                                              analytics: AnalyticsServiceMock(.init()),
                                               userIndicatorController: UserIndicatorControllerMock(),
-                                              mediaProvider: MediaProviderMock(configuration: .init()))
+                                              mediaProvider: MediaProviderMock(.init()))
     }
 }

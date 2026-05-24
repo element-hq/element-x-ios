@@ -20,7 +20,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let roomProxy: JoinedRoomProxyProtocol
-    private let analyticsService: AnalyticsService
+    private let analyticsService: AnalyticsServiceProtocol
     private let draftService: ComposerDraftServiceProtocol
     private var identityPinningViolations = [String: RoomMemberProxyProtocol]()
     
@@ -52,7 +52,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
          mediaProvider: MediaProviderProtocol,
          mentionDisplayHelper: MentionDisplayHelper,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService,
+         analyticsService: AnalyticsServiceProtocol,
          composerDraftService: ComposerDraftServiceProtocol) {
         self.initialText = initialText
         self.wysiwygViewModel = wysiwygViewModel
@@ -820,17 +820,14 @@ extension ComposerToolbarViewModel {
             roomProxy.identityStatusChangesPublisher = .init([.init(userId: RoomMemberProxyMock.mockAlice.userID, changedTo: .verificationViolation)])
         }
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         let wysiwygViewModel = WysiwygComposerViewModel()
         let viewModel = ComposerToolbarViewModel(roomProxy: roomProxy,
                                                  wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
-                                                 mediaProvider: MediaProviderMock(configuration: .init()),
+                                                 mediaProvider: MediaProviderMock(.init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                                 appSettings: appSettings,
-                                                 analyticsService: analytics,
+                                                 appSettings: .volatile(),
+                                                 analyticsService: AnalyticsServiceMock(.init()),
                                                  composerDraftService: ComposerDraftServiceMock(.init()))
         viewModel.state.bindings.composerFocused = focused
         viewModel.state.bindings.plainComposerText = NSAttributedString(string: message)

@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Ρυθμίσεις για προχωρημένους";
 "common_an_image" = "μια εικόνα";
 "common_analytics" = "Στατιστικά στοιχεία";
-"common_android_fetching_notifications_title" = "Συγχρονισμός ειδοποιήσεων...";
 "common_android_shortcuts_remove_reason_left_room" = "Αποχωρήσατε από την αίθουσα";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Αποσυνδεθήκατε από την περίοδο λειτουργίας";
 "common_appearance" = "Εμφάνιση";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Αποχώρησε από την αίθουσα";
 "common_current_user_left_space" = "Αποχωρήσατε από τον χώρο";
 "common_current_user_rejected_invite" = "Η πρόσκληση απορρίφθηκε";
-"common_dark" = "Σκοτεινό";
 "common_date_date_at_time" = "%1$@ στις %2$@";
 "common_date_this_month" = "Αυτό το μήνα";
 "common_decryption_error" = "Σφάλμα αποκρυπτογράφησης";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Αυτό το Matrix ID δεν μπορεί να βρεθεί, επομένως η πρόσκληση ενδέχεται να μην ληφθεί.";
 "common_leaving_room" = "Αποχώρηση από την αίθουσα";
 "common_leaving_space" = "Αποχωρείτε από τον χώρο";
-"common_light" = "Φωτεινό";
 "common_line_copied_to_clipboard" = "Η γραμμή αντιγράφηκε στο πρόχειρο";
 "common_link_copied_to_clipboard" = "Ο σύνδεσμος αντιγράφηκε στο πρόχειρο";
 "common_link_new_device" = "Σύνδεση νέας συσκευής";
@@ -350,7 +347,6 @@
 "common_suggested" = "Προτεινόμενο";
 "common_suggestions" = "Προτάσεις";
 "common_syncing" = "Συγχρονισμός";
-"common_system" = "Σύστημα";
 "common_text" = "Κείμενο";
 "common_third_party_notices" = "Ειδοποιήσεις τρίτων";
 "common_thread" = "Νήμα";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "Ο χρήστης %1$@ έκανε μια άγνωστη αλλαγή στην ιδιότητα μέλους του.";
 "test_language_identifier" = "el";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Σκοτεινό";
+"theme_light" = "Φωτεινό";
+"theme_system" = "Σύστημα";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Τα ιστορικά μηνύματα δεν είναι διαθέσιμα σε αυτήν τη συσκευή";
 "timeline_decryption_failure_historical_event_unverified_device" = "Πρέπει να επαληθεύσετε αυτήν τη συσκευή για πρόσβαση σε μηνύματα ιστορικού";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Δεν έχεις πρόσβαση σε αυτό το μήνυμα";

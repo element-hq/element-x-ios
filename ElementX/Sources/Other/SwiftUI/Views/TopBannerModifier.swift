@@ -46,7 +46,7 @@ extension View {
     func topBanner(_ banner: some View, isVisible: Bool, footer: some View = EmptyView()) -> some View {
         topBanners([TopBannerLayer(banner, isVisible: isVisible)], footer: footer)
     }
-    
+
     /// Overlays the given Z-axis banner slots at the top edge of this view.
     /// Later items in the array are overlayed on top of earlier ones. Within
     /// each slot, visible vertical banners are stacked in a VStack and slide
@@ -66,6 +66,13 @@ extension View {
                                     ForEach(Array(item.verticalBanners.enumerated()), id: \.offset) { _, vBanner in
                                         if vBanner.isVisible {
                                             vBanner.banner
+                                                // Group the banner's geometry so the slide
+                                                // animation transforms it as one unit instead
+                                                // of animating each child SwiftUI primitive
+                                                // independently. Unlike `drawingGroup`, this
+                                                // doesn't rasterise — interactive children
+                                                // (Buttons) continue to render normally.
+                                                .geometryGroup()
                                                 .transition(.move(edge: .top))
                                         }
                                     }

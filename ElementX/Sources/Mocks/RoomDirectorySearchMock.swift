@@ -9,12 +9,12 @@
 import Combine
 import Foundation
 
-struct RoomDirectorySearchProxyMockConfiguration {
-    let results: [RoomDirectorySearchResult]
-}
-
 extension RoomDirectorySearchProxyMock {
-    convenience init(configuration: RoomDirectorySearchProxyMockConfiguration) {
+    struct Configuration {
+        let results: [RoomDirectorySearchResult]
+    }
+    
+    convenience init(_ configuration: Configuration) {
         self.init()
         resultsPublisher = CurrentValueSubject(configuration.results).asCurrentValuePublisher()
         searchQueryReturnValue = .success(())

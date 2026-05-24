@@ -22,13 +22,9 @@ final class RoomFlowCoordinatorTests {
     private let appSettings: AppSettings
 
     init() {
-        appSettings = AppSettings()
+        appSettings = AppSettings.volatile()
     }
 
-    deinit {
-        AppSettings.resetAllSettings()
-    }
-    
     @Test
     func roomPresentation() async throws {
         setupRoomFlowCoordinator()
@@ -487,11 +483,11 @@ final class RoomFlowCoordinatorTests {
                                                   timelineControllerFactory: timelineControllerFactory,
                                                   emojiProvider: EmojiProvider(appSettings: appSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
-                                                  appMediator: AppMediatorMock.default,
+                                                  appMediator: AppMediatorMock(.init()),
                                                   appSettings: appSettings,
                                                   appHooks: AppHooks(),
-                                                  analytics: .mock(settings: appSettings),
-                                                  userIndicatorController: UserIndicatorControllerMock.default,
+                                                  analytics: AnalyticsServiceMock(.init()),
+                                                  userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: StateMachineFactory())
         

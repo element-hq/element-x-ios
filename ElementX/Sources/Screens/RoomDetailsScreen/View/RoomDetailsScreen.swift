@@ -22,6 +22,11 @@ struct RoomDetailsScreen: View {
             
             aboutSection
             
+            // The invitation flow is different for DMs
+            if context.viewState.dmRecipientInfo != nil {
+                inviteToNewRoomSection
+            }
+            
             configurationSection
             
             if context.viewState.dmRecipientInfo == nil {
@@ -163,6 +168,13 @@ struct RoomDetailsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
         }
+    }
+    
+    private var inviteToNewRoomSection: some View {
+        ListRow(label: .default(title: L10n.actionInvite, icon: \.userAdd),
+                kind: .navigationLink {
+                    context.send(viewAction: .processTapInvite)
+                })
     }
     
     private var configurationSection: some View {
@@ -406,16 +418,13 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     analyticsService: analytics,
-                     userIndicatorController: UserIndicatorControllerMock.default,
+                     analyticsService: AnalyticsServiceMock(.init()),
+                     userIndicatorController: UserIndicatorControllerMock(),
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: appSettings)
+                     appSettings: .volatile())
     }
     
     private static func makeSimpleRoomViewModel() -> RoomDetailsScreenViewModel {
@@ -437,16 +446,13 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     analyticsService: analytics,
-                     userIndicatorController: UserIndicatorControllerMock.default,
+                     analyticsService: AnalyticsServiceMock(.init()),
+                     userIndicatorController: UserIndicatorControllerMock(),
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: appSettings)
+                     appSettings: .volatile())
     }
     
     private static func makeDMViewModel(verificationState: UserIdentityVerificationState) -> RoomDetailsScreenViewModel {
@@ -468,9 +474,9 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         clientProxyMock.userIdentityForFallBackToServerClosure = { userID, _ in
             let identity = switch userID {
             case RoomMemberProxyMock.mockDan.userID:
-                UserIdentityProxyMock(configuration: .init(verificationState: verificationState))
+                UserIdentityProxyMock(.init(verificationState: verificationState))
             default:
-                UserIdentityProxyMock(configuration: .init())
+                UserIdentityProxyMock(.init())
             }
             
             return .success(identity)
@@ -478,15 +484,12 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
 
-        let appSettings = AppSettings()
-        let analytics = AnalyticsService.mock(settings: appSettings)
-
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                     analyticsService: analytics,
-                     userIndicatorController: UserIndicatorControllerMock.default,
+                     analyticsService: AnalyticsServiceMock(.init()),
+                     userIndicatorController: UserIndicatorControllerMock(),
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appSettings: appSettings)
+                     appSettings: .volatile())
     }
 }

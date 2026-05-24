@@ -8,6 +8,7 @@
 
 import Compound
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct NotificationSettingsScreen: View {
     @Bindable var context: NotificationSettingsScreenViewModel.Context
@@ -37,6 +38,8 @@ struct NotificationSettingsScreen: View {
                     if context.viewState.settings?.invitationsEnabled != nil {
                         additionalSettingsSection
                     }
+
+                    soundSelectionSection
                 }
             }
         }
@@ -168,7 +171,67 @@ struct NotificationSettingsScreen: View {
                 .compoundListSectionHeader()
         }
     }
-    
+
+    @ViewBuilder
+    private var soundSelectionSection: some View {
+        Section {
+            DisclosureGroup(context.viewState.selectedAlertTone.label, isExpanded: $context.shouldShowAlertSounds) {
+                customSoundSelectionSection
+            }
+            .foregroundStyle(.compound.textPrimary)
+            .listRowBackground(Color.compound.bgCanvasDefaultLevel1)
+            .listRowSeparatorTint(ListRowColor.separatorTint)
+        } header: {
+            Text(L10n.screenNotificationSettingsSoundSectionTitle)
+                .compoundListSectionHeader()
+        }
+
+        Section(isExpanded: $context.shouldShowAlertSounds) {
+            presetSoundSelectionSection
+        } header: { }
+    }
+
+    private var presetSoundSelectionSection: some View {
+        ForEach(NotificationToneManager.allDefaultAlerts, id: \.filename) { alertTone in
+            ListRow(label: .plain(title: alertTone.label),
+                    kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
+                        context.send(viewAction: .selectAlertTone(alertTone))
+                    })
+        }
+    }
+
+    @ViewBuilder
+    private var customSoundSelectionSection: some View {
+        ForEach(context.viewState.availableCustomTones, id: \.filename) { alertTone in
+            ListRow(label: .plain(title: alertTone.label),
+                    kind: .selection(isSelected: context.viewState.selectedAlertTone == alertTone) {
+                        context.send(viewAction: .selectAlertTone(alertTone))
+                    })
+        }
+        .onDelete { indices in
+            let tones = indices.map {
+                context.viewState.availableCustomTones[$0]
+            }
+
+            context.send(viewAction: .deleteCustomAlertTones(tones))
+        }
+
+        ListRow(label: .plain(title: L10n.screenNotificationSettingsSoundCustomSoundButtonTitle),
+                kind: .button {
+                    context.shouldShowCustomAlertTonePicker = true
+                })
+                .fileImporter(isPresented: $context.shouldShowCustomAlertTonePicker,
+                              allowedContentTypes: [
+                                  .mp3,
+                                  .aiff,
+                                  .wav,
+                                  UTType("com.apple.m4a-audio"),
+                                  UTType("com.apple.coreaudio-format")
+                              ].compactMap(\.self)) {
+                    context.send(viewAction: .addedCustomAlertTone($0))
+                }
+    }
+
     private var configurationMismatchSection: some View {
         Section {
             ListRow(kind: .custom {
@@ -201,7 +264,7 @@ struct NotificationSettingsScreen: View {
 
 struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel: NotificationSettingsScreenViewModel = {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         let notificationCenter = UserNotificationCenterMock()
         notificationCenter.authorizationStatusReturnValue = .notDetermined
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
@@ -220,14 +283,16 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
 
         var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
+                                                            notificationToneManager: NotificationToneManagerMock(.init()),
                                                             notificationSettingsProxy: notificationSettingsProxy,
+                                                            userIndicatorController: UserIndicatorControllerMock(),
                                                             isModallyPresented: true)
         viewModel.fetchInitialContent()
         return viewModel
     }()
     
     static let viewModelConfigurationMismatch: NotificationSettingsScreenViewModel = {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         let notificationCenter = UserNotificationCenterMock()
         notificationCenter.authorizationStatusReturnValue = .notDetermined
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
@@ -248,7 +313,9 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
 
         var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
+                                                            notificationToneManager: NotificationToneManagerMock(.init()),
                                                             notificationSettingsProxy: notificationSettingsProxy,
+                                                            userIndicatorController: UserIndicatorControllerMock(),
                                                             isModallyPresented: true)
         viewModel.fetchInitialContent()
         return viewModel

@@ -18,19 +18,16 @@ final class AnalyticsSettingsScreenViewModelTests {
     private var context: AnalyticsSettingsScreenViewModelType.Context!
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
-        analytics = .mock(settings: appSettings)
+        appSettings = AppSettings.volatile()
+        let client = AnalyticsClientMock()
+        client.isRunning = false
+        analytics = AnalyticsService(client: client, appSettings: appSettings)
 
         viewModel = AnalyticsSettingsScreenViewModel(appSettings: appSettings,
                                                      analytics: analytics)
         context = viewModel.context
     }
     
-    deinit {
-        AppSettings.resetAllSettings()
-    }
-
     @Test
     func initialState() {
         #expect(!context.enableAnalytics)

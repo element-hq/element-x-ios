@@ -13,25 +13,20 @@ import Testing
 
 final class AnalyticsTests {
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
+    private let analytics: AnalyticsServiceProtocol
     private let analyticsClient: AnalyticsClientMock
     private var posthogMock: PHGPostHogMock
     
     @MainActor
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings.volatile()
         
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
-        analytics = .mock(analyticsClient, settings: appSettings)
+        analytics = AnalyticsService(client: analyticsClient, appSettings: appSettings)
         
         posthogMock = PHGPostHogMock()
         posthogMock.configureMockBehavior()
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
     }
     
     @Test

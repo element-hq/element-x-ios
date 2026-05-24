@@ -200,7 +200,6 @@
 "common_advanced_settings" = "Расширенные настройки";
 "common_an_image" = "изображение";
 "common_analytics" = "Аналитика";
-"common_android_fetching_notifications_title" = "Синхронизация уведомлений...";
 "common_android_shortcuts_remove_reason_left_room" = "Вы покинули комнату";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Вы вышли из сессии";
 "common_appearance" = "Внешний вид";
@@ -220,7 +219,6 @@
 "common_current_user_left_room" = "Покинул комнату";
 "common_current_user_left_space" = "Покинуть пространство";
 "common_current_user_rejected_invite" = "Приглашение отклонено";
-"common_dark" = "Темная";
 "common_date_date_at_time" = "%1$@ в %2$@";
 "common_date_this_month" = "В этом месяце";
 "common_decryption_error" = "Ошибка расшифровки";
@@ -257,7 +255,6 @@
 "common_invite_unknown_profile" = "Идентификатор Matrix ID не найден, приглашение может быть не получено.";
 "common_leaving_room" = "Покидаем комнату";
 "common_leaving_space" = "Покидаем пространство";
-"common_light" = "Светлое";
 "common_line_copied_to_clipboard" = "Строка скопирована в буфер обмена";
 "common_link_copied_to_clipboard" = "Ссылка скопирована в буфер обмена";
 "common_link_new_device" = "Привязать новое устройство";
@@ -350,7 +347,6 @@
 "common_suggested" = "Рекомендуемые";
 "common_suggestions" = "Предложения";
 "common_syncing" = "Синхронизация";
-"common_system" = "Системное";
 "common_text" = "Текст";
 "common_third_party_notices" = "Уведомления о третьих лицах";
 "common_thread" = "Обсуждение";
@@ -1541,6 +1537,10 @@
 "state_event_room_unknown_membership_change" = "%1$@ внес неизвестное изменение для своих участников";
 "test_language_identifier" = "ru";
 "test_untranslated_default_language_identifier" = "en";
+"theme_black" = "Black";
+"theme_dark" = "Темная";
+"theme_light" = "Светлое";
+"theme_system" = "Системное";
 "timeline_decryption_failure_historical_event_no_key_backup" = "На этом устройстве недоступна история сообщений";
 "timeline_decryption_failure_historical_event_unverified_device" = "Вам необходимо подтвердить это устройство чтобы получить доступ к истории сообщений";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Вы не имеете доступа к этому сообщению";
