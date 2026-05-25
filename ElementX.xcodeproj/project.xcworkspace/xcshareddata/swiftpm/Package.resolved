@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "34b9ca65ac74394fedd6dc881673ae49214486e5",
-        "version" : "10.1.1"
+        "revision" : "33a0ad8a14dd07dd1acfcb5a1e77cb8485c594ea",
+        "version" : "10.2.0"
       }
     },
     {
