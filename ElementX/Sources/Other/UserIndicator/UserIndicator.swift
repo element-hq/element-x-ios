@@ -7,7 +7,9 @@
 //
 
 import Combine
+import Compound
 import Foundation
+import SwiftUI
 
 enum UserIndicatorType: Equatable {
     case toast(progress: UserIndicator.Progress?)
@@ -40,7 +42,7 @@ struct UserIndicator: Equatable, Identifiable {
     var type: UserIndicatorType = .toast
     var title: String
     var message: String?
-    var iconName: String?
+    var icon: KeyPath<CompoundIcons, Image>?
     var persistent = false
     
     // MARK: - Associated values from the type

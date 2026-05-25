@@ -1106,7 +1106,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,
                                                               type: .toast,
                                                               title: title,
-                                                              iconName: "xmark"))
+                                                              icon: \.close))
     }
 }
 

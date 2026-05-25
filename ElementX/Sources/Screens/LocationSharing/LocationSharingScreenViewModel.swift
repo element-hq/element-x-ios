@@ -308,7 +308,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         userIndicatorController.submitIndicator(UserIndicator(id: Self.statusIndicatorID,
                                                               type: .toast,
                                                               title: L10n.errorUnknown,
-                                                              iconName: "xmark"))
+                                                              icon: \.close))
     }
     
     private func showLoader() {

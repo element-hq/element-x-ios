@@ -92,6 +92,6 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
         userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorID,
                                                               type: .toast,
                                                               title: L10n.errorUnknown,
-                                                              iconName: "xmark"))
+                                                              icon: \.close))
     }
 }

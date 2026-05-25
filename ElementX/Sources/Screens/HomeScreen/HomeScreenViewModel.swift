@@ -453,7 +453,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         userIndicatorController.submitIndicator(UserIndicator(id: UUID().uuidString,
                                                               type: .toast,
                                                               title: L10n.commonCurrentUserLeftRoom,
-                                                              iconName: "checkmark"))
+                                                              icon: \.check))
         actionsSubject.send(.roomLeft(roomIdentifier: roomID))
     }
     

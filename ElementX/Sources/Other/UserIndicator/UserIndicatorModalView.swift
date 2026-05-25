@@ -7,6 +7,7 @@
 //
 
 import Combine
+import Compound
 import SwiftUI
 
 struct UserIndicatorModalView: View {
@@ -23,9 +24,8 @@ struct UserIndicatorModalView: View {
                 }
 
                 HStack(spacing: 8) {
-                    if let iconName = indicator.iconName {
-                        Image(systemName: iconName)
-                            .font(titleFont)
+                    if let icon = indicator.icon {
+                        CompoundIcon(icon, size: .medium, relativeTo: .compound.headingMDBold)
                             .foregroundColor(.compound.iconPrimary)
                     }
                     
@@ -76,24 +76,24 @@ struct UserIndicatorModalView_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 0) {
             UserIndicatorModalView(indicator: UserIndicator(type: .modal,
                                                             title: "Successfully logged in",
-                                                            iconName: "checkmark"))
+                                                            icon: \.check))
             
             UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .published(CurrentValueSubject<Double, Never>(0.5).asCurrentValuePublisher()),
                                                                          interactiveDismissDisabled: false,
                                                                          allowsInteraction: false),
                                                             title: "Successfully logged in",
-                                                            iconName: "checkmark"))
+                                                            icon: \.check))
             
             UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .none,
                                                                          interactiveDismissDisabled: false,
                                                                          allowsInteraction: false),
                                                             title: "Successfully logged in",
-                                                            iconName: "checkmark"))
+                                                            icon: \.check))
             
             UserIndicatorModalView(indicator: UserIndicator(type: .modal,
                                                             title: "Successfully logged in",
                                                             message: "You can now be happy.",
-                                                            iconName: "checkmark"))
+                                                            icon: \.check))
         }
     }
 }

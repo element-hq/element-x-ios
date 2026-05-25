@@ -84,7 +84,7 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
                 userIndicatorController.submitIndicator(UserIndicator(id: Self.errorID,
                                                                       type: .toast,
                                                                       title: L10n.screenRoomDirectorySearchLoadingError,
-                                                                      iconName: "xmark"))
+                                                                      icon: \.close))
             }
             
             // Add a small delay to allow the rooms to be published,
