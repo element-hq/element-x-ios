@@ -46,7 +46,7 @@ struct TimelineReplyView: View {
                         ReplyView(sender: sender,
                                   plainBody: content.caption ?? content.filename,
                                   formattedBody: content.formattedCaption,
-                                  icon: .init(kind: .systemIcon("waveform")))
+                                  icon: .init(kind: .icon(\.audio)))
                     case .emote(let content):
                         ReplyView(sender: sender,
                                   plainBody: content.body,
@@ -119,7 +119,6 @@ struct TimelineReplyView: View {
         struct Icon {
             enum Kind {
                 case mediaSource(MediaSourceProxy)
-                case systemIcon(String)
                 case iconAsset(ImageAsset)
                 case icon(KeyPath<CompoundIcons, Image>)
             }
@@ -173,15 +172,10 @@ struct TimelineReplyView: View {
                                   size: .init(width: imageContainerSize,
                                               height: imageContainerSize),
                                   mediaProvider: context.mediaProvider) {
-                        Image(systemName: "photo")
+                        CompoundIcon(\.image)
                             .padding(4.0)
                     }
                     .aspectRatio(contentMode: .fill)
-                case .systemIcon(let systemIconName):
-                    Image(systemName: systemIconName)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .padding(8.0)
                 case .iconAsset(let asset):
                     Image(asset: asset)
                         .resizable()
