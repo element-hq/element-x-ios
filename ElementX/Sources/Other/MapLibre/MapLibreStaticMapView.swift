@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import CoreLocation
 import SwiftUI
 
@@ -92,7 +93,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
             placeholderImage
                 .overlay {
                     VStack(spacing: 0) {
-                        Image(systemName: "arrow.clockwise")
+                        CompoundIcon(\.restart)
                         Text(L10n.actionStaticMapLoad)
                     }
                 }

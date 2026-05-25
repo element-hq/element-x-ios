@@ -32,9 +32,8 @@ struct HomeScreenNewSoundBanner: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Button(action: dismissAction) {
-                    Image(systemName: "xmark")
+                    CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyMD)
                         .foregroundColor(.compound.iconSecondary)
-                        .frame(width: 12, height: 12)
                 }
             }
             

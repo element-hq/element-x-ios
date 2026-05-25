@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct CollapsibleRoomTimelineView: View {
@@ -38,12 +39,12 @@ struct CollapsibleRoomTimelineView: View {
             } label: {
                 HStack(alignment: .center, spacing: 8) {
                     Text(L10n.screenRoomTimelineStateChanges(timelineItem.items.count))
-                    Text(Image(systemName: "chevron.forward"))
+                        .font(.compound.bodySM)
+                    CompoundIcon(\.chevronRight, size: .small, relativeTo: .compound.bodySM)
                         .accessibilityLabel(isExpanded ? L10n.screenRoomGroupedStateEventsReduce : L10n.screenRoomGroupedStateEventsExpand)
                         .rotationEffect(.degrees(isExpanded ? 90 : 0))
                         .animation(.elementDefault, value: isExpanded)
                 }
-                .font(.compound.bodySM)
                 .foregroundColor(.compound.textSecondary)
                 .padding(.horizontal, 36.0)
                 .padding(.vertical, 12.0)
