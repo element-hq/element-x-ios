@@ -144,7 +144,7 @@ final class AppSettings: @unchecked Sendable {
                   accountProvisioningHost: String,
                   bugReportApplicationID: String,
                   analyticsTermsURL: URL?,
-                  mapTilerConfiguration: MapTilerConfiguration) {
+                  mapTilerConfiguration: MapTilerSettings.Configuration) {
         self.accountProviders = accountProviders
         self.allowOtherAccountProviders = allowOtherAccountProviders
         self.hideBrandChrome = hideBrandChrome
@@ -164,7 +164,7 @@ final class AppSettings: @unchecked Sendable {
         self.accountProvisioningHost = accountProvisioningHost
         self.bugReportApplicationID = bugReportApplicationID
         self.analyticsTermsURL = analyticsTermsURL
-        self.mapTilerConfiguration = mapTilerConfiguration
+        mapTilerSettings = RemotePreference(.configuration(mapTilerConfiguration))
     }
     
     // MARK: - Application
@@ -398,12 +398,17 @@ final class AppSettings: @unchecked Sendable {
     let hideIgnoredUserProfiles = true
     
     // MARK: - Maps
-    
-    /// maptiler base url
-    private(set) var mapTilerConfiguration = MapTilerConfiguration(baseURL: "https://api.maptiler.com/maps",
-                                                                   apiKey: Secrets.mapLibreAPIKey,
-                                                                   lightStyleID: "9bc819c8-e627-474a-a348-ec144fe3d810",
-                                                                   darkStyleID: "dea61faf-292b-4774-9660-58fcef89a7f3")
+
+    /// The locally-bundled MapTiler configuration.
+    static let bundledMapTilerConfiguration = MapTilerSettings.Configuration(baseURL: "https://api.maptiler.com/maps",
+                                                                             apiKey: Secrets.mapLibreAPIKey,
+                                                                             lightStyleID: "9bc819c8-e627-474a-a348-ec144fe3d810",
+                                                                             darkStyleID: "dea61faf-292b-4774-9660-58fcef89a7f3")
+
+    /// The resolved map tile settings. Defaults to ``MapTilerSettings/config(_:)`` with the
+    /// bundled configuration and is remotely overridden with ``MapTilerSettings/url(_:)`` when
+    /// the homeserver advertises a `style.json` URL via the matrix client well-known.
+    private(set) var mapTilerSettings = RemotePreference<MapTilerSettings>(.configuration(AppSettings.bundledMapTilerConfiguration))
     
     // MARK: - Presence
     

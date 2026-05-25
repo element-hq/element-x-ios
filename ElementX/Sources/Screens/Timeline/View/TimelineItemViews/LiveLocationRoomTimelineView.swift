@@ -66,7 +66,7 @@ struct LiveLocationRoomTimelineView: View {
             }
         }
         .onTapGesture {
-            guard context.viewState.mapTilerConfiguration.isEnabled,
+            guard context.viewState.mapTilerSettings.isEnabled,
                   timelineItem.content.lastGeoURI != nil,
                   isLive else {
                 return
@@ -95,7 +95,7 @@ struct LiveLocationRoomTimelineView: View {
     private var liveContent: some View {
         if let geoURI = timelineItem.content.lastGeoURI {
             MapLibreStaticMapView(geoURI: geoURI,
-                                  mapURLBuilder: context.viewState.mapTilerConfiguration,
+                                  mapURLBuilder: context.viewState.mapTilerSettings,
                                   attributionPlacement: .topLeft,
                                   mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
                 LocationMarkerView(kind: .liveUser(.init(sender: timelineItem.sender)),

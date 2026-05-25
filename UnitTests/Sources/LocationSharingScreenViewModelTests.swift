@@ -397,7 +397,7 @@ struct LocationSharingScreenViewModelTests {
         let appSettings = AppSettings.volatile()
         
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: nil, initialLiveLocationShare: nil),
-                                                   mapURLBuilder: appSettings.mapTilerConfiguration,
+                                                   mapURLBuilder: appSettings.mapTilerSettings.publisher.value,
                                                    roomProxy: roomProxyMock,
                                                    timelineController: MockTimelineController(timelineProxy: TimelineProxyMock(.init())),
                                                    liveLocationManager: LiveLocationManagerMock(.init()),
@@ -432,7 +432,7 @@ struct LocationSharingScreenViewModelTests {
         let appSettings = AppSettings.volatile()
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
-                                                   mapURLBuilder: appSettings.mapTilerConfiguration,
+                                                   mapURLBuilder: appSettings.mapTilerSettings.publisher.value,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                    liveLocationManager: LiveLocationManagerMock(liveLocationManagerConfiguration),
@@ -447,7 +447,7 @@ struct LocationSharingScreenViewModelTests {
         let appSettings = AppSettings.volatile()
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
-                                                   mapURLBuilder: appSettings.mapTilerConfiguration,
+                                                   mapURLBuilder: appSettings.mapTilerSettings.publisher.value,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                    liveLocationManager: liveLocationManagerMock,
@@ -469,7 +469,7 @@ struct LocationSharingScreenViewModelTests {
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: sender, initialLiveLocationShare: initialShare),
-                                                   mapURLBuilder: appSettings.mapTilerConfiguration,
+                                                   mapURLBuilder: appSettings.mapTilerSettings.publisher.value,
                                                    roomProxy: roomProxyMock,
                                                    timelineController: MockTimelineController(timelineProxy: TimelineProxyMock(.init())),
                                                    liveLocationManager: LiveLocationManagerMock(.init()),

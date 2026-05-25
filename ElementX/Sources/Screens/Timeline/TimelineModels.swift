@@ -146,8 +146,8 @@ struct TimelineViewState: BindableState {
     
     var linkMetadataProvider: LinkMetadataProviderProtocol?
     
-    var mapTilerConfiguration: MapTilerConfiguration
-    
+    var mapTilerSettings: MapTilerSettings
+
     var stoppedLiveLocationIDs: Set<TimelineItemIdentifier> = []
     
     var bindings: TimelineViewStateBindings

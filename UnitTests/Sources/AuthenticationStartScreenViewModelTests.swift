@@ -350,7 +350,7 @@ final class AuthenticationStartScreenViewModelTests {
                              accountProvisioningHost: appSettings.accountProvisioningHost,
                              bugReportApplicationID: appSettings.bugReportApplicationID,
                              analyticsTermsURL: appSettings.analyticsTermsURL,
-                             mapTilerConfiguration: appSettings.mapTilerConfiguration)
+                             mapTilerConfiguration: AppSettings.bundledMapTilerConfiguration)
     }
 }
 
