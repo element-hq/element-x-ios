@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct UserIndicatorToastView: View {
@@ -18,9 +19,8 @@ struct UserIndicatorToastView: View {
                     .controlSize(.small)
                     .tint(.compound.iconPrimary)
             }
-            if let iconName = indicator.iconName {
-                Image(systemName: iconName)
-                    .font(.compound.bodyMD)
+            if let icon = indicator.icon {
+                CompoundIcon(icon, size: .small, relativeTo: .compound.bodyMD)
                     .foregroundColor(.compound.iconPrimary)
             }
             Text(indicator.title)
@@ -48,7 +48,7 @@ struct UserIndicatorToastView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 30) {
             UserIndicatorToastView(indicator: UserIndicator(title: "Successfully logged in",
-                                                            iconName: "checkmark"))
+                                                            icon: \.check))
             
             UserIndicatorToastView(indicator: UserIndicator(title: "Toast without icon"))
             

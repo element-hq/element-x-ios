@@ -169,6 +169,6 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         userIndicatorController.submitIndicator(UserIndicator(id: Self.successIndicatorID,
                                                               type: .toast,
                                                               title: L10n.commonSuccess,
-                                                              iconName: "checkmark"))
+                                                              icon: \.check))
     }
 }

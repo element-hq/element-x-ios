@@ -885,6 +885,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         flowParameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorIdentifier,
                                                                              type: .toast,
                                                                              title: L10n.errorUnknown,
-                                                                             iconName: "xmark"))
+                                                                             icon: \.close))
     }
 }

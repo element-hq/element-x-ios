@@ -273,6 +273,6 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorIdentifier,
                                                               type: .toast,
                                                               title: L10n.errorUnknown,
-                                                              iconName: "xmark"))
+                                                              icon: \.close))
     }
 }

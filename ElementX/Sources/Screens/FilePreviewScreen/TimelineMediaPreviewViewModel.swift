@@ -213,21 +213,21 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
                                                               type: .toast,
                                                               title: L10n.commonFileDeleted,
-                                                              iconName: "checkmark"))
+                                                              icon: \.check))
     }
     
     private func showSavedIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
                                                               type: .toast,
                                                               title: L10n.commonFileSaved,
-                                                              iconName: "checkmark"))
+                                                              icon: \.check))
     }
     
     private func showErrorIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
                                                               type: .toast,
                                                               title: L10n.errorUnknown,
-                                                              iconName: "xmark"))
+                                                              icon: \.close))
     }
     
     private func showTimelineEndIndicator() {

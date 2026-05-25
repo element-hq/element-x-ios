@@ -140,7 +140,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
     
     private func showManageMemberFailure(title: String) {
         userIndicatorController.retractIndicatorWithId(title)
-        userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonFailed, iconName: "xmark"))
+        userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonFailed, icon: \.close))
     }
 }
 

@@ -1067,7 +1067,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .cancel:
                     break
                 case .finish:
-                    flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, iconName: "checkmark"))
+                    flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, icon: \.check))
                 }
             }
             .store(in: &cancellables)

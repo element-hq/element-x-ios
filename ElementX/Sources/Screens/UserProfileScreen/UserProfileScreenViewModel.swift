@@ -190,6 +190,6 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorIdentifier,
                                                               type: .toast,
                                                               title: L10n.errorUnknown,
-                                                              iconName: "xmark"))
+                                                              icon: \.close))
     }
 }

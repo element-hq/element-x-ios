@@ -107,6 +107,6 @@ class DeclineAndBlockScreenViewModel: DeclineAndBlockScreenViewModelType, Declin
     }
     
     private func showSuccess() {
-        userIndicatorController.submitIndicator(.init(title: L10n.commonSuccess, iconName: "checkmark"))
+        userIndicatorController.submitIndicator(.init(title: L10n.commonSuccess, icon: \.check))
     }
 }

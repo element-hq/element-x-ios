@@ -47,7 +47,7 @@ class ReportRoomScreenViewModel: ReportRoomScreenViewModelType, ReportRoomScreen
                 await leaveRoom(showLoading: false)
             } else {
                 hideLoadingIndicator()
-                userIndicatorController.submitIndicator(.init(title: L10n.dialogRoomReported, iconName: "checkmark"))
+                userIndicatorController.submitIndicator(.init(title: L10n.dialogRoomReported, icon: \.check))
                 actionsSubject.send(.dismiss(shouldLeaveRoom: false))
             }
         case .failure:
@@ -70,7 +70,7 @@ class ReportRoomScreenViewModel: ReportRoomScreenViewModelType, ReportRoomScreen
         
         switch result {
         case .success:
-            userIndicatorController.submitIndicator(.init(title: L10n.dialogRoomReportedAndLeft, iconName: "checkmark"))
+            userIndicatorController.submitIndicator(.init(title: L10n.dialogRoomReportedAndLeft, icon: \.check))
             actionsSubject.send(.dismiss(shouldLeaveRoom: true))
         case .failure:
             state.bindings.alert = .init(id: .leaveRoomFailed,
