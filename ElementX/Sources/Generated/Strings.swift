@@ -26,6 +26,10 @@ internal enum L10n {
   internal static func a11yDigitsEntered(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_digits_entered", p1)
   }
+  /// Duration: %1$@
+  internal static func a11yDuration(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "a11y_duration", String(describing: p1))
+  }
   /// Edit avatar
   internal static var a11yEditAvatar: String { return L10n.tr("Localizable", "a11y_edit_avatar") }
   /// The full address will be %1$@
@@ -84,6 +88,10 @@ internal enum L10n {
   internal static var a11yPollsWillRemoveSelection: String { return L10n.tr("Localizable", "a11y_polls_will_remove_selection") }
   /// This is the winning answer
   internal static var a11yPollsWinningAnswer: String { return L10n.tr("Localizable", "a11y_polls_winning_answer") }
+  /// Position: %1$@
+  internal static func a11yPosition(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "a11y_position", String(describing: p1))
+  }
   /// QR Code
   internal static var a11yQrCode: String { return L10n.tr("Localizable", "a11y_qr_code") }
   /// React with %1$@
@@ -1858,6 +1866,14 @@ internal enum L10n {
   internal static var screenIdentityUseAnotherDevice: String { return L10n.tr("Localizable", "screen_identity_use_another_device") }
   /// Waiting on other device…
   internal static var screenIdentityWaitingOnOtherDevice: String { return L10n.tr("Localizable", "screen_identity_waiting_on_other_device") }
+  /// Rotate the image to the left
+  internal static var screenImageEditionA11yRotateToTheLeft: String { return L10n.tr("Localizable", "screen_image_edition_a11y_rotate_to_the_left") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenImageEditionA11yRotationState(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_image_edition_a11y_rotation_state", p1)
+  }
+  /// Edit photo
+  internal static var screenImageEditionTitle: String { return L10n.tr("Localizable", "screen_image_edition_title") }
   /// Already a member
   internal static var screenInviteUsersAlreadyAMember: String { return L10n.tr("Localizable", "screen_invite_users_already_a_member") }
   /// Already invited
@@ -2244,6 +2260,8 @@ internal enum L10n {
   internal static var screenMediaUploadPreviewOptimizeImageQualityTitle: String { return L10n.tr("Localizable", "screen_media_upload_preview_optimize_image_quality_title") }
   /// Processing...
   internal static var screenMediaUploadPreviewProcessing: String { return L10n.tr("Localizable", "screen_media_upload_preview_processing") }
+  /// Add media
+  internal static var screenMediaUploadPreviewTitle: String { return L10n.tr("Localizable", "screen_media_upload_preview_title") }
   /// This is a one time process, thanks for waiting.
   internal static var screenMigrationMessage: String { return L10n.tr("Localizable", "screen_migration_message") }
   /// Setting up your account.
@@ -3879,6 +3897,18 @@ internal enum L10n {
     internal static var otherUserAvatar: String { return L10n.tr("Localizable", "a11y.other_user_avatar") }
     /// Room avatar
     internal static var roomAvatar: String { return L10n.tr("Localizable", "a11y.room_avatar") }
+    /// Sent by %1$@ at %2$@
+    internal static func sentBySenderAtDate(_ p1: Any, _ p2: Any) -> String {
+      return L10n.tr("Localizable", "a11y.sent_by_sender_at_date", String(describing: p1), String(describing: p2))
+    }
+    /// Thread in %1$@
+    internal static func threadInRoom(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "a11y.thread_in_room", String(describing: p1))
+    }
+    /// Threads in %1$@
+    internal static func threadsInRoom(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "a11y.threads_in_room", String(describing: p1))
+    }
     /// User avatar
     internal static var userAvatar: String { return L10n.tr("Localizable", "a11y.user_avatar") }
     /// Your avatar
